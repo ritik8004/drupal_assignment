@@ -99,75 +99,21 @@
     position: relative;
     vertical-align: top;
 
-    @include breakpoint($tablet) {
-      margin-#{$left}: 0.25rem;
+    @include select-wrapper(9.375rem);
+
+    select {
+      @include select-style(9.375rem);
     }
 
     @include breakpoint($desktop) {
+      @include select-wrapper(14.63rem);
+
+      .select2-container {
+        @include select2-style(11.63rem);
+      }
+
       margin-#{$left}: 23px;
-      width: 14.25rem;
     }
-
-    .select2 {
-      min-width: 8.9375rem;
-      position: relative;
-      outline: transparent;
-
-      @include breakpoint($tablet) {
-        min-width: 10.0625rem;
-        max-width: 10.0625rem;
-      }
-
-      @include breakpoint($desktop) {
-        min-width: 11.6rem;
-        max-width: 11.6rem;
-        margin-#{$right}: 1px;
-      }
-    }
-
-    .select2-selection {
-      font-size: 0.75rem;
-      text-align: $left;
-      outline: transparent;
-      padding: 0.25rem 0.8rem;
-      border: none;
-      height: 2.1875rem;
-      background: $whisper-dark;
-      border-radius: 0;
-
-      .select2-selection__arrow {
-        top: 0;
-        #{$right}: 0;
-        width: 2.1875rem;
-        height: 2.1875rem;
-      }
-    }
-
-    .select2-selection__arrow {
-      @include icon(chevrondown, after) {
-        border-#{$left}: 1px solid $white-five;
-        color: $black;
-        font-size: 1.75rem;
-        line-height: 35px;
-        pointer-events: none;
-        position: absolute;
-        text-align: center;
-        #{$right}: 0;
-        #{$left}: auto;
-        top: 0;
-        width: 2.1875rem;
-        height: 2.1875rem;
-
-        @include breakpoint($tablet) {
-          background: $whisper-dark;
-          z-index: 1;
-        }
-      }
-    }
-  }
-
-  .form-select {
-    display: none;
   }
 
   .form-text {
@@ -250,35 +196,6 @@
   }
 }
 
-.select2-container--open {
-  z-index: 5;
-
-  .order-list-select {
-    &.select2-dropdown--below {
-      border: 0;
-      border-bottom: 1px solid $white;
-      border-radius: 0;
-    }
-  }
-}
-
-.order-list-select {
-  .select2-results .select2-results__option {
-    font-size: 0.75rem;
-    padding-#{$left}: 0.75rem;
-    padding-top: 0.75rem;
-    background-color: $white-five;
-    height: 2.1875rem;
-    border-left: 1px solid $white;
-    border-right: 1px solid $white;
-
-    &.select2-results__option--highlighted {
-      background-color: $marine-blue;
-      border-color: $marine-blue;
-    }
-  }
-}
-
 .block-alshaya-user-recent-orders + .c-order-help {
   @include breakpoint($tablet) {
     border-top: 1px solid $white;
@@ -290,6 +207,10 @@
   border: none;
   border-collapse: separate;
   border-spacing: 0;
+
+  .order-summary-row:hover td {
+    background: $white-four;
+  }
 
   @include breakpoint($desktop) {
     table-layout: fixed;
@@ -638,7 +559,7 @@
 
       label {
         display: block;
-        background-color: $whisper-dark;
+        background-color: $white-five;
         border: 1px solid $whisper-dark;
         padding-#{$left}: 0.625rem;
         width: 100%;

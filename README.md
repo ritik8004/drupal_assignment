@@ -63,7 +63,7 @@ To prepare your local env:
   * `composer install`
   * `composer blt-alias`
   * `blt vm`
-  * `blt refresh:local`
+  * `blt refresh:local` or `blt refresh:non-transac-local`
   * `drush @alshaya.local uli`
 * Load commerce content (already included in refresh:local and refresh:local:drupal):
   * `drush @alshaya.local alshaya-acm-offline-categories-sync`
@@ -71,3 +71,134 @@ To prepare your local env:
 
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
+
+### Create a new site
+
+Currently, 2 distinct installation profiles exist in the code base. `transac`
+installation profile will enable all the modules required for an a site with
+commercial features and integration with Conductor/Magento. `non_transac`
+profile is a light/static site without any commercial feature.`
+
+* Create a new theme for your site. See `docroot/themes/custom/README.md` for
+more information on how to create a custom theme.
+* Create a custom module in `docroot/modules/brands`. This module goal is to
+enable the appropriate theme, place the blocks in the theme's regions and
+install the specific configuration. See existing brand modules for example.
+* Run the appropriate `blt refresh:*` commands depending on the required
+installation profile.
+
+/!\ Currently, the blt commands are hardcoded to install the Mothercare or
+Victoria Secret sites. While the blt commands don't accept brand argument,
+please edit the `blt/setup.local.xml` file to change the brand name. Don't
+commit that change.
+
+### Local setup of Behat:
+* Start Behat installation on your local by following the steps below:
+  * Create a directory, say 'alshaya_behat'
+  * cd into the above directory - `cd alshaya_behat`
+  * Create a file composer.json and paste the contents below in it:
+  
+    `{
+    "require-dev" : {
+    "behat/behat" : "3.0.*",
+    "behat/mink-goutte-driver" : "*",
+    "behat/mink-browserkit-driver" : "*",
+    "behat/mink-extension" : "2.*",
+    "behat/mink-selenium2-driver" : "*",
+    "behat/mink" : "*",
+    "drupal/drupal-extension" : "~3.0",
+    "drupal/drupal-driver": "1.1.*",
+    "emuse/behat-html-formatter": "^0.1.0"
+    },
+  "config": {
+  "bin-dir": "bin/"  
+  }
+}`
+* Save the file and close it
+* If you don't have composer installed, Install composer by running the commands:
+  * `curl -sS https://getcomposer.org/installer | php`
+  * `php composer.phar install`
+* If you already have composer installed, then run the command as below:
+  `composer install`
+* Create behat.yml file
+* Paste the content below in the yml file:
+
+  `#behat.yml
+  default:
+    autoload:
+      '': %paths.base%/features/bootstrap
+    suites:
+      default:
+        contexts:
+          - FeatureContext
+          - Drupal\DrupalExtension\Context\MinkContext
+          - Drupal\DrupalExtension\Context\MessageContext
+          - Drupal\DrupalExtension\Context\DrupalContext 
+        paths:
+          - %paths.base%/features
+    formatters:
+      html:
+        output_path: %paths.base%/build/html/behat      
+    extensions:
+      Behat\MinkExtension:
+          browser_name: 'chrome'
+          goutte:
+            guzzle_parameters:
+              verify: false
+          javascript_session: selenium2
+          selenium2:
+            wd_host: http://127.0.0.1:4444/wd/hub
+            capabilities: { "browser": "chrome", "version": "59.0.3071.115", 'chrome': {'switches':['--start-maximized']}}
+          base_url: 'https://whitelabel2.test-alshaya.acsitefactory.com/'
+          files_path: "%paths.base%/files"
+      Drupal\DrupalExtension:
+        blackbox: ~
+      emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true`
+          
+* Initialize Behat by running the command
+  `bin/behat --init`
+* Features and bootstrap directory should get created after initializing Behat
+* Download all the feature files from Alshaya git repository and place it under 'features' directory on your local Behat setup
+* Download the FeatureContext.php from Alshaya git repository and replace it with the local copy. You should be able locate the file under features -> bootstrap -> FeatureContext.php
+* Follow the steps below to change the environment on which you want to run tests on:
+  * Open behat.yml file
+  * Set parameter 'base_url' to the instance you want to run tests on
+  * Save the file
+* Install JDK on your machine.
+* Download the latest Selenium standalone server from http://www.seleniumhq.org/download/
+* Download the latest chrome driver from https://sites.google.com/a/chromium.org/chromedriver/downloads
+* Run the selenium server on your machine by using the following command:
+  `java -Dwebdriver.chrome.driver=/path/to/chromedriver  -jar selenium-server-standalone-*.jar` (type the selenium server version you downloaded in place of *)
+* You are now good to start runnning Behat scripts on your machine
+* Below are various ways to run Behat feature files:
+  * To run all the feature files - `bin/behat features`
+  * To run a single feature file - `bin/behat features/filename.feature` (e.g. `bin/behat features/checkout.feature`)
+  * To run tagged scenarios - `bin/behat features --tags @tagname` (e.g. `bin/behat features --tags @checkout`)
+  
+### Some pre-requisites to run Behat tests
+  * Make sure the products mentioned in the feature file is available on the instance you wish you to execute tests. For e.g. if you wish to run 'checkout.feature' on your local, perform the steps mentioned below:
+  * Open FeatureContext.php file
+  * Search for method "iAmOnASimpleProductPage"
+  * In the visitPath function, pass the value of the URL for a simple product
+  * In the method "iShouldSeeTheLinkForSimpleProduct", pass the href link for the simple product which can be got from its PLP
+  * Perform similar steps for the configurable product too
+  * Methods that need to be modified similarly are as below:
+    * iAmOnASimpleProductPage
+    * iAmOnAConfigurableProduct
+    * iShouldSeeTheLinkForSimpleProduct
+    * iShouldSeeTheLinkForConfigurableProduct
+    * iShouldNotSeeTheLinkForSimpleProduct
+    * iShouldNotSeeTheLinkForConfigurableProduct
+    * iShouldSeeTheLinkForSimpleProductInArabic
+    * iShouldSeeTheLinkForConfigurableProductInArabic
+    
+### How to interpret the Behat reports:
+  * When the execution of the feature file is completed, navigate to build directory which is inside your parent directory
+  * Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
+  * In order to share the reports, compress the html directory immediately after every run.

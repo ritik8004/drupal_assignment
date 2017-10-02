@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_security module.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_security_install() {
+  $timeout = 1200;
+
+  if ($settings = Settings::get('autologout.settings')) {
+    $timeout = isset($settings['timeout']) ? $settings['timeout'] : $timeout;
+  }
+
+  // Configure defaults for autologout.
+  $config_factory = \Drupal::configFactory()->getEditable('autologout.settings');
+  $config_factory->set('timeout', $timeout);
+  $config_factory->set('max_timeout', $timeout);
+  $config_factory->set('no_dialog', TRUE);
+  $config_factory->set('enforce_admin', TRUE);
+  $config_factory->save();
+}

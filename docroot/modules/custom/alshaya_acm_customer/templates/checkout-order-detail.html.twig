@@ -37,7 +37,7 @@
         {% if order.loyaltyCard %}
           <div>
             {% trans %}
-            <p>Your Privileges Card Number is: <strong class="dark--text">{{ order.loyaltyCard }}</strong></p>
+            <p>Your PRIVILEGES CLUB card number is: <strong class="dark--text">{{ order.loyaltyCard }}</strong></p>
             {% endtrans %}
           </div>
         {% endif %}
@@ -217,6 +217,18 @@
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
+
+      {% if order_details.discount is not empty %}
+        <tr class="discount-row collapse-row">
+          <td class="above-mobile">&nbsp;</td>
+          <td class="above-mobile">&nbsp;</td>
+          <td class="right--align">{{ "Discount"|t }}</td>
+          <td class="blend">
+            {{ order_details.discount }}
+          </td>
+          <td class="above-mobile empty--cell">&nbsp;</td>
+        </tr>
+      {% endif %}
 
       <tr class="delivery-charge-row collapse-row">
         <td class="above-mobile">&nbsp;</td>

@@ -26,6 +26,58 @@
   .multistep-checkout {
     max-width: 100%;
   }
+
+  .checkout-login-actions-wrapper {
+    background: $white-four;
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+    padding: 1em;
+    line-height: 2.8;
+
+    @include breakpoint($only-tablet) {
+      padding: 1rem 1.375rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 1.375rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+      line-height: 3.8;
+      background: white;
+      margin-top: 1rem;
+      padding: 0;
+      margin-bottom: 1rem;
+    }
+
+    .form-submit {
+      float: $right;
+      margin: 0;
+      margin-#{$right}: 0.75em;
+
+      @include breakpoint($tablet) {
+        margin-#{$right}: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        float: none;
+      }
+    }
+
+    a {
+      font-weight: bold;
+      color: $cerulean-two;
+      font-size: 0.75rem;
+
+      &.back-to-basket {
+        @include breakpoint($desktop) {
+          padding: 0.625rem 0;
+        }
+      }
+    }
+  }
 }
 
 .alias--cart-checkout-login {
@@ -320,4 +372,8 @@
       line-height: 1.45;
     }
   }
+}
+
+.form-item--error-message a {
+  color: $cerulean-two;
 }

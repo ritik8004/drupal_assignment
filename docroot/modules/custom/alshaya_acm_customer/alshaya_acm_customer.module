@@ -107,7 +107,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
  */
 function alshaya_acm_customer_block_access(Block $block, $operation, AccountInterface $account) {
   // Not allow 'recent orders' block other than user/{uid} page.
-  if ($operation == 'view' && $block->id() == 'userrecentorders') {
+  if ($operation == 'view' && in_array($block->id(), ['userrecentorders', 'myaccountneedhelp'])) {
     $current_route = \Drupal::routeMatch()->getRouteName();
     return AccessResult::forbiddenIf($current_route != 'entity.user.canonical');
   }
@@ -143,12 +143,17 @@ function alshaya_acm_customer_acq_commerce_update_customer_api_request_alter(arr
 function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'user_login_form') {
     if (isset($form['name'], $form['name']['#element_validate'])) {
-      // Disable element validate for email, we will call lafter if required.
+      // Disable element validate for email, we will call later if required.
       $key = array_search('email_registration_user_login_validate', $form['name']['#element_validate']);
       if ($key !== FALSE) {
         unset($form['name']['#element_validate'][$key]);
       }
     }
+
+    // Modify the inline email validation pattern.
+    $form['name']['#element_validate'] = [
+      'alshaya_valid_email_address',
+    ];
 
     // Disable validateAuthentication here, we will call later if required.
     $key = array_search('::validateAuthentication', $form['#validate']);
@@ -158,6 +163,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
 
     array_unshift($form['#validate'], 'alshaya_acm_customer_login_validate');
     $form['#validate'][] = 'alshaya_acm_customer_login_post_validate';
+    $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
   }
 
   if ($form_id == 'user_register_form') {
@@ -186,11 +192,32 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
     $form['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
   }
 
-  if ($form_id == 'user_form' && \Drupal::currentUser()->isAuthenticated()) {
-    // Always hide customer_id field for none-admin users.
-    $form['acq_customer_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
+  if ($form_id == 'user_form') {
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      // We don't want to show subscribe to newsletter field to logged in users.
+      if (!empty($form['field_subscribe_newsletter'])) {
+        $form['field_subscribe_newsletter']['#access'] = FALSE;
+      }
 
-    $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
+      // We don't allow changing email address for customer.
+      if (alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
+        $form['account']['mail']['#disabled'] = TRUE;
+        // Access false, if only authenticated.
+        $form['account']['current_pass']['#access'] = FALSE;
+      }
+
+      // Always hide customer_id field for none-admin users.
+      $form['acq_customer_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
+      $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
+    }
+    else {
+      // Add markup for terms and conditions.
+      if (!empty($form['field_subscribe_newsletter'])) {
+        $form['field_subscribe_newsletter']['widget']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value');
+      }
+      // Change submit button text.
+      $form['actions']['submit']['#value'] = t('Create');
+    }
   }
 
   if ($form_id == 'change_pwd_form') {
@@ -348,15 +375,8 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
         else {
           // Check first if we have a cart in session.
           if ($cart = $cart_storage->getCart(FALSE)) {
-            // Check if current cart is not associated to another user.
-            if ($cart->customerEmail() && $cart->customerEmail() != $mail) {
-              // It is associated to someone else. We clear the cart in session.
-              $cart_storage->clearCart();
-            }
-            else {
-              // Cart is not assigned or assigned to same customer.
-              $cart_storage->associateCart($customer['customer_id'], $customer['email']);
-            }
+            // Associate the cart to returning customer.
+            $cart_storage->associateCart($customer['customer_id'], $customer['email']);
           }
         }
       }
@@ -375,9 +395,6 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
         /** @var \Drupal\user\Entity\User $user */
         $user = alshaya_acm_customer_create_drupal_user($customer);
       }
-
-      // Allow modules to act after user logs in.
-      \Drupal::moduleHandler()->invokeAll('alshaya_acm_customer_post_login', [$user, $customer]);
 
       return $user->id();
     }
@@ -574,16 +591,20 @@ function alshaya_acm_customer_change_pwd_form_update_password(array &$form, Form
   // For all users except just authenticated, we store password only in Drupal.
   if (!alshaya_acm_customer_is_customer($user)) {
     call_user_func_array($form_state->prepareCallback('::submitForm'), [&$form, &$form_state]);
-    return;
+  }
+  else {
+    // Get password from user's input.
+    $pass = trim($form_state->getValue('pass'));
+
+    // Update customer data with new password.
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+    alshaya_acm_customer_update_customer_data($user->getEmail(), $pass);
   }
 
-  // Get password from user's input.
-  $pass = trim($form_state->getValue('pass'));
+  // Sign out user, and redirect to login page.
+  user_logout();
 
-  // Update customer data with new password.
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-  alshaya_acm_customer_update_customer_data($user->getEmail(), $pass);
-  drupal_set_message(t('Your password has been changed.'));
+  $form_state->setRedirect('alshaya_user.password_changed_logout');
 }
 
 /**
@@ -625,31 +646,29 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
 }
 
 /**
- * Implements hook_alshaya_profile_installed().
+ * Implements hook_alshaya_i18n_onetime_translation_add().
  */
-function alshaya_acm_customer_alshaya_profile_installed() {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_i18n')) {
-    // Save some translations.
-    $strings = [];
+function alshaya_acm_customer_alshaya_i18n_onetime_translation_add() {
+  // Save some translations.
+  $strings = [];
 
-    $strings['Unrecognized username or password. <a href=":password">Forgot your password?</a>'] = [
-      'en' => 'Unrecognized email address or password.',
-    ];
+  $strings['Unrecognized username or password. <a href=":password">Forgot your password?</a>'] = [
+    'en' => 'Unrecognized email address or password.',
+  ];
 
-    $strings['Collector contact no.'] = [
-      'ar' => 'رقم اتصال المستلم',
-    ];
+  $strings['Collector contact no.'] = [
+    'ar' => 'رقم اتصال المستلم',
+  ];
 
-    $strings['Delivery details'] = [
-      'ar' => 'تفاصيل التوصيل',
-    ];
+  $strings['Delivery details'] = [
+    'ar' => 'تفاصيل التوصيل',
+  ];
 
-    $strings['Billing details'] = [
-      'ar' => 'معلومات تحرير الفاتورة',
-    ];
+  $strings['Billing details'] = [
+    'ar' => 'معلومات تحرير الفاتورة',
+  ];
 
-    alshaya_i18n_save_translations($strings);
-  }
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

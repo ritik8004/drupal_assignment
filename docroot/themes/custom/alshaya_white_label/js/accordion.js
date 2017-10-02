@@ -9,7 +9,6 @@
   Drupal.behaviors.privilegeCardAccordion = {
     attach: function (context, settings) {
       var applyCoupon = $('#apply_coupon');
-      applyCoupon.hide();
       if (context === document) {
         applyCoupon.prev().andSelf().wrapAll('<div class="card__content">');
       }
@@ -30,6 +29,21 @@
       });
 
       $('.alias--user-register #details-privilege-card-wrapper').each(function () {
+        if (context === document) {
+          var error = $(this).find('.form-item--error-message');
+          var active = false;
+          if (error.length > 0) {
+            active = 0;
+          }
+
+          $(this).accordion({
+            header: '.privilege-card-wrapper-title',
+            collapsible: true,
+            active: active
+          });
+        }
+      });
+      $('.path--user #details-privilege-card-wrapper').each(function () {
         if (context === document) {
           var error = $(this).find('.form-item--error-message');
           var active = false;
@@ -79,29 +93,37 @@
       if (context === document) {
         // Toggle for Product description.
         $('.read-more-description-link').on('click', function () {
-          $('.c-pdp .description-wrapper').toggleClass('desc-open');
-          if ($(window).width() < 768) {
-            $('.c-pdp .short-description-wrapper').toggle('appear');
-            $('.c-pdp .description-wrapper').toggle('appear');
-            if ($('.c-pdp .description-wrapper .show-less-link').length < 1) {
-              $('.c-pdp .description-wrapper .field__content')
-                .append('<div class="show-less-link">' + Drupal.t('Show less') + '</div>');
-            }
+          // Close click and collect all stores wrapper if open.
+          if ($('.click-collect-all-stores').hasClass('desc-open')) {
+            $('.click-collect-all-stores').toggleClass('desc-open');
           }
+          $('.c-pdp .description-wrapper').toggleClass('desc-open');
+        });
+        var mobileStickyHeaderHeight = $('.branding__menu').height();
+
+        $('.c-pdp .short-description-wrapper', context).once('readmore').each(function () {
+          $(this).on('click', '.read-more-description-link-mobile', function () {
+            $(this).parent().toggleClass('show-detail');
+            $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+            $(this).replaceWith('<span class="show-less-link">' + Drupal.t('show less') + '</span>');
+          });
+          $(this).on('click', '.show-less-link', function () {
+            $(this).parent().toggleClass('show-detail');
+            $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+            $(this).replaceWith('<span class="read-more-description-link-mobile">' + Drupal.t('Read more') + '</span>');
+            $('html,body').animate({
+              scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
+            }, 'slow');
+          });
         });
 
         $('.close').on('click', function () {
           $('.c-pdp .description-wrapper').toggleClass('desc-open');
         });
 
-        var mobileStickyHeaderHeight = $('.branding__menu').height();
-        $('.c-pdp .description-wrapper .field__content').on('click', '.show-less-link', function () {
-          if ($(window).width() < 768) {
-            $('.c-pdp .short-description-wrapper').toggle('appear');
-            $('.c-pdp .description-wrapper').toggle('appear');
-            $('html,body').animate({
-              scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
-            }, 'slow');
+        $(document).on('click', function (e) {
+          if ($(e.target).closest('.c-pdp .content__sidebar .short-description-wrapper').length === 0 && $(e.target).closest('.c-pdp .content__sidebar .description-wrapper').length === 0 && $('.c-pdp .description-wrapper').hasClass('desc-open')) {
+            $('.c-pdp .description-wrapper').removeClass('desc-open');
           }
         });
 
@@ -135,7 +157,7 @@
         $(listOrder).hide();
 
         $(parentOrder).click(function () {
-          var $ub = $(this).nextAll().stop(true, true).slideToggle();
+          var $ub = $(this).nextAll().stop(true, true).fadeToggle('slow');
           listOrder.not($ub).hide();
           $ub.parent().toggleClass('open--accordion');
           listOrder.not($ub).parent().removeClass('open--accordion');
@@ -166,12 +188,12 @@
        * Toggles the Order confirmation table.
        */
       if ($('.multistep-checkout .user__order--detail').length) {
-        $('.collapse-row').slideUp();
+        $('.collapse-row').fadeOut();
         $('.product--count').on('click', function () {
           $('#edit-confirmation-continue-shopping')
             .toggleClass('expanded-table');
           $(this).toggleClass('expanded-row');
-          $(this).nextAll('.collapse-row').slideToggle();
+          $(this).nextAll('.collapse-row').fadeToggle('slow');
         });
       }
 
@@ -181,6 +203,7 @@
   Drupal.alshayaAccordion = function (element) {
     $(element).siblings().slideToggle('slow');
     $(element).toggleClass('ui-state-active');
+    $(element).parent().toggleClass('facet-active');
   };
 
 })(jQuery, Drupal);

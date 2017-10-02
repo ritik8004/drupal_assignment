@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Plugin\Block;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Block\BlockBase;
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
@@ -26,6 +27,13 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
   protected $cartStorage;
 
   /**
+   * The linked sku service.
+   *
+   * @var \Drupal\acq_sku\AcqSkuLinkedSku
+   */
+  protected $linkedSkus;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -36,10 +44,13 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
    *   The plugin implementation definition.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart session.
+   * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
+   *   Linked sku service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartStorageInterface $cart_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartStorageInterface $cart_storage, AcqSkuLinkedSku $linked_skus) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->cartStorage = $cart_storage;
+    $this->linkedSkus = $linked_skus;
   }
 
   /**
@@ -50,7 +61,8 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('acq_cart.cart_storage')
+      $container->get('acq_cart.cart_storage'),
+      $container->get('acq_sku.linked_sku')
     );
   }
 
@@ -62,8 +74,11 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
 
     $view_skus = [];
 
+    // Cross sell skus from the related rule.
+    $cross_sell_rule_skus = [];
+
     // Get current cart skus.
-    if ($cart = $this->cartStorage->getCart()) {
+    if ($cart = $this->cartStorage->getCart(FALSE)) {
       $skus = [];
       $items = $cart->items();
 
@@ -76,11 +91,14 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
         }
       }
 
-      foreach ($skus as $sku) {
-        if ($sku_entity = SKU::loadFromSku($sku)) {
-          $cross_sell_skus = $sku_entity->getCrossSell();
-          foreach ($cross_sell_skus as $cross_sell_sku) {
-            $view_skus[] = $cross_sell_sku['value'];
+      if (!empty($skus)) {
+        foreach ($skus as $sku) {
+          if ($sku_entity = SKU::loadFromSku($sku)) {
+            $cross_sell_rule_skus += $this->linkedSkus->getLinkedSKus($sku_entity, 'crosssell');
+            $cross_sell_manual_skus = $sku_entity->getCrossSell();
+            foreach ($cross_sell_manual_skus as $cross_sell_sku) {
+              $view_skus[] = $cross_sell_sku['value'];
+            }
           }
         }
       }
@@ -91,7 +109,15 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
       $view_skus = array_diff($view_skus, $skus);
     }
 
+    // Merging the manual cross sell skus from product and cross sell skus from
+    // the related rule.
+    $view_skus = array_merge($view_skus, $cross_sell_rule_skus);
+
     if (!empty($view_skus)) {
+      $related_items_size = \Drupal::config('alshaya_acm_product.settings')->get('related_items_size');
+
+      $view_skus = array_unique($view_skus);
+      $view_skus = array_slice($view_skus, 0, $related_items_size, TRUE);
       return views_embed_view('product_slider', 'block_product_slider', implode(',', $view_skus));
     }
 

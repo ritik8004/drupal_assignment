@@ -146,16 +146,14 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
       $method = $checkout_options_manager->getCleanShippingMethodCode($method);
-
-      // URL to change delivery address or shipping method.
-      $options = ['absolute' => TRUE];
-      $delivery['url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
+      $method_query_code = 'hd';
 
       $term = $checkout_options_manager->loadShippingMethod($method);
 
       $method_code = $term->get('field_shipping_code')->getString();
 
       if ($method_code == $checkout_options_manager->getClickandColectShippingMethod()) {
+        $method_query_code = 'cc';
         if ($store_code = $cart->getExtension('store_code')) {
           // Not injected here to avoid module dependency.
           $store = \Drupal::service('alshaya_stores_finder.utility')->getTranslatedStoreFromCode($store_code);
@@ -174,7 +172,9 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           $delivery['method_description'] = $this->t('Your order will be available in %duration', ['%duration' => $duration]);
           $delivery['address_label'] = $this->t('Collection Store');
 
-          $delivery['address'] = $store->get('field_store_address')->getString();
+          $delivery['address'] = [
+            '#markup' => $store->get('field_store_address')->getString(),
+          ];
         }
         else {
           $delivery = [];
@@ -211,13 +211,23 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           $country_list = \Drupal::service('address.country_repository')->getList();
           $line3[] = $country_list[$shipping_address['country_code']];
 
-          $delivery['address'] = implode(',<br>', [
+          $delivery_address = implode(',<br>', [
             implode(' ', $line1),
             implode(' ', $line2),
             implode(' ', $line3),
           ]);
+          $delivery['address'] = [
+            '#markup' => $delivery_address,
+          ];
         }
       }
+
+      // URL to change delivery address or shipping method.
+      $options = ['absolute' => TRUE];
+      $delivery['change_url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
+      $edit_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options);
+      $edit_url->setRouteParameter('method', $method_query_code);
+      $delivery['edit_url'] = $edit_url->toString();
     }
 
     // Totals.
@@ -231,7 +241,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $totals['tax'] = (float) $cart_totals['tax'] > 0 ? alshaya_acm_price_format($cart_totals['tax']) : NULL;
 
     // Discount.
-    $totals['discount'] = (float) $cart_totals['discount'] > 0 ? alshaya_acm_price_format($cart_totals['discount']) : NULL;
+    $totals['discount'] = ((float) ($cart_totals['discount'])) != 0 ? alshaya_acm_price_format($cart_totals['discount']) : NULL;
 
     // Shipping.
     $totals['shipping'] = (float) $cart_totals['shipping'] > 0 ? alshaya_acm_price_format($cart_totals['shipping']) : NULL;

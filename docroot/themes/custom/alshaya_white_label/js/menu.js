@@ -32,12 +32,12 @@
         if (submenu.length > 0) {
           $(this).addClass('has-child');
           linkWrapper.addClass('contains-sublink');
-          linkWrapper.after('<span class="menu__in"></span>');
+          linkWrapper.once().after('<span class="menu__in"></span>');
         }
       });
 
-      var $menuIn = $('.has-child .menu__link-wrapper');
-      $menuIn.click(function () {
+      var $menuIn = $('.has-child .menu__link-wrapper', context);
+      $menuIn.on('click', function () {
         $(this).next('.menu__in').next().toggleClass('menu__list--active');
       });
 
@@ -47,8 +47,8 @@
         $(this).parent().removeClass('not-active').addClass('active-menu');
       });
 
-      var $menuBack = $('.back--link');
-      $menuBack.click(function () {
+      var $menuBack = $('.back--link', context);
+      $menuBack.on('click', function () {
         $(this).parents('.menu__list').first().toggleClass('menu__list--active');
       });
 
@@ -208,7 +208,7 @@
         var position = $('.branding__menu').offset().top;
         var nav = $('.branding__menu');
 
-        $(window).scroll(function () {
+        $(window, context).once().scroll(function () {
           if ($(this).scrollTop() > position) {
             $('body').addClass('header--fixed');
             nav.addClass('navbar-fixed-top');

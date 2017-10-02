@@ -2,12 +2,16 @@
 
 namespace Drupal\alshaya_acm_promotion\Plugin\Block;
 
+use Drupal\acq_cart\CartStorageInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityRepository;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Driver\Exception\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 
@@ -43,6 +47,13 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   protected $entityRepository;
 
   /**
+   * The cart storage service.
+   *
+   * @var \Drupal\acq_cart\CartStorageInterface
+   */
+  protected $cartStorage;
+
+  /**
    * Constructs a new AlshayaCartPromotionsBlock object.
    *
    * @param array $configuration
@@ -57,6 +68,8 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    *   The entity repository service.
    * @param \Drupal\Core\Language\LanguageManager $languageManager
    *   The language manager service.
+   * @param \Drupal\acq_cart\CartStorageInterface $cartSessionStorage
+   *   The cart storage service.
    */
   public function __construct(
         array $configuration,
@@ -64,12 +77,14 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
         $plugin_definition,
         AlshayaPromotionsManager $alshaya_acm_promotion_manager,
         EntityRepository $entityRepository,
-        LanguageManager $languageManager
+        LanguageManager $languageManager,
+        CartStorageInterface $cartSessionStorage
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->alshayaAcmPromotionManager = $alshaya_acm_promotion_manager;
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
+    $this->cartStorage = $cartSessionStorage;
   }
 
   /**
@@ -82,7 +97,8 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       $plugin_definition,
       $container->get('alshaya_acm_promotion.manager'),
       $container->get('entity.repository'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('acq_cart.cart_storage')
     );
   }
 
@@ -149,8 +165,9 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
             // translation for $langcode.
             $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
             if ($node) {
-              $promotions[] = $node->get('field_acq_promotion_label')
-                ->getString();
+              $promotions[] = [
+                '#markup' => $node->get('field_acq_promotion_label')->getString(),
+              ];
             }
           }
         }
@@ -164,6 +181,27 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     }
 
     return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function blockAccess(AccountInterface $account) {
+    try {
+      $cart = $this->cartStorage->getCart(FALSE);
+
+      if ($cart) {
+        $count = $cart->getCartItemsCount();
+        if ($count > 0) {
+          return AccessResult::allowed();
+        }
+      }
+
+      return AccessResult::forbidden();
+    }
+    catch (Exception $e) {
+      return AccessResult::forbidden();
+    }
   }
 
 }

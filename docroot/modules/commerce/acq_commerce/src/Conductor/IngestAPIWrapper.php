@@ -29,12 +29,13 @@ class IngestAPIWrapper {
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->debug = $config_factory->get('acq_commerce.conductor')->get('debug');
     $this->debugDir = $config_factory->get('acq_commerce.conductor')->get('debug_dir');
+    $this->product_page_size = $config_factory->get('acq_commerce.conductor')->get('product_page_size');
   }
 
   /**
    * Performs full conductor sync.
    */
-  public function productFullSync() {
+  public function productFullSync($skus = '') {
     foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
       if (empty($store_id)) {
         continue;
@@ -47,9 +48,21 @@ class IngestAPIWrapper {
         fclose($fp);
       }
 
-      $endpoint = $this->apiVersion . '/ingest/product/sync?store_id=' . $store_id;
+      $product_page_size = (int) $this->product_page_size;
 
-      $doReq = function ($client, $opt) use ($endpoint) {
+      $endpoint = $this->apiVersion . '/ingest/product/sync';
+
+      $doReq = function ($client, $opt) use ($endpoint, $store_id, $skus, $product_page_size) {
+        if ($product_page_size > 0) {
+          $opt['query']['page_size'] = $product_page_size;
+        }
+
+        if (!empty($skus)) {
+          $opt['query']['skus'] = $skus;
+        }
+
+        $opt['query']['store_id'] = $store_id;
+
         return $client->post($endpoint, $opt);
       };
 

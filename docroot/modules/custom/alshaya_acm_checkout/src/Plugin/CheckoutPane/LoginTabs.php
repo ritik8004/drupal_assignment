@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides the Login Tabs pane on Login page.
@@ -38,6 +39,23 @@ class LoginTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $pane_form['returning_customer'] = [
       '#markup' => '<div class="tab tab-returning-customer"><span>' . $this->t('returning customers') . '</span></div>',
+    ];
+
+    $complete_form['actions'] = [
+      '#type' => 'actions',
+      '#weight' => 100,
+      '#attributes' => [
+        'class' => ['checkout-login-actions-wrapper'],
+      ],
+    ];
+
+    $complete_form['actions']['back_to_basket'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Back to basket'),
+      '#url' => Url::fromRoute('acq_cart.cart'),
+      '#attributes' => [
+        'class' => ['back-to-basket'],
+      ],
     ];
 
     return $pane_form;

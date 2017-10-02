@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_click_collect\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_click_collect\Ajax\ClickCollectStoresCommand;
 use Drupal\alshaya_click_collect\Ajax\StoreDisplayFillCommand;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
@@ -21,6 +22,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class ClickCollectController.
  */
 class ClickCollectController extends ControllerBase {
+
+  /**
+   * AlshayaApiWrapper service object.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $apiWrapper;
 
   /**
    * Stores Finder Utility service object.
@@ -53,6 +61,8 @@ class ClickCollectController extends ControllerBase {
   /**
    * StoresFinderController constructor.
    *
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   AlshayaApiWrapper service object.
    * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $stores_finder_utility
    *   Stores Finder Utility service object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
@@ -64,7 +74,8 @@ class ClickCollectController extends ControllerBase {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   Entity type manager.
    */
-  public function __construct(StoresFinderUtility $stores_finder_utility, EntityRepositoryInterface $entity_repository, ConfigFactoryInterface $config_factory, CartStorageInterface $cart_storage, EntityTypeManagerInterface $entity_manager) {
+  public function __construct(AlshayaApiWrapper $api_wrapper, StoresFinderUtility $stores_finder_utility, EntityRepositoryInterface $entity_repository, ConfigFactoryInterface $config_factory, CartStorageInterface $cart_storage, EntityTypeManagerInterface $entity_manager) {
+    $this->apiWrapper = $api_wrapper;
     $this->storesFinderUtility = $stores_finder_utility;
     $this->entityRepository = $entity_repository;
     $this->configFactory = $config_factory;
@@ -78,6 +89,7 @@ class ClickCollectController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('alshaya_api.api'),
       $container->get('alshaya_stores_finder.utility'),
       $container->get('entity.repository'),
       $container->get('config.factory'),
@@ -102,20 +114,14 @@ class ClickCollectController extends ControllerBase {
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
 
     // Get the stores from Magento.
-    /** @var \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('alshaya_api.api');
-
-    if ($stores = $api_wrapper->getCartStores($cart_id, $lat, $lon)) {
-      /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
-      $store_utility = \Drupal::service('alshaya_stores_finder.utility');
-
+    if ($stores = $this->apiWrapper->getCartStores($cart_id, $lat, $lon)) {
       $config = $this->configFactory->get('alshaya_click_collect.settings');
 
       foreach ($stores as $index => &$store) {
         $store['rnc_available'] = (int) $store['rnc_available'];
         $store['sts_available'] = (int) $store['sts_available'];
 
-        if ($extra_data = $store_utility->getStoreExtraData($store)) {
+        if ($extra_data = $this->storesFinderUtility->getStoreExtraData($store)) {
           $store = array_merge($store, $extra_data);
 
           if (!empty($store['rnc_available'])) {
@@ -255,11 +261,14 @@ class ClickCollectController extends ControllerBase {
   public function getProductStores($sku, $lat, $lon, $limit = 3) {
     $final_all_stores = $final_top_three = '';
     if ($sku_entity = SKU::loadFromSku($sku)) {
-      if ($stores = $this->storesFinderUtility->getSkuStores($sku, $lat, $lon)) {
+      if ($stores = $this->apiWrapper->getSkuStores($sku, $lat, $lon)) {
         $top_three = [];
         $top_three['#theme'] = 'pdp_click_collect_top_stores';
         $top_three['#stores'] = array_slice($stores, 0, $limit);
         $top_three['#has_more'] = count($stores) > $limit ? t('Other stores nearby') : '';
+        $top_three['#available_at_title'] = $this->t('Available at @count stores near', [
+          '@count' => count($stores),
+        ]);
 
         if ($top_three['#has_more']) {
           $store_form = \Drupal::formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
@@ -269,6 +278,9 @@ class ClickCollectController extends ControllerBase {
           $all_stores['#stores'] = $stores;
           $all_stores['#title'] = $config->get('pdp_click_collect_title');
           $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
+          $all_stores['#available_at_title'] = $this->t('Available at @count stores near', [
+            '@count' => count($stores),
+          ]);
           $all_stores['#store_finder_form'] = render($store_form);
           $all_stores['#help_text'] = $config->get('pdp_click_collect_help_text.value');
         }
@@ -303,6 +315,7 @@ class ClickCollectController extends ControllerBase {
       $response->addCommand(new InvokeCommand('.click-collect-form .store-finder-form-wrapper', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .change-location', 'hide'));
       $response->addCommand(new InvokeCommand('.click-collect-form .available-store-text', 'show'));
+      $response->addCommand(new HtmlCommand('.store-available-at-title', $data['top_three']['#available_at_title']));
       $response->addCommand(new InvokeCommand('.click-collect-form .available_store .change-location-link', 'show'));
       if (!empty($data['all_stores'])) {
         $settings['alshaya_click_collect']['pdp']['all_stores'] = TRUE;

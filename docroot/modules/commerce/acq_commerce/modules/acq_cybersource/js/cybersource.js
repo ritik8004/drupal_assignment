@@ -13,24 +13,63 @@
    */
   Drupal.behaviors.checkoutCybersource = {
     attach: function (context, settings) {
+      $('.cybersource-input').once('security').on('copy paste', function (event) {
+        event.preventDefault();
+      });
+
+      $('.cybersource-credit-card-exp-year-select').once('current-year').on('change', function () {
+        var month = $('.cybersource-credit-card-exp-month-select');
+        var currentYear = (new Date()).getFullYear().toString();
+        var selectedYear = jQuery('.cybersource-credit-card-exp-year-select option:selected').val();
+
+        if (currentYear === selectedYear) {
+          var currentMonth = (new Date()).getMonth();
+
+          month.find('option').each(function () {
+            var optionMonth = parseInt($(this).val());
+
+            if (optionMonth <= currentMonth) {
+              if ($(this).is(':selected')) {
+                $(this).next().prop('selected', true);
+              }
+              $(this).prop('disabled', true);
+            }
+          });
+
+        }
+        else {
+          month.find('option').prop('disabled', false);
+        }
+
+        // Let other JS libraries know options are changed.
+        month.trigger('change');
+      });
+
+      $('.cybersource-credit-card-exp-year-select').trigger('change');
+
       // Bind this only once after every ajax call.
       $('.cybersource-credit-card-input').once('bind-events').each(function () {
         var form = $('.cybersource-credit-card-input').closest('form');
+        var wrapper = $('.cybersource-credit-card-input').closest('#payment_details');
 
-        if (form.data('submit-handler') !== 'cybersource_form_submit_handler') {
+        // Remove the name attributes to ensure it is not posted to server even by mistake.
+        $(wrapper).find('input:text, input:password, select').each(function () {
+          $(this).data('name', $(this).attr('name'));
+          $(this).removeAttr('name');
+        });
+
+        $(form).once('bind-client-side').each(function () {
           try {
             // Update the validate settings to use custom submit handler.
-            form.data('submit-handler', 'cybersource_form_submit_handler');
-
-            // We try to update the submit handler here.
-            Drupal.cvValidatorObjects[form.attr('id')].settings['submitHandler'] = cybersource_form_submit_handler;
+            var validator = $(form).validate();
+            validator.settings.submitHandler = cybersource_form_submit_handler;
           }
           catch (e) {
             // If any error comes we reload the page.
             // JS is very critical for cybersource to work.
             window.location.reload();
           }
-        }
+        });
 
         $(this).validateCreditCard(function (result) {
           // Reset the card type every-time.
@@ -51,13 +90,23 @@
 
 
   Drupal.finishCybersourcePayment = function () {
+    var wrapper = $('.cybersource-credit-card-input').closest('#payment_details');
+
     // We hide credit card fields to avoid error message displays when we remove value.
-    $('.cybersource-credit-card-input').closest('.form-item').hide();
-    $('.cybersource-credit-card-cvv-input').closest('.form-item').hide();
+    $(wrapper).hide();
 
     // We don't pass credit card info to drupal.
-    $('.cybersource-credit-card-input').val('-');
-    $('.cybersource-credit-card-cvv-input').val('-');
+    $(wrapper).find('input:text, input:password, select').each(function () {
+      $(this).val('-');
+
+      // Add the name attribute again to ensure server side validation doesn't break.
+      $(this).attr('name', $(this).data('name'));
+    });
+
+    // Reset expiry year and month dropdowns.
+    $(wrapper).find('select').each(function () {
+      $(this).val($(this).find('option:first').val());
+    });
 
     // Update the JS to ensure we don't submit to cybersource again.
     Drupal.cybersourceProcessed = true;

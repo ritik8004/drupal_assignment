@@ -7,7 +7,6 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\taxonomy\Entity\Term;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Block\BlockPluginInterface;
 
@@ -46,15 +45,22 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
 
       $form['#attributes']['class'][] = 'stores-finder-exposed-form';
 
+      $hidden_class_map_list = '';
+      $hidden_class_glossary_back = 'hidden';
+      if ($current_route_name == 'view.stores_finder.page_1') {
+        $hidden_class_map_list = 'hidden';
+        $hidden_class_glossary_back = '';
+      }
+
       $form['list_view'] = [
         '#title' => t('List view'),
         '#type' => 'link',
-        '#url' => Url::fromRoute('alshaya_stores_finder.view_toggle', ['view_type' => 'list_view']),
+        '#url' => Url::fromRoute('view.stores_finder.page_2'),
         '#attributes' => [
           'class' => [
-            'use-ajax',
             'list-view-link',
             $active_class,
+            $hidden_class_map_list,
           ],
         ],
         '#weight' => 7,
@@ -67,6 +73,19 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
           'class' => [
             'use-ajax',
             'map-view-link',
+            $hidden_class_map_list,
+          ],
+        ],
+        '#weight' => 8,
+      ];
+      $form['back_to_glossary'] = [
+        '#title' => t('List of all Mothercare Stores'),
+        '#type' => 'link',
+        '#url' => Url::fromRoute('view.stores_finder.page_2'),
+        '#attributes' => [
+          'class' => [
+            'back-to-glossary',
+            $hidden_class_glossary_back,
           ],
         ],
         '#weight' => 8,
@@ -135,38 +154,6 @@ function alshaya_stores_finder_block_build_alter(array &$build, BlockPluginInter
   ];
   if (in_array($block->getPluginId(), $store_finder_search_blocks)) {
     $build['#cache']['tags'][] = 'store-finder-cache-tag';
-  }
-}
-
-/**
- * Implements hook_alshaya_i18n_onetime_translation_add().
- */
-function alshaya_stores_finder_alshaya_i18n_onetime_translation_add() {
-  $area_list = \Drupal::config('area_list.kw')->get('areas');
-  // If area available.
-  if ($area_list) {
-    // Vocabulary id.
-    $vid = 'area_list';
-    foreach ($area_list as $area_source => $area) {
-      try {
-        // Create term for each area.
-        $term = Term::create([
-          'name' => $area_source,
-          'vid' => $vid,
-        ]);
-        // Add translation if available.
-        if (isset($area['ar']) && !empty($area['ar'])) {
-          $term->addTranslation('ar', [
-            'name' => $area['ar'],
-          ]);
-        }
-        $term->save();
-      }
-      catch (\Exception $e) {
-        // Log error if any.
-        \Drupal::logger('alshaya_stores_finder')->error($e->getMessage());
-      }
-    }
   }
 }
 

@@ -13,7 +13,7 @@
     attach: function (context, settings) {
       // If we find the gallery in add cart form ajax response, we update the main gallery.
       if ($('.field--name-field-skus #product-zoom-container').size() > 0) {
-        $('.field--name-field-skus #product-zoom-container').each(function() {
+        $('.field--name-field-skus #product-zoom-container').each(function () {
           if ($(this).closest('td.sell-sku').length === 0) {
             // Execute the attach function of alshaya_product_zoom again.
             Drupal.behaviors.alshaya_product_zoom.attach($(this), settings);
@@ -27,4 +27,40 @@
     }
   };
 
+  $.fn.replaceDynamicParts = function (data) {
+    if (data.replaceWith === '') {
+      // Do nothing
+    }
+    else {
+      $(data.selector).replaceWith(data.replaceWith);
+
+      // We trigger focus of cart button to avoid issue in iOS.
+      setTimeout('jQuery(".edit-add-to-cart").trigger("focus")', 50);
+    }
+  };
+
+  Drupal.behaviors.stickyAddtobasketButton = {
+    attach: function (context, settings) {
+      // Only on mobile.
+      if ($(window).width() < 768) {
+        $(window, context).on('scroll', function () {
+          // Button top.
+          var button = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart');
+          // This is the wrapper that holds delivery options.
+          var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper');
+          // Delivery options bottom.
+          var mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + 56;
+          // Screen scroll offset.
+          var windowBottom = $(window).scrollTop() + $(window).height();
+          // Hide button when we are below delivery wrapper.
+          if (windowBottom >= mobileCWBottom) {
+            button.addClass('hide-button');
+          }
+          else {
+            button.removeClass('hide-button');
+          }
+        });
+      }
+    }
+  };
 })(jQuery, Drupal);

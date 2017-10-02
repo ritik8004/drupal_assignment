@@ -13,7 +13,6 @@ dependencies:
   - menu_ui
   - metatag
   - node
-  - panelizer
   - paragraphs
   - path
   - system

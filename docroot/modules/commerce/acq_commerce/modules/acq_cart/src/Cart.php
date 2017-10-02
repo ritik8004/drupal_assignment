@@ -394,6 +394,19 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
+  public function clearShippingMethod() {
+    // Unset the value set just now (before update cart).
+    unset($this->cart->carrier);
+
+    // Unset the value set in extension (updated cart response).
+    if (isset($this->cart, $this->cart->extension, $this->cart->extension['shipping_method'])) {
+      unset($this->cart->extension['shipping_method']);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getPaymentMethod($full_details = TRUE) {
     if (!isset($this->cart, $this->cart->payment)) {
       return [];

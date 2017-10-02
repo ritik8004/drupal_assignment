@@ -9,18 +9,61 @@
   @include breakpoint($tablet) {
     margin-bottom: 1.5rem;
   }
+
+  .slick-slider {
+    overflow: hidden;
+
+    .slick-list {
+      width: 47.5rem;
+      #{$left}: calc((100vw - 47.5rem) / 2);
+      min-height: 10.5rem;
+
+      @include breakpoint($tablet) {
+        width: 71.875rem;
+        min-height: 15.875rem;
+        #{$left}: calc((100vw - 71.875rem) / 2);
+      }
+
+      .ucbrowser & {
+        @include breakpoint(orientation portrait) {
+          #{$left}: -25%;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        width: 120rem;
+        min-height: 26.5rem;
+        #{$left}: calc((100vw - 120rem) / 2);
+      }
+    }
+  }
 }
 
 .c-slider-promo__items {
-  position: relative;
-}
-
-.c-slider-promo {
   position: relative;
 
   a {
     @include u-overlay-content;
     @include u-image-replacement;
+
+    display: none;
+  }
+
+  .slick-active a {
+    display: block;
+  }
+
+  .owl-prev,
+  .owl-next,
+  .slick-prev,
+  .slick-next {
+    top: 45% !important;
+    top: calc(50% - 2.25rem) !important;
+
+    @include breakpoint($tablet) {
+      top: 45% !important;
+      top: calc(50% - 1.125rem) !important;
+    }
   }
 }
 
@@ -28,16 +71,6 @@
 .owl-next,
 .slick-prev,
 .slick-next {
-  @include breakpoint($tablet) {
-    top: 45%;
-    top: calc(50% - 1.125rem); // 50% - (2.25rem / 2)
-  }
-
-  @include breakpoint($only-mobile) {
-    top: 45%;
-    top: calc(50% - (4.75rem + 1.125rem)); // 50% - (4.375rem - (2.25rem / 2))
-  }
-
   @include u-image-replacement;
 
   cursor: pointer;

@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\block\Entity\Block;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\BaseCommand;
@@ -21,6 +22,7 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 
@@ -148,36 +150,39 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       ];
     }
     elseif ($view_mode == 'full') {
+      $related_items_size = \Drupal::config('alshaya_acm_product.settings')->get('related_items_size');
 
-      // Get up sell block for the product.
-      $items = $sku_entity->get('upsell')->getValue();
+      /* @var \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus */
+      $linked_skus = \Drupal::service('acq_sku.linked_sku');
 
-      if (!empty($items)) {
-        $up_sell_skus = array_column($items, 'value');
-        $up_sell_skus = array_slice($up_sell_skus, 0, 12);
-        $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $up_sell_skus));
+      $up_sell_skus = [];
+      // Get up sell items from the product.
+      $upsell_manuel_items = $sku_entity->get('upsell')->getValue();
+      if (!empty($upsell_manuel_items)) {
+        $up_sell_skus = array_column($upsell_manuel_items, 'value');
+      }
+      // Merge upsell items from product and from the rule.
+      $up_sell_skus = array_merge($up_sell_skus, $linked_skus->getLinkedSKus($sku_entity, 'upsell'));
+
+      if (!empty($up_sell_skus)) {
+        $upsell_items = array_slice($up_sell_skus, 0, $related_items_size);
+        $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($upsell_items)));
         // Weight will have no effect later once template is modified.
         $build['up_sell']['#weight'] = 10;
       }
 
-      // Get cross sell block for the product.
-      $items = $sku_entity->get('crosssell')->getValue();
-
-      if (!empty($items)) {
-        $cross_sell_skus = array_column($items, 'value');
-        $cross_sell_skus = array_slice($cross_sell_skus, 0, 12);
-        $build['cross_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $cross_sell_skus));
-        // Weight will have no effect later once template is modified.
-        $build['cross_sell']['#weight'] = 11;
+      $related_skus = [];
+      // Get related items from the product.
+      $related_manual_items = $sku_entity->get('related')->getValue();
+      if (!empty($related_manual_items)) {
+        $related_skus = array_column($related_manual_items, 'value');
       }
+      // Merge related items from product and from the rule.
+      $related_skus = array_merge($related_skus, $linked_skus->getLinkedSKus($sku_entity, 'related'));
 
-      // Get cross sell block for the product.
-      $items = $sku_entity->get('related')->getValue();
-
-      if (!empty($items)) {
-        $related_skus = array_column($items, 'value');
-        $related_skus = array_slice($related_skus, 0, 12);
-        $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $related_skus));
+      if (!empty($related_skus)) {
+        $related_items = array_slice($related_skus, 0, $related_items_size);
+        $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($related_items)));
         // Weight will have no effect later once template is modified.
         $build['related']['#weight'] = 11;
       }
@@ -191,19 +196,37 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       $build['item_code']['#markup'] = $sku;
 
-      $build['short_description']['#markup'] = '';
+      $at_glance['label'] = [
+        '#markup' => t('At a glance'),
+      ];
+      $at_glance['value'] = [
+        '#markup' => $sku_entity->get('attr_at_glance')->getString(),
+      ];
+
+      $description['label'] = [
+        '#markup' => t('Features and benefits'),
+      ];
+
+      $description_value = '';
+
       if ($body = $entity->get('body')->getValue()) {
-        $build['short_description']['#markup'] = $body[0]['value'];
+        $description_value = $body[0]['value'];
       }
 
-      $at_glance['label'] = t('At a glance');
-      $at_glance['value'] = $sku_entity->get('attr_at_glance')->getString();
+      if ($bullet_points = $sku_entity->get('attr_bullet_points')->getString()) {
+        $description_value .= '<div class="bullet-points-wrapper">';
+        $description_value .= $bullet_points;
+        $description_value .= '</div>';
+      }
 
-      $description['label'] = t('Features and benefits');
-      $description['value'] = $build['short_description']['#markup'];
-      $description['value'] .= $sku_entity->get('attr_bullet_points')->getString();
+      $description['value'] = [
+        '#markup' => $description_value,
+      ];
 
-      $specifications['label'] = t('Specifications');
+      $specifications['label'] = [
+        '#markup' => t('Specifications'),
+      ];
+
       $specifications['value'] = [
         "#theme" => 'item_list',
         '#items' => [],
@@ -233,8 +256,13 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ]);
       }
 
-      $whats_in_box['label'] = t("What's In The Box");
-      $whats_in_box['value'] = $sku_entity->get('attr_whats_in_the_box')->getString();
+      $whats_in_box['label'] = [
+        '#markup' => t("What's In The Box"),
+      ];
+
+      $whats_in_box['value'] = [
+        '#markup' => $sku_entity->get('attr_whats_in_the_box')->getString(),
+      ];
 
       // Prepare full description in required sequence.
       // Check comments in MMCPA-218 for sequence requirements.
@@ -246,27 +274,24 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       // Initialise home delivery variable.
       $build['home_delivery'] = [];
 
-      // Check if home delivery is available for this product.
-      if (alshaya_acm_product_available_home_delivery($sku)) {
-        $home_delivery_config = \Drupal::config('alshaya_acm_product.home_delivery');
+      // Display delivery options only if product is buyable.
+      if (alshaya_acm_product_is_buyable($sku_entity)) {
+        // Check if home delivery is available for this product.
+        if (alshaya_acm_product_available_home_delivery($sku)) {
+          $home_delivery_config = \Drupal::config('alshaya_acm_product.home_delivery');
 
-        $home_delivery_options = [];
-        $home_delivery_options['standard_icon_class'] = $home_delivery_config->get('options_standard_icon_class');
-        $home_delivery_options['standard_title'] = $home_delivery_config->get('options_standard_title');
-        $home_delivery_options['standard_subtitle'] = $home_delivery_config->get('options_standard_subtitle');
-        $home_delivery_options['standard_price_options_one_title'] = $home_delivery_config->get('options_standard_price_options_one_title');
-        $home_delivery_options['standard_price_options_one_price'] = $home_delivery_config->get('options_standard_price_options_one_price') ? alshaya_acm_price_format((float) $home_delivery_config->get('options_standard_price_options_one_price')) : t('FREE');
-        $home_delivery_options['standard_price_options_two_title'] = $home_delivery_config->get('options_standard_price_options_two_title');
-        $home_delivery_options['standard_price_options_two_price'] = $home_delivery_config->get('options_standard_price_options_two_price') ? alshaya_acm_price_format((float) $home_delivery_config->get('options_standard_price_options_two_price')) : t('FREE');
+          $home_delivery_options = [];
+          $home_delivery_options['standard_title'] = $home_delivery_config->get('options_standard_title');
+          $home_delivery_options['standard_subtitle'] = $home_delivery_config->get('options_standard_subtitle');
 
-        // @TODO: Next day delivery not done for now.
-        $build['home_delivery'] = [
-          '#theme' => 'pdp_delivery_option',
-          '#title' => $home_delivery_config->get('title'),
-          '#subtitle' => $home_delivery_config->get('subtitle'),
-          '#title_price' => alshaya_acm_price_get_formatted_price((float) $home_delivery_config->get('price')),
-          '#options' => $home_delivery_options,
-        ];
+          // @TODO: Next day delivery not done for now.
+          $build['home_delivery'] = [
+            '#theme' => 'pdp_delivery_option',
+            '#title' => $home_delivery_config->get('title'),
+            '#subtitle' => $home_delivery_config->get('subtitle'),
+            '#options' => $home_delivery_options,
+          ];
+        }
       }
 
       $promotion_types = ['cart'];
@@ -275,7 +300,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
       if (!empty($promotions)) {
         $build['promotions'] = [
-          '#markup' => implode(', ', $promotions),
+          '#markup' => implode('</br>', $promotions),
         ];
       }
     }
@@ -295,7 +320,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
       if (!empty($promotions)) {
         $build['promotions'] = [
-          '#markup' => implode(', ', $promotions),
+          '#markup' => implode('</br>', $promotions),
         ];
       }
 
@@ -309,6 +334,16 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         '#mainsku' => $sku_identifier,
         '#type' => 'plp',
       ];
+
+      $promotion_types = ['cart'];
+
+      // Get promotions for the product.
+      $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
+      if (!empty($promotions)) {
+        $build['promotions'] = [
+          '#markup' => implode('</br>', $promotions),
+        ];
+      }
     }
     elseif ($view_mode == 'modal') {
       alshaya_acm_product_get_gallery($build, $sku_entity);
@@ -332,7 +367,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, TRUE, $promotion_types);
       if (!empty($promotions)) {
         $build['promotions'] = [
-          '#markup' => implode(', ', $promotions),
+          '#markup' => implode('</br>', $promotions),
         ];
       }
     }
@@ -350,8 +385,35 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
     $build['#no_add_to_cart'] = TRUE;
   }
 
-  // Show the price inside the SKU display when in full view mode.
+  // Show the placeholder to load add to cart form in full view mode.
   if ($build['#view_mode'] == 'full') {
+    // We don't display form and placeholder if not buyable.
+    if (!alshaya_acm_product_is_buyable($entity)) {
+      $build['#no_add_to_cart'] = TRUE;
+
+      // Display the non-buyable message and help text.
+      $settings = \Drupal::config('alshaya_acm_product.settings');
+      $build['not_buyable_message'] = [
+        '#markup' => '<div class="not-buyable-message">' . $settings->get('not_buyable_message.value') . '</div>',
+      ];
+
+      // Get store finder link.
+      $find_store_url = Url::fromUserInput('/store-finder')->toString();
+      $not_buyable_help_text = new FormattableMarkup($settings->get('not_buyable_help_text.value'), [
+        ':find_store' => $find_store_url,
+      ]);
+
+      $build['not_buyable_help_text'] = [
+        '#markup' => '<div class="not-buyable-help-text">' . $not_buyable_help_text . '</div>',
+      ];
+    }
+    else {
+      // Show placeholder to allow adding form in AJAX.
+      $build['cart_form_placeholder'] = [
+        '#markup' => '<div class="stock-checker">' . t('Checking stock...') . '</div>',
+      ];
+    }
+
     unset($build['name']);
     unset($build['price']);
   }
@@ -403,9 +465,25 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  $process_stock = FALSE;
+
+  // We process stock only when loaded from our custom controller.
+  if (\Drupal::routeMatch()->getRouteName() == 'alshaya_acm_product.get_cart_form') {
+    $process_stock = TRUE;
+  }
+
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   // Get SKU id.
   $sku_entity = SKU::load($form['sku_id']['#value']);
+
+  // For simple products, we just return from here. For configurable products,
+  // we check inside loop.
+  if ($sku_entity->getType() == 'simple') {
+    // We are not going to show the form right now, we don't do any stock check.
+    if (!$process_stock) {
+      return;
+    }
+  }
 
   $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
   $form['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
@@ -427,13 +505,13 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $configurable_sizes = $form['ajax']['configurables']['size'];
     if (\Drupal::languageManager()->getCurrentLanguage()->getId() !== $site_default_langcode) {
       foreach ($configurable_sizes['#options'] as $key => $option) {
-        $default_language_option_val = \Drupal::database()->select('acq_sku__attr_size', 'asas')
-          ->fields('asas', ['attr_size_value'])
-          ->condition('asas.langcode', $site_default_langcode)
-          ->condition('entity_id', $key)
-          ->execute()->fetchField();
+        $product_options_manager = \Drupal::service('acq_sku.product_options_manager');
 
-        $options[$option] = $default_language_option_val;
+        // Fetch taxonomy_term from option Id.
+        $default_language_option = $product_options_manager->loadProductOptionByOptionId('size', $key, $site_default_langcode);
+        if ($default_language_option) {
+          $options[$option] = $default_language_option->getName();
+        }
       }
 
       $form['#attached']['drupalSettings']['alshaya_product_size_config'] = $options;
@@ -447,7 +525,14 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
         unset($configurable['#ajax']['wrapper']);
 
+        // We are not going to show the form right now, we don't do any
+        // stock check for variant SKUs.
+        if (!$process_stock) {
+          continue;
+        }
+
         $configurable['#options_attributes'] = [];
+
         // Check if it is a dropdown, we disable the options for which we don't
         // have stock.
         if (isset($configurable['#options'])) {
@@ -545,17 +630,31 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
 
     $selector = '.configurable-wrapper-' . $sku_identifier;
-    $response->addCommand(new ReplaceCommand($selector, $dynamic_parts));
 
-    $selector = '.quantity-' . $sku_identifier;
-    $response->addCommand(new ReplaceCommand($selector, $form['quantity']));
+    // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
+    $data['replaceWith'] = \Drupal::service('renderer')->render($dynamic_parts);
+    $data['selector'] = $selector;
+
+    $response->addCommand(new InvokeCommand($selector, 'replaceDynamicParts', [$data]));
+
+    $quantity_selector = '.quantity-' . $sku_identifier;
+    $response->addCommand(new ReplaceCommand($quantity_selector, $form['quantity']));
+
+    // Get the data from BubbleMetaData.
+    $bubbleable_metadata = BubbleableMetadata::createFromRenderArray($dynamic_parts);
+
+    // Retrieve the attachments from the $data.
+    $attachments = $bubbleable_metadata->getAttachments();
+
+    // Send the updated settings in ajax response.
+    $response->addCommand(new SettingsCommand($attachments['drupalSettings'], TRUE));
 
     // Update the promotions for the product.
     $promotion_links = '';
     $promotion_types = ['cart'];
     $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($tree_pointer, TRUE, $promotion_types);
     if (!empty($promotions)) {
-      $promotion_links = implode(', ', $promotions);
+      $promotion_links = implode('</br>', $promotions);
     }
     $response->addCommand(new HtmlCommand('.promotions', $promotion_links));
 
@@ -618,7 +717,7 @@ function _alshaya_acm_product_get_size_guide_link() {
     $options = [
       'attributes' => [
         'class' => ['size-guide-link', 'use-ajax'],
-        'data-dialog-type' => 'modal',
+        'data-dialog-type' => 'dialog',
         'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
       ],
     ];
@@ -628,4 +727,40 @@ function _alshaya_acm_product_get_size_guide_link() {
   }
 
   return '';
+}
+
+/**
+ * Wrapper function to check if SKU is buyable.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+ *   SKU entity object.
+ *
+ * @return bool
+ *   SKU is buyable or not.
+ */
+function alshaya_acm_product_is_buyable(SKU $sku_entity) {
+  // For now we have only one condition, we may have more in future.
+  return (bool) $sku_entity->get('attr_is_buyable')->getString();
+}
+
+/**
+ * Wrapper function to get the cached expiration time for the SKU.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+ *   SKU entity object.
+ *
+ * @return int
+ *   Cache expiration time.
+ */
+function _alshaya_acm_get_stock_expiration_time(SKU $sku_entity) {
+  $stock_cid = acq_sku_get_stock_cache_id($sku_entity);
+  // If 'stock' bin is available.
+  if ($stock_cache_backend = \Drupal::cache('stock')) {
+    // If cached data is available.
+    if ($cache = $stock_cache_backend->get($stock_cid)) {
+      return (int) $cache->expire;
+    }
+  }
+
+  return (int) 0;
 }

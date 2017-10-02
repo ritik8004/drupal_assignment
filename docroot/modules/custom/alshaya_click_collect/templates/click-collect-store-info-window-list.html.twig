@@ -7,7 +7,7 @@
       </div>
       <div class="store-open-hours">
         <div class="hours--wrapper selector--hours">
-            <div class="hours--label" onclick='jQuery(this).toggleClass("open");'>{{ 'Opening Hours'|t }}</div>
+            <div class="hours--label" onclick="jQuery(this).toggleClass('open');">{{ 'Opening Hours'|t }}</div>
             <div class="open--hours">
               {% for item in store.open_hours %}
                 <div>
@@ -23,7 +23,7 @@
         <span class="delivery--time--value">{{ store.delivery_time }}</span>
       </div>
       <div class="view-on--map">
-        <a href="http://maps.google.com/?q={{ store.lat }},{{ store.lng }}" target='_blank'>
+        <a onclick="mapsApp({{ store.lat }}, {{ store.lng }})" target='_blank'>
           {% trans %}
           View on map
           {% endtrans %}

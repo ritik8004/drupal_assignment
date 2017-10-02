@@ -120,6 +120,8 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // plugin form instead.
     $payment_options = [];
     $payment_has_descriptions = [];
+    $payment_translations = [];
+
     foreach ($payment_methods as $plugin_id) {
       if (!isset($plugins[$plugin_id])) {
         continue;
@@ -132,6 +134,15 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         $description = $description_value[0]['value'];
       }
 
+      $current_language_id = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      $default_language_id = \Drupal::languageManager()->getDefaultLanguage()->getId();
+
+      if ($current_language_id !== $default_language_id) {
+        if ($payment_term->hasTranslation($default_language_id)) {
+          $default_language_payment_term = $payment_term->getTranslation($default_language_id);
+          $payment_translations[$payment_term->getName()] = $default_language_payment_term->getName();
+        }
+      }
       $payment_has_descriptions[$plugin_id] = (bool) $description;
 
       $method_name = '
@@ -143,6 +154,10 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       ';
 
       $payment_options[$plugin_id] = $method_name;
+    }
+
+    if (isset($payment_translations)) {
+      $pane_form['#attached']['drupalSettings']['alshaya_payment_options_translations'] = $payment_translations;
     }
 
     $pane_form['payment_options'] = [
@@ -246,6 +261,10 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $plugin = $this->getSelectedPlugin();
     $plugin->submitPaymentForm($pane_form, $form_state, $complete_form);
+
+    // Set the payment method id in session as it is not available in cart.
+    $session = \Drupal::request()->getSession();
+    $session->set('selected_payment_method', $plugin->getId());
   }
 
 }

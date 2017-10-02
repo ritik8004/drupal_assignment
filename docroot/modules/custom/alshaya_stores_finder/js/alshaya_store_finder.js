@@ -17,11 +17,6 @@
   Drupal.behaviors.storeFinder = {
     attach: function (context, settings) {
 
-      // Opening hours toggle.
-      $('[data-drupal-selector^="views-form-stores-finder-"], .individual--store', context).once('opening-hrs-init').on('click', '.hours--label', function () {
-        $(this).toggleClass('open');
-      });
-
       var storeFinderPageSelector = $('.view-id-stores_finder.view-display-id-page_1', context);
       if (storeFinderPageSelector.length > 0) {
         var loadmoreItemLimit = settings.stores_finder.load_more_item_limit;
@@ -39,6 +34,7 @@
 
         // Id of the row.
         var elementID = $(this).find('.set-center-location').attr('id');
+        var store_counter = $(this).find('.store-row--counter').text();
         Drupal.geolocation.loadGoogle(function () {
           var geolocationMap = {};
 
@@ -49,6 +45,7 @@
               }
             });
           }
+
           if (typeof geolocationMap.googleMap !== 'undefined') {
             var currentLat = parseFloat($('#' + elementID + ' .lat-lng .lat').html()).toFixed(6);
             var currentLng = parseFloat($('#' + elementID + ' .lat-lng .lng').html()).toFixed(6);
@@ -58,10 +55,13 @@
 
             // Clicking the markup.
             var markers = geolocationMap.mapMarkers;
+
             var current_marker = {};
             for (var i = 0, len = markers.length; i < len; i++) {
               // If markup has same latitude and longitude that we clicked.
-              if (markers[i].position.lat().toFixed(6) === currentLat && markers[i].position.lng().toFixed(6) === currentLng) {
+              var matchposition = (markers[i].position.lat().toFixed(6) === currentLat && markers[i].position.lng().toFixed(6) === currentLng);
+              var matchlabel = (store_counter == markers[i].label);
+              if (matchposition || matchlabel) {
                 current_marker = markers[i];
                 break;
               }
@@ -133,9 +133,9 @@
                 $('.current-view input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
               }
               else {
-                $('.block-views-exposed-filter-blockstores-finder-page-1 #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
-                $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
-                $('.block-views-exposed-filter-blockstores-finder-page-1 input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
+                $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] #edit-geolocation-geocoder-google-places-api').val(results[1].formatted_address);
+                $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] input[name="field_latitude_longitude_proximity-lat"]').val(latitude);
+                $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] input[name="field_latitude_longitude_proximity-lng"]').val(longitude);
               }
             }
           }
@@ -152,7 +152,7 @@
           else {
             setTimeout(function () {
               if (runscript) {
-                $('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-submit-stores-finder').trigger('click');
+                $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form #edit-submit-stores-finder').trigger('click');
               }
               // Close the overlay.
               $('body').removeClass('modal-overlay--spinner');
@@ -172,8 +172,13 @@
         }
       };
 
+      // Scroll to top of the page on store-detail.
+      $.fn.storeFinderDetailPageScrollTop = function (data) {
+        window.scrollTo(0, 0);
+      };
+
       // Trigger click on autocomplete selection.
-      $('[class*="block-views-exposed-filter-blockstores-finder-page"]').each(function () {
+      $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"]').each(function () {
         var storeFinder = $(this);
         // Add class to store finder exposed form.
         // Adding class to hook_form_alter for store finder form is adding it to the
@@ -206,13 +211,21 @@
       $(storeLocatorSelector).slice(loadmoreItemLimit, viewLocatorCount).hide();
 
       $(loadMoreButtonSelector).on('click', function (e) {
+        var itemListContainerSelector = $('.view-id-stores_finder.view-display-id-page_1 .view-content');
+        var itemListSelector = $('.view-id-stores_finder.view-display-id-page_1 .view-content .views-form form');
+        var itemListBeforeHeight = itemListSelector.height();
         e.preventDefault();
         var hiddenStoreSelector = $(storeLocatorSelector + ':hidden');
-        hiddenStoreSelector.slice(0, loadmoreItemLimit).slideDown('slow', function () {
+        hiddenStoreSelector.slice(0, loadmoreItemLimit).show(function () {
           if ($(storeLocatorSelector + ':hidden').length === 0) {
             $(loadMoreButtonSelector).fadeOut('slow');
           }
         });
+        // On tablet and desktop scroll the page to the top along with the list.
+        if ($(window).width() >= 1025) {
+          $.fn.storeFinderDetailPageScrollTop();
+          itemListContainerSelector.stop().animate({scrollTop:itemListBeforeHeight + 25}, 1200, 'swing');
+        }
       });
     }
     else {

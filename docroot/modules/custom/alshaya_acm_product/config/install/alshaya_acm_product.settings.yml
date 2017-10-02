@@ -1,5 +1,12 @@
+related_items_size: 12
 brand_logo_base_path: 'media/attribute/swatch'
 brand_logo_extension: 'jpg'
+not_buyable_message:
+  format: rich_text
+  value: '<p>Unfortunately, we do not yet offer furniture items for purchase online. But we will be happy to tell you more about this product and how you can buy it.</p>'
+not_buyable_help_text:
+  format: rich_text
+  value: '<p>Please visit a <a href=":find_store">Mothercare store</a> or contact customer services for support on 182-12-12.</p>'
 size_guide_link: 0
 size_guide_modal_content:
   format: rich_text

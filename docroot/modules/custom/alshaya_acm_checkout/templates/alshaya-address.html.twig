@@ -25,5 +25,5 @@
 {% endif %}
 
 <div class="address--contact">
-  {{ 'Contact:' }} {{ address.telephone }}
+  {{ 'Mobile Number' | t }}: <div class="no-direction">{{ address.telephone|replace({' ':''}) }}</div>
 </div>

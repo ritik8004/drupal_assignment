@@ -56,25 +56,32 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
 
       $sku_entity->get('field_acq_sku_promotions')->setValue($sku_promotions);
       $sku_entity->save();
+
+      // Update Sku Translations.
+      $translation_languages = $sku_entity->getTranslationLanguages(FALSE);
+
+      foreach ($translation_languages as $langcode => $language) {
+        $sku_entity_translation = $sku_entity->getTranslation($langcode);
+        $sku_entity_translation->get('field_acq_sku_promotions')->setValue($sku_promotions);
+        $sku_entity_translation->save();
+      }
     }
 
-    $sku_texts = array_keys($skus);
-    $sku_query_string = implode(',', $sku_texts);
-
-    $endpoint = $this->apiVersion . '/ingest/product/sync?skus=' . $sku_query_string;
+    $sku_texts = implode(',', $skus);
+    $endpoint = $this->apiVersion . '/ingest/product/sync';
 
     $doReq = function ($client, $opt) use ($endpoint) {
       return $client->post($endpoint, $opt);
     };
 
     try {
-      $this->tryIngestRequest($doReq, 'productFullSync', 'products');
+      $this->tryIngestRequest($doReq, 'productFullSync', 'products', $sku_texts);
     }
     catch (ConductorException $e) {
     }
 
     $this->loggerFactory->get('acq_sku')->info('Detached Promotion:@promo from SKUs: @skus',
-      ['@promo' => $promotion_nid, '@skus' => implode(',', $skus)]);
+      ['@promo' => $promotion_nid, '@skus' => $sku_texts]);
   }
 
 }

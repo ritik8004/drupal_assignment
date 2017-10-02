@@ -20,7 +20,7 @@ function alshaya_default_content_module_implements_alter(&$implementations, $hoo
  * Implements hook_modules_installed().
  */
 function alshaya_default_content_modules_installed($modules) {
-  if (in_array('alshaya_default_content', $modules)) {
+  if (\Drupal::moduleHandler()->moduleExists('simple_sitemap') && in_array('alshaya_default_content', $modules)) {
     // Exclude home page node from sitemap.
     $entity_details = \Drupal::config('alshaya_master.home')->get('entity');
 

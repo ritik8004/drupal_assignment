@@ -4,6 +4,7 @@ namespace Drupal\acq_promotion;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -11,7 +12,6 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\node\Entity\Node;
-use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Class AcqPromotionsManager.
@@ -68,6 +68,13 @@ class AcqPromotionsManager {
   protected $configFactory;
 
   /**
+   * Database connection service.
+   *
+   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   */
+  protected $connection;
+
+  /**
    * Constructs a new AcqPromotionsManager object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -84,6 +91,8 @@ class AcqPromotionsManager {
    *   Queue factory service.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   Config factory service.
+   * @param Connection $connection
+   *   Database connection service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               APIWrapper $api_wrapper,
@@ -91,7 +100,8 @@ class AcqPromotionsManager {
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
                               QueueFactory $queue,
-                              ConfigFactory $configFactory) {
+                              ConfigFactory $configFactory,
+                              Connection $connection) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->apiWrapper = $api_wrapper;
@@ -100,6 +110,7 @@ class AcqPromotionsManager {
     $this->entityRepository = $entityRepository;
     $this->queue = $queue;
     $this->configFactory = $configFactory;
+    $this->connection = $connection;
   }
 
   /**
@@ -111,7 +122,6 @@ class AcqPromotionsManager {
   public function syncPromotions($types = ['category', 'cart']) {
     $types = is_array($types) ? $types : [$types];
     $ids = [];
-    $promotions = [];
     $fetched_promotions = [];
 
     foreach ($types as $type) {
@@ -125,10 +135,14 @@ class AcqPromotionsManager {
       }
     }
 
-    $this->processPromotions($fetched_promotions);
+    if (!empty($fetched_promotions)) {
+      $this->processPromotions($fetched_promotions);
+    }
 
     // Unpublish promotions, which are not part of API response.
-    $this->unpublishPromotions($ids);
+    if (!empty($ids)) {
+      $this->unpublishPromotions($ids);
+    }
   }
 
   /**
@@ -142,6 +156,11 @@ class AcqPromotionsManager {
     $query->condition('type', 'acq_promotion');
     $query->condition('field_acq_promotion_rule_id', $validIDs, 'NOT IN');
     $nids = $query->execute();
+
+    $acq_promotion_attach_batch_size = $this->configFactory
+      ->get('acq_promotion.settings')
+      ->get('promotion_attach_batch_size');
+
     foreach ($nids as $nid) {
       /* @var $node \Drupal\node\Entity\Node */
       $node = $this->nodeStorage->load($nid);
@@ -149,12 +168,15 @@ class AcqPromotionsManager {
       $node->save();
 
       // Detach promotion from all skus.
-      $attached_skus = $this->getSkusForPromotion($node);
-      if ($attached_skus) {
-        $data['skus'] = $attached_skus;
-        $data['promotion'] = $node->id();
-        $acq_promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
-        $acq_promotion_detach_queue->createItem($data);
+      $attached_promotion_skus = $this->getSkusForPromotion($node);
+      if (!empty($attached_promotion_skus)) {
+        $chunks = array_chunk($attached_promotion_skus, $acq_promotion_attach_batch_size);
+        foreach ($chunks as $chunk) {
+          $data['skus'] = $chunk;
+          $data['promotion'] = $nid;
+          $acq_promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
+          $acq_promotion_detach_queue->createItem($data);
+        }
       }
     }
   }
@@ -205,13 +227,13 @@ class AcqPromotionsManager {
    *   Array of sku objects attached with the promotion.
    */
   public function getSkusForPromotion(Node $promotion) {
-    $skus = [];
-    $query = $this->skuStorage->getQuery();
-    $query->condition('field_acq_sku_promotions', $promotion->id());
-    $sku_ids = $query->execute();
-    if (!empty($sku_ids)) {
-      $skus = SKU::loadMultiple($sku_ids);
-    }
+
+    $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
+    $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
+    $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
+    $query->fields('asfd', ['id', 'sku']);
+    $query->distinct();
+    $skus = $query->execute()->fetchAllKeyed(0, 1);
 
     return $skus;
   }
@@ -240,8 +262,14 @@ class AcqPromotionsManager {
     $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
 
     foreach ($promotions_labels as $promotion_label) {
-      $promtion_label_language = acq_commerce_get_langcode_from_store_id($promotion_label['store_id']);
-      $promotion_label_languages[$promtion_label_language] = $promotion_label['store_label'];
+      $promotion_label_language = acq_commerce_get_langcode_from_store_id($promotion_label['store_id']);
+
+      // Magento might have stores that what we don't support.
+      if (empty($promotion_label_language)) {
+        continue;
+      }
+
+      $promotion_label_languages[$promotion_label_language] = $promotion_label['store_label'];
     }
 
     $promotion_node->get('title')->setValue($promotion['name']);
@@ -287,11 +315,11 @@ class AcqPromotionsManager {
     foreach ($promotion_label_languages as $langcode => $promotion_label_language) {
       if ($langcode !== $site_default_langcode) {
         if ($promotion_node->hasTranslation($langcode)) {
-          $node_translation = $promotion_node->getTranslation($langcode);
+          $promotion_node->removeTranslation($langcode);
         }
-        else {
-          $node_translation = $promotion_node->addTranslation($langcode, $promotion_node->toArray());
-        }
+
+        $node_translation = $promotion_node->addTranslation($langcode, $promotion_node->toArray());
+
         $node_translation->get('field_acq_promotion_label')->setValue($promotion_label_languages[$langcode]);
         $node_translation->save();
       }
@@ -321,19 +349,32 @@ class AcqPromotionsManager {
       ->get('acq_promotion.settings')
       ->get('promotion_attach_batch_size');
 
+    $promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
+    $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
+
+    // Clear any outstanding items in queue before starting promotion import to
+    // avoid duplicate queues.
+    $promotion_detach_queue->deleteQueue();
+    $promotion_attach_queue->deleteQueue();
+
     foreach ($promotions as $promotion) {
-      $attached_promotion_skus = [];
       $fetched_promotion_skus = [];
       $fetched_promotion_sku_attach_data = [];
 
       // Extract list of sku text attached with the promotion passed.
       $products = $promotion['products'];
       foreach ($products as $product) {
-        $fetched_promotion_skus[] = $product['product_sku'];
-        $fetched_promotion_sku_attach_data[$product['product_sku']] = [
-          'sku' => $product['product_sku'],
-          'final_price' => $product['final_price'],
-        ];
+        if (!in_array($product['product_sku'], array_keys($fetched_promotion_skus))) {
+          $fetched_promotion_skus[$product['product_sku']] = $product['product_sku'];
+
+          $fetched_promotion_sku_attach_data[$product['product_sku']] = [
+            'sku' => $product['product_sku'],
+          ];
+
+          if (($promotion['promotion_type'] === 'category') && isset($product['final_price'])) {
+            $fetched_promotion_sku_attach_data[$product['product_sku']]['final_price'] = $product['final_price'];
+          }
+        }
       }
 
       // Check if this promotion exists in Drupal.
@@ -341,33 +382,33 @@ class AcqPromotionsManager {
 
       // If promotion exists, we update the related skus & final price.
       if ($promotion_node) {
+        $promotion_nid = $promotion_node->id();
+
         // Update promotion metadata.
         $this->syncPromotionWithMiddlewareResponse($promotion, $promotion_node);
-        $attached_skus = $this->getSkusForPromotion($promotion_node);
-
-        // Extract sku text from sku objects.
-        if (!empty($attached_skus)) {
-          foreach ($attached_skus as $attached_sku) {
-            $attached_promotion_skus[] = $attached_sku->getSku();
-          }
-        }
+        $attached_promotion_skus = $this->getSkusForPromotion($promotion_node);
+        $detach_promotion_skus = [];
 
         // Get list of skus for which promotions should be detached.
-        $detach_promotion_skus = array_diff($attached_promotion_skus, $fetched_promotion_skus);
+        if (!empty($attached_promotion_skus)) {
+          $detach_promotion_skus = array_diff($attached_promotion_skus, $fetched_promotion_skus);
+        }
 
         // Create a queue for removing promotions from skus.
         if (!empty($detach_promotion_skus)) {
-          $promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
-          $data['promotion'] = $promotion_node->id();
-          $data['skus'] = $detach_promotion_skus;
-          $promotion_detach_queue->createItem($data);
-          $output['detached_message'] = t(
-            'Skus @skus queued up to detach promotion rule: @rule_id',
-            [
-              '@skus' => implode(',', $data['skus']),
-              '@rule_id' => $promotion['rule_id'],
-            ]
-          );
+          $chunks = array_chunk($detach_promotion_skus, $acq_promotion_attach_batch_size);
+          foreach ($chunks as $chunk) {
+            $data['promotion'] = $promotion_nid;
+            $data['skus'] = $chunk;
+            $promotion_detach_queue->createItem($data);
+            $output['detached_message'] = t(
+              'Skus @skus queued up to detach promotion rule: @rule_id',
+              [
+                '@skus' => implode(',', $data['skus']),
+                '@rule_id' => $promotion['rule_id'],
+              ]
+            );
+          }
         }
       }
       else {
@@ -376,8 +417,7 @@ class AcqPromotionsManager {
       }
 
       // Attach promotions to skus.
-      if ($promotion_node && (!empty($fetched_promotion_skus))) {
-        $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
+      if ($promotion_node && (!empty($fetched_promotion_sku_attach_data))) {
         $data['promotion'] = $promotion_node->id();
         $chunks = array_chunk($fetched_promotion_sku_attach_data, $acq_promotion_attach_batch_size);
         foreach ($chunks as $chunk) {

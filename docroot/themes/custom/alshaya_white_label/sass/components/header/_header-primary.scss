@@ -1,5 +1,3 @@
-
-
 @include breakpoint($desktop) {
   .no--desktop,
   .toggle--sign.no--desktop {
@@ -322,7 +320,6 @@ header {
 
   @include breakpoint($only-tablet) {
     #mini-cart-wrapper {
-      min-width: 8.625rem;
       float: $right;
       margin-top: -7px;
 
@@ -1379,12 +1376,13 @@ header {
     font-size: 2rem;
     max-width: 10.0625rem;
 
-    @include breakpoint($tablet) {
-      max-width: none;
+    @include breakpoint($only-tablet) {
+      max-width: 13rem;
     }
 
     @include breakpoint($desktop) {
       height: 2.875rem;
+      max-width: 17.5625rem;
     }
   }
 }

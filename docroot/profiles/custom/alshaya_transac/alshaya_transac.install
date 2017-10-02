@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall hooks for the alshaya_transac subprofile.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_transac_install() {
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::service('module_installer')->install(['acquia_search']);
+  }
+
+  $modules = [
+    // Custom modules.
+    'alshaya_custom',
+    'alshaya_addressbook',
+    'alshaya_advanced_page',
+    'alshaya_acm',
+    'alshaya_acm_checkout',
+    'alshaya_acm_customer',
+    'alshaya_acm_product',
+    'alshaya_acm_product_category',
+    'alshaya_acm_product_position',
+    'alshaya_acm_promotion',
+    'alshaya_admin',
+    'alshaya_arabic',
+    'alshaya_block',
+    'alshaya_captcha',
+    'alshaya_click_collect',
+    'alshaya_config',
+    'alshaya_contact',
+    // 'alshaya_default_content',
+    'alshaya_default_content_transac',
+    'alshaya_department_page',
+    'alshaya_i18n',
+    'alshaya_loyalty',
+    'alshaya_main_menu',
+    'alshaya_master',
+    'alshaya_menus',
+    'alshaya_acm_cart_notification',
+    'alshaya_newsletter',
+    'alshaya_permissions',
+    'alshaya_product',
+    'alshaya_seo',
+    'alshaya_stores_finder',
+    'alshaya_user',
+    'alshaya_acm_knet',
+    'alshaya_static_html',
+  ];
+
+  global $_alshaya_modules_installed;
+
+  foreach ($modules as $module) {
+    \Drupal::service('module_installer')->install([$module]);
+    $_alshaya_modules_installed[] = $module;
+  }
+
+  // Invoke a hook to let other modules know that profile installation is done.
+  \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya_transac', $modules]);
+
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    // Configure ShareThis defaults.
+    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+    if (\Drupal::moduleHandler()->moduleExists('acq_sku')) {
+      // Enable share this for Product CT.
+      $configFactory->set('node_types.acq_product', 'acq_product');
+    }
+    // Set the option to use custom style for showing share images.
+    $configFactory->set('button_option', 'stbc_custom');
+    // Save the changes.
+    $configFactory->save();
+  }
+  
+  // Set whitelabel_transac as the default theme.
+  \Drupal::service('theme_handler')->setDefault('whitelabel_transac');
+
+  // Invoke the function in profile to inform sub profile is installed.
+  alshaya_sub_profile_installed('alshaya_transac', $modules);
+}

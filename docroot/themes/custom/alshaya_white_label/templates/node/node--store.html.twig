@@ -3,9 +3,9 @@
     <div class="list-view-locator">
       <div class="back-link">
         {% if previous_page == 'list' %}
-          <a class="use-ajax" href="{{ url('alshaya_stores_finder.view_toggle', {'view_type': 'list_view'}) }}">{{ 'Back' | t }}</a>
+          <a href="{{ url('view.stores_finder.page_2') }}">{{ 'Back' | t }}</a>
         {% else %}
-          <a class="use-ajax" href="{{ url('alshaya_stores_finder.glossary_back') }}">{{ 'Back' | t }}</a>
+          <a href="{{ url('view.stores_finder.page_2') }}">{{ 'Back' | t }}</a>
         {% endif %}
       </div>
       <div>

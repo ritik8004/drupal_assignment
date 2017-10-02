@@ -44,6 +44,9 @@
         if ($('body').hasClass('path--search')) {
           mobileFilterBarSelector = '.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar';
         }
+        else if ($('body').hasClass('nodetype--acq_promotion')) {
+          mobileFilterBarSelector = '.region__content .region__sidebar-first .block-facets-summary-blockfilter-bar-promotions';
+        }
         else {
           mobileFilterBarSelector = '.c-content__region .region__sidebar-first .block-facets-summary-blockfilter-bar-plp';
         }
@@ -59,7 +62,7 @@
 
         var countFilters = $(mobileFilterBarSelector + ' ul li').length;
         if (countFilters === 0 && $.trim($(mobileFilterBarSelector)
-            .html()).length === 0) {
+          .html()).length === 0) {
           $(mobileFilterBarSelector)
             .once()
             .append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
@@ -88,11 +91,50 @@
         if ($('body').hasClass('path--search')) {
           filterBarSelector = '.region__content > .block-facets-summary-blockfilter-bar';
         }
+        else if ($('body').hasClass('nodetype--acq_promotion')) {
+          filterBarSelector = '.region__content > .block-facets-summary-blockfilter-bar-promotions';
+        }
         else {
           filterBarSelector = '.region__content > .block-facets-summary-blockfilter-bar-plp';
         }
 
         if ($(window).width() < 768) {
+          // Enable & disable apply filter button on mobile.
+          $(document).ajaxComplete(function () {
+            var facetBlocks = $('.c-facet__blocks__wrapper--mobile .c-facet__blocks');
+            var clearAllMobileButton = $('.c-facet__blocks__wrapper--mobile .clear-all');
+            var clearAllFake = $('.clear-all-fake');
+            if (clearAllMobileButton.length !== 0) {
+              clearAllFake.removeClass('inactive');
+              if (!clearAllFake.hasClass('active')) {
+                clearAllFake.addClass('active');
+              }
+            }
+            else if (clearAllMobileButton.length === 0) {
+              if (!clearAllFake.hasClass('inactive')) {
+                clearAllFake.addClass('inactive');
+              }
+            }
+
+            if (facetBlocks.length !== 0) {
+              var selectedFiterCount = facetBlocks.find('input:checked').length;
+              var fakeApplyButton = $('.fake-apply-button');
+              if (selectedFiterCount > 0) {
+                fakeApplyButton.removeClass('inactive');
+                fakeApplyButton.removeAttr('disabled');
+                if (!fakeApplyButton.hasClass('active')) {
+                  fakeApplyButton.addClass('active');
+                }
+              }
+              else {
+                fakeApplyButton.attr('disabled', 'disabled');
+                if (!fakeApplyButton.hasClass('inactive')) {
+                  fakeApplyButton.addClass('inactive');
+                }
+              }
+            }
+          });
+
           // Facet Block selector.
           var facetBlocks = $('.c-facet__blocks__wrapper .c-facet__blocks');
 
@@ -103,8 +145,16 @@
           }
           else {
             // If we dont have one, create it, this is first time load.
-            $('<div class="filter-menu-label"><span class="label">' + Drupal.t('filter') + '</span><li class="clear-all-fake"><span>' + Drupal.t('clear all') + '</span></li></div>')
+            $('<div class="filter-menu-label"><span class="label">' + Drupal.t('filter') + '</span><li class="apply-fake"><input type="button" class="fake-apply-button inactive" disabled value="' + Drupal.t('apply') + '"></li><li class="clear-all-fake inactive"><span>' + Drupal.t('clear all') + '</span></li></div>')
               .insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
+
+            $('.fake-apply-button').click(function () {
+              $('body').toggleClass('filter-open-no-scroll');
+              $('.c-facet__blocks__wrapper--mobile .c-facet__blocks').hide();
+              $('.show-overlay').each(function () {
+                $(this).removeClass('show-overlay');
+              });
+            });
           }
 
           if ($(mobileFilterBarSelector).length) {
@@ -139,6 +189,10 @@
         if ($('body').hasClass('path--search')) {
           viewHeader = $('.c-search .view-search .view-header');
           selector = '.c-content__region .block-views-exposed-filter-blocksearch-page';
+        }
+        else if ($('body').hasClass('nodetype--acq_promotion')) {
+          viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
+          selector = '.c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-2';
         }
         else {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
@@ -186,6 +240,14 @@
             $('.region__content .block-views-exposed-filter-blocksearch-page .c-facet__blocks__wrapper')
               .insertBefore('.view-filters.is-filter');
           }
+          else if ($('body').hasClass('nodetype--acq_promotion')) {
+            mainBlock.before(facetBlockWrapper);
+            var promoFilter = $('.c-plp #views-exposed-form-alshaya-product-list-block-2');
+            promoFilter.wrapAll('<div class="view-filters is-filter">');
+            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
+            $('.region__content .c-facet__blocks__wrapper')
+              .insertBefore('.view-filters.is-filter');
+          }
           else {
             mainBlock.before(facetBlockWrapper);
             var plpFilter = $('.c-plp #views-exposed-form-alshaya-product-list-block-1');
@@ -195,7 +257,7 @@
               .insertBefore('.view-filters.is-filter');
           }
 
-          facetLabel.click(function () {
+          facetLabel.on('click', function () {
             $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
               .toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
@@ -218,13 +280,22 @@
         }
 
         // Add class to promotional banner view block if it is not empty.
-        if (!$('.view-plp-promotional-banner .field-content').is(':empty')) {
-          $('.block-views-blockplp-promotional-banner-block-1')
-            .addClass('promo-banner');
-          $('.region__content').addClass('promo-banner');
-          $('.block-views-blockplp-promotional-banner-block-1')
-            .siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1')
-            .addClass('promo-banner');
+        var bannerBlock = '';
+        if ($('body').hasClass('nodetype--acq_promotion')) {
+          if (!$('.view-promotion-banner .field-content').is(':empty')) {
+            bannerBlock = $('.block-views-blockpromotion-banner-block-1');
+            bannerBlock.addClass('promo-banner');
+            $('.region__content').addClass('promo-banner');
+            bannerBlock.siblings('.block-views-exposed-filter-blockalshaya-product-list-block-2').addClass('promo-banner');
+          }
+        }
+        else {
+          if (!$('.view-plp-promotional-banner .field-content').is(':empty')) {
+            bannerBlock = $('.block-views-blockplp-promotional-banner-block-1');
+            bannerBlock.addClass('promo-banner');
+            $('.region__content').addClass('promo-banner');
+            bannerBlock.siblings('.block-views-exposed-filter-blockalshaya-product-list-block-1').addClass('promo-banner');
+          }
         }
       }
 
@@ -239,28 +310,19 @@
 
       // Toggle the filter menu when click on the label.
       $('.filter-menu-label .label').once().on('click', function () {
-        $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
-          .toggleClass('show-overlay');
-        $('body').toggleClass('filter-open-no-scroll');
         $('.c-facet__blocks__wrapper .c-facet__label').parent().siblings('.view-filters').toggleClass('low-zindex');
         $('.c-facet__blocks__wrapper .c-facet__label').toggleClass('is-active');
         $('.c-facet__blocks__wrapper .c-facet__blocks').toggle();
+        $('body').toggleClass('filter-open-no-scroll');
+        $('.show-overlay').each(function () {
+          $(this).removeClass('show-overlay');
+        });
       });
 
       $('.c-facet').each(function () {
         if ($(this).hasClass('facet-active')) {
           $(this).find('.c-accordion__title').addClass('ui-state-active');
         }
-      });
-
-      // Close the filter menu when a facet is selected/unselected.
-      $('.filter--mobile li.facet-item').once().on('click', function () {
-        var facetBlocks = $(this).closest('.c-facet__blocks');
-        facetBlocks.toggle();
-        $('body').toggleClass('filter-open-no-scroll');
-        facetBlocks.siblings('.c-facet__label').toggleClass('is-active');
-        $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
-          .toggleClass('show-overlay');
       });
 
       // Click event for fake clear all link on mobile filter.
@@ -283,6 +345,12 @@
             $(this).find('ul li:gt(' + softItemsLimit + ')').hide();
             softLink.insertAfter($(this).find('ul'));
           });
+
+          // Function defined in mobile and called here.
+          // Don't want to refactor a lot to fix during UAT stage.
+          if (typeof Drupal.alshayaSearchActiveFacetResetAfterAjax !== 'undefined') {
+            Drupal.alshayaSearchActiveFacetResetAfterAjax();
+          }
         }
       }, 100);
 
@@ -294,6 +362,12 @@
             softLink.addClass('processed');
             softLink.insertAfter($(this).find('ul'));
           });
+
+          // Function defined in mobile and called here.
+          // Don't want to refactor a lot to fix during UAT stage.
+          if (typeof Drupal.alshayaSearchActiveFacetResetAfterAjax !== 'undefined') {
+            Drupal.alshayaSearchActiveFacetResetAfterAjax();
+          }
         }
       }, 100);
     }

@@ -14,16 +14,6 @@
       var applyCoupon = $('#apply_coupon');
 
       $('.customer-cart-form', context).once('bind-events').each(function () {
-        // Display apply coupon button if there's a value, else hide it.
-        $('input[name="coupon"]').on('input', function (e) {
-          if ($(this).val() !== '') {
-            $('#apply_coupon').show();
-          }
-          else {
-            $('#apply_coupon').hide();
-          }
-        });
-
         $('#apply_coupon', $(this)).on('click', function () {
           $('[data-drupal-selector="edit-update"]').trigger('click');
         });
@@ -34,17 +24,23 @@
           $('[data-drupal-selector="edit-checkout"]').trigger('click');
         });
       });
-
-      $.fn.updateOutOfStockDom = function (message) {
-        if ($('#out-of-stock-message').length) {
-          $('#out-of-stock-message').html(message);
-        }
-        else {
-          var error_div = '<div id="out-of-stock-message">' + message + '</div>';
-          $('#table-cart-items').before(error_div);
-        }
-      };
-
     }
   };
+
+  $.fn.updateOutOfStockDom = function (message) {
+    if ($('#out-of-stock-message').length) {
+      $('#out-of-stock-message').html(message);
+    }
+    else {
+      var error_div = '<div id="out-of-stock-message">' + message + '</div>';
+      $('#table-cart-items').before(error_div);
+    }
+  };
+
+  $.fn.removeCartItem = function (sku) {
+    var removedItem = $('#edit-cart [gtm-product-sku="' + sku + '"]');
+    removedItem.trigger('cart-item-removed');
+    window.location.reload();
+  }
+
 })(jQuery);

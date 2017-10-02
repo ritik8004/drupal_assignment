@@ -14,6 +14,9 @@ stock_check:
     - core/jquery
     - core/drupal.ajax
     - core/drupal.dialog.ajax
+    - core/drupal.form
+    - clientside_validation_jquery/cv.jquery.validate
     - alshaya_master/ladda
     - alshaya_acm_product/product_view
     - alshaya_acm_cart_notification/cart_notification_js
+    - alshaya_white_label/jquery_mobile_touch_swipe

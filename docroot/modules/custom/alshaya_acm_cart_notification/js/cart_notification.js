@@ -4,12 +4,14 @@
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
       $(window).on('click', function() {
-        // check if element is Visible
-        var length = $('#cart_notification').html().length;
-        if (length > 0) {
-          $('#cart_notification').empty();
-          $('body').removeClass('notification--on');
-          $('#cart_notification').removeClass('has--notification')
+        if ($('#cart_notification').length) {
+          // check if element is Visible
+          var length = $('#cart_notification').html().length;
+          if (length > 0) {
+            $('#cart_notification').empty();
+            $('body').removeClass('notification--on');
+            $('#cart_notification').removeClass('has--notification')
+          }
         }
       });
 
@@ -54,17 +56,29 @@
       });
 
       $.fn.cartNotificationScroll = function () {
-        $('html,body').animate({
+        $('html, body').animate({
           scrollTop: $('.header--wrapper').offset().top
         }, 'slow');
           $('body').addClass('notification--on');
-        $('#cart_notification').addClass('has--notification')
+        $('#cart_notification').addClass('has--notification');
+
+        setTimeout(function () {
+          $('#cart_notification').fadeOut();
+        }, 10000);
+      };
+
+      $.fn.cartGenericScroll = function (selector) {
+        if ($(window).width() < 768 && $('body').find(selector).length !== 0) {
+          $('html, body').animate({
+            scrollTop: $(selector).offset().top - $('.branding__menu').height() - 100
+          }, 'slow');
+        }
       };
 
       $.fn.stopSpinner = function (data) {
         l.ladda('stop');
         if (data.message === 'success') {
-          $('.edit-add-to-cart', context).find('.ladda-label').html(Drupal.t('added'));
+          $('.edit-add-to-cart', $(data.sku_css_id).parent()).find('.ladda-label').html(Drupal.t('added'));
           var pdpAddCartButton = l;
           var addedProduct = pdpAddCartButton.closest('article[gtm-type="gtm-product-link"]');
           var quantity = parseInt(pdpAddCartButton.closest('.sku-base-form').find('.form-item-quantity select').val());
@@ -94,17 +108,16 @@
             product.quantity = quantity;
 
             // Set product size to selected size.
-            if (product.dimension5 !== 'simple') {
+            if (product.dimension2 !== 'simple') {
               var currentLangCode = drupalSettings.path.currentLanguage;
               if (currentLangCode !== 'en') {
-                var productSizeTranslations = drupalSettings.alshaya_product_size_config;
                 size = drupalSettings.alshaya_product_size_config[size];
               }
-              product.dimension1 = size;
+              product.dimension6 = size;
             }
 
             // Set product variant to the selected variant.
-            if (product.dimension5 !== 'simple') {
+            if (product.dimension2 !== 'simple') {
               product.variant = selectedVariant;
             }
             else {
@@ -112,7 +125,7 @@
             }
 
             // Calculate metric 1 value.
-            product.metric1 = product.price * product.quantity;
+            product.metric2 = product.price * product.quantity;
 
             var productData = {
               'event': 'addToCart',

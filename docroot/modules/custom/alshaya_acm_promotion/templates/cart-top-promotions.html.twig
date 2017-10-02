@@ -1,7 +1,10 @@
 {% if promotions is not empty %}
   <div class="cart-promotions-wrapper" id="block-basketpromotionmessage">
     {% for id, promotion in promotions %}
-      <p class="promotion">{{ promotion | raw }}</p>
+      <p class="promotion">{{ promotion }}</p>
     {% endfor %}
+    <div class="continue-shopping">
+      <a href="{{ path('<front>') }}">{{ 'continue shopping' | t }}</a>
+    </div>
   </div>
 {% endif %}

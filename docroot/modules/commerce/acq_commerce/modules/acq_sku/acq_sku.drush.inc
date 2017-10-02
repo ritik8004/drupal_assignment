@@ -5,6 +5,9 @@
  * Provides drush commands for the products of Acquia Commerce connector.
  */
 
+use Drupal\Core\Cache\Cache;
+use Drupal\acq_sku\Entity\SKU;
+
 const DELETE_BATCH_COUNT = 200;
 
 /**
@@ -26,6 +29,10 @@ function acq_sku_drush_command() {
     'aliases'     => ['acsp'],
     'examples'    => [
       'drush acsp' => 'Run a full product synchronization of all available products.',
+      'drush acsp --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\'' => 'Synchronize sku data for the skus M-H3495 130 2  FW, M-H3496 130 004FW & M-H3496 130 005FW only.',
+    ],
+    'options'     => [
+      'skus' => 'SKUs to import (like query).',
     ],
   ];
 
@@ -38,10 +45,33 @@ function acq_sku_drush_command() {
   ];
 
   $commands['clean-synced-data'] = [
-    'description' => 'Flush all commerce data from the site (Products, SKUs and Product Categories).',
+    'description' => 'Flush all commerce data from the site (Products, SKUs, Product Categories and Product Options).',
     'aliases'     => ['accd'],
     'examples'    => [
-      'drush acsc' => 'Flush all commerce data from the site (Products, SKUs and Product Categories).',
+      'drush acsc' => 'Flush all commerce data from the site (Products, SKUs, Product Categories and Product Options).',
+    ],
+  ];
+
+  $commands['get-stock-cache'] = [
+    'description' => 'Get stock cache for particualar SKU in all languages',
+    'aliases'     => ['acgsc'],
+    'arguments'     => [
+      'sku' => 'SKU to get stock of.',
+    ],
+    'examples'    => [
+      'drush acgsc SKU' => 'Get stock cache for particualar SKU in all languages',
+    ],
+  ];
+
+  $commands['clean-stock-cache'] = [
+    'description' => 'Flush the stock cache.',
+    'aliases'     => ['accsc'],
+    'options'     => [
+      'sku' => 'SKU to clean stock of.',
+    ],
+    'examples'    => [
+      'drush accsc' => 'Flush stock cache for all SKUs in all languages.',
+      'drush accsc --sku=SKU' => 'Flush stock cache for particular SKU in all languages',
     ],
   ];
 
@@ -54,7 +84,9 @@ function acq_sku_drush_command() {
 function drush_acq_sku_sync_commerce_products() {
   drush_print(dt('Synchronizing all commerce products, this usually takes some time...'));
   $container = \Drupal::getContainer();
-  $container->get('acq_commerce.ingest_api')->productFullSync();
+  $skus = drush_get_option('skus');
+
+  $container->get('acq_commerce.ingest_api')->productFullSync($skus);
 }
 
 /**
@@ -185,4 +217,65 @@ function _acq_sku_clean_process(&$context) {
   if ($context['sandbox']['progress'] !== $context['sandbox']['max']) {
     $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
   }
+}
+
+/**
+ * Implements drush get stock cache command.
+ */
+function drush_acq_sku_get_stock_cache($sku) {
+  if ($sku_entity = SKU::loadFromSku($sku)) {
+    // Clear stock cache for particular sku in all languages.
+    foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
+      $sku_entity_to_get_stock = $sku_entity->getTranslation($langcode);
+
+      // Get the stock cache id.
+      $stock_cid = acq_sku_get_stock_cache_id($sku_entity_to_get_stock);
+
+      // Get particular cache.
+      if ($cache = \Drupal::cache('stock')->get($stock_cid)) {
+        drush_print(dt('@langcode: !stock', [
+          '@langcode' => $langcode,
+          '!stock' => print_r($cache->data, TRUE),
+        ]));
+      }
+    }
+  }
+  else {
+    drush_print(dt('SKU not found.'));
+  }
+}
+
+/**
+ * Implements drush clean stock cache command.
+ */
+function drush_acq_sku_clean_stock_cache() {
+  // Check if we are asked to clear cache of specific SKU.
+  if ($sku = drush_get_option('sku', '')) {
+    if ($sku_entity = SKU::loadFromSku($sku)) {
+      // Clear stock cache for particular sku in all languages.
+      foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
+        $sku_entity_to_clear_stock = $sku_entity->getTranslation($langcode);
+
+        // Get the stock cache id.
+        $stock_cid = acq_sku_get_stock_cache_id($sku_entity_to_clear_stock);
+
+        // Invalidate particular cache.
+        \Drupal::cache('stock')->invalidate($stock_cid);
+
+        drush_print(dt('Invalidated stock cache for @stock_cid.', [
+          '@stock_cid' => $stock_cid,
+        ]));
+      }
+    }
+
+    return;
+  }
+
+  if (!drush_confirm(dt('Are you sure you want to clean stock cache?'))) {
+    return drush_user_abort();
+  }
+
+  \Drupal::service('cache.stock')->deleteAllPermanent();
+
+  drush_print(dt('Deleted all cache for stock.'));
 }
