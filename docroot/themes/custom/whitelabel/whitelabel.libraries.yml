@@ -6,15 +6,17 @@ reset:
 
 global:
   version: VERSION
+  directional: 1
   css:
     theme:
-      components/dist/css/sass/global.css: {}
+      components/dist/css/sass/global.ltr.css: {}
 
 fonts:
   version: VERSION
   css:
     theme:
       //fonts.googleapis.com/css?family=Open+Sans:400,600: {}
+      //fonts.googleapis.com/css?family=Cairo:400,600: {}
 
 block-site-logo:
   version: VERSION
