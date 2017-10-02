@@ -25,17 +25,6 @@
     $('body').removeClass('block-scroll');
   });
 
-  Drupal.behaviors.potteryBarnStoreFinder = {
-    attach: function (context, settings) {
-      // Store Finder, opening hours toggle.
-      // @todo: Remove when the site is reinstalled, or configs are imported.
-      $('.view-id-stores_finder, .geolocation-common-map-container')
-        .on('click', '.hours--wrapper', function () {
-          $(this).find('.hours--label').toggleClass('open');
-        });
-    }
-  };
-
   // Mobile Language Toggle
   // Language Settings In Mobile View.
   var hide = localStorage.getItem('hide');
