@@ -11,7 +11,7 @@
   header {
     color: $black-smoke;
     margin-bottom: 2.3rem;
-    margin-top: 1.5rem;
+    margin-top: 1.6rem;
 
     @include breakpoint($upto-palm) {
       display: none;
@@ -43,7 +43,7 @@
 .view-store-finder--list__column--1,
 .view-store-finder--list__column--2 {
   @include breakpoint($above-palm) {
-    width: 50%;
+    width: 49%;
     float: direction(left);
   }
 }

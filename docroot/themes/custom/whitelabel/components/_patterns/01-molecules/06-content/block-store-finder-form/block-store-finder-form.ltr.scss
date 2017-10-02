@@ -19,7 +19,7 @@
 
   @include breakpoint($desk) {
     padding-top: 1.25rem;
-    padding-bottom: 1.25rem;
+    padding-bottom: 1.6rem;
   }
 
   form {
@@ -59,7 +59,7 @@
 
   @include breakpoint($above-palm) {
     float: direction(left);
-    text-align: center;
+    padding: 0 1.5rem;
   }
 
   @include breakpoint($lap) {
@@ -273,7 +273,7 @@
   }
 
   @include breakpoint($desk) {
-    width: 10.922%;
+    width: 10.5%;
   }
 
   &::before {
