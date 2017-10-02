@@ -4,6 +4,12 @@ reset:
     base:
       components/dist/css/sass/reset.css: {}
 
+ltr:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/sass/ltr.css: {}
+
 global:
   version: VERSION
   directional: 1
