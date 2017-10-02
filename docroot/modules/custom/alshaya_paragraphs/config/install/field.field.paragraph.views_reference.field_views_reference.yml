@@ -18,12 +18,8 @@ default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:view'
-  handler_settings:
-    target_bundles: null
-    auto_create: 0
+  handler_settings: {  }
   plugin_types:
     block: block
   preselect_views: {  }
-  handler: 'default:view'
-  handler_settings: {  }
 field_type: viewsreference
