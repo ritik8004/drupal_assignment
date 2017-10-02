@@ -1,3 +1,7 @@
+<?php
+global $_alshaya_acm_categories;
+
+$_alshaya_acm_categories = 
 array (
   0 => 
   array (
@@ -159,4 +163,4 @@ array (
     array (
     ),
   ),
-)
+);
