@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -174,6 +175,7 @@ class APIWrapper {
 
     try {
       $cart = $this->tryAgentRequest($doReq, 'updateCart', 'cart');
+      Cache::invalidateTags(['mini_cart_' . $cart_id]);
     }
     catch (ConductorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());
@@ -770,5 +772,67 @@ class APIWrapper {
 
     return $result;
   }
+
+  /**
+   * Get linked skus for a given sku by linked type.
+   *
+   * @param string $sku
+   *   The sku id.
+   * @param string $type
+   *   Linked type. Like - related/crosssell/upsell.
+   *
+   * @return array|mixed
+   *   All linked skus of given type.
+   *
+   * @throws \Exception
+   */
+  public function getLinkedskus($sku, $type = LINKED_SKU_TYPE_ALL) {
+    $endpoint = $this->apiVersion . "/agent/product/$sku/related/$type";
+
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
+    };
+
+    $result = [];
+
+    try {
+      $result = $this->tryAgentRequest($doReq, 'linkedSkus', 'related');
+    }
+    catch (ConductorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $result;
+  }
+
+    /**
+     * Get position of the products in a category.
+     *
+     * @param int $category_id
+     *   The category id.
+     *
+     * @return array
+     *   All products with the positions in the given category.
+     *
+     * @throws \Exception
+     */
+    public function getProductPosition($category_id) {
+        $endpoint = $this->apiVersion . "/agent/category/$category_id/position";
+
+        $doReq = function ($client, $opt) use ($endpoint) {
+            return ($client->get($endpoint, $opt));
+        };
+
+        $result = [];
+
+        try {
+            $result = $this->tryAgentRequest($doReq, 'productPosition', 'position');
+        }
+        catch (ConductorException $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+
+        return $result;
+    }
 
 }

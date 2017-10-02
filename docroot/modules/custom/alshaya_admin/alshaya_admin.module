@@ -49,7 +49,11 @@ function alshaya_admin_form_alter(&$form, FormStateInterface $form_state, $form_
 
     // Disable field except field_meta_tags and simple_sitemap.
     foreach ($fields as $field_name => $field_definition) {
-      if ($field_name != 'field_meta_tags' && $field_name != 'simple_sitemap') {
+      if (!in_array($field_name, [
+        'field_meta_tags',
+        'simple_sitemap',
+        'description',
+      ])) {
         $form[$field_name]['#disabled'] = TRUE;
       }
     }

@@ -1,13 +1,17 @@
+uuid: 63194a82-096e-4a9b-81c7-498e0b0640f0
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: hjZcCuMDoNc_G1kRRnbjO47PAemKbQloHmipHvAz8UM
 name: 921x168
 label: 921x168
 effects:
-  35b2b377-3d96-41e7-9fd9-1e5145527f37:
-    uuid: 35b2b377-3d96-41e7-9fd9-1e5145527f37
-    id: image_scale_and_crop
-    weight: 1
+  4d8729bf-c539-4b34-9db0-5c1f5eb214ca:
+    uuid: 4d8729bf-c539-4b34-9db0-5c1f5eb214ca
+    id: image_scale
+    weight: 2
     data:
       width: 921
-      height: 168
+      height: null
+      upscale: false

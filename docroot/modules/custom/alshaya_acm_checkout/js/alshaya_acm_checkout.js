@@ -39,6 +39,7 @@
               case 'diners_club_international':
                 $('.card-type-diners-club').addClass('active');
                 break;
+
               case 'visa':
               case 'mastercard':
               default:
@@ -111,16 +112,23 @@
 
         $('#add-address-button').on('click', function (event) {
           event.preventDefault();
+          $('#address-book-form-wrapper .form-item--error-message, #address-book-form-wrapper label.error').remove();
+          $('#address-book-form-wrapper .form-item--error').removeClass('form-item--error');
+
           // Reset the form values.
           $('[data-drupal-selector="edit-member-delivery-home-address-form-address-id"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-given-name"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-family-name"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]').val('');
-          $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-locality"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val('');
+
+          // Select value.
+          $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val('');
+          // Trigger chance of select to ensure js dropdown shows proper value.
+          $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').trigger('change');
 
           // Reset Mobile number prefix js.
           Drupal.alshayaMobileNumber.init($('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]'));
@@ -132,8 +140,16 @@
         $('#cancel-address-add-edit').on('click', function (event) {
           event.preventDefault();
 
+          // Update fieldset title to edit address.
+          $('.delivery-address-form-title').html(Drupal.t('add new address'));
+
+          $('#addresses-header').show();
+
           // Hide the form.
           $('#address-book-form-wrapper').slideUp();
+
+          // Display the hidden address which was being edited.
+          $('#edit-member-delivery-home-addresses').slideDown();
         });
       });
 
@@ -170,7 +186,7 @@
 
       // Re-bind client side validations for billing address after form is updated.
       $('[data-drupal-selector="edit-billing-address-address-billing-given-name"]').once('bind-events').each(function () {
-        Drupal.behaviors.cvJqueryValidate.attach($('#block-alshaya-white-label-content'));
+        Drupal.behaviors.cvJqueryValidate.attach($('#block-content'));
       });
 
       // Show the form by default if user has no address saved in address book.
@@ -184,13 +200,20 @@
       });
 
       // Toggle the checkout guest login/returning customers sections on mobile.
-      if ($('#edit-login-tabs').is(":visible")) {
+      if ($('#edit-login-tabs').is(':visible')) {
         var tabs = $('#edit-login-tabs');
         tabs.parent().toggleClass('active');
 
-        // Show Guest Checkout as selected by default
-        tabs.find('.tab-new-customer').toggleClass('active');
-        tabs.next('#edit-checkout-guest').toggleClass('active');
+        // Show Guest Checkout as selected by default unless we have an login error
+        // in which case make the returning customers tab as active.
+        if ($('#edit-checkout-login').find('.messages.messages--error').length > 0) {
+          tabs.find('.tab-returning-customer').toggleClass('active');
+          tabs.next().next('#edit-checkout-login').toggleClass('active');
+        }
+        else {
+          tabs.find('.tab-new-customer').toggleClass('active');
+          tabs.next('#edit-checkout-guest').toggleClass('active');
+        }
 
         // Add click handler for the tabs.
         tabs.find('.tab').each(function () {
@@ -219,35 +242,73 @@
 
   // Ajax command to update search result header count.
   $.fn.editDeliveryAddress = function (data) {
+    $('#address-book-form-wrapper .form-item--error-message, #address-book-form-wrapper label.error').remove();
+    $('#address-book-form-wrapper .form-item--error').removeClass('form-item--error');
+
     // Set values in form.
     $('[data-drupal-selector="edit-member-delivery-home-address-form-address-id"]').val(data.id);
+
+    // Input values.
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-given-name"]').val(data.given_name);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-family-name"]').val(data.family_name);
-    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val(data.administrative_area);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-locality"]').val(data.locality);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val(data.address_line1);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val(data.dependent_locality);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val(data.address_line2);
+
+    // Select value.
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val(data.administrative_area);
+    // Trigger chance of select to ensure js dropdown shows proper value.
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').trigger('change');
 
     // Init Mobile number prefix js.
     Drupal.alshayaMobileNumber.init($('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]'), data.mobile);
 
     // Show the form.
     $('#address-book-form-wrapper').slideDown();
+
+    // Update fieldset title to default value.
+    $('.delivery-address-form-title').html(Drupal.t('edit address'));
+  };
+
+  // Ajax command to show loader on checkout pages.
+  $.fn.showCheckoutLoader = function (data) {
+    // Add the loader div.
+    $('.page-standard').append('<div class="ajax-progress ajax-progress-throbber checkout-ajax-progress-throbber"><div class="throbber"></div></div>');
+
+    // Show the loader.
+    $('.checkout-ajax-progress-throbber').show();
   };
 
   Drupal.behaviors.fixCheckoutSummaryBlock = {
     attach: function (context, settings) {
       var block = $('.block-checkout-summary-block');
 
-      $(window).once().on('scroll', function() {
-        if ($('body').scrollTop() > 122) {
-          block.addClass('fix-block');
-        }
-        else {
-          block.removeClass('fix-block');
-        }
-      });
+      if (block.length > 0) {
+        $(window).once().on('scroll', function () {
+          // Fix the block after a certain height.
+          if ($(window).scrollTop() > 122) {
+            block.addClass('fix-block');
+          }
+          else {
+            block.removeClass('fix-block');
+          }
+
+          var blockbottom = block.offset().top + block.height();
+          // 40 is the pixel offset above footer where we stop the fixed block.
+          var footertop = $('.c-post-content').offset().top - 40;
+          // Add class at this point to stop block going over footer.
+          if (blockbottom >= footertop) {
+            block.addClass('contain');
+          }
+          // Make the block sticky again when the top is visible.
+          if ($(document).scrollTop() <= block.offset().top) {
+            if (block.hasClass('contain')) {
+              block.removeClass('contain');
+            }
+          }
+        });
+      }
     }
   };
 

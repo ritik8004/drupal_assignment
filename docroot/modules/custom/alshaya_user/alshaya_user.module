@@ -5,8 +5,6 @@
  * Module file for alshaya_user.
  */
 
-use Drupal\block\Entity\Block;
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
@@ -15,22 +13,6 @@ use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\Entity\User;
 use Drupal\Core\Url;
-
-/**
- * Check if the current user has is only authenticated user.
- *
- * @return bool
- *   Return true if user is only authenticated user.
- */
-function alshaya_user_only_authenticated() {
-  if (\Drupal::currentUser()->isAuthenticated()) {
-    $roles = \Drupal::currentUser()->getRoles();
-    if (count($roles) == 1) {
-      return TRUE;
-    }
-  }
-  return FALSE;
-}
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -47,22 +29,10 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   $form['account']['name']['#description'] = '';
   $form['account']['pass']['#description'] = '';
 
-  // We don't want to show the terms and conditions field to logged in users.
-  if (\Drupal::currentUser()->isAuthenticated()) {
-    // Get if user only authenticated or not.
-    $only_authenticated = alshaya_user_only_authenticated();
-    // Disabled true, if only authenticated.
-    $form['account']['mail']['#disabled'] = $only_authenticated;
-    // Access false, if only authenticated.
-    $form['account']['current_pass']['#access'] = !$only_authenticated;
-  }
-  else {
-    // Add markup for terms and conditions.
-    $form['field_subscribe_newsletter']['widget']['#suffix'] = \Drupal::config('alshaya_user.settings')
-      ->get('terms_conditions.value');
-    // Change submit button text.
-    $form['actions']['submit']['#value'] = t('Create');
-  }
+  // First name and last name will not accept some special characters.
+  $form['field_first_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
+  $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
+
   $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 }
 
@@ -85,6 +55,13 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     $form['account']['pass']['#title'] = t('Password');
     $form['account']['pass']['#type'] = 'password';
     $form['account']['pass']['#attributes']['data-twig-suggestion'] = 'userregisterformpassword';
+
+    // Add password validation attribute.
+    $form['account']['pass']['#attributes']['passvalidate'] = 'passvalidate';
+
+    // First name and last name will not accept some special characters.
+    $form['field_first_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
+    $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
   }
 }
 
@@ -136,6 +113,11 @@ function alshaya_user_form_user_pass_alter(&$form, FormStateInterface $form_stat
     '#markup' => '<div class="password--message">' . t('Please enter your email address.') . '</br>' . t('We will send you an email with a password reminder.') . '</div>',
     '#weight' => -10,
   ];
+
+  $form['name']['#element_validate'] = [
+    'alshaya_valid_email_address',
+  ];
+  $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 }
 
 /**
@@ -157,17 +139,6 @@ function alshaya_user_preprocess_menu(&$variables) {
         // Do nothing, issue may be with external link.
       }
     }
-  }
-}
-
-/**
- * Implements hook_block_access().
- */
-function alshaya_user_block_access(Block $block, $operation, AccountInterface $account) {
-  // Not allow 'my account- need help' block other than user/{uid} page.
-  if ($operation == 'view' && $block->id() == 'myaccountneedhelp') {
-    $current_route = \Drupal::routeMatch()->getRouteName();
-    return AccessResult::forbiddenIf($current_route != 'entity.user.canonical');
   }
 }
 
@@ -200,6 +171,10 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
   $form['#validate'][] = '_password_policy_user_profile_form_validate';
   $form['#validate'][] = 'alshaya_user_change_password_validate';
   $form['#submit'][] = '_password_policy_user_profile_form_submit';
+
+  // Add password validation attribute.
+  $form['account']['pass']['#attributes']['passvalidate'] = 'passvalidate';
+  $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 }
 
 /**
@@ -284,6 +259,14 @@ function alshaya_user_acq_commerce_update_customer_api_request_alter(array &$req
 }
 
 /**
+ * Implements hook_entity_type_alter().
+ */
+function alshaya_user_entity_type_alter(array &$entity_types) {
+  /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  $entity_types['user']->setFormClass('default', 'Drupal\alshaya_user\Form\AlshayaUserProfileForm');
+}
+
+/**
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_user_alshaya_i18n_onetime_translation_add() {
@@ -293,12 +276,14 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
   $signup_mail->set('register_withpassword.subject', 'على موقع [site:name] [user:field_first_name:value] تفاصيل حساب');
   $signup_mail->set('register_withpassword.body', '<h1>،[user:field_first_name:value] مرحباً</h1>
 
-أهلاً بك في موقع [site:name] .و شكراً على الانضمام إلينا
+.أهلاً بك في موقع [site:name] و شكراً على الانضمام إلينا
 
 [user:mail] :لقد قمت بالتسجيل عن طريق عنوان البريد الإلكتروني
 
-:يمكنك الآن تسجيل الدخول وتقوم بتعديل وتحديث بياناتك الشخصية في أي وقت بالضغط على هذا الرابط أو نسخه ولصقه في المتصفح
-<a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
+<b>الرجاء الضغط على رابط “التحقق من بريدك الإلكتروني” ليتم تأكيد بريدك آلإلكتروني و تفعيل حسابك</b>
+<a href="[user:registrationpassword-url]" class="button">التحقق من بريدك الإلكتروني</a>
+
+<a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a> :أو تحقق عبر الضغط على الرابط التالي
 
 .إذا كان لديك أي سؤال، يرجى الاطلاع على <a href="[site:url]">صفحة الأسئلة المتكررة</a>  أو يمكنك الاتصال في أي وقت بمركز خدمة الزبائن
 
@@ -392,5 +377,53 @@ function alshaya_valid_email_address(&$element, FormStateInterface $form_state, 
   $form_state->setValueForElement($element, $value);
   if ($value !== '' && !preg_match('/^(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){255,})(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){65,}@)(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22))(?:\.(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-[a-z0-9]+)*\.){1,126}){1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-[a-z0-9]+)*)|(?:\[(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\]]){7,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:){5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))(?:\.(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))){3}))\]))$/iD', $value)) {
     $form_state->setError($element, t('The email address %mail is not valid.', ['%mail' => $value]));
+  }
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function alshaya_user_mail_alter(&$message) {
+  if ($message['key'] == 'password_reset') {
+    $language_manager = \Drupal::service('language_manager');
+
+    // Get user preferred language.
+    $lang = $message['params']['account']->getPreferredLangcode();
+    $language = $language_manager->getLanguage($lang);
+
+    // Get original language.
+    $original_language = $language_manager->getConfigOverrideLanguage();
+    // Set language according to user preferred language.
+    $language_manager->setConfigOverrideLanguage($language);
+
+    // Get site name.
+    $sitename = \Drupal::config('system.site')->get('name');
+    // Reset the language to original language.
+    $language_manager->setConfigOverrideLanguage($original_language);
+
+    // Alter the header from information according to user preferred language.
+    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8') . ' <' . $message['from'] . '>';
+    $message['headers']['From'] = $message['headers']['Sender'] = $message['from'];
+  }
+
+  if ($message['key'] === 'register') {
+    $sitename = \Drupal::config('system.site')->get('name');
+    $message['from'] = mb_encode_mimeheader($sitename, 'UTF-8') . ' <' . $message['from'] . '>';
+    $message['headers']['From'] = $message['headers']['Sender'] = $message['from'];
+  }
+}
+
+/**
+ * Implements hook_link_alter().
+ */
+function alshaya_user_link_alter(&$variables) {
+  /** @var \Drupal\core\Url $url */
+  $url = $variables['url'];
+  if ($url->isExternal()) {
+    return;
+  }
+  elseif ($url->isRouted() && $url->getRouteName() == 'user.logout') {
+    $path = \Drupal::service('path.current')->getPath();
+    $variables['options']['query']['destination'] = '/' . \Drupal::languageManager()->getCurrentLanguage()->getId() . \Drupal::service('path.alias_manager')->getAliasByPath($path);
   }
 }

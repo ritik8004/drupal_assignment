@@ -315,7 +315,7 @@
       font-size: 0.75rem;
     }
 
-    @include icon(chevron#{$right}, after) {
+    @include icon(chevrondown, after) {
       position: absolute;
       #{$right}: 1rem;
       font-size: 1.875rem;
@@ -401,6 +401,10 @@
     .product-name {
       margin-bottom: 5px;
       font-weight: 700;
+
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
     }
 
     .product-total {
@@ -410,17 +414,46 @@
     .product-qty {
       color: $greyish;
       margin-bottom: 3px;
+
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
     }
 
     .sku-attributes {
       color: $greyish;
       font-weight: normal;
+      margin-top: 0.3125rem;
     }
   }
 
   .totals {
     background: none;
     border-top: 1px solid $white;
+
+    html[lang=ar] & {
+      line-height: 1.5;
+    }
+
+    .sub-total,
+    .order-total {
+      > span {
+        width: 51%;
+
+        @include breakpoint($upto-desktop) {
+          width: 50%;
+        }
+      }
+
+      .total--amount,
+      .price-type__wrapper {
+        width: 47%;
+
+        @include breakpoint($upto-desktop) {
+          width: 47%;
+        }
+      }
+    }
   }
 }
 
@@ -445,30 +478,20 @@
   .order-total {
     > span {
       display: inline-block;
-      width: 60%;
-
-      html[lang=ar] & {
-        @include breakpoint($desktop) {
-          width: 59%;
-        }
-
-        @include breakpoint($only-tablet) {
-          width: 54%;
-        }
-      }
+      width: 57%;
 
       @include breakpoint($upto-desktop) {
-        width: 55%;
+        width: 50%;
       }
     }
 
     .total--amount,
     .price-type__wrapper {
       display: inline-block;
-      width: 38%;
+      width: 41%;
 
       @include breakpoint($upto-desktop) {
-        width: 43%;
+        width: 47%;
       }
     }
 
@@ -478,6 +501,10 @@
 
       .price {
         .price-currency {
+          @include breakpoint($only-tablet) {
+            margin-right: 0.4rem;
+          }
+
           margin-right: 1.5625rem;
         }
 
@@ -556,7 +583,7 @@ body.alias--cart {
   h1 {
     font-size: 1.125rem;
     font-weight: normal;
-    color: $cobalt-blue;
+    color: $marine-blue-two;
     border-bottom: 1px solid $white;
     margin-bottom: 0.75rem;
     padding-bottom: 0.625rem;
@@ -598,7 +625,9 @@ body.alias--cart {
 
     tbody tr {
       &:hover {
-        background: rgba(247, 247, 247, 0.72);
+        @include breakpoint($tablet) {
+          background: rgba(247, 247, 247, 0.72);
+        }
 
         .name .items a {
           color: $cerulean-two;
@@ -826,7 +855,7 @@ body.alias--cart {
       }
 
       a {
-        width: 68%;
+        width: 100%;
         font-size: 12px;
         font-weight: bold;
         color: $cerulean-two;
@@ -838,6 +867,10 @@ body.alias--cart {
 
       .form-type-select {
         @include select-wrapper(4.375rem);
+
+        @include breakpoint($desktop) {
+          @include select2-style(4.375rem);
+        }
 
         .ajax-progress-throbber {
           position: absolute;
@@ -876,9 +909,13 @@ body.alias--cart {
           position: absolute;
           #{$right}: 0;
 
+          @include breakpoint($only-mobile) {
+            top: 0.9375rem;
+          }
+
           .tooltip {
             #{$left}: 0.625rem;
-            top: 1.5rem;
+            top: 0.5rem;
             position: relative;
 
             @include breakpoint($only-mobile) {
@@ -887,7 +924,7 @@ body.alias--cart {
 
             @include breakpoint($desktop) {
               #{$left}: 13rem;
-              top: -0.3rem;
+              top: -1.3rem;
             }
           }
         }
@@ -949,7 +986,7 @@ body.alias--cart {
       .tooltip--head::after {
         position: absolute;
         #{$right}: -0.1rem;
-        top: -0.0625rem;
+        top: -1.0625rem;
 
         @include breakpoint($only-tablet) {
           #{$right}: -0.5rem;
@@ -1176,6 +1213,13 @@ body.alias--cart {
       padding: 0 1.125rem;
       max-height: 2.188rem;
       line-height: 2.7;
+
+      &.disabled {
+        &:hover {
+          cursor: default;
+          background-color: $ladda-disabled;
+        }
+      }
     }
   }
 }
@@ -1250,25 +1294,10 @@ html[lang=ar] {
     table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] {
       .cart-promotions {
         position: absolute;
-        left: -21px;
-        top: -2px;
 
-        @include breakpoint($tablet) {
-          left: -3px;
-        }
-
-        .tooltip {
-          right: 1rem;
-          top: 1.5rem;
-
-          @include breakpoint($tablet) {
-            right: 0.7rem;
-          }
-
-          @include breakpoint($desktop) {
-            right: 13rem;
-            top: -0.5rem;
-          }
+        @include breakpoint($only-mobile) {
+          left: -2rem;
+          top: 0.8125rem;
         }
       }
     }
@@ -1278,16 +1307,14 @@ html[lang=ar] {
     position: absolute;
 
     @include breakpoint($mobile) {
-      left: 0.9rem;
       top: -0.1rem;
     }
 
-    @include breakpoint($tablet) {
+    @include breakpoint($only-tablet) {
       left: -0.4rem;
     }
 
     @include breakpoint($desktop) {
-      left: 4rem;
       top: 0;
     }
   }
@@ -1322,5 +1349,34 @@ html[lang=ar] .alias--cart #table-cart-items tr th {
 
   @include breakpoint($desktop) {
     font-size: 0.875rem;
+  }
+}
+
+html[lang=ar] {
+  header .block-cart-mini-block .price-amount,
+  header .block-cart-mini-block .quantity {
+    font-family: $arial-nodir;
+  }
+
+  .alias--cart {
+    #table-cart-items {
+      .delivery-option {
+        .home-delivery.tooltip--head {
+          & ~ .tooltip {
+            @include breakpoint($desktop) {
+              right: 2.75rem;
+            }
+          }
+        }
+
+        .click-collect.tooltip--head {
+          & ~ .tooltip {
+            @include breakpoint($desktop) {
+              right: -0.25rem;
+            }
+          }
+        }
+      }
+    }
   }
 }

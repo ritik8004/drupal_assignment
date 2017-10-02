@@ -13,16 +13,15 @@
     attach: function (context, settings) {
 
       // Stock check on PLP,search & Promo pages.
-      $('article[data-vmode="search_result"]', context).each(function(){
+      $('article[data-vmode="search_result"]', context).each(function () {
         var productId = $(this).attr('data-nid');
         var productStock = $(this).find('.out-of-stock');
         var articleNode = $(this);
         if (!articleNode.hasClass('stock-processed')) {
           $.ajax({
             url: Drupal.url('stock-check-ajax/node/' + productId),
-            type: "GET",
-            contentType: "application/json;",
-            dataType: "json",
+            type: 'GET',
+            dataType: 'json',
             success: function (result) {
               productStock.html(result.html);
               articleNode.addClass('stock-processed');
@@ -32,15 +31,14 @@
       });
 
       // Stock check on PDP main Product.
-      $('article[data-vmode="full"]', context).find('.basic-details-wrapper article').once('js-event').each(function(){
-        var skuId = $(this).attr('data-skuid');
-        if (skuId !== undefined) {
-          var $wrapper = $(this);
+      $('article[data-vmode="full"]', context).find('.basic-details-wrapper article .stock-checker').once('js-event').each(function () {
+        var $wrapper = $(this).closest('article');
+        var skuId = $wrapper.attr('data-skuid');
+        if (typeof skuId !== 'undefined') {
           $.ajax({
-            url: Drupal.url('stock-check-ajax/acq_sku/' + skuId),
-            type: "GET",
-            contentType: "application/json;",
-            dataType: "json",
+            url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+            type: 'GET',
+            dataType: 'json',
             success: function (result) {
               $wrapper.html(result.html);
 
@@ -54,7 +52,7 @@
               }
 
               Drupal.attachBehaviors($wrapper[0]);
-              Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
+              Drupal.reAttachAddCartAndConfigSizeAjax($wrapper[0]);
             }
           });
         }
@@ -62,112 +60,136 @@
 
       // Check stock for mobile & load add cart form if stock-check successful.
       if ($(window).width() < 768) {
-        $('.horizontal-crossell.mobile-only-block article[data-vmode="teaser"], .horizontal-upell.mobile-only-block article[data-vmode="teaser"], #block-baskethorizontalproductrecommendation.horizontal-crossell article[data-vmode="teaser"], #block-baskethorizontalproductrecommendation.horizontal-upell article[data-vmode="teaser"]', context).find('article').once('js-event').each(function() {
-          var that = $(this);
-          if (!that.closest('article[data-vmode="teaser"]').hasClass('stock-check-processed')) {
-            var skuId = $(this).attr('data-skuid');
-            if (skuId !== undefined) {
-              var $wrapper = $(this);
+        $(window).load(function () {
+          // Load cart form only for active carousel items on page load on PDP & Basket.
+          $('.owl-item.active').each(function () {
+            var activeItem = $(this);
+            Drupal.loadTeaserCartForm(activeItem);
+          });
 
-              $.ajax({
-                url: Drupal.url('stock-check-ajax/acq_sku/' + skuId),
-                type: "GET",
-                contentType: "application/json;",
-                dataType: "json",
-                success: function (result) {
-                  $wrapper.html(result.html);
-                  that.closest('article[data-vmode="teaser"]').addClass('stock-check-processed');
-                  Drupal.attachBehaviors($wrapper[0]);
-                  Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
+          // Load cart form for active item post swipe on PDP & Basket.
+          $('.owl-item').each(function () {
+            var currItem = $(this);
+            var currParent = currItem.closest('.mobile-only-block');
+            // Handle owl carousel on Basket page.
+            if (currParent.length === 0) {
+              currParent = currItem.closest('#block-baskethorizontalproductrecommendation.horizontal-crossell');
+            }
+
+            currItem.swipe({
+              swipeStatus: function (event, phase, direction, distance, fingerCount) {
+                switch (phase) {
+                  case 'end':
+                    setTimeout(function () {
+                      var activeItem = currParent.find('.owl-item.active');
+                      Drupal.loadTeaserCartForm(activeItem);
+                    }, '1000');
+                    break;
+                }
+              }
+            });
+          });
+
+          // Load cart form for items which are not in the carousel on PDP & Basket.
+          $('.horizontal-crossell.mobile-only-block, .horizontal-upell.mobile-only-block, #block-baskethorizontalproductrecommendation.horizontal-crossell, #block-baskethorizontalproductrecommendation.horizontal-upell', context).each(function () {
+            var viewRowCount = $(this).find('.views-row').length;
+            if ((viewRowCount > 0) && (viewRowCount <= 3)) {
+              $(this).find('.views-row').each(function () {
+                var mobileItem = $(this).find('.mobile--only--sell');
+                if (mobileItem.length !== 0) {
+                  Drupal.loadTeaserCartForm($(this));
                 }
               });
             }
-          }
-        });
-      }
-      else {
-        // Check stock for modal & load add cart form if stock-check successful.
-        $('article[data-vmode="modal"]').find('.basic-details-wrapper article').once('js-event').each(function(){
-          var skuId = $(this).attr('data-skuid');
-          var stockCheckProcessed = 'stock-check-processed';
-          if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
-            var $wrapper = $(this);
-            $.ajax({
-              url: Drupal.url('stock-check-ajax/acq_sku/' + skuId),
-              type: "GET",
-              contentType: "application/json;",
-              dataType: "json",
-              success: function (result) {
-                $wrapper.html(result.html);
-                // Add class to share this wrapper if product out of stock.
-                if (result.max_quantity <= 0) {
-                  $wrapper.closest('article[data-vmode="modal"]').find('sharethis-wrapper').addClass('out-of-stock');
-                }
-                $wrapper.closest('article[data-vmode="modal"]').addClass(stockCheckProcessed);
-                Drupal.attachBehaviors($wrapper[0]);
-                Drupal.reAttachAddCartAndConfigSizeAjax(result.html);
-              }
-            });
-          }
+          });
         });
       }
 
+      // Check stock for modal & load add cart form if stock-check successful.
+      $('article[data-vmode="modal"]').find('.basic-details-wrapper article .stock-checker').once('js-event').each(function () {
+        var $wrapper = $(this).closest('article');
+        var skuId = $wrapper.attr('data-skuid');
+        var stockCheckProcessed = 'stock-check-processed';
+        if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
+          $.ajax({
+            url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+            type: 'GET',
+            dataType: 'json',
+            success: function (result) {
+              $wrapper.html(result.html);
+              // Add class to share this wrapper if product out of stock.
+              if (result.max_quantity <= 0) {
+                $wrapper.closest('article[data-vmode="modal"]').find('sharethis-wrapper').addClass('out-of-stock');
+              }
+              $wrapper.closest('article[data-vmode="modal"]').addClass(stockCheckProcessed);
+              Drupal.attachBehaviors($wrapper[0]);
+              Drupal.reAttachAddCartAndConfigSizeAjax($wrapper[0]);
+            }
+          });
+        }
+      });
+
       // Remove checking stock message from the response for configurable size AJAX.
-      $(document).ajaxComplete(function(xhr, event, settings) {
-        if (settings.hasOwnProperty('extraData') && (settings.extraData._triggering_element_name === "configurables[size]")) {
+      $(document).ajaxComplete(function (xhr, event, settings) {
+        if (settings.hasOwnProperty('extraData') && (settings.extraData._triggering_element_name === 'configurables[size]')) {
           $('.stock-checker').remove();
         }
       });
     }
   };
 
-  Drupal.reAttachAddCartAndConfigSizeAjax = function(element) {
+  /**
+   * Helper function to re-attach AJAX settings to add-cart button & config sizes.
+   *
+	 * @param element
+	 */
+  Drupal.reAttachAddCartAndConfigSizeAjax = function (element) {
+    var postUrl = $(element).find('form').attr('action') + '?ajax_form=1';
     var editCartElementSettings = {
-      'callback': "alshaya_acm_cart_notification_form_submit",
-      'dialogType': "ajax",
-      'event': "mousedown",
-      'keypress': true,
-      'prevent': "click",
-      'selector': ".edit-add-to-cart",
-      'submit': {
-        _triggering_element_name: "op",
-        _triggering_element_value: Drupal.t("add to cart")
+      callback: 'alshaya_acm_cart_notification_form_submit',
+      dialogType: 'ajax',
+      event: 'mousedown',
+      keypress: true,
+      prevent: 'click',
+      selector: '.edit-add-to-cart',
+      submit: {
+        _triggering_element_name: 'op',
+        _triggering_element_value: Drupal.t('add to cart')
       },
-      'url': document.location.pathname + '?ajax_form=1',
-      'wrapper': "cart_notification"
+      url: postUrl,
+      wrapper: 'cart_notification'
     };
 
     var editConfigSizeElementSettings = {
-      'callback': "alshaya_acm_product_configurable_form_ajax_callback",
-      'dialogType': "ajax",
-      'event': "change",
-      'selector': "[data-drupal-selector='edit-configurables-size']",
-      'progress': {
-        'message': null,
-        'type': 'throbber'
+      callback: 'alshaya_acm_product_configurable_form_ajax_callback',
+      dialogType: 'ajax',
+      event: 'change',
+      selector: "[data-drupal-selector='edit-configurables-size']",
+      progress: {
+        message: null,
+        type: 'throbber'
       },
-      'submit': {
-        _triggering_element_name: "configurables[size]"
+      submit: {
+        _triggering_element_name: 'configurables[size]'
       },
-      "url": document.location.pathname + '?ajax_form=1'
+      url: postUrl
     };
 
     // Re-attach Ajax to add-to-cart buttons, since there are duplicate ids on the page, Drupal will attach
     // AJAX only with the first button it finds.
-    var sku_id = $(element).find('input[name="sku_id"]').val();
-
-    $('.edit-add-to-cart').each(function() {
+    $(element).find('.edit-add-to-cart').each(function () {
       var is_mobile_only_sell = $(this).closest('.mobile--only--sell');
       var is_modal_product = $(this).closest('#drupal-modal');
       var sku_id = $(this).siblings('input[name="sku_id"]').val();
       if (((is_mobile_only_sell.length > 0) || (is_modal_product.length > 0)) && (!$(this).hasClass('reattached-ajax'))) {
+        $(this).off();
         $(this).addClass('reattached-ajax');
         var addCartBase = 'edit-add-to-cart_mobile--only--sell--' + sku_id;
         Drupal.ajax[addCartBase] = new Drupal.Ajax(addCartBase, this, editCartElementSettings);
       }
     });
 
-    $("select[data-drupal-selector='edit-configurables-size']").each(function() {
+    $("select[data-drupal-selector='edit-configurables-size']").each(function () {
       var is_mobile_only_sell = $(this).closest('.mobile--only--sell');
       var is_modal_product = $(this).closest('#drupal-modal');
       var sku_id = $(this).siblings('input[name="sku_id"]').val();
@@ -177,6 +199,33 @@
         Drupal.ajax[configSizeBase] = new Drupal.Ajax(configSizeBase, this, editConfigSizeElementSettings);
       }
     });
+  };
+
+  /**
+   * Helper function to load cart form for the carousel active item.
+   *
+	 * @param activeitem
+	 */
+  Drupal.loadTeaserCartForm = function (activeitem) {
+    if (activeitem.find('.mobile--only--sell')) {
+      var activeMobileItem = activeitem.find('.mobile--only--sell');
+      var skuArticle = activeMobileItem.find('article');
+      var skuId = skuArticle.attr('data-skuid');
+      if (!(skuArticle.hasClass('stock-check-processed')) && (typeof skuId !== 'undefined')) {
+        var $wrapper = skuArticle;
+        $.ajax({
+          url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+          type: 'GET',
+          dataType: 'json',
+          success: function (result) {
+            $wrapper.html(result.html);
+            skuArticle.addClass('stock-check-processed');
+            Drupal.attachBehaviors($wrapper[0]);
+            Drupal.reAttachAddCartAndConfigSizeAjax($wrapper[0]);
+          }
+        });
+      }
+    }
   };
 
 })(jQuery, Drupal);

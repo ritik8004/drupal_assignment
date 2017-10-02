@@ -13,6 +13,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
+use Drupal\lightning_core\ConfigHelper;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
 
@@ -134,6 +135,8 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);
     $element['locality']['#title'] = t('Block', [], ['context' => 'Address label']);
     $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
+    $element['address_line2']['#attributes']['class'][] = 'form-item-field-address-floor';
+    $element['address_line2']['#attached']['library'][] = 'alshaya_addressbook/alshaya_addressbook';
     $element['address_line2']['#title_display'] = 'before';
   }
 
@@ -320,6 +323,48 @@ function alshaya_addressbook_entity_type_alter(array &$entity_types) {
 }
 
 /**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_addressbook_alshaya_master_post_drupal_install() {
+  $country_code = _alshaya_custom_get_site_level_country_code();
+
+  $area_list_config = ConfigHelper::forModule('alshaya_addressbook')
+    ->optional()
+    ->get('alshaya_addressbook.area_list.' . strtolower($country_code));
+
+  if (empty($area_list_config)) {
+    return;
+  }
+
+  // If area available.
+  if ($area_list = $area_list_config->get('areas')) {
+    // Vocabulary to store these areas into.
+    $vid = 'area_list';
+
+    foreach ($area_list as $area_source => $area) {
+      try {
+        // Create term for each area.
+        $term = Term::create([
+          'name' => $area_source,
+          'vid' => $vid,
+        ]);
+        // Add translation if available.
+        if (isset($area['ar']) && !empty($area['ar'])) {
+          $term->addTranslation('ar', [
+            'name' => $area['ar'],
+          ]);
+        }
+        $term->save();
+      }
+      catch (\Exception $e) {
+        // Log error if any.
+        \Drupal::logger('alshaya_addressbook')->error($e->getMessage());
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
@@ -375,7 +420,7 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
       'context' => 'Address label',
     ],
     'Select Area' => [
-      'ar' => 'يرجى اختيار المنطقة / القطعة',
+      'ar' => 'يرجى اختيار المنطقة',
       'context' => 'Address label',
     ],
     'State' => [
@@ -487,6 +532,8 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
   if (isset($telephone[0]) && !empty($telephone[0]['value'])) {
     $variables['contact_no'] = $telephone[0]['value'];
   }
+  /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */
+  $csrf_token_generator = \Drupal::service('csrf_token');
 
   if (isset($values[0])) {
     // If name is available.
@@ -613,12 +660,19 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
         ];
       }
       else {
-        $set_default_url = $profile->toUrl('set-default', [
+        $set_default_params = [
+          'profile' => $profile->id(),
+          'token' => $csrf_token_generator->get('profile-' . $profile->id()),
+        ];
+
+        $set_default_options = [
           'language' => $current_language,
           'query' => [
             'destination' => Url::fromRoute("entity.profile.type.address_book.user_profile_form", ["user" => $current_user->id(), "profile_type" => "address_book"])->toString(),
           ],
-        ]);
+        ];
+
+        $set_default_url = Url::fromRoute('alshaya_addressbook.profile.set_default', $set_default_params, $set_default_options);
 
         $variables['set_default_operation'] = [
           '#type' => 'link',

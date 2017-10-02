@@ -38,11 +38,6 @@
       }
 
       .views-row {
-        float: $left;
-        text-align: center;
-        color: $black;
-        height: 19.5rem;
-
         @include breakpoint($only-mobile) {
           &:nth-child(2n) {
             float: $right;
@@ -50,20 +45,6 @@
 
           &:nth-child(2n + 1) {
             clear: both;
-          }
-        }
-
-        @include breakpoint($tablet) {
-          height: 24rem;
-        }
-
-        @include breakpoint($tablet) {
-          width: 31.59%;
-          max-width: 291px;
-          height: 30rem;
-
-          &:nth-child(3n+2) {
-            margin: 0 2.6%;
           }
         }
 
@@ -159,7 +140,7 @@
 
 .facets-soft-limit-link {
   margin-top: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.1rem;
 }
 
 header,
@@ -290,7 +271,7 @@ ul.item-list__checkbox,
 
 .alshaya_search_slider {
   // Need this in px for JS consistency for slider.
-  width: 263px;
+  width: 264px;
   margin: 0 auto;
   position: relative;
   margin-top: 0.625rem;
@@ -302,22 +283,31 @@ ul.item-list__checkbox,
       margin-top: 0.1875rem;
       height: 4.25rem;
       position: relative;
+      // Width here avoids the small thumbnail issue on page load.
+      width: 3.688rem;
 
       &:hover {
         &::after {
           content: '';
-          top: -3px;
-          #{$left}: -3px;
-          #{$right}: -3px;
-          bottom: 5px;
+          top: -2px;
+          #{$left}: -2px;
+          #{$right}: -1px;
+          bottom: 6px;
           position: absolute;
-          z-index: -1;
+          z-index: 1;
           border: 1px solid $brownish-grey;
+          pointer-events: none;
         }
       }
 
       &:first-child {
-        margin-#{$left}: 3px;
+        margin-#{$left}: -1px;
+
+        &:hover {
+          &::after {
+            #{$left}: 1px;
+          }
+        }
       }
     }
 
@@ -327,6 +317,7 @@ ul.item-list__checkbox,
 
       &.lSNext {
         #{$right}: -1.7rem;
+        #{$left}: auto;
 
         @include icon(chevron#{$right}, after) {
           font-size: 2.125rem;
@@ -336,6 +327,7 @@ ul.item-list__checkbox,
 
       &.lSPrev {
         #{$left}: -1.75rem;
+        #{$right}: auto;
 
         @include icon(chevron#{$left}, after) {
           font-size: 2.125rem;

@@ -16,10 +16,10 @@ require_once __DIR__ . '/../test.php';
 
 $api = 'agent/customer';
 
-$method = 'POST';
+$method = 'JSON';
 
 $data = [];
-$data['json']['customer'] = $customer;
-$data['json']['password'] = $pass;
+$data['customer'] = $customer;
+$data['password'] = $pass;
 
 invoke_api($api, $method, $data);

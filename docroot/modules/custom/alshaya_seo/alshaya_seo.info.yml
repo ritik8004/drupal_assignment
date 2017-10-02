@@ -5,6 +5,7 @@ core: 8.x
 package: Alshaya
 dependencies:
   - alshaya_i18n
+  - alshaya_main_menu
   - google_tag
   - metatag
   - metatag_open_graph
@@ -14,4 +15,5 @@ dependencies:
   - token
   - datalayer
   - alshaya_stores_finder
+  - metatag_verification
 version: 8.x-1.0

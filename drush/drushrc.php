@@ -1,5 +1,5 @@
 <?php
-
+ini_set('memory_limit', '2048M');
 // Load a drushrc.php configuration file from the current working directory.
 $options['config'][] = realpath(__DIR__ . '/../vendor/acquia/blt/drush/drushrc.php');
 

@@ -92,7 +92,7 @@
     }
   }
 
-  #block-alshaya-white-label-local-tasks {
+  #block-local-tasks {
     display: none;
   }
 
@@ -428,7 +428,7 @@
       width: auto;
 
       html[lang='ar'] & {
-        #{$left}: 12em;
+        #{$left}: 13em;
         bottom: 0.75em;
       }
     }
@@ -554,7 +554,7 @@
   }
 }
 
-#block-alshaya-white-label-content {
+#block-content {
   .order-items {
     list-style: none;
     width: 100%;
@@ -571,10 +571,6 @@
 
       @include breakpoint($only-mobile) {
         height: 143px;
-
-        &:nth-child(even) {
-          background-color: $whisper-light;
-        }
       }
 
       background-color: $white-five;
@@ -837,7 +833,7 @@
     }
   }
 
-  #block-alshaya-white-label-content {
+  #block-content {
     padding-top: 1rem;
 
     @include breakpoint($only-tablet) {
@@ -862,13 +858,6 @@
 
   @include breakpoint($desktop) {
     margin-bottom: 12.125rem;
-
-    .form-type-password {
-      .c-input__bar {
-        position: absolute;
-        top: 34px;
-      }
-    }
   }
 
   .form-wrapper {
@@ -901,6 +890,17 @@
 
     .form-item-pass {
       margin-top: 2.563rem;
+    }
+
+    .form-item-current-pass,
+    .form-item-pass {
+      @include breakpoint($only-tablet) {
+        > label {
+          html[lang=ar] & {
+            width: 100%;
+          }
+        }
+      }
     }
   }
 

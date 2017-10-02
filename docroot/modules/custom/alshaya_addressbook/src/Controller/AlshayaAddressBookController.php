@@ -4,6 +4,7 @@ namespace Drupal\alshaya_addressbook\Controller;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RemoveCommand;
 use Drupal\profile\Controller\ProfileController;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -23,13 +24,22 @@ class AlshayaAddressBookController extends ProfileController {
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
    *   The route match.
+   * @param string $token
+   *   CSRF Token.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   A redirect back to the currency listing.
    */
-  public function setDefault(RouteMatchInterface $routeMatch) {
+  public function setDefaultAddress(RouteMatchInterface $routeMatch, $token) {
     /* @var \Drupal\profile\Entity\Profile $profile */
     $profile = $routeMatch->getParameter('profile');
+
+    /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */
+    $csrf_token_generator = \Drupal::service('csrf_token');
+
+    if (!$csrf_token_generator->validate($token, 'profile-' . $profile->id())) {
+      throw new AccessDeniedHttpException();
+    }
 
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
@@ -182,6 +192,7 @@ class AlshayaAddressBookController extends ProfileController {
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('#address-book-form-wrapper', $form));
     $response->addCommand(new RemoveCommand('.messages__wrapper'));
+    $response->addCommand(new InvokeCommand(NULL, 'correctFloorFieldLabel', []));
     return $response;
   }
 

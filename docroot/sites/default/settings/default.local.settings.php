@@ -8,12 +8,16 @@
 /**
  * Database configuration.
  */
+
+$hostname = $_SERVER['HTTP_HOST'];
+$hostname_parts = explode('.', $hostname);
+
 $databases = array(
   'default' =>
   array(
     'default' =>
     array(
-      'database' => 'drupal',
+      'database' => 'drupal_' . str_replace('-', '_', $hostname_parts[1]),
       'username' => 'drupal',
       'password' => 'drupal',
       'host' => 'localhost',
@@ -24,10 +28,6 @@ $databases = array(
     ),
   ),
 );
-
-// Configuration directories.
-$dir = dirname(DRUPAL_ROOT);
-$config_directories['sync'] = $dir . "/config/$site_dir";
 
 // Use development service parameters.
 $settings['container_yamls'][] = $dir . '/docroot/sites/development.services.yml';
@@ -126,13 +126,18 @@ $config['system.file']['path']['temporary'] = '/tmp';
 /**
  * Private file path.
  */
-$settings['file_private_path'] = $dir . '/files-private';
+$settings['file_private_path'] = $dir . '/files-private/' . $hostname_parts[1];
+
+/**
+ * Public file path.
+ */
+$settings['file_public_path'] = 'sites/g/files/' . $hostname_parts[1];
 
 /**
  * Trusted host configuration.
  *
  * See full description in default.settings.php.
  */
-# $settings['trusted_host_patterns'] = array(
-#   '^example\.local$',
-# );
+$settings['trusted_host_patterns'] = array(
+  '^.+$',
+);

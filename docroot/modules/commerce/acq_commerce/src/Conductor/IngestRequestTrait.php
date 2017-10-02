@@ -54,6 +54,7 @@ trait IngestRequestTrait {
 
     $client = $this->clientFactory->createClient();
     $reqOpts = [];
+
     $logger = ($this->logger) ?: \Drupal::logger('acq_commerce');
 
     if ($this->debug) {

@@ -38,3 +38,19 @@ services:
       - '@element_info'
       - '@theme.manager'
       - '@csrf_token'
+
+  acq_sku.linked_sku:
+      class: Drupal\acq_sku\AcqSkuLinkedSku
+      arguments:
+        - '@acq_commerce.api'
+        - '@cache.default'
+        - '@config.factory'
+        - '@language_manager'
+        - '@logger.factory'
+
+  cache.stock:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [stock]

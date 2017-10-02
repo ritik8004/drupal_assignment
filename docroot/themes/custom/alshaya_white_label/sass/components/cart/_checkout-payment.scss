@@ -3,7 +3,7 @@
     margin-top: 0.75em;
 
     @include breakpoint($tablet) {
-      border: 2px solid $white;
+      border: 2px solid $greyish;
     }
 
     fieldset {
@@ -205,14 +205,8 @@
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year,
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month {
     float: $left;
-    width: 105px;
-    height: 35px;
-    border: 1px solid $white;
+    width: 6.5rem;
     margin-#{$right}: 10px;
-
-    html[lang=ar] & {
-      width: 9.375rem;
-    }
 
     label {
       float: $left;
@@ -230,6 +224,30 @@
       padding: 4px 10px;
       appearance: none;
       height: 35px;
+    }
+
+    @include select-wrapper(6.5rem);
+
+    select {
+      @include select-style(6.5rem);
+    }
+
+    .select2-container {
+      @include select2-style(6.5rem);
+    }
+
+    html[lang=ar] & {
+      width: 9.375rem;
+
+      @include select-wrapper(9.375rem);
+
+      select {
+        @include select-style(9.375rem);
+      }
+
+      .select2-container {
+        @include select2-style(9.375rem);
+      }
     }
   }
 
@@ -348,10 +366,10 @@
     display: block;
     position: absolute;
     top: 7.4rem;
-    #{$left}: 57%;
+    #{$left}: 11.5rem;
 
     html[lang=ar] & {
-      #{$left}: 64%;
+      #{$left}: 14rem;
     }
   }
 

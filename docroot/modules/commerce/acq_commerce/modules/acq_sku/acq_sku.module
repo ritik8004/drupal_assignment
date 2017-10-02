@@ -10,6 +10,7 @@
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Render\Element;
+use Drupal\acq_commerce\Conductor\ConductorException;
 
 /**
  * Implements hook_theme().
@@ -126,11 +127,13 @@ function acq_sku_get_stock_cache_id(SKU $sku_entity) {
  * @throws \Exception
  */
 function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
+  $stock = NULL;
+
   try {
     // Cache id.
     $cid = acq_sku_get_stock_cache_id($sku_entity);
 
-    $cache = \Drupal::cache('data')->get($cid);
+    $cache = \Drupal::cache('stock')->get($cid);
 
     // If information is cached.
     if (!$reset && !empty($cache)) {
@@ -148,13 +151,15 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
 
       // If cache multiplier is zero we don't cache the stock.
       if ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
-        $time = $stock['quantity'] ? $stock['quantity'] * $cache_multiplier : $cache_multiplier;
+        $default_cache_lifetime = $stock['quantity'] ? $stock['quantity'] * $cache_multiplier : $cache_multiplier;
+        $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
 
         // Calculate the timestamp when we want the cache to expire.
-        $expire = \Drupal::time()->getRequestTime() + $time;
+        $stock_cache_lifetime = min($default_cache_lifetime, $max_cache_lifetime);
+        $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
 
         // Set the stock in cache.
-        \Drupal::cache('data')->set($cid, $stock, $expire);
+        \Drupal::cache('stock')->set($cid, $stock, $expire);
       }
     }
   }

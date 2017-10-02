@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+/**
+ * Implements hook_autologout_prevent().
+ */
+function alshaya_security_autologout_prevent() {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_acm_customer')) {
+    $currentUser = \Drupal::currentUser();
+
+    // Don't logout customers automatically.
+    if ($currentUser->isAuthenticated() && alshaya_acm_customer_is_customer($currentUser)) {
+      return TRUE;
+    }
+  }
+}

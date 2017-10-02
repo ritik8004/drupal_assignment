@@ -3,3 +3,7 @@ store_finder:
     js/alshaya_store_finder.js: {}
   dependencies:
     - core/jquery
+
+store_finder_preserve_history:
+  js:
+    js/alshaya_store_finder_preserve_history.js: {}

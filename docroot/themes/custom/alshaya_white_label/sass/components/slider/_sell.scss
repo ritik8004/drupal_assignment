@@ -1,4 +1,5 @@
 .horizontal-upell,
+.horizontal-related,
 .horizontal-crossell {
   .view-product-slider {
     text-align: center;
@@ -60,7 +61,8 @@
     font-family: $alshaya-thin;
     color: $grey-ash;
     font-weight: normal;
-    margin: 0.625rem 0;
+    max-width: 10rem;
+    margin: 0.625rem auto;
 
     &:hover {
       text-decoration: underline;
@@ -133,6 +135,18 @@
     .use-ajax {
       outline: transparent;
     }
+
+    .promotions {
+      margin-top: 0.25rem;
+
+      a {
+        font-size: 0.75rem;
+        color: $cherry;
+        display: inline-block;
+        margin-#{$left}: 0.125rem;
+        margin-#{$right}: 0.125rem;
+      }
+    }
   }
 
   .price-wrapper {
@@ -173,8 +187,6 @@
     max-width: 11.625rem;
 
     @include breakpoint($upto-desktop) {
-      max-width: 10rem;
-      min-height: 10rem;
       object-fit: cover;
     }
   }
@@ -199,6 +211,7 @@
   }
 }
 
+.horizontal-related,
 .horizontal-crossell,
 .horizontal-upell {
   @include breakpoint($tablet) {
@@ -290,17 +303,20 @@
         position: relative;
         padding-bottom: 3rem;
         margin-top: 2.1875rem;
-        width: 100%;
+        background: $white-five;
+
+        @include breakpoint($only-mobile) {
+          padding-bottom: 1rem;
+        }
 
         .ajax-progress {
           display: none;
         }
       }
 
-      select {
+      select.form-select {
         @include select-style(12.375rem);
 
-        background-color: $whisper-dark;
         width: 100%;
       }
     }
@@ -329,11 +345,11 @@
       padding: 0;
       margin-bottom: 1.5rem;
       margin-top: 2.1875rem;
+      background: $white-five;
 
       select {
         @include select-style(4.375rem);
 
-        background-color: $whisper-dark;
         direction: $dir;
       }
     }
@@ -349,7 +365,10 @@
 }
 
 .has--special--price {
-  text-decoration: line-through;
+  .price-amount,
+  .price-currency {
+    text-decoration: line-through;
+  }
 }
 
 .node--view-mode-search-result {
@@ -369,17 +388,21 @@
 .special--price .price-amount,
 .special--price .price-currency,
 .special--price .price-wrapper {
-  color: $special-price !important;
+  color: $scarlet !important;
 }
 
 .price--discount {
-  margin-top: 0.5625rem;
+  margin-top: 0;
   font-size: 0.625rem;
-  color: $special-price;
+  color: $scarlet;
 
   @include breakpoint($tablet) {
     margin-top: 0.75rem;
     font-size: 0.75rem;
+
+    td.price & {
+      margin-top: 0.245rem;
+    }
   }
 
   @include breakpoint($desktop) {

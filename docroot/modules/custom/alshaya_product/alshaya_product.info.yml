@@ -3,6 +3,8 @@ type: module
 core: 8.x
 dependencies:
   - acq_sku
+  - alshaya_acm_product_position
+  - alshaya_acm_promotion
   - alshaya_image_styles
   - alshaya_search
   - better_exposed_filters
@@ -21,5 +23,6 @@ dependencies:
   - user
   - views
   - views_infinite_scroll
+  - alshaya_acm_promotion
 version: 8.x-1.0
 package: Alshaya

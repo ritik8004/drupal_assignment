@@ -185,17 +185,17 @@ function _alshaya_acm_checkout_clean_address_phone($phone) {
 }
 
 /**
- * Implements hook_alshaya_profile_installed().
+ * Implements hook_alshaya_profile_installed_final_task().
  */
-function alshaya_acm_checkout_alshaya_profile_installed(array $modules) {
+function alshaya_acm_checkout_alshaya_profile_installed_final_task($profile, array $modules) {
   if (in_array('alshaya_i18n', $modules)) {
     // Array of language translation strings.
     $strings = [
       'CUSTOMER SERVICE' => [
         'ar' => 'خدمة العملاء',
       ],
-      '<p>For Kuwait <span class="light">+965 XXX XX XX</span></p><p>For other regions <span class="light">8 (800) XXX XX X</span></p><p><span class="light">We are open from Sunday – Saturday from 9:30 am – 8:30 pm (Kuwait Local Time, GMT +3)</span></p>' => [
-        'ar' => '<p>الكويت <span class="light">+965 XXX XX XX</span></p><p>المناطق الأخرى <span class="light">8 (800) XXX XX X</span></p><p><span class="light">مواعيد العمل: الأحد إلى السبت من الساعة 9:30 صباحًا حتى الساعة 8:30 مساءً (حسب التوقيت المحلي للكويت، و3+ بتوقيت غرينتش)</span></p>',
+      '<p>For Kuwait <span class="light no-direction">+965 XXX XX XX</span></p><p>For other regions <span class="light no-direction">8 (800) XXX XX X</span></p><p><span class="light">We are open from Sunday – Saturday from 9:30 am – 8:30 pm (Kuwait Local Time, GMT +3)</span></p>' => [
+        'ar' => '<p>الكويت <span class="light no-direction">+965 XXX XX XX</span></p><p>المناطق الأخرى <span class="light no-direction">8 (800) XXX XX X</span></p><p><span class="light">مواعيد العمل: الأحد إلى السبت من الساعة 9:30 صباحًا حتى الساعة 8:30 مساءً (حسب التوقيت المحلي للكويت، و3+ بتوقيت غرينتش)</span></p>',
       ],
       'Username does not contain a valid email.' => [
         'ar' => 'اسم المستخدم لا يشمل عنوان بريد إلكتروني صحيح',
@@ -299,21 +299,24 @@ function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = '
  *   Order array if found.
  */
 function _alshaya_acm_checkout_get_last_order_from_session() {
+  static $order;
+
+  if (!empty($order)) {
+    return $order;
+  }
+
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
-  $temp_store = \Drupal::service('user.private_tempstore')->get('alshaya_acm_checkout');
-  $order_data = $temp_store->get('order');
+  $session = \Drupal::request()->getSession();
+  $order_id = $session->get('last_order_id');
 
   // Throw access denied if nothing in session.
-  if (empty($order_data) || empty($order_data['id'])) {
+  if (empty($order_id)) {
     throw new AccessDeniedHttpException();
   }
 
-  // @TODO: Remove the fix when we get the full order details.
-  $order_id = str_replace('"', '', $order_data['id']);
-
   if (\Drupal::currentUser()->isAnonymous()) {
-    $email = $temp_store->get('email');
+    $email = $session->get('email_order_' . $order_id);
   }
   else {
     $email = \Drupal::currentUser()->getEmail();
@@ -332,7 +335,9 @@ function _alshaya_acm_checkout_get_last_order_from_session() {
     throw new NotFoundHttpException();
   }
 
-  return $orders[$order_index];
+  $order = $orders[$order_index];
+
+  return $order;
 }
 
 /**

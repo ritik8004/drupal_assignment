@@ -24,7 +24,13 @@ jQuery.fn.select2Option = function (options) {
         var liHtml = $('<li></li>');
         if (selectIndex === 0) {
           liHtml.hide();
-          labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
+          var defaultTitle = $(this).parent().attr('data-default-title');
+          if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
+            labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
+          }
+          else {
+            labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
+          }
         }
         else if ($(this).attr('disabled') || select.attr('disabled')) {
           liHtml.addClass('disabled');
@@ -61,6 +67,7 @@ jQuery.fn.select2Option = function (options) {
       e.preventDefault();
       var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
       $(this).closest('.select2Option').find('.list-title .selected-text').remove();
+      $(this).closest('.sku-base-form').find('.error').remove();
       $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span');
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');

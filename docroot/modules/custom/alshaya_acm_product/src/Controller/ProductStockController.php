@@ -4,12 +4,16 @@ namespace Drupal\alshaya_acm_product\Controller;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Cache\CacheableJsonResponse;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class ProductStockController.
@@ -24,7 +28,7 @@ class ProductStockController extends ControllerBase {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   Entity related to SKU for which we checking the stock.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+   * @return \Drupal\Core\Cache\CacheableJsonResponse
    *   Response object returning availability.
    */
   public function checkStock(EntityInterface $entity) {
@@ -35,41 +39,145 @@ class ProductStockController extends ControllerBase {
     elseif ($entity instanceof SKU) {
       $sku_entity = $entity;
     }
+    // For someone trying to trick the system with different entity type.
+    // This will be good as we will be using this with GET now.
+    else {
+      throw new NotFoundHttpException();
+    }
 
-    $max_quantity = alshaya_acm_is_product_in_stock($sku_entity);
-    if (!$max_quantity) {
-      $build['#markup'] = '<span class="out-of-stock">' . $this->t('out of stock') . '</span>';
-      $response['html'] = \Drupal::service('renderer')->render($build);
-      $response['max_quantity'] = 0;
+    $build = [];
+
+    // @TODO: We should avoid this AJAX call as well.
+    if (!alshaya_acm_product_is_buyable($sku_entity)) {
+      // @TODO: This is to avoid adding out of stock classes. Needs refactoring.
+      $build['max_quantity'] = 100;
+      $build['html'] = '';
+    }
+    elseif ($max_quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
+      $build['max_quantity'] = $max_quantity;
+      $build['html'] = '';
     }
     else {
-      if ($entity instanceof SKU) {
-        $settings = '';
-        $build = $this->fetchAddCartForm($sku_entity);
-        $rendered_form = \Drupal::service('renderer')->renderRoot($build);
-
-        // Get the data from BubbleMetaData.
-        $data = BubbleableMetadata::createFromRenderArray($build);
-        // Retrieve the attachments from the $data.
-        $attachments = $data->getAttachments();
-
-        // Generate the settings to be sent back with the ajax response.
-        if (!empty($attachments['drupalSettings'])) {
-          $settings .= '<script type="text/javascript">jQuery.extend(drupalSettings, ';
-          $settings .= Json::encode($attachments['drupalSettings']);
-          $settings .= ');</script>';
-        }
-
-        $response['html'] = $rendered_form . $settings;
-      }
-      else {
-        $build['#markup'] = '';
-        $response['html'] = \Drupal::service('renderer')->render($build);
-      }
-      $response['max_quantity'] = $max_quantity;
+      $build['html'] = '<span class="out-of-stock">' . $this->t('out of stock')->render() . '</span>';
+      $build['max_quantity'] = 0;
     }
 
-    return new JsonResponse($response);
+    $response = new CacheableJsonResponse($build, 200);
+    $response->addCacheableDependency($sku_entity);
+    $response->addcacheabledependency(['url.path']);
+
+    // Adding cacheability metadata, so whenever, cache invalidates, this
+    // url's cached response also gets invalidate.
+    $cacheMeta = new CacheableMetadata();
+    // Adding cache tags.
+    $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
+    // Adding max-age.
+    $expiration_time = _alshaya_acm_get_stock_expiration_time($sku_entity);
+    $max_age = $expiration_time - \Drupal::time()->getRequestTime();
+    $cacheMeta->setCacheMaxAge($max_age);
+    $response->addCacheableDependency($cacheMeta);
+
+    return $response;
+  }
+
+  /**
+   * Controller to get for cart form for product/sku.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity related to SKU for which we checking the stock.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse|\Drupal\Core\Cache\CacheableJsonResponse
+   *   Response object returning cart form or out of stock message.
+   */
+  public function getCartForm(EntityInterface $entity) {
+    if ($entity instanceof Node) {
+      $sku = $entity->get('field_skus')->first()->getString();
+      $sku_entity = SKU::loadFromSku($sku);
+    }
+    elseif ($entity instanceof SKU) {
+      $sku_entity = $entity;
+    }
+    // For someone trying to trick the system with different entity type.
+    // This will be good as we will be using this with GET now.
+    else {
+      throw new NotFoundHttpException();
+    }
+
+    $build = [];
+
+    if (!alshaya_acm_product_is_buyable($sku_entity)) {
+      // @TODO: This is to avoid adding out of stock classes. Needs refactoring.
+      $build['max_quantity'] = 100;
+      $build['html'] = '';
+
+      $response = new CacheableJsonResponse($build, 200);
+      $response->addCacheableDependency($sku_entity);
+      $response->addcacheabledependency(['url.path']);
+
+      // Adding cacheability metadata, so whenever, cache invalidates, this
+      // url's cached response also gets invalidate.
+      $cacheMeta = new CacheableMetadata();
+
+      // Adding cache tags.
+      $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
+      $response->addCacheableDependency($cacheMeta);
+
+      return $response;
+    }
+    elseif ($max_quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
+      $build['max_quantity'] = $max_quantity;
+
+      $form = $this->fetchAddCartForm($sku_entity);
+      $rendered_form = \Drupal::service('renderer')->renderRoot($form);
+
+      // Get the data from BubbleMetaData.
+      $data = BubbleableMetadata::createFromRenderArray($form);
+
+      // Retrieve the attachments from the $data.
+      $attachments = $data->getAttachments();
+
+      // Generate the settings to be sent back with the ajax response.
+      $settings = '';
+      if (!empty($attachments['drupalSettings'])) {
+        $settings .= '<script type="text/javascript">jQuery.extend(drupalSettings, ';
+        $settings .= Json::encode($attachments['drupalSettings']);
+        $settings .= ');</script>';
+      }
+
+      $build['html'] = $rendered_form . $settings;
+
+      return new JsonResponse($build);
+    }
+    else {
+      // We process add to cart form if we have stock or request is POST.
+      // Stock might become zero after user has loaded the page.
+      // In such cases we just reload the page to show updated status.
+      if (\Drupal::request()->getMethod() == 'POST') {
+        $response = new AjaxResponse();
+        $response->addCommand(new RedirectCommand(\Drupal::request()->server->get('HTTP_REFERER')));
+        return $response;
+      }
+      else {
+        $build['max_quantity'] = 0;
+        $build['html'] = '<span class="out-of-stock">' . $this->t('out of stock')->render() . '</span>';
+
+        $response = new CacheableJsonResponse($build, 200);
+        $response->addCacheableDependency($sku_entity);
+        $response->addcacheabledependency(['url.path']);
+
+        // Adding cacheability metadata, so whenever, cache invalidates, this
+        // url's cached response also gets invalidate.
+        $cacheMeta = new CacheableMetadata();
+        // Adding cache tags.
+        $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
+        // Adding max-age.
+        $expiration_time = _alshaya_acm_get_stock_expiration_time($sku_entity);
+        $max_age = $expiration_time - \Drupal::time()->getRequestTime();
+        $cacheMeta->setCacheMaxAge($max_age);
+        $response->addCacheableDependency($cacheMeta);
+        return $response;
+      }
+    }
   }
 
   /**
@@ -91,22 +199,6 @@ class ProductStockController extends ControllerBase {
     $form['add_to_cart'] = \Drupal::service('acq_sku.form_builder')->getForm($plugin, $sku_entity);
     $form['add_to_cart']['#weight'] = 50;
 
-    // We need to set the ajax url for the add_cart & config_sizes
-    // explicitly to the product node they belong to for AJAX to apply
-    // correctly.
-    $product_node = alshaya_acm_product_get_display_node($sku_entity);
-
-    /** @var \Drupal\Core\Url $product_node_url */
-    $product_node_url = $product_node->toUrl();
-    $product_node_url->setOption('query', ['ajax_form' => 1]);
-    $product_node_ajax_url = $product_node_url->toString();
-
-    $form['add_to_cart']['add_to_cart']['#attached']['drupalSettings']['ajax']['edit-add-to-cart']['url'] = $product_node_ajax_url;
-    $form['add_to_cart']['ajax']['configurables']['size']['#attached']['drupalSettings']['ajax']['edit-configurables-size']['url'] = $product_node_ajax_url;
-    $form['add_to_cart']['add_to_cart']['#attached']['drupalSettings']['ajaxTrustedUrl'][] = $product_node_ajax_url;
-    $form['add_to_cart']['ajax']['configurables']['size']['#attached']['drupalSettings']['ajaxTrustedUrl'][] = $product_node_ajax_url;
-
-    $form['add_to_cart']['add_to_cart']['#ajax']['options']['query'][FormBuilderInterface::AJAX_FORM_REQUEST] = TRUE;
     return $form;
   }
 

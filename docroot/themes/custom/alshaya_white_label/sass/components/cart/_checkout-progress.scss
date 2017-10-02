@@ -38,6 +38,11 @@
     vertical-align: top;
     min-height: 3.625rem;
     padding: 0.5rem 0;
+    cursor: default;
+
+    html[lang=ar] & {
+      font-family: $alshaya-thin;
+    }
 
     @include breakpoint($tablet) {
       overflow: hidden;
@@ -47,14 +52,23 @@
     @include breakpoint($desktop) {
       margin-#{$right}: 0;
       width: 39.7%;
+      line-height: 1.8;
+
+      &.-complete {
+        line-height: 1.1;
+      }
     }
 
     @include breakpoint($only-tablet) {
       &:not(.-has-link) {
         .safari &,
         .ucbrowser & {
-          line-height: 2;
+          line-height: 1.8;
         }
+      }
+
+      &.-complete {
+        line-height: 1.8;
       }
     }
 
@@ -139,6 +153,7 @@
       position: relative;
       display: inline-block;
       z-index: 100;
+      font-family: $body_font;
       width: 1.3rem;
       height: 1.3rem;
       #{$left}: 37.5%;
@@ -203,6 +218,7 @@
 
     a {
       display: inline-block;
+      pointer-events: none;
 
       @include breakpoint($only-mobile) {
         display: inline;
@@ -368,4 +384,8 @@
       }
     }
   }
+}
+
+#block-checkoutsummaryblock {
+  border: 2px solid $greyish;
 }

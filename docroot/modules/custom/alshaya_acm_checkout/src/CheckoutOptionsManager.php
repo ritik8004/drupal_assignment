@@ -91,6 +91,8 @@ class CheckoutOptionsManager {
       return;
     }
 
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
     // Clean the code every-time.
     $code = $this->getCleanShippingMethodCode($code);
 
@@ -108,6 +110,7 @@ class CheckoutOptionsManager {
       $term = $this->termStorage->create([
         'vid' => 'shipping_method',
         'name' => $name,
+        'langcode' => $langcode,
       ]);
 
       // Following will be used as default, it will be available for
@@ -121,11 +124,10 @@ class CheckoutOptionsManager {
       $term->get('field_shipping_code')->setValue($code);
       $term->get('field_shipping_carrier_code')->setValue($carrier_code);
       $term->get('field_shipping_method_code')->setValue($method_code);
-      $term->get('field_shipping_method_code')->setValue($method_code);
 
       $term->save();
 
-      $this->logger->critical('New shipping method created for code @code. Please save the description asap.', ['@code' => $code]);
+      $this->logger->critical('New shipping method created for code @code. Please confirm the values asap.', ['@code' => $code]);
     }
     else {
       if (count($result) > 1) {
@@ -137,9 +139,21 @@ class CheckoutOptionsManager {
       /** @var \Drupal\taxonomy\Entity\Term $term */
       $term = $this->termStorage->load($tid);
 
-      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
       if ($term->hasTranslation($langcode)) {
         $term = $term->getTranslation($langcode);
+      }
+      // If we don't have translation and values available, we create it.
+      elseif (!empty($name)) {
+        $term = $term->addTranslation($langcode, []);
+        $term->setName($name);
+        $term->get('field_shipping_method_cart_desc')->setValue($description);
+        $term->get('field_shipping_method_desc')->setValue($order_description);
+        $term->get('field_shipping_code')->setValue($code);
+        $term->get('field_shipping_carrier_code')->setValue($carrier_code);
+        $term->get('field_shipping_method_code')->setValue($method_code);
+        $term->save();
+
+        $this->logger->critical('Translation added for shipping method with code @code. Please confirm the values asap.', ['@code' => $code]);
       }
     }
 
@@ -212,11 +226,13 @@ class CheckoutOptionsManager {
    *   Payment method code.
    * @param string $name
    *   Default available name.
+   * @param bool $current_language
+   *   Return the term in current language or default.
    *
    * @return \Drupal\taxonomy\Entity\Term
    *   Full loaded term object.
    */
-  public function loadPaymentMethod($code, $name = '') {
+  public function loadPaymentMethod($code, $name = '', $current_language = TRUE) {
     $query = $this->termStorage->getQuery();
     $query->condition('vid', 'payment_method');
     $query->condition('field_payment_code', $code);
@@ -253,9 +269,11 @@ class CheckoutOptionsManager {
       /** @var \Drupal\taxonomy\Entity\Term $term */
       $term = $this->termStorage->load($tid);
 
-      $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-      if ($term->hasTranslation($langcode)) {
-        $term = $term->getTranslation($langcode);
+      if ($current_language) {
+        $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        if ($term->hasTranslation($langcode)) {
+          $term = $term->getTranslation($langcode);
+        }
       }
     }
 
@@ -390,10 +408,11 @@ class CheckoutOptionsManager {
    *   Cleaned code.
    */
   public function getCleanShippingMethodCode($code) {
-    // @TODO: Currently what we get back in orders is first 32 characters
+    // @TODO: Currently what we get back in orders is first 120 characters
     // and concatenated by underscore.
+    // Check MMCPA-2197 for more details.
     $code = str_replace(',', '_', $code);
-    $code = substr($code, 0, 32);
+    $code = substr($code, 0, 120);
     return $code;
   }
 

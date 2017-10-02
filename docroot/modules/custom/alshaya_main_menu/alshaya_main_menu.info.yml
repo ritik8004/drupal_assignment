@@ -3,6 +3,7 @@ type: module
 core: 8.x
 dependencies:
   - alshaya_department_page
+  - alshaya_acm_product_category
   - alshaya_image_styles
   - alshaya_main_menu
   - block

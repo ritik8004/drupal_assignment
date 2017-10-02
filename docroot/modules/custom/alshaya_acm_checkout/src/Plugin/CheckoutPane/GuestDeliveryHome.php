@@ -6,9 +6,11 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 
 /**
@@ -61,12 +63,16 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
     $pane_form['guest_delivery_home']['title'] = [
-      '#markup' => '<div class="title">' . $this->t('delivery information') . '</div>',
+      '#markup' => '<div class="title">' . $this->t('delivery address') . '</div>',
     ];
 
     $cart = $this->getCart();
     $address = (array) $cart->getShipping();
     $default_shipping = '';
+
+    if ($this->getCartSelectedDeliveryMethod() == 'cc') {
+      $address = [];
+    }
 
     if (empty($address['country_id'])) {
       $address_default_value = [
@@ -161,6 +167,14 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         '#change_address' => render($change_address_button),
       ];
 
+      // Expose selected delivery address to GTM.
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_seo')) {
+        datalayer_add([
+          'deliveryArea' => $drupal_address['administrative_area'],
+          'deliveryCity' => $drupal_address['locality'],
+        ]);
+      }
+
       $selected_address = '<div id="selected-address-wrapper">' . render($selected_address_build) . '</div>';
     }
 
@@ -224,6 +238,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
     }
     else {
+      // Clear the shipping method info now to ensure we set it properly again.
+      \Drupal::service('acq_cart.cart_storage')->clearShippingMethodSession();
+
+      $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
       $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
     }
 
@@ -278,7 +296,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     }
 
     if ($user = user_load_by_mail($email)) {
-      $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $this->t('You already have an account, please login.'));
+      $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $this->t('You already have an account, @login_link.', [
+        '@login_link' => Link::createFromRoute($this->t('please login'), 'acq_checkout.form', ['step' => 'login'])->toString(),
+      ]));
       return;
     }
 

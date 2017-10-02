@@ -206,7 +206,14 @@ class Configurable extends SKUPluginBase {
           ]
       ));
 
-      $cart->addItemToCart($tree_pointer->getSku(), $quantity);
+      $cart->addRawItemToCart([
+        'name' => $label,
+        'sku' => $tree['parent']->getSKU(),
+        'qty' => $quantity,
+        'options' => [
+          'configurable_item_options' => $options,
+        ],
+      ]);
 
       // Add child SKU to form state to allow other modules to use it.
       $form_state->setTemporaryValue('child_sku', $tree_pointer->getSKU());
@@ -217,7 +224,7 @@ class Configurable extends SKUPluginBase {
       catch (\Exception $e) {
         // Clear stock cache.
         $stock_cid = acq_sku_get_stock_cache_id($tree_pointer);
-        \Drupal::cache('data')->invalidate($stock_cid);
+        \Drupal::cache('stock')->invalidate($stock_cid);
 
         // Clear product and forms related to sku.
         Cache::invalidateTags(['acq_sku:' . $tree_pointer->id()]);

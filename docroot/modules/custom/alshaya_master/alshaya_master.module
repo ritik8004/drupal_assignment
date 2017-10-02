@@ -5,13 +5,13 @@
  * Alshaya master module file.
  */
 
+use Drupal\block\Entity\Block;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
-use Drupal\node\Entity\NodeType;
+use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_editor_js_settings_alter().
@@ -64,7 +64,8 @@ function alshaya_master_form_system_theme_settings_alter(&$form, FormStateInterf
         '#open' => TRUE,
       ];
 
-      $config = \Drupal::configFactory()->get('alshaya_master.theme.' . $theme);
+      $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      $config = \Drupal::configFactory()->get('alshaya_master.theme.' . $theme . '.' . $lang);
       $form['email_logo']['settings']['email_logo_path'] = [
         '#type' => 'textfield',
         '#title' => t('Path to custom logo'),
@@ -222,7 +223,8 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
   }
 
   if (isset($logo_path)) {
-    $config = \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $theme);
+    $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $config = \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $theme . '.' . $lang);
     $config->set('email_logo_path', $logo_path);
     $config->set('email_logo_url', file_create_url($logo_path));
     $config->save();
@@ -268,7 +270,7 @@ function alshaya_master_validate_path($path) {
  * @return array
  *   Return array of logo path and url.
  */
-function alshaya_master_get_email_logo($theme = NULL) {
+function alshaya_master_get_email_logo($theme = NULL, $lang = NULL) {
   $cache = &drupal_static(__FUNCTION__, []);
   // If no key is given, use the current theme if we can determine it.
   if (!isset($theme)) {
@@ -276,7 +278,11 @@ function alshaya_master_get_email_logo($theme = NULL) {
   }
 
   if (empty($cache[$theme])) {
-    $config = \Drupal::configFactory()->get('alshaya_master.theme.' . $theme);
+    // Get email logo based on the language.
+    if (!isset($lang)) {
+      $lang = \Drupal::currentUser()->getPreferredLangcode();
+    }
+    $config = \Drupal::configFactory()->get('alshaya_master.theme.' . $theme . '.' . $lang);
     $cache[$theme]['logo_path'] = $config->get('email_logo_path');
     if (!empty($cache[$theme]['logo_path'])) {
       $cache[$theme]['logo_url'] = file_create_url($config->get('email_logo_path'));
@@ -371,17 +377,6 @@ function _alshaya_master_utility_usort_check_order($val1, $val2, $order) {
 }
 
 /**
- * Implements hook_alshaya_profile_installed().
- */
-function alshaya_master_alshaya_profile_installed() {
-  // Delete basic page content type.
-  $node_type = NodeType::load('page');
-  if ($node_type) {
-    $node_type->delete();
-  }
-}
-
-/**
  * Implements hook_back_to_top_admin_prevent_alter().
  */
 function alshaya_master_back_to_top_admin_prevent_alter(&$is_admin) {
@@ -456,6 +451,14 @@ function _alshaya_master_mobile_number_process(array &$element, FormStateInterfa
   if (!empty($element['mobile']['#default_value'])) {
     $element['mobile']['#default_value'] = str_replace(' ', '', $element['mobile']['#default_value']);
   }
+
+  // Add maxlength from config.
+  // This config doesn't contain any form as length of mobile number is not
+  // expected to change except for changing country. Changing country is a major
+  // change and also means new install so it can be set in specific country
+  // specific module install.
+  $mobile_number_settings = \Drupal::config('alshaya_master.mobile_number_settings');
+  $element['mobile']['#maxlength'] = $mobile_number_settings->get('maxlength');
 
   // Make mobile number required only for few forms.
   $mobile_number_required_forms = [
@@ -585,4 +588,20 @@ function alshaya_master_get_site_date_from_api_date($date, $format = '') {
 
   // Return formated date in site's timezone.
   return \Drupal::service('date.formatter')->format($dt->getTimestamp(), $format);
+}
+
+/**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_master_alshaya_master_post_drupal_install() {
+  // Disable unwanted core views.
+  if ($views_to_disable = Settings::get('views_to_disable')) {
+    $view_storage = \Drupal::service('entity.manager')->getStorage('view');
+    foreach ($views_to_disable as $view_machine_name) {
+      // Disable the view.
+      if ($view = $view_storage->load($view_machine_name)) {
+        $view->disable()->save();
+      }
+    }
+  }
 }

@@ -80,7 +80,13 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       $account = $this->currentUser;
     }
 
-    $is_customer = alshaya_acm_customer_is_customer($account);
+    // Check alshaya_acm_customer module status (enabled/disabled).
+    $alshaya_acm_customer_status = \Drupal::moduleHandler()->moduleExists('alshaya_acm_customer');
+    // Set the variable NULL.
+    $is_customer = NULL;
+    if ($alshaya_acm_customer_status) {
+      $is_customer = alshaya_acm_customer_is_customer($account);
+    }
 
     // Get the current route to set active class.
     $currentRoute = \Drupal::routeMatch()->getRouteName();
@@ -165,7 +171,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       elseif (($currentRoute == 'entity.profile.edit_form' || $currentRoute == 'entity.profile.type.address_book.user_profile_form.add') && $link['route'] == 'entity.profile.type.address_book.user_profile_form') {
         $options = $activeLinkOptions;
       }
-      elseif ($link['route'] == 'acq_customer.orders' && $currentRoute == 'alshaya_acm_customer.orders_detail') {
+      elseif ($alshaya_acm_customer_status && ($link['route'] == 'acq_customer.orders' && $currentRoute == 'alshaya_acm_customer.orders_detail')) {
         $options = $activeLinkOptions;
       }
 

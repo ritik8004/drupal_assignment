@@ -22,6 +22,6 @@
 </div>
 <div class="store-actions">
   <a href="#" class="change-store">{{ 'change store'|t }}</a>
-  <a href="http://maps.google.com/?q={{ store.lat }},{{ store.lng }}" class="view-on-map mobile-only">{{ 'View on map'|t }}</a>
+  <a onclick="mapsApp({{ store.lat }}, {{ store.lng }})" class="view-on-map mobile-only">{{ 'View on map'|t }}</a>
   <a href="#" class="store-on-map" data-store-code="{{ store.code }}">{{ 'View on map'|t }}</a>
 </div>

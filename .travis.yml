@@ -29,9 +29,11 @@ cache:
   - "$HOME/.npm"
   - "$HOME/.nvm"
   - "vendor"
-  # Cache front end dependecies to dramatically improve build time.
-  # - "docroot/themes/custom/mytheme/node_modules"
-  # - "docroot/themes/custom/mytheme/bower_components"
+  - "docroot/themes/custom/whitelabel/node_modules"
+  - "docroot/themes/custom/whitelabel_transac/node_modules"
+  - "docroot/themes/custom/whitelabel_non_transac/node_modules"
+  - "docroot/themes/custom/alshaya_white_label/node_modules"
+  - "docroot/themes/custom/victoria_secret/node_modules"
 
 addons:
   ssh_known_hosts:
@@ -53,6 +55,7 @@ before_install:
 install:
   - source ${BLT_DIR}/scripts/travis/setup_environment
   - echo "memory_limit=512M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - source $BLT_DIR/scripts/travis/setup_project
   - nvm install 6.10.0
   - nvm use 6.10.0

@@ -4,7 +4,7 @@ core: 8.x
 dependencies:
   - alshaya_advanced_page
   - alshaya_paragraphs
-  - alshaya_seo
+  - alshaya_permissions
   - block
   - content_translation
   - ctools

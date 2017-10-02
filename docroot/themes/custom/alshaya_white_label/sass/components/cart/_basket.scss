@@ -23,9 +23,13 @@
       margin-top: 1.9rem;
     }
 
-    .price-wrapper .price {
+    .price-type__wrapper {
       @include breakpoint($only-mobile) {
         margin-top: 1rem;
+
+        html[lang=ar] & {
+          line-height: 1.5;
+        }
       }
     }
 
@@ -36,7 +40,7 @@
         .sku-promotion-link {
           font-size: 12px !important;
           color: $scarlet !important;
-          width: auto !important;
+          width: 100% !important;
           padding-top: 1px;
 
           html[lang=ar] & {
@@ -48,11 +52,23 @@
           #{$right}: -20px;
           top: 0;
           position: absolute;
+
+          @include breakpoint($upto-desktop) {
+            display: none;
+          }
         }
 
         .tooltip {
-          #{$left}: 7.4rem;
           top: -0.9rem;
+          #{$left}: 7.4rem;
+
+          @include breakpoint($tablet) {
+            #{$left}: 10rem;
+          }
+
+          @include breakpoint($desktop) {
+            #{$left}: 14.4rem;
+          }
 
           p {
             margin: 0;
@@ -127,6 +143,7 @@
           @include breakpoint($only-tablet) {
             position: relative;
             left: 0;
+            padding-right: 0.4rem;
           }
 
           @include breakpoint($tablet) {
@@ -187,6 +204,29 @@
       }
     }
 
+    .quantity .ajax-progress-throbber {
+      position: absolute;
+      #{$left}: 40%;
+
+      .message {
+        display: none;
+      }
+
+      .throbber {
+        background-image: url(../imgs/icons/MC-loader.svg) !important;
+        background-position: $right center !important;
+        background-repeat: no-repeat !important;
+        background-size: 1.5rem;
+        padding-left: 0.625rem;
+        padding-right: 0.625rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        bottom: -2rem;
+        #{$left}: 40%;
+      }
+    }
+
     @include breakpoint($tablet) {
       .delivery-options-mobile {
         @include u-visibility(none);
@@ -208,23 +248,11 @@
       font-family: $arial;
 
       @include breakpoint($tablet) {
-        padding-right: 0;
+        padding-right: 0.4rem;
       }
 
       @include breakpoint($desktop) {
         padding-right: 1.56rem;
-      }
-    }
-
-    .price-currency.suffix {
-      line-height: 1.2;
-
-      @include breakpoint($only-tablet) {
-        line-height: 1.3;
-      }
-
-      @include breakpoint($desktop) {
-        line-height: 1.2;
       }
     }
 
@@ -267,12 +295,25 @@
         padding-top: 0.125rem;
       }
 
-      div {
+      > div {
         margin-bottom: 0.187rem;
       }
 
       .dark + div {
         font-family: $arial;
+      }
+
+      .price-amount,
+      .price-currency,
+      .discount-prefix,
+      .discount-value {
+        font-weight: normal;
+      }
+
+      .discount-value {
+        @include breakpoint($only-mobile) {
+          margin-left: 0.8rem;
+        }
       }
     }
 
@@ -446,14 +487,6 @@
   }
 }
 
-.alias--cart {
-  &.path--cart .site-brand-home a {
-    width: auto;
-    display: block;
-    margin-#{$left}: auto;
-  }
-}
-
 #details-privilege-card-wrapper {
   .privilege-card-wrapper {
     padding-left: 0;
@@ -470,7 +503,6 @@
 }
 
 .details-privilege-card-wrapper-inside {
-  border-top: 1px solid $white;
   margin-bottom: 1.5625rem;
 }
 
@@ -606,10 +638,11 @@
 
   label {
     position: relative;
-    top: -3.4rem;
-    font-size: 0.75rem;
+    top: -1.4rem;
+    font-size: 1rem;
     color: $greyish;
     font-family: $arial;
+    transition: 0.2s ease all;
 
     &.error {
       bottom: 7px;
@@ -617,7 +650,19 @@
       top: auto;
       left: 0;
       color: $cherry;
-      font-size: 0.81rem;
+      font-size: 0.75rem;
+    }
+
+    &.active-label:not(.error) {
+      top: -2.938rem;
+      bottom: 0;
+      #{$left}: 0;
+      opacity: 1;
+      font-size: 0.75rem;
+
+      html[lang=ar] & {
+        top: -3.2rem;
+      }
     }
   }
 
@@ -628,7 +673,7 @@
     color: $black;
     text-shadow: none;
     width: 100%;
-    margin-top: 2.3rem;
+    margin-top: 1.9rem;
     vertical-align: bottom;
     outline: none;
     padding-bottom: 0.5rem !important;
@@ -637,6 +682,14 @@
 
     &:focus {
       border-color: $windows-blue;
+
+      & ~ label {
+        top: -2.938rem;
+        bottom: 0;
+        #{$left}: 0;
+        opacity: 1;
+        font-size: 0.75rem;
+      }
     }
 
     &.error {
@@ -725,6 +778,16 @@
       }
     }
 
+    .owl-carousel .owl-item {
+      .labels-container {
+        @include breakpoint($upto-desktop) {
+          img {
+            min-height: auto;
+          }
+        }
+      }
+    }
+
     .c-products__item__label {
       @include breakpoint($desktop) {
         margin-bottom: 0.875rem;
@@ -770,6 +833,7 @@
   padding: 0.85rem 1rem;
   margin-bottom: 0.875rem;
   letter-spacing: 0.0125rem;
+  position: relative;
 
   html[lang=ar] & {
     line-height: normal;
@@ -870,7 +934,6 @@
     .price-amount {
       @include breakpoint($only-mobile) {
         position: relative;
-        #{$right}: 2.5rem;
       }
     }
   }
@@ -880,9 +943,13 @@
   }
 
   .price-currency {
+    @include breakpoint($only-tablet) {
+      margin-right: 0.4rem;
+    }
+
     float: left !important;
     padding: 0;
-    margin-right: 1.5625rem;
+    margin-right: 1.3625rem;
   }
 }
 
@@ -986,15 +1053,8 @@ html[lang=ar] {
     }
   }
 
-  .edit-continue-shopping-mobile {
-    border: 0 none !important;
-    width: 10.8125rem;
-    padding: 0.67rem !important;
-    color: $cobalt-blue !important;
-  }
-
   .alias--cart .c-page-title {
-    font-family: 'alshaya-arabic-thin';
+    font-family: $alshaya-arabic-thin-nodir, sans-serif;
     font-size: 1.3rem;
     margin-bottom: 0.75rem;
     margin-top: 2em;
@@ -1017,8 +1077,7 @@ html[lang=ar] {
   .promo-continue-shopping-wrapper summary,
   .alias--cart #table-cart-totals td:first-child,
   #block-basketpromotionmessage p,
-  .alias--cart #table-cart-items tr th,
-  .ladda-label {
+  .alias--cart #table-cart-items tr th {
     font-size: 0.75rem;
   }
 
@@ -1065,7 +1124,7 @@ html[lang=ar] {
     font-family: $alshaya-thin;
   }
 
-  #table-cart-items table tr td.subtotal .price-currency.suffix {
+  #table-cart-items table tr td .price-currency.suffix {
     left: 0.5rem !important;
     float: none !important;
   }
@@ -1123,7 +1182,7 @@ html[lang=ar] {
     }
 
     @include breakpoint($desktop) {
-      float: right !important;
+      float: left !important;
       padding-right: 0.56rem;
     }
 
@@ -1154,14 +1213,29 @@ html[lang=ar] {
 
   table tr td.subtotal {
     span.price-amount {
-      margin-left: 1.5625rem;
+      margin-left: 0.4rem;
       float: right;
+
+      @include breakpoint($tablet) {
+        margin-left: 0.2rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-left: 0.9rem;
+      }
     }
 
     .price-currency.suffix {
       @include breakpoint($desktop) {
         padding-right: 0 !important;
       }
+    }
+  }
+
+  #table-cart-totals .price-currency {
+    @include breakpoint($only-tablet) {
+      float: none !important;
+      margin-right: 0.4rem;
     }
   }
 }
@@ -1173,10 +1247,6 @@ html[lang=ar] {
   font-weight: bold;
   padding-#{$left}: 1.5rem;
   padding-top: 1rem;
-
-  .alias--cart & {
-    border-top: 1px solid $white;
-  }
 }
 
 html[lang=ar] .path--cart h1.c-page-title::before {
@@ -1191,6 +1261,18 @@ html[lang=ar] .path--cart h1.c-page-title::before {
 }
 
 td.price {
+  @include breakpoint($only-mobile) {
+    .has--special--price {
+      .price-amount {
+        text-decoration: line-through;
+      }
+
+      .price-currency {
+        text-decoration: line-through;
+      }
+    }
+  }
+
   @include breakpoint($tablet) {
     .price-type__wrapper,
     .has--special--price,
@@ -1204,6 +1286,10 @@ td.price {
       width: 100%;
 
       .discount-prefix {
+        @include breakpoint($only-tablet) {
+          margin-right: 0;
+        }
+
         margin-right: 1.5625rem;
       }
 
@@ -1219,6 +1305,7 @@ td.price {
           position: relative;
           left: 0.22rem;
           float: left;
+          margin-right: 0;
         }
 
         @include breakpoint($desktop) {
@@ -1240,6 +1327,10 @@ td.price {
       .price {
         .price-currency {
           float: left !important;
+
+          @include breakpoint($only-tablet) {
+            padding-right: 0.4rem;
+          }
         }
 
         .price-amount {
@@ -1258,3 +1349,92 @@ body .ladda-button {
   font-family: $alshaya-bold;
 }
 
+.continue-shopping {
+  color: $white-five;
+  line-height: 0;
+
+  @include breakpoint($only-mobile) {
+    padding-top: 1rem;
+  }
+
+  @include breakpoint($tablet) {
+    position: absolute;
+    top: 50%;
+    #{$right}: 2%;
+  }
+
+  @include breakpoint($desktop) {
+    #{$right}: 25%;
+  }
+
+  a {
+    color: $white-five;
+    font-size: 1rem;
+    text-decoration: underline;
+
+    @include breakpoint($tablet) {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+#block-baskethorizontalproductrecommendation {
+  .owl-item a.above-mobile-block:hover .c-products__item__label {
+    color: $cerulean-two;
+    text-decoration: underline;
+  }
+}
+
+.path--cart .messages.messages--status::before {
+  font-size: 1.9rem;
+  margin-top: -8px;
+}
+
+html[lang=ar] {
+  .customer-cart-form {
+    td.name,
+    td.price {
+      .price-wrapper {
+        .price-amount {
+          min-width: 33% !important;
+          display: inline-block;
+
+          @include breakpoint($only-tablet) {
+            min-width: 46% !important;
+          }
+        }
+      }
+
+      .price--discount {
+        .discount-prefix {
+          float: none !important;
+          font-family: $alshaya-thin;
+          font-size: 0.75rem;
+
+          @include breakpoint($only-tablet) {
+            font-size: 0.75rem !important;
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: 0.625rem;
+          }
+        }
+
+        .discount-value {
+          float: right;
+          min-width: 47%;
+
+          @include breakpoint($only-tablet) {
+            font-size: 0.75rem;
+            min-width: 66%;
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: 0.625rem;
+            min-width: 35% !important;
+          }
+        }
+      }
+    }
+  }
+}

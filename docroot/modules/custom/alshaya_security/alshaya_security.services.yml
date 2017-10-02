@@ -1,0 +1,6 @@
+services:
+  alshaya_security.subscriber:
+    class: Drupal\alshaya_security\AlshayaSecuritySubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments: ['@config.factory']

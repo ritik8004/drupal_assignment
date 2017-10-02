@@ -27,6 +27,11 @@ interface CartStorageInterface {
   public function clearCart();
 
   /**
+   * Clears the shipping method details in cart stored in session.
+   */
+  public function clearShippingMethodSession();
+
+  /**
    * Gets the current card ID.
    *
    * @param bool $create_new

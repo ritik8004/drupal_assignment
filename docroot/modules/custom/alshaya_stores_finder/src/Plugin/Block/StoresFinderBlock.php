@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_stores_finder\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Cache\Cache;
 
@@ -19,6 +20,36 @@ class StoresFinderBlock extends BlockBase {
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+    return [
+      'link_title' => $this->t('Find Store'),
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+    $form['link_title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Link title'),
+      '#description' => $this->t('Title to be displayed for the link.'),
+      '#default_value' => $this->configuration['link_title'],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    $this->configuration['link_title'] = $form_state->getValue('link_title');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function build() {
     $is_active = '';
     // Current route name.
@@ -29,7 +60,7 @@ class StoresFinderBlock extends BlockBase {
     }
 
     return [
-      '#markup' => Link::createFromRoute($this->t('Find Store'), 'view.stores_finder.page_2', [], [
+      '#markup' => Link::createFromRoute($this->configuration['link_title'], 'view.stores_finder.page_2', [], [
         'attributes' =>
           [
             'class' => ['stores-finder', $is_active],

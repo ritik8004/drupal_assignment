@@ -193,8 +193,14 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   // Calculate status of order based on status of items.
   $orderRow['status'] = alshaya_acm_customer_get_order_status($order);
 
-  // Get the loyalty card number from order detail.
-  $orderRow['loyaltyCard'] = isset($order['extension']['loyalty_card']) ? $order['extension']['loyalty_card'] : '';
+  // Get loyalty settings.
+  $loyalty_settings = alshaya_loyalty_get_validation_settings();
+
+  // Show loyalty information if enabled.
+  if ($loyalty_settings['enable_disable_loyalty']) {
+    // Get the loyalty card number from order detail.
+    $orderRow['loyaltyCard'] = isset($order['extension']['loyalty_card']) ? alshaya_loyalty_format_card_number($order['extension']['loyalty_card'], TRUE) : '';
+  }
 
   return $orderRow;
 }
@@ -227,6 +233,8 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
   if ($shipping_method_code == $checkoutOptionsManager->getClickandColectShippingMethod()) {
+    $cc_config = \Drupal::config('alshaya_click_collect.settings');
+
     $orderDetails['type'] = 'cc';
 
     $orderDetails['delivery_method'] = $shippingTerm->getName();
@@ -234,19 +242,32 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $shipping_assignment = reset($order['extension']['shipping_assignments']);
     $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
 
+    $cc_type = $shipping_assignment['shipping']['extension_attributes']['click_and_collect_type'];
+
     /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
     $store_utility = \Drupal::service('alshaya_stores_finder.utility');
-    $store_node = $store_utility->getStoreFromCode($store_code);
-    $orderDetails['store_name'] = $store_node->label();
-    $orderDetails['store_address'] = $store_node->get('field_store_address')->getString();
-    $orderDetails['store_phone'] = $store_node->get('field_store_phone')->getString();
-    $orderDetails['store_open_hours'] = $store_node->get('field_store_open_hours')->getValue();
 
     $orderDetails['view_on_map_link'] = '';
-    if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
-      $lat = $lat_lng[0]['lat'];
-      $lng = $lat_lng[0]['lng'];
-      $orderDetails['view_on_map_link'] = 'http://maps.google.com/?q=' . $lat . ',' . $lng;
+
+    // Getting store node object from store code.
+    if ($store_node = $store_utility->getTranslatedStoreFromCode($store_code)) {
+      $orderDetails['store_name'] = $store_node->label();
+      $orderDetails['store_address'] = $store_node->get('field_store_address')->getString();
+      $orderDetails['store_phone'] = $store_node->get('field_store_phone')->getString();
+      $orderDetails['store_open_hours'] = $store_node->get('field_store_open_hours')->getValue();
+
+      if ($lat_lng = $store_node->get('field_latitude_longitude')->getValue()) {
+        $lat = $lat_lng[0]['lat'];
+        $lng = $lat_lng[0]['lng'];
+        $orderDetails['view_on_map_link'] = 'http://maps.google.com/?q=' . $lat . ',' . $lng;
+      }
+
+      $cc_text = ($cc_type == 'reserve_and_collect') ? $cc_config->get('click_collect_rnc') : $store_node->get('field_store_sts_label')->getString();
+
+      $orderDetails['delivery_method'] = t('@shipping_method_name (@shipping_method_description)', [
+        '@shipping_method_name' => $shippingTerm->getName(),
+        '@shipping_method_description' => $cc_text,
+      ]);
     }
   }
   else {
@@ -291,6 +312,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['payment_method'] = $payment_method_term->getName();
 
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
+  $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   return $orderDetails;
@@ -390,13 +412,6 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   }
 
   $build = [];
-
-  $config = \Drupal::config('alshaya_acm_customer.orders_config');
-  $order_status_failed = explode(',', $config->get('order_status_failed'));
-
-  if (in_array($order['status'], $order_status_failed)) {
-    $build['#order_error'] = t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.');
-  }
 
   $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
   $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);

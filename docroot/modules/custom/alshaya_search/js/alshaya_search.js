@@ -1,8 +1,19 @@
+var alshayaSearchActiveFacet = null;
+var alshayaSearchShowMoreOpen = 0;
+var alshayaSearchActiveFacetTimer = null;
+var alshayaSearchActiveFacetAfterAjaxTimer = null;
+
 (function ($) {
   'use strict';
+
   Drupal.behaviors.alshayaSearch = {
     attach: function (context, settings) {
       $('#edit-sort-bef-combine option[value="search_api_relevance ASC"]').remove();
+      // Hide the sort drop down and filters text, if no results.
+      if ($('.view-id-search .view-empty').length !== 0) {
+        $('#views-exposed-form-search-page .form-item-sort-bef-combine').hide();
+        $('.c-sidebar-first__region .c-facet__blocks__wrapper .c-facet__label').remove();
+      }
       // Do not allow search form submit on empty search text.
       $('form[data-bef-auto-submit-full-form]', context).submit(function (e) {
         var $keyword = $(this).find('input[name="keywords"]');
@@ -10,21 +21,78 @@
           e.preventDefault();
         }
       });
-
-      // Ajax command to update search result header count.
-      $.fn.alshayaSearchHeaderUpdate = function (data) {
-        // If search page.
-        if ($('.view-id-search').length !== 0) {
-          // Update the header result count.
-          var header_result = $('.view-id-search .view-header').html();
-          $('.search-count').html(header_result);
-        }
-      };
     }
+  };
+
+  // Ajax command to update search result header count.
+  $.fn.alshayaSearchHeaderUpdate = function (data) {
+    // If search page.
+    if ($('.view-id-search').length !== 0) {
+      // Update the header result count.
+      var header_result = $('.view-id-search .view-header').html();
+      $('.search-count').html(header_result);
+    }
+  };
+
+  Drupal.alshayaSearchActiveFacetObserver = function () {
+    alshayaSearchActiveFacet = null;
+    alshayaSearchShowMoreOpen = 0;
+
+    if ($('.facet-active').length) {
+      alshayaSearchActiveFacet = $('.facet-active').attr('data-block-plugin-id');
+      alshayaSearchShowMoreOpen = $('.facet-active .facets-soft-limit-link.open').length;
+    }
+
+    Drupal.alshayaSearchBindObserverEvents();
+  };
+
+  Drupal.alshayaSearchActiveFacetResetAfterAjax = function () {
+    if (alshayaSearchActiveFacet) {
+      var facetBlock = $('[data-block-plugin-id="' + alshayaSearchActiveFacet + '"]:visible');
+      facetBlock.addClass('facet-active');
+      facetBlock.find('.c-accordion__title').addClass('ui-state-active');
+      facetBlock.find('.facets-soft-limit-link').css('display', 'inline-block');
+
+      if (alshayaSearchShowMoreOpen) {
+        facetBlock.find('li').show();
+        facetBlock.find('.facets-soft-limit-link').addClass('open').text(Drupal.t('Show less'));
+      }
+    }
+
+    Drupal.alshayaSearchBindObserverEvents();
+  };
+
+  Drupal.alshayaSearchBindObserverEvents = function () {
+    $('.c-facet__blocks').on('click', function () {
+      if (alshayaSearchActiveFacetTimer) {
+        clearTimeout(alshayaSearchActiveFacetTimer);
+        alshayaSearchActiveFacetTimer = null;
+      }
+
+      alshayaSearchActiveFacetTimer = setTimeout(Drupal.alshayaSearchActiveFacetObserver, 100);
+    });
   };
 
   Drupal.behaviors.alshayaFacets = {
     attach: function (context, settings) {
+      Drupal.alshayaSearchBindObserverEvents();
+
+      $.fn.replaceFacets = function(data) {
+        if (data.replaceWith === '') {
+          $(data.selector).html('');
+        }
+        else {
+          $(data.selector).replaceWith(data.replaceWith);
+
+          if (alshayaSearchActiveFacetAfterAjaxTimer) {
+            clearTimeout(alshayaSearchActiveFacetAfterAjaxTimer);
+            alshayaSearchActiveFacetAfterAjaxTimer = null;
+          }
+
+          alshayaSearchActiveFacetAfterAjaxTimer = setTimeout(Drupal.alshayaSearchActiveFacetResetAfterAjax, 100);
+        }
+      };
+
       var facetsDisplayTextbox = settings.alshaya_search_facets_display_textbox;
       if (facetsDisplayTextbox) {
         var facetPlugins = Object.keys(facetsDisplayTextbox);
@@ -39,10 +107,6 @@
               + '" class="facets-search-input">').on('keyup', function () {
               var facetFilterKeyword = $(this).find('.facets-search-input').val().toLowerCase();
               if (facetFilterKeyword) {
-                // Hide show more if above keyword has some data.
-                if (settings.facets.softLimit !== undefined) {
-                  $(this).parent().find('.facets-soft-limit-link').hide();
-                }
                 $(this).find('li').each(function () {
                   // Hide all facet links.
                   $(this).hide();
@@ -70,42 +134,47 @@
         });
       }
 
-      // Poll the DOM to check if the show more/less link is avaialble, before placing it inside the ul.
-      var i = setInterval(function () {
-        if ($('.c-search aside .block-facet--checkbox a.facets-soft-limit-link').length) {
-          clearInterval(i);
-          $('aside .block-facet--checkbox').each(function () {
-            var softLink = $(this).find('a.facets-soft-limit-link');
-            softLink.insertAfter($(this).find('ul'));
+      // Only execute if views is not empty.
+      if ($('.views-infinite-scroll-content-wrapper').length !== 0) {
+        // Change the title of facet when open.
+        var priceCurrency = settings.alshaya_search_price_currency;
+        var $finalPriceBlock = $('#block-finalprice');
+        if (priceCurrency) {
+          var initialTitle = $finalPriceBlock.find('h3').html();
+          $finalPriceBlock.find('h3').on('click', function() {
+            if ($(this).hasClass('ui-state-active')) {
+              $finalPriceBlock.find('h3').html(initialTitle + ' (' + priceCurrency + ')');
+            }
+            else {
+              $finalPriceBlock.find('h3').html(initialTitle);
+            }
           });
         }
-      }, 100);
 
-      var j = setInterval(function () {
-        if ($('.c-search .region__content .region__sidebar-first .block-facet--checkbox a.facets-soft-limit-link').length) {
-          clearInterval(j);
-          $('.region__content .region__sidebar-first .block-facet--checkbox').each(function () {
-            var softLink = $(this).find('a.facets-soft-limit-link');
-            softLink.addClass('processed');
-            softLink.insertAfter($(this).find('ul'));
-          });
-        }
-      }, 100);
-
-      // Change the title of facet when open.
-      var priceCurrency = settings.alshaya_search_price_currency;
-      if (priceCurrency) {
-        var initialTitle = $('#block-finalprice h3').html();
-        $('#block-finalprice > h3').on('click', function() {
-          if ($(this).hasClass('ui-state-active')) {
-            $('#block-finalprice h3').html(initialTitle + ' (' + priceCurrency + ')');
-          }
-          else {
-            $('#block-finalprice h3').html(initialTitle);
-          }
-        });
+        // Price facets to respect Soft Limit.
+        var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
+        var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
+        $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
       }
 
+      $('.ui-autocomplete').on("touchend",function(e) {
+        if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+          e.stopPropagation();
+          e.preventDefault();
+          if (e.handled !== true) {
+            if ($(e.target).hasClass('.autocomplete-suggestion-user-input')) {
+              var $userInput = $(e.currentTarget);
+            }
+            else {
+              var $userInput = $(e.currentTarget).find('.autocomplete-suggestion-user-input');
+            }
+            var input = $userInput.html() + $userInput.siblings('.autocomplete-suggestion-suggestion-suffix').html();
+            $('#edit-keywords').val(input);
+            $('#views-exposed-form-search-page').submit();
+          }
+        }
+
+      });
     }
   };
 
@@ -114,16 +183,29 @@
       // Convert the list to slider.
       $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
         var gallery = $(this);
-        $(this, context).lightSlider({
-          vertical: false,
-          item: 4,
-          slideMargin: 6,
-          autoWidth: true,
-          onSliderLoad: function() {
-            gallery.closest('.alshaya_search_slider').hide();
-            gallery.css('height', '73px');
-          }
-        });
+        if (isRTL()) {
+          $(this, context).lightSlider({
+            vertical: false,
+            item: 4,
+            rtl: true,
+            slideMargin: 5,
+            onSliderLoad: function() {
+              gallery.closest('.alshaya_search_slider').hide();
+              gallery.css('height', '73px');
+            }
+          });
+        }
+        else {
+          $(this, context).lightSlider({
+            vertical: false,
+            item: 4,
+            slideMargin: 5,
+            onSliderLoad: function() {
+              gallery.closest('.alshaya_search_slider').hide();
+              gallery.css('height', '73px');
+            }
+          });
+        }
       });
 
       // Show/Hide the slider on Mouse hover.
@@ -157,6 +239,21 @@
               .attr('rel'));
         }
       );
+
+      // Preload slider images.
+      if ($(window).width() > 1024) {
+        // Iterate over each product tile.
+        $('.c-products__item').each(function () {
+          var slider = $(this).find('.alshaya_search_slider');
+          // Iterate over each slider thumbnail.
+          slider.find('.lslide').each(function () {
+            var imgURL = $(this).children('img').attr('rel');
+            // Preload image.
+            var img = new Image();
+            img.src = imgURL;
+          });
+        });
+      }
 
       $.fn.alshayaAttachSearchSlider = function () {
         Drupal.attachBehaviors(context);

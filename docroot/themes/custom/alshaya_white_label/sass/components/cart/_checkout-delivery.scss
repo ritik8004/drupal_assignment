@@ -1,6 +1,10 @@
 .page-standard.user-page.checkout-delivery {
   margin: 1.2rem auto;
 
+  .country-name {
+    color: #999 !important;
+  }
+
   &.l-two--sf {
     @include breakpoint($upto-tablet) {
       max-width: 19rem;
@@ -15,13 +19,6 @@
     @include breakpoint($only-mobile) {
       padding-left: 1em;
       font-size: 1.115rem;
-
-      @include icon(chevronleft, before) {
-        position: absolute;
-        left: -0.6875rem;
-        top: 0;
-        font-size: 1.563rem;
-      }
     }
   }
 
@@ -50,10 +47,10 @@
 
       .form-item.form-type-select {
         padding-bottom: 1rem;
-        margin-top: 2.5rem !important;
+        margin-top: 2.75rem !important;
 
         label {
-          top: -1.1375rem;
+          top: -1.375rem;
           font-size: 0.75rem;
 
           &.error {
@@ -153,6 +150,12 @@
           font-weight: bold;
           color: $cerulean-two;
           font-size: 0.75rem;
+
+          &.back-to-basket {
+            @include breakpoint($desktop) {
+              padding: 0.625rem 0;
+            }
+          }
         }
       }
     }
@@ -259,9 +262,21 @@
       font-family: $alshaya-bold;
       font-weight: normal;
 
+      h2 {
+        font-weight: normal;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+        }
+      }
+
       p {
         color: $grey-ash;
         font-family: $arial;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.75rem;
+        }
       }
 
       @include breakpoint($tablet) {
@@ -394,6 +409,11 @@
 
       @include breakpoint($desktop) {
         width: 6.2%;
+
+        html[lang=ar] & {
+          width: 6.1%;
+          margin-left: 1px;
+        }
       }
     }
 
@@ -531,17 +551,17 @@
     font-size: 0;
 
     .form-type-radio {
-      margin-top: 0 !important;
+      margin-top: 0;
 
       &:first-child {
-        margin-top: 1.875rem !important;
+        margin-top: 1.875rem;
 
         @include breakpoint($only-tablet) {
-          margin-top: 1.188rem !important;
+          margin-top: 1.188rem;
         }
 
         @include breakpoint($desktop) {
-          margin-top: 2.375rem !important;
+          margin-top: 1.438rem;
         }
       }
     }
@@ -626,6 +646,18 @@
   padding-#{$left}: 0;
   margin-top: 0;
 
+  #payment_method_knet {
+    border-top: 2px solid $greyish;
+
+    @include breakpoint($only-mobile) {
+      border-top-width: 1px;
+    }
+
+    .payment-plugin-wrapper-div {
+      border-top: none;
+    }
+  }
+
   > .form-wrapper {
     cursor: pointer;
     margin-top: 0;
@@ -635,18 +667,6 @@
     &:last-child {
       .payment-plugin-wrapper-div {
         border-bottom: 1px solid $white;
-      }
-    }
-
-    &:first-child {
-      border-top: 2px solid $white;
-
-      @include breakpoint($only-mobile) {
-        border-top-width: 1px;
-      }
-
-      .payment-plugin-wrapper-div {
-        border-top: none;
       }
     }
 
@@ -721,6 +741,10 @@
 
           @include breakpoint($tablet) {
             width: 92.5%;
+
+            .ucbrowser & {
+              width: 92%;
+            }
           }
 
           @include breakpoint($desktop) {
@@ -865,7 +889,8 @@
             margin-top: 0;
             width: 100%;
             text-transform: lowercase;
-            color: $marine-blue-two;
+            color: $cerulean-two;
+            font-size: 0.75rem;
             display: block;
             padding: 0.5rem 0;
 
@@ -1093,10 +1118,18 @@
       a p {
         color: $grey-ash;
       }
+
+      &.active--tab--head {
+        h2 {
+          color: $cerulean-two !important;
+        }
+      }
     }
 
-    #edit-guest-delivery-collect,
     #edit-guest-delivery-home,
+    #edit-member-delivery-home,
+    #edit-guest-delivery-collect,
+    #edit-member-delivery-collect,
     #edit-actions {
       display: none !important;
     }
@@ -1138,6 +1171,45 @@ html[lang=ar] {
         @include icon(chevronright, before) {
           right: -0.6875rem;
         }
+      }
+    }
+  }
+}
+
+// Showing label on mobile number field.
+.address-book-address .mobile-number-field {
+  > label {
+    position: static !important;
+    line-height: 2.2;
+  }
+
+  .form-type-textfield input[type=text] {
+    padding-bottom: 0.25rem !important;
+  }
+}
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-payment {
+  h1 {
+    z-index: -1;
+  }
+
+  .back-link {
+    display: none;
+    z-index: 1;
+
+    @include breakpoint($only-mobile) {
+      display: block;
+      position: absolute;
+      width: 1.063rem;
+      height: 1.375rem;
+
+      @include icon(chevronleft, before) {
+        position: absolute;
+        #{$left}: -0.6875rem;
+        top: 0;
+        color: $black;
+        font-size: 1.563rem;
       }
     }
   }

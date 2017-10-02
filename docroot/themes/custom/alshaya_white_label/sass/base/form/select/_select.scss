@@ -26,6 +26,11 @@ select:focus::-ms-value {
     position: relative;
     z-index: 3;
   }
+
+  // Arabic font is longer so it gets clipped from bottom.
+  html[lang=ar] & {
+    line-height: 1.2;
+  }
 }
 
 @mixin select-wrapper($wrapper-width) {
@@ -34,7 +39,6 @@ select:focus::-ms-value {
   position: relative;
 
   @include icon(chevrondown, after) {
-    border-#{$left}: 1px solid $white-five;
     font-size: 1.75rem;
     line-height: 35px;
     pointer-events: none;
@@ -57,7 +61,6 @@ select:focus::-ms-value {
   &::before {
     width: $select-width;
     content: "";
-    background: $whisper-dark;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -84,6 +87,12 @@ select:focus::-ms-value {
     }
   }
 
+  html[lang=ar] & {
+    .select2-selection--single .select2-selection__rendered {
+      width: 94%;
+    }
+  }
+
   .select2-selection__arrow {
     top: 0;
     #{$right}: 0;
@@ -102,6 +111,7 @@ select:focus::-ms-value {
       #{$right}: 0;
       text-align: center;
       display: inline-block;
+      background: $white-two;
     }
   }
 }

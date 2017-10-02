@@ -13,7 +13,7 @@
     @extend %list-clear;
 
     @include breakpoint($desktop) {
-      padding-top: 0.5625rem;
+      padding-top: 1.313rem;
     }
 
     input[type="text"] {
@@ -22,12 +22,12 @@
       font-size: 0.75rem;
       padding: 0.25rem 0.5rem;
       width: 13rem;
-      margin: 0.45rem 0 1rem;
+      margin-bottom: 1.313rem;
     }
 
     li {
       margin-#{$left}: -1px;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.875rem;
     }
   }
 
@@ -49,6 +49,10 @@
 
     .facet-item__value {
       margin-#{$left}: 1rem;
+
+      div {
+        display: inline;
+      }
     }
 
     .facet-item__count,
@@ -75,7 +79,7 @@
 
 .c-facet__blocks {
   .item-list__checkbox {
-    max-height: 180px;
+    max-height: 228px;
     overflow: auto;
   }
 
@@ -83,3 +87,4 @@
     display: none;
   }
 }
+

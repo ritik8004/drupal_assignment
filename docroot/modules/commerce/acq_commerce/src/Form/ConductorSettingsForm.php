@@ -41,7 +41,7 @@ class ConductorSettingsForm extends ConfigFormBase {
       ->set('hmac_secret', $form_state->getValue('hmac_secret'))
       ->set('timeout', (int) $form_state->getValue('timeout'))
       ->set('verify_ssl', (bool) $form_state->getValue('verify_ssl'))
-      ->set('product_page_size', (int) $form_state->getValue('page_size'))
+      ->set('product_page_size', (int) $form_state->getValue('product_page_size'))
       ->set('filter_root_category', (bool) $form_state->getValue('filter_root_category'))
       ->save();
 
@@ -96,20 +96,18 @@ class ConductorSettingsForm extends ConfigFormBase {
     ];
 
     $form['security']['hmac_id'] = [
-      '#type' => 'textfield',
+      '#type' => 'password',
       '#title' => $this->t('HMAC Key ID'),
       '#required' => TRUE,
-      '#default_value' => $config->get('hmac_id'),
     ];
 
     $form['security']['hmac_secret'] = [
-      '#type' => 'textfield',
+      '#type' => 'password',
       '#title' => $this->t('HMAC Key Secret'),
       '#required' => TRUE,
-      '#default_value' => $config->get('hmac_secret'),
     ];
 
-    $form['page_size'] = [
+    $form['product_page_size'] = [
       '#type' => 'number',
       '#title' => $this->t('Conductor Product Synchronization Page Size'),
       '#default_value' => $config->get('product_page_size'),
