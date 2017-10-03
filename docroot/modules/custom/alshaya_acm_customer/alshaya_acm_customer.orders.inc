@@ -34,6 +34,19 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
   else {
     $orders = \Drupal::service('acq_commerce.api')->getCustomerOrders($email);
 
+    // Update order items to have unique records only.
+    // For configurable products we get it twice (once for parent and once for
+    // selected variant).
+    foreach ($orders as $index => &$order) {
+      $order_items = [];
+      foreach ($order['items'] as $item) {
+        if (!isset($order_items[$item['sku']])) {
+          $order_items[$item['sku']] = $item;
+        }
+      }
+      $order['items'] = $order_items;
+    }
+
     // Sort them by default by date.
     usort($orders, function ($a, $b) {
       return $b['created_at'] > $a['created_at'];
