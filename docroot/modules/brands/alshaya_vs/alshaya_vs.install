@@ -5,6 +5,8 @@
  * Install, uninstall, update function for alshaya_vs.
  */
 
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_install().
  */
@@ -30,7 +32,17 @@ function alshaya_vs_install() {
 
   // Disable some default blocks provided by whitelabel_non_transac that we
   // don't want on victoria_secret.
-  alshaya_block_delete_blocks(['branding', 'main_navigation']);
+  alshaya_block_delete_blocks(['branding']);
+
+  // Change region for main navigation block.
+  $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => 'main_navigation']);
+  if (!empty($blocks)) {
+    $block = reset($blocks);
+    if ($block instanceof Block) {
+      $block->setRegion('header_primary');
+      $block->save();
+    }
+  }
 
   // Set default marker image for stores finder.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
