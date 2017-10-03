@@ -153,7 +153,7 @@
             setTimeout(function () {
               if (runscript) {
                 if ($(window).width() < 768) {
-                  $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form').attr('action', '/' + drupalSettings.path.currentLanguage + '/store-finder/list');
+                  $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form').attr('action', Drupal.url('/store-finder/list'));
                 }
                 $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form #edit-submit-stores-finder').trigger('click');
               }
