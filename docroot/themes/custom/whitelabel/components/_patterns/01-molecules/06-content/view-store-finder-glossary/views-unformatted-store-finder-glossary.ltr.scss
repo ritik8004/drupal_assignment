@@ -26,6 +26,7 @@
 
     @include breakpoint($lap) {
       width: 22.5%;
+      margin-top: 0.4rem;
     }
 
     @include breakpoint($desk) {

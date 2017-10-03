@@ -30,6 +30,20 @@ function whitelabel_css_alter(&$css, $assets) {
 }
 
 /**
+ * Implements hook_page_attachments_alter().
+ */
+function whitelabel_page_attachments_alter(&$attachments) {
+  $language_manager = \Drupal::service('language_manager');
+  $language = $language_manager->getCurrentLanguage();
+  $direction = $language->getDirection();
+
+  // Add a library in ltr version to enable libraries alter for rtl version.
+  if ($direction == 'ltr') {
+    $attachments['#attached']['library'][] = 'whitelabel/ltr';
+  }
+}
+
+/**
  * Implements hook_preprocess_block().
  */
 function whitelabel_preprocess_block(&$variables) {
