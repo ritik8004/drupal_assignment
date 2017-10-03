@@ -110,7 +110,9 @@ class ProductSyncForm extends FormBase {
         break;
 
       case 'Synchronize Products':
-        $this->ingestApi->productFullSync();
+        foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+          $this->ingestApi->productFullSync($store_id, $langcode);
+        }
         drupal_set_message('Product Synchronization Processing...', 'status');
         break;
     }

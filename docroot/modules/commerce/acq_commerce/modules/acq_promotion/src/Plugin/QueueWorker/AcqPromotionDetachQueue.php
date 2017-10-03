@@ -68,19 +68,14 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
     }
 
     $sku_texts = implode(',', $skus);
-    $endpoint = $this->apiVersion . '/ingest/product/sync';
 
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return $client->post($endpoint, $opt);
-    };
-
-    try {
-      $this->tryIngestRequest($doReq, 'productFullSync', 'products', $sku_texts);
-    }
-    catch (ConductorException $e) {
+    if ($sku_texts) {
+      foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+        $this->ingestApiWrapper->productFullSync($store_id, $langcode, $sku_texts);
+      }
     }
 
-    $this->loggerFactory->get('acq_sku')->info('Detached Promotion:@promo from SKUs: @skus',
+    $this->logger->info('Detached Promotion:@promo from SKUs: @skus',
       ['@promo' => $promotion_nid, '@skus' => $sku_texts]);
   }
 
