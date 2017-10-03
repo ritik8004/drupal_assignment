@@ -3,14 +3,14 @@
 
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
-      $(window).on('click', function() {
+      $(window).on('click', function () {
         if ($('#cart_notification').length) {
           // check if element is Visible
           var length = $('#cart_notification').html().length;
           if (length > 0) {
             $('#cart_notification').empty();
             $('body').removeClass('notification--on');
-            $('#cart_notification').removeClass('has--notification')
+            $('#cart_notification').removeClass('has--notification');
           }
         }
       });
@@ -59,7 +59,7 @@
         $('html, body').animate({
           scrollTop: $('.header--wrapper').offset().top
         }, 'slow');
-          $('body').addClass('notification--on');
+        $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification');
 
         setTimeout(function () {
@@ -80,6 +80,10 @@
         if (data.message === 'success') {
           $('.edit-add-to-cart', $(data.sku_css_id).parent()).find('.ladda-label').html(Drupal.t('added'));
           var pdpAddCartButton = l;
+
+          if ($('.ui-dialog').length > 0) {
+            pdpAddCartButton = $('.edit-add-to-cart', $('.ui-dialog'));
+          }
           var addedProduct = pdpAddCartButton.closest('article[gtm-type="gtm-product-link"]');
           var quantity = parseInt(pdpAddCartButton.closest('.sku-base-form').find('.form-item-quantity select').val());
           var size = pdpAddCartButton.closest('.sku-base-form').find('.form-item-configurables-size select option:selected').text();
@@ -128,11 +132,11 @@
             product.metric2 = product.price * product.quantity;
 
             var productData = {
-              'event': 'addToCart',
-              'ecommerce': {
-                'currencyCode': 'KWD',
-                'add': {
-                  'products': [
+              event: 'addToCart',
+              ecommerce: {
+                currencyCode: 'KWD',
+                add: {
+                  products: [
                     product
                   ]
                 }
