@@ -324,8 +324,18 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       try {
         $customer = $api_wrapper->createCustomer($address['firstname'], $address['lastname'], $email);
+
+        /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+        $cart_storage = \Drupal::service('acq_cart.cart_storage');
+        $cart_storage->associateCart($customer['customer_id'], $email);
       }
       catch (\Exception $e) {
+        if (acq_commerce_is_exception_api_down_exception($e)) {
+          drupal_set_message($e->getMessage(), 'error');
+          $form_state->setErrorByName('custom', $e->getMessage());
+          return;
+        }
+
         // @TODO: Handle create customer errors here.
         // Probably just the email error.
         \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
@@ -333,10 +343,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $error);
         return;
       }
-
-      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-      $cart_storage = \Drupal::service('acq_cart.cart_storage');
-      $cart_storage->associateCart($customer['customer_id'], $email);
     }
 
     if ($form_state->getErrors()) {

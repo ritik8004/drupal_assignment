@@ -15,6 +15,11 @@ class APIWrapper {
   use \Drupal\acq_commerce\Conductor\AgentRequestTrait;
 
   /**
+   * Error code used internally for API Down cases.
+   */
+  const API_DOWN_ERROR_CODE = 600;
+
+  /**
    * Store ID.
    *
    * @var mixed
