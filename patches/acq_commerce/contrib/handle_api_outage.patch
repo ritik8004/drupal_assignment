@@ -164,3 +164,143 @@ index 3228b9aa3..f55088c5f 100644
      $response = json_decode($result->getBody(), TRUE);
      if (($response === NULL) || (!isset($response['success']))) {
        $mesg = sprintf(
+diff --git a/acq_commerce.module b/acq_commerce.module
+index e6ccf0ab5..636c6fc40 100644
+--- a/acq_commerce.module
++++ b/acq_commerce.module
+@@ -5,6 +5,8 @@
+  * Provides base hooks to the base Acquia Commerce connector.
+  */
+ 
++use Drupal\acq_commerce\Conductor\APIWrapper;
++
+ /**
+  * For the all.
+  */
+@@ -144,6 +146,32 @@ function acq_commerce_get_langcode_from_store_id($store_id) {
+ }
+ 
+ /**
++ * Helper function to check if exception is related to API being down.
++ *
++ * @param \Exception $e
++ *   Exception object.
++ *
++ * @return bool
++ *   True if exception is related to API being down.
++ */
++function acq_commerce_is_exception_api_down_exception(\Exception $e) {
++  return acq_commerce_is_code_api_down_code($e->getCode());
++}
++
++/**
++ * Helper function to check if exception code is related to API being down.
++ *
++ * @param int $code
++ *   Exception code.
++ *
++ * @return bool
++ *   True if exception code is related to API being down.
++ */
++function acq_commerce_is_code_api_down_code($code) {
++  return ($code == APIWrapper::API_DOWN_ERROR_CODE);
++}
++
++/**
+  * Function to return global error message to be used when API is down.
+  *
+  * Not adding this to config or creating form, this can be updated using
+diff --git a/modules/acq_cart/src/CartSessionStorage.php b/modules/acq_cart/src/CartSessionStorage.php
+index 4b35d4caf..5b77ea16a 100644
+--- a/modules/acq_cart/src/CartSessionStorage.php
++++ b/modules/acq_cart/src/CartSessionStorage.php
+@@ -203,7 +203,8 @@ public function updateCart($create_new = TRUE) {
+         $cartObject = (object) $this->apiWrapper->updateCart($cart_id, $update);
+       }
+       catch (\Exception $e) {
+-        if ($e->getCode() != 500) {
++        // Restore the cart only if exception is not related to API being down.
++        if (!acq_commerce_is_api_down_error($e)) {
+           $this->restoreCart($cart_id);
+         }
+ 
+diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
+index d5181e580..93695009a 100644
+--- a/src/Conductor/APIWrapper.php
++++ b/src/Conductor/APIWrapper.php
+@@ -15,6 +15,11 @@ class APIWrapper {
+   use \Drupal\acq_commerce\Conductor\AgentRequestTrait;
+ 
+   /**
++   * Error code used internally for API Down cases.
++   */
++  const API_DOWN_ERROR_CODE = 600;
++
++  /**
+    * Store ID.
+    *
+    * @var mixed
+diff --git a/src/Conductor/AgentRequestTrait.php b/src/Conductor/AgentRequestTrait.php
+index f55088c5f..9a8ad5dd3 100644
+--- a/src/Conductor/AgentRequestTrait.php
++++ b/src/Conductor/AgentRequestTrait.php
+@@ -98,45 +98,30 @@ function (TransferStats $stats) use ($logger, $action) {
+       /** @var \GuzzleHttp\Psr7\Response $result */
+       $result = $doReq($client, $reqOpts);
+     }
+-    catch (ConnectException $e) {
+-      $mesg = sprintf(
+-        '%s: ConnectException during request: (%d) - %s',
+-        $action,
+-        $e->getCode(),
+-        $e->getMessage()
+-      );
+-
+-      $logger->error($mesg);
+-
+-      throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
+-    }
+-    catch (MalformedResponseException $e) {
+-      $mesg = sprintf(
+-        '%s: MalformedResponseException during request: (%d) - %s',
+-        $action,
+-        $e->getCode(),
+-        $e->getMessage()
+-      );
+-
+-      $logger->error($mesg);
++    catch (\Exception $e) {
++      $class = get_class($e);
+ 
+-      throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
+-    }
+-    catch (RequestException $e) {
+       $mesg = sprintf(
+-        '%s: Exception during request: (%d) - %s',
++        '%s: %s during request: (%d) - %s',
+         $action,
++        $class,
+         $e->getCode(),
+         $e->getMessage()
+       );
+ 
+       $logger->error($mesg);
+ 
+-      if ($e->getCode() == 404) {
+-        throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
++      if ($e->getCode() == 404
++        || $e instanceof MalformedResponseException
++        || $e instanceof ConnectException) {
++        throw new \Exception(acq_commerce_api_down_global_error_message(), APIWrapper::API_DOWN_ERROR_CODE);
++      }
++      elseif ($e instanceof RequestException) {
++        throw new ConductorException($mesg, $e->getCode(), $e);
++      }
++      else {
++        throw $e;
+       }
+-
+-      throw new ConductorException($mesg, $e->getCode(), $e);
+     }
+ 
+     $response = json_decode($result->getBody(), TRUE);

@@ -98,45 +98,30 @@ trait AgentRequestTrait {
       /** @var \GuzzleHttp\Psr7\Response $result */
       $result = $doReq($client, $reqOpts);
     }
-    catch (ConnectException $e) {
+    catch (\Exception $e) {
+      $class = get_class($e);
+
       $mesg = sprintf(
-        '%s: ConnectException during request: (%d) - %s',
+        '%s: %s during request: (%d) - %s',
         $action,
+        $class,
         $e->getCode(),
         $e->getMessage()
       );
 
       $logger->error($mesg);
 
-      throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
-    }
-    catch (MalformedResponseException $e) {
-      $mesg = sprintf(
-        '%s: MalformedResponseException during request: (%d) - %s',
-        $action,
-        $e->getCode(),
-        $e->getMessage()
-      );
-
-      $logger->error($mesg);
-
-      throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
-    }
-    catch (RequestException $e) {
-      $mesg = sprintf(
-        '%s: Exception during request: (%d) - %s',
-        $action,
-        $e->getCode(),
-        $e->getMessage()
-      );
-
-      $logger->error($mesg);
-
-      if ($e->getCode() == 404) {
-        throw new \Exception(acq_commerce_api_down_global_error_message(), 500);
+      if ($e->getCode() == 404
+        || $e instanceof MalformedResponseException
+        || $e instanceof ConnectException) {
+        throw new \Exception(acq_commerce_api_down_global_error_message(), APIWrapper::API_DOWN_ERROR_CODE);
       }
-
-      throw new ConductorException($mesg, $e->getCode(), $e);
+      elseif ($e instanceof RequestException) {
+        throw new ConductorException($mesg, $e->getCode(), $e);
+      }
+      else {
+        throw $e;
+      }
     }
 
     $response = json_decode($result->getBody(), TRUE);

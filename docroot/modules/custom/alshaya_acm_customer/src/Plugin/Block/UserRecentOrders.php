@@ -208,7 +208,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       // If any error during api/service calling.
       \Drupal::logger('alshaya_acm_customer')->error($e->getMessage());
 
-      if ($e->getCode() == 500) {
+      if (acq_commerce_is_exception_api_down_exception($e)) {
         $build['message'] = [
           '#theme' => 'global_error',
           '#message' => $e->getMessage(),

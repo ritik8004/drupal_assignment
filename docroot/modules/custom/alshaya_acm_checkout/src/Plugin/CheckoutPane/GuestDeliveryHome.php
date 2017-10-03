@@ -320,7 +320,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         $cart_storage->associateCart($customer['customer_id'], $email);
       }
       catch (\Exception $e) {
-        if ($e->getCode() == 500) {
+        if (acq_commerce_is_exception_api_down_exception($e)) {
           drupal_set_message($e->getMessage(), 'error');
           $form_state->setErrorByName('custom', $e->getMessage());
           return;

@@ -118,7 +118,7 @@ class CustomerController extends ControllerBase {
     catch (\Exception $e) {
       $orders = [];
 
-      if ($e->getCode() == 500) {
+      if (acq_commerce_is_exception_api_down_exception($e)) {
         $noOrdersFoundMessage = [
           '#theme' => 'global_error',
           '#message' => $e->getMessage(),

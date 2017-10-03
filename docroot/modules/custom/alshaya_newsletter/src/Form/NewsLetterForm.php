@@ -106,7 +106,7 @@ class NewsLetterForm extends FormBase {
         }
       }
       catch (\Exception $e) {
-        if ($e->getCode() == 500) {
+        if (acq_commerce_is_exception_api_down_exception($e)) {
           $message = '<span class="message error">' . $e->getMessage() . '</span>';
         }
         else {

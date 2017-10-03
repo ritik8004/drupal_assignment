@@ -257,7 +257,7 @@ function alshaya_acm_customer_form_validate_api_works($form, FormStateInterface 
     $api_wrapper->systemWatchdog();
   }
   catch (\Exception $e) {
-    if ($e->getCode() == 500) {
+    if (acq_commerce_is_exception_api_down_exception($e)) {
       drupal_set_message($e->getMessage(), 'error');
       $form_state->setErrorByName('form_token', $e->getMessage());
       return;
@@ -354,7 +354,7 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       }
     }
     catch (\Exception $e) {
-      if ($e->getCode() == 500) {
+      if (acq_commerce_is_exception_api_down_exception($e)) {
         $form_state->setErrorByName('name', $e->getMessage());
         return;
       }
@@ -433,8 +433,8 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
     }
   }
   catch (\Exception $e) {
-    // Do nothing except for 500, could be admin user.
-    if ($e->getCode() == 500) {
+    // Could be admin user, do nothing except for downtime exception.
+    if (acq_commerce_is_exception_api_down_exception($e)) {
       throw $e;
     }
   }
@@ -506,8 +506,9 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
     }
   }
   catch (\Exception $e) {
-    // Do nothing except for 500, we will do other validations after try/catch.
-    if ($e->getCode() == 500) {
+    // Do nothing except for downtime exception, we will do other validations
+    // after try/catch.
+    if (acq_commerce_is_exception_api_down_exception($e)) {
       $form_state->setErrorByName('custom', $e->getMessage());
       drupal_set_message($e->getMessage(), 'error');
     }
@@ -607,8 +608,9 @@ function alshaya_acm_customer_change_pwd_form_validate_password(array &$form, Fo
     }
   }
   catch (\Exception $e) {
-    // Do nothing except for 500, we will set the error message below.
-    if ($e->getCode() == 500) {
+    // Do nothing except for downtime exception, we will set the error message
+    // below.
+    if (acq_commerce_is_exception_api_down_exception($e)) {
       $form_state->setErrorByName('current_pass', $e->getMessage());
     }
   }
@@ -684,8 +686,9 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
     }
   }
   catch (\Exception $e) {
-    // Do nothing except 500, let default validation handle the error messages.
-    if ($e->getCode() == 500) {
+    // Do nothing except for downtime exception, let default validation handle
+    // the error messages.
+    if (acq_commerce_is_exception_api_down_exception($e)) {
       $form_state->setErrorByName('name', $e->getMessage());
     }
   }

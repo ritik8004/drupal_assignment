@@ -5,6 +5,8 @@
  * Provides base hooks to the base Acquia Commerce connector.
  */
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
+
 /**
  * For the all.
  */
@@ -141,6 +143,32 @@ function acq_commerce_get_langcode_from_store_id($store_id) {
   }
 
   return !empty($mapping[$store_id]) ? $mapping[$store_id] : NULL;
+}
+
+/**
+ * Helper function to check if exception is related to API being down.
+ *
+ * @param \Exception $e
+ *   Exception object.
+ *
+ * @return bool
+ *   True if exception is related to API being down.
+ */
+function acq_commerce_is_exception_api_down_exception(\Exception $e) {
+  return acq_commerce_is_code_api_down_code($e->getCode());
+}
+
+/**
+ * Helper function to check if exception code is related to API being down.
+ *
+ * @param int $code
+ *   Exception code.
+ *
+ * @return bool
+ *   True if exception code is related to API being down.
+ */
+function acq_commerce_is_code_api_down_code($code) {
+  return ($code == APIWrapper::API_DOWN_ERROR_CODE);
 }
 
 /**

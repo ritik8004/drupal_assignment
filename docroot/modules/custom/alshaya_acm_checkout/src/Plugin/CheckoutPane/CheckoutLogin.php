@@ -141,7 +141,7 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
       }
     }
     catch (\Exception $e) {
-      if ($e->getCode() == 500) {
+      if (acq_commerce_is_exception_api_down_exception($e)) {
         $form_state->setErrorByName('custom', $e->getMessage());
       }
     }

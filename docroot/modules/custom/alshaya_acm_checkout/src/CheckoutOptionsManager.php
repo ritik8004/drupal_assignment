@@ -397,7 +397,7 @@ class CheckoutOptionsManager {
       }
     }
     catch (\Exception $e) {
-      if ($e->getCode() == 500) {
+      if (acq_commerce_is_exception_api_down_exception($e)) {
         drupal_set_message($e->getMessage(), 'error');
       }
     }
