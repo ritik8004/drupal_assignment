@@ -687,8 +687,8 @@ class APIWrapper {
    * Surrogate method for the ingest method. This is done to not have trait
    * conflicts.
    */
-  public function productFullSync() {
-    \Drupal::service('acq_commerce.ingest_api')->productFullSync();
+  public function productFullSync($store_id, $langcode, $skus = '', $page_size = 0) {
+    \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $page_size);
   }
 
   /**
