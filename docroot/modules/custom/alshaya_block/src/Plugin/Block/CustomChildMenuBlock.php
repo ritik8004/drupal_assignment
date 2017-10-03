@@ -170,7 +170,6 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function build() {
     $build = [];
-    // $menu_tree = \Drupal::menuTree();
     $menu_name = $this->configuration['menu_type'];
     $parentID = $this->configuration['parent_menu'];
 
@@ -188,9 +187,10 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
     ];
     $tree = $this->menuTree->transform($tree, $manipulators);
-    $build['content'] = $this->menuTree->build($tree);
-    $build['#attributes']['class'][] = 'block-sub-navigation';
-    $build['content']['#attributes']['class'][] = 'navigation__sub-menu';
+    if (!empty($tree)) {
+      $build['menu_items'] = $this->menuTree->build($tree);
+      $build['menu_items']['#attributes']['class'][] = 'navigation__sub-menu';
+    }
     return $build;
   }
 
