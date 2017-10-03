@@ -217,6 +217,7 @@ class CustomerController extends ControllerBase {
       '#uri' => theme_get_setting('logo.url'),
     ];
     $build['#theme'] = 'user_order_print';
+    $build['#attached']['library'][] = 'alshaya_acm_customer/order_print';
 
     return $build;
   }
