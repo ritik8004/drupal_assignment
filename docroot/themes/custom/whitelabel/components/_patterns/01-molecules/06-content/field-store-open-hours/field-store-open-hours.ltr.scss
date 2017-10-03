@@ -14,8 +14,15 @@
 }
 
 .geolocation-common-map-container {
-  .hours--wrapper {
-    display: none;
+  .hours--label,
+  .open--hours {
+    padding-#{direction(left)}: 0;
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .location-content {
+    min-width: 12rem;
   }
 
   .views-field-title {

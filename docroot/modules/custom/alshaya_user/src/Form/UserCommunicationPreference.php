@@ -110,15 +110,16 @@ class UserCommunicationPreference extends FormBase {
     ];
 
     $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['submit'] = ['#type' => 'submit', '#value' => $this->t('Save')];
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('save', [], ['context' => 'button']),
+    ];
 
     return $form;
   }
 
   /**
    * Submit handler for the form.
-   *
-   * @inheritdoc
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $preference = $form_state->getValue('communication_preference');

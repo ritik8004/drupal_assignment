@@ -286,8 +286,6 @@
     if (map) {
       // Invoke function to add marker for each store.
       _.invoke(storeItems, Drupal.checkoutClickCollect.mapPushMarker, {geolocationMap: map});
-      // Trigger click on the 1st marker, so info window is open.
-      google.maps.event.trigger(map.mapMarkers[0], 'click');
       // Setting to zoom level 10 which roughly covers entire Kuwait City and hence will show all the markers.
       // We cannot zoom further as the map marker and info window is open for the first marker which can be anywhere on
       // the map. Hence setting zoom level such that entire city will be shown.

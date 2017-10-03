@@ -659,6 +659,10 @@
       #{$left}: 0;
       opacity: 1;
       font-size: 0.75rem;
+
+      html[lang=ar] & {
+        top: -3.2rem;
+      }
     }
   }
 

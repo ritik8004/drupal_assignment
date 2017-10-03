@@ -92,7 +92,7 @@
     }
   }
 
-  #block-alshaya-white-label-local-tasks {
+  #block-local-tasks {
     display: none;
   }
 
@@ -554,7 +554,7 @@
   }
 }
 
-#block-alshaya-white-label-content {
+#block-content {
   .order-items {
     list-style: none;
     width: 100%;
@@ -571,10 +571,6 @@
 
       @include breakpoint($only-mobile) {
         height: 143px;
-
-        &:nth-child(even) {
-          background-color: $whisper-light;
-        }
       }
 
       background-color: $white-five;
@@ -837,7 +833,7 @@
     }
   }
 
-  #block-alshaya-white-label-content {
+  #block-content {
     padding-top: 1rem;
 
     @include breakpoint($only-tablet) {

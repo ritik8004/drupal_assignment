@@ -80,7 +80,8 @@
     max-height: none !important;
   }
 
-  #drupal-modal {
+  #drupal-modal,
+  div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
     background: $white-five;
     padding: 1.5em;
     overflow: hidden;

@@ -104,12 +104,12 @@
         $('.c-pdp .short-description-wrapper', context).once('readmore').each(function () {
           $(this).on('click', '.read-more-description-link-mobile', function () {
             $(this).parent().toggleClass('show-detail');
-            $(this).parent().find('.desc-wrapper:not(:first-child)').toggle('appear');
+            $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
             $(this).replaceWith('<span class="show-less-link">' + Drupal.t('show less') + '</span>');
           });
           $(this).on('click', '.show-less-link', function () {
             $(this).parent().toggleClass('show-detail');
-            $(this).parent().find('.desc-wrapper:not(:first-child)').toggle('appear');
+            $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
             $(this).replaceWith('<span class="read-more-description-link-mobile">' + Drupal.t('Read more') + '</span>');
             $('html,body').animate({
               scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight
@@ -157,7 +157,7 @@
         $(listOrder).hide();
 
         $(parentOrder).click(function () {
-          var $ub = $(this).nextAll().stop(true, true).slideToggle();
+          var $ub = $(this).nextAll().stop(true, true).fadeToggle('slow');
           listOrder.not($ub).hide();
           $ub.parent().toggleClass('open--accordion');
           listOrder.not($ub).parent().removeClass('open--accordion');

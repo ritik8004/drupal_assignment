@@ -6,7 +6,7 @@ core: 8.x
 dependencies:
   - alshaya_block
   - alshaya_i18n
-  - alshaya_modal
+  - alshaya_paragraph_block
   - alshaya_stores_migrate
 themes:
   - victoria_secret

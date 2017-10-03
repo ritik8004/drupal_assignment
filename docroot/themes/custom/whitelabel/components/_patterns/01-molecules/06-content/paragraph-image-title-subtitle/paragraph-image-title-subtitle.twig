@@ -1,0 +1,20 @@
+{% extends "@molecules/_paragraph.twig" %}
+{% set url = content.field_link['0']['#title'] %}
+
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }}>
+    {% block content %}
+      <a href="{{ url }}">
+        <div class="image-title-subtitle--banner">
+          {{ content.field_banner }}
+        </div>
+        <div class="image-title-subtitle--title">
+          <h2>{{ content.field_title }}</h2>
+        </div>
+        <div class="image-title-subtitle--subtitle">
+          {{ content.field_sub_title }}
+        </div>
+      </a>
+    {% endblock %}
+  </div>
+{% endblock paragraph %}

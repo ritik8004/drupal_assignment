@@ -4,11 +4,18 @@ reset:
     base:
       components/dist/css/sass/reset.css: {}
 
-global:
+ltr:
   version: VERSION
   css:
     theme:
-      components/dist/css/sass/global.css: {}
+      components/dist/css/sass/ltr.css: {}
+
+global:
+  version: VERSION
+  directional: 1
+  css:
+    theme:
+      components/dist/css/sass/global.ltr.css: {}
 
 fonts:
   version: VERSION
@@ -208,6 +215,8 @@ node-product-item:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/field-product-listing/node-product-item.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/06-content/field-product-listing/node-product-item.js: {}
 
 slick:
   css:
@@ -263,3 +272,21 @@ form-input-password:
       components/dist/css/_patterns/01-molecules/07-forms/input-password/input-password.ltr.css: {}
   js:
     components/dist/js/01-molecules/07-forms/input-password/input-password.js: {}
+
+modal-generic:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/08-modal/modal-generic/modal-generic.ltr.css: {}
+
+modal-email-signup:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/08-modal/modal-email-signup/modal-email-signup.ltr.css: {}
+
+paragraph-image-title-subtitle:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-image-title-subtitle/paragraph-image-title-subtitle.ltr.css: {}

@@ -107,7 +107,8 @@ commit that change.
     "behat/mink-selenium2-driver" : "*",
     "behat/mink" : "*",
     "drupal/drupal-extension" : "~3.0",
-    "drupal/drupal-driver": "1.1.*"
+    "drupal/drupal-driver": "1.1.*",
+    "emuse/behat-html-formatter": "^0.1.0"
     },
   "config": {
   "bin-dir": "bin/"  
@@ -135,6 +136,9 @@ commit that change.
           - Drupal\DrupalExtension\Context\DrupalContext 
         paths:
           - %paths.base%/features
+    formatters:
+      html:
+        output_path: %paths.base%/build/html/behat      
     extensions:
       Behat\MinkExtension:
           browser_name: 'chrome'
@@ -148,7 +152,14 @@ commit that change.
           base_url: 'https://whitelabel2.test-alshaya.acsitefactory.com/'
           files_path: "%paths.base%/files"
       Drupal\DrupalExtension:
-        blackbox: ~`
+        blackbox: ~
+      emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true`
           
 * Initialize Behat by running the command
   `bin/behat --init`
@@ -172,10 +183,22 @@ commit that change.
   
 ### Some pre-requisites to run Behat tests
   * Make sure the products mentioned in the feature file is available on the instance you wish you to execute tests. For e.g. if you wish to run 'checkout.feature' on your local, perform the steps mentioned below:
-  * Open checkout.feature file
-  * In the background section, check the line:
-    `Given I am on '/product-name'`
-  * Either make sure that the above product is available on the instance you wish to run tests or change the feature file to point to an available product
-  * If the product mentioned in the feature file is configurable, make sure the available size is selected too in the automated steps. For e.g. add the below two steps after navigating to product page
-   * `When I follow "2-3 Years"`
-   * `And I wait for AJAX to finish`
+  * Open FeatureContext.php file
+  * Search for method "iAmOnASimpleProductPage"
+  * In the visitPath function, pass the value of the URL for a simple product
+  * In the method "iShouldSeeTheLinkForSimpleProduct", pass the href link for the simple product which can be got from its PLP
+  * Perform similar steps for the configurable product too
+  * Methods that need to be modified similarly are as below:
+    * iAmOnASimpleProductPage
+    * iAmOnAConfigurableProduct
+    * iShouldSeeTheLinkForSimpleProduct
+    * iShouldSeeTheLinkForConfigurableProduct
+    * iShouldNotSeeTheLinkForSimpleProduct
+    * iShouldNotSeeTheLinkForConfigurableProduct
+    * iShouldSeeTheLinkForSimpleProductInArabic
+    * iShouldSeeTheLinkForConfigurableProductInArabic
+    
+### How to interpret the Behat reports:
+  * When the execution of the feature file is completed, navigate to build directory which is inside your parent directory
+  * Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
+  * In order to share the reports, compress the html directory immediately after every run.

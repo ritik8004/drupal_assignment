@@ -10,8 +10,8 @@
 .view-stores-finder {
   header {
     color: $black-smoke;
-    margin-bottom: 3rem;
-    margin-top: 1.5rem;
+    margin-bottom: 2.3rem;
+    margin-top: 1.6rem;
 
     @include breakpoint($upto-palm) {
       display: none;
@@ -19,6 +19,8 @@
 
     @include breakpoint($lap) {
       font-weight: bold;
+      margin-bottom: 1.4rem;
+      margin-top: 1.5rem;
     }
   }
 }
@@ -46,6 +48,10 @@
     width: 50%;
     float: direction(left);
   }
+
+  @include breakpoint($desk) {
+    width: 49%;
+  }
 }
 
 .view-store-finder--list__column--1 {
@@ -55,7 +61,11 @@
 }
 
 .view-store-finder--list__column--2 {
-  @include breakpoint($above-palm) {
+  @include breakpoint($lap) {
+    padding-#{direction(left)}: 1rem;
+  }
+
+  @include breakpoint($desk) {
     padding-#{direction(left)}: 2.875rem;
   }
 }

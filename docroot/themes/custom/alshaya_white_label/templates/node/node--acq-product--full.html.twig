@@ -64,16 +64,16 @@ set classes = [
             <div class="field__content-wrapper">
               <div class="field__content">
                 {% for desc in content.description  %}
-                  {% if desc.value %}
+                  {% if desc.value|render %}
                     <div class="desc-wrapper">
-                      {% if desc.label %}
+                      {% if desc.label|render %}
                         <div class="desc-label">
-                          {{ desc.label|raw }}
+                          {{ desc.label }}
                         </div>
                       {% endif %}
 
                       <div class="desc-value">
-                        {{ desc.value|raw }}
+                        {{ desc.value }}
                       </div>
                     </div>
                   {% endif %}
@@ -91,16 +91,16 @@ set classes = [
             <h2 class="field__label">{{ 'Product Description'|t }}</h2>
             <div class="field__content">
               {% for desc in content.description  %}
-                {% if desc.value %}
+                {% if desc.value|render %}
                   <div class="desc-wrapper">
-                    {% if desc.label %}
+                    {% if desc.label|render %}
                       <div class="desc-label">
-                        {{ desc.label|raw }}
+                        {{ desc.label }}
                       </div>
                     {% endif %}
 
                     <div class="desc-value">
-                      {{ desc.value|raw }}
+                      {{ desc.value }}
                     </div>
                   </div>
                 {% endif %}

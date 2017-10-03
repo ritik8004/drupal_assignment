@@ -12,7 +12,7 @@ regions:
 
 libraries:
   - whitelabel/reset
-  # - whitelabel/global
+  - whitelabel/global
 
 libraries-override:
   geolocation/geolocation.commonmap:
@@ -27,6 +27,11 @@ libraries-override:
   views-infinite-scroll/views-infinite-scroll:
     js:
       js/infinite-scroll.js : components/dist/js/infinite-scroll.js
+
+  core/jquery.ui:
+    css:
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
 
 component-libraries:
   atoms:

@@ -48,6 +48,12 @@
   }
 }
 
+.paragraph-vm-default {
+  @include breakpoint($upto-palm) {
+    margin-bottom: 0.5rem;
+  }
+}
+
 .paragraph-t-1-row-3-col {
   .field__wrapper {
     @include u-clearfix;

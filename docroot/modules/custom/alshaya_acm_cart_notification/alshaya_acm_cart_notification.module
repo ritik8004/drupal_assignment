@@ -12,6 +12,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -97,7 +98,9 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     $quantity = $form_state->getValue('quantity');
 
     // Generating cart link.
-    $url = Url::fromRoute('acq_cart.cart')->toString();
+    $url = Url::fromRoute('acq_cart.cart', [], [
+      'absolute' => TRUE,
+    ])->toString();
 
     // Include the utility file to get product image.
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
@@ -128,35 +131,47 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
 
   // Get the rendered html to pass into HtmlCommand.
   $html = render($output);
+  $sku_css_id = strtolower(HTML::cleanCssIdentifier($sku_entity->getSku()));
 
   // Get the interval we want to show the message for on our ladda button.
   $interval = \Drupal::config('alshaya_master.settings')->get('ajax_spinner_message_interval');
   $data['interval'] = $interval;
+  // Passing the identifier to quantity field of the SKU so we can pass the
+  // correct form as context.
+  $data['sku_css_id'] = '.quantity-' . $sku_css_id;
 
   // Prepare the ajax Response.
   $response = new AjaxResponse();
   $data['message'] = $output['#theme'] == 'cart_notification' ? 'success' : 'failure';
   $response->addCommand(new InvokeCommand(NULL, 'stopSpinner', [$data]));
 
-  $sku_css_id = strtolower(HTML::cleanCssIdentifier($sku_entity->getSku()));
-
   if ($output['#theme'] == 'add_to_cart_error') {
     $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id . ':visible', $html));
     $response->addCommand(new InvokeCommand(NULL, 'cartGenericScroll', ['.error-container-' . $sku_css_id]));
   }
   else {
-    // Update mini cart Block.
-    $cart_storage = \Drupal::service('acq_cart.cart_storage');
-    $customer_cart_form_class = new CustomerCartForm($cart_storage);
-    $customer_cart_form = \Drupal::formBuilder()->getForm($customer_cart_form_class);
-    $response->addCommand(new ReplaceCommand('.customer-cart-form', $customer_cart_form));
+    $current_url = \Drupal::request()->server->get('HTTP_REFERER');
 
-    $mini_cart_html = \Drupal::service('acq_cart.mini_cart')->getMiniCart();
+    // We reload the page if we are already on Basket page.
+    // With AJAX we might need to refresh mini cart, cart form and cross sell
+    // block.
+    if ($current_url == $url) {
+      $response->addCommand(new RedirectCommand($url));
+    }
+    else {
+      // Update mini cart Block.
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+      $customer_cart_form_class = new CustomerCartForm($cart_storage);
+      $customer_cart_form = \Drupal::formBuilder()->getForm($customer_cart_form_class);
+      $response->addCommand(new ReplaceCommand('.customer-cart-form', $customer_cart_form));
 
-    $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));
-    $response->addCommand(new HtmlCommand('#block-cartminiblock', $mini_cart_html));
-    $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
-    $response->addCommand(new HtmlCommand('#cart_notification', $html));
+      $mini_cart_html = \Drupal::service('acq_cart.mini_cart')->getMiniCart();
+
+      $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, ''));
+      $response->addCommand(new HtmlCommand('#block-cartminiblock', $mini_cart_html));
+      $response->addCommand(new InvokeCommand(NULL, 'cartNotificationScroll'));
+      $response->addCommand(new HtmlCommand('#cart_notification', $html));
+    }
   }
   return $response;
 }

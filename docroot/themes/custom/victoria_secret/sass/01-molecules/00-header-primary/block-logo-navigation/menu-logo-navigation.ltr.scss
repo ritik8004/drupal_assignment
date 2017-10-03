@@ -6,7 +6,6 @@
         background-size: contain;
       }
 
-      &.is-active::after,
       &:hover::after {
         background: url("../../../../../images/icons/svg/vsecret-active.svg") no-repeat center;
         background-size: contain;
@@ -26,11 +25,22 @@
         background-size: contain;
       }
 
-      &.is-active::after,
       &:hover::after {
         background: url("../../../../../images/icons/svg/vsport-active.svg") no-repeat center;
         background-size: contain;
       }
+    }
+  }
+
+  .active-trail {
+    .brand-victoria-secret::after {
+      background: url("../../../../../images/icons/svg/vsecret-active.svg") no-repeat center;
+      background-size: contain;
+    }
+
+    .brand-victoria-sport::after {
+      background: url("../../../../../images/icons/svg/vsport-active.svg") no-repeat center;
+      background-size: contain;
     }
   }
 }

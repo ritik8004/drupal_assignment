@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_block
+  theme:
+    - victoria_secret
+id: alshaya_vs_application_links
+theme: victoria_secret
+region: footer
+weight: -4
+provider: null
+plugin: alshaya_application_links
+settings:
+  id: alshaya_application_links
+  label: 'Application Links'
+  provider: alshaya_block
+  label_display: '0'
+  app_android_link: ''
+  app_apple_link: ''
+visibility: {  }

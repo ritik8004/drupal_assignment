@@ -29,6 +29,8 @@ function alshaya_vs_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $for
         '#type' => 'item',
         '#markup' => \Drupal::getContainer()->get('renderer')->renderPlain($build),
         '#weight' => -100,
+        '#prefix' => '<div class="form--content">',
+        '#suffix' => '</div>'
       ];
     }
   }

@@ -63,8 +63,9 @@
         "drupal/migrate_tools": "^2.0",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "drupal/viewsreference": "^1.0",
-        "drupal/machine_name_widget": "^1.0",
-        "drupal/autologout": "^1.0"
+        "drupal/autologout": "^1.0",
+        "drupal/block_content_machine_name": "^1.0",
+        "drupal/menu_link_modal": "^1.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -126,6 +127,9 @@
             "drupal/acquia_connector": {
                 "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch"
             },
+            "drupal/search_api": {
+                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
+            },
             "drupal/facets": {
                 "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
                 "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch",
@@ -141,7 +145,8 @@
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",
                 "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
-                "Enable GET by default for exposed form AJAX": "patches/ajax_view.patch"
+                "Enable GET by default for exposed form AJAX": "patches/ajax_view.patch",
+                "Database lock backend should normalize the lock name": "https://www.drupal.org/files/issues/2872276-10.patch"
             },
             "drupal/password_policy": {
                 "Error message is not translatable": "https://www.drupal.org/files/issues/password_policy_error_translate-2878784-2.patch"
