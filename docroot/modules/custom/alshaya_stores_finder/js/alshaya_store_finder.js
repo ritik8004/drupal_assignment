@@ -152,6 +152,9 @@
           else {
             setTimeout(function () {
               if (runscript) {
+                if ($(window).width() < 768) {
+                  $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form').attr('action', Drupal.url('/store-finder/list'));
+                }
                 $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form #edit-submit-stores-finder').trigger('click');
               }
               // Close the overlay.
@@ -224,7 +227,7 @@
         // On tablet and desktop scroll the page to the top along with the list.
         if ($(window).width() >= 1025) {
           $.fn.storeFinderDetailPageScrollTop();
-          itemListContainerSelector.stop().animate({scrollTop:itemListBeforeHeight + 25}, 1200, 'swing');
+          itemListContainerSelector.stop().animate({scrollTop: itemListBeforeHeight + 25}, 1200, 'swing');
         }
       });
     }
