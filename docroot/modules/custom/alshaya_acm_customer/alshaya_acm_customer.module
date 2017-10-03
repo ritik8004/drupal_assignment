@@ -189,7 +189,6 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   }
 
   if ($form_id == 'user_communication_preference') {
-    $form['#validate'][] = 'alshaya_acm_customer_form_validate_api_works';
     $form['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
   }
 
@@ -210,8 +209,6 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
       // Always hide customer_id field for none-admin users.
       $form['acq_customer_id']['#access'] = \Drupal::currentUser()->hasPermission('administer users');
       $form['actions']['submit']['#submit'][] = 'alshaya_acm_customer_update_customer_after_submit';
-
-      $form['#validate'][] = 'alshaya_acm_customer_form_validate_api_works';
     }
     else {
       // Add markup for terms and conditions.
@@ -240,28 +237,6 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
 
   if ($form_id == 'user_pass') {
     array_unshift($form['#validate'], 'alshaya_acm_customer_user_pass_validate');
-  }
-}
-
-/**
- * Common validate callback to check API works before saving data.
- */
-function alshaya_acm_customer_form_validate_api_works($form, FormStateInterface $form_state) {
-  if ($form_state->getErrors()) {
-    return;
-  }
-
-  try {
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
-    $api_wrapper->systemWatchdog();
-  }
-  catch (\Exception $e) {
-    if (acq_commerce_is_exception_api_down_exception($e)) {
-      drupal_set_message($e->getMessage(), 'error');
-      $form_state->setErrorByName('form_token', $e->getMessage());
-      return;
-    }
   }
 }
 
