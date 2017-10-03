@@ -54,7 +54,7 @@ class IngestAPIWrapper {
 
       $doReq = function ($client, $opt) use ($endpoint, $store_id, $skus, $product_page_size) {
         if ($product_page_size > 0) {
-          $opt['query']['product_page_size'] = $product_page_size;
+          $opt['query']['page_size'] = $product_page_size;
         }
 
         if (!empty($skus)) {

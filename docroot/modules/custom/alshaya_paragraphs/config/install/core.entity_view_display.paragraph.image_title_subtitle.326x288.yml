@@ -1,0 +1,57 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.paragraph.326x288
+    - field.field.paragraph.image_title_subtitle.field_banner
+    - field.field.paragraph.image_title_subtitle.field_link
+    - field.field.paragraph.image_title_subtitle.field_sub_title
+    - field.field.paragraph.image_title_subtitle.field_title
+    - paragraphs.paragraphs_type.image_title_subtitle
+    - responsive_image.styles.326x288
+  module:
+    - link
+    - responsive_image
+id: paragraph.image_title_subtitle.326x288
+targetEntityType: paragraph
+bundle: image_title_subtitle
+mode: 326x288
+content:
+  field_banner:
+    weight: 0
+    label: hidden
+    settings:
+      responsive_image_style: 326x288
+      image_link: ''
+    third_party_settings: {  }
+    type: responsive_image
+    region: content
+  field_link:
+    weight: 3
+    label: hidden
+    settings:
+      trim_length: 255
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_sub_title:
+    weight: 2
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_title:
+    weight: 1
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden: {  }

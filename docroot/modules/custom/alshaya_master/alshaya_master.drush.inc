@@ -54,6 +54,12 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
 
         // Update config translations from string translations.
         Locale::config()->updateConfigTranslations($names, $langcodes);
+
+        // Get all config names available in current profile.
+        $names = ConfigHelper::forModule(\Drupal::installProfile())->optional()->listAll();
+
+        // Update config translations from string translations.
+        Locale::config()->updateConfigTranslations($names, $langcodes);
       }
       else {
         drush_print(dt("Brand module @brand_module can't be enabled because the site is already configured with @existing_brand_module.",

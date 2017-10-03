@@ -2,7 +2,7 @@
 Feature: Test various checkout scenarios as returning customer
 
   Background:
-    Given I am on a configurable product
+    Given I am on a simple product page
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -32,7 +32,7 @@ Feature: Test various checkout scenarios as returning customer
     When I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
+    And I should see text matching "Your order number is "
 
   @hd @knet
   Scenario: As a returning customer
@@ -60,8 +60,7 @@ Feature: Test various checkout scenarios as returning customer
     When I press "Confirm"
     And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
-
+    And I should see text matching "Your order number is "
 
   @cc @knet
   Scenario: As a returning customer
@@ -94,11 +93,11 @@ Feature: Test various checkout scenarios as returning customer
     And I press "Confirm"
     When I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
+    And I should see text matching "Your order number is "
 
   @hd @cs
   Scenario: As a returning customer
-    I should be able to checkout using HD - Cybersource
+  I should be able to checkout using HD - Cybersource
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I follow "deliver to this address"
@@ -116,7 +115,7 @@ Feature: Test various checkout scenarios as returning customer
     And I press "place order"
     When I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
+    And I should see text matching "Your order number is "
 
   @cc @cs
   Scenario: As a returning customer
@@ -144,4 +143,4 @@ Feature: Test various checkout scenarios as returning customer
     When I press "place order"
     When I wait 15 seconds
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    Then I should see text matching "Your Privileges Card Number is: 6362 - 5440 - 0013 - 5844"
+    And I should see text matching "Your order number is "

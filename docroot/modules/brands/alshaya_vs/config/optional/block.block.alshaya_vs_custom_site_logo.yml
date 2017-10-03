@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_block
+  theme:
+    - victoria_secret
+id: alshaya_vs_custom_site_logo
+theme: victoria_secret
+region: header
+weight: -4
+provider: null
+plugin: custom_logo_block
+settings:
+  id: custom_logo_block
+  label: 'Custom Site Logo'
+  provider: alshaya_block
+  label_display: '0'
+  use_site_logo: 1
+  use_menu_item_logo: 1
+  menu_option: main
+  logo_fallback: 1
+visibility: {  }

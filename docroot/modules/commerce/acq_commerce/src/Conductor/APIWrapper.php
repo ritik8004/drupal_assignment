@@ -805,4 +805,34 @@ class APIWrapper {
     return $result;
   }
 
+    /**
+     * Get position of the products in a category.
+     *
+     * @param int $category_id
+     *   The category id.
+     *
+     * @return array
+     *   All products with the positions in the given category.
+     *
+     * @throws \Exception
+     */
+    public function getProductPosition($category_id) {
+        $endpoint = $this->apiVersion . "/agent/category/$category_id/position";
+
+        $doReq = function ($client, $opt) use ($endpoint) {
+            return ($client->get($endpoint, $opt));
+        };
+
+        $result = [];
+
+        try {
+            $result = $this->tryAgentRequest($doReq, 'productPosition', 'position');
+        }
+        catch (ConductorException $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+
+        return $result;
+    }
+
 }

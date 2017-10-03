@@ -322,6 +322,9 @@ function alshaya_master_install() {
     'Postal code' => [
       'ar' => 'الرمز البريدي',
     ],
+    'Country' => [
+      'ar' => 'البلد',
+    ],
     'Telephone' => [
       'ar' => 'الهاتف',
     ],
@@ -368,7 +371,7 @@ function alshaya_master_install() {
     '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li></ul>' => [
       'ar' => '<ul><li>يجب أن تكون كلمة السر الخاصة بك مكونة من سبعة عناصر على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رمزاً واحداً على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رقماً واحداً على الأقل</li><li>يجب أن لا تحتوي كلمة السر الخاصة بك على مسافات</li></ul>',
     ],
-    '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li><li>The previous four password are not allowed.</li></ul>' => [
+    '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li><li>The previous four passwords are not allowed.</li></ul>' => [
       'ar' => '<ul><li>يجب أن تكون كلمة السر الخاصة بك مكونة من سبعة عناصر على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رمزاً واحداً على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رقماً واحداً على الأقل</li><li>يجب أن لا تحتوي كلمة السر الخاصة بك على مسافات</li><li>كلمات السر الأربع السابقة غير مسموح بها</li></ul>',
     ],
     '<p>You\'re almost done.</p><p>We\'ve sent a verification email to <a href="mailto:[email]">[email]</a>.</p><p>Clicking on the email confirmation link, lets us know the email address is both valid and yours.</p><p>It is also your final step in the sign up process.</p>' => [
@@ -457,6 +460,9 @@ function alshaya_master_install() {
     ],
     'Home Delivery' => [
       'ar' => 'خدمة التوصيل للمنزل',
+    ],
+    'OR' => [
+      'ar' => 'أو',
     ],
     'For orders over KWD99' => [
       'ar' => 'على الطلبيات التي تزيد على "99" د.ك.',
@@ -694,7 +700,11 @@ function alshaya_master_install() {
       'ar' => 'احفظ التفاصيل الخاصة بك لتسهيل تسوقك المرة القادمة',
     ],
     'save' => [
-      'ar' => 'وفر',
+      'ar' => 'حفظ',
+    ],
+    'save' => [
+      'ar' => 'حفظ',
+      'context' => 'button',
     ],
     'Back to top' => [
       'ar' => 'أعلى الصفحة',
@@ -765,6 +775,9 @@ function alshaya_master_install() {
     ],
     'Select Area' => [
       'ar' => 'يرجى اختيار المنطقة',
+    ],
+    'Select @title' => [
+      'ar' => 'يرجى اختيار @title',
     ],
     'The email address @email is already taken.' => [
       'ar' => 'عنوان البريد الإلكتروني @email مستعمل مسبقاً',
@@ -839,7 +852,10 @@ function alshaya_master_install() {
       'ar' => 'الخصم',
     ],
     'under @stop' => [
-      'ar' => 'أقل من @stop د.ك.',
+      'ar' => 'أقل من @stop',
+    ],
+    '@start - @stop' => [
+      'ar' => '@stop - @start',
     ],
     'Features and benefits' => [
       'ar' => 'المزايا و الفوائد',
@@ -859,8 +875,12 @@ function alshaya_master_install() {
     'Thank you for your subscription.' => [
       'ar' => 'شكراً لاشتراككم في نشرتنا الاخبارية',
     ],
-    'Save @discount' => [
-      'ar' => 'وفر @discount',
+    'Save @discount%' => [
+      'ar' => 'وفّر %@discount',
+    ],
+    'Save' => [
+      'ar' => 'وفّر',
+      'context' => 'discount',
     ],
     'Filter' => [
       'ar' => 'حدّد اختيارك',
@@ -897,10 +917,6 @@ function alshaya_master_install() {
     ],
     'error' => [
       'ar' => 'يوجد خطأ',
-    ],
-    'save' => [
-      'ar' => 'حفظ',
-      'context' => 'Checkout',
     ],
     'Order Print' => [
       'ar' => 'اطبع الطلبية',
@@ -1073,16 +1089,19 @@ function alshaya_master_install() {
       'ar' => 'المجموعة',
     ],
     'Style Code: @value' => [
-      'ar' => '@value :رمز المنتج',
+      'ar' => 'رمز المنتج: @value',
     ],
     'Season: @value' => [
-      'ar' => '@value :الموسم',
+      'ar' => 'الموسم: @value',
     ],
     'Product brand: @value' => [
-      'ar' => '@value :العلامة التجارية',
+      'ar' => 'العلامة التجارية: @value',
     ],
     'Color: @value' => [
-      'ar' => '@value :اللون',
+      'ar' => 'اللون: @value',
+    ],
+    "What's In The Box" => [
+      'ar' => 'ماذا يوجد في الصندوق؟',
     ],
     'Size' => [
       'ar' => 'المقاس',
@@ -1230,16 +1249,8 @@ function alshaya_master_install() {
     $configFactory->set('option_extras.' . $option, 0);
   }
 
-  if (\Drupal::moduleHandler()->moduleExists('acq_sku')) {
-    // Enable share this for Product CT.
-    $configFactory->set('node_types.acq_product', 'acq_product');
-  }
-
   // Enable lazy load of JS to enhance performance (rendering time).
   $configFactory->set('late_load', 1);
-
-  // Set the option to use custom style for showing share images.
-  $configFactory->set('button_option', 'stbc_custom');
 
   // Save the changes.
   $configFactory->save();

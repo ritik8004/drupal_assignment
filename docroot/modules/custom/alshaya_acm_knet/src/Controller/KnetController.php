@@ -115,6 +115,28 @@ class KnetController extends ControllerBase {
    * Page callback to process the payment and return redirect URL.
    */
   public function response() {
+    $quote_id = isset($_POST['udf3']) ? $_POST['udf3'] : '';
+
+    try {
+      if (empty($quote_id)) {
+        throw new \Exception();
+      }
+
+      // Get the cart using API to validate.
+      $cart = $this->apiWrapper->getCart($quote_id);
+
+      if (empty($cart)) {
+        throw new \Exception();
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Invalid KNET response call found.<br>POST: @message', [
+        '@message' => json_encode($_POST),
+      ]);
+
+      throw new NotFoundHttpException();
+    }
+
     $response['payment_id'] = $_POST['paymentid'];
     $response['result'] = $_POST['result'];
     $response['post_date'] = $_POST['postdate'];
@@ -126,19 +148,7 @@ class KnetController extends ControllerBase {
     $response['customer_id'] = $_POST['udf2'];
     $response['quote_id'] = $_POST['udf3'];
     $response['email'] = $_POST['udf4'];
-
     $state_key = $_POST['udf5'];
-
-    // Get the cart using API to validate.
-    $cart = $this->apiWrapper->getCart($response['quote_id']);
-
-    if (empty($cart)) {
-      $this->logger->error('Invalid KNET response call found.<br>@message', [
-        '@message' => json_encode($response),
-      ]);
-
-      exit;
-    }
 
     $state_data = \Drupal::state()->get($state_key);
 
@@ -148,6 +158,10 @@ class KnetController extends ControllerBase {
       || $state_data['order_id'] != $response['tracking_id']
       || $state_data['payment_id'] != $response['payment_id']
     ) {
+      $this->logger->error('Invalid KNET response call found.<br>POST: @message', [
+        '@message' => json_encode($_POST),
+      ]);
+
       throw new NotFoundHttpException();
     }
 

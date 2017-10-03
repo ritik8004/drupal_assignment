@@ -183,15 +183,29 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       // Convert the list to slider.
       $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
         var gallery = $(this);
-        $(this, context).lightSlider({
-          vertical: false,
-          item: 4,
-          slideMargin: 5,
-          onSliderLoad: function() {
-            gallery.closest('.alshaya_search_slider').hide();
-            gallery.css('height', '73px');
-          }
-        });
+        if (isRTL()) {
+          $(this, context).lightSlider({
+            vertical: false,
+            item: 4,
+            rtl: true,
+            slideMargin: 5,
+            onSliderLoad: function() {
+              gallery.closest('.alshaya_search_slider').hide();
+              gallery.css('height', '73px');
+            }
+          });
+        }
+        else {
+          $(this, context).lightSlider({
+            vertical: false,
+            item: 4,
+            slideMargin: 5,
+            onSliderLoad: function() {
+              gallery.closest('.alshaya_search_slider').hide();
+              gallery.css('height', '73px');
+            }
+          });
+        }
       });
 
       // Show/Hide the slider on Mouse hover.
@@ -225,6 +239,21 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
               .attr('rel'));
         }
       );
+
+      // Preload slider images.
+      if ($(window).width() > 1024) {
+        // Iterate over each product tile.
+        $('.c-products__item').each(function () {
+          var slider = $(this).find('.alshaya_search_slider');
+          // Iterate over each slider thumbnail.
+          slider.find('.lslide').each(function () {
+            var imgURL = $(this).children('img').attr('rel');
+            // Preload image.
+            var img = new Image();
+            img.src = imgURL;
+          });
+        });
+      }
 
       $.fn.alshayaAttachSearchSlider = function () {
         Drupal.attachBehaviors(context);

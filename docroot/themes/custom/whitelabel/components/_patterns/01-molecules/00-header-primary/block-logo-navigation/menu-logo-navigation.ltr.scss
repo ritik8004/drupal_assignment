@@ -11,6 +11,14 @@
   li {
     display: inline-block;
     vertical-align: top;
+
+    @include breakpoint($upto-palm) {
+      width: 33.33%;
+    }
+
+    &.active-trail a {
+      background-color: $white;
+    }
   }
 
   a {
@@ -34,7 +42,6 @@
       display: block;
     }
 
-    &.is-active,
     &:hover {
       background-color: $white;
     }

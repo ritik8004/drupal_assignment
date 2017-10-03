@@ -10,6 +10,7 @@
   }
 
   .c-page-title {
+    margin-top: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #ddd;
 
@@ -133,6 +134,18 @@
   .discount-row {
     td {
       padding: 0.625rem 1.375rem;
+    }
+  }
+
+  .discount-row {
+    td {
+      &:nth-child(3) {
+        background: $white-five;
+      }
+
+      &:nth-child(4) {
+        background: $white-four;
+      }
     }
   }
 
@@ -310,11 +323,6 @@
   .order-details-row {
     background: $pale-grey;
 
-    .delivery--method,
-    .tablet-blend {
-      word-break: break-all;
-    }
-
     .blend {
       background: $solitude;
 
@@ -412,7 +420,7 @@
   .desktop-only {
     display: none;
 
-    @include breakpoint($tablet) {
+    @include breakpoint($desktop) {
       display: table-cell;
     }
   }
@@ -586,7 +594,7 @@
   }
 }
 
-#block-alshaya-white-label-content .order-items li {
+#block-content .order-items li {
   .second-third .second .dark {
     @include breakpoint($tablet) {
       white-space: nowrap;

@@ -39,6 +39,7 @@ content:
     type: string_textfield
     region: content
 hidden:
+  translation: true
   created: true
   status: true
   uid: true

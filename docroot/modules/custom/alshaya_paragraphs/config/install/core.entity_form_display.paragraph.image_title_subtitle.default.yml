@@ -1,0 +1,56 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.image_title_subtitle.field_banner
+    - field.field.paragraph.image_title_subtitle.field_link
+    - field.field.paragraph.image_title_subtitle.field_sub_title
+    - field.field.paragraph.image_title_subtitle.field_title
+    - image.style.thumbnail
+    - paragraphs.paragraphs_type.image_title_subtitle
+  module:
+    - image
+    - link
+    - workbench_moderation
+id: paragraph.image_title_subtitle.default
+targetEntityType: paragraph
+bundle: image_title_subtitle
+mode: default
+content:
+  field_banner:
+    weight: 6
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content
+  field_link:
+    weight: 9
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_sub_title:
+    weight: 8
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_title:
+    weight: 7
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+hidden:
+  translation: true
+  created: true
+  status: true
+  uid: true

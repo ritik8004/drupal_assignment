@@ -1,0 +1,18 @@
+content:
+  field_banner: '<div class="field__wrapper">
+                  <picture>
+                    <!--[if IE 9]><video style="display: none;"><![endif]-->
+                    <source srcset="https://dummyimage.com/326x288/000/fff?itok=5k2STRGB 1x" media="all and (min-width: 64.0625rem)" type="image/png">
+                    <source srcset="https://dummyimage.com/224x202/000/fff?itok=k-Jn5KdF 1x" media="all and (min-width: 48rem) and (max-width: 64rem)" type="image/png">
+                    <source srcset="https://dummyimage.com/146x132/000/fff?itok=cwkPvAah 1x" media="all and (max-width: 47.9375rem)" type="image/png">
+                    <!--[if IE 9]></video><![endif]-->
+                    <img src="https://dummyimage.com/146x132/000/fff?itok=cwkPvAah" alt="banner" typeof="foaf:Image">
+                  </picture>
+                </div>'
+  field_title: 'Lorem ipsum'
+  field_sub_title: 'Lorem ipsum dolor sit'
+attributes:
+  Attribute():
+    class:
+    - 'paragraph-t-image-title-subtitle'
+url: 'http://example.com'

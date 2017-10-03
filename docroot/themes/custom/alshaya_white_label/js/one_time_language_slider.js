@@ -31,7 +31,7 @@
         }
 
         // Gradually Hide the language slider once user starts to scroll.
-        $(window).once().on('scroll', function () {
+        $(window, context).on('scroll', function () {
           languge_switcher.fadeOut(2000);
         });
 

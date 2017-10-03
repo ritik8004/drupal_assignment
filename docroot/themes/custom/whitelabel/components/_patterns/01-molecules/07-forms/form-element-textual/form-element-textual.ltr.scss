@@ -115,3 +115,28 @@ input:focus ~ .input__label label {
 .input--textual__description {
   display: none;
 }
+
+.input__container--half {
+  &:first-child {
+    float: direction(left);
+  }
+
+  &:last-child {
+    float: direction(right);
+  }
+}
+
+.input__container--half {
+  width: 48%;
+}
+
+.input__container,
+.input__inner-container {
+  position: relative;
+}
+
+.input__container--half__wrapper {
+  @include u-clearfix;
+
+  margin-top: 1rem;
+}

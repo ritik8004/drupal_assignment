@@ -443,7 +443,8 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
     foreach ($form['ajax']['configurables'] as $key => $form_item) {
       if (is_array($form_item) && isset($form_item['#type']) && $form_item['#type'] == 'select') {
-        $form['ajax']['configurables'][$key]['#empty_option'] = $form_item['#title'];
+        $form['ajax']['configurables'][$key]['#empty_option'] = t('Select @title', ['@title' => $form_item['#title']]);
+        $form['ajax']['configurables'][$key]['#attributes']['data-default-title'] = $form_item['#title'];
       }
     }
   }
@@ -675,11 +676,6 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency');
   $config->set('currency_code', 'د٠ك٠');
   $config->set('currency_code_position', 'after');
-  $config->save();
-
-  // Translate store id in config.
-  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store');
-  $config->set('store_id', '3');
   $config->save();
 
   // Add translation for the error messages we check in API response.

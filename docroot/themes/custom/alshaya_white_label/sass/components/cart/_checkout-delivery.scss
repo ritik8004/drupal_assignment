@@ -646,6 +646,18 @@
   padding-#{$left}: 0;
   margin-top: 0;
 
+  #payment_method_knet {
+    border-top: 2px solid $greyish;
+
+    @include breakpoint($only-mobile) {
+      border-top-width: 1px;
+    }
+
+    .payment-plugin-wrapper-div {
+      border-top: none;
+    }
+  }
+
   > .form-wrapper {
     cursor: pointer;
     margin-top: 0;
@@ -655,18 +667,6 @@
     &:last-child {
       .payment-plugin-wrapper-div {
         border-bottom: 1px solid $white;
-      }
-    }
-
-    &:first-child {
-      border-top: 2px solid $greyish;
-
-      @include breakpoint($only-mobile) {
-        border-top-width: 1px;
-      }
-
-      .payment-plugin-wrapper-div {
-        border-top: none;
       }
     }
 

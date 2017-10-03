@@ -49,6 +49,10 @@
 
     .facet-item__value {
       margin-#{$left}: 1rem;
+
+      div {
+        display: inline;
+      }
     }
 
     .facet-item__count,

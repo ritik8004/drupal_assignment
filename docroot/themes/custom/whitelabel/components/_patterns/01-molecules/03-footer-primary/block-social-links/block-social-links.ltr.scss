@@ -1,13 +1,21 @@
 @import '../../../../sass/config/**/*.scss';
 
 .block-social-link {
-  background-color: $black;
+  background-color: $blackish-grey;
   text-align: center;
   text-transform: uppercase;
   font-weight: bold;
   color: $white;
-  padding-top: 1.9rem;
+  padding-top: 1.4rem;
   padding-bottom: 2.3rem;
+
+  @include breakpoint($above-palm) {
+    background-color: $black;
+  }
+
+  @include breakpoint($lap) {
+    padding-top: 1.7rem;
+  }
 
   @include breakpoint($desk) {
     padding-top: 0.6rem;
@@ -17,7 +25,7 @@
 
 .block-social-link__title {
   font-size: 0.875rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.3rem;
   text-transform: uppercase;
 
   @include breakpoint($lap) {
@@ -25,6 +33,6 @@
   }
 
   @include breakpoint($desk) {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
   }
 }
