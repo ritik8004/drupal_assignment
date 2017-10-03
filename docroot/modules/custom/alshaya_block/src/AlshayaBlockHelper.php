@@ -61,16 +61,25 @@ class AlshayaBlockHelper {
 
   /**
    * Check if the current path belongs to main menu.
+   *
+   * If current path belongs to the main menu return the array with active link
+   * and active parent element else return empty array.
+   *
+   * @param string $menu_name
+   *   The menu name. Default is main menu.
+   *
+   * @return array
+   *   Return the array of active menu link or empty array.
    */
-  public function checkCurrentPathInMainMenu() {
+  public function checkCurrentPathInMainMenu($menu_name = 'main') {
     $output = [];
     // Get current language code.
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // @todo: Make the menu name "main" dynamic.
     // Get the main menu tree to get the current active path.
-    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters('main');
+    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters($menu_name);
     $parameters->setTopLevelOnly();
-    $tree = $this->menuTree->load('main', $parameters);
+    $tree = $this->menuTree->load($menu_name, $parameters);
 
     // Retrieve an array which contains the path pieces.
     $current_path = $this->currentPath->getPath();
