@@ -6,7 +6,6 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Menu\MenuLinkTree;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -36,13 +35,6 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $menuTree;
 
   /**
-   * The language manger.
-   *
-   * @var \Drupal\Core\Language\LanguageManager
-   */
-  protected $languageManager;
-
-  /**
    * Creates a CustomLogoBlock instance.
    *
    * @param array $configuration
@@ -54,15 +46,12 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    * @param \Drupal\Core\Menu\MenuLinkTree $menu_tree
-   *   The menu link tree service.
-   * @param \Drupal\Core\Language\LanguageManager $language_manager
    *   The language manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTree $menu_tree, LanguageManager $language_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTree $menu_tree) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->menuTree = $menu_tree;
-    $this->languageManager = $language_manager;
   }
 
   /**
@@ -74,8 +63,7 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('menu.link_tree'),
-      $container->get('language_manager')
+      $container->get('menu.link_tree')
     );
   }
 
@@ -133,6 +121,19 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function build() {
+    $build = [];
+    $tree = $this->getBuildItems();
+    if (!empty($tree)) {
+      $build['menu_items'] = $this->menuTree->build($tree);
+      $build['menu_items']['#attributes']['class'][] = 'navigation__sub-menu';
+    }
+    return $build;
+  }
+
+  /**
    * Get menu items for the given menu name.
    *
    * @param string $menu_name
@@ -166,10 +167,12 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   }
 
   /**
-   * {@inheritdoc}
+   * Get the final build items based on the settings.
+   *
+   * @return array|\Drupal\Core\Menu\MenuLinkTreeElement[]|mixed
+   *   Return array of menu links or null.
    */
-  public function build() {
-    $build = [];
+  protected function getBuildItems() {
     $menu_name = $this->configuration['menu_type'];
     $parentID = $this->configuration['parent_menu'];
 
@@ -186,12 +189,8 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
     ];
-    $tree = $this->menuTree->transform($tree, $manipulators);
-    if (!empty($tree)) {
-      $build['menu_items'] = $this->menuTree->build($tree);
-      $build['menu_items']['#attributes']['class'][] = 'navigation__sub-menu';
-    }
-    return $build;
+
+    return $this->menuTree->transform($tree, $manipulators);
   }
 
   /**
