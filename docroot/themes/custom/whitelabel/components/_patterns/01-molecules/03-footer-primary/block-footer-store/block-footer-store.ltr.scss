@@ -18,6 +18,7 @@
     position: absolute;
     top: 1.7rem;
     #{direction(right)}: 1.5%;
+    z-index: $z-1;
   }
 
   @include breakpoint($desk) {

@@ -37,7 +37,14 @@ function whitelabel_page_attachments_alter(&$attachments) {
   $language = $language_manager->getCurrentLanguage();
   $direction = $language->getDirection();
 
-  // Add a library in ltr version to enable libraries alter for rtl version.
+  // If language direction is ltr, we attach an empty library
+  // so we are sure the list of libraries differs from rtl pages.
+  // It is required as AssetResolver::getCssAssets() which
+  // transforms the attached libraries in css files and uses
+  // the libraries key to generate a cache ID. As we are overriding
+  // the css files for rtl languages, we must be sure the list
+  // of libraries differs depending on the language direction
+  // so the cache ID is different.
   if ($direction == 'ltr') {
     $attachments['#attached']['library'][] = 'whitelabel/ltr';
   }
