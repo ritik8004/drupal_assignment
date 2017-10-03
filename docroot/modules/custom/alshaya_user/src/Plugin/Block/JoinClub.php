@@ -43,7 +43,7 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
   protected $configFactory;
 
   /**
-   * MyAccountNavBlock constructor.
+   * WelcomeUserBlock constructor.
    *
    * @param array $configuration
    *   Configuration data.
