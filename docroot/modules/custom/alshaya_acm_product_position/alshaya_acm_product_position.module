@@ -57,7 +57,6 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
 }
 
 /**
-<<<<<<< HEAD
  * Implements hook_views_pre_execute().
  */
 function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
