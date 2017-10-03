@@ -17,8 +17,12 @@ settings:
   label: 'Custom Child Menu Block'
   provider: alshaya_block
   label_display: '0'
-  menu_type: main
-  parent_menu: 'menu_link_content:ec7c7c66-1b08-4aba-8dd7-5b723ca5692d'
+  level: '2'
+  depth: '1'
+  menu_name: main
+  parent_menu_item: 'menu_link_content:afee08a2-896b-4390-a00d-8acff76732e7'
+  child_level: '1'
+  child_depth: '1'
 visibility:
   request_path:
     id: request_path
