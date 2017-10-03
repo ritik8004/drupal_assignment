@@ -249,6 +249,7 @@ class CustomerController extends ControllerBase {
     $build['#barcode'] = alshaya_acm_customer_get_barcode($order);
     $build['#account'] = $account;
     $build['#theme'] = 'user_order_print';
+    $build['#attached']['library'][] = 'alshaya_acm_customer/order_print';
 
     return $build;
   }
