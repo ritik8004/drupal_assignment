@@ -1,19 +1,23 @@
 @import '../../../../sass/config/**/*.scss';
 
 .block-find-store-heading {
-  background-color: $black;
+  background-color: $blackish-grey;
   color: $white;
   font-size: 0.875rem;
-  padding-top: 1px;
-  padding-bottom: 1.25rem;
+  padding: 1rem;
   text-align: center;
-  display: none;
-  position: absolute;
-  top: 1.7rem;
-  #{direction(right)}: 4%;
+
+  @include breakpoint($upto-palm) {
+    border-bottom: 1px solid $eclipse;
+  }
 
   @include breakpoint($above-palm) {
-    display: block;
+    background-color: $black;
+    padding-top: 1px;
+    padding-bottom: 1.25rem;
+    position: absolute;
+    top: 1.7rem;
+    #{direction(right)}: 4%;
   }
 
   @include breakpoint($desk) {
@@ -25,13 +29,21 @@
     font-size: 0.875rem;
     text-transform: uppercase;
     margin-bottom: 0.1875rem;
+
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
   }
 
   a {
     color: $white;
     font-family: $open-sans;
-    font-size: 0.6875rem;
-    margin-#{direction(right)}: 2rem;
+    font-size: 0.875rem;
+
+    @include breakpoint($above-palm) {
+      font-size: 0.6875rem;
+      margin-#{direction(right)}: 2rem;
+    }
 
     @include breakpoint($desk) {
       margin-#{direction(right)}: 1rem;
@@ -43,6 +55,15 @@
       text-decoration: none;
       vertical-align: bottom;
       display: inline-block;
+    }
+
+    @include breakpoint($upto-palm) {
+      text-transform: uppercase;
+      text-decoration: none;
+
+      &::before {
+        content: none;
+      }
     }
   }
 }
