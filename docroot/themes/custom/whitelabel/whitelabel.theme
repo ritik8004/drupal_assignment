@@ -51,6 +51,10 @@ function whitelabel_preprocess_block(&$variables) {
         $variables['content']['#attributes']['class'][] = 'menu-logo-navigation';
         $variables['content']['#attached']['library'][] = 'whitelabel/menu-logo-navigation';
       }
+
+    case 'custom_child_menu_block':
+      $variables['content']['#attached']['library'][] = 'whitelabel/menu-sub-navigation';
+      break;
   }
 }
 
