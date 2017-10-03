@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_block
+    - system
+  theme:
+    - victoria_secret
+id: vs_custom_child_menu_block
+theme: victoria_secret
+region: header
+weight: 0
+provider: null
+plugin: custom_child_menu_block
+settings:
+  id: custom_child_menu_block
+  label: 'Custom Child Menu Block'
+  provider: alshaya_block
+  label_display: '0'
+  menu_type: main
+  parent_menu: 'menu_link_content:ec7c7c66-1b08-4aba-8dd7-5b723ca5692d'
+visibility:
+  request_path:
+    id: request_path
+    pages: "/store-finder\r\n/store-finder/*"
+    negate: false
+    context_mapping: {  }
