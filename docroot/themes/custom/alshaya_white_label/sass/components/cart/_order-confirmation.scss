@@ -7,7 +7,7 @@
     .user-register-form {
       margin-top: 1.6rem;
 
-      @include breakpoint($tablet) {
+      @include breakpoint($only-tablet) {
         max-width: 24.8rem;
         width: 55%;
         margin-#{$left}: 0;
@@ -287,7 +287,7 @@
   }
 
   .user-register-form {
-    @include breakpoint($tablet) {
+    @include breakpoint($only-tablet) {
       float: $left;
       width: 55%;
     }
@@ -314,53 +314,75 @@
     @include breakpoint($tablet) {
       padding-top: 2.8rem;
       margin-top: 1rem;
+      float: #{$left};
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 100%;
     }
 
     @include breakpoint($desktop) {
       padding-top: 4.1rem;
     }
+  }
 
-    #block-jointheclub {
-      margin-#{$left}: 0;
-      border-top: 0;
-      padding-#{$left}: 0;
-      font-size: 0.75rem;
+  .block-join-the-club {
+    margin-#{$left}: 0;
+    border-top: 0;
+    padding-#{$left}: 0;
+    font-size: 0.75rem;
+    text-align: center;
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: 15.5em !important;
+      width: 36.25rem !important;
+    }
+
+    @include breakpoint($tablet) {
+      width: 45.5%;
+      text-align: $left;
+      margin-top: 1.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      position: absolute;
+      #{$right}: -1rem;
+    }
+
+    h3 {
+      font-size: 0.875rem;
+      margin-bottom: 0.8rem !important;
+      font-family: $alshaya-bold;
+      font-weight: normal;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0.7rem;
+      }
+    }
+
+    a.final-pc-learn-more {
+      margin-top: 0.2rem !important;
+    }
+
+    @include breakpoint($only-tablet) {
       text-align: center;
+      text-indent: 2rem;
+      width: 42%;
+      padding-top: 0.5rem;
 
-      @include breakpoint($tablet) {
-        width: 45.5%;
-        float: $right;
+      img {
+        margin-#{$left}: 0;
+      }
+
+      a {
+        text-indent: 0;
+        margin-top: 0.2rem !important;
+      }
+
+      h3,
+      p {
         text-align: $left;
-        margin-top: 1.25rem;
-      }
-
-      h3 {
-        font-size: 0.875rem;
-
-        @include breakpoint($only-mobile) {
-          margin-bottom: 0.7rem;
-        }
-      }
-
-      @include breakpoint($only-tablet) {
-        text-align: center;
-        text-indent: 2rem;
-        width: 42%;
-        padding-top: 0.5rem;
-
-        img {
-          margin-left: 0;
-        }
-
-        a {
-          text-indent: 0;
-        }
-
-        h3,
-        p {
-          text-align: $left;
-          padding-#{$left}: 20%;
-        }
+        padding-#{$left}: 12%;
       }
     }
   }
@@ -590,7 +612,15 @@
 
   &.expanded-table {
     @include breakpoint($only-tablet) {
-      margin-#{$right}: 4.5rem;
+      margin-right: 2.8rem;
+
+      html[lang=ar] & {
+        margin-left: 1.2rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 7.8rem;
     }
   }
 

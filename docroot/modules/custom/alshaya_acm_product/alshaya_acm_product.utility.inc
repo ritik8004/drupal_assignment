@@ -156,17 +156,9 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
  *   Loaded SKU entity.
  */
 function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
-  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
-
-  // Additional check, can be removed post go UAT.
-  if (empty($sku_entity)) {
-    return NULL;
-  }
-
-  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-  $plugin = $sku_entity->getPluginInstance();
-
-  return $plugin->getParentSku($sku_entity);
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  return $skuManager->getParentSkuBySku($sku, $langcode);
 }
 
 /**
@@ -305,16 +297,9 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
  *   Loaded node object.
  */
 function alshaya_acm_product_get_display_node($sku, $langcode = '') {
-  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
-
-  if (empty($sku_entity)) {
-    return NULL;
-  }
-
-  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-  $plugin = $sku_entity->getPluginInstance();
-
-  return $plugin->getDisplayNode($sku_entity);
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  return $skuManager->getDisplayNode($sku, $langcode);
 }
 
 /**
