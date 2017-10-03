@@ -603,6 +603,10 @@
                 .key-value-key {
                   width: 51%;
                   display: inline-block;
+
+                  html[lang=ar] & {
+                    width: 30%;
+                  }
                 }
               }
 
@@ -736,6 +740,10 @@
             .key-value-key {
               width: 51%;
               display: inline-block;
+
+              html[lang=ar] & {
+                width: 30%;
+              }
             }
           }
 
@@ -1110,6 +1118,10 @@
           .key-value-key {
             width: 51%;
             display: inline-block;
+
+            html[lang=ar] & {
+              width: 30%;
+            }
           }
         }
 

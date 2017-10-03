@@ -7,7 +7,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\alshaya_main_menu\ProductCategoryTree;
@@ -24,18 +23,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The entity type manager.
+   * Term storage object.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\taxonomy\TermStorageInterface
    */
-  protected $entityManager;
-
-  /**
-   * The entity repository service.
-   *
-   * @var \Drupal\Core\Entity\EntityRepositoryInterface
-   */
-  protected $entityRepository;
+  protected $termStorage;
 
   /**
    * Vocabulary processed data.
@@ -90,8 +82,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Plugin defination.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   The entity type manager.
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
-   *   The entity repository service.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   Route match service.
    * @param \Drupal\Core\Database\Connection $connection
@@ -101,10 +91,9 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * @param \Drupal\alshaya_main_menu\ProductCategoryTree $product_category_tree
    *   Product category tree.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, EntityRepositoryInterface $entity_repository, RouteMatchInterface $route_match, Connection $connection, LanguageManagerInterface $language, ProductCategoryTree $product_category_tree) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, RouteMatchInterface $route_match, Connection $connection, LanguageManagerInterface $language, ProductCategoryTree $product_category_tree) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityManager = $entity_manager;
-    $this->entityRepository = $entity_repository;
+    $this->termStorage = $entity_manager->getStorage('taxonomy_term');
     $this->routeMatch = $route_match;
     $this->connection = $connection;
     $this->languageManager = $language;
@@ -120,7 +109,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('entity.repository'),
       $container->get('current_route_match'),
       $container->get('database'),
       $container->get('language_manager'),
@@ -132,13 +120,11 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build() {
-    $term_data = $this->productCateoryTree->getCategoryTree();
+    $term_data = $this->productCateoryTree->getCategoryTreeCached();
 
     // If no data, no need to render the block.
     if (empty($term_data)) {
-      return [
-        '#markup' => '',
-      ];
+      return [];
     }
 
     $route_name = $this->routeMatch->getRouteName();
@@ -153,14 +139,14 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $node = $this->routeMatch->getParameter('node');
       if ($node->bundle() == 'department_page') {
         $terms = $node->get('field_product_category')->getValue();
-        $term = $this->entityManager->getStorage('taxonomy_term')->load($terms[0]['target_id']);
+        $term = $this->termStorage->load($terms[0]['target_id']);
       }
     }
 
     // If term is of 'acq_product_category' vocabulary.
     if (is_object($term) && $term->getVocabularyId() == 'acq_product_category') {
       // Get all parents of the given term.
-      $parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($term->id());
+      $parents = $this->termStorage->loadAllParents($term->id());
 
       if (!empty($parents)) {
         /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
@@ -174,11 +160,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     return [
       '#theme' => 'alshaya_main_menu_level1',
       '#term_tree' => $term_data,
-      '#cache' => [
-        'contexts' => [
-          'url.path',
-        ],
-      ],
     ];
   }
 
@@ -192,7 +173,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->cacheTags[] = 'node_type:department_page';
 
     // Discard cache for the block once a term gets updated.
-    $this->cacheTags[] = 'taxonomy_term_list';
+    $this->cacheTags[] = ProductCategoryTree::VOCABULARY_ID . '_list';
 
     return Cache::mergeTags(
       parent::getCacheTags(),
@@ -204,7 +185,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path']);
   }
 
 }

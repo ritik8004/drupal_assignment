@@ -30,12 +30,17 @@ class AlshayaSearchGranular extends SearchApiGranular {
   public function calculateResultFilter($value) {
     $range = $this->getRange(ceil($value));
 
+    $t_options = [
+      '@start' => alshaya_acm_price_format($range['start']),
+      '@stop' => alshaya_acm_price_format($range['stop']),
+    ];
+
     // If this is the first range, display, "under X".
     if ($range['start'] === 0) {
-      $displayValue = $this->t('under @stop', ['@stop' => $range['stop']]);
+      $displayValue = t('under @stop', $t_options)->render();
     }
     else {
-      $displayValue = $range['start'] . ' - ' . $range['stop'];
+      $displayValue = t('@start - @stop', $t_options)->render();
     }
 
     return [

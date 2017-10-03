@@ -68,6 +68,9 @@ $settings['alshaya_api.settings']['verify_ssl'] = 0;
 $settings['alshaya_api.settings']['username'] = 'acquiaapi';
 $settings['alshaya_api.settings']['password'] = 'password123';
 
+// Security - autologout settings.
+$settings['autologout.settings']['timeout'] = 1200;
+
 // Set the debug dir of conductor.
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
 $config['acq_commerce.conductor']['debug'] = TRUE;
@@ -94,6 +97,8 @@ switch ($env) {
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'features_ui';
+
+    $settings['autologout.settings']['timeout'] = 86400;
 
   case 'travis':
     // Disable stock check in local.

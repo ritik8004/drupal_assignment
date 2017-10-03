@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b99a60855d717905b09eca9dff474e27",
+    "content-hash": "ff34f9b58f7149399eae5389d06916ca",
     "packages": [
         {
             "name": "acquia/blt",
@@ -2449,6 +2449,56 @@
             "time": "2017-06-18T01:04:09+00:00"
         },
         {
+            "name": "drupal/block_content_machine_name",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/block_content_machine_name",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/block_content_machine_name-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "afe61324ef503eb6a01dbc0095b1f9e949aa25b0"
+            },
+            "require": {
+                "drupal/core": "*",
+                "drupal/machine_name_widget": "^1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1506356944",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Mitesh Patel",
+                    "homepage": "https://www.drupal.org/u/miteshmap",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Creates machine name field for block_content and allows user to create default blocks with machine name.",
+            "homepage": "http://drupal.org/project/block_content_machine_name",
+            "support": {
+                "source": "http://cgit.drupalcode.org/block_content_machine_name",
+                "issues": "https://www.drupal.org/project/issues/block_content_machine_name"
+            }
+        },
+        {
             "name": "drupal/block_field",
             "version": "1.0.0-alpha4",
             "source": {
@@ -4715,6 +4765,57 @@
             "time": "2017-03-15T17:04:08+00:00"
         },
         {
+            "name": "drupal/machine_name_widget",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/machine_name_widget",
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/machine_name_widget-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "1f0aa148682244823754b10b75cd4719295499e6"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0",
+                    "datestamp": "1492559943",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "davidwbarratt",
+                    "homepage": "https://www.drupal.org/user/411675"
+                },
+                {
+                    "name": "sethcardoza",
+                    "homepage": "https://www.drupal.org/user/1024334"
+                }
+            ],
+            "description": "Provides a machine name widget.",
+            "homepage": "https://www.drupal.org/project/machine_name_widget",
+            "support": {
+                "source": "http://cgit.drupalcode.org/machine_name_widget"
+            }
+        },
+        {
             "name": "drupal/mailsystem",
             "version": "4.1.0",
             "source": {
@@ -6614,6 +6715,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

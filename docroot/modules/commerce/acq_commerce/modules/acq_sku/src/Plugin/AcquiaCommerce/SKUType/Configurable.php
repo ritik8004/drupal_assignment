@@ -220,7 +220,14 @@ class Configurable extends SKUPluginBase {
           ]
       ));
 
-      $cart->addItemToCart($tree_pointer->getSku(), $quantity);
+      $cart->addRawItemToCart([
+        'name' => $label,
+        'sku' => $tree['parent']->getSKU(),
+        'qty' => $quantity,
+        'options' => [
+          'configurable_item_options' => $options,
+        ],
+      ]);
 
       // Add child SKU to form state to allow other modules to use it.
       $form_state->setTemporaryValue('child_sku', $tree_pointer->getSKU());

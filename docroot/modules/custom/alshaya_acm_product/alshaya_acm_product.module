@@ -717,7 +717,7 @@ function _alshaya_acm_product_get_size_guide_link() {
     $options = [
       'attributes' => [
         'class' => ['size-guide-link', 'use-ajax'],
-        'data-dialog-type' => 'modal',
+        'data-dialog-type' => 'dialog',
         'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
       ],
     ];
