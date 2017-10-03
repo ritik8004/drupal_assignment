@@ -296,9 +296,19 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     }
 
     if ($user = user_load_by_mail($email)) {
+      $login_link = Link::createFromRoute($this->t('please login'), 'acq_checkout.form', [
+        'step' => 'login',
+      ],
+      [
+        'query' => [
+          'showlogin' => 1,
+        ],
+      ]);
+
       $form_state->setErrorByName('guest_delivery_home][address][shipping][organization', $this->t('You already have an account, @login_link.', [
-        '@login_link' => Link::createFromRoute($this->t('please login'), 'acq_checkout.form', ['step' => 'login'])->toString(),
+        '@login_link' => $login_link->toString(),
       ]));
+
       return;
     }
 
