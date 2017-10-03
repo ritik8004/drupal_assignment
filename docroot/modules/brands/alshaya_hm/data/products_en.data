@@ -384,7 +384,8 @@ array (
     'tax_class_id' => '0',
     'gift_message_available' => '0',
     'gift_wrapping_available' => '0',
-    
+    'is_returnable' => '2',
+     'is_buyable' => '1',
   ),
   'linked' => 
   array (
