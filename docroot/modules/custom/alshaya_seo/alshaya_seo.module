@@ -101,24 +101,6 @@ function alshaya_seo_page_attachments_alter(&$page) {
 }
 
 /**
- * Implements hook_robotstxt().
- */
-function alshaya_seo_robotstxt() {
-  return [
-    'User-agent: *',
-    'Disallow: /*.js$',
-    'Disallow: /*.css$',
-    'Disallow: /*.php$',
-    'Disallow: /*?p=*&',
-    'Disallow: /*?SID=',
-    'Disallow: */index.php/*',
-    'Disallow: */catalog/category/view/',
-    'Disallow: */catalog/product/view/',
-    'Disallow: */catalogsearch/',
-  ];
-}
-
-/**
  * Implements hook_simple_sitemap_links_alter().
  */
 function alshaya_seo_simple_sitemap_links_alter(&$links) {

@@ -64,6 +64,11 @@ function alshaya_mc_install() {
     ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
     ->save();
 
+  // Translate store id in config.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
+    ->set('store_id', '3')
+    ->save();
+
   // Create default content for mothercare.
   alshaya_mc_create_default_content();
 }

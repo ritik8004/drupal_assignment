@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "03b1f40349e5f25559a194a2a4e0718c",
+    "content-hash": "2f203772d8fc06b525b5e926e631ee32",
     "packages": [
         {
             "name": "acquia/blt",
@@ -5368,7 +5368,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.2",
-                    "datestamp": "1506356944",
+                    "datestamp": "1506600543",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -5384,6 +5384,10 @@
                     "name": "Mitesh Patel",
                     "homepage": "https://www.drupal.org/u/miteshmap",
                     "role": "Maintainer"
+                },
+                {
+                    "name": "vbouchet",
+                    "homepage": "https://www.drupal.org/user/1671428"
                 }
             ],
             "description": "Allow you to open internal menu links in modal.",
@@ -6936,6 +6940,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

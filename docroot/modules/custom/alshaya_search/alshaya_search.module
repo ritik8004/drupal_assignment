@@ -75,6 +75,15 @@ function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface
 }
 
 /**
+ * Implements hook_theme_registry_alter().
+ */
+function alshaya_search_theme_registry_alter(array &$theme_registry) {
+  if (isset($theme_registry['facets_result_item'])) {
+    $theme_registry['facets_result_item']['path'] = drupal_get_path('module', 'alshaya_search') . '/templates';
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function alshaya_search_theme($existing, $type, $theme, $path) {

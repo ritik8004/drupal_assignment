@@ -240,6 +240,21 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         }
       );
 
+      // Preload slider images.
+      if ($(window).width() > 1024) {
+        // Iterate over each product tile.
+        $('.c-products__item').each(function () {
+          var slider = $(this).find('.alshaya_search_slider');
+          // Iterate over each slider thumbnail.
+          slider.find('.lslide').each(function () {
+            var imgURL = $(this).children('img').attr('rel');
+            // Preload image.
+            var img = new Image();
+            img.src = imgURL;
+          });
+        });
+      }
+
       $.fn.alshayaAttachSearchSlider = function () {
         Drupal.attachBehaviors(context);
       };
