@@ -70,6 +70,10 @@
 
     .card__header {
       display: block;
+
+      &.ui-state-active {
+        border-bottom: 1px solid $white;
+      }
     }
 
     .form-item-privilege-card-number2 {
