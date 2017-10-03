@@ -346,3 +346,16 @@ index 2088bc2f8..b456782bf 100644
  
        // Dispatch event so action can be taken.
        $dispatcher = \Drupal::service('event_dispatcher');
+diff --git a/modules/acq_cart/src/Form/CustomerCartForm.php b/modules/acq_cart/src/Form/CustomerCartForm.php
+index 4fa7b9c19..356309a02 100644
+--- a/modules/acq_cart/src/Form/CustomerCartForm.php
++++ b/modules/acq_cart/src/Form/CustomerCartForm.php
+@@ -236,7 +236,7 @@ private function updateCart(FormStateInterface $form_state) {
+       }
+     }
+     catch (\Exception $e) {
+-      if ($e->getCode() == 500) {
++      if (acq_commerce_is_exception_api_down_exception($e)) {
+         drupal_set_message($e->getMessage(), 'error');
+         $form_state->setErrorByName('custom', $e->getMessage());
+         $form_state->setRebuild(TRUE);
