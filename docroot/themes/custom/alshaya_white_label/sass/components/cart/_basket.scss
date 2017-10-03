@@ -767,6 +767,7 @@
 
     .owl-carousel .owl-item img {
       max-width: 11.625rem;
+      max-height: 13.81rem;
 
       @include breakpoint($upto-desktop) {
         min-height: 10rem;
