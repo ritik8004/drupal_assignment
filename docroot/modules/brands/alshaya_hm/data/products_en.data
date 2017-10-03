@@ -53,6 +53,7 @@ array (
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'composition' => '{}',
   ),
   'linked' => 
@@ -159,6 +160,7 @@ array (
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'composition' => '{}',
   ),
   'linked' => 
@@ -243,6 +245,7 @@ array (
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'composition' => '{}',
   ),
   'linked' => 
@@ -381,7 +384,7 @@ array (
     'tax_class_id' => '0',
     'gift_message_available' => '0',
     'gift_wrapping_available' => '0',
-    'is_returnable' => '2',
+    
   ),
   'linked' => 
   array (
@@ -467,6 +470,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'composition' => '{}',
   ),
   'linked' => 
@@ -551,6 +555,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'composition' => '{}',
   ),
   'linked' => 
@@ -636,6 +641,7 @@ array (
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -717,6 +723,7 @@ array (
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -797,6 +804,7 @@ array (
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -877,6 +885,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -957,6 +966,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1039,6 +1049,7 @@ array (
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1119,6 +1130,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1199,6 +1211,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1279,6 +1292,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1360,6 +1374,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1440,6 +1455,7 @@ array (
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1520,6 +1536,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1600,6 +1617,7 @@ array (
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1680,6 +1698,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1760,6 +1779,7 @@ array (
     'gift_message_available' => '2',
     'gift_wrapping_available' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1844,6 +1864,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -1929,6 +1950,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -2041,6 +2063,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -2149,6 +2172,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -2234,6 +2258,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -2346,6 +2371,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -2454,6 +2480,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -2539,6 +2566,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -2651,6 +2679,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -2759,6 +2788,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -2844,6 +2874,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -2956,6 +2987,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -3064,6 +3096,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -3149,6 +3182,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -3261,6 +3295,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -3369,6 +3404,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -3454,6 +3490,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -3566,6 +3603,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -3674,6 +3712,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -3759,6 +3798,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -3871,6 +3911,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -3979,6 +4020,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -4064,6 +4106,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -4176,6 +4219,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -4284,6 +4328,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -4369,6 +4414,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -4481,6 +4527,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -4589,6 +4636,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -4674,6 +4722,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
@@ -4786,6 +4835,7 @@ array (
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'is_returnable' => '2',
+    'is_buyable' => '1',
     'product_brand' => '2018',
   ),
   'linked' => 
