@@ -6,7 +6,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Drupal\block\Entity\Block;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -25,7 +24,7 @@ class CustomerController extends ControllerBase {
    */
   public function listOrders(UserInterface $user) {
     if (!alshaya_acm_customer_is_customer($user)) {
-      throw new AccessDeniedHttpException();
+      throw new NotFoundHttpException();
     }
 
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
