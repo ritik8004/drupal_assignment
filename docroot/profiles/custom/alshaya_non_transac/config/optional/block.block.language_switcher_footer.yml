@@ -4,9 +4,9 @@ dependencies:
   module:
     - language
   theme:
-    - victoria_secret
-id: vs_language_switcher_footer
-theme: victoria_secret
+    - whitelabel_non_transac
+id: language_switcher_footer
+theme: whitelabel_non_transac
 region: footer_primary
 weight: 0
 provider: null
