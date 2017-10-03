@@ -13,6 +13,11 @@
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #ddd;
 
+    @include breakpoint($only-mobile) {
+      padding: 0.45rem 0 0.3rem;
+      line-height: 1.5;
+    }
+
     @include breakpoint($tablet) {
       margin-bottom: 2.25rem;
     }
@@ -122,7 +127,8 @@
 
   .sub-total-row,
   .delivery-charge-row,
-  .total-row {
+  .total-row,
+  .discount-row {
     background: $white-five;
 
     td {
@@ -133,13 +139,6 @@
   .discount-row {
     td {
       padding: 0.625rem 1.375rem;
-    }
-  }
-
-  .total-row {
-    td:nth-child(3) {
-      padding-#{$left}: 0;
-      padding-#{$right}: 2.4rem;
     }
   }
 
@@ -194,12 +193,17 @@
 
   .delivery-charge-row,
   .sub-total-row,
-  .order-item-row {
+  .order-item-row,
+  .discount-row {
     .blend {
       background: $white-four;
 
       @include breakpoint($tablet) {
         background: $white-smoke-light;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 24%;
       }
     }
   }
