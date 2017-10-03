@@ -258,13 +258,6 @@
   .light {
     font-family: $alshaya-thin;
     color: $grey-ash;
-
-    &.no-direction {
-      html[lang=ar] & {
-        display: inline-block;
-        direction: ltr;
-      }
-    }
   }
 
   p:last-child {
@@ -300,8 +293,15 @@
   }
 }
 
-html[lang=ar] .path--cart {
-  .site-brand-home {
-    max-width: 100% !important;
+html[lang=ar] {
+  .path--cart {
+    .site-brand-home {
+      max-width: 100% !important;
+    }
+  }
+
+  &.no-direction {
+    display: inline-block;
+    direction: ltr;
   }
 }
