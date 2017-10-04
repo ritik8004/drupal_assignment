@@ -5,3 +5,4 @@ marker:
   path: ''
   url: ''
   use_default: true
+store_list_label: 'List of all Stores'

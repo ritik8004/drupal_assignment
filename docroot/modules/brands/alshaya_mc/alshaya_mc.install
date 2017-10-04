@@ -102,3 +102,14 @@ function alshaya_mc_update_8301() {
     }
   }
 }
+/**
+ * Implements hook_update().
+ *
+ * Update config file for store configuration.
+ */
+function alshaya_mc_update_8303() {
+  // Set the default value.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all Mothercare Stores');
+  $config->save();
+}

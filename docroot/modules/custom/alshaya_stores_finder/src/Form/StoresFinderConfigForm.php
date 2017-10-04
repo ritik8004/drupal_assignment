@@ -48,6 +48,13 @@ class StoresFinderConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('load_more_item_limit'),
     ];
 
+    $form['store_list_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Label for back to store list link'),
+      '#description' => $this->t('Configure the label for the link that will redirect back to all the sores list.'),
+      '#default_value' => $config->get('store_list_label'),
+    ];
+
     $form['search_proximity_radius'] = [
       '#type' => 'number',
       '#min' => 1,
@@ -152,6 +159,7 @@ class StoresFinderConfigForm extends ConfigFormBase {
     $config->set('enable_disable_store_finder_search', $form_state->getValue('enable_disable_store_finder_search'));
     $config->set('load_more_item_limit', $form_state->getValue('load_more_item_limit'));
     $config->set('search_proximity_radius', $form_state->getValue('search_proximity_radius'));
+    $config->set('store_list_label', $form_state->getValue('store_list_label'));
     $config->set('marker.use_default', $form_state->getValue('use_default'));
     $config->set('marker.path', $marker_path);
     $config->set('marker.url', file_url_transform_relative(file_create_url($marker_path)));

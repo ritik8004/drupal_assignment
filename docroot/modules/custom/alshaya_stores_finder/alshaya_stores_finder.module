@@ -86,7 +86,7 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#weight' => 8,
       ];
       $form['back_to_glossary'] = [
-        '#title' => t('List of all Mothercare Stores'),
+        '#title' => $store_finder_config->get('store_list_label'),
         '#type' => 'link',
         '#url' => Url::fromRoute('view.stores_finder.page_2'),
         '#attributes' => [
