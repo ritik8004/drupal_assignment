@@ -1,0 +1,110 @@
+#cart_notification {
+  z-index: 999;
+  position: absolute;
+  top: 2.7rem;
+  #{$right}: -0.25rem;
+
+  @include breakpoint($tablet) {
+    top: 3.5rem;
+    #{$right}: 0.1125rem;
+  }
+
+  @include breakpoint($desktop) {
+    top: 3.7rem;
+  }
+
+  &.has--notification::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 11px solid $pumpkin-orange;
+    clear: both;
+    top: -10px;
+    #{$right}: 18px;
+  }
+
+  .notification,
+  .error {
+    width: 17.37rem;
+    background: $white-five;
+    border: 2px solid $pumpkin-orange;
+    box-shadow: 4px 4px 0 0 $white-two;
+    padding: 0.8rem;
+    display: inline-block;
+
+    .col-1 {
+      float: $left;
+      width: 4.313rem;
+      font-family: $arial;
+      font-size: 0.75rem;
+      text-align: center;
+
+      .qty {
+        color: $black;
+        font-weight: bold;
+      }
+
+      img {
+        margin-bottom: 0.4375rem;
+      }
+    }
+
+    .col-2 {
+      color: $pumpkin-orange;
+      font-family: $arial;
+      font-weight: bold;
+      font-size: 0.75rem;
+      float: $left;
+      width: 9.5rem;
+      margin-#{$left}: 0.6875rem;
+      text-align: $left;
+
+      .name {
+        font-family: $alshaya-thin;
+        font-size: 0.875rem;
+        color: $grey-ash;
+        width: 100%;
+        display: block;
+        margin-bottom: 5px;
+        text-align: $left;
+      }
+
+      a {
+        width: 6.563rem;
+        height: 35px;
+        margin-top: 13px;
+        display: block;
+        line-height: 35px;
+        text-align: center;
+        background: $pumpkin-orange;
+        color: $white-five;
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+}
+
+.edit-add-to-cart + .ajax-progress-throbber {
+  display: none;
+}
+
+html[lang=ar] #cart_notification {
+  @include breakpoint($tablet) {
+    top: 4.2rem;
+    #{$right}: 0.1125rem;
+  }
+
+  .notification,
+  .error {
+    &::before {
+      top: -2.9rem;
+    }
+
+    .col-2 {
+      font-size: 0.675rem;
+    }
+  }
+}

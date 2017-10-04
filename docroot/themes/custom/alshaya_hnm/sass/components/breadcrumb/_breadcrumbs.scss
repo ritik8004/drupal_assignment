@@ -1,0 +1,53 @@
+.c-breadcrumb {
+  background: $white-four;
+
+  ol {
+    max-width: 80.25rem;
+    margin: auto;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.75rem;
+  }
+
+  li {
+    list-style: none;
+    display: inline-block;
+    font-weight: bold;
+    text-transform: lowercase;
+
+    &:last-of-type {
+      font-weight: bold;
+    }
+
+    &:last-of-type a {
+      font-weight: bold;
+      color: $breadcrumb-active;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    a {
+      font-weight: normal;
+      color: $greyish;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &::after {
+      content: '>';
+      color: $greyish;
+      vertical-align: middle;
+      padding-right: 0.3125rem;
+      padding-left: 0.3125rem;
+    }
+
+    &:last-of-type::after {
+      display: none;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+}

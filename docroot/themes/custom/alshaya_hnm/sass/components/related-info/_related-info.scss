@@ -1,0 +1,37 @@
+.c-related-info {
+  img {
+    vertical-align: middle;
+  }
+
+  .c-related-info__label {
+    @extend %page-title;
+
+    margin-bottom: 0.75rem;
+  }
+
+  .c-related-info__item {
+    margin-bottom: 2.5rem;
+
+    @include breakpoint($desktop) {
+      margin-bottom: 3.625rem;
+    }
+  }
+
+  .c-related-info__banner {
+    margin-bottom: 0.75rem;
+  }
+
+  .c-related-info__title {
+    font-size: 1rem;
+    line-height: 2;
+  }
+
+  .c-related-info__body {
+    font-size: 0.875rem;
+    line-height: 2;
+
+    @include breakpoint($desktop) {
+      line-height: 2.29;
+    }
+  }
+}

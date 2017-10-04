@@ -1,0 +1,30 @@
+{% set classes = [
+'node',
+'node--type-' ~ node.bundle|clean_class,
+view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+] %}
+
+<article {{ attributes.addClass(classes) }}>
+  <div class="content">
+    {{ content|without('comment', 'links') }}
+  </div>
+
+<!-- /content -->
+
+  {% if content.links.terms %}
+  <div class="terms">
+    {{ content.links.terms }}
+  </div>
+<!-- /terms -->
+  {% endif %}
+
+  {% if content.links %}
+  <div class="links">
+    {{ content.links }}
+  </div>
+<!-- /links -->
+  {% endif %}
+
+  {{ content.comment }}
+</article>
+<!-- /article #node -->

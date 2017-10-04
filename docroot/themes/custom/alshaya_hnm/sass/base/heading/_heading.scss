@@ -1,0 +1,34 @@
+%page-title {
+  text-transform: lowercase;
+  font-family: $hnm-bold;
+  font-weight: normal;
+  color: $marine-blue;
+  line-height: 1;
+  margin-top: 0;
+  margin-bottom: 0;
+
+  @include breakpoint($mobile) {
+    font-size: 1.125rem;
+  }
+
+  @include breakpoint($tablet) {
+    font-size: 1.375rem;
+  }
+
+  @include breakpoint($desktop) {
+    font-size: 1.5rem;
+  }
+}
+
+.c-page-title {
+  @extend %page-title;
+}
+
+.subtitle {
+  font-family: $hnm-bold;
+  color: $marine-blue;
+  font-size: 1rem;
+  text-transform: lowercase;
+  padding-bottom: 9px;
+  margin-bottom: 0;
+}

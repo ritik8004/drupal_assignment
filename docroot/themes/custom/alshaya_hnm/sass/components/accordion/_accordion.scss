@@ -1,0 +1,40 @@
+.c-accordion {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+
+  &:last-child {
+    @include breakpoint($desktop) {
+      border-bottom: 1px solid $white;
+    }
+  }
+}
+
+.c-accordion__title {
+  @include icon(chevrondown, after);
+
+  position: relative;
+  border-top: 1px solid $white;
+  color: $grey-ash;
+  font-size: 0.875rem;
+  font-weight: normal;
+  height: 2.9375rem;
+  line-height: 2.9375rem;
+  margin-bottom: 0;
+  margin-top: 0;
+  text-transform: lowercase;
+  outline: none;
+  cursor: pointer;
+
+  &::after {
+    @include u-center--vertically;
+
+    font-size: 2rem;
+    #{$right}: 0.375rem;
+  }
+
+  &.ui-state-active {
+    @include icon(chevronup, after);
+
+    border-bottom: 1px solid $white;
+  }
+}
