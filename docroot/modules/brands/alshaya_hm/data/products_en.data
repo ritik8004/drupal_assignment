@@ -30,7 +30,7 @@ array (
     'url_key' => 'long-t-shirt-hm05518570021870081',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -110,7 +110,7 @@ array (
     'url_key' => 'long-t-shirt-hm05518570021870082',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -190,7 +190,7 @@ array (
     'url_key' => 'long-t-shirt-hm05518570021870083',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -270,7 +270,7 @@ array (
     'url_key' => 'long-t-shirt-hm05518570021870084',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -350,7 +350,7 @@ array (
     'url_key' => 'long-t-shirt-hm05518570021870085',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -430,7 +430,7 @@ array (
     'url_key' => 'long-t-shirt-hm05518570021870086',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -510,7 +510,7 @@ array (
     'url_key' => 'long-t-shirt-hm05518570021870087',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -590,7 +590,7 @@ array (
     'url_key' => 'long-t-shirt-hm05518570021870088',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -670,7 +670,7 @@ array (
     'url_key' => 'long-t-shirt-hm05518570021870089',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -750,7 +750,7 @@ array (
     'url_key' => 'long-t-shirt-hm05518570021870080',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
@@ -828,7 +828,7 @@ array (
     'tax_class_id' => '2',
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
-    'is_returnable' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
