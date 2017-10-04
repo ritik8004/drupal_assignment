@@ -57,8 +57,8 @@ function alshaya_vs_create_email_signup_cta_block_content() {
     'info' => 'Stay in the know',
     'machine_name' => 'stay_in_the_know',
     'body' => [
-      'value' => "<p>Get the inside scoop on exclusive offers, new product alerts &amp; Middle Eastern Store events.</p>\r\n<p><a href=\"/signup\">Sign up</a></p>",
-      'format' => 'rich_text',
+      'value' => "<p>Get the inside scoop on exclusive offers, new product alerts &amp; Middle Eastern Store events.</p>\r\n<p><a href=\"/email-sign-up\" class=\"use-ajax\" data-dialog-type=\"modal\">Sign up</a></p>",
+      'format' => 'full_text',
     ],
     'type' => 'basic',
     'langcode' => 'en',
@@ -68,8 +68,8 @@ function alshaya_vs_create_email_signup_cta_block_content() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'إبقى دائماً على معرفة',
     'body' => [
-      'value' => "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/signup\">تسجيل مستخدم جديد</a></p>",
-      'format' => 'rich_text',
+      'value' => "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/email-sign-up\" class=\"use-ajax\" data-dialog-type=\"modal\">تسجيل مستخدم جديد</a></p>",
+      'format' => 'full_text',
     ]
   ]);
   $ar_block_content->save();

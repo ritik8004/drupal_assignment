@@ -537,7 +537,7 @@ class AlshayaGtmManager {
         // For CC we always use step 2.
         $attributes['step'] = 2;
       }
-      elseif (isset($address['extension'], $address['extension']['address_area_segment']) &&
+      elseif (isset($address['customer_address_id']) && (!empty($address['customer_address_id'])) &&
         ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
         // For HD we use step 3 if we have address saved.
         $attributes['step'] = 3;

@@ -10,6 +10,10 @@
   padding: 2.5rem 0 1.875rem 1.5rem;
   width: 100%;
 
+  @include breakpoint($upto-palm) {
+    width: 100% !important;
+  }
+
   @include breakpoint($lap) {
     width: 45rem !important;
   }
@@ -57,6 +61,8 @@
 .ui-state-default .ui-icon {
   position: relative;
   display: inline;
+  top: 0 !important;
+  left: 48% !important;
 
   @include icon(close, before) {
     font-size: 1.75rem;

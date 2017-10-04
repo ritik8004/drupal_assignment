@@ -5,6 +5,8 @@
  * Functions around blocks.
  */
 
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_module_implements_alter().
  */
@@ -67,6 +69,25 @@ function alshaya_block_delete_blocks($blocks, $theme = NULL) {
     if (!empty($block)) {
       $block = reset($block);
       $block->delete();
+    }
+  }
+}
+
+/**
+ * Utility function to change the region of the block.
+ *
+ * @param array $block_params
+ *   An array of blocks with key and value pair as [block_id => region].
+ */
+function alshaya_block_move_blocks(array $block_params) {
+  foreach ($block_params as $block_id => $region) {
+    $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id]);
+    if (!empty($blocks)) {
+      $block = reset($blocks);
+      if ($block instanceof Block) {
+        $block->setRegion($region);
+        $block->save();
+      }
     }
   }
 }

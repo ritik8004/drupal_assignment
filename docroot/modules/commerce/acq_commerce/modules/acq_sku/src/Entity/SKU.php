@@ -106,27 +106,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
     if ($media_data = $this->get('media')->getString()) {
       $update_sku = FALSE;
 
-      $media_data_full = unserialize($media_data);
+      $media_data = unserialize($media_data);
 
-      if (empty($media_data_full)) {
+      if (empty($media_data)) {
         return [];
       }
-
-      // @TODO: Remove this hard coded fix after getting answer why we have empty
-      // second array index and why all media come in first array index.
-      $media_data = reset($media_data_full);
-
-      // Sort media data by position.
-      usort($media_data, function ($a, $b) {
-        $position1 = (int) $a['position'];
-        $position2 = (int) $b['position'];
-
-        if ($position1 == $position2) {
-          return 0;
-        }
-
-        return ($position1 < $position2) ? -1 : 1;
-      });
 
       foreach ($media_data as &$data) {
         if ($data['media_type'] == 'image') {
@@ -153,10 +137,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
 
       if ($update_sku) {
-        // @TODO: Remove this hard coded fix after getting answer why we have
-        // empty second array index and why all media come in first array index.
-        $media_data_full[0] = $media_data;
-        $this->get('media')->setValue(serialize($media_data_full));
+        $this->get('media')->setValue(serialize($media_data));
         $this->save();
       }
     }
