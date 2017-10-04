@@ -108,6 +108,14 @@
     font-weight: 700;
   }
 
+  .upcase.dark {
+    padding-#{$left}: 1.375rem;
+
+    html[lang=ar] & {
+      padding-#{$left}: 0;
+    }
+  }
+
   .font-small {
     font-size: 0.75rem;
   }
@@ -274,7 +282,7 @@
   }
 
   .label {
-    margin-bottom: 3px;
+    margin-bottom: 0.5rem;
   }
 
   .contact {
@@ -305,6 +313,19 @@
 
     .mobile-only {
       margin-top: 19px;
+
+      .button.status-pending {
+        @include icon(chevron#{$right}, after) {
+          position: absolute;
+          top: 6rem;
+          #{$left}: 13.5rem;
+          font-size: 1.8rem;
+          color: $black;
+          background: $white;
+          border-radius: 50%;
+          padding: 0.1875rem;
+        }
+      }
     }
 
     .tablet-only {
