@@ -800,8 +800,10 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    */
   public function iClickEditAddress() {
     $page = $this->getSession()->getPage();
-    $page->find('css', '#block-alshaya-white-label-content > div.views-element-container > div > div > div > div.views-row.clearfix.row-1 > div:nth-child(1) > div > span > div > div.address--options > div.address--edit.address--controls > a')
-      ->click();
+    $element = $page->find('css', '#block-content > div.views-element-container > div > div > div > div.views-row.clearfix.row-1 > div:nth-child(1) > div > span > div > div.address--options > div.address--edit.address--controls > a');
+    if ($element !== NULL) {
+      $element->click();
+    }
   }
 
   /**
