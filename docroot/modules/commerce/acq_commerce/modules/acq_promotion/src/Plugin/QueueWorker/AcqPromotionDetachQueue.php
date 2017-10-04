@@ -44,6 +44,7 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
   public function processItem($data) {
     $skus = $data['skus'];
     $promotion_nid = $data['promotion'];
+    $promotion_type = $data['promotion_type'];
     $promotion_detach_item[] = ['target_id' => $promotion_nid];
 
     foreach ($skus as $sku) {
@@ -69,7 +70,7 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
 
     $sku_texts = implode(',', $skus);
 
-    if ($sku_texts) {
+    if (($sku_texts) && ($promotion_type !== 'cart')) {
       foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
         $this->ingestApiWrapper->productFullSync($store_id, $langcode, $sku_texts);
       }
