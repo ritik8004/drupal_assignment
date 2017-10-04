@@ -233,7 +233,7 @@ Feature: Test the My account section for authenticated user
     Then I should see "Communication preferences"
     And I should see "Select your preferred communication channel"
     When I check the ".form-item-communication-preference-email > label" checkbox
-    And I press "Save"
+    And I press "save"
     When I wait for the page to load
     Then I should see "Your communication preference saved successfully."
 
