@@ -29,3 +29,10 @@ function whitelabel_non_transac_library_info_alter(&$libraries, $extension) {
     }
   }
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function whitelabel_non_transac_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'whitelabel_non_transac/disable_mobile_modal';
+}
