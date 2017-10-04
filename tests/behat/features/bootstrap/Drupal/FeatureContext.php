@@ -23,6 +23,8 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
 
   private $address_count;
 
+  private $item_count;
+
   /**
    * Every scenario gets its own context instance.
    *
@@ -1492,4 +1494,86 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     }
   }
 
+  /**
+   * @Given /^I should see the title and count of items$/
+   */
+  public function iShouldSeeTheTitleAndCountOfItems() {
+    $page = $this->getSession()->getPage();
+    $title = $page->find('css', 'h1.c-page-title > div');
+    if ($title == NULL) {
+      throw new \Exception('Title is not displayed on category page');
+    }
+    if (!(($page->hasContent('items')) or ($page->hasContent(' قطعة')))) {
+      throw new \Exception('Number of items not displayed on category page');
+    }
+    $this->item_count = count($page->findAll('css', '.field--name-name'));
+  }
+
+  /**
+   * @Then /^more items should get loaded$/
+   */
+  public function moreItemsShouldGetLoaded() {
+    $page = $this->getSession()->getPage();
+    $loaded_items = count($page->findAll('css', '.field--name-name'));
+    if ($loaded_items < $this->item_count) {
+      throw new \Exception('Load more is not functioning correctly');
+    }
+  }
+
+  /**
+   * @Given /^I select a product from a product category$/
+   */
+  public function iSelectAProductFromAProductCategory() {
+    $page = $this->getSession()->getPage();
+    $all_products = $page->findById('block-views-block-alshaya-product-list-block-1');
+    if ($all_products !== NULL) {
+      $all_products = $all_products->findAll('css', '.c-products__item');
+      $total_products = count($all_products);
+    }
+    else {
+      throw new \Exception('No products are listed on PLP');
+    }
+    foreach ($all_products as $item) {
+      $item_status = count($item->find('css', 'div.out-of-stock span'));
+      if ($item_status) {
+        $total_products--;
+        if (!$total_products) {
+          throw new \Exception('All products are out of stock on PLP');
+        }
+        continue;
+      }
+      $this->product = $item->find('css', 'h2.field--name-name')->getText();
+      $page->clickLink($this->product);
+      break;
+    }
+  }
+
+  /**
+   * @Given /^I select a size for the product$/
+   */
+  public function iSelectASizeForTheProduct() {
+    $page = $this->getSession()->getPage();
+    $all_sizes = $page->findById('configurable_ajax');
+    if ($all_sizes !== NULL) {
+      $all_sizes = $all_sizes->findAll('css', 'div > div.select2Option > ul li');
+      $total_sizes = count($all_sizes);
+      foreach ($all_sizes as $size) {
+        $check_li = $size->find('css', 'li')->getText();
+        $size_status = count($size->find('css', '.disabled'));
+        if ($size_status || !$check_li) {
+          $total_sizes--;
+          if (!$total_sizes) {
+            throw new \Exception('All sizes are disabled');
+          }
+          continue;
+        }
+        $available_size = $size->find('css', 'a')->getText();
+        $page->clickLink($available_size);
+        break;
+      }
+    }
+    else {
+      echo 'No size attribute is available for this product';
+    }
+  }
 }
