@@ -605,3 +605,10 @@ function alshaya_master_alshaya_master_post_drupal_install() {
     }
   }
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_master_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'alshaya_master/disable_mobile_modal';
+}
