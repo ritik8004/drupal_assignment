@@ -28,3 +28,4 @@ disable_mobile_modal:
   dependencies:
     - core/jquery
     - core/drupal
+    
