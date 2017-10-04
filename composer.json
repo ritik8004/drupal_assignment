@@ -167,6 +167,9 @@
             "drupal/redirect" : {
                 "Wildcard support for query parameter redirects" : "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
             },
+            "drupal/simple_sitemap" : {
+                "MMCPA-2433" : "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
+            },
             "drupal/sharethis" : {
                 "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"
             }

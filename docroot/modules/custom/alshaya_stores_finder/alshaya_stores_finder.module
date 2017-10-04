@@ -35,8 +35,8 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
 
     $exposed_form_ids = [
       'views-exposed-form-stores-finder-page-1',
-      'views-exposed-form-stores-finder-page-3',
     ];
+
     if (in_array($form['#id'], $exposed_form_ids)) {
 
       // Config of store finder search enable/disable.

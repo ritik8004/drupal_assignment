@@ -67,7 +67,9 @@ class ProductCategoryTree {
    *   Processed term data from cache if available or fresh.
    */
   public function getCategoryTreeCached() {
-    if ($term_data = \Drupal::cache(self::CACHE_BIN)->get(self::CACHE_ID)) {
+    $cid = self::CACHE_ID . '_' . $this->languageManager->getCurrentLanguage()->getId();
+
+    if ($term_data = \Drupal::cache(self::CACHE_BIN)->get($cid)) {
       return $term_data->data;
     }
 
@@ -78,7 +80,7 @@ class ProductCategoryTree {
       'node_type:department_page',
     ];
 
-    \Drupal::cache(self::CACHE_BIN)->set(self::CACHE_ID, $term_data, Cache::PERMANENT, $cache_tags);
+    \Drupal::cache(self::CACHE_BIN)->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
 
     return $term_data;
   }

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_user\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -39,6 +40,13 @@ class UserCommunicationPreference extends FormBase {
   protected $account;
 
   /**
+   * ImmutableConfig object containing custom user config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
+
+  /**
    * UserCommunicationPreference constructor.
    *
    * @param \Drupal\user\UserDataInterface $user_data
@@ -47,11 +55,14 @@ class UserCommunicationPreference extends FormBase {
    *   The current user service object.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   The MobileNumber util service object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    */
-  public function __construct(UserDataInterface $user_data, AccountInterface $account, MobileNumberUtilInterface $mobile_util) {
+  public function __construct(UserDataInterface $user_data, AccountInterface $account, MobileNumberUtilInterface $mobile_util, ConfigFactoryInterface $config_factory) {
     $this->userData = $user_data;
     $this->account = $account;
     $this->mobileUtil = $mobile_util;
+    $this->config = $config_factory->get('alshaya_user.settings');
   }
 
   /**
@@ -61,7 +72,8 @@ class UserCommunicationPreference extends FormBase {
     return new static(
       $container->get('user.data'),
       $container->get('current_user'),
-      $container->get('mobile_number.util')
+      $container->get('mobile_number.util'),
+      $container->get('config.factory')
     );
   }
 
@@ -80,6 +92,13 @@ class UserCommunicationPreference extends FormBase {
    * @inheritdoc
    */
   public function buildForm(array $form, FormStateInterface $form_state, UserInterface $user = NULL) {
+    if ($config = $this->config->get('my_account_enabled_links')) {
+      $config = unserialize($config);
+      if (empty($config['communication_preference'])) {
+        throw new AccessDeniedHttpException();
+      }
+    }
+
     $this->user_profile = $account = $user;
 
     $account = User::load($this->user_profile->id());
