@@ -3,409 +3,50 @@ global $_alshaya_acm_products;
 
 $_alshaya_acm_products = array(
 array (
-  'product_id' => 21,
+  'product_id' => 24,
   'store_id' => 1,
   'attribute_set_id' => 4,
   'attribute_set_label' => 'Default',
-  'sku' => 'Test Simple Product',
-  'name' => 'Test Simple Product',
+  'sku' => 'HM05518570021870081',
+  'name' => 'Long T-shirt',
   'type' => 'simple',
   'price' => '10.0000',
   'special_price' => '0',
   'final_price' => '10',
   'status' => 1,
-  'visibility' => 1,
+  'visibility' => 2,
   'attributes' => 
   array (
-    'meta_title' => 'Test Simple Product',
-    'meta_keyword' => 'Test Simple Product',
-    'meta_description' => 'Test Simple Product ',
-    'color' => '2018',
     'options_container' => 'container2',
     'required_options' => '0',
     'has_options' => '0',
-    'product_activation_date' => '2017-09-07 00:00:00',
-    'product_collection' => '5',
-    'concept' => '16',
-    'washing_instructions' => '26',
-    'dry_cleaning_instructions' => '35',
-    'rgb_color' => '#ABABAA',
-    'color_label' => 'Tiger Print',
-    'size' => '89',
-    'season_code' => '174',
-    'season_value' => '201704',
-    'aims_department' => 'TEST',
-    'product_designer_collection' => '884',
-    'product_feature' => '887',
-    'product_environment' => '891',
-    'product_quality' => '892',
-    'article_pattern' => '894',
-    'article_license_company' => '911',
-    'article_license_item' => '915',
-    'article_fragrance_description' => '971',
-    'article_warning' => '1001',
-    'asset_ids' => '41234671284,32412342341,12341241',
-    'style_with' => '423423,423424,2342',
-    'style_code' => '423423',
-    'article_castor_id' => '1015',
-    'url_key' => 'test-simple-product',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
+    'url_key' => 'long-t-shirt-hm05518570021870081',
+    'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '1',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-    'composition' => '{}',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
   ),
   'categories' => 
   array (
-    0 => '6',
-    1 => '2',
-    2 => '8',
   ),
   'extension' => 
   array (
     'stock_item' => 
     array (
-      'item_id' => 27,
-      'product_id' => 21,
-      'stock_id' => 2,
-      'qty' => 9985,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 22,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Test Another Simple Product',
-  'name' => 'Test Another Simple Product',
-  'type' => 'simple',
-  'price' => '200.0000',
-  'special_price' => '0',
-  'final_price' => '200',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Test Another Simple Product',
-    'meta_keyword' => 'Test Another Simple Product',
-    'meta_description' => 'Test Another Simple Product ',
-    'color' => '2019',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-07 00:00:00',
-    'product_collection' => '7',
-    'concept' => '18',
-    'washing_instructions' => '24',
-    'dry_cleaning_instructions' => '35',
-    'rgb_color' => '#12BC56',
-    'color_label' => 'Solid Black',
-    'size' => '232',
-    'season_code' => '174',
-    'season_value' => '201704',
-    'aims_department' => 'TEST',
-    'product_designer_collection' => '883',
-    'product_feature' => '889',
-    'product_environment' => '891',
-    'product_quality' => '892',
-    'article_pattern' => '893',
-    'article_license_company' => '911',
-    'article_license_item' => '915',
-    'article_fragrance_description' => '971',
-    'asset_ids' => '234234,2342342,23424',
-    'style_with' => '34242',
-    'style_code' => '342432',
-    'article_castor_id' => '1638',
-    'url_key' => 'test-another-simple-product',
-    'tax_class_id' => '0',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '1',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-    'composition' => '{}',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '6',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 28,
-      'product_id' => 22,
-      'stock_id' => 2,
-      'qty' => 9988,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-09-07 16:15:09',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 23,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Test Configurable Product',
-  'name' => 'Test Configurable Product',
-  'type' => 'configurable',
-  'price' => '10',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Test Configurable Product',
-    'meta_keyword' => 'Test Configurable Product',
-    'meta_description' => 'Test Configurable Product ',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-07 00:00:00',
-    'asset_ids' => '123,123',
-    'style_with' => '1233123',
-    'style_code' => '13424',
-    'url_key' => 'test-configurable-product',
-    'tax_class_id' => '0',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '1',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-    'composition' => '{}',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '6',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 29,
-      'product_id' => 23,
-      'stock_id' => 2,
-      'qty' => 10000,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'configurable_product_links' => 
-    array (
-      0 => 
-      array (
-        'id' => '21',
-        'sku' => 'Test Simple Product',
-      ),
-      1 => 
-      array (
-        'id' => '22',
-        'sku' => 'Test Another Simple Product',
-      ),
-    ),
-    'configurable_product_options' => 
-    array (
-      0 => 
-      array (
-        'attribute_id' => '126',
-        'code' => 'size',
-        'label' => 'Size',
-        'position' => '1',
-        'values' => 
-        array (
-          0 => 
-          array (
-            'value_id' => '89',
-            'label' => '29 1/2',
-          ),
-          1 => 
-          array (
-            'value_id' => '232',
-            'label' => '13-14Y',
-          ),
-        ),
-      ),
-      1 => 
-      array (
-        'attribute_id' => '143',
-        'code' => 'article_castor_id',
-        'label' => 'Article Castor ID',
-        'position' => '0',
-        'values' => 
-        array (
-          0 => 
-          array (
-            'value_id' => '1015',
-            'label' => '007',
-          ),
-          1 => 
-          array (
-            'value_id' => '1638',
-            'label' => '630',
-          ),
-        ),
-      ),
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 24,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => '550442001',
-  'name' => 'Hooded sweatshirt dress',
-  'type' => 'simple',
-  'price' => '19.9900',
-  'special_price' => '0',
-  'final_price' => '19.99',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Hooded sweatshirt dress',
-    'meta_keyword' => 'Hooded sweatshirt dress',
-    'meta_description' => 'Hooded sweatshirt dress ',
-    'color' => '2017',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-11 00:00:00',
-    'size' => '856',
-    'url_key' => 'hooded-sweatshirt-dress',
-    'tax_class_id' => '0',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '0',
-    'is_returnable' => '2',
-     'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '2',
-    1 => '9',
-    2 => '7',
-    3 => '10',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 30,
+      'item_id' => 48,
       'product_id' => 24,
       'stock_id' => 2,
-      'qty' => 9985,
-      'is_in_stock' => true,
+      'qty' => 0,
+      'is_in_stock' => false,
       'is_qty_decimal' => false,
       'show_default_notification_message' => false,
       'use_config_min_qty' => true,
@@ -424,7 +65,7 @@ array (
       'enable_qty_increments' => false,
       'use_config_manage_stock' => true,
       'manage_stock' => true,
-      'low_stock_date' => '2017-09-11 14:08:52',
+      'low_stock_date' => '2017-10-04 10:07:00',
       'is_decimal_divided' => false,
       'stock_status_changed_auto' => 1,
     ),
@@ -441,142 +82,51 @@ array (
       ),
     ),
   ),
-),
-array (
-  'product_id' => 25,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => '0000111122',
-  'name' => 'Shirt One',
-  'type' => 'simple',
-  'price' => '50.0000',
-  'special_price' => '0',
-  'final_price' => '50',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Shirt One',
-    'meta_keyword' => 'Shirt One',
-    'meta_description' => 'Shirt One ',
-    'color' => '2017',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-11 14:23:24',
-    'size' => '47',
-    'url_key' => 'shirt-one',
-    'tax_class_id' => '0',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-    'composition' => '{}',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '2',
-    1 => '6',
-    2 => '8',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 31,
-      'product_id' => 25,
-      'stock_id' => 2,
-      'qty' => 9986,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-09-11 14:23:24',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
+), array (
   'product_id' => 26,
   'store_id' => 1,
   'attribute_set_id' => 4,
   'attribute_set_label' => 'Default',
-  'sku' => '00044552210',
-  'name' => 'Jeans One',
+  'sku' => 'HM05518570021870082',
+  'name' => 'Long T-shirt',
   'type' => 'simple',
-  'price' => '75.0000',
+  'price' => '10.0000',
   'special_price' => '0',
-  'final_price' => '75',
+  'final_price' => '10',
   'status' => 1,
-  'visibility' => 1,
+  'visibility' => 2,
   'attributes' => 
   array (
-    'meta_title' => 'Jeans One',
-    'meta_keyword' => 'Jeans One',
-    'meta_description' => 'Jeans One ',
-    'color' => '2018',
     'options_container' => 'container2',
     'required_options' => '0',
     'has_options' => '0',
-    'product_activation_date' => '2017-09-11 15:04:34',
-    'url_key' => 'jeansone',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
+    'url_key' => 'long-t-shirt-hm05518570021870082',
+    'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-    'composition' => '{}',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
   ),
   'categories' => 
   array (
-    0 => '2',
-    1 => '7',
-    2 => '9',
   ),
   'extension' => 
   array (
     'stock_item' => 
     array (
-      'item_id' => 32,
+      'item_id' => 50,
       'product_id' => 26,
       'stock_id' => 2,
-      'qty' => 9997,
-      'is_in_stock' => true,
+      'qty' => 0,
+      'is_in_stock' => false,
       'is_qty_decimal' => false,
       'show_default_notification_message' => false,
       'use_config_min_qty' => true,
@@ -595,7 +145,7 @@ array (
       'enable_qty_increments' => false,
       'use_config_manage_stock' => true,
       'manage_stock' => true,
-      'low_stock_date' => '2017-09-11 15:04:33',
+      'low_stock_date' => '2017-10-04 10:07:01',
       'is_decimal_divided' => false,
       'stock_status_changed_auto' => 1,
     ),
@@ -612,98 +162,653 @@ array (
       ),
     ),
   ),
-),
-array (
-  'product_id' => 27,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Diesel Jean',
-  'name' => 'Diesel Jean',
-  'type' => 'simple',
-  'price' => '5000.0000',
-  'special_price' => '0',
-  'final_price' => '5000',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Diesel Jean',
-    'meta_keyword' => 'Diesel Jean',
-    'meta_description' => 'Diesel Jean ',
-    'color' => '2017',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'country_of_manufacture' => 'BD',
-    'product_activation_date' => '2017-09-12 00:00:00',
-    'url_key' => 'diesel-jean',
-    'tax_class_id' => '2',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '1',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '6',
-    1 => '2',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 39,
-      'product_id' => 27,
-      'stock_id' => 2,
-      'qty' => 9942,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-09-13 07:03:54',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
+), array (
   'product_id' => 28,
   'store_id' => 1,
   'attribute_set_id' => 4,
   'attribute_set_label' => 'Default',
-  'sku' => 'Cat3 Test Product 1',
-  'name' => 'Cat3 Test Product 1',
+  'sku' => 'HM05518570021870083',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
+    'url_key' => 'long-t-shirt-hm05518570021870083',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 52,
+      'product_id' => 28,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-04 10:07:01',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+), array (
+  'product_id' => 30,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM05518570021870084',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
+    'url_key' => 'long-t-shirt-hm05518570021870084',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 54,
+      'product_id' => 30,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-04 10:07:01',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+), array (
+  'product_id' => 32,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM05518570021870085',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
+    'url_key' => 'long-t-shirt-hm05518570021870085',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 56,
+      'product_id' => 32,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-04 10:07:01',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+), array (
+  'product_id' => 34,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM05518570021870086',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
+    'url_key' => 'long-t-shirt-hm05518570021870086',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 58,
+      'product_id' => 34,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-04 10:07:01',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+), array (
+  'product_id' => 36,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM05518570021870087',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
+    'url_key' => 'long-t-shirt-hm05518570021870087',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 60,
+      'product_id' => 36,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-04 10:07:01',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+), array (
+  'product_id' => 38,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM05518570021870088',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
+    'url_key' => 'long-t-shirt-hm05518570021870088',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 62,
+      'product_id' => 38,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-04 10:07:01',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+), array (
+  'product_id' => 40,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM05518570021870089',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
+    'url_key' => 'long-t-shirt-hm05518570021870089',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 64,
+      'product_id' => 40,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-04 10:07:01',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+), array (
+  'product_id' => 42,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM05518570021870080',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
+    'url_key' => 'long-t-shirt-hm05518570021870080',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 66,
+      'product_id' => 42,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-04 10:07:01',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+), array (
+  'product_id' => 44,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'Test Product 1',
+  'name' => 'Test Product 1',
   'type' => 'simple',
   'price' => '100.0000',
   'special_price' => '0',
@@ -712,1082 +817,25 @@ array (
   'visibility' => 1,
   'attributes' => 
   array (
-    'meta_title' => 'Cat3 Test Product 1',
-    'meta_keyword' => 'Cat3 Test Product 1',
-    'meta_description' => 'Cat3 Test Product 1 ',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-13 00:00:00',
-    'url_key' => 'cat3tp1',
-    'tax_class_id' => '2',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '1',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '10',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 40,
-      'product_id' => 28,
-      'stock_id' => 2,
-      'qty' => 9994,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-09-13 07:14:39',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 29,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Cat3 Test Product 2',
-  'name' => 'Cat3 Test Product 2',
-  'type' => 'simple',
-  'price' => '200.0000',
-  'special_price' => '0',
-  'final_price' => '200',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Cat3 Test Product 2',
-    'meta_keyword' => 'Cat3 Test Product 2',
-    'meta_description' => 'Cat3 Test Product 2 ',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-13 00:00:00',
-    'url_key' => 'cat3tp2',
-    'tax_class_id' => '2',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '1',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '10',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 41,
-      'product_id' => 29,
-      'stock_id' => 2,
-      'qty' => 9994,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-09-13 07:18:19',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 30,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Cat 3 Test Product 3',
-  'name' => 'Cat 3 Test Product 3',
-  'type' => 'simple',
-  'price' => '300.0000',
-  'special_price' => '0',
-  'final_price' => '300',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Cat 3 Test Product 3',
-    'meta_keyword' => 'Cat 3 Test Product 3',
-    'meta_description' => 'Cat 3 Test Product 3 ',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-13 00:00:00',
-    'url_key' => 'cat3tp3',
-    'tax_class_id' => '2',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '10',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 42,
-      'product_id' => 30,
-      'stock_id' => 2,
-      'qty' => 9995,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-09-13 07:25:26',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 31,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Cat 3 Test Product 4',
-  'name' => 'Cat 3 Test Product 4',
-  'type' => 'simple',
-  'price' => '400.0000',
-  'special_price' => '0',
-  'final_price' => '400',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Cat 3 Test Product 4',
-    'meta_keyword' => 'Cat 3 Test Product 4',
-    'meta_description' => 'Cat 3 Test Product 4 ',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-13 00:00:00',
-    'url_key' => 'cat3tp4',
-    'tax_class_id' => '2',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '10',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 43,
-      'product_id' => 31,
-      'stock_id' => 2,
-      'qty' => 9994,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-09-13 07:28:28',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 32,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Levis',
-  'name' => 'Levis',
-  'type' => 'simple',
-  'price' => '105.0000',
-  'special_price' => '0',
-  'final_price' => '105',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Levis',
-    'meta_keyword' => 'Levis',
-    'meta_description' => 'Levis ',
-    'color' => '2017',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-04 00:00:00',
-    'size' => '46',
-    'url_key' => 'levis',
-    'tax_class_id' => '2',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '1',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '11',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'product_id' => 0,
-      'stock_id' => 2,
-      'qty' => NULL,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => false,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 0,
-      'min_sale_qty' => 0,
-      'use_config_max_sale_qty' => false,
-      'max_sale_qty' => 0,
-      'use_config_backorders' => false,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => false,
-      'notify_stock_qty' => 0,
-      'use_config_qty_increments' => false,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => false,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => false,
-      'manage_stock' => false,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 33,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Hugo Boss',
-  'name' => 'Hugo Boss',
-  'type' => 'simple',
-  'price' => '150.0000',
-  'special_price' => '0',
-  'final_price' => '150',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Hugo Boss',
-    'meta_keyword' => 'Hugo Boss',
-    'meta_description' => 'Hugo Boss ',
-    'color' => '2019',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-15 13:28:33',
-    'url_key' => 'hugo-boss',
-    'tax_class_id' => '2',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '11',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'product_id' => 0,
-      'stock_id' => 2,
-      'qty' => NULL,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => false,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 0,
-      'min_sale_qty' => 0,
-      'use_config_max_sale_qty' => false,
-      'max_sale_qty' => 0,
-      'use_config_backorders' => false,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => false,
-      'notify_stock_qty' => 0,
-      'use_config_qty_increments' => false,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => false,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => false,
-      'manage_stock' => false,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 34,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Versace',
-  'name' => 'Versace',
-  'type' => 'simple',
-  'price' => '175.0000',
-  'special_price' => '0',
-  'final_price' => '175',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Versace',
-    'meta_keyword' => 'Versace',
-    'meta_description' => 'Versace ',
-    'color' => '2018',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-15 13:35:23',
-    'url_key' => 'versace',
-    'tax_class_id' => '2',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '11',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'product_id' => 0,
-      'stock_id' => 2,
-      'qty' => NULL,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => false,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 0,
-      'min_sale_qty' => 0,
-      'use_config_max_sale_qty' => false,
-      'max_sale_qty' => 0,
-      'use_config_backorders' => false,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => false,
-      'notify_stock_qty' => 0,
-      'use_config_qty_increments' => false,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => false,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => false,
-      'manage_stock' => false,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 35,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Adidas',
-  'name' => 'Adidas',
-  'type' => 'simple',
-  'price' => '345.0000',
-  'special_price' => '0',
-  'final_price' => '345',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Adidas',
-    'meta_keyword' => 'Adidas',
-    'meta_description' => 'Adidas ',
-    'color' => '2018',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-15 13:38:10',
-    'url_key' => 'adidas',
-    'tax_class_id' => '2',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '11',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'product_id' => 0,
-      'stock_id' => 2,
-      'qty' => NULL,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => false,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 0,
-      'min_sale_qty' => 0,
-      'use_config_max_sale_qty' => false,
-      'max_sale_qty' => 0,
-      'use_config_backorders' => false,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => false,
-      'notify_stock_qty' => 0,
-      'use_config_qty_increments' => false,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => false,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => false,
-      'manage_stock' => false,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 36,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Lacoste',
-  'name' => 'Lacoste',
-  'type' => 'simple',
-  'price' => '500.0000',
-  'special_price' => '0',
-  'final_price' => '500',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Lacoste',
-    'meta_keyword' => 'Lacoste',
-    'meta_description' => 'Lacoste ',
-    'color' => '2018',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-15 13:41:21',
-    'size' => '49',
-    'url_key' => 'lacoste',
-    'tax_class_id' => '2',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '11',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'product_id' => 0,
-      'stock_id' => 2,
-      'qty' => NULL,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => false,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 0,
-      'min_sale_qty' => 0,
-      'use_config_max_sale_qty' => false,
-      'max_sale_qty' => 0,
-      'use_config_backorders' => false,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => false,
-      'notify_stock_qty' => 0,
-      'use_config_qty_increments' => false,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => false,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => false,
-      'manage_stock' => false,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 37,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Polo Ralph Lauren',
-  'name' => 'Polo Ralph Lauren',
-  'type' => 'simple',
-  'price' => '200.0000',
-  'special_price' => '0',
-  'final_price' => '200',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Polo Ralph Lauren',
-    'meta_keyword' => 'Polo Ralph Lauren',
-    'meta_description' => 'Polo Ralph Lauren ',
-    'color' => '2019',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-15 00:00:00',
-    'url_key' => 'polo-ralph-lauren',
-    'tax_class_id' => '2',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '1',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '11',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'product_id' => 0,
-      'stock_id' => 2,
-      'qty' => NULL,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => false,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 0,
-      'min_sale_qty' => 0,
-      'use_config_max_sale_qty' => false,
-      'max_sale_qty' => 0,
-      'use_config_backorders' => false,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => false,
-      'notify_stock_qty' => 0,
-      'use_config_qty_increments' => false,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => false,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => false,
-      'manage_stock' => false,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 38,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Nike',
-  'name' => 'Nike',
-  'type' => 'simple',
-  'price' => '430.0000',
-  'special_price' => '0',
-  'final_price' => '430',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Nike',
-    'meta_keyword' => 'Nike',
-    'meta_description' => 'Nike ',
-    'color' => '2019',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-15 13:46:36',
-    'url_key' => 'nike',
-    'tax_class_id' => '2',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '11',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'product_id' => 0,
-      'stock_id' => 2,
-      'qty' => NULL,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => false,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 0,
-      'min_sale_qty' => 0,
-      'use_config_max_sale_qty' => false,
-      'max_sale_qty' => 0,
-      'use_config_backorders' => false,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => false,
-      'notify_stock_qty' => 0,
-      'use_config_qty_increments' => false,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => false,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => false,
-      'manage_stock' => false,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 40,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Test Product 1',
-  'name' => 'Test Product 1',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
     'meta_title' => 'Test Product 1',
     'meta_keyword' => 'Test Product 1',
     'meta_description' => 'Test Product 1 ',
-    'color' => '2017',
     'options_container' => 'container2',
     'required_options' => '0',
     'has_options' => '0',
-    'product_activation_date' => '2017-09-19 00:00:00',
+    'product_activation_date' => '2017-10-04 00:00:00',
     'url_key' => 'test-product-1',
     'tax_class_id' => '2',
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
   array (
   ),
   'categories' => 
   array (
-    0 => '12',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'product_id' => 0,
-      'stock_id' => 2,
-      'qty' => NULL,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => false,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 0,
-      'min_sale_qty' => 0,
-      'use_config_max_sale_qty' => false,
-      'max_sale_qty' => 0,
-      'use_config_backorders' => false,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => false,
-      'notify_stock_qty' => 0,
-      'use_config_qty_increments' => false,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => false,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => false,
-      'manage_stock' => false,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 41,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Product 2',
-  'name' => 'Product 2',
-  'type' => 'simple',
-  'price' => '50.0000',
-  'special_price' => '0',
-  'final_price' => '50',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Product 2',
-    'meta_keyword' => 'Product 2',
-    'meta_description' => 'Product 2 ',
-    'color' => '2018',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-19 13:24:25',
-    'url_key' => 'product-2',
-    'tax_class_id' => '2',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '12',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'product_id' => 0,
-      'stock_id' => 2,
-      'qty' => NULL,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => false,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 0,
-      'min_sale_qty' => 0,
-      'use_config_max_sale_qty' => false,
-      'max_sale_qty' => 0,
-      'use_config_backorders' => false,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => false,
-      'notify_stock_qty' => 0,
-      'use_config_qty_increments' => false,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => false,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => false,
-      'manage_stock' => false,
-      'low_stock_date' => NULL,
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 0,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 42,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Product 5',
-  'name' => 'Product 5',
-  'type' => 'simple',
-  'price' => '22.0000',
-  'special_price' => '0',
-  'final_price' => '22',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'meta_title' => 'Product 5',
-    'meta_keyword' => 'Product 5',
-    'meta_description' => 'Product 5 ',
-    'color' => '2019',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-09-19 13:26:21',
-    'url_key' => 'product-5',
-    'tax_class_id' => '2',
-    'gift_message_available' => '2',
-    'gift_wrapping_available' => '2',
-    'is_returnable' => '2',
-    'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '12',
+    0 => '4',
   ),
   'extension' => 
   array (
