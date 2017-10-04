@@ -9,8 +9,8 @@ dependencies:
     - whitelabel_non_transac
 id: main_navigation
 theme: whitelabel_non_transac
-region: header_primary
-weight: -5
+region: header
+weight: 0
 provider: null
 plugin: 'system_menu_block:main'
 settings:
