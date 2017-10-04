@@ -58,6 +58,8 @@ function alshaya_vs_install() {
     if (\Drupal::moduleHandler()->moduleExists('alshaya_non_transac_product')) {
       $configFactory->set('node_types.product', 'product');
     }
+    // Set the option to use large image style button for sharethis.
+    $configFactory->set('button_option', 'stbc_large');
     $configFactory->save();
   }
 
