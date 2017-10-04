@@ -13,6 +13,7 @@ use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Solarium\Core\Query\QueryInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_views_pre_render().
@@ -222,7 +223,7 @@ function alshaya_search_search_api_solr_query_alter(QueryInterface $solarium_que
 function alshaya_search_keyword_language_redirect($form, FormStateInterface $form_state) {
   // Redirect to correct language, based on user input.
   $languages = \Drupal::languageManager()->getLanguages();
-  if (count($languages) > 1 && array_key_exists('ar', $languages) && empty($form_state->getRedirect())) {
+  if (count($languages) > 1 && array_key_exists('ar', $languages)) {
     $keyword = $form_state->getValue('keywords');
     // Identify a non arabic language in the list of language.
     if (\Drupal::languageManager()->getDefaultLanguage() != 'ar') {
@@ -239,9 +240,11 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
         // Redirect to the previously identified non arabic language.
         $url = Url::fromUserInput('/search', [
           'query' => ['keywords' => $keyword],
+          'absolute' => TRUE,
           'language' => $default_language,
-        ]);
-        $form_state->disableRedirect(FALSE)->setRedirectUrl($url);
+        ])->toString();
+        $response = new RedirectResponse($url);
+        $response->send();
       }
     }
     else {
@@ -249,9 +252,11 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
         // Redirect to arabic, if all characters are in arabic.
         $url = Url::fromUserInput('/search', [
           'query' => ['keywords' => $keyword],
+          'absolute' => TRUE,
           'language' => $languages['ar'],
-        ]);
-        $form_state->disableRedirect(FALSE)->setRedirectUrl($url);
+        ])->toString();
+        $response = new RedirectResponse($url);
+        $response->send();
       }
     }
   }
