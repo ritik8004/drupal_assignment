@@ -127,12 +127,12 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
   }
 
   /**
-   * @When /^I subscribe using a valid Email ID$/
+   * @When /^I enter a valid Email ID in field "([^"]*)"$/
    */
-  public function iSubscribeUsingAValidEmailID() {
+  public function iEnterAValidEmailID($field) {
     $randomString = 'randemail' . rand(2, getrandmax());
     $email_id = $randomString . '@gmail.com';
-    $this->getSession()->getPage()->fillField("edit-email", $email_id);
+    $this->getSession()->getPage()->fillField($field, $email_id);
   }
 
   /**
