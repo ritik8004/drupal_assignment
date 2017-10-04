@@ -43,9 +43,10 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     $form['sort_options'] = [
       '#type' => 'checkboxes',
       '#options' => [
-        'nid' => t('Best Seller'),
-        'name_1' => t('Name'),
-        'final_price' => t('Price'),
+        'nid' => $this->t('Best Seller'),
+        'created' => $this->t('New In'),
+        'name_1' => $this->t('Name'),
+        'final_price' => $this->t('Price'),
       ],
       '#title' => $this->t('Sort options'),
       '#description' => $this->t('Enabled sort options will show on PLP page.'),

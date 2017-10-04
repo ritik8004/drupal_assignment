@@ -93,10 +93,14 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
 function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-alshaya-product-list-block-1') {
     // Best seller descending option removed.
-    unset($form['sort_bef_combine']['#options']['nid DESC']);
+    if (isset($form['sort_bef_combine']['#options']['nid DESC'])) {
+      unset($form['sort_bef_combine']['#options']['nid DESC']);
+    }
 
     // New In ascending option removed.
-    unset($form['sort_bef_combine']['#options']['created ASC']);
+    if (isset($form['sort_bef_combine']['#options']['created ASC'])) {
+      unset($form['sort_bef_combine']['#options']['created ASC']);
+    }
 
     // Disable sort options if not enabled.
     $enabled_sorts = _alshaya_acm_product_position_get_config();
@@ -106,8 +110,12 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
     else {
       foreach ($enabled_sorts as $key => $sort) {
         if (!$sort) {
-          unset($form['sort_bef_combine']['#options']["$key ASC"]);
-          unset($form['sort_bef_combine']['#options']["$key DESC"]);
+          if (isset($form['sort_bef_combine']['#options']["$key ASC"])) {
+            unset($form['sort_bef_combine']['#options']["$key ASC"]);
+          }
+          if (isset($form['sort_bef_combine']['#options']["$key DESC"])) {
+            unset($form['sort_bef_combine']['#options']["$key DESC"]);
+          }
         }
       }
     }
