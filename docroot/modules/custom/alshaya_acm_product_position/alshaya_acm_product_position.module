@@ -72,7 +72,7 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
       if ($enabled_sorts) {
         $default_sort = FALSE;
         foreach ($sorts as $sort) {
-          if ($enabled_sorts[$sort]) {
+          if (isset($enabled_sorts[$sort])) {
             $default_sort = $sort . ' ASC';
             break;
           }
@@ -94,6 +94,9 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
   if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-alshaya-product-list-block-1') {
     // Best seller descending option removed.
     unset($form['sort_bef_combine']['#options']['nid DESC']);
+
+    // New In ascending option removed.
+    unset($form['sort_bef_combine']['#options']['created ASC']);
 
     // Disable sort options if not enabled.
     $enabled_sorts = _alshaya_acm_product_position_get_config();
