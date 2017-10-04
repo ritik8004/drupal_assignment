@@ -295,6 +295,7 @@
 
     .js-form-wrapper {
       float: $left;
+      max-width: 12.75rem;
 
       .form-type-select {
         @include select-wrapper(12.375rem);

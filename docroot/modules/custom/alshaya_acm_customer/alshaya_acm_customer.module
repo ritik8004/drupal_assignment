@@ -318,13 +318,21 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
 
   // Do check against Magento only if user is unknown or just authenticated.
   if ($do_api_check) {
-    if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass)) {
-      $form_state->set('uid', $uid);
-      return;
+    try {
+      if ($uid = _alshaya_acm_customer_authenticate_customer($mail, $pass)) {
+        $form_state->set('uid', $uid);
+        return;
+      }
+      else {
+        $form_state->setErrorByName('name', t('Unrecognized email address or password.'));
+        return;
+      }
     }
-    else {
-      $form_state->setErrorByName('name', t('Unrecognized email address or password.'));
-      return;
+    catch (\Exception $e) {
+      if (acq_commerce_is_exception_api_down_exception($e)) {
+        $form_state->setErrorByName('name', $e->getMessage());
+        return;
+      }
     }
   }
 
@@ -400,7 +408,10 @@ function _alshaya_acm_customer_authenticate_customer($mail, $pass, $force_associ
     }
   }
   catch (\Exception $e) {
-    // Do nothing, could be admin user.
+    // Could be admin user, do nothing except for downtime exception.
+    if (acq_commerce_is_exception_api_down_exception($e)) {
+      throw $e;
+    }
   }
 
   return NULL;
@@ -470,7 +481,12 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
     }
   }
   catch (\Exception $e) {
-    // Do nothing, we will do other validations after this try/catch.
+    // Do nothing except for downtime exception, we will do other validations
+    // after try/catch.
+    if (acq_commerce_is_exception_api_down_exception($e)) {
+      $form_state->setErrorByName('custom', $e->getMessage());
+      drupal_set_message($e->getMessage(), 'error');
+    }
   }
 
   // Process default validation if no errors found.
@@ -567,7 +583,11 @@ function alshaya_acm_customer_change_pwd_form_validate_password(array &$form, Fo
     }
   }
   catch (\Exception $e) {
-    // Do nothing, we will set the error message below.
+    // Do nothing except for downtime exception, we will set the error message
+    // below.
+    if (acq_commerce_is_exception_api_down_exception($e)) {
+      $form_state->setErrorByName('current_pass', $e->getMessage());
+    }
   }
 
   $form_state->setErrorByName('current_pass', t('The current password you provided is incorrect.'));
@@ -641,7 +661,11 @@ function alshaya_acm_customer_user_pass_validate(array &$form, FormStateInterfac
     }
   }
   catch (\Exception $e) {
-    // Do nothing, let default validation function handle the error messages.
+    // Do nothing except for downtime exception, let default validation handle
+    // the error messages.
+    if (acq_commerce_is_exception_api_down_exception($e)) {
+      $form_state->setErrorByName('name', $e->getMessage());
+    }
   }
 }
 

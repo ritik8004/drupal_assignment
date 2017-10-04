@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f203772d8fc06b525b5e926e631ee32",
+    "content-hash": "61b0e612bcdb9dab61606638697c06d5",
     "packages": [
         {
             "name": "acquia/blt",
@@ -7489,7 +7489,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/simple_sitemap",
-                "reference": "a26345459dd68bb182319252548bf8bc36ca570a"
+                "reference": "ae04cd85bfc4417fd9233f69f26516cf80166898"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -7500,12 +7500,15 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.9+14-dev",
-                    "datestamp": "1503777545",
+                    "version": "8.x-2.10+2-dev",
+                    "datestamp": "1506772144",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "MMCPA-2433": "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7532,7 +7535,7 @@
                 "issues": "https://drupal.org/project/issues/simple_sitemap",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-08-28 13:57:41"
+            "time": "2017-09-30 20:57:01"
         },
         {
             "name": "drupal/taxonomy_access_fix",

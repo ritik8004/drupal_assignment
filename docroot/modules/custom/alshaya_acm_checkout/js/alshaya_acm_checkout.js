@@ -210,6 +210,10 @@
           tabs.find('.tab-returning-customer').toggleClass('active');
           tabs.next().next('#edit-checkout-login').toggleClass('active');
         }
+        else if (window.location.href.indexOf('showlogin=1') > -1) {
+          tabs.find('.tab-returning-customer').toggleClass('active');
+          tabs.next().next('#edit-checkout-login').toggleClass('active');
+        }
         else {
           tabs.find('.tab-new-customer').toggleClass('active');
           tabs.next('#edit-checkout-guest').toggleClass('active');

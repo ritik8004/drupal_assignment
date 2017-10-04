@@ -11,7 +11,7 @@ dependencies:
 id: exposedformstores_finderpage_1
 theme: whitelabel_non_transac
 region: content
-weight: -15
+weight: -6
 provider: null
 plugin: 'views_exposed_filter_block:stores_finder-page_1'
 settings:
