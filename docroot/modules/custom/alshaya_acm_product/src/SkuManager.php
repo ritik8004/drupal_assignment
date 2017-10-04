@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product;
 
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
@@ -45,6 +46,13 @@ class SkuManager {
   protected $entityRepository;
 
   /**
+   * Linked SKUs service.
+   *
+   * @var \Drupal\acq_sku\AcqSkuLinkedSku
+   */
+  protected $linkedSkus;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -57,6 +65,8 @@ class SkuManager {
    *   The entity repository service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger service.
+   * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
+   *   Linked SKUs service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service.
    */
@@ -65,6 +75,7 @@ class SkuManager {
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
+                              AcqSkuLinkedSku $linked_skus,
                               CacheBackendInterface $cache) {
     $this->connection = $connection;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
@@ -72,6 +83,7 @@ class SkuManager {
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
+    $this->linkedSkus = $linked_skus;
     $this->cache = $cache;
   }
 
@@ -708,6 +720,39 @@ class SkuManager {
     $plugin = $sku_entity->getPluginInstance();
 
     return $plugin->getParentSku($sku_entity);
+  }
+
+  /**
+   * Utility function to get linked SKUs.
+   *
+   * @param mixed $sku
+   *   SKU text or full entity object.
+   * @param string $type
+   *   Type of Linked SKUs to return related/upsell.
+   *
+   * @return array
+   *   Linked SKUs for requested type.
+   */
+  public function getLinkedSkus($sku, $type) {
+    $linked_skus = $this->linkedSkus->getLinkedSKus($sku);
+
+    $linked_skus_requested = [];
+
+    if (isset($linked_skus[$type]) && !empty($linked_skus[$type])) {
+      $linked_skus_requested = $linked_skus[$type];
+    }
+
+    try {
+      if ($linked_skus_from_product = $sku->get($type)->getValue()) {
+        $linked_skus_from_product = array_column($linked_skus_from_product, 'value');
+        $linked_skus_requested = array_merge($linked_skus_requested, $linked_skus_from_product);
+      }
+    }
+    catch (\Exception $e) {
+      // Do nothing.
+    }
+
+    return $linked_skus_requested;
   }
 
 }
