@@ -19,10 +19,10 @@ use Drupal\acq_sku\Entity\SKU;
  *   Whether to process or not.
  */
 function _alshaya_seo_process_gtm() {
-  static $process;
+  static $process = NULL;
 
-  if ($process) {
-    return ($process === 'yes');
+  if ($process !== NULL) {
+    return $process;
   }
 
   $currentUser = \Drupal::currentUser();
@@ -30,22 +30,22 @@ function _alshaya_seo_process_gtm() {
 
   // Disable SEO modifications for non-customer users (admins).
   if ($currentUser->isAuthenticated() && !alshaya_acm_customer_is_customer($currentUser)) {
-    $process = 'no';
+    $process = FALSE;
   }
   // Don't process for AJAX requests.
   elseif (stripos(\Drupal::request()->getRequestUri(), 'ajax') > -1) {
-    $process = 'no';
+    $process = FALSE;
   }
   elseif (!\Drupal::service('router.admin_context')->isAdminRoute()
     || ($current_route_name === 'entity.user.edit_form')) {
-    $process = 'yes';
+    $process = TRUE;
   }
   else {
     // Return false by default.
-    $process = 'no';
+    $process = FALSE;
   }
 
-  return ($process === 'yes');
+  return $process;
 }
 
 /**
