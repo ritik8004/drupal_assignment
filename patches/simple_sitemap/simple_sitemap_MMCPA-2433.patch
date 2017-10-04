@@ -1,0 +1,14 @@
+diff --git a/src/SitemapGenerator.php b/src/SitemapGenerator.php
+index 0508c76..42b2477 100644
+--- a/src/SitemapGenerator.php
++++ b/src/SitemapGenerator.php
+@@ -327,8 +327,8 @@ class SitemapGenerator {
+         foreach ($link['alternate_urls'] as $language_id => $alternate_url) {
+           $writer->startElement('xhtml:link');
+           $writer->writeAttribute('rel', 'alternate');
+-          $writer->writeAttribute('hreflang', $language_id);
+           $writer->writeAttribute('href', $alternate_url);
++          $writer->writeAttribute('hreflang', $language_id);
+           $writer->endElement();
+         }
+       }

@@ -2,9 +2,7 @@
 
 namespace Drupal\acq_promotion;
 
-use Drupal\acq_commerce\Conductor\ClientFactory;
-use Drupal\acq_commerce\Conductor\IngestRequestTrait;
-use Drupal\Core\Config\ConfigFactory;
+use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
@@ -16,28 +14,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package Drupal\acq_promotion
  */
 abstract class AcqPromotionQueueBase extends QueueWorkerBase implements ContainerFactoryPluginInterface {
-  use IngestRequestTrait;
 
   /**
-   * Logger service.
+   * IngestAPIWrapper Service object.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   * @var \Drupal\acq_commerce\Conductor\IngestAPIWrapper
    */
-  protected $loggerFactory;
+  protected $ingestApiWrapper;
 
   /**
-   * Api version.
+   * LoggerChannelInterface object.
    *
-   * @var string
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected $apiVersion;
-
-  /**
-   * Debug directory for Ingest API call.
-   *
-   * @var array|mixed|null
-   */
-  protected $debugDir;
+  protected $logger;
 
   /**
    * AcqPromotionAttachQueue constructor.
@@ -48,26 +38,19 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
    *   Plugin unique id.
    * @param mixed $plugin_definition
    *   Plugin definition.
+   * @param \Drupal\acq_commerce\Conductor\IngestAPIWrapper $ingestApiWrapper
+   *   IngestAPIWrapper Service object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerFactory
    *   Logger service.
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
-   *   Config Factory service.
-   * @param \Drupal\acq_commerce\Conductor\ClientFactory $clientFactory
-   *   Client Factory service.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              LoggerChannelFactory $loggerFactory,
-                              ConfigFactory $configFactory,
-                              ClientFactory $clientFactory) {
+                              IngestAPIWrapper $ingestApiWrapper,
+                              LoggerChannelFactory $loggerFactory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->loggerFactory = $loggerFactory;
-    $this->apiVersion = $configFactory->get('acq_commerce.conductor')->get('api_version');
-    $this->clientFactory = $clientFactory;
+    $this->ingestApiWrapper = $ingestApiWrapper;
     $this->logger = $loggerFactory->get('acq_sku');
-    $this->debug = $configFactory->get('acq_commerce.conductor')->get('debug');
-    $this->debugDir = $configFactory->get('acq_commerce.conductor')->get('debug_dir');
   }
 
   /**
@@ -90,9 +73,8 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('logger.factory'),
-      $container->get('config.factory'),
-      $container->get('acq_commerce.client_factory')
+      $container->get('acq_commerce.ingest_api'),
+      $container->get('logger.factory')
     );
   }
 

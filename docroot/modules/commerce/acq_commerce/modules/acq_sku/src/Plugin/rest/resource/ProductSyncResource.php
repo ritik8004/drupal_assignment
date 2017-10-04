@@ -205,7 +205,10 @@ class ProductSyncResource extends ResourceBase {
       $sku->special_price->value = $product['special_price'];
       $sku->final_price->value = $product['final_price'];
       $sku->attributes = $this->formatProductAttributes($product['attributes']);
-      $sku->media = serialize($product['extension']['media']);
+
+      // Update product media to set proper position.
+      $sku->media = $this->getProcessedMedia($product);
+
       $sku->attribute_set = $product['attribute_set_label'];
       $sku->product_id = $product['product_id'];
 
@@ -351,6 +354,9 @@ class ProductSyncResource extends ResourceBase {
     $formatted = [];
 
     foreach ($attributes as $name => $value) {
+      if (is_array($value)) {
+        continue;
+      }
 
       if (!strlen($value)) {
         continue;
@@ -460,6 +466,43 @@ class ProductSyncResource extends ResourceBase {
         }
       }
     }
+  }
+
+  protected function getProcessedMedia($product) {
+    $media = [];
+
+    if (isset($product['extension'], $product['extension']['media'])) {
+      $media = $product['extension']['media'];
+
+      if (isset($product['attributes'], $product['attributes']['image'])) {
+        $image = $product['attributes']['image'];
+
+        // @TODO: Remove this hard coded fix after getting answer why we have
+        // empty second array index and why all media come in first array index.
+        $media = reset($media);
+
+        foreach ($media as &$data) {
+          if (substr_compare($data['file'], $image, -strlen($image) ) === 0) {
+            $data['position'] = -1;
+            break;
+          }
+        }
+      }
+
+      // Sort media data by position.
+      usort($media, function ($a, $b) {
+        $position1 = (int) $a['position'];
+        $position2 = (int) $b['position'];
+
+        if ($position1 == $position2) {
+          return 0;
+        }
+
+        return ($position1 < $position2) ? -1 : 1;
+      });
+    }
+
+    return serialize($media);
   }
 
 }

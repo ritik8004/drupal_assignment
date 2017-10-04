@@ -110,11 +110,11 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
     }
 
     if (!empty($skus_not_found)) {
-      $this->loggerFactory->get('acq_sku')->warning('Skus @skus not found in Drupal.',
+      $this->logger->warning('Skus @skus not found in Drupal.',
         ['@skus' => implode(',', $skus_not_found)]);
     }
 
-    $this->loggerFactory->get('acq_sku')->info('Attached Promotion:@promo to SKUs: @skus',
+    $this->logger->info('Attached Promotion:@promo to SKUs: @skus',
       ['@promo' => $promotion_nid, '@skus' => implode(',', $attached_skus)]);
   }
 

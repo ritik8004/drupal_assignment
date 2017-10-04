@@ -364,13 +364,19 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
 
   $message = '';
 
+  // Prepare the ajax Response.
+  $response = new AjaxResponse();
+
   if (UpdateCartErrorEventSubscriber::getErrorStatus()) {
     $errors = UpdateCartErrorEventSubscriber::getErrors();
     $message = '<div id="out-of-stock-message">' . reset($errors) . '</div>';
-  }
 
-  // Prepare the ajax Response.
-  $response = new AjaxResponse();
+    if (acq_commerce_is_code_api_down_code(UpdateCartErrorEventSubscriber::getCode())) {
+      // Show the error or remove existing errors.
+      $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
+      return $response;
+    }
+  }
 
   // Show the error or remove existing errors.
   $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
@@ -497,6 +503,11 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'image' => '',
         'include_in_bundle' => '',
         'available_delivery_methods' => '',
+      ],
+    ],
+    'global_error' => [
+      'variables' => [
+        'message' => '',
       ],
     ],
   ];
