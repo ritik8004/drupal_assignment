@@ -25,6 +25,7 @@ function alshaya_click_collect_theme($existing, $type, $theme, $path) {
       'subtitle' => NULL,
       'title_price' => NULL,
       'help_text' => NULL,
+      'available_at_title' => NULL,
       'store_finder_form' => NULL,
       'select_option_text' => NULL,
     ],
@@ -37,6 +38,7 @@ function alshaya_click_collect_theme($existing, $type, $theme, $path) {
       'subtitle' => NULL,
       'help_text' => NULL,
       'stores' => NULL,
+      'available_at_title' => NULL,
       'store_finder_form' => NULL,
     ],
   ];
@@ -111,6 +113,7 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
       '#subtitle' => $state ? $config->get('pdp_click_collect_subtitle') : $config->get('pdp_click_collect_unavailable'),
       '#help_text' => $config->get('pdp_click_collect_help_text.value'),
       '#select_option_text' => $config->get('pdp_click_collect_select_option_text.value'),
+      '#available_at_title' => '',
       '#store_finder_form' => render($store_form),
       '#attached' => [
         'drupalSettings' => [

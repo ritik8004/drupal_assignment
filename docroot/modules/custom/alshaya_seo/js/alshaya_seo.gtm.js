@@ -47,11 +47,18 @@
       ];
 
       // If we receive an empty page type, set page type as not defined.
-      if (gtmPageType === undefined) {
-        if (document.location.pathname.startsWith('/user')) {
+      if (gtmPageType === 'not defined') {
+        if (document.location.pathname.startsWith('/' + drupalSettings.path.currentLanguage + '/user')) {
           var currPath = document.location.pathname;
-          var pagePath = currPath.replace('/user/', '');
-          gtmPageType = pagePath.split('/').join('-');
+          var pagePath = currPath.replace('/' + drupalSettings.path.currentLanguage + '/user/', '');
+          var gtmPageTypeArray = pagePath.split('/');
+          for (var i = 0; i < gtmPageTypeArray.length; i++) {
+            if (gtmPageTypeArray[i] == parseInt(gtmPageTypeArray[i])) {
+              gtmPageTypeArray.splice(i, 1);
+            }
+          }
+          gtmPageType = gtmPageTypeArray.join('-');
+          gtmPageType = 'user-' . gtmPageType;
         }
         else {
           gtmPageType = 'not defined';
@@ -298,7 +305,7 @@
 
       /** Quantity update in cart. **/
       // Trigger removeFromCart & addToCart events based on the quantity update on cart page.
-      $('select[gtm-type="gtm-quantity"]').focus(function () {
+      $('select[gtm-type="gtm-quantity"]').on('select2:open', function () {
         originalCartQty = $(this).val();
       }).once('js-event').on('change', function () {
         if (originalCartQty !== 0) {
@@ -421,7 +428,9 @@
             virtualPageTitle: 'C&C Step 1 – Click and Collect View'
           });
 
-          Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
+          if (($('input.cc-action', context).length > 0) && (context === document)) {
+            Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
+          }
         }
 
         $('.store-actions a.select-store', context).once('js-event').click(function () {
@@ -692,10 +701,6 @@
         position = $(highlight).data('position');
       }
       else {
-        if ($(highlight).parent().find('a').length === 0) {
-          return;
-        }
-
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
         position = parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
       }
@@ -734,6 +739,17 @@
             }
           }
         };
+
+        if (gtmPageType === 'Top Navigation') {
+          dataLayer.push({
+            event: 'promotionImpression',
+            ecommerce: {
+              promoView: {
+                promotions: promotions
+              }
+            }
+          });
+        }
       }
       else {
         var data = {
@@ -807,12 +823,14 @@
    * @param resultCount
    */
   Drupal.alshaya_seo_gtm_push_store_finder_search = function (keyword, location, resultCount) {
-    dataLayer.push({
-      event: 'findStore',
-      fsLocation: location,
-      fsKeyword: keyword,
-      fsNoOfResult: resultCount
-    });
+    if (keyword !== '') {
+      dataLayer.push({
+        event: 'findStore',
+        fsLocation: location,
+        fsKeyword: keyword,
+        fsNoOfResult: resultCount
+      });
+    }
   };
 
 })(jQuery, Drupal, dataLayer);

@@ -125,7 +125,14 @@ class AlshayaAddressBookManager {
     /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
     $account = User::load($entity->getOwnerId());
 
-    $customer = $this->apiWrapper->getCustomer($account->getEmail());
+    try {
+      $customer = $this->apiWrapper->getCustomer($account->getEmail());
+    }
+    catch (\Exception $e) {
+      drupal_set_message($e->getMessage(), 'error');
+      return FALSE;
+    }
+
     unset($customer['extension']);
 
     foreach ($customer['addresses'] as $index => $address) {

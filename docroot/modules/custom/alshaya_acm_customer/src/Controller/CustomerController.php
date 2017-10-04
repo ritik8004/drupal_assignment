@@ -6,7 +6,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Drupal\block\Entity\Block;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -25,12 +24,18 @@ class CustomerController extends ControllerBase {
    */
   public function listOrders(UserInterface $user) {
     if (!alshaya_acm_customer_is_customer($user)) {
-      throw new AccessDeniedHttpException();
+      throw new NotFoundHttpException();
     }
 
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     $build = [];
+
+    // Initialising order details array to array.
+    $orderDetails = [];
+    $nextPageButton = [];
+    $noOrdersFoundMessage = ['#markup' => ''];
+    $help_block = NULL;
 
     // Get items to show per page from config.
     $itemsPerPage = \Drupal::config('alshaya_acm_customer.orders_config')->get('items_per_page');
@@ -45,72 +50,78 @@ class CustomerController extends ControllerBase {
     $searchForm['form_id']['#printed'] = TRUE;
     $searchForm['form_build_id']['#printed'] = TRUE;
 
-    // Get the orders to display for current user and filter applied.
-    $orders = alshaya_acm_customer_get_user_orders($user->getEmail(), 'search', 'filter');
+    try {
+      // Get the orders to display for current user and filter applied.
+      $orders = alshaya_acm_customer_get_user_orders($user->getEmail(), 'search', 'filter');
 
-    // Initialising order details array to array.
-    $orderDetails = [];
-    $nextPageButton = [];
-    $noOrdersFoundMessage = ['#markup' => ''];
-    $help_block = NULL;
-
-    if (empty($orders)) {
-      // @TODO: Check the empty result message.
-      if ($search = \Drupal::request()->query->get('search')) {
-        $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('Your search yielded no results, please try different text in search.') . '</div>';
-      }
-      else {
-        // Below message is taken from https://zpl.io/Oqv1o mockup.
-        $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('You haven’t ordered anything recently.') . '</div>';
-      }
-    }
-    else {
-      // Get current page number.
-      $currentPageNumber = (int) \Drupal::request()->query->get('page');
-
-      // Get the offset to start displaying orders from.
-      $offset = $currentPageNumber * $itemsPerPage;
-
-      // Get the orders to display for current page.
-      $ordersPaged = array_slice($orders, $offset, $itemsPerPage, TRUE);
-
-      if (count($orders) > $offset + $itemsPerPage) {
-        // Get all the query parameters we currently have.
-        $query = \Drupal::request()->query->all();
-        $query['page'] = $currentPageNumber + 1;
-
-        // Prepare the next page url.
-        $nextPageUrl = Url::fromRoute('alshaya_acm_customer.list_orders_ajax', ['user' => $user->id()], ['query' => $query])->toString();
-
-        // Prepare the next page button tag.
-        $nextPageButton = [
-          '#type' => 'html_tag',
-          '#tag' => 'button',
-          '#value' => $this->t('show more'),
-          '#attributes' => [
-            'attr-next-page' => $nextPageUrl,
-          ],
-        ];
-      }
-
-      // Loop through each order and prepare the array for template.
-      foreach ($ordersPaged as $order) {
-        if ($order_summary = alshaya_acm_customer_get_processed_order_summary($order)) {
-          $orderDetails[] = [
-            '#theme' => 'user_order_list_item',
-            '#order' => $order_summary,
-            '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', [
-              'user' => $user->id(),
-              'order_id' => $order['increment_id'],
-            ])->toString(),
-          ];
+      if (empty($orders)) {
+        // @TODO: Check the empty result message.
+        if ($search = \Drupal::request()->query->get('search')) {
+          $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('Your search yielded no results, please try different text in search.') . '</div>';
+        }
+        else {
+          // Below message is taken from https://zpl.io/Oqv1o mockup.
+          $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('You haven’t ordered anything recently.') . '</div>';
         }
       }
+      else {
+        // Get current page number.
+        $currentPageNumber = (int) \Drupal::request()->query->get('page');
 
-      // Load my-account-help block for rendering on order list page.
-      $help_block_entity = Block::load('myaccountneedhelp');
-      if ($help_block_entity) {
-        $help_block = \Drupal::entityTypeManager()->getViewBuilder('block')->view($help_block_entity);
+        // Get the offset to start displaying orders from.
+        $offset = $currentPageNumber * $itemsPerPage;
+
+        // Get the orders to display for current page.
+        $ordersPaged = array_slice($orders, $offset, $itemsPerPage, TRUE);
+
+        if (count($orders) > $offset + $itemsPerPage) {
+          // Get all the query parameters we currently have.
+          $query = \Drupal::request()->query->all();
+          $query['page'] = $currentPageNumber + 1;
+
+          // Prepare the next page url.
+          $nextPageUrl = Url::fromRoute('alshaya_acm_customer.list_orders_ajax', ['user' => $user->id()], ['query' => $query])->toString();
+
+          // Prepare the next page button tag.
+          $nextPageButton = [
+            '#type' => 'html_tag',
+            '#tag' => 'button',
+            '#value' => $this->t('show more'),
+            '#attributes' => [
+              'attr-next-page' => $nextPageUrl,
+            ],
+          ];
+        }
+
+        // Loop through each order and prepare the array for template.
+        foreach ($ordersPaged as $order) {
+          if ($order_summary = alshaya_acm_customer_get_processed_order_summary($order)) {
+            $orderDetails[] = [
+              '#theme' => 'user_order_list_item',
+              '#order' => $order_summary,
+              '#order_detail_link' => Url::fromRoute('alshaya_acm_customer.orders_detail', [
+                'user' => $user->id(),
+                'order_id' => $order['increment_id'],
+              ])->toString(),
+            ];
+          }
+        }
+
+        // Load my-account-help block for rendering on order list page.
+        $help_block_entity = Block::load('myaccountneedhelp');
+        if ($help_block_entity) {
+          $help_block = \Drupal::entityTypeManager()->getViewBuilder('block')->view($help_block_entity);
+        }
+      }
+    }
+    catch (\Exception $e) {
+      $orders = [];
+
+      if (acq_commerce_is_exception_api_down_exception($e)) {
+        $noOrdersFoundMessage = [
+          '#theme' => 'global_error',
+          '#message' => $e->getMessage(),
+        ];
       }
     }
 
@@ -217,6 +228,7 @@ class CustomerController extends ControllerBase {
       '#uri' => theme_get_setting('logo.url'),
     ];
     $build['#theme'] = 'user_order_print';
+    $build['#attached']['library'][] = 'alshaya_acm_customer/order_print';
 
     return $build;
   }
@@ -248,6 +260,7 @@ class CustomerController extends ControllerBase {
     $build['#barcode'] = alshaya_acm_customer_get_barcode($order);
     $build['#account'] = $account;
     $build['#theme'] = 'user_order_print';
+    $build['#attached']['library'][] = 'alshaya_acm_customer/order_print';
 
     return $build;
   }

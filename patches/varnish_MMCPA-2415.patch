@@ -1,0 +1,13 @@
+diff --git a/conf/varnish-alshaya.txt b/conf/varnish-alshaya.txt
+index b5fdb8d53..3b2979d46 100644
+--- a/conf/varnish-alshaya.txt
++++ b/conf/varnish-alshaya.txt
+@@ -113,7 +113,7 @@ sub vcl_recv {
+   }
+ 
+   # Always cache the following file types for all users if not coming from the private file system.
+-  if (req.url ~ "(?i)/(modules|themes|files|libraries)/.*\.(png|gif|jpeg|jpg|ico|swf|css|js|flv|f4v|mov|mp3|mp4|pdf|doc|ttf|eot|ppt|ogv|woff)(\?[a-z0-9]+)?$" && req.url !~ "/system/files") {
++  if (req.url ~ "(?i)/(modules|themes|files|libraries)/.*\.(png|gif|jpeg|jpg|ico|swf|css|js|flv|f4v|mov|mp3|mp4|pdf|doc|ttf|eot|ppt|ogv|woff)(\?.*)?$" && req.url !~ "/system/files") {
+     unset req.http.Cookie;
+     # Set header so we know to remove Set-Cookie later on.
+     set req.http.X-static-asset = "True";

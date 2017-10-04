@@ -618,6 +618,10 @@
         margin-left: 1.2rem;
       }
     }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 7.8rem;
+    }
   }
 
   @include breakpoint($desktop) {
