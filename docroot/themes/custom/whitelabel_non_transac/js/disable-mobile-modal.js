@@ -6,7 +6,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
     $('a[data-dialog-type="modal"]').each(function () {
       var href = $(this).attr('href');
       $(this).click(function () {
@@ -17,4 +17,3 @@
   }
 
 })(jQuery, Drupal);
-
