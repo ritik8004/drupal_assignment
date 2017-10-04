@@ -1207,7 +1207,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    */
   public function theBreadcrumbShouldBeDisplayed($breadcrumb) {
     $page = $this->getSession()->getPage();
-    $breadcrumb_elements = $page->findAll('css', '#block-alshaya-white-label-breadcrumbs > nav > ol > li');
+    $breadcrumb_elements = $page->findAll('css', '#block-breadcrumbs > nav > ol > li');
     foreach ($breadcrumb_elements as $element) {
       $actual_breadcrumb[] = $element->find('css', 'a')->getText();
     }
