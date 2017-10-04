@@ -1157,6 +1157,9 @@ function alshaya_master_install() {
     '<p>Your PRIVILEGES CLUB card number is: <strong class="dark--text">@order.loyaltyCard</strong></p>' => [
       'ar' => '<p> رقم بطاقة نادي الامتيازات: <strong class="dark--text">@order.loyaltyCard</strong></p>',
     ],
+    'Sorry, something went wrong and we are unable to process your request right now. Please try again later.' => [
+      'ar' => 'عفواً، حدث خطأ ما، ولم نتمكن من متابعة تنفيذ طلبك الآن. يرجى المحاولة مجدداً في وقت لاحق.',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 

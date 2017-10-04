@@ -227,26 +227,32 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       return;
     }
 
-    $cart = $this->getCart();
+    try {
+      $cart = $this->getCart();
 
-    $address = (array) $cart->getShipping();
+      $address = (array) $cart->getShipping();
 
-    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-    $entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id']);
-    $address = $address_book_manager->getAddressFromEntity($entity);
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+      $entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id']);
+      $address = $address_book_manager->getAddressFromEntity($entity);
 
-    $update = [];
-    $update['customer_address_id'] = $address['customer_address_id'];
-    $update['country_id'] = $address['country_id'];
-    $update['customer_id'] = $cart->customerId();
+      $update = [];
+      $update['customer_address_id'] = $address['customer_address_id'];
+      $update['country_id'] = $address['country_id'];
+      $update['customer_id'] = $cart->customerId();
 
-    $cart->setShipping($update);
+      $cart->setShipping($update);
 
-    /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-    $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-    $term = $checkout_options_manager->loadShippingMethod($shipping_method);
-    $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+      $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+      $term = $checkout_options_manager->loadShippingMethod($shipping_method);
+      $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
+    }
+    catch (\Exception $e) {
+      drupal_set_message($e->getMessage(), 'error');
+      $form_state->setErrorByName('custom', $e->getMessage());
+    }
   }
 
   /**
