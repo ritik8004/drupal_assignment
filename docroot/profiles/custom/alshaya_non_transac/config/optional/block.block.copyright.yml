@@ -10,7 +10,7 @@ dependencies:
 id: copyright
 theme: whitelabel_non_transac
 region: footer_secondary
-weight: -10
+weight: -7
 provider: null
 plugin: 'block_content:340b823b-e16c-457a-bc03-4a096f8ae171'
 settings:
