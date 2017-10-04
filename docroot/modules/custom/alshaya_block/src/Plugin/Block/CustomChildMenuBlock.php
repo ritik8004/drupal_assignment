@@ -286,9 +286,10 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     ];
 
     $tree = $this->menuTree->transform($tree, $manipulators);
-
-    $main_menu_item = $this->alshayaBlockHelper->checkCurrentPathInMainMenu();
-
+    // Check if the current path belongs to the main menu or not.
+    $main_menu_item = $this->alshayaBlockHelper->checkCurrentPathInMenu();
+    // Build the default child menu items if current menu items doesn't have
+    // any child and current path doesn't belongs to the menu item.
     if (empty($tree) && $default == FALSE && empty($main_menu_item)) {
       return $this->getBuildItems(TRUE);
     }

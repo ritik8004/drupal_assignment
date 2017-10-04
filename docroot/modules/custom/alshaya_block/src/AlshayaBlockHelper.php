@@ -8,7 +8,7 @@ use Drupal\Core\Path\AliasStorage;
 use Drupal\Core\Path\CurrentPathStack;
 
 /**
- * Helper class to check if the current path belongs to main menu.
+ * Helper class to check if the current path belongs to given menu.
  */
 class AlshayaBlockHelper {
 
@@ -60,10 +60,10 @@ class AlshayaBlockHelper {
   }
 
   /**
-   * Check if the current path belongs to main menu.
+   * Check if the current path belongs to the given menu.
    *
-   * If current path belongs to the main menu return the array with active link
-   * and active parent element else return empty array.
+   * If current path belongs to the given menu, return the array with active
+   * link and active parent element else return empty array.
    *
    * @param string $menu_name
    *   The menu name. Default is main menu.
@@ -71,12 +71,11 @@ class AlshayaBlockHelper {
    * @return array
    *   Return the array of active menu link or empty array.
    */
-  public function checkCurrentPathInMainMenu($menu_name = 'main') {
+  public function checkCurrentPathInMenu($menu_name = 'main') {
     $output = [];
     // Get current language code.
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    // @todo: Make the menu name "main" dynamic.
-    // Get the main menu tree to get the current active path.
+    // Get the given menu tree to get the current active path.
     $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters($menu_name);
     $parameters->setTopLevelOnly();
     $tree = $this->menuTree->load($menu_name, $parameters);
