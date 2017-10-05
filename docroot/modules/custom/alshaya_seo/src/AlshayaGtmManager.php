@@ -938,7 +938,7 @@ class AlshayaGtmManager {
                 $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
               }
             }
-            $shipping_obj = $cart->getShipping();
+            $shipping_obj = (array) $cart->getShipping();
             if (isset($shipping_obj['extension']['address_governate_segment'])) {
               $page_dl_attributes['deliveryArea'] = $shipping_obj['extension']['address_governate_segment'];
             }

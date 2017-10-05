@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutFlow;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
@@ -274,6 +275,15 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           || $e->getMessage() == $this->t('Some of the products are out of stock.')->render()
           || $e->getMessage() == $this->t('Not all of your products are available in the requested quantity.')->render()
           || strpos($e->getMessage(), $this->t("We don't have as many")->render()) !== FALSE) {
+
+          $cart = $this->getCart();
+
+          // Clear stock of items in cart.
+          foreach ($cart->items() as $item) {
+            if ($sku_entity = SKU::loadFromSku($item['sku'])) {
+              acq_sku_clear_sku_stock_cache($sku_entity);
+            }
+          }
 
           $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
           $response->send();
