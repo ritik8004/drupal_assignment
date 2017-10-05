@@ -47,7 +47,7 @@ function alshaya_hm_install() {
     ])
     ->save();
 
-  // Enable "Best seller" and "New in" sort.
+  // Enable "Best seller" and "New in" sort options.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
   $sort_options = $config->get('sort_options');
   $sort_options['nid'] = 'nid';
