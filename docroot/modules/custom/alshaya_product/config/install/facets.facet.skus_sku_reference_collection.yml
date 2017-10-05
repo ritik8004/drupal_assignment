@@ -22,7 +22,7 @@ facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
 widget:
   type: checkbox
   config:
-    show_numbers: false
+    show_numbers: true
     soft_limit: 0
 query_operator: or
 use_hierarchy: false
