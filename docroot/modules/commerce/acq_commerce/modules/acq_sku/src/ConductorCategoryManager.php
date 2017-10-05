@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_commerce\Conductor\ClientFactory;
@@ -50,6 +51,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   protected $apiWrapper;
 
   /**
+   * Drupal Entity Query Factory.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryFactory
+   */
+  private $queryFactory;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -58,14 +66,17 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   ClientFactory object.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   API Wrapper object.
+   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
+   *   Query factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, LoggerChannelFactory $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->clientFactory = $client_factory;
     $this->apiWrapper = $api_wrapper;
+    $this->queryFactory = $query_factory;
     $this->logger = $logger_factory->get('acq_sku');
   }
 
@@ -127,7 +138,30 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    * {@inheritdoc}
    */
   public function synchronizeCategory($vocabulary, array $categories) {
-    return \Drupal::service('acq_commerce.api')->getCategories();
+    $this->resetResults();
+    $this->loadVocabulary($vocabulary);
+
+    // Load the current parent of the updated node (if any).
+    $parent = NULL;
+    $query = $this->queryFactory->get('taxonomy_term');
+    $group = $query->andConditionGroup()
+      ->condition('field_commerce_id', $categories['category_id'])
+      ->condition('vid', $this->vocabulary->id());
+    $query->condition($group);
+
+    $tids = $query->execute();
+
+    if (count($tids)) {
+      $tid = array_shift($tids);
+      $parents = $this->termStorage->loadParents($tid);
+      $parent = array_shift($parents);
+      $parent = ($parent && $parent->id()) ? $parent : NULL;
+    }
+
+    // Recurse the category tree and create / update nodes.
+    $this->syncCategory([$categories], $parent);
+
+    return ($this->results);
   }
 
   /**
