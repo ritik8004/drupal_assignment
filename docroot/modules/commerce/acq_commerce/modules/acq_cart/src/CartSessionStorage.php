@@ -203,7 +203,11 @@ class CartSessionStorage implements CartStorageInterface {
         $cartObject = (object) $this->apiWrapper->updateCart($cart_id, $update);
       }
       catch (\Exception $e) {
-        $this->restoreCart($cart_id);
+        // Restore the cart only if exception is not related to API being down.
+        if (!acq_commerce_is_api_down_error($e)) {
+          $this->restoreCart($cart_id);
+        }
+
         throw $e;
       }
 

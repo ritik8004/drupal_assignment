@@ -6,10 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Language\LanguageManager;
-use Drupal\Core\Menu\MenuLinkTree;
-use Drupal\Core\Path\AliasStorage;
-use Drupal\Core\Path\CurrentPathStack;
+use Drupal\alshaya_block\AlshayaBlockHelper;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -32,32 +29,11 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
   protected $configFactory;
 
   /**
-   * The Menu tree.
+   * The block helper class.
    *
-   * @var \Drupal\Core\Menu\MenuLinkTree
+   * @var \Drupal\alshaya_block\AlshayaBlockHelper
    */
-  protected $menuTree;
-
-  /**
-   * The current path.
-   *
-   * @var \Drupal\Core\Path\CurrentPathStack
-   */
-  protected $currentPath;
-
-  /**
-   * The language manger.
-   *
-   * @var \Drupal\Core\Language\LanguageManager
-   */
-  protected $languageManager;
-
-  /**
-   * The alias storage.
-   *
-   * @var \Drupal\Core\Path\AliasStorage
-   */
-  protected $aliasStorage;
+  protected $alshayaBlockHelper;
 
   /**
    * Creates a CustomLogoBlock instansce.
@@ -70,22 +46,13 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
    *   The plugin implementation definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\Core\Menu\MenuLinkTree $menu_tree
-   *   The menu link tree service.
-   * @param \Drupal\Core\Path\CurrentPathStack $current_path
-   *   The current path stack.
-   * @param \Drupal\Core\Language\LanguageManager $language_manager
-   *   The language manager.
-   * @param \Drupal\Core\Path\AliasStorage $alias_storage
+   * @param \Drupal\alshaya_block\AlshayaBlockHelper $alshaya_block_helper
    *   The alias storage service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTree $menu_tree, CurrentPathStack $current_path, LanguageManager $language_manager, AliasStorage $alias_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, AlshayaBlockHelper $alshaya_block_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
-    $this->menuTree = $menu_tree;
-    $this->currentPath = $current_path;
-    $this->languageManager = $language_manager;
-    $this->aliasStorage = $alias_storage;
+    $this->alshayaBlockHelper = $alshaya_block_helper;
   }
 
   /**
@@ -97,10 +64,7 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('menu.link_tree'),
-      $container->get('path.current'),
-      $container->get('language_manager'),
-      $container->get('path.alias_storage')
+      $container->get('alshaya_block.helper')
     );
   }
 
@@ -215,36 +179,17 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * Get the current menu attributes based on current path.
    */
   protected function getCurrentMenuAttributes() {
-    // Get current language code.
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    // @todo: Make the menu name "main" dynamic.
-    // Get the main menu tree to get the current active path.
-    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters('main');
-    $parameters->setTopLevelOnly();
-    $tree = $this->menuTree->load($this->configuration['menu_option'], $parameters);
-
-    // Retrieve an array which contains the path pieces.
-    $current_path = $this->currentPath->getPath();
-    // Get current path alias.
-    $current_path_alias = $this->aliasStorage->load(['source' => $current_path, 'langcode' => $langcode]);
-
-    // Get the active link if any!.
-    foreach ($tree as $key => $element) {
-      if ($element->inActiveTrail) {
-        // @var $link \Drupal\Core\Menu\MenuLinkInterface
-        $link = $element->link;
-        $active_link = $link->getUrlObject()->toString();
-        if (strpos($active_link, $current_path_alias['alias']) !== 0) {
-          $attributes = menu_link_attributes_get_attributes($element->link);
-          return [
-            'class' => $attributes['class'],
-            // @todo: Change this link to the parent link only,
-            // We don't need the sublink for the link of the logo.
-            'link' => $active_link,
-            'title' => $link->getTitle(),
-          ];
-        }
-      }
+    // Get the current path attributes from the given menu.
+    $helper = $this->alshayaBlockHelper->checkCurrentPathInMenu($this->configuration['menu_option']);
+    if (!empty($helper)) {
+      $element = $helper['element'];
+      $link = $element->link;
+      $attributes = menu_link_attributes_get_attributes($link);
+      return [
+        'class' => $attributes['class'],
+        'link' => $helper['active_link'],
+        'title' => $link->getTitle(),
+      ];
     }
     return NULL;
   }
@@ -253,16 +198,14 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    // todo: Make the menu name `.main` dynamic.
-    return Cache::mergeTags(parent::getCacheTags(), ['config:system.menu.main']);
+    return Cache::mergeTags(parent::getCacheTags(), ['config:system.menu.' . $this->configuration['menu_option']]);
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    // todo: Make the menu name `:main` dynamic.
-    return Cache::mergeContexts(parent::getCacheContexts(), ['route.menu_active_trails:main']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route.menu_active_trails:' . $this->configuration['menu_option']]);
   }
 
 }

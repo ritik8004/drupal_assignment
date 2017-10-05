@@ -35,42 +35,40 @@ class IngestAPIWrapper {
   /**
    * Performs full conductor sync.
    */
-  public function productFullSync($skus = '') {
-    foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
-      if (empty($store_id)) {
-        continue;
+  public function productFullSync($store_id, $langcode, $skus = '', $page_size = 0) {
+    if ($this->debug && !empty($this->debugDir)) {
+      // Export product data into file.
+      $filename = $this->debugDir . '/products_' . $langcode . '.data';
+      $fp = fopen($filename, 'w');
+      fclose($fp);
+    }
+
+    $product_page_size = (int) $this->product_page_size;
+
+    if (!empty($page_size) && is_int($page_size)) {
+      $product_page_size = (int) $page_size;
+    }
+
+    $endpoint = $this->apiVersion . '/ingest/product/sync';
+
+    $doReq = function ($client, $opt) use ($endpoint, $store_id, $skus, $product_page_size) {
+      if ($product_page_size > 0) {
+        $opt['query']['page_size'] = $product_page_size;
       }
 
-      if ($this->debug && !empty($this->debugDir)) {
-        // Export product data into file.
-        $filename = $this->debugDir . '/products_' . $langcode . '.data';
-        $fp = fopen($filename, 'w');
-        fclose($fp);
+      if (!empty($skus)) {
+        $opt['query']['skus'] = $skus;
       }
 
-      $product_page_size = (int) $this->product_page_size;
+      $opt['query']['store_id'] = $store_id;
 
-      $endpoint = $this->apiVersion . '/ingest/product/sync';
+      return $client->post($endpoint, $opt);
+    };
 
-      $doReq = function ($client, $opt) use ($endpoint, $store_id, $skus, $product_page_size) {
-        if ($product_page_size > 0) {
-          $opt['query']['page_size'] = $product_page_size;
-        }
-
-        if (!empty($skus)) {
-          $opt['query']['skus'] = $skus;
-        }
-
-        $opt['query']['store_id'] = $store_id;
-
-        return $client->post($endpoint, $opt);
-      };
-
-      try {
-        $this->tryIngestRequest($doReq, 'productFullSync', 'products');
-      }
-      catch (ConductorException $e) {
-      }
+    try {
+      $this->tryIngestRequest($doReq, 'productFullSync', 'products');
+    }
+    catch (ConductorException $e) {
     }
   }
 

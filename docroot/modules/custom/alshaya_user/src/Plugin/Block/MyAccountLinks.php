@@ -4,6 +4,7 @@ namespace Drupal\alshaya_user\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -35,7 +36,14 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
   protected $entityRepository;
 
   /**
-   * MyAccountNavBlock constructor.
+   * ImmutableConfig object containing custom user config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
+
+  /**
+   * MyAccountLinks constructor.
    *
    * @param array $configuration
    *   Configuration data.
@@ -47,11 +55,14 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
    *   The current account object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   The entity repository service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_account, EntityRepositoryInterface $entity_repository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_account, EntityRepositoryInterface $entity_repository, ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_account;
     $this->entityRepository = $entity_repository;
+    $this->config = $config_factory->get('alshaya_user.settings');
   }
 
   /**
@@ -63,8 +74,88 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       $plugin_id,
       $plugin_definition,
       $container->get('current_user'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('config.factory')
     );
+  }
+
+  /**
+   * Function to return my account links.
+   *
+   * @return array
+   *   My Account links.
+   */
+  public static function getMyAccountLinks() {
+    $links = [];
+
+    // My account link.
+    $links['my_account'] = [
+      'text' => t('my account'),
+      'route' => 'entity.user.canonical',
+    ];
+
+    // Orders link.
+    $links['orders'] = [
+      'text' => t('orders'),
+      'route' => 'acq_customer.orders',
+    ];
+
+    // Contact details link.
+    $links['contact_details'] = [
+      'text' => t('contact details'),
+      'route' => 'entity.user.edit_form',
+    ];
+
+    // Address book link.
+    $links['address_book'] = [
+      'text' => t('address book'),
+      'route' => 'entity.profile.type.address_book.user_profile_form',
+      'options' => [
+        'profile_type' => 'address_book',
+      ],
+    ];
+
+    // Communication preferences link.
+    $links['communication_preference'] = [
+      'text' => t('communication preferences'),
+      'route' => 'alshaya_user.user_communication_preference',
+    ];
+
+    // Change password link.
+    $links['change_password'] = [
+      'text' => t('change password'),
+      'route' => 'change_pwd_page.change_password_form',
+    ];
+
+    // Sign out link.
+    $links['sign_out'] = [
+      'text' => t('Sign out'),
+      'route' => 'user.logout',
+      'options' => [],
+    ];
+
+    return $links;
+  }
+
+  /**
+   * Function to return only those my account links which are enabled.
+   *
+   * @return array
+   *   My Account links.
+   */
+  public function getMyAccountEnabledLinks() {
+    $links = self::getMyAccountLinks();
+
+    if ($config = $this->config->get('my_account_enabled_links')) {
+      $config = unserialize($config);
+      foreach ($links as $key => $link) {
+        if (empty($config[$key])) {
+          unset($links[$key]);
+        }
+      }
+    }
+
+    return $links;
   }
 
   /**
@@ -98,71 +189,23 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       ],
     ];
 
-    // My account link.
-    $links['my_account'] = [
-      'text' => $this->t('my account'),
-      'route' => 'entity.user.canonical',
-      'options' => ['user' => $account->id()],
-    ];
+    $links = $this->getMyAccountEnabledLinks();
 
-    if ($uid != $account->id()) {
+    if (!$is_customer) {
+      unset($links['orders']);
+      unset($links['address_book']);
+      unset($links['communication_preference']);
+    }
+
+    if ($uid != $account->id() && isset($links['my_account'])) {
       $links['my_account']['text'] = $this->t('Account');
     }
-
-    if ($is_customer) {
-      // Orders link.
-      $links['orders'] = [
-        'text' => $this->t('orders'),
-        'route' => 'acq_customer.orders',
-        'options' => ['user' => $account->id()],
-      ];
-    }
-
-    // Contact details link.
-    $links['contact_details'] = [
-      'text' => $this->t('contact details'),
-      'route' => 'entity.user.edit_form',
-      'options' => ['user' => $account->id()],
-    ];
-
-    if ($is_customer) {
-      // Address book link.
-      $links['address_book'] = [
-        'text' => $this->t('address book'),
-        'route' => 'entity.profile.type.address_book.user_profile_form',
-        'options' => [
-          'user' => $account->id(),
-          'profile_type' => 'address_book',
-        ],
-      ];
-    }
-
-    if ($is_customer) {
-      // Communication preferences link.
-      $links['communication_preference'] = [
-        'text' => $this->t('communication preferences'),
-        'route' => 'alshaya_user.user_communication_preference',
-        'options' => ['user' => $account->id()],
-      ];
-    }
-
-    // Change password link.
-    $links['change_password'] = [
-      'text' => $this->t('change password'),
-      'route' => 'change_pwd_page.change_password_form',
-      'options' => ['user' => $account->id()],
-    ];
-
-    // Sign out link.
-    $links['sign_out'] = [
-      'text' => $this->t('Sign out'),
-      'route' => 'user.logout',
-      'options' => [],
-    ];
 
     $items = [];
 
     foreach ($links as $key => $link) {
+      $link['options']['user'] = $account->id();
+
       $options = [];
 
       if ($link['route'] == $currentRoute) {
@@ -188,9 +231,9 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
         $link_item_class_name = strtolower(str_replace(' ', '-', $link['text']));
         $options['attributes']['class'][] = ' ' . $link_item_class_name;
       }
+
       $items[$key] = [
-        '#markup' => Link::createFromRoute($link['text'], $link['route'], $link['options'], $options)
-          ->toString(),
+        '#markup' => Link::createFromRoute($link['text'], $link['route'], $link['options'], $options)->toString(),
       ];
 
       // Add class for sign-out.
@@ -201,9 +244,8 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
           ],
         ];
       }
-
       // Add class for my account.
-      if ($key == 'my_account') {
+      elseif ($key == 'my_account') {
         $items[$key]['#wrapper_attributes'] = [
           'class' => [
             'my-account',
