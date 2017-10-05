@@ -46,7 +46,16 @@ function alshaya_paragraphs_update_8301() {
     'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
     'language.content_settings.paragraph.offers_bordered',
     // Block reference paragraph type.
+    'paragraphs.paragraphs_type.block_reference',
+    'field.storage.paragraph.field_block_reference',
+    'field.field.paragraph.block_reference.field_block_reference',
+    'core.entity_form_display.paragraph.block_reference.default',
+    'core.entity_view_display.paragraph.block_reference.default',
     'language.content_settings.paragraph.block_reference',
+    'core.base_field_override.paragraph.block_reference.created',
+    'core.base_field_override.paragraph.block_reference.moderation_state',
+    'core.base_field_override.paragraph.block_reference.status',
+    'core.base_field_override.paragraph.block_reference.uid',
     // Views reference paragraph type.
     'paragraphs.paragraphs_type.views_reference',
     'field.storage.paragraph.field_html_heading',
