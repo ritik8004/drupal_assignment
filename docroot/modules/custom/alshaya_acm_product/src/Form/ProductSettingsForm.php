@@ -36,6 +36,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('not_buyable_help_text', $form_state->getValue('not_buyable_help_text'));
     $config->set('size_guide_link', $form_state->getValue('size_guide_link'));
     $config->set('size_guide_modal_content', $form_state->getValue('size_guide_modal_content'));
+    $config->set('all_products_buyable', $form_state->getValue('all_products_buyable'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -100,6 +101,12 @@ class ProductSettingsForm extends ConfigFormBase {
       '#format' => 'rich_text',
       '#title' => $this->t('Size guide content'),
       '#default_value' => $config->get('size_guide_modal_content.value'),
+    ];
+
+    $form['all_products_buyable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Set all products to be buyable'),
+      '#default_value' => $config->get('all_products_buyable'),
     ];
 
     return $form;
