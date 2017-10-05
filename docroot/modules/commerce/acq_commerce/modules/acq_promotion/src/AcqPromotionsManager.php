@@ -168,6 +168,8 @@ class AcqPromotionsManager {
       $node->save();
 
       // Detach promotion from all skus.
+      $attached_promotion_skus = $this->getSkusForPromotion($node);
+
       if (!empty($attached_promotion_skus)) {
         $chunks = array_chunk($attached_promotion_skus, $acq_promotion_attach_batch_size);
         foreach ($chunks as $chunk) {
