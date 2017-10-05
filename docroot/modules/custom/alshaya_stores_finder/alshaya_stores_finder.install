@@ -56,3 +56,14 @@ function alshaya_stores_finder_update_8002() {
   $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
   $config->save();
 }
+
+/**
+ * Implements hook_update().
+ *
+ * Update config file for store configuration.
+ */
+function alshaya_stores_finder_update_8303() {
+  $configs = ['alshaya_stores_finder.settings'];
+  // Install updated schema file.
+  alshaya_config_install_configs($configs, 'alshaya_stores_finder', 'schema');
+}
