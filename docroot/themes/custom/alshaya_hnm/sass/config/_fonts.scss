@@ -1,0 +1,222 @@
+// Define Fonts
+@font-face {
+  font-family: 'Mothercare';
+  src: url('../fonts/alshaya-bold.woff2') format('woff2'), url('../fonts/alshaya-bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MothercareThin';
+  src: url('../fonts/alshaya-thin.woff2') format('woff2'), url('../fonts/alshaya-thin.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cairo-300';
+  src: url('../fonts/alshaya-arabic-thin.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-thin.woff') format('woff'), url('../fonts/alshaya-arabic-thin.ttf')  format('truetype'), url('../fonts/alshaya-arabic-thin.svg#NotoKufiArabic-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cairo-bold';
+  src: url('../fonts/alshaya-arabic-bold.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-bold.woff') format('woff'), url('../fonts/alshaya-arabic-bold.ttf')  format('truetype'), url('../fonts/alshaya-arabic-bold.svg#NotoKufiArabic-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'alshaya-icons';
+  src: url('../fonts/alshaya-icons.eot?2pxs5l');
+  src: url('../fonts/alshaya-icons.eot?2pxs5l#iefix') format('embedded-opentype'), url('../fonts/alshaya-icons.ttf?2pxs5l') format('truetype'), url('../fonts/alshaya-icons.woff?2pxs5l') format('woff'), url('../fonts/alshaya-icons.svg?2pxs5l#alshaya-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ampersand_bold';
+  src: url('../fonts/HMAmpersand-Bold.eot');
+  src:
+    url('../fonts/HMAmpersand-Bold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/HMAmpersand-Bold.woff2') format('woff2'),
+    url('../fonts/HMAmpersand-Bold.woff') format('woff'),
+    url('../fonts/HMAmpersand-Bold.ttf') format('truetype'),
+    url('../fonts/HMAmpersand-Bold.svg#HMAmpersand-Bold') format('svg');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Amperserif_regular';
+  src: url('../fonts/HMAmperserif-Regular.eot');
+  src:
+    url('../fonts/HMAmperserif-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/HMAmperserif-Regular.woff2') format('woff2'),
+    url('../fonts/HMAmperserif-Regular.woff') format('woff'),
+    url('../fonts/HMAmperserif-Regular.ttf') format('truetype'),
+    url('../fonts/HMAmperserif-Regular.svg#HMAmperserif-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ampersand_regular';
+  src: url('../fonts/HMAmpersand-Regular.eot');
+  src:
+    url('../fonts/HMAmpersand-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/HMAmpersand-Regular.woff2') format('woff2'),
+    url('../fonts/HMAmpersand-Regular.woff') format('woff'),
+    url('../fonts/HMAmpersand-Regular.ttf') format('truetype'),
+    url('../fonts/HMAmpersand-Regular.svg#HMAmpersand-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ampersand_demibold';
+  src: url('../fonts/HMAmpersand-DemiBold.eot');
+  src:
+    url('../fonts/HMAmpersand-DemiBold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/HMAmpersand-DemiBold.woff2') format('woff2'),
+    url('../fonts/HMAmpersand-DemiBold.woff') format('woff'),
+    url('../fonts/HMAmpersand-DemiBold.ttf') format('truetype'),
+    url('../fonts/HMAmpersand-DemiBold.svg#HMAmpersand-DemiBold') format('svg');
+  font-weight: 600;
+  font-style: normal;
+}
+
+// hnm specific font family
+$hnm-bold: 'Ampersand_bold';
+$hnm-regular: 'Ampersand_regular';
+$hnm-demibold: 'Ampersand_demibold';
+$hnmpromo-regular: 'Amperserif_regular';
+
+// Font Family
+$alshaya-bold: 'Mothercare';
+$alshaya-bold-nodir: 'Mothercare';
+
+$alshaya-thin: 'MothercareThin';
+$alshaya-thin-nodir: 'MothercareThin';
+
+$alshaya-arabic-bold: 'Cairo-bold', 'Mothercare';
+$alshaya-arabic-bold-nodir: 'Cairo-bold', 'Mothercare';
+
+$alshaya-arabic-thin: 'Cairo-300', 'MothercareThin';
+$alshaya-arabic-thin-nodir: 'Cairo-300', 'MothercareThin';
+
+$alshaya-icons: 'alshaya-icons';
+$arial: 'arialmt', arial, sans-serif;
+$arial-nodir: 'arialmt', arial, sans-serif;
+$body_font: $arial;
+
+// Icon Fonts
+$icons: (
+  arrowdown: "\e900",
+  arrowup: "\e901",
+  blog: "\e902",
+  blogselect: "\e903",
+  checkboxempty: "\e904",
+  checkboxfull: "\e905",
+  checkshape: "\e906",
+  chevrondown: "\e907",
+  chevronleft: "\e908",
+  chevronright: "\e909",
+  chevronup: "\e90a",
+  close: "\e90b",
+  closeshape: "\e90c",
+  delivery: "\e90d",
+  deliveryservice: "\e90e",
+  direction: "\e90f",
+  email: "\e910",
+  emailselect: "\e911",
+  facebook: "\e912",
+  facebookselect: "\e913",
+  googleplus: "\e914",
+  googleplusselect: "\e915",
+  hide: "\e916",
+  infomation: "\e917",
+  instagram: "\e918",
+  instagramselect: "\e919",
+  language: "\e91a",
+  list: "\e91b",
+  login: "\e91c",
+  logout: "\e91d",
+  map: "\e91e",
+  mappin: "\e91f",
+  menu: "\e920",
+  mylocation: "\e921",
+  newsletter: "\e922",
+  nextdaydelivery: "\e923",
+  pinterest: "\e924",
+  pinterestselect: "\e925",
+  play: "\e926",
+  prize: "\e927",
+  radioempty: "\e928",
+  radiofull: "\e929",
+  rating: "\e92a",
+  ratingfull: "\e92b",
+  rewards: "\e92c",
+  search: "\e92d",
+  shoppingbag: "\e92e",
+  show: "\e92f",
+  twitter: "\e930",
+  twitterselect: "\e931",
+  user: "\e932",
+  warning: "\e939",
+  whiteglovedelivery: "\e933",
+  wishlist: "\e934",
+  wishlistfull: "\e935",
+  youtube: "\e936",
+  youtubeselect: "\e937",
+  zoom: "\e938",
+  bell: "\e006",
+  marquee-plus: "\e083"
+);
+
+@mixin iconbase() {
+  font-family: $alshaya-icons !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin icon($icon: false, $position: before, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $icon {
+      content: "#{map-get($icons, $icon)}";
+    }
+
+    @if $styles {
+      @include iconbase;
+    }
+
+    @content;
+  }
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  &::before {
+    @include iconbase;
+  }
+}
+
+@each $icon, $unicode in $icons {
+  %icon-ic_#{$icon},
+  .icon-ic_#{$icon} {
+    &::before {
+      content: $unicode;
+    }
+  }
+}

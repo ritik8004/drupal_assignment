@@ -1,0 +1,14 @@
+{% set classes = [
+'node',
+'node--type-' ~ node.bundle|clean_class,
+view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+] %}
+
+<article {{ attributes.addClass(classes) }} {{ gtm_attributes }}>
+
+  <div class="content">
+    {{ content }}
+  </div>
+  <!-- /content -->
+</article>
+<!-- /article #node -->

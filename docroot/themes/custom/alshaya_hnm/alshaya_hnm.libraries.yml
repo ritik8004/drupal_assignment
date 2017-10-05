@@ -1,0 +1,122 @@
+global_styles:
+  css:
+    theme:
+      css/colors.css: {}
+  js:
+    vendor/js/calc.min.js: {}
+    js/back_to_top.js: {}
+    js/custom.js: {}
+    js/accordion.js: {}
+    js/menu.js: {}
+    js/form.js: {}
+    js/address_book.js: {}
+    js/one_time_language_slider.js: {}
+    vendor/js/details-polyfill.js: {}
+  dependencies:
+    - core/modernizr
+    - core/jquery
+    - core/jquery.once
+    - core/jquery.ui.accordion
+    - core/jquery.ui.tabs
+    - core/jquery.cookie
+    - mobile_number/element
+    - alshaya_hnm/utils
+
+ltr_styles:
+  css:
+    theme:
+      css/ltr.css: {}
+      css/ltr-print.css: {media: print}
+
+rtl_styles:
+  css:
+    theme:
+      css/rtl.css: {}
+      css/rtl-print.css: {media: print}
+
+unmask_password:
+  js:
+    js/unmask_password.js: {}
+
+mobile_number:
+  js:
+    js/mobile_number.js: {}
+  dependencies:
+    - alshaya_hnm/cleave
+
+slider_banner:
+  js:
+    js/slider.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_hnm/slick
+
+sell:
+  js:
+    js/sell.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_hnm/utils
+    - alshaya_hnm/owlcarousel
+
+autosize_textarea:
+  js:
+    js/autosize_textarea.js: {}
+  dependencies:
+    - alshaya_hnm/autosize
+
+convert_to_select2:
+  js:
+    js/convert_to_select2.js: {}
+  dependencies:
+    - alshaya_hnm/select2
+
+slick:
+  css:
+    theme:
+      vendor/css/slick.css: {}
+  js:
+    vendor/js/slick.min.js: {}
+
+owlcarousel:
+  css:
+    theme:
+      vendor/css/owl.carousel.css: {}
+  js:
+    vendor/js/owlcarousel.min.js: {}
+
+select2:
+  css:
+    theme:
+      vendor/css/select2.css: {}
+  js:
+    vendor/js/select2.full.min.js: {}
+
+autosize:
+  js:
+    vendor/js/autosize.min.js: {}
+
+sizeguide:
+  js:
+    js/select2Option.js: {}
+    js/sizeguide.js: {}
+
+ucfix:
+  js:
+    js/ucfix.js: {}
+
+utils:
+  js:
+    js/utils.js: {}
+
+cleave:
+  js:
+    vendor/js/cleave.min.js: {}
+
+plp_search_js:
+  js:
+    js/plp-search.js: {}
+
+jquery_mobile_touch_swipe:
+  js:
+    vendor/js/jquery.touchSwipe.min.js: {}

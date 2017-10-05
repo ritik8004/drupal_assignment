@@ -1,0 +1,90 @@
+.c-facet {
+  a {
+    font-size: 0.75rem;
+    line-height: 1;
+    color: $windows-blue;
+    font-weight: bold;
+    margin-top: 0.75rem;
+    display: inline-block;
+    text-transform: lowercase;
+  }
+
+  ul {
+    @extend %list-clear;
+
+    @include breakpoint($desktop) {
+      padding-top: 1.313rem;
+    }
+
+    input[type="text"] {
+      border: 1px solid $white;
+      font-family: $alshaya-thin;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      width: 13rem;
+      margin-bottom: 1.313rem;
+    }
+
+    li {
+      margin-#{$left}: -1px;
+      margin-bottom: 0.875rem;
+    }
+  }
+
+  label {
+    font-size: 0.875rem;
+    color: $grey-ash;
+    position: relative;
+    top: -1px;
+  }
+
+  .item-list {
+    padding: 1.5rem 0.5rem 1rem;
+    line-height: 1.6;
+    height: auto !important;
+  }
+
+  label {
+    font-size: 0;
+
+    .facet-item__value {
+      margin-#{$left}: 1rem;
+
+      div {
+        display: inline;
+      }
+    }
+
+    .facet-item__count,
+    .facet-item__value {
+      font-size: 0.875rem;
+      text-transform: lowercase;
+    }
+
+    .facet-item__count {
+      margin-#{$left}: 0.125rem;
+    }
+  }
+}
+
+.c-facet__label {
+  font-size: 0.875rem;
+  margin: 0.75rem 0.5rem;
+  text-transform: lowercase;
+
+  @include breakpoint($desktop) {
+    color: $black;
+  }
+}
+
+.c-facet__blocks {
+  .item-list__checkbox {
+    max-height: 228px;
+    overflow: auto;
+  }
+
+  .facets-soft-limit-link {
+    display: none;
+  }
+}
+

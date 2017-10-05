@@ -1,0 +1,115 @@
+.path--user {
+  .ui-dialog-title {
+    @extend %page-title;
+
+    border-bottom: 1px solid $white;
+    font-size: 18px;
+    float: $left;
+    padding-bottom: 7px;
+    margin-top: 25px;
+    margin-bottom: 18px;
+    width: 70%;
+  }
+
+  .profile-address-book-delete-form {
+    color: $black;
+    font-size: 0.875rem;
+    min-height: 2rem;
+  }
+
+  .ui-dialog {
+    background: $white-five;
+    padding: 0;
+    padding-bottom: 1.25rem;
+    padding-#{$left}: 1.25rem;
+    z-index: 8;
+
+    @include breakpoint($only-mobile) {
+      width: 100% !important;
+    }
+
+    .ui-dialog-buttonpane .ui-dialog-buttonset,
+    .ui-dialog-content,
+    .ui-dialog-titlebar {
+      float: none;
+      padding: 0;
+    }
+
+    .ui-dialog-buttonpane .ui-dialog-buttonset {
+      float: $left;
+    }
+
+    .ui-dialog-buttonpane {
+      margin: 0;
+      padding: 0;
+
+      button {
+        margin: 0;
+      }
+    }
+
+    .ui-button .ui-button-text {
+      font-weight: 700;
+    }
+
+    .ui-dialog-content {
+      margin-bottom: 2rem;
+      padding-#{$right}: 3rem;
+    }
+  }
+
+  .ui-widget-header {
+    overflow: hidden;
+  }
+
+  .ui-dialog .ui-dialog-titlebar-close {
+    color: $black;
+    height: 3.125rem;
+    font-size: 1rem;
+    #{$right}: 0;
+    #{$left}: initial;
+    top: 0;
+    width: 2.5rem;
+    outline: none;
+    background-color: transparent;
+
+    &::before {
+      content: none;
+    }
+
+    &::after {
+      background: $white;
+      content: "X";
+      display: block;
+      padding: 10px 15px;
+      position: absolute;
+      #{$right}: 0;
+      #{$left}: initial;
+      top: 0;
+    }
+  }
+
+  .button--primary span {
+    @extend %button-wide;
+
+    min-width: 0;
+  }
+
+  .dialog-cancel span {
+    color: #3381d0;
+    font-size: 10px;
+
+    @include breakpoint($tablet) {
+      font-size: 11px;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 12px;
+    }
+  }
+
+  button {
+    background: #fff;
+    border: none;
+  }
+}
