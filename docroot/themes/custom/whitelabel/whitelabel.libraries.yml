@@ -290,3 +290,17 @@ paragraph-image-title-subtitle:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/paragraph-image-title-subtitle/paragraph-image-title-subtitle.ltr.css: {}
+
+block-todays-offer:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/05-footer-tertiary/block-todays-offer/block-todays-offer.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/05-footer-tertiary/block-todays-offer/block-todays-offer.js: {}
+
+paragraph-offers-bordered:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/05-footer-tertiary/block-todays-offer/paragraph-offers-bordered.ltr.css: {}
