@@ -428,7 +428,9 @@
             virtualPageTitle: 'C&C Step 1 – Click and Collect View'
           });
 
-          Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
+          if (($('input.cc-action', context).length > 0) && (context === document)) {
+            Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
+          }
         }
 
         $('.store-actions a.select-store', context).once('js-event').click(function () {
@@ -821,12 +823,14 @@
    * @param resultCount
    */
   Drupal.alshaya_seo_gtm_push_store_finder_search = function (keyword, location, resultCount) {
-    dataLayer.push({
-      event: 'findStore',
-      fsLocation: location,
-      fsKeyword: keyword,
-      fsNoOfResult: resultCount
-    });
+    if (keyword !== '') {
+      dataLayer.push({
+        event: 'findStore',
+        fsLocation: location,
+        fsKeyword: keyword,
+        fsNoOfResult: resultCount
+      });
+    }
   };
 
 })(jQuery, Drupal, dataLayer);
