@@ -14,7 +14,7 @@ use Drupal\acq_sku\Entity\SKU;
  *   title = @Translation("Acq Commerce Promotion detach queue"),
  * )
  */
-class \AcqPromotionDetachQueue extends AcqPromotionQueueBase {
+class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
 
   /**
    * Works on a single queue item.
