@@ -364,13 +364,19 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
 
   $message = '';
 
+  // Prepare the ajax Response.
+  $response = new AjaxResponse();
+
   if (UpdateCartErrorEventSubscriber::getErrorStatus()) {
     $errors = UpdateCartErrorEventSubscriber::getErrors();
     $message = '<div id="out-of-stock-message">' . reset($errors) . '</div>';
-  }
 
-  // Prepare the ajax Response.
-  $response = new AjaxResponse();
+    if (acq_commerce_is_code_api_down_code(UpdateCartErrorEventSubscriber::getCode())) {
+      // Show the error or remove existing errors.
+      $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
+      return $response;
+    }
+  }
 
   // Show the error or remove existing errors.
   $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
@@ -443,7 +449,8 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
     foreach ($form['ajax']['configurables'] as $key => $form_item) {
       if (is_array($form_item) && isset($form_item['#type']) && $form_item['#type'] == 'select') {
-        $form['ajax']['configurables'][$key]['#empty_option'] = $form_item['#title'];
+        $form['ajax']['configurables'][$key]['#empty_option'] = t('Select @title', ['@title' => $form_item['#title']]);
+        $form['ajax']['configurables'][$key]['#attributes']['data-default-title'] = $form_item['#title'];
       }
     }
   }
@@ -496,6 +503,11 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'image' => '',
         'include_in_bundle' => '',
         'available_delivery_methods' => '',
+      ],
+    ],
+    'global_error' => [
+      'variables' => [
+        'message' => '',
       ],
     ],
   ];
@@ -675,11 +687,6 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency');
   $config->set('currency_code', 'د٠ك٠');
   $config->set('currency_code_position', 'after');
-  $config->save();
-
-  // Translate store id in config.
-  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store');
-  $config->set('store_id', '3');
   $config->save();
 
   // Add translation for the error messages we check in API response.

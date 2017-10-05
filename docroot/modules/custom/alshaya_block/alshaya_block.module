@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Functions around blocks.
+ */
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_block_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'themes_installed') {
+    // We don't want the blocks to be copied from one theme to another using
+    // the default block_theme_initialize() as it change.
+    unset($implementations['block']);
+  }
+}
+
+/**
+ * Implements hook_themes_installed().
+ */
+function alshaya_block_themes_installed($theme_list) {
+  $theme_info = \Drupal::service('theme_handler')->listInfo();
+  foreach ($theme_list as $theme) {
+    // We only move blocks for custom themes.
+    if (isset($theme_info[$theme])
+      && strpos($theme_info[$theme]->getPathname(), '/custom/')
+      && \Drupal::service('theme_handler')->hasUi($theme)
+    ) {
+      alshaya_block_move_blocks_theme_to_theme($theme);
+    }
+  }
+}
+
+/**
+ * Move the blocks from one theme to another.
+ *
+ * Because of the block ID unicity constraint, we can't simply duplicate the
+ * blocks from one theme to another. This function moves the block from one
+ * theme to another and keep the region's configuration.
+ *
+ * @see block_theme_initialize()
+ */
+function alshaya_block_move_blocks_theme_to_theme($target_theme, $source_theme = NULL) {
+  $source_theme = empty($source_theme) ? \Drupal::config('system.theme')->get('default') : $source_theme;
+
+  $default_theme_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['theme' => $source_theme]);
+  foreach ($default_theme_blocks as $default_theme_block_id => $default_theme_block) {
+    $block = $default_theme_block->createDuplicateBlock($default_theme_block_id, $target_theme);
+
+    // We delete the block from the previous theme.
+    $default_theme_block->delete();
+
+    // We save the block on the new theme.
+    $block->save();
+  }
+}
+
+/**
+ * Utility function to delete blocks from a theme.
+ */
+function alshaya_block_delete_blocks($blocks, $theme = NULL) {
+  $theme = empty($theme) ? \Drupal::config('system.theme')->get('default') : $theme;
+
+  foreach ($blocks as $block_id) {
+    $block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id, 'theme' => $theme]);
+    if (!empty($block)) {
+      $block = reset($block);
+      $block->delete();
+    }
+  }
+}

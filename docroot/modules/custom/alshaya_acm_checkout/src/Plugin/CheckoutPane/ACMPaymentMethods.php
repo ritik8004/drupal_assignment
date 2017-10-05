@@ -77,11 +77,18 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     $cart = $this->getCart();
     $plugins = $this->getPlugins();
 
-    // Get available payment methods and compare to enabled payment method
-    // plugins.
-    $apiWrapper = $this->getApiWrapper();
-    $payment_methods = $apiWrapper->getPaymentMethods($cart->id());
-    $payment_methods = array_intersect($payment_methods, array_keys($plugins));
+    try {
+      // Get available payment methods and compare to enabled payment method
+      // plugins.
+      $apiWrapper = $this->getApiWrapper();
+      $payment_methods = $apiWrapper->getPaymentMethods($cart->id());
+      $payment_methods = array_intersect($payment_methods, array_keys($plugins));
+    }
+    catch (\Exception $e) {
+      drupal_set_message($e->getMessage(), 'error');
+      $form_state->setErrorByName('custom', $e->getMessage());
+      return $pane_form;
+    }
 
     // Get the default plugin id.
     if ($default_plugin_id = $checkout_options_manager->getDefaultPaymentCode()) {
@@ -120,6 +127,8 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // plugin form instead.
     $payment_options = [];
     $payment_has_descriptions = [];
+    $payment_translations = [];
+
     foreach ($payment_methods as $plugin_id) {
       if (!isset($plugins[$plugin_id])) {
         continue;
@@ -134,8 +143,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       $current_language_id = \Drupal::languageManager()->getCurrentLanguage()->getId();
       $default_language_id = \Drupal::languageManager()->getDefaultLanguage()->getId();
-
-      $payment_translations = [];
 
       if ($current_language_id !== $default_language_id) {
         if ($payment_term->hasTranslation($default_language_id)) {

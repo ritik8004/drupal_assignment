@@ -166,7 +166,7 @@
 
             // Place the cloned bar before other facets in the region content's sidebar first.
             $(blockFilterBar)
-              .insertBefore('.region__content .c-facet__blocks .region__sidebar-first div:first-child');
+              .insertBefore('.region__content .c-facet__blocks .region__sidebar-first > div:first-child');
 
             placeFilterCount();
           }
@@ -257,7 +257,7 @@
               .insertBefore('.view-filters.is-filter');
           }
 
-          facetLabel.click(function () {
+          facetLabel.on('click', function () {
             $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
               .toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
@@ -323,12 +323,6 @@
         if ($(this).hasClass('facet-active')) {
           $(this).find('.c-accordion__title').addClass('ui-state-active');
         }
-      });
-
-      // Close the filter menu when a facet is selected/unselected.
-      $('.filter--mobile li.facet-item').once().on('click', function () {
-        var facetBlocks = $(this).closest('.c-facet__blocks');
-        facetBlocks.siblings('.c-facet__label').toggleClass('is-active');
       });
 
       // Click event for fake clear all link on mobile filter.

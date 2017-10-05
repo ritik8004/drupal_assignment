@@ -93,7 +93,6 @@ Feature: Test the My account section for authenticated user
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
     And I wait for the page to load
     Then I should see "shweta+2@axelerant.com"
-    And I should see "+965 - 9700 - 4455"
     Then I should see "6362 - 5440 - 0013 - 5844"
     But I should not see "Join the club"
     And I should not see "Win exciting prizes"
@@ -234,7 +233,7 @@ Feature: Test the My account section for authenticated user
     Then I should see "Communication preferences"
     And I should see "Select your preferred communication channel"
     When I check the ".form-item-communication-preference-email > label" checkbox
-    And I press "Save"
+    And I press "save"
     When I wait for the page to load
     Then I should see "Your communication preference saved successfully."
 
@@ -252,7 +251,7 @@ Feature: Test the My account section for authenticated user
     Then I should see text matching "Your password must contain at-least 1 special character."
     Then I should see text matching "Your password must contain at-least 1 numeric character."
     Then I should see text matching "Spaces are not allowed in your password."
-    Then I should see text matching "The previous four passwords were not allowed."
+    Then I should see text matching "The previous four passwords are not allowed."
     When I press "change password"
     Then I should see "Please enter your current password."
     And I should see "Please enter your new password."

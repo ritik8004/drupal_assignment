@@ -7,3 +7,7 @@ orders-list:
     - core/jquery
     - core/jquery.once
     - core/drupal
+order_print:
+  version: VERSION
+  js:
+    js/order-print.js: {}

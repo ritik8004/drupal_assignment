@@ -112,6 +112,9 @@
 
         $('#add-address-button').on('click', function (event) {
           event.preventDefault();
+          $('#address-book-form-wrapper .form-item--error-message, #address-book-form-wrapper label.error').remove();
+          $('#address-book-form-wrapper .form-item--error').removeClass('form-item--error');
+
           // Reset the form values.
           $('[data-drupal-selector="edit-member-delivery-home-address-form-address-id"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-given-name"]').val('');
@@ -139,6 +142,8 @@
 
           // Update fieldset title to edit address.
           $('.delivery-address-form-title').html(Drupal.t('add new address'));
+
+          $('#addresses-header').show();
 
           // Hide the form.
           $('#address-book-form-wrapper').slideUp();
@@ -181,7 +186,7 @@
 
       // Re-bind client side validations for billing address after form is updated.
       $('[data-drupal-selector="edit-billing-address-address-billing-given-name"]').once('bind-events').each(function () {
-        Drupal.behaviors.cvJqueryValidate.attach($('#block-alshaya-white-label-content'));
+        Drupal.behaviors.cvJqueryValidate.attach($('#block-content'));
       });
 
       // Show the form by default if user has no address saved in address book.
@@ -202,6 +207,10 @@
         // Show Guest Checkout as selected by default unless we have an login error
         // in which case make the returning customers tab as active.
         if ($('#edit-checkout-login').find('.messages.messages--error').length > 0) {
+          tabs.find('.tab-returning-customer').toggleClass('active');
+          tabs.next().next('#edit-checkout-login').toggleClass('active');
+        }
+        else if (window.location.href.indexOf('showlogin=1') > -1) {
           tabs.find('.tab-returning-customer').toggleClass('active');
           tabs.next().next('#edit-checkout-login').toggleClass('active');
         }
@@ -237,6 +246,9 @@
 
   // Ajax command to update search result header count.
   $.fn.editDeliveryAddress = function (data) {
+    $('#address-book-form-wrapper .form-item--error-message, #address-book-form-wrapper label.error').remove();
+    $('#address-book-form-wrapper .form-item--error').removeClass('form-item--error');
+
     // Set values in form.
     $('[data-drupal-selector="edit-member-delivery-home-address-form-address-id"]').val(data.id);
 
@@ -276,29 +288,31 @@
     attach: function (context, settings) {
       var block = $('.block-checkout-summary-block');
 
-      $(window).once().on('scroll', function () {
-        // Fix the block after a certain height.
-        if ($(window).scrollTop() > 122) {
-          block.addClass('fix-block');
-        }
-        else {
-          block.removeClass('fix-block');
-        }
-
-        var blockbottom = block.offset().top + block.height();
-        // 40 is the pixel offset above footer where we stop the fixed block.
-        var footertop = $('.c-post-content').offset().top - 40;
-        // Add class at this point to stop block going over footer.
-        if (blockbottom >= footertop) {
-          block.addClass('contain');
-        }
-        // Make the block sticky again when the top is visible.
-        if ($(document).scrollTop() <= block.offset().top) {
-          if (block.hasClass('contain')) {
-            block.removeClass('contain');
+      if (block.length > 0) {
+        $(window).once().on('scroll', function () {
+          // Fix the block after a certain height.
+          if ($(window).scrollTop() > 122) {
+            block.addClass('fix-block');
           }
-        }
-      });
+          else {
+            block.removeClass('fix-block');
+          }
+
+          var blockbottom = block.offset().top + block.height();
+          // 40 is the pixel offset above footer where we stop the fixed block.
+          var footertop = $('.c-post-content').offset().top - 40;
+          // Add class at this point to stop block going over footer.
+          if (blockbottom >= footertop) {
+            block.addClass('contain');
+          }
+          // Make the block sticky again when the top is visible.
+          if ($(document).scrollTop() <= block.offset().top) {
+            if (block.hasClass('contain')) {
+              block.removeClass('contain');
+            }
+          }
+        });
+      }
     }
   };
 

@@ -28,9 +28,14 @@ function acq_sku_drush_command() {
     'description' => 'Run a full synchronization of all commerce product records.',
     'aliases'     => ['acsp'],
     'examples'    => [
-      'drush acsp' => 'Run a full product synchronization of all available products.',
-      'drush acsp --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\'' => 'Synchronize sku data for the skus M-H3495 130 2  FW, M-H3496 130 004FW & M-H3496 130 005FW only.',
+      'drush acsp en 50' => 'Run a full product synchronization of all available products in store linked to en and page size 50.',
+      'drush acsp en 50 --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\'' => 'Synchronize sku data for the skus M-H3495 130 2  FW, M-H3496 130 004FW & M-H3496 130 005FW only in store linked to en and page size 50.',
     ],
+    'arguments'     => [
+      'langcode' => 'Language code for which we want to import products.',
+      'page_size' => 'Page/Chunk size for importing products in chunks.',
+    ],
+    'required-arguments' => TRUE,
     'options'     => [
       'skus' => 'SKUs to import (like query).',
     ],
@@ -81,12 +86,36 @@ function acq_sku_drush_command() {
 /**
  * Implements drush product sync command.
  */
-function drush_acq_sku_sync_commerce_products() {
-  drush_print(dt('Synchronizing all commerce products, this usually takes some time...'));
-  $container = \Drupal::getContainer();
+function drush_acq_sku_sync_commerce_products($langcode, $page_size) {
+  $langcode = strtolower($langcode);
+
+  $store_id = acq_commerce_get_store_id_from_langcode($langcode);
+
+  if (empty($store_id)) {
+    drush_print(dt("Store id not found for provided language code."));
+    return;
+  }
+
+  $page_size = (int) $page_size;
+
+  if ($page_size <= 0) {
+    drush_print(dt("Page size must be a positive integer."));
+    return;
+  }
+
   $skus = drush_get_option('skus');
 
-  $container->get('acq_commerce.ingest_api')->productFullSync($skus);
+  // Ask for confirmation from user if attempt is to run full sync.
+  if (empty($skus)) {
+    if (!drush_confirm(dt("Are you sure you want to import all products for selected language?"))) {
+      return drush_user_abort();
+    }
+  }
+
+  drush_print(dt('Requesting all commerce products for selected language code...'));
+  $container = \Drupal::getContainer();
+  $container->get('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $page_size);
+  drush_print(dt('Done.'));
 }
 
 /**
@@ -252,20 +281,11 @@ function drush_acq_sku_clean_stock_cache() {
   // Check if we are asked to clear cache of specific SKU.
   if ($sku = drush_get_option('sku', '')) {
     if ($sku_entity = SKU::loadFromSku($sku)) {
-      // Clear stock cache for particular sku in all languages.
-      foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
-        $sku_entity_to_clear_stock = $sku_entity->getTranslation($langcode);
+      acq_sku_clear_sku_stock_cache($sku_entity);
 
-        // Get the stock cache id.
-        $stock_cid = acq_sku_get_stock_cache_id($sku_entity_to_clear_stock);
-
-        // Invalidate particular cache.
-        \Drupal::cache('stock')->invalidate($stock_cid);
-
-        drush_print(dt('Invalidated stock cache for @stock_cid.', [
-          '@stock_cid' => $stock_cid,
-        ]));
-      }
+      drush_print(dt('Invalidated stock cache for @sku.', [
+        '@sku' => $sku,
+      ]));
     }
 
     return;

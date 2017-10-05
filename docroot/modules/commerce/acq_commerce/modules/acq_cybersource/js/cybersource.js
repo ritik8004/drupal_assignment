@@ -13,6 +13,40 @@
    */
   Drupal.behaviors.checkoutCybersource = {
     attach: function (context, settings) {
+      $('.cybersource-input').once('security').on('copy paste', function (event) {
+        event.preventDefault();
+      });
+
+      $('.cybersource-credit-card-exp-year-select').once('current-year').on('change', function () {
+        var month = $('.cybersource-credit-card-exp-month-select');
+        var currentYear = (new Date()).getFullYear().toString();
+        var selectedYear = jQuery('.cybersource-credit-card-exp-year-select option:selected').val();
+
+        if (currentYear === selectedYear) {
+          var currentMonth = (new Date()).getMonth();
+
+          month.find('option').each(function () {
+            var optionMonth = parseInt($(this).val());
+
+            if (optionMonth <= currentMonth) {
+              if ($(this).is(':selected')) {
+                $(this).next().prop('selected', true);
+              }
+              $(this).prop('disabled', true);
+            }
+          });
+
+        }
+        else {
+          month.find('option').prop('disabled', false);
+        }
+
+        // Let other JS libraries know options are changed.
+        month.trigger('change');
+      });
+
+      $('.cybersource-credit-card-exp-year-select').trigger('change');
+
       // Bind this only once after every ajax call.
       $('.cybersource-credit-card-input').once('bind-events').each(function () {
         var form = $('.cybersource-credit-card-input').closest('form');

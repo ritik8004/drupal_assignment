@@ -81,7 +81,7 @@
 
   <div class="address">
     {{ delivery.address_label }} <a class="edit-delivery-address" id="checkout-edit-da" href="{{ delivery.edit_url }}">{{ 'Edit'|t }}</a>
-    <div class="delivery-address">{{ delivery.address|raw }}</div>
+    <div class="delivery-address">{{ delivery.address }}</div>
   </div>
   {% endif %}
 </div>

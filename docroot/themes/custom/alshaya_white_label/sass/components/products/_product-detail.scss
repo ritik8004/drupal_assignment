@@ -835,11 +835,23 @@
       padding: 0.5rem 0;
       border: none;
       border-radius: 0;
+
+      html[lang=ar] & {
+        width: 7.563rem;
+      }
     }
 
     .form-item-location label {
       @include u-visibility(none);
     }
+  }
+}
+
+.store-available-at-title {
+  display: inline;
+
+  div {
+    display: inline;
   }
 }
 
@@ -1600,6 +1612,14 @@ article[gtm-sku-type="simple"] {
         }
       }
     }
+
+    .view-product-slider {
+      .sku-base-form {
+        .form-item-quantity {
+          float: $right !important;
+        }
+      }
+    }
   }
 }
 
@@ -1669,7 +1689,7 @@ article[gtm-sku-type="simple"] {
 }
 
 .select2-container--open {
-  z-index: 999;
+  z-index: 5;
 }
 
 .sku-base-form {

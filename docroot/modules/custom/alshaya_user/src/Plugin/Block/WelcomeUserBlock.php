@@ -26,7 +26,7 @@ class WelcomeUserBlock extends BlockBase implements ContainerFactoryPluginInterf
   protected $currentUser;
 
   /**
-   * MyAccountNavBlock constructor.
+   * WelcomeUserBlock constructor.
    *
    * @param array $configuration
    *   Configuration data.

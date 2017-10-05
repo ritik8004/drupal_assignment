@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product;
 
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
@@ -45,6 +46,13 @@ class SkuManager {
   protected $entityRepository;
 
   /**
+   * Linked SKUs service.
+   *
+   * @var \Drupal\acq_sku\AcqSkuLinkedSku
+   */
+  protected $linkedSkus;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -57,6 +65,8 @@ class SkuManager {
    *   The entity repository service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger service.
+   * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
+   *   Linked SKUs service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service.
    */
@@ -65,6 +75,7 @@ class SkuManager {
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
+                              AcqSkuLinkedSku $linked_skus,
                               CacheBackendInterface $cache) {
     $this->connection = $connection;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
@@ -72,6 +83,7 @@ class SkuManager {
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
+    $this->linkedSkus = $linked_skus;
     $this->cache = $cache;
   }
 
@@ -164,7 +176,7 @@ class SkuManager {
         // Get discount if discounted price available.
         $discount = floor((($price - $final_price) * 100) / $price);
         $build['discount'] = [
-          '#markup' => t('Save @discount', ['@discount' => $discount . '%']),
+          '#markup' => t('Save @discount%', ['@discount' => $discount]),
         ];
       }
     }
@@ -218,8 +230,8 @@ class SkuManager {
     if ($final_price !== $sku_cart_price['price']) {
       $sku_cart_price['final_price'] = number_format($final_price, 3);
       $discount = floor((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
-      $sku_cart_price['discount']['prefix'] = t('Save');
-      $sku_cart_price['discount']['value'] = t('@discount', ['@discount' => $discount . '%']);
+      $sku_cart_price['discount']['prefix'] = t('Save', [], ['context' => 'discount']);
+      $sku_cart_price['discount']['value'] = $discount . '%';
     }
 
     return $sku_cart_price;
@@ -311,49 +323,36 @@ class SkuManager {
   public function getPromotionsFromSkuId(SKU $sku,
                                          $getLinks = FALSE,
                                          array $types = ['cart', 'category']) {
+
+    $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+
     $promos = [];
     $promotion_nids = [];
-    $promotions = [];
-    // Fetch child skus, if its a parent sku.
-    $child_skus = $this->getChildSkus($sku);
 
-    // If not child skus, its a simple product.
-    if (empty($child_skus)) {
-      $child_skus[] = $sku;
+    $promotion = $sku->get('field_acq_sku_promotions')->getValue();
+
+    foreach ($promotion as $promo) {
+      $promotion_nids[] = $promo['target_id'];
     }
 
-    $promotions[] = $sku->get('field_acq_sku_promotions')->getValue();
-
-    foreach ($child_skus as $child_sku) {
-      if ($child_sku) {
-        $promotions[] = $child_sku->get('field_acq_sku_promotions')->getValue();
-      }
-    }
-
-    foreach ($promotions as $promotion) {
-      foreach ($promotion as $promo) {
-        $promotion_nids[] = $promo['target_id'];
-      }
-    }
-
-    $promotion_nids = array_unique($promotion_nids);
     if (!empty($promotion_nids)) {
+      $promotion_nids = array_unique($promotion_nids);
+
       $promotion_nodes = Node::loadMultiple($promotion_nids);
+
+      /* @var \Drupal\node\Entity\Node $promotion_node */
       foreach ($promotion_nodes as $promotion_node) {
         $promotion_type = $promotion_node->get('field_acq_promotion_type')->getString();
+
         if (in_array($promotion_type, $types, TRUE)) {
-          $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
-            ->getId();
           // Get the promotion with language fallback, if it did not have a
           // translation for $langcode.
           $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node, $langcode);
-          $promotion_text = $promotion_node->get('field_acq_promotion_label')
-            ->getString();
-          $discount_type = $promotion_node->get('field_acq_promotion_disc_type')
-            ->getString();
-          $discount_value = $promotion_node->get('field_acq_promotion_discount')
-            ->getString();
-          /* @var \Drupal\node\Entity\Node $promotion */
+
+          $promotion_text = $promotion_node->get('field_acq_promotion_label')->getString();
+          $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
+          $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
+
           if ($getLinks) {
             $promos[$promotion_node->id()] = $promotion_node->toLink($promotion_text)
               ->toString()
@@ -373,6 +372,20 @@ class SkuManager {
             ];
           }
         }
+      }
+    }
+
+    // For configurable products there are many rules like rules on product
+    // category that get applied to child SKUs even if they don't have the
+    // category but parent SKU has the category.
+    // To avoid issues in display we check for parent SKU promotions if current
+    // SKU (child) has no promotions attached.
+    // This is done here to reduce processing in Magento, current process
+    // (indexer) in Magento is already heavy and requires enhancement, so
+    // it is done in Drupal to avoid more performance issues Magento.
+    if (empty($promos)) {
+      if ($parentSku = $this->getParentSkuBySku($sku)) {
+        return $this->getPromotionsFromSkuId($parentSku, $getLinks, $types);
       }
     }
 
@@ -564,7 +577,7 @@ class SkuManager {
         }
       }
 
-      $this->cache->set('sku_tree', $sku_tree, Cache::PERMANENT, ['sku_list']);
+      $this->cache->set('sku_tree', $sku_tree, Cache::PERMANENT, ['acq_sku_list']);
     }
 
     return $sku_tree;
@@ -599,12 +612,15 @@ class SkuManager {
    *   List of skus related with a promotion.
    */
   public function getSkutextsForPromotion(Node $promotion) {
+    $skus = [];
+
     $cid = 'promotions_sku_' . $promotion->id();
     if (!empty($this->cache->get($cid))) {
       $skus_cache = $this->cache->get($cid);
       $skus = $skus_cache->data;
     }
     else {
+      // Get configurable SKUs.
       $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
       $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
       $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
@@ -613,6 +629,10 @@ class SkuManager {
       $query->distinct();
       $config_skus = $query->execute()->fetchAllKeyed(0, 1);
 
+      // We may not have anything in Simple.
+      $skus = $config_skus;
+
+      // Get Simple SKUs.
       $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
       $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
       $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
@@ -621,27 +641,118 @@ class SkuManager {
       $query->distinct();
       $simple_skus = $query->execute()->fetchAllKeyed(0, 1);
 
-      $sku_tree = $this->getSkuTree();
-      $processed_sku_eids = [];
+      if ($simple_skus) {
+        $skus = array_unique(array_merge($skus, $simple_skus));
 
-      foreach ($simple_skus as $sku) {
-        if (isset($sku_tree[$sku])) {
-          $parent_sku = $sku_tree[$sku];
-          if (!in_array($parent_sku, $processed_sku_eids)) {
-            $processed_sku_eids[] = $this->getSkuTextFromId($parent_sku);
-          }
-        }
-        else {
-          $processed_sku_eids[] = $sku;
-        }
+        // Get all parent SKUs for simple ones.
+        $parent_skus = $this->getParentSkus($simple_skus);
+        $skus = array_unique(array_merge($skus, $parent_skus));
       }
 
-      $skus = array_unique(array_merge($processed_sku_eids, $config_skus));
-
-      $this->cache->set($cid, $skus, Cache::PERMANENT, ['sku_list']);
+      $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
     }
 
     return $skus;
+  }
+
+  /**
+   * Helper function to get parent skus of all simple ones in one go.
+   *
+   * @param array $simple_skus
+   *   Array containing simple skus.
+   *
+   * @return array
+   *   Array containing all parent skus.
+   */
+  public function getParentSkus(array $simple_skus) {
+    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    $query->addField('acq_sku', 'id');
+    $query->addField('acq_sku', 'sku');
+    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
+    $query->condition('child_sku.field_configured_skus_value', array_values($simple_skus), 'IN');
+    return $query->execute()->fetchAllKeyed(0);
+  }
+
+  /**
+   * Utility function to get parent node of the sku.
+   *
+   * @param mixed $sku
+   *   SKU name or full sku object.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return object
+   *   Loaded node object.
+   */
+  public function getDisplayNode($sku, $langcode = '') {
+    $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
+
+    if (empty($sku_entity)) {
+      return NULL;
+    }
+
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $sku_entity->getPluginInstance();
+
+    return $plugin->getDisplayNode($sku_entity);
+  }
+
+  /**
+   * Utility function to get parent SKU for a configurable child sku.
+   *
+   * @param mixed $sku
+   *   SKU text or full entity object.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   Loaded SKU entity.
+   */
+  public function getParentSkuBySku($sku, $langcode = '') {
+    $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
+
+    // Additional check, can be removed post go UAT.
+    if (empty($sku_entity)) {
+      return NULL;
+    }
+
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $sku_entity->getPluginInstance();
+
+    return $plugin->getParentSku($sku_entity);
+  }
+
+  /**
+   * Utility function to get linked SKUs.
+   *
+   * @param mixed $sku
+   *   SKU text or full entity object.
+   * @param string $type
+   *   Type of Linked SKUs to return related/upsell.
+   *
+   * @return array
+   *   Linked SKUs for requested type.
+   */
+  public function getLinkedSkus($sku, $type) {
+    $linked_skus = $this->linkedSkus->getLinkedSKus($sku);
+
+    $linked_skus_requested = [];
+
+    if (isset($linked_skus[$type]) && !empty($linked_skus[$type])) {
+      $linked_skus_requested = $linked_skus[$type];
+    }
+
+    try {
+      if ($linked_skus_from_product = $sku->get($type)->getValue()) {
+        $linked_skus_from_product = array_column($linked_skus_from_product, 'value');
+        $linked_skus_requested = array_merge($linked_skus_requested, $linked_skus_from_product);
+      }
+    }
+    catch (\Exception $e) {
+      // Do nothing.
+    }
+
+    return $linked_skus_requested;
   }
 
 }

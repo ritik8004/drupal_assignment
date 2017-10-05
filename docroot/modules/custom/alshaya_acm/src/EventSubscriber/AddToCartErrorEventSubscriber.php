@@ -20,6 +20,13 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
   public static $errors = [];
 
   /**
+   * Variable to store exception code.
+   *
+   * @var int
+   */
+  public static $code = 0;
+
+  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
@@ -38,6 +45,16 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
+   * Get error code from static variable.
+   *
+   * @return int
+   *   Returns the error code available in EventSubscriber.
+   */
+  public static function getCode() {
+    return self::$code;
+  }
+
+  /**
    * Get error messages in EventSubscriber.
    *
    * @return array
@@ -45,6 +62,18 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
    */
   public static function getErrors() {
     return self::$errors;
+  }
+
+  /**
+   * Adds error code to static variable.
+   *
+   * @param int $code
+   *   Error code to set in static variable.
+   */
+  public static function setCode($code) {
+    if ($code) {
+      self::$code = $code;
+    }
   }
 
   /**
@@ -64,10 +93,14 @@ class AddToCartErrorEventSubscriber implements EventSubscriberInterface {
    *   Exception raised.
    */
   public function onAddToCartError(AddToCartErrorEvent $event) {
-    // Logs a notice.
+    // Get Event Exception.
     $exception = $event->getEventException();
+
+    // Log notice.
     \Drupal::logger('alshaya_acm')->notice($exception->getMessage());
 
+    // Set in static variables.
+    self::setCode($exception->getCode());
     self::setError($exception->getMessage());
   }
 

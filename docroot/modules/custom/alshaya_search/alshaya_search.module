@@ -12,6 +12,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Solarium\Core\Query\QueryInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_views_pre_render().
@@ -71,6 +73,19 @@ function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface
 
     $form['#attached']['library'][] = 'alshaya_search/alshaya_search';
     $form['keywords']['#attributes'] = ['data-bef-auto-submit-exclude' => ''];
+
+    if ($form['#id'] === 'views-exposed-form-search-page') {
+      array_unshift($form['#submit'], 'alshaya_search_keyword_language_redirect');
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function alshaya_search_theme_registry_alter(array &$theme_registry) {
+  if (isset($theme_registry['facets_result_item'])) {
+    $theme_registry['facets_result_item']['path'] = drupal_get_path('module', 'alshaya_search') . '/templates';
   }
 }
 
@@ -200,4 +215,49 @@ function alshaya_search_block_view_alter(array &$build, BlockPluginInterface $bl
 function alshaya_search_search_api_solr_query_alter(QueryInterface $solarium_query, SearchApiQueryInterface $query) {
   $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $solarium_query->addParam('fq', 'ss_search_api_language:"' . $current_langcode . '"');
+}
+
+/**
+ * Submit function to redirect user to correct language, based on keyword.
+ */
+function alshaya_search_keyword_language_redirect($form, FormStateInterface $form_state) {
+  // Redirect to correct language, based on user input.
+  $languages = \Drupal::languageManager()->getLanguages();
+  if (count($languages) > 1 && array_key_exists('ar', $languages)) {
+    $keyword = $form_state->getValue('keywords');
+    // Identify a non arabic language in the list of language.
+    if (\Drupal::languageManager()->getDefaultLanguage() != 'ar') {
+      // Pick the default language if it is not arabic.
+      $default_language = \Drupal::languageManager()->getDefaultLanguage();
+    }
+    else {
+      unset($languages['ar']);
+      $default_language = current($languages);
+    }
+    if (\Drupal::languageManager()->getCurrentLanguage()->getId() == 'ar') {
+      // If none of the characters of the keywords are in arabic.
+      if (!preg_match("/\p{Arabic}/u", $keyword)) {
+        // Redirect to the previously identified non arabic language.
+        $url = Url::fromUserInput('/search', [
+          'query' => ['keywords' => $keyword],
+          'absolute' => TRUE,
+          'language' => $default_language,
+        ])->toString();
+        $response = new RedirectResponse($url);
+        $response->send();
+      }
+    }
+    else {
+      if (preg_match("/^\p{Arabic}+$/u", $keyword)) {
+        // Redirect to arabic, if all characters are in arabic.
+        $url = Url::fromUserInput('/search', [
+          'query' => ['keywords' => $keyword],
+          'absolute' => TRUE,
+          'language' => $languages['ar'],
+        ])->toString();
+        $response = new RedirectResponse($url);
+        $response->send();
+      }
+    }
+  }
 }

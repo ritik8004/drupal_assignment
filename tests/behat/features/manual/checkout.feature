@@ -22,7 +22,7 @@ Feature: Test Checkout feature
     And I should not see "عربية"
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    And I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
@@ -48,7 +48,7 @@ Feature: Test Checkout feature
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    And I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
@@ -73,7 +73,7 @@ Feature: Test Checkout feature
     And I fill in "Ecom_Payment_Pin_id" with "1234"
     And I press "Submit"
     And I press "Confirm"
-    And I wait 10 seconds
+    And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma"
     And I should see text matching "Your order number is "
 
@@ -91,7 +91,7 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     When I fill in "edit-cc-firstname" with "Shweta"
     And I fill in "edit-cc-lastname" with "Sharma"
-    When I fill in "edit-cc-email" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-cc-email"
     And I fill in "edit-cc-mobile-number-mobile" with "97004455"
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
@@ -124,7 +124,7 @@ Feature: Test Checkout feature
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    And I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
@@ -145,7 +145,7 @@ Feature: Test Checkout feature
     And I press "Cancel"
     And I wait for the page to load
     Then I should see text matching "Sorry, we are unable to process your payment. Please contact our customer service team for assistance."
-    And I should not see "Your order number is "
+    And the url should match "/cart/checkout/payment"
 
   @hd @knet
   Scenario: As a Guest
@@ -163,7 +163,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
@@ -188,7 +188,7 @@ Feature: Test Checkout feature
     And I fill in "Ecom_Payment_Pin_id" with "1234"
     And I press "Submit"
     And I press "Confirm"
-    And I wait 10 seconds
+    And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma"
     And I should see text matching "Your order number is "
 
@@ -215,7 +215,7 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     When I fill in "edit-cc-firstname" with "Shweta"
     And I fill in "edit-cc-lastname" with "Sharma"
-    When I fill in "edit-cc-email" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-cc-email"
     And I fill in "edit-cc-mobile-number-mobile" with "97004455"
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
@@ -309,12 +309,10 @@ Feature: Test Checkout feature
     When I click the label for "div.hours--label"
     And I wait for AJAX to finish
     Then I should see "Monday"
-    And I should see "9am to 6pm"
-    And I should see "Tuesday"
+    And I should see "Sunday"
     When I click the label for ".hours--label.open"
     Then I should not see "Monday"
-    And I should not see "9am to 6pm"
-    And I should not see "Tuesday"
+    And I should not see "Sunday"
 
   @hd @cs
   Scenario: As a Guest
@@ -322,7 +320,7 @@ Feature: Test Checkout feature
   using Cybersource payment method
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
@@ -341,7 +339,7 @@ Feature: Test Checkout feature
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I accept terms and conditions
     And I press "place order"
-    When I wait 10 seconds
+    When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
     And I should see text matching "Your order number is "
 
@@ -358,7 +356,7 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     When I fill in "edit-cc-firstname" with "Shweta"
     And I fill in "edit-cc-lastname" with "Sharma"
-    When I fill in "edit-cc-email" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-cc-email"
     And I fill in "edit-cc-mobile-number-mobile" with "97004455"
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
@@ -376,7 +374,7 @@ Feature: Test Checkout feature
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
     And I press "place order"
-    When I wait 10 seconds
+    When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
     And I should see text matching "Your order number is "
 
@@ -402,7 +400,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    And I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
@@ -439,12 +437,14 @@ Feature: Test Checkout feature
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
+    When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
     And I wait for the page to load
     When I fill in "edit-cc-firstname" with "Shweta"
     And I fill in "edit-cc-lastname" with "Sharma"
-    When I fill in "edit-cc-email" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-cc-email"
     And I fill in "edit-cc-mobile-number-mobile" with "97004455"
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
@@ -476,6 +476,8 @@ Feature: Test Checkout feature
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
+    When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
     And I wait 2 seconds
     Then I should see "Monday"

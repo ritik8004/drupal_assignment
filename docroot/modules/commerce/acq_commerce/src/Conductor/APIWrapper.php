@@ -15,6 +15,11 @@ class APIWrapper {
   use \Drupal\acq_commerce\Conductor\AgentRequestTrait;
 
   /**
+   * Error code used internally for API Down cases.
+   */
+  const API_DOWN_ERROR_CODE = 600;
+
+  /**
    * Store ID.
    *
    * @var mixed
@@ -687,8 +692,8 @@ class APIWrapper {
    * Surrogate method for the ingest method. This is done to not have trait
    * conflicts.
    */
-  public function productFullSync() {
-    \Drupal::service('acq_commerce.ingest_api')->productFullSync();
+  public function productFullSync($store_id, $langcode, $skus = '', $page_size = 0) {
+    \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $page_size);
   }
 
   /**
@@ -804,5 +809,35 @@ class APIWrapper {
 
     return $result;
   }
+
+    /**
+     * Get position of the products in a category.
+     *
+     * @param int $category_id
+     *   The category id.
+     *
+     * @return array
+     *   All products with the positions in the given category.
+     *
+     * @throws \Exception
+     */
+    public function getProductPosition($category_id) {
+        $endpoint = $this->apiVersion . "/agent/category/$category_id/position";
+
+        $doReq = function ($client, $opt) use ($endpoint) {
+            return ($client->get($endpoint, $opt));
+        };
+
+        $result = [];
+
+        try {
+            $result = $this->tryAgentRequest($doReq, 'productPosition', 'position');
+        }
+        catch (ConductorException $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+
+        return $result;
+    }
 
 }

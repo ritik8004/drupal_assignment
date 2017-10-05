@@ -19,8 +19,8 @@
 
   Drupal.behaviors.joinusblock = {
     attach: function (context, settings) {
-      if ($('#block-alshaya-white-label-content div').hasClass('joinclub')) {
-        $('#block-alshaya-white-label-content article').addClass('joinclubblock');
+      if ($('#block-content div').hasClass('joinclub')) {
+        $('#block-content article').addClass('joinclubblock');
       }
 
       var mobileStickyHeaderHeight = $('.branding__menu').height();
@@ -98,27 +98,6 @@
           modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
         });
       });
-    }
-  };
-
-  Drupal.behaviors.stickyAddtobasketButton = {
-    attach: function (context, settings) {
-      // Only on mobile.
-      if ($(window).width() < 768) {
-        $(window, context).on('scroll', function () {
-          // Button top.
-          var button = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart');
-          var deliveryWrapper = $('.c-pdp .mobile-content-wrapper .delivery-options-wrapper');
-          var buttonTop = button.offset().top - 144;
-          var deliveryWrapperTop = deliveryWrapper.offset().top;
-          if (buttonTop >= deliveryWrapperTop) {
-            button.addClass('hide-button');
-          }
-          else {
-            button.removeClass('hide-button');
-          }
-        });
-      }
     }
   };
 

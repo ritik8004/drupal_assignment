@@ -46,6 +46,7 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
     $promotion_attach_item = ['target_id' => $promotion_nid];
     $skus_not_found = [];
     $attached_skus = [];
+    $invalidate_tags = ['node:' . $promotion_nid];
 
     foreach ($skus as $key => $sku) {
       $update_sku_flag = FALSE;
@@ -93,7 +94,7 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
           $sku_entity->save();
         }
 
-        // Process sku entity translations.s
+        // Process sku entity translations.
         if (!empty($sku_entity_translations)) {
           foreach ($sku_entity_translations as $langcode => $sku_entity_translation) {
             if (isset($update_sku_translations_flag[$langcode]) &&
@@ -103,18 +104,22 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
           }
         }
         $attached_skus[] = $sku['sku'];
+        $invalidate_tags[] = 'acq_sku:' . $sku_entity->id();
       }
       else {
         $skus_not_found[] = $sku['sku'];
       }
     }
 
+    // Invalidate sku cache tags & related promotion nid.
+    \Drupal::cache()->invalidateMultiple($invalidate_tags);
+
     if (!empty($skus_not_found)) {
-      $this->loggerFactory->get('acq_sku')->warning('Skus @skus not found in Drupal.',
+      $this->logger->warning('Skus @skus not found in Drupal.',
         ['@skus' => implode(',', $skus_not_found)]);
     }
 
-    $this->loggerFactory->get('acq_sku')->info('Attached Promotion:@promo to SKUs: @skus',
+    $this->logger->info('Attached Promotion:@promo to SKUs: @skus',
       ['@promo' => $promotion_nid, '@skus' => implode(',', $attached_skus)]);
   }
 

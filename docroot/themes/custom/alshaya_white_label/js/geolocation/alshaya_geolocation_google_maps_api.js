@@ -376,7 +376,13 @@
           scaledSize: new google.maps.Size(31, 48)
         };
         if (drupalSettings.path.currentLanguage === 'ar') {
-          markerSettings.icon.labelOrigin = new google.maps.Point(7, 15);
+          // If only single digit move them closer to the center.
+          if (markerSettings.label.length === 1) {
+            markerSettings.icon.labelOrigin = new google.maps.Point(11, 15);
+          }
+          else {
+            markerSettings.icon.labelOrigin = new google.maps.Point(7, 15);
+          }
         }
       }
     }

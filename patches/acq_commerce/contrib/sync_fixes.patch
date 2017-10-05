@@ -89,3 +89,16 @@ index 59527b94a..32282cdb4 100644
        ->set('filter_root_category', (bool) $form_state->getValue('filter_root_category'))
        ->save();
  
+diff --git a/src/Form/ConductorSettingsForm.php b/src/Form/ConductorSettingsForm.php
+index 32282cdb4..ff71d6036 100644
+--- a/src/Form/ConductorSettingsForm.php
++++ b/src/Form/ConductorSettingsForm.php
+@@ -107,7 +107,7 @@ public function buildForm(array $form, FormStateInterface $form_state) {
+       '#required' => TRUE,
+     ];
+ 
+-    $form['page_size'] = [
++    $form['product_page_size'] = [
+       '#type' => 'number',
+       '#title' => $this->t('Conductor Product Synchronization Page Size'),
+       '#default_value' => $config->get('product_page_size'),

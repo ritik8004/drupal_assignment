@@ -61,17 +61,20 @@
             font-size: 12px;
 
             span {
-              background: $cerulean-two;
-              display: inline-block;
-              padding: 0.657rem 17px;
-              text-align: center;
-              vertical-align: middle;
-              height: 35px;
-
               &.facet-item__value {
                 float: $left;
                 margin-#{$right}: 1px;
                 text-transform: lowercase;
+                background: $cerulean-two;
+                display: inline-block;
+                padding: 0.657rem 17px;
+                text-align: center;
+                vertical-align: middle;
+                height: 35px;
+
+                div {
+                  display: inline;
+                }
               }
 
               &.facet-item__count {
@@ -92,6 +95,11 @@
                 height: 35px;
                 position: relative;
                 float: $right;
+                background: $cerulean-two;
+                display: inline-block;
+                padding: 0.657rem 17px;
+                text-align: center;
+                vertical-align: middle;
               }
             }
           }
@@ -844,6 +852,18 @@ body {
     img {
       width: 100%;
       height: auto;
+    }
+  }
+}
+
+// Brands wont be translated.
+html[lang=ar] {
+  .block-facet-blockbrand,
+  .block-facet-blockskus-sku-reference-brand {
+    .facet-item__value,
+    .facet-item__count {
+      direction: ltr;
+      display: inline-block;
     }
   }
 }

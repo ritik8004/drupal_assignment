@@ -88,7 +88,9 @@ function alshaya_white_label_preprocess_page(&$variables) {
     }
   }
 
-  $variables['nojs_message'] = \Drupal::config('alshaya_master.settings')->get('js_disable_message');
+  $variables['nojs_message'] = [
+    '#markup' => \Drupal::config('alshaya_master.settings')->get('js_disable_message'),
+  ];
 
   $routmatch = \Drupal::routeMatch();
   // Attach the plp search js library to PLP page.
@@ -144,6 +146,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
 function alshaya_white_label_theme_suggestions_views_view_alter(array &$suggestions, &$variables) {
   if ($variables['view']->current_display == "block_product_slider") {
     $suggestions[] = 'views_view__product_slider';
+    $variables['row_limit'] = 3;
+  }
+  if (\Drupal::routeMatch()->getRouteName() === 'acq_cart.cart') {
+    $variables['row_limit'] = 5;
   }
 }
 
@@ -603,14 +609,16 @@ function alshaya_white_label_preprocess_input(&$variables) {
   $element = $variables['element'];
   if (isset($element['#attributes']['data-twig-suggestion']) && $element['#attributes']['data-twig-suggestion'] == 'userregisterformpassword') {
     // Get password tooltip content from config.
-    $tooltip = \Drupal::config('alshaya_user.settings')
-      ->get('password_tooltip.value');
+    $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip.value');
+
     // Get a different tooltip for change password page.
     if (\Drupal::routeMatch()->getRouteName() == 'change_pwd_page.change_password_form') {
-      $tooltip = \Drupal::config('alshaya_user.settings')
-        ->get('password_tooltip_change_pwd.value');
+      $tooltip = \Drupal::config('alshaya_user.settings')->get('password_tooltip_change_pwd.value');
     }
-    $variables['password_tooltip'] = $tooltip;
+
+    $variables['password_tooltip'] = [
+      '#markup' => $tooltip,
+    ];
   }
 }
 
@@ -671,7 +679,9 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
   $config = \Drupal::config('alshaya_master.maintenanace_404_settings');
   $maintenance_text = $config->get('maintenance_mode_rich_message');
   $image = $config->get('maintenance_mode_image');
-  $variables['maintenance_text'] = $maintenance_text['value'];
+  $variables['maintenance_text'] = [
+    '#markup' => $maintenance_text['value'],
+  ];
   $variables['maintenance_image'] = '';
   if (!empty($image)) {
     if ($file = file_load($image)) {
@@ -688,7 +698,9 @@ function alshaya_white_label_preprocess_page__404(&$variables) {
   $config = \Drupal::config('alshaya_master.maintenanace_404_settings');
   $text_404 = $config->get('404_message');
   $image = $config->get('404_image.' . $langcode);
-  $variables['message_404'] = $text_404['value'];
+  $variables['message_404'] = [
+    '#markup' => $text_404['value'],
+  ];
   $variables['image_404'] = '';
   if (!empty($image)) {
     if ($file = file_load($image)) {

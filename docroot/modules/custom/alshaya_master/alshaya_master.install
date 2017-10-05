@@ -322,6 +322,9 @@ function alshaya_master_install() {
     'Postal code' => [
       'ar' => 'الرمز البريدي',
     ],
+    'Country' => [
+      'ar' => 'البلد',
+    ],
     'Telephone' => [
       'ar' => 'الهاتف',
     ],
@@ -457,6 +460,9 @@ function alshaya_master_install() {
     ],
     'Home Delivery' => [
       'ar' => 'خدمة التوصيل للمنزل',
+    ],
+    'OR' => [
+      'ar' => 'أو',
     ],
     'For orders over KWD99' => [
       'ar' => 'على الطلبيات التي تزيد على "99" د.ك.',
@@ -694,7 +700,11 @@ function alshaya_master_install() {
       'ar' => 'احفظ التفاصيل الخاصة بك لتسهيل تسوقك المرة القادمة',
     ],
     'save' => [
-      'ar' => 'وفر',
+      'ar' => 'حفظ',
+    ],
+    'save' => [
+      'ar' => 'حفظ',
+      'context' => 'button',
     ],
     'Back to top' => [
       'ar' => 'أعلى الصفحة',
@@ -765,6 +775,9 @@ function alshaya_master_install() {
     ],
     'Select Area' => [
       'ar' => 'يرجى اختيار المنطقة',
+    ],
+    'Select @title' => [
+      'ar' => 'يرجى اختيار @title',
     ],
     'The email address @email is already taken.' => [
       'ar' => 'عنوان البريد الإلكتروني @email مستعمل مسبقاً',
@@ -839,7 +852,10 @@ function alshaya_master_install() {
       'ar' => 'الخصم',
     ],
     'under @stop' => [
-      'ar' => 'أقل من @stop د.ك.',
+      'ar' => 'أقل من @stop',
+    ],
+    '@start - @stop' => [
+      'ar' => '@stop - @start',
     ],
     'Features and benefits' => [
       'ar' => 'المزايا و الفوائد',
@@ -859,8 +875,12 @@ function alshaya_master_install() {
     'Thank you for your subscription.' => [
       'ar' => 'شكراً لاشتراككم في نشرتنا الاخبارية',
     ],
-    'Save @discount' => [
-      'ar' => 'وفر @discount',
+    'Save @discount%' => [
+      'ar' => 'وفّر %@discount',
+    ],
+    'Save' => [
+      'ar' => 'وفّر',
+      'context' => 'discount',
     ],
     'Filter' => [
       'ar' => 'حدّد اختيارك',
@@ -897,10 +917,6 @@ function alshaya_master_install() {
     ],
     'error' => [
       'ar' => 'يوجد خطأ',
-    ],
-    'save' => [
-      'ar' => 'حفظ',
-      'context' => 'Checkout',
     ],
     'Order Print' => [
       'ar' => 'اطبع الطلبية',
@@ -1073,16 +1089,19 @@ function alshaya_master_install() {
       'ar' => 'المجموعة',
     ],
     'Style Code: @value' => [
-      'ar' => '@value :رمز المنتج',
+      'ar' => 'رمز المنتج: @value',
     ],
     'Season: @value' => [
-      'ar' => '@value :الموسم',
+      'ar' => 'الموسم: @value',
     ],
     'Product brand: @value' => [
-      'ar' => '@value :العلامة التجارية',
+      'ar' => 'العلامة التجارية: @value',
     ],
     'Color: @value' => [
-      'ar' => '@value :اللون',
+      'ar' => 'اللون: @value',
+    ],
+    "What's In The Box" => [
+      'ar' => 'ماذا يوجد في الصندوق؟',
     ],
     'Size' => [
       'ar' => 'المقاس',
@@ -1137,6 +1156,9 @@ function alshaya_master_install() {
     ],
     '<p>Your PRIVILEGES CLUB card number is: <strong class="dark--text">@order.loyaltyCard</strong></p>' => [
       'ar' => '<p> رقم بطاقة نادي الامتيازات: <strong class="dark--text">@order.loyaltyCard</strong></p>',
+    ],
+    'Sorry, something went wrong and we are unable to process your request right now. Please try again later.' => [
+      'ar' => 'عفواً، حدث خطأ ما، ولم نتمكن من متابعة تنفيذ طلبك الآن. يرجى المحاولة مجدداً في وقت لاحق.',
     ],
   ];
   alshaya_i18n_save_translations($strings);
@@ -1230,16 +1252,8 @@ function alshaya_master_install() {
     $configFactory->set('option_extras.' . $option, 0);
   }
 
-  if (\Drupal::moduleHandler()->moduleExists('acq_sku')) {
-    // Enable share this for Product CT.
-    $configFactory->set('node_types.acq_product', 'acq_product');
-  }
-
   // Enable lazy load of JS to enhance performance (rendering time).
   $configFactory->set('late_load', 1);
-
-  // Set the option to use custom style for showing share images.
-  $configFactory->set('button_option', 'stbc_custom');
 
   // Save the changes.
   $configFactory->save();

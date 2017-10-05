@@ -34,6 +34,19 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
   else {
     $orders = \Drupal::service('acq_commerce.api')->getCustomerOrders($email);
 
+    // Update order items to have unique records only.
+    // For configurable products we get it twice (once for parent and once for
+    // selected variant).
+    foreach ($orders as $index => &$order) {
+      $order_items = [];
+      foreach ($order['items'] as $item) {
+        if (!isset($order_items[$item['sku']])) {
+          $order_items[$item['sku']] = $item;
+        }
+      }
+      $order['items'] = $order_items;
+    }
+
     // Sort them by default by date.
     usort($orders, function ($a, $b) {
       return $b['created_at'] > $a['created_at'];
@@ -312,7 +325,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['payment_method'] = $payment_method_term->getName();
 
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
-  $orderDetails['discount'] = alshaya_acm_price_format($order['totals']['discount']);
+  $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   return $orderDetails;
@@ -330,8 +343,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 function alshaya_acm_customer_get_available_user_order_status(UserInterface $user) {
   $all_status = [];
 
-  // Get all the orders for the user.
-  $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
+  try {
+    // Get all the orders for the user.
+    $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
+  }
+  catch (\Exception $e) {
+    return [];
+  }
 
   // Loop through all the orders to get status of each.
   foreach ($orders as $order) {
