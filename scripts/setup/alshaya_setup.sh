@@ -105,8 +105,12 @@ then
 	if [ "$loadsku" != "" ]
 	then
 	   echo "loading product skus"
-	   drush $envn -l $site sync-commerce-products --skus="$loadsku"
+	   # drush $envn -l $site sync-commerce-products --skus="$loadsku"
+       drush $envn -l $site acsp en 30 --skus="$loadsku"
+       drush $envn -l $site acsp ar 15 --skus="$loadsku"
 	fi
 	echo "loading all products"
-	drush $envn -l $site sync-commerce-products;
+	# drush $envn -l $site sync-commerce-products;
+    drush $envn -l $site acsp en 30;
+    drush $envn -l $site acsp ar 15;
 fi
