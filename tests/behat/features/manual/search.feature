@@ -2,8 +2,9 @@
 Feature: Search feature
 
   Scenario: As a Guest user
-    I should be able to search products
+  I should be able to search products
     Given I am on homepage
+    And I wait for the page to load
     When I fill in "edit-keywords" with "baby carrier"
     And I press "Search"
     Then I should see Search results page for "baby carrier"
@@ -12,33 +13,39 @@ Feature: Search feature
   Scenario: As a Guest user
   I should be able to search products
     Given I am on homepage
+    And I wait for the page to load
     And I follow "عربية"
-    When I fill in "edit-keywords" with "arabic"
+    When I wait for the page to load
+    When I fill in "edit-keywords" with "Green تي- شيرت"
     And I press "Search"
-    Then I should see Search results page in Arabic for "arabic"
+    Then I should see Search results page in Arabic for "Green تي- شيرت"
 
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
-    When I fill in "edit-keywords" with "black"
+    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    And I wait for the page to load
+    When I fill in "edit-keywords" with "socks"
     And I press "Search"
     And I wait for the page to load
-    Then I should see Search results page for "black"
+    Then I should see Search results page for "socks"
 
   @arabic
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    And I wait for the page to load
     And I follow "عربية"
-    When I fill in "edit-keywords" with "arabic"
+    When I wait for the page to load
+    When I fill in "edit-keywords" with "Green تي- شيرت"
     And I press "Search"
     And I wait for the page to load
-    Then I should see Search results page for "arabic"
+    Then I should see Search results page for "Green تي- شيرت"
 
   Scenario: As an user
-    I should be prompted with a correct message
-    when my search yields no results
+  I should be prompted with a correct message
+  when my search yields no results
     Given I am on homepage
+    And I wait for the page to load
     When I fill in "edit-keywords" with "randomtext"
     And I press "Search"
     Then I should see "Your search did not return any results."
@@ -48,8 +55,10 @@ Feature: Search feature
   I should be prompted with a correct message
   when my search yields no results
     Given I am on homepage
+    And I wait for the page to load
     And I follow "عربية"
-    When I fill in "edit-keywords" with "randomtext"
+    When I wait for the page to load
+    When I fill in "edit-keywords" with "نص عشوائي"
     And I press "Search"
     Then I should see "لا يوجد نتائج لبحثك"
 
@@ -57,10 +66,13 @@ Feature: Search feature
   I should be able to search for a product
   and add it to the cart
     Given I am on homepage
-    When I fill in "edit-keywords" with "baby"
+    And I wait for the page to load
+    When I fill in "edit-keywords" with "green t shirt"
     And I press "Search"
     And I wait for AJAX to finish
     When I select a product in stock
+    And I wait for the page to load
+    When I select a size for the product
     And I wait for AJAX to finish
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -72,7 +84,7 @@ Feature: Search feature
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
@@ -94,12 +106,16 @@ Feature: Search feature
   I should be able to search for a product
   and add it to the cart on Arabic site
     Given I am on homepage
+    And I wait for the page to load
     And I follow "عربية"
-    When I fill in "edit-keywords" with "لباس"
+    When I wait for the page to load
+    When I fill in "edit-keywords" with "Green تي- شيرت"
     And I press "Search"
     And I wait for AJAX to finish
     When I select a product in stock
     And I wait for the page to load
+    When I select a size for the product
+    And I wait for AJAX to finish
     When I press "أضف إلى سلة التسوق"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
@@ -110,7 +126,7 @@ Feature: Search feature
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
@@ -126,12 +142,13 @@ Feature: Search feature
     And I press "سجل الطلبية"
     When I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
-    And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على shweta@axelerant.com"
+    And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على"
 
   Scenario: As a Guest user
   I should be able to sort search results
   in ascending, descending order
     Given I am on homepage
+    And I wait for the page to load
     When I fill in "edit-keywords" with "black"
     And I press "Search"
     And I wait for the page to load
@@ -147,3 +164,16 @@ Feature: Search feature
     When I select "Price Low to High" from "edit-sort-bef-combine"
     And I wait 10 seconds
     Then I should see results sorted in ascending price order
+
+  Scenario: As a Guest user
+  when I type an Arabic term on English site
+  then I should be redirected to to the Arabic site and vice-versa
+    Given I am on homepage
+    And I wait for the page to load
+    When I fill in "edit-keywords" with "Green تي- شيرت"
+    And I press "Search"
+    Then I should see Search results page in Arabic for "Green تي- شيرت"
+    When I fill in "edit-keywords" with "baby"
+    And I press "Search"
+    When I wait for the page to load
+    Then I should see Search results page for "baby"
