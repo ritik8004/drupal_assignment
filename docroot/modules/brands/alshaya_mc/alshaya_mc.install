@@ -74,6 +74,11 @@ function alshaya_mc_install() {
   $config->set('store_list_label', 'List of all Mothercare Stores');
   $config->save();
 
+  // Setting all products buyable to be false by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('all_products_buyable', 0)
+    ->save();
+
   // Create default content for mothercare.
   alshaya_mc_create_default_content();
 }
@@ -106,6 +111,16 @@ function alshaya_mc_update_8301() {
       $new_block->save();
     }
   }
+}
+
+/**
+ * Default config for all_products_buyable.
+ */
+function alshaya_mc_update_8302() {
+  // Setting all products buyable to be false by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('all_products_buyable', 0)
+    ->save();
 }
 
 /**

@@ -30,4 +30,9 @@ function alshaya_hm_install() {
   \Drupal::configFactory()->getEditable('block.block.keywordsearchblock')
     ->set('weight', '-32')
     ->save();
+
+  // Setting all products buyable to be true by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('all_products_buyable', 1)
+    ->save();
 }
