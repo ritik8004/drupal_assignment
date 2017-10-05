@@ -3,6 +3,11 @@ status: true
 dependencies:
   config:
     - paragraphs.paragraphs_type.block_reference
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
 id: paragraph.block_reference
 target_entity_type_id: paragraph
 target_bundle: block_reference
