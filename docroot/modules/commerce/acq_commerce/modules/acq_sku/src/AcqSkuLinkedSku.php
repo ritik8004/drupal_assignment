@@ -115,8 +115,10 @@ class AcqSkuLinkedSku {
       }
 
       // Set the cache.
-      $cache_lifetime = $this->configFactory->get('acq_sku.settings')->get('linked_skus_cache_max_lifetime');
-      $this->cache->set($cache_key, $linked_skus, $cache_lifetime);
+      if ($cache_lifetime = $this->configFactory->get('acq_sku.settings')->get('linked_skus_cache_max_lifetime')) {
+        $cache_lifetime += \Drupal::time()->getRequestTime();
+        $this->cache->set($cache_key, $linked_skus, $cache_lifetime, ['acq_sku:' . $sku->id()]);
+      }
 
       // Return the data.
       return $type != LINKED_SKU_TYPE_ALL ? $linked_skus[$type] : $linked_skus;

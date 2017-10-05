@@ -78,16 +78,9 @@ class OrdersManager {
     $order = _alshaya_acm_checkout_get_last_order_from_session();
 
     foreach ($order['items'] as $item) {
-      $sku_entity = SKU::loadFromSku($item['sku']);
-
-      foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
-        $sku_entity_to_reset_stock = $sku_entity->getTranslation($langcode);
-        $cid = acq_sku_get_stock_cache_id($sku_entity_to_reset_stock);
-        \Drupal::cache('stock')->invalidate($cid);
+      if ($sku_entity = SKU::loadFromSku($item['sku'])) {
+        acq_sku_clear_sku_stock_cache($sku_entity);
       }
-
-      // Clear product and forms related to sku.
-      Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
     }
   }
 

@@ -106,6 +106,10 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       $account = $this->currentUser;
     }
 
+    if (!alshaya_acm_customer_is_customer($account)) {
+      return [];
+    }
+
     $email = $account->getEmail();
     $uid = $account->id();
 

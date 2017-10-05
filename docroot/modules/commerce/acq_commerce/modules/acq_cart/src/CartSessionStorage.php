@@ -204,7 +204,7 @@ class CartSessionStorage implements CartStorageInterface {
       }
       catch (\Exception $e) {
         // Restore the cart only if exception is not related to API being down.
-        if (!acq_commerce_is_api_down_error($e)) {
+        if (!acq_commerce_is_exception_api_down_exception($e)) {
           $this->restoreCart($cart_id);
         }
 

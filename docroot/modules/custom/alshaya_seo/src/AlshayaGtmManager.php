@@ -568,6 +568,11 @@ class AlshayaGtmManager {
         $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
         $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
+
+        if ($attributes[$skuId]['gtm-metric1']) {
+          $attributes[$skuId]['gtm-metric1'] *= $cartItem['qty'];
+        }
+
         $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
         $attributes[$skuId]['gtm-dimension7'] = $dimension7;
         $attributes[$skuId]['gtm-dimension8'] = $dimension8;
@@ -770,7 +775,7 @@ class AlshayaGtmManager {
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
-      'discountAmount' => (float) $order['totals']['discount'],
+      'discountAmount' => (float) abs($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
@@ -933,7 +938,7 @@ class AlshayaGtmManager {
                 $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
               }
             }
-            $shipping_obj = $cart->getShipping();
+            $shipping_obj = (array) $cart->getShipping();
             if (isset($shipping_obj['extension']['address_governate_segment'])) {
               $page_dl_attributes['deliveryArea'] = $shipping_obj['extension']['address_governate_segment'];
             }

@@ -146,6 +146,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
 function alshaya_white_label_theme_suggestions_views_view_alter(array &$suggestions, &$variables) {
   if ($variables['view']->current_display == "block_product_slider") {
     $suggestions[] = 'views_view__product_slider';
+    $variables['row_limit'] = 3;
+  }
+  if (\Drupal::routeMatch()->getRouteName() === 'acq_cart.cart') {
+    $variables['row_limit'] = 5;
   }
 }
 

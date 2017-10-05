@@ -474,12 +474,12 @@ class ProductSyncResource extends ResourceBase {
     if (isset($product['extension'], $product['extension']['media'])) {
       $media = $product['extension']['media'];
 
+      // @TODO: Remove this hard coded fix after getting answer why we have
+      // empty second array index and why all media come in first array index.
+      $media = reset($media);
+
       if (isset($product['attributes'], $product['attributes']['image'])) {
         $image = $product['attributes']['image'];
-
-        // @TODO: Remove this hard coded fix after getting answer why we have
-        // empty second array index and why all media come in first array index.
-        $media = reset($media);
 
         foreach ($media as &$data) {
           if (substr_compare($data['file'], $image, -strlen($image) ) === 0) {

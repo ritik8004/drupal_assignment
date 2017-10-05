@@ -12,12 +12,7 @@
   .c-page-title {
     margin-top: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #ddd;
-
-    @include breakpoint($only-mobile) {
-      padding: 0.45rem 0 0.3rem;
-      line-height: 1.5;
-    }
+    border-bottom: 1px solid $white;
 
     @include breakpoint($tablet) {
       margin-bottom: 2.25rem;

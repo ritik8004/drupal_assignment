@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product;
 
+use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
@@ -45,6 +46,13 @@ class SkuManager {
   protected $entityRepository;
 
   /**
+   * Linked SKUs service.
+   *
+   * @var \Drupal\acq_sku\AcqSkuLinkedSku
+   */
+  protected $linkedSkus;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -57,6 +65,8 @@ class SkuManager {
    *   The entity repository service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger service.
+   * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
+   *   Linked SKUs service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service.
    */
@@ -65,6 +75,7 @@ class SkuManager {
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
+                              AcqSkuLinkedSku $linked_skus,
                               CacheBackendInterface $cache) {
     $this->connection = $connection;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
@@ -72,6 +83,7 @@ class SkuManager {
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
+    $this->linkedSkus = $linked_skus;
     $this->cache = $cache;
   }
 
@@ -565,7 +577,7 @@ class SkuManager {
         }
       }
 
-      $this->cache->set('sku_tree', $sku_tree, Cache::PERMANENT, ['sku_list']);
+      $this->cache->set('sku_tree', $sku_tree, Cache::PERMANENT, ['acq_sku_list']);
     }
 
     return $sku_tree;
@@ -600,12 +612,15 @@ class SkuManager {
    *   List of skus related with a promotion.
    */
   public function getSkutextsForPromotion(Node $promotion) {
+    $skus = [];
+
     $cid = 'promotions_sku_' . $promotion->id();
     if (!empty($this->cache->get($cid))) {
       $skus_cache = $this->cache->get($cid);
       $skus = $skus_cache->data;
     }
     else {
+      // Get configurable SKUs.
       $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
       $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
       $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
@@ -614,6 +629,10 @@ class SkuManager {
       $query->distinct();
       $config_skus = $query->execute()->fetchAllKeyed(0, 1);
 
+      // We may not have anything in Simple.
+      $skus = $config_skus;
+
+      // Get Simple SKUs.
       $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
       $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
       $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
@@ -622,27 +641,36 @@ class SkuManager {
       $query->distinct();
       $simple_skus = $query->execute()->fetchAllKeyed(0, 1);
 
-      $sku_tree = $this->getSkuTree();
-      $processed_sku_eids = [];
+      if ($simple_skus) {
+        $skus = array_unique(array_merge($skus, $simple_skus));
 
-      foreach ($simple_skus as $sku) {
-        if (isset($sku_tree[$sku])) {
-          $parent_sku = $sku_tree[$sku];
-          if (!in_array($parent_sku, $processed_sku_eids)) {
-            $processed_sku_eids[] = $this->getSkuTextFromId($parent_sku);
-          }
-        }
-        else {
-          $processed_sku_eids[] = $sku;
-        }
+        // Get all parent SKUs for simple ones.
+        $parent_skus = $this->getParentSkus($simple_skus);
+        $skus = array_unique(array_merge($skus, $parent_skus));
       }
 
-      $skus = array_unique(array_merge($processed_sku_eids, $config_skus));
-
-      $this->cache->set($cid, $skus, Cache::PERMANENT, ['sku_list']);
+      $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
     }
 
     return $skus;
+  }
+
+  /**
+   * Helper function to get parent skus of all simple ones in one go.
+   *
+   * @param array $simple_skus
+   *   Array containing simple skus.
+   *
+   * @return array
+   *   Array containing all parent skus.
+   */
+  public function getParentSkus(array $simple_skus) {
+    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    $query->addField('acq_sku', 'id');
+    $query->addField('acq_sku', 'sku');
+    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
+    $query->condition('child_sku.field_configured_skus_value', array_values($simple_skus), 'IN');
+    return $query->execute()->fetchAllKeyed(0);
   }
 
   /**
@@ -692,6 +720,39 @@ class SkuManager {
     $plugin = $sku_entity->getPluginInstance();
 
     return $plugin->getParentSku($sku_entity);
+  }
+
+  /**
+   * Utility function to get linked SKUs.
+   *
+   * @param mixed $sku
+   *   SKU text or full entity object.
+   * @param string $type
+   *   Type of Linked SKUs to return related/upsell.
+   *
+   * @return array
+   *   Linked SKUs for requested type.
+   */
+  public function getLinkedSkus($sku, $type) {
+    $linked_skus = $this->linkedSkus->getLinkedSKus($sku);
+
+    $linked_skus_requested = [];
+
+    if (isset($linked_skus[$type]) && !empty($linked_skus[$type])) {
+      $linked_skus_requested = $linked_skus[$type];
+    }
+
+    try {
+      if ($linked_skus_from_product = $sku->get($type)->getValue()) {
+        $linked_skus_from_product = array_column($linked_skus_from_product, 'value');
+        $linked_skus_requested = array_merge($linked_skus_requested, $linked_skus_from_product);
+      }
+    }
+    catch (\Exception $e) {
+      // Do nothing.
+    }
+
+    return $linked_skus_requested;
   }
 
 }
