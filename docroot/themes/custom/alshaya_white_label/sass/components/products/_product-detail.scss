@@ -835,6 +835,10 @@
       padding: 0.5rem 0;
       border: none;
       border-radius: 0;
+
+      html[lang=ar] & {
+        width: 7.563rem;
+      }
     }
 
     .form-item-location label {
