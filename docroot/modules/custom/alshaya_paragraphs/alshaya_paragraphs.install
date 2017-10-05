@@ -45,6 +45,8 @@ function alshaya_paragraphs_update_8301() {
     'core.entity_view_display.paragraph.offers_bordered.default',
     'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
     'language.content_settings.paragraph.offers_bordered',
+    // Block reference paragraph type.
+    'language.content_settings.paragraph.block_reference',
     // Views reference paragraph type.
     'paragraphs.paragraphs_type.views_reference',
     'field.storage.paragraph.field_html_heading',
@@ -58,6 +60,21 @@ function alshaya_paragraphs_update_8301() {
     'core.base_field_override.paragraph.views_reference.moderation_state',
     'core.base_field_override.paragraph.views_reference.status',
     'core.base_field_override.paragraph.views_reference.uid',
+    // Title + textarea paragraph type.
+    'paragraphs.paragraphs_type.title_textarea',
+    'field.field.paragraph.title_textarea.field_title',
+    'field.field.paragraph.title_textarea.field_body',
+    'core.entity_form_display.paragraph.title_textarea.default',
+    'core.entity_view_display.paragraph.title_textarea.default',
+    'core.entity_view_display.paragraph.title_textarea.default',
+    'language.content_settings.paragraph.title_textarea',
+    'core.base_field_override.paragraph.title_textarea.created',
+    'core.base_field_override.paragraph.title_textarea.moderation_state',
+    'core.base_field_override.paragraph.title_textarea.status',
+    'core.base_field_override.paragraph.title_textarea.uid',
+    'core.entity_form_display.paragraph.1_row_1_col.default',
+    'field.field.paragraph.1_row_1_col.field_promo_block',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
