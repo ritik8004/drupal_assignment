@@ -8,3 +8,4 @@ dependencies:
   - alshaya_acm
   - alshaya_product
   - alshaya_config
+  - alshaya_i18n

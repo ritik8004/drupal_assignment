@@ -113,11 +113,31 @@ class AlshayaPromotionsManager {
 
   /**
    * Helper function to fetch all promotions.
+   *
+   * @param array $conditions
+   *   An array of associative array containing conditions, to be used in query,
+   *   with following elements:
+   *   - 'field': Name of the field being queried.
+   *   - 'value': The value for field.
+   *   - 'operator': Possible values like '=', '<>', '>', '>=', '<', '<='.
+   *
+   * @return array
+   *   Array of node objects.
+   *
+   * @see \Drupal\Core\Entity\Query\QueryInterface
    */
-  public function getAllPromotions() {
+  public function getAllPromotions(array $conditions = []) {
     $nodes = [];
     $query = $this->nodeStorage->getQuery();
-    $nids = $query->condition('type', 'acq_promotion')->execute();
+    $query->condition('type', 'acq_promotion');
+    foreach ($conditions as $condition) {
+      if (!empty($condition['field']) && !empty($condition['value'])) {
+        $condition['operator'] = empty($condition['operator']) ? '=' : $condition['operator'];
+        $query->condition($condition['field'], $condition['value'], $condition['operator']);
+      }
+    }
+
+    $nids = $query->execute();
     if (!empty($nids)) {
       $nodes = Node::loadMultiple($nids);
     }
