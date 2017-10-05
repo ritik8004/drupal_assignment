@@ -5,3 +5,12 @@
  * @file
  * Contains install, update, uninstall hooks for alshaya_acm_promotion module.
  */
+
+/**
+ * Implements hook_update_N()
+ */
+function alshaya_acm_promotion_update_8001() {
+  // Getting editable SOLR facet config.
+  $facet_promotion_collection = \Drupal::configFactory()->getEditable('facets.facet.promotion_collection_facet');
+  $facet_promotion_collection->set('widget.config.show_numbers', TRUE)->save();
+}

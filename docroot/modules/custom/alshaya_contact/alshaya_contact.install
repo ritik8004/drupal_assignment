@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use Drupal\lightning_core\ConfigHelper;
+
+/**
+ * Implements hook_update().
+ *
+ * Update form id for contact webform in captcha config.
+ */
+function alshaya_contact_update_8002() {
+  try {
+    \Drupal::configFactory()->getEditable('captcha.captcha_point.webform_submission_alshaya_contact_form')->delete();
+  }
+  catch (\Exception $e) {
+    // Do nothing, we don't plan to use this config anymore.
+  }
+  ConfigHelper::forModule('alshaya_contact')->install()->get('captcha.captcha_point.webform_submission_alshaya_contact_add_form')->save();
+}

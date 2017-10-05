@@ -295,6 +295,7 @@
 
     .js-form-wrapper {
       float: $left;
+      max-width: 12.75rem;
 
       .form-type-select {
         @include select-wrapper(12.375rem);
@@ -418,6 +419,19 @@
     @include breakpoint($tablet) {
       width: 33%;
       float: $left;
+    }
+  }
+}
+
+.path--cart {
+  .no-carousel {
+    @include clearfix;
+
+    .views-row {
+      @include breakpoint($tablet) {
+        width: 25%;
+        float: $left;
+      }
     }
   }
 }

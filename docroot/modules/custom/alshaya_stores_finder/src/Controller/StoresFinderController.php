@@ -112,8 +112,6 @@ class StoresFinderController extends ControllerBase {
     $display = 'page_2';
     if ($view_type == 'map_view') {
       $display = 'page_3';
-      $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'none']));
-      $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'block']));
       $response->addCommand(new InvokeCommand('.map-view-link', 'addClass', ['active']));
       $response->addCommand(new InvokeCommand('.list-view-link', 'removeClass', ['active']));
       $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'removeClass', ['current-view']));
@@ -125,8 +123,6 @@ class StoresFinderController extends ControllerBase {
       $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-geolocation-geocoder-google-places-api', 'val', ['']));
     }
     else {
-      $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'none']));
-      $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'block']));
       $response->addCommand(new InvokeCommand('.list-view-link', 'addClass', ['active']));
       $response->addCommand(new InvokeCommand('.map-view-link', 'removeClass', ['active']));
       $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'addClass', ['current-view']));

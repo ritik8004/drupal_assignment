@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_promotion module.
+ */
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_product_update_8001() {
+  // Getting editable SOLR facet config.
+  $facet_solr_collection = \Drupal::configFactory()->getEditable('facets.facet.collection');
+  $facet_solr_collection->set('widget.config.show_numbers', TRUE)->save();
+
+  // Get editable db facet config.
+  $facet_db_collection = \Drupal::configFactory()->getEditable('facets.facet.skus_sku_reference_collection');
+  $facet_db_collection->set('widget.config.show_numbers', TRUE)->save();
+}

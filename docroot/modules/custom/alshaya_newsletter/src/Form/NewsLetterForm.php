@@ -106,7 +106,13 @@ class NewsLetterForm extends FormBase {
         }
       }
       catch (\Exception $e) {
-        $message = '<span class="message error">' . $this->t('Something went wrong, please try again later.') . '</span>';
+        if (acq_commerce_is_exception_api_down_exception($e)) {
+          $message = '<span class="message error">' . $e->getMessage() . '</span>';
+        }
+        else {
+          $message = '<span class="message error">' . $this->t('Something went wrong, please try again later.') . '</span>';
+        }
+
         $data['message'] = 'failure';
       }
 

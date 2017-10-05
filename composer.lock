@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff34f9b58f7149399eae5389d06916ca",
+    "content-hash": "c4f11ffe191a7acfb0a19b752bfd0ea6",
     "packages": [
         {
             "name": "acquia/blt",
@@ -594,54 +594,6 @@
             ],
             "description": "Internationalization library powered by CLDR data.",
             "time": "2016-12-13T12:33:19+00:00"
-        },
-        {
-            "name": "commerceguys/zone",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/commerceguys/zone.git",
-                "reference": "9bd0b361a971284442972c42b6749ca855c65435"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/commerceguys/zone/zipball/9bd0b361a971284442972c42b6749ca855c65435",
-                "reference": "9bd0b361a971284442972c42b6749ca855c65435",
-                "shasum": ""
-            },
-            "require": {
-                "commerceguys/addressing": "~1.0",
-                "doctrine/collections": "~1.0",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "mikey179/vfsstream": "1.*",
-                "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "2.*",
-                "symfony/intl": ">=2.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CommerceGuys\\Zone\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bojan Zivanovic"
-                }
-            ],
-            "description": "Zone management library.",
-            "time": "2017-04-20T12:44:24+00:00"
         },
         {
             "name": "composer/installers",
@@ -2215,22 +2167,21 @@
         },
         {
             "name": "drupal/address",
-            "version": "1.0.0-rc4",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/address",
-                "reference": "8.x-1.0-rc4"
+                "reference": "8.x-1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/address-8.x-1.0-rc4.zip",
-                "reference": "8.x-1.0-rc4",
-                "shasum": "541b020ce839dd9c75374e213c1131d9c1f6f52d"
+                "url": "https://ftp.drupal.org/files/projects/address-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "041445ac14087be943c0c1c562b9bf800d87f7e8"
             },
             "require": {
                 "commerceguys/addressing": "~1.0",
                 "commerceguys/intl": "~0.7",
-                "commerceguys/zone": "~1.0",
                 "drupal/core": "*"
             },
             "type": "drupal-module",
@@ -2239,8 +2190,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc4",
-                    "datestamp": "1495109886"
+                    "version": "8.x-1.2",
+                    "datestamp": "1505896144",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3036,17 +2991,17 @@
         },
         {
             "name": "drupal/contact_storage",
-            "version": "1.0.0-beta8",
+            "version": "1.0.0-beta9",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/contact_storage",
-                "reference": "8.x-1.0-beta8"
+                "reference": "8.x-1.0-beta9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/contact_storage-8.x-1.0-beta8.zip",
-                "reference": "8.x-1.0-beta8",
-                "shasum": "01e9bd402351f02cf6519b841d355a61138e0d0f"
+                "url": "https://ftp.drupal.org/files/projects/contact_storage-8.x-1.0-beta9.zip",
+                "reference": "8.x-1.0-beta9",
+                "shasum": "42b12d6f755485617e949aaf1b2c9aae09eb0e3e"
             },
             "require": {
                 "drupal/core": "*",
@@ -3058,8 +3013,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta8",
-                    "datestamp": "1476400139"
+                    "version": "8.x-1.0-beta9",
+                    "datestamp": "1497478742",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3853,20 +3812,20 @@
         },
         {
             "name": "drupal/entity",
-            "version": "1.0.0-alpha4",
+            "version": "1.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/entity",
-                "reference": "8.x-1.0-alpha4"
+                "reference": "8.x-1.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity-8.x-1.0-alpha4.zip",
-                "reference": "8.x-1.0-alpha4",
-                "shasum": "c081d3757c159dfee74c9e5acb63bdee81c42e18"
+                "url": "https://ftp.drupal.org/files/projects/entity-8.x-1.0-beta1.zip",
+                "reference": "8.x-1.0-beta1",
+                "shasum": "6965349818de8cb820113b6841076162190c1a4c"
             },
             "require": {
-                "drupal/core": "~8.1"
+                "drupal/core": "~8.3"
             },
             "type": "drupal-module",
             "extra": {
@@ -3874,8 +3833,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-alpha4",
-                    "datestamp": "1481194983"
+                    "version": "8.x-1.0-beta1",
+                    "datestamp": "1505895844",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5299,17 +5262,17 @@
         },
         {
             "name": "drupal/menu_link_attributes",
-            "version": "1.0.0-beta3",
+            "version": "1.0.0-beta5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/menu_link_attributes",
-                "reference": "8.x-1.0-beta3"
+                "reference": "8.x-1.0-beta5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/menu_link_attributes-8.x-1.0-beta3.zip",
-                "reference": "8.x-1.0-beta3",
-                "shasum": "60dbace4eca093fddf00c185396251b95d865fa0"
+                "url": "https://ftp.drupal.org/files/projects/menu_link_attributes-8.x-1.0-beta5.zip",
+                "reference": "8.x-1.0-beta5",
+                "shasum": "ccdbe16df5a0d3235724ab2b1e4128461cb5273f"
             },
             "require": {
                 "drupal/core": "*"
@@ -5320,8 +5283,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta3",
-                    "datestamp": "1467719639"
+                    "version": "8.x-1.0-beta5",
+                    "datestamp": "1507123853",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5935,17 +5902,17 @@
         },
         {
             "name": "drupal/password_policy",
-            "version": "3.0.0-alpha3",
+            "version": "3.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/password_policy",
-                "reference": "8.x-3.0-alpha3"
+                "reference": "8.x-3.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/password_policy-8.x-3.0-alpha3.zip",
-                "reference": "8.x-3.0-alpha3",
-                "shasum": "efe3ac404276ab2274b29393e55f6a4b7fb58681"
+                "url": "https://ftp.drupal.org/files/projects/password_policy-8.x-3.0-alpha4.zip",
+                "reference": "8.x-3.0-alpha4",
+                "shasum": "79997599fbce390e79eda0aba10f403324c48b99"
             },
             "require": {
                 "drupal/core": "*",
@@ -5957,11 +5924,12 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-alpha3",
-                    "datestamp": "1488135183"
-                },
-                "patches_applied": {
-                    "Error message is not translatable": "https://www.drupal.org/files/issues/password_policy_error_translate-2878784-2.patch"
+                    "version": "8.x-3.0-alpha4",
+                    "datestamp": "1506649448",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6111,17 +6079,17 @@
         },
         {
             "name": "drupal/profile",
-            "version": "1.0.0-alpha7",
+            "version": "1.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/profile",
-                "reference": "8.x-1.0-alpha7"
+                "reference": "8.x-1.0-rc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/profile-8.x-1.0-alpha7.zip",
-                "reference": "8.x-1.0-alpha7",
-                "shasum": "8fe1cea29dd88215d0cf886b3bca9eccb025f531"
+                "url": "https://ftp.drupal.org/files/projects/profile-8.x-1.0-rc1.zip",
+                "reference": "8.x-1.0-rc1",
+                "shasum": "cc537ca25412adc4fa601ff42cf2fb5cbc6e7b6b"
             },
             "require": {
                 "drupal/core": "~8.1",
@@ -6133,11 +6101,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-alpha7",
-                    "datestamp": "1497287643",
+                    "version": "8.x-1.0-rc1",
+                    "datestamp": "1505830145",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -6352,17 +6320,17 @@
         },
         {
             "name": "drupal/redirect",
-            "version": "1.0.0-alpha5",
+            "version": "1.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/redirect",
-                "reference": "8.x-1.0-alpha5"
+                "reference": "8.x-1.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/redirect-8.x-1.0-alpha5.zip",
-                "reference": "8.x-1.0-alpha5",
-                "shasum": "927aa4c8d8b40b0cd2442bee86f2f386d25e53ca"
+                "url": "https://ftp.drupal.org/files/projects/redirect-8.x-1.0-beta1.zip",
+                "reference": "8.x-1.0-beta1",
+                "shasum": "0be21502538afc193a6817089476e7f6ddae2f6d"
             },
             "require": {
                 "drupal/core": "~8"
@@ -6373,8 +6341,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-alpha5",
-                    "datestamp": "1492182542"
+                    "version": "8.x-1.0-beta1",
+                    "datestamp": "1501443542",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
                 },
                 "patches_applied": {
                     "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
@@ -6792,22 +6764,28 @@
         },
         {
             "name": "drupal/search_api_solr",
-            "version": "1.0.0-rc4",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/search_api_solr",
-                "reference": "8.x-1.0-rc4"
+                "reference": "8.x-1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_solr-8.x-1.0-rc4.zip",
-                "reference": "8.x-1.0-rc4",
-                "shasum": "8d49e3b4d4783fff318763e1051ca9592544c6bf"
+                "url": "https://ftp.drupal.org/files/projects/search_api_solr-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "ff124407b883c9e56030e8c10dcd8827c922cceb"
             },
             "require": {
                 "drupal/core": "~8.0",
-                "drupal/search_api": "~1.0",
+                "drupal/search_api": "~1.3",
                 "solarium/solarium": "3.8.*"
+            },
+            "require-dev": {
+                "drupal/facets": "1.x-dev",
+                "drupal/geofield": "1.x-dev",
+                "drupal/search_api_autocomplete": "1.x-dev",
+                "drupal/search_api_location": "1.x-dev"
             },
             "suggest": {
                 "drupal/facets": "Provides facetted search.",
@@ -6819,16 +6797,15 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc4",
-                    "datestamp": "1498580642",
+                    "version": "8.x-1.1",
+                    "datestamp": "1505488645",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "RC releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "patches_applied": {
-                    "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch",
-                    "Allow case insensitive autocomplete": "https://www.drupal.org/files/issues/allow_case_insensitive_autocomplete-2890159-5.patch"
+                    "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7272,7 +7249,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/simple_sitemap",
-                "reference": "a26345459dd68bb182319252548bf8bc36ca570a"
+                "reference": "ae04cd85bfc4417fd9233f69f26516cf80166898"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -7283,12 +7260,15 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.9+14-dev",
-                    "datestamp": "1503777545",
+                    "version": "8.x-2.10+2-dev",
+                    "datestamp": "1506772144",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "MMCPA-2433": "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7315,7 +7295,7 @@
                 "issues": "https://drupal.org/project/issues/simple_sitemap",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-08-28T13:57:41+00:00"
+            "time": "2017-09-30T20:57:01+00:00"
         },
         {
             "name": "drupal/taxonomy_access_fix",
@@ -7788,17 +7768,17 @@
         },
         {
             "name": "drupal/webform",
-            "version": "5.0.0-beta12",
+            "version": "5.0.0-beta19",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/webform",
-                "reference": "8.x-5.0-beta12"
+                "reference": "8.x-5.0-beta19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.0-beta12.zip",
-                "reference": "8.x-5.0-beta12",
-                "shasum": "5fdaf9cba10c146937f86f85f868008ef1799a94"
+                "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.0-beta19.zip",
+                "reference": "8.x-5.0-beta19",
+                "shasum": "c117f293e1f009a86adfd7cff1007e4e89b2c5fd"
             },
             "require": {
                 "drupal/core": "*"
@@ -7809,8 +7789,12 @@
                     "dev-5.x": "5.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-5.0-beta12",
-                    "datestamp": "1496265842"
+                    "version": "8.x-5.0-beta19",
+                    "datestamp": "1506634743",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13407,6 +13391,54 @@
                 "behat-screenshot"
             ],
             "time": "2016-11-26T16:45:39+00:00"
+        },
+        {
+            "name": "commerceguys/zone",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/commerceguys/zone.git",
+                "reference": "9bd0b361a971284442972c42b6749ca855c65435"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/commerceguys/zone/zipball/9bd0b361a971284442972c42b6749ca855c65435",
+                "reference": "9bd0b361a971284442972c42b6749ca855c65435",
+                "shasum": ""
+            },
+            "require": {
+                "commerceguys/addressing": "~1.0",
+                "doctrine/collections": "~1.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "1.*",
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "2.*",
+                "symfony/intl": ">=2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CommerceGuys\\Zone\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bojan Zivanovic"
+                }
+            ],
+            "description": "Zone management library.",
+            "time": "2017-04-20T12:44:24+00:00"
         },
         {
             "name": "dflydev/dot-access-configuration",

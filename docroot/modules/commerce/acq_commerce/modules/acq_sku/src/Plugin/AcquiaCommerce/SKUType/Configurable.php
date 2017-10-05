@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
@@ -175,6 +176,20 @@ class Configurable extends SKUPluginBase {
 
     if ($tree_pointer instanceof SKU) {
       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
+
+      // Cart here can be empty only if APIs aren't working.
+      // Call above is to create cart if empty, we except a new or old cart here
+      // and it can be empty if server is not working or in maintenance mode.
+      if (empty($cart)) {
+        $e = new \Exception(acq_commerce_api_down_global_error_message(), APIWrapper::API_DOWN_ERROR_CODE);
+
+        // Dispatch event so action can be taken.
+        $dispatcher = \Drupal::service('event_dispatcher');
+        $event = new AddToCartErrorEvent($e);
+        $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
+        return;
+      }
+
       $options = [];
       $label_parts = [];
       $configurables_form = $form['ajax']['configurables'];

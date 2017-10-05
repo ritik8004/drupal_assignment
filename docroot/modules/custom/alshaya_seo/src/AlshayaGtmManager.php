@@ -537,7 +537,7 @@ class AlshayaGtmManager {
         // For CC we always use step 2.
         $attributes['step'] = 2;
       }
-      elseif (isset($address['extension'], $address['extension']['address_area_segment']) &&
+      elseif (isset($address['customer_address_id']) && (!empty($address['customer_address_id'])) &&
         ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
         // For HD we use step 3 if we have address saved.
         $attributes['step'] = 3;
@@ -568,6 +568,11 @@ class AlshayaGtmManager {
         $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
         $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
+
+        if ($attributes[$skuId]['gtm-metric1']) {
+          $attributes[$skuId]['gtm-metric1'] *= $cartItem['qty'];
+        }
+
         $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
         $attributes[$skuId]['gtm-dimension7'] = $dimension7;
         $attributes[$skuId]['gtm-dimension8'] = $dimension8;
@@ -770,7 +775,7 @@ class AlshayaGtmManager {
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
-      'discountAmount' => (float) $order['totals']['discount'],
+      'discountAmount' => (float) abs($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
