@@ -143,6 +143,23 @@ trait AgentRequestTrait {
         $result->getBody()
       ));
 
+      // Process the response to check if error is downtime error
+      // from Magento.
+      $errors = [];
+      if (preg_match('/response:(.*)/i', $result->getBody(), $matches)) {
+        if (isset($errors[1])) {
+          $error = json_decode(strtolower($errors[1]), TRUE);
+
+          if (isset($error['status'])) {
+            $error_code = (int) $error['status'];
+
+            if ($error_code >= 500 && $error_code < 600) {
+              throw new \Exception(acq_commerce_api_down_global_error_message(), APIWrapper::API_DOWN_ERROR_CODE);
+            }
+          }
+        }
+      }
+
       throw new ConductorResultException($response);
     }
 

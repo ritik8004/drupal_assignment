@@ -359,3 +359,31 @@ index 4fa7b9c19..356309a02 100644
          drupal_set_message($e->getMessage(), 'error');
          $form_state->setErrorByName('custom', $e->getMessage());
          $form_state->setRebuild(TRUE);
+diff --git a/src/Conductor/AgentRequestTrait.php b/src/Conductor/AgentRequestTrait.php
+index 9a8ad5dd3..c27178a0b 100644
+--- a/src/Conductor/AgentRequestTrait.php
++++ b/src/Conductor/AgentRequestTrait.php
+@@ -143,6 +143,23 @@ function (TransferStats $stats) use ($logger, $action) {
+         $result->getBody()
+       ));
+ 
++      // Process the response to check if error is downtime error
++      // from Magento.
++      $errors = [];
++      if (preg_match('/response:(.*)/i', $result->getBody(), $matches)) {
++        if (isset($errors[1])) {
++          $error = json_decode(strtolower($errors[1]), TRUE);
++
++          if (isset($error['status'])) {
++            $error_code = (int) $error['status'];
++
++            if ($error_code >= 500 && $error_code < 600) {
++              throw new \Exception(acq_commerce_api_down_global_error_message(), APIWrapper::API_DOWN_ERROR_CODE);
++            }
++          }
++        }
++      }
++
+       throw new ConductorResultException($response);
+     }
+ 
