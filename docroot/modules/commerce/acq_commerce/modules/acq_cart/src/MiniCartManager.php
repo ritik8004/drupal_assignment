@@ -28,6 +28,8 @@ class MiniCartManager {
     // Return empty cart in case no cart available in current session.
     $output = [
       '#theme' => 'acq_cart_mini_cart',
+      '#prefix' => '<div id="mini-cart-wrapper">',
+      '#suffix' => '</div><div id="cart_notification"></div>',
     ];
 
     if (!empty($cart)) {
@@ -49,11 +51,8 @@ class MiniCartManager {
       // Use the template to render the HTML.
       $output['#quantity'] = $cart->getCartItemsCount();
       $output['#total'] = render($total);
-      $output['#cart_id'] = $cart->id();
     }
 
-    $output['#prefix'] = '<div id="mini-cart-wrapper">';
-    $output['#suffix'] = '</div><div id="cart_notification"></div>';
     return $output;
   }
 
