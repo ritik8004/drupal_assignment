@@ -267,10 +267,9 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
       $langcode = acq_commerce_get_langcode_from_store_id($category['store_id']);
 
-      // Use site's default langcode if store_id mapping is not available to
-      // any language.
+      // If lancode is not available, means no mapping of store and language.
       if (!$langcode) {
-        $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+        continue;
       }
 
       $parent_data = ($parent) ? [$parent->id()] : [0];
