@@ -1,13 +1,19 @@
 .region-secondary-header {
-  display: none;
-  width: 40%;
-  font-size: 0;
-  vertical-align: top;
-  text-align: direction(right);
-  background: $black;
-  padding-#{direction(right)}: 1.5rem;
-
-  @include breakpoint($desk) {
+  @include breakpoint($above-palm) {
     display: inline-block;
+    width: 40%;
+    font-size: 0;
+    vertical-align: top;
+    text-align: direction(right);
+    background: $black;
+    padding-#{direction(right)}: 1.5rem;
+  }
+}
+
+.region-top-header {
+  .region-secondary-header {
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
   }
 }

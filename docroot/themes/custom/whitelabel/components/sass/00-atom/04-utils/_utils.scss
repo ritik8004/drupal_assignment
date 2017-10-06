@@ -17,3 +17,9 @@
     display: block;
   }
 }
+
+.device__mobile {
+  @include breakpoint($above-palm) {
+    display: none;
+  }
+}
