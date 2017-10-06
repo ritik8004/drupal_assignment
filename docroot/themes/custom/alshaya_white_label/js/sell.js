@@ -17,7 +17,6 @@
       var basketHR = $('.block-basket-horizontal-recommendation .owl-carousel');
 
       var options = {
-        loop: true,
         responsiveClass: true,
         dots: true,
         responsive: {
