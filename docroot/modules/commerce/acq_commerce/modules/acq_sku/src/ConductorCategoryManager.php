@@ -155,7 +155,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       $tid = array_shift($tids);
       $parents = $this->termStorage->loadParents($tid);
       $parent = array_shift($parents);
-      $parent = ($parent && $parent->id()) ? $parent : NULL;
+      $parent = ($parent && $parent->id()) ? $parent : 0;
     }
     else {
       // This might be the case of new term which doesn't exist yet. In this
@@ -254,7 +254,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     // Remove top level item (Default Category) from the categories, if its set
     // in configuration and category is with no parent.
     $filter_root_category = \Drupal::config('acq_commerce.conductor')->get('filter_root_category');
-    if ($filter_root_category && $parent == NULL) {
+    if ($filter_root_category && $parent === NULL) {
       $categories = $categories[0]['children'];
     }
 
