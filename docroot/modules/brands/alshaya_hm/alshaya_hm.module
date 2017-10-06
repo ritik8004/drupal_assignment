@@ -18,3 +18,14 @@ function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id)
     }
   }
 }
+
+/**
+ * Implements hook_acq_sku_product_node_alter().
+ */
+function alshaya_hm_acq_sku_product_node_alter(Drupal\node\Entity\Node $node, array $product) {
+  // Set product activation date if available.
+  if (isset($product['attributes']['product_activation_date'])) {
+    $node->created = strtotime($product['attributes']['product_activation_date']);
+    $node->save();
+  }
+}
