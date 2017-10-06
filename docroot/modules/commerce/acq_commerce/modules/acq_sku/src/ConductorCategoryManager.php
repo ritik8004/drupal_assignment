@@ -157,6 +157,25 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       $parent = array_shift($parents);
       $parent = ($parent && $parent->id()) ? $parent : NULL;
     }
+    else {
+      // This might be the case of new term which doesn't exist yet. In this
+      // case, we need to find the existing parent or new term will be created
+      // at root level.
+      if (isset($categories['parent_id'])) {
+        $query = $this->queryFactory->get('taxonomy_term');
+        $group = $query->andConditionGroup()
+          ->condition('field_commerce_id', $categories['parent_id'])
+          ->condition('vid', $this->vocabulary->id());
+        $query->condition($group);
+
+        $tids = $query->execute();
+        // If term with given commerce id exists.
+        if (count($tids)) {
+          $tid = array_shift($tids);
+          $parent = $this->termStorage->load($tid);
+        }
+      }
+    }
 
     // Recurse the category tree and create / update nodes.
     $this->syncCategory([$categories], $parent);
