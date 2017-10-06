@@ -58,6 +58,13 @@ function alshaya_non_transac_install() {
   // Invoke a hook to let other modules know that profile installation is done.
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya_non_transac', $modules]);
 
+  $strings = [
+    'find a store' => [
+      'ar' => 'البحث عن محل',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
   // We probably don't have any module depending on acquia_connector which is
   // required on ACSF environments.
   if (isset($_ENV['AH_SITE_NAME'])) {
