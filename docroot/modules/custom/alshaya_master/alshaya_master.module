@@ -613,7 +613,9 @@ function alshaya_master_alshaya_master_post_drupal_install() {
 function alshaya_master_webform_submission_presave(EntityInterface $entity) {
   $data = $entity->getData();
   $value_changed = FALSE;
-
+  // Mobile number field gives value as array and it gets stored in database
+  // as "Array". so, we need to Walk through the submitted data and search for
+  // mobile number value and replace the array with value string.
   array_walk($data, function (&$value) use (&$value_changed) {
     if (is_array($value) && isset($value['mobile'])) {
       $value_changed = TRUE;
