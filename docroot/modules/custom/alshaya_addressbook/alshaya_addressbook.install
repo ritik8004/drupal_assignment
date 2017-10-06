@@ -9,7 +9,7 @@ use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
- * Implements hook_update().
+ * Implements hook_update_N().
  *
  * Grant view profile permission to all users.
  */

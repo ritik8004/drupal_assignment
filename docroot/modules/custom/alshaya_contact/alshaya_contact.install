@@ -8,11 +8,11 @@
 use Drupal\lightning_core\ConfigHelper;
 
 /**
- * Implements hook_update().
+ * Implements hook_update_N().
  *
  * Update form id for contact webform in captcha config.
  */
-function alshaya_contact_update_8002() {
+function alshaya_contact_update_8001() {
   try {
     \Drupal::configFactory()->getEditable('captcha.captcha_point.webform_submission_alshaya_contact_form')->delete();
   }
