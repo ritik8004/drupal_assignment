@@ -223,10 +223,7 @@ function alshaya_search_search_api_solr_query_alter(QueryInterface $solarium_que
 function alshaya_search_keyword_language_redirect($form, FormStateInterface $form_state) {
   $keyword = $form_state->getValue('keywords');
 
-  // For some reason Drupal submits the exposed form if anything is received
-  // in GET and since this form is added on all pages it processes the submit
-  // callback on all pages. We simply add a check here, if keyword is empty
-  // we don't do anything.
+  // Don't process if some notorious guy reached search page directly.
   if (empty($keyword)) {
     return;
   }
