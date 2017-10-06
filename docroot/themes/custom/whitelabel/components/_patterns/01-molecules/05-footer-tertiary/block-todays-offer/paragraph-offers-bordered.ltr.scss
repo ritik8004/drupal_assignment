@@ -21,6 +21,14 @@
     }
   }
 
+  .field-banner img {
+    max-height: 8.0625rem;
+
+    @include breakpoint($desk) {
+      max-height: 11.75rem;
+    }
+  }
+
   .field-title {
     color: $medium-pink;
     font-size: 1rem;

@@ -6,11 +6,11 @@
   margin: auto;
 
   @include breakpoint($lap) {
-    max-width: 720px;
+    max-width: 93.75%;
   }
 
   @include breakpoint($desk) {
-    max-width: 73.12%;
+    max-width: 81.8%;
   }
 
   .field-paragraph-content {
@@ -52,7 +52,7 @@
 }
 
 .active-offer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   z-index: $z-3;
   left: 0;
@@ -65,11 +65,7 @@
     box-shadow: none;
 
     @include breakpoint($desk) {
-      padding: 0.625rem;
+      padding: 0.625rem 1.8rem;
     }
   }
-}
-
-footer {
-  position: relative;
 }
