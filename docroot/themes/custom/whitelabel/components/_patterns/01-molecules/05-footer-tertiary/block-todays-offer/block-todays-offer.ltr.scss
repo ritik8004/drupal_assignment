@@ -46,7 +46,7 @@
     @include breakpoint($desk) {
       font-size: 0.9375rem;
       letter-spacing: 0.125rem;
-      padding: 1.1rem 1.5rem 0.7rem 3rem;
+      padding: direction-sides(1.1rem 1.5rem 0.7rem 3rem);
     }
   }
 }
