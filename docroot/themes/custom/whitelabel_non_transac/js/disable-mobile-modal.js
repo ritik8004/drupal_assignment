@@ -12,8 +12,8 @@
       $(this).click(function () {
         window.open(Drupal.settings.basePath + href);
         return false;
-      })
-    })
+      });
+    });
   }
 
 })(jQuery, Drupal);
