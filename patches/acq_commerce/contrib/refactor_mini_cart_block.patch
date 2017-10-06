@@ -124,3 +124,15 @@ index ee6c0583d..b654e0401 100644
    }
  
  }
+diff --git a/modules/acq_cart/src/Plugin/Block/CartMiniBlock.php b/modules/acq_cart/src/Plugin/Block/CartMiniBlock.php
+index b654e0401..d74a704f0 100644
+--- a/modules/acq_cart/src/Plugin/Block/CartMiniBlock.php
++++ b/modules/acq_cart/src/Plugin/Block/CartMiniBlock.php
+@@ -7,7 +7,6 @@
+ use Drupal\Core\Block\BlockBase;
+ use Drupal\Core\Cache\Cache;
+ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+-use Drupal\Core\Session\AccountProxyInterface;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
