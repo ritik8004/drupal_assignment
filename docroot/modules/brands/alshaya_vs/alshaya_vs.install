@@ -35,6 +35,15 @@ function alshaya_vs_install() {
   // Change region for main navigation block.
   alshaya_block_move_blocks(['main_navigation' => 'header_primary']);
 
+  // Change page title visibility for advanced_page content type.
+  $blocks = [
+    'page_title_block' => [
+      'bundles' => ['advanced_page'],
+      'negate' => TRUE,
+    ],
+  ];
+  alshaya_block_set_blocks_node_visibility($blocks);
+
   // Set default marker image for stores finder.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     $marker_path = drupal_get_path('module', 'alshaya_vs') . '/images/google-map-marker.svg';
