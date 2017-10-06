@@ -172,7 +172,7 @@ class AlshayaPromotionsManager {
           return self::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER;
         }
       }
-      elseif (isset($promotion['simple_free_shipping']) && $promotion['simple_free_shipping'] == 2) {
+      elseif (isset($promotion['free_shipping']) && $promotion['free_shipping'] == 2) {
         return self::SUBTYPE_FREE_SHIPPING_ORDER;
       }
     }
