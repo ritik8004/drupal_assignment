@@ -259,7 +259,8 @@ class ClickCollectController extends ControllerBase {
    *   Return array of top tree and all stores.
    */
   public function getProductStores($sku, $lat, $lon, $limit = 3) {
-    $final_all_stores = $final_top_three = '';
+    $all_stores = $top_three = [];
+
     if ($sku_entity = SKU::loadFromSku($sku)) {
       if ($stores = $this->apiWrapper->getSkuStores($sku, $lat, $lon)) {
         $top_three = [];
