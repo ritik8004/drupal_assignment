@@ -186,6 +186,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   }
 
   $main_image = [];
+  $thumbnails = [];
 
   // Fetch settings.
   $settings = alshaya_product_zoom_cloudzoom_default_settings();
@@ -195,7 +196,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 
   // Create our thumbnails to be rendered for zoom.
   foreach ($media as $delta => $media_item) {
-    if ($media_item['media_type'] == 'image') {
+    if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
 
       $file_uri = $media_item['file']->getFileUri();
 
@@ -223,7 +224,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
         'type' => 'image',
       ];
     }
-    elseif ($media_item['media_type'] == 'video') {
+    elseif (isset($media_item['media_type']) && $media_item['media_type'] == 'video') {
       if (strpos($media_item['video_provider'], 'youtube')) {
         $thumbnails[] = [
           'thumburl' => 'https://img.youtube.com/vi/' . alshaya_product_zoom_getyoutubeid($media_item['video_url']) . '/hqdefault.jpg',
