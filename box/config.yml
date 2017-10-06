@@ -140,7 +140,6 @@ mysql_users:
     priv: "drupal_alshaya.*:ALL/drupal_non_transac.*:ALL"
 
 varnish_version: "4.1"
-apache_listen_port: "81"
-varnish_listen_port: "80"
-varnish_default_backend_port: "81"
-varnish_default_vcl_template_path: "../../../../box/alshaya.vcl"
+varnish_listen_port: "81"
+varnish_default_backend_port: "80"
+varnish_default_vcl_template_path: "../../../../conf/varnish-4-box.vcl"

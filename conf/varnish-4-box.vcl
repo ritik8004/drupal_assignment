@@ -1,12 +1,10 @@
 vcl 4.0;
 import std;
 
-# This Varnish VCL has been adapted from the Four Kitchens VCL for Varnish 3.
-
 # Default backend definition. Points to Apache, normally.
 backend default {
     .host = "127.0.0.1";
-    .port = "81";
+    .port = "80";
     .first_byte_timeout = 300s;
 }
 
@@ -119,7 +117,7 @@ sub vcl_recv {
   }
 
   # Always cache the following file types for all users if not coming from the private file system.
-  if (req.url ~ "(?i)/(modules|themes|files|libraries)/.*\.(png|gif|jpeg|jpg|ico|swf|css|js|flv|f4v|mov|mp3|mp4|pdf|doc|ttf|eot|ppt|ogv|woff)(\?[a-z0-9]+)?$" && req.url !~ "/system/files") {
+  if (req.url ~ "(?i)/(modules|themes|files|libraries)/.*\.(png|gif|jpeg|jpg|ico|swf|css|js|flv|f4v|mov|mp3|mp4|pdf|doc|ttf|eot|ppt|ogv|woff)(\?.*)?$" && req.url !~ "/system/files") {
     unset req.http.Cookie;
     # Set header so we know to remove Set-Cookie later on.
     set req.http.X-static-asset = "True";

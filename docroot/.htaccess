@@ -131,14 +131,14 @@ AddEncoding gzip svgz
   # RewriteBase /
 
   # Redirect HTTP to HTTPS for all requests
-  #RewriteCond %{HTTPS} off
-  #RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
   # Make sure we are not executing this rule after an internal redirection for
   # index.php. Note that variable name is prefixed by Apache when recomputing
   # redirect rules after an internal redirection.
-  #RewriteCond %{ENV:REDIRECT_internal_redirect} !true
-  #RewriteCond %{REQUEST_URI} !(knet) [NC]
-  #RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteCond %{ENV:REDIRECT_internal_redirect} !true
+  RewriteCond %{REQUEST_URI} !(knet) [NC]
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Redirect common PHP files to their new locations.
   RewriteCond %{REQUEST_URI} ^(.*)?/(install.php) [OR]
