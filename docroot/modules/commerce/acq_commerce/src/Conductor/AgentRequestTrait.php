@@ -146,7 +146,7 @@ trait AgentRequestTrait {
       // Process the response to check if error is downtime error
       // from Magento.
       $errors = [];
-      if (preg_match('/response:(.*)/i', $result->getBody(), $matches)) {
+      if (preg_match('/response:(.*)/i', $result->getBody(), $errors)) {
         if (isset($errors[1])) {
           $error = json_decode(strtolower($errors[1]), TRUE);
 
