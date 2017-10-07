@@ -153,15 +153,10 @@
 }
 */
 .region__footer-secondary {
-  padding-bottom: 2.625rem;
-  padding-top: 2.5rem;
-  padding-#{$left}: 0.5rem;
-  padding-#{$right}: 0.5rem;
+  padding: 2.5rem 0.5rem 2.625rem;
 
   @include breakpoint($tablet) {
-    padding-top: 2.0625rem;
-    padding-#{$right}: 0;
-    padding-#{$left}: 0;
+    padding: 2.0625rem 0 2.625rem;
   }
 
   @include breakpoint($desktop) {
