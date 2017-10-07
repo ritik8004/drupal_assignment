@@ -20,8 +20,8 @@ function alshaya_hnm_form_system_theme_settings_alter(&$form, FormStateInterface
   /* -- Delete this line if you want to use this setting
   $form['alshaya_hnm_example'] = array(
   '#type'          => 'checkbox',
-  '#title'         => t('alshaya_white_label sample setting'),
-  '#default_value' => theme_get_setting('alshaya_white_label_example'),
+  '#title'         => t('alshaya_hnm sample setting'),
+  '#default_value' => theme_get_setting('alshaya_hnm_example'),
   '#description'   => t("This example option doesn't do anything."),
   );
   // */
