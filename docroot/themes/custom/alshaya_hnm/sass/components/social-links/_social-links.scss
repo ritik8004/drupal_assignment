@@ -19,10 +19,6 @@
 
     &:not(:last-child) {
       margin-#{$right}: 2.125rem;
-
-      /*@include breakpoint($upto-tablet) {
-        margin-#{$right}: 2.25rem;
-      }*/
     }
   }
 
@@ -54,6 +50,7 @@
 
   .c-social-links--instagram {
     @include icon(instagram);
+
     &:hover::before {
       background: url("../imgs/social-icons/pdp/ic-instagramselect.png") no-repeat center;
       background-size: 1.5rem;
@@ -102,10 +99,12 @@
   text-align: center;
   padding-top: 0.75rem;
   padding-bottom: 1.125rem;
+
   @include breakpoint($tablet) {
     padding-top: 1.25rem;
     padding-bottom: 1.1875rem;
   }
+
   @include breakpoint($desktop) {
     padding-top: 1.1875rem;
     padding-bottom: 1.125rem;

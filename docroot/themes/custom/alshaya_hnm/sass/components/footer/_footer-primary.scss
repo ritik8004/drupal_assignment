@@ -669,10 +669,10 @@
   }
 }
 
-
 .c-footer {
-  background-color: $hnm-black
+  background-color: $hnm-black;
 }
+
 .c-footer-primary {
   @include clearfix;
 
@@ -752,7 +752,7 @@
 
     &-menu {
       @extend %list-clear;
-      
+
       display: none;
       border-top: 1px solid $white-smoke-border;
 
@@ -761,6 +761,7 @@
         width: 100%;
         border-top: none;
       }
+
       a {
         display: block;
         text-decoration: none;
@@ -774,6 +775,7 @@
           text-align: center;
           padding: 0.375rem 0;
         }
+
         @include breakpoint($desktop) {
           font-size: 0.75rem;
           line-height: 1.5;
@@ -798,15 +800,18 @@
           padding-#{$left}: 0.834%;
           padding-#{$right}: 7.62%;
         }
+
         @include breakpoint($desktop) {
           padding-#{$left}: 9.7%;
           padding-#{$right}: 14.25%;
         }
+
         .is-accordion {
           @include breakpoint($tablet) {
             width: 8.8125rem;
           }
         }
+
         .c-footer-menu {
           @include breakpoint($tablet) {
             width: 8.8125rem;
@@ -831,6 +836,7 @@
     width: 14.875rem;
     padding: 0;
   }
+
   @include breakpoint($desktop) {
     width: 15.9375rem;
   }
