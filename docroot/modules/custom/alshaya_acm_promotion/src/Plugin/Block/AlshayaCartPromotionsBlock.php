@@ -175,8 +175,38 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
           }
         }
       }
+    }
 
-      $promotions = array_filter($promotions);
+    $cartRulesApplied = $this->cartStorage->getCart()->getCart()->cart_rules;
+    $subTypePromotions = $this->alshayaAcmPromotionManager->getAllPromotions([
+      [
+        'field' => 'field_alshaya_promotion_subtype',
+        'value' => [
+          AlshayaPromotionsManager::SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER,
+          AlshayaPromotionsManager::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER,
+          AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER,
+        ],
+        'operator' => 'IN',
+      ],
+    ]);
+    foreach ($subTypePromotions as $subTypePromotion) {
+      // Add the label to the promotions array.
+      if (in_array($subTypePromotion->get('field_acq_promotion_rule_id')->getString(), $cartRulesApplied)) {
+        if ($subTypePromotion->get('field_alshaya_promotion_subtype')->getString() == AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER) {
+          $promotions[] = [
+            '#markup' => \Drupal::config('alshaya_acm_promotion.config')->get('free_shipping_order')['label'],
+          ];
+        }
+      }
+      else {
+        $promotions[] = [
+          '#markup' => $subTypePromotion->get('field_acq_promotion_label')->getString(),
+        ];
+      }
+    }
+
+    $promotions = array_filter($promotions);
+    if (!empty($promotions)) {
       $build = [
         '#theme' => 'cart_top_promotions',
         '#promotions' => $promotions,

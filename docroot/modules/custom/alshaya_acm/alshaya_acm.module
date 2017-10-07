@@ -16,6 +16,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -352,6 +353,35 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
   $form['totals']['grand']['value'] = [
     '#markup' => alshaya_acm_price_format($totals['grand']),
   ];
+
+  // Add shipping info.
+  $cart_rules_applied = $cart->getCart()->cart_rules;
+  if (!empty($cart_rules_applied)) {
+    $subtype_promotions = \Drupal::service('alshaya_acm_promotion.manager')
+      ->getAllPromotions([
+        [
+          'field' => 'field_alshaya_promotion_subtype',
+          'value' => AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER,
+        ],
+      ]);
+    if (!empty($subtype_promotions)) {
+      foreach ($subtype_promotions as $subtype_promotion) {
+        // If subtype is free_shipping_order and is applied, add it to totals.
+        if (in_array($subtype_promotion->get('field_acq_promotion_rule_id')->getString(), $cart_rules_applied)) {
+          $form['totals']['shipping'] = [
+            'label' => [
+              '#markup' => t('Shipping'),
+            ],
+            'value' => [
+              '#markup' => t('Free'),
+            ],
+          ];
+          break;
+        }
+      }
+    }
+  }
+
 }
 
 /**
