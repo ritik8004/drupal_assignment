@@ -10,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Implements hook_form_alter().
  */
-function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-alshaya-product-list-block-1') {
     // Change position label.
     if ($form['sort_bef_combine']['#options']['nid ASC']) {

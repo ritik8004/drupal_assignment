@@ -2,16 +2,16 @@
 
 /**
  * @file
- * Install, uninstall and update for alshaya_hm.
+ * Install, uninstall and update for alshaya_hnm.
  */
 
 /**
  * Implements hook_install().
  */
-function alshaya_hm_install() {
+function alshaya_hnm_install() {
   // Enable and set hnm as default theme.
-  \Drupal::service('theme_handler')->install(['hnm'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('hnm');
+  \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
 
   // Translate store id in config.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
