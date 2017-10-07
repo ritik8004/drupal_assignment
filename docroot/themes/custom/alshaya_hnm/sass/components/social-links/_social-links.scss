@@ -18,11 +18,11 @@
     }
 
     &:not(:last-child) {
-      margin-#{$right}: 0.5625rem;
+      margin-#{$right}: 2.125rem;
 
-      @include breakpoint($upto-tablet) {
+      /*@include breakpoint($upto-tablet) {
         margin-#{$right}: 2.25rem;
-      }
+      }*/
     }
   }
 
@@ -32,14 +32,14 @@
     display: block;
 
     &::before {
-      font-size: 1.938rem;
+      font-size: 1.125rem;
       color: $marine-blue-two;
     }
 
     &:hover::before {
       color: transparent;
-      height: 31px;
-      width: 31px;
+      height: 1.125rem;
+      width: 1.125rem;
     }
   }
 
@@ -54,7 +54,6 @@
 
   .c-social-links--instagram {
     @include icon(instagram);
-
     &:hover::before {
       background: url("../imgs/social-icons/pdp/ic-instagramselect.png") no-repeat center;
       background-size: 1.5rem;
@@ -94,5 +93,21 @@
       background: url("../imgs/social-icons/pdp/ic-pinterestselect.png") no-repeat center;
       background-size: 1.5rem;
     }
+  }
+}
+
+//specific to H&M brand
+
+.c-social-links {
+  text-align: center;
+  padding-top: 0.75rem;
+  padding-bottom: 1.125rem;
+  @include breakpoint($tablet) {
+    padding-top: 1.25rem;
+    padding-bottom: 1.1875rem;
+  }
+  @include breakpoint($desktop) {
+    padding-top: 1.1875rem;
+    padding-bottom: 1.125rem;
   }
 }

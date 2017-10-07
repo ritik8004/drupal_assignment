@@ -4,11 +4,11 @@
 //
 // Style guide: base.form
 %btn {
-  color: $white-five;
+  color: $black;
   padding: 0.625rem 1.6rem;
   border: 0;
   font-size: 0.813rem;
-  font-family: $alshaya-bold;
+  font-family: $hnm-bold;
 }
 
 @mixin form-selector-wrap {

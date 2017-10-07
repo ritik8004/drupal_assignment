@@ -1,4 +1,4 @@
-.c-footer-secondary {
+/*.c-footer-secondary {
   background: $hnm-black;
   font-size: 0.6875rem;
   position: relative;
@@ -148,5 +148,90 @@
   @include breakpoint($desktop) {
     width: 67%;
     margin-#{$right}: 3rem;
+  }
+}
+*/
+.region__footer-secondary {
+  padding-bottom: 2.625rem;
+  padding-top: 2.5rem;
+  padding-#{$left}: 0.5rem;
+  padding-#{$right}: 0.5rem;
+  @include breakpoint($tablet) {
+    padding-top: 2.0625rem;
+    padding-#{$right}: 0;
+    padding-#{$left}: 0;
+  }
+  @include breakpoint($desktop) {
+    padding-top: 1.5rem;
+  }
+}
+.c-footer__copy {
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 0.625rem;
+  padding-bottom: 1.125rem;
+  @include breakpoint($tablet) {
+    width: 35.4375rem;
+    padding-top: 0.75rem;
+  }
+
+  p {
+    font-family: $hnm-regular;
+    font-size: 0.5625rem;
+    line-height: 1.44;
+    text-align: center;
+    color: $grey5;
+    margin: 0;
+  }
+}
+
+.c-footer__logos {
+  .menu {
+    @extend %list-clear;
+    @extend %list--horizontal;
+    text-align: center;
+  }
+
+  li {
+    &:not(:last-child) {
+      margin-#{$right}: 1.6rem;
+    }
+  }
+}
+
+[class^="c-footer__logo--"] {
+  @include u-image-replacement;
+
+  display: inline-block;
+  vertical-align: middle;
+  pointer-events: none;
+}
+
+.c-footer__logo {
+  &--mastercard {
+    background: url("../imgs/cards/master-card-secure-code-white.svg") no-repeat center;
+    width: 5.3125rem;
+    height: 1.625rem;
+  }
+
+  &--verisign {
+    background: url("../imgs/cards/veri-sign-white.svg") no-repeat center;
+    width: 4.375rem;
+    height: 2.1875rem;
+  }
+
+  &--visa {
+    background: url("../imgs/cards/verifiedby-visa-white.svg") no-repeat center;
+    width: 4.0625rem;
+    height: 1.8125rem;
+  }
+}
+
+.footer-brand__logo {
+  line-height: 1;
+  padding-bottom: 1.1875rem;
+  .footer-brand-home {
+    text-align: center;
+    margin: 0;
   }
 }
