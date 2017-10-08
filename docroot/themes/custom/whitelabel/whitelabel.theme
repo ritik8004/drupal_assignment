@@ -65,13 +65,15 @@ function whitelabel_preprocess_block(&$variables) {
 
     case 'system_menu_block':
       if ($variables['elements']['#id'] == 'main_navigation') {
+        $variables['content']['#attributes']['twig_suggestion'] = 'menu-main-main';
         $variables['content']['#attributes']['class'][] = 'menu-logo-navigation';
         $variables['content']['#attached']['library'][] = 'whitelabel/menu-logo-navigation';
       }
       break;
 
     case 'custom_child_menu_block':
-      $variables['content']['#attributes']['class'][] = 'navigation__sub-menu';
+      $variables['content']['#attributes']['twig_suggestion'] = 'menu-main-sub';
+      $variables['content']['#attributes']['class'][] = 'navigation__sub-menu burger-sub-menu';
       $variables['content']['#attached']['library'][] = 'whitelabel/menu-sub-navigation';
       break;
   }
@@ -161,11 +163,16 @@ function whitelabel_theme_suggestions_block_alter(array &$suggestions, array $va
           $suggestions[] = 'block__alshaya_main_menu_1';
           break;
         }
-        elseif ($level == 2) {
-          $suggestions[] = 'block__alshaya_main_menu_2';
-          break;
-        }
+        break;
       }
+
+    case 'custom_child_menu_block':
+      $level = $variables['elements']['#configuration']['level'];
+      if ($level == 2) {
+        $suggestions[] = 'block__alshaya_main_menu_2';
+        break;
+      }
+      break;
   }
 
   return $suggestions;
@@ -312,5 +319,21 @@ function whitelabel_preprocess_form_element(array &$variables) {
 function whitelabel_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_login_form' || $form_id == 'user_register_form') {
     $form['actions']['submit']['#attributes']['class'][] = 'button--form-submit';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_menu_alter().
+ */
+function whitelabel_theme_suggestions_menu_alter(array &$suggestions, array $variables) {
+  if (isset($variables['attributes'])) {
+    if (isset($variables['attributes']['twig_suggestion'])) {
+      if ($variables['attributes']['twig_suggestion'] === 'menu-main-main') {
+        $suggestions[] = 'menu__main_main';
+      }
+      elseif ($variables['attributes']['twig_suggestion'] === 'menu-main-sub') {
+        $suggestions[] = 'menu__main_sub';
+      }
+    }
   }
 }
