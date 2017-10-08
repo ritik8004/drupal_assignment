@@ -293,6 +293,13 @@ paragraph-image-title-subtitle:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/paragraph-image-title-subtitle/paragraph-image-title-subtitle.ltr.css: {}
 
+
+block-footer-language:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/03-footer-primary/block-footer-language/block-footer-language.ltr.css: {}
+
 block-todays-offer:
   version: VERSION
   css:

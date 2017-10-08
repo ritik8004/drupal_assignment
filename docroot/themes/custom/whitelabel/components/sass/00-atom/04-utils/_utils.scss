@@ -18,6 +18,11 @@
   }
 }
 
+.device__mobile {
+  @include breakpoint($above-palm) {
+    display: none;
+  }
+
 .overlay-content {
   background: $black;
   opacity: 0.6;
