@@ -87,11 +87,66 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "GESSTwoMedium-Medium";
+  src: url("../fonts/GESSTwoMedium.eot");
+  src:
+    url("../fonts/GESSTwoMedium.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/GESSTwoMedium.otf") format("opentype"),
+    url("../fonts/GESSTwoMedium.svg") format("svg"),
+    url("../fonts/GESSTwoMedium.ttf") format("truetype"),
+    url("../fonts/GESSTwoMedium.woff") format("woff"),
+    url("../fonts/GESSTwoMedium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GESSTwoLight-Light";
+  src: url("../fonts/GESSTwoLight.eot");
+  src:
+    url("../fonts/GESSTwoLight.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/GESSTwoLight.otf") format("opentype"),
+    url("../fonts/GESSTwoLight.svg") format("svg"),
+    url("../fonts/GESSTwoLight.ttf") format("truetype"),
+    url("../fonts/GESSTwoLight.woff") format("woff"),
+    url("../fonts/GESSTwoLight.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GESSTwoBold-Bold";
+  src: url("../fonts/GESSTwoBold.eot");
+  src:
+    url("../fonts/GESSTwoBold.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/GESSTwoBold.otf") format("opentype"),
+    url("../fonts/GESSTwoBold.svg") format("svg"),
+    url("../fonts/GESSTwoBold.ttf") format("truetype"),
+    url("../fonts/GESSTwoBold.woff") format("woff"),
+    url("../fonts/GESSTwoBold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 // hnm specific font family
 $hnm-bold: 'Ampersand_bold';
+$hnm-bold-nodir: 'Ampersand_bold';
+
 $hnm-regular: 'Ampersand_regular';
+$hnm-regular: 'Ampersand_regular';
+
 $hnm-demibold: 'Ampersand_demibold';
+$hnm-demibold-nodir: 'Ampersand_demibold';
+
 $hnmpromo-regular: 'Amperserif_regular';
+$hnmpromo-regular-nodir: 'Amperserif_regular';
+
+$hnm-arabic-bold: 'GESSTwoBold-Bold', 'Ampersand_bold';
+$hnm-arabic-bold-nodir: 'GESSTwoBold-Bold', 'Ampersand_bold';
+
+$hnm-arabic-regular: 'GESSTwoMedium-Medium', 'Ampersand_regular';
+$hnm-arabic-regular-nodir: 'GESSTwoMedium-Medium', 'Ampersand_regular';
 
 // Font Family
 $alshaya-bold: 'Mothercare';
