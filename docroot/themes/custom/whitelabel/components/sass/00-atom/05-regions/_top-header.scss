@@ -1,4 +1,7 @@
 .region-top-header {
-  background-color: $black;
   font-size: 0;
+
+  @include breakpoint($above-palm) {
+    background: $black;
+  }
 }

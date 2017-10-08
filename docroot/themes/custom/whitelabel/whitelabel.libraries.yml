@@ -64,6 +64,8 @@ menu-logo-navigation:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/00-header-primary/block-logo-navigation/menu-logo-navigation.ltr.css: {}
+  js:
+    components/js/burger-menu.js: {}
 
 block-footer-store:
   version: VERSION
