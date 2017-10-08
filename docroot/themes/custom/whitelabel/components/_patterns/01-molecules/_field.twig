@@ -36,8 +36,14 @@
  * @see template_preprocess_field()
  */
 #}
+{%
+set classes = [
+'field__wrapper',
+field_name ? field_name|replace('_', '-'),
+]
+%}
 {% set item_classes = [ 'field__item', default_item_class ] %}
-{% set attributes = attributes.addClass('field__wrapper') %}
+{% set attributes = attributes.addClass(classes) %}
 {% if label_hidden %}
   {% if multiple %}
     <div{{ attributes }}>
