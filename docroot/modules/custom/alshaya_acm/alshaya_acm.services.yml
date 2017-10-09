@@ -16,7 +16,7 @@ services:
 
   alshaya_acm.api_helper:
     class: Drupal\alshaya_acm\ApiHelper
-    arguments: ['@acq_commerce.api', '@acq_cart.cart_storage', '@cache.alshaya_api', '@language_manager']
+    arguments: ['@acq_commerce.api', '@acq_cart.cart_storage', '@config.factory', '@cache.alshaya_api', '@language_manager']
 
   cache.alshaya_api:
     class: Drupal\Core\Cache\CacheBackendInterface

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
@@ -48,21 +49,35 @@ class ApiHelper {
   protected $cache;
 
   /**
+   * Time to cache the API response.
+   *
+   * @var int
+   */
+  protected $cacheTime;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   APIWrapper service object.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   Cart Storage service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   ConfigFactoryInterface object.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   LanguageManagerInterface object.
    */
-  public function __construct(APIWrapper $api_wrapper, CartStorageInterface $cart_storage, CacheBackendInterface $cache, LanguageManagerInterface $language_manager) {
+  public function __construct(APIWrapper $api_wrapper,
+                              CartStorageInterface $cart_storage,
+                              ConfigFactoryInterface $config_factory,
+                              CacheBackendInterface $cache,
+                              LanguageManagerInterface $language_manager) {
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
     $this->cart = $this->cartStorage->getCart(FALSE);
+    $this->cacheTime = (int) $config_factory->get('alshaya_acm.settings')->get('api_cache_time');
     $this->cache = $cache;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
   }
@@ -88,8 +103,8 @@ class ApiHelper {
 
     $methods = $this->apiWrapper->getPaymentMethods($this->cart->id());
 
-    // Cache only for 5 mins - average time for user to place order.
-    $expire = \Drupal::time()->getRequestTime() + 300;
+    // Cache only for XX mins.
+    $expire = \Drupal::time()->getRequestTime() + $this->cacheTime;
 
     $this->cache->set($cache_id, $methods, $expire);
 
@@ -120,8 +135,8 @@ class ApiHelper {
 
     $methods = $this->apiWrapper->getShippingEstimates($this->cart->id(), $address);
 
-    // Cache only for 5 mins - average time for user to place order.
-    $expire = \Drupal::time()->getRequestTime() + 300;
+    // Cache only for XX mins.
+    $expire = \Drupal::time()->getRequestTime() + $this->cacheTime;
 
     $this->cache->set($cache_id, $methods, $expire);
 
