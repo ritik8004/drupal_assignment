@@ -3,6 +3,7 @@
 .menu-logo-navigation {
   margin: 0;
   padding-#{direction(left)}: 0;
+  background: $black;
 
   @include breakpoint($desk) {
     padding-#{direction(left)}: 1.5rem;
@@ -63,7 +64,7 @@
   color: $marine-blue-two;
   font-size: 1.0625rem;
   position: absolute;
-  #{direction(right)}: 2%;
+  #{direction(right)}: -15%;
   top: 10%;
   display: none;
 
@@ -74,7 +75,7 @@
 
 .vertical-layout .navigation__sub-menu {
   @include breakpoint($upto-palm) {
-    max-width: 16.875rem;
+    min-width: 16.875rem;
     position: fixed;
     z-index: 9;
     background: $white;
@@ -83,6 +84,7 @@
     transition: transform 0.25s  ease-in-out;
     clear: both;
     will-change: transform;
+    margin-top: 3rem;
 
     li {
       width: 100%;
