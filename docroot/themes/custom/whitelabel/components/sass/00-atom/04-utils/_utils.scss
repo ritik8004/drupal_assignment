@@ -22,6 +22,7 @@
   @include breakpoint($above-palm) {
     display: none;
   }
+}
 
 .overlay-content {
   background: $black;
