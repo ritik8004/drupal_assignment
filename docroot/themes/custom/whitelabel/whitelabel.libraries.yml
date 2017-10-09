@@ -293,7 +293,6 @@ paragraph-image-title-subtitle:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/paragraph-image-title-subtitle/paragraph-image-title-subtitle.ltr.css: {}
 
-
 block-footer-language:
   version: VERSION
   css:
@@ -313,3 +312,9 @@ paragraph-offers-bordered:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/05-footer-tertiary/block-todays-offer/paragraph-offers-bordered.ltr.css: {}
+
+paragraph-title-textarea:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-title-textarea/paragraph-title-textarea.ltr.css: {}
