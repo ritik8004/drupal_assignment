@@ -376,6 +376,15 @@
     }
   }
 
+  .order-item-row,
+  .sub-total-row,
+  .delivery-charge-row,
+  .total-row {
+    .blend {
+      min-width: 8rem;
+    }
+  }
+
   .warm--white {
     background-color: $white;
   }
