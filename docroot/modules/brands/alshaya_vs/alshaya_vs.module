@@ -37,36 +37,11 @@ function alshaya_vs_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $for
 }
 
 /**
- * Implements hook_page_attachments().
- */
-function alshaya_vs_page_attachments(array &$attachments) {
-  foreach ($attachments['#attached'] as $type => $elements) {
-    foreach ($attachments['#attached'][$type] as $key => $value) {
-      // Search for back_to_top library and unset it.
-      if ($type == 'library') {
-        if (strpos($value, 'back_to_top') !== FALSE) {
-          unset($attachments['#attached'][$type][$key]);
-        }
-      }
-
-      // Search for back_to_top settings and unset it.
-      if ($type == 'drupalSettings') {
-        if (strpos($key, 'back_to_top') !== FALSE) {
-          unset($attachments['#attached'][$type][$key]);
-        }
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_module_implements_alter().
  */
 function alshaya_vs_module_implements_alter(&$implementations, $hook) {
   // Alter page_attachments implementation for alshaya_vs to call at last.
   if ($hook == 'page_attachments') {
-    $group = $implementations['alshaya_vs'];
-    unset($implementations['alshaya_vs']);
-    $implementations['alshaya_vs'] = $group;
+    unset($implementations['back_to_top']);
   }
 }
