@@ -20,6 +20,7 @@
 
   @include breakpoint($desk) {
     width: 59.466%;
+    padding-top: 1.3rem;
   }
 }
 
@@ -34,6 +35,10 @@
 
   @include breakpoint($desk) {
     width: 28.571%;
+  }
+
+  img {
+    vertical-align: middle;
   }
 }
 
@@ -53,10 +58,10 @@
   }
 
   @include breakpoint($desk) {
-    width: 41.591%;
+    width: 41.3%;
     padding-#{direction(left)}: 22%;
     border-#{direction(right)}: 1px solid $greyish-lighter;
-    margin-top: 1.9rem;
+    margin-top: 2rem;
   }
 }
 
@@ -109,7 +114,7 @@
   }
 
   @include breakpoint($desk) {
-    padding-#{direction(left)}: 4.714%;
+    padding-#{direction(left)}: 5.2%;
     width: 29.836%;
     margin-top: 1.2rem;
   }
@@ -129,6 +134,7 @@
 
   span {
     font-size: 1.125rem;
+    padding-#{direction(right)}: 0.4375rem;
 
     &::before {
       position: relative;
