@@ -488,11 +488,11 @@ header {
 
     a {
       text-decoration: none;
-      color: $brownish-grey;
+      color: $hnm-black-four;
       font-size: 0.875rem;
       display: block;
-      text-transform: lowercase;
-      font-family: $alshaya-thin;
+      text-transform: capitalize;
+      font-family: $hnm-regular;
 
       &::before {
         content: ' ';
@@ -632,7 +632,8 @@ header {
     }
 
     ul.menu--one__list {
-      display: table !important;
+      display: block !important;
+      text-align: center;
       width: 100%;
       margin: 0;
       background: $white-five;
@@ -640,23 +641,27 @@ header {
     }
 
     li.menu--one__list-item {
-      display: table-cell;
+      display: inline-block;
       vertical-align: top;
       list-style: none;
       text-align: center;
       text-transform: lowercase;
       height: 2.6875rem;
+      margin-#{$right}: 0.6875rem;
 
       a.menu--one__link {
         padding: 0.625rem;
         padding-bottom: 0.6rem;
         display: block;
         height: 2.75rem;
-        border-bottom: 1px solid $white;
         border-top: 2px solid transparent;
         position: relative;
         z-index: 100;
         margin-top: -1px;
+        font-size: 15px;
+        text-transform: uppercase;
+        font-family: $hnm-demibold;
+        letter-spacing: 2px;
       }
 
       &.active {
@@ -676,6 +681,17 @@ header {
           opacity: 1;
           z-index: 1;
           transform: translateY(-2rem);
+
+          &::after {
+            content: '';
+            height: 1px;
+            width: 100%;
+            background: $hnm-black-two;
+            position: absolute;
+            top: -0.9375rem;
+            opacity: 0.24;
+            #{$left}: 0;
+          }
         }
       }
 
@@ -709,20 +725,17 @@ header {
     }
 
     .active--menu--links {
-      &:hover {
-        li.menu--one__list-item {
-          a.menu--one__link {
-            border-bottom: 1px solid $white;
-          }
-        }
-      }
-
       li.menu--one__list-item {
         &:hover {
           a.menu--one__link {
-            border-bottom: 1px solid $white-five;
-            color: $marine-blue;
-            border-top: 2px solid $marine-blue;
+            &::after {
+              content: '';
+              height: 0.125rem;
+              background: $white-smoke-border;
+              display: inherit;
+              width: 100%;
+              margin-top: 0.125rem;
+            }
           }
         }
       }
@@ -766,9 +779,11 @@ header {
         z-index: 10;
 
         a {
-          font-family: $alshaya-bold;
+          font-family: $hnm-demibold;
+          letter-spacing: 0.5px;
           font-weight: normal;
-          color: $marine-blue;
+          text-transform: uppercase;
+          color: $black;
 
           &:hover {
             color: $white-five !important;
@@ -810,7 +825,7 @@ header {
       }
 
       .menu-two__link {
-        font-size: 14px;
+        font-size: 0.8125rem;
       }
 
       &:hover {
@@ -836,7 +851,7 @@ header {
         }
 
         li {
-          padding: 0.3125rem 0;
+          padding: 0.19rem 0;
           vertical-align: top;
           width: 12rem;
 
@@ -978,10 +993,10 @@ header {
   }
 
   .main--menu a {
-    font-family: $alshaya-thin;
+    font-family: $hnm-regular;
     font-size: 0.75rem;
     text-decoration: none;
-    color: $brownish-grey;
+    color: $hnm-black-four;
     display: block;
   }
 
@@ -989,13 +1004,13 @@ header {
     border-bottom: 1px solid $white;
     margin-#{$left}: 0.625rem;
     margin-#{$right}: 0.625rem;
-    font-family: $alshaya-bold;
+    font-family: $hnm-regular;
+    text-transform: uppercase;
     font-weight: normal;
-    color: $marine-blue;
+    color: $hnm-black-four;
     display: block;
     font-size: 12px;
     padding: 0;
-    text-transform: lowercase;
 
     a {
       padding: 1rem 0;
@@ -1069,8 +1084,9 @@ header {
     pointer-events: none;
 
     @include icon(chevron#{$right}, after) {
-      color: $marine-blue-two;
+      color: $hnm-black-two;
       font-size: 1.313rem;
+      font-weight: bold;
       cursor: pointer;
       pointer-events: none;
     }
@@ -1161,7 +1177,7 @@ header {
 }
 
 .mobile--close {
-  background: $white-five;
+  background: $hnm-black-two;
   position: fixed;
   top: 0.5rem;
   #{$left}: -100%;
@@ -1176,11 +1192,15 @@ header {
   -moz-transform: translateZ(0);
 
   span {
-    background: url('../imgs/icons/ic-close.svg') center center no-repeat;
-    width: 25px;
-    height: 25px;
-    display: inline-block;
-    background-size: 17px;
+    @include icon(close) {
+      width: 25px;
+      height: 25px;
+      font-size: 2.5rem;
+      position: absolute;
+      top: -5px;
+      #{$left}: -2px;
+      color: $white-five;
+    }
   }
 }
 
@@ -1191,28 +1211,37 @@ header {
 
   position: fixed;
   top: 0;
-  background: $white;
+  background: $hnm-grey;
   z-index: 10;
   transition: #{$left 0.5s ease-in-out};
   -moz-transform: translateZ(0);
   #{$left}: -100%;
   width: 84.375%;
-  font-size: 0;
+  font-size: 0.875rem;
+  font-family: $hnm-demibold;
+  font-weight: normal;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 
   .one {
     @include breakpoint($only-tablet) {
-      font-family: $alshaya-bold;
-      font-weight: normal;
+      color: $hnm-black-three;
     }
 
-    font-family: $alshaya-thin;
-    font-size: 14px;
+    @include breakpoint($only-mobile) {
+      width: 59%;
+
+      .logged-out & {
+        padding: 0.9rem 0.25rem;
+      }
+    }
+
     padding: 0.9rem 1rem;
     display: inline-block;
     vertical-align: middle;
     text-align: center;
     height: 47px;
-    width: 61%;
+    width: 60%;
 
     &.shop {
       padding: 0.9rem 2.05rem;
@@ -1221,9 +1250,7 @@ header {
   }
 
   .active {
-    font-family: $alshaya-bold;
-    font-weight: normal;
-    color: $marine-blue;
+    color: $hnm-black-two;
     background: $white-five;
     text-align: center;
   }
@@ -1408,8 +1435,6 @@ header {
 
 .c-pre-content__region {
   @include breakpoint($desktop) {
-    border-top: 1px solid $white;
-    border-bottom: 1px solid $white;
     height: 2.75rem;
   }
 }
