@@ -307,6 +307,12 @@ block-todays-offer:
   js:
     components/dist/js/01-molecules/05-footer-tertiary/block-todays-offer/block-todays-offer.js: {}
 
+block-content-todays-offer:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/05-footer-tertiary/block-todays-offer/block-content-todays-offer.ltr.css: {}
+
 paragraph-offers-bordered:
   version: VERSION
   css:

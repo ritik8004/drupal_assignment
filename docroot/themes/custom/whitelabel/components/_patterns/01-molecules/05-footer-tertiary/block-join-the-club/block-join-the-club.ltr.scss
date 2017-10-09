@@ -39,6 +39,8 @@
 
   img {
     vertical-align: middle;
+    margin-#{direction(left)}: -0.3125rem;
+    margin-bottom: -0.3125rem;
   }
 }
 
