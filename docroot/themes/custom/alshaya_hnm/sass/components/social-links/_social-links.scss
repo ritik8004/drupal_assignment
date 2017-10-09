@@ -1,6 +1,7 @@
 .c-social-links {
   ul {
     font-size: 0;
+    height: 1.125rem;
 
     @extend %list-clear;
 
@@ -18,11 +19,7 @@
     }
 
     &:not(:last-child) {
-      margin-#{$right}: 0.5625rem;
-
-      @include breakpoint($upto-tablet) {
-        margin-#{$right}: 2.25rem;
-      }
+      margin-#{$right}: 2.125rem;
     }
   }
 
@@ -30,69 +27,74 @@
     @include u-image-replacement;
 
     display: block;
-
-    &::before {
-      font-size: 1.938rem;
-      color: $marine-blue-two;
-    }
-
-    &:hover::before {
-      color: transparent;
-      height: 31px;
-      width: 31px;
-    }
+    width: 1.125rem;
+    height: 1.125rem;
   }
 
   .c-social-links--facebook {
+    /*
     @include icon(facebook);
-
-    &:hover::before {
-      background: url("../imgs/social-icons/pdp/ic-facebookselect.png") no-repeat center;
-      background-size: 1.5rem;
-    }
+    */
+    background: url("../imgs/social-icons/facebook-logo.svg") no-repeat center;
   }
 
   .c-social-links--instagram {
+    /*
     @include icon(instagram);
-
-    &:hover::before {
-      background: url("../imgs/social-icons/pdp/ic-instagramselect.png") no-repeat center;
-      background-size: 1.5rem;
-    }
+    */
+    background: url("../imgs/social-icons/instagram-logo.svg") no-repeat center;
   }
 
   .c-social-links--youtube {
+    /*
     @include icon(youtube);
-
-    &:hover::before {
-      background: url("../imgs/social-icons/pdp/ic-youtubeselect.png") no-repeat center;
-      background-size: 1.5rem;
-    }
+    */
+    background: url("../imgs/social-icons/you-tune-logo.svg") no-repeat center;
+    width: 1.25rem;
+    height: 0.875rem;
   }
 
   .c-social-links--google-plus {
+    /*
     @include icon(googleplus);
-
-    &:hover::before {
-      color: $marine-blue;
-    }
+    */
+    background: url("../imgs/social-icons/g.svg") no-repeat center;
+    width: 1.4375rem;
+    height: 0.875rem;
   }
 
   .c-social-links--twitter {
+    /*
     @include icon(twitter);
-
-    &:hover::before {
-      background: url("../imgs/social-icons/pdp/ic-twitterselect.png") no-repeat center;
-      background-size: 1.5rem;
-    }
+    */
+    background: url("../imgs/social-icons/twitter-logo.svg") no-repeat center;
+    height: 0.9375rem;
   }
 
   .c-social-links--pinterest {
+    /*
     @include icon(pinterest);
+    */
+    background: url("../imgs/social-icons/pinterest-logo.svg") no-repeat center;
+    width: 1.0625rem;
+    height: 1.0625rem;
+  }
+}
 
-    &:hover::before {
-      background: url("../imgs/social-icons/pdp/ic-pinterestselect.png") no-repeat center;
-      background-size: 1.5rem;
-    }
+//specific to H&M brand
+
+.c-social-links {
+  text-align: center;
+  padding-top: 0.75rem;
+  padding-bottom: 1.125rem;
+
+  @include breakpoint($tablet) {
+    padding-top: 1.25rem;
+    padding-bottom: 1.1875rem;
+  }
+
+  @include breakpoint($desktop) {
+    padding-top: 1.1875rem;
+    padding-bottom: 1.125rem;
   }
 }
