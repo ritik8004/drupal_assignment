@@ -968,6 +968,7 @@ class AlshayaGtmManager {
           if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
             $dimension7 = $store->label();
             $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+            $deliveryArea = $store->get('field_store_area')->getString();
           }
         }
 
@@ -986,7 +987,9 @@ class AlshayaGtmManager {
           'cartItemsFlocktory' => $this->formatCartFlocktory($orderItems),
           'storeLocation' => $dimension7,
           'storeAddress' => $dimension8,
+          'deliveryArea' => $deliveryArea,
         ];
+
         break;
     }
 
