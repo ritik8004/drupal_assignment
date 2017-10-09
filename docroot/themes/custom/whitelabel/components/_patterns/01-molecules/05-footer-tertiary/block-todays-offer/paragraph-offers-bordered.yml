@@ -1,17 +1,17 @@
-content: '<div class="field__wrapper field-heading">Limited offer</div>
+content: '<div class="field__wrapper field-heading">Lorem ipsum</div>
             <div class="field__wrapper field-banner">
               <picture>
                 <!--[if IE 9]><video style="display: none;"><![endif]-->
-                <source srcset="/sites/g/files/non-transac/styles/326x288/public/2017-10/group-25%403x_0.jpg?itok=1QJpH8ep 1x" media="all and (min-width: 64.0625rem)" type="image/jpeg">
-                <source srcset="/sites/g/files/non-transac/styles/224x202/public/2017-10/group-25%403x_0.jpg?itok=dreHPOQP 1x" media="all and (min-width: 48rem) and (max-width: 64rem)" type="image/jpeg">
-                <source srcset="/sites/g/files/non-transac/styles/146x132/public/2017-10/group-25%403x_0.jpg?itok=VwJUyZD5 1x" media="all and (max-width: 47.9375rem)" type="image/jpeg">
+                <source srcset="https://dummyimage.com/326x288/000/fff?itok=1QJpH8ep 1x" media="all and (min-width: 64.0625rem)" type="image/jpeg">
+                <source srcset="https://dummyimage.com/224x202/000/fff?itok=dreHPOQP 1x" media="all and (min-width: 48rem) and (max-width: 64rem)" type="image/jpeg">
+                <source srcset="https://dummyimage.com/146x132/000/fff?itok=VwJUyZD5 1x" media="all and (max-width: 47.9375rem)" type="image/jpeg">
                 <!--[if IE 9]></video><![endif]-->
-                <img src="/sites/g/files/non-transac/styles/146x132/public/2017-10/group-25%403x_0.jpg?itok=VwJUyZD5" alt="tote" typeof="foaf:Image">
+                <img src="https://dummyimage.com/146x132/000/fff?itok=VwJUyZD5" alt="tote" typeof="foaf:Image">
               </picture>
             </div>
-            <div class="field__wrapper field-title">COTTON PANTIES</div>
+            <div class="field__wrapper field-title">Lorem ipsum</div>
             <div class="field__wrapper field-sub-title">5 - 8 KD </div>
-            <div class="field__wrapper field-link"><a href="/en">see details</a></div>'
+            <div class="field__wrapper field-link"><a href="/en">lorem ipsum</a></div>'
 attributes:
   Attribute():
     class:

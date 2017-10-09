@@ -6,6 +6,7 @@
  */
 
 use Drupal\block\Entity\Block;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_css_alter().
@@ -76,6 +77,24 @@ function whitelabel_preprocess_block(&$variables) {
       $variables['content']['#attributes']['class'][] = 'navigation__sub-menu burger-sub-menu';
       $variables['content']['#attached']['library'][] = 'whitelabel/menu-sub-navigation';
       break;
+  }
+
+  $machine_name = $variables['elements']['#id'];
+
+  if ($machine_name == 'todaysoffer') {
+    if ($variables['content']) {
+      $label = $variables['label'];
+      $variables['label'] = [
+        '#type' => 'link',
+        '#title' => $label,
+        '#url' => Url::fromUri('internal:/todays-offer'),
+        '#options' => [
+          'attributes' => [
+            'class' => ['mobile-link'],
+          ],
+        ],
+      ];
+    }
   }
 }
 
