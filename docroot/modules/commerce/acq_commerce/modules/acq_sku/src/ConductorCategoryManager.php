@@ -141,8 +141,8 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
 
-    // Load the current parent of the updated node (if any).
-    $parent = NULL;
+    // If parent is 0, means term will be created at root level.
+    $parent = 0;
     $query = $this->queryFactory->get('taxonomy_term');
     $group = $query->andConditionGroup()
       ->condition('field_commerce_id', $categories['category_id'])
