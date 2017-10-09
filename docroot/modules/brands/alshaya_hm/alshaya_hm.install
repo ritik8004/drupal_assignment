@@ -2,14 +2,14 @@
 
 /**
  * @file
- * Install, uninstall and update for alshaya_hnm.
+ * Install, uninstall and update for alshaya_hm.
  */
 
 /**
  * Implements hook_install().
  */
-function alshaya_hnm_install() {
-  \Drupal::moduleHandler()->loadInclude('alshaya_hnm', 'inc', 'alshaya_hnm.content');
+function alshaya_hm_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_hm', 'inc', 'alshaya_hm.content');
   // Enable and set alshaya_hnm as default theme.
   \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
   \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
@@ -20,5 +20,5 @@ function alshaya_hnm_install() {
     ->save();
 
    // Create default content for the site.
-  alshaya_hnm_create_default_content();
+  alshaya_hm_create_default_content();
 }

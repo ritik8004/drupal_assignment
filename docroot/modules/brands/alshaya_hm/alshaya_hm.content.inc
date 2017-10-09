@@ -10,15 +10,15 @@ use \Drupal\block_content\Entity\BlockContent;
 /**
  * Create default copyright block content.
  */
-function alshaya_hnm_create_default_content() {
+function alshaya_hm_create_default_content() {
   // Create copyright block.
-  alshaya_hnm_create_copyright_block_content();
+  alshaya_hm_create_copyright_block_content();
 }
 
 /**
  * Create default copyright block content.
  */
-function alshaya_hnm_create_copyright_block_content() {
+function alshaya_hm_create_copyright_block_content() {
   // Create copyright block content.
   $block_content = BlockContent::create([
     'uuid' => '340b823b-e16c-457a-bc03-4a096f8ae171',
