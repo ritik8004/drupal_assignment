@@ -19,7 +19,7 @@
         var articleNode = $(this);
         if (!articleNode.hasClass('stock-processed')) {
           $.ajax({
-            url: Drupal.url('stock-check-ajax/node/' + productId),
+            url: Drupal.url('stock-check-ajax/node/' + productId) + '?cacheable',
             type: 'GET',
             dataType: 'json',
             success: function (result) {

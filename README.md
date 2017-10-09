@@ -68,6 +68,10 @@ To prepare your local env:
 * Load commerce content (already included in refresh:local and refresh:local:drupal):
   * `drush @alshaya.local alshaya-acm-offline-categories-sync`
   * `drush @alshaya.local alshaya-acm-offline-products-sync`
+* Access site through Varnish in local
+  * Comment out the code forcing SSL redirection in `docroot/.htaccess`
+  * Access the site on port 81
+  * To do any change in VCL do it in `conf/varnish-4.vcl`, do `vagrant ssh` and run `sh box/scripts/configure-varnish.sh`
 
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
