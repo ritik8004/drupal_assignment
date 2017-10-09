@@ -71,7 +71,7 @@ function alshaya_paragraphs_update_8301() {
     'core.base_field_override.paragraph.views_reference.uid',
     // Title + textarea paragraph type.
     'paragraphs.paragraphs_type.title_textarea',
-    'field.field.paragraph.title_textarea.field_title',
+    'field.field.paragraph.title_textarea.field_html_heading',
     'field.field.paragraph.title_textarea.field_body',
     'core.entity_form_display.paragraph.title_textarea.default',
     'core.entity_view_display.paragraph.title_textarea.default',

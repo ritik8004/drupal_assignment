@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.title_textarea.field_body
-    - field.field.paragraph.title_textarea.field_title
+    - field.field.paragraph.title_textarea.field_html_heading
     - paragraphs.paragraphs_type.title_textarea
   module:
     - text
@@ -13,18 +13,17 @@ bundle: title_textarea
 mode: default
 content:
   field_body:
-    weight: 1
+    weight: 2
     label: hidden
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
-  field_title:
+  field_html_heading:
     weight: 0
     label: hidden
-    settings:
-      link_to_entity: false
+    settings: {  }
     third_party_settings: {  }
-    type: string
+    type: text_default
     region: content
 hidden: {  }

@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.title_textarea.field_body
-    - field.field.paragraph.title_textarea.field_title
+    - field.field.paragraph.title_textarea.field_html_heading
     - paragraphs.paragraphs_type.title_textarea
   module:
     - text
@@ -14,21 +14,26 @@ bundle: title_textarea
 mode: default
 content:
   field_body:
-    weight: 7
+    weight: 2
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
     type: text_textarea
     region: content
-  field_title:
-    weight: 6
+  field_html_heading:
+    weight: 1
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
+    type: text_textfield
     region: content
+  translation:
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   created: true
   status: true
