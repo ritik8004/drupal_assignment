@@ -162,7 +162,7 @@ class AlshayaPromotionsManager {
     if (
       (!isset($promotion['product_discounts']) || empty($promotion['product_discounts'])) &&
       (!isset($promotion['action_condition']['conditions']) || empty($promotion['action_condition']['conditions'])) &&
-      (isset($promotion['condition']['conditions'][0]['attribute_name']) && $promotion['condition']['conditions'][0]['attribute'] == 'base_subtotal')
+      (isset($promotion['condition']['conditions'][0]['attribute']) && $promotion['condition']['conditions'][0]['attribute'] == 'base_subtotal')
     ) {
       if (!$promotion['apply_to_shipping']) {
         if ($promotion['action'] == 'by_percent') {
