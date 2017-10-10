@@ -117,6 +117,9 @@ function alshaya_user_form_user_pass_alter(&$form, FormStateInterface $form_stat
   $form['name']['#element_validate'] = [
     'alshaya_valid_email_address',
   ];
+
+  unset($form['name']['#attributes']['autofocus']);
+
   $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 }
 

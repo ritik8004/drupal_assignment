@@ -859,6 +859,7 @@ body {
 // Brands wont be translated.
 html[lang=ar] {
   .block-facet-blockbrand,
+  .block-facet-blockskus-sku-reference-collection,
   .block-facet-blockskus-sku-reference-brand {
     .facet-item__value,
     .facet-item__count {

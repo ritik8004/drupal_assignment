@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_product_category.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable translation for promotional banner field in acq_product_category.
+ */
+function alshaya_acm_product_category_update_8001() {
+  $config = \Drupal::configFactory()->getEditable('field.field.taxonomy_term.acq_product_category.field_promotion_banner');
+  $config->set('translatable', TRUE);
+  $config->save();
+
+  $field = FieldConfig::loadByName('taxonomy_term', 'acq_product_category', 'field_promotion_banner');
+  $field->setTranslatable(TRUE);
+  $field->save();
+
+  // Revert the view to have language filter.
+  $reverter = \Drupal::service('config_update.config_update');
+  $reverter->revert('view', 'plp_promotional_banner');
+}

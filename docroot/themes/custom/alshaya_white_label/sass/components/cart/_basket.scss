@@ -366,7 +366,7 @@
       width: 10.81rem;
 
       @include breakpoint($desktop) {
-        #{$left}: 1.1rem;
+        #{$left}: 1rem;
       }
 
       @include breakpoint($only-mobile) {

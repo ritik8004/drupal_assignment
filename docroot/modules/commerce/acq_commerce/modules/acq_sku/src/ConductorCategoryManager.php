@@ -141,8 +141,8 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
 
-    // Load the current parent of the updated node (if any).
-    $parent = NULL;
+    // If parent is 0, means term will be created at root level.
+    $parent = 0;
     $query = $this->queryFactory->get('taxonomy_term');
     $group = $query->andConditionGroup()
       ->condition('field_commerce_id', $categories['category_id'])
@@ -155,7 +155,26 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       $tid = array_shift($tids);
       $parents = $this->termStorage->loadParents($tid);
       $parent = array_shift($parents);
-      $parent = ($parent && $parent->id()) ? $parent : NULL;
+      $parent = ($parent && $parent->id()) ? $parent : 0;
+    }
+    else {
+      // This might be the case of new term which doesn't exist yet. In this
+      // case, we need to find the existing parent or new term will be created
+      // at root level.
+      if (isset($categories['parent_id'])) {
+        $query = $this->queryFactory->get('taxonomy_term');
+        $group = $query->andConditionGroup()
+          ->condition('field_commerce_id', $categories['parent_id'])
+          ->condition('vid', $this->vocabulary->id());
+        $query->condition($group);
+
+        $tids = $query->execute();
+        // If term with given commerce id exists.
+        if (count($tids)) {
+          $tid = array_shift($tids);
+          $parent = $this->termStorage->load($tid);
+        }
+      }
     }
 
     // Recurse the category tree and create / update nodes.
@@ -235,7 +254,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     // Remove top level item (Default Category) from the categories, if its set
     // in configuration and category is with no parent.
     $filter_root_category = \Drupal::config('acq_commerce.conductor')->get('filter_root_category');
-    if ($filter_root_category && $parent == NULL) {
+    if ($filter_root_category && $parent === NULL) {
       $categories = $categories[0]['children'];
     }
 
@@ -247,6 +266,11 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       }
 
       $langcode = acq_commerce_get_langcode_from_store_id($category['store_id']);
+
+      // If lancode is not available, means no mapping of store and language.
+      if (!$langcode) {
+        continue;
+      }
 
       $parent_data = ($parent) ? [$parent->id()] : [0];
       $position = (isset($category['position'])) ? (int) $category['position'] : 1;
