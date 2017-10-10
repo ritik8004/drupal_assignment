@@ -160,17 +160,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     elseif ($view_mode == 'full') {
       $related_items_size = \Drupal::config('alshaya_acm_product.settings')->get('related_items_size');
 
-      /* @var \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus */
-      $linked_skus = \Drupal::service('acq_sku.linked_sku');
-
-      $up_sell_skus = [];
-      // Get up sell items from the product.
-      $upsell_manuel_items = $sku_entity->get('upsell')->getValue();
-      if (!empty($upsell_manuel_items)) {
-        $up_sell_skus = array_column($upsell_manuel_items, 'value');
-      }
-      // Merge upsell items from product and from the rule.
-      $up_sell_skus = array_merge($up_sell_skus, $linked_skus->getLinkedSKus($sku_entity, 'upsell'));
+      $up_sell_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_UPSELL);
 
       if (!empty($up_sell_skus)) {
         $upsell_items = array_slice($up_sell_skus, 0, $related_items_size);
@@ -179,14 +169,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['up_sell']['#weight'] = 10;
       }
 
-      $related_skus = [];
-      // Get related items from the product.
-      $related_manual_items = $sku_entity->get('related')->getValue();
-      if (!empty($related_manual_items)) {
-        $related_skus = array_column($related_manual_items, 'value');
-      }
-      // Merge related items from product and from the rule.
-      $related_skus = array_merge($related_skus, $linked_skus->getLinkedSKus($sku_entity, 'related'));
+      $related_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_RELATED);
 
       if (!empty($related_skus)) {
         $related_items = array_slice($related_skus, 0, $related_items_size);

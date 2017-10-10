@@ -23,6 +23,8 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
 
   private $address_count;
 
+  private $item_count;
+
   /**
    * Every scenario gets its own context instance.
    *
@@ -34,7 +36,8 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
   }
 
   /**
-   * @BeforeScenario @javascript */
+   * @BeforeScenario @javascript
+   */
   public function before(BeforeScenarioScope $scope) {
     $this->getSession()->getDriver()->resizeWindow(1440, 900, 'current');
   }
@@ -99,7 +102,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
 
     $text = 'connect with us' and 'get email offers and the latest news from Mothercare Kuwait';
     $subscription = $page->find('css', '.alshaya-newsletter-subscribe');
-    $subscription->find('named_partial', array('content', $text));
+    $subscription->find('named_partial', ['content', $text]);
     if ($subscription == NULL) {
       throw new \Exception('Text related to Subscription is missing in the footer');
     }
@@ -112,7 +115,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $copyright1 = '© Copyright Mothercare UK Limited 2016 Registered in England no. 533087, VAT Reg no 440 6445 66';
     $copyright1 = $copyright1 and 'Registered ofﬁce: Cherry Tree Road, Watford, Hertfordshire, WD24 6SH';
     $copyright = $page->find('css', '.region__footer-secondary');
-    $copyright->has('named', array('content', $copyright1));
+    $copyright->has('named', ['content', $copyright1]);
 
     if ($copyright == NULL) {
       throw new \Exception('Copyright information is missing in the footer');
@@ -127,12 +130,12 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
   }
 
   /**
-   * @When /^I subscribe using a valid Email ID$/
+   * @When /^I enter a valid Email ID in field "([^"]*)"$/
    */
-  public function iSubscribeUsingAValidEmailID() {
+  public function iEnterAValidEmailID($field) {
     $randomString = 'randemail' . rand(2, getrandmax());
     $email_id = $randomString . '@gmail.com';
-    $this->getSession()->getPage()->fillField("edit-email", $email_id);
+    $this->getSession()->getPage()->fillField($field, $email_id);
   }
 
   /**
@@ -267,7 +270,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
 
     $text = 'تواصل معنا' and 'مذركير الكويت احصل على أحدث العروض الحصرية عبر عنوان البريد الإكتروني';
     $subscription = $page->find('css', '.alshaya-newsletter-subscribe');
-    $subscription->find('named_partial', array('content', $text));
+    $subscription->find('named_partial', ['content', $text]);
     if ($subscription == NULL) {
       throw new \Exception('Text related to Subscription is missing in the footer');
     }
@@ -281,7 +284,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $copyright1 = $copyright1 and 'مسجلة في إنجلترا برقم 533087 . رقم تسجيل ضريبة القيمة المضافة 66 6445 440 ';
     $copyright1 = $copyright1 and 'مكتب التسجيل: شيري تري رود، واتفورد، هيرتفوردشاير، WD24 6SH';
     $copyright = $page->find('css', '.region__footer-secondary');
-    $copyright->has('named', array('content', $copyright1));
+    $copyright->has('named', ['content', $copyright1]);
 
     if ($copyright == NULL) {
       throw new \Exception('Copyright information is missing in the footer');
@@ -381,7 +384,11 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    * @Given /^I should see "([^"]*)" in the cart area$/
    */
   public function iShouldSeeInTheCartArea($arg1) {
-    $price = $this->getSession()->getPage()->findById('block-cartminiblock')->find('css', '.price')->hasLink($arg1);
+    $price = $this->getSession()
+      ->getPage()
+      ->findById('block-cartminiblock')
+      ->find('css', '.price')
+      ->hasLink($arg1);
 
     if (!$price) {
       throw new \Exception('Product of the price is not displayed on the mini cart');
@@ -800,8 +807,10 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    */
   public function iClickEditAddress() {
     $page = $this->getSession()->getPage();
-    $page->find('css', '#block-alshaya-white-label-content > div.views-element-container > div > div > div > div.views-row.clearfix.row-1 > div:nth-child(1) > div > span > div > div.address--options > div.address--edit.address--controls > a')
-      ->click();
+    $element = $page->find('css', '#block-content > div.views-element-container > div > div > div > div.views-row.clearfix.row-1 > div:nth-child(1) > div > span > div > div.address--options > div.address--edit.address--controls > a');
+    if ($element !== NULL) {
+      $element->click();
+    }
   }
 
   /**
@@ -865,7 +874,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $page->find('css', '.select2-selection__arrow')->click();
     $page->find('css', 'ul.select2-results__options li:nth-child(1)')->click();
   }
-  
+
   /**
    * @Given /^I should be able to see the header for checkout$/
    */
@@ -969,7 +978,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
       throw new \Exception('Price did not get updated after adding the quantity');
     }
   }
-  
+
   /**
    * @Given /^I am on a simple product page$/
    */
@@ -1073,7 +1082,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $page = $this->getSession()->getPage();
     $page->find('css', $arg1)->mouseOver();
   }
-  
+
   /**
    * @Then /^I should see the link for simple product in Arabic$/
    */
@@ -1205,7 +1214,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    */
   public function theBreadcrumbShouldBeDisplayed($breadcrumb) {
     $page = $this->getSession()->getPage();
-    $breadcrumb_elements = $page->findAll('css', '#block-alshaya-white-label-breadcrumbs > nav > ol > li');
+    $breadcrumb_elements = $page->findAll('css', '#block-breadcrumbs > nav > ol > li');
     foreach ($breadcrumb_elements as $element) {
       $actual_breadcrumb[] = $element->find('css', 'a')->getText();
     }
@@ -1469,10 +1478,12 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    */
   public function iSelectAProductInStock() {
     $page = $this->getSession()->getPage();
-    $all_products = $page->findById('block-alshaya-white-label-content')
-      ->findAll('css', '.c-products__item');
-    $total_products = count($all_products);
-    if ($total_products == 0) {
+    $all_products = $page->findById('block-content');
+    if ($all_products !== NULL) {
+      $all_products = $all_products->findAll('css', '.c-products__item');
+      $total_products = count($all_products);
+    }
+    else {
       throw new \Exception('Search passed, but search results were empty');
     }
     foreach ($all_products as $item) {
@@ -1487,6 +1498,88 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
       $this->product = $item->find('css', 'h2.field--name-name')->getText();
       $page->clickLink($this->product);
       break;
+    }
+  }
+
+  /**
+   * @Given /^I should see the title and count of items$/
+   */
+  public function iShouldSeeTheTitleAndCountOfItems() {
+    $page = $this->getSession()->getPage();
+    $title = $page->find('css', 'h1.c-page-title > div');
+    if ($title == NULL) {
+      throw new \Exception('Title is not displayed on category page');
+    }
+    if (!(($page->hasContent('items')) or ($page->hasContent(' قطعة')))) {
+      throw new \Exception('Number of items not displayed on category page');
+    }
+    $this->item_count = count($page->findAll('css', '.field--name-name'));
+  }
+
+  /**
+   * @Then /^more items should get loaded$/
+   */
+  public function moreItemsShouldGetLoaded() {
+    $page = $this->getSession()->getPage();
+    $loaded_items = count($page->findAll('css', '.field--name-name'));
+    if ($loaded_items < $this->item_count) {
+      throw new \Exception('Load more is not functioning correctly');
+    }
+  }
+
+  /**
+   * @Given /^I select a product from a product category$/
+   */
+  public function iSelectAProductFromAProductCategory() {
+    $page = $this->getSession()->getPage();
+    $all_products = $page->findById('block-views-block-alshaya-product-list-block-1');
+    if ($all_products !== NULL) {
+      $all_products = $all_products->findAll('css', '.c-products__item');
+      $total_products = count($all_products);
+    }
+    else {
+      throw new \Exception('No products are listed on PLP');
+    }
+    foreach ($all_products as $item) {
+      $item_status = count($item->find('css', 'div.out-of-stock span'));
+      if ($item_status) {
+        $total_products--;
+        if (!$total_products) {
+          throw new \Exception('All products are out of stock on PLP');
+        }
+        continue;
+      }
+      $this->product = $item->find('css', 'h2.field--name-name')->getText();
+      $page->clickLink($this->product);
+      break;
+    }
+  }
+
+  /**
+   * @Given /^I select a size for the product$/
+   */
+  public function iSelectASizeForTheProduct() {
+    $page = $this->getSession()->getPage();
+    $all_sizes = $page->findById('configurable_ajax');
+    if ($all_sizes !== NULL) {
+      $all_sizes = $all_sizes->findAll('css', 'div > div.select2Option > ul li');
+      $total_sizes = count($all_sizes);
+      foreach ($all_sizes as $size) {
+        $check_li = $size->find('css', 'li')->getText();
+        $size_status = count($size->find('css', '.disabled'));
+        if ($size_status || !$check_li) {
+          $total_sizes--;
+          if (!$total_sizes) {
+            throw new \Exception('All sizes are disabled');
+          }
+          continue;
+        }
+        $size->find('css', 'a')->click();
+        break;
+      }
+    }
+    else {
+      echo 'No size attribute is available for this product';
     }
   }
 

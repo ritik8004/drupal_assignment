@@ -6,6 +6,8 @@
  * Contains install, update, uninstall hooks for alshaya_acm_promotion module.
  */
 
+use Drupal\field\Entity\FieldConfig;
+
 /**
  * Implements hook_update_N().
  */
@@ -35,4 +37,32 @@ function alshaya_acm_promotion_update_8302() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable translation for promotional banner field in acq_promotion.
+ */
+function alshaya_acm_promotion_update_8002() {
+  $config = \Drupal::configFactory()->getEditable('field.field.node.acq_promotion.field_acq_promotion_banner');
+  $config->set('translatable', TRUE);
+  $config->save();
+
+  $field = FieldConfig::loadByName('node', 'acq_promotion', 'field_acq_promotion_banner');
+  $field->setTranslatable(TRUE);
+  $field->save();
+
+  // Revert the view to have language filter.
+  $reverter = \Drupal::service('config_update.config_update');
+  $reverter->revert('view', 'promotion_banner');
+}
+
+/**
+ * Implements hook_update_N()
+ */
+function alshaya_acm_promotion_update_8001() {
+  // Getting editable SOLR facet config.
+  $facet_promotion_collection = \Drupal::configFactory()->getEditable('facets.facet.promotion_collection_facet');
+  $facet_promotion_collection->set('widget.config.show_numbers', TRUE)->save();
 }

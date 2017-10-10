@@ -14,6 +14,9 @@ alshaya_stores_finder.settings:
     search_proximity_radius:
       type: integer
       label: 'Store finder proximity radius'
+    store_list_label:
+      type: label
+      label: 'Label for back to store list link'
     marker:
       type: mapping
       label: 'Marker settings'

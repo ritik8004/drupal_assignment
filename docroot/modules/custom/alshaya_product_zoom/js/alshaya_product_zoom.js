@@ -315,7 +315,7 @@
         $(this).parent().addClass('slick-current');
       });
 
-      $('.acq-content-product-modal #lightSlider li a', context).on('click', function (e) {
+      $('.acq-content-product-modal #lightSlider li a').once().on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
         var index = $(this).parent().attr("data-slick-index");

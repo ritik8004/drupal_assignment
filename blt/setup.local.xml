@@ -9,6 +9,14 @@
   </target>
 
   <target name="local:reset-local-settings">
+    <if>
+      <not><available file="${docroot}/sites/${multisite.name}/settings" type="dir" property="dirExists" /></not>
+      <then>
+        <echo>Creating settings directory for the site:</echo>
+        <exec dir="${docroot}/sites/${multisite.name}" command="mkdir settings" logoutput="true" checkreturn="true" level="${blt.exec_level}" passthru="true"/>
+      </then>
+    </if>
+
     <chmod mode="0755" file="${docroot}/sites/${multisite.name}" failonerror="false"/>
     <chmod mode="0755" file="${docroot}/sites/${multisite.name}/settings/" failonerror="false"/>
     <if>

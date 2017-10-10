@@ -57,12 +57,12 @@ settings:
   draft_button_attributes: {  }
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: inline
+  confirmation_type: url
   confirmation_title: ''
   confirmation_message: 'Thank you :)'
-  confirmation_url: ''
+  confirmation_url: '/[server:HTTP_REFERER]'
   confirmation_attributes: {  }
-  confirmation_back: true
+  confirmation_back: false
   confirmation_back_label: ''
   confirmation_back_attributes: {  }
   limit_total: null

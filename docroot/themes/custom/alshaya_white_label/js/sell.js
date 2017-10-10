@@ -13,10 +13,10 @@
 
       var crossSell = $('.horizontal-crossell .owl-carousel');
       var upSell = $('.horizontal-upell .owl-carousel');
+      var relatedSell = $('.horizontal-related .owl-carousel');
       var basketHR = $('.block-basket-horizontal-recommendation .owl-carousel');
 
       var options = {
-        loop: true,
         responsiveClass: true,
         dots: true,
         responsive: {
@@ -70,6 +70,7 @@
       applyRtl(basketHR, options);
       applyRtl(crossSell, optionsPdp);
       applyRtl(upSell, optionsPdp);
+      applyRtl(relatedSell, optionsPdp);
 
       $('.owl-carousel').owlCarousel({
         loop: true,

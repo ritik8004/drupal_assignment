@@ -57,8 +57,8 @@
               gtmPageTypeArray.splice(i, 1);
             }
           }
-          gtmPageType = gtmPageTypeArray.join('-');
-          gtmPageType = 'user-' . gtmPageType;
+          var gtmPageSubType = gtmPageTypeArray.join('-');
+          gtmPageType = 'user-' . gtmPageSubType;
         }
         else {
           gtmPageType = 'not defined';
@@ -422,11 +422,14 @@
       /** GTM virtual page tracking for click & collect journey. **/
       if (isCCPage) {
         if ($('#store-finder-wrapper', context).length > 0) {
-          dataLayer.push({
-            event: 'VirtualPageview',
-            virtualPageURL: '/virtualpv/click-and-collect/step1/click-and-collect-view',
-            virtualPageTitle: 'C&C Step 1 – Click and Collect View'
-          });
+          if (!(body.hasClass('virtualpageview-fired'))) {
+            dataLayer.push({
+              event: 'VirtualPageview',
+              virtualPageURL: '/virtualpv/click-and-collect/step1/click-and-collect-view',
+              virtualPageTitle: 'C&C Step 1 – Click and Collect View'
+            });
+            body.addClass('virtualpageview-fired');
+          }
 
           if (($('input.cc-action', context).length > 0) && (context === document)) {
             Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
@@ -468,6 +471,10 @@
 
       if ($(context).find('article[data-vmode="modal"]').length === 1) {
         var product = Drupal.alshaya_seo_gtm_get_product_values($(context).find('article[data-vmode="modal"]'));
+
+        if (product.hasOwnProperty('variant') && product.variant === undefined) {
+          product.variant = '';
+        }
 
         var data = {
           event: 'productDetailView',

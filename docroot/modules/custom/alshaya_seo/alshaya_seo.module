@@ -13,20 +13,64 @@ use Drupal\Core\Url;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
+ * Function to check if we should process GTM code for current request.
+ *
+ * @return bool
+ *   Whether to process or not.
+ */
+function _alshaya_seo_process_gtm() {
+  static $process = NULL;
+
+  if ($process !== NULL) {
+    return $process;
+  }
+
+  $currentUser = \Drupal::currentUser();
+  $current_route_name = \Drupal::routeMatch()->getRouteName();
+
+  $route_params = \Drupal::routeMatch()->getRawParameters();
+
+  // Disable SEO modifications for non-customer users (admins).
+  if ($currentUser->isAuthenticated() && !alshaya_acm_customer_is_customer($currentUser)) {
+    $process = FALSE;
+  }
+  // Don't process for AJAX requests.
+  elseif ((stripos(\Drupal::request()->getRequestUri(), 'ajax') > -1) && ($current_route_name !== 'views.ajax')) {
+    $process = FALSE;
+  }
+  elseif (!\Drupal::service('router.admin_context')->isAdminRoute()
+    || ($current_route_name === 'entity.user.edit_form')) {
+    $process = TRUE;
+  }
+  else {
+    // Return false by default.
+    $process = FALSE;
+  }
+
+  return $process;
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_seo_preprocess_html(&$variables) {
-  /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtmManager */
-  $gtm_manager = \Drupal::service('alshaya_seo.gtm_manager');
-  $variables['attributes']['gtm-currency'] = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
-  $variables['attributes']['gtm-container'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
-  $variables['attributes']['gtm-list-name'] = $gtm_manager->convertCurrentRouteToGtmListName($gtm_manager->getGtmContainer());
+  if (_alshaya_seo_process_gtm()) {
+    /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtmManager */
+    $gtm_manager = \Drupal::service('alshaya_seo.gtm_manager');
+    $variables['attributes']['gtm-currency'] = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
+    $variables['attributes']['gtm-container'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
+    $variables['attributes']['gtm-list-name'] = $gtm_manager->convertCurrentRouteToGtmListName($gtm_manager->getGtmContainer());
+  }
 }
 
 /**
  * Implements hook_page_attachments().
  */
 function alshaya_seo_page_attachments(array &$attachments) {
+  if (!_alshaya_seo_process_gtm()) {
+    return;
+  }
+
   $gkg_config = \Drupal::config('alshaya_seo.google_knowledge_graph');
 
   $gkg_data = [];
@@ -90,12 +134,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_seo_page_attachments_alter(&$page) {
-  // Attach the gtm library on every page.
-  // Load GTM library on user edit page as well.
-  $current_route_name = \Drupal::routeMatch()->getRouteName();
-
-  if (!\Drupal::service('router.admin_context')->isAdminRoute() ||
-    ($current_route_name === 'entity.user.edit_form')) {
+  if (_alshaya_seo_process_gtm()) {
     $page['#attached']['library'][] = 'alshaya_seo/gtm';
   }
 }
@@ -124,6 +163,10 @@ function alshaya_seo_simple_sitemap_links_alter(&$links) {
  * Implements template_preprocess_node().
  */
 function alshaya_seo_preprocess_node(&$variables) {
+  if (!_alshaya_seo_process_gtm()) {
+    return;
+  }
+
   $view_mode = $variables['view_mode'];
   /** @var \Drupal\node\Entity\Node $entity */
   $entity = $variables['node'];
@@ -241,10 +284,7 @@ function alshaya_seo_theme($existing, $type, $theme, $path) {
  * Implements hook_datalayer_alter().
  */
 function alshaya_seo_datalayer_alter(&$data_layer) {
-  $currentUser = \Drupal::currentUser();
-
-  // Disable SEO modifications for non-customer users (admins).
-  if ($currentUser->isAuthenticated() && !alshaya_acm_customer_is_customer($currentUser)) {
+  if (!_alshaya_seo_process_gtm()) {
     return;
   }
 
@@ -372,6 +412,20 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
         break;
     }
 
+    // Generic handling of page type for user pages.
+    if ($page_type === 'not defined') {
+      $current_route = $gtm_manager->getGtmContainer();
+      $current_path = $current_route['pathinfo']->getpath();
+      if (preg_match('/^\/user\/{user}\/(\S*)$/', $current_path, $matches)) {
+        if (strpos($matches[1], '{') === 0) {
+          $route_param_identifier = trim($matches[1], '{}');
+          $route_param_val = $current_route['route_params'][$route_param_identifier]->id();
+          $matches[1] = $route_param_val;
+        }
+        $page_type = 'user-' . $matches[1];
+      }
+    }
+
     $data_layer['pageType'] = $page_type;
     $page_dl_attributes = $gtm_manager->fetchPageSpecificAttributes($page_type, $current_route);
     $data_layer = array_merge($data_layer, $page_dl_attributes);
@@ -468,20 +522,26 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
   $field = $variables['field'];
   $view = $variables['view'];
 
-  $is_product_level_3_view = (($view->id() === 'product_category_level_3')
-    && ($view->current_display === 'default'));
+  $is_product_level_3_view = ((($view->id() === 'product_category_level_3') && ($view->current_display === 'block_1')) ||
+      ($view->id() === 'product_category_level_2_3') && ($view->current_display === 'block_2'));
   if (($is_product_level_3_view) &&
     ($field->getPluginId() === 'term_name')) {
     $args = $view->args;
     $parents = \Drupal::entityManager()->getStorage('taxonomy_term')->loadParents($args[0]);
     $parent_term = array_shift($parents);
-    $parent_term_name = $parent_term->getName();
-    $parent_term_class = 'vert-nav-' . str_replace(' ', '-', strtolower($parent_term_name));
+    $term_classes = [];
+    if ($parent_term) {
+      $parent_term_name = $parent_term->getName();
+      $term_classes[] = 'vert-nav-' . str_replace(' ', '-', strtolower($parent_term_name));
+    }
+
     $term = $variables['row']->_entity;
+    $term_class_name = str_replace(' ', '-', strtolower(preg_replace('/[^A-Za-z0-9-\s]/', '', $term->getName())));
+    $term_classes[] = 'left-nav-' . $term_class_name;
 
     $options = [
       'attributes' => [
-        'class' => $parent_term_class,
+        'class' => $term_classes,
       ],
     ];
 
