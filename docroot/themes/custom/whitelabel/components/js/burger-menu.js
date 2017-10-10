@@ -26,20 +26,18 @@
       const closeButton = $('.menu-close');
       const menuContent = $('.navigation__sub-menu');
       const menuLogos = $('.menu-logo-navigation');
+      const overlayContent = $('.empty-overlay');
 
-      menuButton.click(function () {
-        menuButton.addClass('is-hidden');
-        menuContent.addClass('is-active');
-        menuLogos.addClass('is-active-ul');
-        closeButton.addClass('is-active-close');
-      });
+      function toggleMenu() {
+        menuButton.toggleClass('is-hidden');
+        menuContent.toggleClass('is-active');
+        menuLogos.toggleClass('is-active-ul');
+        closeButton.toggleClass('is-active-close');
+        overlayContent.toggleClass('overlay-content');
+      }
 
-      closeButton.click(function () {
-        menuButton.removeClass('is-hidden');
-        menuContent.removeClass('is-active');
-        menuLogos.removeClass('is-active-ul');
-        closeButton.removeClass('is-active-close');
-      });
+      menuButton.once().on('click', toggleMenu);
+      closeButton.once().on('click', toggleMenu);
     }
   };
 
