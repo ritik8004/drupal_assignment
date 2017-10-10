@@ -233,7 +233,7 @@ class ProductSyncResource extends ResourceBase {
 
       $sku->save();
 
-      if ($product['status'] == 1) {
+      if ($product['status'] == 1 && $product['visibility'] == 1) {
         $node = $plugin->getDisplayNode($sku, FALSE, TRUE);
 
         if (empty($node)) {
