@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "29a4e0bd56b5d0a0e1cee9f29e1ed850",
+    "content-hash": "6b57b271845ab341a7ede073025f17dd",
     "packages": [
         {
             "name": "acquia/blt",
@@ -3266,6 +3266,7 @@
                     "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
                     "Enable GET by default for exposed form AJAX": "patches/ajax_view.patch",
                     "Database lock backend should normalize the lock name": "https://www.drupal.org/files/issues/2872276-10.patch",
+                    "Clearing cache via UI in translated language resets config translation of field labels to default language": "https://www.drupal.org/files/issues/clearing_cache_via_ui-2650434-137.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/2752961-90.patch",
                     "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-360.patch",

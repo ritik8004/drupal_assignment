@@ -33,6 +33,10 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     </div>
   {% endif %}
 
+  {% if content.stock_placeholder %}
+    {{ content.stock_placeholder }}
+  {% endif %}
+
   <table class="mobile--only--sell">
     <tr>
       <td class="sell--image">

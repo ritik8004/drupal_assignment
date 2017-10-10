@@ -167,12 +167,21 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         ],
       ];
 
+      $stock_placeholder = NULL;
+
+      if (alshaya_acm_product_is_buyable($sku)) {
+        $stock_placeholder = [
+          '#markup' => '<div class="stock-placeholder out-of-stock">' . t('Checking stock...') . '</div>',
+        ];
+      }
+
       $elements[$delta] = [
         '#theme' => 'sku_teaser',
         '#gallery' => $sku_gallery,
         '#product_url' => $product_url,
         '#product_label' => $product_label,
         '#promotions' => $promotions,
+        '#stock_placeholder' => $stock_placeholder,
         '#cache' => [
           'tags' => array_merge($promotion_cache_tags, ['sku:' . $sku->id()]),
           'contexts' => ['url'],

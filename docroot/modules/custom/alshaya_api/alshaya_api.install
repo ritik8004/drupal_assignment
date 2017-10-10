@@ -8,19 +8,17 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_modules_installed().
+ * Implements hook_install().
  */
-function alshaya_api_modules_installed($modules) {
-  if (in_array('alshaya_api', $modules)) {
-    // Configure alshaya_api settings.
-    $config = \Drupal::configFactory()->getEditable('alshaya_api.settings');
+function alshaya_api_install() {
+  // Configure alshaya_api settings.
+  $config = \Drupal::configFactory()->getEditable('alshaya_api.settings');
 
-    $alshaya_api_settings = Settings::get('alshaya_api.settings');
+  $alshaya_api_settings = Settings::get('alshaya_api.settings');
 
-    foreach ($alshaya_api_settings as $key => $value) {
-      $config->set($key, $value);
-    }
-
-    $config->save();
+  foreach ($alshaya_api_settings as $key => $value) {
+    $config->set($key, $value);
   }
+
+  $config->save();
 }
