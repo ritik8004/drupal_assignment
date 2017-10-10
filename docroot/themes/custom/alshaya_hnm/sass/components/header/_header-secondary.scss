@@ -104,12 +104,6 @@
 
     line-height: 1;
 
-    &:hover,
-    &.is-active {
-      color: $marine-blue-two;
-      background: $white-five;
-    }
-
     &::before,
     &::after {
       font-size: 1.1rem;
