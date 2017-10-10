@@ -1404,7 +1404,6 @@ html[lang=ar] {
 
       .price--discount {
         .discount-prefix {
-          float: none !important;
           font-family: $alshaya-thin;
           font-size: 0.75rem;
 
@@ -1418,18 +1417,43 @@ html[lang=ar] {
         }
 
         .discount-value {
-          float: right;
-          min-width: 47%;
-
           @include breakpoint($only-tablet) {
             font-size: 0.75rem;
-            min-width: 66%;
           }
 
           @include breakpoint($only-mobile) {
             font-size: 0.625rem;
-            min-width: 35% !important;
           }
+        }
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  .customer-cart-form {
+    .price--discount {
+      .discount-prefix {
+        float: right !important;
+        min-width: 25%;
+        text-align: center;
+
+        @include breakpoint($tablet) {
+          min-width: 33%;
+          padding-right: 10px;
+        }
+
+        @include breakpoint($desktop) {
+          min-width: 33%;
+          padding-right: 20px;
+        }
+      }
+      .discount-value {
+        text-align: center;
+        padding-right: 15px;
+
+        @include breakpoint($desktop) {
+          padding-right: 20px;
         }
       }
     }
