@@ -383,10 +383,10 @@ class AcqPromotionsManager {
       }
 
       // Check if this promotion exists in Drupal.
+      // Assuming rule_id is unique across a promotion type.
       $promotion_node = $this->getPromotionByRuleId($promotion['rule_id'], $promotion['promotion_type']);
 
       // If promotion exists, we update the related skus & final price.
-      // Assuming rule_id is unique across a promotion type.
       if ($promotion_node) {
         $promotion_nid = $promotion_node->id();
         // Update promotion metadata.
