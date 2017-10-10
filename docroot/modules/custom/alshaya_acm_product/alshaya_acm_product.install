@@ -6,6 +6,15 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Apply entity updates to apply t() for field labels in SKU entity.
+ */
+function alshaya_acm_product_update_8001() {
+  \Drupal::service("entity.definition_update_manager")->applyUpdates();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_acm_product_install() {
