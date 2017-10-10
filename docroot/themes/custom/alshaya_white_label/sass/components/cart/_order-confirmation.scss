@@ -99,12 +99,12 @@
       }
     }
 
-    .discount-row,
-    .sub-total-row {
-      & .right--align {
-        padding-#{$right}: 2.6rem !important;
-      }
-    }
+    //.discount-row,
+    //.sub-total-row {
+    //  & .right--align {
+    //    padding-#{$right}: 2.6rem !important;
+    //  }
+    //}
 
     tr.order-details-row:first-child {
       .order__user--info,
@@ -415,6 +415,18 @@
 
   .right--align {
     text-align: $right;
+
+    @include breakpoint($tablet) {
+      html[lang=ar] & {
+        min-width: 8rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        min-width: 9rem;
+      }
+    }
   }
 
   .product--count {
@@ -606,26 +618,65 @@
   text-transform: lowercase;
 
   @include breakpoint($tablet) {
-    margin-#{$right}: 6.1rem;
-    width: 9.875rem;
+    margin-#{$right}: 6.15rem;
+    width: 8.5rem;
+
+    html[lang=ar] & {
+      margin-#{$right}: 6.15rem;
+      width: 8rem;
+    }
   }
 
-  &.expanded-table {
-    @include breakpoint($only-tablet) {
-      margin-right: 2.8rem;
+  @include breakpoint($desktop - 1) {
+    margin-#{$right}: 6rem;
+    width: 9rem;
 
-      html[lang=ar] & {
-        margin-left: 1.2rem;
-      }
-    }
-
-    @include breakpoint($desktop) {
-      margin-#{$right}: 7.8rem;
+    html[lang=ar] & {
+      margin-#{$right}: 6rem;
+      width: 8rem;
     }
   }
 
   @include breakpoint($desktop) {
-    margin-#{$right}: 8.375rem;
+    margin-#{$right}: 8.5rem;
+    width: 9.875rem;
+
+    html[lang=ar] & {
+      margin-#{$right}: 8.5rem;
+      width: 9.875rem;
+    }
+  }
+
+  &.expanded-table {
+    @include breakpoint($tablet) {
+      margin-#{$right}: 4.15rem;
+      width: 8.5rem;
+
+      html[lang=ar] & {
+        margin-#{$right}: 2.15rem;
+        width: 8rem;
+      }
+    }
+
+    @include breakpoint($desktop - 1) {
+      margin-#{$right}: 6rem;
+      width: 9rem;
+
+      html[lang=ar] & {
+        margin-#{$right}: 6rem;
+        width: 9rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 7.5rem;
+      width: 9.875rem;
+
+      html[lang=ar] & {
+        margin-#{$right}: 5.8rem;
+        width: 9.875rem;
+      }
+    }
   }
 }
 
