@@ -6,15 +6,17 @@
       column-count: 3;
       max-height: 24rem;
       padding-#{$right}: 52%;
-      padding-#{$left}: 1rem;
+      padding-#{$left}: 6.1rem;
       padding-bottom: 1.5rem;
       column-fill: auto;
       min-height: 24rem;
+      padding-top: 1.5rem;
 
       .menu--two__list-item .menu--three__list {
         padding-#{$left}: 0;
         padding-top: 0;
         position: static;
+        margin-top: 0.625rem;
       }
     }
 
@@ -25,13 +27,18 @@
 
     .highlights {
       position: absolute;
-      #{$left}: 49.145%;
-      top: 0.7rem;
+      #{$left}: 67.6%;
+      top: 1.5rem;
       margin-top: 0;
       width: 50%;
 
       .title {
+        text-transform: uppercase;
         margin-bottom: 0.9rem;
+        font-family: $hnm-demibold;
+        letter-spacing: 0.5px;
+        font-weight: normal;
+        color: $black-three;
       }
     }
 
@@ -46,7 +53,7 @@
       }
 
       a {
-        color: $marine-blue !important;
+        color: $black-three !important;
 
         html[lang=ar] & {
           line-height: 1.7;
@@ -56,11 +63,15 @@
 
     .menu--three__list-item > .menu-two__link-wrapper a {
       font-size: 0.75rem !important;
-      color: $grey-ash !important;
-      font-family: $arial !important;
+      color: $grey7 !important;
+      font-family: $hnm-regular !important;
+      letter-spacing: 0.3px;
+      line-height: 1.1;
+      text-transform: capitalize;
 
       &:hover {
-        color: $cerulean-two !important;
+        color: $link-hover !important;
+        text-decoration: underline;
       }
     }
 
