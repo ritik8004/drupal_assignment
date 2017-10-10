@@ -21,7 +21,7 @@ if [ ! -e "$SOLR_SETUP_COMPLETE_FILE" ]; then
   sudo cp -a $SOLR_MODULE_DIR/$SOLR_MODULE_NAME/solr-conf/4.x/. /var/solr/collection1/conf/
 
   # Copy this projects overrides into the `collection1` core.
-  sudo cp -a $PROJECT_DIR/solrconf/. /var/solr/collection1/conf/
+  sudo cp -a $PROJECT_DIR/architecture/solr/. /var/solr/collection1/conf/
 
   # Adjust the autoCommit time so index changes are committed in 1s.
   #sudo sed -i 's/\(<maxTime>\)\([^<]*\)\(<[^>]*\)/\11000\3/g' /var/solr/collection1/conf/solrconfig.xml
