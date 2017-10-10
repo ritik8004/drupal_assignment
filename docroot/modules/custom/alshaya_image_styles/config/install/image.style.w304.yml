@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w304
+label: w304
+effects:
+  df7b7be6-3563-4177-90f9-2a6216602920:
+    uuid: df7b7be6-3563-4177-90f9-2a6216602920
+    id: image_scale
+    weight: 1
+    data:
+      width: 304
+      height: null
+      upscale: false
