@@ -3,7 +3,7 @@
 namespace Drupal\acq_customer\Plugin\rest\resource;
 
 use Drupal\Core\Entity\EntityStorageException;
-use Drupal\rest\ModifiedResourceResponse;
+use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -79,9 +79,8 @@ class CustomerDeleteResource extends ResourceBase {
       try {
         $user->delete();
         $this->logger->notice('Deleted user with uid %id and email %email.', ['%id' => $user->id(), '%email' => $customer_email]);
-
-        // DELETE responses have an empty body.
-        return new ModifiedResourceResponse(NULL, 204);
+        $response['success'] = (bool) (TRUE);
+        return (new ResourceResponse($response));
       }
       catch (EntityStorageException $e) {
         $this->logger->error($e->getMessage());
