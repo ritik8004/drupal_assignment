@@ -122,7 +122,9 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
         }
       }
       // Set the second sort as default value if first is disabled from backend.
-      if (!array_key_exists($first_sort_key, $form['sort_bef_combine']['#options']) && !empty($form['sort_bef_combine']['#options'])) {
+      // Make sure this only runs once on page refresh not ajax request.
+      $user_inputs = $form_state->getUserInput();
+      if (!array_key_exists($first_sort_key, $form['sort_bef_combine']['#options']) && !empty($form['sort_bef_combine']['#options']) && !isset($user_inputs['pager_query_method'])) {
         $form['sort_bef_combine']['#value'] = $form['sort_bef_combine']['#default_value'] = key($form['sort_bef_combine']['#options']);
       }
     }
