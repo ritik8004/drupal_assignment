@@ -334,12 +334,12 @@ header {
       margin-top: -0.4375rem;
 
       .cart-link-total {
-        margin-right: -0.25rem;
+        margin-#{$right}: -0.25rem;
         margin-top: 0.8125rem;
         font-size: 0.75rem;
 
         .prefix {
-          margin-right: 0.5625rem;
+          margin-#{$right}: 0.5625rem;
         }
       }
     }
