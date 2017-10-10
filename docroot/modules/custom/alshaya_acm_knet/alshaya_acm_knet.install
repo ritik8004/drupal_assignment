@@ -8,19 +8,17 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_modules_installed().
+ * Implements hook_install().
  */
-function alshaya_acm_knet_modules_installed($modules) {
-  if (in_array('alshaya_acm_knet', $modules)) {
-    // Configure K-Net settings.
-    $config = \Drupal::configFactory()->getEditable('alshaya_acm_knet.settings');
+function alshaya_acm_knet_install() {
+  // Configure K-Net settings.
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_knet.settings');
 
-    $settings = Settings::get('alshaya_acm_knet.settings');
+  $settings = Settings::get('alshaya_acm_knet.settings');
 
-    foreach ($settings as $key => $value) {
-      $config->set($key, $value);
-    }
-
-    $config->save();
+  foreach ($settings as $key => $value) {
+    $config->set($key, $value);
   }
+
+  $config->save();
 }
