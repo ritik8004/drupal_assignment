@@ -1,22 +1,19 @@
 %page-title {
-  text-transform: lowercase;
-  font-family: $hnm-bold;
+  text-transform: uppercase;
+  font-family: $hnm-demibold;
   font-weight: normal;
-  color: $marine-blue;
+  color: $hnm-black-two;
+  letter-spacing: 0.8px;
   line-height: 1;
   margin-top: 0;
   margin-bottom: 0;
 
   @include breakpoint($mobile) {
-    font-size: 1.125rem;
+    font-size: 1rem;
   }
 
   @include breakpoint($tablet) {
-    font-size: 1.375rem;
-  }
-
-  @include breakpoint($desktop) {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 }
 

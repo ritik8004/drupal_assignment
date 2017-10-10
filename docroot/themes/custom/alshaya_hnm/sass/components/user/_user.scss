@@ -67,10 +67,9 @@
 
   .c-sidebar-second {
     h3 {
-      color: $marine-blue;
-      font-size: 14px;
-      font-family: $alshaya-bold;
-      text-transform: lowercase;
+      color: $hnm-black-two;
+      font-size: 0.75rem;
+      font-family: $hnm-demibold;
       font-weight: normal;
     }
 
@@ -145,7 +144,8 @@
     }
 
     h3 {
-      color: $dark-sand;
+      color: $hnm-black-two;
+      font-family: $hnm-demibold;
       margin-bottom: 0.1rem;
     }
 
@@ -172,9 +172,10 @@
     }
 
     a {
-      font-weight: bold;
-      text-transform: lowercase;
-      color: $cerulean-two;
+      font-weight: normal;
+      color: $hnm-black-two;
+      text-decoration: underline;
+      font-family: $hnm-demibold;
     }
 
     h3 {
@@ -208,7 +209,7 @@
     }
 
     p {
-      line-height: 1.1rem;
+      line-height: 1.5;
 
       @include breakpoint($desktop) {
         margin-top: 0;
@@ -304,10 +305,9 @@
     .form-submit {
       @extend %btn;
 
-      background: $pumpkin-orange;
+      background: $hnm-black-two;
       margin-top: 1em;
       width: 100%;
-      text-transform: lowercase;
 
       @include breakpoint($tablet) {
         width: auto;
@@ -423,7 +423,7 @@
 
   & > a {
     @include breakpoint($tablet) {
-      #{$left}: 9em;
+      #{$left}: 10em;
       bottom: 0.5em;
       width: auto;
 
@@ -434,7 +434,6 @@
     }
 
     @include breakpoint($desktop) {
-      #{$left}: 9em;
       bottom: 0.7em;
 
       html[lang='ar'] & {
@@ -444,13 +443,14 @@
 
     position: absolute;
     bottom: -3.5em;
-    text-decoration: none;
+    text-decoration: underline;
     font-size: 0.75rem;
     font-weight: bold;
     z-index: 2;
     width: 100%;
     text-align: center;
-    color: $windows-blue;
+    color: $hnm-black-two;
+    font-family: $hnm-regular;
   }
 
   label.error {
@@ -465,7 +465,9 @@
   text-transform: lowercase;
 
   a {
-    color: $cerulean-two;
+    color: $hnm-black-two;
+    text-decoration: underline;
+    font-family: $hnm-demibold;
   }
 
   span {
@@ -543,7 +545,7 @@
 
       input[type=submit] {
         @include breakpoint($tablet) {
-          width: 5.688rem;
+          min-width: 5.688rem;
         }
       }
 
@@ -1134,8 +1136,8 @@
   margin-top: 2rem;
 
   .privilege-card-wrapper-title {
-    color: $dark-sand;
-    font-family: $alshaya-bold;
+    color: $hnm-black-two;
+    font-family: $hnm-demibold;
   }
 
   .form-wrapper {
