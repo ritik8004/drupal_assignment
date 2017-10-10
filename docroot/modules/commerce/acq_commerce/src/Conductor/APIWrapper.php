@@ -180,7 +180,7 @@ class APIWrapper {
 
     try {
       $cart = $this->tryAgentRequest($doReq, 'updateCart', 'cart');
-      Cache::invalidateTags(['mini_cart_' . $cart_id]);
+      Cache::invalidateTags(['cart_' . $cart_id]);
     }
     catch (ConductorException $e) {
       throw new \Exception($e->getMessage(), $e->getCode());

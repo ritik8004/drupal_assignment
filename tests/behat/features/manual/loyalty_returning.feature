@@ -4,7 +4,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
   no PC number should be displayed on Order confirmation page
   when the PC number is null on basket
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -12,7 +12,7 @@ Feature: Test the privilege card functionality for returning customer
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "shweta+2@axelerant.com"
+    Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
     And I fill in "edit-checkout-login-pass" with "Alshaya123$"
     When I press "sign in"
     And I wait for the page to load
@@ -45,7 +45,7 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see "Contact details changes have been saved."
     When I follow "Sign out"
     And I wait for the page to load
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -96,7 +96,7 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see "Contact details changes have been saved."
     When I follow "Sign out"
     And I wait for the page to load
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -141,7 +141,7 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see "Contact details changes have been saved."
     When I follow "Sign out"
     And I wait for the page to load
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -180,7 +180,7 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see "Contact details changes have been saved."
     When I follow "Sign out"
     And I wait for the page to load
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -226,7 +226,7 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see "Contact details changes have been saved."
     When I follow "Sign out"
     And I wait for the page to load
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -254,7 +254,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
   no PC number should be displayed on Order confirmation page
   when the PC number is null on basket
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -294,7 +294,7 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see "Contact details changes have been saved."
     When I follow "Sign out"
     And I wait for the page to load
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -323,7 +323,7 @@ Feature: Test the privilege card functionality for returning customer
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
-    When I am on homepage
+    When I go to "/ar"
     And I wait for the page to load
     When I follow "حسابي"
     And I wait for the page to load
@@ -346,7 +346,7 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see "Contact details changes have been saved."
     When I follow "Sign out"
     And I wait for the page to load
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -392,7 +392,7 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see "Contact details changes have been saved."
     When I follow "Sign out"
     And I wait for the page to load
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -432,7 +432,7 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see "Contact details changes have been saved."
     When I follow "Sign out"
     And I wait for the page to load
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -479,7 +479,7 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see "Contact details changes have been saved."
     When I follow "Sign out"
     And I wait for the page to load
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish

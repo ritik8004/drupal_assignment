@@ -4,7 +4,7 @@ Feature: Test privilege card features for Guest
   Scenario: As a Guest
   no PC number should be displayed on Order Confirmation page
   when there is no value on basket page and loyalty block details should appear
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -16,7 +16,7 @@ Feature: Test privilege card features for Guest
     And I wait for the page to load
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    And I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
@@ -41,7 +41,7 @@ Feature: Test privilege card features for Guest
 
   Scenario: As a Guest
   PC number from the basket should be displayed on Order confirmation page
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -57,7 +57,7 @@ Feature: Test privilege card features for Guest
     And I wait for the page to load
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    And I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
@@ -91,7 +91,7 @@ Feature: Test privilege card features for Guest
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
@@ -134,7 +134,7 @@ Feature: Test privilege card features for Guest
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"

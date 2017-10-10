@@ -6,6 +6,7 @@ use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm_customer\OrdersManager;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\user\Entity\User;
 
@@ -74,6 +75,9 @@ class CheckoutHelper {
 
     // Place an order.
     $response = $this->apiWrapper->placeOrder($cart->id());
+
+    // Once we reach here, we clear cart related cache.
+    Cache::invalidateTags(['cart_' . $cart->id()]);
 
     // @TODO: Remove the fix when we get the full order details.
     $order_id = str_replace('"', '', $response['order']['id']);
