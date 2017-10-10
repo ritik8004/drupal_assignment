@@ -1,4 +1,18 @@
 .region-top-header {
-  background-color: $black;
   font-size: 0;
+
+  @include breakpoint($upto-palm) {
+    position: fixed;
+    z-index: 999;
+  }
+
+  @include breakpoint($above-palm) {
+    background: $black;
+  }
+}
+
+main {
+  @include breakpoint($upto-palm) {
+    margin-top: 4rem;
+  }
 }

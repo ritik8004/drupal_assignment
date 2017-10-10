@@ -17,7 +17,7 @@ Feature:
     And I press "Save"
     When I wait for the page to load
     Then I should see "Contact details changes have been saved."
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     And I press "Add to basket"
     And I wait for AJAX to finish
@@ -52,7 +52,7 @@ Feature:
     And I press "Save"
     When I wait for the page to load
     Then I should see "Contact details changes have been saved."
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     And I press "Add to basket"
     And I wait for AJAX to finish
@@ -95,7 +95,7 @@ Feature:
     And I press "Save"
     When I wait for the page to load
     Then I should see "Contact details changes have been saved."
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     And I press "Add to basket"
     And I wait for AJAX to finish
@@ -138,7 +138,7 @@ Feature:
     And I press "Save"
     When I wait for the page to load
     Then I should see "Contact details changes have been saved."
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     And I press "Add to basket"
     And I wait for AJAX to finish
@@ -182,7 +182,7 @@ Feature:
     And I press "Save"
     When I wait for the page to load
     Then I should see "Contact details changes have been saved."
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
@@ -218,7 +218,7 @@ Feature:
     And I press "Save"
     When I wait for the page to load
     Then I should see "Contact details changes have been saved."
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     And I press "Add to basket"
     And I wait for AJAX to finish
@@ -243,7 +243,7 @@ Feature:
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 1511 - 8942"
-    When I am on homepage
+    When I go to "/ar"
     And I wait for the page to load
     When I follow "حسابي"
     And I wait for the page to load
@@ -262,7 +262,7 @@ Feature:
     And I press "Save"
     When I wait for the page to load
     Then I should see "Contact details changes have been saved."
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     And I press "Add to basket"
     And I wait for AJAX to finish
@@ -286,11 +286,11 @@ Feature:
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     Then I should not see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
-    When I am on homepage
+    When I go to "/ar"
     And I wait for the page to load
     When I follow "حسابي"
     And I wait for the page to load
-    Then I should not see "نادي الامتيازات"
+    Then I should not see "اربح جوائز مدهشة"
     Then I should see "6362 - 5440 - 0013 - 5844"
 
   @arabic
@@ -306,7 +306,7 @@ Feature:
     And I press "Save"
     When I wait for the page to load
     Then I should see "Contact details changes have been saved."
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     And I press "Add to basket"
     And I wait for AJAX to finish
@@ -331,7 +331,7 @@ Feature:
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 1511 - 8942"
-    When I am on homepage
+    When I go to "/ar"
     And I wait for the page to load
     When I follow "حسابي"
     And I wait for the page to load

@@ -58,17 +58,18 @@ class KeywordSearchBlock extends BlockBase implements ContainerFactoryPluginInte
     $view->initHandlers();
     $view->setAjaxEnabled(FALSE);
 
-    $form_state = (new FormState())
-      ->setStorage([
-        'view' => $view,
-        'display' => &$view->display_handler->display,
-        'rerender' => TRUE,
-      ])
-      ->setMethod('get')
-      ->setAlwaysProcess()
-      ->disableRedirect();
+    $form_state = new FormState();
+
+    $form_state->setMethod('get');
     $form_state->set('rerender', NULL);
+    $form_state->setStorage([
+      'view' => $view,
+      'display' => &$view->display_handler->display,
+      'rerender' => TRUE,
+    ]);
+
     $form = $this->formBuilder->buildForm('\Drupal\views\Form\ViewsExposedForm', $form_state);
+
     $form['#attached']['library'][] = 'alshaya_search/disable_keyword_ajax';
     $form['keywords']['#attributes']['autocapitalize'] = 'none';
 

@@ -2,10 +2,11 @@
 
 namespace Drupal\acq_cart\Plugin\Block;
 
+use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_cart\MiniCartManager;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,26 +18,27 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface {
+
   /**
-   * Current user service.
+   * The cart session.
    *
-   * @var AccountProxyInterface
+   * @var \Drupal\acq_cart\CartStorageInterface
    */
   protected $currentUser;
 
   /**
    * Mini cart manager service.
    *
-   * @var MiniCartManager
+   * @var \Drupal\acq_cart\MiniCartManager
    */
   protected $miniCartManager;
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_user, MiniCartManager $mini_cart_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartStorageInterface $cart_storage, MiniCartManager $mini_cart_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->currentUser = $current_user;
+    $this->cartStorage = $cart_storage;
     $this->miniCartManager = $mini_cart_manager;
   }
 
@@ -48,7 +50,7 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_user'),
+      $container->get('acq_cart.cart_storage'),
       $container->get('acq_cart.mini_cart')
     );
   }
@@ -57,18 +59,36 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
    * {@inheritdoc}
    */
   public function build() {
-    // Fetch mini cart block content.
-    $mini_cart = $this->miniCartManager->getMiniCart();
-    $mini_cart['#cache']['contexts'][] = 'cookies:Drupal_visitor_acq_cart_id';
+    return $this->miniCartManager->getMiniCart();
+  }
 
-    // Set cache metadata if cart_id is set.
-    if (isset($mini_cart['#cart_id'])) {
-      $cart_id = $mini_cart['#cart_id'];
-      $mini_cart['#cache']['tags'][] = 'mini_cart_' . $cart_id;
-      unset($mini_cart['#cart_id']);
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    // Cart will be different for every session, even guests will have session
+    // as soon as they add something to cart.
+    return Cache::mergeContexts(parent::getCacheContexts(), ['cookies:Drupal_visitor_acq_cart_id']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    $cache_tags = parent::getCacheTags();
+
+    // As soon as we have cart, we have session.
+    // As soon as we have session, varnish is disabled.
+    // We are good to have no cache tag based on cart if there is none.
+    if ($cart = $this->cartStorage->getCart(FALSE)) {
+      // Custom cache tag here will be cleared in API Wrapper after every
+      // update cart call.
+      $cache_tags = Cache::mergeTags($cache_tags, [
+        'cart_' . $cart->id(),
+      ]);
     }
 
-    return $mini_cart;
+    return $cache_tags;
   }
 
 }

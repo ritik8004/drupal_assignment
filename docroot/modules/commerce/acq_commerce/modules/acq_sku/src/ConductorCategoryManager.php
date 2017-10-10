@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_commerce\Conductor\ClientFactory;
@@ -50,6 +51,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   protected $apiWrapper;
 
   /**
+   * Drupal Entity Query Factory.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryFactory
+   */
+  private $queryFactory;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -58,14 +66,17 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   ClientFactory object.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   API Wrapper object.
+   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
+   *   Query factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, LoggerChannelFactory $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->clientFactory = $client_factory;
     $this->apiWrapper = $api_wrapper;
+    $this->queryFactory = $query_factory;
     $this->logger = $logger_factory->get('acq_sku');
   }
 
@@ -127,7 +138,49 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    * {@inheritdoc}
    */
   public function synchronizeCategory($vocabulary, array $categories) {
-    return \Drupal::service('acq_commerce.api')->getCategories();
+    $this->resetResults();
+    $this->loadVocabulary($vocabulary);
+
+    // If parent is 0, means term will be created at root level.
+    $parent = 0;
+    $query = $this->queryFactory->get('taxonomy_term');
+    $group = $query->andConditionGroup()
+      ->condition('field_commerce_id', $categories['category_id'])
+      ->condition('vid', $this->vocabulary->id());
+    $query->condition($group);
+
+    $tids = $query->execute();
+
+    if (count($tids)) {
+      $tid = array_shift($tids);
+      $parents = $this->termStorage->loadParents($tid);
+      $parent = array_shift($parents);
+      $parent = ($parent && $parent->id()) ? $parent : 0;
+    }
+    else {
+      // This might be the case of new term which doesn't exist yet. In this
+      // case, we need to find the existing parent or new term will be created
+      // at root level.
+      if (isset($categories['parent_id'])) {
+        $query = $this->queryFactory->get('taxonomy_term');
+        $group = $query->andConditionGroup()
+          ->condition('field_commerce_id', $categories['parent_id'])
+          ->condition('vid', $this->vocabulary->id());
+        $query->condition($group);
+
+        $tids = $query->execute();
+        // If term with given commerce id exists.
+        if (count($tids)) {
+          $tid = array_shift($tids);
+          $parent = $this->termStorage->load($tid);
+        }
+      }
+    }
+
+    // Recurse the category tree and create / update nodes.
+    $this->syncCategory([$categories], $parent);
+
+    return ($this->results);
   }
 
   /**
@@ -201,7 +254,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     // Remove top level item (Default Category) from the categories, if its set
     // in configuration and category is with no parent.
     $filter_root_category = \Drupal::config('acq_commerce.conductor')->get('filter_root_category');
-    if ($filter_root_category && $parent == NULL) {
+    if ($filter_root_category && $parent === NULL) {
       $categories = $categories[0]['children'];
     }
 
@@ -213,6 +266,11 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       }
 
       $langcode = acq_commerce_get_langcode_from_store_id($category['store_id']);
+
+      // If lancode is not available, means no mapping of store and language.
+      if (!$langcode) {
+        continue;
+      }
 
       $parent_data = ($parent) ? [$parent->id()] : [0];
       $position = (isset($category['position'])) ? (int) $category['position'] : 1;

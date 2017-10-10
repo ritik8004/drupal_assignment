@@ -1,0 +1,9 @@
+label: 'todays offer'
+content:
+  include():
+    pattern: 'molecules-paragraph-offers-bordered'
+attributes:
+  Attribute():
+    class:
+    - 'block-todays-offer'
+content_class: 'field-paragraph-content'

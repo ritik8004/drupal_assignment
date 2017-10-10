@@ -29,5 +29,9 @@
       max-width: 20.75rem;
       max-height: 2.25rem;
     }
+
+    @include breakpoint($desk) {
+      max-height: 2.9375rem;
+    }
   }
 }

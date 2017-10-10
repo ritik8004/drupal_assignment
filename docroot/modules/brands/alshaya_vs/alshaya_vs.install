@@ -17,7 +17,7 @@ function alshaya_vs_install() {
       'ar' => 'اختر محلاً للتعرف على التفاصيل',
     ],
     $join_the_club_body => [
-      'ar' => "<div class=\"block-join-the-club__title-wrapper\">\r\n<h2 class=\"block-join-the-club__title\">Join the club</h2>\r\n<p class=\"block-join-the-club__title-link\">\r\n<a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a>\r\n</p>\r\n</div>\r\n<div class=\"block-join-the-club__list\">\r\n<p>\r\n<span class=\"icon-prize\"></span>\r\nاربح جوائز مدهشة\r\n</p>\r\n<p>\r\n<span class=\"icon-rewards\"></span>\r\nاحصل على مكافآت حصرية\r\n</p>\r\n<p>\r\n<span class=\"icon-newsletter\"></span>\r\nكُن أول من يعلم\r\n</p>\r\n<a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a>\r\n</div>",
+      'ar' => "<div class=\"block-join-the-club__title-wrapper\">\r\n<h2 class=\"block-join-the-club__title\">إنضم لنادي الإمتيازات</h2>\r\n<p class=\"block-join-the-club__title-link\">\r\n<a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a>\r\n</p>\r\n</div>\r\n<div class=\"block-join-the-club__list\">\r\n<p>\r\n<span class=\"icon-prize\"></span>\r\nاربح جوائز مدهشة\r\n</p>\r\n<p>\r\n<span class=\"icon-rewards\"></span>\r\nاحصل على مكافآت حصرية\r\n</p>\r\n<p>\r\n<span class=\"icon-newsletter\"></span>\r\nكُن أول من يعلم\r\n</p>\r\n<a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a>\r\n</div>",
     ],
   ];
   alshaya_i18n_save_translations($strings);
@@ -35,11 +35,20 @@ function alshaya_vs_install() {
   // Change region for main navigation block.
   alshaya_block_move_blocks(['main_navigation' => 'header_primary']);
 
+  // Change page title visibility for advanced_page content type.
+  $blocks = [
+    'page_title_block' => [
+      'bundles' => ['advanced_page'],
+      'negate' => TRUE,
+    ],
+  ];
+  alshaya_block_set_blocks_node_visibility($blocks);
+
   // Set default marker image for stores finder.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     $marker_path = drupal_get_path('module', 'alshaya_vs') . '/images/google-map-marker.svg';
     \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
-      ->set('marker.use_default', TRUE)
+      ->set('marker.use_default', FALSE)
       ->set('marker.path', $marker_path)
       ->set('marker.url', file_url_transform_relative(file_create_url($marker_path)))
       ->save(TRUE);

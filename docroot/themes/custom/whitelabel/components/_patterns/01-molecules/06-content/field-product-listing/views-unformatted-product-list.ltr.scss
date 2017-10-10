@@ -4,12 +4,14 @@
   width: 48.67%;
   margin-bottom: 0.875rem;
 
-  &:nth-of-type(odd) {
-    float: direction(left);
-  }
+  @include breakpoint($upto-palm) {
+    &:nth-of-type(odd) {
+      float: direction(left);
+    }
 
-  &:nth-of-type(even) {
-    float: direction(right);
+    &:nth-of-type(even) {
+      float: direction(right);
+    }
   }
 
   @include breakpoint($above-palm) {

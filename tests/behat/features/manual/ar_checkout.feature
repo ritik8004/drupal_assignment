@@ -18,7 +18,7 @@ Feature: Test various checkout scenarios for Arabic site
   I should be able to checkout using COD
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
@@ -43,7 +43,7 @@ Feature: Test various checkout scenarios for Arabic site
   I should be able to checkout using CD
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
@@ -84,7 +84,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for AJAX to finish
     When I fill in "edit-cc-firstname" with "شويتا"
     And I fill in "edit-cc-lastname" with "شارما"
-    When I fill in "edit-cc-email" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-cc-email"
     And I fill in "edit-cc-mobile-number-mobile" with "97004455"
     When I select an element having class ".cc-action"
     And I wait for AJAX to finish
@@ -118,7 +118,7 @@ Feature: Test various checkout scenarios for Arabic site
   and User should be able to place order again
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
@@ -177,7 +177,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
@@ -212,7 +212,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for AJAX to finish
     When I fill in "edit-cc-firstname" with "شويتا"
     And I fill in "edit-cc-lastname" with "شارما"
-    When I fill in "edit-cc-email" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-cc-email"
     And I fill in "edit-cc-mobile-number-mobile" with "97004455"
     When I select an element having class ".cc-action"
     And I wait for AJAX to finish
@@ -256,7 +256,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
-    When I fill in "edit-guest-delivery-home-address-shipping-organization" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
@@ -294,14 +294,14 @@ Feature: Test various checkout scenarios for Arabic site
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
-    When I wait 2 seconds
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(14) > img"
+    When I wait 5 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
     And I wait for the page to load
     When I fill in "edit-cc-firstname" with "شويتا"
     And I fill in "edit-cc-lastname" with "شارما"
-    When I fill in "edit-cc-email" with "shweta@axelerant.com"
+    When I enter a valid Email ID in field "edit-cc-email"
     And I fill in "edit-cc-mobile-number-mobile" with "97004455"
     When I select an element having class ".cc-action"
     And I wait for AJAX to finish
@@ -334,8 +334,8 @@ Feature: Test various checkout scenarios for Arabic site
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
-    When I wait 2 seconds
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(14) > img"
+    When I wait 5 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
     And I wait 2 seconds
     Then I should see "الإثنين"

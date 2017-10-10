@@ -1,0 +1,100 @@
+@import '../../../../sass/config/**/*.scss';
+
+.block-todays-offer {
+  clear: both;
+  text-align: center;
+  margin: auto;
+
+  @include breakpoint($lap) {
+    max-width: 93.75%;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 81.8%;
+  }
+
+  .field-paragraph-content {
+    background-color: $white;
+    display: none;
+
+    @include breakpoint($upto-palm) {
+      display: none !important;
+    }
+
+    @include breakpoint($lap) {
+      padding: 1.125rem;
+      padding-top: 0;
+    }
+
+    @include breakpoint($desk) {
+      padding: 0 1.5rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  h2 {
+    background-color: $blackish-grey;
+    text-transform: uppercase;
+    font-weight: normal;
+    color: $white;
+    font-size: 0.875rem;
+    padding: 1.05rem;
+    padding-bottom: 0.9rem;
+    text-align: center;
+    border-bottom: 1px solid $eclipse;
+    margin: 0;
+
+    @include breakpoint($above-palm) {
+      color: $black-smoke;
+      font-size: 0.6875rem;
+      padding: 0.7rem 0.8rem;
+      padding-bottom: 0.55rem;
+      display: inline-block;
+      border-radius: 0.25rem 0.25rem 0 0;
+      background-color: $white;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+      border: 1px solid $greyish-light;
+      cursor: pointer;
+    }
+
+    @include breakpoint($desk) {
+      font-size: 0.9375rem;
+      letter-spacing: 0.125rem;
+      padding: direction-sides(1.1rem 1.5rem 0.7rem 3rem);
+    }
+
+    a {
+      color: $white;
+      text-decoration: none;
+      display: block;
+
+      @include breakpoint($above-palm) {
+        color: $black-smoke;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+.active-offer {
+  @include breakpoint($above-palm) {
+    position: fixed;
+    bottom: 0;
+    z-index: $z-3;
+    left: 0;
+    right: 0;
+  }
+
+  h2 {
+    @include breakpoint($above-palm) {
+      padding: 0.375rem;
+      padding-bottom: 0.7rem;
+      border: 0;
+      box-shadow: none;
+    }
+
+    @include breakpoint($desk) {
+      padding: 0.625rem 1.8rem;
+    }
+  }
+}
