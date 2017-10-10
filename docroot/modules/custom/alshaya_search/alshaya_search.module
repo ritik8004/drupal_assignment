@@ -221,10 +221,16 @@ function alshaya_search_search_api_solr_query_alter(QueryInterface $solarium_que
  * Submit function to redirect user to correct language, based on keyword.
  */
 function alshaya_search_keyword_language_redirect($form, FormStateInterface $form_state) {
+  $keyword = $form_state->getValue('keywords');
+
+  // Don't process if some notorious guy reached search page directly.
+  if (empty($keyword)) {
+    return;
+  }
+
   // Redirect to correct language, based on user input.
   $languages = \Drupal::languageManager()->getLanguages();
   if (count($languages) > 1 && array_key_exists('ar', $languages)) {
-    $keyword = $form_state->getValue('keywords');
     // Identify a non arabic language in the list of language.
     if (\Drupal::languageManager()->getDefaultLanguage() != 'ar') {
       // Pick the default language if it is not arabic.
