@@ -364,7 +364,7 @@ header {
       margin: 0;
     }
 
-    .contextual-region {
+    .menu--mobile-navigation {
       @include breakpoint($upto-desktop) {
         position: initial;
       }
