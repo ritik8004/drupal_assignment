@@ -9,12 +9,16 @@
  * Implements hook_install().
  */
 function alshaya_hm_install() {
-  // Enable and set hnm as default theme.
-  \Drupal::service('theme_handler')->install(['hnm'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('hnm');
+  \Drupal::moduleHandler()->loadInclude('alshaya_hm', 'inc', 'alshaya_hm.content');
+  // Enable and set alshaya_hnm as default theme.
+  \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
 
   // Translate store id in config.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
     ->set('store_id', '2')
     ->save();
+
+   // Create default content for the site.
+  alshaya_hm_create_default_content();
 }
