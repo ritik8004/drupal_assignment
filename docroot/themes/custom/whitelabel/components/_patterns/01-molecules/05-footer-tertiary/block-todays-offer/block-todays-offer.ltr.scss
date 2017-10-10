@@ -61,6 +61,10 @@
       font-size: 0.9375rem;
       letter-spacing: 0.125rem;
       padding: direction-sides(1.1rem 1.5rem 0.7rem 3rem);
+
+      html[lang=ar] & {
+        letter-spacing: 0;
+      }
     }
 
     a {
@@ -96,5 +100,11 @@
     @include breakpoint($desk) {
       padding: 0.625rem 1.8rem;
     }
+  }
+}
+
+.active-todays-offer .empty-overlay {
+  @include breakpoint($upto-palm) {
+    display: none;
   }
 }

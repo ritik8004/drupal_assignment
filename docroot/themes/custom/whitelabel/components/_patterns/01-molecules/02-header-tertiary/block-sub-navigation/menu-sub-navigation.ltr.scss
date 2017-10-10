@@ -30,6 +30,10 @@
     letter-spacing: 1.5px;
     border-bottom: 2px solid transparent;
 
+    html[lang=ar] & {
+      letter-spacing: 0;
+    }
+
     @include breakpoint($lap) {
       margin-#{direction(right)}: 0.5rem;
       padding: 0.625rem 1rem;

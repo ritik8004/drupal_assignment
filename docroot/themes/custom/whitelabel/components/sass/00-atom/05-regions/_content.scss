@@ -16,6 +16,20 @@
   }
 }
 
+.page-generic {
+  @include breakpoint($upto-palm) {
+    padding-top: 3rem;
+  }
+}
+
+.has-burger-menu {
+  .page-generic {
+    @include breakpoint($upto-palm) {
+      padding-top: 0;
+    }
+  }
+}
+
 .page-home,
 .node-advanced-page {
   .region-content {
