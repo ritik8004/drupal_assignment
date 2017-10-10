@@ -668,7 +668,7 @@ header {
         a.menu--one__link {
           &::after {
             content: '';
-            height: 0.125rem;
+            height: 1px;
             background: $white-smoke-border;
             display: inherit;
             width: 100%;
@@ -736,7 +736,7 @@ header {
           a.menu--one__link {
             &::after {
               content: '';
-              height: 0.125rem;
+              height: 1px;
               background: $white-smoke-border;
               display: inherit;
               width: 100%;
