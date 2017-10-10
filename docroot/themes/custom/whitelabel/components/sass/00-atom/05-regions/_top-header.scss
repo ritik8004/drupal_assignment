@@ -4,6 +4,8 @@
   @include breakpoint($upto-palm) {
     position: fixed;
     z-index: 999;
+    top: 0;
+    width: 100%;
   }
 
   @include breakpoint($above-palm) {
