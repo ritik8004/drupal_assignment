@@ -1,0 +1,90 @@
+// Define theme fonts here.
+$arial: 'arialmt', arial, sans-serif;
+$open-sans: 'Open Sans', sans-serif;
+$TradeGothicLTStd: 'TradeGothicLTStd', sans-serif;
+$TradeGothicLTStdBold: 'TradeGothicLTStd-bold', sans-serif;
+$vs-icons: 'font-icons';
+
+// Icon Fonts
+$icons: (
+  arrowdown: "\e900",
+  arrowup: "\e901",
+  checkboxempty: "\e904",
+  checkboxfull: "\e905",
+  checkshape: "\e906",
+  chevrondown: "\e907",
+  chevronleft: "\e908",
+  chevronright: "\e909",
+  chevronup: "\e90a",
+  close: "\e90b",
+  closeshape: "\e90c",
+  delivery: "\e90d",
+  deliveryservice: "\e90e",
+  direction: "\e90f",
+  email: "\e910",
+  emailselect: "\e911",
+  facebook: "\e912",
+  facebookselect: "\e913",
+  googleplus: "\e914",
+  googleplusselect: "\e915",
+  hide: "\e916",
+  information: "\e917",
+  instagram: "\e918",
+  instagramselect: "\e919",
+  language: "\e91a",
+  list: "\e91b",
+  login: "\e91c",
+  logout: "\e91d",
+  map: "\e91e",
+  mappin: "\e91f",
+  menu: "\e920",
+  mylocation: "\e921",
+  newsletter: "\e922",
+  nextdaydelivery: "\e923",
+  play: "\e926",
+  prize: "\e927",
+  radioempty: "\e928",
+  radiofull: "\e929",
+  rating: "\e92a",
+  ratingfull: "\e92b",
+  rewards: "\e92c",
+  search: "\e92d",
+  shoppingbag: "\e92e",
+  show: "\e92f",
+  user: "\e932",
+  warning: "\e939",
+  whiteglovedelivery: "\e933",
+  zoom: "\e938",
+  bell: "\e006",
+  marquee-plus: "\e083"
+);
+
+@mixin iconbase() {
+  font-family: $vs-icons;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin icon($icon: false, $position: before, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $icon {
+      content: "#{map-get($icons, $icon)}";
+    }
+
+    @if $styles {
+      @include iconbase;
+    }
+
+    @content;
+  }
+}

@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_bbw.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_bbw_install() {
+  $join_the_club_body = "<div class=\"block-join-the-club__title-wrapper\">\r\n<h2 class=\"block-join-the-club__title\">Join the club</h2>\r\n<p class=\"block-join-the-club__title-link\">\r\n<a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a>\r\n</p>\r\n</div>\r\n<div class=\"block-join-the-club__list\">\r\n<p>\r\n<span class=\"icon-prize\"></span>\r\nWin exciting prizes\r\n</p>\r\n<p>\r\n<span class=\"icon-rewards\"></span>\r\nUnlock exclusive rewards\r\n</p>\r\n<p>\r\n<span class=\"icon-newsletter\"></span>\r\nBe the first to know\r\n</p>\r\n<a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a>\r\n</div>";
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'find your nearest store' => [
+      'ar' => 'اختر محلاً للتعرف على التفاصيل',
+    ],
+    $join_the_club_body => [
+      'ar' => "<div class=\"block-join-the-club__title-wrapper\">\r\n<h2 class=\"block-join-the-club__title\">Join the club</h2>\r\n<p class=\"block-join-the-club__title-link\">\r\n<a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a>\r\n</p>\r\n</div>\r\n<div class=\"block-join-the-club__list\">\r\n<p>\r\n<span class=\"icon-prize\"></span>\r\nاربح جوائز مدهشة\r\n</p>\r\n<p>\r\n<span class=\"icon-rewards\"></span>\r\nاحصل على مكافآت حصرية\r\n</p>\r\n<p>\r\n<span class=\"icon-newsletter\"></span>\r\nكُن أول من يعلم\r\n</p>\r\n<a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a>\r\n</div>",
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
+  \Drupal::moduleHandler()->loadInclude('alshaya_bbw', 'inc', 'alshaya_bbw.content');
+
+  // Enable and set bath_body_works as default theme.
+  \Drupal::service('theme_handler')->install(['bath_body_works'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('bath_body_works');
+
+  // Set default marker image for stores finder.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    $marker_path = drupal_get_path('module', 'alshaya_bbw') . '/images/google-map-marker.svg';
+    \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+      ->set('marker.use_default', TRUE)
+      ->set('marker.path', $marker_path)
+      ->set('marker.url', file_url_transform_relative(file_create_url($marker_path)))
+      ->save(TRUE);
+  }
+
+  $join_the_club_config = \Drupal::configFactory()->getEditable('alshaya_user.join_club');
+  $join_the_club_config->set('join_club_description.value', $join_the_club_body);
+  $join_the_club_config->save();
+
+  // Translate store finder footer block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder_footer')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
+
+  // Configure for which content type ShareThis widget should appear.
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+    // Enable share this for non transac Product CT.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_non_transac_product')) {
+      $configFactory->set('node_types.product', 'product');
+    }
+    $configFactory->save();
+  }
+
+  // Create default content for the site.
+  alshaya_bbw_create_default_content();
+}

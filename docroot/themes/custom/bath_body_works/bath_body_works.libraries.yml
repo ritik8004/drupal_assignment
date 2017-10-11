@@ -1,0 +1,11 @@
+global:
+  version: VERSION
+  css:
+    theme:
+      dist/css/global.css: {}
+
+menu-logo-navigation:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/00-header-primary/block-logo-navigation/menu-logo-navigation.ltr.css: {}
