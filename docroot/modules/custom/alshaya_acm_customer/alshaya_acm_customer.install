@@ -34,7 +34,7 @@ function alshaya_acm_customer_update_8001() {
     'configuration' => [
       'DELETE' => [
         'supported_formats' => ['json'],
-        'supported_auth' => ['oauth2'],
+        'supported_auth' => ['oauth2', 'basic_auth'],
       ],
     ],
     'dependencies' => [
