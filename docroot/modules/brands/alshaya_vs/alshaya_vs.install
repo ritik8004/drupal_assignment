@@ -9,22 +9,6 @@
  * Implements hook_install().
  */
 function alshaya_vs_install() {
-  $join_the_club_body = "<div class=\"block-join-the-club__title-wrapper\">\r\n<h2 class=\"block-join-the-club__title\">Join the club</h2>\r\n<p class=\"block-join-the-club__title-link\">\r\n<a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a>\r\n</p>\r\n</div>\r\n<div class=\"block-join-the-club__list\">\r\n<p>\r\n<span class=\"icon-prize\"></span>\r\nWin exciting prizes\r\n</p>\r\n<p>\r\n<span class=\"icon-rewards\"></span>\r\nUnlock exclusive rewards\r\n</p>\r\n<p>\r\n<span class=\"icon-newsletter\"></span>\r\nBe the first to know\r\n</p>\r\n<a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a>\r\n</div>";
-  // Set initial translation string for en language.
-  // Array of language translation strings.
-  $strings = [
-    'find your nearest store' => [
-      'ar' => 'اختر محلاً للتعرف على التفاصيل',
-    ],
-    $join_the_club_body => [
-      'ar' => "<div class=\"block-join-the-club__title-wrapper\">\r\n<h2 class=\"block-join-the-club__title\">إنضم لنادي الإمتيازات</h2>\r\n<p class=\"block-join-the-club__title-link\">\r\n<a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a>\r\n</p>\r\n</div>\r\n<div class=\"block-join-the-club__list\">\r\n<p>\r\n<span class=\"icon-prize\"></span>\r\nاربح جوائز مدهشة\r\n</p>\r\n<p>\r\n<span class=\"icon-rewards\"></span>\r\nاحصل على مكافآت حصرية\r\n</p>\r\n<p>\r\n<span class=\"icon-newsletter\"></span>\r\nكُن أول من يعلم\r\n</p>\r\n<a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a>\r\n</div>",
-    ],
-    "today's offer" => [
-      'ar' => "عروض اليوم",
-    ]
-  ];
-  alshaya_i18n_save_translations($strings);
-
   \Drupal::moduleHandler()->loadInclude('alshaya_vs', 'inc', 'alshaya_vs.content');
 
   // Enable and set victoria_secret as default theme.
@@ -57,9 +41,19 @@ function alshaya_vs_install() {
       ->save(TRUE);
   }
 
-  $join_the_club_config = \Drupal::configFactory()->getEditable('alshaya_user.join_club');
-  $join_the_club_config->set('join_club_description.value', $join_the_club_body);
-  $join_the_club_config->save();
+  // Override join the club default value.
+  $join_the_club_body = "<div class=\"block-join-the-club__title-wrapper\"><h2 class=\"block-join-the-club__title\">Join the club</h2><p class=\"block-join-the-club__title-link\"><a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></p></div><div class=\"block-join-the-club__list\"><p><span class=\"icon-prize\"></span>Win exciting prizes</p><p><span class=\"icon-rewards\"></span>Unlock exclusive rewards</p><p><span class=\"icon-newsletter\"></span>Be the first to know</p><a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></div>";
+  $join_the_club_desc = ['value' => $join_the_club_body, 'format' => 'full_text'];
+
+  \Drupal::configFactory()->getEditable('alshaya_user.join_club')
+    ->set('join_club_description', $join_the_club_desc)
+    ->save();
+
+  // Translate join the club.
+  $join_the_club_desc['value'] = "<div class=\"block-join-the-club__title-wrapper\"><h2 class=\"block-join-the-club__title\">إنضم لنادي الإمتيازات</h2><p class=\"block-join-the-club__title-link\"><a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a></p></div><div class=\"block-join-the-club__list\"><p><span class=\"icon-prize\"></span>اربح جوائز مدهشة</p><p><span class=\"icon-rewards\"></span>احصل على مكافآت حصرية</p><p><span class=\"icon-newsletter\"></span>كُن أول من يعلم</p><a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a></div>";
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_user.join_club')
+    ->set('join_club_description', $join_the_club_desc)
+    ->save();
 
   // Translate store finder footer block's link title.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder_footer')
@@ -80,4 +74,16 @@ function alshaya_vs_install() {
 
   // Create default content for the site.
   alshaya_vs_create_default_content();
+
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'find your nearest store' => [
+      'ar' => 'اختر محلاً للتعرف على التفاصيل',
+    ],
+    "today's offer" => [
+      'ar' => "عروض اليوم",
+    ]
+  ];
+  alshaya_i18n_save_translations($strings);
 }
