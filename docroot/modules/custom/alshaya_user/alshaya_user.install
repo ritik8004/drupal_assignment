@@ -45,18 +45,20 @@ function alshaya_user_install() {
   \Drupal::entityManager()->clearCachedDefinitions();
   \Drupal::service('router.builder')->rebuild();
   \Drupal::service('entity.definition_update_manager')->applyUpdates();
-}
 
-/**
- * Implements hook_modules_installed().
- */
-function alshaya_user_modules_installed($modules) {
-  if (!in_array('alshaya_user', $modules)) {
-    return;
-  }
+  $user_settings = \Drupal::configFactory()->getEditable('user.settings');
 
   // Disable password strength indicator.
-  \Drupal::configFactory()->getEditable('user.settings')->set('password_strength', FALSE)->save();
+  $user_settings->set('password_strength', FALSE);
+
+  // Set visitor user registration.
+  $user_settings->set('register', 'visitors');
+
+  // Set email verification to false to make password field visible on
+  // registration.
+  $user_settings->set('verify_mail', FALSE);
+
+  $user_settings->save();
 
   // Disable user to set own timezone.
   \Drupal::configFactory()->getEditable('system.date')->set('timezone.user.configurable', FALSE)->save();

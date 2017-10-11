@@ -140,7 +140,8 @@
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",
                 "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
                 "Enable GET by default for exposed form AJAX": "patches/ajax_view.patch",
-                "Database lock backend should normalize the lock name": "https://www.drupal.org/files/issues/2872276-10.patch"
+                "Database lock backend should normalize the lock name": "https://www.drupal.org/files/issues/2872276-10.patch",
+                "Clearing cache via UI in translated language resets config translation of field labels to default language": "https://www.drupal.org/files/issues/clearing_cache_via_ui-2650434-137.patch"
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",

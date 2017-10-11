@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutFlow;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
@@ -257,9 +258,18 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       return;
     }
 
+    $cart = $this->getCart();
+
     if ($next_step_id = $this->getNextStepId()) {
       $current_step_id = $this->getStepId();
       try {
+
+        if ($next_step_id == 'confirmation') {
+          // User has pressed "place order" button.
+          // Set the attempted payment flag and push to Magento.
+          $cart->setExtension('attempted_payment', 1);
+        }
+
         /** @var \Drupal\acq_cart\Cart $cart */
         $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
       }
@@ -274,6 +284,15 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           || $e->getMessage() == $this->t('Some of the products are out of stock.')->render()
           || $e->getMessage() == $this->t('Not all of your products are available in the requested quantity.')->render()
           || strpos($e->getMessage(), $this->t("We don't have as many")->render()) !== FALSE) {
+
+          $cart = $this->getCart();
+
+          // Clear stock of items in cart.
+          foreach ($cart->items() as $item) {
+            if ($sku_entity = SKU::loadFromSku($item['sku'])) {
+              acq_sku_clear_sku_stock_cache($sku_entity);
+            }
+          }
 
           $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
           $response->send();
@@ -298,12 +317,6 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
       if ($next_step_id == 'confirmation') {
         try {
-          // User has pressed "place order" button.
-          // Set the attempted payment flag and push to Magento.
-          $cart->setExtension('attempted_payment', 1);
-          $cart = \Drupal::service('acq_cart.cart_storage')->updateCart();
-          $cart->setCheckoutStep($next_step_id);
-
           // Invoke hook to allow other modules to process before order is
           // finally placed.
           \Drupal::moduleHandler()->invokeAll('alshaya_acm_checkout_pre_place_order', [$cart]);

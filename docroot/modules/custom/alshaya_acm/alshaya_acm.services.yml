@@ -3,11 +3,24 @@ services:
     class: Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber
     tags:
       - { name: 'event_subscriber' }
+
   alshaya_acm.update_cart_error_event:
     class: Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber
     tags:
       - { name: 'event_subscriber' }
+
   alshaya_acm.breadcrumb:
    class: Drupal\alshaya_acm\Breadcrumb\AlshayaACMBreadcrumbBuilder
    tags:
     - { name: breadcrumb_builder, priority: 100 }
+
+  alshaya_acm.api_helper:
+    class: Drupal\alshaya_acm\ApiHelper
+    arguments: ['@acq_commerce.api', '@acq_cart.cart_storage', '@config.factory', '@cache.alshaya_api', '@language_manager']
+
+  cache.alshaya_api:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: [alshaya_api]

@@ -5,71 +5,82 @@
  * Contains install, update, uninstall hooks for alshaya_acm module.
  */
 
-use Drupal\user\Entity\User;
 use Drupal\Core\Site\Settings;
+use Drupal\lightning_core\ConfigHelper;
 use Drupal\simple_oauth\Entity\Oauth2Client;
+use Drupal\user\Entity\User;
 
 /**
- * Implements hook_modules_installed().
+ * Implements hook_update_N().
+ *
+ * Install new config - alshaya_acm.settings.
  */
-function alshaya_acm_modules_installed($modules) {
-  if (in_array('alshaya_acm', $modules)) {
-    // Create a user that will be used by ACM when pushing to Drupal.
-    $user = User::create();
-    $user->setPassword(Settings::get('alshaya_acm_user_password'));
-    $user->enforceIsNew();
-    $user->setEmail(Settings::get('alshaya_acm_user_email'));
-    $user->setUsername(Settings::get('alshaya_acm_user_username'));
-    $user->activate();
-    // TODO: Security.
-    $user->addRole('administrator');
-    $user->save();
+function alshaya_acm_update_8001() {
+  ConfigHelper::forModule('alshaya_acm')
+    ->install()
+    ->get('alshaya_acm.settings')
+    ->save();
+}
 
-    // Configure Simple Oauth.
-    $config = \Drupal::configFactory()->getEditable('simple_oauth.settings');
-    $config->set('public_key', Settings::get('alshaya_acm_soauth_public_key'));
-    $config->set('private_key', Settings::get('alshaya_acm_soauth_private_key'));
-    $config->save();
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_install() {
+  // Create a user that will be used by ACM when pushing to Drupal.
+  $user = User::create();
+  $user->setPassword(Settings::get('alshaya_acm_user_password'));
+  $user->enforceIsNew();
+  $user->setEmail(Settings::get('alshaya_acm_user_email'));
+  $user->setUsername(Settings::get('alshaya_acm_user_username'));
+  $user->activate();
+  // TODO: Security.
+  $user->addRole('administrator');
+  $user->save();
 
-    // Add Simple Oauth client.
-    $client = Oauth2Client::create();
-    $client->set('label', 'Alshaya ACM');
-    $client->setDefaultUser($user);
-    $client->setSecret(Settings::get('alshaya_acm_soauth_client_secret'));
-    $client->set('roles', ['administrator']);
-    $client->set('uuid', Settings::get('alshaya_acm_soauth_client_uuid'));
-    $client->save();
+  // Configure Simple Oauth.
+  $config = \Drupal::configFactory()->getEditable('simple_oauth.settings');
+  $config->set('public_key', Settings::get('alshaya_acm_soauth_public_key'));
+  $config->set('private_key', Settings::get('alshaya_acm_soauth_private_key'));
+  $config->save();
 
-    // Update category sync resource to allow basic_auth.
-    $config = \Drupal::configFactory()->getEditable('rest.resource.acq_categorysync');
-    $configuration = $config->get('configuration');
-    $configuration['POST']['supported_auth'][] = 'basic_auth';
-    $config->set('configuration', $configuration);
-    $config->save();
+  // Add Simple Oauth client.
+  $client = Oauth2Client::create();
+  $client->set('label', 'Alshaya ACM');
+  $client->setDefaultUser($user);
+  $client->setSecret(Settings::get('alshaya_acm_soauth_client_secret'));
+  $client->set('roles', ['administrator']);
+  $client->set('uuid', Settings::get('alshaya_acm_soauth_client_uuid'));
+  $client->save();
 
-    // Update product sync resource to allow basic_auth.
-    $config = \Drupal::configFactory()->getEditable('rest.resource.acq_productsync');
-    $configuration = $config->get('configuration');
-    $configuration['POST']['supported_auth'][] = 'basic_auth';
-    $config->set('configuration', $configuration);
-    $config->save();
+  // Update category sync resource to allow basic_auth.
+  $config = \Drupal::configFactory()->getEditable('rest.resource.acq_categorysync');
+  $configuration = $config->get('configuration');
+  $configuration['POST']['supported_auth'][] = 'basic_auth';
+  $config->set('configuration', $configuration);
+  $config->save();
 
-    // Update product category sync root setting.
-    $config = \Drupal::configFactory()->getEditable('acq_commerce.conductor');
-    $config->set('filter_root_category', TRUE);
+  // Update product sync resource to allow basic_auth.
+  $config = \Drupal::configFactory()->getEditable('rest.resource.acq_productsync');
+  $configuration = $config->get('configuration');
+  $configuration['POST']['supported_auth'][] = 'basic_auth';
+  $config->set('configuration', $configuration);
+  $config->save();
 
-    $acq_commerce_conductor_settings = Settings::get('acq_commerce.conductor');
+  // Update product category sync root setting.
+  $config = \Drupal::configFactory()->getEditable('acq_commerce.conductor');
+  $config->set('filter_root_category', TRUE);
 
-    foreach ($acq_commerce_conductor_settings as $key => $value) {
-      $config->set($key, $value);
-    }
+  $acq_commerce_conductor_settings = Settings::get('acq_commerce.conductor');
 
-    $config->save();
-
-    // Update the currency code to one required for the site.
-    $config = \Drupal::configFactory()->getEditable('acq_commerce.currency');
-    $config->set('currency_code', 'KWD');
-    $config->set('decimal_points', 3);
-    $config->save();
+  foreach ($acq_commerce_conductor_settings as $key => $value) {
+    $config->set($key, $value);
   }
+
+  $config->save();
+
+  // Update the currency code to one required for the site.
+  $config = \Drupal::configFactory()->getEditable('acq_commerce.currency');
+  $config->set('currency_code', 'KWD');
+  $config->set('decimal_points', 3);
+  $config->save();
 }
