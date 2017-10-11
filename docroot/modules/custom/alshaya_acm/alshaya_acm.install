@@ -5,9 +5,22 @@
  * Contains install, update, uninstall hooks for alshaya_acm module.
  */
 
-use Drupal\user\Entity\User;
 use Drupal\Core\Site\Settings;
+use Drupal\lightning_core\ConfigHelper;
 use Drupal\simple_oauth\Entity\Oauth2Client;
+use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install new config - alshaya_acm.settings.
+ */
+function alshaya_acm_update_8001() {
+  ConfigHelper::forModule('alshaya_acm')
+    ->install()
+    ->get('alshaya_acm.settings')
+    ->save();
+}
 
 /**
  * Implements hook_install().
