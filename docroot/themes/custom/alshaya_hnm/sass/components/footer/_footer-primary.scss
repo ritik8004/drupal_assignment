@@ -936,12 +936,13 @@
     color: $white-five;
     margin-top: 1.75rem;
 
-    @include breakpoint($desktop) {
+    @include breakpoint($tablet) {
       margin-top: 1.5rem;
     }
 
     @include breakpoint($desktop) {
       margin-top: 1.7rem;
+      border-bottom: 2px solid $white-five !important;
     }
 
     &::placeholder {
@@ -1011,6 +1012,14 @@
       @include breakpoint($only-mobile) {
         border-top: 2px solid $white-smoke-border;
       }
+    }
+  }
+}
+
+.frontpage {
+  .block-alshaya-newsletter {
+    input[type="email"] {
+      border-bottom: 1px solid #fff !important;
     }
   }
 }
