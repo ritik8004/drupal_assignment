@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_image_styles module.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set jpeg quality setting to 100%.
+ */
+function alshaya_image_styles_update_8001() {
+  \Drupal::configFactory()
+    ->getEditable('system.image.gd')
+    ->set('jpeg_quality', 100)
+    ->save();
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_image_styles_install() {
+  // Set jpeg quality setting to 100%.
+  \Drupal::configFactory()
+    ->getEditable('system.image.gd')
+    ->set('jpeg_quality', 100)
+    ->save();
+}
