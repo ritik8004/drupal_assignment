@@ -5,27 +5,26 @@
     max-width: 80.25rem;
     margin: auto;
     padding: 0.875rem 1.5rem;
-    font-size: 0.75rem;
+    font-size: 0.625rem;
   }
 
   li {
     list-style: none;
     display: inline-block;
-    font-weight: bold;
-    text-transform: lowercase;
-
-    &:last-of-type {
-      font-weight: bold;
-    }
 
     &:last-of-type a {
-      font-weight: bold;
-      color: $breadcrumb-active;
+      font-family: $hnm-bold;
+      text-transform: capitalize;
+      font-weight: normal;
+      color: $black-two;
       pointer-events: none;
       cursor: default;
     }
 
     a {
+      font-family: $hnm-regular;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
       font-weight: normal;
       color: $greyish;
 
