@@ -670,7 +670,17 @@
 }
 
 .c-footer {
+  position: relative;
+  margin-top: 3.5rem;
   background-color: $hnm-black;
+
+  @include breakpoint($tablet) {
+    margin-top: 2.75rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 3.75rem;
+  }
 }
 
 .c-footer-primary {
