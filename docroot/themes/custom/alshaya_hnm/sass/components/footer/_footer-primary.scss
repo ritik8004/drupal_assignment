@@ -763,9 +763,6 @@
     &-menu {
       @extend %list-clear;
 
-      display: none;
-      border-top: 1px solid $white-smoke-border;
-
       @include breakpoint($tablet) {
         display: block;
         width: 100%;
@@ -783,7 +780,7 @@
 
         @include breakpoint($upto-tablet) {
           text-align: center;
-          padding: 0.375rem 0;
+          padding: 0.625rem 0;
         }
 
         @include breakpoint($desktop) {
@@ -1002,10 +999,18 @@
   }
 }
 
-.open--accordion {
-  .is-accordion {
-    @include breakpoint($only-mobile) {
-      @include icon(chevronup, after);
+.c-footer-primary {
+  .open--accordion {
+    .is-accordion {
+      @include breakpoint($only-mobile) {
+        @include icon(chevronup, after);
+      }
+    }
+
+    .accordion--body {
+      @include breakpoint($only-mobile) {
+        border-top: 2px solid $white-smoke-border;
+      }
     }
   }
 }
