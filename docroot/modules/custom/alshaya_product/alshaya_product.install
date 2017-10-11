@@ -35,7 +35,7 @@ function alshaya_product_update_8001() {
 /**
  * Implements hook_update_N().
  */
-function alshaya_product_update_8002() {
+function alshaya_product_update_8302() {
   // Import view.
   $configs = [
     'views.view.alshaya_product_list',
