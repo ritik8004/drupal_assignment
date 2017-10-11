@@ -61,22 +61,24 @@
 
 .menu-close {
   color: $marine-blue-two;
-  position: absolute;
+  position: fixed;
   #{direction(right)}: 2.5%;
-  top: 9%;
+  top: 0.625rem;
   display: none;
+  width: 2.1875rem;
+  height:1.9375rem;
+  overflow: hidden;
 
   &::before {
     background: $white;
-    width: 2.1875rem;
-    height: 2.1875rem;
     font-size: 2.25rem;
+    line-height: 31px;
   }
 }
 
 .vertical-layout .navigation__sub-menu {
   @include breakpoint($upto-palm) {
-    width: 85%;
+    width: 84.7%;
     position: fixed;
     z-index: 9;
     background: $white;
@@ -86,6 +88,7 @@
     clear: both;
     will-change: transform;
     margin-top: 3rem;
+    top: 0;
 
     li {
       width: 100%;
@@ -172,10 +175,6 @@
 
     @include breakpoint($upto-palm) {
       width: 85%;
-
-      li {
-        width: 5.625rem;
-      }
 
       a {
         padding: 0.72rem 0.6rem;
