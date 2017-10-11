@@ -1466,6 +1466,7 @@ header {
 .c-pre-content__region {
   @include breakpoint($desktop) {
     height: 2.75rem;
+    border-bottom: 1px solid $white;
   }
 }
 
