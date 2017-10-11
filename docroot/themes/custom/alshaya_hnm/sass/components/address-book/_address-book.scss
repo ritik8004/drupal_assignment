@@ -470,26 +470,30 @@
   }
 
   .select2-selection {
-    font-family: $alshaya-thin;
+    font-family: $hnm-regular;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     font-size: 1rem;
     padding: 0.25rem 0.5rem;
     width: 100%;
     border-radius: 0;
     height: 2.188rem !important;
-    border-color: $white-two;
+    border-color: $hnm-black-two;
   }
 
   .select2-selection__arrow {
-    top: 0;
-    #{$right}: 0;
-    width: 2.1875rem;
-    height: 2.1875rem;
-    background: $white-two;
+    top: 1px;
+    #{$right}: 1px;
+    width: 33px;
+    height: 33px;
+    background: $white-five;
 
     &::after {
       font-size: 1.7rem;
-      top: 12%;
-      #{$left}: 11%;
+      top: 0;
+      #{$left}: 0;
+      width: 33px;
+      height: 33px;
     }
   }
 
@@ -498,20 +502,24 @@
   }
 
   .select2-selection__rendered {
-    font-family: $arial;
+    font-family: $hnm-regular;
     line-height: 1.188rem !important;
-    color: $black;
+    color: $hnm-black-two;
     padding: 0.25rem !important;
   }
 }
 
 .form-type-select {
   .select2-selection__arrow {
-    @include icon(chevrondown, after) {
+    &::after {
+      content: '';
+      background: url("../imgs/icons/ic-dropdown-expand.svg") center center no-repeat;
       font-size: 1.5rem;
       position: absolute;
-      top: 9%;
-      #{$left}: 10%;
+      top: 0;
+      #{$left}: 0;
+      width: 33px;
+      height: 33px;
     }
 
     b {
