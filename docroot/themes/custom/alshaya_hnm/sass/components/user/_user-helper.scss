@@ -227,9 +227,6 @@
       }
 
       input {
-        font-size: 0.75rem;
-        font-family: $alshaya-bold;
-
         @include breakpoint($only-tablet) {
           font-size: 0.8125rem;
           padding: 0.625rem 1.7rem;
@@ -407,8 +404,10 @@
         }
 
         a {
-          color: $cerulean-two;
-          font-weight: bold;
+          color: $hnm-black-two;
+          font-family: $hnm-demibold;
+          text-decoration: underline;
+          font-weight: normal;
         }
       }
 
