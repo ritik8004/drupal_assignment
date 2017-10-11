@@ -13,8 +13,3 @@
   }
 }
 
-main {
-  @include breakpoint($upto-palm) {
-    margin-top: 4rem;
-  }
-}
