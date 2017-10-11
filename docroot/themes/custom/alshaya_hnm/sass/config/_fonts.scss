@@ -129,6 +129,20 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "NotoKufiArabic";
+  src: url("../fonts/NotoNaskhArabic-Regular.eot");
+  src:
+    url("../fonts/NotoNaskhArabic-Regular.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/NotoNaskhArabic-Regular.otf") format("opentype"),
+    url("../fonts/NotoNaskhArabic-Regular.svg") format("svg"),
+    url("../fonts/NotoNaskhArabic-Regular.ttf") format("truetype"),
+    url("../fonts/NotoNaskhArabic-Regular.woff") format("woff"),
+    url("../fonts/NotoNaskhArabic-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 // hnm specific font family
 $hnm-bold: 'Ampersand_bold';
 $hnm-bold-nodir: 'Ampersand_bold';
@@ -147,6 +161,10 @@ $hnm-arabic-bold-nodir: 'GESSTwoBold-Bold', 'Ampersand_bold';
 
 $hnm-arabic-regular: 'GESSTwoMedium-Medium', 'Ampersand_regular';
 $hnm-arabic-regular-nodir: 'GESSTwoMedium-Medium', 'Ampersand_regular';
+
+$hnm-arabic-thin: 'NotoKufiArabic';
+
+$hnm-arabic-light: 'GESSTwoLight-Light';
 
 // Font Family
 $alshaya-bold: 'Mothercare';

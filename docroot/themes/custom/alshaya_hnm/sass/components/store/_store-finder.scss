@@ -2,8 +2,12 @@
 .nodetype--store {
   .view-header {
     font-size: 14px;
-    color: $black;
+    color: $hnm-black-two;
     margin-bottom: 1.563rem;
+
+    @include breakpoint($only-tablet) {
+      margin-bottom: 2.5rem;
+    }
 
     @include breakpoint($only-mobile) {
       margin-top: 1.1rem;
@@ -20,9 +24,8 @@
       }
 
       @include breakpoint($desktop) {
-        font-weight: normal;
-        font-family: $alshaya-bold;
-        color: $marine-blue;
+        font-family: $hnm-demibold;
+        color: $hnm-black-two;
       }
     }
 
@@ -30,7 +33,7 @@
     .view-display-id-page_1 .view-header {
       color: $black;
       display: block;
-      font-family: $arial;
+      font-family: $hnm-regular;
       font-weight: normal;
     }
   }
@@ -38,7 +41,7 @@
   .view-empty {
     color: $black;
     display: block;
-    font-family: $arial;
+    font-family: $hnm-regular;
     font-weight: bold;
   }
 
@@ -97,7 +100,7 @@
       @include icon(chevron#{$left}, after) {
         position: absolute;
         display: inline-block;
-        color: $marine-blue-two;
+        color: $hnm-black-two;
         font-size: 1.875rem;
         top: 0.125rem;
         padding: 0.5rem;
@@ -147,7 +150,7 @@
       height: 2.1875rem;
       padding-#{$right}: 1.1rem;
       padding-top: 0.425rem;
-      border: 1px solid $greyish;
+      border: 1px solid $hnm-black-two;
       border-#{$left}: 0;
       z-index: 1;
       background-color: $white-five;
@@ -156,12 +159,13 @@
         border: 1px solid $white;
         border-#{$left}: 0;
         padding: 0.375rem;
-        #{$right}: 0;
+        #{$right}: 1.75rem;
         top: 0.3rem;
       }
 
       @include breakpoint($desktop) {
         top: 1.1rem;
+        #{$right}: 0;
       }
     }
   }
@@ -217,14 +221,18 @@
     }
 
     &[id^=edit-submit-stores-finder] {
-      background: url('../imgs/icons/store-search.svg');
+      background: url('../imgs/icons/store-search.svg') no-repeat;
       border: none;
       background-repeat: no-repeat;
       text-indent: -9999px;
-      width: 20px;
+      width: 1.25rem;
       height: 25px;
       padding: 0;
       background-size: contain;
+
+      @include breakpoint($only-mobile) {
+        background: url('../imgs/assets/ic-search.svg') no-repeat;
+      }
     }
   }
 
@@ -247,7 +255,7 @@
 
       &::before {
         position: absolute;
-        #{$left}: 0;
+        #{$left}: 1.5rem;
       }
     }
 
@@ -259,15 +267,15 @@
   }
 
   .current-location::before {
-    background: url('../imgs/icons/current.svg') no-repeat;
-    width: 26px;
-    height: 26px;
+    background: url('../imgs/icons/ic-mylocation.svg') no-repeat;
+    width: 1.625rem;
+    height: 1.625rem;
   }
 
   .label--location::before {
-    background: url('../imgs/icons/ic-search-store.svg') no-repeat;
-    width: 25px;
-    height: 25px;
+    background: url('../imgs/assets/ic-search.svg') no-repeat;
+    width: 1.625rem;
+    height: 1.625rem;
     margin-#{$right}: 0.4rem;
 
     @include breakpoint($tablet) {
@@ -277,37 +285,19 @@
       }
     }
 
+    @include breakpoint($only-tablet) {
+      margin-top: 2px;
+      margin-#{$right}: 2px;
+    }
+
     @include breakpoint($desktop) {
       margin-#{$right}: 0.3875rem;
     }
   }
 
-  .map-view-link {
-    margin-#{$left}: -1px;
-
-    @include icon(map, before) {
-      color: $cerulean-two;
-      margin-#{$right}: 0.4rem;
-      margin-#{$left}: 0.3125rem;
-      vertical-align: middle;
-      font-size: 1.8rem;
-      line-height: 1;
-
-      @include breakpoint($desktop) {
-        line-height: 0.6;
-        margin-#{$left}: 0.1875rem;
-      }
-    }
-
-    &:hover::before,
-    &.active::before {
-      color: $marine-blue;
-    }
-  }
-
   .list-view-link {
     @include icon(list, before) {
-      color: $cerulean-two;
+      color: $hnm-black-two;
       width: 1.625rem;
       height: 0.8rem;
       vertical-align: top;
@@ -327,7 +317,34 @@
 
     &:hover::before,
     &.active::before {
-      color: $marine-blue;
+      color: $white-five;
+    }
+  }
+
+  .map-view-link {
+    margin-#{$left}: -1px;
+
+    @include icon(map, before) {
+      color: $hnm-black-two;
+      margin-#{$right}: 0.4rem;
+      margin-#{$left}: 0.3125rem;
+      vertical-align: middle;
+      font-size: 1.8rem;
+      line-height: 1;
+
+      @include breakpoint($only-tablet) {
+        display: inline-table;
+      }
+
+      @include breakpoint($desktop) {
+        line-height: 0.6;
+        margin-#{$left}: 0.1875rem;
+      }
+    }
+
+    &:hover::before,
+    &.active::before {
+      color: $white-five;
     }
   }
 
@@ -340,7 +357,7 @@
     @include breakpoint($desktop) {
       padding-#{$left}: 3.4rem;
       padding-#{$right}: 0;
-      width: 27.6%;
+      width: 12.9375rem;
     }
   }
 
@@ -351,8 +368,9 @@
 
     &:hover,
     &.active {
-      border: 1px solid $marine-blue;
-      color: $marine-blue;
+      border: 1px solid $hnm-black-two;
+      color: $white-five;
+      background-color: $hnm-black-two;
 
       @include breakpoint($only-tablet) {
         font-family: $alshaya-thin;
@@ -403,6 +421,7 @@
         padding-top: 0;
         padding-bottom: 0;
         line-height: 2.1875rem;
+        border: 1px solid $hnm-black-two;
       }
 
       &.ui-autocomplete-loading {
@@ -431,8 +450,8 @@
   .by--alphabet {
     @include clearfix;
 
-    @include breakpoint($tablet) {
-      padding-bottom: 2rem;
+    @include breakpoint($only-tablet) {
+      margin-#{$left}: -4px;
     }
 
     @include breakpoint($tablet) {
@@ -449,14 +468,13 @@
 
     h3 {
       font-size: 1.625rem;
-      font-family: $alshaya-bold;
-      font-weight: normal;
-      color: $marine-blue;
+      font-family: $hnm-demibold;
+      color: $hnm-black-two;
       line-height: 1.6;
       margin: 0;
       text-transform: uppercase;
       float: $left;
-      width: 10%;
+      width: 9.836%;
 
       @include breakpoint($only-mobile) {
         display: none !important;
@@ -465,13 +483,17 @@
 
     .rows {
       font-size: 14px;
-      line-height: 232%;
+      line-height: 2.29;
       margin-#{$left}: 1.7rem;
 
       @include breakpoint($tablet) {
-        width: 88%;
+        width: 83.164%;
         margin: 0;
         float: $right;
+      }
+
+      @include breakpoint($desktop) {
+        width: 90.164%;
       }
 
       @include breakpoint($only-mobile) {
@@ -479,7 +501,7 @@
         margin-#{$left}: 0;
 
         a {
-          color: $cerulean-two !important;
+          color: $hnm-black-two !important;
           display: block;
           width: 100%;
           padding: 1rem 0;
@@ -490,7 +512,7 @@
           @include icon(chevron#{$right}, after) {
             position: absolute;
             display: inline-block;
-            color: $black;
+            color: $hnm-black-two;
             font-size: 1.875rem;
             top: 0.5rem;
             #{$right}: 0.4rem;
@@ -499,10 +521,10 @@
       }
 
       a {
-        color: $grey-ash;
+        color: $grey7;
 
         &:hover {
-          color: $cerulean-two;
+          color: $link-hover;
           text-decoration: underline;
         }
       }
@@ -515,30 +537,34 @@
     padding: 1rem 0;
     padding-bottom: 0;
     margin-bottom: 1.625rem;
-    border: 1px solid $white;
+    border-top: 1px solid $white;
+    border-bottom: 1px solid $white;
     position: relative;
     cursor: pointer;
 
     &:hover,
     &.selected {
-      background-color: $white-four;
+      background-color: $white-five;
     }
 
     .row-title {
-      font-weight: bold;
       display: block;
-      color: $marine-blue;
+      color: $hnm-black-two;
       padding: 0 3.5rem;
+      font-family: $hnm-demibold;
 
       @include breakpoint($tablet) {
         padding: 0 3.25rem;
-        color: $black;
       }
     }
 
     .views-field-field-store-address {
       border-bottom: 1px solid $white;
       padding-bottom: 1.5rem;
+
+      p {
+        color: $grey7;
+      }
 
       .field-content {
         padding: 0 3.5rem;
@@ -622,9 +648,10 @@
       display: block;
       font-size: 12px;
       text-align: center;
-      border: 1px solid $cerulean-two;
+      border: 1px solid $scarlet-three;
       padding: 0.3125rem 0;
       margin-bottom: 1rem;
+      color: $scarlet-three;
     }
 
     .label--location,
@@ -639,6 +666,8 @@
       width: 17%;
       padding-#{$left}: 1.25rem;
       padding-#{$right}: 0;
+      margin-#{$left}: 1.5rem;
+      line-height: 2;
     }
 
     .store-finder--wrapper {
@@ -647,7 +676,8 @@
 
       .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
       .form-item-geolocation-geocoder-google-places-api {
-        width: 48% !important;
+        width: 55% !important;
+        padding-#{$right}: 3.75rem;
       }
     }
 
@@ -678,7 +708,7 @@
       position: absolute;
       #{$left}: 1rem;
       width: 1.25rem;
-      background: $cerulean-two;
+      background: $hnm-red;
       height: 1.25rem;
       vertical-align: middle;
       text-align: center;
@@ -688,7 +718,7 @@
     }
 
     .c-page-title {
-      margin-top: 1rem;
+      margin-top: 1.5625rem;
       margin-bottom: 0.79rem;
     }
 
@@ -728,7 +758,7 @@
       padding-top: 0.85rem;
       position: relative;
       overflow: hidden;
-      font-family: $alshaya-thin;
+      font-family: $hnm-regular;
     }
 
     .label--location {
@@ -746,7 +776,8 @@
           width: 45%;
         }
 
-        width: 49.35%;
+        width: 39.35%;
+        padding-#{$left}: 1.625rem;
       }
 
       @include breakpoint($desktop) {
@@ -762,10 +793,8 @@
 
     .current-location {
       padding: 0 1.5rem;
-    }
-
-    .current-location {
-      width: 20%;
+      width: 15.25rem;
+      color: $hnm-red;
     }
 
     .list-view-link,
@@ -833,6 +862,10 @@
       html[lang=ar] & {
         margin-top: 0.2rem;
       }
+
+      .block-store-finder-form__form__label__wrapper {
+        display: inline;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -873,10 +906,12 @@
   .list-view-link,
   .map-view-link {
     line-height: 1.4;
+    color: $hnm-black-two;
 
     @include breakpoint($tablet) {
       height: 2.9375rem;
       border: 1px solid transparent;
+      margin-#{$left}: 1px;
     }
 
     @include breakpoint($desktop) {
@@ -884,10 +919,23 @@
     }
   }
 
+  .icon-list {
+    @include breakpoint($only-tablet) {
+      margin-#{$left}: -1.625rem;
+      margin-#{$right}: 2px;
+    }
+  }
+
+  .icon-map {
+    @include breakpoint($only-tablet) {
+      margin-#{$left}: -1px;
+    }
+  }
+
   @include breakpoint($desktop) {
     .store-finder--wrapper {
-      width: 49.7%;
-      padding-#{$right}: 1rem;
+      width: 38.5625rem;
+      padding-#{$right}: 1.5625rem;
       max-width: 38.4375;
     }
 
@@ -919,9 +967,7 @@
       }
 
       @include breakpoint($desktop) {
-        width: 72.4%;
-        padding-#{$right}: 0.5rem;
-        padding-#{$left}: 1.375rem;
+        width: 23.135rem;
 
         html[lang=ar] & {
           width: 62.4%;
@@ -1072,7 +1118,7 @@
   .hours--wrapper {
     .hours--label.open {
       @include icon(chevronup, after) {
-        color: $marine-blue-two;
+        color: $hnm-black-two;
       }
     }
   }
@@ -1097,7 +1143,7 @@
   .hours--wrapper {
     .hours--label.open {
       @include icon(chevrondown, after) {
-        color: $marine-blue-two;
+        color: $hnm-black-two;
       }
 
       &::after {
@@ -1116,11 +1162,13 @@
   .get--directions div,
   .view-on--map {
     position: relative;
-    color: $cerulean-two;
+    color: $hnm-black-two;
     cursor: pointer;
+    letter-spacing: 0.5px;
 
     a {
-      color: $cerulean-two;
+      color: $hnm-black-two;
+      letter-spacing: 0.5px;
     }
 
     &::after {
@@ -1144,7 +1192,7 @@
   .list-view-link,
   .map-view-link {
     @include breakpoint($desktop) {
-      width: 15%;
+      width: 11.625rem;
     }
   }
 
@@ -1170,7 +1218,7 @@
     @include icon(chevron#{$right}, after) {
       position: absolute;
       display: inline-block;
-      color: $cerulean-two;
+      color: $hnm-black-two;
       font-size: 1.875rem;
       top: 0.5rem;
       #{$right}: 0.7rem;
@@ -1184,7 +1232,7 @@
 
   .view-on--map {
     @include icon(map, after) {
-      color: $cerulean-two;
+      color: $hnm-black-two;
       vertical-align: middle;
       font-size: 1.8rem;
       line-height: 1;
@@ -1194,11 +1242,11 @@
   }
 
   .get--directions div::after {
-    background: url('../imgs/icons/ic-directions.svg');
+    background: url('../imgs/icons/ic-directionstroke.svg') no-repeat;
     top: 1rem;
     #{$right}: 1rem;
-    width: 18px;
-    height: 18px;
+    width: 1.25rem;
+    height: 1.25rem;
 
     html[lang=ar] & {
       transform: scaleX(-1);
@@ -1292,12 +1340,16 @@
 
   .hours--label {
     @include icon(chevrondown, after);
+
+    color: $hnm-black-two;
   }
 
   .hours--label.open {
     font-weight: bold;
 
     @include icon(chevronup, after);
+
+    color: $hnm-black-two;
   }
 
   .view-on--map,

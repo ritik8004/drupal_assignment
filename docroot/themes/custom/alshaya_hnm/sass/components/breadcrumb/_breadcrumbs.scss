@@ -4,8 +4,9 @@
   ol {
     max-width: 80.25rem;
     margin: auto;
-    padding: 0.875rem 1.5rem;
-    font-size: 0.75rem;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.5px;
   }
 
   li {
@@ -20,14 +21,16 @@
 
     &:last-of-type a {
       font-weight: bold;
-      color: $breadcrumb-active;
+      color: $hnm-black-two;
       pointer-events: none;
       cursor: default;
+      font-family: $hnm-bold;
     }
 
     a {
-      font-weight: normal;
       color: $greyish;
+      font-family: $hnm-regular;
+      text-transform: capitalize;
 
       &:hover {
         text-decoration: underline;
@@ -38,8 +41,8 @@
       content: '>';
       color: $greyish;
       vertical-align: middle;
-      padding-right: 0.3125rem;
-      padding-left: 0.3125rem;
+      padding-right: 0.1875rem;
+      padding-left: 0.1875rem;
     }
 
     &:last-of-type::after {

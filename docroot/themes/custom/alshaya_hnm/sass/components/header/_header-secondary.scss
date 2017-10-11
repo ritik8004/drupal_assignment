@@ -100,6 +100,15 @@
       vertical-align: middle;
       letter-spacing: 0.8px;
       text-transform: uppercase;
+
+      &:hover,
+      &.is-active {
+        background-color: $grey1;
+      }
+
+      &.language-link {
+        font-family: $hnm-arabic-thin;
+      }
     }
 
     line-height: 1;
@@ -133,7 +142,10 @@
     @include breakpoint($desktop) {
       .register-link,
       li:first-child a {
-        background-color: $grey1;
+        &:hover,
+        &.is-active {
+          background-color: $grey1;
+        }
       }
     }
   }
@@ -380,6 +392,14 @@ body {
 
     .region__menu-secondary {
       text-align: center;
+    }
+  }
+}
+
+html[lang='ar'] {
+  .c-menu-secondary {
+    a {
+      font-family: $hnm-arabic-light;
     }
   }
 }
