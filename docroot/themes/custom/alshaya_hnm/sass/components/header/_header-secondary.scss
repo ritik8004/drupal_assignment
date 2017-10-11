@@ -107,7 +107,7 @@
       }
 
       &.language-link {
-        font-family: $hnm-arabic-thin;
+        font-family: $hnm-arabic-medium;
       }
     }
 
@@ -399,7 +399,7 @@ body {
 html[lang='ar'] {
   .c-menu-secondary {
     a {
-      font-family: $hnm-arabic-light;
+      font-family: $hnm-arabic-regular;
     }
   }
 }
