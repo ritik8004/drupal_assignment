@@ -21,4 +21,13 @@ function alshaya_hm_install() {
 
    // Create default content for the site.
   alshaya_hm_create_default_content();
+
+  // Swap logo and search block placement in header.
+  \Drupal::configFactory()->getEditable('block.block.branding')
+    ->set('weight', '-31')
+    ->save();
+
+  \Drupal::configFactory()->getEditable('block.block.keywordsearchblock')
+    ->set('weight', '-32')
+    ->save();
 }
