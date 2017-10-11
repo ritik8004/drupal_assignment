@@ -2,19 +2,19 @@ langcode: en
 status: true
 dependencies:
   config:
-    - system.menu.corporate-info
+    - system.menu.about-brand
   module:
     - system
   theme:
     - alshaya_hnm
-id: corporateinfo
+id: aboutbrand
 theme: alshaya_hnm
 region: footer_primary
-weight: -31
+weight: -33
 provider: null
-plugin: 'system_menu_block:corporate-info'
+plugin: 'system_menu_block:about-brand'
 settings:
-  id: 'system_menu_block:corporate-info'
+  id: 'system_menu_block:about-brand'
   label: 'Corporate Info'
   provider: system
   label_display: visible

@@ -1,7 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-id: corporate-info
-label: 'Corporate Info'
-description: ''
-locked: false
