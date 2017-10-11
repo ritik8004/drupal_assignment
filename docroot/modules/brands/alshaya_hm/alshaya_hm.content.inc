@@ -58,7 +58,7 @@ function alshaya_hm_create_footer_logo_block() {
     'body' => [
       'value' => "<h1 class='footer-brand-home'>
                    <a href='/en' title='footer-brand-logo' rel='home' class='logo'>
-                     <img src='themes/custom/alshaya_hnm/h-m-logo-bw.svg' alt='HnM Logo'>
+                     <img src='/themes/custom/alshaya_hnm/h-m-logo-bw.svg' alt='HnM Logo'>
                    </a>
                  </h1>",
       'format' => 'rich_text',
@@ -73,7 +73,7 @@ function alshaya_hm_create_footer_logo_block() {
     'body' => [
       'value' => "<h1 class='footer-brand-home'>
                    <a href='/ar' title='footer-brand-logo' rel='home' class='logo'>
-                     <img src='themes/custom/alshaya_hnm/h-m-logo-bw.svg' alt='HnM Logo'>
+                     <img src='/themes/custom/alshaya_hnm/h-m-logo-bw.svg' alt='HnM Logo'>
                    </a>
                  </h1>",
       'format' => 'rich_text',
