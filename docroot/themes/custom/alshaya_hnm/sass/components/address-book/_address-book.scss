@@ -86,7 +86,8 @@
   .address--content {
     color: $black-two;
     direction: ltr;
-    font-weight: 700;
+    font-family: $hnm-bold;
+    font-weight: normal;
 
     html[lang=ar] & {
       text-align: right;
@@ -209,7 +210,7 @@
 
     span::before,
     a:hover::before {
-      border: 0.1875rem solid $windows-blue;
+      border: 0.1875rem solid $hnm-black-two;
       background: white;
     }
   }
@@ -254,11 +255,13 @@
   &:hover,
   &.default {
     .address--data {
-      background: $white-four;
+      background: $grey3;
     }
 
     .address--primary {
-      font-weight: 700;
+      font-family: $hnm-bold;
+      font-weight: normal;
+      color: $hnm-black-two;
       letter-spacing: 0;
     }
 
@@ -376,13 +379,12 @@
       top: -1rem;
       #{$right}: 0;
       min-width: 10.2rem;
-      text-transform: lowercase;
       margin-top: 1.75rem;
       margin-bottom: 0;
     }
 
     @include breakpoint($desktop) {
-      top: -0.5rem;
+      top: -1.188rem;
       min-width: 11.75rem;
       margin-top: 0;
       margin-bottom: 1.25rem;

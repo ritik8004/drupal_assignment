@@ -63,7 +63,7 @@
   }
 
   .ui-dialog .ui-dialog-titlebar-close {
-    color: $black;
+    color: $white-five;
     height: 3.125rem;
     font-size: 1rem;
     #{$right}: 0;
@@ -77,15 +77,14 @@
       content: none;
     }
 
-    &::after {
-      background: $white;
-      content: "X";
-      display: block;
-      padding: 10px 15px;
-      position: absolute;
-      #{$right}: 0;
-      #{$left}: initial;
-      top: 0;
+    @include icon(close) {
+      color: $white-five;
+      background: $hnm-black-two;
+      width: 2.188rem;
+      height: 2.188rem;
+      font-size: 2.688rem;
+      text-indent: -3px;
+      line-height: 0.8;
     }
   }
 
@@ -96,15 +95,17 @@
   }
 
   .dialog-cancel span {
-    color: #3381d0;
-    font-size: 10px;
+    color: $hnm-black-two;
+    font-family: $hnm-bold;
+    font-weight: normal;
+    font-size: 0.625rem;
 
     @include breakpoint($tablet) {
-      font-size: 11px;
+      font-size: 0.625rem;
     }
 
     @include breakpoint($desktop) {
-      font-size: 12px;
+      font-size: 0.75rem;
     }
   }
 
