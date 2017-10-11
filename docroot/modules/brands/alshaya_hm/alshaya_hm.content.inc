@@ -13,6 +13,8 @@ use \Drupal\block_content\Entity\BlockContent;
 function alshaya_hm_create_default_content() {
   // Create copyright block.
   alshaya_hm_create_copyright_block_content();
+  // Create Footer logo block content for HnM.
+  alshaya_hm_create_footer_logo_block();
 }
 
 /**
@@ -38,6 +40,42 @@ H&M has since it was founded in 1947 grown into one of the world's leading fashi
     'info' => 'Copyright',
     'body' => [
       'value' => "<p>مفهوم الأعمال لدى H&M هو تقديم أحدث صيحات الموضة والجودة العالية بأفضل الأسعار. ومنذ تأسيس H&M في عام 1947 نمت لتصبح واحدة من شركات الأزياء الرائدة في العالم. حقوق النشر محفوظة لموقع شركة H&M و هو مُلك Hennes H&M & Mauritz AB &copy;</p>",
+      'format' => 'rich_text',
+    ]
+  ]);
+  $ar_block_content->save();
+}
+
+/**
+ * Create Footer logo block content for HnM.
+ */
+function alshaya_hm_create_footer_logo_block() {
+  // Create footer logo block content.
+  $block_content = BlockContent::create([
+    'info' => 'Footer HnM logo',
+    'uuid' => '6a8aca33-da8d-4c88-953c-0ffbdcc63447',
+    'machine_name' => 'footerhnmlogo',
+    'body' => [
+      'value' => "<h1 class='footer-brand-home'>
+                   <a href='/en' title='footer-brand-logo' rel='home' class='logo'>
+                     <img src='themes/custom/alshaya_hnm/h-m-logo-bw.svg' alt='HnM Logo'>
+                   </a>
+                 </h1>",
+      'format' => 'rich_text',
+    ],
+    'type' => 'basic',
+    'langcode' => 'en',
+  ]);
+  $block_content->save();
+  // Create footer logo block translation.
+  $ar_block_content = $block_content->addTranslation('ar', [
+    'info' => 'Footer HnM logo',
+    'body' => [
+      'value' => "<h1 class='footer-brand-home'>
+                   <a href='/ar' title='footer-brand-logo' rel='home' class='logo'>
+                     <img src='themes/custom/alshaya_hnm/h-m-logo-bw.svg' alt='HnM Logo'>
+                   </a>
+                 </h1>",
       'format' => 'rich_text',
     ]
   ]);

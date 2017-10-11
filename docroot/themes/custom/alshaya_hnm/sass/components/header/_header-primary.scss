@@ -703,8 +703,14 @@ header {
 
       &.active {
         a.menu--one__link {
-          background: $white-five;
-          border-top: 2px solid $marine-blue-two;
+          &::after {
+            content: '';
+            height: 1px;
+            background: $white-smoke-border;
+            display: inherit;
+            width: 100%;
+            margin-top: 0.125rem;
+          }
         }
       }
 
@@ -767,7 +773,7 @@ header {
           a.menu--one__link {
             &::after {
               content: '';
-              height: 0.125rem;
+              height: 1px;
               background: $white-smoke-border;
               display: inherit;
               width: 100%;
