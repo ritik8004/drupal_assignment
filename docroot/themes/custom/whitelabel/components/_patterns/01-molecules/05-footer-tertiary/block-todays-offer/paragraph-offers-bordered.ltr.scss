@@ -77,6 +77,10 @@
       font-size: 0.875rem;
       line-height: 1.57;
       min-height: 2.9rem;
+
+      html[lang=ar] & {
+        min-height: 3.125rem;
+      }
     }
 
     @include breakpoint($desk) {
@@ -84,6 +88,10 @@
       min-height: 2.75rem;
       max-width: 14rem;
       line-height: normal;
+
+      html[lang=ar] & {
+        min-height: 4.125rem;
+      }
     }
   }
 
