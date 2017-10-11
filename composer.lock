@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e35abd8c394e621f97545ebabb954c24",
+    "content-hash": "96688dbb33a71e8b94040d4005e8dc9e",
     "packages": [
         {
             "name": "acquia/blt",
@@ -5931,6 +5931,9 @@
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-8.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
