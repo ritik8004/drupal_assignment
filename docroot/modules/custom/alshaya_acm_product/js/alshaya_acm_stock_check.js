@@ -13,7 +13,6 @@
     attach: function (context, settings) {
 
       // Stock check on PLP, Search and Promo pages and Related products block.
-      // $('article[data-vmode="search_result"]', context).each(function () {
       $('.stock-placeholder', context).once('check-stock').each(function () {
         var placeHolder = $(this);
 
@@ -25,7 +24,7 @@
         var productId = articleNode.attr('data-nid');
         var productStock = articleNode.find('.out-of-stock');
         $.ajax({
-          url: Drupal.url('stock-check-ajax/node/' + productId),
+          url: Drupal.url('stock-check-ajax/node/' + productId) + '?cacheable',
           type: 'GET',
           dataType: 'json',
           async: true,
