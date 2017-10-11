@@ -9,7 +9,7 @@
   text-transform: uppercase;
 
   @include breakpoint($mobile) {
-    font-size: 1.125rem;
+    font-size: 1rem;
   }
 
   @include breakpoint($tablet) {

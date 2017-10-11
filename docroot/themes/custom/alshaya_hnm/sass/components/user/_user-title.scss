@@ -19,9 +19,6 @@
     @extend %page-title;
 
     position: absolute;
-    font-family: $alshaya-bold;
-    color: $marine-blue;
-    font-weight: normal;
     top: -4.5rem;
 
     @include breakpoint($tablet) {

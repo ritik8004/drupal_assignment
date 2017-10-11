@@ -1,0 +1,8 @@
+content: '<div class="paragraph-t-title-textarea paragraph-vm-1026x288">
+            <div class="field__wrapper field-html-heading">
+              <h2 class="text-uppercase text-center text-bold color-pink">lorem ipsum dolor</h2>
+            </div>
+            <div class="field__wrapper field-body">
+              <p class="text-align-center" >lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt!</p>
+            </div>
+          </div>'

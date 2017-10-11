@@ -15,8 +15,8 @@ regions:
   footer_primary: 'Footer Primary'
   footer_secondary: 'Footer Secondary'
 
-# libraries:
-#   - whitelabel_non_transac/global
+libraries:
+  - whitelabel_non_transac/disable_mobile_modal
 
 component-libraries:
   atoms:

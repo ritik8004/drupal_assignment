@@ -281,20 +281,11 @@ function drush_acq_sku_clean_stock_cache() {
   // Check if we are asked to clear cache of specific SKU.
   if ($sku = drush_get_option('sku', '')) {
     if ($sku_entity = SKU::loadFromSku($sku)) {
-      // Clear stock cache for particular sku in all languages.
-      foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
-        $sku_entity_to_clear_stock = $sku_entity->getTranslation($langcode);
+      acq_sku_clear_sku_stock_cache($sku_entity);
 
-        // Get the stock cache id.
-        $stock_cid = acq_sku_get_stock_cache_id($sku_entity_to_clear_stock);
-
-        // Invalidate particular cache.
-        \Drupal::cache('stock')->invalidate($stock_cid);
-
-        drush_print(dt('Invalidated stock cache for @stock_cid.', [
-          '@stock_cid' => $stock_cid,
-        ]));
-      }
+      drush_print(dt('Invalidated stock cache for @sku.', [
+        '@sku' => $sku,
+      ]));
     }
 
     return;

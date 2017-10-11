@@ -44,8 +44,9 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
   public function processItem($data) {
     $skus = $data['skus'];
     $promotion_nid = $data['promotion'];
+    $promotion_type = $data['promotion_type'];
     $promotion_detach_item[] = ['target_id' => $promotion_nid];
-
+    $invalidate_tags = ['node:' . $promotion_nid];
     foreach ($skus as $sku) {
       $sku_entity = SKU::loadFromSku($sku);
       $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
@@ -65,15 +66,21 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
         $sku_entity_translation->get('field_acq_sku_promotions')->setValue($sku_promotions);
         $sku_entity_translation->save();
       }
+      $invalidate_tags[] = 'acq_sku:' . $sku_entity->id();
     }
 
     $sku_texts = implode(',', $skus);
 
-    if ($sku_texts) {
+    // The skus detached from a catalog promotion are not part of those coming back during promotions sync.
+    // So their final_price value does not get updated at that time. We thus need to resync these specific skus.
+    if ($promotion_type === 'category' && $sku_texts) {
       foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
         $this->ingestApiWrapper->productFullSync($store_id, $langcode, $sku_texts);
       }
     }
+
+    // Invalidate cache tags for updated skus & promotions.
+    \Drupal::cache()->invalidateMultiple($invalidate_tags);
 
     $this->logger->info('Detached Promotion:@promo from SKUs: @skus',
       ['@promo' => $promotion_nid, '@skus' => $sku_texts]);

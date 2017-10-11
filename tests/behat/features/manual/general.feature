@@ -20,7 +20,7 @@ Feature: Test generic features on the site
   Scenario: As a Guest user
   I should be able to subscribe with Mothercare
     Given I am on homepage
-    When I subscribe using a valid Email ID
+    When I enter a valid Email ID in field "edit-email"
     And I press "sign up"
     And I wait for AJAX to finish
     Then I should see "Thank you for your subscription."
@@ -30,7 +30,7 @@ Feature: Test generic features on the site
   I should be able to subscribe with Mothercare
     Given I am on homepage
     And I follow "عربية"
-    When I subscribe using a valid Email ID
+    When I enter a valid Email ID in field "edit-email"
     And I press "سجل الآن"
     And I wait for AJAX to finish
     Then I should see "شكراً لاشتراككم في نشرتنا الاخبارية"

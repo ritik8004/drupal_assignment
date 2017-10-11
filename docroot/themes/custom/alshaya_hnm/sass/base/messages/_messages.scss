@@ -57,10 +57,9 @@
   &.messages--warning,
   &.messages--error {
     box-shadow: none;
-    font-family: $arial;
+    font-family: $hnm-regular;
     font-size: 0.75rem;
     padding: 0.66rem 1.5625rem;
-    font-weight: 700;
 
     @include breakpoint($upto-tablet) {
       padding-left: 3.8125rem;
@@ -88,13 +87,13 @@
     }
 
     @include breakpoint($desktop) {
-      font-size: 0.9375rem;
+      font-size: 0.75rem;
     }
   }
 
   &.messages--status {
-    background: $tealish;
-    color: $white-five;
+    background: $success;
+    color: $white-four;
     border: none;
     border-radius: 0;
 
