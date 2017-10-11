@@ -8,8 +8,8 @@
   padding-top: 1px;
   padding-bottom: 1.25rem;
   position: absolute;
-  top: 1.7rem;
-  #{direction(right)}: 3.4%;
+  top: 1.625rem;
+  #{direction(right)}: 3.2%;
   z-index: $z-1;
 
   @include breakpoint($upto-palm) {
