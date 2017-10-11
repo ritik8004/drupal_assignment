@@ -1,7 +1,7 @@
 .path--store-finder,
 .nodetype--store {
   .view-header {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: $hnm-black-two;
     margin-bottom: 1.563rem;
 
@@ -217,7 +217,7 @@
 
   input {
     &.form-autocomplete {
-      font-size: 12px;
+      font-size: 0.75rem;
     }
 
     &[id^=edit-submit-stores-finder] {
@@ -226,7 +226,7 @@
       background-repeat: no-repeat;
       text-indent: -9999px;
       width: 1.25rem;
-      height: 25px;
+      height: 1.5625rem;
       padding: 0;
       background-size: contain;
 
@@ -286,8 +286,8 @@
     }
 
     @include breakpoint($only-tablet) {
-      margin-top: 2px;
-      margin-#{$right}: 2px;
+      margin-top: 0.125rem;
+      margin-#{$right}: 0.125rem;
     }
 
     @include breakpoint($desktop) {
@@ -425,7 +425,7 @@
       }
 
       &.ui-autocomplete-loading {
-        background-size: 30px;
+        background-size: 1.875rem;
       }
 
       @include breakpoint($tablet) {
@@ -451,7 +451,7 @@
     @include clearfix;
 
     @include breakpoint($only-tablet) {
-      margin-#{$left}: -4px;
+      margin-#{$left}: -0.25rem;
     }
 
     @include breakpoint($tablet) {
@@ -482,7 +482,7 @@
     }
 
     .rows {
-      font-size: 14px;
+      font-size: 0.875rem;
       line-height: 2.29;
       margin-#{$left}: 1.7rem;
 
@@ -532,7 +532,7 @@
   }
 
   .list-view-locator {
-    font-size: 14px;
+    font-size: 0.875rem;
     background: $white-five;
     padding: 1rem 0;
     padding-bottom: 0;
@@ -646,7 +646,7 @@
 
     .current-location {
       display: block;
-      font-size: 12px;
+      font-size: 0.75rem;
       text-align: center;
       border: 1px solid $scarlet-three;
       padding: 0.3125rem 0;
@@ -714,7 +714,7 @@
       text-align: center;
       color: $white-five;
       border-radius: 50%;
-      padding-top: 2px;
+      padding-top: 0.125rem;
     }
 
     .c-page-title {
@@ -1000,7 +1000,7 @@
     overflow-y: scroll;
     vertical-align: top;
     float: $left;
-    font-size: 14px;
+    font-size: 0.875rem;
     background: $white-four;
     padding: 1rem 0;
     padding-bottom: 0;
@@ -1039,10 +1039,10 @@
         content: '';
         background: url('../imgs/icons/store--down.svg');
         display: inline-block;
-        width: 17px;
-        height: 7px;
-        top: 5px;
-        #{$right}: 55px;
+        width: 1.0625rem;
+        height: 0.4375rem;
+        top: 0.3125rem;
+        #{$right}: 3.4375rem;
         transform: rotate(270deg);
       }
 
