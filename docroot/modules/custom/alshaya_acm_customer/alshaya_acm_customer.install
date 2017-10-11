@@ -5,6 +5,8 @@
  * Contains install, update, uninstall hooks for alshaya_acm_customer module.
  */
 
+use Drupal\rest\Entity\RestResourceConfig;
+use Drupal\rest\RestResourceConfigInterface;
 use Drupal\user\Entity\Role;
 
 /**
@@ -15,4 +17,35 @@ function alshaya_acm_customer_install() {
   $role = Role::load('authenticated');
   $role->grantPermission('access own orders');
   $role->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the 'acq_customer_delete' rest resource.
+ */
+function alshaya_acm_customer_update_8001() {
+  // Creating and enabling 'customer delete' resource.
+  $rest_config = [
+    'id' => 'acq_customer_delete',
+    'plugin_id' => 'acq_customer_delete',
+    'status' => TRUE,
+    'granularity' => RestResourceConfigInterface::METHOD_GRANULARITY,
+    'configuration' => [
+      'DELETE' => [
+        'supported_formats' => ['json'],
+        'supported_auth' => ['oauth2'],
+      ],
+    ],
+    'dependencies' => [
+      'module' => [
+        'acq_customer',
+        'serialization',
+        'simple_oauth',
+        'user',
+      ],
+    ],
+  ];
+  $rest_resource = new RestResourceConfig($rest_config, 'rest_resource_config');
+  $rest_resource->save();
 }
