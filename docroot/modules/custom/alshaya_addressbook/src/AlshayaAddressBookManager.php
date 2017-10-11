@@ -303,12 +303,28 @@ class AlshayaAddressBookManager {
     ];
     $address['address_line1'] = $magento_address['street'];
 
-    // This one is optional so additional check added.
-    $address['address_line2'] = isset($magento_address['extension']['address_apartment_segment']) ? $magento_address['extension']['address_apartment_segment'] : '';
+    $address['address_line2'] = '';
+    $address['administrative_area'] = '';
+    $address['locality'] = '';
+    $address['dependent_locality'] = '';
 
-    $address['administrative_area'] = $magento_address['extension']['address_area_segment'];
-    $address['locality'] = $magento_address['extension']['address_block_segment'];
-    $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
+    if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
+      if (isset($magento_address['extension']['address_apartment_segment'])) {
+        $address['address_line2'] = $magento_address['extension']['address_apartment_segment'];
+      }
+
+      if (isset($magento_address['extension']['address_area_segment'])) {
+        $address['administrative_area'] = $magento_address['extension']['address_area_segment'];
+      }
+
+      if (isset($magento_address['extension']['address_block_segment'])) {
+        $address['locality'] = $magento_address['extension']['address_block_segment'];
+      }
+
+      if (isset($magento_address['extension']['address_building_segment'])) {
+        $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
+      }
+    }
 
     $address['country_code'] = $magento_address['country_id'];
 

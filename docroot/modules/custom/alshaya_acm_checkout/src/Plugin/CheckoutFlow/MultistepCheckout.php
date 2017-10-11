@@ -114,6 +114,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     if (empty($cart) || !$cart->items()) {
       $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
       $response->send();
+      return;
     }
 
     $cart_step_id = $cart->getCheckoutStep();
