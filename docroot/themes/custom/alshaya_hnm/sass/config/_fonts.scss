@@ -129,44 +129,31 @@
   font-style: normal;
 }
 
-@font-face {
-  font-family: "NotoKufiArabic";
-  src: url("../fonts/NotoNaskhArabic-Regular.eot");
-  src:
-    url("../fonts/NotoNaskhArabic-Regular.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/NotoNaskhArabic-Regular.otf") format("opentype"),
-    url("../fonts/NotoNaskhArabic-Regular.svg") format("svg"),
-    url("../fonts/NotoNaskhArabic-Regular.ttf") format("truetype"),
-    url("../fonts/NotoNaskhArabic-Regular.woff") format("woff"),
-    url("../fonts/NotoNaskhArabic-Regular.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-}
-
 // hnm specific font family
+// English fonts.
 $hnm-bold: 'Ampersand_bold';
 $hnm-bold-nodir: 'Ampersand_bold';
-
-$hnm-regular: 'Ampersand_regular';
-$hnm-regular: 'Ampersand_regular';
 
 $hnm-demibold: 'Ampersand_demibold';
 $hnm-demibold-nodir: 'Ampersand_demibold';
 
+$hnm-regular: 'Ampersand_regular';
+$hnm-regular-nodir: 'Ampersand_regular';
+
 $hnmpromo-regular: 'Amperserif_regular';
 $hnmpromo-regular-nodir: 'Amperserif_regular';
 
+// Arabic fonts.
 $hnm-arabic-bold: 'GESSTwoBold-Bold', 'Ampersand_bold';
 $hnm-arabic-bold-nodir: 'GESSTwoBold-Bold', 'Ampersand_bold';
 
-$hnm-arabic-regular: 'GESSTwoMedium-Medium', 'Ampersand_regular';
-$hnm-arabic-regular-nodir: 'GESSTwoMedium-Medium', 'Ampersand_regular';
+$hnm-arabic-medium: 'GESSTwoMedium-Medium', 'Ampersand_demibold';
+$hnm-arabic-medium-nodir: 'GESSTwoMedium-Medium', 'Ampersand_demibold';
 
-$hnm-arabic-thin: 'NotoKufiArabic';
+$hnm-arabic-regular: 'GESSTwoLight-Light', 'Amperserif_regular';
+$hnm-arabic-regular-nodir: 'GESSTwoLight-Light', 'Amperserif_regular';
 
-$hnm-arabic-light: 'GESSTwoLight-Light';
-
-// Font Family
+// Mothercare font Family.
 $alshaya-bold: 'Mothercare';
 $alshaya-bold-nodir: 'Mothercare';
 
@@ -182,7 +169,7 @@ $alshaya-arabic-thin-nodir: 'Cairo-300', 'MothercareThin';
 $alshaya-icons: 'alshaya-icons';
 $arial: 'arialmt', arial, sans-serif;
 $arial-nodir: 'arialmt', arial, sans-serif;
-$body_font: $arial;
+$body_font: $hnm-regular;
 
 // Icon Fonts
 $icons: (
