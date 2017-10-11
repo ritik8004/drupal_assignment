@@ -3,831 +3,161 @@ global $_alshaya_acm_products;
 
 $_alshaya_acm_products = array(
 array (
-  'product_id' => 24,
+  'product_id' => 46,
   'store_id' => 1,
   'attribute_set_id' => 4,
   'attribute_set_label' => 'Default',
-  'sku' => 'HM05518570021870081',
-  'name' => 'Long T-shirt',
+  'sku' => 'Test Simple Product',
+  'name' => 'Test Simple Product',
   'type' => 'simple',
-  'price' => '10.0000',
+  'price' => '12.0000',
   'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'size' => '849',
-    'season_value' => '201807',
-    'article_pattern' => '901,893',
-    'article_license_company' => '913',
-    'article_license_item' => '968',
-    'article_fragrance_description' => '974',
-    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
-    'url_key' => 'long-t-shirt-hm05518570021870081',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 48,
-      'product_id' => 24,
-      'stock_id' => 2,
-      'qty' => 0,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 10:07:00',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-), array (
-  'product_id' => 26,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM05518570021870082',
-  'name' => 'Long T-shirt',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'size' => '849',
-    'season_value' => '201807',
-    'article_pattern' => '901,893',
-    'article_license_company' => '913',
-    'article_license_item' => '968',
-    'article_fragrance_description' => '974',
-    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
-    'url_key' => 'long-t-shirt-hm05518570021870082',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 50,
-      'product_id' => 26,
-      'stock_id' => 2,
-      'qty' => 0,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 10:07:01',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-), array (
-  'product_id' => 28,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM05518570021870083',
-  'name' => 'Long T-shirt',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'size' => '849',
-    'season_value' => '201807',
-    'article_pattern' => '901,893',
-    'article_license_company' => '913',
-    'article_license_item' => '968',
-    'article_fragrance_description' => '974',
-    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
-    'url_key' => 'long-t-shirt-hm05518570021870083',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 52,
-      'product_id' => 28,
-      'stock_id' => 2,
-      'qty' => 0,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 10:07:01',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-), array (
-  'product_id' => 30,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM05518570021870084',
-  'name' => 'Long T-shirt',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'size' => '849',
-    'season_value' => '201807',
-    'article_pattern' => '901,893',
-    'article_license_company' => '913',
-    'article_license_item' => '968',
-    'article_fragrance_description' => '974',
-    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
-    'url_key' => 'long-t-shirt-hm05518570021870084',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 54,
-      'product_id' => 30,
-      'stock_id' => 2,
-      'qty' => 0,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 10:07:01',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-), array (
-  'product_id' => 32,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM05518570021870085',
-  'name' => 'Long T-shirt',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'size' => '849',
-    'season_value' => '201807',
-    'article_pattern' => '901,893',
-    'article_license_company' => '913',
-    'article_license_item' => '968',
-    'article_fragrance_description' => '974',
-    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
-    'url_key' => 'long-t-shirt-hm05518570021870085',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 56,
-      'product_id' => 32,
-      'stock_id' => 2,
-      'qty' => 0,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 10:07:01',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-), array (
-  'product_id' => 34,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM05518570021870086',
-  'name' => 'Long T-shirt',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'size' => '849',
-    'season_value' => '201807',
-    'article_pattern' => '901,893',
-    'article_license_company' => '913',
-    'article_license_item' => '968',
-    'article_fragrance_description' => '974',
-    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
-    'url_key' => 'long-t-shirt-hm05518570021870086',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 58,
-      'product_id' => 34,
-      'stock_id' => 2,
-      'qty' => 0,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 10:07:01',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-), array (
-  'product_id' => 36,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM05518570021870087',
-  'name' => 'Long T-shirt',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'size' => '849',
-    'season_value' => '201807',
-    'article_pattern' => '901,893',
-    'article_license_company' => '913',
-    'article_license_item' => '968',
-    'article_fragrance_description' => '974',
-    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
-    'url_key' => 'long-t-shirt-hm05518570021870087',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 60,
-      'product_id' => 36,
-      'stock_id' => 2,
-      'qty' => 0,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 10:07:01',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-), array (
-  'product_id' => 38,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM05518570021870088',
-  'name' => 'Long T-shirt',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'size' => '849',
-    'season_value' => '201807',
-    'article_pattern' => '901,893',
-    'article_license_company' => '913',
-    'article_license_item' => '968',
-    'article_fragrance_description' => '974',
-    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
-    'url_key' => 'long-t-shirt-hm05518570021870088',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 62,
-      'product_id' => 38,
-      'stock_id' => 2,
-      'qty' => 0,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 10:07:01',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-), array (
-  'product_id' => 40,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM05518570021870089',
-  'name' => 'Long T-shirt',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'size' => '849',
-    'season_value' => '201807',
-    'article_pattern' => '901,893',
-    'article_license_company' => '913',
-    'article_license_item' => '968',
-    'article_fragrance_description' => '974',
-    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
-    'url_key' => 'long-t-shirt-hm05518570021870089',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 64,
-      'product_id' => 40,
-      'stock_id' => 2,
-      'qty' => 0,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 10:07:01',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-), array (
-  'product_id' => 42,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM05518570021870080',
-  'name' => 'Long T-shirt',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'size' => '849',
-    'season_value' => '201807',
-    'article_pattern' => '901,893',
-    'article_license_company' => '913',
-    'article_license_item' => '968',
-    'article_fragrance_description' => '974',
-    'asset_ids' => '66fa127bd74409c545b19de47f3127b142aafbbf,3d78441d1c59a81eb53d38fbeb6f17c540d93f7f',
-    'url_key' => 'long-t-shirt-hm05518570021870080',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 66,
-      'product_id' => 42,
-      'stock_id' => 2,
-      'qty' => 0,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 10:07:01',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-), array (
-  'product_id' => 44,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'Test Product 1',
-  'name' => 'Test Product 1',
-  'type' => 'simple',
-  'price' => '100.0000',
-  'special_price' => '0',
-  'final_price' => '100',
+  'final_price' => '12',
   'status' => 1,
   'visibility' => 1,
   'attributes' => 
   array (
-    'meta_title' => 'Test Product 1',
-    'meta_keyword' => 'Test Product 1',
-    'meta_description' => 'Test Product 1 ',
+    'meta_title' => 'Test Simple Product',
+    'meta_keyword' => 'Test Simple Product',
+    'meta_description' => 'Test Simple Product ',
     'options_container' => 'container2',
     'required_options' => '0',
     'has_options' => '0',
-    'product_activation_date' => '2017-10-04 00:00:00',
-    'url_key' => 'test-product-1',
+    'product_activation_date' => '2017-08-31 00:00:00',
+    'rgb_color' => 'FFFFFF',
+    'color_label' => 'Black',
+    'size' => '67',
+    'season_code' => '174',
+    'season_value' => '201704',
+    'aims_department' => 'ЕУЫЕ',
+    'article_visual_description' => 'Visual description',
+    'asset_ids' => '8d15a6f7dca7179b92ae8e39829bf483c87e1e79, 3b65688f4f614029cc307ad2fd02fceeae5d9d86',
+    'style_with' => '1231231,1231231',
+    'style_code' => '1231321',
+    'article_castor_id' => '1022',
+    'url_key' => 'test-simple-product',
     'tax_class_id' => '2',
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'composition' => '{"materials":{"paraffin":"80","wax":"20"},"container":{"materials":{"glass":"100"}}}',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '5',
+    1 => '6',
+    2 => '12',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 72,
+      'product_id' => 46,
+      'stock_id' => 2,
+      'qty' => 9997,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '3b65688f4f614029cc307ad2fd02fceeae5d9d86' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '3b65688f4f614029cc307ad2fd02fceeae5d9d86',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '2',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '3b/65/3b65688f4f614029cc307ad2fd02fceeae5d9d86.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0526434',
+              'ArticleId' => '004',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 55,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '550442001',
+  'name' => 'Hooded sweatshirt dress',
+  'type' => 'simple',
+  'price' => '19.9900',
+  'special_price' => '0',
+  'final_price' => '19.99',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'meta_title' => 'Hooded sweatshirt dress',
+    'meta_keyword' => 'Hooded sweatshirt dress',
+    'meta_description' => 'Hooded sweatshirt dress ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-09-11 00:00:00',
+    'season_code' => '001',
+    'season_value' => '001',
+    'url_key' => 'hooded-sweatshirt-dress',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
   ),
   'linked' => 
@@ -835,34 +165,37 @@ array (
   ),
   'categories' => 
   array (
-    0 => '4',
+    0 => '5',
+    1 => '8',
+    2 => '9',
   ),
   'extension' => 
   array (
     'stock_item' => 
     array (
-      'product_id' => 0,
+      'item_id' => 80,
+      'product_id' => 55,
       'stock_id' => 2,
-      'qty' => NULL,
-      'is_in_stock' => true,
+      'qty' => 10000,
+      'is_in_stock' => false,
       'is_qty_decimal' => false,
       'show_default_notification_message' => false,
-      'use_config_min_qty' => false,
+      'use_config_min_qty' => true,
       'min_qty' => 0,
-      'use_config_min_sale_qty' => 0,
-      'min_sale_qty' => 0,
-      'use_config_max_sale_qty' => false,
-      'max_sale_qty' => 0,
-      'use_config_backorders' => false,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
       'backorders' => 0,
-      'use_config_notify_stock_qty' => false,
-      'notify_stock_qty' => 0,
-      'use_config_qty_increments' => false,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
       'qty_increments' => 0,
-      'use_config_enable_qty_inc' => false,
+      'use_config_enable_qty_inc' => true,
       'enable_qty_increments' => false,
-      'use_config_manage_stock' => false,
-      'manage_stock' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
       'low_stock_date' => NULL,
       'is_decimal_divided' => false,
       'stock_status_changed_auto' => 0,
@@ -881,4 +214,2153 @@ array (
     ),
   ),
 ),
-);
+array (
+  'product_id' => 62,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'Test Products on Demo',
+  'name' => 'Test Products on Demo',
+  'type' => 'simple',
+  'price' => '500.0000',
+  'special_price' => '0',
+  'final_price' => '500',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'meta_title' => 'Test Products on Demo',
+    'meta_keyword' => 'Test Products on Demo',
+    'meta_description' => 'Test Products on Demo ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-09-13 00:00:00',
+    'product_collection' => '5',
+    'concept' => '16',
+    'washing_instructions' => '25',
+    'dry_cleaning_instructions' => '35',
+    'rgb_color' => '#12345',
+    'color_label' => 'Animal Print',
+    'size' => '49',
+    'article_castor_id' => '1017',
+    'url_key' => 'test-products-on-demo',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '5',
+    1 => '12',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 88,
+      'product_id' => 62,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-04 12:21:11',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 64,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM75440 6 08 3084',
+  'name' => 'Playsuit',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'color' => '2019',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 00:00:00',
+    'rgb_color' => '#FFFFFF',
+    'size' => '874',
+    'season_value' => '201706',
+    'asset_ids' => '02ef832083deb1586cb7bf16912a671e74260fd7',
+    'url_key' => 'playsuit-hm75440-6-08-3084',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'composition' => '{\\"\\":{\\"materials\\":{\\"viscose\\":\\"100.0\\"}}}',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '15',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 94,
+      'product_id' => 64,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '02ef832083deb1586cb7bf16912a671e74260fd7' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '02ef832083deb1586cb7bf16912a671e74260fd7',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '02/ef/02ef832083deb1586cb7bf16912a671e74260fd7.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0530293',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 65,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '0530293',
+  'name' => 'Playsuit',
+  'type' => 'configurable',
+  'price' => '10',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'short_description' => '<p>Playsuit in a patterned weave with frill trims and shoulder straps that fasten at the back. A seam at the waist, side pockets, a concealed zip in the side and wide legs with a double frill at the hems.</p>
+',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'concept' => '22',
+    'washing_instructions' => '27',
+    'aims_department' => 'HM1666',
+    'url_key' => 'playsuit-0530293',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_brand' => '2018',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '15',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 95,
+      'product_id' => 65,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' => 
+    array (
+    ),
+    'configurable_product_links' => 
+    array (
+      0 => 
+      array (
+        'id' => '64',
+        'sku' => 'HM75440 6 08 3084',
+      ),
+    ),
+    'configurable_product_options' => 
+    array (
+      0 => 
+      array (
+        'attribute_id' => '93',
+        'code' => 'color',
+        'label' => 'Color',
+        'position' => '0',
+        'values' => 
+        array (
+          0 => 
+          array (
+            'value_id' => '2019',
+            'label' => '08',
+          ),
+        ),
+      ),
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 66,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM75440 6 12',
+  'name' => 'Make-up bag',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'color' => '2021',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 00:00:00',
+    'rgb_color' => '#D4C5A8',
+    'size' => '853',
+    'season_value' => '201706',
+    'asset_ids' => 'b3e031565df9aa43d687d111799c0310ae51274a,f93f72bace66ff41fc8ab5afbedd68e872a8c9d7',
+    'url_key' => 'make-up-bag-hm75440-6-12',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'composition' => '{\\"\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}},\\"coating\\":{\\"materials\\":{\\"polyurethane\\":\\"100.0\\"}},\\"lining\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}}}',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '13',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 96,
+      'product_id' => 66,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      'b3e031565df9aa43d687d111799c0310ae51274a' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => 'b3e031565df9aa43d687d111799c0310ae51274a',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'b3/e0/b3e031565df9aa43d687d111799c0310ae51274a.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0553501',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'f93f72bace66ff41fc8ab5afbedd68e872a8c9d7' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => 'f93f72bace66ff41fc8ab5afbedd68e872a8c9d7',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'f9/3f/f93f72bace66ff41fc8ab5afbedd68e872a8c9d7.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0553501',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '1',
+            'Identifier' => 'L',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 67,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM75440 6 45',
+  'name' => 'Make-up bag',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'color' => '2020',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 00:00:00',
+    'rgb_color' => '#C34041',
+    'size' => '853',
+    'asset_ids' => '75a34ec4369031471cd3057a4d051956eaefda54,aac44329027c522bb639357b54ae7f6606e3c264',
+    'url_key' => 'make-up-bag-hm75440-6-45',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'composition' => '{\\"\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}},\\"coating\\":{\\"materials\\":{\\"polyurethane\\":\\"100.0\\"}},\\"lining\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}}}',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '13',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 97,
+      'product_id' => 67,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '75a34ec4369031471cd3057a4d051956eaefda54' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '75a34ec4369031471cd3057a4d051956eaefda54',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '75/a3/75a34ec4369031471cd3057a4d051956eaefda54.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0553501',
+              'ArticleId' => '005',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'aac44329027c522bb639357b54ae7f6606e3c264' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => 'aac44329027c522bb639357b54ae7f6606e3c264',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'aa/c4/aac44329027c522bb639357b54ae7f6606e3c264.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0553501',
+              'ArticleId' => '005',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '1',
+            'Identifier' => 'L',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 68,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM75440 6 53',
+  'name' => 'Make-up bag',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'color' => '2022',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 00:00:00',
+    'rgb_color' => '#755E61',
+    'size' => '853',
+    'season_value' => '201706',
+    'asset_ids' => '0fc5f920bdbf31222d2026d13713592241b100d7,e87ea5b5035b911a79c557556e0b33d29ee84117',
+    'url_key' => 'make-up-bag-hm75440-6-53',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'composition' => '{\\"\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}},\\"coating\\":{\\"materials\\":{\\"polyurethane\\":\\"100.0\\"}},\\"lining\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}}}',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '13',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 98,
+      'product_id' => 68,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '0fc5f920bdbf31222d2026d13713592241b100d7' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '0fc5f920bdbf31222d2026d13713592241b100d7',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '0f/c5/0fc5f920bdbf31222d2026d13713592241b100d7.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0553501',
+              'ArticleId' => '002',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'e87ea5b5035b911a79c557556e0b33d29ee84117' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => 'e87ea5b5035b911a79c557556e0b33d29ee84117',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'e8/7e/e87ea5b5035b911a79c557556e0b33d29ee84117.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0553501',
+              'ArticleId' => '002',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '1',
+            'Identifier' => 'L',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 69,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '0553501',
+  'name' => 'Make-up bag',
+  'type' => 'configurable',
+  'price' => '10',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'short_description' => '<p>Make-up bag in imitation leather with a zip at the top and decorative chain with a carabiner hook. Size of bag 7.5x14x22.5 cm.</p>
+',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'aims_department' => 'HM1116',
+    'url_key' => 'make-up-bag-0553501',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_brand' => '2018',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '13',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 99,
+      'product_id' => 69,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' => 
+    array (
+    ),
+    'configurable_product_links' => 
+    array (
+      0 => 
+      array (
+        'id' => '66',
+        'sku' => 'HM75440 6 12',
+      ),
+      1 => 
+      array (
+        'id' => '67',
+        'sku' => 'HM75440 6 45',
+      ),
+      2 => 
+      array (
+        'id' => '68',
+        'sku' => 'HM75440 6 53',
+      ),
+    ),
+    'configurable_product_options' => 
+    array (
+      0 => 
+      array (
+        'attribute_id' => '93',
+        'code' => 'color',
+        'label' => 'Color',
+        'position' => '0',
+        'values' => 
+        array (
+          0 => 
+          array (
+            'value_id' => '2021',
+            'label' => '12',
+          ),
+          1 => 
+          array (
+            'value_id' => '2020',
+            'label' => '45',
+          ),
+          2 => 
+          array (
+            'value_id' => '2022',
+            'label' => '53',
+          ),
+        ),
+      ),
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 70,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM59065 6 05',
+  'name' => 'Small mirror',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'color' => '2023',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 00:00:00',
+    'rgb_color' => '#B1A646',
+    'size' => '853',
+    'season_value' => '201706',
+    'asset_ids' => '4964908c08de3abf8948d494e7f14cd9895281d3',
+    'url_key' => 'small-mirror-hm59065-6-05',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'composition' => '{\\"frame\\":{\\"materials\\":{\\"metal\\":\\"100.0\\"}},\\"front\\":{\\"materials\\":{\\"glass\\":\\"100.0\\"}}}',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '14',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 100,
+      'product_id' => 70,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '4964908c08de3abf8948d494e7f14cd9895281d3' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '4964908c08de3abf8948d494e7f14cd9895281d3',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '49/64/4964908c08de3abf8948d494e7f14cd9895281d3.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0547344',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 71,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '0547344',
+  'name' => 'Small mirror',
+  'type' => 'configurable',
+  'price' => '10',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'short_description' => '<p>Small, round mirror with a fluted metal frame and a hook at the back for hanging. Screws not included. Diameter of mirror 12 cm, diameter of frame 22 cm.</p>
+',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-11 12:09:44',
+    'aims_department' => 'HM9132',
+    'url_key' => 'small-mirror-0547344',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_brand' => '2018',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '14',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 101,
+      'product_id' => 71,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' => 
+    array (
+    ),
+    'configurable_product_links' => 
+    array (
+      0 => 
+      array (
+        'id' => '70',
+        'sku' => 'HM59065 6 05',
+      ),
+    ),
+    'configurable_product_options' => 
+    array (
+      0 => 
+      array (
+        'attribute_id' => '93',
+        'code' => 'color',
+        'label' => 'Color',
+        'position' => '0',
+        'values' => 
+        array (
+          0 => 
+          array (
+            'value_id' => '2023',
+            'label' => '05',
+          ),
+        ),
+      ),
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 72,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM20329 5 09 6266',
+  'name' => 'Leather ankle boots',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 00:00:00',
+    'size' => '41',
+    'season_value' => '201706',
+    'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'url_key' => 'leather-ankle-boots-hm20329-5-09-6266',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '12',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 102,
+      'product_id' => 72,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '3',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '8',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 73,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM20329 5 09 6276',
+  'name' => 'Leather ankle boots',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 13:27:13',
+    'size' => '43',
+    'season_value' => '201706',
+    'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'url_key' => 'leather-ankle-boots-hm20329-5-09-6276',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '12',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 103,
+      'product_id' => 73,
+      'stock_id' => 2,
+      'qty' => 9999,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '3',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '8',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 74,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM20329 5 09 7026',
+  'name' => 'Leather ankle boots',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 13:28:18',
+    'size' => '2026',
+    'season_value' => '201706',
+    'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'url_key' => 'leather-ankle-boots-hm20329-5-09-7026',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '12',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 104,
+      'product_id' => 74,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '3',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '8',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 75,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM20329 5 09 7036',
+  'name' => 'Leather ankle boots',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 13:27:42',
+    'size' => '2025',
+    'season_value' => '201706',
+    'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'url_key' => 'leather-ankle-boots-hm20329-5-09-7036',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '12',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 105,
+      'product_id' => 75,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '3',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '8',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 76,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM20329 5 09 8854',
+  'name' => 'Leather ankle boots',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 00:00:00',
+    'size' => '101',
+    'season_value' => '201706',
+    'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'url_key' => 'leather-ankle-boots-hm20329-5-09-8854',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+    0 => 
+    array (
+      'linked_sku' => 'Test Simple Product',
+      'linked_type' => 'simple',
+      'type' => 'crosssell',
+      'main_sku' => 'HM20329 5 09 8854',
+      'position' => 1,
+      'extension' => 
+      array (
+      ),
+    ),
+    1 => 
+    array (
+      'linked_sku' => 'HM20329 5 09 6976',
+      'linked_type' => 'simple',
+      'type' => 'crosssell',
+      'main_sku' => 'HM20329 5 09 8854',
+      'position' => 2,
+      'extension' => 
+      array (
+      ),
+    ),
+  ),
+  'categories' => 
+  array (
+    0 => '5',
+    1 => '12',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 106,
+      'product_id' => 76,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '3',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '8',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 77,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM20329 5 09 6976',
+  'name' => 'Leather ankle boots',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' => 
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 13:26:45',
+    'size' => '42',
+    'season_value' => '201706',
+    'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'url_key' => 'leather-ankle-boots-hm20329-5-09-6976',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '12',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 107,
+      'product_id' => 77,
+      'stock_id' => 2,
+      'qty' => 9999,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-09 22:35:36',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+    'assets' => 
+    array (
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '3',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      array (
+        'Data' => 
+        array (
+          'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' => 
+          array (
+            'Article' => 
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' => 
+          array (
+            'Facing' => '8',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 78,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '0512631',
+  'name' => 'Leather ankle boots',
+  'type' => 'configurable',
+  'price' => '10',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'short_description' => '<p>PREMIUM QUALITY. Leather ankle boots with a decorative welt seam round the soles, lacing at the front and a visible zip at the back. Fabric linings and insoles and chunky rubber soles. Heel 11 cm.</p>
+',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-10 00:00:00',
+    'aims_department' => 'HM3529',
+    'product_quality' => '892',
+    'url_key' => 'leather-ankle-boots-0512631',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_brand' => '2018',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '12',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 108,
+      'product_id' => 78,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' => 
+    array (
+    ),
+    'configurable_product_links' => 
+    array (
+      0 => 
+      array (
+        'id' => '72',
+        'sku' => 'HM20329 5 09 6266',
+      ),
+      1 => 
+      array (
+        'id' => '77',
+        'sku' => 'HM20329 5 09 6976',
+      ),
+      2 => 
+      array (
+        'id' => '73',
+        'sku' => 'HM20329 5 09 6276',
+      ),
+      3 => 
+      array (
+        'id' => '75',
+        'sku' => 'HM20329 5 09 7036',
+      ),
+      4 => 
+      array (
+        'id' => '74',
+        'sku' => 'HM20329 5 09 7026',
+      ),
+      5 => 
+      array (
+        'id' => '76',
+        'sku' => 'HM20329 5 09 8854',
+      ),
+    ),
+    'configurable_product_options' => 
+    array (
+      0 => 
+      array (
+        'attribute_id' => '126',
+        'code' => 'size',
+        'label' => 'Size',
+        'position' => '0',
+        'values' => 
+        array (
+          0 => 
+          array (
+            'value_id' => '41',
+            'label' => '4',
+          ),
+          1 => 
+          array (
+            'value_id' => '42',
+            'label' => '5',
+          ),
+          2 => 
+          array (
+            'value_id' => '43',
+            'label' => '6',
+          ),
+          3 => 
+          array (
+            'value_id' => '2025',
+            'label' => '75',
+          ),
+          4 => 
+          array (
+            'value_id' => '2026',
+            'label' => '65',
+          ),
+          5 => 
+          array (
+            'value_id' => '101',
+            'label' => '35',
+          ),
+        ),
+      ),
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+));
