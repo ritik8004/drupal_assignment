@@ -28,13 +28,15 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
   </a>
   {% if content.promotions %}
-    <div class="promotions">
+    <div class="promotions above-mobile-block">
       {{ content.promotions }}
     </div>
   {% endif %}
 
   {% if content.stock_placeholder %}
-    {{ content.stock_placeholder }}
+    <div class="above-mobile-block">
+      {{ content.stock_placeholder }}
+    </div>
   {% endif %}
 
   <table class="mobile--only--sell">
