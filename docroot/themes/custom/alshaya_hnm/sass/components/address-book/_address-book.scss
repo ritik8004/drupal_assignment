@@ -486,16 +486,16 @@
   .select2-selection__arrow {
     top: 1px;
     #{$right}: 1px;
-    width: 33px;
-    height: 33px;
+    width: 2.063rem;
+    height: 2.063rem;
     background: $white-five;
 
     &::after {
       font-size: 1.7rem;
       top: 0;
       #{$left}: 0;
-      width: 33px;
-      height: 33px;
+      width: 2.063rem;
+      height: 2.063rem;
     }
   }
 
@@ -520,8 +520,8 @@
       position: absolute;
       top: 0;
       #{$left}: 0;
-      width: 33px;
-      height: 33px;
+      width: 2.063rem;
+      height: 2.063rem;
     }
 
     b {
