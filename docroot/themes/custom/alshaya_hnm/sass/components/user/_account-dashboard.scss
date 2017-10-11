@@ -5,11 +5,7 @@
 
   .subtitle {
     border-bottom: 1px solid $white;
-    font-weight: 700;
-    margin-bottom: 1.313rem;
-    font-family: $alshaya-bold;
     font-size: 1rem;
-    color: $marine-blue;
 
     @include breakpoint($tablet) {
       font-size: 0.875rem;

@@ -996,7 +996,7 @@
   }
 
   .c-order-help .field--name-body {
-    color: $windows-blue;
+    color: $white-five;
     overflow: hidden;
     font-size: 0;
 
@@ -1047,11 +1047,9 @@
     }
 
     a {
-      color: $windows-blue;
-
-      &:hover {
-        text-decoration: underline;
-      }
+      color: $white-five;
+      font-family: $hnm-regular;
+      text-decoration: underline;
     }
 
     li {
@@ -1090,7 +1088,8 @@
 
     p {
       font-size: 0.8125rem;
-      font-weight: 700;
+      font-family: $hnm-bold;
+      font-weight: normal;
       line-height: 1.56rem;
 
       @include breakpoint($desktop) {
@@ -1119,7 +1118,7 @@
   }
 
   .c-order-help .field--name-body {
-    background: $pale-grey;
+    background: $info;
     margin-top: 1.5rem;
     margin-bottom: 2rem;
     padding: 1.25rem 1rem;
