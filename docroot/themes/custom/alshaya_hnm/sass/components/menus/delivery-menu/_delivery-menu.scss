@@ -15,8 +15,7 @@
   margin-#{$left}: auto;
   margin-#{$right}: auto;
   width: 100%;
-  border: 1px solid $cerulean-two;
-  box-shadow: 5px 5px 0 0 $shadow;
+  border: 2px solid $link-hover;
   position: relative;
   line-height: normal;
 
@@ -65,12 +64,12 @@
   }
 
   .field--name-field-sub-title {
-    font-size: 12px;
+    font-size: 0.75rem;
     font-family: $alshaya-thin;
     color: $cerulean-two;
 
     @include breakpoint($only-mobile) {
-      font-size: 10px;
+      font-size: 0.625rem;
     }
   }
 
@@ -80,7 +79,10 @@
   }
 
   .c-delivery-menu__title {
-    font-family: $alshaya-bold;
+    font-family: $hnm-demibold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: $link-hover;
     font-size: 1.125rem;
 
     @include breakpoint($only-mobile) {
@@ -88,11 +90,13 @@
     }
 
     a {
-      color: $cerulean-two;
+      color: $link-hover;
     }
 
     .c-delivery-menu__description {
-      font-family: $alshaya-thin;
+      font-family: $hnm-regular;
+      letter-spacing: 0.5px;
+      text-transform: capitalize;
       font-size: 0.75rem;
       margin-top: -1px;
 
