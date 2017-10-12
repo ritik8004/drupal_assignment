@@ -48,7 +48,7 @@ class AlshayaSrpSortSettingsForm extends ConfigFormBase {
         'final_price' => $this->t('Price'),
       ],
       '#title' => $this->t('Sort options'),
-      '#description' => $this->t('Enabled sort options will show on SRP page. Relevance option cannot be changed.'),
+      '#description' => $this->t('Enabled sort options will show on SRP page. NOTE: Relevance option cannot be disable for search page.'),
       '#default_value' => $config->get('sort_options'),
     ];
     return $form;
