@@ -11,6 +11,10 @@
  * Configure image toolkit.
  */
 function alshaya_image_styles_update_8001() {
+  if (!\Drupal::moduleHandler()->moduleExists('imagemagick')) {
+    \Drupal::service('module_installer')->install(['imagemagick']);
+  }
+
   _alshaya_image_styles_configure_image_toolkit();
 }
 
@@ -25,24 +29,13 @@ function alshaya_image_styles_install() {
  * Helper function to configure image toolkit.
  */
 function _alshaya_image_styles_configure_image_toolkit() {
-  // Set jpeg quality setting to 100%.
   \Drupal::configFactory()
-    ->getEditable('system.image.gd')
-    ->set('jpeg_quality', 100)
+    ->getEditable('system.image')
+    ->set('toolkit', 'imagemagick')
     ->save();
 
-  // Enable and set imagemagick as default on cloud.
-  if (isset($_ENV['AH_SITE_NAME'])) {
-    \Drupal::service('module_installer')->install(['imagemagick']);
-
-    \Drupal::configFactory()
-      ->getEditable('system.image')
-      ->set('toolkit', 'imagemagick')
-      ->save();
-
-    \Drupal::configFactory()
-      ->getEditable('imagemagick.settings')
-      ->set('quality', 100)
-      ->save();
-  }
+  \Drupal::configFactory()
+    ->getEditable('imagemagick.settings')
+    ->set('quality', 100)
+    ->save();
 }
