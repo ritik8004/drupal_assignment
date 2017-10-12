@@ -2,7 +2,7 @@
 
 .view-product-list__item {
   width: 48.67%;
-  margin-bottom: 0.875rem;
+  margin-bottom: 0.5rem;
 
   @include breakpoint($upto-palm) {
     &:nth-of-type(odd) {
