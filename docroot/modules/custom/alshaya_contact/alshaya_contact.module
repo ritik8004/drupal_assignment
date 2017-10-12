@@ -5,19 +5,7 @@
  * Module file.
  */
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function alshaya_contact_webform_submission_presave(EntityInterface $entity) {
-  if ($entity->bundle() == 'alshaya_contact') {
-    $data = $entity->getData();
-    $data['mobile_number'] = $data['mobile_number']['value'];
-    $entity->setData($data);
-  }
-}
 
 /**
  * Implements hook_alshaya_i18n_onetime_translation_add().

@@ -99,7 +99,7 @@
 <tr>
 	<td>type</td>
 	<td>//input[starts-with(@id,&quot;edit-field-slider-0-subform-field-banner-0-upload&quot;)]</td>
-	<td>~/Downloads/Alshaya_Selenium_Scripts/hero-banner@3x.png</td>
+	<td>~/Downloads/Alshaya_Selenium_Scripts/1920-x-424-heros-com-site-01@3x.jpg</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -129,7 +129,7 @@
 <tr>
 	<td>type</td>
 	<td>//input[starts-with(@id,&quot;edit-field-slider-1-subform-field-banner-0-upload&quot;)]</td>
-	<td>~/Downloads/Alshaya_Selenium_Scripts/1284-x-424-main-carousel_0.png</td>
+	<td>~/Downloads/Alshaya_Selenium_Scripts/1920-x-424-heros-com-site-01@3x 2.jpg</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -154,7 +154,7 @@
 <tr>
 	<td>type</td>
 	<td>//input[starts-with(@id,&quot;edit-field-slider-2-subform-field-banner-0-upload&quot;)]</td>
-	<td>~/Downloads/Alshaya_Selenium_Scripts/hp-eoss-lctb-10042017-en-v1.png</td>
+	<td>~/Downloads/Alshaya_Selenium_Scripts/1920-x-424-heros-com-site-01@3x 3.jpg</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -165,31 +165,6 @@
 	<td>type</td>
 	<td>//input[starts-with(@id,&quot;edit-field-slider-2-subform-field-banner-0-alt&quot;)]</td>
 	<td>Promo</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>//input[starts-with(@id,&quot;edit-field-slider-add-more-add-more-button-banner&quot;)]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//input[starts-with(@id,&quot;edit-field-slider-3-subform-field-banner-0-upload&quot;)]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>//input[starts-with(@id,&quot;edit-field-slider-3-subform-field-banner-0-upload&quot;)]</td>
-	<td>~/Downloads/Alshaya_Selenium_Scripts/hp-heroslider-kerry-25082016-en-v1.jpg</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//input[starts-with(@id,&quot;edit-field-slider-3-subform-field-banner-0-alt&quot;)]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>//input[starts-with(@id,&quot;edit-field-slider-3-subform-field-banner-0-alt&quot;)]</td>
-	<td>Another promo</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -214,7 +189,7 @@
 <tr>
 	<td>type</td>
 	<td>//input[starts-with(@id,&quot;edit-field-promo-blocks-0-subform-field-promo-block-0-subform-field-banner-0-upload&quot;)]</td>
-	<td>~/Downloads/Alshaya_Selenium_Scripts/1026-x-288-banners-1_0.png</td>
+	<td>~/Downloads/Alshaya_Selenium_Scripts/1920-x-424-heros-com-site-01 copy 2.png</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>

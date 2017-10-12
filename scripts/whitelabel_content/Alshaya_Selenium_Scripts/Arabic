@@ -58,7 +58,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=(//button[@type='button'])[7]</td>
+	<td>xpath=(//button[@type='button'])[6]</td>
 	<td></td>
 </tr>
 <tr>
@@ -93,7 +93,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=(//button[@type='button'])[8]</td>
+	<td>xpath=(//button[@type='button'])[7]</td>
 	<td></td>
 </tr>
 <tr>
@@ -387,13 +387,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>id=toolbar-link-system-admin_config</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='block-seven-content']/div/div[3]/div[4]/div/ul/li[6]/a/span</td>
+	<td>open</td>
+	<td>en/admin/config/regional/translate</td>
 	<td></td>
 </tr>
 <tr>
@@ -409,6 +404,76 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>id=edit-submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[starts-with(@id,&quot;edit-strings&quot;)and contains(@id,&quot;translations-0&quot;)]</td>
+	<td>الإجمالي: قطعة</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[starts-with(@id,&quot;edit-strings&quot;)and contains(@id,&quot;translations-1&quot;)]</td>
+	<td>الإجمالي: لا يوجد أي قطع</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[starts-with(@id,&quot;edit-strings&quot;)and contains(@id,&quot;translations-2&quot;)]</td>
+	<td>الإجمالي: قطعتان</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[starts-with(@id,&quot;edit-strings&quot;)and contains(@id,&quot;translations-3&quot;)]</td>
+	<td>الإجمالي:&nbsp;&nbsp;@count قطع</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[starts-with(@id,&quot;edit-strings&quot;)and contains(@id,&quot;translations-4&quot;)]</td>
+	<td>الإجمالي:&nbsp;&nbsp;@count قطعة</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=edit-submit--2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-string</td>
+	<td>@count items</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=edit-submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[starts-with(@id,&quot;edit-strings&quot;)and contains(@id,&quot;translations-0&quot;)]</td>
+	<td>قطعة</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[starts-with(@id,&quot;edit-strings&quot;)and contains(@id,&quot;translations-1&quot;)]</td>
+	<td>لا يوجد أي قطع</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[starts-with(@id,&quot;edit-strings&quot;)and contains(@id,&quot;translations-2&quot;)]</td>
+	<td>قطعتان</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[starts-with(@id,&quot;edit-strings&quot;)and contains(@id,&quot;translations-3&quot;)]</td>
+	<td>@count قطع</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//textarea[starts-with(@id,&quot;edit-strings&quot;)and contains(@id,&quot;translations-4&quot;)]</td>
+	<td>@count قطعة</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=edit-submit--2</td>
 	<td></td>
 </tr>
 </tbody></table>

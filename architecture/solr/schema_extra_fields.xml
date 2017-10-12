@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<fields>
+  <!-- Define dynamic fields per language. -->
+  <dynamicField name="ts_X3b_ar_*" type="text_ar" stored="true" indexed="true" multiValued="false" termVectors="true"  />
+  <dynamicField name="tm_X3b_ar_*" type="text_ar" stored="true" indexed="true" multiValued="true" termVectors="true"  />
+  <dynamicField name="ts_X3b_en_*" type="text_en" stored="true" indexed="true" multiValued="false" termVectors="true"  />
+  <dynamicField name="tm_X3b_en_*" type="text_en" stored="true" indexed="true" multiValued="true" termVectors="true"  />
+  <dynamicField name="ts_X3b_und_*" type="text_und" stored="true" indexed="true" multiValued="false" termVectors="true"  />
+  <dynamicField name="tm_X3b_und_*" type="text_und" stored="true" indexed="true" multiValued="true" termVectors="true"  />
+
+  <!-- Define spellcheck fields per language. These types don't stem the words. -->
+  <field name="spell_ar" type="text_spell_ar" indexed="true" stored="true" multiValued="true" />
+  <field name="spell_en" type="text_spell_en" indexed="true" stored="true" multiValued="true" />
+
+  <!-- Copy the contents of the multilingual fields into the spellcheck fields by language. -->
+  <copyField source="ts_X3b_ar_*" dest="spell_ar"/>
+  <copyField source="tm_X3b_ar_*" dest="spell_ar"/>
+  <copyField source="ts_X3b_en_*" dest="spell_en"/>
+  <copyField source="tm_X3b_en_*" dest="spell_en"/>
+</fields>

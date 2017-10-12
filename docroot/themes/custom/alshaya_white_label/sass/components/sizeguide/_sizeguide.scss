@@ -58,7 +58,7 @@
   left: 0 !important;
   background: rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  z-index: 9;
+  z-index: 999;
 
   .ui-dialog-title {
     @include u-visibility(none);

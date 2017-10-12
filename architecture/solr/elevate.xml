@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+ This file allows you to boost certain search items to the top of search
+ results. You can find out an item's ID by searching directly on the Solr
+ server.
+
+ See http://wiki.apache.org/solr/QueryElevationComponent for more information.
+-->
+
+<elevate>
+    <!--
+        The following example shows how to add elevated search pages.
+
+        Format:
+
+        <query text="&quot;[search terms]&quot;">
+            <doc id="[Solr site hash]-acquia_search_index-entity:node/[node id]:[language code]" />
+        </query>
+
+        Example:
+
+        <query text="&quot;black&quot;">
+            <doc id="1u5v57-acquia_search_index-entity:node/7:en" />
+            <doc id="1u5v57-acquia_search_index-entity:node/5:en" />
+        </query>
+
+        Search terms: The text is the search term wrapped in quotes `&quot;`.
+
+        Solr site hash: This is a unique hash per site generated on site install. You can find this hash in the Drupal configuration system. The `search_api_solr.settings` configuration object with the `site_hash` key stores this value. The configuration file would be `search_api_solr.settings.yml`.
+
+            Using Drush, you can obtain this value with
+            `drush @alshaya.local config-get search_api_solr.settings site_hash`
+
+            Using Drush, you can set this value (ex: abc123) with
+            `drush @alshaya.local config-set search_api_solr.settings site_hash abc123`
+
+        Node id: This is the Drupal node ID for the content. This can be seen in the URL when editing a page.
+
+        Language code: This is the language code (typically 2 characters) for the content. `en` for English and `ar` for Arabic.
+
+        Note: When Drupal builds a search query, it uses the q (query text) and qf (query field) parameters. Using a different method may not use the same configurations and you may not see search terms elevated.
+        Ex: `q=%22example%22&qf=ts_X3b_en_title`.
+    -->
+
+    <!--
+    <query text="&quot;black&quot;">
+        <doc id="1u5v57-acquia_search_index-entity:node/7:en" />
+        <doc id="1u5v57-acquia_search_index-entity:node/5:en" />
+    </query>
+    -->
+
+    <!-- Multiple <query> elements can be specified, contained in one <elevate>. -->
+    <!-- <query text="...">...</query> -->
+</elevate>

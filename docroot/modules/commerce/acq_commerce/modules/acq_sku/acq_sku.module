@@ -9,6 +9,7 @@
  */
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Render\Element;
 use Drupal\acq_commerce\Conductor\ConductorException;
 
@@ -149,6 +150,11 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
       // Get the stock.
       $stock = $api_wrapper->skuStockCheck($sku_entity->getSku());
 
+      // Magento uses additional flag as well for out of stock.
+      if (isset($stock['is_in_stock']) && empty($stock['is_in_stock'])) {
+        $stock['quantity'] = 0;
+      }
+
       // If cache multiplier is zero we don't cache the stock.
       if ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
         $default_cache_lifetime = $stock['quantity'] ? $stock['quantity'] * $cache_multiplier : $cache_multiplier;
@@ -169,4 +175,21 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
   }
 
   return $stock;
+}
+
+/**
+ * Clear stock cache of particular SKU.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+ *   SKU Entity object.
+ */
+function acq_sku_clear_sku_stock_cache(SKU $sku_entity) {
+  foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
+    $sku_entity_to_reset_stock = $sku_entity->getTranslation($langcode);
+    $cid = acq_sku_get_stock_cache_id($sku_entity_to_reset_stock);
+    \Drupal::cache('stock')->invalidate($cid);
+  }
+
+  // Clear product and forms related to sku.
+  Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
 }
