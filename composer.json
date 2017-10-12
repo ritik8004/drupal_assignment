@@ -168,7 +168,7 @@
                 "MMCPA-2433" : "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
             },
             "drupal/password_policy" : {
-                "Code logic will never reset password expiry - update" : "https://www.drupal.org/files/issues/2867089-8.patch"
+                "Code logic will never reset password expiry - update" : "https://www.drupal.org/files/issues/2867089-9.patch"
             },
             "drupal/sharethis" : {
                 "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"

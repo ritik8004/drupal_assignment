@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "96688dbb33a71e8b94040d4005e8dc9e",
+    "content-hash": "cb321968354ef3d8908861528aa00c0b",
     "packages": [
         {
             "name": "acquia/blt",
@@ -5933,7 +5933,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-8.patch"
+                    "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
