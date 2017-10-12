@@ -60,7 +60,8 @@
         "drupal/kashmir": "^1.1",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "drupal/autologout": "^1.0",
-        "drupal/block_content_machine_name": "^1.2"
+        "drupal/block_content_machine_name": "^1.2",
+        "drupal/imagemagick": "~2.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
