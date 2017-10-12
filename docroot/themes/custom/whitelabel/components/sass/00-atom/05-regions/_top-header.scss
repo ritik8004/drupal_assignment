@@ -3,7 +3,7 @@
 
   @include breakpoint($upto-palm) {
     position: fixed;
-    z-index: 999;
+    z-index: $z-50;
     top: 0;
     width: 100%;
   }
@@ -13,3 +13,10 @@
   }
 }
 
+.toolbar-vertical {
+  .region-top-header {
+    @include breakpoint($upto-palm) {
+      top: 2.4375rem;
+    }
+  }
+}

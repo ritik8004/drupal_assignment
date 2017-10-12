@@ -195,3 +195,17 @@ html[dir=rtl] {
     }
   }
 }
+
+.toolbar-vertical {
+  .vertical-layout .navigation__sub-menu {
+    @include breakpoint($upto-palm) {
+      margin-top: 5.4rem;
+    }
+  }
+
+  .menu-close {
+    @include breakpoint($upto-palm) {
+      top: 2.625rem;
+    }
+  }
+}
