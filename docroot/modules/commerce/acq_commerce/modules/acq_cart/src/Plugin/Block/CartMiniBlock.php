@@ -68,7 +68,7 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
   public function getCacheContexts() {
     // Cart will be different for every session, even guests will have session
     // as soon as they add something to cart.
-    return Cache::mergeContexts(parent::getCacheContexts(), ['session']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['cookies:Drupal_visitor_acq_cart_id']);
   }
 
   /**
@@ -83,7 +83,9 @@ class CartMiniBlock extends BlockBase implements ContainerFactoryPluginInterface
     if ($cart = $this->cartStorage->getCart(FALSE)) {
       // Custom cache tag here will be cleared in API Wrapper after every
       // update cart call.
-      $cache_tags = Cache::mergeTags($cache_tags, ['mini_cart_' . $cart->id()]);
+      $cache_tags = Cache::mergeTags($cache_tags, [
+        'cart_' . $cart->id(),
+      ]);
     }
 
     return $cache_tags;

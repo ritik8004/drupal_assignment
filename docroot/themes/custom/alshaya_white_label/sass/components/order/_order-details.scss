@@ -103,14 +103,6 @@
     font-weight: 700;
   }
 
-  .upcase.dark {
-    padding-#{$left}: 1.375rem;
-
-    html[lang=ar] & {
-      padding-#{$left}: 0;
-    }
-  }
-
   .font-small {
     font-size: 0.75rem;
   }
@@ -599,8 +591,9 @@
     .delivery-charge-row,
     .total-row {
       td.right--align {
-        padding-#{$right}: 2.5rem !important;
-        padding-#{$left}: 0 !important;
+        @include breakpoint($only-tablet) {
+          min-width: 8rem;
+        }
       }
     }
   }

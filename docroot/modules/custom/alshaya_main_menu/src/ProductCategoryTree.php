@@ -156,11 +156,10 @@ class ProductCategoryTree {
    *   Highlight image array.
    */
   protected function getHighlightImage(TermInterface $term) {
-    $highlight_images = [];
+    // Get the current language code.
+    $language = $this->languageManager->getCurrentLanguage()->getId();
 
-    if ($highlight_image_cache = \Drupal::cache(self::CACHE_BIN)->get('highlights_' . $term->id())) {
-      return $highlight_image_cache->data;
-    }
+    $highlight_images = [];
 
     if ($highlight_field = $term->get('field_main_menu_highlight')) {
 
@@ -174,9 +173,6 @@ class ProductCategoryTree {
 
         // Load paragraph entity.
         $paragraph = Paragraph::load($paragraph_id);
-
-        // Get the current language code.
-        $language = $this->languageManager->getCurrentLanguage()->getId();
 
         // Get the translation of the paragraph if exists.
         if ($paragraph->hasTranslation($language)) {
@@ -198,8 +194,6 @@ class ProductCategoryTree {
         }
       }
     }
-
-    \Drupal::cache(self::CACHE_BIN)->set('highlights_' . $term->id(), $highlight_images, Cache::PERMANENT, ['taxonomy_term:' . $term->id()]);
 
     return $highlight_images;
   }

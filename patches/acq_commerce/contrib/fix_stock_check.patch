@@ -94,3 +94,16 @@ index 8df596b91..fcab6790a 100644
 +  // Clear product and forms related to sku.
 +  Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
 +}
+diff --git a/modules/acq_sku/acq_sku.module b/modules/acq_sku/acq_sku.module
+index fcab6790a..02482fc9e 100644
+--- a/modules/acq_sku/acq_sku.module
++++ b/modules/acq_sku/acq_sku.module
+@@ -137,7 +137,7 @@ function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
+     $cache = \Drupal::cache('stock')->get($cid);
+ 
+     // If information is cached.
+-    if ($reset && !empty($cache)) {
++    if (!$reset && !empty($cache)) {
+       $stock = $cache->data;
+     }
+     else {
