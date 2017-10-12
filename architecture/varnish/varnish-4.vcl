@@ -118,6 +118,15 @@ sub vcl_recv {
     # Set header so we know to remove Set-Cookie later on.
     set req.http.X-static-asset = "True";
   }
+  # Always remove cookies for the requests common for both anonymous and logged in users.
+  # We expect cacheable keyword anywhere in query string (after ?) for the rule to pass.
+  else if (req.url ~ "(?i)/(.*)\?(.*)(cacheable)(.*)?$") {
+    # Removing cookies will ensure it is always processed as anonymous.
+    unset req.http.Cookie;
+    # Set header so we know to remove Set-Cookie later on.
+    # Re-using the variable to reduce custom code.
+    set req.http.X-static-asset = "True";
+  }
 
   # Don't check cache for cron.php
   if (req.url ~ "^/cron.php") {

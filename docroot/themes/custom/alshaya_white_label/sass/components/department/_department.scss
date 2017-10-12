@@ -16,6 +16,15 @@
       width: 100%;
     }
   }
+
+  .c-category-list {
+    &__item {
+      a {
+        color: $cerulean-two;
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
 .nodetype--department_page {

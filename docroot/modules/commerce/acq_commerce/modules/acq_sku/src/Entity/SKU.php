@@ -8,6 +8,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\Entity\File;
 use Drupal\user\UserInterface;
 
@@ -595,7 +596,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
           throw new \RuntimeException('Field type not defined yet, please contact TA.');
         }
 
-        $field->setLabel($field_info['label']);
+        $field->setLabel(new TranslatableMarkup($field_info['label']));
 
         // Update cardinality with default value if empty.
         $field_info['description'] = empty($field_info['description']) ? 1 : $field_info['description'];
