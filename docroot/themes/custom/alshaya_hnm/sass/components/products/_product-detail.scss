@@ -1767,16 +1767,17 @@ article.product-out-of-stock {
 }
 
 .fake-apply-button {
-  font-family: $alshaya-bold;
+  font-family: $hnm-bold;
   display: inline-block;
   margin-bottom: 0.875rem;
-  padding: 0.3625rem 1.875rem 0.5625rem;
-  background: $pumpkin-orange;
-  color: $white-four !important;
+  padding: 0.5rem 0.875rem;
+  background: $hnm-black-two;
+  color: $white-five !important;
   cursor: pointer;
   margin-#{$left}: 1rem;
   font-size: 0.75rem;
   border: 0;
+  text-transform: uppercase;
 }
 
 .filter-menu-label {
@@ -1828,6 +1829,17 @@ html[lang=ar] {
     a {
       font-weight: bold;
       color: $cerulean-two;
+    }
+  }
+}
+
+.filter-menu-label {
+  .clear-all-fake {
+    &.inactive {
+      @include breakpoint($only-mobile) {
+        margin-left: 0;
+        width: 6rem;
+      }
     }
   }
 }

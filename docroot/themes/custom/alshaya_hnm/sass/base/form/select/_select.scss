@@ -120,7 +120,6 @@ select:focus::-ms-value {
       #{$right}: 1px;
       text-align: center;
       display: inline-block;
-      background: $white-five;
     }
   }
 }
@@ -135,12 +134,13 @@ select:focus::-ms-value {
 
   ul.select2-results__options {
     li.select2-results__option {
-      color: $grey-ash;
+      color: $hnm-black-two;
       font-size: 0.875rem;
       padding: 0.625rem;
       border-bottom: 1px solid $white;
       text-transform: uppercase;
       font-family: $hnm-regular;
+      letter-spacing: 1px;
 
       &:first-child {
         border-top: 1px solid $white;
