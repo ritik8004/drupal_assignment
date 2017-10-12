@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_acm_checkout;
 
 use Drupal\acq_cart\CartStorageInterface;
-use Drupal\alshaya_acm\ApiHelper;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -17,11 +17,11 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 class CheckoutOptionsManager {
 
   /**
-   * API Helper object.
+   * API Wrapper object.
    *
-   * @var \Drupal\alshaya_acm\ApiHelper
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
    */
-  protected $apiHelper;
+  protected $apiWrapper;
 
   /**
    * The cart storage service.
@@ -58,8 +58,8 @@ class CheckoutOptionsManager {
    *   EntityTypeManager object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\alshaya_acm\ApiHelper $api_helper
-   *   API Helper object.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   ApiWrapper object.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   Cart Storage service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
@@ -67,10 +67,10 @@ class CheckoutOptionsManager {
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language Manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, ApiHelper $api_helper, CartStorageInterface $cart_storage, LoggerChannelFactoryInterface $logger_factory, LanguageManagerInterface $languageManager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, APIWrapper $api_wrapper, CartStorageInterface $cart_storage, LoggerChannelFactoryInterface $logger_factory, LanguageManagerInterface $languageManager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->configFactory = $config_factory;
-    $this->apiHelper = $api_helper;
+    $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
     $this->languageManager = $languageManager;
@@ -350,7 +350,7 @@ class CheckoutOptionsManager {
     $shipping_method_options = [];
 
     if (!empty($address) && !empty($address['country_id'])) {
-      $shipping_methods = $this->apiHelper->getShippingEstimates($address);
+      $shipping_methods = $this->apiWrapper->getShippingEstimates($cart->id(), $address);
     }
 
     if (!empty($shipping_methods)) {
