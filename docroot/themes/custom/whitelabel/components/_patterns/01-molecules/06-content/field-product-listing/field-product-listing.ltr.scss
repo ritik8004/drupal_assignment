@@ -52,7 +52,7 @@
   header {
     float: direction(right);
     color: $brownish-grey;
-    padding-top: 1.6rem;
+    padding-top: 1.75rem;
     font-size: 1rem;
 
     @include breakpoint($lap) {
@@ -68,7 +68,7 @@
     clear: both;
 
     @include breakpoint($upto-palm) {
-      padding-top: 0.875rem;
+      padding-top: 0.65rem;
     }
 
     @include breakpoint($above-palm) {

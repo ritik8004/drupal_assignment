@@ -17,6 +17,7 @@
     width: 64.583%;
     padding-top: 1rem;
     padding-#{direction(left)}: 6%;
+    padding-bottom: 0.5625rem;
   }
 
   @include breakpoint($desk) {
