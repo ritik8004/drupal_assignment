@@ -730,8 +730,9 @@ function _alshaya_acm_product_get_size_guide_link() {
  *   SKU is buyable or not.
  */
 function alshaya_acm_product_is_buyable(SKU $sku_entity) {
+  $all_products_buyable = \Drupal::config('alshaya_acm_product.settings')->get('all_products_buyable');
   // For now we have only one condition, we may have more in future.
-  return (bool) $sku_entity->get('attr_is_buyable')->getString();
+  return $all_products_buyable || (bool) $sku_entity->get('attr_is_buyable')->getString();
 }
 
 /**

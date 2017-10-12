@@ -32,6 +32,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('related_items_size', $form_state->getValue('related_items_size'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('brand_logo_extension', $form_state->getValue('brand_logo_extension'));
+    $config->set('all_products_buyable', $form_state->getValue('all_products_buyable'));
     $config->set('not_buyable_message', $form_state->getValue('not_buyable_message'));
     $config->set('not_buyable_help_text', $form_state->getValue('not_buyable_help_text'));
     $config->set('size_guide_link', $form_state->getValue('size_guide_link'));
@@ -71,6 +72,12 @@ class ProductSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Do not include leading dots.'),
       '#required' => TRUE,
       '#default_value' => $config->get('brand_logo_extension'),
+    ];
+
+    $form['all_products_buyable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Set all products to be buyable'),
+      '#default_value' => $config->get('all_products_buyable'),
     ];
 
     $form['not_buyable_message'] = [

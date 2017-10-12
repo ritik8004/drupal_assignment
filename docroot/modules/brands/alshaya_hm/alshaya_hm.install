@@ -19,7 +19,7 @@ function alshaya_hm_install() {
     ->set('store_id', '2')
     ->save();
 
-   // Create default content for the site.
+  // Create default content for the site.
   alshaya_hm_create_default_content();
 
   // Swap logo and search block placement in header.
@@ -30,4 +30,39 @@ function alshaya_hm_install() {
   \Drupal::configFactory()->getEditable('block.block.keywordsearchblock')
     ->set('weight', '-32')
     ->save();
+
+  // Setting all products buyable to be true by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('all_products_buyable', 1)
+    ->save();
+
+  // Update the customer service text.
+  $customer_service_text = '<p>For Kuwait <span class=\"light no-direction\">+965 123 4567</span></p>\r\n\r\n<p>For other regions <span class=\"light no-direction\">8 (800) 123 45 67</span></p>\r\n\r\n<p><span class=\"light\">We are open&nbsp;from 9:30 am – 8:30 pm Monday to Sunday</span></p>\r\n';
+  $checkout_customer_service = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $checkout_customer_service->set('checkout_customer_service.value', $customer_service_text);
+  $checkout_customer_service->save();
+  
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site favicon.
+  \Drupal::configFactory()->getEditable('alshaya_hnm.settings')
+    ->setData([
+      'favicon' => [
+        'path' => $site_favicon . '.ico',
+      ],
+    ])
+    ->save();
+
+  // Enable "Best seller" and "New in" sort options.
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
+  $sort_options = $config->get('sort_options');
+  $sort_options['nid'] = 'nid';
+  $sort_options['created'] = 'created';
+  $config->set('sort_options', $sort_options);
+  $config->save();
 }
