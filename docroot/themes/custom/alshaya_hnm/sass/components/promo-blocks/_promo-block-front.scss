@@ -24,3 +24,31 @@
     margin-bottom: 1.5rem;
   }
 }
+
+.c-content__container {
+  .field--name-field-1-row-2-col  {
+    .field__label {
+      display: none;
+    }
+
+    .field__items {
+      width: 100%;
+    }
+
+    .field__item {
+      width: calc(50% - 12px);
+
+      &:nth-child(1) {
+        float: $left;
+      }
+
+      &:nth-child(2) {
+        float: $right;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+  }
+}
