@@ -103,6 +103,9 @@
       @include icon(chevron#{$left}, before) {
         font-size: 1.875rem;
         margin-#{$left}: -0.75rem;
+        line-height: 0.875;
+        font-weight: bold;
+        color: $hnm-black-two;
       }
 
       h1.c-page-title {

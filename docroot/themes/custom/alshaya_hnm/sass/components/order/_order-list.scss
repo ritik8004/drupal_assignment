@@ -33,7 +33,7 @@
       margin-top: 0;
       padding-bottom: 0;
       position: absolute;
-      top: 1.2rem;
+      top: 0.4rem;
       #{$right}: 0;
       #{$left}: auto;
     }
@@ -570,13 +570,15 @@
       label {
         display: block;
         background-color: $white-five;
-        border: 1px solid $whisper-dark;
-        padding-#{$left}: 0.625rem;
+        border: 1px solid $hnm-black-two;
         width: 100%;
         position: relative;
         line-height: 2.0625rem;
-        color: $grey-ash;
+        color: $hnm-black-two;
         height: 2.1875rem;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
 
         @include icon(search, before) {
           pointer-events: none;
@@ -587,6 +589,7 @@
           display: inline-block;
           vertical-align: middle;
           padding: 0;
+          font-weight: bold;
         }
       }
     }
