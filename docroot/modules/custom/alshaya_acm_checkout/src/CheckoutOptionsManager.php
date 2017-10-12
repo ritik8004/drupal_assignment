@@ -6,6 +6,7 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\alshaya_acm\ApiHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
@@ -44,6 +45,13 @@ class CheckoutOptionsManager {
   protected $configFactory;
 
   /**
+   * THe language manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * CheckoutOptionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -56,13 +64,16 @@ class CheckoutOptionsManager {
    *   Cart Storage service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   Language Manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, ApiHelper $api_helper, CartStorageInterface $cart_storage, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, ApiHelper $api_helper, CartStorageInterface $cart_storage, LoggerChannelFactoryInterface $logger_factory, LanguageManagerInterface $languageManager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->configFactory = $config_factory;
     $this->apiHelper = $api_helper;
     $this->cartStorage = $cart_storage;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
+    $this->languageManager = $languageManager;
   }
 
   /**
@@ -421,6 +432,32 @@ class CheckoutOptionsManager {
     $code = str_replace(',', '_', $code);
     $code = substr($code, 0, 120);
     return $code;
+  }
+
+  /**
+   * Helper function to fetch shipping method translations.
+   *
+   * @return array
+   *   List of shipping methods keyed by shipping method in current language.
+   */
+  public function getShippingMethodTranslations() {
+    $shipping_method_translations = [];
+
+    $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
+    if ($this->languageManager->getCurrentLanguage()->getId() !== $site_default_langcode) {
+      $shipping_options = $this->getAllShippingTerms();
+      foreach ($shipping_options as $key => $shipping_option) {
+        if ($shipping_option->hasTranslation($site_default_langcode)) {
+          $shipping_translated_term = $shipping_option->getTranslation($site_default_langcode);
+        }
+        else {
+          $shipping_translated_term = $shipping_option;
+        }
+        $shipping_method_translations[$shipping_option->getName()] = $shipping_translated_term->getName();
+      }
+    }
+
+    return $shipping_method_translations;
   }
 
 }

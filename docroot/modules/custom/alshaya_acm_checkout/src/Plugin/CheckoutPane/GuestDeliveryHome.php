@@ -139,6 +139,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       // method as of now.
       $shipping_methods = self::generateShippingEstimates($address);
 
+      // Fetch translations for shipping methods.
+      $shipping_method_translations = $checkout_options_manager->getShippingMethodTranslations();
+
       if (!empty($shipping_methods) && empty($default_shipping)) {
         $default_shipping = array_keys($shipping_methods)[0];
       }
@@ -198,6 +201,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         ],
       ],
     ];
+
+    if (!empty($shipping_method_translations)) {
+      $pane_form['address']['shipping_methods']['#attached']['drupalSettings']['alshaya_shipping_method_translations'] = $shipping_method_translations;
+    }
 
     $complete_form['actions']['get_shipping_methods'] = [
       '#type' => 'button',
