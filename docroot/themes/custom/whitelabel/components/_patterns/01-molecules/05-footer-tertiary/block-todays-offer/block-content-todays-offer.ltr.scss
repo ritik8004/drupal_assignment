@@ -9,6 +9,7 @@
     margin-bottom: 1.5rem;
     padding-#{direction(left)}: 1.8125rem;
     position: relative;
+    text-align: direction(left);
 
     @include icon(chevron#{direction(left)}, before) {
       color: $medium-pink;
