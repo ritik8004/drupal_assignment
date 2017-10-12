@@ -24,6 +24,9 @@ content:
     third_party_settings: {  }
     type: entity_reference_paragraphs
     region: content
+  translation:
+    weight: 10
+    region: content
 hidden:
   created: true
   status: true

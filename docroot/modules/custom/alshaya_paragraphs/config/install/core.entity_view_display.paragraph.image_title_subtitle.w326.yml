@@ -2,55 +2,56 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.paragraph.w326
     - field.field.paragraph.image_title_subtitle.field_banner
     - field.field.paragraph.image_title_subtitle.field_link
     - field.field.paragraph.image_title_subtitle.field_sub_title
     - field.field.paragraph.image_title_subtitle.field_title
-    - image.style.thumbnail
     - paragraphs.paragraphs_type.image_title_subtitle
+    - responsive_image.styles.w326
   module:
-    - image
     - link
-    - workbench_moderation
-id: paragraph.image_title_subtitle.default
+    - responsive_image
+id: paragraph.image_title_subtitle.w326
 targetEntityType: paragraph
 bundle: image_title_subtitle
-mode: default
+mode: w326
 content:
   field_banner:
-    weight: 6
+    weight: 0
+    label: hidden
     settings:
-      progress_indicator: throbber
-      preview_image_style: thumbnail
+      responsive_image_style: w326
+      image_link: ''
     third_party_settings: {  }
-    type: image_image
+    type: responsive_image
     region: content
   field_link:
-    weight: 9
+    weight: 3
+    label: hidden
     settings:
-      placeholder_url: ''
-      placeholder_title: ''
+      trim_length: 255
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
     third_party_settings: {  }
-    type: link_default
+    type: link
     region: content
   field_sub_title:
-    weight: 8
+    weight: 2
+    label: hidden
     settings:
-      size: 60
-      placeholder: ''
+      link_to_entity: false
     third_party_settings: {  }
-    type: string_textfield
+    type: string
     region: content
   field_title:
-    weight: 7
+    weight: 1
+    label: hidden
     settings:
-      size: 60
-      placeholder: ''
+      link_to_entity: false
     third_party_settings: {  }
-    type: string_textfield
+    type: string
     region: content
-hidden:
-  created: true
-  status: true
-  translation: true
-  uid: true
+hidden: {  }
