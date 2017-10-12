@@ -41,8 +41,10 @@
           position: relative;
 
           @include icon(chevron#{$right}, after) {
-            font-size: 1.9rem;
+            font-size: 1.6rem;
             position: absolute;
+            font-weight: bold;
+            color: $hnm-black-two;
             #{$right}: 0.7rem;
             top: 50%;
             transform: translateY(-50%);
@@ -83,10 +85,14 @@
 
         .my-account-mobile-title1 {
           display: block;
-          font-family: $alshaya-bold;
-          color: $marine-blue;
+          font-family: $hnm-demibold;
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          color: $hnm-black-two;
           font-size: 1.125rem;
           margin-bottom: 0.1875rem;
+          margin-top: 0;
+          padding-top: 4px;
 
           html[lang=ar] & {
             margin-bottom: 1rem;
@@ -96,9 +102,9 @@
         .my-account-mobile-title2 {
           display: block;
           opacity: 0.6;
-          font-family: $arial;
+          font-family: $hnm-regular;
           font-size: 0.875rem;
-          color: $black;
+          color: $black-two;
           font-weight: normal;
           margin-top: 0.375rem;
           margin-bottom: 0.5rem;
