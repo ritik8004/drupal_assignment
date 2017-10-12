@@ -61,8 +61,8 @@
             font-size: 12px;
 
             span {
-              background: $cerulean-two;
-              display: inline-block;
+              background: $hnm-black-two;
+              display: inline;
               padding: 0.657rem 17px;
               text-align: center;
               vertical-align: middle;
@@ -71,6 +71,7 @@
               &.facet-item__value {
                 float: $left;
                 margin-#{$right}: 1px;
+                line-height: 1;
                 text-transform: lowercase;
               }
 
@@ -93,17 +94,33 @@
                 position: relative;
                 float: $right;
               }
+
+              div {
+                display: inline;
+              }
+            }
+
+            .price-type__wrapper {
+              padding: 0;
+
+              div,
+              span {
+                padding: 0;
+              }
             }
           }
 
           &.clear-all {
-            border: 2px solid $cerulean-two;
+            border: 2px solid $hnm-black-two;
             padding: 0.407rem 1.5rem;
             text-transform: lowercase;
+            line-height: 1;
             height: 2.188rem;
 
             a {
-              color: $cerulean-two;
+              color: $hnm-black-two;
+              font-family: $hnm-bold;
+              text-transform: uppercase;
             }
           }
         }
@@ -156,12 +173,14 @@
               @include u-visibility(inline-block);
 
               .label {
-                font-family: $alshaya-bold;
-                font-size: 0.817rem;
+                font-family: $hnm-bold;
+                font-size: 0.875rem;
                 padding-#{$left}: 1.5rem;
                 color: $black;
                 float: $left;
                 margin-top: 0.4375rem;
+                letter-spacing: 1px;
+                text-transform: uppercase;
               }
 
               @include icon(chevron#{$left}, after) {
@@ -180,7 +199,7 @@
 
             list-style: none;
             display: inline-block;
-            border: 1px solid $marine-blue-two;
+            border: 1px solid $hnm-black-two;
             margin-#{$left}: 5.6rem;
             font-size: 12px;
             text-align: center;
@@ -194,8 +213,10 @@
           }
 
           .applied-filter-count {
-            font-family: $alshaya-bold;
-            color: $marine-blue-two;
+            font-family: $hnm-bold;
+            color: $hnm-black-two;
+            letter-spacing: 1px;
+            text-transform: uppercase;
           }
 
           .c-accordion__title.ui-state-active {
@@ -226,7 +247,6 @@
 
           .c-facet__label {
             width: 100%;
-            border: 1px solid $white-two;
           }
         }
 
@@ -273,10 +293,10 @@
       margin-top: 0.9rem;
       margin-bottom: 0.75rem;
       font-size: 0.875rem;
-      color: $black;
+      color: $grey7;
       padding-bottom: 9px;
       border-bottom: 1px solid $white;
-      font-family: $alshaya-thin;
+      font-family: $hnm-regular;
     }
 
     .promo-banner > .filter--mobile {
@@ -397,7 +417,7 @@
     .field--name-name {
       margin-top: 0.625rem;
       margin-bottom: 0.625rem;
-      font-family: $alshaya-thin;
+      font-family: $hnm-regular;
       font-size: 0.875rem;
       padding: 0 1.25rem;
 
@@ -406,10 +426,10 @@
       }
 
       a {
-        color: $grey-ash;
+        color: $hnm-black-two;
 
         &:hover {
-          color: $cerulean-two;
+          color: $hnm-black-two;
           text-decoration: underline;
         }
       }
@@ -452,7 +472,7 @@
 
         .field--name-name {
           a {
-            color: $cerulean-two;
+            color: $hnm-black-two;
             text-decoration: underline;
           }
         }
@@ -505,7 +525,7 @@
       font-size: 0.813rem;
       border: 1px solid $marine-blue;
       padding: 0.563rem 7.12rem;
-      font-family: $alshaya-bold;
+      font-family: $hnm-bold;
       text-transform: lowercase;
     }
   }
@@ -527,35 +547,42 @@
     @include breakpoint($only-mobile) {
       width: 6.75rem;
       font-size: 0.75rem;
+      border: 1px solid $hnm-black-two;
+      border-#{$right}: none;
 
       @include icon(chevron#{$right}, after) {
         #{$right}: -2.188rem;
         height: 2.1875rem;
         width: 2.1875rem;
-        background-color: $white-two;
         position: absolute;
         text-align: center;
         top: 0;
         font-size: 2rem;
+        border: 1px solid $hnm-black-two;
+        border-#{$left}: none;
       }
     }
 
     @include breakpoint($tablet) {
       width: 7.875rem;
 
-      @include icon(chevrondown, after) {
-        #{$right}: -2.188rem;
+      &::after {
+        content: '';
+        background: url("../imgs/icons/ic-dropdown-expand.svg") center center no-repeat;
+        #{$right}: -2.15rem;
         height: 2.1875rem;
         width: 2.1875rem;
-        background-color: $white-two;
         position: absolute;
         text-align: center;
         top: 0;
         font-size: 2rem;
+        border: 1px solid $hnm-black-two;
+        border-#{$left}: none;
       }
     }
 
-    border: 1px solid $white-two;
+    border: 1px solid $hnm-black-two;
+    border-#{$right}: none;
     height: 2.1875rem;
     padding: 0.625rem;
     font-weight: normal;
@@ -569,12 +596,9 @@
     &.is-active {
       background: $white-five;
       position: relative;
-      border: none;
 
-      @include icon(chevron#{$right}, after);
-
-      @include breakpoint($tablet) {
-        @include icon(chevronup, after);
+      @include breakpoint($only-tablet) {
+        border: none;
       }
 
       &::after {
@@ -582,6 +606,11 @@
 
         @include breakpoint($only-mobile) {
           top: -1px;
+        }
+
+        @include breakpoint($tablet) {
+          transform: rotate(180deg);
+          border: none;
         }
       }
     }
@@ -617,12 +646,14 @@
       @include u-visibility(inline-block);
 
       .label {
-        font-family: $alshaya-bold;
-        font-size: 0.817rem;
+        font-family: $hnm-bold;
+        font-size: 0.875rem;
         padding-#{$left}: 1.5rem;
         color: $black;
         float: $left;
         margin-top: 7px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
 
         @include breakpoint($only-mobile) {
           min-width: 6rem;
@@ -644,7 +675,7 @@
 
       list-style: none;
       display: inline-block;
-      border: 1px solid $marine-blue-two;
+      border: 1px solid $hnm-black-two;
       margin-#{$left}: 5.6rem;
       font-size: 12px;
       text-align: center;
@@ -658,8 +689,10 @@
     }
 
     .applied-filter-count {
-      font-family: $alshaya-bold;
-      color: $marine-blue-two;
+      font-family: $hnm-bold;
+      color: $hnm-black-two;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     .c-accordion__title.ui-state-active {
@@ -693,7 +726,7 @@
       display: none;
 
       @include breakpoint($only-mobile) {
-        display: block;
+        display: inline-block;
       }
     }
   }
@@ -745,7 +778,9 @@
 
       position: absolute;
       #{$left}: -4rem;
-      font-size: 12px;
+      font-size: 0.75rem;
+      color: $hnm-black-two;
+      text-transform: uppercase;
     }
 
     .select2-container {
@@ -855,6 +890,14 @@ html[lang=ar] {
     .facet-item__count {
       direction: ltr;
       display: inline-block;
+    }
+  }
+}
+
+.region__sidebar-first {
+  > .block-facets-summary-blockfilter-bar-plp {
+    @include breakpoint($only-mobile) {
+      width: 100%;
     }
   }
 }

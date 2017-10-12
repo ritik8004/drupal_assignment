@@ -353,16 +353,16 @@ ul.item-list__checkbox,
     li.clear-all-fake {
       list-style: none;
       display: inline-block;
-      border: 1px solid $cerulean-two;
+      border: 1px solid $hnm-black-two;
       float: $right;
-      font-size: 12px;
+      font-size: 0.75rem;
       text-align: center;
-      padding: 0.407rem 0.532rem;
-      font-family: $alshaya-thin;
-      text-transform: lowercase;
+      padding: 0.4375rem 0.78125rem 0.4375rem 0.84375rem;
+      font-family: $hnm-bold;
+      text-transform: uppercase;
 
       span {
-        color: $cerulean-two;
+        color: $hnm-black-two;
       }
     }
   }

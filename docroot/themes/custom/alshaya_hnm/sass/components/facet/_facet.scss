@@ -52,6 +52,10 @@
 
       div {
         display: inline;
+
+        @include breakpoint($only-mobile) {
+          display: inline-block;
+        }
       }
     }
 
@@ -59,6 +63,11 @@
     .facet-item__value {
       font-size: 0.875rem;
       text-transform: lowercase;
+      line-height: 1.57;
+
+      @include breakpoint($only-mobile) {
+        display: inline-block;
+      }
     }
 
     .facet-item__count {
@@ -70,11 +79,9 @@
 .c-facet__label {
   font-size: 0.875rem;
   margin: 0.75rem 0.5rem;
-  text-transform: lowercase;
-
-  @include breakpoint($desktop) {
-    color: $black;
-  }
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: $hnm-black-two;
 }
 
 .c-facet__blocks {

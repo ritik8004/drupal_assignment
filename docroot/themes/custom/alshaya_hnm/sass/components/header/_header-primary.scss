@@ -71,10 +71,11 @@ header {
     @include container(1284px);
 
     @include breakpoint($only-mobile) {
-      margin: 0.625rem 0 0.75rem;
+      margin: 0.625rem 0;
       padding-bottom: 0;
       padding-left: 0.5rem;
       padding-right: 0.5rem;
+      height: 2.25rem;
     }
   }
 
@@ -95,10 +96,16 @@ header {
       }
     }
 
+    .site-branding {
+      @include breakpoint($upto-desktop) {
+        float: $left;
+      }
+    }
+
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
         position: absolute;
-        top: 3.125rem;
+        top: 3rem;
         display: none;
         width: 100%;
         left: 0;
@@ -251,6 +258,10 @@ header {
     font-size: 0.875rem;
     text-align: $right;
     color: $black;
+
+    @include breakpoint($only-tablet) {
+      width: 2rem;
+    }
 
     .total {
       display: inline-block;
@@ -555,6 +566,7 @@ header {
 
     .mobile--menu {
       padding: 1rem 1.515rem;
+      padding-#{$right}: 0;
     }
   }
 
