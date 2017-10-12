@@ -58,7 +58,7 @@
   &.messages--error {
     box-shadow: none;
     font-family: $hnm-regular;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     padding: 0.66rem 1.5625rem;
 
     @include breakpoint($upto-tablet) {
@@ -87,7 +87,7 @@
     }
 
     @include breakpoint($desktop) {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
     }
   }
 

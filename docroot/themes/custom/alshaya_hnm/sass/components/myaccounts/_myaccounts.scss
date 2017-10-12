@@ -3,9 +3,9 @@
     .item-list ul {
       @extend %list-clear;
 
-      font-family: $arial;
+      font-family: $hnm-regular;
       line-height: 1;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
     }
 
     li:first-child a {
@@ -14,23 +14,25 @@
     }
 
     a {
-      color: $grey-ash;
+      color: $grey7;
+      font-family: $hnm-regular;
       display: block;
       line-height: 1.9;
-      text-transform: lowercase;
-      font-size: 0.75rem;
+      text-transform: capitalize;
+      font-size: 0.875rem;
 
       @include breakpoint($desktop) {
         font-size: 0.875rem;
       }
 
       &.active {
-        color: $marine-blue;
-        font-weight: bold;
+        color: $hnm-black-two;
+        font-family: $hnm-demibold;
+        font-weight: normal;
       }
 
       &:hover {
-        color: $cerulean-two;
+        color: $hnm-black-two;
         text-decoration: underline;
       }
     }

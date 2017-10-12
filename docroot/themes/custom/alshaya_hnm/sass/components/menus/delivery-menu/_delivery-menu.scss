@@ -1,5 +1,4 @@
 .c-delivery-menu {
-  text-transform: lowercase;
   margin: 2em auto;
   padding: 0;
 
@@ -55,8 +54,11 @@
     display: block;
     text-decoration: none;
     font-size: 18px;
-    font-family: $alshaya-bold;
-    color: $cerulean-two;
+    font-family: $hnm-demibold;
+    font-weight: normal;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: $hnm-black-two;
 
     @include breakpoint($only-mobile) {
       font-size: 16px;
@@ -65,8 +67,9 @@
 
   .field--name-field-sub-title {
     font-size: 0.75rem;
-    font-family: $alshaya-thin;
-    color: $cerulean-two;
+    font-family: $hnm-regular;
+    letter-spacing: 0.5px;
+    color: $link-hover;
 
     @include breakpoint($only-mobile) {
       font-size: 0.625rem;
