@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w761
+label: w761
+effects:
+  82751135-b3db-4374-96cd-913b205e54fd:
+    uuid: 82751135-b3db-4374-96cd-913b205e54fd
+    id: image_scale
+    weight: 1
+    data:
+      width: 761
+      height: null
+      upscale: false

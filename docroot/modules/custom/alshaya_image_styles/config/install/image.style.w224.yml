@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w224
+label: w224
+effects:
+  aa4dc7aa-a6aa-4a66-8c4a-2605afadc277:
+    uuid: aa4dc7aa-a6aa-4a66-8c4a-2605afadc277
+    id: image_scale
+    weight: 1
+    data:
+      width: 224
+      height: null
+      upscale: false
