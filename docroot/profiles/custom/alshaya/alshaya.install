@@ -16,6 +16,42 @@ function alshaya_install() {
   $uri = "public://google_tag";
   file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
 
+  // Set default country to KW.
+  \Drupal::configFactory()->getEditable('system.date')->set('country.default', 'KW')->save();
+
+  // Remove all roles created by Lightning.
+  $coreRoles = [
+    'anonymous',
+    'authenticated',
+    'administrator',
+  ];
+  foreach (user_roles() as $role) {
+    if (!in_array($role->id(), $coreRoles)) {
+      $role->delete();
+    }
+  }
+
+  // Stop lightning from creating user roles in future.
+  \Drupal::configFactory()->getEditable('lightning_roles.settings')->setData([
+    'content_roles' => [
+      'creator' => [
+        'enabled' => FALSE,
+      ],
+      'reviewer' => [
+        'enabled' => FALSE,
+      ],
+    ],
+  ])->save();
+
+  // Set the page cache for 30 minutes.
+  \Drupal::configFactory()->getEditable('system.performance')
+    ->set('cache', [
+      'page' => [
+        'max_age' => 1800,
+      ],
+    ])
+    ->save();
+
   // TODO: List the modules common for transac and non-transac profiles.
   $modules = [];
 

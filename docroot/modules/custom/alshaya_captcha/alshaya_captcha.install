@@ -8,14 +8,11 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_modules_installed().
+ * Implements hook_install().
  */
-function alshaya_captcha_modules_installed($modules) {
-  if (!in_array('alshaya_captcha', $modules)) {
-    return;
-  }
-
+function alshaya_captcha_install() {
   $config_factory = \Drupal::configFactory();
+
   // Set captcha setting.
   $config_factory->getEditable('captcha.settings')->set('default_challenge', 'recaptcha/reCAPTCHA')->save();
   // Hide the description for captcha.

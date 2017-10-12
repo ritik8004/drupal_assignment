@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e982d891cb4822837f2051e11d3432a",
+    "content-hash": "5215bfa4edc0ada17ca47556cb58497e",
     "packages": [
         {
             "name": "acquia/blt",
@@ -3274,6 +3274,7 @@
                     "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
                     "Enable GET by default for exposed form AJAX": "patches/ajax_view.patch",
                     "Database lock backend should normalize the lock name": "https://www.drupal.org/files/issues/2872276-10.patch",
+                    "Clearing cache via UI in translated language resets config translation of field labels to default language": "https://www.drupal.org/files/issues/clearing_cache_via_ui-2650434-137.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/2752961-90.patch",
                     "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-360.patch",
@@ -14362,16 +14363,16 @@
         },
         {
             "name": "geerlingguy/drupal-vm",
-            "version": "4.4.5",
+            "version": "4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/geerlingguy/drupal-vm.git",
-                "reference": "90c671d584c8d2e7196119b06e125946dd80ef3f"
+                "reference": "f04cf99e94eb2d23cd0e972c985c82947d5aba19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/geerlingguy/drupal-vm/zipball/90c671d584c8d2e7196119b06e125946dd80ef3f",
-                "reference": "90c671d584c8d2e7196119b06e125946dd80ef3f",
+                "url": "https://api.github.com/repos/geerlingguy/drupal-vm/zipball/f04cf99e94eb2d23cd0e972c985c82947d5aba19",
+                "reference": "f04cf99e94eb2d23cd0e972c985c82947d5aba19",
                 "shasum": ""
             },
             "type": "vm",
@@ -14397,7 +14398,7 @@
                 "virtual machine",
                 "vm"
             ],
-            "time": "2017-04-24T17:57:19+00:00"
+            "time": "2017-06-29T03:33:03+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
