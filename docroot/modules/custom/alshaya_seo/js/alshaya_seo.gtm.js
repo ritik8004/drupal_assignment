@@ -409,12 +409,14 @@
         // Push default selected sub-delivery option to GTM.
         if ($(this).find('input[checked="checked"]').length > 0) {
           var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          selectedMethodLabel = alshaya_seo_translate_shipping_method(selectedMethodLabel);
           Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
         }
 
         // Attach change event listener to shipping method radio buttons.
         $(this).change(function () {
           var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          selectedMethodLabel = alshaya_seo_translate_shipping_method(selectedMethodLabel);
           Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
         });
       });
@@ -838,6 +840,24 @@
         fsNoOfResult: resultCount
       });
     }
+  };
+
+  /**
+   * Helper function to translate non-site default lang shipping method label.
+   *
+   * @param selectedMethodLabel
+   * @returns {*}
+   */
+  Drupal.alshaya_seo_translate_shipping_method = function (selectedMethodLabel) {
+    var currentLangCode = drupalSettings.path.currentLanguage;
+    if (currentLangCode !== 'en') {
+      var shipping_translations = drupalSettings.alshaya_shipping_method_translations;
+      if (drupalSettings.alshaya_shipping_method_translations.hasOwnProperty(selectedMethodLabel)) {
+        selectedMethodLabel = shipping_translations[selectedMethodLabel];
+      }
+    }
+
+    return selectedMethodLabel;
   };
 
 })(jQuery, Drupal, dataLayer);
