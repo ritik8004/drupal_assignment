@@ -32,8 +32,4 @@
     return this.optional(element) || /(?=(.*[\۰۱۲۳٤٥٦٧۸۹|0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?!.*[\s])(?=.*[\u0600-\u06FF|a-zA-Z])(?=(.*)).{7,}/.test(value);
   });
 
-  setTimeout(function () {
-    $('#user-register-form #edit-mail').val('');
-  }, 20);
-
 })(jQuery, Drupal);
