@@ -84,13 +84,14 @@ class CustomerDeleteResource extends ResourceBase {
       }
       catch (EntityStorageException $e) {
         $this->logger->error($e->getMessage());
-        throw new HttpException(500, 'Internal Server Error', $e);
+        $response['success'] = (bool) (FALSE);
+        return (new ResourceResponse($response));
       }
     }
     else {
       $this->logger->warning('User with email %email doesn\'t exist.', ['%email' => $customer_email]);
-      // @Todo: Need to determine the correct exception class.
-      throw new NotFoundHttpException();
+      $response['success'] = (bool) (FALSE);
+      return (new ResourceResponse($response));
     }
   }
 
