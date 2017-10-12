@@ -54,6 +54,10 @@
         position: relative;
         top: 0.5rem;
         display: inline-block;
+
+        html[lang=ar] & {
+          margin-left: 0.625rem;
+        }
       }
 
       color: $black-smoke;
