@@ -332,10 +332,10 @@
 
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 6.875rem;
+    margin-top: 3.9rem;
 
     html[lang=ar] & {
-      margin-top: 6.9375rem;
+      margin-top: 4.25rem;
     }
 
     &.logged-in.toolbar-vertical {
