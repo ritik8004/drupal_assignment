@@ -25,8 +25,11 @@
     text-transform: uppercase;
     font-size: 1rem;
 
-    @include breakpoint($above-palm) {
-      font-size: 1.5rem;
+    & h3,
+    & p {
+      @include breakpoint($above-palm) {
+        font-size: 1.5rem;
+      }
     }
 
     p {
@@ -52,11 +55,15 @@
   header {
     float: direction(right);
     color: $brownish-grey;
+<<<<<<< HEAD
     padding-top: 1.75rem;
+=======
+    padding-top: 1.9rem;
+>>>>>>> ACR2-720: Product page bug fixes.
     font-size: 1rem;
 
     @include breakpoint($lap) {
-      padding-top: 2.6rem;
+      padding-top: 2.4rem;
     }
 
     @include breakpoint($desk) {
@@ -66,13 +73,5 @@
 
   .views-infinite-scroll-content-wrapper {
     clear: both;
-
-    @include breakpoint($upto-palm) {
-      padding-top: 0.65rem;
-    }
-
-    @include breakpoint($above-palm) {
-      padding-top: 1.5rem;
-    }
   }
 }
