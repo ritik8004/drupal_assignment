@@ -70,10 +70,17 @@
       float: $right;
       outline: none;
       height: 2.1875rem;
+      text-transform: uppercase;
+    }
+
+    input::placeholder {
+      text-transform: uppercase;
+      color: $hnm-black-two;
     }
 
     label {
       color: $black-two;
+      text-transform: uppercase;
       display: none;
       float: $left;
       line-height: 35px;
@@ -117,7 +124,8 @@
   }
 
   .form-text {
-    border: 1px solid $whisper-dark;
+    border: 1px solid $hnm-black-two;
+    border-#{$right}: none;
     padding-top: 0.3125rem;
     padding-bottom: 0.25rem;
     padding-#{$left}: 1rem;
@@ -144,10 +152,11 @@
     }
 
     @include icon(search, after) {
-      background-color: $whisper-dark;
-      border: 1px solid $whisper-dark;
-      color: $black;
-      line-height: 19px;
+      background-color: $white-five;
+      border: 1px solid $hnm-black-two;
+      border-#{$left}: none;
+      color: $hnm-black-two;
+      line-height: 0.93;
       font-size: 1.625rem;
       pointer-events: none;
       position: absolute;
@@ -427,9 +436,11 @@
 }
 
 .block-alshaya-acm-customer > a {
-  font-family: $arial;
+  font-family: $hnm-bold;
+  font-weight: normal;
+  text-transform: uppercase;
   font-size: 0.875rem;
-  color: $windows-blue;
+  color: $white-five;
   position: absolute;
   #{$right}: 0;
   top: 0;
@@ -462,7 +473,6 @@
   margin: auto;
   margin-top: 1.75rem;
   position: static;
-  text-transform: lowercase;
 }
 
 .block-alshaya-user-recent-orders {
@@ -514,13 +524,13 @@
 }
 
 .block-alshaya-acm-customer > .edit-account {
-  font-family: $arial;
+  font-family: $hnm-bold;
+  font-weight: normal;
+  text-transform: uppercase;
   line-height: 1;
   color: $white-five;
-  top: -5.3rem;
+  top: -5.7rem;
   font-size: 0.75rem;
-  text-transform: lowercase;
-  font-weight: bold;
   height: 2.1875rem;
 
   @include breakpoint($desktop) {
