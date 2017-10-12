@@ -542,7 +542,7 @@
         Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'Top Navigation', 'promotionClick');
       });
 
-      if ($('.paragraph--type--promo-block').length > 0) {
+      if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
         Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
       }
 

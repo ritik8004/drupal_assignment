@@ -759,6 +759,9 @@ class AlshayaGtmManager {
 
     foreach ($orderItems as $key => $item) {
       $product = $this->fetchSkuAtttributes($item['sku']);
+      if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
+        $product['gtm-metric1'] *= $item['ordered'];
+      }
       $productNode = alshaya_acm_product_get_display_node($item['sku']);
       $product['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
       $product['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
