@@ -55,11 +55,7 @@
   header {
     float: direction(right);
     color: $brownish-grey;
-<<<<<<< HEAD
-    padding-top: 1.75rem;
-=======
     padding-top: 1.9rem;
->>>>>>> ACR2-720: Product page bug fixes.
     font-size: 1rem;
 
     @include breakpoint($lap) {
