@@ -36,4 +36,20 @@ function alshaya_hm_install() {
   $checkout_customer_service = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
   $checkout_customer_service->set('checkout_customer_service.value', $customer_service_text);
   $checkout_customer_service->save();
+  
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site favicon.
+  \Drupal::configFactory()->getEditable('alshaya_hnm.settings')
+    ->setData([
+      'favicon' => [
+        'path' => $site_favicon . '.ico',
+      ],
+    ])
+    ->save();
 }
