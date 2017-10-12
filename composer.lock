@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "885ec0c1e3b62e4abd01b1380d04e7d4",
+    "content-hash": "87bcd80c17010b4dda35e11e25432936",
     "packages": [
         {
             "name": "acquia/blt",
@@ -6520,20 +6520,14 @@
         },
         {
             "name": "drupal/recaptcha",
-            "version": "2.2.0",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/recaptcha",
-                "reference": "8.x-2.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/recaptcha-8.x-2.2.zip",
-                "reference": "8.x-2.2",
-                "shasum": "99a3bda62b34ad6dac1d497fcf578e25aad0a3e0"
+                "reference": "572d857cc37935c817bed9677016a401a0fea687"
             },
             "require": {
-                "drupal/captcha": "*",
+                "drupal/captcha": "^1.0.0-alpha1",
                 "drupal/core": "~8.0"
             },
             "type": "drupal-module",
@@ -6542,8 +6536,15 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.2",
-                    "datestamp": "1469859539"
+                    "version": "8.x-2.2+11-dev",
+                    "datestamp": "1491167883",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                },
+                "patches_applied": {
+                    "modal support": "https://www.drupal.org/files/issues/2493183-recaptcha-use-behaviors-74.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6577,7 +6578,8 @@
             "support": {
                 "source": "http://git.drupal.org/project/recaptcha.git",
                 "issues": "https://www.drupal.org/project/issues/recaptcha"
-            }
+            },
+            "time": "2017-04-02T21:15:08+00:00"
         },
         {
             "name": "drupal/redirect",
@@ -14939,6 +14941,7 @@
         "drupal/default_content": 15,
         "drupal/taxonomy_term_depth": 20,
         "drupal/captcha": 10,
+        "drupal/recaptcha": 20,
         "drupal/clientside_validation": 20,
         "drupal/facets": 15,
         "drupal/profile": 15,
