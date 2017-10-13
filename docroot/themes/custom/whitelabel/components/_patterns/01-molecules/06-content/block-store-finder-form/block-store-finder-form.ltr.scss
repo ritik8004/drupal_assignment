@@ -186,6 +186,9 @@
     border-color: $greyish;
     padding: 0.625rem 1.125rem;
     padding-#{direction(right)}: 3.125rem;
+    appearance: none;
+    box-shadow: none;
+    border-radius: 0;
   }
 
   @include breakpoint($above-palm) {
