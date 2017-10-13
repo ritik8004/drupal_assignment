@@ -136,7 +136,7 @@ function alshaya_hnm_preprocess_block(&$variables) {
   }
 
   if ($variables['elements']['#id'] === 'branding') {
-    $variables['site_logo'] = base_path() . drupal_get_path('theme', 'alshaya_hnm') . '/logo.svg';
+    $variables['site_logo'] = theme_get_setting('logo.url');
     $variables['site_name'] = 'H&M';
   }
 }
