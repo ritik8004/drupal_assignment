@@ -5,6 +5,8 @@ input[type=checkbox] {
 input[type=checkbox] ~ label {
   @include icon(checkboxempty);
 
+  color: $hnm-black-four;
+
   &::before {
     font-size: 1rem;
   }
@@ -12,10 +14,6 @@ input[type=checkbox] ~ label {
 
 input[type=checkbox]:checked ~ label {
   @include icon(checkboxfull);
-
-  &::before {
-    color: $hnm-black-two;
-  }
 }
 
 // Fix for facets without translations.
