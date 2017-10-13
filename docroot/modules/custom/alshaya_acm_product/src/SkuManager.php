@@ -294,12 +294,15 @@ class SkuManager {
     $build = [];
 
     $this->buildPrice($build, $sku_entity);
+    // Adding vat text to product page.
+    $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text.value');
 
     $price_build = [
       '#theme' => 'product_price_block',
       '#price' => $build['price'],
       '#final_price' => $build['final_price'],
       '#discount' => $build['discount'],
+      '#vat_text' => $vat_text,
     ];
 
     return $price_build;
