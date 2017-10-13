@@ -129,6 +129,20 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "GEDinarTwo-Medium";
+  src: url("../fonts/GEDinarTwoMedium.eot");
+  src:
+    url("../fonts/GEDinarTwoMedium.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/GEDinarTwoMedium.otf") format("opentype"),
+    url("../fonts/GEDinarTwoMedium.svg") format("svg"),
+    url("../fonts/GEDinarTwoMedium.ttf") format("truetype"),
+    url("../fonts/GEDinarTwoMedium.woff") format("woff"),
+    url("../fonts/GEDinarTwoMedium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 // hnm specific font family
 // English fonts.
 $hnm-bold: 'Ampersand_bold';
@@ -152,6 +166,9 @@ $hnm-arabic-medium-nodir: 'GESSTwoMedium-Medium', 'Ampersand_demibold';
 
 $hnm-arabic-regular: 'GESSTwoLight-Light', 'Ampersand_regular';
 $hnm-arabic-regular-nodir: 'GESSTwoLight-Light', 'Ampersand_regular';
+
+$hnmpromo-arabic-regular: 'GEDinarTwo-Medium', 'Amperserif_regular';
+$hnmpromo-arabic-regular-nodir: 'GEDinarTwo-Medium', 'Amperserif_regular';
 
 // Mothercare font Family.
 $alshaya-bold: 'Mothercare';
