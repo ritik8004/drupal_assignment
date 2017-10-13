@@ -88,22 +88,43 @@ function whitelabel_preprocess_block(&$variables) {
     $machine_name = $elements_id;
   }
 
+  if ($machine_name == 'todaysoffer') {
+    if ($variables['content']) {
+      // Make label a link to redirect to today's offer page on mobile.
+      $label = $variables['label'];
+      $variables['label'] = [
+        '#type' => 'link',
+        '#title' => $label,
+        '#url' => Url::fromUri('internal:/todays-offer'),
+        '#options' => [
+          'attributes' => [
+            'class' => ['mobile-link'],
+          ],
+        ],
+      ];
+    }
+  }
+
   if ($machine_name == 'today_s_offer') {
     if ($variables['content']) {
+      $lang = \Drupal::languageManager()->getCurrentLanguage();
+      $lang_code = $lang->getId();
+      $link_options = ['language' => $lang];
       // If the block is added to block reference paragraph type.
       if ($machine_name != $block_content) {
         // Get the referer path.
-        $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
         $referrer_path = parse_url(\Drupal::request()->headers->get('referer'))['path'];
-        $referrer_path = str_replace('/' . $lang . '/', '', $referrer_path);
+        $referrer_path = preg_replace('/^(\/' . $lang_code . ')(.*)/g', '', $referrer_path);
+        $empty = !empty($referrer_path) ? $referrer_path : 'home';
+
         // Create the back link.
         $element['back'] = [
           '#type' => 'link',
           '#title' => t('Back'),
-          '#url' => Url::fromUri('internal:/' . $referrer_path),
+          '#url' => Url::fromUri('internal:/' . $empty, $link_options),
           '#options' => [
             'attributes' => [
-              'class' => ['mobile-link'],
+              'class' => ['mobile-back-link'],
             ],
           ],
         ];
@@ -114,7 +135,7 @@ function whitelabel_preprocess_block(&$variables) {
       $element['label'] = [
         '#type' => 'link',
         '#title' => $label,
-        '#url' => Url::fromUri('internal:/todays-offer'),
+        '#url' => Url::fromUri('internal:/todays-offer', $link_options),
         '#options' => [
           'attributes' => [
             'class' => ['mobile-link'],
