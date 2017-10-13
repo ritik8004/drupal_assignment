@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - lightning_core
+    - paragraphs
+third_party_settings:
+  lightning_core:
+    description: ''
+id: paragraph.w921
+label: w921
+targetEntityType: paragraph
+cache: true
