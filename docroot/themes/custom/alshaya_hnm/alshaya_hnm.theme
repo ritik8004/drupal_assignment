@@ -138,11 +138,6 @@ function alshaya_hnm_preprocess_block(&$variables) {
   if ($variables['plugin_id'] === 'basket_horizontal_recommendation') {
     $variables['attributes']['class'][] = 'horizontal-crossell';
   }
-
-  if ($variables['elements']['#id'] === 'branding') {
-    $variables['site_logo'] = base_path() . drupal_get_path('theme', 'alshaya_hnm') . '/logo.svg';
-    $variables['site_name'] = 'H&M';
-  }
 }
 
 /**
