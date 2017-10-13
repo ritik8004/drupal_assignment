@@ -111,7 +111,6 @@ function alshaya_search_update_8301() {
 function alshaya_search_update_8302() {
   // Enable sort options on SRP page.
   $sort_options = [
-    'search_api_relevance',
     'name_1',
     'final_price',
   ];

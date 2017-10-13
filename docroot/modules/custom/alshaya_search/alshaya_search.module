@@ -93,8 +93,6 @@ function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface
         $form['#access'] = FALSE;
       }
       else {
-        // Store relevance options and set later.
-        $relevance_sort = $form['sort_bef_combine']['#options']['search_api_relevance DESC'];
         foreach ($enabled_sorts as $key => $sort) {
           if (!$sort) {
             if (isset($form['sort_bef_combine']['#options']["$key ASC"])) {
@@ -105,9 +103,6 @@ function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface
             }
           }
         }
-
-        // Relevence option can not be disabled on SRP.
-        $form['sort_bef_combine']['#options']['search_api_relevance DESC'] = $relevance_sort;
       }
     }
   }
