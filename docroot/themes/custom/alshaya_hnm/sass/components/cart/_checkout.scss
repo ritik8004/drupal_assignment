@@ -630,7 +630,6 @@ body.alias--cart {
         }
 
         .name .items a {
-          color: $cerulean-two;
           text-decoration: underline;
         }
       }
@@ -1042,10 +1041,13 @@ body.alias--cart {
     #edit-continue-shopping-mobile {
       @include breakpoint($tablet) {
         display: block;
+        font-family: $hnm-bold;
         font-weight: normal;
+        text-transform: uppercase;
+        text-decoration: underline;
         border: 0;
         padding: 0;
-        color: $cerulean-two;
+        color: $hnm-black-two;
       }
 
       @include breakpoint($only-mobile) {

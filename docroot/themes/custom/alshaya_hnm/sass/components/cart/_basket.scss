@@ -411,8 +411,12 @@
     }
 
     &.not-available {
-      color: $white;
+      color: $grey4;
       text-decoration: line-through;
+
+      &::after {
+        color: $grey4;
+      }
 
       &:hover + .tooltip {
         display: none;
@@ -1000,7 +1004,11 @@ html[lang=ar] {
       font-size: 0.75rem;
 
       &.not-available {
-        color: $white;
+        color: $grey4;
+
+        &::after {
+          color: $grey4;
+        }
       }
     }
 
