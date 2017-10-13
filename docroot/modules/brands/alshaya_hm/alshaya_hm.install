@@ -65,4 +65,17 @@ function alshaya_hm_install() {
   $sort_options['created'] = 'created';
   $config->set('sort_options', $sort_options);
   $config->save();
+
+  // Use the customer service block.
+  Drupal::configFactory()->getEditable('block.block.customerservice')
+    ->set('weight', '-34')
+    ->set('region', 'footer_secondary')
+    ->save();
+
+  // Re use the about branc block for corporate info.
+  Drupal::configFactory()->getEditable('block.block.aboutbrand')
+    ->set('weight', '-33')
+    ->set('settings.label', "Corporate Info")
+    ->set('region', 'footer_primary')
+    ->save();
 }
