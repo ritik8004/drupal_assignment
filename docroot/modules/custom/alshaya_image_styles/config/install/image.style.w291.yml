@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w291
+label: w291
+effects:
+  07365a45-3897-4c20-821c-e27b076c8740:
+    uuid: 07365a45-3897-4c20-821c-e27b076c8740
+    id: image_scale
+    weight: 1
+    data:
+      width: 291
+      height: null
+      upscale: false
