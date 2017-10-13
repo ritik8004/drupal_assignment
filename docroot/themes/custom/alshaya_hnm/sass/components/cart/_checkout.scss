@@ -583,18 +583,17 @@ body.alias--cart {
   h1 {
     font-size: 1.125rem;
     font-weight: normal;
-    color: $marine-blue-two;
+    color: $hnm-black-two;
     border-bottom: 1px solid $white;
     margin-bottom: 0.75rem;
     padding-bottom: 0.625rem;
 
     @include breakpoint($tablet) {
-      font-size: 1.375rem;
+      font-size: 1.25rem;
       padding-bottom: 0.875rem;
     }
 
     @include breakpoint($desktop) {
-      font-size: 1.5rem;
       padding-bottom: 0.75rem;
     }
 
@@ -610,15 +609,16 @@ body.alias--cart {
   #table-cart-items {
     table {
       width: 100%;
-      font-family: $arial-nodir;
+      font-family: $hnm-regular;
       margin-top: -0.5rem;
     }
 
     thead {
-      background: $white-three;
+      background: $grey9;
 
       th {
-        font-family: $arial;
+        font-family: $hnm-regular;
+        color: $hnm-black-two;
         font-weight: normal;
       }
     }
@@ -697,7 +697,9 @@ body.alias--cart {
 
         &.quantity {
           a {
-            font-family: $arial;
+            font-family: $hnm-demibold;
+            font-weight: normal;
+            color: $hnm-black-two;
           }
         }
       }
@@ -1020,7 +1022,7 @@ body.alias--cart {
             top: 0.5em;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
-            border-#{$right}: 8px solid $cerulean-two;
+            border-#{$right}: 8px solid $hnm-black-two;
           }
         }
 
@@ -1090,7 +1092,15 @@ body.alias--cart {
 
       td:nth-child(2) {
         background-color: $whisper-light;
-        font-weight: bold;
+      }
+
+      &:last-child {
+        span.price-currency,
+        span.price-amount {
+          font-family: $hnm-bold;
+          color: $hnm-black-two;
+          font-weight: normal;
+        }
       }
     }
 
@@ -1123,13 +1133,15 @@ body.alias--cart {
   .edit-checkout {
     @extend %btn;
 
-    background: $pumpkin-orange;
+    background: $hnm-black-two;
     margin-top: 1em;
     margin-bottom: 0.75rem;
     min-width: 10.8125rem;
-    text-transform: lowercase;
-    font-family: $alshaya-bold;
+    text-transform: uppercase;
+    font-family: $hnm-bold;
     font-size: 0.75rem;
+    letter-spacing: normal;
+    padding: 0.625rem 1.3rem;
 
     @include breakpoint($upto-tablet) {
       display: block;
@@ -1202,10 +1214,12 @@ body.alias--cart {
 
     .checkout-top-button {
       cursor: pointer;
-      background: $pumpkin-orange;
+      background: $hnm-black-two;
       color: $white-five;
       font-size: 0.75rem;
-      font-family: $alshaya-bold;
+      font-family: $hnm-bold;
+      text-transform: uppercase;
+      font-weight: normal;
       width: 10.81rem;
       height: 2.188rem;
       display: inline-block;
@@ -1264,10 +1278,11 @@ body.alias--cart {
 .empty-cart-message {
   margin-bottom: 34px;
   margin-top: 35px;
-  font-weight: bold;
+  font-weight: normal;
   color: $black;
-  font-family: $arial;
-  font-size: 14px;
+  font-family: $hnm-bold;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
 
   @include breakpoint($tablet) {
     margin-top: 24px;
@@ -1355,7 +1370,7 @@ html[lang=ar] .alias--cart #table-cart-items tr th {
 html[lang=ar] {
   header .block-cart-mini-block .price-amount,
   header .block-cart-mini-block .quantity {
-    font-family: $arial-nodir;
+    font-family: $hnm-regular-nodir;
   }
 
   .alias--cart {
