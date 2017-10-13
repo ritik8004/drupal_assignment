@@ -255,9 +255,10 @@ header {
   }
 
   .block-cart-mini-block {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     text-align: $right;
     color: $black;
+    letter-spacing: 0.5px;
 
     @include breakpoint($only-tablet) {
       width: 2rem;
@@ -297,7 +298,7 @@ header {
     }
 
     .cart-link-total {
-      color: $black;
+      color: $hnm-black-four;
       float: $left;
       margin-top: 6px;
       margin-right: 2px;
@@ -321,11 +322,11 @@ header {
     .quantity {
       font-size: 0.625rem;
       position: absolute;
-      background: $pumpkin-orange;
+      background: $hnm-red;
       color: $white-five;
       text-align: center;
       bottom: -0.75rem;
-      #{$left}: -0.375rem;
+      #{$left}: 0.0625rem;
       border-radius: 50%;
       padding: 0;
       line-height: 2;
@@ -346,9 +347,7 @@ header {
       margin-top: -0.4375rem;
 
       .cart-link-total {
-        margin-#{$right}: -0.25rem;
-        margin-top: 0.8125rem;
-        font-size: 0.75rem;
+        display: none;
 
         .prefix {
           margin-#{$right}: 0.5625rem;

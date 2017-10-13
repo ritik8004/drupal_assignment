@@ -138,6 +138,11 @@ function alshaya_hnm_preprocess_block(&$variables) {
   if ($variables['plugin_id'] === 'basket_horizontal_recommendation') {
     $variables['attributes']['class'][] = 'horizontal-crossell';
   }
+
+  if ($variables['elements']['#id'] === 'branding') {
+    $variables['site_logo'] = theme_get_setting('logo.url');
+    $variables['site_name'] = 'H&M';
+  }
 }
 
 /**
@@ -260,6 +265,8 @@ function alshaya_hnm_preprocess_node(&$variables) {
     $variables['label'] = NULL;
   }
   elseif ($variables['node']->bundle() === 'acq_product') {
+    $vat_text_footer = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer.value');
+    $variables['vat_text_footer'] = $vat_text_footer;
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
   }
