@@ -52,6 +52,25 @@
   @include breakpoint($upto-palm) {
     margin-bottom: 1.2rem;
   }
+
+  @include breakpoint($desk) {
+    max-width: 67.125rem;
+    margin: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.paragraph-t-banner,
+.paragraph-t-views-reference {
+  @include breakpoint($desk) {
+    max-width: none;
+  }
+}
+
+.paragraph-t-banner {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .paragraph-t-1-row-3-col {

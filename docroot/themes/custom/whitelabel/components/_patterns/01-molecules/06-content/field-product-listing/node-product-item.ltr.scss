@@ -61,6 +61,11 @@
     bottom: 0;
     z-index: $z-2;
     display: inline-block;
+    letter-spacing: 1px;
+
+    html[lang=ar] {
+      letter-spacing: 0;
+    }
   }
 
   @include breakpoint($lap) {
