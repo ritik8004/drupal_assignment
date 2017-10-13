@@ -31,6 +31,13 @@ class ProductCategoryTree {
   protected $termStorage;
 
   /**
+   * Node storage object.
+   *
+   * @var \Drupal\node\NodeStorageInterface
+   */
+  protected $nodeStorage;
+
+  /**
    * Entity repository.
    *
    * @var \Drupal\Core\Entity\EntityRepositoryInterface
@@ -56,6 +63,7 @@ class ProductCategoryTree {
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityRepositoryInterface $entity_repository, LanguageManagerInterface $language_manager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
   }
@@ -136,8 +144,13 @@ class ProductCategoryTree {
       if (isset($alshaya_department_pages[$term->id()])) {
         $nid = $alshaya_department_pages[$term->id()];
 
-        // Use the path of node instead of term path.
-        $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+        /** @var \Drupal\node\Entity\Node $node */
+        $node = $this->nodeStorage->load($nid);
+
+        // Use the path of node instead of term path if node is published.
+        if ($node->isPublished()) {
+          $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+        }
       }
 
       $data[$term->id()]['child'] = $this->getCategoryTree($term->id());
