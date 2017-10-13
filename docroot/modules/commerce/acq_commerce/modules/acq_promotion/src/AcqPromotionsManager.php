@@ -140,9 +140,7 @@ class AcqPromotionsManager {
     }
 
     // Unpublish promotions, which are not part of API response.
-    if (!empty($ids)) {
-      $this->unpublishPromotions($ids);
-    }
+    $this->unpublishPromotions($ids);
   }
 
   /**
@@ -154,7 +152,11 @@ class AcqPromotionsManager {
   protected function unpublishPromotions(array $validIDs = []) {
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
-    $query->condition('field_acq_promotion_rule_id', $validIDs, 'NOT IN');
+
+    if ($validIDs) {
+      $query->condition('field_acq_promotion_rule_id', $validIDs, 'NOT IN');
+    }
+
     $nids = $query->execute();
 
     $acq_promotion_attach_batch_size = $this->configFactory
