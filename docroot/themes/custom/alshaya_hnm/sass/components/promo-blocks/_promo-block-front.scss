@@ -33,21 +33,25 @@
 
     .field__items {
       width: 100%;
-    }
 
-    .field__item {
-      width: calc(50% - 12px);
+      > .field__item {
+        width: calc(50% - 0.75rem);
 
-      &:first-child {
-        float: $left;
-      }
+        &:first-child {
+          float: $left;
+        }
 
-      &:last-child {
-        float: $right;
-      }
+        &:last-child {
+          float: $right;
 
-      @include breakpoint($only-mobile) {
-        width: 100%;
+          @include breakpoint($only-mobile) {
+            margin-bottom: 0.75rem;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
       }
     }
   }
