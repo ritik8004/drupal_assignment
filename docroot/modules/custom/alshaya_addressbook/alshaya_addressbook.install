@@ -9,6 +9,17 @@ use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Grant view profile permission to all users.
+ */
+function alshaya_addressbook_update_8001() {
+  $role = Role::load(RoleInterface::AUTHENTICATED_ID);
+  $role->grantPermission('view profile');
+  $role->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_addressbook_install() {
@@ -18,37 +29,6 @@ function alshaya_addressbook_install() {
   $role->grantPermission('update own address_book profile');
   $role->grantPermission('delete own address_book profile');
   $role->grantPermission('view own address_book profile');
+  $role->grantPermission('view profile');
   $role->save();
-}
-
-/**
- * Implements hook_modules_installed().
- */
-function alshaya_addressbook_modules_installed($modules) {
-  if (!in_array('alshaya_addressbook', $modules)) {
-    return;
-  }
-
-  $config_factory = \Drupal::configFactory();
-  // Profile view.
-  $profile_view = $config_factory->getEditable('views.view.profiles');
-
-  // Get the display.
-  $display = $profile_view->get('display');
-
-  // Add the sort.
-  $display['default']['display_options']['sorts'] = [
-    'is_default' => [
-      'id' => 'is_default',
-      'table' => 'profile',
-      'field' => 'is_default',
-      'entity_type' => 'profile',
-      'entity_field' => 'is_default',
-      'plugin_d' => 'standard',
-      'order' => 'DESC',
-    ],
-  ];
-
-  // Save the configuration.
-  $profile_view->set('display', $display)->save();
 }

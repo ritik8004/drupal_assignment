@@ -36,7 +36,8 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
   }
 
   /**
-   * @BeforeScenario @javascript */
+   * @BeforeScenario @javascript
+   */
   public function before(BeforeScenarioScope $scope) {
     $this->getSession()->getDriver()->resizeWindow(1440, 900, 'current');
   }
@@ -101,7 +102,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
 
     $text = 'connect with us' and 'get email offers and the latest news from Mothercare Kuwait';
     $subscription = $page->find('css', '.alshaya-newsletter-subscribe');
-    $subscription->find('named_partial', array('content', $text));
+    $subscription->find('named_partial', ['content', $text]);
     if ($subscription == NULL) {
       throw new \Exception('Text related to Subscription is missing in the footer');
     }
@@ -114,7 +115,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $copyright1 = '© Copyright Mothercare UK Limited 2016 Registered in England no. 533087, VAT Reg no 440 6445 66';
     $copyright1 = $copyright1 and 'Registered ofﬁce: Cherry Tree Road, Watford, Hertfordshire, WD24 6SH';
     $copyright = $page->find('css', '.region__footer-secondary');
-    $copyright->has('named', array('content', $copyright1));
+    $copyright->has('named', ['content', $copyright1]);
 
     if ($copyright == NULL) {
       throw new \Exception('Copyright information is missing in the footer');
@@ -269,7 +270,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
 
     $text = 'تواصل معنا' and 'مذركير الكويت احصل على أحدث العروض الحصرية عبر عنوان البريد الإكتروني';
     $subscription = $page->find('css', '.alshaya-newsletter-subscribe');
-    $subscription->find('named_partial', array('content', $text));
+    $subscription->find('named_partial', ['content', $text]);
     if ($subscription == NULL) {
       throw new \Exception('Text related to Subscription is missing in the footer');
     }
@@ -283,7 +284,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $copyright1 = $copyright1 and 'مسجلة في إنجلترا برقم 533087 . رقم تسجيل ضريبة القيمة المضافة 66 6445 440 ';
     $copyright1 = $copyright1 and 'مكتب التسجيل: شيري تري رود، واتفورد، هيرتفوردشاير، WD24 6SH';
     $copyright = $page->find('css', '.region__footer-secondary');
-    $copyright->has('named', array('content', $copyright1));
+    $copyright->has('named', ['content', $copyright1]);
 
     if ($copyright == NULL) {
       throw new \Exception('Copyright information is missing in the footer');
@@ -383,7 +384,11 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    * @Given /^I should see "([^"]*)" in the cart area$/
    */
   public function iShouldSeeInTheCartArea($arg1) {
-    $price = $this->getSession()->getPage()->findById('block-cartminiblock')->find('css', '.price')->hasLink($arg1);
+    $price = $this->getSession()
+      ->getPage()
+      ->findById('block-cartminiblock')
+      ->find('css', '.price')
+      ->hasLink($arg1);
 
     if (!$price) {
       throw new \Exception('Product of the price is not displayed on the mini cart');
@@ -869,7 +874,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $page->find('css', '.select2-selection__arrow')->click();
     $page->find('css', 'ul.select2-results__options li:nth-child(1)')->click();
   }
-  
+
   /**
    * @Given /^I should be able to see the header for checkout$/
    */
@@ -973,7 +978,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
       throw new \Exception('Price did not get updated after adding the quantity');
     }
   }
-  
+
   /**
    * @Given /^I am on a simple product page$/
    */
@@ -1077,7 +1082,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
     $page = $this->getSession()->getPage();
     $page->find('css', $arg1)->mouseOver();
   }
-  
+
   /**
    * @Then /^I should see the link for simple product in Arabic$/
    */
@@ -1473,10 +1478,12 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    */
   public function iSelectAProductInStock() {
     $page = $this->getSession()->getPage();
-    $all_products = $page->findById('block-alshaya-white-label-content')
-      ->findAll('css', '.c-products__item');
-    $total_products = count($all_products);
-    if ($total_products == 0) {
+    $all_products = $page->findById('block-content');
+    if ($all_products !== NULL) {
+      $all_products = $all_products->findAll('css', '.c-products__item');
+      $total_products = count($all_products);
+    }
+    else {
       throw new \Exception('Search passed, but search results were empty');
     }
     foreach ($all_products as $item) {
@@ -1567,8 +1574,7 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
           }
           continue;
         }
-        $available_size = $size->find('css', 'a')->getText();
-        $page->clickLink($available_size);
+        $size->find('css', 'a')->click();
         break;
       }
     }
@@ -1576,4 +1582,5 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
       echo 'No size attribute is available for this product';
     }
   }
+
 }

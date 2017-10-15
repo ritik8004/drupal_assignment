@@ -57,8 +57,8 @@
               gtmPageTypeArray.splice(i, 1);
             }
           }
-          gtmPageType = gtmPageTypeArray.join('-');
-          gtmPageType = 'user-' . gtmPageType;
+          var gtmPageSubType = gtmPageTypeArray.join('-');
+          gtmPageType = 'user-' . gtmPageSubType;
         }
         else {
           gtmPageType = 'not defined';
@@ -409,12 +409,14 @@
         // Push default selected sub-delivery option to GTM.
         if ($(this).find('input[checked="checked"]').length > 0) {
           var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          selectedMethodLabel = alshaya_seo_translate_shipping_method(selectedMethodLabel);
           Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
         }
 
         // Attach change event listener to shipping method radio buttons.
         $(this).change(function () {
           var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          selectedMethodLabel = alshaya_seo_translate_shipping_method(selectedMethodLabel);
           Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
         });
       });
@@ -422,11 +424,14 @@
       /** GTM virtual page tracking for click & collect journey. **/
       if (isCCPage) {
         if ($('#store-finder-wrapper', context).length > 0) {
-          dataLayer.push({
-            event: 'VirtualPageview',
-            virtualPageURL: '/virtualpv/click-and-collect/step1/click-and-collect-view',
-            virtualPageTitle: 'C&C Step 1 – Click and Collect View'
-          });
+          if (!(body.hasClass('virtualpageview-fired'))) {
+            dataLayer.push({
+              event: 'VirtualPageview',
+              virtualPageURL: '/virtualpv/click-and-collect/step1/click-and-collect-view',
+              virtualPageTitle: 'C&C Step 1 – Click and Collect View'
+            });
+            body.addClass('virtualpageview-fired');
+          }
 
           if (($('input.cc-action', context).length > 0) && (context === document)) {
             Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
@@ -468,6 +473,10 @@
 
       if ($(context).find('article[data-vmode="modal"]').length === 1) {
         var product = Drupal.alshaya_seo_gtm_get_product_values($(context).find('article[data-vmode="modal"]'));
+
+        if (product.hasOwnProperty('variant') && product.variant === undefined) {
+          product.variant = '';
+        }
 
         var data = {
           event: 'productDetailView',
@@ -533,7 +542,7 @@
         Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'Top Navigation', 'promotionClick');
       });
 
-      if ($('.paragraph--type--promo-block').length > 0) {
+      if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
         Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
       }
 
@@ -831,6 +840,24 @@
         fsNoOfResult: resultCount
       });
     }
+  };
+
+  /**
+   * Helper function to translate non-site default lang shipping method label.
+   *
+   * @param selectedMethodLabel
+   * @returns {*}
+   */
+  Drupal.alshaya_seo_translate_shipping_method = function (selectedMethodLabel) {
+    var currentLangCode = drupalSettings.path.currentLanguage;
+    if (currentLangCode !== 'en') {
+      var shipping_translations = drupalSettings.alshaya_shipping_method_translations;
+      if (drupalSettings.alshaya_shipping_method_translations.hasOwnProperty(selectedMethodLabel)) {
+        selectedMethodLabel = shipping_translations[selectedMethodLabel];
+      }
+    }
+
+    return selectedMethodLabel;
   };
 
 })(jQuery, Drupal, dataLayer);

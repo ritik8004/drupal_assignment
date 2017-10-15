@@ -5,6 +5,7 @@
  * Alshaya master module file.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Access\AccessResult;
@@ -462,7 +463,7 @@ function _alshaya_master_mobile_number_process(array &$element, FormStateInterfa
 
   // Make mobile number required only for few forms.
   $mobile_number_required_forms = [
-    'webform_submission_alshaya_contact_form',
+    'webform_submission_alshaya_contact_add_form',
     'profile_address_book_add_form',
     'profile_address_book_edit_form',
     'profile_address_book_form',
@@ -603,5 +604,26 @@ function alshaya_master_alshaya_master_post_drupal_install() {
         $view->disable()->save();
       }
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_master_webform_submission_presave(EntityInterface $entity) {
+  $data = $entity->getData();
+  $value_changed = FALSE;
+  // Mobile number field gives value as array and it gets stored in database
+  // as "Array". so, we need to Walk through the submitted data and search for
+  // mobile number value and replace the array with value string.
+  array_walk($data, function (&$value) use (&$value_changed) {
+    if (is_array($value) && isset($value['mobile'])) {
+      $value_changed = TRUE;
+      $value = $value['value'];
+    }
+  });
+
+  if ($value_changed) {
+    $entity->setData($data);
   }
 }

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_seo;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -179,6 +180,13 @@ class AlshayaGtmManager {
   protected $database;
 
   /**
+   * Address Book Manager service.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
+  private $addressBookManager;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -203,6 +211,8 @@ class AlshayaGtmManager {
    *   Cache data service.
    * @param \Drupal\Core\Database\Connection $database
    *   Database connection service.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $addressBookManager
+   *   Address Book Manager service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -214,7 +224,8 @@ class AlshayaGtmManager {
                               StoresFinderUtility $storesFinderUtility,
                               LanguageManagerInterface $languageManager,
                               CacheBackendInterface $cache,
-                              Connection $database) {
+                              Connection $database,
+                              AlshayaAddressBookManager $addressBookManager) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -226,6 +237,7 @@ class AlshayaGtmManager {
     $this->languageManager = $languageManager;
     $this->cache = $cache;
     $this->database = $database;
+    $this->addressBookManager = $addressBookManager;
   }
 
   /**
@@ -537,7 +549,10 @@ class AlshayaGtmManager {
         // For CC we always use step 2.
         $attributes['step'] = 2;
       }
-      elseif (isset($address['customer_address_id']) && (!empty($address['customer_address_id'])) &&
+      // We receive address id in case of authenticated users & address as an
+      // extension attribute for anonymous.
+      elseif (((isset($address['customer_address_id']) && (!empty($address['customer_address_id']))) ||
+        (isset($address['extension'], $address['extension']['address_area_segment']))) &&
         ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
         // For HD we use step 3 if we have address saved.
         $attributes['step'] = 3;
@@ -568,6 +583,11 @@ class AlshayaGtmManager {
         $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
         $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
+
+        if ($attributes[$skuId]['gtm-metric1']) {
+          $attributes[$skuId]['gtm-metric1'] *= $cartItem['qty'];
+        }
+
         $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
         $attributes[$skuId]['gtm-dimension7'] = $dimension7;
         $attributes[$skuId]['gtm-dimension8'] = $dimension8;
@@ -739,6 +759,9 @@ class AlshayaGtmManager {
 
     foreach ($orderItems as $key => $item) {
       $product = $this->fetchSkuAtttributes($item['sku']);
+      if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
+        $product['gtm-metric1'] *= $item['ordered'];
+      }
       $productNode = alshaya_acm_product_get_display_node($item['sku']);
       $product['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
       $product['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
@@ -770,7 +793,7 @@ class AlshayaGtmManager {
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
-      'discountAmount' => (float) $order['totals']['discount'],
+      'discountAmount' => (float) abs($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
@@ -915,27 +938,35 @@ class AlshayaGtmManager {
             'cartItemsFlocktory' => $this->formatCartFlocktory($cart_items),
           ];
 
-          if ($shipping = $cart->getShippingMethodAsString()) {
-            $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($shipping);
+          if (($page_type === 'checkout delivery page') || ($page_type === 'checkout payment page')) {
+            if ($shipping = $cart->getShippingMethodAsString()) {
+              $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($shipping);
 
-            $page_dl_attributes['deliveryOption'] = 'Home Delivery';
-            $page_dl_attributes['deliveryType'] = $shipping_method->getName();
+              $page_dl_attributes['deliveryOption'] = 'Home Delivery';
+              $page_dl_attributes['deliveryType'] = $shipping_method->getName();
 
-            $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
+              $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
 
-            // Check if selected shipping method is click and collect.
-            if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
-              $page_dl_attributes['deliveryOption'] = 'Click and Collect';
-              $page_dl_attributes['deliveryType'] = $cart->getExtension('click_and_collect_type');
-
-              if ($store = $this->storeFinder->getStoreFromCode($cart->getExtension('store_code'))) {
-                $page_dl_attributes['storeLocation'] = $store->label();
-                $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+              $shipping_obj = (array) $cart->getShipping();
+              if (isset($shipping_obj['extension']['address_governate_segment'])) {
+                $page_dl_attributes['deliveryArea'] = $shipping_obj['extension']['address_governate_segment'];
               }
-            }
-            $shipping_obj = $cart->getShipping();
-            if (isset($shipping_obj['extension']['address_governate_segment'])) {
-              $page_dl_attributes['deliveryArea'] = $shipping_obj['extension']['address_governate_segment'];
+              // Check if selected shipping method is click and collect.
+              if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
+                $page_dl_attributes['deliveryOption'] = 'Click and Collect';
+                $page_dl_attributes['deliveryType'] = $cart->getExtension('click_and_collect_type');
+
+                if ($store = $this->storeFinder->getStoreFromCode($cart->getExtension('store_code'))) {
+                  $page_dl_attributes['storeLocation'] = $store->label();
+                  $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+                }
+
+                // Unset deliveryArea if shipping method is C&C. We use delivery
+                // area taken from billing address in case of C&C.
+                if (isset($page_dl_attributes['deliveryArea'])) {
+                  unset($page_dl_attributes['deliveryArea']);
+                }
+              }
             }
           }
         }
@@ -964,6 +995,9 @@ class AlshayaGtmManager {
             $dimension7 = $store->label();
             $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
           }
+
+          $billing_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
+          $deliveryArea = $billing_address['administrative_area'];
         }
 
         foreach ($orderItems as $orderItem) {
@@ -981,7 +1015,9 @@ class AlshayaGtmManager {
           'cartItemsFlocktory' => $this->formatCartFlocktory($orderItems),
           'storeLocation' => $dimension7,
           'storeAddress' => $dimension8,
+          'deliveryArea' => $deliveryArea,
         ];
+
         break;
     }
 

@@ -204,6 +204,10 @@ class CybersourceController implements ContainerInjectionInterface {
       // Get the cart object.
       $cart = $this->cartStorage->getCart(FALSE);
 
+      if (empty($cart)) {
+        throw new AccessDeniedHttpException('No cart available to process token');
+      }
+
       // Set the payment method.
       $cart->setPaymentMethod('cybersource');
 

@@ -47,9 +47,8 @@ class ProductStockController extends ControllerBase {
 
     $build = [];
 
-    // @TODO: We should avoid this AJAX call as well.
+    // We wont have AJAX call if product not buyable but kept to be double sure.
     if (!alshaya_acm_product_is_buyable($sku_entity)) {
-      // @TODO: This is to avoid adding out of stock classes. Needs refactoring.
       $build['max_quantity'] = 100;
       $build['html'] = '';
     }

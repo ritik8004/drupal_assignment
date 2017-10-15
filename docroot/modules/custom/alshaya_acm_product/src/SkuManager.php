@@ -577,7 +577,7 @@ class SkuManager {
         }
       }
 
-      $this->cache->set('sku_tree', $sku_tree, Cache::PERMANENT, ['sku_list']);
+      $this->cache->set('sku_tree', $sku_tree, Cache::PERMANENT, ['acq_sku_list']);
     }
 
     return $sku_tree;
@@ -649,7 +649,7 @@ class SkuManager {
         $skus = array_unique(array_merge($skus, $parent_skus));
       }
 
-      $this->cache->set($cid, $skus, Cache::PERMANENT, ['sku_list']);
+      $this->cache->set($cid, $skus, Cache::PERMANENT, ['acq_sku_list']);
     }
 
     return $skus;

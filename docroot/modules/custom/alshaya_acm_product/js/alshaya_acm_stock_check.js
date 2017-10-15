@@ -12,22 +12,26 @@
   Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
 
-      // Stock check on PLP,search & Promo pages.
-      $('article[data-vmode="search_result"]', context).each(function () {
-        var productId = $(this).attr('data-nid');
-        var productStock = $(this).find('.out-of-stock');
-        var articleNode = $(this);
-        if (!articleNode.hasClass('stock-processed')) {
-          $.ajax({
-            url: Drupal.url('stock-check-ajax/node/' + productId),
-            type: 'GET',
-            dataType: 'json',
-            success: function (result) {
-              productStock.html(result.html);
-              articleNode.addClass('stock-processed');
-            }
-          });
+      // Stock check on PLP, Search and Promo pages and Related products block.
+      $('.stock-placeholder', context).once('check-stock').each(function () {
+        var placeHolder = $(this);
+
+        if (placeHolder.parents('.mobile-related-wrapper').length > 0) {
+          return;
         }
+
+        var articleNode = placeHolder.closest('article');
+        var productId = articleNode.attr('data-nid');
+        var productStock = articleNode.find('.out-of-stock');
+        $.ajax({
+          url: Drupal.url('stock-check-ajax/node/' + productId) + '?cacheable',
+          type: 'GET',
+          dataType: 'json',
+          async: true,
+          success: function (result) {
+            productStock.html(result.html);
+          }
+        });
       });
 
       // Stock check on PDP main Product.
@@ -39,6 +43,7 @@
             url: Drupal.url('get-cart-form/acq_sku/' + skuId),
             type: 'GET',
             dataType: 'json',
+            async: true,
             success: function (result) {
               $wrapper.html(result.html);
 
@@ -115,6 +120,7 @@
             url: Drupal.url('get-cart-form/acq_sku/' + skuId),
             type: 'GET',
             dataType: 'json',
+            async: true,
             success: function (result) {
               $wrapper.html(result.html);
               // Add class to share this wrapper if product out of stock.
@@ -217,6 +223,7 @@
           url: Drupal.url('get-cart-form/acq_sku/' + skuId),
           type: 'GET',
           dataType: 'json',
+          async: true,
           success: function (result) {
             $wrapper.html(result.html);
             skuArticle.addClass('stock-check-processed');

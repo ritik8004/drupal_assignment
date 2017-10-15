@@ -13,6 +13,7 @@ services:
       - '@language_manager'
       - '@cache.alshaya'
       - '@database'
+      - '@alshaya_addressbook.manager'
   alshaya_seo.sitemap_breadcrumb:
     class: Drupal\alshaya_seo\Breadcrumb\AlshayaSiteMapBreadcrumb
     tags:

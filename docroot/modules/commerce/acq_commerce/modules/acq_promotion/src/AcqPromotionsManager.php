@@ -169,11 +169,13 @@ class AcqPromotionsManager {
 
       // Detach promotion from all skus.
       $attached_promotion_skus = $this->getSkusForPromotion($node);
+
       if (!empty($attached_promotion_skus)) {
         $chunks = array_chunk($attached_promotion_skus, $acq_promotion_attach_batch_size);
         foreach ($chunks as $chunk) {
           $data['skus'] = $chunk;
           $data['promotion'] = $nid;
+          $data['promotion_type'] = $node->get('field_acq_promotion_type')->getString();
           $acq_promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
           $acq_promotion_detach_queue->createItem($data);
         }
@@ -186,14 +188,17 @@ class AcqPromotionsManager {
    *
    * @param int $rule_id
    *   Rule id of the promotion to load.
+   * @param string $rule_type
+   *   Rule type of the promotion to load.
    *
    * @return \Drupal\node\Entity\Node|null
    *   Return node if a promotion found associated with the rule id else Null.
    */
-  public function getPromotionByRuleId($rule_id) {
+  public function getPromotionByRuleId($rule_id, $rule_type) {
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
     $query->condition('field_acq_promotion_rule_id', $rule_id);
+    $query->condition('field_acq_promotion_type', $rule_type);
     $nids = $query->execute();
 
     if (empty($nids)) {
@@ -378,12 +383,12 @@ class AcqPromotionsManager {
       }
 
       // Check if this promotion exists in Drupal.
-      $promotion_node = $this->getPromotionByRuleId($promotion['rule_id']);
+      // Assuming rule_id is unique across a promotion type.
+      $promotion_node = $this->getPromotionByRuleId($promotion['rule_id'], $promotion['promotion_type']);
 
       // If promotion exists, we update the related skus & final price.
       if ($promotion_node) {
         $promotion_nid = $promotion_node->id();
-
         // Update promotion metadata.
         $this->syncPromotionWithMiddlewareResponse($promotion, $promotion_node);
         $attached_promotion_skus = $this->getSkusForPromotion($promotion_node);
