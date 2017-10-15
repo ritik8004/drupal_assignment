@@ -519,6 +519,8 @@ function alshaya_seo_preprocess_alshaya_main_menu_level2(&$variables) {
  * Implements template_preprocess_views_view_field().
  */
 function alshaya_seo_preprocess_views_view_field(&$variables) {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
   $field = $variables['field'];
   $view = $variables['view'];
 
@@ -535,6 +537,7 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
       $term_classes[] = 'vert-nav-' . str_replace(' ', '-', strtolower($parent_term_name));
     }
 
+    /** @var \Drupal\taxonomy\Entity\Term $term */
     $term = $variables['row']->_entity;
     $term_class_name = str_replace(' ', '-', strtolower(preg_replace('/[^A-Za-z0-9-\s]/', '', $term->getName())));
     $term_classes[] = 'left-nav-' . $term_class_name;
@@ -544,6 +547,10 @@ function alshaya_seo_preprocess_views_view_field(&$variables) {
         'class' => $term_classes,
       ],
     ];
+
+    if ($term->hasTranslation($langcode)) {
+      $term = $term->getTranslation($langcode);
+    }
 
     $variables['output'] = $term->toLink($term->getName(), '', $options)->toString();
   }

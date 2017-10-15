@@ -51,18 +51,21 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
         if (isset($alshaya_department_pages[$term->id()])) {
           $nid = $alshaya_department_pages[$term->id()];
           // We use department page link instead of PLP link.
+          /** @var \Drupal\node\Entity\Node $node */
           $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
 
-          // Get the translated node.
-          $node = $entityRepository->getTranslationFromContext($node);
+          if ($node->isPublished()) {
+            // Get the translated node.
+            $node = $entityRepository->getTranslationFromContext($node);
 
-          // Add link to breadcrumb.
-          $breadcrumb->addLink(Link::createFromRoute(_alshaya_department_page_get_node_title($node), 'entity.node.canonical', ['node' => $node->id()]));
+            // Add link to breadcrumb.
+            $breadcrumb->addLink(Link::createFromRoute(_alshaya_department_page_get_node_title($node), 'entity.node.canonical', ['node' => $node->id()]));
 
-          // Add the node to cache dependency.
-          $breadcrumb->addCacheableDependency($node);
+            // Add the node to cache dependency.
+            $breadcrumb->addCacheableDependency($node);
 
-          continue;
+            continue;
+          }
         }
       }
 
