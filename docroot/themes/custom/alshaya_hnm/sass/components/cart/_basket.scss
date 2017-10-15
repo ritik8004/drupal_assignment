@@ -271,11 +271,11 @@
     }
 
     .dark {
-      color: $black;
+      color: $hnm-black-two;
     }
 
     .item-code {
-      font-family: $arial;
+      font-family: $hnm-regular;
       font-size: 0.875rem;
     }
 
@@ -353,20 +353,20 @@
     .tooltip {
       display: none;
       font-size: 0.625rem;
-      font-family: $arial;
+      font-family: $hnm-regular;
       position: absolute;
       z-index: 1;
       padding: 10px 11px;
       top: 1rem;
       #{$left}: -4.3rem;
-      color: $windows-blue;
-      background-color: $alice-blue;
-      border: 1px solid $cerulean-two;
+      color: $hnm-black-two;
+      background-color: $grey1;
+      border: 1px solid $hnm-black-two;
       border-radius: 2px;
       width: 10.81rem;
 
       @include breakpoint($desktop) {
-        #{$left}: 1.1rem;
+        #{$left}: 0.95rem;
       }
 
       @include breakpoint($only-mobile) {
@@ -389,8 +389,8 @@
 
   .tooltip--head {
     font-size: 0.75rem;
-    font-family: $arial;
-    color: $cerulean-two;
+    font-family: $hnm-regular;
+    color: $hnm-black-two;
     margin: 0;
 
     @include icon(infomation, after) {
@@ -399,6 +399,7 @@
       vertical-align: middle;
       font-weight: bold;
       font-size: 1rem;
+      color: $hnm-black-two;
 
       @include breakpoint($desktop) {
         margin-#{$left}: 0.75rem;
@@ -410,8 +411,12 @@
     }
 
     &.not-available {
-      color: $white;
+      color: $grey4;
       text-decoration: line-through;
+
+      &::after {
+        color: $grey4;
+      }
 
       &:hover + .tooltip {
         display: none;
@@ -511,7 +516,8 @@
   padding: 1rem;
   position: relative;
   outline: none;
-  font-family: $arial;
+  font-family: $hnm-regular;
+  color: $hnm-black-two;
 
   @include breakpoint($tablet) {
     padding: 1rem 1.5rem;
@@ -698,15 +704,17 @@
   }
 
   #apply_coupon {
-    font-family: $alshaya-bold;
+    font-family: $hnm-bold;
+    font-weight: normal;
+    text-transform: uppercase;
     display: inline-block;
     margin-bottom: 14px;
     padding: 9px 30px;
-    background: $pumpkin-orange;
+    background: $hnm-black-two;
     color: $white-five;
     cursor: pointer;
     margin-#{$left}: 1.5rem;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
 
     @include breakpoint($only-tablet) {
       margin-#{$left}: 1.5rem;
@@ -996,7 +1004,11 @@ html[lang=ar] {
       font-size: 0.75rem;
 
       &.not-available {
-        color: $white;
+        color: $grey4;
+
+        &::after {
+          color: $grey4;
+        }
       }
     }
 
