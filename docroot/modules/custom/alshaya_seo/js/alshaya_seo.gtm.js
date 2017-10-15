@@ -334,17 +334,27 @@
             event = 'addToCart';
           }
 
-          var data = {
-            event: event,
-            ecommerce: {
-              currencyCode: currencyCode,
-              remove: {
-                products: [
-                  product
-                ]
-              }
-            }
-          };
+					var data = {
+						event: event,
+						ecommerce: {
+							currencyCode: currencyCode
+						}
+					};
+
+					if (event === 'removeFromCart') {
+						data.ecommerce.remove = {
+							products: [
+								product
+							]
+						};
+					}
+					else if (event === 'addToCart') {
+						data.ecommerce.add = {
+							products: [
+								product
+							]
+						};
+					}
 
           dataLayer.push(data);
         }
