@@ -29,7 +29,19 @@ function alshaya_bbw_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $fo
         '#type' => 'item',
         '#markup' => \Drupal::getContainer()->get('renderer')->renderPlain($build),
         '#weight' => -100,
+        '#prefix' => '<div class="form--content">',
+        '#suffix' => '</div>'
       ];
     }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_bbw_module_implements_alter(&$implementations, $hook) {
+  // Alter page_attachments implementation for alshaya_bbw to call at last.
+  if ($hook == 'page_attachments') {
+    unset($implementations['back_to_top']);
   }
 }

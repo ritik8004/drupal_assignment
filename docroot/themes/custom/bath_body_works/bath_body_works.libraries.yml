@@ -3,6 +3,8 @@ global:
   css:
     theme:
       dist/css/global.css: {}
+  js:
+    js/global.js: {}
 
 menu-logo-navigation:
   version: VERSION

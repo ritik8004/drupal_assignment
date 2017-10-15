@@ -1,4 +1,4 @@
-#block-mobile-footer-menu {
+.pls-footer-menu {
   font-size: 0.875rem;
 
   @include breakpoint($above-palm) {
@@ -30,7 +30,7 @@
 }
 
 .region-footer-primary {
-  .block-language-switcher--desktop {
+  .pls-footer-languageswitcher {
     width: 100%;
     background-color: transparent;
     text-align: center;

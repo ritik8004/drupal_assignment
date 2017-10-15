@@ -1,8 +1,7 @@
-{% extends "block.html.twig" %}
 {#
 /**
  * @file
- * Bartik's theme implementation for a branding block.
+ * Default theme implementation for a branding block.
  *
  * Each branding element variable (logo, name, slogan) is only available if
  * enabled in the block configuration.
@@ -11,15 +10,16 @@
  * - site_logo: Logo for site as defined in Appearance or theme settings.
  * - site_name: Name for site as defined in Site information settings.
  * - site_slogan: Slogan for site as defined in Site information settings.
+ *
+ * @ingroup themeable
  */
 #}
-{% set attributes = attributes.addClass('site__logo') %}
-{% block content %}
-    {% if site_logo %}
-      <div class="site-brand-home">
-        <a href="{{ path('<front>') }}" title="{{ site_name }}" rel="home" class="logo">
-            <img src="{{ site_logo }}" alt="{{ site_name }}"/>
-        </a>
-      </div>
-    {% endif %}
-{% endblock %}
+{{ attach_library("whitelabel/block-site-logo") }}
+{% include "@molecules/02-header-tertiary/block-site-logo/block-site-logo.twig" with
+  {
+    content: content,
+    site_logo: site_logo,
+    site_logo_title: site_logo_title,
+    site_link: site_link
+  }
+%}

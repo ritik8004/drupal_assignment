@@ -57,8 +57,8 @@ function alshaya_bbw_create_email_signup_cta_block_content() {
     'info' => 'Stay in the know',
     'machine_name' => 'stay_in_the_know',
     'body' => [
-      'value' => "<p>Get the inside scoop on exclusive offers, new product alerts &amp; Middle Eastern Store events.</p>\r\n<p><a href=\"/signup\">Sign up</a></p>",
-      'format' => 'rich_text',
+      'value' => "<p>Get the inside scoop on exclusive offers, new product alerts &amp; Middle Eastern Store events.</p>\r\n<p><a href=\"/email-sign-up\" class=\"use-ajax\" data-dialog-type=\"modal\">Sign up</a></p>",
+      'format' => 'full_text',
     ],
     'type' => 'basic',
     'langcode' => 'en',
@@ -68,8 +68,8 @@ function alshaya_bbw_create_email_signup_cta_block_content() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'إبقى دائماً على معرفة',
     'body' => [
-      'value' => "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/signup\">تسجيل مستخدم جديد</a></p>",
-      'format' => 'rich_text',
+      'value' => "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/email-sign-up\" class=\"use-ajax\" data-dialog-type=\"modal\">تسجيل مستخدم جديد</a></p>",
+      'format' => 'full_text',
     ]
   ]);
   $ar_block_content->save();
@@ -82,7 +82,7 @@ function alshaya_bbw_create_email_signup_form_incentive_text_block_content() {
 // Create email signup form incentive text block content.
   $block_content = BlockContent::create([
     'uuid' => '19207aad-0e43-4d3a-96d7-c74141f75bb1',
-    'info' => 'Sign up to get the latest from Bath and Body Works, like:',
+    'info' => 'Sign up to get the latest from Bath and body works, like:',
     'machine_name' => 'email_sign_up_content',
     'body' => [
       'value' => "<ul>
@@ -99,7 +99,7 @@ function alshaya_bbw_create_email_signup_form_incentive_text_block_content() {
   $block_content->save();
   // Create email signup form incentive block translation.
   $ar_block_content = $block_content->addTranslation('ar', [
-    'info' => 'Sign up to get the latest from Bath and Body Works, like:',
+    'info' => 'Sign up to get the latest from Bath and body works, like:',
     'body' => [
       'value' => "<ul>
                     <li><p>Exclusive offers &amp; deals.</p></li>

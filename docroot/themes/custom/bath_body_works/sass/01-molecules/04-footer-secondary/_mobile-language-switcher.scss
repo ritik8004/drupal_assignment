@@ -59,3 +59,13 @@
     }
   }
 }
+
+body.mobile-language-toggle-active {
+  .region-footer-secondary {
+    padding-bottom: 40px;
+  }
+
+  .mobile-language-toggle {
+    bottom: 0;
+  }
+}
