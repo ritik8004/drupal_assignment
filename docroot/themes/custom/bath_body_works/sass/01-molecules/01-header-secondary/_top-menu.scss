@@ -42,3 +42,8 @@
     vertical-align: bottom;
   }
 }
+
+html[lang="ar"] .menu-language-switcher--desktop li a::before {
+  float: right;
+  line-height: 0.8;
+}
