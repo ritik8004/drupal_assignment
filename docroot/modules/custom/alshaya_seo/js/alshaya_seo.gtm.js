@@ -23,7 +23,7 @@
       var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
       var cartCheckoutDeliverySelector = $('body[gtm-container="checkout delivery page"]');
       var cartCheckoutPaymentSelector = $('body[gtm-container="checkout payment page"]');
-      var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container .js-webform-radios', context);
+      var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
       var couponCode = $('form.customer-cart-form', context).find('input#edit-coupon').val();
       var storeFinderFormSelector = $('form#views-exposed-form-stores-finder-page-1');
