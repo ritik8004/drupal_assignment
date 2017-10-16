@@ -71,6 +71,7 @@ function alshaya_hm_install() {
       'logo' => [
         'path' => $active_theme->getPath() . '/logo.svg',
       ],
+      'name' => 'H&M Kuwait',
     ])
     ->save();
 

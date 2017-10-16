@@ -1448,7 +1448,9 @@ header {
     }
 
     @include breakpoint($desktop) {
-      height: 2.875rem;
+      width: 5.1875rem;
+      margin: 0 auto;
+      height: 3.375rem;
       text-align: center;
     }
   }

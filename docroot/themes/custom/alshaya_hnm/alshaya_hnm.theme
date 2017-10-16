@@ -119,7 +119,7 @@ function alshaya_hnm_preprocess_page(&$variables) {
 
   // Make site name and logo available to all templates.
   $variables['site_logo'] = theme_get_setting('logo.url');
-  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  $variables['site_name'] = theme_get_setting('name');
 }
 
 /**
@@ -145,7 +145,7 @@ function alshaya_hnm_preprocess_block(&$variables) {
 
   if ($variables['elements']['#id'] === 'branding') {
     $variables['site_logo'] = theme_get_setting('logo.url');
-    $variables['site_name'] = \Drupal::config('system.site')->get('name');
+    $variables['site_name'] = theme_get_setting('name');
   }
 }
 
