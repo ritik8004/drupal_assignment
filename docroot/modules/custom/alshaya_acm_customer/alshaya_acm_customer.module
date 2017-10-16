@@ -62,6 +62,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'delivery_detail_notice' => NULL,
       'account' => NULL,
       'print_link' => NULL,
+      'vat_text' => NULL,
     ],
   ];
 
