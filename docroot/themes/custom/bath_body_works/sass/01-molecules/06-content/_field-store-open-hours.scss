@@ -11,31 +11,33 @@
   }
 }
 
-.geolocation-common-map-container {
-  .hours--label,
-  .open--hours {
-    padding-#{direction(left)}: 0;
-    border-bottom: 0;
-    padding-bottom: 0;
-  }
+.geolocation-common-map {
+  .geolocation-common-map-container {
+    .hours--label,
+    .open--hours {
+      padding-#{direction(left)}: 0;
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
 
-  .location-content {
-    min-width: 12rem;
-  }
+    .location-content {
+      min-width: 12rem;
+    }
 
-  .views-field-title {
-    margin-bottom: 0.1875rem;
-    font-weight: bold;
-  }
+    .views-field-title {
+      margin-bottom: 0.1875rem;
+      font-weight: bold;
+    }
 
-  .get--directions a {
-    color: $peacock-blue;
-    padding-#{direction(left)}: 0;
-    border-bottom: 0;
+    .get--directions a {
+      color: $peacock-blue;
+      padding-#{direction(left)}: 0;
+      border-bottom: 0;
 
-    &::after {
-      content: '';
-      background: url("../../images/icons/svg/icon-direction.svg") no-repeat;
+      &::after {
+        content: '';
+        background: url("../../images/icons/svg/icon-direction.svg") no-repeat;
+      }
     }
   }
 }
@@ -75,26 +77,30 @@
   display: none;
 }
 
-.views-field-field-store-open-hours .hours--wrapper {
-  .open--hours {
-    padding-top: 1.25rem;
-    padding-bottom: 1.25rem;
-  }
+.views-field-field-store-open-hours {
+  min-width: 13.12rem;
 
-  .hours--label {
-    color: $peacock-blue;
-    position: relative;
-
-    @include icon(chevron#{direction(right)}, after) {
-      position: absolute;
-      font-size: 2rem;
-      line-height: 2rem;
-      #{direction(right)}: 0.3rem;
-      top: 0.5rem;
+  .hours--wrapper {
+    .open--hours {
+      padding-top: 1.25rem;
+      padding-bottom: 1.25rem;
     }
 
-    &.open {
-      @include icon(chevrondown, after);
+    .hours--label {
+      color: $peacock-blue;
+      position: relative;
+
+      @include icon(chevron#{direction(right)}, after) {
+        position: absolute;
+        font-size: 2rem;
+        line-height: 2rem;
+        #{direction(right)}: 0.3rem;
+        top: 0.5rem;
+      }
+
+      &.open {
+        @include icon(chevrondown, after);
+      }
     }
   }
 }

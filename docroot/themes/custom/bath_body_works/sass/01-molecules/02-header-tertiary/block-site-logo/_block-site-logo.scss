@@ -27,6 +27,6 @@
 
 .region-page-header .site__logo {
   @include breakpoint($upto-palm) {
-    display: block;
+    display: table;
   }
 }

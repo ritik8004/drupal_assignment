@@ -15,11 +15,10 @@
  */
 #}
 {{ attach_library("whitelabel/block-site-logo") }}
-{% include "@molecules/02-header-tertiary/block-site-logo/block-site-logo.twig" with
-  {
-    content: content,
-    site_logo: site_logo,
-    site_logo_title: site_logo_title,
-    site_link: site_link
-  }
-%}
+{% if site_logo %}
+  <div class="site__logo ss">
+    <a href="{{ path('<front>') }}" title="{{ site_logo_title }}" rel="home">
+      <img src="{{ site_logo }}" alt="{{ site_logo_title }}" />
+    </a>
+  </div>
+{% endif %}

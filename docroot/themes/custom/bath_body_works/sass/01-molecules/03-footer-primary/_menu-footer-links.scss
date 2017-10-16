@@ -81,10 +81,14 @@
 
       &::before {
         font-size: 1.01rem;
-        margin-right: 0;
+        margin-#{direction(right)}: 0;
         vertical-align: middle;
         line-height: 1.5;
       }
     }
   }
+}
+
+html[lang="ar"] .region-footer-primary .pls-footer-languageswitcher .menu-language-switcher--desktop li a::before {
+  line-height: 0.51;
 }

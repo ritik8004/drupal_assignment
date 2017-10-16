@@ -16,7 +16,7 @@
 
       &::before {
         font-size: 1rem;
-        margin-right: 0.31em;
+        margin-#{direction(right)}: 0.31em;
         vertical-align: bottom;
       }
     }
@@ -38,7 +38,7 @@
 
   &::before {
     font-size: 1rem;
-    margin-right: 0.31em;
+    margin-#{direction(right)}: 0.31em;
     vertical-align: bottom;
   }
 }

@@ -137,9 +137,19 @@
 .list-view-locator {
   .store-row--counter {
     background-color: $peacock-blue;
+    padding-top: 0.25rem;
+    #{direction(left)}: 1rem;
   }
 
   .hours--wrapper .hours--label {
     color: $black-smoke;
+
+    &::after {
+      color: $peacock-blue;
+    }
+  }
+
+  .mobile-only--back-to-glossary {
+    display: none;
   }
 }
