@@ -85,7 +85,7 @@ function alshaya_hm_install() {
   // Use the customer service block.
   Drupal::configFactory()->getEditable('block.block.customerservice')
     ->set('weight', '-34')
-    ->set('region', 'footer_secondary')
+    ->set('region', 'post_content')
     ->save();
 
   // Re use the about branc block for corporate info.

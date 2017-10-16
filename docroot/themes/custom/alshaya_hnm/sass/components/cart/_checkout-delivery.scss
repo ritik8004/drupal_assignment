@@ -97,8 +97,10 @@
 
         h2 {
           font-size: 0.75rem;
-          color: $cerulean-two;
-          text-transform: lowercase;
+          color: $hnm-black-two;
+          text-transform: uppercase;
+          font-family: $hnm-bold;
+          letter-spacing: 1px;
 
           @include breakpoint($desktop) {
             font-size: 0.875rem;
@@ -147,8 +149,9 @@
         }
 
         a {
-          font-weight: bold;
-          color: $cerulean-two;
+          font-weight: normal;
+          font-family: $hnm-demibold;
+          color: $hnm-black-two;
           font-size: 0.75rem;
 
           &.back-to-basket {
@@ -215,8 +218,8 @@
         &.active--tab--head {
           display: block;
           background-color: $white-two;
-          border-width: 2px;
-          border-color: $marine-blue-two;
+          border-width: 1px;
+          border-color: $hnm-black-two;
           padding: 5px;
         }
       }
@@ -227,30 +230,11 @@
     }
 
     hr {
-      display: block;
-      width: 39%;
-      width: calc(50% - 40px);
-      margin: 0 10px;
-      border: 1px solid $cerulean-two;
-      transition: 0.3s ease-in-out;
-      position: absolute;
-      bottom: 0;
-      z-index: 2;
-
-      @include breakpoint($desktop) {
-        width: calc(50% - 80px);
-        margin: 0 20px;
-      }
+      display: none;
     }
 
-    .tab-click-collect:hover ~ hr {
-      .no-touchevents & {
-        margin-#{$left}: 55.5%;
-      }
-    }
-
-    .tab-click-collect.active--tab--head ~ hr {
-      margin-#{$left}: 55.5%;
+    .tab-click-collect:hover {
+      background: $hnm-grey;
     }
 
     .tab {
@@ -259,7 +243,7 @@
       vertical-align: middle;
       border: 1px solid $light-greyish;
       background: $white-five;
-      font-family: $alshaya-bold;
+      font-family: $hnm-regular;
       font-weight: normal;
 
       h2 {
@@ -271,8 +255,8 @@
       }
 
       p {
-        color: $grey-ash;
-        font-family: $arial;
+        color: $grey8;
+        font-family: $hnm-regular;
 
         @include breakpoint($only-mobile) {
           font-size: 0.75rem;
@@ -320,8 +304,9 @@
         &.active--tab--head {
           position: relative;
           z-index: 2;
-          border-width: 2px;
-          border-color: $greyish;
+          border-width: 1px;
+          border-color: $hnm-black-two;
+          background: $hnm-grey;
         }
 
         &.tab-home-delivery {
@@ -354,54 +339,16 @@
 
       &.active--tab--head {
         h2 {
-          color: $marine-blue-two;
+          color: $hnm-black-two;
         }
-      }
-    }
-
-    .tab-home-delivery.active--tab--head::after,
-    .tab-click-collect.active--tab--head::before {
-      content: "";
-      display: block;
-      width: 0.125rem;
-      height: calc(100% - 0.3125rem);
-      background: $light-greyish;
-      position: absolute;
-      top: 0.3125rem;
-
-      @include breakpoint($desktop) {
-        width: 0.25rem;
-      }
-    }
-
-    .tab-home-delivery.active--tab--head::after {
-      #{$right}: -0.1875rem;
-
-      @include breakpoint($desktop) {
-        #{$right}: -0.3125rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        display: none;
-      }
-    }
-
-    .tab-click-collect.active--tab--head::before {
-      #{$left}: -0.1875rem;
-
-      @include breakpoint($desktop) {
-        #{$left}: -0.3125rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        display: none;
       }
     }
 
     .tab-separator {
       border: none;
       pointer-events: none;
-      color: $grey-ash;
+      color: $hnm-black-two;
+      font-size: 0.875rem;
 
       @include breakpoint($tablet) {
         width: 6.2%;
@@ -854,12 +801,12 @@
           margin: 0;
 
           &.active--tab--content {
-            top: -2px;
+            top: -1px;
             position: relative;
-            border-width: 2px;
-            border-color: $greyish;
+            border-width: 1px;
+            border-color: $hnm-black-two;
             border: none;
-            border-top: 2px solid $greyish;
+            border-top: 1px solid $hnm-black-two;
           }
         }
 
@@ -969,14 +916,16 @@
         }
 
         .title {
-          color: $marine-blue-two;
+          color: $hnm-black-two;
           font-size: 1rem;
-          font-family: $alshaya-bold;
+          font-family: $hnm-demibold;
+          letter-spacing: 1px;
+          text-transform: uppercase;
           font-weight: normal;
 
           @include breakpoint($tablet) {
             padding-bottom: 0.4375rem;
-            border-bottom: 1px solid $white;
+            border-bottom: 1px solid $hnm-black-two;
           }
         }
 
@@ -1006,7 +955,7 @@
 
     .tabs--content {
       @include breakpoint($tablet) {
-        border: 2px solid $greyish;
+        border: 1px solid $hnm-black-two;
         border-top: none;
         margin-top: 0.4375rem;
       }

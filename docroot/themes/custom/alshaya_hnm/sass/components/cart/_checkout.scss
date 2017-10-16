@@ -291,16 +291,18 @@
     }
 
     .title {
-      color: $black-two;
-      font-weight: bold;
+      color: $hnm-black-two;
+      font-weight: normal;
+      font-family: $hnm-demibold;
     }
 
     a {
-      text-decoration: none;
+      text-decoration: underline;
       float: $right;
-      font-weight: bold;
       font-size: 0.75rem;
-      color: $cerulean-two;
+      color: $hnm-black-two;
+      font-weight: normal;
+      font-family: $hnm-demibold;
     }
   }
 
@@ -310,6 +312,7 @@
     font-size: 0.875rem;
     position: relative;
     cursor: pointer;
+    color: $hnm-black-two;
 
     @include breakpoint($upto-desktop) {
       font-size: 0.75rem;
@@ -433,6 +436,15 @@
 
     html[lang=ar] & {
       line-height: 1.5;
+    }
+
+    .order-total {
+      > span,
+      span.price-currency,
+      span.price-amount {
+        font-family: $hnm-bold;
+        color: $hnm-black-two;
+      }
     }
 
     .sub-total,
@@ -1167,12 +1179,12 @@ body.alias--cart {
   .edit-continue-shopping-mobile {
     font-size: 12px;
     font-weight: bold;
-    border: 1px solid $marine-blue-two;
+    border: 1px solid $hnm-black-two;
     display: block;
     padding: 0.625rem 1.6rem;
     text-align: center;
-    text-transform: lowercase;
-    font-family: $arial;
+    text-transform: uppercase;
+    font-family: $hnm-regular;
 
     @include breakpoint($tablet) {
       max-width: 173px;
@@ -1393,6 +1405,18 @@ html[lang=ar] {
             }
           }
         }
+      }
+    }
+  }
+}
+
+.checkout {
+  .multistep-checkout {
+    #edit-actions {
+      .form-submit {
+        font-family: $hnm-bold;
+        font-weight: normal;
+        font-size: 0.75rem;
       }
     }
   }
