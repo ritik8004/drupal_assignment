@@ -50,3 +50,21 @@
     }
   }
 }
+
+.ajax-progress-throbber {
+  display: none;
+}
+
+.ajax-progress-fullscreen {
+  background: none;
+
+  .throbber {
+    display: none;
+  }
+
+  @include icon(spinner, after) {
+    animation: anim-rotate 2s infinite linear;
+    font-size: 1.75rem;
+    display: inline-block;
+  }
+}
