@@ -28,6 +28,12 @@ function _alshaya_seo_process_gtm() {
   $currentUser = \Drupal::currentUser();
   $current_route_name = \Drupal::routeMatch()->getRouteName();
 
+  // List of route expections with AJAX.
+  $whitelisted_routes = [
+    'views.ajax',
+    'alshaya_acm_product.product_modal',
+  ];
+
   $route_params = \Drupal::routeMatch()->getRawParameters();
 
   // Disable SEO modifications for non-customer users (admins).
@@ -35,7 +41,7 @@ function _alshaya_seo_process_gtm() {
     $process = FALSE;
   }
   // Don't process for AJAX requests.
-  elseif ((stripos(\Drupal::request()->getRequestUri(), 'ajax') > -1) && ($current_route_name !== 'views.ajax')) {
+  elseif ((stripos(\Drupal::request()->getRequestUri(), 'ajax') > -1) && (!in_array($current_route_name, $whitelisted_routes))) {
     $process = FALSE;
   }
   elseif (!\Drupal::service('router.admin_context')->isAdminRoute()
