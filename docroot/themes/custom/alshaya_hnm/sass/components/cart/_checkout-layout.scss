@@ -126,13 +126,12 @@
   }
 
   .c-post-content {
-    background-color: $white-five;
-    border-top: 2px solid $marine-blue-two;
+    background-color: $hnm-black;
   }
 
   .block-customer-service-block {
     border-top: none;
-    padding-top: 0;
+    padding-top: 3.25rem;
     padding-bottom: 1.375rem;
   }
 
@@ -158,20 +157,29 @@
     a {
       margin-#{$left}: 0;
       width: 52.5%;
+      text-align: $left;
       display: inline-block;
+
+      @include breakpoint($upto-desktop) {
+        img {
+          width: 2.5rem;
+          height: 2.25rem;
+        }
+      }
 
       @include breakpoint($tablet) {
         width: 29%;
       }
 
       @include breakpoint($desktop) {
-        width: 50.5%;
+        width: 54.5%;
+        text-align: $right;
       }
     }
 
     .secure__checkout--block {
       float: $right;
-      color: $marine-blue;
+      color: $black-two;
       font-size: 0.75rem;
       line-height: 2.25rem;
 
@@ -199,7 +207,7 @@
 
       @include breakpoint($tablet) {
         font-size: 1rem;
-        background: $pumpkin-orange;
+        background: $hnm-red;
         color: $white-five;
         padding: 0.125rem;
         display: inline-block;
@@ -242,23 +250,40 @@
 }
 
 .block-customer-service-block {
-  background-color: $white-five;
-  border-top: 2px solid $marine-blue-two;
-  font-family: $alshaya-bold;
+  background-color: $hnm-black;
+  font-family: $hnm-regular;
   font-weight: normal;
-  text-transform: lowercase;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   padding: 1.375rem 1.5rem;
   padding-#{$right}: 1rem;
+  text-align: center;
 
   p {
-    color: $black;
+    color: $grey5;
+    font-size: 0.75rem;
+    margin: 0;
+
+    span.subtext {
+      font-size: 0.5625rem;
+      display: inline-block;
+      width: 57%;
+      line-height: 1.45;
+    }
+
+    &.line1 {
+      margin-bottom: 0.25rem;
+    }
+
+    &.line2 {
+      margin-bottom: 1.25rem;
+    }
+
+    &.line3 {
+      margin-bottom: 2rem;
+    }
   }
 
   .light {
-    font-family: $alshaya-thin;
-    color: $grey-ash;
-
     &.no-direction {
       html[lang=ar] & {
         display: inline-block;
@@ -283,8 +308,12 @@
   }
 
   h3 {
-    color: $marine-blue-two;
-    margin-bottom: 0.8rem;
+    font-family: $hnm-bold;
+    font-weight: normal;
+    color: $white-five;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    margin-bottom: 1.188rem;
   }
 
   @include breakpoint($tablet) {

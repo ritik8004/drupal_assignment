@@ -67,9 +67,14 @@
     }
 
     a {
-      font-weight: bold;
-      color: $cerulean-two;
+      font-weight: normal;
+      font-family: $hnm-demibold;
+      color: $hnm-black-two;
       font-size: 0.75rem;
+
+      &:hover {
+        text-decoration: underline;
+      }
 
       &.back-to-basket {
         @include breakpoint($desktop) {
@@ -207,15 +212,11 @@
     }
 
     span {
-      font-size: 14px;
-      font-family: $alshaya-bold;
+      font-size: 0.75rem;
+      font-family: $hnm-demibold;
+      text-transform: uppercase;
       font-weight: normal;
-      color: $marine-blue-two;
-
-      @include breakpoint($only-mobile) {
-        font-size: 12px;
-        font-weight: normal;
-      }
+      color: $hnm-black-two;
     }
   }
 
@@ -235,8 +236,13 @@
       margin-top: 1.6rem;
       display: block;
       text-align: center;
-      font-weight: bold;
-      color: $cerulean-two;
+      font-family: $hnm-demibold;
+      font-weight: normal;
+      color: $hnm-black-two;
+
+      &:hover {
+        text-decoration: underline;
+      }
 
       @include breakpoint($tablet) {
         position: absolute;
