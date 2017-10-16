@@ -225,10 +225,6 @@
     }
   }
 
-  .c-footer-secondary {
-    background-color: $white-four;
-  }
-
   .c-post-content .l-container {
     max-width: 80.25rem;
     margin: auto;
@@ -266,8 +262,12 @@
     span.subtext {
       font-size: 0.5625rem;
       display: inline-block;
-      width: 57%;
+      width: 41%;
       line-height: 1.45;
+
+      @include breakpoint($only-tablet) {
+        width: 79%;
+      }
     }
 
     &.line1 {
@@ -293,7 +293,7 @@
   }
 
   p:last-child {
-    margin-top: 2.8rem;
+    margin-top: 2rem;
 
     .light {
       font-family: $alshaya-bold;
