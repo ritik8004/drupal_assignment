@@ -106,6 +106,10 @@ function alshaya_hnm_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_hnm/plp_search_js';
   }
 
+  // Adding vat text footer to the page.
+  if ($routmatch->getRouteName() == 'acq_cart.cart') {
+    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer.value');
+  }
   // Attach the plp search js library to the promotion product listing page.
   if (isset($variables['node'])) {
     if ($variables['node']->bundle() === 'acq_promotion') {
@@ -137,7 +141,7 @@ function alshaya_hnm_preprocess_block(&$variables) {
 
   if ($variables['elements']['#id'] === 'branding') {
     $variables['site_logo'] = theme_get_setting('logo.url');
-    $variables['site_name'] = 'H&M';
+    $variables['site_name'] = \Drupal::config('system.site')->get('name');
   }
 }
 
@@ -261,8 +265,7 @@ function alshaya_hnm_preprocess_node(&$variables) {
     $variables['label'] = NULL;
   }
   elseif ($variables['node']->bundle() === 'acq_product') {
-    $vat_text_footer = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer.value');
-    $variables['vat_text_footer'] = $vat_text_footer;
+    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer.value');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
   }
