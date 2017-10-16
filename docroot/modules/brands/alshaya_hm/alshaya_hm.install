@@ -95,6 +95,28 @@ function alshaya_hm_install() {
     ->set('region', 'footer_primary')
     ->save();
 
+  // Edit the block titles.
+  Drupal::configFactory()->getEditable('block.block.shopby')
+    ->set('settings.label', 'Shop')
+    ->save();
+  Drupal::configFactory()->getEditable('block.block.shopby')
+    ->set('settings.label', 'Newsletter')
+    ->save();
+
+  // Set visiblity for social link block.
+  Drupal::configFactory()->getEditable('block.block.sociallinks')
+    ->set('visibility.request_path.pages', '/cart/checkout\r\n/cart/checkout/*')
+    ->set('visibility.request_path.negate', 'TRUE')
+    ->set('weight', '-34')
+    ->set('region', 'footer_secondary')
+    ->save();
+
+  // Set visiblity for copyright block.
+  Drupal::configFactory()->getEditable('block.block.copyright')
+    ->set('visibility.request_path.pages', '/cart/checkout\r\n/cart/checkout/*')
+    ->set('visibility.request_path.negate', 'TRUE')
+    ->save();
+
   // Enable "New in" sort options.
   $config = \Drupal::configFactory()->getEditable('alshaya_search.settings');
   $sort_options = $config->get('sort_options');

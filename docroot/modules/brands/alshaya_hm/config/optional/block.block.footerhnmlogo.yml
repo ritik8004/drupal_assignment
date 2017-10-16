@@ -21,4 +21,9 @@ settings:
   status: true
   info: ''
   view_mode: full
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    pages: "/cart/checkout\r\n/cart/checkout/*"
+    negate: true
+    context_mapping: {  }
