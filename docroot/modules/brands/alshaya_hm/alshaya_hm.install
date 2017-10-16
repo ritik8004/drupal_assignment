@@ -94,4 +94,12 @@ function alshaya_hm_install() {
     ->set('settings.label', "Corporate Info")
     ->set('region', 'footer_primary')
     ->save();
+
+  // Enable "New in" sort options.
+  $config = \Drupal::configFactory()->getEditable('alshaya_search.settings');
+  $sort_options = $config->get('sort_options');
+  $sort_options['search_api_relevance'] = 'search_api_relevance';
+  $sort_options['created'] = 'created';
+  $config->set('sort_options', $sort_options);
+  $config->save();
 }
