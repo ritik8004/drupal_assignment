@@ -11,7 +11,7 @@ index ff66ad2d9..253413d4f 100644
 +  # Don't redirect ACSF domains.
 +  RewriteCond %{HTTP_HOST} !\.acsitefactory\.com$ [NC]
 +  # Don't redirect preprod domains.
-+  RewriteCond %{HTTP_HOST} !^\.factory\.alshaya\.com$ [NC]
++  RewriteCond %{HTTP_HOST} !\.factory\.alshaya\.com$ [NC]
 +  # Don't redirect local dev sites.
 +  RewriteCond %{HTTP_HOST} !local\.alshaya\.com$ [NC]
 +  RewriteCond %{HTTP_HOST} !local\.non-transac\.com$ [NC]
