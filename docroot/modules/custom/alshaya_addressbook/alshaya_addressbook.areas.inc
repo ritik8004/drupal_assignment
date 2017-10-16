@@ -80,7 +80,7 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas['kw'][] = ['en' => 'Khaldiya', 'ar' => 'الخالدية'];
   $areas['kw'][] = ['en' => 'Kuwait City', 'ar' => 'مدينة الكويت'];
   $areas['kw'][] = ['en' => 'Mirqab', 'ar' => 'المرقاب'];
-  $areas['kw'][] = ['en' => 'Nahda', 'ar' => 'النهضة'];
+  $areas['kw'][] = ['en' => 'Al-Nahda', 'ar' => 'النهضة'];
   $areas['kw'][] = ['en' => 'Qairawan', 'ar' => 'القيروان'];
   $areas['kw'][] = ['en' => 'Qurtuba', 'ar' => 'قرطبة'];
   $areas['kw'][] = ['en' => 'Rawdah', 'ar' => 'الروضة'];
@@ -110,7 +110,6 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas['kw'][] = ['en' => 'Abbasiya', 'ar' => 'العباسية'];
   $areas['kw'][] = ['en' => 'Abdullah Al-Mubarak Al-Sabah', 'ar' => 'ضاحية عبد الله المبارك'];
   $areas['kw'][] = ['en' => 'Abraq Khaitan', 'ar' => 'أبرق خيطان'];
-  $areas['kw'][] = ['en' => 'Al-Nahda', 'ar' => 'النهضة'];
   $areas['kw'][] = ['en' => 'Al-Rai', 'ar' => 'الري'];
   $areas['kw'][] = ['en' => 'Andalus', 'ar' => 'الأندلس'];
   $areas['kw'][] = ['en' => 'Ardiya', 'ar' => 'العارضية'];
@@ -157,14 +156,12 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas['kw'][] = ['en' => 'Al-Qurain', 'ar' => 'القرين'];
   $areas['kw'][] = ['en' => 'Al-Qusour', 'ar' => 'القصور'];
   $areas['kw'][] = ['en' => 'Funaitees', 'ar' => 'الفنيطيس'];
-  $areas['kw'][] = ['en' => 'Fintas', 'ar' => 'الفنطاس'];
   $areas['kw'][] = ['en' => 'Masayel', 'ar' => 'المسايل'];
   $areas['kw'][] = ['en' => 'Messila', 'ar' => 'المسيلة'];
   $areas['kw'][] = ['en' => 'Mubarak Al-Kabeer', 'ar' => 'مبارك الكبير'];
   $areas['kw'][] = ['en' => 'Sabah Al-Salem', 'ar' => 'صباح السالم'];
   $areas['kw'][] = ['en' => 'Sabhan', 'ar' => 'صبحان'];
   $areas['kw'][] = ['en' => 'Abdelli', 'ar' => 'العبدلي'];
-  $areas['kw'][] = ['en' => 'Al-Auyon', 'ar' => 'العيون'];
   $areas['kw'][] = ['en' => 'Al-Naseem', 'ar' => 'النسيم'];
   $areas['kw'][] = ['en' => 'Al-Qasr', 'ar' => 'القصر'];
   $areas['kw'][] = ['en' => 'Al-Salmi', 'ar' => 'السالمي'];
@@ -179,7 +176,6 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas['kw'][] = ['en' => 'Old Jahra', 'ar' => 'الجهراء القديمة'];
   $areas['kw'][] = ['en' => 'Ouyoun', 'ar' => 'العيون'];
   $areas['kw'][] = ['en' => 'Qaisariya', 'ar' => 'القيصرية'];
-  $areas['kw'][] = ['en' => 'Qayrawan', 'ar' => 'القيروان'];
   $areas['kw'][] = ['en' => 'Saad Al-Abdallah', 'ar' => 'مدينة سعد العبد الله'];
   $areas['kw'][] = ['en' => 'Sulaibiya Agriculture', 'ar' => 'الصليبية الزراعية'];
   $areas['kw'][] = ['en' => 'Sulaibiya industrial', 'ar' => 'الصليبية الصناعية'];
