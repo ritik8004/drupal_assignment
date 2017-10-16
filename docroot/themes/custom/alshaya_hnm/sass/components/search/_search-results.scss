@@ -218,7 +218,11 @@ header,
     @include breakpoint($only-mobile) {
       z-index: 9999;
       position: fixed !important;
-      top: 9.6rem !important;
+      top: 6.5625rem !important;
+    }
+
+    @include breakpoint($tablet) {
+      width: 10.125rem !important;
     }
   }
 }
