@@ -419,7 +419,7 @@
         // Push default selected sub-delivery option to GTM.
         if ($(this).find('input[checked="checked"]').length > 0) {
           var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          selectedMethodLabel = alshaya_seo_translate_shipping_method(selectedMethodLabel);
+          selectedMethodLabel = Drupal.alshaya_seo_translate_shipping_method(selectedMethodLabel);
           Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
         }
 
