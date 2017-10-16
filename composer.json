@@ -61,7 +61,8 @@
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "drupal/autologout": "^1.0",
         "drupal/block_content_machine_name": "^1.2",
-        "drupal/imagemagick": "~2.0"
+        "drupal/imagemagick": "~2.0",
+        "acquia/acsf-tools": "^8.1"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -225,7 +226,8 @@
             "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
             "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch",
             "cd docroot && patch -p1 <../patches/htaccess-knet-ssl-exception.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-force-www.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",
