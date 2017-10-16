@@ -20,10 +20,11 @@ class AlshayaEmailSignUpLink extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
+    $lang = \Drupal::languageManager()->getCurrentLanguage();
     return [
       '#type' => 'link',
       '#title' => $this->t('email sign up'),
-      '#url' => Url::fromUri('internal:/email-sign-up'),
+      '#url' => Url::fromUri('internal:/email-sign-up', ['language' => $lang]),
       '#options' => [
         'attributes' => [
           'class' => ['use-ajax'],
