@@ -67,9 +67,14 @@
     }
 
     a {
-      font-weight: bold;
-      color: $cerulean-two;
+      font-weight: normal;
+      font-family: $hnm-demibold;
+      color: $hnm-black-two;
       font-size: 0.75rem;
+
+      &:hover {
+        text-decoration: underline;
+      }
 
       &.back-to-basket {
         @include breakpoint($desktop) {
@@ -113,19 +118,24 @@
 
   .tab {
     padding: 0.5rem 2rem;
-    border: 1px solid $cerulean-two;
+    border: 1px solid $grey5;
     display: inline-block;
-    color: $cerulean-two;
+    color: $hnm-black-two;
+    text-transform: uppercase;
     font-size: 0.75rem;
     width: 49%;
     height: 3.125rem;
     vertical-align: top;
     text-align: center;
+    letter-spacing: 0.5px;
 
     &.active {
-      border: 2px solid $marine-blue;
-      color: $marine-blue;
-      font-weight: bold;
+      border: 1px solid $hnm-black-two;
+      color: $hnm-black-two;
+      font-weight: normal;
+      font-family: $hnm-bold;
+      text-transform: uppercase;
+      background: $hnm-grey;
     }
 
     &.active--tab--head {
@@ -207,15 +217,11 @@
     }
 
     span {
-      font-size: 14px;
-      font-family: $alshaya-bold;
+      font-size: 0.75rem;
+      font-family: $hnm-demibold;
+      text-transform: uppercase;
       font-weight: normal;
-      color: $marine-blue-two;
-
-      @include breakpoint($only-mobile) {
-        font-size: 12px;
-        font-weight: normal;
-      }
+      color: $hnm-black-two;
     }
   }
 
@@ -235,8 +241,13 @@
       margin-top: 1.6rem;
       display: block;
       text-align: center;
-      font-weight: bold;
-      color: $cerulean-two;
+      font-family: $hnm-demibold;
+      font-weight: normal;
+      color: $hnm-black-two;
+
+      &:hover {
+        text-decoration: underline;
+      }
 
       @include breakpoint($tablet) {
         position: absolute;
@@ -333,13 +344,14 @@
     }
 
     .checkout-guest-email-usage {
-      color: $light-ash;
+      color: $hnm-black-two;
       margin-bottom: 1.85rem;
+      font-family: $hnm-bold;
+      font-weight: normal;
 
       @include breakpoint($tablet) {
-        color: $grey-ash;
+        color: $hnm-black-two;
         margin-bottom: 1.4rem;
-        font-weight: bold;
         font-size: 13px;
         width: 80%;
       }
@@ -352,6 +364,7 @@
 
   .checkout-guest-summary {
     line-height: 1.6;
+    color: $grey-ash;
 
     @include breakpoint($tablet) {
       font-size: 0.8125rem;
