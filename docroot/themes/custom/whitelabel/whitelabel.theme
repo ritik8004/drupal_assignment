@@ -79,10 +79,18 @@ function whitelabel_preprocess_block(&$variables) {
       break;
   }
 
-  $machine_name = $variables['elements']['#id'];
+  $elements_id = $variables['elements']['#id'];
+  if (strpos($elements_id, 'block_content') !== FALSE) {
+    $block_content = $variables['content']['#block_content'];
+    $machine_name = $block_content->get('machine_name')->value;
+  }
+  else {
+    $machine_name = $elements_id;
+  }
 
   if ($machine_name == 'todaysoffer') {
     if ($variables['content']) {
+      // Make label a link to redirect to today's offer page on mobile.
       $label = $variables['label'];
       $variables['label'] = [
         '#type' => 'link',
@@ -94,6 +102,52 @@ function whitelabel_preprocess_block(&$variables) {
           ],
         ],
       ];
+    }
+  }
+
+  if ($machine_name == 'today_s_offer') {
+    if ($variables['content']) {
+      $lang = \Drupal::languageManager()->getCurrentLanguage();
+      $lang_code = $lang->getId();
+      $link_options = ['language' => $lang];
+      // If the block is added to block reference paragraph type.
+      if ($machine_name != $block_content) {
+        // Get the referer path.
+        $referrer_path = parse_url(\Drupal::request()->headers->get('referer'))['path'];
+        $referrer_path = preg_replace('/^(\/' . $lang_code . ')(.*)/g', '', $referrer_path);
+        $empty = !empty($referrer_path) ? $referrer_path : 'home';
+
+        // Create the back link.
+        $element['back'] = [
+          '#type' => 'link',
+          '#title' => t('Back'),
+          '#url' => Url::fromUri('internal:/' . $empty, $link_options),
+          '#options' => [
+            'attributes' => [
+              'class' => ['mobile-back-link'],
+            ],
+          ],
+        ];
+      }
+
+      // Make label a link to redirect to today's offer page on mobile.
+      $label = $variables['label'];
+      $element['label'] = [
+        '#type' => 'link',
+        '#title' => $label,
+        '#url' => Url::fromUri('internal:/todays-offer', $link_options),
+        '#options' => [
+          'attributes' => [
+            'class' => ['mobile-link'],
+          ],
+        ],
+      ];
+
+      // Change default label with link.
+      $variables['label'] = [
+        '#markup' => \Drupal::service('renderer')->render($element),
+      ];
+
     }
   }
 }

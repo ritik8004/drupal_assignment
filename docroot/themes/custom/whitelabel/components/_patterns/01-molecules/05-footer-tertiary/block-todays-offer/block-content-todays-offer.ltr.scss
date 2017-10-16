@@ -11,12 +11,24 @@
     position: relative;
     text-align: direction(left);
 
-    @include icon(chevron#{direction(left)}, before) {
-      color: $medium-pink;
-      font-size: 1.8rem;
-      position: absolute;
-      #{direction(left)}: -0.1875rem;
-      top: -0.3125rem;
+    a {
+      text-decoration: none;
+    }
+
+    .mobile-link {
+      color: $black-smoke;
+    }
+
+    .mobile-back-link {
+      font-size: 0;
+
+      @include icon(chevron#{direction(left)}, before) {
+        color: $medium-pink;
+        font-size: 1.8rem;
+        position: absolute;
+        #{direction(left)}: -0.1875rem;
+        top: -0.3125rem;
+      }
     }
   }
 }
