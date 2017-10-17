@@ -388,7 +388,7 @@
       cursor: pointer;
       color: $cerulean-two;
 
-      @include icon(infomation, after) {
+      @include icon(info, after) {
         margin-#{$left}: 0.3rem;
         display: inline-block;
         vertical-align: middle;

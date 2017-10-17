@@ -218,7 +218,7 @@
       margin-#{$left}: 0.625rem;
     }
 
-    @include icon(infomation, before) {
+    @include icon(info, before) {
       font-size: 2rem;
       display: inline-block;
       margin-#{$right}: 0.4rem;

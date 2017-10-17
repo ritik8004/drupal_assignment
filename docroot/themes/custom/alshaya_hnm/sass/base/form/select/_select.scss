@@ -40,10 +40,10 @@ select:focus::-ms-value {
   margin-bottom: 0.75rem;
   position: relative;
 
-  &::after {
-    content: '';
-    background: url("../imgs/icons/ic-dropdown-expand.svg") center center no-repeat;
-    font-size: 1.75rem;
+  @include icon(dropdown-expand, after) {
+    font-size: 2.438rem;
+    color: $hnm-black-two;
+    text-indent: -3px;
     line-height: 35px;
     pointer-events: none;
     position: absolute;
@@ -111,8 +111,8 @@ select:focus::-ms-value {
 
     &::after {
       // IE10 needs this in px.
-      line-height: 35px;
-      font-size: 1.75rem;
+      line-height: 34px;
+      font-size: 2.438rem;
       top: 1px;
       #{$left}: auto;
       width: 2.063rem;
@@ -120,6 +120,7 @@ select:focus::-ms-value {
       #{$right}: 1px;
       text-align: center;
       display: inline-block;
+      text-indent: -2px;
     }
   }
 }
