@@ -3,7 +3,7 @@ input[type=checkbox] {
 }
 
 input[type=checkbox] ~ label {
-  @include icon(checkboxempty);
+  @include icon(check-box-empty);
 
   color: $hnm-black-four;
 
@@ -13,7 +13,7 @@ input[type=checkbox] ~ label {
 }
 
 input[type=checkbox]:checked ~ label {
-  @include icon(checkboxfull);
+  @include icon(check-box-filled);
 }
 
 // Fix for facets without translations.

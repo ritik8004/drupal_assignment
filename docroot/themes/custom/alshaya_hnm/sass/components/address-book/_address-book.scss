@@ -188,30 +188,50 @@
       text-indent: 0;
     }
 
-    span::before,
-    a::before {
-      content: "";
-      display: inline-block;
-      vertical-align: middle;
-      width: 0.875rem;
-      height: 0.875rem;
-      border-radius: 100%;
-      margin-#{$right}: 0.75rem;
-      border: 0.0625rem solid;
-      position: absolute;
-      #{$left}: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
+    span {
+      @include icon(radio-filled, before) {
+        color: $hnm-black-two;
+        font-size: 2.625rem;
+        display: inline-block;
+        position: absolute;
+        top: -7%;
+        #{$left}: -0.9375rem;
 
-      @include breakpoint($desktop) {
-        #{$left}: 0;
+        @include breakpoint($only-mobile) {
+          top: 5%;
+          #{$left}: 0;
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 22%;
+          #{$left}: -3px;
+        }
       }
     }
 
-    span::before,
-    a:hover::before {
-      border: 0.1875rem solid $hnm-black-two;
-      background: white;
+    a {
+      @include icon(radio-empty, before) {
+        color: $hnm-black-two;
+        font-size: 2.625rem;
+        display: inline-block;
+        position: absolute;
+        top: -7%;
+        #{$left}: -0.9375rem;
+
+        @include breakpoint($only-mobile) {
+          top: 5%;
+          #{$left}: 0;
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 22%;
+          #{$left}: -3px;
+        }
+      }
+
+      &:hover {
+        @include icon(radio-filled, before);
+      }
     }
   }
 
@@ -491,11 +511,12 @@
     background: $white-five;
 
     &::after {
-      font-size: 1.7rem;
+      font-size: 2.438rem;
       top: 0;
       #{$left}: 0;
       width: 2.063rem;
       height: 2.063rem;
+      text-indent: -3px;
     }
   }
 
@@ -513,10 +534,10 @@
 
 .form-type-select {
   .select2-selection__arrow {
-    &::after {
-      content: '';
-      background: url("../imgs/icons/ic-dropdown-expand.svg") center center no-repeat;
-      font-size: 1.5rem;
+    @include icon(dropdown-expand, after) {
+      font-size: 2.438rem;
+      color: $hnm-black-two;
+      line-height: 35px;
       position: absolute;
       top: 0;
       #{$left}: 0;

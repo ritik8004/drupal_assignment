@@ -393,7 +393,7 @@
     color: $hnm-black-two;
     margin: 0;
 
-    @include icon(infomation, after) {
+    @include icon(info, after) {
       margin-#{$left}: 0.3rem;
       display: inline-block;
       vertical-align: middle;
@@ -523,16 +523,17 @@
     padding: 1rem 1.5rem;
   }
 
-  @include icon(chevrondown, after) {
+  @include icon(dropdown-expand, after) {
     position: absolute;
-    #{$right}: 0.625rem;
-    font-size: 1.875rem;
+    #{$right}: 0.3125rem;
     top: 50%;
     transform: translateY(-50%);
+    color: $hnm-black-two;
+    font-size: 2.4rem;
   }
 
   &.ui-state-active {
-    @include icon(chevronup, after);
+    @include icon(dropdown-collapse, after);
   }
 }
 

@@ -1100,7 +1100,7 @@
         word-spacing: 1px;
       }
 
-      @include icon(infomation, before) {
+      @include icon(info, before) {
         font-size: 1.8rem;
         margin-#{$right}: 0.8rem;
         vertical-align: bottom;
