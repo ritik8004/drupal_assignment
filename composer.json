@@ -65,7 +65,9 @@
         "drupal/viewsreference": "^1.0",
         "drupal/autologout": "^1.0",
         "drupal/block_content_machine_name": "^1.4",
-        "drupal/menu_link_modal": "^1.3"
+        "drupal/menu_link_modal": "^1.3",
+        "drupal/imagemagick": "~2.0",
+        "acquia/acsf-tools": "^8.1"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -110,8 +112,7 @@
                 "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
             },
             "drupal/search_api_solr": {
-                "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch",
-                "Allow case insensitive autocomplete": "https://www.drupal.org/files/issues/allow_case_insensitive_autocomplete-2890159-5.patch"
+                "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch"
             },
             "drupal/search_api_solr_multilingual": {
                 "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
@@ -149,9 +150,6 @@
                 "Database lock backend should normalize the lock name": "https://www.drupal.org/files/issues/2872276-10.patch",
                 "Clearing cache via UI in translated language resets config translation of field labels to default language": "https://www.drupal.org/files/issues/clearing_cache_via_ui-2650434-137.patch"
             },
-            "drupal/password_policy": {
-                "Error message is not translatable": "https://www.drupal.org/files/issues/password_policy_error_translate-2878784-2.patch"
-            },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
                 "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch",
@@ -175,6 +173,9 @@
             },
             "drupal/simple_sitemap" : {
                 "MMCPA-2433" : "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
+            },
+            "drupal/password_policy" : {
+                "Code logic will never reset password expiry - update" : "https://www.drupal.org/files/issues/2867089-9.patch"
             },
             "drupal/sharethis" : {
                 "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"
@@ -233,7 +234,8 @@
             "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
             "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch",
             "cd docroot && patch -p1 <../patches/htaccess-knet-ssl-exception.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-force-www.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",

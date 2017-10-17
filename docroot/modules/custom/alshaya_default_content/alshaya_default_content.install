@@ -19,6 +19,7 @@ function alshaya_default_content_install() {
 
   $home->setTitle('Home');
   $home->setPublished(NodeInterface::PUBLISHED);
+  $home->set('moderation_state', 'published');
   $home->setPromoted(NodeInterface::NOT_PROMOTED);
   $home->setRevisionUserId(1);
   $home->save();
@@ -26,6 +27,7 @@ function alshaya_default_content_install() {
   $home = $home->addTranslation('ar', []);
   $home->setTitle('Home');
   $home->setPublished(NodeInterface::PUBLISHED);
+  $home->set('moderation_state', 'published');
   $home->setPromoted(NodeInterface::NOT_PROMOTED);
   $home->setRevisionUserId(1);
   $home->save();

@@ -109,7 +109,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     // Address book link.
     $links['address_book'] = [
       'text' => t('address book'),
-      'route' => 'entity.profile.type.address_book.user_profile_form',
+      'route' => 'entity.profile.type.user_profile_form',
       'options' => [
         'profile_type' => 'address_book',
       ],
@@ -211,7 +211,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       if ($link['route'] == $currentRoute) {
         $options = $activeLinkOptions;
       }
-      elseif (($currentRoute == 'entity.profile.edit_form' || $currentRoute == 'entity.profile.type.address_book.user_profile_form.add') && $link['route'] == 'entity.profile.type.address_book.user_profile_form') {
+      elseif (($currentRoute == 'entity.profile.edit_form' || $currentRoute == 'entity.profile.type.user_profile_form.add') && $link['route'] == 'entity.profile.type.user_profile_form') {
         $options = $activeLinkOptions;
       }
       elseif ($alshaya_acm_customer_status && ($link['route'] == 'acq_customer.orders' && $currentRoute == 'alshaya_acm_customer.orders_detail')) {
