@@ -88,7 +88,7 @@ class CheckoutHelper {
     $current_user_id = 0;
 
     // Clear orders list cache if user is logged in.
-    if (\Drupal::currentUser()->isAnonymous()) {
+    if (\Drupal::currentUser()->isAnonymous() || !alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
       // Store the email address of customer in session.
       $email = $cart->customerEmail();
       $session->set('email_order_' . $order_id, $email);
