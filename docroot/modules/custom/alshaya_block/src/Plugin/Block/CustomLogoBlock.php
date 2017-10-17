@@ -184,7 +184,7 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
     if (!empty($helper)) {
       $element = $helper['element'];
       $link = $element->link;
-      $attributes = menu_link_attributes_get_attributes($link);
+      $attributes = alshaya_menus_get_menu_link_attributes($link);
       return [
         'class' => $attributes['class'],
         'link' => $helper['active_link'],
