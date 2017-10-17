@@ -214,6 +214,7 @@ header {
       @include breakpoint($only-mobile) {
         padding: 0.625rem;
         border-bottom: none;
+        font-size: 0.6875rem;
       }
 
       @include breakpoint($tablet) {
@@ -429,7 +430,7 @@ header {
 
   input {
     color: $grey-ash;
-    font-family: $alshaya-thin;
+    font-family: $hnm-regular;
 
     @include breakpoint($only-mobile) {
       font-size: 0.875rem;
