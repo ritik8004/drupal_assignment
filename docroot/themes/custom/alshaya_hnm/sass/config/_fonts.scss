@@ -143,6 +143,18 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'hnm-icons';
+  src: url('../fonts/HMIcons.eot?yy6ec8');
+  src:
+    url('../fonts/HMIcons.eot?yy6ec8#iefix') format('embedded-opentype'),
+    url('../fonts/HMIcons.ttf?yy6ec8') format('truetype'),
+    url('../fonts/HMIcons.woff?yy6ec8') format('woff'),
+    url('../fonts/HMIcons.svg?yy6ec8#HMIcons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 // hnm specific font family
 // English fonts.
 $hnm-bold: 'Ampersand_bold';
@@ -170,6 +182,9 @@ $hnm-arabic-regular-nodir: 'GESSTwoLight-Light', 'Ampersand_regular';
 $hnmpromo-arabic-regular: 'GEDinarTwo-Medium', 'Amperserif_regular';
 $hnmpromo-arabic-regular-nodir: 'GEDinarTwo-Medium', 'Amperserif_regular';
 
+$hnm-icons: 'hnm-icons';
+$body_font: $hnm-regular;
+
 // Mothercare font Family.
 $alshaya-bold: 'Mothercare';
 $alshaya-bold-nodir: 'Mothercare';
@@ -186,7 +201,6 @@ $alshaya-arabic-thin-nodir: 'Cairo-300', 'MothercareThin';
 $alshaya-icons: 'alshaya-icons';
 $arial: 'arialmt', arial, sans-serif;
 $arial-nodir: 'arialmt', arial, sans-serif;
-$body_font: $hnm-regular;
 
 // Icon Fonts
 $icons: (
@@ -290,6 +304,105 @@ $icons: (
 }
 
 @each $icon, $unicode in $icons {
+  %icon-ic_#{$icon},
+  .icon-ic_#{$icon} {
+    &::before {
+      content: $unicode;
+    }
+  }
+}
+
+//specific to H&M.
+
+$hnmicons: (
+  arrowdown: "\25bd",
+  arrowleft: "\e901",
+  arrowright: "\e902",
+  arrowup: "\e903",
+  check: "\e904",
+  close: "\e905",
+  done: "\e906",
+  circle-stroke-shape: "\e907",
+  circle-shape: "\e908",
+  check-box-empty: "\e909",
+  check-box-filled: "\e90a",
+  delivery: "\e90b",
+  sirection-fill: "\e90c",
+  direction-stroke: "\e90d",
+  dropdown-collapse: "\e90e",
+  dropdown-expand: "\e90f",
+  favorite-fill: "\e910",
+  favorite-stroke: "\e911",
+  paginator-active: "\e912",
+  paginator-inactive: "\e913",
+  radio-empty: "\e914",
+  radio-filled: "\e915",
+  rating-empty: "\e916",
+  rating-filled: "\e917",
+  video path1: "\e918",
+  video path2: "\e919",
+  loader path1: "\e91a",
+  loader path2: "\e91b",
+  loader path3: "\e91c",
+  search: "\e91d",
+  menu: "\e91e",
+  list: "\e91f",
+  shopping-bag: "\e920",
+  map-pin: "\e921",
+  map: "\e922",
+  mylocation: "\e923",
+  newsletter: "\e924",
+  next-day-delivery: "\e925",
+  rewards: "\e926",
+  language: "\e927",
+  info: "\e928",
+  warning: "\2757",
+  googlePlus: "\1f576",
+  facebook: "\1f575",
+  twitter: "\1f425",
+  pinterest: "\1f4cc",
+  instagram: "\1f305",
+  youTube: "\1f4fa"
+);
+
+@mixin hnmiconbase() {
+  font-family: $hnm-icons !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin icon($icon: false, $position: before, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $icon {
+      content: "#{map-get($hnmicons, $icon)}";
+    }
+
+    @if $styles {
+      @include hnmiconbase;
+    }
+
+    @content;
+  }
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  &::before {
+    @include hnmiconbase;
+  }
+}
+
+@each $icon, $unicode in $hnmicons {
   %icon-ic_#{$icon},
   .icon-ic_#{$icon} {
     &::before {
