@@ -23,8 +23,7 @@ function alshaya_department_page_form_node_department_page_form_alter(&$form, Fo
 
   $category_ids = [];
 
-  if ($node->get('field_product_category')->getValue()) {
-    $category = $node->get('field_product_category')->getValue();
+  if ($category = $node->get('field_product_category')->getValue()) {
     $category_ids = array_column($category, 'target_id');
   }
 
