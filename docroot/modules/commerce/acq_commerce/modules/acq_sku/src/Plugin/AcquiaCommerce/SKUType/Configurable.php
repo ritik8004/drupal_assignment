@@ -312,6 +312,12 @@ class Configurable extends SKUPluginBase {
    *   Configurables tree.
    */
   public function deriveProductTree(SKU $sku) {
+    static $cache = [];
+
+    if (isset($cache[$sku->language()->getId()], $cache[$sku->language()->getId()][$sku->id()])) {
+      return $cache[$sku->language()->getId()][$sku->id()];
+    }
+
     $tree = ['parent' => $sku];
 
     foreach ($sku->field_configured_skus as $child_sku) {
@@ -334,6 +340,8 @@ class Configurable extends SKUPluginBase {
       $tree,
       $tree['configurables']
     );
+
+    $cache[$sku->language()->getId()][$sku->id()] = $tree;
 
     return $tree;
   }
