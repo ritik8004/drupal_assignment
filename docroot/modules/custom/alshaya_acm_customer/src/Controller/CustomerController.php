@@ -198,6 +198,7 @@ class CustomerController extends ControllerBase {
 
     $build['#print_link'] = Url::fromRoute('alshaya_acm_customer.orders_print', ['user' => $user->id(), 'order_id' => $order_id]);
     $build['#account'] = $account;
+    $build['#vat_text'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text.value');
     $build['#theme'] = 'user_order_detail';
     $build['#cache'] = ['max-age' => 0];
 
