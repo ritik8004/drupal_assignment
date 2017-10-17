@@ -19,6 +19,10 @@
     }
   }
 
+  .mobile-number-field .local-number {
+    direction: ltr;
+  }
+
   .form__form-fields {
     @include breakpoint($upto-palm) {
       width: 100%;
