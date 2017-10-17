@@ -553,6 +553,7 @@ function alshaya_hnm_preprocess_menu(&$variables) {
   if ($variables['menu_name'] === 'account') {
     // Get the current path.
     $current_path = \Drupal::routeMatch()->getRouteObject()->getPath();
+    $current_path_Uri = \Drupal::request()->getRequestUri();
     $items = $variables['items'];
     foreach ($items as $key => $item) {
       // If path is current_path, add active class.
@@ -562,6 +563,12 @@ function alshaya_hnm_preprocess_menu(&$variables) {
           $attributes['class'][] = 'is-active';
           $item['url']->setOption('attributes', $attributes);
         }
+      }
+
+      if ($item['url']->toString() == $current_path_Uri) {
+        $attributes = $item['url']->getOption('attributes');
+        $attributes['class'][] = 'is-active';
+        $item['url']->setOption('attributes', $attributes);
       }
     }
   }
