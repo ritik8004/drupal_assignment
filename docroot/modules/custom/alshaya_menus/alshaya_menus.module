@@ -17,6 +17,8 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
  *
  * @return array
  *   An array with the attributes.
+ *
+ * @see http://jira.alshaya.com:8080/browse/ACR2-970
  */
 function alshaya_menus_get_menu_link_attributes(MenuLinkInterface $menu_link_content_plugin) {
   $attributes = [];
