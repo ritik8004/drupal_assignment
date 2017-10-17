@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * @file
+ * The Module file.
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_bbw_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_email_signup') && $form_id == 'webform_submission_alshaya_email_signup_form') {
+    $lang = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    $uuid = '19207aad-0e43-4d3a-96d7-c74141f75bb1';
+    $entity_manager = \Drupal::getContainer()->get('entity.manager');
+    $block = $entity_manager->loadEntityByUuid('block_content', $uuid);
+    if (!empty($block)) {
+      $build = $entity_manager->getViewBuilder('block_content')->view($block, 'full', $lang);
+
+      // Add the title to text so it is searchable.
+      $build['search_title'] = [
+        '#prefix' => '<h2>',
+        '#plain_text' => $block->label(),
+        '#suffix' => '</h2>',
+        '#weight' => -1000
+      ];
+
+      $form['info_block'] = [
+        '#type' => 'item',
+        '#markup' => \Drupal::getContainer()->get('renderer')->renderPlain($build),
+        '#weight' => -100,
+        '#prefix' => '<div class="form--content">',
+        '#suffix' => '</div>'
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_bbw_module_implements_alter(&$implementations, $hook) {
+  // Alter page_attachments implementation for alshaya_bbw to call at last.
+  if ($hook == 'page_attachments') {
+    unset($implementations['back_to_top']);
+  }
+}

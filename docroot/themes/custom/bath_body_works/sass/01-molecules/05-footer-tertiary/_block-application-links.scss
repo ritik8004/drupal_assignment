@@ -1,0 +1,25 @@
+.region-footer-tertiary {
+  .block-application-links {
+    padding-bottom: 1.5rem;
+
+    @include breakpoint($above-palm) {
+      float: direction(left);
+      padding-top: 1.5rem;
+    }
+
+    @include breakpoint($lap) {
+      width: 35.416%;
+      padding-top: 0;
+    }
+
+    @include breakpoint($desk) {
+      width: 40%;
+      padding-#{direction(left)}: 3.883%;
+      margin-top: 0;
+    }
+  }
+
+  @include breakpoint($desk) {
+    margin-top: 0.25rem;
+  }
+}
