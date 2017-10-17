@@ -385,6 +385,18 @@
         margin-top: 2.125rem;
       }
     }
+
+    .click-collect.tooltip--head + .tooltip {
+      #{$left}: -3.6rem;
+
+      @include breakpoint($tablet) {
+        #{$left}: -4.4rem;
+      }
+
+      @include breakpoint($desktop) {
+        #{$left}: 1rem;
+      }
+    }
   }
 
   .tooltip--head {

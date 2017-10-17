@@ -401,14 +401,6 @@ body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-con
   width: 90%;
 }
 
-.select2-container {
-  .select2-selection__arrow {
-    .ie & {
-      z-index: 9 !important;
-    }
-  }
-}
-
 /**
  * We always want price to be displayed from ltr.
  */

@@ -902,12 +902,10 @@ header {
   .highlights {
     vertical-align: top;
     display: inline-block;
-    width: 39%;
     margin-top: 5px;
 
     div:nth-child(2) {
       margin-#{$right}: 24px;
-      float: $left;
     }
 
     .highlighted {

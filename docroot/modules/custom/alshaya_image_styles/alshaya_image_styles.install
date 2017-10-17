@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install file for alshaya_image_styles.
+ * Contains install, update, uninstall hooks for alshaya_image_styles module.
  */
 
 /**
@@ -16,4 +16,39 @@ function alshaya_image_styles_update_8301() {
     'responsive_image.styles.286x404',
   ];
   alshaya_config_install_configs($configs, 'alshaya_image_styles');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Configure image toolkit.
+ */
+function alshaya_image_styles_update_8001() {
+  if (!\Drupal::moduleHandler()->moduleExists('imagemagick')) {
+    \Drupal::service('module_installer')->install(['imagemagick']);
+  }
+
+  _alshaya_image_styles_configure_image_toolkit();
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_image_styles_install() {
+  _alshaya_image_styles_configure_image_toolkit();
+}
+
+/**
+ * Helper function to configure image toolkit.
+ */
+function _alshaya_image_styles_configure_image_toolkit() {
+  \Drupal::configFactory()
+    ->getEditable('system.image')
+    ->set('toolkit', 'imagemagick')
+    ->save();
+
+  \Drupal::configFactory()
+    ->getEditable('imagemagick.settings')
+    ->set('quality', 100)
+    ->save();
 }

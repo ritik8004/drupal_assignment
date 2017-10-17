@@ -60,6 +60,9 @@ installed_extras:
   - tideways
   - varnish
 
+extra_packages:
+  - imagemagick
+
 # Use PHP 5.6.
 php_version: "5.6"
 php_packages_extra:
@@ -143,4 +146,3 @@ mysql_users:
 varnish_version: "4.1"
 varnish_listen_port: "81"
 varnish_default_backend_port: "80"
-varnish_default_vcl_template_path: "../../../../conf/varnish-4-box.vcl"
