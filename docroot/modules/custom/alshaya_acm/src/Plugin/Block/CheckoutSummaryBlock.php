@@ -252,6 +252,9 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     // Generate the cart link.
     $url = Url::fromRoute('acq_cart.cart')->toString();
 
+    // Adding vat text to summary block.
+    $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text.value');
+
     $build = [
       '#theme' => 'checkout_summary',
       '#cart_link' => $url,
@@ -259,6 +262,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       '#products' => $products,
       '#totals' => $totals,
       '#delivery' => $delivery,
+      '#vat_text' => $vat_text,
       '#attached' => [
         'library' => [
           'alshaya_acm/alshaya.acm.js',

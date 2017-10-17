@@ -529,6 +529,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'currency_format' => '',
         'currency_code_position' => '',
         'delivery' => [],
+        'vat_text' => '',
       ],
       'template' => 'block--checkout-summary',
     ],

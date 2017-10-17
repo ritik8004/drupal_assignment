@@ -67,6 +67,12 @@
     {% if delivery is empty %}
       <span class="status">{% trans %}Before Delivery{% endtrans %}</span>
     {% endif %}
+
+    {% if vat_text %}
+      <div class = 'vat-text'>
+        {{ vat_text }}
+      </div>
+    {% endif %}
   </div>
 
   {% if delivery %}
