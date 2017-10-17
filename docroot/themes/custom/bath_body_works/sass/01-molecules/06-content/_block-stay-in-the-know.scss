@@ -22,8 +22,13 @@
     @include breakpoint($desk) {
       line-height: 1.5;
       font-size: 0.75rem;
-      max-width: 29.625rem;
+      max-width: 100%;
       margin: auto;
+
+      p {
+        max-width: 29.625rem;
+        margin: 0.58rem auto;
+      }
     }
 
     a {

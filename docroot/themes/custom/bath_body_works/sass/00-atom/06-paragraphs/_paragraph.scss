@@ -131,50 +131,37 @@
 }
 
 .paragraph-t-block-reference {
-  h2 {
+  h2.border {
     text-align: center;
-    position: relative;
     font-family: $TradeGothicLTStdBold;
-    display: table;
-    white-space: nowrap;
-    width: 100%;
+    overflow: hidden;
+    height: 1.56rem;
+    font-size: 1.5rem;
+  }
 
-    &::before,
-    &::after {
-      -webkit-background-clip: padding;
-      -moz-background-clip: padding;
-      background-clip: padding;
-      background-image: -moz-linear-gradient(transparent 30%, $black 30%, $black 30%, transparent 35%);
-      background-image: -webkit-linear-gradient(transparent 30%, $black 30%, $black 30%, transparent 35%);
-      background-image: linear-gradient(transparent 30%, $black 30%, $black 30%, transparent 35%);
-      content: "";
-      display: table-cell;
-      width: 35%;
-    }
+  h2.border span {
+    display: inline-block;
+    position: relative;
+  }
 
-    &::before {
-      border-right: 0.93rem solid transparent;
-    }
+  h2.border span::before,
+  h2.border span::after {
+    content: "";
+    position: absolute;
+    height: 0.31rem;
+    border-top: 1px solid $black;
+    top: 0.62rem;
+    width: 30.75rem;
+  }
 
-    &::after {
-      border-left: 0.93rem solid transparent;
-    }
+  h2.border span::before {
+    right: 100%;
+    margin-right: 0.93rem;
+  }
 
-    @include breakpoint($lap) {
-      &::before,
-      &::after {
-        content: "";
-        width: 30%;
-      }
-    }
-
-    @include breakpoint($palm) {
-      &::before,
-      &::after {
-        content: "";
-        width: 30%;
-      }
-    }
+  h2.border span::after {
+    left: 100%;
+    margin-left: 0.93rem;
   }
 }
 
