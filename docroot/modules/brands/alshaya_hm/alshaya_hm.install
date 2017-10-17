@@ -99,7 +99,7 @@ function alshaya_hm_install() {
   Drupal::configFactory()->getEditable('block.block.shopby')
     ->set('settings.label', 'Shop')
     ->save();
-  Drupal::configFactory()->getEditable('block.block.shopby')
+  Drupal::configFactory()->getEditable('block.block.alshayanewslettersubscription')
     ->set('settings.label', 'Newsletter')
     ->save();
 
