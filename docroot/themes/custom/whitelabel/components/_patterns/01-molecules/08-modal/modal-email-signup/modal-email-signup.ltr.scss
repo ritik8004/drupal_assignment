@@ -37,6 +37,11 @@
       @include breakpoint($lap) {
         margin-left: 1rem;
       }
+
+      a {
+        color: $windows-blue;
+        text-decoration: none;
+      }
     }
   }
 
