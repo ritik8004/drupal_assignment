@@ -6,13 +6,13 @@
   @include icon(arrowup, after) {
     width: 2.3125rem;
     height: 2.3125rem;
-    background: $hnm-black-two;
+    color: $hnm-black-two;
     font-size: 2.125rem;
     position: absolute;
     top: 0.75rem;
     right: 0.875rem;
     border-radius: 100%;
-    color: $white-five;
+    background-color: $white-three;
   }
 
   &:hover {
