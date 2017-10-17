@@ -39,3 +39,22 @@ function acq_customer_update_8001() {
   $rest_resource = new RestResourceConfig($rest_config, 'rest_resource_config');
   $rest_resource->save();
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating the method from 'DELETE' to 'POST' for the 'acq_customer_delete'
+ * rest resource.
+ */
+function acq_customer_update_8002() {
+  // Load the entity.
+  $rest_entity = RestResourceConfig::load('acq_customer_delete');
+  // Get and update configuration.
+  $config = $rest_entity->get('configuration');
+  $config['POST'] = $config['DELETE'];
+  // Unset 'DELETE' as now not required.
+  unset($config['DELETE']);
+  // Save entity.
+  $rest_entity->set('configuration', $config);
+  $rest_entity->save();
+}

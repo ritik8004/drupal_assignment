@@ -618,6 +618,24 @@
   }
 }
 
+.user__order--detail {
+  .sub-total-row,
+  .delivery-charge-row,
+  .total-row {
+    td.right--align {
+      text-align: $right;
+      min-width: 8rem;
+
+      html[lang=ar] & {
+        @include breakpoint($only-mobile) {
+          min-width: 10rem;
+          padding: 0.625rem 1rem;
+        }
+      }
+    }
+  }
+}
+
 #block-content .order-items li {
   .second-third .second .dark {
     @include breakpoint($tablet) {

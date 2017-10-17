@@ -11,8 +11,11 @@
       return;
     }
 
-    $('input[type="email"]').val('');
-    $('input[type="password"]').val('');
+    $('input[type="email"], input[type="password"]').each(function () {
+      if (!($(this).prop('readonly') || $(this).prop('disabled'))) {
+        $(this).val('');
+      }
+    });
   };
 
   Drupal.clearAutoFillData();

@@ -10,7 +10,7 @@ id: acq_customer_delete
 plugin_id: acq_customer_delete
 granularity: method
 configuration:
-  DELETE:
+  POST:
     supported_formats:
       - json
     supported_auth:
