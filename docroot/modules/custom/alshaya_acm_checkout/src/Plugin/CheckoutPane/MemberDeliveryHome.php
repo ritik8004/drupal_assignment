@@ -31,7 +31,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function isVisible() {
-    return \Drupal::currentUser()->isAuthenticated();
+    return \Drupal::currentUser()->isAuthenticated() && alshaya_acm_customer_is_customer(\Drupal::currentUser());
   }
 
   /**
