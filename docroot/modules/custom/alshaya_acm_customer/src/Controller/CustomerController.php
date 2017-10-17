@@ -259,6 +259,7 @@ class CustomerController extends ControllerBase {
     ];
     $build['#barcode'] = alshaya_acm_customer_get_barcode($order);
     $build['#account'] = $account;
+    $build['#vat_text'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text.value');
     $build['#theme'] = 'user_order_print';
     $build['#attached']['library'][] = 'alshaya_acm_customer/order_print';
 

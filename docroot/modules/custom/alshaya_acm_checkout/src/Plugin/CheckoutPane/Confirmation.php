@@ -70,6 +70,7 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
     $build['#account'] = $account;
     $build['#barcode'] = alshaya_acm_customer_get_barcode($order);
     $build['#print_link'] = $print_link;
+    $build['#vat_text'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text.value');
     $build['#theme'] = 'checkout_order_detail';
 
     $pane_form['summary'] = $build;
