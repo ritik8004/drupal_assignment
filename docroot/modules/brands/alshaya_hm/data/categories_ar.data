@@ -212,6 +212,26 @@ $_alshaya_acm_categories = array (
         ),
         'children' => 
         array (
+          0 =>
+          array (
+            'category_id' => 16,
+            'parent_id' => 12,
+            'store_id' => 2,
+            'name' => 'QA Swatch Display',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' =>
+            array (
+            ),
+            'children' =>
+            array (
+            ),
+            'extension' =>
+            array (
+            ),
+          ),
         ),
         'extension' => 
         array (
