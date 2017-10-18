@@ -25,12 +25,11 @@
     text-transform: uppercase;
     font-size: 1rem;
 
-    @include breakpoint($above-palm) {
-      font-size: 1.5rem;
-    }
-
-    p {
-      margin-bottom: 0;
+    & h3,
+    & p {
+      @include breakpoint($above-palm) {
+        font-size: 1.5rem;
+      }
     }
 
     span {
@@ -52,11 +51,16 @@
   header {
     float: direction(right);
     color: $brownish-grey;
-    padding-top: 1.6rem;
+    padding-top: 1.9rem;
     font-size: 1rem;
+    margin-bottom: 0.75rem;
+
+    @include breakpoint($above-palm) {
+      margin-bottom: 1.25rem;
+    }
 
     @include breakpoint($lap) {
-      padding-top: 2.6rem;
+      padding-top: 3rem;
     }
 
     @include breakpoint($desk) {
@@ -66,13 +70,5 @@
 
   .views-infinite-scroll-content-wrapper {
     clear: both;
-
-    @include breakpoint($upto-palm) {
-      padding-top: 0.875rem;
-    }
-
-    @include breakpoint($above-palm) {
-      padding-top: 1.5rem;
-    }
   }
 }

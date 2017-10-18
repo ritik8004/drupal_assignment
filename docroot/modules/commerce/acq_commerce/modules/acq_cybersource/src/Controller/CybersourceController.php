@@ -152,6 +152,11 @@ class CybersourceController implements ContainerInjectionInterface {
         }
       }
 
+      // Save transaction_uuid in session to compare later for better security.
+      $session = \Drupal::request()->getSession();
+      $session->set('cybersource_transaction_uuid', $token_info['transaction_uuid']);
+      $session->save();
+
       $cybersource_url = $this->config->get('env') == 'test' ? $this->config->get('test_url') : $this->config->get('prod_url');
       $cybersource_url .= self::JS_API_ENDPOINT;
       $response_data = [];
@@ -187,6 +192,23 @@ class CybersourceController implements ContainerInjectionInterface {
       throw new AccessDeniedHttpException();
     }
 
+    // Get transaction_uuid from session to check if request is secure.
+    $session = \Drupal::request()->getSession();
+    $transaction_uuid = $session->get('cybersource_transaction_uuid');
+
+    // Check if transaction_uuid is not empty.
+    if (empty($transaction_uuid)) {
+      throw new AccessDeniedHttpException();
+    }
+    // Check if transaction_uuid in request matches the one in session.
+    elseif ($transaction_uuid != $post_data['req_transaction_uuid']) {
+      throw new AccessDeniedHttpException();
+    }
+
+    // Remove it again to ensure no double calls are made for same token.
+    $session->set('cybersource_transaction_uuid', '');
+    $session->save();
+
     $response = new Response();
     $script = '';
 
@@ -203,6 +225,10 @@ class CybersourceController implements ContainerInjectionInterface {
     else {
       // Get the cart object.
       $cart = $this->cartStorage->getCart(FALSE);
+
+      if (empty($cart)) {
+        throw new AccessDeniedHttpException('No cart available to process token');
+      }
 
       // Set the payment method.
       $cart->setPaymentMethod('cybersource');

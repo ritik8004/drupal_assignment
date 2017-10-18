@@ -23,7 +23,7 @@
       var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
       var cartCheckoutDeliverySelector = $('body[gtm-container="checkout delivery page"]');
       var cartCheckoutPaymentSelector = $('body[gtm-container="checkout payment page"]');
-      var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container .js-webform-radios', context);
+      var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
       var couponCode = $('form.customer-cart-form', context).find('input#edit-coupon').val();
       var storeFinderFormSelector = $('form#views-exposed-form-stores-finder-page-1');
@@ -334,17 +334,27 @@
             event = 'addToCart';
           }
 
-          var data = {
-            event: event,
-            ecommerce: {
-              currencyCode: currencyCode,
-              remove: {
-                products: [
-                  product
-                ]
-              }
-            }
-          };
+					var data = {
+						event: event,
+						ecommerce: {
+							currencyCode: currencyCode
+						}
+					};
+
+					if (event === 'removeFromCart') {
+						data.ecommerce.remove = {
+							products: [
+								product
+							]
+						};
+					}
+					else if (event === 'addToCart') {
+						data.ecommerce.add = {
+							products: [
+								product
+							]
+						};
+					}
 
           dataLayer.push(data);
         }
@@ -405,16 +415,18 @@
         }
       }
 
-      subDeliveryOptionSelector.find('.form-type-radio').once('js-event').each(function () {
+      subDeliveryOptionSelector.find('.form-type-radio').each(function () {
         // Push default selected sub-delivery option to GTM.
         if ($(this).find('input[checked="checked"]').length > 0) {
           var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          selectedMethodLabel = Drupal.alshaya_seo_translate_shipping_method(selectedMethodLabel);
           Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
         }
 
         // Attach change event listener to shipping method radio buttons.
         $(this).change(function () {
           var selectedMethodLabel = $(this).find('.shipping-method-title').text();
+          selectedMethodLabel = alshaya_seo_translate_shipping_method(selectedMethodLabel);
           Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
         });
       });
@@ -540,7 +552,7 @@
         Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'Top Navigation', 'promotionClick');
       });
 
-      if ($('.paragraph--type--promo-block').length > 0) {
+      if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
         Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
       }
 
@@ -838,6 +850,24 @@
         fsNoOfResult: resultCount
       });
     }
+  };
+
+  /**
+   * Helper function to translate non-site default lang shipping method label.
+   *
+   * @param selectedMethodLabel
+   * @returns {*}
+   */
+  Drupal.alshaya_seo_translate_shipping_method = function (selectedMethodLabel) {
+    var currentLangCode = drupalSettings.path.currentLanguage;
+    if (currentLangCode !== 'en') {
+      var shipping_translations = drupalSettings.alshaya_shipping_method_translations;
+      if (drupalSettings.alshaya_shipping_method_translations.hasOwnProperty(selectedMethodLabel)) {
+        selectedMethodLabel = shipping_translations[selectedMethodLabel];
+      }
+    }
+
+    return selectedMethodLabel;
   };
 
 })(jQuery, Drupal, dataLayer);

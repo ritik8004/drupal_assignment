@@ -59,7 +59,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
       'price_block' => NULL,
       'price_block_identifier' => NULL,
       'promotions' => NULL,
-      'out_of_stock' => NULL,
+      'stock_placeholder' => NULL,
     ],
   ];
 
@@ -334,6 +334,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       if (!empty($promotions)) {
         $build['promotions'] = [
           '#markup' => implode('</br>', $promotions),
+        ];
+      }
+
+      if (alshaya_acm_product_is_buyable($sku_entity)) {
+        $build['stock_placeholder'] = [
+          '#markup' => '<div class="stock-placeholder ' . $sku_identifier . ' out-of-stock">' . t('Checking stock...') . '</div>',
         ];
       }
     }

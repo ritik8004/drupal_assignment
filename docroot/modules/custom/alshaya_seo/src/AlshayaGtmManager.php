@@ -549,7 +549,10 @@ class AlshayaGtmManager {
         // For CC we always use step 2.
         $attributes['step'] = 2;
       }
-      elseif (isset($address['customer_address_id']) && (!empty($address['customer_address_id'])) &&
+      // We receive address id in case of authenticated users & address as an
+      // extension attribute for anonymous.
+      elseif (((isset($address['customer_address_id']) && (!empty($address['customer_address_id']))) ||
+        (isset($address['extension'], $address['extension']['address_area_segment']))) &&
         ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
         // For HD we use step 3 if we have address saved.
         $attributes['step'] = 3;
@@ -756,6 +759,9 @@ class AlshayaGtmManager {
 
     foreach ($orderItems as $key => $item) {
       $product = $this->fetchSkuAtttributes($item['sku']);
+      if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
+        $product['gtm-metric1'] *= $item['ordered'];
+      }
       $productNode = alshaya_acm_product_get_display_node($item['sku']);
       $product['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
       $product['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
@@ -942,8 +948,9 @@ class AlshayaGtmManager {
               $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
 
               $shipping_obj = (array) $cart->getShipping();
-              if (isset($shipping_obj['extension']['address_governate_segment'])) {
-                $page_dl_attributes['deliveryArea'] = $shipping_obj['extension']['address_governate_segment'];
+
+              if (isset($shipping_obj['extension']['address_area_segment'])) {
+                $page_dl_attributes['deliveryArea'] = $shipping_obj['extension']['address_area_segment'];
               }
               // Check if selected shipping method is click and collect.
               if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
@@ -993,6 +1000,10 @@ class AlshayaGtmManager {
           $billing_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
           $deliveryArea = $billing_address['administrative_area'];
         }
+        else {
+          $billing_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
+          $deliveryArea = $billing_address['administrative_area'];
+        }
 
         foreach ($orderItems as $orderItem) {
           $productSKU[] = $orderItem['sku'];
@@ -1009,8 +1020,11 @@ class AlshayaGtmManager {
           'cartItemsFlocktory' => $this->formatCartFlocktory($orderItems),
           'storeLocation' => $dimension7,
           'storeAddress' => $dimension8,
-          'deliveryArea' => $deliveryArea,
         ];
+
+        if ($deliveryArea) {
+          $page_dl_attributes['deliveryArea'] = $deliveryArea;
+        }
 
         break;
     }

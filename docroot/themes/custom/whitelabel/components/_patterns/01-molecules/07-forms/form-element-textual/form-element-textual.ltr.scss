@@ -18,7 +18,7 @@
   input:active ~ .input__line,
   .error ~ .input__line {
     width: 100%;
-    left: 0;
+    #{direction(left)}: 0;
     background: $windows-blue;
   }
 
@@ -36,7 +36,7 @@
     margin-top: 0.3125rem;
     position: absolute;
     bottom: -1.25rem;
-    left: 0;
+    #{direction(left)}: 0;
   }
 
   input.error ~ .input__line,
@@ -97,7 +97,8 @@
 
 .input--prefix ~ .input__label label,
 .input--active ~ .input__label label,
-input:focus ~ .input__label label {
+input:focus ~ .input__label label,
+input:active ~ .input__label label {
   font-size: 0.625rem;
   top: -0.75rem;
 }
@@ -106,7 +107,7 @@ input:focus ~ .input__label label {
   position: absolute;
   color: $greyish;
   top: 0;
-  left: 0;
+  #{direction(left)}: 0;
   font-size: 1rem;
   transition: font-size 0.25s ease-in-out, top 0.25s ease-in-out;
   pointer-events: none;
@@ -139,4 +140,17 @@ input:focus ~ .input__label label {
   @include u-clearfix;
 
   margin-top: 1rem;
+}
+
+/* Mobile Number */
+.mobile-number-field {
+  > label {
+    display: none;
+  }
+
+  .local-number ~ .input__label label {
+    height: auto;
+    width: auto;
+    clip: unset;
+  }
 }

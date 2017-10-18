@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_default_content module.
+ */
+
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_default_content_install() {
+  $home = Node::create([
+    'type' => 'advanced_page',
+    'langcode' => 'en',
+  ]);
+
+  $home->setTitle('Home');
+  $home->setPublished(NodeInterface::PUBLISHED);
+  $home->set('moderation_state', 'published');
+  $home->setPromoted(NodeInterface::NOT_PROMOTED);
+  $home->setRevisionUserId(1);
+  $home->save();
+
+  $home = $home->addTranslation('ar', []);
+  $home->setTitle('Home');
+  $home->setPublished(NodeInterface::PUBLISHED);
+  $home->set('moderation_state', 'published');
+  $home->setPromoted(NodeInterface::NOT_PROMOTED);
+  $home->setRevisionUserId(1);
+  $home->save();
+
+  $config_factory = \Drupal::configFactory()->getEditable('alshaya_master.home');
+  $config_factory->set('entity.id', $home->id());
+  $config_factory->save();
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_default_content_modules_installed($modules) {
+  // Exclude home page node from sitemap.
+  if (in_array('alshaya_seo', $modules)) {
+    $entity_details = \Drupal::config('alshaya_master.home')->get('entity');
+
+    $simple_sitemap = \Drupal::service('simple_sitemap.generator');
+    $simple_sitemap->setEntityInstanceSettings($entity_details['entity_type'], $entity_details['id'], [
+      'index' => 0,
+      'priority' => 0.5,
+      'changefreq' => 'never',
+    ]);
+  }
+}

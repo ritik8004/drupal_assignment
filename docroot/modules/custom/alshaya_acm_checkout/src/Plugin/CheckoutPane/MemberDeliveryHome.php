@@ -31,7 +31,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function isVisible() {
-    return \Drupal::currentUser()->isAuthenticated();
+    return \Drupal::currentUser()->isAuthenticated() && alshaya_acm_customer_is_customer(\Drupal::currentUser());
   }
 
   /**
@@ -186,6 +186,9 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
         $default_shipping = $checkout_options_manager->getCleanShippingMethodCode($default_shipping);
 
+        // Fetch translations for shipping methods.
+        $shipping_method_translations = $checkout_options_manager->getShippingMethodTranslations();
+
         if (!empty($shipping_methods) && empty($default_shipping)) {
           $default_shipping = array_keys($shipping_methods)[0];
         }
@@ -204,6 +207,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       '#suffix' => '</div>',
       '#attributes' => ['class' => ['shipping-methods-container']],
     ];
+
+    if (!empty($shipping_method_translations)) {
+      $pane_form['address']['shipping_methods']['#attached']['drupalSettings']['alshaya_shipping_method_translations'] = $shipping_method_translations;
+    }
 
     $complete_form['actions']['next']['#limit_validation_errors'] = [['address']];
     $complete_form['actions']['next']['#attributes']['class'][] = 'delivery-home-next';

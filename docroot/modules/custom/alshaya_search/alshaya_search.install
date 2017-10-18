@@ -47,42 +47,6 @@ function alshaya_search_install() {
   // Allow anonymous and authenticated users to use autocomplete.
   user_role_grant_permissions('anonymous', ['use search_api_autocomplete for search_api_views_search']);
   user_role_grant_permissions('authenticated', ['use search_api_autocomplete for search_api_views_search']);
-
-}
-
-/**
- * Implements hook_modules_installed().
- */
-function alshaya_search_modules_installed($modules) {
-  if (!in_array('alshaya_search', $modules)) {
-    return;
-  }
-
-  _alshaya_search_translate_search_view_config();
-}
-
-/**
- * Translates the search view settings / config.
- */
-function _alshaya_search_translate_search_view_config() {
-  $search_view = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.search');
-
-  $search_view->set('display.default.display_options.exposed_form.options.exposed_sorts_label', 'رتب حسب');
-  $search_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'التطابق تنازلي|التطابق
-الاسم تصاعدي|الاسم من أ إلى ي
-الاسم تنازلي|الاسم من ي إلى أ
-السعر تنازلي|السعر من الأعلى إلى الأدنى
-السعر تصاعدي|السعر من الأدنى إلى الأعلى');
-  $search_view->set('display.default.display_options.exposed_form.options.sort_asc_label', 'تصاعدي');
-  $search_view->set('display.default.display_options.exposed_form.options.sort_desc_label', 'تنازلي');
-  $search_view->set('display.default.display_options.sorts.search_api_relevance.expose.label', 'التطابق');
-  $search_view->set('display.default.display_options.sorts.final_price.expose.label', 'السعر');
-  $search_view->set('display.default.display_options.sorts.title.expose.label', 'الاسم');
-  $search_view->set('display.default.display_options.empty.area.content.value', "<p>لا يوجد نتائج لبحثك</p>\r\n");
-  $search_view->set('display.default.display_options.header.result.content', '@total القطع');
-  $search_view->set('display.default.display_options.pager.options.views_infinite_scroll.button_text', 'عرض المزيد');
-
-  $search_view->save();
 }
 
 /**

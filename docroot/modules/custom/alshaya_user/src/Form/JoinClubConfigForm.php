@@ -33,7 +33,6 @@ class JoinClubConfigForm extends ConfigFormBase {
     $image = $form_state->getValue('image');
     $image = $image ? reset($image) : '';
     $config->set('join_club_image.fid', $image);
-
     $config->set('join_club_description', $form_state->getValue('description'));
 
     $config->save();
@@ -60,7 +59,7 @@ class JoinClubConfigForm extends ConfigFormBase {
 
     $form['description'] = [
       '#type' => 'text_format',
-      '#format' => 'rich_text',
+      '#format' => !empty($config->get('join_club_description.format')) ? $config->get('join_club_description.format') : 'rich_text',
       '#title' => $this->t('Description'),
       '#required' => TRUE,
       '#default_value' => $config->get('join_club_description.value'),

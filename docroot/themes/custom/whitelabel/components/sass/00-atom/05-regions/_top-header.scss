@@ -3,7 +3,9 @@
 
   @include breakpoint($upto-palm) {
     position: fixed;
-    z-index: 999;
+    z-index: $z-50;
+    top: 0;
+    width: 100%;
   }
 
   @include breakpoint($above-palm) {
@@ -11,8 +13,10 @@
   }
 }
 
-main {
-  @include breakpoint($upto-palm) {
-    margin-top: 4rem;
+.toolbar-vertical {
+  .region-top-header {
+    @include breakpoint($upto-palm) {
+      top: 2.4375rem;
+    }
   }
 }

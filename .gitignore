@@ -127,3 +127,4 @@ atlassian-ide-plugin.xml
 
 # Drupal console
 console
+install-site-dev.sh

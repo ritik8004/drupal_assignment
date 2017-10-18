@@ -1642,12 +1642,6 @@ article[gtm-sku-type="simple"] {
     }
   }
 
-  @include breakpoint($only-mobile) {
-    article.stock-check-processed {
-      min-height: 5rem;
-    }
-  }
-
   span.out-of-stock {
     background-color: $cherry;
     font-family: $alshaya-bold;
@@ -1655,7 +1649,6 @@ article[gtm-sku-type="simple"] {
     display: block;
     vertical-align: middle;
     text-align: center;
-    margin: 1rem 0;
     padding: 0.6rem 1.5rem;
     color: $white;
 

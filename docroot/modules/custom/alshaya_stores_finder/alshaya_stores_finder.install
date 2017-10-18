@@ -40,13 +40,6 @@ function alshaya_stores_finder_set_default_marker_icon() {
 }
 
 /**
- * Set default marker icon.
- */
-function alshaya_stores_finder_update_8001() {
-  alshaya_stores_finder_set_default_marker_icon();
-}
-
-/**
  * Implements hook_update().
  *
  * Update the Google Map API Key.
@@ -60,9 +53,12 @@ function alshaya_stores_finder_update_8002() {
 /**
  * Implements hook_update().
  *
+ * Set default marker icon.
  * Update config file for store configuration.
  */
-function alshaya_stores_finder_update_8303() {
+function alshaya_stores_finder_update_8101() {
+  alshaya_stores_finder_set_default_marker_icon();
+
   $configs = ['alshaya_stores_finder.settings'];
   // Install updated schema file.
   alshaya_config_install_configs($configs, 'alshaya_stores_finder', 'schema');

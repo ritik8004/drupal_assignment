@@ -58,6 +58,10 @@ installed_extras:
   - memcached
   - xhprof
   - tideways
+  - varnish
+
+extra_packages:
+  - imagemagick
 
 # Use PHP 5.6.
 php_version: "5.6"
@@ -87,6 +91,7 @@ post_provision_tasks_dir: "../../../acquia/blt/scripts/drupal-vm/post-provision.
 post_provision_scripts:
   - "../../../acquia/blt/scripts/drupal-vm/post-provision.sh"
   - "../../../../box/scripts/configure-solr.sh"
+  - "../../../../box/scripts/configure-varnish.sh"
 
 apache_vhosts_ssl:
   - servername: "{{ drupal_domain }}"
@@ -137,3 +142,7 @@ mysql_users:
     host: "%"
     password: drupal
     priv: "drupal_alshaya.*:ALL/drupal_non_transac.*:ALL"
+
+varnish_version: "4.1"
+varnish_listen_port: "81"
+varnish_default_backend_port: "80"

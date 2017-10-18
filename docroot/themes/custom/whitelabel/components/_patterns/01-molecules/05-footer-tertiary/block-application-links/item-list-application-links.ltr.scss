@@ -13,6 +13,10 @@
 
   @include breakpoint($lap) {
     margin-top: 1.125rem;
+
+    html[lang=ar] & {
+      margin-top: 1rem;
+    }
   }
 
   li {
@@ -25,8 +29,12 @@
         border-#{direction(right)}: 1px solid $greyish-lighter;
       }
 
-      @include breakpoint($upto-lap) {
-        margin-bottom: 1rem;
+      @include breakpoint($lap) {
+        margin-bottom: 0.6rem;
+      }
+
+      @include breakpoint($upto-palm) {
+        margin-bottom: 1.4rem;
       }
     }
   }
@@ -43,13 +51,18 @@
       display: block;
 
       @include breakpoint($above-palm) {
-        margin-left: 1rem;
-        margin-right: 1rem;
+        margin-left: 2.3rem;
+        margin-right: 1.8rem;
       }
 
       @include breakpoint($upto-lap) {
         margin-left: auto;
         margin-right: auto;
+      }
+
+      @include breakpoint($lap) {
+        position: relative;
+        #{direction(left)}: -0.5rem;
       }
     }
   }

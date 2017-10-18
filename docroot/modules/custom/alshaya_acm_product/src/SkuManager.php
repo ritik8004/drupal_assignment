@@ -155,14 +155,22 @@ class SkuManager {
     // Get the price, discounted price and discount.
     $build['price'] = $build['final_price'] = $build['discount'] = [];
 
-    if ($price = (float) $sku_entity->get('price')->getString()) {
+    if ($sku_entity->bundle() == 'configurable') {
+      $price = $final_price = $this->getMinPrice($sku_entity);
+    }
+    else {
+      $price = (float) $sku_entity->get('price')->getString();
+      $final_price = (float) $sku_entity->get('final_price')->getString();
+    }
+
+    if ($price) {
       $build['price'] = [
         '#theme' => 'acq_commerce_price',
         '#price' => $price,
       ];
 
       // Get the discounted price.
-      if ($final_price = (float) $sku_entity->get('final_price')->getString()) {
+      if ($final_price) {
         // Final price could be same as price, we dont need to show discount.
         if ($final_price >= $price) {
           return;
@@ -180,11 +188,46 @@ class SkuManager {
         ];
       }
     }
-    elseif ($final_price = (float) $sku_entity->get('final_price')->getString()) {
+    elseif ($final_price) {
       $build['price'] = [
         '#theme' => 'acq_commerce_price',
         '#price' => $final_price,
       ];
+    }
+  }
+
+  /**
+   * Get minimum price for configurable products.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   SKU Entity.
+   *
+   * @return float|int
+   *   Minimum price.
+   */
+  protected function getMinPrice(SKU $sku_entity) {
+    $sku_price = 0;
+
+    /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
+    $plugin = $sku_entity->getPluginInstance();
+    $tree = $plugin->deriveProductTree($sku_entity);
+
+    if (isset($tree['products'])) {
+      foreach ($tree['products'] as $child_sku => $child_sku_entity) {
+        if ($child_sku_entity instanceof SKU) {
+          $price = (float) $child_sku_entity->get('price')->getString();
+          $final_price = (float) $child_sku_entity->get('final_price')->getString();
+
+          if ($final_price > 0) {
+            $sku_price = $sku_price > 0 ? min($sku_price, $final_price) : $final_price;
+          }
+          elseif ($price > 0) {
+            $sku_price = $sku_price > 0 ? min($sku_price, $price) : $price;
+          }
+        }
+      }
+
+      return $sku_price;
     }
   }
 

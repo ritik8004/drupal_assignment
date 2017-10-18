@@ -60,22 +60,25 @@
 }
 
 .menu-close {
-  background: $white;
   color: $marine-blue-two;
-  font-size: 1.0625rem;
-  position: absolute;
-  #{direction(right)}: -15%;
-  top: 10%;
+  position: fixed;
+  #{direction(right)}: 2.5%;
+  top: 0.625rem;
   display: none;
+  width: 2.1875rem;
+  height: 1.9375rem;
+  overflow: hidden;
 
   &::before {
+    background: $white;
     font-size: 2.25rem;
+    line-height: 31px;
   }
 }
 
 .vertical-layout .navigation__sub-menu {
   @include breakpoint($upto-palm) {
-    min-width: 16.875rem;
+    width: 84.7%;
     position: fixed;
     z-index: 9;
     background: $white;
@@ -85,6 +88,7 @@
     clear: both;
     will-change: transform;
     margin-top: 3rem;
+    top: 0;
 
     li {
       width: 100%;
@@ -92,17 +96,22 @@
       text-align: direction(left);
       border-bottom: 1px solid $gainsboro;
 
+      .ajax-progress-throbber {
+        display: none;
+      }
+
       a {
         text-transform: capitalize;
         font-size: 0.875rem;
         color: $brownish-grey;
         margin-#{direction(right)}: 0;
+        padding: 0.875rem 0.5625rem;
 
         @include icon(chevronright, after) {
           font-size: 1.75rem;
           color: $light-pink;
           position: absolute;
-          #{direction(right)}: 0;
+          #{direction(right)}: 0.5rem;
           margin-top: -0.3125rem;
         }
       }
@@ -151,10 +160,11 @@
   @include breakpoint($upto-palm) {
     .burger {
       display: block;
-      width: 3.125rem;
+      width: 15%;
+      height: 3rem;
       position: relative;
-      top: 0.375rem;
-      #{direction(left)}: 0.6875rem;
+      padding-top: 0.375rem;
+      padding-#{direction(left)}: 0.6875rem;
       background: $white;
     }
   }
@@ -164,9 +174,7 @@
     background: $black;
 
     @include breakpoint($upto-palm) {
-      li {
-        width: 5.625rem;
-      }
+      width: 85%;
 
       a {
         padding: 0.72rem 0.6rem;
@@ -176,12 +184,28 @@
 }
 
 html[dir=rtl] {
-  .vertical-layout .navigation__sub-menu {
-    right: 0;
-    transform: translateX(100%);
+  @include breakpoint($upto-palm) {
+    .vertical-layout .navigation__sub-menu {
+      right: 0;
+      transform: translateX(100%);
 
-    li a {
-      @include icon(chevronleft, after);
+      li a {
+        @include icon(chevronleft, after);
+      }
+    }
+  }
+}
+
+.toolbar-vertical {
+  .vertical-layout .navigation__sub-menu {
+    @include breakpoint($upto-palm) {
+      margin-top: 5.4rem;
+    }
+  }
+
+  .menu-close {
+    @include breakpoint($upto-palm) {
+      top: 2.625rem;
     }
   }
 }

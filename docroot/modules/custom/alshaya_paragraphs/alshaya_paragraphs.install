@@ -10,7 +10,7 @@
  *
  * Create Image+title+subtitle paragraph type.
  */
-function alshaya_paragraphs_update_8301() {
+function alshaya_paragraphs_update_8101() {
 
   $configs = [
     // Image + title + subtitle paragraph type.

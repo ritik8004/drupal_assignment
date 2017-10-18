@@ -75,3 +75,4 @@ permissions:
   - 'delete any static_html content'
   - 'edit any static_html content'
   - 'use text format full_text'
+  - 'translate interface'
