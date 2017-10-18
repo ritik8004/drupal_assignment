@@ -1,0 +1,94 @@
+.pls-footer-menu {
+  font-size: 0.875rem;
+
+  @include breakpoint($above-palm) {
+    display: none;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      width: 100%;
+      text-align: center;
+      padding: 0.782rem;
+      border-top: 0.06rem solid $gainsboro;
+
+      a {
+        text-decoration: none;
+        color: $peacock-blue;
+
+        &::before {
+          margin-#{direction(right)}: 0.31rem;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+.region-footer-primary {
+  .pls-footer-languageswitcher {
+    width: 100%;
+    background-color: transparent;
+    text-align: center;
+    border-top: 0.06rem solid $gainsboro;
+    border-bottom: 0.06rem solid $gainsboro;
+
+    @include breakpoint($above-palm) {
+      display: none;
+    }
+
+    .menu-language-switcher--desktop li {
+      font-size: 0.875rem;
+      padding: 0.86rem 0;
+
+      a {
+        color: $peacock-blue;
+
+        @include icon(language);
+
+        &::before {
+          margin-#{direction(right)}: 0.31rem;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .block-find-store-heading {
+    background-color: transparent;
+    position: static;
+    padding: 0.69rem 0.875rem;
+    border-top: 0.06rem solid $gainsboro;
+
+    @include breakpoint($upto-palm) {
+      display: block;
+    }
+
+    @include breakpoint($above-palm) {
+      display: none;
+    }
+
+    a {
+      font-family: $TradeGothicLTStd;
+      color: $peacock-blue;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-size: 0.875rem;
+
+      &::before {
+        font-size: 1.01rem;
+        margin-#{direction(right)}: 0;
+        vertical-align: middle;
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+html[lang="ar"] .region-footer-primary .pls-footer-languageswitcher .menu-language-switcher--desktop li a::before {
+  line-height: 0.51;
+}

@@ -4,7 +4,6 @@
   background-color: $blackish-grey;
   text-align: center;
   text-transform: uppercase;
-  font-weight: bold;
   color: $white;
   padding-top: 1.4rem;
   padding-bottom: 2.3rem;
@@ -28,11 +27,22 @@
   margin-bottom: 1.3rem;
   text-transform: uppercase;
 
+  @include breakpoint($upto-palm) {
+    html[lang=ar] & {
+      margin-bottom: 1.6rem;
+    }
+  }
+
   @include breakpoint($lap) {
     margin-bottom: 0.8rem;
   }
 
   @include breakpoint($desk) {
     margin-bottom: 0.6rem;
+
+    html[lang=ar] & {
+      position: relative;
+      right: -0.3125rem;
+    }
   }
 }

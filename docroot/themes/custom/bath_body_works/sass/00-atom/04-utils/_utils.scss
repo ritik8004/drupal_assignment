@@ -1,0 +1,19 @@
+.is-hidden {
+  display: none !important;
+}
+
+.device__desktop {
+  display: none;
+
+  @include breakpoint($desk) {
+    display: block;
+  }
+}
+
+.device__tablet {
+  display: none;
+
+  @include breakpoint($lap) {
+    display: block;
+  }
+}

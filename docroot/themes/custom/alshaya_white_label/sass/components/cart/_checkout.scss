@@ -608,6 +608,10 @@ body.alias--cart {
       width: 100%;
       font-family: $arial-nodir;
       margin-top: -0.5rem;
+
+      td.name {
+        font-family: $arial;
+      }
     }
 
     thead {

@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+formId: webform_submission_alshaya_contact_add_form
+captchaType: default
+label: webform_submission_alshaya_contact_add_form

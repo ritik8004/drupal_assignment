@@ -69,15 +69,29 @@
   @include breakpoint($lap) {
     width: 19.3611%;
     padding: 0 1.25rem;
+
+    html[lang=ar] & {
+      width: 25.3611%;
+    }
   }
 
   @include breakpoint($desk) {
     width: 19.1%;
     padding: 0 1.5rem;
+    padding-#{direction(left)}: 3.5rem;
+    text-indent: -2.2rem;
+
+    html[lang=ar] & {
+      line-height: 1.2;
+    }
   }
 
   &:hover {
     color: $medium-pink;
+
+    &::before {
+      background: url('../../../../../../images/icons/svg/icon-mylocation-active.svg');
+    }
   }
 
   &::before {
@@ -100,10 +114,18 @@
 
   @include breakpoint($lap) {
     width: 44%;
+
+    html[lang=ar] & {
+      width: 38%;
+    }
   }
 
   @include breakpoint($desk) {
     width: 50.7281%;
+
+    html[lang=ar] & {
+      width: 49.5%;
+    }
   }
 }
 
@@ -123,6 +145,13 @@
     font-size: 0.75rem;
     width: 47.05%;
     padding-#{direction(left)}: 3%;
+
+    html[lang=ar] & {
+      width: 41.05%;
+      padding-right: 8%;
+      line-height: 2;
+      text-align: right;
+    }
   }
 
   @include breakpoint($desk) {
@@ -160,6 +189,10 @@
 
   @include breakpoint($lap) {
     width: 52.083%;
+
+    html[lang=ar] & {
+      width: 58.083%;
+    }
   }
 
   @include breakpoint($desk) {
@@ -185,6 +218,10 @@
   @include breakpoint($upto-palm) {
     border-color: $greyish;
     padding: 0.625rem 1.125rem;
+    padding-#{direction(right)}: 3.125rem;
+    appearance: none;
+    box-shadow: none;
+    border-radius: 0;
   }
 
   @include breakpoint($above-palm) {
@@ -275,6 +312,10 @@
     display: block;
     position: relative;
     padding-#{direction(left)}: 1.875rem;
+
+    html[lang=ar] & {
+      padding-right: 2.6rem;
+    }
   }
 
   @include breakpoint($lap) {
@@ -284,6 +325,10 @@
   @include breakpoint($desk) {
     width: 10.5%;
     min-width: 7.5rem;
+
+    html[lang=ar] & {
+      min-width: 8.5rem;
+    }
   }
 
   &::before {
@@ -315,6 +360,10 @@
 
   @include breakpoint($desk) {
     margin-#{direction(left)}: 2.75%;
+
+    html[lang=ar] & {
+      margin-right: 1.5%;
+    }
   }
 }
 
@@ -326,6 +375,10 @@
 
   @include breakpoint($desk) {
     margin-#{direction(left)}: 2%;
+
+    html[lang=ar] & {
+      margin-right: 1.5%;
+    }
   }
 }
 

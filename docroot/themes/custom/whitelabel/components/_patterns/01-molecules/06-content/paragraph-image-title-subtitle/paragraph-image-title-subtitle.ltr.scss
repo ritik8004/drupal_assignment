@@ -6,6 +6,10 @@
   margin-bottom: 1.4rem;
   cursor: pointer;
 
+  html[lang=ar] & {
+    letter-spacing: 0;
+  }
+
   a {
     text-decoration: none;
   }

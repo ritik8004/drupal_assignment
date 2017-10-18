@@ -3,3 +3,10 @@ email_validator_override:
     js/email_validator_override.js: {}
   dependencies:
     - clientside_validation_jquery/jquery.validate
+
+clear_autofill:
+  js:
+    js/clear_autofill.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

@@ -14,6 +14,10 @@
 }
 
 .geolocation-common-map-container {
+  .gm-style-iw {
+    cursor: pointer;
+  }
+
   .hours--label,
   .open--hours {
     padding-#{direction(left)}: 0;
@@ -28,12 +32,25 @@
   .views-field-title {
     margin-bottom: 0.1875rem;
     font-weight: bold;
+    color: $black-smoke;
+  }
+
+  .views-field-field-store-address {
+    color: $brownish-grey;
+  }
+
+  .views-field-title,
+  .get--directions a,
+  .hours--label,
+  .views-field-field-store-address {
+    font-size: 0.875rem;
   }
 
   .get--directions a {
     color: $medium-pink;
     padding-#{direction(left)}: 0;
     border-bottom: 0;
+    font-weight: bold;
 
     &::after {
       content: '';
@@ -81,7 +98,6 @@
     @include icon(chevron#{direction(right)}, after) {
       position: absolute;
       font-size: 2rem;
-      line-height: 2rem;
       #{direction(right)}: 0.3rem;
       top: 0.5rem;
     }

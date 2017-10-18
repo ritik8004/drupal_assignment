@@ -3,9 +3,10 @@
 namespace Drupal\alshaya_acm_checkout;
 
 use Drupal\acq_cart\CartStorageInterface;
-use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_acm\ApiHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
@@ -16,11 +17,11 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 class CheckoutOptionsManager {
 
   /**
-   * API Wrapper object.
+   * API Helper object.
    *
-   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   * @var \Drupal\alshaya_acm\ApiHelper
    */
-  protected $apiWrapper;
+  protected $apiHelper;
 
   /**
    * The cart storage service.
@@ -44,25 +45,35 @@ class CheckoutOptionsManager {
   protected $configFactory;
 
   /**
+   * THe language manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * CheckoutOptionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   EntityTypeManager object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
-   *   ApiWrapper object.
+   * @param \Drupal\alshaya_acm\ApiHelper $api_helper
+   *   API Helper object.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   Cart Storage service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   Language Manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, APIWrapper $api_wrapper, CartStorageInterface $cart_storage, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, ApiHelper $api_helper, CartStorageInterface $cart_storage, LoggerChannelFactoryInterface $logger_factory, LanguageManagerInterface $languageManager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->configFactory = $config_factory;
-    $this->apiWrapper = $api_wrapper;
+    $this->apiHelper = $api_helper;
     $this->cartStorage = $cart_storage;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
+    $this->languageManager = $languageManager;
   }
 
   /**
@@ -339,7 +350,7 @@ class CheckoutOptionsManager {
     $shipping_method_options = [];
 
     if (!empty($address) && !empty($address['country_id'])) {
-      $shipping_methods = $this->apiWrapper->getShippingEstimates($cart->id(), $address);
+      $shipping_methods = $this->apiHelper->getShippingEstimates($address);
     }
 
     if (!empty($shipping_methods)) {
@@ -421,6 +432,32 @@ class CheckoutOptionsManager {
     $code = str_replace(',', '_', $code);
     $code = substr($code, 0, 120);
     return $code;
+  }
+
+  /**
+   * Helper function to fetch shipping method translations.
+   *
+   * @return array
+   *   List of shipping methods keyed by shipping method in current language.
+   */
+  public function getShippingMethodTranslations() {
+    $shipping_method_translations = [];
+
+    $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
+    if ($this->languageManager->getCurrentLanguage()->getId() !== $site_default_langcode) {
+      $shipping_options = $this->getAllShippingTerms();
+      foreach ($shipping_options as $key => $shipping_option) {
+        if ($shipping_option->hasTranslation($site_default_langcode)) {
+          $shipping_translated_term = $shipping_option->getTranslation($site_default_langcode);
+        }
+        else {
+          $shipping_translated_term = $shipping_option;
+        }
+        $shipping_method_translations[$shipping_option->getName()] = $shipping_translated_term->getName();
+      }
+    }
+
+    return $shipping_method_translations;
   }
 
 }

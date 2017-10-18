@@ -1,0 +1,7 @@
+dist
+node_modules
+patternlab
+dist
+.idea
+.vscode
+vendor

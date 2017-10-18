@@ -277,8 +277,10 @@
 
   // Ajax command to show loader on checkout pages.
   $.fn.showCheckoutLoader = function (data) {
-    // Add the loader div.
-    $('.page-standard').append('<div class="ajax-progress ajax-progress-throbber checkout-ajax-progress-throbber"><div class="throbber"></div></div>');
+    if ($('.checkout-ajax-progress-throbber').length === 0) {
+      // Add the loader div if not available.
+      $('.page-standard').append('<div class="ajax-progress ajax-progress-throbber checkout-ajax-progress-throbber"><div class="throbber"></div></div>');
+    }
 
     // Show the loader.
     $('.checkout-ajax-progress-throbber').show();
@@ -315,5 +317,10 @@
       }
     }
   };
+
+  // Show loader every-time we are reloading page.
+  $(window).on('beforeunload', function () {
+    $(this).showCheckoutLoader();
+  });
 
 })(jQuery, Drupal);

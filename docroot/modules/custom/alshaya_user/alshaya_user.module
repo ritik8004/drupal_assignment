@@ -34,6 +34,7 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
 
   $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
+  $form['#attached']['library'][] = 'alshaya_user/clear_autofill';
 }
 
 /**
@@ -63,6 +64,8 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     $form['field_first_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
     $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
   }
+
+  $form['#attached']['library'][] = 'alshaya_user/clear_autofill';
 }
 
 /**
@@ -121,6 +124,7 @@ function alshaya_user_form_user_pass_alter(&$form, FormStateInterface $form_stat
   unset($form['name']['#attributes']['autofocus']);
 
   $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
+  $form['#attached']['library'][] = 'alshaya_user/clear_autofill';
 }
 
 /**
@@ -178,6 +182,7 @@ function alshaya_user_form_change_pwd_form_alter(&$form, FormStateInterface $for
   // Add password validation attribute.
   $form['account']['pass']['#attributes']['passvalidate'] = 'passvalidate';
   $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
+  $form['#attached']['library'][] = 'alshaya_user/clear_autofill';
 }
 
 /**
@@ -216,9 +221,12 @@ function alshaya_user_preprocess_page_title(&$variables) {
   $current_path = \Drupal::service('path.current')->getPath();
   if (strpos($current_path, '/user') !== FALSE && $user = \Drupal::request()->attributes->get('user')) {
     $arg = explode('/', $current_path);
+
     if (!empty($arg[3])) {
-      $link = Url::fromRoute('entity.user.canonical', ['user' => $user->id()])
-        ->toString();
+      $back_link_route = ($arg[3] === 'order') ? 'acq_customer.orders' : 'entity.user.canonical';
+
+      $link = Url::fromRoute($back_link_route, ['user' => $user->id()])->toString();
+
       $variables['title_prefix'] = [
         '#markup' => "<a href=" . $link . " class='back-link'>",
         '#weight' => 100,

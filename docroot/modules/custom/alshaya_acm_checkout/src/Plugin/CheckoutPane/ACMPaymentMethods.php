@@ -80,8 +80,8 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     try {
       // Get available payment methods and compare to enabled payment method
       // plugins.
-      $apiWrapper = $this->getApiWrapper();
-      $payment_methods = $apiWrapper->getPaymentMethods($cart->id());
+      $apiHelper = \Drupal::service('alshaya_acm.api_helper');
+      $payment_methods = $apiHelper->getPaymentMethods();
       $payment_methods = array_intersect($payment_methods, array_keys($plugins));
     }
     catch (\Exception $e) {

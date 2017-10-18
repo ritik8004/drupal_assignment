@@ -49,6 +49,7 @@
     width: inherit;
     overflow: hidden;
     font-size: 0.5rem;
+    text-decoration: none;
     height: 0;
 
     @include icon(chevron#{direction(left)}, after) {

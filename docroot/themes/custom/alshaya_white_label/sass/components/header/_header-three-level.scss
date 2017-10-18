@@ -25,10 +25,10 @@
 
     .highlights {
       position: absolute;
-      #{$left}: 67.6%;
+      #{$right}: 0;
       top: 0.7rem;
       margin-top: 0;
-      width: 50%;
+      margin-#{$right}: 1.5rem;
 
       .title {
         margin-bottom: 0.9rem;
