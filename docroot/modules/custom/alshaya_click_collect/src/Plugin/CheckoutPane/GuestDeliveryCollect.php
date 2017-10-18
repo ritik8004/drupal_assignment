@@ -34,7 +34,11 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    * {@inheritdoc}
    */
   public function isVisible() {
-    return \Drupal::currentUser()->isAnonymous() && $this->getClickAndCollectAvailability();
+    if (\Drupal::currentUser()->isAnonymous() || !alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
+      return $this->getClickAndCollectAvailability();
+    }
+
+    return FALSE;
   }
 
   /**

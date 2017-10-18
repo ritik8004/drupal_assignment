@@ -14,12 +14,18 @@
     padding-bottom: 0.5rem;
     border-bottom: 1px solid $white;
 
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+      padding-bottom: 0;
+      border-bottom: 0 none;
+    }
+
     @include breakpoint($tablet) {
       margin-bottom: 2.25rem;
     }
 
     @include breakpoint($only-tablet) {
-      margin-top: 1.8rem;
+      margin-top: 0.5rem;
     }
 
     @include breakpoint($desktop) {
@@ -64,7 +70,7 @@
     display: none;
     position: absolute;
     #{$right}: 0;
-    top: -1rem;
+    top: 1rem;
 
     @include breakpoint($tablet) {
       display: block;
@@ -300,19 +306,6 @@
 
     .mobile-only {
       margin-top: 19px;
-
-      .button.status-pending {
-        @include icon(chevron#{$right}, after) {
-          position: absolute;
-          top: 6rem;
-          #{$left}: 13.5rem;
-          font-size: 1.8rem;
-          color: $black;
-          background: $white;
-          border-radius: 50%;
-          padding: 0.1875rem;
-        }
-      }
     }
 
     .tablet-only {
