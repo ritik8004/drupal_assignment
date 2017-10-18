@@ -3,6 +3,436 @@ global $_alshaya_acm_products;
 
 $_alshaya_acm_products = array(
 array (
+  'product_id' => 24,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM05518570021870081',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-05 00:00:00',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '0048167e1fe708a30ae44bb7fdd17584c8ecea46',
+    'url_key' => 'long-t-shirt-hm05518570021870081',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 48,
+      'product_id' => 24,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      '0048167e1fe708a30ae44bb7fdd17584c8ecea46' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '0048167e1fe708a30ae44bb7fdd17584c8ecea46',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '2',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/48/0048167e1fe708a30ae44bb7fdd17584c8ecea46.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0515236',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 28,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM05518570021870083',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-13 00:00:00',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '0048167e1fe708a30ae44bb7fdd17584c8ecea46',
+    'url_key' => 'long-t-shirt-hm05518570021870083',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 52,
+      'product_id' => 28,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      '0048167e1fe708a30ae44bb7fdd17584c8ecea46' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '0048167e1fe708a30ae44bb7fdd17584c8ecea46',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '2',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/48/0048167e1fe708a30ae44bb7fdd17584c8ecea46.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0515236',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 30,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'HM05518570021870084',
+  'name' => 'Long T-shirt',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-13 00:00:00',
+    'size' => '849',
+    'season_value' => '201807',
+    'article_pattern' => '901,893',
+    'article_license_company' => '913',
+    'article_license_item' => '968',
+    'article_fragrance_description' => '974',
+    'asset_ids' => '0048167e1fe708a30ae44bb7fdd17584c8ecea46',
+    'url_key' => 'long-t-shirt-hm05518570021870084',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 54,
+      'product_id' => 30,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      '0048167e1fe708a30ae44bb7fdd17584c8ecea46' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '0048167e1fe708a30ae44bb7fdd17584c8ecea46',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '2',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/48/0048167e1fe708a30ae44bb7fdd17584c8ecea46.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0515236',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 45,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'test-simple',
+  'name' => 'Test Simple Product',
+  'type' => 'simple',
+  'price' => '20.0000',
+  'special_price' => '0',
+  'final_price' => '20',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => 'Test Simple Product',
+    'meta_keyword' => 'Test Simple Product',
+    'meta_description' => 'Test Simple Product ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-04 11:16:47',
+    'url_key' => 'test-product',
+    'tax_class_id' => '2',
+    'gift_message_available' => '2',
+    'gift_wrapping_available' => '2',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '3',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 121,
+      'product_id' => 45,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+), array(
   'product_id' => 46,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -15,7 +445,7 @@ array (
   'final_price' => '12',
   'status' => 1,
   'visibility' => 1,
-  'attributes' => 
+  'attributes' =>
   array (
     'meta_title' => 'Test Simple Product',
     'meta_keyword' => 'Test Simple Product',
@@ -41,24 +471,69 @@ array (
     'gift_wrapping_available' => '1',
     'is_returnable' => '2', 'is_buyable' => '1',
     'composition' => '{"materials":{"paraffin":"80","wax":"20"},"container":{"materials":{"glass":"100"}}}',
+    'product_state' => '2028',
   ),
-  'linked' => 
+  'linked' =>
   array (
+    0 =>
+    array (
+      'linked_sku' => 'Test New Product',
+      'linked_type' => 'simple',
+      'type' => 'crosssell',
+      'main_sku' => 'Test Simple Product',
+      'position' => 4,
+      'extension' =>
+      array (
+      ),
+    ),
+    1 =>
+    array (
+      'linked_sku' => 'Test Product Attribute',
+      'linked_type' => 'simple',
+      'type' => 'crosssell',
+      'main_sku' => 'Test Simple Product',
+      'position' => 3,
+      'extension' =>
+      array (
+      ),
+    ),
+    2 =>
+    array (
+      'linked_sku' => '512508999',
+      'linked_type' => 'simple',
+      'type' => 'crosssell',
+      'main_sku' => 'Test Simple Product',
+      'position' => 2,
+      'extension' =>
+      array (
+      ),
+    ),
+    3 =>
+    array (
+      'linked_sku' => '0547344',
+      'linked_type' => 'configurable',
+      'type' => 'crosssell',
+      'main_sku' => 'Test Simple Product',
+      'position' => 1,
+      'extension' =>
+      array (
+      ),
+    ),
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '5',
     1 => '6',
     2 => '12',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 72,
       'product_id' => 46,
       'stock_id' => 2,
-      'qty' => 9997,
+      'qty' => 10000,
       'is_in_stock' => true,
       'is_qty_decimal' => false,
       'show_default_notification_message' => false,
@@ -82,23 +557,60 @@ array (
       'is_decimal_divided' => false,
       'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
     ),
-    'assets' => 
+    'assets' =>
     array (
-      '3b65688f4f614029cc307ad2fd02fceeae5d9d86' => 
+      '8d15a6f7dca7179b92ae8e39829bf483c87e1e79' =>
       array (
-        'Data' => 
+        'Data' =>
+        array (
+          'AssetId' => '8d15a6f7dca7179b92ae8e39829bf483c87e1e79',
+          'AssetType' => 'StillMediaComponents/Lookbook',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '8d/15/8d15a6f7dca7179b92ae8e39829bf483c87e1e79.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0527396',
+              'ArticleId' => '002',
+            ),
+          ),
+          'SubordinateArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0517360',
+              'ArticleId' => '001',
+            ),
+          ),
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      '3b65688f4f614029cc307ad2fd02fceeae5d9d86' =>
+      array (
+        'Data' =>
         array (
           'AssetId' => '3b65688f4f614029cc307ad2fd02fceeae5d9d86',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -107,16 +619,16 @@ array (
           'FilePath' => '3b/65/3b65688f4f614029cc307ad2fd02fceeae5d9d86.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0526434',
               'ArticleId' => '004',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '1',
             'Identifier' => 'C',
@@ -128,56 +640,159 @@ array (
       ),
     ),
   ),
-),
-array (
-  'product_id' => 55,
+), array(
+  'product_id' => 48,
   'store_id' => 1,
   'attribute_set_id' => 4,
   'attribute_set_label' => 'Default',
-  'sku' => '550442001',
-  'name' => 'Hooded sweatshirt dress',
+  'sku' => 'vbo_1',
+  'name' => 'Vincent Simple Product',
+  'type' => 'simple',
+  'price' => '12.0000',
+  'special_price' => '0',
+  'final_price' => '12',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => 'Vincent Simple Product',
+    'meta_keyword' => 'Vincent Simple Product',
+    'meta_description' => 'Vincent Simple Product ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'country_of_manufacture' => 'AQ',
+    'product_activation_date' => '2017-09-11 00:00:00',
+    'product_collection' => '6,7',
+    'concept' => '15',
+    'washing_instructions' => '25',
+    'dry_cleaning_instructions' => '35',
+    'rgb_color' => '#121212',
+    'color_label' => 'Light blue',
+    'size' => '52',
+    'season_code' => '17',
+    'season_value' => 'Summer17',
+    'product_designer_collection' => '884',
+    'product_feature' => '886',
+    'product_environment' => '891',
+    'product_quality' => '892',
+    'article_visual_description' => 'This is a visual description',
+    'article_pattern' => '893',
+    'article_license_company' => '911',
+    'article_license_item' => '915',
+    'article_fragrance_description' => '971',
+    'article_warning' => 'notunder8years',
+    'url_key' => 'vincent-simple-product',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'composition' => '{"bottom":{"materials":{"cotton":"40","lycra":"60"}},"top":{"materials":{"lycra":"90","polyester":"10"}},"sleevelining":{"materials":{"cotton":"100"}}}',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '7',
+    1 => '12',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 73,
+      'product_id' => 48,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 59,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '512508001',
+  'name' => 'Denim shorts',
   'type' => 'simple',
   'price' => '19.9900',
   'special_price' => '0',
   'final_price' => '19.99',
   'status' => 1,
   'visibility' => 1,
-  'attributes' => 
+  'attributes' =>
   array (
-    'meta_title' => 'Hooded sweatshirt dress',
-    'meta_keyword' => 'Hooded sweatshirt dress',
-    'meta_description' => 'Hooded sweatshirt dress ',
+    'meta_title' => 'Denim shorts',
+    'meta_keyword' => 'Denim shorts',
+    'meta_description' => 'Denim shorts ',
     'options_container' => 'container2',
     'required_options' => '0',
     'has_options' => '0',
     'product_activation_date' => '2017-09-11 00:00:00',
+    'size' => '45',
     'season_code' => '001',
-    'season_value' => '001',
-    'url_key' => 'hooded-sweatshirt-dress',
+    'asset_ids' => '0009069d5c95cb671afd865',
+    'url_key' => 'denim-shorts',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'gift_message_available' => '0',
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
-    0 => '5',
-    1 => '8',
-    2 => '9',
+    0 => '10',
+    1 => '2',
+    2 => '11',
+    3 => '12',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
-      'item_id' => 80,
-      'product_id' => 55,
+      'item_id' => 84,
+      'product_id' => 59,
       'stock_id' => 2,
       'qty' => 10000,
-      'is_in_stock' => false,
+      'is_in_stock' => true,
       'is_qty_decimal' => false,
       'show_default_notification_message' => false,
       'use_config_min_qty' => true,
@@ -200,21 +815,223 @@ array (
       'is_decimal_divided' => false,
       'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
+    ),
+    'assets' =>
+    array (
     ),
   ),
-),
-array (
+), array(
+  'product_id' => 60,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '541917002',
+  'name' => 'Jacquard-patterned dress',
+  'type' => 'simple',
+  'price' => '19.9900',
+  'special_price' => '0',
+  'final_price' => '19.99',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => 'Jacquard-patterned dress',
+    'meta_keyword' => 'Jacquard-patterned dress',
+    'meta_description' => 'Jacquard-patterned dress ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-09-10 00:00:00',
+    'size' => '43',
+    'season_code' => '006',
+    'asset_ids' => 'b82b0af24a5e054012c18f22b64',
+    'url_key' => 'jacquard-patterned-dress',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '5',
+    1 => '2',
+    2 => '11',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 85,
+      'product_id' => 60,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+    ),
+  ),
+), array(
+  'product_id' => 61,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'Test Another Simple',
+  'name' => 'Test Another Simple',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'description' => '<p>This is a long description</p>',
+    'meta_title' => 'Test Another Simple',
+    'meta_keyword' => 'Test Another Simple',
+    'meta_description' => 'Test Another Simple ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-09-08 00:00:00',
+    'product_collection' => '6',
+    'concept' => '17',
+    'washing_instructions' => '25',
+    'dry_cleaning_instructions' => '35',
+    'rgb_color' => '#121212',
+    'color_label' => 'LAbel',
+    'size' => '38',
+    'season_code' => '174',
+    'season_value' => '201704',
+    'aims_department' => 'TEST',
+    'product_designer_collection' => '883',
+    'product_feature' => '885',
+    'product_environment' => '891',
+    'product_quality' => '892',
+    'article_visual_description' => 'Test',
+    'article_pattern' => '893',
+    'article_license_company' => '912',
+    'article_license_item' => '914',
+    'article_fragrance_description' => '971',
+    'article_warning' => 'notunder18months',
+    'asset_ids' => '1231,1231231',
+    'style_with' => '123132,1231',
+    'style_code' => '123123',
+    'article_castor_id' => '1010',
+    'url_key' => 'test-another-simple',
+    'msrp_display_actual_price_type' => '0',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'composition' => '{"materials":{"paraffin":"80","wax":"20"},"container":{"materials":{"glass":"100"}}}',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '5',
+    1 => '6',
+    2 => '2',
+    3 => '11',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 86,
+      'product_id' => 61,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+    ),
+  ),
+), array(
   'product_id' => 62,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -227,7 +1044,7 @@ array (
   'final_price' => '500',
   'status' => 1,
   'visibility' => 1,
-  'attributes' => 
+  'attributes' =>
   array (
     'meta_title' => 'Test Products on Demo',
     'meta_keyword' => 'Test Products on Demo',
@@ -243,6 +1060,7 @@ array (
     'rgb_color' => '#12345',
     'color_label' => 'Animal Print',
     'size' => '49',
+    'asset_ids' => '00853b0c9707b477c0bb8282d2ad85ec421fbb98',
     'article_castor_id' => '1017',
     'url_key' => 'test-products-on-demo',
     'msrp_display_actual_price_type' => '0',
@@ -250,219 +1068,22 @@ array (
     'gift_message_available' => '0',
     'gift_wrapping_available' => '1',
     'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '5',
     1 => '12',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 88,
       'product_id' => 62,
-      'stock_id' => 2,
-      'qty' => 10000,
-      'is_in_stock' => false,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-04 12:21:11',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 64,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM75440 6 08 3084',
-  'name' => 'Playsuit',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'color' => '2019',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-10-10 00:00:00',
-    'rgb_color' => '#FFFFFF',
-    'size' => '874',
-    'season_value' => '201706',
-    'asset_ids' => '02ef832083deb1586cb7bf16912a671e74260fd7',
-    'url_key' => 'playsuit-hm75440-6-08-3084',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '0',
-    'is_returnable' => '2', 'is_buyable' => '1',
-    'composition' => '{\\"\\":{\\"materials\\":{\\"viscose\\":\\"100.0\\"}}}',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '15',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 94,
-      'product_id' => 64,
-      'stock_id' => 2,
-      'qty' => 10000,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-    'assets' => 
-    array (
-      '02ef832083deb1586cb7bf16912a671e74260fd7' => 
-      array (
-        'Data' => 
-        array (
-          'AssetId' => '02ef832083deb1586cb7bf16912a671e74260fd7',
-          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
-          'Version' => '1',
-          'FileLocation' => 'LiquidPixels',
-          'FilePath' => '02/ef/02ef832083deb1586cb7bf16912a671e74260fd7.jpg',
-          'Brand' => 'H&M',
-          'AllowedForUse' => 'true',
-          'MainArticles' => 
-          array (
-            'Article' => 
-            array (
-              'ProductId' => '0530293',
-              'ArticleId' => '001',
-            ),
-          ),
-          'SubordinateArticles' => '',
-          'Angle' => 
-          array (
-            'Facing' => '1',
-            'Identifier' => 'C',
-            'Packaging' => '0',
-            'Number' => '1',
-          ),
-          'IsMultiPack' => 'false',
-        ),
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 65,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => '0530293',
-  'name' => 'Playsuit',
-  'type' => 'configurable',
-  'price' => '10',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'short_description' => '<p>Playsuit in a patterned weave with frill trims and shoulder straps that fasten at the back. A seam at the waist, side pockets, a concealed zip in the side and wide legs with a double frill at the hems.</p>
-',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'concept' => '22',
-    'washing_instructions' => '27',
-    'aims_department' => 'HM1666',
-    'url_key' => 'playsuit-0530293',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-    'product_brand' => '2018',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '15',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 95,
-      'product_id' => 65,
       'stock_id' => 2,
       'qty' => 10000,
       'is_in_stock' => true,
@@ -488,47 +1109,53 @@ array (
       'is_decimal_divided' => false,
       'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'configurable_product_links' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
-        'id' => '64',
-        'sku' => 'HM75440 6 08 3084',
+      ),
+      1 =>
+      array (
       ),
     ),
-    'configurable_product_options' => 
+    'assets' =>
     array (
-      0 => 
+      '00853b0c9707b477c0bb8282d2ad85ec421fbb98' =>
       array (
-        'attribute_id' => '93',
-        'code' => 'color',
-        'label' => 'Color',
-        'position' => '0',
-        'values' => 
+        'Data' =>
         array (
-          0 => 
+          'AssetId' => '00853b0c9707b477c0bb8282d2ad85ec421fbb98',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '2',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/85/00853b0c9707b477c0bb8282d2ad85ec421fbb98.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
           array (
-            'value_id' => '2019',
-            'label' => '08',
+            'Article' =>
+            array (
+              'ProductId' => '0521467',
+              'ArticleId' => '001',
+            ),
           ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '8',
+            'Identifier' => 'L',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
         ),
       ),
     ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
   ),
-),
-array (
+), array(
   'product_id' => 66,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -541,7 +1168,7 @@ array (
   'final_price' => '10',
   'status' => 1,
   'visibility' => 2,
-  'attributes' => 
+  'attributes' =>
   array (
     'color' => '2021',
     'options_container' => 'container2',
@@ -552,6 +1179,7 @@ array (
     'size' => '853',
     'season_value' => '201706',
     'asset_ids' => 'b3e031565df9aa43d687d111799c0310ae51274a,f93f72bace66ff41fc8ab5afbedd68e872a8c9d7',
+    'article_castor_id' => '1009',
     'url_key' => 'make-up-bag-hm75440-6-12',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
@@ -559,17 +1187,18 @@ array (
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
     'composition' => '{\\"\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}},\\"coating\\":{\\"materials\\":{\\"polyurethane\\":\\"100.0\\"}},\\"lining\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}}}',
+    'product_state' => '2028',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '13',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 96,
       'product_id' => 66,
@@ -594,27 +1223,27 @@ array (
       'enable_qty_increments' => false,
       'use_config_manage_stock' => true,
       'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
+      'low_stock_date' => NULL,
       'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
+      'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
     ),
-    'assets' => 
+    'assets' =>
     array (
-      'b3e031565df9aa43d687d111799c0310ae51274a' => 
+      'b3e031565df9aa43d687d111799c0310ae51274a' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => 'b3e031565df9aa43d687d111799c0310ae51274a',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -623,16 +1252,16 @@ array (
           'FilePath' => 'b3/e0/b3e031565df9aa43d687d111799c0310ae51274a.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0553501',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '1',
             'Identifier' => 'C',
@@ -642,9 +1271,9 @@ array (
           'IsMultiPack' => 'false',
         ),
       ),
-      'f93f72bace66ff41fc8ab5afbedd68e872a8c9d7' => 
+      'f93f72bace66ff41fc8ab5afbedd68e872a8c9d7' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => 'f93f72bace66ff41fc8ab5afbedd68e872a8c9d7',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -653,16 +1282,16 @@ array (
           'FilePath' => 'f9/3f/f93f72bace66ff41fc8ab5afbedd68e872a8c9d7.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0553501',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '1',
             'Identifier' => 'L',
@@ -674,8 +1303,7 @@ array (
       ),
     ),
   ),
-),
-array (
+), array(
   'product_id' => 67,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -688,7 +1316,7 @@ array (
   'final_price' => '10',
   'status' => 1,
   'visibility' => 2,
-  'attributes' => 
+  'attributes' =>
   array (
     'color' => '2020',
     'options_container' => 'container2',
@@ -697,7 +1325,9 @@ array (
     'product_activation_date' => '2017-10-10 00:00:00',
     'rgb_color' => '#C34041',
     'size' => '853',
+    'season_value' => '201706',
     'asset_ids' => '75a34ec4369031471cd3057a4d051956eaefda54,aac44329027c522bb639357b54ae7f6606e3c264',
+    'article_castor_id' => '1013',
     'url_key' => 'make-up-bag-hm75440-6-45',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
@@ -705,309 +1335,21 @@ array (
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
     'composition' => '{\\"\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}},\\"coating\\":{\\"materials\\":{\\"polyurethane\\":\\"100.0\\"}},\\"lining\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}}}',
+    'product_state' => '2028',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '13',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 97,
       'product_id' => 67,
-      'stock_id' => 2,
-      'qty' => 10000,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-    'assets' => 
-    array (
-      '75a34ec4369031471cd3057a4d051956eaefda54' => 
-      array (
-        'Data' => 
-        array (
-          'AssetId' => '75a34ec4369031471cd3057a4d051956eaefda54',
-          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
-          'Version' => '1',
-          'FileLocation' => 'LiquidPixels',
-          'FilePath' => '75/a3/75a34ec4369031471cd3057a4d051956eaefda54.jpg',
-          'Brand' => 'H&M',
-          'AllowedForUse' => 'true',
-          'MainArticles' => 
-          array (
-            'Article' => 
-            array (
-              'ProductId' => '0553501',
-              'ArticleId' => '005',
-            ),
-          ),
-          'SubordinateArticles' => '',
-          'Angle' => 
-          array (
-            'Facing' => '1',
-            'Identifier' => 'C',
-            'Packaging' => '0',
-            'Number' => '1',
-          ),
-          'IsMultiPack' => 'false',
-        ),
-      ),
-      'aac44329027c522bb639357b54ae7f6606e3c264' => 
-      array (
-        'Data' => 
-        array (
-          'AssetId' => 'aac44329027c522bb639357b54ae7f6606e3c264',
-          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
-          'Version' => '1',
-          'FileLocation' => 'LiquidPixels',
-          'FilePath' => 'aa/c4/aac44329027c522bb639357b54ae7f6606e3c264.jpg',
-          'Brand' => 'H&M',
-          'AllowedForUse' => 'true',
-          'MainArticles' => 
-          array (
-            'Article' => 
-            array (
-              'ProductId' => '0553501',
-              'ArticleId' => '005',
-            ),
-          ),
-          'SubordinateArticles' => '',
-          'Angle' => 
-          array (
-            'Facing' => '1',
-            'Identifier' => 'L',
-            'Packaging' => '0',
-            'Number' => '1',
-          ),
-          'IsMultiPack' => 'false',
-        ),
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 68,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => 'HM75440 6 53',
-  'name' => 'Make-up bag',
-  'type' => 'simple',
-  'price' => '10.0000',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 2,
-  'attributes' => 
-  array (
-    'color' => '2022',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'product_activation_date' => '2017-10-10 00:00:00',
-    'rgb_color' => '#755E61',
-    'size' => '853',
-    'season_value' => '201706',
-    'asset_ids' => '0fc5f920bdbf31222d2026d13713592241b100d7,e87ea5b5035b911a79c557556e0b33d29ee84117',
-    'url_key' => 'make-up-bag-hm75440-6-53',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'gift_message_available' => '0',
-    'gift_wrapping_available' => '0',
-    'is_returnable' => '2', 'is_buyable' => '1',
-    'composition' => '{\\"\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}},\\"coating\\":{\\"materials\\":{\\"polyurethane\\":\\"100.0\\"}},\\"lining\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}}}',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '13',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 98,
-      'product_id' => 68,
-      'stock_id' => 2,
-      'qty' => 10000,
-      'is_in_stock' => true,
-      'is_qty_decimal' => false,
-      'show_default_notification_message' => false,
-      'use_config_min_qty' => true,
-      'min_qty' => 0,
-      'use_config_min_sale_qty' => 1,
-      'min_sale_qty' => 1,
-      'use_config_max_sale_qty' => true,
-      'max_sale_qty' => 10000,
-      'use_config_backorders' => true,
-      'backorders' => 0,
-      'use_config_notify_stock_qty' => true,
-      'notify_stock_qty' => 1,
-      'use_config_qty_increments' => true,
-      'qty_increments' => 0,
-      'use_config_enable_qty_inc' => true,
-      'enable_qty_increments' => false,
-      'use_config_manage_stock' => true,
-      'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
-      'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
-    ),
-    'labels' => 
-    array (
-    ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
-    'assets' => 
-    array (
-      '0fc5f920bdbf31222d2026d13713592241b100d7' => 
-      array (
-        'Data' => 
-        array (
-          'AssetId' => '0fc5f920bdbf31222d2026d13713592241b100d7',
-          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
-          'Version' => '1',
-          'FileLocation' => 'LiquidPixels',
-          'FilePath' => '0f/c5/0fc5f920bdbf31222d2026d13713592241b100d7.jpg',
-          'Brand' => 'H&M',
-          'AllowedForUse' => 'true',
-          'MainArticles' => 
-          array (
-            'Article' => 
-            array (
-              'ProductId' => '0553501',
-              'ArticleId' => '002',
-            ),
-          ),
-          'SubordinateArticles' => '',
-          'Angle' => 
-          array (
-            'Facing' => '1',
-            'Identifier' => 'C',
-            'Packaging' => '0',
-            'Number' => '1',
-          ),
-          'IsMultiPack' => 'false',
-        ),
-      ),
-      'e87ea5b5035b911a79c557556e0b33d29ee84117' => 
-      array (
-        'Data' => 
-        array (
-          'AssetId' => 'e87ea5b5035b911a79c557556e0b33d29ee84117',
-          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
-          'Version' => '1',
-          'FileLocation' => 'LiquidPixels',
-          'FilePath' => 'e8/7e/e87ea5b5035b911a79c557556e0b33d29ee84117.jpg',
-          'Brand' => 'H&M',
-          'AllowedForUse' => 'true',
-          'MainArticles' => 
-          array (
-            'Article' => 
-            array (
-              'ProductId' => '0553501',
-              'ArticleId' => '002',
-            ),
-          ),
-          'SubordinateArticles' => '',
-          'Angle' => 
-          array (
-            'Facing' => '1',
-            'Identifier' => 'L',
-            'Packaging' => '0',
-            'Number' => '1',
-          ),
-          'IsMultiPack' => 'false',
-        ),
-      ),
-    ),
-  ),
-),
-array (
-  'product_id' => 69,
-  'store_id' => 1,
-  'attribute_set_id' => 4,
-  'attribute_set_label' => 'Default',
-  'sku' => '0553501',
-  'name' => 'Make-up bag',
-  'type' => 'configurable',
-  'price' => '10',
-  'special_price' => '0',
-  'final_price' => '10',
-  'status' => 1,
-  'visibility' => 1,
-  'attributes' => 
-  array (
-    'short_description' => '<p>Make-up bag in imitation leather with a zip at the top and decorative chain with a carabiner hook. Size of bag 7.5x14x22.5 cm.</p>
-',
-    'options_container' => 'container2',
-    'required_options' => '0',
-    'has_options' => '0',
-    'aims_department' => 'HM1116',
-    'url_key' => 'make-up-bag-0553501',
-    'msrp_display_actual_price_type' => '0',
-    'tax_class_id' => '2',
-    'is_returnable' => '2', 'is_buyable' => '1',
-    'product_brand' => '2018',
-  ),
-  'linked' => 
-  array (
-  ),
-  'categories' => 
-  array (
-    0 => '13',
-  ),
-  'extension' => 
-  array (
-    'stock_item' => 
-    array (
-      'item_id' => 99,
-      'product_id' => 69,
       'stock_id' => 2,
       'qty' => 10000,
       'is_in_stock' => true,
@@ -1033,111 +1375,129 @@ array (
       'is_decimal_divided' => false,
       'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'configurable_product_links' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
-        'id' => '66',
-        'sku' => 'HM75440 6 12',
       ),
-      1 => 
+      1 =>
       array (
-        'id' => '67',
-        'sku' => 'HM75440 6 45',
-      ),
-      2 => 
-      array (
-        'id' => '68',
-        'sku' => 'HM75440 6 53',
       ),
     ),
-    'configurable_product_options' => 
+    'assets' =>
     array (
-      0 => 
+      '75a34ec4369031471cd3057a4d051956eaefda54' =>
       array (
-        'attribute_id' => '93',
-        'code' => 'color',
-        'label' => 'Color',
-        'position' => '0',
-        'values' => 
+        'Data' =>
         array (
-          0 => 
+          'AssetId' => '75a34ec4369031471cd3057a4d051956eaefda54',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '75/a3/75a34ec4369031471cd3057a4d051956eaefda54.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
           array (
-            'value_id' => '2021',
-            'label' => '12',
+            'Article' =>
+            array (
+              'ProductId' => '0553501',
+              'ArticleId' => '005',
+            ),
           ),
-          1 => 
+          'SubordinateArticles' => '',
+          'Angle' =>
           array (
-            'value_id' => '2020',
-            'label' => '45',
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
           ),
-          2 => 
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'aac44329027c522bb639357b54ae7f6606e3c264' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => 'aac44329027c522bb639357b54ae7f6606e3c264',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'aa/c4/aac44329027c522bb639357b54ae7f6606e3c264.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
           array (
-            'value_id' => '2022',
-            'label' => '53',
+            'Article' =>
+            array (
+              'ProductId' => '0553501',
+              'ArticleId' => '005',
+            ),
           ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'L',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
         ),
       ),
     ),
-    'media' => 
-    array (
-      0 => 
-      array (
-      ),
-      1 => 
-      array (
-      ),
-    ),
   ),
-),
-array (
-  'product_id' => 70,
+), array(
+  'product_id' => 68,
   'store_id' => 1,
   'attribute_set_id' => 4,
   'attribute_set_label' => 'Default',
-  'sku' => 'HM59065 6 05',
-  'name' => 'Small mirror',
+  'sku' => 'HM75440 6 53',
+  'name' => 'Make-up bag',
   'type' => 'simple',
   'price' => '10.0000',
   'special_price' => '0',
   'final_price' => '10',
   'status' => 1,
   'visibility' => 2,
-  'attributes' => 
+  'attributes' =>
   array (
-    'color' => '2023',
+    'color' => '2022',
     'options_container' => 'container2',
     'required_options' => '0',
     'has_options' => '0',
     'product_activation_date' => '2017-10-10 00:00:00',
-    'rgb_color' => '#B1A646',
+    'rgb_color' => '#755E61',
     'size' => '853',
     'season_value' => '201706',
-    'asset_ids' => '4964908c08de3abf8948d494e7f14cd9895281d3',
-    'url_key' => 'small-mirror-hm59065-6-05',
+    'asset_ids' => '0fc5f920bdbf31222d2026d13713592241b100d7,e87ea5b5035b911a79c557556e0b33d29ee84117',
+    'article_castor_id' => '1010',
+    'url_key' => 'make-up-bag-hm75440-6-53',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'gift_message_available' => '0',
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
-    'composition' => '{\\"frame\\":{\\"materials\\":{\\"metal\\":\\"100.0\\"}},\\"front\\":{\\"materials\\":{\\"glass\\":\\"100.0\\"}}}',
+    'composition' => '{\\"\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}},\\"coating\\":{\\"materials\\":{\\"polyurethane\\":\\"100.0\\"}},\\"lining\\":{\\"materials\\":{\\"polyester\\":\\"100.0\\"}}}',
+    'product_state' => '2028',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
-    0 => '14',
+    0 => '13',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
-      'item_id' => 100,
-      'product_id' => 70,
+      'item_id' => 98,
+      'product_id' => 68,
       'stock_id' => 2,
       'qty' => 10000,
       'is_in_stock' => true,
@@ -1159,48 +1519,48 @@ array (
       'enable_qty_increments' => false,
       'use_config_manage_stock' => true,
       'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
+      'low_stock_date' => NULL,
       'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
+      'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
     ),
-    'assets' => 
+    'assets' =>
     array (
-      '4964908c08de3abf8948d494e7f14cd9895281d3' => 
+      'e87ea5b5035b911a79c557556e0b33d29ee84117' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
-          'AssetId' => '4964908c08de3abf8948d494e7f14cd9895281d3',
+          'AssetId' => 'e87ea5b5035b911a79c557556e0b33d29ee84117',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
           'Version' => '1',
           'FileLocation' => 'LiquidPixels',
-          'FilePath' => '49/64/4964908c08de3abf8948d494e7f14cd9895281d3.jpg',
+          'FilePath' => 'e8/7e/e87ea5b5035b911a79c557556e0b33d29ee84117.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
-              'ProductId' => '0547344',
-              'ArticleId' => '001',
+              'ProductId' => '0553501',
+              'ArticleId' => '002',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '1',
-            'Identifier' => 'C',
+            'Identifier' => 'L',
             'Packaging' => '0',
             'Number' => '1',
           ),
@@ -1209,8 +1569,7 @@ array (
       ),
     ),
   ),
-),
-array (
+), array(
   'product_id' => 71,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -1218,12 +1577,12 @@ array (
   'sku' => '0547344',
   'name' => 'Small mirror',
   'type' => 'configurable',
-  'price' => '10',
+  'price' => '0',
   'special_price' => '0',
-  'final_price' => '10',
+  'final_price' => '0',
   'status' => 1,
   'visibility' => 1,
-  'attributes' => 
+  'attributes' =>
   array (
     'short_description' => '<p>Small, round mirror with a fluted metal frame and a hook at the back for hanging. Screws not included. Diameter of mirror 12 cm, diameter of frame 22 cm.</p>
 ',
@@ -1240,16 +1599,16 @@ array (
     'is_returnable' => '2', 'is_buyable' => '1',
     'product_brand' => '2018',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '14',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 101,
       'product_id' => 71,
@@ -1278,47 +1637,76 @@ array (
       'is_decimal_divided' => false,
       'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'configurable_product_links' => 
+    'configurable_product_links' =>
     array (
-      0 => 
+      0 =>
       array (
         'id' => '70',
         'sku' => 'HM59065 6 05',
       ),
     ),
-    'configurable_product_options' => 
+    'configurable_product_options' =>
     array (
-      0 => 
+      0 =>
       array (
         'attribute_id' => '93',
         'code' => 'color',
         'label' => 'Color',
         'position' => '0',
-        'values' => 
+        'values' =>
         array (
-          0 => 
+          0 =>
           array (
             'value_id' => '2023',
             'label' => '05',
           ),
         ),
       ),
+      1 =>
+      array (
+        'attribute_id' => '126',
+        'code' => 'size',
+        'label' => 'Size',
+        'position' => '0',
+        'values' =>
+        array (
+          0 =>
+          array (
+            'value_id' => '853',
+            'label' => 'NOSIZE',
+          ),
+        ),
+      ),
+      2 =>
+      array (
+        'attribute_id' => '143',
+        'code' => 'article_castor_id',
+        'label' => 'Article Castor ID',
+        'position' => '0',
+        'values' =>
+        array (
+          0 =>
+          array (
+            'value_id' => '1009',
+            'label' => '001',
+          ),
+        ),
+      ),
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
     ),
   ),
-),
-array (
+), array(
   'product_id' => 72,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -1331,7 +1719,7 @@ array (
   'final_price' => '10',
   'status' => 1,
   'visibility' => 2,
-  'attributes' => 
+  'attributes' =>
   array (
     'options_container' => 'container2',
     'required_options' => '0',
@@ -1340,6 +1728,7 @@ array (
     'size' => '41',
     'season_value' => '201706',
     'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'article_castor_id' => '1009',
     'url_key' => 'leather-ankle-boots-hm20329-5-09-6266',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
@@ -1347,16 +1736,16 @@ array (
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '12',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 102,
       'product_id' => 72,
@@ -1381,27 +1770,27 @@ array (
       'enable_qty_increments' => false,
       'use_config_manage_stock' => true,
       'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
+      'low_stock_date' => NULL,
       'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
+      'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
     ),
-    'assets' => 
+    'assets' =>
     array (
-      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -1410,16 +1799,16 @@ array (
           'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '3',
             'Identifier' => 'C',
@@ -1429,9 +1818,9 @@ array (
           'IsMultiPack' => 'false',
         ),
       ),
-      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -1440,16 +1829,16 @@ array (
           'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '8',
             'Identifier' => 'C',
@@ -1461,8 +1850,7 @@ array (
       ),
     ),
   ),
-),
-array (
+), array(
   'product_id' => 73,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -1475,7 +1863,7 @@ array (
   'final_price' => '10',
   'status' => 1,
   'visibility' => 2,
-  'attributes' => 
+  'attributes' =>
   array (
     'options_container' => 'container2',
     'required_options' => '0',
@@ -1484,6 +1872,7 @@ array (
     'size' => '43',
     'season_value' => '201706',
     'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'article_castor_id' => '1009',
     'url_key' => 'leather-ankle-boots-hm20329-5-09-6276',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
@@ -1491,21 +1880,21 @@ array (
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '12',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 103,
       'product_id' => 73,
       'stock_id' => 2,
-      'qty' => 9999,
+      'qty' => 10000,
       'is_in_stock' => true,
       'is_qty_decimal' => false,
       'show_default_notification_message' => false,
@@ -1525,27 +1914,27 @@ array (
       'enable_qty_increments' => false,
       'use_config_manage_stock' => true,
       'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
+      'low_stock_date' => NULL,
       'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
+      'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
     ),
-    'assets' => 
+    'assets' =>
     array (
-      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -1554,16 +1943,16 @@ array (
           'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '3',
             'Identifier' => 'C',
@@ -1573,9 +1962,9 @@ array (
           'IsMultiPack' => 'false',
         ),
       ),
-      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -1584,16 +1973,16 @@ array (
           'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '8',
             'Identifier' => 'C',
@@ -1605,8 +1994,7 @@ array (
       ),
     ),
   ),
-),
-array (
+), array(
   'product_id' => 74,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -1619,7 +2007,7 @@ array (
   'final_price' => '10',
   'status' => 1,
   'visibility' => 2,
-  'attributes' => 
+  'attributes' =>
   array (
     'options_container' => 'container2',
     'required_options' => '0',
@@ -1628,6 +2016,7 @@ array (
     'size' => '2026',
     'season_value' => '201706',
     'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'article_castor_id' => '1009',
     'url_key' => 'leather-ankle-boots-hm20329-5-09-7026',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
@@ -1635,16 +2024,16 @@ array (
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '12',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 104,
       'product_id' => 74,
@@ -1669,27 +2058,27 @@ array (
       'enable_qty_increments' => false,
       'use_config_manage_stock' => true,
       'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
+      'low_stock_date' => NULL,
       'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
+      'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
     ),
-    'assets' => 
+    'assets' =>
     array (
-      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -1698,16 +2087,16 @@ array (
           'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '3',
             'Identifier' => 'C',
@@ -1717,9 +2106,9 @@ array (
           'IsMultiPack' => 'false',
         ),
       ),
-      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -1728,16 +2117,16 @@ array (
           'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '8',
             'Identifier' => 'C',
@@ -1749,8 +2138,7 @@ array (
       ),
     ),
   ),
-),
-array (
+), array(
   'product_id' => 75,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -1763,7 +2151,7 @@ array (
   'final_price' => '10',
   'status' => 1,
   'visibility' => 2,
-  'attributes' => 
+  'attributes' =>
   array (
     'options_container' => 'container2',
     'required_options' => '0',
@@ -1772,6 +2160,7 @@ array (
     'size' => '2025',
     'season_value' => '201706',
     'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'article_castor_id' => '1009',
     'url_key' => 'leather-ankle-boots-hm20329-5-09-7036',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
@@ -1779,16 +2168,16 @@ array (
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '12',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 105,
       'product_id' => 75,
@@ -1813,27 +2202,27 @@ array (
       'enable_qty_increments' => false,
       'use_config_manage_stock' => true,
       'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
+      'low_stock_date' => NULL,
       'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
+      'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
     ),
-    'assets' => 
+    'assets' =>
     array (
-      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -1842,16 +2231,16 @@ array (
           'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '3',
             'Identifier' => 'C',
@@ -1861,9 +2250,9 @@ array (
           'IsMultiPack' => 'false',
         ),
       ),
-      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -1872,16 +2261,16 @@ array (
           'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '8',
             'Identifier' => 'C',
@@ -1893,8 +2282,7 @@ array (
       ),
     ),
   ),
-),
-array (
+), array(
   'product_id' => 76,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -1907,7 +2295,7 @@ array (
   'final_price' => '10',
   'status' => 1,
   'visibility' => 2,
-  'attributes' => 
+  'attributes' =>
   array (
     'options_container' => 'container2',
     'required_options' => '0',
@@ -1916,6 +2304,7 @@ array (
     'size' => '101',
     'season_value' => '201706',
     'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'article_castor_id' => '1009',
     'url_key' => 'leather-ankle-boots-hm20329-5-09-8854',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
@@ -1923,39 +2312,39 @@ array (
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
   ),
-  'linked' => 
+  'linked' =>
   array (
-    0 => 
+    0 =>
     array (
       'linked_sku' => 'Test Simple Product',
       'linked_type' => 'simple',
       'type' => 'crosssell',
       'main_sku' => 'HM20329 5 09 8854',
       'position' => 1,
-      'extension' => 
+      'extension' =>
       array (
       ),
     ),
-    1 => 
+    1 =>
     array (
       'linked_sku' => 'HM20329 5 09 6976',
       'linked_type' => 'simple',
       'type' => 'crosssell',
       'main_sku' => 'HM20329 5 09 8854',
       'position' => 2,
-      'extension' => 
+      'extension' =>
       array (
       ),
     ),
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '5',
     1 => '12',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 106,
       'product_id' => 76,
@@ -1980,27 +2369,27 @@ array (
       'enable_qty_increments' => false,
       'use_config_manage_stock' => true,
       'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
+      'low_stock_date' => NULL,
       'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
+      'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
     ),
-    'assets' => 
+    'assets' =>
     array (
-      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -2009,16 +2398,16 @@ array (
           'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '3',
             'Identifier' => 'C',
@@ -2028,9 +2417,9 @@ array (
           'IsMultiPack' => 'false',
         ),
       ),
-      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -2039,16 +2428,16 @@ array (
           'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '8',
             'Identifier' => 'C',
@@ -2060,8 +2449,7 @@ array (
       ),
     ),
   ),
-),
-array (
+), array(
   'product_id' => 77,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -2074,37 +2462,39 @@ array (
   'final_price' => '10',
   'status' => 1,
   'visibility' => 2,
-  'attributes' => 
+  'attributes' =>
   array (
     'options_container' => 'container2',
     'required_options' => '0',
     'has_options' => '0',
-    'product_activation_date' => '2017-10-10 13:26:45',
+    'product_activation_date' => '2017-10-10 00:00:00',
     'size' => '42',
     'season_value' => '201706',
     'asset_ids' => '27096ba26db8ab5a372496edfb1739622a17bf6a,ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'article_castor_id' => '1009',
     'url_key' => 'leather-ankle-boots-hm20329-5-09-6976',
     'msrp_display_actual_price_type' => '0',
     'tax_class_id' => '2',
     'gift_message_available' => '0',
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '12',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 107,
       'product_id' => 77,
       'stock_id' => 2,
-      'qty' => 9999,
+      'qty' => 10000,
       'is_in_stock' => true,
       'is_qty_decimal' => false,
       'show_default_notification_message' => false,
@@ -2124,27 +2514,27 @@ array (
       'enable_qty_increments' => false,
       'use_config_manage_stock' => true,
       'manage_stock' => true,
-      'low_stock_date' => '2017-10-09 22:35:36',
+      'low_stock_date' => NULL,
       'is_decimal_divided' => false,
-      'stock_status_changed_auto' => 1,
+      'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
       ),
     ),
-    'assets' => 
+    'assets' =>
     array (
-      '27096ba26db8ab5a372496edfb1739622a17bf6a' => 
+      '27096ba26db8ab5a372496edfb1739622a17bf6a' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => '27096ba26db8ab5a372496edfb1739622a17bf6a',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -2153,16 +2543,16 @@ array (
           'FilePath' => '27/09/27096ba26db8ab5a372496edfb1739622a17bf6a.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '3',
             'Identifier' => 'C',
@@ -2172,9 +2562,9 @@ array (
           'IsMultiPack' => 'false',
         ),
       ),
-      'ebafebc681b38ac819a6fc35c68144a761f57bbd' => 
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' =>
       array (
-        'Data' => 
+        'Data' =>
         array (
           'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
           'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
@@ -2183,16 +2573,16 @@ array (
           'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
           'Brand' => 'H&M',
           'AllowedForUse' => 'true',
-          'MainArticles' => 
+          'MainArticles' =>
           array (
-            'Article' => 
+            'Article' =>
             array (
               'ProductId' => '0512631',
               'ArticleId' => '001',
             ),
           ),
           'SubordinateArticles' => '',
-          'Angle' => 
+          'Angle' =>
           array (
             'Facing' => '8',
             'Identifier' => 'C',
@@ -2204,8 +2594,7 @@ array (
       ),
     ),
   ),
-),
-array (
+), array(
   'product_id' => 78,
   'store_id' => 1,
   'attribute_set_id' => 4,
@@ -2218,7 +2607,7 @@ array (
   'final_price' => '10',
   'status' => 1,
   'visibility' => 1,
-  'attributes' => 
+  'attributes' =>
   array (
     'short_description' => '<p>PREMIUM QUALITY. Leather ankle boots with a decorative welt seam round the soles, lacing at the front and a visible zip at the back. Fabric linings and insoles and chunky rubber soles. Heel 11 cm.</p>
 ',
@@ -2235,17 +2624,19 @@ array (
     'gift_wrapping_available' => '0',
     'is_returnable' => '2', 'is_buyable' => '1',
     'product_brand' => '2018',
+    'product_state' => '2028',
   ),
-  'linked' => 
+  'linked' =>
   array (
   ),
-  'categories' => 
+  'categories' =>
   array (
     0 => '12',
+    1 => '2',
   ),
-  'extension' => 
+  'extension' =>
   array (
-    'stock_item' => 
+    'stock_item' =>
     array (
       'item_id' => 108,
       'product_id' => 78,
@@ -2274,92 +2665,2457 @@ array (
       'is_decimal_divided' => false,
       'stock_status_changed_auto' => 0,
     ),
-    'labels' => 
+    'labels' =>
     array (
     ),
-    'configurable_product_links' => 
+    'configurable_product_links' =>
     array (
-      0 => 
+      0 =>
       array (
         'id' => '72',
         'sku' => 'HM20329 5 09 6266',
       ),
-      1 => 
+      1 =>
       array (
         'id' => '77',
         'sku' => 'HM20329 5 09 6976',
       ),
-      2 => 
+      2 =>
       array (
         'id' => '73',
         'sku' => 'HM20329 5 09 6276',
       ),
-      3 => 
+      3 =>
       array (
         'id' => '75',
         'sku' => 'HM20329 5 09 7036',
       ),
-      4 => 
+      4 =>
       array (
         'id' => '74',
         'sku' => 'HM20329 5 09 7026',
       ),
-      5 => 
+      5 =>
       array (
         'id' => '76',
         'sku' => 'HM20329 5 09 8854',
       ),
     ),
-    'configurable_product_options' => 
+    'configurable_product_options' =>
     array (
-      0 => 
+      0 =>
       array (
         'attribute_id' => '126',
         'code' => 'size',
         'label' => 'Size',
         'position' => '0',
-        'values' => 
+        'values' =>
         array (
-          0 => 
+          0 =>
           array (
             'value_id' => '41',
             'label' => '4',
           ),
-          1 => 
+          1 =>
           array (
             'value_id' => '42',
             'label' => '5',
           ),
-          2 => 
+          2 =>
           array (
             'value_id' => '43',
             'label' => '6',
           ),
-          3 => 
+          3 =>
           array (
             'value_id' => '2025',
             'label' => '75',
           ),
-          4 => 
+          4 =>
           array (
             'value_id' => '2026',
             'label' => '65',
           ),
-          5 => 
+          5 =>
           array (
             'value_id' => '101',
             'label' => '35',
           ),
         ),
       ),
+      1 =>
+      array (
+        'attribute_id' => '143',
+        'code' => 'article_castor_id',
+        'label' => 'Article Castor ID',
+        'position' => '0',
+        'values' =>
+        array (
+          0 =>
+          array (
+            'value_id' => '1009',
+            'label' => '001',
+          ),
+        ),
+      ),
     ),
-    'media' => 
+    'media' =>
     array (
-      0 => 
+      0 =>
       array (
       ),
-      1 => 
+      1 =>
       array (
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 79,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'Test Simple Product 1',
+  'name' => 'Test Simple Product 1',
+  'type' => 'simple',
+  'price' => '5.0000',
+  'special_price' => '0',
+  'final_price' => '5',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => 'Test Simple Product 1',
+    'meta_keyword' => 'Test Simple Product 1',
+    'meta_description' => 'Test Simple Product 1 ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-01 00:00:00',
+    'url_key' => 'test-simple-product-1',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '12',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 174,
+      'product_id' => 79,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 80,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'Test Simple Product 2',
+  'name' => 'Test Simple Product 2',
+  'type' => 'simple',
+  'price' => '3.0000',
+  'special_price' => '0',
+  'final_price' => '3',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => 'Test Simple Product 2',
+    'meta_keyword' => 'Test Simple Product 2',
+    'meta_description' => 'Test Simple Product 2 ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-11 00:00:00',
+    'url_key' => 'test-simple-product-2',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '12',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 175,
+      'product_id' => 80,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 91,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_1',
+  'name' => '[AQ]-Product_1',
+  'type' => 'simple',
+  'price' => '50.0000',
+  'special_price' => '0',
+  'final_price' => '50',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_1',
+    'meta_keyword' => '[AQ]-Product_1',
+    'meta_description' => '[AQ]-Product_1 ',
+    'color' => '2019',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#999999',
+    'color_label' => 'Nineth',
+    'asset_ids' => 'adbbb73e295f7b830517cb43bd547006c7eac00d,86a879756cacf0ea4ec5fbf3f14d6198abdcaf55,004b1adf7809920f5be9a852ac913a0b84795984',
+    'url_key' => 'aq-product-1',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '11',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 179,
+      'product_id' => 91,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      'adbbb73e295f7b830517cb43bd547006c7eac00d' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => 'adbbb73e295f7b830517cb43bd547006c7eac00d',
+          'AssetType' => 'StillMediaComponents/Lookbook',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'ad/bb/adbbb73e295f7b830517cb43bd547006c7eac00d.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0532013',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0530622',
+              'ArticleId' => '002',
+            ),
+          ),
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      '86a879756cacf0ea4ec5fbf3f14d6198abdcaf55' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '86a879756cacf0ea4ec5fbf3f14d6198abdcaf55',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '86/a8/86a879756cacf0ea4ec5fbf3f14d6198abdcaf55.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0506018',
+              'ArticleId' => '004',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      '004b1adf7809920f5be9a852ac913a0b84795984' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '004b1adf7809920f5be9a852ac913a0b84795984',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/4b/004b1adf7809920f5be9a852ac913a0b84795984.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0405251',
+              'ArticleId' => '004',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 92,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_2',
+  'name' => '[AQ]-Product_2',
+  'type' => 'simple',
+  'price' => '100.0000',
+  'special_price' => '0',
+  'final_price' => '100',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_2',
+    'meta_keyword' => '[AQ]-Product_2',
+    'meta_description' => '[AQ]-Product_2 ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'asset_ids' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'url_key' => 'aq-product-2',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '11',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 180,
+      'product_id' => 92,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '8',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 93,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_3',
+  'name' => '[AQ]-Product_3',
+  'type' => 'simple',
+  'price' => '100.0000',
+  'special_price' => '0',
+  'final_price' => '100',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_3',
+    'meta_keyword' => '[AQ]-Product_3',
+    'meta_description' => '[AQ]-Product_3 ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'asset_ids' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
+    'url_key' => 'aq-product-3',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '11',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 181,
+      'product_id' => 93,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      'ebafebc681b38ac819a6fc35c68144a761f57bbd' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => 'ebafebc681b38ac819a6fc35c68144a761f57bbd',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'eb/af/ebafebc681b38ac819a6fc35c68144a761f57bbd.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0512631',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '8',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 94,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_4',
+  'name' => '[AQ]-Product_4',
+  'type' => 'simple',
+  'price' => '150.0000',
+  'special_price' => '0',
+  'final_price' => '150',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_4',
+    'meta_keyword' => '[AQ]-Product_4',
+    'meta_description' => '[AQ]-Product_4 ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'asset_ids' => '266d2683421792fc17f39dba6dc350160d487627,cdbfa20cf3d88b3cd858030ecf9d4d87e211907b,6b953bced8c151d79e53d783ed373abf7d84a87f',
+    'url_key' => 'aq-product-4',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '11',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 182,
+      'product_id' => 94,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      '266d2683421792fc17f39dba6dc350160d487627' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '266d2683421792fc17f39dba6dc350160d487627',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveDetail',
+          'Version' => '2',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '26/6d/266d2683421792fc17f39dba6dc350160d487627.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0598991',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '0',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      'cdbfa20cf3d88b3cd858030ecf9d4d87e211907b' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => 'cdbfa20cf3d88b3cd858030ecf9d4d87e211907b',
+          'AssetType' => 'StillMediaComponents/Lookbook',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'cd/bf/cdbfa20cf3d88b3cd858030ecf9d4d87e211907b.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0503448',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0492161',
+              'ArticleId' => '002',
+            ),
+          ),
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      '6b953bced8c151d79e53d783ed373abf7d84a87f' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '6b953bced8c151d79e53d783ed373abf7d84a87f',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '2',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '6b/95/6b953bced8c151d79e53d783ed373abf7d84a87f.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0527573',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 95,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_5-08',
+  'name' => '[AQ]-Product_5-08',
+  'type' => 'simple',
+  'price' => '200.0000',
+  'special_price' => '0',
+  'final_price' => '200',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_5',
+    'meta_keyword' => '[AQ]-Product_5',
+    'meta_description' => '[AQ]-Product_5 ',
+    'color' => '2019',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'asset_ids' => '001e61673e959ccffad622151443681afd490d6d',
+    'url_key' => 'aq-product-5-08',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '11',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 183,
+      'product_id' => 95,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-16 12:56:19',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+    ),
+  ),
+), array(
+  'product_id' => 96,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_5',
+  'name' => '[AQ]-Product_5',
+  'type' => 'simple',
+  'price' => '200.0000',
+  'special_price' => '0',
+  'final_price' => '200',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_5',
+    'meta_keyword' => '[AQ]-Product_5',
+    'meta_description' => '[AQ]-Product_5 ',
+    'options_container' => 'container2',
+    'required_options' => '1',
+    'has_options' => '1',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'asset_ids' => '001e61673e959ccffad622151443681afd490d6d',
+    'url_key' => 'aq-product-5',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '11',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 184,
+      'product_id' => 96,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+    ),
+  ),
+), array(
+  'product_id' => 97,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_6-08',
+  'name' => '[AQ]-Product_6-08',
+  'type' => 'simple',
+  'price' => '250.0000',
+  'special_price' => '0',
+  'final_price' => '250',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_6',
+    'meta_keyword' => '[AQ]-Product_6',
+    'meta_description' => '[AQ]-Product_6 ',
+    'color' => '2019',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#123456',
+    'color_label' => 'Some Color',
+    'size' => '40',
+    'asset_ids' => '43b1aae5aac3bd26268dfbc3e1aed798210c4510,0085a43f865684fabf7cbdd97de80c27131ffce9',
+    'article_castor_id' => '1009',
+    'url_key' => 'aq-product-6-08',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '13',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 185,
+      'product_id' => 97,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      '43b1aae5aac3bd26268dfbc3e1aed798210c4510' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '43b1aae5aac3bd26268dfbc3e1aed798210c4510',
+          'AssetType' => 'StillMediaComponents/Lookbook',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '43/b1/43b1aae5aac3bd26268dfbc3e1aed798210c4510.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0405887',
+              'ArticleId' => '024',
+            ),
+          ),
+          'SubordinateArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0504909',
+              'ArticleId' => '001',
+            ),
+          ),
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      '0085a43f865684fabf7cbdd97de80c27131ffce9' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '0085a43f865684fabf7cbdd97de80c27131ffce9',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '2',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/85/0085a43f865684fabf7cbdd97de80c27131ffce9.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0535030',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 98,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_6-45',
+  'name' => '[AQ]-Product_6-45',
+  'type' => 'simple',
+  'price' => '250.0000',
+  'special_price' => '0',
+  'final_price' => '250',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_6',
+    'meta_keyword' => '[AQ]-Product_6',
+    'meta_description' => '[AQ]-Product_6 ',
+    'color' => '2020',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#456712',
+    'color_label' => 'Dark Color',
+    'size' => '43',
+    'style_with' => '0009069d5c95cb671afd865564c24143d71d7e52,0085a43f865684fabf7cbdd97de80c27131ffce9',
+    'article_castor_id' => '1009',
+    'url_key' => 'aq-product-6-45',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '13',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 186,
+      'product_id' => 98,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2017-10-16 13:00:56',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 99,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_6-12',
+  'name' => '[AQ]-Product_6-12',
+  'type' => 'simple',
+  'price' => '250.0000',
+  'special_price' => '0',
+  'final_price' => '250',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_6',
+    'meta_keyword' => '[AQ]-Product_6',
+    'meta_description' => '[AQ]-Product_6 ',
+    'color' => '2021',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#FF0000',
+    'color_label' => 'Red',
+    'size' => '51',
+    'asset_ids' => 'd3f55c586e3bfc7a38ccdf3243b66ba6635f4774',
+    'article_castor_id' => '1009',
+    'url_key' => 'aq-product-6-12',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '13',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 187,
+      'product_id' => 99,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      'd3f55c586e3bfc7a38ccdf3243b66ba6635f4774' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => 'd3f55c586e3bfc7a38ccdf3243b66ba6635f4774',
+          'AssetType' => 'StillMediaComponents/Lookbook',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'd3/f5/d3f55c586e3bfc7a38ccdf3243b66ba6635f4774.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0493309',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 100,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_6',
+  'name' => '[AQ]-Product_6',
+  'type' => 'configurable',
+  'price' => '250',
+  'special_price' => '0',
+  'final_price' => '250',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_6',
+    'meta_keyword' => '[AQ]-Product_6',
+    'meta_description' => '[AQ]-Product_6 ',
+    'options_container' => 'container2',
+    'required_options' => '1',
+    'has_options' => '1',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#443344',
+    'color_label' => 'Blue',
+    'asset_ids' => '0085a43f865684fabf7cbdd97de80c27131ffce9',
+    'url_key' => 'aq-product-6',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '13',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 188,
+      'product_id' => 100,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'configurable_product_links' =>
+    array (
+      0 =>
+      array (
+        'id' => '97',
+        'sku' => '[AQ]-Product_6-08',
+      ),
+      1 =>
+      array (
+        'id' => '98',
+        'sku' => '[AQ]-Product_6-45',
+      ),
+      2 =>
+      array (
+        'id' => '99',
+        'sku' => '[AQ]-Product_6-12',
+      ),
+    ),
+    'configurable_product_options' =>
+    array (
+      0 =>
+      array (
+        'attribute_id' => '126',
+        'code' => 'size',
+        'label' => 'Size',
+        'position' => '1',
+        'values' =>
+        array (
+          0 =>
+          array (
+            'value_id' => '40',
+            'label' => '3',
+          ),
+          1 =>
+          array (
+            'value_id' => '43',
+            'label' => '6',
+          ),
+          2 =>
+          array (
+            'value_id' => '51',
+            'label' => '14',
+          ),
+        ),
+      ),
+      1 =>
+      array (
+        'attribute_id' => '143',
+        'code' => 'article_castor_id',
+        'label' => 'Article Castor ID',
+        'position' => '0',
+        'values' =>
+        array (
+          0 =>
+          array (
+            'value_id' => '1009',
+            'label' => '001',
+          ),
+        ),
+      ),
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      '0085a43f865684fabf7cbdd97de80c27131ffce9' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '0085a43f865684fabf7cbdd97de80c27131ffce9',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '2',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/85/0085a43f865684fabf7cbdd97de80c27131ffce9.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0535030',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 101,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_7-53',
+  'name' => '[AQ]-Product_7-53',
+  'type' => 'simple',
+  'price' => '250.0000',
+  'special_price' => '0',
+  'final_price' => '250',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_7',
+    'meta_keyword' => '[AQ]-Product_7',
+    'meta_description' => '[AQ]-Product_7 ',
+    'color' => '2022',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#223311',
+    'color_label' => 'Black',
+    'size' => '39',
+    'asset_ids' => 'cdbfa20cf3d88b3cd858030ecf9d4d87e211907b',
+    'article_castor_id' => '1009',
+    'url_key' => 'aq-product-7-53',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '12',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 189,
+      'product_id' => 101,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      'cdbfa20cf3d88b3cd858030ecf9d4d87e211907b' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => 'cdbfa20cf3d88b3cd858030ecf9d4d87e211907b',
+          'AssetType' => 'StillMediaComponents/Lookbook',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'cd/bf/cdbfa20cf3d88b3cd858030ecf9d4d87e211907b.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0503448',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0492161',
+              'ArticleId' => '002',
+            ),
+          ),
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 102,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_7-05',
+  'name' => '[AQ]-Product_7-05',
+  'type' => 'simple',
+  'price' => '250.0000',
+  'special_price' => '0',
+  'final_price' => '250',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_7',
+    'meta_keyword' => '[AQ]-Product_7',
+    'meta_description' => '[AQ]-Product_7 ',
+    'color' => '2023',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#767676',
+    'color_label' => 'Seven Six',
+    'size' => '38',
+    'asset_ids' => '0009069d5c95cb671afd865564c24143d71d7e52,004b1adf7809920f5be9a852ac913a0b84795984',
+    'article_castor_id' => '1010',
+    'url_key' => 'aq-product-7-05',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '12',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 190,
+      'product_id' => 102,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      '004b1adf7809920f5be9a852ac913a0b84795984' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '004b1adf7809920f5be9a852ac913a0b84795984',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/4b/004b1adf7809920f5be9a852ac913a0b84795984.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0405251',
+              'ArticleId' => '004',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 103,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_7-09',
+  'name' => '[AQ]-Product_7-09',
+  'type' => 'simple',
+  'price' => '250.0000',
+  'special_price' => '0',
+  'final_price' => '250',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_7',
+    'meta_keyword' => '[AQ]-Product_7',
+    'meta_description' => '[AQ]-Product_7 ',
+    'color' => '2024',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#878787',
+    'color_label' => 'Colored',
+    'size' => '37',
+    'asset_ids' => '01a05f8a0b154878a69c9eed8fdfdc95fea32874,004b1adf7809920f5be9a852ac913a0b84795984',
+    'article_castor_id' => '1011',
+    'url_key' => 'aq-product-7-09',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '0',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '12',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 191,
+      'product_id' => 103,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      '01a05f8a0b154878a69c9eed8fdfdc95fea32874' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '01a05f8a0b154878a69c9eed8fdfdc95fea32874',
+          'AssetType' => 'StillMediaComponents/Lookbook',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '01/a0/01a05f8a0b154878a69c9eed8fdfdc95fea32874.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0531838',
+              'ArticleId' => '001',
+            ),
+          ),
+          'SubordinateArticles' =>
+          array (
+            'Article' =>
+            array (
+              0 =>
+              array (
+                'ProductId' => '0478426',
+                'ArticleId' => '007',
+              ),
+              1 =>
+              array (
+                'ProductId' => '0356289',
+                'ArticleId' => '005',
+              ),
+            ),
+          ),
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      '004b1adf7809920f5be9a852ac913a0b84795984' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '004b1adf7809920f5be9a852ac913a0b84795984',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/4b/004b1adf7809920f5be9a852ac913a0b84795984.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0405251',
+              'ArticleId' => '004',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 104,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_7',
+  'name' => '[AQ]-Product_7',
+  'type' => 'configurable',
+  'price' => '250',
+  'special_price' => '0',
+  'final_price' => '250',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_7',
+    'meta_keyword' => '[AQ]-Product_7',
+    'meta_description' => '[AQ]-Product_7 ',
+    'color' => '2019',
+    'options_container' => 'container2',
+    'required_options' => '1',
+    'has_options' => '1',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#667733',
+    'color_label' => 'Animal Print',
+    'asset_ids' => '004b1adf7809920f5be9a852ac913a0b84795984',
+    'url_key' => 'aq-product-7',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '12',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 192,
+      'product_id' => 104,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'configurable_product_links' =>
+    array (
+      0 =>
+      array (
+        'id' => '103',
+        'sku' => '[AQ]-Product_7-09',
+      ),
+      1 =>
+      array (
+        'id' => '101',
+        'sku' => '[AQ]-Product_7-53',
+      ),
+      2 =>
+      array (
+        'id' => '102',
+        'sku' => '[AQ]-Product_7-05',
+      ),
+    ),
+    'configurable_product_options' =>
+    array (
+      0 =>
+      array (
+        'attribute_id' => '126',
+        'code' => 'size',
+        'label' => 'Size',
+        'position' => '1',
+        'values' =>
+        array (
+          0 =>
+          array (
+            'value_id' => '37',
+            'label' => '1',
+          ),
+          1 =>
+          array (
+            'value_id' => '39',
+            'label' => '2',
+          ),
+          2 =>
+          array (
+            'value_id' => '38',
+            'label' => '1.5',
+          ),
+        ),
+      ),
+      1 =>
+      array (
+        'attribute_id' => '143',
+        'code' => 'article_castor_id',
+        'label' => 'Article Castor ID',
+        'position' => '0',
+        'values' =>
+        array (
+          0 =>
+          array (
+            'value_id' => '1011',
+            'label' => '003',
+          ),
+          1 =>
+          array (
+            'value_id' => '1009',
+            'label' => '001',
+          ),
+          2 =>
+          array (
+            'value_id' => '1010',
+            'label' => '002',
+          ),
+        ),
+      ),
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      '004b1adf7809920f5be9a852ac913a0b84795984' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '004b1adf7809920f5be9a852ac913a0b84795984',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/4b/004b1adf7809920f5be9a852ac913a0b84795984.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0405251',
+              'ArticleId' => '004',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 105,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => '[AQ]-Product_8',
+  'name' => '[AQ]-Product_8',
+  'type' => 'simple',
+  'price' => '300.0000',
+  'special_price' => '0',
+  'final_price' => '300',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_8',
+    'meta_keyword' => '[AQ]-Product_8',
+    'meta_description' => '[AQ]-Product_8 ',
+    'color' => '2021',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#891277',
+    'color_label' => 'Some Label',
+    'size' => '49',
+    'asset_ids' => 'b7710e20173e3404b4c32cb5ea8b5be791d7dc02,004b1adf7809920f5be9a852ac913a0b84795984',
+    'url_key' => 'aq-product-8',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+    0 =>
+    array (
+      'linked_sku' => '512508001',
+      'linked_type' => 'simple',
+      'type' => 'related',
+      'main_sku' => '[AQ]-Product_8',
+      'position' => 1,
+      'extension' =>
+      array (
+      ),
+    ),
+    1 =>
+    array (
+      'linked_sku' => '541917002',
+      'linked_type' => 'simple',
+      'type' => 'crosssell',
+      'main_sku' => '[AQ]-Product_8',
+      'position' => 1,
+      'extension' =>
+      array (
+      ),
+    ),
+  ),
+  'categories' =>
+  array (
+    0 => '11',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 193,
+      'product_id' => 105,
+      'stock_id' => 2,
+      'qty' => 10000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      'b7710e20173e3404b4c32cb5ea8b5be791d7dc02' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => 'b7710e20173e3404b4c32cb5ea8b5be791d7dc02',
+          'AssetType' => 'StillMediaComponents/Lookbook',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => 'b7/71/b7710e20173e3404b4c32cb5ea8b5be791d7dc02.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0545911',
+              'ArticleId' => '003',
+            ),
+          ),
+          'SubordinateArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0540407',
+              'ArticleId' => '002',
+            ),
+          ),
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+      '004b1adf7809920f5be9a852ac913a0b84795984' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '004b1adf7809920f5be9a852ac913a0b84795984',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/4b/004b1adf7809920f5be9a852ac913a0b84795984.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0405251',
+              'ArticleId' => '004',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
+      ),
+    ),
+  ),
+), array(
+  'product_id' => 106,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'undefined-002-1.5',
+  'name' => 'undefined-002-1.5',
+  'type' => 'simple',
+  'price' => '250.0000',
+  'special_price' => '0',
+  'final_price' => '250',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'meta_title' => '[AQ]-Product_7',
+    'meta_keyword' => '[AQ]-Product_7',
+    'meta_description' => '[AQ]-Product_7 ',
+    'color' => '2019',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2017-10-16 00:00:00',
+    'rgb_color' => '#667733',
+    'color_label' => 'Animal Print',
+    'size' => '38',
+    'asset_ids' => '004b1adf7809920f5be9a852ac913a0b84795984',
+    'article_castor_id' => '1010',
+    'url_key' => 'undefined-002-1-5',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2', 'is_buyable' => '1',
+    'product_state' => '2028',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+    0 => '12',
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'product_id' => 0,
+      'stock_id' => 2,
+      'qty' => NULL,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => false,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 0,
+      'min_sale_qty' => 0,
+      'use_config_max_sale_qty' => false,
+      'max_sale_qty' => 0,
+      'use_config_backorders' => false,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => false,
+      'notify_stock_qty' => 0,
+      'use_config_qty_increments' => false,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => false,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => false,
+      'manage_stock' => false,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+    'assets' =>
+    array (
+      '004b1adf7809920f5be9a852ac913a0b84795984' =>
+      array (
+        'Data' =>
+        array (
+          'AssetId' => '004b1adf7809920f5be9a852ac913a0b84795984',
+          'AssetType' => 'StillMediaComponents/Product/DescriptiveStillLife',
+          'Version' => '1',
+          'FileLocation' => 'LiquidPixels',
+          'FilePath' => '00/4b/004b1adf7809920f5be9a852ac913a0b84795984.jpg',
+          'Brand' => 'H&M',
+          'AllowedForUse' => 'true',
+          'MainArticles' =>
+          array (
+            'Article' =>
+            array (
+              'ProductId' => '0405251',
+              'ArticleId' => '004',
+            ),
+          ),
+          'SubordinateArticles' => '',
+          'Angle' =>
+          array (
+            'Facing' => '1',
+            'Identifier' => 'C',
+            'Packaging' => '0',
+            'Number' => '1',
+          ),
+          'IsMultiPack' => 'false',
+        ),
       ),
     ),
   ),
