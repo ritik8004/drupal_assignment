@@ -64,21 +64,21 @@
           description="Setup local dev environment.">
       <phingcall target="local:reset-local-settings"/>
       <phingcall target="local:setup">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
           <property name="drush.brand_module" value="alshaya_mc" />
       </phingcall>
       <phingcall target="sync:products">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
       </phingcall>
       <phingcall target="sync:promotions">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
       </phingcall>
       <phingcall target="sync:stores">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
       </phingcall>
   </target>
 
@@ -102,24 +102,24 @@
       <phingcall target="frontend:build"/>
       <phingcall target="local:reset-local-settings"/>
       <phingcall target="local:drupal:install">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
       </phingcall>
       <phingcall target="setup:toggle-modules">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
           <property name="drush.brand_module" value="alshaya_mc" />
       </phingcall>
       <phingcall target="sync:products">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
       </phingcall>
       <phingcall target="sync:promotions">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
       </phingcall>
       <phingcall target="sync:stores">
-          <property name="drush.uri" value="https://local.alshaya.com" />
+          <property name="drush.uri" value="https://localr1.alshaya.com" />
       </phingcall>
   </target>
 
