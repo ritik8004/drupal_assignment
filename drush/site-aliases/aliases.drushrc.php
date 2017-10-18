@@ -364,9 +364,9 @@ $aliases['alshaya.local'] = array(
   // /var/www/[vagrant_machine_name]/docroot
   'root' => '/var/www/alshaya/docroot',
   // vagrant_hostname
-  'uri' => 'http://localr1.alshaya.com',
+  'uri' => 'http://local.alshaya.com',
   // vagrant_hostname
-  'remote-host' => 'localr1.alshaya.com',
+  'remote-host' => 'local.alshaya.com',
   'remote-user' => 'vagrant',
   'ssh-options' => '-o PasswordAuthentication=no -i ' . drush_server_home() . '/.vagrant.d/insecure_private_key'
 );

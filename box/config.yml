@@ -1,6 +1,6 @@
 # Update the hostname to the local development environment hostname
-vagrant_ip: 192.168.25.78
-vagrant_hostname: localr1.alshaya.com
+vagrant_ip: 192.168.25.74
+vagrant_hostname: local.alshaya.com
 vagrant_machine_name: alshaya
 
 # Use Ubuntu 14.04 LTS to more closely match Acquia Cloud environment.
@@ -58,7 +58,7 @@ installed_extras:
   - memcached
   - xhprof
   - tideways
-  # - varnish
+  - varnish
 
 extra_packages:
   - imagemagick
@@ -94,7 +94,7 @@ post_provision_scripts:
   - "../../../../box/scripts/configure-varnish.sh"
 
 apache_vhosts_ssl:
-  - servername: "localr1.alshaya.com"
+  - servername: "{{ drupal_domain }}"
     documentroot: "{{ drupal_core_path }}"
     certificate_file: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
     certificate_key_file: "/etc/ssl/private/ssl-cert-snakeoil.key"
@@ -102,8 +102,8 @@ apache_vhosts_ssl:
           ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ drupal_core_path }}"
 
 apache_vhosts:
-  - servername: "localr1.alshaya.com"
-    serveralias: "www.localr1.alshaya.com"
+  - servername: "{{ drupal_domain }}"
+    serveralias: "www.{{ drupal_domain }}"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
@@ -142,3 +142,7 @@ mysql_users:
     host: "%"
     password: drupal
     priv: "drupal_alshaya.*:ALL/drupal_non_transac.*:ALL"
+
+varnish_version: "4.1"
+varnish_listen_port: "81"
+varnish_default_backend_port: "80"
