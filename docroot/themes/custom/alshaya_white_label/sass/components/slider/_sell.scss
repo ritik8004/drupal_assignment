@@ -277,6 +277,7 @@
       background: $pumpkin-orange;
       border: none;
       padding: 0.656rem;
+      margin-bottom: 0;
 
       @include breakpoint($only-mobile) {
         max-width: 100%;
@@ -360,9 +361,43 @@
 
 .mobile--only--sell {
   width: 100%;
+  min-height: 22rem;
 
   @include breakpoint($tablet) {
     display: none;
+  }
+
+  .sell--image {
+    @include breakpoint($only-mobile) {
+      padding: 0.3125rem;
+    }
+  }
+
+  .sell-sku {
+    vertical-align: bottom;
+
+    .field__items {
+      @include breakpoint($only-mobile) {
+        padding: 0.3125rem;
+      }
+    }
+  }
+}
+
+// for mobile when we have no size attribute the quantity should span to full.
+.view-product-slider {
+  .owl-carousel {
+    article[gtm-sku-type="simple"] {
+      .mobile--only--sell {
+        .form-item-quantity {
+          width: 100%;
+
+          select {
+            width: 100%;
+          }
+        }
+      }
+    }
   }
 }
 

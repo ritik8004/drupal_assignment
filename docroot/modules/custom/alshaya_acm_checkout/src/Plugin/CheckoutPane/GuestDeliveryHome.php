@@ -31,7 +31,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public function isVisible() {
-    return \Drupal::currentUser()->isAnonymous();
+    return \Drupal::currentUser()->isAnonymous() || !alshaya_acm_customer_is_customer(\Drupal::currentUser());
   }
 
   /**

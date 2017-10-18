@@ -22,7 +22,8 @@
         responsive: {
           0: {
             items: 1,
-            nav: false
+            nav: false,
+            mouseDrag: true
           },
           768: {
             items: 4,
@@ -42,7 +43,8 @@
         responsive: {
           0: {
             items: 1,
-            nav: false
+            nav: false,
+            mouseDrag: true
           },
           768: {
             items: 2,
@@ -79,7 +81,8 @@
         responsive: {
           0: {
             items: 1,
-            nav: false
+            nav: false,
+            mouseDrag: true
           },
           768: {
             items: 2,
