@@ -116,7 +116,7 @@ function alshaya_mc_update_8301() {
 /**
  * Default config for all_products_buyable.
  */
-function alshaya_mc_update_8302() {
+function alshaya_mc_update_8322() {
   // Setting all products buyable to be false by default.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('all_products_buyable', 0)

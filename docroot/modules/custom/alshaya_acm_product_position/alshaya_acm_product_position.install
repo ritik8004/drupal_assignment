@@ -9,7 +9,7 @@
 /**
  * Implements hook_update_N().
  */
-function alshaya_acm_product_position_update_8301() {
+function alshaya_acm_product_position_update_8101() {
   // Enable sort options on PLP page.
   $sort_options = [
     'nid',
