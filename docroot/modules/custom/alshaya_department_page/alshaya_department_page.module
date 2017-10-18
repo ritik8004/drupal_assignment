@@ -17,17 +17,24 @@ use Drupal\node\Entity\Node;
 function alshaya_department_page_form_node_department_page_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // We will show only those categories who don't have a department page yet.
   $tids = array_keys($form['field_product_category']['widget']['#options']);
+
   // Get the current node and category for current department page.
   $node = $form_state->getFormObject()->getEntity();
-  $category = $node->get('field_product_category')->getValue();
+
+  $category_ids = [];
+
+  if ($node->get('field_product_category')->getValue()) {
+    $category = $node->get('field_product_category')->getValue();
+    $category_ids = array_column($category, 'target_id');
+  }
+
   $alshaya_department_pages = alshaya_department_page_get_pages();
+
   foreach ($tids as $tid) {
     // Hide the term, if it's not the current node's category term.
-    if (!empty($category[0]) && $tid != $category[0]['target_id']) {
-      if (isset($alshaya_department_pages[$tid])) {
-        // Unset the value.
-        unset($form['field_product_category']['widget']['#options'][$tid]);
-      }
+    if (isset($alshaya_department_pages[$tid]) && !in_array($tid, $category_ids)) {
+      // Unset the value.
+      unset($form['field_product_category']['widget']['#options'][$tid]);
     }
   }
 }

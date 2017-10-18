@@ -11,6 +11,29 @@ use Drupal\user\RoleInterface;
 /**
  * Implements hook_update_N().
  *
+ * Re-create all areas from updated values.
+ */
+function alshaya_addressbook_update_8002() {
+  // Delete all the terms in area_list.
+  $result = \Drupal::entityQuery('taxonomy_term')
+    ->condition('vid', 'area_list')
+    ->execute();
+
+  if ($result) {
+    $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $terms = $term_storage->loadMultiple($result);
+    $term_storage->delete($terms);
+  }
+
+  // Include the inc file containing all areas.
+  \Drupal::moduleHandler()->loadInclude('alshaya_addressbook', 'inc', 'alshaya_addressbook.areas');
+
+  _alshaya_addressbook_create_area_terms();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Grant view profile permission to all users.
  */
 function alshaya_addressbook_update_8001() {

@@ -1,0 +1,21 @@
+diff --git a/.htaccess b/.htaccess
+index ff66ad2d9..253413d4f 100644
+--- a/.htaccess
++++ b/.htaccess
+@@ -119,6 +119,16 @@ AddEncoding gzip svgz
+   # uncomment the following:
+   # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+   # RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
++  RewriteCond %{HTTP_HOST} .
++  RewriteCond %{HTTP_HOST} !^www\. [NC]
++  # Don't redirect ACSF domains.
++  RewriteCond %{HTTP_HOST} !\.acsitefactory\.com$ [NC]
++  # Don't redirect preprod domains.
++  RewriteCond %{HTTP_HOST} !\.factory\.alshaya\.com$ [NC]
++  # Don't redirect local dev sites.
++  RewriteCond %{HTTP_HOST} !local\.alshaya\.com$ [NC]
++  RewriteCond %{HTTP_HOST} !local\.non-transac\.com$ [NC]
++  RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+ 
+   # Modify the RewriteBase if you are using Drupal in a subdirectory or in a
+   # VirtualDocumentRoot and the rewrite rules are not working properly.
