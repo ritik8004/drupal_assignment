@@ -136,8 +136,8 @@
 
   .menu--account {
     @include breakpoint($desktop) {
-      .createanaccount-link,
-      li:first-child a {
+      li:first-child a,
+      li:nth-child(2) a {
         @include icon(user);
       }
 

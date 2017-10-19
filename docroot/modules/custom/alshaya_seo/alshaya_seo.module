@@ -511,8 +511,8 @@ function alshaya_seo_preprocess_menu(&$variables) {
  */
 function alshaya_seo_preprocess_alshaya_main_menu_level2(&$variables) {
   $sub_nav_label = str_replace(' ', '-', strtolower($variables['data']['label']));
-  $sub_nav_class = 'sub-nav-' . $sub_nav_label;
-  $variables['data']['sub_nav_class'] = 'sub-nav-' . $sub_nav_label;
+  $sub_nav_class = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
+  $variables['data']['sub_nav_class'] = 'sub-nav-' . $sub_nav_label . ' sub-nav-link';
   foreach ($variables['data']['child'] as $key1 => $value) {
     $variables['data']['child'][$key1]['sub_nav_class'] = $sub_nav_class;
     foreach ($value['child'] as $key2 => $value2) {
