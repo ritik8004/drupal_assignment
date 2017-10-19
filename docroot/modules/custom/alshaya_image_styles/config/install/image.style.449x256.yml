@@ -1,13 +1,17 @@
+uuid: 2a3e9266-e4f5-49ce-a0e0-dd231caaaa15
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: KBCZoz436ybLwxUrkqwPL7Pi0YmBCnoT8WldfEbCVac
 name: 449x256
 label: 449x256
 effects:
-  b9ab64a2-1a44-474a-83db-af5bf81d639b:
-    uuid: b9ab64a2-1a44-474a-83db-af5bf81d639b
-    id: image_scale_and_crop
-    weight: 1
+  ed57f17a-840e-4e17-84bc-a5d5ac498a63:
+    uuid: ed57f17a-840e-4e17-84bc-a5d5ac498a63
+    id: image_scale
+    weight: 2
     data:
       width: 449
-      height: 256
+      height: null
+      upscale: false
