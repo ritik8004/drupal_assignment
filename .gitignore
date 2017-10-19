@@ -5,6 +5,7 @@ local.aliases.drushrc.php
 local.services.yml
 tests/behat/local.yml
 box/local.config.yml
+box/alshaya_acm*
 *.local
 project.local.yml
 
