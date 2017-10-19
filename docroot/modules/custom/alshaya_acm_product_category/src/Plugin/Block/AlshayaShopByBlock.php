@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product_category\Plugin\Block;
 
+use Drupal\alshaya_main_menu\ProductCategoryTree;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
@@ -290,10 +291,14 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    // Even when the menu block renders to the empty string for a user, we want
-    // the cache tag for this menu to be set: whenever the menu is changed, this
-    // menu block must also be re-rendered for that user, because maybe a menu
-    // link that is accessible for that user has been added.
+    // Add department page node type cache tag.
+    // This is custom cache tag and cleared in hook_presave in department
+    // module.
+    $this->cacheTags[] = 'node_type:department_page';
+
+    // Discard cache for the block once a term gets updated.
+    $this->cacheTags[] = ProductCategoryTree::VOCABULARY_ID . '_list';
+
     return Cache::mergeTags(
       parent::getCacheTags(),
       $this->cacheTags
