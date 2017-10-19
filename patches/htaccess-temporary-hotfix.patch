@@ -1,0 +1,14 @@
+diff --git a/.htaccess b/.htaccess
+index 940cd4b..2612967 100644
+--- a/.htaccess
++++ b/.htaccess
+@@ -218,7 +218,8 @@ AddEncoding gzip svgz
+ # Various header fixes.
+ <IfModule mod_headers.c>
+   # Disable content sniffing, since it's an attack vector.
+-  Header always set X-Content-Type-Options nosniff
++# MMCSP-1927: temporary workaround.
++#  Header always set X-Content-Type-Options nosniff
+   # Disable Proxy header, since it's an attack vector.
+   RequestHeader unset Proxy
+ </IfModule>
