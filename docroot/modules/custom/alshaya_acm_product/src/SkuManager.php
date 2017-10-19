@@ -156,7 +156,9 @@ class SkuManager {
     $build['price'] = $build['final_price'] = $build['discount'] = [];
 
     if ($sku_entity->bundle() == 'configurable') {
-      $price = $final_price = $this->getMinPrice($sku_entity);
+      $prices = $this->getMinPrices($sku_entity);
+      $price = $prices['price'];
+      $final_price = $prices['final_price'];
     }
     else {
       $price = (float) $sku_entity->get('price')->getString();
@@ -197,15 +199,16 @@ class SkuManager {
   }
 
   /**
-   * Get minimum price for configurable products.
+   * Get minimum final price and associated initial price for configurable.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   SKU Entity.
    *
-   * @return float|int
-   *   Minimum price.
+   * @return array
+   *   Minimum final price and associated initial price.
    */
-  protected function getMinPrice(SKU $sku_entity) {
+  protected function getMinPrices(SKU $sku_entity) {
+    $prices = ['price' => 0, 'final_price' => 0];
     $sku_price = 0;
 
     /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
@@ -218,16 +221,33 @@ class SkuManager {
           $price = (float) $child_sku_entity->get('price')->getString();
           $final_price = (float) $child_sku_entity->get('final_price')->getString();
 
+          $new_sku_price = 0;
           if ($final_price > 0) {
-            $sku_price = $sku_price > 0 ? min($sku_price, $final_price) : $final_price;
+            $new_sku_price = $sku_price > 0 ? min($sku_price, $final_price) : $final_price;
           }
           elseif ($price > 0) {
-            $sku_price = $sku_price > 0 ? min($sku_price, $price) : $price;
+            $new_sku_price = $sku_price > 0 ? min($sku_price, $price) : $price;
+          }
+
+          // Do we need to update selected prices?
+          if ($new_sku_price != 0) {
+            // Have we found a new min final price?
+            if ($sku_price != $new_sku_price) {
+              $sku_price = $new_sku_price;
+              $prices = ['price' => $price, 'final_price' => $final_price];
+            }
+            // Is the difference between initial an final bigger?
+            elseif (
+              $price != 0 && $final_price != 0 && $prices['price'] != 0 && $prices['final_price'] != 0
+              && ($price - $final_price) > ($prices['price'] - $prices['final_price'])
+            ) {
+              $prices = ['price' => $price, 'final_price' => $final_price];
+            }
           }
         }
       }
 
-      return $sku_price;
+      return $prices;
     }
   }
 
