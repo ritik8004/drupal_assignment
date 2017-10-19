@@ -1,13 +1,17 @@
+uuid: ae89602e-5857-4a39-8348-b59239273fd8
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: jp4KDcxKIcM0lcI2FHapJHbvTt1w_K4JNSDtF1xH_lU
 name: 720x202
 label: 720x202
 effects:
-  00dd1cdf-7fb6-49f1-9e35-5cff0cb17340:
-    uuid: 00dd1cdf-7fb6-49f1-9e35-5cff0cb17340
-    id: image_scale_and_crop
-    weight: 1
+  de10f773-20c8-4550-9c9c-235029502c1e:
+    uuid: de10f773-20c8-4550-9c9c-235029502c1e
+    id: image_scale
+    weight: 2
     data:
       width: 720
-      height: 202
+      height: null
+      upscale: false
