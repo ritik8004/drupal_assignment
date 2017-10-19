@@ -199,11 +199,7 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     // For language specific data.
     $term = $this->entityRepository->getTranslationFromContext($term);
 
-    // For cache tag bubbling up.
-    $this->cacheTags = [
-      'taxonomy_term:' . $term->id(),
-      'node_type:department_page',
-    ];
+    $this->cacheTags[] = 'taxonomy_term:' . $term->id();
 
     $build = [
       'label' => $term->label(),
@@ -234,7 +230,7 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     $alshaya_department_pages = alshaya_department_page_get_pages();
 
     $data = [];
-    foreach ($terms as $key => $term) {
+    foreach ($terms as $term) {
       $data[$term->id()] = $this->processTermTranslations($term);
       if (isset($alshaya_department_pages[$term->id()])) {
         $nid = $alshaya_department_pages[$term->id()];
