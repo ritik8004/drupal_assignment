@@ -3,14 +3,15 @@ langcode: en
 status: true
 dependencies: {  }
 _core:
-  default_config_hash: HgcU1julRO8_p4XnU_Ha8sAsJt4LC0uLubWOaV_oPCc
+  default_config_hash: iRDmyncwXvFemUVkAj8gWNUwhY0WGBMVs-OKmHHGGng
 name: 146x132
 label: 146x132
 effects:
-  219285d3-167f-4280-8962-96cc142e4a30:
-    uuid: 219285d3-167f-4280-8962-96cc142e4a30
-    id: image_scale_and_crop
-    weight: 1
+  036e82f0-97c2-48e8-98ae-d2140d3fa15f:
+    uuid: 036e82f0-97c2-48e8-98ae-d2140d3fa15f
+    id: image_scale
+    weight: 2
     data:
       width: 326
-      height: 288
+      height: null
+      upscale: false
