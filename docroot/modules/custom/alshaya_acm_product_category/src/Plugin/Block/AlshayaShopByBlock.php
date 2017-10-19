@@ -14,6 +14,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\node\Entity\Node;
 
 /**
  * Provides a generic Menu block.
@@ -198,7 +199,10 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     $term = $this->entityRepository->getTranslationFromContext($term);
 
     // For cache tag bubbling up.
-    $this->cacheTags[] = 'taxonomy_term:' . $term->id();
+    $this->cacheTags = [
+      'taxonomy_term:' . $term->id(),
+      'node_type:department_page',
+    ];
 
     $build = [
       'label' => $term->label(),
@@ -225,9 +229,21 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
       ];
     }
 
+    // Get all the department pages.
+    $alshaya_department_pages = alshaya_department_page_get_pages();
+
     $data = [];
-    foreach ($terms as $term) {
+    foreach ($terms as $key => $term) {
       $data[$term->id()] = $this->processTermTranslations($term);
+      if (isset($alshaya_department_pages[$term->id()])) {
+        $nid = $alshaya_department_pages[$term->id()];
+        $node = Node::load($nid);
+
+        // Use the path of node instead of term path if node is published.
+        if ($node->isPublished()) {
+          $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+        }
+      }
     }
 
     $route_name = $this->routeMatch->getRouteName();
