@@ -276,7 +276,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $sku_entity = $sku_entity->addTranslation($langcode, ['sku' => $sku]);
       }
       else {
-        throw new \Exception(new FormattableMarkup('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]), 404);
+        \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
     }
 
