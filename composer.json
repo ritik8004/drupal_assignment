@@ -227,7 +227,8 @@
             "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch",
             "cd docroot && patch -p1 <../patches/htaccess-knet-ssl-exception.patch",
             "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-force-www.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-force-www.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-temporary-hotfix.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",
