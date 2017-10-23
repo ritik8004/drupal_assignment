@@ -46,7 +46,6 @@ function alshaya_image_styles_update_8002() {
     'image.style.472x202',
     'image.style.606x256',
     'image.style.720x202',
-    'image.style.checkout_summary_block_thumbnail',
   ];
 
   foreach ($configs as $config) {
