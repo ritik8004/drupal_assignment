@@ -48,6 +48,10 @@
     display: table;
     height: 25.875rem;
 
+    a {
+      color: #0084cc;
+    }
+
     .maintenance-page & {
       font-family: $alshaya-thin-nodir;
     }
