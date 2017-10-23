@@ -44,7 +44,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
     // Deal with color field case that is not a real configurable attribute
     // and that thus does not auto fill the color field of the parent sku.
-    if ($type == 'node' && $bundle == 'acq_product') {
+    if ($type == 'node' && $bundle == 'acq_product' && !empty($item->getField('attr_color'))) {
       $sku = $object->get('field_skus')->first()->getString();
       if (!empty($sku)) {
         $sku_entity = SKU::loadFromSku($sku);
