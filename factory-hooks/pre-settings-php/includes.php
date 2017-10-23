@@ -142,7 +142,7 @@ switch ($env) {
     $settings['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     break;
 
-  defaulti:
+  default:
     $settings['acq_commerce.conductor']['debug'] = FALSE;
 
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-prod.eu-west-1.prod.acm.acquia.io/';
