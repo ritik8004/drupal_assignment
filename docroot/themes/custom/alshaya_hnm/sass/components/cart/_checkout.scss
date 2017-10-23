@@ -1177,17 +1177,28 @@ body.alias--cart {
   #edit-continue-shopping,
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    font-size: 12px;
-    font-weight: bold;
+    font-size: 0.8125rem;
+    font-family: $hnm-bold;
+    font-weight: normal;
     border: 1px solid $hnm-black-two;
+    background: $hnm-black-two;
     display: block;
-    padding: 0.625rem 1.6rem;
+    padding: 0.53125rem 0;
     text-align: center;
     text-transform: uppercase;
-    font-family: $hnm-regular;
+    color: $white-five;
+    position: relative;
+    padding-#{$left}: 1.688rem;
+
+    @include icon(shopping-bag, after) {
+      font-size: 1.5rem;
+      #{$left}: 0.875rem;
+      position: absolute;
+      top: 0.4375rem;
+    }
 
     @include breakpoint($tablet) {
-      max-width: 173px;
+      max-width: 12.44rem;
     }
   }
 
