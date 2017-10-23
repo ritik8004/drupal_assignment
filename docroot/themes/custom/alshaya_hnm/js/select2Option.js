@@ -10,6 +10,8 @@ jQuery.fn.select2Option = function (options) {
     var $ = jQuery;
     var select = $(this);
     var labeltext = '';
+    var option_id;
+    var sku_configurable_options_color;
     select.hide();
 
     var buttonsHtml = $('<div class="select2Option"></div>');
@@ -34,10 +36,38 @@ jQuery.fn.select2Option = function (options) {
         }
         else if ($(this).attr('disabled') || select.attr('disabled')) {
           liHtml.addClass('disabled');
-          liHtml.append('<span class="' + $(this).text() + '">' + $(this).html() + '</span>');
+          if ((select.attr('data-drupal-selector') === 'edit-configurables-color') &&
+            (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
+      drupalSettings.sku_configurable_options_color.hasOwnProperty($(this).val())) {
+            option_id = $(this).val();
+            sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
+            if (sku_configurable_options_color[option_id].swatch_type === 'color_block') {
+              liHtml.append('<span class="' + $(this).text() + '" style="background-color:' + sku_configurable_options_color[option_id].display_value + ';"></span>');
+            }
+            else if (sku_configurable_options_color[option_id].swatch_type === 'miniature_image') {
+              liHtml.append('<span class="' + $(this).text() + '">' + sku_configurable_options_color[option_id].display_value + '</span>');
+            }
+          }
+          else {
+            liHtml.append('<span class="' + $(this).text() + '">' + $(this).html() + '</span>');
+          }
         }
         else {
-          liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
+          if ((select.attr('data-drupal-selector') === 'edit-configurables-color') &&
+      (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
+      drupalSettings.sku_configurable_options_color.hasOwnProperty($(this).val())) {
+            option_id = $(this).val();
+            sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
+            if (sku_configurable_options_color[option_id].swatch_type === 'color_block') {
+              liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '" style="background-color:' + sku_configurable_options_color[option_id].display_value + ';"></a>');
+            }
+            else if (sku_configurable_options_color[option_id].swatch_type === 'miniature_image') {
+              liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + sku_configurable_options_color[option_id].display_value + '</a>');
+            }
+          }
+          else {
+            liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
+          }
         }
 
         // Mark current selection as "picked".

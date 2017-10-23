@@ -4,7 +4,9 @@
  * @file
  * Module file.
  */
+
 use Drupal\alshaya_hm_images\SkuAssetManager;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_acq_sku_import_alter().
@@ -165,3 +167,47 @@ function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
   }
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  $tree = $form_state->get('tree');
+  if (!empty($tree['parent'])) {
+    $parent_sku = $tree['parent'];
+    $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+    $config_factory = \Drupal::service('config.factory');
+    $swatch_type = $config_factory->get('alshaya_hm_images.settings')->get('swatch_type');
+    $config_override = $sku_asset_manager->overrideConfig($parent_sku, 'swatch');
+    if (!empty($config_override['swatch_type'])) {
+      $swatch_type = $config_override['swatch_type'];
+    }
+    if (isset($form['ajax']['configurables']['color'])) {
+      $options = $form['ajax']['configurables']['color']['#options'];
+
+      foreach ($options as $key => $option) {
+        if (isset($tree['options']['color:' . $key])) {
+          $sku_option = $tree['options']['color:' . $key];
+          if ($swatch_type === 'miniature_image') {
+            $asset = $sku_asset_manager->getSkuAsset($sku_option, 'swatch', 'swatch');
+            $sku_configurable_options_color[$key] = [
+              'display_value' => '<img src="' . $asset[0]['url']->toString() . '">',
+              'display_label' => $sku_option->get('attr_color_label')->value,
+              'swatch_type' => $swatch_type,
+            ];
+          }
+          else {
+            $sku_configurable_options_color[$key] = [
+              'display_value' => $sku_option->get('attr_rgb_color')->value,
+              'display_label' => $sku_option->get('attr_color_label')->value,
+              'swatch_type' => $swatch_type,
+            ];
+          }
+        }
+      }
+
+      if (!empty($sku_configurable_options_color)) {
+        $form['ajax']['configurables']['color']['#attached']['drupalSettings']['sku_configurable_options_color'] = $sku_configurable_options_color;
+      }
+    }
+  }
+}
