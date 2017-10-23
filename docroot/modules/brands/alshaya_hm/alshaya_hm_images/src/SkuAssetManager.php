@@ -15,7 +15,7 @@ class SkuAssetManager {
   /**
     * Constant to denote that the current asset has no angle data associated.
     */
-  const NO_ANGLE = 'NO_ANGLE';
+  const LP_DEFAULT_ANGLE = 'NO_ANGLE';
   /**
    * The Config factory service.
    *

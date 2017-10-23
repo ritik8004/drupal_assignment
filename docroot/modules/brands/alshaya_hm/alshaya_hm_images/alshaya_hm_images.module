@@ -4,6 +4,7 @@
  * @file
  * Module file.
  */
+use Drupal\alshaya_hm_images\SkuAssetManager;
 
 /**
  * Implements hook_acq_sku_import_alter().
@@ -30,7 +31,7 @@ function _alshaya_hm_images_acq_sku_process_assets($product) {
     foreach ($assets as $key => $asset) {
       $asset_type_parts = explode('/', $asset['Data']['AssetType']);
       $assets[$key]['sortAssetType'] = end($asset_type_parts);
-      $face_type = 'NO_ANGLE';
+      $face_type = SkuAssetManager::LP_DEFAULT_ANGLE;
 
       if (!empty($asset['Data']['Angle']['Facing']) && !empty($asset['Data']['Angle']['Identifier'])) {
         $face_type = $asset['Data']['Angle']['Facing'] . $asset['Data']['Angle']['Identifier'];
