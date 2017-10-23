@@ -917,6 +917,7 @@
       font-size: 0.75rem;
       margin-top: 0.1875rem;
       text-align: $left;
+      background-color: $hnm-black;
 
       @include breakpoint($upto-tablet) {
         #{$right}: 0.5rem;
@@ -933,7 +934,7 @@
     border-bottom: 1px solid $white-five !important;
     padding-#{$right}: 33%;
     height: 2rem;
-    color: $white-five;
+    color: $white-five !important;
     margin-top: 1.75rem;
 
     @include breakpoint($tablet) {
@@ -1012,6 +1013,38 @@
       @include breakpoint($only-mobile) {
         border-top: 2px solid $white-smoke-border;
       }
+    }
+  }
+}
+
+#footer-newsletter-form-wrapper {
+  line-height: 1.36;
+  display: inline-block;
+  width: 100%;
+  position: absolute;
+  #{$left}: 0;
+  top: 100%;
+  padding: 0.3125rem 0.5rem;
+
+  @include breakpoint($tablet) {
+    padding: 0.3125rem 0;
+  }
+
+  @include breakpoint($tablet) {
+    width: 95.5%;
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  .subscription-status {
+    .success {
+      background: $tealish;
+      color: $white-four;
+      font-size: 0.75rem;
+      padding: 0.3125rem 0.875rem;
+      margin-top: 0.1875rem;
+      font-weight: bold;
+      display: block;
     }
   }
 }
