@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w449
+label: w449
+effects:
+  034afaa1-72e8-474d-b25d-7427ad1b33a9:
+    uuid: 034afaa1-72e8-474d-b25d-7427ad1b33a9
+    id: image_scale
+    weight: 1
+    data:
+      width: 449
+      height: null
+      upscale: false

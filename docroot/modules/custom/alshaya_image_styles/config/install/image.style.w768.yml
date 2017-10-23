@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w768
+label: w768
+effects:
+  d0cb9bc6-468e-42fb-9977-b2c9953ee90d:
+    uuid: d0cb9bc6-468e-42fb-9977-b2c9953ee90d
+    id: image_scale
+    weight: 1
+    data:
+      width: 768
+      height: null
+      upscale: false

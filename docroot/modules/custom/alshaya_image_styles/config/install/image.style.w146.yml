@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w146
+label: w146
+effects:
+  a7957d20-637a-4f49-8b0e-040d87829322:
+    uuid: a7957d20-637a-4f49-8b0e-040d87829322
+    id: image_scale
+    weight: 1
+    data:
+      width: 146
+      height: null
+      upscale: false

@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w420
+label: w420
+effects:
+  c6104375-09de-43d1-bb4f-ed138d7750e2:
+    uuid: c6104375-09de-43d1-bb4f-ed138d7750e2
+    id: image_scale
+    weight: 1
+    data:
+      width: 420
+      height: null
+      upscale: false

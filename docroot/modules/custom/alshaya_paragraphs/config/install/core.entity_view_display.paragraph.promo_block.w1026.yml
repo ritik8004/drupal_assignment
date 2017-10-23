@@ -2,23 +2,24 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.banner.field_banner
-    - field.field.paragraph.banner.field_link
-    - paragraphs.paragraphs_type.banner
-    - responsive_image.styles.w1284
+    - core.entity_view_mode.paragraph.w1026
+    - field.field.paragraph.promo_block.field_banner
+    - field.field.paragraph.promo_block.field_link
+    - paragraphs.paragraphs_type.promo_block
+    - responsive_image.styles.w1026
   module:
     - link
     - responsive_image
-id: paragraph.banner.default
+id: paragraph.promo_block.w1026
 targetEntityType: paragraph
-bundle: banner
-mode: default
+bundle: promo_block
+mode: w1026
 content:
   field_banner:
     weight: 0
     label: hidden
     settings:
-      responsive_image_style: w1284
+      responsive_image_style: w1026
       image_link: ''
     third_party_settings: {  }
     type: responsive_image
@@ -30,8 +31,8 @@ content:
       trim_length: 80
       url_only: false
       url_plain: false
-      rel: '0'
-      target: _blank
+      rel: ''
+      target: ''
     third_party_settings: {  }
     type: link
     region: content

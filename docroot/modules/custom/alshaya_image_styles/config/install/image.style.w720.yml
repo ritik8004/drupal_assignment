@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w720
+label: w720
+effects:
+  46575b14-f9e8-492f-86c6-a2fdac1565fb:
+    uuid: 46575b14-f9e8-492f-86c6-a2fdac1565fb
+    id: image_scale
+    weight: 1
+    data:
+      width: 720
+      height: null
+      upscale: false

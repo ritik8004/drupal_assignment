@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.w1284
+    - image.style.w320
+    - image.style.w768
+  theme:
+    - whitelabel
+id: w1284
+label: w1284
+image_style_mappings:
+  -
+    breakpoint_id: whitelabel.desk
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: w1284
+  -
+    breakpoint_id: whitelabel.lap
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: w768
+  -
+    breakpoint_id: whitelabel.palm
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: w320
+breakpoint_group: whitelabel
+fallback_image_style: w320

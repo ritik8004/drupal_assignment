@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w921
+label: w921
+effects:
+  836bdfeb-3298-4def-ac57-c4edc30502ab:
+    uuid: 836bdfeb-3298-4def-ac57-c4edc30502ab
+    id: image_scale
+    weight: 1
+    data:
+      width: 921
+      height: null
+      upscale: false
