@@ -1654,6 +1654,7 @@ article[gtm-sku-type="simple"] {
 
     @include breakpoint($desktop) {
       display: inline-block;
+      margin: 1rem 0;
     }
   }
 }

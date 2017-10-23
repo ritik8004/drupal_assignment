@@ -699,3 +699,13 @@
   color: $black;
   font-weight: bold;
 }
+
+.alias--cart-checkout-confirmation {
+  .order-confirmation {
+    .region__content {
+      @include breakpoint($desktop) {
+        min-width: 57.5rem;
+      }
+    }
+  }
+}
