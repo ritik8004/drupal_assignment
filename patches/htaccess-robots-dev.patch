@@ -2,13 +2,12 @@ diff --git a/.htaccess b/.htaccess
 index 0629f97..ce30359 100644
 --- a/.htaccess
 +++ b/.htaccess
-@@ -149,6 +149,12 @@ AddEncoding gzip svgz
+@@ -149,6 +149,11 @@ AddEncoding gzip svgz
    # Rewrite install.php during installation to see if mod_rewrite is working
    RewriteRule ^core/install.php core/install.php?rewrite=ok [QSA,L]
 
 +  # Stop search engines from indexing non prod URLs.
-+  RewriteCond %{HTTP_HOST} \.acsitefactory\.com$ [NC]
-+  RewriteCond %{HTTP_HOST} \.factory\.alshaya\.com$ [NC]
++  RewriteCond %{HTTP_HOST} \.(acsitefactory|factory\.alshaya)\.com$ [NC]
 +  RewriteCond %{REQUEST_URI} ^(.*)?/(robots.txt) [NC]
 +  RewriteRule /robots.txt$ /robots-dev.txt [L,NC]
 +
