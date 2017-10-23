@@ -208,4 +208,73 @@ class SkuAssetManager {
     return [];
   }
 
+  /**
+   * Helper function to process assets for PLP/search pages.
+   *
+   * Extract main & hover image as per the business rules.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Sku entity for which PLP assets are being processed.
+   * @param array $assets
+   *   Assets to be processed for listing page.
+   *
+   * @return array
+   *   Filtered assets array containing main & hover image.
+   */
+  public function processAssetsForListing(SKU $sku, array $assets) {
+    if (empty($assets)) {
+      return [];
+    }
+
+    $plp_asset_types[] = $plp_front = $this->configFactory->get('alshaya_hm_images.settings')->get('weights')['plp_front'];
+    $plp_asset_types[] = $plp_back = $this->configFactory->get('alshaya_hm_images.settings')->get('weights')['plp_back'];
+
+    // Fetch angle config.
+    $sort_angles = $this->configFactory->get('alshaya_hm_images.settings')->get('weights')['angle'];
+
+    // Check for overrides for style identifiers & dimensions.
+    $config_overrides = $this->overrideConfig($sku, 'plp');
+
+    if (!empty($config_overrides)) {
+      if (isset($config_overrides['plp_front'])) {
+        $overridden_asset_types[] = $plp_front = $config_overrides['plp_front'];
+      }
+
+      if (isset($config_overrides['plp_back'])) {
+        $overridden_asset_types[] = $plp_back = $config_overrides['plp_back'];
+      }
+
+      if (isset($config_overrides['weights']['angle'])) {
+        $sort_angles = $config_overrides['weights']['angle'];
+      }
+    }
+
+    if (!empty($overridden_asset_types)) {
+      $plp_asset_types = $overridden_asset_types;
+    }
+
+    $plp_assets = [];
+
+    // Loop over assets array to find the main & hover image.
+    foreach ($assets as $asset) {
+      if (!in_array($asset['sortAssetType'], $plp_asset_types)) {
+        continue;
+      }
+      foreach ($sort_angles as $angle) {
+        if (($asset['sortAssetType'] === $plp_front) &&
+                ($asset['sortFacingType'] === $angle)) {
+          $plp_assets['mainImage'] = $asset;
+          break;
+        }
+        elseif (($asset['sortAssetType'] === $plp_back) &&
+                ($asset['sortFacingType'] === $angle)) {
+          $plp_assets['hoverImage'] = $asset;
+          break;
+        }
+      }
+    }
+
+    return $plp_assets;
+  }
+
 }
