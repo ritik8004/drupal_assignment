@@ -5,8 +5,8 @@ dependencies:
     - field.storage.node.field_promo_blocks
     - node.type.advanced_page
     - paragraphs.paragraphs_type.1_row_1_col
-    - paragraphs.paragraphs_type.1_row_2_col
     - paragraphs.paragraphs_type.1_row_1st_col_2_row_2nd_col
+    - paragraphs.paragraphs_type.1_row_2_col
     - paragraphs.paragraphs_type.1_row_3_col
     - paragraphs.paragraphs_type.1_row_3_col_text
     - paragraphs.paragraphs_type.block_reference

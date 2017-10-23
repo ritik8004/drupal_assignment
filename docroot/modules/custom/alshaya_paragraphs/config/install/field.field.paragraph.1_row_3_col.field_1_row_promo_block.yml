@@ -57,9 +57,6 @@ settings:
       1_row_1_col_dept:
         weight: 21
         enabled: false
-      title_textarea:
-        weight: 21
-        enabled: false
       1_row_2_col_1_2_dept:
         weight: 23
         enabled: false

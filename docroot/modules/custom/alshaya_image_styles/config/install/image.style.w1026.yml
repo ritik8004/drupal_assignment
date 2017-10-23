@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w1026
+label: w1026
+effects:
+  20437932-d034-48a2-a576-889994792cff:
+    uuid: 20437932-d034-48a2-a576-889994792cff
+    id: image_scale
+    weight: 1
+    data:
+      width: 1026
+      height: null
+      upscale: false

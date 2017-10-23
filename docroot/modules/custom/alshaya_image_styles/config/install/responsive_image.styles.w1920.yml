@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.w1155
+    - image.style.w1920
+    - image.style.w761
+  theme:
+    - whitelabel
+id: w1920
+label: w1920
+image_style_mappings:
+  -
+    breakpoint_id: whitelabel.desk
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: w1920
+  -
+    breakpoint_id: whitelabel.lap
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: w1155
+  -
+    breakpoint_id: whitelabel.palm
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: w761
+breakpoint_group: whitelabel
+fallback_image_style: w761

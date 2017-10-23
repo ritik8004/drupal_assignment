@@ -20,15 +20,13 @@ content:
       edit_mode: open
       add_mode: dropdown
       form_display_mode: default
-      default_paragraph_type: _none
+      default_paragraph_type: promo_block
     third_party_settings: {  }
     type: entity_reference_paragraphs
     region: content
   translation:
     weight: 10
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   created: true
   status: true

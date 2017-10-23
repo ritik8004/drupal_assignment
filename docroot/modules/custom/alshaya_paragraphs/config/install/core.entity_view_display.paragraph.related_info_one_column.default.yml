@@ -5,10 +5,11 @@ dependencies:
     - field.field.paragraph.related_info_one_column.field_banner
     - field.field.paragraph.related_info_one_column.field_body
     - field.field.paragraph.related_info_one_column.field_title
-    - image.style.420x192
+    - image.style.w420
     - paragraphs.paragraphs_type.related_info_one_column
   module:
     - image
+    - text
 id: paragraph.related_info_one_column.default
 targetEntityType: paragraph
 bundle: related_info_one_column
@@ -18,7 +19,7 @@ content:
     weight: 0
     label: hidden
     settings:
-      image_style: 420x192
+      image_style: w420
       image_link: ''
     third_party_settings: {  }
     type: image
@@ -28,7 +29,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: basic_string
+    type: text_default
     region: content
   field_title:
     weight: 1

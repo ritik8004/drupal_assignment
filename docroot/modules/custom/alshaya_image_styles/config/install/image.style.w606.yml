@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w606
+label: w606
+effects:
+  e733a0ee-0733-41d5-917b-3c414b3f1cc1:
+    uuid: e733a0ee-0733-41d5-917b-3c414b3f1cc1
+    id: image_scale
+    weight: 1
+    data:
+      width: 606
+      height: null
+      upscale: false

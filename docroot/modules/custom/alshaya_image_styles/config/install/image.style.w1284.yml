@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w1284
+label: w1284
+effects:
+  182e5d1d-a128-4f0d-9103-319e19755f3b:
+    uuid: 182e5d1d-a128-4f0d-9103-319e19755f3b
+    id: image_scale
+    weight: 1
+    data:
+      width: 1284
+      height: null
+      upscale: false
