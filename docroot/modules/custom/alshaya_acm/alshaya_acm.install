@@ -13,6 +13,17 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
+ * Update debug config.
+ */
+function alshaya_acm_update_8002() {
+  $config = \Drupal::configFactory()->getEditable('acq_commerce.conductor');
+  $config->set('debug', Settings::get('acq_commerce.conductor')['debug']);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install new config - alshaya_acm.settings.
  */
 function alshaya_acm_update_8001() {

@@ -73,7 +73,7 @@ $settings['autologout.settings']['timeout'] = 1200;
 
 // Set the debug dir of conductor.
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
-$config['acq_commerce.conductor']['debug'] = TRUE;
+$settings['acq_commerce.conductor']['debug'] = TRUE;
 
 // Set page size to sync products to 30.
 $settings['acq_commerce.conductor']['product_page_size'] = 30;
@@ -105,7 +105,7 @@ switch ($env) {
     global $_alshaya_acm_disable_stock_check;
     $_alshaya_acm_disable_stock_check = TRUE;
 
-    $config['acq_commerce.conductor']['debug'] = FALSE;
+    $settings['acq_commerce.conductor']['debug'] = FALSE;
 
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
@@ -142,7 +142,9 @@ switch ($env) {
     $settings['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     break;
 
-  default:
+  defaulti:
+    $settings['acq_commerce.conductor']['debug'] = FALSE;
+
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-prod.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
