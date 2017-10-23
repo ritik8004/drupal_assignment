@@ -16,7 +16,7 @@ function alshaya_seo_drush_command() {
 
   $items['redirect-arabic-categories'] = [
     'description' => 'Creates redirect rules for categories arabic URLs',
-    'aliases' => ['rmac'],
+    'aliases' => ['rac'],
   ];
 
   return $items;
@@ -25,7 +25,7 @@ function alshaya_seo_drush_command() {
 /**
  * Creates a new user account.
  */
-function drush_alshaya_seo_redirect_mckw_arabic_categories() {
+function drush_alshaya_seo_redirect_arabic_categories() {
 
   drush_print('Creating redirect rules for arabic Product categories URLs...');
 
