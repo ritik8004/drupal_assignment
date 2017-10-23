@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_acq_sku_import_alter().
+ */
+function alshaya_hm_images_acq_sku_product_sku_alter($sku, $product) {
+  // Process assets data & create attributes which are needed for sorting
+  // the assets while displaying them.
+  $sku->attr_assets = _alshaya_hm_images_acq_sku_process_assets($product);
+}
+
+/**
+ * Helper function to process asset attributes & calculate sorting params.
+ *
+ * @param array $product
+ *   Product array containing assets to be processed.
+ *
+ * @return string
+ *   Serialized & processed assets.
+ */
+function _alshaya_hm_images_acq_sku_process_assets($product) {
+  $assets = [];
+  if (isset($product['extension'], $product['extension']['assets'])) {
+    $assets = $product['extension']['assets'];
+    foreach ($assets as $key => $asset) {
+      $asset_type_parts = explode('/', $asset['Data']['AssetType']);
+      $assets[$key]['sortAssetType'] = end($asset_type_parts);
+      $face_type = 'NO_ANGLE';
+
+      if (!empty($asset['Data']['Angle']['Facing']) && !empty($asset['Data']['Angle']['Identifier'])) {
+        $face_type = $asset['Data']['Angle']['Facing'] . $asset['Data']['Angle']['Identifier'];
+      }
+      $assets[$key]['sortFacingType'] = $face_type;
+    }
+  }
+
+  return serialize($assets);
+}
