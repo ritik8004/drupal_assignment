@@ -69,20 +69,20 @@ class SkuAssetManager {
     $origin = $alshaya_hm_images_settings->get('origin');;
 
     $assets = $this->sortSkuAsset($sku, $context, unserialize($sku_entity->get('attr_assets')->value));
-    $sorted_asset_urls = [];
+    $asset_urls = [];
 
     foreach ($assets as $asset) {
-      $asset_options['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
-      $asset_options['origin'] = "origin[" . $origin . "]";
-      $asset_options['type'] = "type[" . $asset['sortAssetType'] . "]";
-      $asset_options['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
-      $asset_options['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
-      $asset_options['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
+      $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
+      $set['origin'] = "origin[" . $origin . "]";
+      $set['type'] = "type[" . $asset['sortAssetType'] . "]";
+      $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
+      $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
+      $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
       $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
       // Check for overrides for style identifiers & dimensions.
       $config_overrides = $this->overrideConfig($sku, $context);
-
+      
       // If overrides are available, update style id, width & height in the url.
       if (!empty($config_overrides)) {
         if (isset($config_overrides['style_identifiers'][$location_image])) {
@@ -90,28 +90,28 @@ class SkuAssetManager {
         }
 
         if (isset($config_overrides['dimensions'][$location_image]['width'])) {
-          $asset_options['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
+          $set['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
         }
 
         if (isset($config_overrides['dimensions'][$location_image]['height'])) {
-          $asset_options['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
+          $set['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
         }
       }
-      $sorted_asset_set = implode(',', $asset_options);
-      $sorted_asset_url_options = [
+      $asset_set = implode(',', $set);
+      $options = [
         'query' => [
-          'set' => $sorted_asset_set,
+          'set' => $asset_set,
           'call' => 'url[' . $image_location_identifier . ']',
         ],
       ];
-      $sorted_asset_urls[] = [
-        'url' => Url::fromUri($base_url, $sorted_asset_url_options),
+      $asset_urls[] = [
+        'url' => Url::fromUri($base_url, $options),
         'sortAssetType' => $asset['sortAssetType'],
         'sortFacingType' => $asset['sortFacingType'],
       ];
     }
 
-    return $sorted_asset_urls;
+    return $asset_urls;
   }
 
   /**
