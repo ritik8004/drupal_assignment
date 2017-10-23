@@ -1,0 +1,6 @@
+services:
+  alshaya_hm_images.skuassetsmanager:
+    class: Drupal\alshaya_hm_images\SkuAssetManager
+    arguments:
+      - '@config.factory'
+      - '@current_route_match'
