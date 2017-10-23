@@ -1197,9 +1197,11 @@
     }
   }
 
-  .get--directions div::after {
+  .get--directions a::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
     background: url('../imgs/icons/ic-directions.svg');
-    top: 1rem;
     #{$right}: 1rem;
     width: 18px;
     height: 18px;
