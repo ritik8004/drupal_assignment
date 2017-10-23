@@ -1177,28 +1177,17 @@ body.alias--cart {
   #edit-continue-shopping,
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    font-size: 0.8125rem;
-    font-family: $hnm-bold;
-    font-weight: normal;
+    font-size: 12px;
+    font-weight: bold;
     border: 1px solid $hnm-black-two;
-    background: $hnm-black-two;
     display: block;
-    padding: 0.53125rem 0;
+    padding: 0.625rem 1.6rem;
     text-align: center;
     text-transform: uppercase;
-    color: $white-five;
-    position: relative;
-    padding-#{$left}: 1.688rem;
-
-    @include icon(shopping-bag, after) {
-      font-size: 1.5rem;
-      #{$left}: 0.875rem;
-      position: absolute;
-      top: 0.4375rem;
-    }
+    font-family: $hnm-regular;
 
     @include breakpoint($tablet) {
-      max-width: 12.44rem;
+      max-width: 173px;
     }
   }
 
@@ -1291,12 +1280,32 @@ body.alias--cart {
     display: none;
   }
 
+  #edit-continue-shopping,
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    color: $white-five;
-    background: $pumpkin-orange;
-    border: 1px solid $pumpkin-orange;
+    font-size: 0.8125rem;
+    font-family: $hnm-bold;
     font-weight: normal;
+    border: 1px solid $hnm-black-two;
+    background: $hnm-black-two;
+    display: block;
+    padding: 0.53125rem 0;
+    text-align: center;
+    text-transform: uppercase;
+    color: $white-five;
+    position: relative;
+    padding-#{$left}: 1.688rem;
+
+    @include icon(shopping-bag, after) {
+      font-size: 1.5rem;
+      #{$left}: 0.875rem;
+      position: absolute;
+      top: 0.4375rem;
+    }
+
+    @include breakpoint($tablet) {
+      max-width: 12.44rem;
+    }
   }
 }
 
