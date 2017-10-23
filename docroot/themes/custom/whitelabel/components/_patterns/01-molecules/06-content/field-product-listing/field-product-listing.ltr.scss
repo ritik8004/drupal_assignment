@@ -51,7 +51,7 @@
   header {
     float: direction(right);
     color: $brownish-grey;
-    padding-top: 1.9rem;
+    padding-top: 1.6rem;
     font-size: 1rem;
     margin-bottom: 0.75rem;
 
@@ -60,11 +60,11 @@
     }
 
     @include breakpoint($lap) {
-      padding-top: 3rem;
+      padding-top: 2.65rem;
     }
 
     @include breakpoint($desk) {
-      padding-top: 1.4rem;
+      padding-top: 1.1rem;
     }
   }
 
