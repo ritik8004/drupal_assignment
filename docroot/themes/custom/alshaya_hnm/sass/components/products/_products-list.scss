@@ -183,7 +183,7 @@
                 text-transform: uppercase;
               }
 
-              @include icon(chevron#{$left}, after) {
+              @include icon(arrow#{$left}, after) {
                 position: absolute;
                 #{$left}: 1.3%;
                 font-size: 2rem;
