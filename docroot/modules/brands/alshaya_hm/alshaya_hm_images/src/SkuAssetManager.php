@@ -82,7 +82,7 @@ class SkuAssetManager {
 
       // Check for overrides for style identifiers & dimensions.
       $config_overrides = $this->overrideConfig($sku, $context);
-      
+
       // If overrides are available, update style id, width & height in the url.
       if (!empty($config_overrides)) {
         if (isset($config_overrides['style_identifiers'][$location_image])) {
