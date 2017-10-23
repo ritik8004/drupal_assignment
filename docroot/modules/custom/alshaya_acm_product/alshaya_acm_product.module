@@ -25,6 +25,52 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\search_api\IndexInterface;
+
+/**
+ * Alter the items that are indexed.
+ *
+ * @param \Drupal\search_api\IndexInterface $index
+ *   The search index on which items will be indexed.
+ * @param \Drupal\search_api\Item\ItemInterface[] $items
+ *   The items that will be indexed.
+ */
+function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
+  foreach ($items as $item_id => $item) {
+    $object = $item->getOriginalObject()->getValue();
+
+    $type = $object->getEntityType()->id();
+    $bundle = $object->bundle();
+
+    // Deal with color field case that is not a real configurable attribute
+    // and that thus does not auto fill the color field of the parent sku.
+    if ($type == 'node' && $bundle == 'acq_product') {
+      $sku = $object->get('field_skus')->first()->getString();
+      if (!empty($sku)) {
+        $sku_entity = SKU::loadFromSku($sku);
+
+        if (!empty($sku_entity) && $sku_entity->bundle() == 'configurable') {
+          // Update color based on color of children.
+          $colors = [];
+
+          foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
+            $child_sku_entity = SKU::loadFromSku($child_sku->getString());
+
+            if (!empty($child_sku_entity)) {
+              $color = $child_sku_entity->get('attr_color')->first();
+              if (!empty($color)) {
+                $color = $color->getString();
+                $colors[$color] = $color;
+              }
+            }
+          }
+
+          $item->getField('attr_color')->setValues(array_keys($colors));
+        }
+      }
+    }
+  }
+}
 
 /**
  * Implements hook_theme().
