@@ -1,4 +1,4 @@
-base_url: 'https://lp2.hm.com/hmprod'
+base_url: 'https://lp2.hm.com/hmgoepprod'
 origin: 'dam'
 dimensions:
  plp:
@@ -19,6 +19,8 @@ dimensions:
  swatch:
    width: 11
    height: 21
+# Weights are used to sort asset-types. Items with lower weight get precedence
+# while displaying them.
 weights:
  plp:
    Lookbook: 1
