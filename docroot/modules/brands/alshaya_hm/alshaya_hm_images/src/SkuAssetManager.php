@@ -68,21 +68,16 @@ class SkuAssetManager {
     $base_url = $alshaya_hm_images_settings->get('base_url');
     $origin = $alshaya_hm_images_settings->get('origin');;
 
-    $assets = unserialize($sku_entity->get('attr_assets')->value);
-    $sorted_assets = $this->sortSkuAsset($sku, $context, $assets);
+    $assets = $this->sortSkuAsset($sku, $context, unserialize($sku_entity->get('attr_assets')->value));
     $sorted_asset_urls = [];
 
-    $currentRoute['route_name'] = $this->currentRouteMatch->getRouteName();
-    $currentRoute['route_params'] = $this->currentRouteMatch->getParameters()->all();
-
-    foreach ($sorted_assets as $key => $sorted_asset) {
-      $sorted_asset_url = $base_url;
-      $sorted_asset_set_args['source'] = "source[/" . $sorted_asset['Data']['FilePath'] . "]";
-      $sorted_asset_set_args['origin'] = "origin[" . $origin . "]";
-      $sorted_asset_set_args['type'] = "type[" . $sorted_asset['sortAssetType'] . "]";
-      $sorted_asset_set_args['hmver'] = "hmver[" . $sorted_asset['Data']['Version'] . "]";
-      $sorted_asset_set_args['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
-      $sorted_asset_set_args['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
+    foreach ($assets as $asset) {
+      $asset_options['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
+      $asset_options['origin'] = "origin[" . $origin . "]";
+      $asset_options['type'] = "type[" . $asset['sortAssetType'] . "]";
+      $asset_options['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
+      $asset_options['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
+      $asset_options['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
       $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
       // Check for overrides for style identifiers & dimensions.
@@ -95,14 +90,14 @@ class SkuAssetManager {
         }
 
         if (isset($config_overrides['dimensions'][$location_image]['width'])) {
-          $sorted_asset_set_args['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
+          $asset_options['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
         }
 
         if (isset($config_overrides['dimensions'][$location_image]['height'])) {
-          $sorted_asset_set_args['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
+          $asset_options['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
         }
       }
-      $sorted_asset_set = implode(',', $sorted_asset_set_args);
+      $sorted_asset_set = implode(',', $asset_options);
       $sorted_asset_url_options = [
         'query' => [
           'set' => $sorted_asset_set,
@@ -110,9 +105,9 @@ class SkuAssetManager {
         ],
       ];
       $sorted_asset_urls[] = [
-        'url' => Url::fromUri($sorted_asset_url, $sorted_asset_url_options),
-        'sortAssetType' => $sorted_asset['sortAssetType'],
-        'sortFacingType' => $sorted_asset['sortFacingType'],
+        'url' => Url::fromUri($base_url, $sorted_asset_url_options),
+        'sortAssetType' => $asset['sortAssetType'],
+        'sortFacingType' => $asset['sortFacingType'],
       ];
     }
 
