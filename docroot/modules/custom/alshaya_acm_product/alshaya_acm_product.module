@@ -46,15 +46,17 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
     // and that thus does not auto fill the color field of the parent sku.
     if ($type == 'node' && $bundle == 'acq_product' && !empty($item->getField('attr_color'))) {
       $sku = $object->get('field_skus')->first()->getString();
+
       if (!empty($sku)) {
-        $sku_entity = SKU::loadFromSku($sku);
+        $langcode = $object->language()->getId();
+        $sku_entity = SKU::loadFromSku($sku, $langcode);
 
         if (!empty($sku_entity) && $sku_entity->bundle() == 'configurable') {
           // Update color based on color of children.
           $colors = [];
 
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
-            $child_sku_entity = SKU::loadFromSku($child_sku->getString());
+            $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode);
 
             if (!empty($child_sku_entity)) {
               $color = $child_sku_entity->get('attr_color')->first();
