@@ -822,10 +822,13 @@
           #cancel-address-add-edit {
             background: transparent;
             margin-top: 0;
-            text-transform: lowercase;
+            text-transform: capitalize;
             color: $hnm-black-two;
-            font-weight: bold;
+            font-family: $hnm-demibold;
+            font-weight: normal;
+            text-decoration: underline;
             padding: 0.5rem 2.5rem;
+            font-size: 0.75rem;
           }
         }
 
