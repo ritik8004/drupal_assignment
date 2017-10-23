@@ -36,6 +36,7 @@
       var updatedCartQty = 0;
       var subListName = '';
       var leadType = '';
+      var promotionImpressionSubnavFired = false;
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -541,7 +542,8 @@
           if ((mouseOverTime >= 2000) && ($(this).hasClass('has-child'))) {
             var highlights = $(this).find('.highlights [gtm-type="gtm-highlights"]');
 
-            if (highlights.length > 0) {
+            if ((highlights.length > 0) && (!promotionImpressionSubnavFired)) {
+              promotionImpressionSubnavFired = true;
               Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation', 'promotionImpression');
             }
           }
@@ -552,7 +554,8 @@
         var parent = $(this).closest('ul.menu--two__list');
         if (parent.length !== 0) {
           var highlights = parent.find('.highlights [gtm-type="gtm-highlights"]');
-          if (highlights.length > 0) {
+          if ((highlights.length > 0) && (!promotionImpressionSubnavFired)) {
+            promotionImpressionSubnavFired = true;
             Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation', 'promotionImpression');
           }
         }
@@ -764,7 +767,7 @@
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
       }
 
-      if ((filename !== undefined) && (filename !== '')) {
+      if ((fileName !== undefined) && (fileName !== '')) {
         var promotion = {
           id: fileName,
           name: gtmPageType,
