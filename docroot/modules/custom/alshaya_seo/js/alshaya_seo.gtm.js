@@ -764,12 +764,13 @@
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
       }
 
-      var promotion = {
-        id: fileName,
-        name: gtmPageType,
-        position: 'slot' + position
-      };
-
+      if ((id !== undefined) && (id !== '')) {
+        var promotion = {
+          id: fileName,
+          name: gtmPageType,
+          position: 'slot' + position
+        };
+      }
       promotions.push(promotion);
     });
 
