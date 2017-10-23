@@ -764,7 +764,7 @@
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
       }
 
-      if ((id !== undefined) && (id !== '')) {
+      if ((filename !== undefined) && (filename !== '')) {
         var promotion = {
           id: fileName,
           name: gtmPageType,
