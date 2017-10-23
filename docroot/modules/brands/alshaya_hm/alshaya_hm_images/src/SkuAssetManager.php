@@ -277,4 +277,46 @@ class SkuAssetManager {
     return $plp_assets;
   }
 
+  /**
+   * Helper function to process assets for teaser pages.
+   *
+   * Extract first teaser image found as per the angle order.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity for which teaser assets are being processed.
+   * @param array $assets
+   *   Assets to be processed for teaser page.
+   *
+   * @return string
+   *   Filtered assest as per the angle priority.
+   */
+  public function processAssetsForTeaser(SKU $sku, array $assets) {
+    if (empty($assets)) {
+      return '';
+    }
+
+    // Get order of angles to be looked for.
+    $sort_angles = $this->configFactory->get('alshaya_hm_images.settings')->get('weights')['angle'];
+
+    // Check for overrides for style identifiers & dimensions.
+    $config_overrides = $this->overrideConfig($sku, 'plp');
+
+    if (!empty($config_overrides)) {
+      if (isset($config_overrides['weights']['angle'])) {
+        $sort_angles = $config_overrides['weights']['angle'];
+      }
+    }
+
+    // Loop over assets array to find the main & hover image.
+    foreach ($assets as $asset) {
+      foreach ($sort_angles as $angle) {
+        if ($asset['sortFacingType'] === $angle) {
+          return $asset;
+        }
+      }
+    }
+
+    return '';
+  }
+
 }

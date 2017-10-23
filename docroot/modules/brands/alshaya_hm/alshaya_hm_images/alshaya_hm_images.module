@@ -145,3 +145,23 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
     $main_image = $temp_image;
   }
 }
+
+/**
+ * Implements hook_acq_sku_teaser_media_alter().
+ */
+function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
+  if (empty($build['image'])) {
+    $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+    $teaser_assets = $sku_assets_manager->getSkuAsset($sku_entity, 'teaser', 'teaser');
+    $teaser_image = $sku_assets_manager->processAssetsForTeaser($sku_entity, $teaser_assets);
+    $image = [
+      '#theme' => 'image',
+      '#attributes' => array(
+        'src' => $teaser_image['url'],
+      ),
+    ];
+
+    $build['image'] = $image;
+  }
+}
+
