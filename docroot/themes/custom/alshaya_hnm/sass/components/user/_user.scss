@@ -1217,12 +1217,6 @@ html[lang="ar"] {
   }
 }
 
-.c-input__privilege-card {
-  html[lang=ar] & {
-    font-family: $arial-nodir;
-  }
-}
-
 input::-webkit-credentials-auto-fill-button {
   visibility: hidden;
   pointer-events: none;
