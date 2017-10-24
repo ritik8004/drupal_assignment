@@ -3,7 +3,7 @@
     #{$right}: 0;
   }
 
-  @include icon(arrowup, after) {
+  @include icon(chevronup, after) {
     width: 2.3125rem;
     height: 2.3125rem;
     color: $hnm-black-two;

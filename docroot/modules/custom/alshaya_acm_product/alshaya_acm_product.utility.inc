@@ -181,8 +181,6 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity)) {
       return alshaya_acm_product_get_gallery($build, $parent_sku);
     }
-
-    return [];
   }
 
   $main_image = [];
