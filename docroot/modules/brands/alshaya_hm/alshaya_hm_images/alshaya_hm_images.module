@@ -42,3 +42,61 @@ function _alshaya_hm_images_acq_sku_process_assets($product) {
 
   return serialize($assets);
 }
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_hm_images_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_assets_gallery' => [
+      'variables' => [
+        'mainImage' => '',
+        'hoverImage' => '',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_acq_sku_gallery_view_alter().
+ */
+function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
+  foreach ($elements as $delta => $element) {
+    // Check if the gallery has a main image. If not, look for assets.
+    if (empty($element['#gallery']['#mainImage'])) {
+      $sku = $skus[$delta];
+      // Get the assets.
+      $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+      $main_image_assets = $sku_assets_manager->getSkuAsset($sku, 'plp', 'plp');
+      $hover_image_assets = $sku_assets_manager->getSkuAsset($sku, 'plp_hover', 'plp');
+
+      // If no assets attached & the sku is configurable, try to use the
+      // assets attached with first child sku attached.
+      if ((!$main_image_assets) && (!$hover_image_assets) && ($sku->bundle() === 'configurable')) {
+        $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', 'plp');
+        $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', 'plp');
+      }
+
+      $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
+      $plp_hover_image = !empty($hover_image_assets) ? $hover_image_assets[0] : NULL;
+
+      if ($plp_main_image) {
+        $sku_gallery = [
+          '#theme' => 'alshaya_assets_gallery',
+          '#mainImage' => $plp_main_image,
+          '#attached' => [
+            'library' => [
+              'alshaya_hm_images/hm_images',
+            ],
+          ],
+        ];
+
+        if ($plp_hover_image) {
+          $sku_gallery['#hoverImage'] = $plp_hover_image;
+        }
+
+        $elements[$delta]['#gallery'] = $sku_gallery;
+      }
+    }
+  }
+}

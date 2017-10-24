@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_hm_images;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
@@ -13,9 +14,14 @@ use Drupal\Core\Url;
 class SkuAssetManager {
 
   /**
-    * Constant to denote that the current asset has no angle data associated.
-    */
+   * Constant to denote that the current asset has no angle data associated.
+   */
   const LP_DEFAULT_ANGLE = 'NO_ANGLE';
+
+  /**
+   * Constant for default weight in case no weight has been set via config.
+   */
+  const LP_DEFAULT_WEIGHT = 100;
   /**
    * The Config factory service.
    *
@@ -37,11 +43,15 @@ class SkuAssetManager {
    *   Config Factory service.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   Current route matcher service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   Sku manager service.
    */
   public function __construct(ConfigFactory $configFactory,
-                             CurrentRouteMatch $currentRouteMatch) {
+                              CurrentRouteMatch $currentRouteMatch,
+                              SkuManager $skuManager) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -65,13 +75,11 @@ class SkuAssetManager {
     }
 
     $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
-    $assets = $this->sortSkuAsset($sku, $page_type, unserialize($sku_entity->get('attr_assets')->value));
+    $assets = $this->sortSkuAssets($sku, $page_type, unserialize($sku_entity->get('attr_assets')->value));
     $asset_urls = [];
 
     foreach ($assets as $asset) {
-      $set = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
-      $image_location_identifier = $set['image_location_identifier'];
-      unset($set['image_location_identifier']);
+      list($set, $image_location_identifier)  = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
 
       // Prepare query options for image url.
       $options = [
@@ -116,7 +124,7 @@ class SkuAssetManager {
     $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
     $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
     $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
-    $set['image_location_identifier'] = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
+    $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
     // Check for overrides for style identifiers & dimensions.
     $config_overrides = $this->overrideConfig($sku, $page_type);
@@ -124,7 +132,7 @@ class SkuAssetManager {
     // If overrides are available, update style id, width & height in the url.
     if (!empty($config_overrides)) {
       if (isset($config_overrides['style_identifiers'][$location_image])) {
-        $set['image_location_identifier'] = $config_overrides['style_identifiers'][$location_image];
+        $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
       }
 
       if (isset($config_overrides['dimensions'][$location_image]['width'])) {
@@ -136,45 +144,7 @@ class SkuAssetManager {
       }
     }
 
-    return $set;
-  }
-
-  /**
-   * Helper function to sort assets array in context of Page & category.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU entity for which assets need to be sorted.
-   * @param string $page_type
-   *   Page type for which assets need to be sorted.
-   * @param array $assets
-   *   Assets that need to be sorted.
-   *
-   * @return array
-   *   Sorted assets array.
-   */
-  public function sortSkuAsset(SKU $sku, $page_type, array $assets) {
-    $sort_assets_config = $this->configFactory->get('alshaya_hm_images.settings');
-    $sort_assets_config_context = $sort_assets_config->get('weights')[$page_type];
-
-    // Check if there are any overrides for category this product page is
-    // tagged with.
-    // Check for overrides for style identifiers & dimensions.
-    $config_overrides = $this->overrideConfig($sku, $page_type);
-
-    if (!empty($config_overrides)) {
-      if (isset($config_overrides['weights'][$page_type])) {
-        $sort_assets_config_context = $config_overrides['weights'][$page_type];
-      }
-    }
-
-    uasort($assets, function ($a, $b) use ($sort_assets_config_context) {
-       $weight_a = $sort_assets_config_context[$a['sortAssetType']];
-       $weight_b = $sort_assets_config_context[$b['sortAssetType']];
-
-       return $weight_a - $weight_b < 0 ? -1 : 1;
-    });
-
-    return $assets;
+    return [$set, $image_location_identifier];
   }
 
   /**
@@ -218,6 +188,134 @@ class SkuAssetManager {
     }
 
     return !empty($tid) && isset($overrides[$tid]) ? $overrides[$tid] : [];
+  }
+
+  /**
+   * Helper function to sort based on angles.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU for which the assets needs to be sorted on angles.
+   * @param string $page_type
+   *   Page on which the asset needs to be rendered.
+   * @param array $assets
+   *   Array of mixed asset types.
+   *
+   * @return array
+   *   Array of assets sorted by their asset types & angles.
+   */
+  public function sortSkuAssets(SKU $sku, $page_type, array $assets) {
+    $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
+    // Fetch weights of asset types based on the pagetype.
+    $sku_asset_type_weights = $alshaya_hm_images_config->get('weights')[$page_type];
+
+    // Fetch angle config.
+    $sort_angle_weights = $alshaya_hm_images_config->get('weights')['angle'];
+
+    // Check if there are any overrides for category this product page is
+    // tagged with.
+    $config_overrides = $this->overrideConfig($sku, $page_type);
+
+    if (!empty($config_overrides)) {
+      if (isset($config_overrides['weights']['angle'])) {
+        $sort_angle_weights = $config_overrides['weights']['angle'];
+      }
+
+      if (isset($config_overrides['weights'][$page_type])) {
+        $sku_asset_type_weights = $config_overrides['weights'][$page_type];
+      }
+    }
+    // Create multi-dimensional array of assets keyed by their asset type.
+    if (!empty($assets)) {
+      $grouped_assets = [];
+      foreach ($sku_asset_type_weights as $asset_type => $weight) {
+        $grouped_assets[$asset_type] = $this->filterSkuAssetType($assets, $asset_type);
+      }
+
+      // Sort items based on the angle config.
+      foreach ($grouped_assets as $key => $asset) {
+        if (!empty($asset)) {
+          uasort($asset, function ($a, $b) use ($sort_angle_weights) {
+            // If weight is set in config, use that else use a default high
+            // weight to push the items to bottom of the list.
+            $weight_a = isset($sort_angle_weights[$a['sortFacingType']]) ? $sort_angle_weights[$a['sortFacingType']] : self::LP_DEFAULT_WEIGHT;
+            $weight_b = isset($sort_angle_weights[$b['sortFacingType']]) ? $sort_angle_weights[$b['sortFacingType']] : self::LP_DEFAULT_WEIGHT;
+
+            return $weight_a - $weight_b < 0 ? -1 : 1;
+          });
+          $grouped_assets[$key] = $asset;
+        }
+        else {
+          unset($grouped_assets[$key]);
+        }
+      }
+
+      // Flatten the assets array.
+      $flattened_assets = [];
+      foreach ($grouped_assets as $assets) {
+        $flattened_assets = array_merge($flattened_assets, $assets);
+      }
+
+      return $flattened_assets;
+    }
+
+    return $assets;
+  }
+
+  /**
+   * Helper function to filter out specific asset types from a list.
+   *
+   * @param array $assets
+   *   Array of assets with mixed asset types.
+   * @param string $asset_type
+   *   Asset type that needs to be filtered out.
+   *
+   * @return array
+   *   Array of assets matching the asset type.
+   */
+  public function filterSkuAssetType($assets, $asset_type) {
+    $filtered_assets = [];
+
+    foreach ($assets as $asset) {
+      if ((!empty($asset)) && ($asset['sortAssetType'] === $asset_type)) {
+        $filtered_assets[] = $asset;
+      }
+    }
+
+    return $filtered_assets;
+  }
+
+  /**
+   * Helper function to pull child sku assets.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Parent sku for which we pulling child assets.
+   * @param string $context
+   *   Page on which the asset needs to be rendered.
+   * @param string $location
+   *   Location on page e.g., main image, thumbnails etc.
+   * @param bool $first_only
+   *   Flag to indicate we need the assets of the first child only.
+   *
+   * @return array
+   *   Array of sku child assets.
+   */
+  public function getChildSkuAssets(SKU $sku, $context, $location, $first_only = TRUE) {
+    $child_skus = $this->skuManager->getChildSkus($sku);
+    $assets = [];
+
+    if ($child_skus) {
+      foreach ($child_skus as $child_sku) {
+        if ($first_only) {
+          $assets = $this->getSkuAsset($child_sku, $context, $location);
+          return $assets;
+        }
+        else {
+          $assets[$sku->getSku()] = $this->getSkuAsset($child_sku, $context, $location);
+        }
+      }
+    }
+
+    return $assets;
   }
 
 }
