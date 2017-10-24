@@ -324,19 +324,23 @@ function alshaya_acm_product_get_display_node($sku, $langcode = '') {
 function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   // Load the first image.
   $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
+  $image = [];
 
   // If we have image for the product.
   if (!empty($media_image)) {
     if ($media_image['file'] instanceof FileInterface) {
-      return alshaya_acm_product_get_sku_image($media_image, $image_style);
+      $image = alshaya_acm_product_get_sku_image($media_image, $image_style);
     }
   }
   // If no image found, check once for parent product as well.
   elseif ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
-    return alshaya_acm_get_product_display_image($parent_sku, $image_style);
+    $image = alshaya_acm_get_product_display_image($parent_sku, $image_style);
   }
 
-  return [];
+  // Alter cart product image.
+  \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
+
+  return $image;
 }
 
 /**

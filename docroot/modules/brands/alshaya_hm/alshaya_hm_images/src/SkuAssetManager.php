@@ -68,14 +68,14 @@ class SkuAssetManager {
    *   Array of urls to sku assets.
    */
   public function getSkuAsset($sku, $page_type, $location_image) {
-    $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+    $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
-    if (!($sku_entity instanceof SKU)) {
+    if (!($sku instanceof SKU)) {
       return [];
     }
 
     $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
-    $assets = $this->sortSkuAssets($sku, $page_type, unserialize($sku_entity->get('attr_assets')->value));
+    $assets = $this->sortSkuAssets($sku, $page_type, unserialize($sku->get('attr_assets')->value));
     $asset_urls = [];
 
     foreach ($assets as $asset) {
