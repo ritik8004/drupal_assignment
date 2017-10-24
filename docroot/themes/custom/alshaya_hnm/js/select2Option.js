@@ -103,8 +103,24 @@ jQuery.fn.select2Option = function (options) {
 
 /**
  * Helper function to generate swatch markup.
+ *
+ * @param {Object} currentOption
+ *   Option being processed
+ * @param {Object} select
+ *   Select list DOM
+ * @param {string} option_id
+ *   Value of option being processed
+ * @param {string} status
+ *   Enabled/Disabled option.
+ * @param {string} selectIndex
+ *   Index for the enabled options.
+ *
+ * @return {string}
+ *   Swatch markup depending on the above options.
  */
 Drupal.alshaya_hm_images_generate_swatch_markup = function (currentOption, select, option_id, status, selectIndex) {
+  'use strict';
+
   if ((select.attr('data-drupal-selector') === 'edit-configurables-article-castor-id') &&
   (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
   (drupalSettings.sku_configurable_options_color.hasOwnProperty(option_id))) {
