@@ -162,14 +162,13 @@ function alshaya_hm_images_acq_sku_cart_media_alter($sku, &$sku_image) {
   if (empty($sku_image)) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
     $cart_assets = $sku_assets_manager->getSkuAsset($sku, 'cart', 'cart');
-    $cart_image = !empty($cart_assets) ? $cart_assets[0] : NULL;
 
-    if (!empty($cart_image)) {
-      $sku_image = [
+    if (!empty($cart_assets)) {
+      $build['image'] = [
         '#theme' => 'image',
-        '#attributes' => array(
-          'src' => $cart_image['url']->toString(),
-        ),
+        '#attributes' => [
+          'src' => $cart_assets[0]['url']->toString(),
+        ],
       ];
     }
   }
