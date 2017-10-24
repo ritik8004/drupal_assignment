@@ -11,7 +11,8 @@ jQuery.fn.select2Option = function (options) {
     var select = $(this);
     var labeltext = '';
     var option_id;
-    var sku_configurable_options_color;
+    var swatch_markup;
+
     select.hide();
 
     var buttonsHtml = $('<div class="select2Option"></div>');
@@ -36,34 +37,20 @@ jQuery.fn.select2Option = function (options) {
         }
         else if ($(this).attr('disabled') || select.attr('disabled')) {
           liHtml.addClass('disabled');
-          if ((select.attr('data-drupal-selector') === 'edit-configurables-color') &&
-            (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
-            (drupalSettings.sku_configurable_options_color.hasOwnProperty($(this).val()))) {
-            option_id = $(this).val();
-            sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
-            if (sku_configurable_options_color[option_id].swatch_type === 'color_block') {
-              liHtml.append('<span class="' + $(this).text() + '" style="background-color:' + sku_configurable_options_color[option_id].display_value + ';"></span>');
-            }
-            else if (sku_configurable_options_color[option_id].swatch_type === 'miniature_image') {
-              liHtml.append('<span class="' + $(this).text() + '">' + sku_configurable_options_color[option_id].display_value + '</span>');
-            }
+          option_id = $(this).val();
+          swatch_markup = Drupal.alshaya_hm_images_generate_swatch_markup($(this), select, option_id, 'disabled', '');
+          if (swatch_markup) {
+            liHtml.append(swatch_markup);
           }
           else {
             liHtml.append('<span class="' + $(this).text() + '">' + $(this).html() + '</span>');
           }
         }
         else {
-          if ((select.attr('data-drupal-selector') === 'edit-configurables-color') &&
-            (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
-            (drupalSettings.sku_configurable_options_color.hasOwnProperty($(this).val()))) {
-            option_id = $(this).val();
-            sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
-            if (sku_configurable_options_color[option_id].swatch_type === 'color_block') {
-              liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '" style="background-color:' + sku_configurable_options_color[option_id].display_value + ';"></a>');
-            }
-            else if (sku_configurable_options_color[option_id].swatch_type === 'miniature_image') {
-              liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + sku_configurable_options_color[option_id].display_value + '</a>');
-            }
+          option_id = $(this).val();
+          swatch_markup = Drupal.alshaya_hm_images_generate_swatch_markup($(this), select, option_id, 'enabled', selectIndex);
+          if (swatch_markup) {
+            liHtml.append(swatch_markup);
           }
           else {
             liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
@@ -111,4 +98,25 @@ jQuery.fn.select2Option = function (options) {
       select.trigger('change');
     });
   });
+};
+
+
+/**
+ * Helper function to generate swatch markup.
+ */
+Drupal.alshaya_hm_images_generate_swatch_markup = function (currentOption, select, option_id, status, selectIndex) {
+  if ((select.attr('data-drupal-selector') === 'edit-configurables-article-castor-id') &&
+  (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
+  (drupalSettings.sku_configurable_options_color.hasOwnProperty(option_id))) {
+    var sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
+    var swatch_type = sku_configurable_options_color[option_id].swatch_type;
+
+		// If status is disabled, use <span>, otherwise use <a>.
+		var markup = status === 'enabled' ? '<a href="#" class="' + currentOption.text() + '" data-select-index="' + selectIndex + '"' : '<span class="' + currentOption.text() + '"';
+    // If swatch type is RGB, add provided value as background-color, otherwise use it as markup.
+		markup += swatch_type === 'miniature_image' ? '>' + sku_configurable_options_color[option_id].display_value :  ' style="background-color:' + sku_configurable_options_color[option_id].display_value + ';">';
+		markup += status === 'enabled' ? '</a>' : '</span>';
+
+    return markup;
+  }
 };

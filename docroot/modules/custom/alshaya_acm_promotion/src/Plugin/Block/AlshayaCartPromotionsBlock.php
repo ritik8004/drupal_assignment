@@ -14,6 +14,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Driver\Exception\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a 'AlshayaCartPromotionsBlock' block.
@@ -177,7 +178,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       }
     }
 
-    $cartRulesApplied = $this->cartStorage->getCart()->getCart()->cart_rules;
+    $cartRulesApplied = $this->cartStorage->getCart(FALSE)->getCart()->cart_rules;
     $subTypePromotions = $this->alshayaAcmPromotionManager->getAllPromotions([
       [
         'field' => 'field_alshaya_promotion_subtype',
@@ -235,6 +236,13 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     catch (Exception $e) {
       return AccessResult::forbidden();
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), ['cart:' . $this->cartStorage->getCart(FALSE)->id()]);
   }
 
 }

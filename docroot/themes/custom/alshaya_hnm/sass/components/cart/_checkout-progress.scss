@@ -85,6 +85,8 @@
     }
 
     &.-complete.-previous.-has-link a {
+      color: $black-two;
+
       @include breakpoint($desktop) {
         padding: 0.625rem 0;
       }
@@ -253,7 +255,7 @@
   .checkout-progress__step.-previous,
   .checkout-progress__step:last-child.-current {
     background: transparent;
-    color: $cerulean-two;
+    color: $hnm-red;
     border: 0;
     padding: 0;
     padding-top: 0.1875rem;
@@ -268,7 +270,7 @@
       font-size: 1.5625rem;
       border: 0 none;
       top: 0.25rem;
-      color: $cerulean-two;
+      color: $hnm-red;
       margin-#{$left}: -1px;
       background-color: transparent;
 

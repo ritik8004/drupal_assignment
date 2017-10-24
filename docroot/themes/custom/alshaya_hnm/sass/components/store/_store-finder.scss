@@ -564,6 +564,7 @@
 
       p {
         color: $grey7;
+        margin: 0.125rem 0;
       }
 
       .field-content {
@@ -605,8 +606,8 @@
       }
 
       .hours--wrapper .open--hours {
-        padding-top: 1.25rem;
-        padding-bottom: 1.25rem;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
       }
 
       .get--directions a,
@@ -1117,6 +1118,8 @@
 
   .hours--wrapper {
     .hours--label.open {
+      border-bottom: none !important;
+
       @include icon(chevronup, after) {
         color: $hnm-black-two;
       }
@@ -1142,8 +1145,9 @@
 .nodetype--store {
   .hours--wrapper {
     .hours--label.open {
-      @include icon(chevrondown, after) {
+      @include icon(dropdown-collapse, after) {
         color: $hnm-black-two;
+        font-size: 2rem;
       }
 
       &::after {
@@ -1197,6 +1201,8 @@
   }
 
   .get--directions div a {
+    letter-spacing: normal;
+
     &.device__tablet {
       display: none;
 
@@ -1215,11 +1221,11 @@
   }
 
   .hours--label {
-    @include icon(chevron#{$right}, after) {
+    @include icon(dropdown-expand, after) {
       position: absolute;
       display: inline-block;
       color: $hnm-black-two;
-      font-size: 1.875rem;
+      font-size: 2rem;
       top: 0.5rem;
       #{$right}: 0.7rem;
       pointer-events: none;
@@ -1241,15 +1247,15 @@
     }
   }
 
-  .get--directions div::after {
-    background: url('../imgs/icons/ic-directionstroke.svg') no-repeat;
-    top: 1rem;
-    #{$right}: 1rem;
-    width: 1.25rem;
-    height: 1.25rem;
+  .get--directions div {
+    @include icon(direction-stroke, after) {
+      top: 0.875rem;
+      #{$right}: 1rem;
+      font-size: 1.625rem;
 
-    html[lang=ar] & {
-      transform: scaleX(-1);
+      html[lang=ar] & {
+        transform: scaleX(-1);
+      }
     }
   }
 
@@ -1317,19 +1323,30 @@
 
   .views-field-title {
     span {
+      font-family: $hnm-demibold;
       font-size: 0.875rem;
-      font-weight: bold;
+      color: $hnm-black-two;
     }
   }
 
   .views-field-field-store-address {
+    font-family: $hnm-regular;
     font-size: 0.875rem;
     margin-top: 0.1875rem;
     margin-bottom: 0.5rem;
+
+    p {
+      margin: 0;
+    }
   }
 
   .scroll-fix {
     min-width: 12rem;
+
+    .location-title {
+      margin-top: 0.375rem;
+      margin-bottom: 0;
+    }
   }
 
   .hours--label,
@@ -1339,7 +1356,7 @@
   }
 
   .hours--label {
-    @include icon(chevrondown, after);
+    @include icon(dropdown-expand, after);
 
     color: $hnm-black-two;
   }
@@ -1347,7 +1364,7 @@
   .hours--label.open {
     font-weight: bold;
 
-    @include icon(chevronup, after);
+    @include icon(dropdown-collapse, after);
 
     color: $hnm-black-two;
   }
@@ -1383,9 +1400,27 @@
 .scroll-fix {
   overflow: hidden;
   white-space: nowrap;
-  font-family: $arial;
+  font-family: $hnm-regular;
 
   .location-content {
     white-space: normal;
+    margin-left: 0.3125rem;
+  }
+}
+
+.geolocation-common-map-container {
+  .hours--wrapper {
+    .hours--label {
+      border-top: 1px solid $white;
+      border-bottom: 1px solid $white;
+
+      &.open {
+        border-bottom: none;
+      }
+    }
+
+    .open--hours {
+      border-bottom: 1px solid $white;
+    }
   }
 }

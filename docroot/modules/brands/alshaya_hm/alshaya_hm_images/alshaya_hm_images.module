@@ -80,8 +80,8 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
         $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', 'plp');
       }
 
-      $plp_main_image = (!empty($main_image_assets)) ? $main_image_assets[0] : NULL;
-      $plp_hover_image = (!empty($hover_image_assets)) ? $hover_image_assets[0] : NULL;
+      $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
+      $plp_hover_image = !empty($hover_image_assets) ? $hover_image_assets[0] : NULL;
 
       if ($plp_main_image) {
         $sku_gallery = [
@@ -107,38 +107,32 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
 /**
  * Implements hook_acq_sku_pdp_gallery_media_alter().
  */
-function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumbnails, $sku) {
+function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb_images, $sku) {
   if (empty($main_image)) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $main_image = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_main');
-    $thumbnails = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_thumbnail');
+    $main_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_main');
+    $thumb_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_thumbnail');
 
     $zoom_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_zoom');
     $fullscreen_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_fullscreen');
 
-    if ((!$main_image) && ($sku->bundle() === 'configurable')) {
-      $thumbnails = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_thumbnail');
+    if (!$main_images && ($sku->bundle() == 'configurable')) {
+      $thumb_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_thumbnail');
       $zoom_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_zoom');
       $fullscreen_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_fullscreen');
+      $main_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_main');
     }
 
-
-    foreach ($thumbnails as $key => $thumbnail) {
-      $thumbnails[$key]['zoomurl'] = $zoom_images[$key]['url'];
-      $thumbnails[$key]['thumburl'] = $thumbnails[$key]['url'];
-      $thumbnails[$key]['mediumurl'] = $main_image[$key]['url'];
-      $thumbnails[$key]['type'] = 'image';
-      $thumbnails[$key]['fullurl'] = $fullscreen_images[$key]['url'];
+    foreach ($thumb_images as $key => $thumbnail) {
+      $thumb_images[$key]['zoomurl'] = $zoom_images[$key]['url'];
+      $thumb_images[$key]['thumburl'] = $thumb_images[$key]['url'];
+      $thumb_images[$key]['mediumurl'] = $main_images[$key]['url'];
+      $thumb_images[$key]['type'] = 'image';
+      $thumb_images[$key]['fullurl'] = $fullscreen_images[$key]['url'];
     }
 
-    $temp_image = [];
-    foreach ($main_image as $key => $image) {
-      $temp_image['zoomurl'] = $zoom_images[$key]['url'];
-      $temp_image['mediumurl'] = $main_image[$key]['url'];
-      break;
-    }
-
-    $main_image = $temp_image;
+    $main_image['zoomurl'] = $zoom_images[0]['url'];
+    $main_image['mediumurl'] = $main_images[0]['url'];
   }
 }
 
@@ -149,17 +143,14 @@ function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
   if (empty($build['image'])) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
     $teaser_assets = $sku_assets_manager->getSkuAsset($sku_entity, 'teaser', 'teaser');
-    $teaser_image = !empty($teaser_assets) ? $teaser_assets[0] : NULL;
 
-    if (!empty($teaser_image)) {
-      $image = [
+    if (!empty($teaser_assets)) {
+      $build['image'] = [
         '#theme' => 'image',
-        '#attributes' => array(
-          'src' => $teaser_image['url'],
-        ),
+        '#attributes' => [
+          'src' => $teaser_assets[0]['url'],
+        ],
       ];
-
-      $build['image'] = $image;
     }
   }
 }
@@ -194,37 +185,41 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
   if (!empty($tree['parent'])) {
     $parent_sku = $tree['parent'];
     $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $config_factory = \Drupal::service('config.factory');
-    $swatch_type = $config_factory->get('alshaya_hm_images.settings')->get('swatch_type');
-    $config_override = $sku_asset_manager->overrideConfig($parent_sku, 'swatch');
-    if (!empty($config_override['swatch_type'])) {
-      $swatch_type = $config_override['swatch_type'];
-    }
+    $swatch_type = $sku_asset_manager->getSkuSwatchType($parent_sku);
 
     // If the form has color config attribute available.
-    if (isset($form['ajax']['configurables']['color'])) {
-      $options = $form['ajax']['configurables']['color']['#options'];
+    if (isset($form['ajax']['configurables']['article_castor_id'])) {
+      $options = $form['ajax']['configurables']['article_castor_id']['#options'];
+      $form['ajax']['configurables']['article_castor_id']['#title'] = t('Color');
+      $form['ajax']['configurables']['article_castor_id']['#attributes']['data-default-title'] = t('Color');
 
       // Translate color attribute option values to the rgb color values &
       // expose the same in Drupal settings to javascript.
       foreach ($options as $key => $option) {
-        if (isset($tree['options']['color:' . $key])) {
-          $sku_option = $tree['options']['color:' . $key];
+        if (isset($tree['options']['article_castor_id:' . $key])) {
+          $sku_options = $tree['options']['article_castor_id:' . $key];
+
+          foreach ($sku_options as $key_option => $sku) {
+            if ($key_option === '#available_config') {
+              continue;
+            }
+            if (!empty($sku)) {
+              $sku_entity = $sku;
+              break;
+            }
+          }
+
           if ($swatch_type === 'miniature_image') {
-            $asset = $sku_asset_manager->getSkuAsset($sku_option, 'swatch', 'swatch');
-            $sku_configurable_options_color[$key] = [
-              'display_value' => '<img src="' . $asset[0]['url']->toString() . '">',
-              'display_label' => $sku_option->get('attr_color_label')->value,
-              'swatch_type' => $swatch_type,
-            ];
+            $asset = $sku_asset_manager->getSkuAsset($sku_entity, 'swatch', 'swatch');
           }
-          else {
-            $sku_configurable_options_color[$key] = [
-              'display_value' => $sku_option->get('attr_rgb_color')->value,
-              'display_label' => $sku_option->get('attr_color_label')->value,
-              'swatch_type' => $swatch_type,
-            ];
-          }
+
+          // If swatch type is not miniature_image or assets were missing from
+          // sku, use rgb color code instead.
+          $sku_configurable_options_color[$key] = [
+            'display_value' => empty($asset) ? $sku_entity->get('attr_rgb_color')->value : '<img src="' . $asset[0]['url']->toString() . '">',
+            'display_label' => $sku_entity->get('attr_color_label')->value,
+            'swatch_type' => $swatch_type,
+          ];
         }
       }
 

@@ -79,9 +79,7 @@ class SkuAssetManager {
     $asset_urls = [];
 
     foreach ($assets as $asset) {
-      $set = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
-      $image_location_identifier = $set['image_location_identifier'];
-      unset($set['image_location_identifier']);
+      list($set, $image_location_identifier)  = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
 
       // Prepare query options for image url.
       $options = [
@@ -126,7 +124,7 @@ class SkuAssetManager {
     $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
     $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
     $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
-    $set['image_location_identifier'] = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
+    $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
     // Check for overrides for style identifiers & dimensions.
     $config_overrides = $this->overrideConfig($sku, $page_type);
@@ -134,7 +132,7 @@ class SkuAssetManager {
     // If overrides are available, update style id, width & height in the url.
     if (!empty($config_overrides)) {
       if (isset($config_overrides['style_identifiers'][$location_image])) {
-        $set['image_location_identifier'] = $config_overrides['style_identifiers'][$location_image];
+        $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
       }
 
       if (isset($config_overrides['dimensions'][$location_image]['width'])) {
@@ -146,7 +144,7 @@ class SkuAssetManager {
       }
     }
 
-    return $set;
+    return [$set, $image_location_identifier];
   }
 
   /**
@@ -318,6 +316,26 @@ class SkuAssetManager {
     }
 
     return $assets;
+  }
+
+  /**
+   * Helper function to fetch swatch type for the sku.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Sku for which swatch type needs to be fetched.
+   *
+   * @return string
+   *   Swatch type for the sku.
+   */
+  public function getSkuSwatchType(SKU $sku) {
+    $swatch_type = $this->configFactory->get('alshaya_hm_images.settings')->get('swatch_type');
+    $config_override = $this->overrideConfig($sku, 'swatch');
+
+    if (!empty($config_override['swatch_type'])) {
+      $swatch_type = $config_override['swatch_type'];
+    }
+
+    return $swatch_type;
   }
 
 }
