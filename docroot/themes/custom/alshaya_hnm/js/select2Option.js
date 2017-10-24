@@ -110,28 +110,13 @@ Drupal.alshaya_hm_images_generate_swatch_markup = function (currentOption, selec
   (drupalSettings.sku_configurable_options_color.hasOwnProperty(option_id))) {
     var sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
     var swatch_type = sku_configurable_options_color[option_id].swatch_type;
-    var swatch_markup = '';
 
-    switch (status) {
-      case 'enabled':
-        if (swatch_type === 'miniature_image') {
-          swatch_markup = '<a href="#" class="' + currentOption.text() + '" data-select-index="' + selectIndex + '">' + sku_configurable_options_color[option_id].display_value + '</a>';
-        }
-        else if (swatch_type === 'color_block') {
-          swatch_markup = '<a href="#" class="' + currentOption.text() + '" data-select-index="' + selectIndex + '" style="background-color:' + sku_configurable_options_color[option_id].display_value + ';"></a>';
-        }
-        break;
+		// If status is disabled, use <span>, otherwise use <a>.
+		var markup = status === 'enabled' ? '<a href="#" class="' + currentOption.text() + '" data-select-index="' + selectIndex + '"' : '<span class="' + currentOption.text() + '"';
+    // If swatch type is RGB, add provided value as background-color, otherwise use it as markup.
+		markup += swatch_type === 'miniature_image' ? '>' + sku_configurable_options_color[option_id].display_value :  ' style="background-color:' + sku_configurable_options_color[option_id].display_value + ';">';
+		markup += status === 'enabled' ? '</a>' : '</span>';
 
-      case 'disabled':
-        if (swatch_type === 'miniature_image') {
-          swatch_markup = '<span class="' + currentOption.text() + '">' + sku_configurable_options_color[option_id].display_value + '</span>';
-        }
-        else if (swatch_type === 'color_block') {
-          swatch_markup = '<span class="' + currentOption.text() + '" style="background-color:' + sku_configurable_options_color[option_id].display_value + ';"></span>';
-        }
-        break;
-    }
-
-    return swatch_markup;
+    return markup;
   }
 };
