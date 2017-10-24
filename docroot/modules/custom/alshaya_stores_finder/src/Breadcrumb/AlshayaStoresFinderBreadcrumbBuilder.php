@@ -23,7 +23,7 @@ class AlshayaStoresFinderBreadcrumbBuilder implements BreadcrumbBuilderInterface
     }
     elseif (!empty($parameters['node'])) {
       // If store finder node page.
-      return $parameters['node']->bundle() == 'store';
+      return is_object($parameters['node']) && $parameters['node']->bundle() == 'store';
     }
   }
 
