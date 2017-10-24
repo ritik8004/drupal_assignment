@@ -306,6 +306,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
       }
 
+      // Invoke the alter hook to allow all modules to override the images being
+      // rendered for teaser..
+      \Drupal::moduleHandler()->alter('acq_sku_teaser_media', $build, $sku_entity);
+
       $promotion_types = ['cart'];
 
       // Get promotions for the product.

@@ -132,3 +132,22 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
     $main_image['mediumurl'] = $main_images[0]['url'];
   }
 }
+
+/**
+ * Implements hook_acq_sku_teaser_media_alter().
+ */
+function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
+  if (empty($build['image'])) {
+    $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+    $teaser_assets = $sku_assets_manager->getSkuAsset($sku_entity, 'teaser', 'teaser');
+
+    if (!empty($teaser_assets)) {
+      $build['image'] = [
+        '#theme' => 'image',
+        '#attributes' => [
+          'src' => $teaser_assets[0]['url'],
+        ],
+      ];
+    }
+  }
+}
