@@ -14,10 +14,9 @@
       $($overlay_content).toggleClass('overlay-content');
     });
 
-    /**
-    * Today's offer sticky on scroll.
+    /*
+    Today's offer sticky on scroll.
     */
-
     function checkOffset() {
       if ($('.block-todays-offer h2').offset().top + $('.block-todays-offer h2').height() >= $('.block-todays-offer').offset().top - 30) {
         $('.block-todays-offer h2').addClass('label-not-fixed'); // restore on scroll down
