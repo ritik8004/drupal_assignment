@@ -291,10 +291,21 @@ class SkuManager {
     $final_price = (float) $item_price;
 
     if ($final_price !== $sku_cart_price['price']) {
-      $sku_cart_price['final_price'] = number_format($final_price, 3);
-      $discount = floor((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
-      $sku_cart_price['discount']['prefix'] = t('Save', [], ['context' => 'discount']);
-      $sku_cart_price['discount']['value'] = $discount . '%';
+      if ($final_price > $sku_cart_price['price']) {
+        // There must be something wrong. Trust the price coming from commerce
+        // backend.
+        $sku_cart_price['price'] = $final_price;
+        $this->logger->error(
+          'The @sku sku has a final price greater than the initial price. There must be a synchronisation issue.',
+          ['@sku' => $sku_entity->sku->value]
+        );
+      }
+      else {
+        $sku_cart_price['final_price'] = number_format($final_price, 3);
+        $discount = floor((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
+        $sku_cart_price['discount']['prefix'] = t('Save', [], ['context' => 'discount']);
+        $sku_cart_price['discount']['value'] = $discount . '%';
+      }
     }
 
     return $sku_cart_price;
