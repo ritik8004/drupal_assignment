@@ -103,7 +103,7 @@
     .discount-row,
     .sub-total-row {
       & .right--align {
-        padding-#{$right}: 2.6rem !important;
+        padding-#{$right}: 2.5rem !important;
       }
     }
 
@@ -180,12 +180,12 @@
     @include breakpoint($tablet) {
       margin-top: 2.1rem;
       margin-bottom: 2.7rem;
-      background-color: $pale-grey;
+      background-color: $info;
       padding: 1.125rem;
       padding-#{$left}: 1.3rem;
       padding-#{$right}: 1.5rem;
       font-size: 0.875rem;
-      color: $cerulean-two;
+      color: $white-five;
       display: table;
       width: 100%;
     }
@@ -215,7 +215,8 @@
     }
 
     strong {
-      margin-#{$left}: 0.625rem;
+      font-family: $hnm-bold;
+      font-weight: normal;
     }
 
     @include icon(info, before) {
@@ -260,10 +261,12 @@
 
   .order-print-button a {
     display: inline-block;
-    font-family: $alshaya-bold;
+    font-family: $hnm-bold;
+    text-transform: uppercase;
+    color: $hnm-black-two;
     background: $white-five;
     padding: 0.5rem 2.45rem;
-    border: solid 1px $marine-blue;
+    border: 1px solid $hnm-black-two;
     font-size: 0.75rem;
   }
 
@@ -271,6 +274,29 @@
     @include breakpoint($only-tablet) {
       padding: 22px 1.25rem;
     }
+  }
+
+  tr.price-row {
+    .blend {
+      background: $white-four !important;
+    }
+  }
+
+  tr.total-row {
+    .dark.bold,
+    .price-amount {
+      font-weight: normal;
+      font-family: $hnm-bold;
+      color: $hnm-black-two;
+    }
+  }
+
+  tr.order-item-row {
+    .blend {
+      background: $grey9;
+    }
+
+    background: $white-five;
   }
 
   tr .order-item-row img {
@@ -399,7 +425,8 @@
   .label.font-small {
     font-size: 0.75rem;
     margin-bottom: 0.25rem;
-    color: $cerulean-two;
+    color: $hnm-black-two;
+    font-family: $hnm-demibold;
   }
 
   td .contact {
@@ -416,11 +443,16 @@
 
   .right--align {
     text-align: $right;
+
+    &.label {
+      color: $grey7;
+    }
   }
 
   .product--count {
     border-top: 0.625rem solid $white-five;
     font-size: 0.875rem;
+    color: $hnm-black-two;
 
     @include breakpoint($tablet) {
       border-bottom: 1px solid $white-five;
@@ -435,17 +467,17 @@
       position: relative;
       padding: 0.875rem 1.375rem;
 
-      @include icon(chevrondown, after) {
+      @include icon(dropdown-expand, after) {
         position: absolute;
         #{$right}: 0.75rem;
         top: 50%;
         transform: translateY(-50%);
-        font-size: 2.125rem;
+        font-size: 2.483rem;
       }
     }
 
     &.expanded-row td {
-      @include icon(chevronup, after);
+      @include icon(dropdown-collapse, after);
     }
   }
 
@@ -467,10 +499,13 @@
   }
 
   .subtitle {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $hnm-black-two;
     margin-bottom: 0.75rem;
-    color: $marine-blue-two;
+    color: $hnm-black-two;
     font-size: 1rem;
+    font-family: $hnm-demibold;
+    letter-spacing: 1px;
+    font-weight: normal;
   }
 
   &.user-page.checkout-login .multistep-checkout {
@@ -490,6 +525,11 @@
 
     .inner--wrap {
       width: 100%;
+
+      .dark--text {
+        font-family: $hnm-bold;
+        color: $hnm-black-two;
+      }
 
       @include breakpoint($tablet) {
         width: 72%;
@@ -597,14 +637,21 @@
 .order-confirmation .continue--shopping--mobile a,
 #edit-confirmation-continue-shopping {
   font-size: 0.75rem;
-  font-family: $alshaya-bold;
+  font-family: $hnm-bold;
   font-weight: normal;
-  border: 1px solid $marine-blue;
+  border: 1px solid $hnm-black-two;
+  color: $hnm-black-two;
   float: $right;
   padding: 0.5rem 1em;
   width: 100%;
   text-align: center;
-  text-transform: lowercase;
+  text-transform: uppercase;
+
+  &.expanded-table {
+    font-family: $hnm-bold;
+    border: none;
+    text-decoration: underline;
+  }
 
   @include breakpoint($tablet) {
     margin-#{$right}: 6.1rem;
