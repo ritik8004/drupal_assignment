@@ -1,6 +1,6 @@
 .user__address--column {
-  border: 0.0625rem solid $white;
-  font-family: $arial;
+  border: 0.0625rem solid $grey4;
+  font-family: $hnm-regular;
   font-size: 0.75rem;
   margin-bottom: 1.5rem;
 
@@ -84,10 +84,8 @@
   }
 
   .address--content {
-    color: $black-two;
+    color: $grey7;
     direction: ltr;
-    font-family: $hnm-bold;
-    font-weight: normal;
 
     html[lang=ar] & {
       text-align: right;
@@ -100,6 +98,9 @@
 
   .address--label {
     margin-bottom: 0.1875rem;
+    font-family: $hnm-demibold;
+    font-weight: normal;
+    color: $hnm-black-two;
   }
 
   .address--userinfo {
@@ -275,7 +276,7 @@
   &:hover,
   &.default {
     .address--data {
-      background: $grey3;
+      background: $hnm-grey;
     }
 
     .address--primary {
@@ -306,10 +307,12 @@
 
       a {
         border: none;
-        font-weight: bold;
+        font-family: $hnm-demibold;
+        font-weight: normal;
+        text-decoration: underline;
         padding: 0;
         min-width: auto;
-        color: $cerulean-two;
+        color: $hnm-black-two;
         text-transform: capitalize;
         text-align: center;
       }
@@ -329,9 +332,12 @@
         display: block;
         padding: 1rem;
         margin: 0;
-        color: $marine-blue-two;
+        color: $hnm-black-two;
         text-align: center;
-        border: 0.0625rem solid $marine-blue-two;
+        border: 0.0625rem solid $hnm-black-two;
+        font-family: $hnm-bold;
+        font-weight: normal;
+        text-transform: uppercase;
 
         @include breakpoint($tablet) {
           padding: 0.625rem;
@@ -347,14 +353,17 @@
     &:hover,
     &.default {
       .address--data {
-        background: $white-four;
+        background: $hnm-grey;
       }
 
       .address--deliver-to-this-address {
         a {
           color: $white-five;
-          border: 1px solid $pumpkin-orange;
-          background-color: $pumpkin-orange;
+          border: 1px solid $hnm-black-two;
+          background-color: $hnm-black-two;
+          font-family: $hnm-bold;
+          font-weight: normal;
+          text-transform: uppercase;
         }
       }
     }
