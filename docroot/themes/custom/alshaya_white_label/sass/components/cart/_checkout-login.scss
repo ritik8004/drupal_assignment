@@ -112,7 +112,7 @@
   }
 
   .tab {
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1rem;
     border: 1px solid $cerulean-two;
     display: inline-block;
     color: $cerulean-two;
@@ -121,6 +121,13 @@
     height: 3.125rem;
     vertical-align: top;
     text-align: center;
+
+    &.tab-returning-customer {
+      html[lang=ar] & {
+        line-height: 2.5;
+        vertical-align: middle;
+      }
+    }
 
     &.active {
       border: 2px solid $marine-blue;
@@ -138,6 +145,10 @@
       max-width: 4.75rem;
       display: block;
       margin: auto;
+
+      html[lang=ar] & {
+        max-width: 6.75rem;
+      }
     }
   }
 
