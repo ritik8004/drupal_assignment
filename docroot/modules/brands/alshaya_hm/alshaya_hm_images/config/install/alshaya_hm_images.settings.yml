@@ -22,10 +22,10 @@ dimensions:
 # Weights are used to sort asset-types. Items with lower weight get precedence
 # while displaying them.
 weights:
-  plp_front:
+  plp:
     Lookbook: 1
     DescriptiveStillLife: 2
-  plp_back:
+  plp_hover:
     DescriptiveStillLife: 1
     Lookbook: 2
   pdp:
