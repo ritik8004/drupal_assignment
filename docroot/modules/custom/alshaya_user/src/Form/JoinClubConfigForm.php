@@ -4,6 +4,7 @@ namespace Drupal\alshaya_user\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Entity\File;
 
 /**
  * Class CartConfigForm.
@@ -32,6 +33,10 @@ class JoinClubConfigForm extends ConfigFormBase {
 
     $image = $form_state->getValue('image');
     $image = $image ? reset($image) : '';
+    if (isset($image[0]) && $file = File::load($image[0])) {
+      $file->setPermanent();
+      $file->save();
+    }
     $config->set('join_club_image.fid', $image);
     $config->set('join_club_description', $form_state->getValue('description'));
 
