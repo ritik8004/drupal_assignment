@@ -188,12 +188,9 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   $item = reset($order['items']);
 
   $product_node = alshaya_acm_product_get_display_node($item['sku']);
-
-  if (empty($product_node)) {
-    return [];
+  if (!empty($product_node)) {
+    $item['name'] = $product_node->getTitle();
   }
-
-  $item['name'] = $product_node->getTitle();
 
   $orderRow['name'] = Unicode::truncate($item['name'], 25, FALSE, TRUE);
 
@@ -413,7 +410,12 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     $product['attributes'] = [];
 
     $product_node = alshaya_acm_product_get_display_node($item['sku']);
-    $product['name'] = $product_node->getTitle();
+    if (!empty($product_node)) {
+      $product['name'] = $product_node->getTitle();
+    }
+    else {
+      $product['name'] = $item['name'];
+    }
 
     // Check if we can find a parent SKU for this to get proper name.
     if ($parentSku = alshaya_acm_product_get_parent_sku_by_sku($item['sku'])) {
