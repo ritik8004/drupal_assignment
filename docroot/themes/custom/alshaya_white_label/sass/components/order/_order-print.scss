@@ -105,12 +105,20 @@ body {
   }
 }
 
-.user__order--detail {
+.order__print--wrap .user__order--detail {
   .above-mobile {
     display: none;
 
     @include breakpoint($ptablet) {
       display: table-cell;
+    }
+  }
+
+  .mobile-only {
+    display: table-cell;
+
+    @include breakpoint($ptablet) {
+      display: none;
     }
   }
 }
