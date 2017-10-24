@@ -86,8 +86,9 @@
     font-size: 0.875rem;
     padding: 1rem 1.5rem;
     line-height: 1.5;
-    font-weight: bold;
-    color: $black;
+    font-family: $hnm-demibold;
+    font-weight: normal;
+    color: $hnm-black-two;
 
     @include breakpoint($upto-desktop) {
       font-size: 0.75rem;
@@ -96,15 +97,17 @@
     a {
       font-size: 0.75rem;
       float: $right;
-      color: $cerulean-two;
+      color: $hnm-black-two;
+      font-family: $hnm-demibold;
+      text-decoration: underline;
     }
 
     .method,
     .delivery-address {
       font-size: 0.75rem;
-      font-weight: normal;
+      font-family: $hnm-regular;
       margin-top: 1em;
-      color: $grey-ash;
+      color: $grey7;
     }
   }
 
