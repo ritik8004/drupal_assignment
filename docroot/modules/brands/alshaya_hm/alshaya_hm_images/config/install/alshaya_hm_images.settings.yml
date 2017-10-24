@@ -1,4 +1,4 @@
-base_url: 'https://lp2.hm.com/hmprod'
+base_url: 'https://lp2.hm.com/hmgoepprod'
 origin: 'dam'
 dimensions:
  plp:
@@ -19,51 +19,54 @@ dimensions:
  swatch:
    width: 11
    height: 21
+# Weights are used to sort asset-types. Items with lower weight get precedence
+# while displaying them.
 weights:
- plp:
-   Lookbook: 1
-   DescriptiveStillLife: 2
- plp_front: Lookbook
- plp_back: DescriptiveStillLife
- pdp:
-   Lookbook: 1
-   Environmental: 2
-   CreativeDetail: 3
-   DescriptiveStillLife: 4
-   Pictogram: 5
-   DescriptiveDetail: 6
- teaser:
-   Lookbook: 1
- swatch:
-   DescriptiveStillLife: 1
- angle:
-     - 1C
-     - 1L
-     - 1R
-     - 2C
-     - 2L
-     - 2R
-     - 8C
-     - 8L
-     - 8R
-     - 7C
-     - 7L
-     - 7R
-     - 3C
-     - 3L
-     - 3R
-     - 9C
-     - 9L
-     - 9R
-     - NO_ANGLE
+  plp:
+    Lookbook: 1
+    DescriptiveStillLife: 2
+  plp_hover:
+    DescriptiveStillLife: 1
+    Lookbook: 2
+  pdp:
+    Lookbook: 1
+    Environmental: 2
+    CreativeDetail: 3
+    DescriptiveStillLife: 4
+    Pictogram: 5
+    DescriptiveDetail: 6
+  teaser:
+    Lookbook: 1
+  swatch:
+    DescriptiveStillLife: 1
+  angle:
+    - 1C
+    - 1L
+    - 1R
+    - 2C
+    - 2L
+    - 2R
+    - 8C
+    - 8L
+    - 8R
+    - 7C
+    - 7L
+    - 7R
+    - 3C
+    - 3L
+    - 3R
+    - 9C
+    - 9L
+    - 9R
+    - NO_ANGLE
 style_identifiers:
- plp: 'file:/product/listing'
- pdp_main: 'file:/product/main'
- pdp_thumbnail: 'file:/product/thumb'
- pdp_zoom: 'file:/product/zoom'
- pdp_fullscreen: 'file:/product/fullscreen'
- teaser: 'file:/product/style'
- swatch: 'file:/product/miniature'
+  plp: 'file:/product/listing'
+  pdp_main: 'file:/product/main'
+  pdp_thumbnail: 'file:/product/thumb'
+  pdp_zoom: 'file:/product/zoom'
+  pdp_fullscreen: 'file:/product/fullscreen'
+  teaser: 'file:/product/style'
+  swatch: 'file:/product/miniature'
 swatch_type: 'miniature_image'
 # Sample structure for override, until we have a config UI.
 #overrides:
