@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -147,7 +148,26 @@ function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
       $build['image'] = [
         '#theme' => 'image',
         '#attributes' => [
-          'src' => $teaser_assets[0]['url'],
+          'src' => $teaser_assets[0]['url']->toString(),
+        ],
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_acq_sku_cart_media_alter().
+ */
+function alshaya_hm_images_acq_sku_cart_media_alter($sku, &$sku_image) {
+  if (empty($sku_image)) {
+    $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+    $cart_assets = $sku_assets_manager->getSkuAsset($sku, 'cart', 'cart');
+
+    if (!empty($cart_assets)) {
+      $build['image'] = [
+        '#theme' => 'image',
+        '#attributes' => [
+          'src' => $cart_assets[0]['url']->toString(),
         ],
       ];
     }
