@@ -36,7 +36,7 @@ jQuery.fn.select2Option = function (options) {
         }
         else if ($(this).attr('disabled') || select.attr('disabled')) {
           liHtml.addClass('disabled');
-          if ((select.attr('data-drupal-selector') === 'edit-configurables-color') &&
+          if ((select.attr('data-drupal-selector') === 'edit-configurables-article-castor-id') &&
             (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
             (drupalSettings.sku_configurable_options_color.hasOwnProperty($(this).val()))) {
             option_id = $(this).val();
@@ -53,7 +53,7 @@ jQuery.fn.select2Option = function (options) {
           }
         }
         else {
-          if ((select.attr('data-drupal-selector') === 'edit-configurables-color') &&
+          if ((select.attr('data-drupal-selector') === 'edit-configurables-article-castor-id') &&
             (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
             (drupalSettings.sku_configurable_options_color.hasOwnProperty($(this).val()))) {
             option_id = $(this).val();

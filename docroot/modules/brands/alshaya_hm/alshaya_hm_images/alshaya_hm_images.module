@@ -172,26 +172,41 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
     }
 
     // If the form has color config attribute available.
-    if (isset($form['ajax']['configurables']['color'])) {
-      $options = $form['ajax']['configurables']['color']['#options'];
+    if (isset($form['ajax']['configurables']['article_castor_id'])) {
+      $options = $form['ajax']['configurables']['article_castor_id']['#options'];
+      $form['ajax']['configurables']['article_castor_id']['#title'] = t('Color');
+      $form['ajax']['configurables']['article_castor_id']['#attributes']['data-default-title'] = t('Color');
 
       // Translate color attribute option values to the rgb color values &
       // expose the same in Drupal settings to javascript.
       foreach ($options as $key => $option) {
-        if (isset($tree['options']['color:' . $key])) {
-          $sku_option = $tree['options']['color:' . $key];
+        if (isset($tree['options']['article_castor_id:' . $key])) {
+          $sku_options = $tree['options']['article_castor_id:' . $key];
+
+          foreach ($sku_options as $key_option => $sku) {
+            if ($key_option === '#available_config') {
+              continue;
+            }
+            if (!empty($sku)) {
+              $sku_entity = $sku;
+              break;
+            }
+          }
+
           if ($swatch_type === 'miniature_image') {
-            $asset = $sku_asset_manager->getSkuAsset($sku_option, 'swatch', 'swatch');
-            $sku_configurable_options_color[$key] = [
-              'display_value' => '<img src="' . $asset[0]['url']->toString() . '">',
-              'display_label' => $sku_option->get('attr_color_label')->value,
-              'swatch_type' => $swatch_type,
-            ];
+            $asset = $sku_asset_manager->getSkuAsset($sku_entity, 'swatch', 'swatch');
+            if (!empty($asset)) {
+              $sku_configurable_options_color[$key] = [
+                'display_value' => '<img src="' . $asset[0]['url']->toString() . '">',
+                'display_label' => $sku_entity->get('attr_color_label')->value,
+                'swatch_type' => $swatch_type,
+              ];
+            }
           }
           else {
             $sku_configurable_options_color[$key] = [
-              'display_value' => $sku_option->get('attr_rgb_color')->value,
-              'display_label' => $sku_option->get('attr_color_label')->value,
+              'display_value' => $sku_entity->get('attr_rgb_color')->value,
+              'display_label' => $sku_entity->get('attr_color_label')->value,
               'swatch_type' => $swatch_type,
             ];
           }
