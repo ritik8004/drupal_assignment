@@ -4,3 +4,4 @@ services:
     arguments:
       - '@config.factory'
       - '@current_route_match'
+      - '@alshaya_acm_product.skumanager'
