@@ -140,17 +140,14 @@ function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
   if (empty($build['image'])) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
     $teaser_assets = $sku_assets_manager->getSkuAsset($sku_entity, 'teaser', 'teaser');
-    $teaser_image = !empty($teaser_assets) ? $teaser_assets[0] : NULL;
 
-    if (!empty($teaser_image)) {
-      $image = [
+    if (!empty($teaser_assets)) {
+      $build['image'] = [
         '#theme' => 'image',
-        '#attributes' => array(
-          'src' => $teaser_image['url'],
-        ),
+        '#attributes' => [
+          'src' => $teaser_assets[0]['url'],
+        ],
       ];
-
-      $build['image'] = $image;
     }
   }
 }
