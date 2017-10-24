@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_hm_images module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_hm_images_install() {
+  // Add fields to store the values from attributes as fields.
+  $fields = \Drupal::config('alshaya_hm_images.sku_base_fields')->get('fields');
+  acq_sku_add_base_fields($fields);
+}
