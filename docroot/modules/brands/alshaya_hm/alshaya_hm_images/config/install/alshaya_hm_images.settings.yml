@@ -40,33 +40,33 @@ weights:
   swatch:
     DescriptiveStillLife: 1
   angle:
-   - 1C
-   - 1L
-   - 1R
-   - 2C
-   - 2L
-   - 2R
-   - 8C
-   - 8L
-   - 8R
-   - 7C
-   - 7L
-   - 7R
-   - 3C
-   - 3L
-   - 3R
-   - 9C
-   - 9L
-   - 9R
-   - NO_ANGLE
+    - 1C
+    - 1L
+    - 1R
+    - 2C
+    - 2L
+    - 2R
+    - 8C
+    - 8L
+    - 8R
+    - 7C
+    - 7L
+    - 7R
+    - 3C
+    - 3L
+    - 3R
+    - 9C
+    - 9L
+    - 9R
+    - NO_ANGLE
 style_identifiers:
- plp: 'file:/product/listing'
- pdp_main: 'file:/product/main'
- pdp_thumbnail: 'file:/product/thumb'
- pdp_zoom: 'file:/product/zoom'
- pdp_fullscreen: 'file:/product/fullscreen'
- teaser: 'file:/product/style'
- swatch: 'file:/product/miniature'
+  plp: 'file:/product/listing'
+  pdp_main: 'file:/product/main'
+  pdp_thumbnail: 'file:/product/thumb'
+  pdp_zoom: 'file:/product/zoom'
+  pdp_fullscreen: 'file:/product/fullscreen'
+  teaser: 'file:/product/style'
+  swatch: 'file:/product/miniature'
 swatch_type: 'miniature_image'
 # Sample structure for override, until we have a config UI.
 #overrides:
