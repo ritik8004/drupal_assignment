@@ -44,6 +44,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
     // Deal with color field case that is not a real configurable attribute
     // and that thus does not auto fill the color field of the parent sku.
+    // Deal with final price of configurable that needs to come from variants.
     if ($type == 'node' && $bundle == 'acq_product' && !empty($item->getField('attr_color'))) {
       $sku = $object->get('field_skus')->first()->getString();
 
@@ -53,7 +54,9 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
         if (!empty($sku_entity) && $sku_entity->bundle() == 'configurable') {
           // Update color based on color of children.
+          // Update final_price based on final_price of children.
           $colors = [];
+          $min_final_price = NULL;
 
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
             $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode);
@@ -64,10 +67,16 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
                 $color = $color->getString();
                 $colors[$color] = $color;
               }
+
+              $final_price = (float) $child_sku_entity->get('final_price')->getString();
+              if ($final_price > 0) {
+                $min_final_price = isset($min_final_price) ? min($min_final_price, $final_price) : $final_price;
+              }
             }
           }
 
           $item->getField('attr_color')->setValues(array_keys($colors));
+          $item->getField('final_price')->setValues([$min_final_price]);
         }
       }
     }
