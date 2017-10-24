@@ -38,7 +38,7 @@ jQuery.fn.select2Option = function (options) {
           liHtml.addClass('disabled');
           if ((select.attr('data-drupal-selector') === 'edit-configurables-color') &&
             (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
-      drupalSettings.sku_configurable_options_color.hasOwnProperty($(this).val())) {
+            (drupalSettings.sku_configurable_options_color.hasOwnProperty($(this).val()))) {
             option_id = $(this).val();
             sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
             if (sku_configurable_options_color[option_id].swatch_type === 'color_block') {
@@ -54,8 +54,8 @@ jQuery.fn.select2Option = function (options) {
         }
         else {
           if ((select.attr('data-drupal-selector') === 'edit-configurables-color') &&
-      (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
-      drupalSettings.sku_configurable_options_color.hasOwnProperty($(this).val())) {
+            (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
+            (drupalSettings.sku_configurable_options_color.hasOwnProperty($(this).val()))) {
             option_id = $(this).val();
             sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
             if (sku_configurable_options_color[option_id].swatch_type === 'color_block') {
@@ -98,7 +98,7 @@ jQuery.fn.select2Option = function (options) {
       var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
       $(this).closest('.select2Option').find('.list-title .selected-text').remove();
       $(this).closest('.sku-base-form').find('.error').remove();
-      $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span');
+      $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
         clickedOption.removeProp('selected');

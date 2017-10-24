@@ -168,6 +168,8 @@ function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
  */
 function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
   $tree = $form_state->get('tree');
+
+  // Check if the product is configurable.
   if (!empty($tree['parent'])) {
     $parent_sku = $tree['parent'];
     $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
@@ -177,9 +179,13 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
     if (!empty($config_override['swatch_type'])) {
       $swatch_type = $config_override['swatch_type'];
     }
+
+    // If the form has color config attribute available.
     if (isset($form['ajax']['configurables']['color'])) {
       $options = $form['ajax']['configurables']['color']['#options'];
 
+      // Translate color attribute option values to the rgb color values &
+      // expose the same in Drupal settings to javascript.
       foreach ($options as $key => $option) {
         if (isset($tree['options']['color:' . $key])) {
           $sku_option = $tree['options']['color:' . $key];
