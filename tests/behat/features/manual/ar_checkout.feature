@@ -15,7 +15,7 @@ Feature: Test various checkout scenarios for Arabic site
 
   @hd @cod
   Scenario: As a Guest on Arabic site
-  I should be able to checkout using COD
+    I should be able to checkout using COD
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -97,6 +97,7 @@ Feature: Test various checkout scenarios for Arabic site
     When I fill in "edit-billing-address-address-billing-locality" with "كتلة A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "بناء C"
+    When I fill in "edit-billing-address-address-billing-address-line2" with "2"
     When I accept terms and conditions
     And I wait for the page to load
     When I press "سجل الطلبية"
@@ -171,8 +172,8 @@ Feature: Test various checkout scenarios for Arabic site
 
   @hd @cs
   Scenario: As a Guest
-  I should be able to checkout using HD
-  and Cybersource payment option on Arabic site
+    I should be able to checkout using HD
+    and Cybersource payment option on Arabic site
     When I follow "خدمة التوصيل للمنزل"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
@@ -201,13 +202,13 @@ Feature: Test various checkout scenarios for Arabic site
 
   @cc @cs
   Scenario: As a Guest
-  I should be able to checkout using Click and Collect
-  and Cybersource payment option on Arabic site
+    I should be able to checkout using Click and Collect
+    and Cybersource payment option on Arabic site
     When I follow "اختر واستلم"
     And I wait for AJAX to finish
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
-    When I wait 5 seconds
+    When I wait 10 seconds
     When I follow "اختر هذا المحل"
     And I wait for AJAX to finish
     When I fill in "edit-cc-firstname" with "شويتا"
@@ -229,7 +230,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "بناء C"
     When I accept terms and conditions
-    When I wait 10 seconds
+    When I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
@@ -294,7 +295,7 @@ Feature: Test various checkout scenarios for Arabic site
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(14) > img"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
     When I wait 5 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
@@ -334,9 +335,9 @@ Feature: Test various checkout scenarios for Arabic site
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(14) > img"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
     When I wait 5 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait 2 seconds
     Then I should see "الإثنين"
     And I should see "الأحد"
