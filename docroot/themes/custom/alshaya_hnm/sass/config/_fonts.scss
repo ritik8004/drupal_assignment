@@ -210,7 +210,7 @@ $icons: (
   chevronup: "\e903",
   check: "\e904",
   close: "\e905",
-  done: "\e906",
+  checkshape: "\e906",
   circle-stroke-shape: "\e907",
   circle-shape: "\e908",
   check-box-empty: "\e909",
@@ -246,12 +246,12 @@ $icons: (
   language: "\e927",
   info: "\e928",
   warning: "\2757",
-  googlePlus: "\1f576",
+  googleplus: "\1f576",
   facebook: "\1f575",
   twitter: "\1f425",
   pinterest: "\1f4cc",
   instagram: "\1f305",
-  youTube: "\1f4fa"
+  youtube: "\1f4fa"
 );
 
 @mixin iconbase() {

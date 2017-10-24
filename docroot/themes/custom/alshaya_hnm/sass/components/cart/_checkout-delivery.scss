@@ -109,7 +109,7 @@
       }
 
       .form-actions {
-        background: $white-four;
+        background: $hnm-grey;
         display: inline-block;
         width: 100%;
         vertical-align: middle;
@@ -217,7 +217,7 @@
 
         &.active--tab--head {
           display: block;
-          background-color: $white-two;
+          background-color: $hnm-grey;
           border-width: 1px;
           border-color: $hnm-black-two;
           padding: 5px;
@@ -273,6 +273,7 @@
 
       @include breakpoint($only-tablet) {
         width: 46.9%;
+        padding: 1.25rem 0;
       }
 
       @include breakpoint($desktop) {
@@ -374,9 +375,9 @@
 
         &.active--tab--head {
           display: block;
-          background-color: $white-five;
-          border-width: 2px;
-          border-color: $marine-blue-two;
+          background-color: $hnm-grey;
+          border-width: 1px;
+          border-color: $hnm-black-two;
           padding: 5px;
         }
       }
@@ -397,8 +398,12 @@
       display: block;
       width: 100%;
       padding: 0.5rem 0;
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $hnm-black-two;
       font-size: 1rem;
+
+      @include breakpoint($upto-desktop) {
+        font-size: 0.875rem;
+      }
     }
   }
 
@@ -426,7 +431,7 @@
     }
 
     &:nth-child(odd) {
-      background-color: $white-four;
+      background-color: $hnm-grey;
     }
 
     label {
@@ -441,20 +446,20 @@
           display: block;
           float: $left;
           margin-#{$right}: 1rem;
-          top: 0.625rem;
+          top: -0.25rem;
         }
 
         .shipping-method {
           &-name {
             float: $right;
-            width: 88%;
+            width: 82%;
 
             @include breakpoint($tablet) {
-              width: 90%;
+              width: 86%;
             }
 
             @include breakpoint($desktop) {
-              width: 95.5%;
+              width: 92.5%;
             }
           }
 
@@ -467,8 +472,8 @@
 
           &-title {
             font-size: 0.875rem;
-            font-weight: bold;
-            color: $brownish-grey;
+            font-weight: $hnm-demibold;
+            color: $hnm-black-two;
           }
 
           &-price {
@@ -582,10 +587,25 @@
 }
 
 #edit-acm-payment-methods-payment-options--wrapper {
-  height: 0;
-
   legend {
-    display: none;
+    padding-bottom: 1rem;
+
+    @include breakpoint($tablet) {
+      padding: 1.5rem 1.375rem 2rem;
+    }
+
+    span {
+      font-size: 1rem;
+      border-bottom-color: $hnm-black-two;
+
+      @include breakpoint($upto-desktop) {
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .form-type-radio {
+    margin-top: 0;
   }
 }
 
@@ -593,16 +613,9 @@
   padding-#{$left}: 0;
   margin-top: 0;
 
-  #payment_method_knet {
-    border-top: 2px solid $greyish;
-
-    @include breakpoint($only-mobile) {
-      border-top-width: 1px;
-    }
-
-    .payment-plugin-wrapper-div {
-      border-top: none;
-    }
+  @include breakpoint($tablet) {
+    padding-#{$left}: 1.375rem;
+    padding-#{$right}: 1.375rem;
   }
 
   > .form-wrapper {
@@ -613,13 +626,13 @@
 
     &:last-child {
       .payment-plugin-wrapper-div {
-        border-bottom: 1px solid $white;
+        border-bottom: 1px solid $grey4;
       }
     }
 
     .payment-plugin-wrapper-div {
       &.plugin-selected {
-        background-color: $white-four;
+        background-color: $hnm-grey;
 
         .method-description {
           display: block;
@@ -630,45 +643,30 @@
           background-size: 100%;
         }
 
-        &::before {
-          border: 3px solid $cerulean-two;
-        }
-
-        .method-title {
-          font-weight: bold;
-        }
+        @include icon(radio-filled, before);
       }
 
       &.has-description.plugin-selected {
         @include breakpoint($tablet) {
           padding: 0.9375rem 1.375rem;
         }
-
-        &::before {
-          top: 0.5625rem;
-        }
       }
 
-      &::before {
-        content: '';
-        width: 0.875rem;
-        height: 0.875rem;
-        background: white;
+      @include icon(radio-empty, before) {
         display: inline-block;
-        border-radius: 100%;
-        border: 1px solid $greyish;
         margin-#{$right}: 1rem;
-        position: relative;
-        top: 2px;
+        color: $hnm-black-two;
+        font-size: 2.438rem;
+        position: absolute;
+        top: 22%;
 
-        @include breakpoint($only-mobile) {
-          margin-#{$right}: 0.625rem;
-          margin-#{$left}: 0.5625rem;
+        @include breakpoint($only-tablet) {
+          #{$left}: 2%;
         }
       }
 
       &:hover {
-        background-color: $white-four;
+        background-color: $hnm-grey;
       }
 
       @include breakpoint($tablet) {
@@ -679,7 +677,9 @@
       float: $left;
       margin: 0;
       padding: 1.5rem 0.5rem;
-      border-top: 1px solid $white;
+      border-top: 1px solid $grey4;
+      border-#{$left}: 1px solid $grey4;
+      border-#{$right}: 1px solid $grey4;
 
       .payment-method {
         &-name {
@@ -695,7 +695,7 @@
           }
 
           @include breakpoint($desktop) {
-            width: 95.5%;
+            width: 92.5%;
           }
         }
       }
@@ -704,7 +704,8 @@
         &-title {
           font-size: 0.875rem;
           font-weight: normal;
-          color: $brownish-grey;
+          font-family: $hnm-demibold;
+          color: $hnm-black-two;
 
           @include breakpoint($only-mobile) {
             font-size: 0.75rem;
@@ -817,10 +818,13 @@
           #cancel-address-add-edit {
             background: transparent;
             margin-top: 0;
-            text-transform: lowercase;
-            color: $cerulean-two;
-            font-weight: bold;
+            text-transform: capitalize;
+            color: $hnm-black-two;
+            font-family: $hnm-demibold;
+            font-weight: normal;
+            text-decoration: underline;
             padding: 0.5rem 2.5rem;
+            font-size: 0.75rem;
           }
         }
 
@@ -831,18 +835,37 @@
         #addresses-header {
           margin: 0.75rem 1.375rem;
 
+          .delivery-address-title {
+            width: 80%;
+
+            @include breakpoint($only-tablet) {
+              width: 54%;
+              font-size: 0.875rem;
+            }
+          }
+
           #add-address-button {
-            background: transparent;
             margin-top: 0;
             width: 100%;
-            text-transform: lowercase;
-            color: $cerulean-two;
             font-size: 0.75rem;
             display: block;
             padding: 0.5rem 0;
+            border: 1px solid $hnm-black-two;
+            background: $white-five;
+            font-family: $hnm-bold;
+            font-weight: normal;
+            color: #000;
+            text-transform: uppercase;
+            padding-#{$left}: 1rem;
+            padding-#{$right}: 1rem;
+            top: -3px;
 
             @include breakpoint($only-mobile) {
               text-align: $left;
+            }
+
+            @include breakpoint($only-tablet) {
+              top: -5px;
             }
           }
 
@@ -857,7 +880,6 @@
               display: inline;
               width: auto;
               position: absolute;
-              top: 0;
               #{$right}: 0;
             }
           }
@@ -911,7 +933,7 @@
           }
 
           span {
-            color: $marine-blue-two;
+            color: $hnm-black-two;
           }
         }
 
@@ -964,8 +986,8 @@
 }
 
 #selected-address-wrapper {
-  border: 1px solid $white;
-  font-family: $arial;
+  border: 1px solid $grey4;
+  font-family: $hnm-regular;
   font-size: 0.75rem;
   margin-bottom: 1.5rem;
 
@@ -980,7 +1002,7 @@
   }
 
   .address--data {
-    background: $white-four;
+    background: $hnm-grey;
   }
 
   .address--controls {
@@ -988,8 +1010,9 @@
 
     #change-address {
       font-size: 0.75rem;
-      font-weight: bold;
-      color: $cerulean-two;
+      font-family: $hnm-demibold;
+      color: $hnm-black-two;
+      text-decoration: underline;
       background: none;
       margin-top: 0;
       padding: 0.5rem 0;
@@ -1036,10 +1059,12 @@
 }
 
 .select-transaction-type {
-  font-family: $alshaya-bold;
+  font-family: $hnm-bold;
+  font-weight: normal;
+  text-transform: uppercase;
   font-size: 1rem;
   line-height: 1.12;
-  color: $marine-blue-two;
+  color: $hnm-black-two;
   margin-bottom: 1rem;
   display: none;
 }
@@ -1070,7 +1095,7 @@
 
       &.active--tab--head {
         h2 {
-          color: $cerulean-two !important;
+          color: $hnm-black-two !important;
         }
       }
     }
