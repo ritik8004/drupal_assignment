@@ -17,16 +17,11 @@
 
   input[type=radio] ~ label {
     @include icon(radio-empty, before) {
-      width: 0.875rem;
-      height: 0.875rem;
-      background: white;
       display: inline-block;
-      border-radius: 100%;
-      border: 1px solid $greyish;
       margin-#{$right}: 1rem;
       position: relative;
-      top: 2px;
       color: $hnm-black-two;
+      font-size: 2.438rem;
     }
   }
 
