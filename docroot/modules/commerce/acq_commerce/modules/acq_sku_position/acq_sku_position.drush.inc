@@ -33,19 +33,12 @@ function acq_sku_position_drush_command() {
  */
 function drush_acq_sku_position_position_sync($position_type = 'position') {
   drush_print(dt('Product position sync in progress...'));
-  // Get root category configuration.
-  $filter_root_category = \Drupal::config('acq_commerce.conductor')->get('filter_root_category');
 
   $database = \Drupal::database();
 
   // Get all product category terms.
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree('acq_product_category');
   foreach ($terms as $term) {
-    // Skip root category if configured in settings.
-    if ($filter_root_category && isset($term->parents[0]) && $term->parents[0] == '0') {
-      continue;
-    }
-
     // Find the magento commerce id from the term. Skip if not found.
     $commerce_id = Term::load($term->tid)->get('field_commerce_id')->value;
     if (!$commerce_id) {
