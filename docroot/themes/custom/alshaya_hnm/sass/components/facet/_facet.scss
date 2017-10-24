@@ -1,19 +1,19 @@
 .c-facet {
   a {
-    font-size: 0.75rem;
-    line-height: 1;
-    color: $windows-blue;
-    font-weight: bold;
+    font-family: $hnm-regular;
     margin-top: 0.75rem;
     display: inline-block;
     text-transform: lowercase;
+    font-size: 0.75rem;
+    line-height: 1.83;
+    color: $black-three;
   }
 
   ul {
     @extend %list-clear;
 
     @include breakpoint($desktop) {
-      padding-top: 1.313rem;
+      padding-top: 0.625rem;
     }
 
     input[type="text"] {
@@ -27,7 +27,8 @@
 
     li {
       margin-#{$left}: -1px;
-      margin-bottom: 0.875rem;
+      margin-bottom: 0;
+      min-height: 2.125rem;
     }
   }
 
@@ -48,7 +49,7 @@
     font-size: 0;
 
     .facet-item__value {
-      margin-#{$left}: 1rem;
+      margin-#{$left}: 0.5rem;
 
       div {
         display: inline;
@@ -64,6 +65,12 @@
       font-size: 0.875rem;
       text-transform: lowercase;
       line-height: 1.57;
+      vertical-align: middle;
+      margin-top: 0.125rem;
+
+      html[lang=ar] & {
+        line-height: 2.125rem;
+      }
 
       @include breakpoint($only-mobile) {
         display: inline-block;

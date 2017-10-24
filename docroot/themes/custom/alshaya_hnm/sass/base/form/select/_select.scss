@@ -41,19 +41,17 @@ select:focus::-ms-value {
   position: relative;
 
   @include icon(dropdown-expand, after) {
-    font-size: 2.438rem;
+    font-size: 2.1875rem;
     color: $hnm-black-two;
     text-indent: -3px;
-    line-height: 35px;
     pointer-events: none;
     position: absolute;
     #{$right}: 1px;
     top: 1px;
+    bottom: 1px;
     text-align: center;
     background-color: $white-five;
-    width: 33px;
-    height: 33px;
-    height: 2.063rem;
+    width: 2.1875rem;
 
     @include breakpoint($tablet) {
       z-index: 3;
@@ -111,13 +109,13 @@ select:focus::-ms-value {
 
     &::after {
       // IE10 needs this in px.
-      line-height: 34px;
-      font-size: 2.438rem;
-      top: 1px;
+      line-height: 35px;
+      font-size: 2.1875rem;
+      top: 0;
       #{$left}: auto;
-      width: 2.063rem;
-      height: 2rem;
-      #{$right}: 1px;
+      width: 2.1875rem;
+      height: 2.1875rem;
+      #{$right}: 0;
       text-align: center;
       display: inline-block;
       text-indent: -2px;
