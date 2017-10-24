@@ -367,7 +367,7 @@
 
   .right {
     float: $right;
-    width: 70%;
+    width: 65%;
 
     @include breakpoint($only-tablet) {
       width: 62%;
