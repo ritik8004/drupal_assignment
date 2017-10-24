@@ -148,7 +148,7 @@ function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
       $build['image'] = [
         '#theme' => 'image',
         '#attributes' => [
-          'src' => $teaser_assets[0]['url'],
+          'src' => $teaser_assets[0]['url']->toString(),
         ],
       ];
     }
