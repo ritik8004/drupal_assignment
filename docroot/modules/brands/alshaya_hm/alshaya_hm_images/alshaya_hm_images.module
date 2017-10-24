@@ -164,12 +164,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
   if (!empty($tree['parent'])) {
     $parent_sku = $tree['parent'];
     $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $config_factory = \Drupal::service('config.factory');
-    $swatch_type = $config_factory->get('alshaya_hm_images.settings')->get('swatch_type');
-    $config_override = $sku_asset_manager->overrideConfig($parent_sku, 'swatch');
-    if (!empty($config_override['swatch_type'])) {
-      $swatch_type = $config_override['swatch_type'];
-    }
+    $swatch_type = $this->getSkuSwatchType($parent_sku);
 
     // If the form has color config attribute available.
     if (isset($form['ajax']['configurables']['article_castor_id'])) {

@@ -318,4 +318,24 @@ class SkuAssetManager {
     return $assets;
   }
 
+  /**
+   * Helper function to fetch swatch type for the sku.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Sku for which swatch type needs to be fetched.
+   *
+   * @return string
+   *   Swatch type for the sku.
+   */
+  public function getSkuSwatchType(SKU $sku) {
+    $swatch_type = $this->configFactory->get('alshaya_hm_images.settings')->get('swatch_type');
+    $config_override = $this->overrideConfig($sku, 'swatch');
+
+    if (!empty($config_override['swatch_type'])) {
+      $swatch_type = $config_override['swatch_type'];
+    }
+
+    return $swatch_type;
+  }
+
 }
