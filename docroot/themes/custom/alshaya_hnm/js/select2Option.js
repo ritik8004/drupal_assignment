@@ -10,6 +10,9 @@ jQuery.fn.select2Option = function (options) {
     var $ = jQuery;
     var select = $(this);
     var labeltext = '';
+    var option_id;
+    var swatch_markup;
+
     select.hide();
 
     var buttonsHtml = $('<div class="select2Option"></div>');
@@ -34,10 +37,24 @@ jQuery.fn.select2Option = function (options) {
         }
         else if ($(this).attr('disabled') || select.attr('disabled')) {
           liHtml.addClass('disabled');
-          liHtml.append('<span class="' + $(this).text() + '">' + $(this).html() + '</span>');
+          option_id = $(this).val();
+          swatch_markup = Drupal.alshaya_hm_images_generate_swatch_markup($(this), select, option_id, 'disabled', '');
+          if (swatch_markup) {
+            liHtml.append(swatch_markup);
+          }
+          else {
+            liHtml.append('<span class="' + $(this).text() + '">' + $(this).html() + '</span>');
+          }
         }
         else {
-          liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
+          option_id = $(this).val();
+          swatch_markup = Drupal.alshaya_hm_images_generate_swatch_markup($(this), select, option_id, 'enabled', selectIndex);
+          if (swatch_markup) {
+            liHtml.append(swatch_markup);
+          }
+          else {
+            liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
+          }
         }
 
         // Mark current selection as "picked".
@@ -68,7 +85,7 @@ jQuery.fn.select2Option = function (options) {
       var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
       $(this).closest('.select2Option').find('.list-title .selected-text').remove();
       $(this).closest('.sku-base-form').find('.error').remove();
-      $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span');
+      $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
         clickedOption.removeProp('selected');
@@ -81,4 +98,25 @@ jQuery.fn.select2Option = function (options) {
       select.trigger('change');
     });
   });
+};
+
+
+/**
+ * Helper function to generate swatch markup.
+ */
+Drupal.alshaya_hm_images_generate_swatch_markup = function (currentOption, select, option_id, status, selectIndex) {
+  if ((select.attr('data-drupal-selector') === 'edit-configurables-article-castor-id') &&
+  (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
+  (drupalSettings.sku_configurable_options_color.hasOwnProperty(option_id))) {
+    var sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
+    var swatch_type = sku_configurable_options_color[option_id].swatch_type;
+
+		// If status is disabled, use <span>, otherwise use <a>.
+		var markup = status === 'enabled' ? '<a href="#" class="' + currentOption.text() + '" data-select-index="' + selectIndex + '"' : '<span class="' + currentOption.text() + '"';
+    // If swatch type is RGB, add provided value as background-color, otherwise use it as markup.
+		markup += swatch_type === 'miniature_image' ? '>' + sku_configurable_options_color[option_id].display_value :  ' style="background-color:' + sku_configurable_options_color[option_id].display_value + ';">';
+		markup += status === 'enabled' ? '</a>' : '</span>';
+
+    return markup;
+  }
 };
