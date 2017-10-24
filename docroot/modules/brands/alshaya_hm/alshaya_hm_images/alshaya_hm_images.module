@@ -67,25 +67,23 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
       $sku = $skus[$delta];
       // Get the assets.
       $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-      $assets = $sku_assets_manager->getSkuAsset($sku, 'plp', 'plp');
+      $main_image_assets = $sku_assets_manager->getSkuAsset($sku, 'plp', 'plp');
+      $hover_image_assets = $sku_assets_manager->getSkuAsset($sku, 'plp_hover', 'plp');
 
       // If no assets attached & the sku is configurable, try to use the
       // assets attached with first child sku attached.
-      if ((!$assets) && ($sku->bundle() === 'configurable')) {
-        $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-        $child_skus = $sku_manager->getChildSkus($sku);
-        foreach ($child_skus as $child_sku) {
-          if ($assets = $sku_assets_manager->getSkuAsset($child_sku, 'plp', 'plp')) {
-            break;
-          }
-        }
+      if ((!$main_image_assets) && (!$hover_image_assets) && ($sku->bundle() === 'configurable')) {
+        $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', 'plp');
+        $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', 'plp');
       }
-      $plp_assets = $sku_assets_manager->processAssetsForListing($sku, $assets);
 
-      if (isset($plp_assets['mainImage'])) {
+      $plp_main_image = $sku_assets_manager->processAssetsForListing($sku, $main_image_assets);
+      $plp_hover_image = $sku_assets_manager->processAssetsForListing($sku, $hover_image_assets);
+
+      if ($plp_main_image) {
         $sku_gallery = [
           '#theme' => 'alshaya_assets_gallery',
-          '#mainImage' => $plp_assets['mainImage'],
+          '#mainImage' => $plp_main_image,
           '#attached' => [
             'library' => [
               'alshaya_hm_images/hm_images',
@@ -93,8 +91,8 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
           ],
         ];
 
-        if (isset($plp_assets['hoverImage'])) {
-          $sku_gallery['#hoverImage'] = $plp_assets['hoverImage'];
+        if ($plp_hover_image) {
+          $sku_gallery['#hoverImage'] = $plp_hover_image;
         }
 
         $elements[$delta]['#gallery'] = $sku_gallery;

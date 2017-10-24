@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_hm_images;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
@@ -37,11 +38,15 @@ class SkuAssetManager {
    *   Config Factory service.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   Current route matcher service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   Sku manager service.
    */
   public function __construct(ConfigFactory $configFactory,
-                             CurrentRouteMatch $currentRouteMatch) {
+                              CurrentRouteMatch $currentRouteMatch,
+                              SkuManager $skuManager) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -143,10 +148,12 @@ class SkuAssetManager {
     }
 
     uasort($assets, function ($a, $b) use ($sort_assets_config_context) {
-       $weight_a = $sort_assets_config_context[$a['sortAssetType']];
-       $weight_b = $sort_assets_config_context[$b['sortAssetType']];
+      // If weight is set in config, use that else use a default high weight to
+      // push the items to bottom of the list.
+      $weight_a = isset($sort_assets_config_context[$a['sortAssetType']]) ? $sort_assets_config_context[$a['sortAssetType']] : 100;
+      $weight_b = isset($sort_assets_config_context[$b['sortAssetType']]) ? $sort_assets_config_context[$b['sortAssetType']] : 100;
 
-       return $weight_a - $weight_b < 0 ? -1 : 1;
+      return $weight_a - $weight_b < 0 ? -1 : 1;
     });
 
     return $assets;
@@ -220,9 +227,7 @@ class SkuAssetManager {
     if (empty($assets)) {
       return [];
     }
-
-    $plp_asset_types[] = $plp_front = $this->configFactory->get('alshaya_hm_images.settings')->get('weights')['plp_front'];
-    $plp_asset_types[] = $plp_back = $this->configFactory->get('alshaya_hm_images.settings')->get('weights')['plp_back'];
+    $plp_image = [];
 
     // Fetch angle config.
     $sort_angles = $this->configFactory->get('alshaya_hm_images.settings')->get('weights')['angle'];
@@ -231,45 +236,60 @@ class SkuAssetManager {
     $config_overrides = $this->overrideConfig($sku, 'plp');
 
     if (!empty($config_overrides)) {
-      if (isset($config_overrides['plp_front'])) {
-        $overridden_asset_types[] = $plp_front = $config_overrides['plp_front'];
-      }
-
-      if (isset($config_overrides['plp_back'])) {
-        $overridden_asset_types[] = $plp_back = $config_overrides['plp_back'];
-      }
-
       if (isset($config_overrides['weights']['angle'])) {
         $sort_angles = $config_overrides['weights']['angle'];
       }
     }
 
-    if (!empty($overridden_asset_types)) {
-      $plp_asset_types = $overridden_asset_types;
-    }
-
-    $plp_assets = [];
-
     // Loop over assets array to find the main & hover image.
     foreach ($assets as $asset) {
-      if (!in_array($asset['sortAssetType'], $plp_asset_types)) {
-        continue;
+      if (!empty($plp_image)) {
+        break;
       }
+
       foreach ($sort_angles as $angle) {
-        if (($asset['sortAssetType'] === $plp_front) &&
-                ($asset['sortFacingType'] === $angle)) {
-          $plp_assets['mainImage'] = $asset;
-          break;
-        }
-        elseif (($asset['sortAssetType'] === $plp_back) &&
-                ($asset['sortFacingType'] === $angle)) {
-          $plp_assets['hoverImage'] = $asset;
+        if ($asset['sortFacingType'] === $angle) {
+          $plp_image = $asset;
           break;
         }
       }
     }
 
-    return $plp_assets;
+    return $plp_image;
+  }
+
+  /**
+   * Helper function to pull child sku assets.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Parent sku for which we pulling child assets.
+   * @param string $context
+   *   Page on which the asset needs to be rendered.
+   * @param string $location
+   *   Location on page e.g., main image, thumbnails etc.
+   * @param bool $first_only
+   *   Flag to indicate we need the assets of the first child only.
+   *
+   * @return array
+   *   Array of sku child assets.
+   */
+  public function getChildSkuAssets(SKU $sku, $context, $location, $first_only = TRUE) {
+    $child_skus = $this->skuManager->getChildSkus($sku);
+    $assets = [];
+
+    if ($child_skus) {
+      foreach ($child_skus as $child_sku) {
+        if ($first_only) {
+          $assets = $this->getSkuAsset($child_sku, $context, $location);
+          return $assets;
+        }
+        else {
+          $assets[$sku->getSku()] = $this->getSkuAsset($child_sku, $context, $location);
+        }
+      }
+    }
+
+    return $assets;
   }
 
 }
