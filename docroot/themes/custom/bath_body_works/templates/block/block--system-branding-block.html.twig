@@ -16,9 +16,9 @@
 #}
 {{ attach_library("whitelabel/block-site-logo") }}
 {% if site_logo %}
-  <div class="site__logo ss">
+  <h1 class="site__logo ss">
     <a href="{{ path('<front>') }}" title="{{ site_logo_title }}" rel="home">
       <img src="{{ site_logo }}" alt="{{ site_logo_title }}" />
     </a>
-  </div>
+  </h1>
 {% endif %}
