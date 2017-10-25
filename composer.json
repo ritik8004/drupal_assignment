@@ -165,7 +165,8 @@
                 "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
             },
             "drupal/redirect" : {
-                "Wildcard support for query parameter redirects" : "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
+                "Wildcard support for query parameter redirects" : "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch",
+                "Fix - Integrity constraint violation" : "https://www.drupal.org/files/issues/duplicate-entry-fix-2887866-9.patch"
             },
             "drupal/simple_sitemap" : {
                 "MMCPA-2433" : "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"

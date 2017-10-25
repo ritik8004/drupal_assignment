@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "890a0453c9237bd73592da430734e5c8",
+    "content-hash": "c42d30c76b672e598608c8706047a8bf",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -6561,7 +6561,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
+                    "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch",
+                    "Fix - Integrity constraint violation": "https://www.drupal.org/files/issues/duplicate-entry-fix-2887866-9.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
