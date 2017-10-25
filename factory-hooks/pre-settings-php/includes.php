@@ -18,6 +18,9 @@ elseif (getenv('TRAVIS')) {
   $env = 'travis';
 }
 
+// Set the env in settings to allow re-using in custom code.
+$settings['env'] = $env;
+
 // Configure your hash salt here.
 // TODO: Security.
 // $settings['hash_salt'] = '';

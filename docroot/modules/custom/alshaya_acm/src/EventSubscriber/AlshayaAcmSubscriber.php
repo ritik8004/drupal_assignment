@@ -19,11 +19,11 @@ class AlshayaAcmSubscriber implements EventSubscriberInterface {
    *   The event to process.
    */
   public function checkAcmConfig(GetResponseEvent $event) {
-    // Have we already done this check?
-    $env = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_ENV['AH_SITE_ENVIRONMENT'] : 'local';
+    $env = Settings::get('env') ?: 'local';
 
     // We don't do anything on prod.
-    if ($env == 'prod') {
+    // @TODO: Find a better way to check if env is prod.
+    if ($env == '01live') {
       return;
     }
 
