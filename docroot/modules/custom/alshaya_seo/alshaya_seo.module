@@ -484,24 +484,42 @@ function alshaya_seo_preprocess_alshaya_cart_product_name(&$variables) {
 function alshaya_seo_preprocess_menu(&$variables) {
   if ($variables['menu_name'] === 'account') {
     foreach ($variables['items'] as $key => $item) {
-      $my_account_menu_item_options['attributes']['class'] = [];
-      $my_account_menu_item_options['attributes']['class'][] = strtolower(str_replace(' ', '', $item['title'])) . '-link';
-      if (Unicode::strcasecmp($item['title'], t('Sign in')) === 0) {
-        $my_account_menu_item_options['attributes']['class'][] = 'gtm-sign-in';
-        $my_account_menu_item_options['attributes']['set_active_class'] = 1;
+      // Get existing options.
+      $options = $item['url']->getOptions();
+
+      // Use class as array.
+      if (empty($options['attributes']['class'])) {
+        $options['attributes']['class'] = [];
       }
-      $variables['items'][$key]['url']->setOptions($my_account_menu_item_options);
+      elseif (!is_array($options['attributes']['class'])) {
+        $options['attributes']['class'] = [$options['attributes']['class']];
+      }
+
+      $options['attributes']['class'][] = strtolower(str_replace(' ', '', $item['title'])) . '-link';
+
+      if (Unicode::strcasecmp($item['title'], t('Sign in')) === 0) {
+        $options['attributes']['class'][] = 'gtm-sign-in';
+      }
+
+      $variables['items'][$key]['url']->setOptions($options);
     }
   }
   elseif ($variables['menu_name'] === 'footer') {
     foreach ($variables['items'] as $key => $item) {
-      $footer_url_options = [
-        'attributes' => [
-          'class' => ['c-footer-menu__link'],
-        ],
-      ];
+      // Get existing options.
+      $options = $item['url']->getOptions();
 
-      $variables['items'][$key]['url']->setOptions($footer_url_options);
+      // Use class as array.
+      if (empty($options['attributes']['class'])) {
+        $options['attributes']['class'] = [];
+      }
+      elseif (!is_array($options['attributes']['class'])) {
+        $options['attributes']['class'] = [$options['attributes']['class']];
+      }
+
+      $options['attributes']['class'][] = 'c-footer-menu__link';
+
+      $variables['items'][$key]['url']->setOptions($options);
     }
   }
 }
