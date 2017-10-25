@@ -304,7 +304,7 @@
         }
       });
 
-      $('.acq-content-product #lightSlider li a', context).on('click', function (e) {
+      $('.acq-content-product #lightSlider li a').once().on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
         var index = $(this).parent().attr("data-slick-index");

@@ -1369,7 +1369,7 @@ header {
 
     @include breakpoint($desktop) {
       height: 2.875rem;
-      max-width: 17.5625rem;
+      max-width: 15.5625rem;
     }
   }
 }
@@ -1434,7 +1434,7 @@ html[lang='ar'] {
       }
 
       @include breakpoint($desktop) {
-        width: 14.94rem;
+        width: 12.94rem;
         margin-top: -1.063rem;
       }
     }
