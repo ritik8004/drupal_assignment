@@ -5,9 +5,11 @@
   background-color: $medium-pink;
   color: $white;
   text-align: center;
+  margin-top: -1.25rem;
 
   @include breakpoint($above-palm) {
     padding: 1.5rem;
+    margin-top: -1.55rem;
   }
 }
 

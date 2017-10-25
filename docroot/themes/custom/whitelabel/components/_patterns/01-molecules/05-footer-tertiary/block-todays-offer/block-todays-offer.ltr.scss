@@ -15,6 +15,7 @@
   &.todays-offer-fixed {
     @include breakpoint($above-palm) {
       position: fixed;
+      z-index: $z-5;
     }
   }
 
