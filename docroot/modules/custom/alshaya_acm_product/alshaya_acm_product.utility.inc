@@ -334,10 +334,16 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   }
   // If no image found, check once for parent product as well.
   elseif ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
-    $image = alshaya_acm_get_product_display_image($parent_sku, $image_style);
+    // Fire alter hook for cart image before looking for the image in the
+    // parent product.
+    \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
+
+    if (!$image) {
+      $image = alshaya_acm_get_product_display_image($parent_sku, $image_style);
+    }
   }
 
-  // Alter cart product image.
+  // Alter cart product image found in child sku in case of config products.
   \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
 
   return $image;
