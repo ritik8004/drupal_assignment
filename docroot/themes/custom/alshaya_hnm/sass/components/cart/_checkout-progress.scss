@@ -349,16 +349,16 @@
     }
   }
 
-  .checkout-progress__step.-previous,
   .checkout-progress__step:last-child.-current {
+    color: $hnm-black-two;
+    font-family: $hnm-demibold;
+  }
+
+  .checkout-progress__step.-previous {
     color: $brownish-grey;
 
     @include breakpoint($only-tablet) {
       font-weight: normal;
-    }
-
-    .checkout-progress__step:last-child.-current {
-      color: $black-two;
     }
 
     &::after {

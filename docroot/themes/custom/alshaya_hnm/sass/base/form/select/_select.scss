@@ -52,6 +52,7 @@ select:focus::-ms-value {
     text-align: center;
     background-color: $white-five;
     width: 2.1875rem;
+    height: 2.063rem;
 
     @include breakpoint($tablet) {
       z-index: 3;
