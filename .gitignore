@@ -128,4 +128,9 @@ atlassian-ide-plugin.xml
 
 # Drupal console
 console
+
+# Allow developers to add installation steps in local.
 install-site-dev.sh
+
+# Allow developers to override config in local.
+factory-hooks/*/local.php
