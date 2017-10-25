@@ -6,6 +6,7 @@
  */
 
 use Drupal\lightning_core\ConfigHelper;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_update_N().
@@ -20,4 +21,26 @@ function alshaya_contact_update_8001() {
     // Do nothing, we don't plan to use this config anymore.
   }
   ConfigHelper::forModule('alshaya_contact')->install()->get('captcha.captcha_point.webform_submission_alshaya_contact_add_form')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update Mobile number field label.
+ */
+function alshaya_contact_update_8003() {
+  $module_name = 'alshaya_contact';
+  $path = 'install';
+  $configs = [
+    'webform.webform.alshaya_contact',
+  ];
+
+  foreach ($configs as $config) {
+    $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config . '.yml'));
+    \Drupal::configFactory()
+      ->getEditable($config)
+      ->setData($config_yaml)
+      ->save();
+  }
+
 }
