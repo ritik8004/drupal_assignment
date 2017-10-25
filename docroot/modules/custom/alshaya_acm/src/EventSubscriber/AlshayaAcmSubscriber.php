@@ -44,7 +44,7 @@ class AlshayaAcmSubscriber implements EventSubscriberInterface {
 
     // The interval time below allows to do temporary overrides on non prod
     // envs for dev/test purpose.
-    if ($interval && $request_time - $first_request < $interval) {
+    if (empty($interval) || $request_time - $first_request < $interval) {
       return;
     }
 
