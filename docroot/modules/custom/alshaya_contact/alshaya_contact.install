@@ -6,29 +6,6 @@
  */
 
 use Drupal\lightning_core\ConfigHelper;
-use Symfony\Component\Yaml\Yaml;
-
-/**
- * Implements hook_update_N().
- *
- * Update Mobile number field label.
- */
-function alshaya_contact_update_8002() {
-  $module_name = 'alshaya_contact';
-  $path = 'install';
-  $configs = [
-    'webform.webform.alshaya_contact',
-  ];
-
-  foreach ($configs as $config) {
-    $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config . '.yml'));
-    \Drupal::configFactory()
-      ->getEditable($config)
-      ->setData($config_yaml)
-      ->save();
-  }
-
-}
 
 /**
  * Implements hook_update_N().

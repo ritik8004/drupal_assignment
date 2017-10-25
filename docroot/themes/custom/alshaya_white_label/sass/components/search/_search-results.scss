@@ -280,6 +280,23 @@ ul.item-list__checkbox,
     margin: 0 auto;
   }
 
+  .lslide {
+    img {
+      min-height: 4rem;
+    }
+  }
+
+  .alshaya_search_mainimage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 10.5rem;
+
+    @include breakpoint($tablet) {
+      min-height: 18.5rem;
+    }
+  }
+
   .lSSlideWrapper {
     position: static;
 
