@@ -517,7 +517,6 @@
     margin-bottom: 1.625rem;
     border: 1px solid $white;
     position: relative;
-    cursor: pointer;
 
     &:hover,
     &.selected {
@@ -801,8 +800,11 @@
       margin-#{$right}: 1%;
       float: $left;
       width: 100%;
+      max-height: 39rem;
+      overflow-y: scroll;
 
       @include breakpoint($desktop) {
+        max-height: 51rem;
         padding-#{$right}: 1%;
       }
 
