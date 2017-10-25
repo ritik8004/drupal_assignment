@@ -51,7 +51,7 @@ class AlshayaPromotionsManager {
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager, LoggerChannelFactoryInterface $logger, LanguageManager $languageManager, EntityRepositoryInterface $entityRepository) {
     $this->nodeStorage = $entityTypeManager->getStorage('node');
-    $this->logger = $logger;
+    $this->logger = $logger->get('alshaya_acm_promotion');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
   }
