@@ -8,9 +8,37 @@ body {
     display: none;
   }
 
+  .delivery-details {
+    border: 1px solid $hnm-black-two;
+    color: $hnm-black-two;
+    background: $white-five;
+    margin-bottom: 1.5rem;
+  }
+
+  .delivery-details,
+  .barcode--wrapper {
+    strong {
+      font-family: $hnm-bold;
+      color: $hnm-black-two;
+      font-weight: normal;
+    }
+  }
+
+  .head-thank-you {
+    h3 {
+      font-family: $hnm-demibold;
+      letter-spacing: 0.8px;
+      color: $hnm-black-two;
+      font-size: 1.125rem;
+      border-bottom: 1px solid $grey4;
+      padding-bottom: 1rem;
+    }
+  }
+
   .site--brand {
     border-bottom: 1px solid $white;
     margin-bottom: 1.56rem;
+    text-align: center;
 
     img {
       padding: 1.75rem 0;
@@ -18,8 +46,24 @@ body {
   }
 
   .subtitle {
-    border-bottom: 1px solid $white;
+    font-family: $hnm-demibold;
+    font-weight: normal;
+    letter-spacing: 1px;
+    color: $hnm-black-two;
+    border-bottom: 1px solid $hnm-black-two;
     margin-bottom: 0.75rem;
+  }
+
+  .user__order--detail {
+    background: none;
+
+    .total-row {
+      .price-currency,
+      .price-amount {
+        font-family: $hnm-bold;
+        color: $hnm-black-two;
+      }
+    }
   }
 }
 
@@ -27,14 +71,15 @@ body {
   border-top: none;
 
   .order-details-row {
-    background: $white-smoke-light;
+    background: $grey2-19;
 
     .label {
-      color: $grey-ash;
+      color: $hnm-black-two;
+      font-family: $hnm-demibold;
     }
 
     .blend {
-      background-color: $whisper-ash;
+      background-color: $grey4-30;
 
       .delivery--method {
         margin-top: 1.7rem;
@@ -44,6 +89,8 @@ body {
 
   .order-item-row {
     .blend {
+      background: $grey9;
+
       @include breakpoint($upto-tablet) {
         vertical-align: top;
       }
@@ -55,6 +102,8 @@ body {
   }
 
   .product--count {
+    background: $hnm-grey;
+    color: $hnm-black-two;
     border-top: 1px solid $white-five;
     border-bottom: 1px solid $white-five;
 
@@ -102,7 +151,7 @@ body {
   margin-bottom: 3.4rem;
   margin-top: 1.9rem;
 
-  .icon-ic_infomation {
+  .icon-ic_info {
     font-size: 1.9rem;
     font-weight: 700;
     margin-right: 1.06rem;
