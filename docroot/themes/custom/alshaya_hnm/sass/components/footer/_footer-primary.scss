@@ -947,6 +947,7 @@
 
     &::placeholder {
       color: $white-five;
+      opacity: 1;
     }
   }
 
@@ -1046,5 +1047,20 @@
       font-weight: bold;
       display: block;
     }
+  }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    background: $white-five;
+  }
+
+  .ladda-spinner {
+    background: url("../imgs/icons/ic-loader.svg") no-repeat;
+    background-size: cover;
+    height: 2.1875rem;
+    width: 2.1875rem;
+    position: absolute;
+    top: 0;
+    #{$left}: 1.6875rem !important;
+    margin-top: -0.125rem;
   }
 }
