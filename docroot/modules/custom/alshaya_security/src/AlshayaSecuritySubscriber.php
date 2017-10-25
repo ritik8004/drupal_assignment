@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Subscribes to the kernel request event to add HAL media types.
+ * Subscribes to the kernel respond event to handle security.
  */
 class AlshayaSecuritySubscriber implements EventSubscriberInterface {
 
@@ -32,7 +32,7 @@ class AlshayaSecuritySubscriber implements EventSubscriberInterface {
   /**
    * Update headers as per security recommendations.
    *
-   * @param Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
    *   The event to process.
    */
   public function onRespond(FilterResponseEvent $event) {
