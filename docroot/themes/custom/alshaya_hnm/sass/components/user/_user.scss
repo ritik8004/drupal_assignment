@@ -130,7 +130,7 @@
     }
 
     @include breakpoint($desktop) {
-      border-top: 1px solid $white;
+      border-top: 1px solid $hnm-black-two;
       margin-#{$left}: -5.5em;
       padding-#{$left}: 5.5em;
       width: 30.25rem;
@@ -399,9 +399,9 @@
 
   .form-type-checkbox .option {
     &::before {
-      margin-#{$right}: 0.95rem;
       position: relative;
-      top: 0.18rem;
+      top: 0.625rem;
+      #{$left}: -0.5625rem;
     }
   }
 

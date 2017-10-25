@@ -551,11 +551,8 @@
     .form-item-field-subscribe-newsletter-value {
       label {
         top: 0 !important;
+        color: $grey-ash;
       }
-    }
-
-    p {
-      margin-#{$left}: 1.9rem;
     }
   }
 
