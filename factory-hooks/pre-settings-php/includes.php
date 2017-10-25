@@ -18,6 +18,9 @@ elseif (getenv('TRAVIS')) {
   $env = 'travis';
 }
 
+// Set the env in settings to allow re-using in custom code.
+$settings['env'] = $env;
+
 // Configure your hash salt here.
 // TODO: Security.
 // $settings['hash_salt'] = '';
@@ -93,6 +96,8 @@ $settings['additional_modules'] = [];
 
 switch ($env) {
   case 'local':
+    $config['acq_commerce.conductor']['debug_dir'] = '/home/vagrant/';
+
     // Specify the modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
