@@ -96,6 +96,8 @@ $settings['additional_modules'] = [];
 
 switch ($env) {
   case 'local':
+    $config['acq_commerce.conductor']['debug_dir'] = '/home/vagrant/';
+
     // Specify the modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
