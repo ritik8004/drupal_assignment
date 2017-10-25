@@ -120,7 +120,7 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
       $thumb_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_thumbnail');
       $zoom_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_zoom');
       $fullscreen_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_fullscreen');
-      $main_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_main');
+      $main_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_main');
     }
 
     foreach ($thumb_images as $key => $thumbnail) {
