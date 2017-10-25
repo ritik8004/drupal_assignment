@@ -1060,7 +1060,7 @@
     width: 2.1875rem;
     position: absolute;
     top: 0;
-    left: 1.6875rem !important;
+    #{$left}: 1.6875rem !important;
     margin-top: -0.125rem;
   }
 }
