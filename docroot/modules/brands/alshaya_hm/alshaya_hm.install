@@ -127,4 +127,9 @@ function alshaya_hm_install() {
   $sort_options['created'] = 'created';
   $config->set('sort_options', $sort_options);
   $config->save();
+
+  // Changing the register page text to H&M.
+  \Drupal::configFactory()->getEditable('field.field.user.user.field_subscribe_newsletter')
+    ->set('label', 'I would like to receive exclusive deals from H&M')
+    ->save();
 }
