@@ -28,6 +28,8 @@
 
   .ui-dialog-buttonpane {
     float: direction(left);
+    margin-top: 0;
+    padding-top: 0;
   }
 
   .ui-button-icon-only {
@@ -37,6 +39,7 @@
     border: 0;
     height: 1.9375rem;
     width: 2.1875rem;
+    outline: transparent;
 
     @include breakpoint($lap) {
       background: $black;
