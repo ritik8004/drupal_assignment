@@ -19,7 +19,7 @@ field_settings:
     label: Color
     datasource_id: 'entity:node'
     property_path: 'field_skus:entity:attr_color'
-    type: text
+    type: string
     boost: 0.5
     dependencies:
       config:
