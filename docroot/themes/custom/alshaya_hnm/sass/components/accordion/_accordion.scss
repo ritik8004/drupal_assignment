@@ -17,7 +17,7 @@
   line-height: 2.9375rem;
   margin-bottom: 0;
   margin-top: 0;
-  text-transform: lowercase;
+  text-transform: uppercase;
   outline: none;
   cursor: pointer;
 
@@ -33,5 +33,7 @@
 
   &.ui-state-active {
     @include icon(dropdown-collapse, after);
+
+    border-bottom: 1px solid $white;
   }
 }

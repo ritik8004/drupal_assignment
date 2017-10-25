@@ -1,24 +1,27 @@
 base_url: 'https://lp2.hm.com/hmgoepprod'
 origin: 'dam'
 dimensions:
- plp:
-   width: 222
-   height: 333
- pdp_main:
-   width: 384
-   height: 576
- pdp_thumbnail:
-   width: 74
-   height: 111
- pdp_zoom:
-   width: 1152
-   height: 1728
- pdp_fullscreen:
-   width: 758
-   height: 1137
- swatch:
-   width: 11
-   height: 21
+  plp:
+    width: 222
+    height: 333
+  pdp_main:
+    width: 384
+    height: 576
+  pdp_thumbnail:
+    width: 74
+    height: 111
+  pdp_zoom:
+    width: 1152
+    height: 1728
+  pdp_fullscreen:
+    width: 758
+    height: 1137
+  swatch:
+    width: 11
+    height: 21
+  cart:
+    width: 74
+    height: 111
 # Weights are used to sort asset-types. Items with lower weight get precedence
 # while displaying them.
 weights:
@@ -39,6 +42,8 @@ weights:
     Lookbook: 1
   swatch:
     DescriptiveStillLife: 1
+  cart:
+    Lookbook: 1
   angle:
     - 1C
     - 1L
@@ -67,6 +72,7 @@ style_identifiers:
   pdp_fullscreen: 'file:/product/fullscreen'
   teaser: 'file:/product/style'
   swatch: 'file:/product/miniature'
+  cart: 'file:/product/thumb'
 swatch_type: 'miniature_image'
 # Sample structure for override, until we have a config UI.
 #overrides:

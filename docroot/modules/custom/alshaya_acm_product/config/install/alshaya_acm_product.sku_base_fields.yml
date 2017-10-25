@@ -295,6 +295,7 @@ fields:
     label: 'Composition'
     description: 'Product Composition.'
     cardinality: 1
+    configurable: 0
     type: 'text_long'
 
   is_buyable:
