@@ -164,7 +164,7 @@ function alshaya_hm_images_acq_sku_cart_media_alter($sku, &$sku_image) {
     $cart_assets = $sku_assets_manager->getSkuAsset($sku, 'cart', 'cart');
 
     if (!empty($cart_assets)) {
-      $build['image'] = [
+      $sku_image = [
         '#theme' => 'image',
         '#attributes' => [
           'src' => $cart_assets[0]['url']->toString(),
