@@ -805,6 +805,7 @@
 
       @include breakpoint($desktop) {
         max-height: 51rem;
+        min-height: 10rem;
         padding-#{$right}: 1%;
       }
 
