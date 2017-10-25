@@ -40,10 +40,13 @@ weights:
     DescriptiveDetail: 6
   teaser:
     Lookbook: 1
-  swatch:
     DescriptiveStillLife: 1
+  swatch:
+    Lookbook: 1
+    DescriptiveStillLife: 2
   cart:
     Lookbook: 1
+    DescriptiveStillLife: 2
   angle:
     - 1C
     - 1L

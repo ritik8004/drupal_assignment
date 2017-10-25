@@ -181,6 +181,21 @@
       url: postUrl
     };
 
+    var editConfigCastorIdElementSettings = {
+      callback: 'alshaya_acm_product_configurable_form_ajax_callback',
+      dialogType: 'ajax',
+      event: 'change',
+      selector: "[data-drupal-selector='edit-configurables-article-castor-id']",
+      progress: {
+        message: null,
+        type: 'throbber'
+      },
+      submit: {
+        _triggering_element_name: 'configurables[article_castor_id]'
+      },
+      url: postUrl
+    };
+
     // Re-attach Ajax to add-to-cart buttons, since there are duplicate ids on the page, Drupal will attach
     // AJAX only with the first button it finds.
     $(element).find('.edit-add-to-cart').each(function () {
@@ -203,6 +218,17 @@
         $(this).addClass('reattached-size-ajax');
         var configSizeBase = 'edit-configurables-size_mobile--only--sell--' + sku_id;
         Drupal.ajax[configSizeBase] = new Drupal.Ajax(configSizeBase, this, editConfigSizeElementSettings);
+      }
+    });
+
+    $("select[data-drupal-selector='edit-configurables-article-castor-id']").each(function () {
+      var is_mobile_only_sell = $(this).closest('.mobile--only--sell');
+      var is_modal_product = $(this).closest('#drupal-modal');
+      var sku_id = $(this).siblings('input[name="sku_id"]').val();
+      if (((is_mobile_only_sell.length > 0) || (is_modal_product.length > 0)) && (!$(this).hasClass('reattached-castorid-ajax'))) {
+        $(this).addClass('reattached-castorid-ajax');
+        var configCastorIdBase = 'edit-configurables-castorid_mobile--only--sell--' + sku_id;
+        Drupal.ajax[configCastorIdBase] = new Drupal.Ajax(configCastorIdBase, this, editConfigCastorIdElementSettings);
       }
     });
   };
