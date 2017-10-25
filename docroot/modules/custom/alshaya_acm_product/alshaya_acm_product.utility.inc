@@ -179,7 +179,12 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   if (empty($media)) {
     // Check once if there is parent SKU available, use media files of parent.
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity)) {
-      return alshaya_acm_product_get_gallery($build, $parent_sku);
+      // Give preference to child products to alter before checking for image in
+      // parent. Alter hook to allow all modules to update the element.
+      \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
+      if (!$main_image) {
+        return alshaya_acm_product_get_gallery($build, $parent_sku);
+      }
     }
   }
 
