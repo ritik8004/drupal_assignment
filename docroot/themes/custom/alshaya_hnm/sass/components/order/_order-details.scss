@@ -321,11 +321,11 @@
   }
 
   .order-details-row {
-    background: rgba(86, 157, 229, 0.19);
+    background: $info-19;
     color: $grey8;
 
     .blend {
-      background: rgba(86, 157, 229, 0.3);
+      background: $info-30;
 
       @include breakpoint($tablet) {
         padding-#{$right}: 0.625rem;
