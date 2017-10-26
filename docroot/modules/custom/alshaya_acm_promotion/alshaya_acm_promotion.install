@@ -6,7 +6,18 @@
  * Contains install, update, uninstall hooks for alshaya_acm_promotion module.
  */
 
+use Drupal\Core\Config\FileStorage;
 use Drupal\field\Entity\FieldConfig;
+
+/**
+ * Implements hook_update_N()
+ */
+function alshaya_acm_promotion_update_8003() {
+  $config_path = drupal_get_path('module', 'alshaya_product') . '/config/optional';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write('facets.facet.promotion_price_facet', $source->read('facets.facet.promotion_price_facet'));
+}
 
 /**
  * Implements hook_update_N().
