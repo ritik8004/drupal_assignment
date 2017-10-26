@@ -108,7 +108,7 @@ function alshaya_hm_install() {
   \Drupal::configFactory()->getEditable('block.block.sociallinks')
     ->set('visibility.request_path.id', 'request_path')
     ->set('visibility.request_path.pages', '/cart/checkout' . PHP_EOL . '/cart/checkout/*')
-    ->set('visibility.request_path.negate', 'TRUE')
+    ->set('visibility.request_path.negate', TRUE)
     ->set('weight', '-34')
     ->set('region', 'footer_secondary')
     ->save();
@@ -117,14 +117,14 @@ function alshaya_hm_install() {
   \Drupal::configFactory()->getEditable('block.block.copyright')
     ->set('visibility.request_path.id', 'request_path')
     ->set('visibility.request_path.pages', '/cart/checkout' . PHP_EOL . '/cart/checkout/*')
-    ->set('visibility.request_path.negate', 'TRUE')
+    ->set('visibility.request_path.negate', TRUE)
     ->save();
 
   // Set visiblity for footerlogos block.
   \Drupal::configFactory()->getEditable('block.block.footerlogos')
     ->set('visibility.request_path.id', 'request_path')
     ->set('visibility.request_path.pages', '/cart/checkout' . PHP_EOL . '/cart/checkout/*')
-    ->set('visibility.request_path.negate', 'FALSE')
+    ->set('visibility.request_path.negate', FALSE)
     ->save();
 
   // Enable "New in" sort options.
