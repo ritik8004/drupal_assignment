@@ -28,7 +28,7 @@ class AlshayaSearchGranular extends SearchApiGranular {
    * {@inheritdoc}
    */
   public function calculateResultFilter($value) {
-    $range = $this->getRange($value);
+    $range = $this->getRange(floor($value));
 
     $t_options = [
       '@start' => alshaya_acm_price_format($range['start']),
@@ -62,10 +62,6 @@ class AlshayaSearchGranular extends SearchApiGranular {
     // Initial values.
     $start = 0;
     $stop = $granularity;
-
-    if (fmod($value, $granularity) < 1) {
-      $value = floor($value);
-    }
 
     if ($value % $granularity) {
       $start = $value - ($value % $granularity);
