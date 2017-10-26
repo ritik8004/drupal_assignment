@@ -41,13 +41,14 @@
 .pager {
   list-style: none;
   padding-#{direction(left)}: 0;
+  margin-top: 0;
 
   @include breakpoint($lap) {
-    margin-top: 1rem;
+    margin-top: 1.2rem;
   }
 
   @include breakpoint($desk) {
-    margin-top: 3rem;
+    margin-top: 4.1rem;
   }
 
   a {

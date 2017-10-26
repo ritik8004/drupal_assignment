@@ -12,6 +12,13 @@
     right: 0;
   }
 
+  &.todays-offer-fixed {
+    @include breakpoint($above-palm) {
+      position: fixed;
+      z-index: $z-5;
+    }
+  }
+
   @include breakpoint($lap) {
     width: 93.75%;
   }
@@ -53,6 +60,12 @@
     margin: 0;
 
     @include breakpoint($above-palm) {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+
       @include icon(price-tag, before) {
         color: $medium-pink;
         display: inline-block;
@@ -69,7 +82,6 @@
       color: $black-smoke;
       font-size: 0.6875rem;
       padding: 0.6rem 0.5rem;
-      padding-bottom: 0.55rem;
       display: inline-block;
       border-radius: 0.25rem 0.25rem 0 0;
       background-color: $white;
@@ -102,6 +114,13 @@
       }
     }
   }
+
+  .label-not-fixed {
+    @include breakpoint($above-palm) {
+      position: static;
+      transform: none;
+    }
+  }
 }
 
 .active-offer {
@@ -116,15 +135,15 @@
 
   h2 {
     @include breakpoint($above-palm) {
+      position: static;
+      transform: none;
       padding: 0.75rem 0.5rem;
-      padding-bottom: 0.5rem;
       border: 0;
       box-shadow: none;
     }
 
     @include breakpoint($desk) {
-      padding: 0.4rem 0.9rem;
-      padding-bottom: 0.6rem;
+      padding: 0.6rem 0.9rem;
       letter-spacing: 0.125rem;
 
       html[lang=ar] & {
