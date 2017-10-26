@@ -372,6 +372,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     $term = $checkout_options_manager->loadShippingMethod($shipping_method);
 
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), []);
+
+    // Clear the payment now.
+    $cart->clearPayment();
   }
 
 }
