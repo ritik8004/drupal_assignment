@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_search\Plugin\facets\query_type;
 
 use Drupal\facets\Plugin\facets\query_type\SearchApiGranular;
+use Drupal\facets\Result\Result;
 
 /**
  * Basic support for numeric facets grouping by a granularity value.
@@ -28,7 +29,7 @@ class AlshayaSearchGranular extends SearchApiGranular {
    * {@inheritdoc}
    */
   public function calculateResultFilter($value) {
-    $range = $this->getRange(ceil($value));
+    $range = $this->getRange($value);
 
     $t_options = [
       '@start' => alshaya_acm_price_format($range['start']),
@@ -36,7 +37,7 @@ class AlshayaSearchGranular extends SearchApiGranular {
     ];
 
     // If this is the first range, display, "under X".
-    if ($range['start'] === 0) {
+    if ($range['start'] == 0) {
       $displayValue = t('under @stop', $t_options)->render();
     }
     else {
@@ -63,25 +64,53 @@ class AlshayaSearchGranular extends SearchApiGranular {
     $start = 0;
     $stop = $granularity;
 
-    if ($value > $granularity) {
-      // If we are at the end of a range, we need to start one range back.
-      if (($value % $granularity) === 0) {
-        $start = $value - $granularity + 1;
-      }
-      // Otherwise, we need to find the closest range by removing the remainder.
-      else {
-        // Remove the remainder.
-        $start = $value - ($value % $granularity) + 1;
-      }
-
-      // Calculate the stop of the range.
-      $stop = $start + $granularity - 1;
+    if (fmod($value, $granularity) < 1) {
+      $value = floor($value);
     }
+
+    if ($value % $granularity) {
+      $start = $value - ($value % $granularity);
+    }
+    else {
+      $start = $value;
+    }
+
+    $stop = $start + $granularity;
 
     return [
       'start' => $start,
       'stop' => $stop,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function build() {
+    $query_operator = $this->facet->getQueryOperator();
+
+    // Go through the results and add facet results grouped by filters
+    // defined by self::calculateResultFilter().
+    if (!empty($this->results)) {
+      $facet_results = [];
+      foreach ($this->results as $key => $result) {
+        if ($result['count'] || $query_operator == 'or') {
+          $count = $result['count'];
+          $result_filter = $this->calculateResultFilter(trim($result['filter'], '"'));
+          if (isset($facet_results[$result_filter['raw']])) {
+            $facet_results[$result_filter['raw']]->setCount(
+              $facet_results[$result_filter['raw']]->getCount() + $count
+            );
+          }
+          else {
+            $facet_results[$result_filter['raw']] = new Result($result_filter['raw'], $result_filter['display'], $count);
+          }
+        }
+      }
+
+      $this->facet->setResults($facet_results);
+    }
+    return $this->facet;
   }
 
 }
