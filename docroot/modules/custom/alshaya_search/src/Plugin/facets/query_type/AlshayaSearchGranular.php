@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_search\Plugin\facets\query_type;
 
 use Drupal\facets\Plugin\facets\query_type\SearchApiGranular;
-use Drupal\facets\Result\Result;
 
 /**
  * Basic support for numeric facets grouping by a granularity value.
@@ -81,36 +80,6 @@ class AlshayaSearchGranular extends SearchApiGranular {
       'start' => $start,
       'stop' => $stop,
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function build() {
-    $query_operator = $this->facet->getQueryOperator();
-
-    // Go through the results and add facet results grouped by filters
-    // defined by self::calculateResultFilter().
-    if (!empty($this->results)) {
-      $facet_results = [];
-      foreach ($this->results as $key => $result) {
-        if ($result['count'] || $query_operator == 'or') {
-          $count = $result['count'];
-          $result_filter = $this->calculateResultFilter(trim($result['filter'], '"'));
-          if (isset($facet_results[$result_filter['raw']])) {
-            $facet_results[$result_filter['raw']]->setCount(
-              $facet_results[$result_filter['raw']]->getCount() + $count
-            );
-          }
-          else {
-            $facet_results[$result_filter['raw']] = new Result($result_filter['raw'], $result_filter['display'], $count);
-          }
-        }
-      }
-
-      $this->facet->setResults($facet_results);
-    }
-    return $this->facet;
   }
 
 }
