@@ -39,8 +39,8 @@
   border: none;
   z-index: 9;
   font-size: 1.875rem;
-  color: $white-two;
-  background-color: $marine-blue;
+  color: $white-five;
+  background-color: $hnm-black-two;
   border-radius: 0;
   outline: solid transparent;
 
@@ -128,15 +128,20 @@
 
     .zoomout,
     .zoomin {
-      font-family: $alshaya-thin;
-      cursor: pointer;
-      border-radius: 2.1875rem;
+      background: $white-five-20;
+      padding: 0;
       border: none;
-      font-size: 1.5rem;
-      margin: 0 0.625rem;
-      background-color: $white;
-      padding: 0.625rem;
-      height: 0;
+
+      &::before {
+        color: $hnm-black-two;
+        font-size: 24px;
+        height: 35px;
+        width: 35px;
+        display: inline-block;
+        font-weight: bold;
+        font-family: $hnm-regular;
+        cursor: pointer;
+      }
 
       &.disabled {
         background-color: $light-ash;
@@ -144,13 +149,17 @@
     }
 
     .zoomout {
-      background: url(../imgs/assets/ic-zoomout.png) no-repeat;
-      background-size: contain;
+      margin-#{$left}: 1rem;
+
+      &::before {
+        content: '-';
+      }
     }
 
     .zoomin {
-      background: url(../imgs/assets/ic-zoomin.png) no-repeat;
-      background-size: contain;
+      &::before {
+        content: '+';
+      }
     }
   }
 }
