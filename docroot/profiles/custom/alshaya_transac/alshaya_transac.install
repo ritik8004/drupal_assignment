@@ -45,6 +45,7 @@ function alshaya_transac_install() {
     'alshaya_permissions',
     'alshaya_product',
     'alshaya_seo',
+    'alshaya_seo_transac',
     'alshaya_stores_finder',
     'alshaya_user',
     'alshaya_acm_knet',
@@ -79,4 +80,11 @@ function alshaya_transac_install() {
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_transac', $modules);
+}
+
+/**
+ *  Hook update to enable module.
+ */
+function alshaya_transac_update_8001() {
+  \Drupal::service('module_installer')->install(['alshaya_seo_transac'], TRUE);
 }

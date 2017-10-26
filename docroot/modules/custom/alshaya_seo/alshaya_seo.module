@@ -36,7 +36,7 @@ function _alshaya_seo_process_gtm() {
   $route_params = \Drupal::routeMatch()->getRawParameters();
 
   // Disable SEO modifications for non-customer users (admins).
-  if ($currentUser->isAuthenticated() && !alshaya_acm_customer_is_customer($currentUser)) {
+  if ($currentUser->isAuthenticated() && function_exists('alshaya_acm_customer_is_customer') && !alshaya_acm_customer_is_customer($currentUser)) {
     $process = FALSE;
   }
   // Don't process for AJAX requests.
