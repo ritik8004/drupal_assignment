@@ -588,6 +588,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     // Attach size guide link to size attribute. This is statically attached to
     // size, we don't want it for any other attributes.
     if (isset($form['ajax']['configurables']['size'])) {
+      $form['ajax']['configurables']['size']['#required_error'] = t('Please select a size.');
+
       // We show the size guide link if available as prefix.
       if ($size_guide_link = _alshaya_acm_product_get_size_guide_link()) {
         $form['ajax']['configurables']['size']['#prefix'] = $size_guide_link;
