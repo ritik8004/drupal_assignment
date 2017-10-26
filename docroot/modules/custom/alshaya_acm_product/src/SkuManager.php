@@ -208,15 +208,23 @@ class SkuManager {
    *   Minimum final price and associated initial price.
    */
   protected function getMinPrices(SKU $sku_entity) {
-    $prices = ['price' => 0, 'final_price' => 0];
+    $prices = [
+      'price' => (float) $sku_entity->get('price')->getString(),
+      'final_price' => (float) $sku_entity->get('final_price')->getString(),
+    ];
+
+    // This function might get called from other places, add condition again
+    // before processing for configurable products.
+    if ($sku_entity->bundle() != 'configurable') {
+      return $prices;
+    }
+
     $sku_price = 0;
 
-    /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
-    $plugin = $sku_entity->getPluginInstance();
-    $tree = $plugin->deriveProductTree($sku_entity);
+    foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
+      try {
+        $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $sku_entity->language()->getId());
 
-    if (isset($tree['products'])) {
-      foreach ($tree['products'] as $child_sku => $child_sku_entity) {
         if ($child_sku_entity instanceof SKU) {
           $price = (float) $child_sku_entity->get('price')->getString();
           $final_price = (float) $child_sku_entity->get('final_price')->getString();
@@ -246,9 +254,13 @@ class SkuManager {
           }
         }
       }
-
-      return $prices;
+      catch (\Exception $e) {
+        // Child SKU might be deleted or translation not available.
+        // Log messages are already set in previous functions.
+      }
     }
+
+    return $prices;
   }
 
   /**
