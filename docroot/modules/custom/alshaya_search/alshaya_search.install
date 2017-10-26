@@ -10,6 +10,17 @@ use Drupal\lightning_core\ConfigHelper;
 /**
  * Implements hook_update_N().
  *
+ * Update index type for color and brand.
+ */
+function alshaya_search_update_8002() {
+  $solr_search_index_color = \Drupal::configFactory()->getEditable('search_api.index.acquia_search_index');
+  $solr_search_index_color->set('field_settings.color.type', 'string')->save();
+  $solr_search_index_color->set('field_settings.brand.type', 'string')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove the faulty sort config creating notices in AR.
  */
 function alshaya_search_update_8001() {
