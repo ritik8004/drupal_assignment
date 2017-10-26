@@ -16,14 +16,12 @@ class RouteSubscriber extends RouteSubscriberBase {
    */
   protected function alterRoutes(RouteCollection $collection) {
     $rest_apis_to_allow = [
-      'rest.‌acq_categorysync.POST',
-      'acq_customer_delete.POST',
-      '‌acq_productsync.POST',
+      'rest.csrftoken',
     ];
 
     // Allow some rest apis to work in maintenance mode.
-    foreach ($rest_apis_to_allow as $api) {
-      if ($route = $collection->get($api)) {
+    foreach ($collection->all() as $key => $route) {
+      if (strpos($key, 'rest.acq_') === 0 || in_array($key, $rest_apis_to_allow)) {
         $route->setOption('_maintenance_access', TRUE);
       }
     }
