@@ -211,6 +211,27 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $description_value .= '</div>';
       }
 
+      if ($composition = $sku_entity->get('attr_composition')->getString()) {
+        $description_value .= '<div class="composition-wrapper">';
+        $description_value .= '<div class="composition-label">' . t('composition') . '</div>';
+        $description_value .= '<div class="composition-value">' . $composition . '</div>';
+        $description_value .= '</div>';
+      }
+
+      $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
+      $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
+      if (!empty($washing_instructions) || !empty($dry_cleaning_instructions)) {
+        $description_value .= '<div class="care-instructions-wrapper">';
+        $description_value .= '<div class="care-instructions-label">' . t('care instructions') . '</div>';
+        if (!empty($washing_instructions)) {
+          $description_value .= '<div class="care-instructions-value washing-instructions">' . $washing_instructions . '</div>';
+        }
+        if (!empty($dry_cleaning_instructions)) {
+          $description_value .= '<div class="care-instructions-value dry-cleaning-instructions">' . $dry_cleaning_instructions . '</div>';
+        }
+        $description_value .= '</div>';
+      }
+
       $description['value'] = [
         '#markup' => $description_value,
       ];
