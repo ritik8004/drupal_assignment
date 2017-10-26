@@ -5,3 +5,10 @@ alshaya_seo.redirect_bulk_upload:
     _title: 'Bulk add redirects'
   requirements:
     _permission: 'administer redirects'
+alshaya_seo.sitemap:
+  path: '/sitemap'
+  defaults:
+    _controller: '\Drupal\alshaya_seo_transac\Controller\AlshayaSeoController::siteMap'
+    _title: 'site map'
+  requirements:
+    _access: 'TRUE'

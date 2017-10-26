@@ -5,58 +5,13 @@
  * Module file for seo transac.
  */
 
-use Drupal\Core\Url;
 use Drupal\acq_sku\Entity\SKU;
-
-/**
- * Function to check if we should process GTM code for current request.
- *
- * @return bool
- *   Whether to process or not.
- */
-function _alshaya_seo_transac_process_gtm() {
-  static $process = NULL;
-
-  if ($process !== NULL) {
-    return $process;
-  }
-
-  $currentUser = \Drupal::currentUser();
-  $current_route_name = \Drupal::routeMatch()->getRouteName();
-
-  // List of route expections with AJAX.
-  $whitelisted_routes = [
-    'views.ajax',
-    'alshaya_acm_product.product_modal',
-  ];
-
-  $route_params = \Drupal::routeMatch()->getRawParameters();
-
-  // Disable SEO modifications for non-customer users (admins).
-  if ($currentUser->isAuthenticated() && !alshaya_acm_customer_is_customer($currentUser)) {
-    $process = FALSE;
-  }
-  // Don't process for AJAX requests.
-  elseif ((stripos(\Drupal::request()->getRequestUri(), 'ajax') > -1) && (!in_array($current_route_name, $whitelisted_routes))) {
-    $process = FALSE;
-  }
-  elseif (!\Drupal::service('router.admin_context')->isAdminRoute()
-    || ($current_route_name === 'entity.user.edit_form')) {
-    $process = TRUE;
-  }
-  else {
-    // Return false by default.
-    $process = FALSE;
-  }
-
-  return $process;
-}
 
 /**
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_seo_transac_preprocess_html(&$variables) {
-  if (_alshaya_seo_transac_process_gtm()) {
+  if (_alshaya_seo_process_gtm()) {
     /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $variables['attributes']['gtm-currency'] = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
@@ -66,77 +21,10 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
 }
 
 /**
- * Implements hook_page_attachments().
- */
-function alshaya_seo_transac_page_attachments(array &$attachments) {
-  if (!_alshaya_seo_transac_process_gtm()) {
-    return;
-  }
-
-  $gkg_config = \Drupal::config('alshaya_seo.google_knowledge_graph');
-
-  $gkg_data = [];
-
-  $gkg_data['@context'] = 'http://schema.org';
-  // As checked in current prod, following text is not to be translated.
-  $gkg_data['@type'] = 'Organization';
-  $gkg_data['name'] = \Drupal::config('system.site')->get('name');
-  $gkg_data['url'] = Url::fromRoute('<front>', [], ['absolute' => TRUE])->toString();
-  $gkg_data['logo'] = Url::fromUserInput(theme_get_setting('logo.url'), ['absolute' => TRUE])->toString();
-
-  // Add all sameAs links as provided in Config.
-  if ($same_as = $gkg_config->get('same_as')) {
-    foreach (explode(PHP_EOL, $same_as) as $same_as_link) {
-      // Remove \r as well if string contains \r\n.
-      $same_as_link = trim($same_as_link, "\r");
-
-      if (!empty($same_as_link)) {
-        $gkg_data['sameAs'][] = $same_as_link;
-      }
-    }
-  }
-
-  // Add all contact options. Basic check added to have contact_type set in
-  // config to show the whole object.
-  if ($gkg_config->get('contact_telephone')) {
-    $contact['@type'] = 'ContactPoint';
-    $contact['telephone'] = $gkg_config->get('contact_telephone');
-    $contact['contactType'] = $gkg_config->get('contact_type');
-    $contact['areaServed'] = $gkg_config->get('contact_areaserved');
-    $contact['contactOption'] = $gkg_config->get('contact_option');
-
-    // Add all site languages as available language.
-    foreach (\Drupal::languageManager()->getLanguages() as $language) {
-      $contact['availableLanguage'][] = $language->getName();
-    }
-
-    // As required, we want it to be array of objects.
-    $gkg_data['contactPoint'][] = $contact;
-  }
-
-  // Add/Edit rich snippet for the PDP page.
-  $gkg_data = _alshaya_seo_transac_pdp_rich_snippet($gkg_data);
-
-  $attachments['#attached']['html_head']['alshaya_seo'] = [
-    [
-      '#type' => 'html_tag',
-      '#tag' => 'script',
-      '#attributes' => [
-        'type' => 'application/ld+json',
-      ],
-      // Adding PHP_EOL on both sides to make it look exactly same as expected.
-      '#value' => PHP_EOL . json_encode($gkg_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
-      '#weight' => 100,
-    ],
-    'gpg',
-  ];
-}
-
-/**
  * Implements hook_page_attachments_alter().
  */
 function alshaya_seo_transac_page_attachments_alter(&$page) {
-  if (_alshaya_seo_transac_process_gtm()) {
+  if (_alshaya_seo_process_gtm()) {
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
   }
 }
@@ -145,7 +33,7 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
  * Implements template_preprocess_node().
  */
 function alshaya_seo_transac_preprocess_node(&$variables) {
-  if (!_alshaya_seo_transac_process_gtm()) {
+  if (!_alshaya_seo_process_gtm()) {
     return;
   }
 
@@ -227,7 +115,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
  * Implements hook_datalayer_alter().
  */
 function alshaya_seo_transac_datalayer_alter(&$data_layer) {
-  if (!_alshaya_seo_transac_process_gtm()) {
+  if (!_alshaya_seo_process_gtm()) {
     return;
   }
 
@@ -404,15 +292,37 @@ function alshaya_seo_transac_preprocess_alshaya_cart_product_name(&$variables) {
 }
 
 /**
- * Implements hook_user_login().
+ * Implements hook_alshaya_seo_google_knowledge_graph_alter().
  */
-function alshaya_seo_transac_user_login($account) {
-  user_cookie_save(['alshaya_gtm_user_logged_in' => $account->id()]);
+function alshaya_seo_transac_alshaya_seo_google_knowledge_graph_alter(&$gkg_data) {
+  $gkg_data = _alshaya_seo_transac_pdp_rich_snippet($gkg_data);
 }
 
 /**
- * Implements hook_user_logout().
+ * Implements template_preprocess_alshaya_main_menu_level2().
  */
-function alshaya_seo_transac_user_logout($account) {
-  user_cookie_save(['alshaya_gtm_user_logged_out' => $account->id()]);
+function alshaya_seo_transac_preprocess_alshaya_main_menu_level2(&$variables) {
+  $sub_nav_label = str_replace(' ', '-', strtolower($variables['data']['label']));
+  $sub_nav_class = 'sub-nav-' . $sub_nav_label;
+  $variables['data']['sub_nav_class'] = 'sub-nav-' . $sub_nav_label;
+  foreach ($variables['data']['child'] as $key1 => $value) {
+    $variables['data']['child'][$key1]['sub_nav_class'] = $sub_nav_class;
+    foreach ($value['child'] as $key2 => $value2) {
+      $variables['data']['child'][$key1]['child'][$key2]['sub_nav_class'] = $sub_nav_class;
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_sitemap' => [
+      'template' => 'alshaya-sitemap',
+      'variables' => [
+        'term_tree' => NULL,
+      ],
+    ],
+  ];
 }

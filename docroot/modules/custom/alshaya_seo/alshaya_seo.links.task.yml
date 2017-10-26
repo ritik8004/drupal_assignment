@@ -2,8 +2,3 @@ alshaya_seo.google_knowledge_graph_form:
   route_name: alshaya_seo.google_knowledge_graph_form
   title: 'Google Knowledge Graph'
   base_route: alshaya_seo.google_knowledge_graph_form
-alshaya_seo.redirect_bulk_upload:
-  route_name: alshaya_seo.redirect_bulk_upload
-  base_route: redirect.list
-  title: 'Bulk add redirects'
-  weight: 51

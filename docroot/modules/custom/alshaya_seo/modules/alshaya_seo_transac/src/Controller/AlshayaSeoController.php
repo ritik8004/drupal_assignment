@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_seo\Controller;
+namespace Drupal\alshaya_seo_transac\Controller;
 
 use Drupal\alshaya_main_menu\ProductCategoryTree;
 use Drupal\Core\Controller\ControllerBase;
