@@ -9,6 +9,8 @@ use Drupal\Core\Config\FileStorage;
 
 /**
  * Implements hook_update_N().
+ *
+ * Update facets config.
  */
 function alshaya_product_update_8003() {
   $config_path = drupal_get_path('module', 'alshaya_product') . '/config/install';
