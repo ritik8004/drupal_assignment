@@ -31,3 +31,20 @@
 .block-language-switcher__tablet--pl {
   position: static;
 }
+
+.block-language-switcher--cookies {
+  display: none;
+  position: relative;
+
+  ul {
+    position: fixed;
+    bottom: 0;
+    background-color: $black-smoke;
+    width: 100%;
+    text-align: center;
+  }
+
+  li {
+    display: inline-block !important;
+  }
+}
