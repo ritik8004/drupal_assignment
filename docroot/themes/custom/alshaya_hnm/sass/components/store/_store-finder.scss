@@ -1252,6 +1252,7 @@
       top: 0.875rem;
       #{$right}: 1rem;
       font-size: 1.625rem;
+      pointer-events: none;
 
       html[lang=ar] & {
         transform: scaleX(-1);
