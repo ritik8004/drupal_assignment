@@ -236,9 +236,19 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
   $shipping_method_code = $checkoutOptionsManager->getCleanShippingMethodCode($order['shipping']['method']['carrier_code']);
-  $shippingTerm = $checkoutOptionsManager->loadShippingMethod($shipping_method_code);
+  $shipping_method_name = isset($order['shipping']['method']['description']) ? $order['shipping']['method']['description'] : '';
+
+  $shippingTerm = $checkoutOptionsManager->loadShippingMethod($shipping_method_code, $shipping_method_name);
 
   $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['method']['amount']);
+
+  $orderDetails['delivery_method'] = $shippingTerm->getName();
+
+  // Check if taxonomy term doesn't have proper name and we have description
+  // available in API response.
+  if (!empty($shipping_method_name) && $shippingTerm->getName() == $shipping_method_code) {
+    $orderDetails['delivery_method'] = $shipping_method_name;
+  }
 
   $orderDetails['contact_no'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($order['shipping']['address']['telephone']);
 
@@ -246,8 +256,6 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $cc_config = \Drupal::config('alshaya_click_collect.settings');
 
     $orderDetails['type'] = 'cc';
-
-    $orderDetails['delivery_method'] = $shippingTerm->getName();
 
     $shipping_assignment = reset($order['extension']['shipping_assignments']);
     $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
@@ -274,19 +282,24 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
       $cc_text = ($cc_type == 'reserve_and_collect') ? $cc_config->get('click_collect_rnc') : $store_node->get('field_store_sts_label')->getString();
 
-      $orderDetails['delivery_method'] = t('@shipping_method_name (@shipping_method_description)', [
-        '@shipping_method_name' => $shippingTerm->getName(),
-        '@shipping_method_description' => $cc_text,
-      ]);
+      if (!empty($cc_text)) {
+        $orderDetails['delivery_method'] = t('@shipping_method_name (@shipping_method_description)', [
+          '@shipping_method_name' => $orderDetails['delivery_method'],
+          '@shipping_method_description' => $cc_text,
+        ]);
+      }
     }
   }
   else {
     $orderDetails['type'] = 'hd';
 
-    $orderDetails['delivery_method'] = t('@shipping_method_name (@shipping_method_description)', [
-      '@shipping_method_name' => $shippingTerm->getName(),
-      '@shipping_method_description' => $shippingTerm->get('field_shipping_method_cart_desc')->getString(),
-    ]);
+    // Check if we have cart description available, display that in parenthesis.
+    if ($cart_desc = $shippingTerm->get('field_shipping_method_cart_desc')->getString()) {
+      $orderDetails['delivery_method'] = t('@shipping_method_name (@shipping_method_description)', [
+        '@shipping_method_name' => $orderDetails['delivery_method'],
+        '@shipping_method_description' => $cart_desc,
+      ]);
+    }
 
     $shipping_address = $order['shipping']['address'];
 

@@ -184,10 +184,39 @@ class ProductSyncResource extends ResourceBase {
       }
 
       if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
+        if ($product['status'] != 1) {
+          $this->logger->info('Removing disabled SKU from system: @sku.', ['@sku' => $product['sku']]);
+
+          try {
+            /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+            $plugin = $sku->getPluginInstance();
+
+            if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
+              // Delete the node if it is linked to this SKU only.
+              $node->delete();
+            }
+          }
+          catch (\Exception $e) {
+            // Not doing anything, we might not have node for the sku.
+          }
+
+          // Delete the SKU.
+          $sku->delete();
+
+          $updated++;
+          continue;
+        }
+
         $this->logger->info('Updating product SKU @sku.', ['@sku' => $product['sku']]);
         $updated++;
       }
       else {
+        if ($product['status'] != 1) {
+          $this->logger->info('Not creating disabled SKU in system: @sku.', ['@sku' => $product['sku']]);
+          $failed++;
+          continue;
+        }
+
         /** @var \Drupal\acq_sku\Entity\SKU $sku */
         $sku = $em->create([
           'type' => $product['type'],
