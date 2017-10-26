@@ -20,5 +20,13 @@
       margin: 0 0.125rem;
       text-decoration: none;
     }
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:hover::before {
+      color: $medium-pink;
+    }
   }
 }
