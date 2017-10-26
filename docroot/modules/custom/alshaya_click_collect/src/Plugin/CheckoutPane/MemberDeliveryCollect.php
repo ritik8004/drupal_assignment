@@ -280,6 +280,9 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $cart = $this->getCart();
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
 
+    // Clear the payment now.
+    $cart->clearPayment();
+
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
     $address = $address_book_manager->getAddressStructureWithEmptyValues();
