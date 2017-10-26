@@ -182,6 +182,53 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
 }
 
 /**
+ * Mark node for reindexing on add/update/delete of SKUs.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $entity
+ *   SKU for which display node is to be updated.
+ */
+function _alshaya_acm_product_node_mark_for_reindex(SKU $entity) {
+  // Don't do anything if search_api is not enabled.
+  if (!\Drupal::moduleHandler()->moduleExists('search_api')) {
+    return;
+  }
+
+  try {
+    $plugin = $entity->getPluginInstance();
+
+    // Check if node is available.
+    if ($node = $plugin->getDisplayNode($entity)) {
+      $node->original = clone $node;
+      search_api_entity_update($node);
+    }
+  }
+  catch (\Exception $e) {
+    // Translation might not be available.
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function alshaya_acm_product_acq_sku_insert(SKU $entity) {
+  _alshaya_acm_product_node_mark_for_reindex($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function alshaya_acm_product_acq_sku_update(SKU $entity) {
+  _alshaya_acm_product_node_mark_for_reindex($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function alshaya_acm_product_acq_sku_delete(SKU $entity) {
+  _alshaya_acm_product_node_mark_for_reindex($entity);
+}
+
+/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
