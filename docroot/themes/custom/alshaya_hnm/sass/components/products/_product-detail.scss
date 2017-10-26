@@ -954,6 +954,10 @@
     &:hover {
       background-color: $white-four;
     }
+
+    &:first-child {
+      border-top: none;
+    }
   }
 
   .pac-item,
