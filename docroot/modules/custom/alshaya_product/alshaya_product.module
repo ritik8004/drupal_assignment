@@ -51,11 +51,12 @@ function alshaya_product_views_pre_execute(ViewExecutable $view) {
  */
 function alshaya_product_alshaya_i18n_onetime_translation_add() {
   // Add translations for PLP page view.
-  $product_list_view = \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'views.view.alshaya_product_list');
+  $product_list_view = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.alshaya_product_list');
+
   $product_list_view->set('display.default.display_options.exposed_form.options.exposed_sorts_label', 'رتب حسب');
-  $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'الاسم تصاعدي|الاسم من أ إلى ي
-الاسم تنازلي|الاسم من ي إلى أ
+  $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
+الاسم تصاعدي|الاسم من أ إلى ي
+الاسم تنازلي|الاسم من ي إلى أ 
 السعر تنازلي|السعر من الأعلى إلى الأدنى
 السعر تصاعدي|السعر من الأدنى إلى الأعلى');
   $product_list_view->set('display.default.display_options.exposed_form.options.sort_asc_label', 'تصاعدي');
@@ -65,6 +66,8 @@ function alshaya_product_alshaya_i18n_onetime_translation_add() {
   $product_list_view->set('display.default.display_options.sorts.title.expose.label', 'الاسم');
   $product_list_view->set('display.default.display_options.header.result.content', '@total القطع');
   $product_list_view->set('display.default.display_options.pager.options.views_infinite_scroll.button_text', 'عرض المزيد');
+  $product_list_view->set('display.block_1.display_options.sorts.nid.expose.label', 'ما ننصح به');
+
   $product_list_view->save();
 }
 

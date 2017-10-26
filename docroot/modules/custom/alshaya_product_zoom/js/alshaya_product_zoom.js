@@ -15,6 +15,7 @@
         arrows: true,
         focusOnSelect: false,
         centerMode: true,
+        infinite: false,
         responsive: [
           {
             breakpoint: 1025,
@@ -114,6 +115,7 @@
             vertical: true,
             arrows: true,
             centerMode: true,
+            infinite: false,
             focusOnSelect: false,
             initialSlide: currentSlide,
             responsive: [
