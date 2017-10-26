@@ -52,7 +52,7 @@ class ProductStockController extends ControllerBase {
       $build['max_quantity'] = 100;
       $build['html'] = '';
     }
-    elseif ($max_quantity = 5) {
+    elseif ($max_quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
       $build['max_quantity'] = $max_quantity;
       $build['html'] = '';
     }
@@ -123,7 +123,7 @@ class ProductStockController extends ControllerBase {
 
       return $response;
     }
-    elseif ($max_quantity = 5) {
+    elseif ($max_quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
       $build['max_quantity'] = $max_quantity;
 
       $form = $this->fetchAddCartForm($sku_entity);

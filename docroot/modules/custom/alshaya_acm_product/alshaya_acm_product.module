@@ -562,20 +562,20 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           foreach ($configurable['#options'] as $key => $value) {
             $sku = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), [$configurable_key => $key]);
 
-//            // This is very limited, it supports only 1 configurable attribute.
-//            if ($sku instanceof SKU) {
-//              $form['#cache']['tags'][] = 'acq_sku:' . $sku->id();
-//              if ($quantity = 5) {
-//                $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
-//              }
-//              else {
-//                $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
-//              }
-//            }
-//            // For some reason we don't have proper data for the option.
-//            else {
-//              $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
-//            }
+            // This is very limited, it supports only 1 configurable attribute.
+            if ($sku instanceof SKU) {
+              $form['#cache']['tags'][] = 'acq_sku:' . $sku->id();
+              if ($quantity = alshaya_acm_is_product_in_stock($sku, TRUE)) {
+                $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
+              }
+              else {
+                $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
+              }
+            }
+            // For some reason we don't have proper data for the option.
+            else {
+              $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
+            }
           }
         }
 
@@ -592,7 +592,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     }
   }
   // Stock check for quantity for all other products.
-  elseif ($quantity = 5) {
+  elseif ($quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
   else {
@@ -620,55 +620,9 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   $dynamic_parts = call_user_func_array($form_state->prepareCallback('::configurableAjaxCallback'), [&$form, &$form_state]);
 
   $tree_pointer = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), $form_state->getValue('configurables'));
-  $product_tree = $form_state->get('tree');
-  if (count($product_tree['configurables']) > 1) {
-    foreach ($tree_pointer as $key => $value) {
-      if ($key === '#available_config') {
-        continue;
-      }
-
-      if (!$value) {
-        $configurable_parts = explode(':', $key);
-        $options = $dynamic_parts['configurables'][$configurable_parts[0]]['#options'];
-        foreach ($options as $key => $option) {
-          if ($key == $configurable_parts[1]) {
-            $dynamic_parts['configurables'][$configurable_parts[0]]['#options_attributes'][$key]['disabled'] = 'disabled';
-          }
-        }
-      }
-      elseif ($value instanceof SKU) {
-        if ($quantity = alshaya_acm_is_product_in_stock($value)) {
-          // Do Nothing.
-        }
-        else {
-          $configurable_parts = explode(':', $key);
-          $options = $dynamic_parts['configurables'][$configurable_parts[0]]['#options'];
-          foreach ($options as $key => $option) {
-            if ($key == $configurable_parts[1]) {
-              $dynamic_parts['configurables'][$configurable_parts[0]]['#options_attributes'][$key]['disabled'] = 'disabled';
-            }
-          }
-        }
-      }
-    }
-    $sku = SKU::load($form['sku_id']['#value']);
-    $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
-
-    $response = new AjaxResponse();
-
-    $selector = '.configurable-wrapper-' . $sku_identifier;
-
-    // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
-    $data['replaceWith'] = \Drupal::service('renderer')->render($dynamic_parts);
-    $data['selector'] = $selector;
-
-    $response->addCommand(new InvokeCommand($selector, 'replaceDynamicParts', [$data]));
-
-    return $response;
-  }
 
   if ($tree_pointer instanceof SKU) {
-    if ($quantity = 5) {
+    if ($quantity = alshaya_acm_is_product_in_stock($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
 

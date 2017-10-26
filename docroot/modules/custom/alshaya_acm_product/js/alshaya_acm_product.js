@@ -1,7 +1,3 @@
-/**
- * @file
- */
-
 (function ($, Drupal) {
   'use strict';
 
@@ -33,7 +29,7 @@
 
   $.fn.replaceDynamicParts = function (data) {
     if (data.replaceWith === '') {
-      // Do nothing.
+      // Do nothing
     }
     else {
       $(data.selector).replaceWith(data.replaceWith);
