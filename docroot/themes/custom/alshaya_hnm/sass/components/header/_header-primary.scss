@@ -112,6 +112,13 @@ header {
       }
     }
 
+    .price {
+      .price-amount {
+        font-family: $hnm-demibold;
+        margin: 0 0.25rem;
+      }
+    }
+
     @include breakpoint($desktop) {
       .block-system-branding-block {
         .site-brand-home {
