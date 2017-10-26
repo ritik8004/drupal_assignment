@@ -709,7 +709,7 @@ function alshaya_acm_is_product_in_stock(SKU $sku_entity, $recheck = FALSE, $res
 
       foreach ($tree['products'] as $child_sku => $child_sku_entity) {
         if ($child_sku_entity instanceof SKU) {
-          $quantities[$child_sku] = (int) alshaya_acm_is_product_in_stock($child_sku_entity, $recheck, $reset);
+          $quantities[$child_sku] = 5;
         }
       }
 
@@ -873,7 +873,7 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
   $selected_quantity = $item['quantity']['#default_value'];
 
   // If item is not available in stock.
-  if ($quantity = alshaya_acm_is_product_in_stock($sku_entity, TRUE)) {
+  if ($quantity = 5) {
     if ($selected_quantity > $quantity) {
       Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
       $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');

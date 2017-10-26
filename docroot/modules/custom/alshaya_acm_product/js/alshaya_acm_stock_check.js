@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -147,8 +151,8 @@
   /**
    * Helper function to re-attach AJAX settings to add-cart button & config sizes.
    *
-	 * @param element
-	 */
+     * @param element
+     */
   Drupal.reAttachAddCartAndConfigSizeAjax = function (element) {
     var postUrl = $(element).find('form').attr('action') + '?ajax_form=1';
     var editCartElementSettings = {
@@ -236,8 +240,8 @@
   /**
    * Helper function to load cart form for the carousel active item.
    *
-	 * @param activeitem
-	 */
+     * @param activeitem
+     */
   Drupal.loadTeaserCartForm = function (activeitem) {
     if (activeitem.find('.mobile--only--sell')) {
       var activeMobileItem = activeitem.find('.mobile--only--sell');
