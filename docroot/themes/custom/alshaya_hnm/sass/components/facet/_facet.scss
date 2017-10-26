@@ -67,13 +67,10 @@
       line-height: 1.57;
       vertical-align: middle;
       margin-top: 0.125rem;
+      display: inline-block;
 
       html[lang=ar] & {
         line-height: 2.125rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        display: inline-block;
       }
     }
 

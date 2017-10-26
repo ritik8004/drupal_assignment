@@ -678,7 +678,7 @@
       .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
       .form-item-geolocation-geocoder-google-places-api {
         width: 55% !important;
-        padding-#{$right}: 3.75rem;
+        padding-#{$right}: 1.75rem;
       }
     }
 
@@ -1252,6 +1252,7 @@
       top: 0.875rem;
       #{$right}: 1rem;
       font-size: 1.625rem;
+      pointer-events: none;
 
       html[lang=ar] & {
         transform: scaleX(-1);
@@ -1378,7 +1379,7 @@
   }
 
   .get--directions div::after {
-    top: 0.5rem;
+    top: 0.25rem;
   }
 
   .hours--wrapper .hours--label,
