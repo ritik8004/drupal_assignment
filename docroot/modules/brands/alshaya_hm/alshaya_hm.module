@@ -17,6 +17,10 @@ function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id)
       $form['sort_bef_combine']['#options']['nid ASC'] = t('Best Seller');
     }
   }
+
+  if ($form_id == 'alshaya_newsletter_subscribe') {
+    $form['email']['#prefix']   = '<div class="newsletter-block-label">Be the first to know about our newest arrivals, special offers and store events near you. </div>';
+  }
 }
 
 /**
