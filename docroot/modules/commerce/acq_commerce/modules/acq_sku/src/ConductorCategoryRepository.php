@@ -3,7 +3,6 @@
 namespace Drupal\acq_sku;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Logger\LoggerChannelFactory;
 
 /**
@@ -93,20 +92,17 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
 
     $tids = $query->execute();
 
-    if (count($tids) > 1) {
-
-      $this->logger->error('Multiple terms found for category id @cid', ['@cid' => $commerce_id]);
-
+    if (count($tids) == 0) {
       return (NULL);
-
     }
-    elseif (count($tids) == 1) {
-      $term = $this->termStorage->load(array_shift($tids));
-      $this->terms[$commerce_id] = $term;
-      return ($term);
+    elseif (count($tids) > 1) {
+      $this->logger->error('Multiple terms found for category id @cid', ['@cid' => $commerce_id]);
     }
 
-    return (NULL);
+    $term = $this->termStorage->load(array_shift($tids));
+    $this->terms[$commerce_id] = $term;
+
+    return ($term);
   }
 
   /**
