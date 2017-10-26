@@ -64,3 +64,12 @@ function alshaya_search_acquia_search_install() {
     ->set('status', FALSE)
     ->save();
 }
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_search_acquia_search_update_8001() {
+  $solr_search_index_color = \Drupal::configFactory()->getEditable('search_api.index.acquia_search_index');
+  $solr_search_index_color->set('field_settings.color.type', 'string')->save();
+  $solr_search_index_color->set('field_settings.brand.type', 'string')->save();
+}
