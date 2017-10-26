@@ -49,11 +49,11 @@ function acq_sku_drush_command() {
     ],
   ];
 
-  $commands['clean-commerce-cats'] = [
-    'description' => 'Clean all duplicate categories available in system.',
-    'aliases'     => ['accc'],
+  $commands['commerce-cats-remove-duplicates'] = [
+    'description' => 'Remove all duplicate categories available in system.',
+    'aliases'     => ['acccrd'],
     'examples'    => [
-      'drush accc' => 'Clean all duplicate categories available in system.',
+      'drush acccrd' => 'Remove all duplicate categories available in system.',
     ],
   ];
 
@@ -148,9 +148,9 @@ function drush_acq_sku_sync_commerce_product_options() {
 }
 
 /**
- * Implements drush clean-commerce-cats command.
+ * Implements drush commerce-cats-remove-duplicates command.
  */
-function drush_acq_sku_clean_commerce_cats() {
+function drush_acq_sku_commerce_cats_remove_duplicates() {
   drush_print(dt('Cleaning all commerce categories, please wait...'));
 
   $db = \Drupal::database();
