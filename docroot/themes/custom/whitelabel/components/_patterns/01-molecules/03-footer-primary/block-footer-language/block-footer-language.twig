@@ -16,8 +16,10 @@
 </div>
 
 {% if content %}
-  <div class="block-language-switcher--cookies device__no-desktop only-first-time">
-    {{ content }}
-    <span class="language-switcher-close icon-close"></span>
+  <div class="block-language-switcher__cookies device__no-desktop only-first-time">
+    <div class="block-language-switcher--cookies--content">
+      {{ content }}
+      <span class="language-switcher-close icon-close"></span>
+    </div>
   </div>
 {% endif %}
