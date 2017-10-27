@@ -646,22 +646,22 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // Items are keyed by their attribute codes.
     foreach ($tree_pointer as $key => $value) {
       $attribute = explode(':', $key);
-      $enabled_options[$attribute[0]] = $attribute[1];
+      $attribute_code = $attribute[0];
+      $enabled_options[] = $attribute[1];
     }
 
-    $attribute_code = array_unique(array_keys($enabled_options));
-    $options = $dynamic_parts['configurables'][$attribute_code[0]]['#options'];
+    $options = $dynamic_parts['configurables'][$attribute_code]['#options'];
 
     // Disable options which don't exist for the choosen config.
     foreach ($options as $key => $value) {
       if (!in_array($key, $enabled_options)) {
-        $dynamic_parts['configurables'][$attribute_code[0]]['#options_attributes'][$key]['disabled'] = 'disabled';
+        $dynamic_parts['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
       }
     }
 
     // If there is only one item returned back,
     // it implies we have reached to the leaf most SKU in the tree.
-    if (count($tree_pointer)) {
+    if (count($tree_pointer) === 1) {
       $tree_pointer = array_shift($tree_pointer);
     }
   }
@@ -754,6 +754,39 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
       $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
     }
+
+    return $response;
+  }
+  else {
+    $build = [];
+    $sku = $product_tree['parent'];
+
+    alshaya_acm_product_get_gallery($build, $sku);
+    $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
+
+    $response = new AjaxResponse();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
+
+    $price_block = $skuManager->getPriceBlock($sku);
+    $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
+
+    $selector = '.configurable-wrapper-' . $sku_identifier;
+
+    // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
+    $data['replaceWith'] = \Drupal::service('renderer')->render($dynamic_parts);
+    $data['selector'] = $selector;
+
+    $response->addCommand(new InvokeCommand($selector, 'replaceDynamicParts', [$data]));
+    // Get the data from BubbleMetaData.
+    $bubbleable_metadata = BubbleableMetadata::createFromRenderArray($dynamic_parts);
+
+    // Retrieve the attachments from the $data.
+    $attachments = $bubbleable_metadata->getAttachments();
+
+    // Send the updated settings in ajax response.
+    $response->addCommand(new SettingsCommand($attachments['drupalSettings'], TRUE));
 
     return $response;
   }
