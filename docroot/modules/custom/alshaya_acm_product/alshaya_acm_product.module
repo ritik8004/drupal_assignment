@@ -5,7 +5,6 @@
  * Contains general hooks and alters.
  */
 
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
@@ -36,16 +35,22 @@ use Drupal\search_api\IndexInterface;
  *   The items that will be indexed.
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
+  // Get the configurable fields we want to capture separately as fields.
+  $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+  $indexFields = array_filter($fields, function ($field) {
+    return !empty($field['index']);
+  });
+
   foreach ($items as $item_id => $item) {
     $object = $item->getOriginalObject()->getValue();
 
     $type = $object->getEntityType()->id();
     $bundle = $object->bundle();
 
-    // Deal with color field case that is not a real configurable attribute
-    // and that thus does not auto fill the color field of the parent sku.
+    // Deal with all indexable fields not available by default in configurable
+    // parent but available in the variants.
     // Deal with final price of configurable that needs to come from variants.
-    if ($type == 'node' && $bundle == 'acq_product' && !empty($item->getField('attr_color'))) {
+    if ($type == 'node' && $bundle == 'acq_product') {
       $sku = $object->get('field_skus')->first()->getString();
 
       if (!empty($sku)) {
@@ -53,29 +58,56 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
         $sku_entity = SKU::loadFromSku($sku, $langcode);
 
         if (!empty($sku_entity) && $sku_entity->bundle() == 'configurable') {
-          // Update color based on color of children.
+          $data = [];
+
           // Update final_price based on final_price of children.
-          $colors = [];
           $min_final_price = NULL;
 
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
-            $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode);
+            try {
+              $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode);
+            }
+            catch (\Exception $e) {
+              // Do nothing, child sku might not be available or deleted.
+              continue;
+            }
 
-            if (!empty($child_sku_entity)) {
-              $color = $child_sku_entity->get('attr_color')->first();
-              if (!empty($color)) {
-                $color = $color->getString();
-                $colors[$color] = $color;
-              }
+            // Additional check if it returns NULL.
+            if (empty($child_sku_entity)) {
+              continue;
+            }
 
-              $final_price = (float) $child_sku_entity->get('final_price')->getString();
-              if ($final_price > 0) {
-                $min_final_price = isset($min_final_price) ? min($min_final_price, $final_price) : $final_price;
+            // Loop through the indexable fields.
+            foreach ($indexFields as $key => $field) {
+              $field_key = 'attr_' . $key;
+              $field_data = $child_sku_entity->get($field_key)->first();
+
+              if (!empty($field_data)) {
+                $field_value = $field_data->getString();
+                $data[$key][$field_value] = $field_value;
               }
+            }
+
+            $final_price = (float) $child_sku_entity->get('final_price')->getString();
+            if ($final_price > 0) {
+              $min_final_price = isset($min_final_price) ? min($min_final_price, $final_price) : $final_price;
             }
           }
 
-          $item->getField('attr_color')->setValues(array_keys($colors));
+          foreach ($data as $key => $values) {
+            $field_key = 'attr_' . $key;
+
+            // There is an issue with color field in indexes.
+            // It is color in solr and attr_color in database index.
+            // For all other fields it is attr_field in both indexes.
+            if (!empty($item->getField($field_key))) {
+              $item->getField($field_key)->setValues(array_keys($values));
+            }
+            elseif (!empty($item->getField($key))) {
+              $item->getField($key)->setValues(array_keys($values));
+            }
+          }
+
           $item->getField('final_price')->setValues([$min_final_price]);
         }
       }
@@ -140,45 +172,6 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
   ];
 
   return $items;
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
-  // @TODO: Simple SKU are processed by default in commerce code, configurable
-  // SKUs are processed below, we will need to check for bundled products
-  // when we work on it: MMCPA-211.
-  if ($sku->bundle() == 'configurable') {
-    // Get the configurable attributes array.
-    $configurable_attributes_data = unserialize($sku->get('field_configurable_attributes')->getString());
-
-    // Get the configurable fields we want to capture separately as fields.
-    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
-    $configurableFields = array_filter($fields, function ($field) {
-      return (bool) $field['configurable'];
-    });
-
-    /** @var \Drupal\acq_sku\ProductOptionsManager $product_options_manager */
-    $product_options_manager = \Drupal::service('acq_sku.product_options_manager');
-
-    // Loop through the configurable fields.
-    foreach ($configurableFields as $key => $field) {
-      $field_key = 'attr_' . $key;
-
-      // Loop through all configurable data available from API.
-      foreach ($configurable_attributes_data as $attribute_data) {
-        if ($attribute_data['code'] == $key) {
-          foreach ($attribute_data['values'] as $index => $value) {
-            $sku->get($field_key)->set($index, $value['value_id']);
-            if ($term = $product_options_manager->loadProductOptionByOptionId($key, $value['value_id'], $sku->language()->getId())) {
-              $sku->get($field_key)->set($index, $term->getName());
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 /**
