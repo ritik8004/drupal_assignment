@@ -40,8 +40,7 @@ function alshaya_non_transac_install() {
     'alshaya_password_policy',
     'alshaya_permissions',
     // 'alshaya_product',
-    // @todo: Separate alshaya_seo for transac & non-transac.
-    // 'alshaya_seo',
+    'alshaya_seo',
     'alshaya_stores_finder',
     'alshaya_user',
     // 'alshaya_acm_knet',
@@ -75,4 +74,11 @@ function alshaya_non_transac_install() {
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_non_transac', $modules);
+}
+
+/**
+ *  Hook update to enable module.
+ */
+function alshaya_non_transac_update_8101() {
+  \Drupal::service('module_installer')->install(['alshaya_seo'], TRUE);
 }
