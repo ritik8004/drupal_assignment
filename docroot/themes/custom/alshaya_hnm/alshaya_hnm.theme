@@ -244,20 +244,6 @@ function alshaya_hnm_preprocess_field__node__field_store_open_hours__store(&$var
 }
 
 /**
- * Implements hook_preprocess_field().
- *
- * For the address field of store content type.
- */
-function alshaya_hnm_preprocess_field__node__field_store_address__store(&$variables) {
-  if (!empty($variables['items'])) {
-    // Adding 'raw' filter for the html tags that show up.
-    foreach ($variables['items'] as &$item) {
-      $item['content']['#template'] = '{{ value|raw|nl2br }}';
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_node().
  */
 function alshaya_hnm_preprocess_node(&$variables) {
@@ -366,7 +352,7 @@ function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id
     case "views_exposed_form":
       // Adding Place holder on Search.
       if ($form['#id'] == 'views-exposed-form-search-page') {
-        $form['keywords']['#attributes']['placeholder'] = t('search');
+        $form['keywords']['#attributes']['placeholder'] = t('Search');
       }
       break;
 

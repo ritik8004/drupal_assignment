@@ -8,7 +8,7 @@
 use \Drupal\block_content\Entity\BlockContent;
 
 /**
- * Create default copyright block content.
+ * Create default block_content.
  */
 function alshaya_vs_create_default_content() {
   // Create copyright block.
@@ -48,7 +48,7 @@ function alshaya_vs_create_copyright_block_content() {
 }
 
 /**
- * Create default copyright block content.
+ * Create default email signup cta block content.
  */
 function alshaya_vs_create_email_signup_cta_block_content() {
   // Create email signup cta block content.
@@ -76,7 +76,7 @@ function alshaya_vs_create_email_signup_cta_block_content() {
 }
 
 /**
- * Create default copyright block content.
+ * Create default email signup form block content.
  */
 function alshaya_vs_create_email_signup_form_incentive_text_block_content() {
 // Create email signup form incentive text block content.

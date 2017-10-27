@@ -135,7 +135,21 @@
   .block-customer-service-block {
     border-top: none;
     padding-top: 3.25rem;
-    padding-bottom: 1.375rem;
+    padding-bottom: 0.625rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 0;
+
+      h3 {
+        margin: 0;
+        padding-top: 2.625rem;
+        padding-bottom: 1.0625rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: 3.25rem 1.5rem 3rem;
+    }
   }
 
   .site-brand-wrapper {
@@ -283,6 +297,22 @@
 
     &.line3 {
       margin-bottom: 2rem;
+
+      @include breakpoint($only-mobile) {
+        width: 14.375rem;
+        margin: 0 auto;
+        line-height: 1.5;
+      }
+    }
+
+    &.line4 {
+      span {
+        width: 76.565%;
+
+        @include breakpoint($tablet) {
+          width: 35.4375rem;
+        }
+      }
     }
   }
 
@@ -297,6 +327,10 @@
 
   p:last-child {
     margin-top: 2rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1.625rem;
+    }
 
     .light {
       font-family: $alshaya-bold;

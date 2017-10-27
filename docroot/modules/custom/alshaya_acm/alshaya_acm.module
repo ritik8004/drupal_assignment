@@ -360,10 +360,6 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
     $totals['grand'] -= $totals['shipping'];
   }
 
-  $form['totals']['grand']['value'] = [
-    '#markup' => alshaya_acm_price_format($totals['grand']),
-  ];
-
   // Add shipping info.
   $cart_rules_applied = $cart->getCart()->cart_rules;
   if (!empty($cart_rules_applied)) {
@@ -392,6 +388,9 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
     }
   }
 
+  $form['totals']['grand']['value'] = [
+    '#markup' => alshaya_acm_price_format($totals['grand']),
+  ];
 }
 
 /**
