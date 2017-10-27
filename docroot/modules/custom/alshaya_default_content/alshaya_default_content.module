@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+
+/**
+ * Helper function to create menu link with translations.
+ *
+ * @param array $link
+ *   Array containing uri, class, menu, weight and title for each language with
+ *   langcode as key.
+ */
+function alshaya_default_content_add_menu_link_with_translations(array $link) {
+  $default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+
+  // We don't do anything if link title not available for default language.
+  if (empty($link[$default_langcode])) {
+    return;
+  }
+
+  // Create the menu item.
+  $menu = MenuLinkContent::create([
+    'link' => [
+      'uri' => $link['uri'],
+      'options' => [
+        'attributes' => [
+          'class' => $link['class'],
+        ],
+      ],
+    ],
+    'menu_name' => $link['menu'],
+    'weight' => $link['weight'],
+  ]);
+
+  // Set title for default language.
+  $menu->title->value = $link[$default_langcode];
+
+  // Save the main menu item.
+  $menu->save();
+
+  // Get all languages.
+  $languages = \Drupal::languageManager()->getLanguages();
+
+  // Remove default language, we already saved menu item for that.
+  unset($languages[$default_langcode]);
+
+  // Get only the langcodes.
+  $langcodes = array_keys($languages);
+
+  // Save translation for each language if available.
+  foreach ($langcodes as $langcode) {
+    if (isset($link[$langcode])) {
+      $language_menu = $menu->addTranslation($langcode, $menu->toArray());
+      $language_menu->title->value = $link[$langcode];
+      $language_menu->save();
+    }
+  }
+}

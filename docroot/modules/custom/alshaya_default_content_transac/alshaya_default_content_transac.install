@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_default_content_transac_install() {
+  $menu_items = [];
+
+  $menu_items[] = [
+    'menu' => 'mobile-navigation',
+    'en' => 'MENU',
+    'ar' => 'محلاتنا',
+    'uri' => 'internal:/#',
+    'class' => 'hamburger--menu mobile--menu',
+    'weight' => -50,
+  ];
+
+  $menu_items[] = [
+    'menu' => 'mobile-navigation',
+    'en' => 'SEARCH',
+    'ar' => 'محلاتنا',
+    'uri' => 'internal:/#',
+    'class' => 'mobile--search',
+    'weight' => -49,
+  ];
+
+  foreach ($menu_items as $item) {
+    alshaya_default_content_add_menu_link_with_translations($item);
+  }
+}

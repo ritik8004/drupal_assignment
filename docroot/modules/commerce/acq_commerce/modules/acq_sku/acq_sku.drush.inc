@@ -49,6 +49,14 @@ function acq_sku_drush_command() {
     ],
   ];
 
+  $commands['commerce-cats-remove-duplicates'] = [
+    'description' => 'Remove all duplicate categories available in system.',
+    'aliases'     => ['acccrd'],
+    'examples'    => [
+      'drush acccrd' => 'Remove all duplicate categories available in system.',
+    ],
+  ];
+
   $commands['clean-synced-data'] = [
     'description' => 'Flush all commerce data from the site (Products, SKUs, Product Categories and Product Options).',
     'aliases'     => ['accd'],
@@ -128,7 +136,6 @@ function drush_acq_sku_sync_commerce_cats() {
   drush_print(dt('Done.'));
 }
 
-
 /**
  * Implements drush product attribute sync command.
  */
@@ -137,6 +144,78 @@ function drush_acq_sku_sync_commerce_product_options() {
   $container = \Drupal::getContainer();
   $container->get('acq_sku.product_options_manager')->synchronizeProductOptions();
   \Drupal::logger('acq_sku')->notice('Product attribute sync completed.');
+  drush_print(dt('Done.'));
+}
+
+/**
+ * Implements drush commerce-cats-remove-duplicates command.
+ */
+function drush_acq_sku_commerce_cats_remove_duplicates() {
+  drush_print(dt('Cleaning all commerce categories, please wait...'));
+
+  $db = \Drupal::database();
+
+  /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
+  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  /** @var \Drupal\node\NodeStorageInterface $nodeStorage */
+  $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
+
+  $query = $db->select('taxonomy_term__field_commerce_id', 'ttfci');
+  $query->addField('ttfci', 'field_commerce_id_value', 'commerce_id');
+  $query->groupBy('commerce_id');
+  $query->having('count(*) > 1');
+  $result = $query->execute()->fetchAllKeyed(0, 0);
+
+  if (empty($result)) {
+    drush_print(dt('No duplicate categories found.'));
+    return;
+  }
+
+  foreach ($result as $commerce_id) {
+    drush_print(dt('Duplicate categories found for commerce id: @commerce_id.', [
+      '@commerce_id' => $commerce_id,
+    ]));
+
+    $query = $db->select('taxonomy_term__field_commerce_id', 'ttfci');
+    $query->addField('ttfci', 'entity_id', 'tid');
+    $query->condition('ttfci.field_commerce_id_value', $commerce_id);
+    $query->orderBy('tid', 'DESC');
+    $tids = $query->execute()->fetchAllKeyed(0, 0);
+
+    foreach ($tids as $tid) {
+      $query = $nodeStorage->getQuery();
+      $query->condition('field_category', $tid);
+      $nodes = $query->execute();
+
+      if (empty($nodes)) {
+        drush_print(dt('No nodes found for tid: @tid for commerce id: @commerce_id. Deleting', [
+          '@commerce_id' => $commerce_id,
+          '@tid' => $tid,
+        ]));
+
+        $term = $termStorage->load($tid);
+        $term->delete();
+
+        unset($tids[$tid]);
+
+        // Break the loop if only one left now, we might not have any products
+        // added yet and categories are synced which means there will be no
+        // nodes for any term.
+        if (count($tids) == 1) {
+          break;
+        }
+      }
+      else {
+        drush_print(dt('@count nodes found for tid: @tid for commerce id: @commerce_id. Not Deleting', [
+          '@commerce_id' => $commerce_id,
+          '@tid' => $tid,
+          '@count' => count($nodes),
+        ]));
+      }
+    }
+  }
+
   drush_print(dt('Done.'));
 }
 
