@@ -79,6 +79,6 @@ function alshaya_non_transac_install() {
 /**
  *  Hook update to enable module.
  */
-function alshaya_non_transac_update_8001() {
+function alshaya_non_transac_update_8101() {
   \Drupal::service('module_installer')->install(['alshaya_seo'], TRUE);
 }
