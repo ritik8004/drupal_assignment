@@ -133,7 +133,7 @@
 
     .content--item-code {
       font-size: 0.6875rem;
-      color: $brownish-grey;
+      color: $grey7;
       padding-bottom: 0.75rem;
     }
 
@@ -181,6 +181,12 @@
       border-radius: 0;
       padding: 0.3125rem 0.625rem;
       appearance: none;
+    }
+  }
+
+  .form-item-configurables-article-castor-id {
+    label {
+      @include u-visibility(none);
     }
   }
 
@@ -238,6 +244,7 @@
       &::after,
       &::before {
         top: 0.5rem;
+        background: rgba(0, 0, 0, 0);
       }
 
       &::before {
@@ -1551,10 +1558,13 @@
     margin: 0;
     font-size: 0.6875rem;
     font-weight: 100;
+    color: $grey7;
   }
 
   .selected-text {
-    font-weight: bold;
+    font-weight: normal;
+    font-family: $hnm-bold;
+    color: $hnm-black-two;
     display: inline-block;
 
     html[lang=ar] .safari & {
@@ -1580,16 +1590,16 @@
         margin-bottom: 0.3125rem;
         margin-#{$right}: 0.5rem;
         margin-#{$left}: 0;
-        border: 1px solid $marine-blue;
+        border: 1px solid $hnm-black-two;
         text-align: center;
         padding: 0.75rem;
         font-size: 0.875rem;
-        color: $marine-blue;
+        color: $hnm-black-two;
 
         &.picked {
           color: $white-five;
           font-weight: bold;
-          background: $marine-blue;
+          background: $hnm-black-two;
 
           html[lang=ar] .safari & {
             font-weight: normal;
