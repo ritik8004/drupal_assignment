@@ -336,12 +336,32 @@
     display: none;
   }
 
+  .composition-wrapper,
+  .care-instructions-wrapper {
+    color: $grey7;
+    margin-bottom: 0.625rem;
+
+    .composition-label,
+    .care-instructions-label {
+      font-family: $hnm-demibold;
+      color: $hnm-black-two;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    ul {
+      padding-#{$left}: 0;
+      list-style: none;
+      margin: 0;
+    }
+  }
+
   .field {
     &__label {
-      font-size: 1rem;
-      font-family: $arial;
-      font-weight: bold;
-      color: $marine-blue;
+      font-size: 0.875rem;
+      font-family: $hnm-bold;
+      font-weight: normal;
+      color: $hnm-black-two;
       margin-top: 0;
     }
 
@@ -352,22 +372,25 @@
   }
 
   a {
-    font-family: $arial;
+    font-family: $hnm-regular;
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $hnm-black-two;
   }
 
   strong {
-    font-weight: bold;
-    color: $black;
+    font-weight: normal;
+    font-family: $hnm-bold;
+    color: $hnm-black-two;
   }
 
   .desc-label {
-    font-family: $arial;
-    font-weight: bold;
-    color: $marine-blue;
+    font-family: $hnm-demibold;
+    font-weight: normal;
+    color: $hnm-black-two;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     font-size: 0.875rem;
     margin-top: 0;
     margin-bottom: 0;
@@ -378,7 +401,7 @@
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $black-two;
     text-transform: lowercase;
     cursor: pointer;
   }
@@ -414,7 +437,7 @@
     top: 0;
     #{$right}: -38%;
     height: 33.75rem;
-    border: 1px solid $marine-blue;
+    border: 1px solid $hnm-black-two;
     padding: 1.25rem;
     padding-bottom: 0;
     background: $white-five;
@@ -434,8 +457,8 @@
       width: 2.188rem;
       font-size: 30px;
       text-align: center;
-      color: $white-two;
-      background-color: $marine-blue;
+      color: $white-five;
+      background-color: $hnm-black-two;
       cursor: pointer;
     }
 
@@ -486,9 +509,10 @@
         }
 
         .desc-label {
-          font-family: $arial;
-          font-weight: bold;
-          color: $marine-blue;
+          font-family: $hnm-demibold;
+          font-weight: normal;
+          text-transform: uppercase;
+          color: $hnm-black-two;
           font-size: 0.875rem;
           margin-top: 0;
           margin-bottom: 0;
@@ -518,11 +542,11 @@
   }
 
   .show-less-link {
-    font-family: $arial;
+    font-family: $hnm-regular;
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $black-three;
     text-transform: lowercase;
     cursor: pointer;
   }
@@ -542,15 +566,33 @@
   }
 
   .read-more-description-link-mobile {
-    font-family: $arial;
+    font-family: $hnm-regular;
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $black-three;
     cursor: pointer;
 
     @include breakpoint($tablet) {
       display: none;
+    }
+  }
+
+  .composition-wrapper,
+  .care-instructions-wrapper {
+    color: $grey7;
+
+    .composition-label,
+    .care-instructions-label {
+      font-family: $hnm-demibold;
+      color: $hnm-black-two;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    ul {
+      padding-#{$left}: 0;
+      list-style: none;
     }
   }
 }
@@ -623,13 +665,13 @@
     }
 
     &__title {
-      font-family: $arial;
+      font-family: $hnm-regular;
       font-size: 0.875rem;
-      color: $black;
+      color: $hnm-black-two;
       line-height: 2;
-      text-transform: capitalize;
       cursor: pointer;
       position: relative;
+      text-transform: none;
 
       &.ui-state-active {
         border-bottom: none;
@@ -638,10 +680,11 @@
       .subtitle {
         @include u-visibility(block);
 
-        font-family: $arial;
+        font-family: $hnm-regular;
         font-size: 0.6875rem;
-        color: $brownish-grey;
+        color: $grey6;
         line-height: 1;
+        text-transform: none;
       }
 
       .title-price {
@@ -677,19 +720,20 @@
         }
 
         &-title {
-          font-family: $arial;
+          font-family: $hnm-bold;
           line-height: 1.5;
           font-size: 0.75rem;
           padding-bottom: 0.5rem;
           padding-top: 0.75rem;
-          color: $black-two;
+          color: $hnm-black-two;
 
           strong {
-            color: $black;
+            font-family: $hnm-regular;
           }
 
           span {
-            color: $brownish-grey;
+            color: $hnm-black-two;
+            font-family: $hnm-regular;
           }
         }
       }
@@ -736,11 +780,17 @@
 
     label,
     .text p {
-      font-family: $arial;
+      font-family: $hnm-regular;
       font-size: 0.75rem;
       line-height: 2;
-      color: $brownish-grey;
+      color: $grey7;
       margin: 0;
+    }
+
+    strong {
+      font-family: $hnm-bold;
+      font-weight: normal;
+      color: $hnm-black-two;
     }
 
     #cc-store-name {
@@ -760,14 +810,14 @@
 
     button {
       float: $right;
-      width: 6.563rem;
+      width: 8.25rem;
       height: 2.188rem;
-      background-color: $cerulean-two;
-      font-family: $alshaya-thin;
+      background-color: $hnm-black-two;
+      font-family: $hnm-bold;
+      text-transform: uppercase;
       appearance: none;
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       color: $white-five;
-      text-transform: lowercase;
       display: inline-block;
       vertical-align: middle;
       text-align: center;
@@ -791,7 +841,7 @@
     font-family: $arial;
     font-size: 0.75rem;
     line-height: 2;
-    color: $grey-ash;
+    color: $grey7;
     margin: 0;
   }
 
@@ -824,14 +874,14 @@
 
     button {
       float: none;
-      width: 6.563rem;
+      width: 8.25rem;
       height: 2.188rem;
-      background-color: $cerulean-two;
-      font-family: $alshaya-thin;
+      background-color: $hnm-black-two;
+      font-family: $hnm-bold;
+      text-transform: uppercase;
       appearance: none;
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       color: $white-five;
-      text-transform: lowercase;
       display: inline-block;
       vertical-align: middle;
       text-align: center;
