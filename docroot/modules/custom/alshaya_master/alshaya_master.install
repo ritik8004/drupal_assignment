@@ -6,6 +6,21 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add new string translations.
+ */
+function alshaya_master_update_8001() {
+  $strings = [
+    'Please select a size.' => [
+      'ar' => 'يرجى اختيار المقاس',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_master_install() {
@@ -185,7 +200,9 @@ function alshaya_master_install() {
       'ar' => 'يرجى إدخال @title',
       'en' => 'Please enter your @title.',
     ],
-
+    'Please select a size.' => [
+      'ar' => 'يرجى اختيار المقاس',
+    ],
     '@title does not contain a valid email.' => [
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
     ],
