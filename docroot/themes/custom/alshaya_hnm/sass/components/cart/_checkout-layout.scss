@@ -148,7 +148,7 @@
     }
 
     @include breakpoint($only-tablet) {
-      padding: 3.25rem 1.5rem 3rem;
+      padding: 3.25rem 1.5rem 0.625rem;
     }
   }
 
