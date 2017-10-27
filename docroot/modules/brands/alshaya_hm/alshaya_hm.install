@@ -139,4 +139,13 @@ function alshaya_hm_install() {
   \Drupal::configFactory()->getEditable('field.field.user.user.field_subscribe_newsletter')
     ->set('label', 'I would like to receive exclusive deals from H&M')
     ->save();
+
+  // Set initial translation strings.
+  $strings = [
+    'view cart' => [
+      'ar' => 'عرض سلة التسوق',
+      'en' => 'view cart',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }
