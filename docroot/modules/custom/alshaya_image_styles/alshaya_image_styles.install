@@ -52,3 +52,27 @@ function _alshaya_image_styles_configure_image_toolkit() {
     ->set('quality', 100)
     ->save();
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove unused image styles.
+ */
+function alshaya_image_styles_update_8301() {
+  $configs = [
+    'image.style.291x256',
+    'image.style.449x256',
+    'image.style.501x288',
+    'image.style.501x600',
+    'image.style.606x256',
+    'image.style.921x256',
+    'responsive_image.styles.291x256',
+    'responsive_image.styles.449x256',
+    'responsive_image.styles.501x288',
+    'responsive_image.styles.501x600',
+    'responsive_image.styles.606x256',
+    'responsive_image.styles.921x256',
+  ];
+
+  alshaya_config_delete_configs($configs);
+}
