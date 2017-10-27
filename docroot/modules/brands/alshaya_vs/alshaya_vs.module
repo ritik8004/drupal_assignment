@@ -14,7 +14,7 @@ use Drupal\block\Entity\Block;
  * Implements hook_form_alter().
  */
 function alshaya_vs_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_email_signup') && $form_id == 'webform_submission_alshaya_email_signup_form') {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_email_signup') && $form_id == 'webform_submission_alshaya_email_signup_add_form') {
     $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $uuid = '19207aad-0e43-4d3a-96d7-c74141f75bb1';
     $entity_manager = \Drupal::getContainer()->get('entity.manager');

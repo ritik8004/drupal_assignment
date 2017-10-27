@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_seo;
+namespace Drupal\alshaya_seo_transac;
 
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;

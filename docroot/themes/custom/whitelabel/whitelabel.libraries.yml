@@ -298,6 +298,12 @@ block-footer-language:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/03-footer-primary/block-footer-language/block-footer-language.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/03-footer-primary/block-footer-language/one-time-language-selector.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.cookie
 
 block-todays-offer:
   version: VERSION

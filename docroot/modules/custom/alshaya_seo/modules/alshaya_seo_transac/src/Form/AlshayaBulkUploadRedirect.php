@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_seo\Form;
+namespace Drupal\alshaya_seo_transac\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\file\Entity\File;
