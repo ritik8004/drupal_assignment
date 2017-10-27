@@ -849,6 +849,7 @@ header {
           font-family: $hnm-demibold;
           letter-spacing: 0.5px;
           font-weight: normal;
+          line-height: 1.69;
           text-transform: uppercase;
           color: $black;
 
@@ -906,7 +907,6 @@ header {
         max-width: 80.25rem;
         min-height: 100%;
         vertical-align: top;
-        margin-bottom: 1.563rem;
         position: absolute;
         background: $white-five;
         top: 0;
