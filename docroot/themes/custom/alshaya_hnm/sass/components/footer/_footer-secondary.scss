@@ -154,6 +154,7 @@
 */
 .region__footer-secondary {
   padding: 2.5rem 0.5rem 2.625rem;
+  background-color: $hnm-black;
 
   @include breakpoint($tablet) {
     padding: 2.0625rem 0 2.625rem;
@@ -191,6 +192,14 @@
     @extend %list--horizontal;
 
     text-align: center;
+
+    @include breakpoint($tablet) {
+      padding-bottom: 1.375rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding-bottom: 0.75rem;
+    }
   }
 
   li {
