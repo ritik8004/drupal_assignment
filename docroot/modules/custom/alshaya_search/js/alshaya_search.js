@@ -190,7 +190,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             rtl: true,
             slideMargin: 5,
             onSliderLoad: function() {
-              gallery.closest('.alshaya_search_slider').hide();
+              // gallery.closest('.alshaya_search_slider').hide();
               gallery.css('height', '73px');
             }
           });
@@ -201,7 +201,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             item: 4,
             slideMargin: 5,
             onSliderLoad: function() {
-              gallery.closest('.alshaya_search_slider').hide();
+              // gallery.closest('.alshaya_search_slider').hide();
               gallery.css('height', '73px');
             }
           });
@@ -209,16 +209,13 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       });
 
       // Show/Hide the slider on Mouse hover.
-      $('.c-products__item', context).hover(
-        function () {
-          if ($(window).width() > 1025) {
-            $(this).find('.alshaya_search_slider').show();
-          }
-        },
-        function () {
-          $(this).find('.alshaya_search_slider').hide();
-        }
-      );
+      // $('.c-products__item', context).hover(
+      //   function () {
+      //     if ($(window).width() > 1025) {
+      //       $(this).find('.alshaya_search_slider').slideToggle();
+      //     }
+      //   }
+      // );
 
       // Change the image on Mouse hover.
       $('.alshaya_search_slider img', context).hover(
