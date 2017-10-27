@@ -24,6 +24,12 @@
   }
 }
 
+.device__no-desktop {
+  @include breakpoint($desk) {
+    display: none;
+  }
+}
+
 .overlay-content {
   background: $black;
   opacity: 0.6;
