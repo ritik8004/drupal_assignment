@@ -6,6 +6,15 @@
  */
 
 /**
+ * Implements hook_update_N().
+ */
+function alshaya_stores_finder_update_8003() {
+  // Revert the view to use relative path in links.
+  $reverter = \Drupal::service('config_update.config_update');
+  $reverter->revert('view', 'stores_finder');
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_stores_finder_install() {
