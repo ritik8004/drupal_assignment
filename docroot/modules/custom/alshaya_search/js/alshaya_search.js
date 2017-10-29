@@ -138,7 +138,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       if ($('.views-infinite-scroll-content-wrapper').length !== 0) {
         // Change the title of facet when open.
         var priceCurrency = settings.alshaya_search_price_currency;
-        var $finalPriceBlock = $('#block-finalprice');
+        var $finalPriceBlock = $('#block-skusskureferencefinalprice');
         if (priceCurrency) {
           var initialTitle = $finalPriceBlock.find('h3').html();
           $finalPriceBlock.find('h3').on('click', function() {
