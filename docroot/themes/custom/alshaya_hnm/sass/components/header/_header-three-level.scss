@@ -27,15 +27,19 @@
 
     .highlights {
       position: absolute;
-      #{$left}: 67.6%;
-      top: 1.5rem;
+      #{$right}: 0;
+      top: -0.875rem;
       margin-top: 0;
-      width: 50%;
+      height: 21.875rem;
+      width: auto;
+      padding: 2.5rem 6.5625rem 2.5rem 3rem;
+      background-color: $grey1;
 
       .title {
         text-transform: uppercase;
         margin-bottom: 0.9rem;
         font-family: $hnm-demibold;
+        font-size: 0.8125rem;
         letter-spacing: 0.5px;
         font-weight: normal;
         color: $black-three;
@@ -85,7 +89,7 @@
       display: block;
       vertical-align: top;
       padding-#{$left}: 0.5rem;
-      break-inside: avoid;
+      margin-bottom: 1.563rem;
     }
   }
 
