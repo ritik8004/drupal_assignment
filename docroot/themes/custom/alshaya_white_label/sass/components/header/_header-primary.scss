@@ -100,10 +100,14 @@ header {
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
         position: absolute;
-        top: 6.15rem;
+        top: 6.25rem;
         display: none;
         width: 100%;
         left: 0;
+
+        html[lang=ar] & {
+          top: 6.35rem;
+        }
       }
     }
 

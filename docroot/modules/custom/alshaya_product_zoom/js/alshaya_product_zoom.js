@@ -166,11 +166,15 @@
             var x2 = imgPos.left;
             var y2 = imgPos.top;
 
+            $('#full-image').css({
+              'left':0,
+              'top': 0
+            });
+
             // Make image draggable inside the window.
             var click = {x: 0, y: 0};
             $('#full-image').draggable({
               containment: [x1, y1, x2, y2],
-              revert: true,
               start: function(event) {
                 click.x = event.clientX;
                 click.y = event.clientY;
@@ -187,6 +191,7 @@
                 };
               }
             });
+
             // Zoom in and Zoom out buttons.
             var image = $('#full-image-wrapper img');
             var img_scale = 1;
@@ -222,6 +227,12 @@
               $('.zoomin').removeClass('disabled');
               $('.zoomout').removeClass('disabled');
 
+              // Make image draggable inside the window.
+              $('#full-image').css({
+                'left': 0,
+                'top': 0
+              });
+
               if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
                 var href = $(this).attr('data-iframe');
                 $('#full-image-wrapper img').hide();
@@ -245,6 +256,11 @@
               $('.zoomin').removeClass('disabled');
               $('.zoomout').removeClass('disabled');
 
+              $('#full-image').css({
+                'left': 0,
+                'top': 0
+              });
+
               var previndex = $(this).parent().slick('slickCurrentSlide');
               $(this).parent().slick('slickGoTo', previndex);
               var prevImage = $(this).parent().find('li[data-slick-index = "'+ previndex +'"] a.imagegallery__thumbnails__image').attr('href');
@@ -258,6 +274,11 @@
               img_scale = 1;
               $('.zoomin').removeClass('disabled');
               $('.zoomout').removeClass('disabled');
+
+              $('#full-image').css({
+                'left': 0,
+                'top': 0
+              });
 
               var nextindex = $(this).parent().slick('slickCurrentSlide');
               $(this).parent().slick('slickGoTo', nextindex);
