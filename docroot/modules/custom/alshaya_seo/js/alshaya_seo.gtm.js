@@ -38,6 +38,7 @@
       var leadType = '';
       var promotionImpressionSubnavFired = false;
       var ccPaymentsClicked = false;
+      var footerNewsletterSubmiClicked  = false;
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -289,7 +290,11 @@
         }
       }
 
-      /** Add to cart GTM .**/
+      /** Newsletter tracking GTM .**/
+      $('footer .edit-newsletter').click(function() {
+        footerNewsletterSubmiClicked = true;
+      });
+
       // Trigger GTM push event on AJAX completion of add to cart button.
       $(document).once('js-event').ajaxComplete(function (event, xhr, settings) {
         gtm_execute_onetime_events = true;
@@ -303,7 +308,7 @@
             }
           });
 
-          if (responseMessage === 'success') {
+          if ((responseMessage === 'success') && (footerNewsletterSubmiClicked)) {
             Drupal.alshaya_seo_gtm_push_lead_type('footer');
           }
         }
