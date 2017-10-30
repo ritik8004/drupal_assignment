@@ -1025,20 +1025,6 @@ class AlshayaGtmManager {
           $deliveryArea = $billing_address['administrative_area'];
         }
 
-        $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
-        $site_current_langcode = $this->languageManager->getCurrentLanguage()->getId();
-
-        if ($site_current_langcode !== $site_default_langcode) {
-          $delivery_area_term = \Drupal::entityTypeManager()
-            ->getStorage('taxonomy_term')
-            ->loadByProperties(['name' => $deliveryArea]);
-
-          if (($delivery_area_term) && ($delivery_area_term->hasTranslation($site_default_langcode))) {
-            $delivery_area_term = $delivery_area_term->getTranslation($site_default_langcode);
-            $deliveryArea = $delivery_area_term->getName();
-          }
-        }
-
         foreach ($orderItems as $orderItem) {
           $productSKU[] = $orderItem['sku'];
           $product_node = alshaya_acm_product_get_display_node($orderItem['sku']);
