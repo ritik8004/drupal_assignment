@@ -525,7 +525,7 @@
               position: relative;
               cursor: pointer;
 
-              @include breakpoint($desktop) {
+              @include breakpoint($tablet) {
                 color: $grey-ash;
                 font-size: 0.875rem;
                 margin-bottom: 0.875rem;
