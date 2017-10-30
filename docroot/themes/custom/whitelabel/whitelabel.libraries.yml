@@ -194,6 +194,10 @@ field-promo-block:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/field-promo-block/field-promo-block.ltr.css: {}
 
+utils:
+  js:
+    components/js/utils.js: {}
+
 field-slider:
   css:
     theme:
@@ -202,6 +206,7 @@ field-slider:
     components/js/field-slider.js: {}
   dependencies:
     - whitelabel/slick
+    - whitelabel/utils
 
 field-product-listing:
   css:
