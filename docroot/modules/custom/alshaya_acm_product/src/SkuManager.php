@@ -436,6 +436,12 @@ class SkuManager {
           $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node, $langcode);
 
           $promotion_text = $promotion_node->get('field_acq_promotion_label')->getString();
+
+          // Let's not display links with empty text and show empty space.
+          if (empty($promotion_text)) {
+            continue;
+          }
+
           $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
           $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
 
