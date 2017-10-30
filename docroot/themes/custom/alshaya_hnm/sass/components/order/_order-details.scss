@@ -84,7 +84,6 @@
 .user__order--detail {
   font-family: $hnm-regular;
   line-height: 1;
-  background: $hnm-grey;
   border-top: 1px solid $white;
   width: 100%;
   font-size: 0.75rem;
@@ -150,10 +149,9 @@
   }
 
   .total-row {
-    td:nth-child(3) {
-      padding-#{$left}: 0;
-      padding-#{$right}: 2.5rem;
-    }
+    color: $black-two;
+    font-weight: normal;
+    font-family: $hnm-demibold;
   }
 
   .delivery-details-row {
@@ -167,13 +165,13 @@
     }
 
     td {
-      background: $solitude;
+      background: $info;
       padding: 1.25rem 1rem;
       padding-#{$left}: 56px;
       text-indent: -2.5rem;
       vertical-align: middle;
 
-      .icon-ic_infomation {
+      .icon-ic_info {
         font-size: 1.9375rem;
         font-weight: 700;
         margin-#{$right}: 0.7rem;
@@ -195,14 +193,18 @@
 
     .blend {
       @include breakpoint($desktop) {
-        background: $denim;
+        background: $info-two;
       }
     }
   }
 
-  .delivery-details-row,
-  .label {
-    color: $windows-blue;
+  .delivery-details-row td {
+    font-family: $hnm-bold;
+    font-weight: normal;
+  }
+
+  .delivery-details-row {
+    color: $white-five;
   }
 
   .delivery-charge-row,
@@ -219,6 +221,7 @@
 
   .order-item-row {
     border-bottom: 1px solid $white;
+    background: $white-four-70;
 
     .order__product--image {
       @include breakpoint($only-tablet) {
@@ -281,7 +284,7 @@
 
   .order-summary-row {
     td {
-      background: $white-smoke;
+      background: $whisper-light-59;
       padding: 1.313rem 1rem;
 
       @include breakpoint($tablet) {
@@ -314,6 +317,10 @@
     }
   }
 
+  .right--align {
+    text-align: $right;
+  }
+
   .order__summary--status {
     @include breakpoint($tablet) {
       width: 19.8%;
@@ -321,11 +328,21 @@
   }
 
   .order-details-row {
-    background: $info-19;
-    color: $grey8;
+    background: $hnm-grey-light;
+    color: $black-two;
+
+    .label {
+      color: $hnm-black-two;
+      font-family: $hnm-bold;
+      font-weight: normal;
+    }
+
+    .address--name {
+      color: $black-two !important;
+    }
 
     .blend {
-      background: $info-30;
+      background: $hnm-grey-light-two;
 
       @include breakpoint($tablet) {
         padding-#{$right}: 0.625rem;
