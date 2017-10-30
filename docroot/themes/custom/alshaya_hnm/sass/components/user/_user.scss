@@ -700,6 +700,7 @@
             > div {
               display: table-cell;
               padding: 0;
+              vertical-align: middle;
             }
 
             .second {
@@ -777,7 +778,7 @@
         .light {
           color: $greyish;
           height: 14px;
-          font-family: $arial;
+          font-family: $hnm-regular;
           font-size: 12px;
           margin-bottom: 5px;
 
@@ -789,7 +790,7 @@
         .dark {
           color: $black-two;
           height: 16px;
-          font-family: $arial;
+          font-family: $hnm-regular;
           font-size: 14px;
           font-weight: bold;
           letter-spacing: 0.5px;
@@ -923,7 +924,7 @@
     line-height: 1;
 
     html[lang=ar] & {
-      font-family: $arial-nodir;
+      font-family: $hnm-regular-nodir;
     }
   }
 }

@@ -387,6 +387,10 @@
 
     div {
       margin-bottom: 0.3125rem;
+
+      &.button {
+        margin-bottom: 0;
+      }
     }
 
     @include breakpoint($upto-tablet) {
