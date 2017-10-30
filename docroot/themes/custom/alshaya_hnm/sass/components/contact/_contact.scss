@@ -174,8 +174,12 @@
   }
 
   fieldset {
-    margin-top: 2.875rem;
+    margin-top: 1rem;
     margin-bottom: 2.875rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 2.875rem;
+    }
   }
 
   .form-item-first-name {
