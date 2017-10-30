@@ -231,6 +231,7 @@ header {
       &::placeholder {
         font-size: 0.875rem;
         color: $grey6;
+        text-transform: capitalize;
       }
     }
 
