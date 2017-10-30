@@ -392,9 +392,11 @@
     }
 
     .alshaya_search_gallery {
+      overflow: hidden;
+
       .alshaya_search_mainimage {
         z-index: 5;
-        height: 15.125rem;
+        height: 11.125rem;
         overflow: hidden;
 
         @include breakpoint($tablet) {
