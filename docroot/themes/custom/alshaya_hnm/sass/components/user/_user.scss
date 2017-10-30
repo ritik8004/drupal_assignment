@@ -1045,7 +1045,10 @@
     a {
       color: $white-five;
       font-family: $hnm-regular;
-      text-decoration: underline;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     li {
