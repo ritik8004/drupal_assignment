@@ -436,6 +436,14 @@
   }
 }
 
+.block-alshaya-user-recent-orders {
+  a.show-all {
+    color: $hnm-black-two;
+    font-family: $hnm-regular;
+    text-transform: none;
+  }
+}
+
 .block-alshaya-acm-customer > a {
   font-family: $hnm-bold;
   font-weight: normal;
