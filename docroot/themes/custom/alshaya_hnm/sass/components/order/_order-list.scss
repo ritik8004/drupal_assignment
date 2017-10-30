@@ -663,7 +663,7 @@
 
     &.open--accordion {
       .icon-ic_chevrondown {
-        @include icon(dropdown-collapse, before)
+        @include icon(dropdown-collapse, before);
       }
     }
   }
