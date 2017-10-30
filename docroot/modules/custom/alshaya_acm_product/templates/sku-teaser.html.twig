@@ -7,20 +7,20 @@
   <div class="price-block {{ price_block_identifier }}">
     {{ price_block }}
   </div>
-</div>
 
-{% if promotions %}
-  <div class="promotions">
-    {% for id, promotion in promotions %}
-      {% if (promotion.render_link) %}
-        <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
+  {% if promotions %}
+    <div class="promotions">
+      {% for id, promotion in promotions %}
+        {% if (promotion.render_link) %}
+          <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
+            {{ promotion.text }}
+          </a>
+        {% else %}
           {{ promotion.text }}
-        </a>
-      {% else %}
-        {{ promotion.text }}
-      {% endif %}
-    {% endfor %}
-  </div>
-{% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
 
 {{ stock_placeholder }}
