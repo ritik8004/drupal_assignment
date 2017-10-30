@@ -6,8 +6,8 @@ index 0629f97..ce30359 100644
    # Rewrite install.php during installation to see if mod_rewrite is working
    RewriteRule ^core/install.php core/install.php?rewrite=ok [QSA,L]
 
-+  # Stop search engines from indexing dev URLs.
-+  RewriteCond %{HTTP_HOST} (.*).acsitefactory.com [NC]
++  # Stop search engines from indexing non prod URLs.
++  RewriteCond %{HTTP_HOST} \.(acsitefactory|factory\.alshaya)\.com$ [NC]
 +  RewriteCond %{REQUEST_URI} ^(.*)?/(robots.txt) [NC]
 +  RewriteRule /robots.txt$ /robots-dev.txt [L,NC]
 +

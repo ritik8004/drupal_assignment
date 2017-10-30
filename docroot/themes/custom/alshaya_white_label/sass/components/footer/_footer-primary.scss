@@ -214,6 +214,10 @@
   @include breakpoint($desktop) {
     width: 30%;
     margin-#{$left}: 5%;
+
+    html[lang=ar] & {
+      width: 37%;
+    }
   }
 }
 
@@ -439,6 +443,16 @@
     float: $left;
     margin-#{$left}: 10%;
     width: 50%;
+
+    html[lang=ar] & {
+      margin-#{$left}: 5%;
+      width: 50%;
+    }
+
+    html[lang=en] & {
+      margin-#{$left}: 5%;
+      width: 55%;
+    }
   }
 
   @include breakpoint($only-tablet) {
@@ -520,7 +534,7 @@
   text-transform: lowercase;
 }
 
-.c-footer .language-switcher-language-url,
+.c-footer-primary .language-switcher-language-url,
 .only-first-time .language-switcher-language-url {
   position: relative;
   clear: both;

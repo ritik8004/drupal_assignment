@@ -27,7 +27,7 @@
       });
 
       $(window).on('load', function () {
-        $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input, .address-book-address input:not([type=hidden])').each(function () {
+        $('.webform-submission-alshaya-contact-form input:not([type=hidden]), .webform-submission-alshaya-contact-form textarea, .profile-form input, .address-book-address input:not([type=hidden])').each(function () {
           if ($(this).val() !== '') {
             $(this).parent().find('label').last().addClass('active-label');
           }

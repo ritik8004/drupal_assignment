@@ -36,6 +36,7 @@
       var updatedCartQty = 0;
       var subListName = '';
       var leadType = '';
+      var promotionImpressionSubnavFired = false;
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -541,11 +542,23 @@
           if ((mouseOverTime >= 2000) && ($(this).hasClass('has-child'))) {
             var highlights = $(this).find('.highlights [gtm-type="gtm-highlights"]');
 
-            if (highlights.length > 0) {
+            if ((highlights.length > 0) && (!promotionImpressionSubnavFired)) {
+              promotionImpressionSubnavFired = true;
               Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation', 'promotionImpression');
             }
           }
         });
+      });
+
+      $('.sub-nav-link').click(function() {
+        var parent = $(this).closest('ul.menu--two__list');
+        if (parent.length !== 0) {
+          var highlights = parent.find('.highlights [gtm-type="gtm-highlights"]');
+          if ((highlights.length > 0) && (!promotionImpressionSubnavFired)) {
+            promotionImpressionSubnavFired = true;
+            Drupal.alshaya_seo_gtm_push_promotion_impressions(highlights, 'Top Navigation', 'promotionImpression');
+          }
+        }
       });
 
       $('[gtm-type="gtm-highlights"]').once('js-event').on('click', function () {
@@ -562,6 +575,20 @@
           Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
         });
       });
+
+      // Tracking promotion banner on PLP.
+      if (listName === 'PLP') {
+        if ($('.views-field-field-promotion-banner').length > 0 && (context === document)) {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($('.views-field-field-promotion-banner'), 'PLP', 'promotionImpression');
+        }
+
+        // Tracking click on promo banner PLP.
+        $('.views-field-field-promotion-banner').each(function () {
+          $(this).once('js-event').on('click', function () {
+            Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'PLP', 'promotionClick');
+          });
+        });
+      }
 
       /** Tracking clicks on fitler & sort options. **/
       if (listName === 'PLP' || listName === 'Search Results Page') {
@@ -719,6 +746,10 @@
         creative = Drupal.url($(highlight).find('.field--name-field-highlight-image img').attr('src'));
         position = $(highlight).data('position');
       }
+      else if (gtmPageType === 'PLP') {
+        creative = Drupal.url($(highlight).find('.field-content img').attr('src'));
+        position = 1;
+      }
       else {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
         position = parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
@@ -736,12 +767,13 @@
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
       }
 
-      var promotion = {
-        id: fileName,
-        name: gtmPageType,
-        position: 'slot' + position
-      };
-
+      if ((fileName !== undefined) && (fileName !== '')) {
+        var promotion = {
+          id: fileName,
+          name: gtmPageType,
+          position: 'slot' + position
+        };
+      }
       promotions.push(promotion);
     });
 

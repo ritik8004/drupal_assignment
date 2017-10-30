@@ -111,12 +111,6 @@
         }
       }
 
-      .desktop-only {
-        @include breakpoint($desktop) {
-          width: 0 !important;
-        }
-      }
-
       .above-mobile.blend {
         @include breakpoint($desktop) {
           min-width: 10rem;
@@ -631,11 +625,11 @@
   }
 
   @include breakpoint($desktop) {
-    margin-#{$right}: 8.5rem;
+    margin-#{$right}: 3.3rem;
     width: 9.875rem;
 
     html[lang=ar] & {
-      margin-#{$right}: 8.5rem;
+      margin-#{$right}: 3.3rem;
       width: 9.875rem;
     }
   }
@@ -662,11 +656,11 @@
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 7.5rem;
+      margin-#{$right}: 3.3rem;
       width: 9.875rem;
 
       html[lang=ar] & {
-        margin-#{$right}: 5.8rem;
+        margin-#{$right}: 3.3rem;
         width: 9.875rem;
       }
     }
@@ -698,4 +692,14 @@
   font-size: 0.875rem;
   color: $black;
   font-weight: bold;
+}
+
+.alias--cart-checkout-confirmation {
+  .order-confirmation {
+    .region__content {
+      @include breakpoint($desktop) {
+        min-width: 57.5rem;
+      }
+    }
+  }
 }

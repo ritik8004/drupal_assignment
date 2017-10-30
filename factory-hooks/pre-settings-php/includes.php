@@ -18,6 +18,9 @@ elseif (getenv('TRAVIS')) {
   $env = 'travis';
 }
 
+// Set the env in settings to allow re-using in custom code.
+$settings['env'] = $env;
+
 // Configure your hash salt here.
 // TODO: Security.
 // $settings['hash_salt'] = '';
@@ -73,7 +76,7 @@ $settings['autologout.settings']['timeout'] = 1200;
 
 // Set the debug dir of conductor.
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
-$config['acq_commerce.conductor']['debug'] = TRUE;
+$settings['acq_commerce.conductor']['debug'] = TRUE;
 
 // Set page size to sync products to 30.
 $settings['acq_commerce.conductor']['product_page_size'] = 30;
@@ -93,6 +96,8 @@ $settings['additional_modules'] = [];
 
 switch ($env) {
   case 'local':
+    $config['acq_commerce.conductor']['debug_dir'] = '/home/vagrant/';
+
     // Specify the modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
@@ -105,7 +110,7 @@ switch ($env) {
     global $_alshaya_acm_disable_stock_check;
     $_alshaya_acm_disable_stock_check = TRUE;
 
-    $config['acq_commerce.conductor']['debug'] = FALSE;
+    $settings['acq_commerce.conductor']['debug'] = FALSE;
 
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
@@ -143,6 +148,8 @@ switch ($env) {
     break;
 
   default:
+    $settings['acq_commerce.conductor']['debug'] = FALSE;
+
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-prod.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';

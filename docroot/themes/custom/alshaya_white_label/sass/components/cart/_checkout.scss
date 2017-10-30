@@ -367,7 +367,7 @@
 
   .right {
     float: $right;
-    width: 70%;
+    width: 65%;
 
     @include breakpoint($only-tablet) {
       width: 62%;
@@ -501,11 +501,11 @@
             margin-right: 0.4rem;
           }
 
-          margin-right: 1.5625rem;
+          margin-right: 1rem;
         }
 
         .price-amount {
-          float: none;
+          float: $right;
         }
       }
     }

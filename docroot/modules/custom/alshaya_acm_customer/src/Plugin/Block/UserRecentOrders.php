@@ -172,11 +172,11 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             // Iterate over each order item.
             foreach ($order['items'] as $key => $item) {
               $product_node = alshaya_acm_product_get_display_node($item['sku']);
-
-              // We don't display the product if it is not available in Drupal.
-              if (empty($product_node)) {
-                unset($order['items'][$key]);
-                continue;
+              if (!empty($product_node)) {
+                $order['item_names'][] = $product_node->getTitle();
+              }
+              else {
+                $order['item_names'][] = $item['name'];
               }
 
               // Load the first image.
@@ -193,9 +193,6 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
                 '#theme' => 'acq_commerce_price',
                 '#price' => $order['items'][$key]['price'],
               ];
-
-              // Item name for order.
-              $order['item_names'][] = $product_node->getTitle();
 
               $order['status'] = alshaya_acm_customer_get_order_status($order);
             }

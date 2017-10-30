@@ -9,6 +9,51 @@ use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
 use Drupal\simple_oauth\Entity\Oauth2Client;
 use Drupal\user\Entity\User;
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set new config for interval in alshaya_acm.settings.
+ */
+function alshaya_acm_update_8004() {
+  \Drupal::configFactory()
+    ->getEditable('alshaya_acm.settings')
+    ->set('config_check_interval', 300)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update image styles.
+ */
+function alshaya_acm_update_8003() {
+  $module_name = 'alshaya_acm';
+  $path = 'install';
+  $configs = [
+    'image.style.checkout_summary_block_thumbnail',
+  ];
+
+  foreach ($configs as $config) {
+    $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config . '.yml'));
+    \Drupal::configFactory()
+      ->getEditable($config)
+      ->setData($config_yaml)
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update debug config.
+ */
+function alshaya_acm_update_8002() {
+  $config = \Drupal::configFactory()->getEditable('acq_commerce.conductor');
+  $config->set('debug', Settings::get('acq_commerce.conductor')['debug']);
+  $config->save();
+}
 
 /**
  * Implements hook_update_N().
