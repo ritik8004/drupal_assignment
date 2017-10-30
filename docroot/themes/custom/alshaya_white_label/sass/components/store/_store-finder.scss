@@ -517,7 +517,6 @@
     margin-bottom: 1.625rem;
     border: 1px solid $white;
     position: relative;
-    cursor: pointer;
 
     &:hover,
     &.selected {
@@ -795,17 +794,18 @@
 
     .view-display-id-page_1 > .view-content {
       display: inline-block;
-      max-height: 39rem;
-      overflow-y: scroll;
       transform: translate3d(0, 0, 0);
       vertical-align: top;
       max-width: 26.5%;
       margin-#{$right}: 1%;
       float: $left;
       width: 100%;
+      max-height: 39rem;
+      overflow-y: scroll;
 
       @include breakpoint($desktop) {
         max-height: 51rem;
+        min-height: 10rem;
         padding-#{$right}: 1%;
       }
 
@@ -1197,9 +1197,11 @@
     }
   }
 
-  .get--directions div::after {
+  .get--directions a::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
     background: url('../imgs/icons/ic-directions.svg');
-    top: 1rem;
     #{$right}: 1rem;
     width: 18px;
     height: 18px;

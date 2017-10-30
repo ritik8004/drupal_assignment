@@ -253,6 +253,17 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
     $skus = $storage->loadByProperties(['sku' => $sku]);
 
+    if (count($skus) > 1) {
+      \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
+
+      // Get rid of undesired languages. Later first one is picked up.
+      foreach ($skus as $key => $sku) {
+        if ($sku->langcode->value != $langcode) {
+          unset($skus[$key]);
+        }
+      }
+    }
+
     if (count($skus) == 0) {
       // We don't log the error while doing sync.
       if ($log_not_found) {
@@ -260,10 +271,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
 
       return NULL;
-    }
-    // For multiple entries, we just log the error and continue with first one.
-    elseif (count($skus) > 1) {
-      \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
     $sku_entity = array_shift($skus);
@@ -276,7 +283,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $sku_entity = $sku_entity->addTranslation($langcode, ['sku' => $sku]);
       }
       else {
-        throw new \Exception(new FormattableMarkup('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]), 404);
+        \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
     }
 

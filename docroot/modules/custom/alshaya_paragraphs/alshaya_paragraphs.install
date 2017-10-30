@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install file for alshaya_paragraphs.
+ * Contains install, update, uninstall hooks for alshaya_paragraphs module.
  */
 
 /**
@@ -87,4 +87,14 @@ function alshaya_paragraphs_update_8101() {
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update paragraphs.
+ */
+function alshaya_paragraphs_update_8001() {
+  $paragraph_banner_target = \Drupal::configFactory()->getEditable('core.entity_view_display.paragraph.banner.default');
+  $paragraph_banner_target->set('content.field_link.settings.target', '0')->save();
 }

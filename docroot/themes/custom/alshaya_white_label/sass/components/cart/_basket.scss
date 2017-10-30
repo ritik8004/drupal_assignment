@@ -365,12 +365,30 @@
       border-radius: 2px;
       width: 10.81rem;
 
-      @include breakpoint($desktop) {
-        #{$left}: 1rem;
+      @include breakpoint($only-tablet) {
+        html[lang=ar] & {
+          top: 0.75rem;
+        }
       }
 
       @include breakpoint($only-mobile) {
         #{$left}: -3.5rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        html[lang=ar] & {
+          #{$left}: -5rem;
+        }
+      }
+
+      @include breakpoint($desktop - 1) {
+        html[lang=ar] & {
+          #{$left}: -2.4rem;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        #{$left}: 1rem;
       }
     }
 
@@ -391,6 +409,16 @@
 
       @include breakpoint($tablet) {
         #{$left}: -4.4rem;
+
+        html[lang=ar] & {
+          #{$left}: -5rem;
+        }
+      }
+
+      @include breakpoint($desktop - 1) {
+        html[lang=ar] & {
+          #{$left}: -2.4rem;
+        }
       }
 
       @include breakpoint($desktop) {
@@ -1466,7 +1494,7 @@ html[lang=ar] {
         padding-right: 1rem;
 
         @include breakpoint($desktop) {
-          padding-right: 1.25rem;
+          padding-right: 0.75rem;
         }
       }
     }

@@ -5,6 +5,7 @@ local.aliases.drushrc.php
 local.services.yml
 tests/behat/local.yml
 box/local.config.yml
+box/alshaya_acm*
 *.local
 project.local.yml
 
@@ -127,4 +128,9 @@ atlassian-ide-plugin.xml
 
 # Drupal console
 console
+
+# Allow developers to add installation steps in local.
 install-site-dev.sh
+
+# Allow developers to override config in local.
+factory-hooks/*/local.php
