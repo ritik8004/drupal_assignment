@@ -401,6 +401,7 @@
 
     display: block;
     margin-top: 1.25rem;
+    font-size: 0.8125rem;
 
     @include breakpoint($tablet) {
       display: inline-block;
