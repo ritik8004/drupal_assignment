@@ -62,7 +62,8 @@
         "drupal/autologout": "^1.0",
         "drupal/block_content_machine_name": "^1.2",
         "drupal/imagemagick": "~2.0",
-        "acquia/acsf-tools": "^8.1"
+        "acquia/acsf-tools": "^8.1",
+        "drupal/acquia_purge": "^1.0@beta"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
