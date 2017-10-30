@@ -641,3 +641,30 @@
     }
   }
 }
+
+.recent__orders--list {
+  .price-wrapper {
+    .price-currency {
+      margin-#{$right}: 0;
+    }
+  }
+
+  .recent__orders--body {
+    .icon-ic_chevrondown {
+      @include icon(dropdown-expand, before) {
+        position: absolute;
+        top: 50%;
+        #{$right}: 0.3125rem;
+        transform: translate(-50%, -50%);
+        color: $hnm-black-two;
+        font-size: 2.125rem;
+      }
+    }
+
+    &.open--accordion {
+      .icon-ic_chevrondown {
+        @include icon(dropdown-collapse, before);
+      }
+    }
+  }
+}
