@@ -84,7 +84,6 @@
 .user__order--detail {
   font-family: $hnm-regular;
   line-height: 1;
-  background: $hnm-grey;
   border-top: 1px solid $white;
   width: 100%;
   font-size: 0.75rem;
@@ -219,6 +218,7 @@
 
   .order-item-row {
     border-bottom: 1px solid $white;
+    background: $white-four-70;
 
     .order__product--image {
       @include breakpoint($only-tablet) {

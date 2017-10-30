@@ -338,8 +338,9 @@
     position: relative;
   }
 
-  .toggle--icon .icon-ic_chevrondown {
-    font-size: 30px;
+  .toggle--icon .icon-ic_dropdown-expand {
+    font-size: 2.125rem;
+    color: $hnm-black-two;
     position: absolute;
     #{$right}: 3.2rem;
     top: 50%;
@@ -364,7 +365,7 @@
     }
 
     a {
-      color: $windows-blue;
+      color: $hnm-black-two;
     }
   }
 
@@ -503,7 +504,7 @@
 
 .open--accordion {
   .order-summary-row td {
-    background-color: $whisper-light;
+    background-color: $whisper-light-59;
   }
 
   .order--items {
@@ -517,8 +518,8 @@
   }
 
   .toggle--icon {
-    .icon-ic_chevrondown {
-      @include icon(chevronup);
+    .icon-ic_dropdown-expand {
+      @include icon(dropdown-collapse);
     }
   }
 }
