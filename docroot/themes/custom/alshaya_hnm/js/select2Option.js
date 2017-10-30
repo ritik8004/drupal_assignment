@@ -103,7 +103,7 @@ jQuery.fn.select2Option = function (options) {
 
 (function ($) {
   'use strict';
-  Drupal.behaviors.alshaya_product_zoom = {
+  Drupal.behaviors.alshaya_hm_attributes = {
     attach: function (context, settings) {
       // Set the value for selected option.
       $('.select-buttons', context).find('a.picked').each(function () {
