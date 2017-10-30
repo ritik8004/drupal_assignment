@@ -1,11 +1,12 @@
 .account--dashboard {
   margin-bottom: 57px;
-  font-family: $arial;
+  font-family: $hnm-regular;
   line-height: 1;
 
   .subtitle {
     border-bottom: 1px solid $white;
     font-size: 1rem;
+    font-family: $hnm-demibold;
 
     @include breakpoint($tablet) {
       font-size: 1rem;
@@ -56,11 +57,21 @@
     @include breakpoint($desktop) {
       padding-left: 35px;
     }
+
+    .light {
+      font-family: $hnm-demibold;
+      line-height: 1.36;
+      color: $hnm-black-two !important;
+    }
+
+    .black {
+      color: $hnm-black-two;
+    }
   }
 
   .label {
-    font-weight: 700;
     margin-bottom: 4px;
+    font-family: $hnm-demibold;
   }
 
   .account-content-wrapper {
@@ -93,7 +104,7 @@
       }
 
       p {
-        font-family: $arial;
+        font-family: $hnm-regular;
         font-size: 0.75rem;
         color: $grey-ash;
         margin: 0.4rem 0;
@@ -120,8 +131,7 @@
       }
 
       a {
-        font-family: $arial;
-        font-weight: bold;
+        font-family: $hnm-regular;
       }
 
       img {
