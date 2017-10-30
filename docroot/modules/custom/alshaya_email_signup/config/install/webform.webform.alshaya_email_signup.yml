@@ -57,7 +57,7 @@ settings:
   draft_button_attributes: {  }
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: url
+  confirmation_type: url_message
   confirmation_title: ''
   confirmation_message: 'Thank you :)'
   confirmation_url: '/[server:HTTP_REFERER]'
@@ -76,6 +76,18 @@ settings:
   results_disabled: false
   results_disabled_ignore: false
   token_update: false
+  ajax: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_reset: false
+  submission_label: ''
+  submission_user_columns: {  }
+  preview_label: ''
+  preview_title: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  draft_multiple: false
 access:
   create:
     roles:
@@ -109,6 +121,7 @@ handlers:
     label: Email
     handler_id: email
     status: true
+    conditions: {  }
     weight: 0
     settings:
       states:
@@ -130,3 +143,7 @@ handlers:
       debug: false
       reply_to: ''
       return_path: ''
+      ignore_access: false
+      exclude_empty: true
+      sender_mail: ''
+      sender_name: ''
