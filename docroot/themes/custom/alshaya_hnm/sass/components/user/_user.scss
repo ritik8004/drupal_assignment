@@ -595,16 +595,15 @@
           #{$right}: 1rem;
           border-radius: 100%;
           color: $black;
-          padding: 2px;
-          padding-#{$left}: 4px;
+          padding: 0.125rem;
+          padding-#{$left}: 0.25rem;
           top: 2rem;
-          height: 35px;
-          width: 35px;
+          height: 2.1875rem;
+          width: 2.1875rem;
 
           @include breakpoint($only-mobile) {
-            background-color: $white-smoke;
-            #{$right}: 3rem;
-            top: 62%;
+            #{$right}: 3.125rem;
+            top: 50%;
           }
         }
 
@@ -790,7 +789,7 @@
         .dark {
           color: $black-two;
           height: 16px;
-          font-family: $hnm-regular;
+          font-family: $hnm-demibold;
           font-size: 14px;
           font-weight: bold;
           letter-spacing: 0.5px;
