@@ -37,6 +37,7 @@
       var subListName = '';
       var leadType = '';
       var promotionImpressionSubnavFired = false;
+      var ccPaymentsClicked = false;
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -59,10 +60,10 @@
             }
           }
           var gtmPageSubType = gtmPageTypeArray.join('-');
-          gtmPageType = 'user-' . gtmPageSubType;
+          gtmPageType = 'myaccount-' . gtmPageSubType;
         }
         else {
-          gtmPageType = 'not defined';
+          gtmPageType = document.location.pathname.split('/').join('-');
         }
       }
 
@@ -90,7 +91,7 @@
 
       if (isSearchPage) {
         $('.c-header #edit-keywords').once('internalsearch').each(function () {
-          var keyword = $(this).val();
+          var keyword = Drupal.getQueryVariable('keywords');
           var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
 
           if ((noOfResult === 0) || (isNaN(noOfResult))) {
@@ -216,7 +217,11 @@
         }
       }
 
-      if (isCCPage && gtm_execute_onetime_events) {
+      $('input[data-drupal-selector="edit-actions-ccnext"]').click(function () {
+        ccPaymentsClicked = true;
+      });
+
+      if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
         if ($('li.select-store', context).length > 0) {
           var keyword = $('input#edit-store-location').val();
           var resultCount = $('li.select-store', context).length;
@@ -335,27 +340,27 @@
             event = 'addToCart';
           }
 
-					var data = {
-						event: event,
-						ecommerce: {
-							currencyCode: currencyCode
-						}
-					};
+          var data = {
+            event: event,
+            ecommerce: {
+              currencyCode: currencyCode
+            }
+          };
 
-					if (event === 'removeFromCart') {
-						data.ecommerce.remove = {
-							products: [
-								product
-							]
-						};
-					}
-					else if (event === 'addToCart') {
-						data.ecommerce.add = {
-							products: [
-								product
-							]
-						};
-					}
+          if (event === 'removeFromCart') {
+            data.ecommerce.remove = {
+              products: [
+                product
+              ]
+            };
+          }
+          else if (event === 'addToCart') {
+            data.ecommerce.add = {
+              products: [
+                product
+              ]
+            };
+          }
 
           dataLayer.push(data);
         }
@@ -550,7 +555,7 @@
         });
       });
 
-      $('.sub-nav-link').click(function() {
+      $('.sub-nav-link').click(function () {
         var parent = $(this).closest('ul.menu--two__list');
         if (parent.length !== 0) {
           var highlights = parent.find('.highlights [gtm-type="gtm-highlights"]');
@@ -603,10 +608,11 @@
             var selectedVal = $(this).find('label>span.facet-item__value').text();
             var facetTitle = $(this).parent('ul').siblings('h3.c-facet__title').text();
             var filterValue = facetTitle + ':' + selectedVal;
+            filterValue = filterValue.trim();
 
             var data = {
               event: 'filter',
-              section: section,
+              siteSection: section,
               filterValue: filterValue
             };
 
@@ -617,9 +623,10 @@
         // Track sorts.
         $('select[name="sort_bef_combine"]', context).once('js-event').on('change', function () {
           var sortValue = $(this).find('option:selected').text();
+          sortValue.trim();
           var data = {
             event: 'sort',
-            section: section,
+            siteSection: section,
             sortValue: sortValue
           };
 
@@ -652,14 +659,12 @@
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       position: 1,
-      dimension6: '',
-      dimension5: product.attr('gtm-dimension5'),
       dimension1: product.attr('gtm-dimension1'),
-      dimension4: mediaCount,
       dimension2: product.attr('gtm-sku-type'),
       dimension3: product.attr('gtm-dimension3'),
-      metric1: parseFloat(product.attr('gtm-metric1')),
-      metric2: product.attr('gtm-cart-value')
+      dimension4: mediaCount,
+      dimension5: product.attr('gtm-dimension5'),
+      dimension6: ''
     };
 
     return productData;
@@ -742,39 +747,43 @@
       var position = 1;
       var creative = '';
 
-      if (gtmPageType === 'Top Navigation') {
+      if ((gtmPageType === 'Top Navigation') &&
+        ($(highlight).find('.field--name-field-highlight-image img').attr('src') !== undefined)) {
         creative = Drupal.url($(highlight).find('.field--name-field-highlight-image img').attr('src'));
         position = $(highlight).data('position');
       }
-      else if (gtmPageType === 'PLP') {
+      else if ((gtmPageType === 'PLP') &&
+        ($(highlight).find('.field-content img').attr('src') !== undefined)) {
         creative = Drupal.url($(highlight).find('.field-content img').attr('src'));
         position = 1;
       }
-      else {
+      else if ($(highlight).find('.field--name-field-banner img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
         position = parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
       }
 
-      var creativeParts = creative.split('/');
-      var fileName = creativeParts[creativeParts.length - 1];
-      // Strip off any query parameters.
-      if (fileName.indexOf('?') !== -1) {
-        fileName = fileName.substring(0, fileName.indexOf('?'));
-      }
+      if (creative) {
+        var creativeParts = creative.split('/');
+        var fileName = creativeParts[creativeParts.length - 1];
+        // Strip off any query parameters.
+        if (fileName.indexOf('?') !== -1) {
+          fileName = fileName.substring(0, fileName.indexOf('?'));
+        }
 
-      // Remove file extensions from fileName.
-      if (fileName.lastIndexOf('.') !== -1) {
-        fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-      }
+        // Remove file extensions from fileName.
+        if (fileName.lastIndexOf('.') !== -1) {
+          fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+        }
 
-      if ((fileName !== undefined) && (fileName !== '')) {
-        var promotion = {
-          id: fileName,
-          name: gtmPageType,
-          position: 'slot' + position
-        };
+        if ((fileName !== undefined) && (fileName !== '')) {
+          var promotion = {
+            id: fileName,
+            name: gtmPageType,
+            position: 'slot' + position
+          };
+        }
+        promotions.push(promotion);
       }
-      promotions.push(promotion);
     });
 
     if (promotions.length > 0) {
@@ -877,7 +886,7 @@
     if (keyword !== '') {
       dataLayer.push({
         event: 'findStore',
-        fsLocation: location,
+        siteSection: location,
         fsKeyword: keyword,
         fsNoOfResult: resultCount
       });
@@ -900,6 +909,23 @@
     }
 
     return selectedMethodLabel;
+  };
+
+  /**
+   * Helper function to fetch value for a query string.
+   *
+	 * @param variable
+	 * @returns {string}
+	 */
+  Drupal.getQueryVariable = function (variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+      if (decodeURIComponent(pair[0]) === variable) {
+        return decodeURIComponent(pair[1]);
+      }
+    }
   };
 
 })(jQuery, Drupal, dataLayer);
