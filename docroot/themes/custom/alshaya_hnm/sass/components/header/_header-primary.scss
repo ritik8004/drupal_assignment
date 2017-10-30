@@ -112,6 +112,13 @@ header {
       }
     }
 
+    .price {
+      .price-amount {
+        font-family: $hnm-demibold;
+        margin: 0 0.25rem;
+      }
+    }
+
     @include breakpoint($desktop) {
       .block-system-branding-block {
         .site-brand-home {
@@ -842,6 +849,7 @@ header {
           font-family: $hnm-demibold;
           letter-spacing: 0.5px;
           font-weight: normal;
+          line-height: 1.69;
           text-transform: uppercase;
           color: $black;
 
@@ -885,7 +893,7 @@ header {
       }
 
       .menu-two__link {
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
       }
 
       &:hover {
@@ -899,7 +907,6 @@ header {
         max-width: 80.25rem;
         min-height: 100%;
         vertical-align: top;
-        margin-bottom: 1.563rem;
         position: absolute;
         background: $white-five;
         top: 0;
@@ -977,11 +984,8 @@ header {
   .highlights {
     vertical-align: top;
     display: inline-block;
-    width: 39%;
-    margin-top: 5px;
 
     div:nth-child(2) {
-      margin-#{$right}: 24px;
       float: $left;
     }
 
@@ -993,15 +997,6 @@ header {
 
     img {
       max-width: 11.625rem;
-    }
-
-    .title {
-      font-family: $alshaya-bold;
-      font-weight: normal;
-      display: block;
-      font-size: 14px;
-      color: $marine-blue;
-      margin-bottom: 0.8rem;
     }
   }
 

@@ -211,6 +211,27 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $description_value .= '</div>';
       }
 
+      if ($composition = $sku_entity->get('attr_composition')->getString()) {
+        $description_value .= '<div class="composition-wrapper">';
+        $description_value .= '<div class="composition-label">' . t('composition') . '</div>';
+        $description_value .= '<div class="composition-value">' . $composition . '</div>';
+        $description_value .= '</div>';
+      }
+
+      $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
+      $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
+      if (!empty($washing_instructions) || !empty($dry_cleaning_instructions)) {
+        $description_value .= '<div class="care-instructions-wrapper">';
+        $description_value .= '<div class="care-instructions-label">' . t('care instructions') . '</div>';
+        if (!empty($washing_instructions)) {
+          $description_value .= '<div class="care-instructions-value washing-instructions">' . $washing_instructions . '</div>';
+        }
+        if (!empty($dry_cleaning_instructions)) {
+          $description_value .= '<div class="care-instructions-value dry-cleaning-instructions">' . $dry_cleaning_instructions . '</div>';
+        }
+        $description_value .= '</div>';
+      }
+
       $description['value'] = [
         '#markup' => $description_value,
       ];
@@ -519,6 +540,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $form['#attached']['drupalSettings']['alshaya_product_size_config'] = $options;
     }
 
+    // Process stock if number of configurable attributes is 1.
+    $process_stock = (count($form_state->get('tree')['configurables']) === 1) ? TRUE : FALSE;
+
     foreach ($form['ajax']['configurables'] as $configurable_key => &$configurable) {
       if (is_array($configurable)) {
         $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
@@ -536,7 +560,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $configurable['#options_attributes'] = [];
 
         // Check if it is a dropdown, we disable the options for which we don't
-        // have stock.
+        // have stock. Apply this check only if we have just 1 configurable
+        // attribute. With multiple conf attributes, we cannot get the SKU with
+        // a single option.
         if (isset($configurable['#options'])) {
           foreach ($configurable['#options'] as $key => $value) {
             $sku = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), [$configurable_key => $key]);

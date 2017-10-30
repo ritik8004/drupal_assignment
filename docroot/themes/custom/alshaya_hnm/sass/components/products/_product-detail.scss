@@ -119,20 +119,21 @@
   &__title_wrapper {
     h1,
     h1 span {
-      font-family: $alshaya-thin;
+      font-family: $hnm-regular;
       font-size: 1.125rem;
-      font-weight: 100;
+      color: $hnm-black-two;
     }
 
     .price {
-      font-size: 1rem;
-      color: $black;
+      color: $black-two;
+      font-family: $hnm-demibold;
+      font-size: 0.9375rem;
       margin-bottom: 1rem;
     }
 
     .content--item-code {
       font-size: 0.6875rem;
-      color: $brownish-grey;
+      color: $grey7;
       padding-bottom: 0.75rem;
     }
 
@@ -180,6 +181,12 @@
       border-radius: 0;
       padding: 0.3125rem 0.625rem;
       appearance: none;
+    }
+  }
+
+  .form-item-configurables-article-castor-id {
+    label {
+      @include u-visibility(none);
     }
   }
 
@@ -237,6 +244,7 @@
       &::after,
       &::before {
         top: 0.5rem;
+        background: transparent;
       }
 
       &::before {
@@ -335,12 +343,32 @@
     display: none;
   }
 
+  .composition-wrapper,
+  .care-instructions-wrapper {
+    color: $grey7;
+    margin-bottom: 0.625rem;
+
+    .composition-label,
+    .care-instructions-label {
+      font-family: $hnm-demibold;
+      color: $hnm-black-two;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    ul {
+      padding-#{$left}: 0;
+      list-style: none;
+      margin: 0;
+    }
+  }
+
   .field {
     &__label {
-      font-size: 1rem;
-      font-family: $arial;
-      font-weight: bold;
-      color: $marine-blue;
+      font-size: 0.875rem;
+      font-family: $hnm-bold;
+      font-weight: normal;
+      color: $hnm-black-two;
       margin-top: 0;
     }
 
@@ -351,22 +379,25 @@
   }
 
   a {
-    font-family: $arial;
+    font-family: $hnm-regular;
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $hnm-black-two;
   }
 
   strong {
-    font-weight: bold;
-    color: $black;
+    font-weight: normal;
+    font-family: $hnm-bold;
+    color: $hnm-black-two;
   }
 
   .desc-label {
-    font-family: $arial;
-    font-weight: bold;
-    color: $marine-blue;
+    font-family: $hnm-demibold;
+    font-weight: normal;
+    color: $hnm-black-two;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     font-size: 0.875rem;
     margin-top: 0;
     margin-bottom: 0;
@@ -377,7 +408,7 @@
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $black-two;
     text-transform: lowercase;
     cursor: pointer;
   }
@@ -413,7 +444,7 @@
     top: 0;
     #{$right}: -38%;
     height: 33.75rem;
-    border: 1px solid $marine-blue;
+    border: 1px solid $hnm-black-two;
     padding: 1.25rem;
     padding-bottom: 0;
     background: $white-five;
@@ -433,8 +464,8 @@
       width: 2.188rem;
       font-size: 30px;
       text-align: center;
-      color: $white-two;
-      background-color: $marine-blue;
+      color: $white-five;
+      background-color: $hnm-black-two;
       cursor: pointer;
     }
 
@@ -458,10 +489,11 @@
 .short-description-wrapper {
   .field {
     &__label {
-      font-size: 1rem;
-      font-family: $arial;
-      font-weight: bold;
-      color: $marine-blue;
+      font-size: 0.875rem;
+      font-family: $hnm-bold;
+      font-weight: normal;
+      color: $hnm-black-two;
+      letter-spacing: 0.5px;
     }
 
     &__content {
@@ -484,9 +516,10 @@
         }
 
         .desc-label {
-          font-family: $arial;
-          font-weight: bold;
-          color: $marine-blue;
+          font-family: $hnm-demibold;
+          font-weight: normal;
+          text-transform: uppercase;
+          color: $hnm-black-two;
           font-size: 0.875rem;
           margin-top: 0;
           margin-bottom: 0;
@@ -516,21 +549,21 @@
   }
 
   .show-less-link {
-    font-family: $arial;
+    font-family: $hnm-regular;
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $black-three;
     text-transform: lowercase;
     cursor: pointer;
   }
 
   .read-more-description-link {
-    font-family: $arial;
-    font-size: 0.875rem;
+    font-family: $hnm-regular;
+    font-size: 0.75rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $black-three;
     cursor: pointer;
     display: none;
 
@@ -540,15 +573,33 @@
   }
 
   .read-more-description-link-mobile {
-    font-family: $arial;
+    font-family: $hnm-regular;
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $black-three;
     cursor: pointer;
 
     @include breakpoint($tablet) {
       display: none;
+    }
+  }
+
+  .composition-wrapper,
+  .care-instructions-wrapper {
+    color: $grey7;
+
+    .composition-label,
+    .care-instructions-label {
+      font-family: $hnm-demibold;
+      color: $hnm-black-two;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    ul {
+      padding-#{$left}: 0;
+      list-style: none;
     }
   }
 }
@@ -582,10 +633,11 @@
 
   .field {
     &__label {
-      font-size: 1rem;
-      font-family: $arial;
-      font-weight: bold;
-      color: $marine-blue;
+      font-size: 0.875rem;
+      font-family: $hnm-bold;
+      font-weight: normal;
+      letter-spacing: 0.5px;
+      color: $hnm-black-two;
 
       &.disabled {
         opacity: 0.4;
@@ -620,13 +672,13 @@
     }
 
     &__title {
-      font-family: $arial;
+      font-family: $hnm-regular;
       font-size: 0.875rem;
-      color: $black;
+      color: $hnm-black-two;
       line-height: 2;
-      text-transform: capitalize;
       cursor: pointer;
       position: relative;
+      text-transform: none;
 
       &.ui-state-active {
         border-bottom: none;
@@ -635,10 +687,11 @@
       .subtitle {
         @include u-visibility(block);
 
-        font-family: $arial;
+        font-family: $hnm-regular;
         font-size: 0.6875rem;
-        color: $brownish-grey;
+        color: $grey6;
         line-height: 1;
+        text-transform: none;
       }
 
       .title-price {
@@ -674,19 +727,20 @@
         }
 
         &-title {
-          font-family: $arial;
+          font-family: $hnm-bold;
           line-height: 1.5;
           font-size: 0.75rem;
           padding-bottom: 0.5rem;
           padding-top: 0.75rem;
-          color: $black-two;
+          color: $hnm-black-two;
 
           strong {
-            color: $black;
+            font-family: $hnm-regular;
           }
 
           span {
-            color: $brownish-grey;
+            color: $hnm-black-two;
+            font-family: $hnm-regular;
           }
         }
       }
@@ -733,11 +787,17 @@
 
     label,
     .text p {
-      font-family: $arial;
+      font-family: $hnm-regular;
       font-size: 0.75rem;
       line-height: 2;
-      color: $brownish-grey;
+      color: $grey7;
       margin: 0;
+    }
+
+    strong {
+      font-family: $hnm-bold;
+      font-weight: normal;
+      color: $hnm-black-two;
     }
 
     #cc-store-name {
@@ -757,14 +817,14 @@
 
     button {
       float: $right;
-      width: 6.563rem;
+      width: 8.25rem;
       height: 2.188rem;
-      background-color: $cerulean-two;
-      font-family: $alshaya-thin;
+      background-color: $hnm-black-two;
+      font-family: $hnm-bold;
+      text-transform: uppercase;
       appearance: none;
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       color: $white-five;
-      text-transform: lowercase;
       display: inline-block;
       vertical-align: middle;
       text-align: center;
@@ -788,7 +848,7 @@
     font-family: $arial;
     font-size: 0.75rem;
     line-height: 2;
-    color: $grey-ash;
+    color: $grey7;
     margin: 0;
   }
 
@@ -821,14 +881,14 @@
 
     button {
       float: none;
-      width: 6.563rem;
+      width: 8.25rem;
       height: 2.188rem;
-      background-color: $cerulean-two;
-      font-family: $alshaya-thin;
+      background-color: $hnm-black-two;
+      font-family: $hnm-bold;
+      text-transform: uppercase;
       appearance: none;
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       color: $white-five;
-      text-transform: lowercase;
       display: inline-block;
       vertical-align: middle;
       text-align: center;
@@ -953,6 +1013,10 @@
 
     &:hover {
       background-color: $white-four;
+    }
+
+    &:first-child {
+      border-top: none;
     }
   }
 
@@ -1400,18 +1464,26 @@
       }
 
       button[type="submit"] {
-        font-family: $alshaya-bold;
-        font-size: 0.875rem;
-        background: $pumpkin-orange;
+        font-family: $hnm-bold;
+        font-size: 0.8125rem;
+        background: $hnm-black-two;
         border-radius: 0;
         color: $white-five;
         border: 0;
-        text-transform: lowercase;
+        text-transform: uppercase;
         padding: 0.5rem 1.3701rem;
         margin-bottom: 1.5rem;
         display: inline-block;
         height: 2.1875rem;
         line-height: 1;
+        padding-#{$left}: 2.938rem;
+
+        @include icon(shopping-bag) {
+          font-size: 1.25rem;
+          top: 0.4375rem;
+          position: absolute;
+          #{$left}: 1.188rem;
+        }
 
         @include breakpoint($only-mobile) {
           &.hide-button {
@@ -1486,10 +1558,13 @@
     margin: 0;
     font-size: 0.6875rem;
     font-weight: 100;
+    color: $grey7;
   }
 
   .selected-text {
-    font-weight: bold;
+    font-weight: normal;
+    font-family: $hnm-bold;
+    color: $hnm-black-two;
     display: inline-block;
 
     html[lang=ar] .safari & {
@@ -1515,16 +1590,16 @@
         margin-bottom: 0.3125rem;
         margin-#{$right}: 0.5rem;
         margin-#{$left}: 0;
-        border: 1px solid $marine-blue;
+        border: 1px solid $hnm-black-two;
         text-align: center;
         padding: 0.75rem;
         font-size: 0.875rem;
-        color: $marine-blue;
+        color: $hnm-black-two;
 
         &.picked {
           color: $white-five;
           font-weight: bold;
-          background: $marine-blue;
+          background: $hnm-black-two;
 
           html[lang=ar] .safari & {
             font-weight: normal;
