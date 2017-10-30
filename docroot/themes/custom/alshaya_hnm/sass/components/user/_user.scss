@@ -869,7 +869,7 @@
 
     .form-text {
       color: $black;
-      margin-top: 0.56rem;
+      margin-top: 0;
       padding-bottom: 0.5rem;
       font-size: 1.25rem;
       letter-spacing: 0.312rem;
@@ -906,10 +906,6 @@
         }
       }
     }
-  }
-
-  #unmask_password {
-    top: 0.6875rem;
   }
 
   .form-actions {
