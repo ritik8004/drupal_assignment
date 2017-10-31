@@ -94,7 +94,7 @@
   }
 
   .light {
-    color: $grey6;
+    color: $greyish;
   }
 
   .dark {
@@ -387,6 +387,10 @@
 
     div {
       margin-bottom: 0.3125rem;
+
+      &.button {
+        margin-bottom: 0;
+      }
     }
 
     @include breakpoint($upto-tablet) {
@@ -529,7 +533,7 @@
   h2.subtitle {
     margin-top: 2.7rem;
     border-bottom: none;
-    font-weight: normal;
+    font-family: $hnm-demibold;
 
     @include breakpoint($only-tablet) {
       font-size: 0.875rem;

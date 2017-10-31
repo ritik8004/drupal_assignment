@@ -9,6 +9,7 @@
 
   .subtitle {
     border-bottom: 1px solid $white;
+    font-family: $hnm-demibold;
   }
 }
 
@@ -70,7 +71,7 @@
 
 .c-user-password {
   h1 {
-    top: -2.7rem;
+    top: -3.875rem;
   }
 }
 
@@ -100,6 +101,8 @@
 
   .back-link {
     @include breakpoint($only-mobile) {
+      font-size: 0;
+
       @include icon(chevron#{$left}, before) {
         font-size: 1.875rem;
         margin-#{$left}: -0.75rem;
@@ -111,8 +114,9 @@
       h1.c-page-title {
         display: inline-block;
         line-height: 1.5;
+        font-size: 1.125rem;
         vertical-align: top;
-        letter-spacing: 0.7px;
+        letter-spacing: 0.8px;
       }
     }
   }
