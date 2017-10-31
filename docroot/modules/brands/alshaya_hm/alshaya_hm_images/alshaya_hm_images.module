@@ -131,8 +131,12 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
       $thumb_images[$key]['fullurl'] = $fullscreen_images[$key]['url'];
     }
 
-    $main_image['zoomurl'] = $zoom_images[0]['url'];
-    $main_image['mediumurl'] = $main_images[0]['url'];
+    // Check on main images is sufficient here, since zoom images are variations
+    // of main images.
+    if ($main_images) {
+      $main_image['zoomurl'] = $zoom_images[0]['url'];
+      $main_image['mediumurl'] = $main_images[0]['url'];
+    }
   }
 }
 
