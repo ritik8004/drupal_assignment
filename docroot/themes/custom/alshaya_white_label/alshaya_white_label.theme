@@ -670,6 +670,18 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   $block_view = \Drupal::entityManager()->getViewBuilder('block_content')->view($copyright_block, 'full', $lang);
   $variables['email_footer'] = $block_view;
   $variables['lang'] = $lang;
+
+  $menu_tree = \Drupal::menuTree();
+  // Build the typical default set of menu tree parameters.
+  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters('social-links');
+  $menus = $menu_tree->load('social-links', $parameters);
+
+  foreach ($menus as $menu) {
+    $title = $menu->link->getTitle();
+    $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+  }
+
+  $variables['links'] = $links;
 }
 
 /**
