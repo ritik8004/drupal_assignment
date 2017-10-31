@@ -1610,11 +1610,11 @@
           padding: 1.188rem !important;
           border: none !important;
           cursor: pointer;
+          position: relative;
 
           &.picked {
             &::after {
               content: '';
-              background: $hnm-black-two;
               position: absolute;
               display: inline-block;
               top: -0.1875rem;
