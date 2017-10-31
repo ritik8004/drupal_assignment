@@ -26,7 +26,7 @@
 
       // JS for converting select list for size to unformatted list on PDP pages.
       function select2OptionConvert() {
-        if ($(window).width() > 1024) {
+        if ($(window).width() > 767) {
           $('.acq-content-product .form-item-configurables-size, .acq-content-product-modal .form-item-configurables-size, .acq-content-product .form-item-configurables-article-castor-id, .acq-content-product-modal .form-item-configurables-article-castor-id').once('bind-events').each(function () {
             $('select', $(this)).select2Option();
 
@@ -35,6 +35,14 @@
             $('.select2Option', $(this)).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
           });
         }
+
+        $('.acq-content-product .form-item-configurables-article-castor-id, .acq-content-product-modal .form-item-configurables-article-castor-id').once('bind-events').each(function () {
+          $('select', $(this)).select2Option();
+
+          var clickedOption = $('.select2Option li a.picked', $(this));
+          $('.select2Option', $(this)).find('.list-title .selected-text').remove();
+          $('.select2Option', $(this)).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+        });
       }
     }
   };
