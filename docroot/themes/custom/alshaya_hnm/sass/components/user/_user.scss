@@ -56,6 +56,10 @@
   padding: 1em 0;
   position: relative;
 
+  &.c-user-password {
+    padding: 1.563rem 0;
+  }
+
   @include breakpoint($only-mobile) {
     margin-top: 2.5em;
     padding: 1em 0.5em;
