@@ -4,6 +4,7 @@
  * @file
  * Contains install, update, uninstall hooks for alshaya_hm_images module.
  */
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_install().
@@ -17,4 +18,9 @@ function alshaya_hm_images_install() {
   $alshaya_acm_product_fields = \Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields');
   $alshaya_acm_product_fields->set('fields.color_label.configurable', 1)->save();
   $alshaya_acm_product_fields->set('fields.color_label.label', 'Color')->save();
+
+  // Update the above in base field additions config as well.
+  $alshaya_acm_base_field_additions = \Drupal::configFactory()->getEditable('acq_sku.base_field_additions');
+  $alshaya_acm_base_field_additions->set('color_label.configurable', 1)->save();
+  $alshaya_acm_base_field_additions->set('color_label.label', 'Color')->save();
 }
