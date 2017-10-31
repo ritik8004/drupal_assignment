@@ -163,6 +163,28 @@
 
 // SideBar content theming
 
+.form-item-configurables-article-castor-id {
+  .select2Option .select-buttons a[data-swatch-type=miniature_image] {
+    margin-#{$right}: 0;
+
+    &.picked {
+      border: none;
+      background: $hnm-grey-light-three;
+    }
+
+    &::before {
+      background: $hnm-black-two;
+      content: '';
+      height: 100%;
+      left: 0;
+      top: 0;
+      position: absolute;
+      width: 100%;
+      opacity: 0.02;
+    }
+  }
+}
+
 .basic-details-wrapper .field--name-field-skus {
   .field--name-sku {
     @include u-visibility(none);
@@ -1578,18 +1600,20 @@
           cursor: pointer;
           position: relative;
 
-          &.picked {
-            &::after {
-              content: '';
-              position: absolute;
-              display: inline-block;
-              top: -0.1875rem;
-              #{$left}: -0.1875rem;
-              #{$right}: -0.1875rem;
-              bottom: -0.1875rem;
-              z-index: 1;
-              border: 1px solid $hnm-black-two;
-              pointer-events: none;
+          &[data-swatch-type=color_block] {
+            &.picked {
+              &::after {
+                content: '';
+                position: absolute;
+                display: inline-block;
+                top: -0.1875rem;
+                #{$left}: -0.1875rem;
+                #{$right}: -0.1875rem;
+                bottom: -0.1875rem;
+                z-index: 1;
+                border: 1px solid $hnm-black-two;
+                pointer-events: none;
+              }
             }
           }
         }
