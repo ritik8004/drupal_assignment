@@ -30,11 +30,6 @@
           languge_switcher.hide();
         }
 
-        // Gradually Hide the language slider once user starts to scroll.
-        $(window, context).on('scroll', function () {
-          languge_switcher.fadeOut(2000);
-        });
-
         // Close the block when clicked on close button.
         languge_switcher_close.on('click', function () {
           // Hide the slider.

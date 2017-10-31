@@ -32,24 +32,11 @@
     </div>
     <div class="footer" style="border-top: 2px solid #003971; text-align: center;">
       <div style="padding-top: 30px; padding-bottom: 50px;">
-        <a href="" target="_blank">
-            <img src="{{ site_base_path ~ directory }}/imgs/social-icons/facebook-icon.png" width="24.3px" alt="{{ 'facebook' | t }}" title="{{ 'facebook' | t }}"/>
-        </a>
-        <a href="" target="_blank">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/instagram-icon.png" width="24.3px"  alt="{{ 'instagram' | t }}" title="{{ 'instagram' | t }}"/>
-        </a>
-        <a href="" target="_blank">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/youtube-icon.png" width="24.3px"  alt="{{ 'youtube' | t }}" title="{{ 'youtube' | t }}"/>
-        </a>
-        <a href="" target="_blank">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/google-icon.png" width="24.3px"  alt="{{ 'google' | t }}" title="{{ 'google' | t }}"/>
-        </a>
-        <a href="" target="_blank">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/twitter-icon.png" width="24.3px" alt="{{ 'twitter' | t }}" title="{{ 'twitter' | t }}"/>
-        </a>
-        <a href="" target="_blank">
-            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/pinterest-icon.png" width="24.3px" alt="{{ 'pinterest' | t }}" title="{{ 'pinterest' | t }}"/>
-        </a>
+        {% for name, link in links %}
+          <a href="{{ link }}" target="_blank">
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/social-icons/{{ name }}-icon.png" alt="{{ name|t }}" width="24.3px" title="{{ name|t }}" />
+          </a>
+        {% endfor %}
       </div>
       <div style="font-family: Arial, helvetica; font-size: 11px; color: #333; line-height: 1.55; background: #f7f7f7; padding: 16px; text-align: center;">
         <p style="margin:0; color: #333; font-size: 11px;">
