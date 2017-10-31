@@ -4,7 +4,6 @@
  * @file
  * Contains install, update, uninstall hooks for alshaya_hm_images module.
  */
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_install().

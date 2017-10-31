@@ -49,7 +49,7 @@ function acq_sku_install() {
  * Implements hook_update_N().
  */
 function acq_sku_update_8001() {
-  $config_path = drupal_get_path('module', 'acq_sku') . '/config/install/acq_sku.configurable_weights.yml';
+  $config_path = drupal_get_path('module', 'acq_sku') . '/config/install/acq_sku.configurable_form_settings.yml';
   $data = Yaml::parse($config_path);
-  \Drupal::configFactory()->getEditable('acq_sku.configurable_weights')->setData($data)->save(TRUE);
+  \Drupal::configFactory()->getEditable('acq_sku.configurable_form_settings')->setData($data)->save(TRUE);
 }
