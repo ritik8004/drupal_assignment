@@ -481,8 +481,13 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
 
       // Display the non-buyable message and help text.
       $settings = \Drupal::config('alshaya_acm_product.settings');
+
       $build['not_buyable_message'] = [
-        '#markup' => '<div class="not-buyable-message">' . $settings->get('not_buyable_message.value') . '</div>',
+        '#type' => 'inline_template',
+        '#template' => '<div class="not-buyable-message">{{ not_buyable_message | raw }}</div>',
+        '#context' => [
+          'not_buyable_message' => $settings->get('not_buyable_message.value'),
+        ],
       ];
 
       // Get store finder link.
@@ -492,7 +497,11 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
       ]);
 
       $build['not_buyable_help_text'] = [
-        '#markup' => '<div class="not-buyable-help-text">' . $not_buyable_help_text . '</div>',
+        '#type' => 'inline_template',
+        '#template' => '<div class="not-buyable-help-text">{{ not_buyable_help_text | raw }}</div>',
+        '#context' => [
+          'not_buyable_help_text' => $not_buyable_help_text,
+        ],
       ];
     }
     else {
