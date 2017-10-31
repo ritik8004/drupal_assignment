@@ -1,12 +1,9 @@
-uuid: 4c901225-e97f-4b2a-bc38-16f11655b27a
 langcode: en
 status: true
 dependencies:
   module:
     - editor
     - entity_embed
-_core:
-  default_config_hash: Mc8Hl-Ya14lrbMXaUx7Ybmv-18vtqE4lw2DpgNHPj-s
 name: 'Rich Text'
 format: rich_text
 weight: 1
