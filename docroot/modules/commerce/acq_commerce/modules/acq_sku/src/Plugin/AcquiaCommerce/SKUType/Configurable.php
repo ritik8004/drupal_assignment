@@ -43,6 +43,7 @@ class Configurable extends SKUPluginBase {
     ];
 
     $configurables = unserialize($sku->field_configurable_attributes->getString());
+    $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_weights')->get('weights');
 
     foreach ($configurables as $configurable) {
       $attribute_code = $configurable['code'];
@@ -58,6 +59,7 @@ class Configurable extends SKUPluginBase {
         '#title' => $configurable['label'],
         '#options' => $options,
         '#required' => TRUE,
+        '#weight' => $configurable_weights[$attribute_code],
         '#ajax' => [
           'callback' => [$this, 'configurableAjaxCallback'],
           'progress' => [
@@ -335,6 +337,13 @@ class Configurable extends SKUPluginBase {
     foreach ($configurables as $configurable) {
       $tree['configurables'][$configurable['code']] = $configurable;
     }
+
+    $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_weights')->get('weights');
+
+    // Sort configurables based on the config.
+    uasort($tree['configurables'], function ($a, $b) use ($configurable_weights) {
+      return $configurable_weights[$a['code']] - $configurable_weights[$b['code']];
+    });
 
     $tree['options'] = Configurable::recursiveConfigurableTree(
       $tree,
