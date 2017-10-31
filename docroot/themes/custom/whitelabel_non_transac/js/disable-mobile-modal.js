@@ -7,7 +7,7 @@
   'use strict';
 
   if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    $('a[data-dialog-type="modal"],  a.mobile-link').each(function () {
+    $('a[data-dialog-type="modal"], a.mobile-link').each(function () {
       var href = $(this).attr('href');
       $(this).click(function () {
         window.open(Drupal.settings.basePath + href);
