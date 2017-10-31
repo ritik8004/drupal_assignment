@@ -12,4 +12,9 @@ function alshaya_hm_images_install() {
   // Add fields to store the values from attributes as fields.
   $fields = \Drupal::config('alshaya_hm_images.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
+
+  // Update color label to be a confugurable value & its label to Color.
+  $alshaya_acm_product_fields = \Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields');
+  $alshaya_acm_product_fields->set('fields.color_label.configurable', 1)->save();
+  $alshaya_acm_product_fields->set('fields.color_label.label', 'Color')->save();
 }

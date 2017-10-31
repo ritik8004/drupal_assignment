@@ -5,7 +5,6 @@
  * Module file.
  */
 
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -192,6 +191,23 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
 
     // If the form has color config attribute available.
     if (isset($form['ajax']['configurables']['article_castor_id'])) {
+      // Set color's weight lower than size.
+      $configurable_weights = [
+        'article_castor_id' => 1,
+        'size' => 2,
+      ];
+
+      $form['ajax']['configurables']['size']['#weight'] = $configurable_weights['size'];
+      $form['ajax']['configurables']['article_castor_id']['#weight'] = $configurable_weights['article_castor_id'];
+
+      $product_tree = $form_state->get('tree');
+
+      // Alter the order of configurables.
+      uasort($product_tree['configurables'], function ($a, $b) use ($configurable_weights) {
+        return $configurable_weights[$a['code']] - $configurable_weights[$b['code']];
+      });
+
+      $form_state->set('tree', $product_tree);
       $options = $form['ajax']['configurables']['article_castor_id']['#options'];
       $form['ajax']['configurables']['article_castor_id']['#title'] = t('Color');
       $form['ajax']['configurables']['article_castor_id']['#attributes']['data-default-title'] = t('Color');
