@@ -191,7 +191,8 @@
 
     .form-text,
     .form-email {
-      color: $black;
+      color: $black-two !important;
+      font-family: $hnm-regular;
 
       @include breakpoint($desktop) {
         padding-bottom: 0.15rem;

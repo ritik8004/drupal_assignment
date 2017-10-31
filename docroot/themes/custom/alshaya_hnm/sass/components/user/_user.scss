@@ -67,10 +67,11 @@
 
   .c-sidebar-second {
     h3 {
-      color: $hnm-black-two;
-      font-size: 0.75rem;
+      color: $black-three;
+      font-size: 0.875rem;
       font-family: $hnm-demibold;
-      font-weight: normal;
+      letter-spacing: 0.4px;
+      line-height: 1.29;
     }
 
     p {
@@ -120,7 +121,6 @@
     padding-top: 0.5rem;
 
     @include breakpoint($tablet) {
-      border-top: 0;
       margin-top: 4.4rem;
       padding-top: 3.5rem;
       width: 20.625rem;
@@ -130,7 +130,6 @@
     }
 
     @include breakpoint($desktop) {
-      border-top: 1px solid $hnm-black-two;
       margin-#{$left}: -5.5em;
       padding-#{$left}: 5.5em;
       width: 30.25rem;
@@ -172,10 +171,9 @@
     }
 
     a {
-      font-weight: normal;
       color: $hnm-black-two;
       text-decoration: underline;
-      font-family: $hnm-demibold;
+      font-family: $hnm-regular;
     }
 
     h3 {
