@@ -903,7 +903,7 @@ html[lang=ar] {
         margin-#{$left}: -0.5rem;
 
         @include breakpoint($desktop) {
-          margin-#{$left}: -0.625rem;
+          margin-#{$left}: -0.5rem;
         }
       }
     }
