@@ -58,8 +58,12 @@
 .view-address-book {
   padding-top: 0.5rem;
 
+  @include breakpoint($tablet) {
+    padding-top: 2.1875rem;
+  }
+
   @include breakpoint($desktop) {
-    padding-top: 2rem;
+    padding-top: 3rem;
   }
 }
 
@@ -401,6 +405,7 @@
 
     display: block;
     margin-top: 1.25rem;
+    font-size: 0.8125rem;
 
     @include breakpoint($tablet) {
       display: inline-block;
@@ -413,10 +418,10 @@
     }
 
     @include breakpoint($desktop) {
-      top: -1.188rem;
+      top: -0.625rem;
       min-width: 11.75rem;
       margin-top: 0;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.625rem;
     }
 
     + .form-item {
@@ -564,6 +569,7 @@
 #address-book-form-open {
   .form-actions {
     position: relative;
+    margin-bottom: 1.5rem;
 
     input[disabled] {
       color: transparent !important;

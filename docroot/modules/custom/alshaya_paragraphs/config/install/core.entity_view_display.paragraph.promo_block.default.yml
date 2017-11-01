@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.paragraph.promo_block.field_banner
     - field.field.paragraph.promo_block.field_link
+    - field.field.paragraph.promo_block.field_promo_block_button
     - paragraphs.paragraphs_type.promo_block
   module:
     - image
@@ -34,4 +35,5 @@ content:
     third_party_settings: {  }
     type: link
     region: content
-hidden: {  }
+hidden:
+  field_promo_block_button: true

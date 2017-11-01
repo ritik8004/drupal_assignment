@@ -407,8 +407,8 @@
 
     @include breakpoint($tablet) {
       width: 31.59%;
-      max-width: 291px;
-      height: 25rem;
+      max-width: 18.1875rem;
+      height: 31.5rem;
 
       &:nth-child(3n+2) {
         margin: 0 2.6%;
@@ -905,6 +905,14 @@ html[lang=ar] {
         @include breakpoint($desktop) {
           margin-#{$left}: -0.625rem;
         }
+      }
+    }
+  }
+
+  .block-facets-ajax {
+    .applied-filter-count {
+      @include breakpoint($only-mobile) {
+        display: none;
       }
     }
   }
