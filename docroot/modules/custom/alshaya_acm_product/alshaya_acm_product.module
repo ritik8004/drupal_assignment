@@ -638,6 +638,14 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // List of attributes selected by end-users on the form.
     $configurables = $form_state->getValue('configurables');
 
+    // Re-roder config attribute order based on the config, so that it aligns
+    // with the product tree.
+    $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form.settings')->get('attribute_weights');
+
+    uksort($configurables, function ($a, $b) use ($configurable_weights) {
+      return $configurable_weights[$a] - $configurable_weights[$b];
+    });
+
     // If the element that fired AJAX is not the last attribute in the tree, we
     // would need to re-render other options, based on the change.
     if (($form_state->getTriggeringElement()['#name'] !== 'configurables[' . $leaf_attribute . ']') &&
