@@ -637,7 +637,7 @@ function alshaya_master_webform_submission_presave(EntityInterface $entity) {
 function alshaya_master_mobile_detect_object() {
   $mobile_detect = &drupal_static(__FUNCTION__);
 
-  if (!isset($detect)) {
+  if (!isset($mobile_detect)) {
     if (class_exists('Mobile_Detect')) {
       try {
         // Detect platform from headers.
