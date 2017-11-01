@@ -638,20 +638,26 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // List of attributes selected by end-users on the form.
     $configurables = $form_state->getValue('configurables');
 
-    // Re-roder config attribute order based on the config, so that it aligns
-    // with the product tree.
-    $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form.settings')->get('attribute_weights');
+    // Get the attribute code of the element that triggered the request.
+    preg_match('/^configurables\[(.*)\]$/', $form_state->getTriggeringElement()['#name'], $matches);
+    $triggering_attribute_code = $matches[1];
 
-    uksort($configurables, function ($a, $b) use ($configurable_weights) {
-      return $configurable_weights[$a] - $configurable_weights[$b];
+    // Re-roder config attribute order based on the the option user selected,
+    // so that it aligns with the product tree.
+    uksort($configurables, function ($a, $b) use ($triggering_attribute_code) {
+      $weight_a = 0;
+      $weight_b = 0;
+
+      if ($a === $triggering_attribute_code) {
+        $weight_a = 1;
+      }
+
+      if ($b === $triggering_attribute_code) {
+        $weight_b = 1;
+      }
+
+      return $weight_b - $weight_a;
     });
-
-    // If the element that fired AJAX is not the last attribute in the tree, we
-    // would need to re-render other options, based on the change.
-    if (($form_state->getTriggeringElement()['#name'] !== 'configurables[' . $leaf_attribute . ']') &&
-      isset($configurables[$leaf_attribute])) {
-      unset($configurables[$leaf_attribute]);
-    }
 
     // Traverse the product tree till the point where config attributes have a
     // value.

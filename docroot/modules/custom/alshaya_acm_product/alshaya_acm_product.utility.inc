@@ -421,7 +421,7 @@ function alshaya_acm_product_fetch_selected_option_tree(array $tree, array $conf
   $tree_pointer = $tree['options'];
   $tree_config_options = [];
   foreach ($configurables as $key => $value) {
-    if ($value) {
+    if (($value) && ($tree_pointer["$key:$value"])) {
       $tree_pointer = $tree_pointer["$key:$value"];
     }
   }
