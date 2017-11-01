@@ -163,12 +163,12 @@
     margin: 0 auto;
 
     @include breakpoint($tablet) {
-      padding: 1rem 1.5rem;
+      padding: 1rem 1.5rem 1rem 1.25rem;
     }
 
     @include breakpoint($desktop) {
-      padding-top: 1.8rem;
-      padding-bottom: 1.8rem;
+      padding-top: 2.0625rem;
+      padding-bottom: 1.3125rem;
     }
 
     a {
@@ -189,7 +189,7 @@
       }
 
       @include breakpoint($desktop) {
-        width: 54.5%;
+        width: 53.5%;
         text-align: $right;
       }
     }
