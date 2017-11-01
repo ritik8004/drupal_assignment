@@ -15,6 +15,7 @@ dependencies:
   - language
   - lightning_core
   - link
+  - options
   - paragraphs
   - path
   - responsive_image
