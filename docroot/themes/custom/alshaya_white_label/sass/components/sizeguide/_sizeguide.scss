@@ -100,4 +100,8 @@
       height: 34.75rem !important;
     }
   }
+
+  div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
+    overflow: scroll;
+  }
 }
