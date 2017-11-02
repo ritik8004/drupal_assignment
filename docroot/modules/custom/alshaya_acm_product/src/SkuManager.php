@@ -53,6 +53,20 @@ class SkuManager {
   protected $linkedSkus;
 
   /**
+   * Cache Backend service for alshaya.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * Cache Backend service for product labels.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $productLabelsCache;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -68,7 +82,9 @@ class SkuManager {
    * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
    *   Linked SKUs service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache Backend service.
+   *   Cache Backend service for alshaya.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $product_labels_cache
+   *   Cache Backend service for product labels.
    */
   public function __construct(Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager,
@@ -76,7 +92,8 @@ class SkuManager {
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
                               AcqSkuLinkedSku $linked_skus,
-                              CacheBackendInterface $cache) {
+                              CacheBackendInterface $cache,
+                              CacheBackendInterface $product_labels_cache) {
     $this->connection = $connection;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
@@ -85,6 +102,7 @@ class SkuManager {
     $this->logger = $logger_factory->get('alshaya_acm_product');
     $this->linkedSkus = $linked_skus;
     $this->cache = $cache;
+    $this->productLabelsCache = $product_labels_cache;
   }
 
   /**
@@ -436,6 +454,12 @@ class SkuManager {
           $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node, $langcode);
 
           $promotion_text = $promotion_node->get('field_acq_promotion_label')->getString();
+
+          // Let's not display links with empty text and show empty space.
+          if (empty($promotion_text)) {
+            continue;
+          }
+
           $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
           $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
 
@@ -503,8 +527,6 @@ class SkuManager {
     $static_labels_cache[$sku][$type] = [];
 
     if ($labels = $sku_entity->get('attr_labels')->getString()) {
-      $update_sku = FALSE;
-
       $labels_data = unserialize($labels);
 
       if (empty($labels_data)) {
@@ -538,19 +560,24 @@ class SkuManager {
           }
         }
 
-        if (empty($data[$image_fid_key])) {
+        $fid = $this->productLabelsCache->get($data[$image_key]);
+
+        if (empty($fid)) {
           try {
             // Prepare the File object when we access it the first time.
-            $data[$image_fid_key] = $this->downloadLabelsImage($sku_entity, $data, $image_key);
-            $update_sku = TRUE;
+            $fid = $this->downloadLabelsImage($sku_entity, $data, $image_key);
+            $this->productLabelsCache->set($data[$image_key], $fid, CacheBackendInterface::CACHE_PERMANENT);
           }
           catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             continue;
           }
         }
+        else {
+          $fid = $fid->data;
+        }
 
-        $image_file = File::load($data[$image_fid_key]);
+        $image_file = File::load($fid);
 
         $image = [
           '#theme' => 'image',
@@ -568,12 +595,6 @@ class SkuManager {
         if ($data['disable_subsequents']) {
           break;
         }
-      }
-
-      // We save the fids in SKU back to reuse.
-      if ($update_sku) {
-        $sku_entity->get('attr_labels')->setValue(serialize($labels_data));
-        $sku_entity->save();
       }
     }
 

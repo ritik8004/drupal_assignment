@@ -298,6 +298,12 @@
     }
   }
 
+  #lightSlider {
+    .slick-slide {
+      width: 7rem !important;
+    }
+  }
+
   #product-image-gallery {
     margin-top: 1rem;
 
@@ -315,6 +321,10 @@
       width: 6.5rem !important;
     }
   }
+}
+
+.slick-disabled::before {
+  color: $white !important;
 }
 
 @include breakpoint($desktop) {
