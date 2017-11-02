@@ -28,7 +28,10 @@
         button.css({top: center});
       }
 
-      $('.field-slider-items-wrapper').slick(options);
+      if ($('.field-slider-items-wrapper').find('.paragraph-t-banner').children().length > 0) {
+        $('.field-slider-items-wrapper').slick(options);
+      }
+
       // eslint-disable-next-line.
       $(window).resize(debounce(function () {
         centerDots();
