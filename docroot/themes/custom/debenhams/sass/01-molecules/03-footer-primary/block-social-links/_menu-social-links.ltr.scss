@@ -1,0 +1,7 @@
+.region-footer-primary .menu-social-links {
+  a {
+    &:hover::before {
+      color: $apple-light-green;
+    }
+  }
+}

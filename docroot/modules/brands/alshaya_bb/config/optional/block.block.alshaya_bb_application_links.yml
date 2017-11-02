@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_block
+  theme:
+    - bouchon_bakery
+id: alshaya_bb_application_links
+theme: bouchon_bakery
+region: footer
+weight: -4
+provider: null
+plugin: alshaya_application_links
+settings:
+  id: alshaya_application_links
+  label: 'Application Links'
+  provider: alshaya_block
+  label_display: '0'
+  app_android_link: ''
+  app_apple_link: ''
+visibility: {  }

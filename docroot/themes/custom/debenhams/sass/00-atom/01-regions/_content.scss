@@ -1,0 +1,81 @@
+.region-content {
+  @include breakpoint($upto-palm) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  @include breakpoint($above-palm) {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 80.25rem;
+  }
+}
+
+.page-generic {
+  @include breakpoint($upto-palm) {
+    padding-top: 3rem;
+  }
+}
+
+.page-home,
+.node-advanced-page {
+  .region-content {
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .promo-container {
+    @include breakpoint($upto-palm) {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    @include breakpoint($above-palm) {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @include breakpoint($lap) {
+      width: 45rem;
+    }
+
+    @include breakpoint($desk) {
+      max-width: 77.5rem;
+    }
+  }
+}
+
+.ajax-progress-throbber {
+  display: none;
+}
+
+.ajax-progress-fullscreen {
+  background: none;
+
+  .throbber {
+    display: none;
+  }
+
+  @include icon(spinner, after) {
+    animation: anim-rotate 2s infinite linear;
+    font-size: 1.75rem;
+    display: inline-block;
+  }
+
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $black;
+    opacity: 0.6;
+  }
+}
