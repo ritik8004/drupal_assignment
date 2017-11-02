@@ -5,11 +5,24 @@ services:
       - { name: breadcrumb_builder, priority: 100 }
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
-    arguments: [ '@database', '@entity_type.manager', '@language_manager', '@entity.repository', '@logger.factory', '@acq_sku.linked_sku', '@cache.alshaya' ]
+    arguments:
+      - '@database'
+      - '@entity_type.manager'
+      - '@language_manager'
+      - '@entity.repository'
+      - '@logger.factory'
+      - '@acq_sku.linked_sku'
+      - '@cache.alshaya'
+      - '@cache.product_labels'
   cache.alshaya:
     class: Drupal\Core\Cache\CacheInterface
     tags:
       - { name: cache.bin }
     factory: cache_factory:get
     arguments: [alshaya]
-
+  cache.product_labels:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [product_labels]
