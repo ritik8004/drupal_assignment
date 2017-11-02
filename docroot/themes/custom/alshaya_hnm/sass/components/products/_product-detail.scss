@@ -164,23 +164,28 @@
 // SideBar content theming
 
 .form-item-configurables-article-castor-id {
-  .select2Option .select-buttons a[data-swatch-type=miniature_image] {
-    margin-#{$right}: 0;
+  .select2Option .select-buttons li {
+    a[data-swatch-type=miniature_image] {
+      max-width: 3rem;
+      padding: 0;
+      border: 1px solid $white-five;
 
-    &.picked {
-      border: none;
-      background: $hnm-grey-light-three;
-    }
+      &.picked {
+        border: 1px solid $hnm-black-two;
+        background: none;
+      }
 
-    &::before {
-      background: $hnm-black-two;
-      content: '';
-      height: 100%;
-      left: 0;
-      top: 0;
-      position: absolute;
-      width: 100%;
-      opacity: 0.02;
+      &:hover {
+        &::after {
+          content: '';
+          background-color: $hnm-black-two-50;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          #{$left}: 0;
+          #{$right}: 0;
+        }
+      }
     }
   }
 }
@@ -1568,6 +1573,10 @@
 
       @include u-visibility(inline-block);
 
+      a:hover {
+        background: $hnm-black-two-50;
+      }
+
       a,
       span {
         @include u-visibility(block);
@@ -1593,8 +1602,6 @@
         }
 
         .form-item-configurables-article-castor-id & {
-          padding: 1.188rem !important;
-          border: none !important;
           cursor: pointer;
           position: relative;
 
