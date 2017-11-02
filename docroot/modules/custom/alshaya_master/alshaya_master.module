@@ -676,3 +676,11 @@ function alshaya_master_detect_device() {
     return 'desktop';
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_master_preprocess_html(&$variables) {
+  // Add settings variable for current device type.
+  $variables['#attached']['drupalSettings']['alshaya_master']['device'] = alshaya_master_detect_device();
+}
