@@ -274,10 +274,6 @@ ul.item-list__checkbox,
   justify-content: center;
   align-items: center;
   min-height: 10.5rem;
-
-  @include breakpoint($tablet) {
-    min-height: 18.5rem;
-  }
 }
 
 .alshaya_search_slider {

@@ -21,7 +21,8 @@
             breakpoint: 1025,
             settings: {
               slidesToShow: 3,
-              vertical: false
+              vertical: false,
+              centerMode: false
             }
           }
         ]
@@ -123,7 +124,8 @@
                 breakpoint: 1025,
                 settings: {
                   slidesToShow: 5,
-                  vertical: false
+                  vertical: false,
+                  centerMode: false
                 }
               }
             ]
@@ -164,11 +166,15 @@
             var x2 = imgPos.left;
             var y2 = imgPos.top;
 
+            $('#full-image').css({
+              'left':0,
+              'top': 0
+            });
+
             // Make image draggable inside the window.
             var click = {x: 0, y: 0};
             $('#full-image').draggable({
               containment: [x1, y1, x2, y2],
-              revert: true,
               start: function(event) {
                 click.x = event.clientX;
                 click.y = event.clientY;
@@ -185,6 +191,7 @@
                 };
               }
             });
+
             // Zoom in and Zoom out buttons.
             var image = $('#full-image-wrapper img');
             var img_scale = 1;
@@ -220,6 +227,12 @@
               $('.zoomin').removeClass('disabled');
               $('.zoomout').removeClass('disabled');
 
+              // Make image draggable inside the window.
+              $('#full-image').css({
+                'left': 0,
+                'top': 0
+              });
+
               if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
                 var href = $(this).attr('data-iframe');
                 $('#full-image-wrapper img').hide();
@@ -236,6 +249,44 @@
               }
               // Stop the browser from loading the image in a new tab.
               return false;
+            });
+
+            $('#product-image-gallery .slick-prev').on('click', function () {
+              img_scale = 1;
+              $('.zoomin').removeClass('disabled');
+              $('.zoomout').removeClass('disabled');
+
+              $('#full-image').css({
+                'left': 0,
+                'top': 0
+              });
+
+              var previndex = $(this).parent().slick('slickCurrentSlide');
+              $(this).parent().slick('slickGoTo', previndex);
+              var prevImage = $(this).parent().find('li[data-slick-index = "'+ previndex +'"] a.imagegallery__thumbnails__image').attr('href');
+              $('#full-image-wrapper img').attr('src', prevImage);
+              $('#full-image-wrapper img').css('transform', 'scale(1)');
+              $('#full-image-wrapper iframe').remove();
+              $('#full-image-wrapper img').show();
+            });
+
+            $('#product-image-gallery .slick-next').on('click', function () {
+              img_scale = 1;
+              $('.zoomin').removeClass('disabled');
+              $('.zoomout').removeClass('disabled');
+
+              $('#full-image').css({
+                'left': 0,
+                'top': 0
+              });
+
+              var nextindex = $(this).parent().slick('slickCurrentSlide');
+              $(this).parent().slick('slickGoTo', nextindex);
+              var nextImage = $(this).parent().find('li[data-slick-index = "'+ nextindex +'"] a.imagegallery__thumbnails__image').attr('href');
+              $('#full-image-wrapper img').attr('src', nextImage);
+              $('#full-image-wrapper img').css('transform', 'scale(1)');
+              $('#full-image-wrappert iframe').remove();
+              $('#full-image-wrapper img').show();
             });
 
             $('#product-image-gallery li a').on('click', function (e) {
@@ -357,6 +408,26 @@
           playerIframe.remove();
           $('#cloud-zoom-wrap').show();
         }
+      });
+
+      $('#lightSlider .slick-prev', context).on('click', function () {
+        var previndex = $(this).parent().slick('slickCurrentSlide');
+        $(this).parent().slick('slickGoTo', previndex);
+        var prevImage = $(this).parent().find('li[data-slick-index = "'+ previndex +'"] a.cloudzoom__thumbnails__image').attr('href');
+        $('.acq-content-product #cloud-zoom-wrap img').attr('src', prevImage);
+        $('.acq-content-product #cloud-zoom-wrap img').css('transform', 'scale(1)');
+        $('.acq-content-product #cloud-zoom-wrap iframe').remove();
+        $('.acq-content-product #cloud-zoom-wrap img').show();
+      });
+
+      $('#lightSlider .slick-next', context).on('click', function () {
+        var nextindex = $(this).parent().slick('slickCurrentSlide');
+        $(this).parent().slick('slickGoTo', nextindex);
+        var nextImage = $(this).parent().find('li[data-slick-index = "'+ nextindex +'"] a.cloudzoom__thumbnails__image').attr('href');
+        $('.acq-content-product #cloud-zoom-wrap img').attr('src', nextImage);
+        $('.acq-content-product #cloud-zoom-wrap img').css('transform', 'scale(1)');
+        $('.acq-content-product #cloud-zoom-wrap iframe').remove();
+        $('.acq-content-product #cloud-zoom-wrap img').show();
       });
 
       // Preventing click on image.
