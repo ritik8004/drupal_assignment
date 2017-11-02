@@ -1,0 +1,42 @@
+name: Bouchon Bakery
+description: Theme for Bouchon Bakery.
+type: theme
+core: 8.x
+base theme: whitelabel_non_transac
+
+regions:
+  admin_content: 'Admin Content'
+  header_secondary: 'Header Secondary'
+  header: Header
+  header_primary: 'Header Primary'
+  content: Content
+  sidebar: Sidebar
+  footer: Footer
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - whitelabel/global
+  - bouchon_bakery/global
+  - bouchon_bakery/fonts
+
+libraries-extend:
+  whitelabel/menu-logo-navigation:
+    - bouchon_bakery/menu-logo-navigation
+
+component-libraries:
+  atoms:
+    paths:
+      - components/_patterns/00-atoms
+  molecules:
+    paths:
+      - components/_patterns/01-molecules
+  organisms:
+    paths:
+      - components/_patterns/02-organisms
+  templates:
+    paths:
+      - components/_patterns/03-templates
+  pages:
+    paths:
+      - components/_patterns/04-pages

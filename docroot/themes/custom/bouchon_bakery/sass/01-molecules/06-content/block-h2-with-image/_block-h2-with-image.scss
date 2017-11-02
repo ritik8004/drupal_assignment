@@ -1,0 +1,24 @@
+.quote-by {
+  text-align: center;
+
+  h2 {
+    font-family: $beton-bold;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: $camo-green;
+
+    html[lang=ar] & {
+      font-family: $gess-bold;
+    }
+  }
+
+  p {
+    font-family: $at-sackers-gothic;
+    font-size: 1.25rem;
+    color: $brownish-grey;
+
+    html[lang=ar] & {
+      font-family: $ge-dinar-one;
+    }
+  }
+}

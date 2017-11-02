@@ -1,0 +1,29 @@
+.region-secondary-header .block-store-link {
+  background-color: $grey-smoke;
+  color: $brown;
+  font-size: 0.875rem;
+  padding: 0.9rem;
+  padding-bottom: 1rem;
+  text-transform: uppercase;
+  text-align: center;
+
+  @include breakpoint($upto-palm) {
+    border-bottom: 1px solid $gainsboro;
+  }
+
+  @include breakpoint($above-palm) {
+    display: none;
+  }
+
+  a {
+    color: $brown;
+    font-size: 1rem;
+    display: block;
+    text-decoration: none;
+    font-family: $beton-bold;
+
+    html[lang=ar] & {
+      font-family: $gess-bold;
+    }
+  }
+}

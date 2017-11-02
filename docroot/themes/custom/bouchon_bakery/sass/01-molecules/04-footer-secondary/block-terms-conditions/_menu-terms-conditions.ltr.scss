@@ -1,0 +1,37 @@
+.region-footer-secondary .menu-terms-conditions {
+  padding: 0 0 0.3125rem;
+  padding-#{direction(left)}: 0;
+  font-size: 0;
+
+  li {
+    display: inline-block;
+    border-#{direction(right)}: 1px solid $brownish-grey;
+    line-height: 0.1875rem;
+    padding: 0.25rem 0 0;
+
+    &:last-child {
+      border-#{direction(right)}: 0;
+    }
+  }
+
+  a {
+    color: lighten($brownish-grey, 12);
+    display: block;
+    font-size: 0.625rem;
+    font-family: $at-sackers-gothic;
+    margin: 0 0.4rem;
+    text-decoration: none;
+    letter-spacing: 0.0625rem;
+    text-transform: uppercase;
+    padding: 0.125rem 0 0;
+
+    &:hover {
+      color: lighten($brownish-grey, 12);
+      text-decoration: underline;
+    }
+
+    @include breakpoint($upto-palm) {
+      letter-spacing: 0;
+    }
+  }
+}
