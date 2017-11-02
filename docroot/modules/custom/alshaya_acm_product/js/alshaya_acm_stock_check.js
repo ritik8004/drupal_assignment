@@ -75,24 +75,22 @@
           // Load cart form for active item post swipe on PDP & Basket.
           $('.owl-item').each(function () {
             var currItem = $(this);
-            var currParent = currItem.closest('.mobile-only-block');
-            // Handle owl carousel on Basket page.
-            if (currParent.length === 0) {
-              currParent = currItem.closest('#block-baskethorizontalproductrecommendation.horizontal-crossell');
-            }
+            var observerConfig = {
+              attributes: true
+            };
 
-            currItem.swipe({
-              swipeStatus: function (event, phase, direction, distance, fingerCount) {
-                switch (phase) {
-                  case 'end':
-                    setTimeout(function () {
-                      var activeItem = currParent.find('.owl-item.active');
-                      Drupal.loadTeaserCartForm(activeItem);
-                    }, '1000');
-                    break;
+            var owlItemActiveObserver = new MutationObserver(function (mutations) {
+              mutations.forEach(function (mutation) {
+                var newVal = $(mutation.target).prop(mutation.attributeName);
+                if (mutation.attributeName === "class") {
+                  if (newVal.indexOf('active') !== -1) {
+                    Drupal.loadTeaserCartForm($(mutation.target));
+                  }
                 }
-              }
+              });
             });
+
+            owlItemActiveObserver.observe(currItem[0], observerConfig);
           });
 
           // Load cart form for items which are not in the carousel on PDP & Basket.
