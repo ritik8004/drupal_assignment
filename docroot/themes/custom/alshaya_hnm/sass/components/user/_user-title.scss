@@ -72,6 +72,10 @@
 .c-user-password {
   h1 {
     top: -3.875rem;
+
+    @include breakpoint($only-mobile) {
+      top: -3.188rem;
+    }
   }
 }
 
