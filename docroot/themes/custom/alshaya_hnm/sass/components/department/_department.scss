@@ -1,10 +1,10 @@
 .c-department {
-  margin-top: 1.75rem;
+  margin-top: 1.875rem;
 
   .c-page-title {
     border-bottom: 1px solid $white;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.75rem;
+    margin-bottom: 1.438rem;
+    padding-bottom: 0.875rem;
     font-family: $hnm-demibold;
     text-transform: uppercase;
     letter-spacing: 0.8px;
@@ -19,6 +19,10 @@
     .c-promo__items--department img {
       width: 100%;
     }
+  }
+
+  .c-sidebar-first .block:first-child {
+    margin-top: 0;
   }
 }
 
