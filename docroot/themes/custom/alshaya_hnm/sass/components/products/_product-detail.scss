@@ -1884,8 +1884,8 @@ article.product-out-of-stock {
     max-height: 1.9375rem;
     font-size: 0.75rem !important;
     font-family: $alshaya-thin !important;
-    margin-right: 0;
-    margin-left: 1rem;
+    margin-#{$right}: 0;
+    margin-#{$left}: 1rem;
     color: $whisper-dark !important;
 
     span {
@@ -1896,11 +1896,18 @@ article.product-out-of-stock {
 
 html[lang=ar] {
   .fake-apply-button {
-    padding: 0.1rem 1rem 0.2rem;
+    padding: 6.5px 1rem;
     margin-right: 1rem;
 
     &.inactive {
       margin-left: 0;
+      width: 3.5rem;
+    }
+  }
+
+  .clear-all-fake {
+    &.inactive {
+      margin-right: 0;
     }
   }
 }
