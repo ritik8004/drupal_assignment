@@ -49,6 +49,9 @@ settings:
       title_textarea:
         enabled: true
         weight: 21
+      video:
+        weight: 22
+        enabled: false
       1_row_1_col_dept:
         weight: 23
         enabled: false

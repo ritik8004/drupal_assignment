@@ -85,6 +85,15 @@ function alshaya_paragraphs_update_8101() {
     'core.entity_form_display.paragraph.1_row_1_col.default',
     'field.field.paragraph.1_row_1_col.field_promo_block',
     'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    // Video paragraph type.
+    'paragraphs.paragraphs_type.video',
+    'field.field.paragraph.banner.field_video',
+    'field.field.paragraph.video.field_video',
+    'field.storage.paragraph.field_video',
+    'core.entity_form_display.paragraph.video.default',
+    'core.entity_view_display.paragraph.video.default',
+    'core.entity_form_display.paragraph.banner.default',
+    'core.entity_view_display.paragraph.banner.default',
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
