@@ -75,14 +75,14 @@ class ProductSettingsForm extends ConfigFormBase {
 
     $form['not_buyable_message'] = [
       '#type' => 'text_format',
-      '#format' => 'rich_text',
+      '#format' => $config->get('not_buyable_message.format'),
       '#title' => $this->t('Not-buyable product message'),
       '#default_value' => $config->get('not_buyable_message.value'),
     ];
 
     $form['not_buyable_help_text'] = [
       '#type' => 'text_format',
-      '#format' => 'rich_text',
+      '#format' => $config->get('not_buyable_help_text.format'),
       '#title' => $this->t('Not-buyable product help text'),
       '#default_value' => $config->get('not_buyable_help_text.value'),
     ];
@@ -97,7 +97,7 @@ class ProductSettingsForm extends ConfigFormBase {
 
     $form['size_guide_modal_content'] = [
       '#type' => 'text_format',
-      '#format' => 'rich_text',
+      '#format' => $config->get('size_guide_modal_content.format'),
       '#title' => $this->t('Size guide content'),
       '#default_value' => $config->get('size_guide_modal_content.value'),
     ];

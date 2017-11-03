@@ -444,7 +444,8 @@ class CheckoutOptionsManager {
     $shipping_method_translations = [];
 
     $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
-    if ($this->languageManager->getCurrentLanguage()->getId() !== $site_default_langcode) {
+    $site_current_langcode = $this->languageManager->getCurrentLanguage()->getId();
+    if ($site_current_langcode !== $site_default_langcode) {
       $shipping_options = $this->getAllShippingTerms();
       foreach ($shipping_options as $key => $shipping_option) {
         if ($shipping_option->hasTranslation($site_default_langcode)) {
@@ -453,7 +454,7 @@ class CheckoutOptionsManager {
         else {
           $shipping_translated_term = $shipping_option;
         }
-        $shipping_method_translations[$shipping_option->getName()] = $shipping_translated_term->getName();
+        $shipping_method_translations[$shipping_option->getTranslation($site_current_langcode)->getName()] = $shipping_translated_term->getName();
       }
     }
 

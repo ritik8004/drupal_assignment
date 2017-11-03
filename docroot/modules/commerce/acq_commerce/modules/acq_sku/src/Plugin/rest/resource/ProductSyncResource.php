@@ -236,7 +236,7 @@ class ProductSyncResource extends ResourceBase {
       $sku->attributes = $this->formatProductAttributes($product['attributes']);
 
       // Update product media to set proper position.
-      $sku->media = $this->getProcessedMedia($product);
+      $sku->media = $this->getProcessedMedia($product, $sku->media->value);
 
       $sku->attribute_set = $product['attribute_set_label'];
       $sku->product_id = $product['product_id'];
@@ -497,7 +497,7 @@ class ProductSyncResource extends ResourceBase {
     }
   }
 
-  protected function getProcessedMedia($product) {
+  protected function getProcessedMedia($product, $current_value) {
     $media = [];
 
     if (isset($product['extension'], $product['extension']['media'])) {
@@ -529,6 +529,27 @@ class ProductSyncResource extends ResourceBase {
 
         return ($position1 < $position2) ? -1 : 1;
       });
+    }
+
+    // Reassign old files to not have to redownload them.
+    if (!empty($media)) {
+      $current_media = unserialize($current_value);
+      if (!empty($current_media) && is_array($current_media)) {
+        $current_mapping = [];
+        foreach ($current_media as $value) {
+          if (!empty($value['fid'])) {
+            $current_mapping[$value['value_id']]['fid'] = $value['fid'];
+            $current_mapping[$value['value_id']]['file'] = $value['file'];
+          }
+        }
+
+        foreach ($media as $key => $value) {
+          if (isset($current_mapping[$value['value_id']])) {
+            $media[$key]['fid'] = $current_mapping[$value['value_id']]['fid'];
+            $media[$key]['file'] = $current_mapping[$value['value_id']]['file'];
+          }
+        }
+      }
     }
 
     return serialize($media);
