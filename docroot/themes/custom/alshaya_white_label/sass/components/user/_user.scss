@@ -905,7 +905,7 @@
   }
 
   #unmask_password {
-    top: 0.6875rem;
+    top: 0.4875rem;
   }
 
   .form-actions {
@@ -1232,4 +1232,15 @@ input::-webkit-credentials-auto-fill-button {
   pointer-events: none;
   position: absolute;
   right: 0;
+}
+
+.safari.path--user,
+.safari .c-user-password.user-page {
+  .change-pwd-form,
+  .user-pass {
+    .form-type-password input[type="password"],
+    .form-type-email input[type=email] {
+      margin-top: 0;
+    }
+  }
 }

@@ -16,6 +16,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Mobile_Detect;
@@ -105,8 +106,6 @@ class AlshayaGtmManager {
     'dimension7' => 'gtm-dimension7',
     'dimension8' => 'gtm-dimension8',
     'dimension3' => 'gtm-dimension3',
-    'metric1' => 'gtm-metric1',
-    'metric2' => '',
   ];
 
   /**
@@ -306,23 +305,20 @@ class AlshayaGtmManager {
 
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
-    $attributes['gtm-dimension6'] = $sku->get('attr_size')->getString();
-    $attributes['gtm-dimension5'] = $sku->get('attr_product_collection')->getString();
     $attributes['gtm-dimension1'] = $sku->get('attribute_set')->getString();
     $attributes['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available';
+    $attributes['gtm-dimension5'] = $sku->get('attr_product_collection')->getString();
+    $attributes['gtm-dimension6'] = $sku->get('attr_size')->getString();
 
     $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
 
     $attributes['gtm-price'] = (float) number_format((float) $final_price, 3, '.', '');
-
-    $attributes['gtm-metric1'] = 0;
 
     if ($final_price
       && ($original_price !== $final_price)
       && ($final_price < $original_price)) {
 
       $product_type = 'Discounted Product';
-      $attributes['gtm-metric1'] = (float) $original_price - $final_price;
     }
 
     $attributes['gtm-dimension3'] = $product_type;
@@ -499,7 +495,6 @@ class AlshayaGtmManager {
 
     // Set dimension1 & 2 to empty until product added to cart.
     $attributes['gtm-dimension6'] = '';
-    $attributes['gtm-dimension7'] = '';
     $attributes['gtm-product-sku'] = '';
     $processed_attributes['ecommerce']['detail']['products'][] = $this->convertHtmlAttributesToDatalayer($attributes);
     return $processed_attributes;
@@ -584,16 +579,17 @@ class AlshayaGtmManager {
         $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
 
-        if ($attributes[$skuId]['gtm-metric1']) {
-          $attributes[$skuId]['gtm-metric1'] *= $cartItem['qty'];
+        $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
+        if ($dimension7) {
+          $attributes[$skuId]['gtm-dimension7'] = $dimension7;
         }
 
-        $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
-        $attributes[$skuId]['gtm-dimension7'] = $dimension7;
-        $attributes[$skuId]['gtm-dimension8'] = $dimension8;
+        if ($dimension8) {
+          $attributes[$skuId]['gtm-dimension8'] = $dimension8;
+        }
       }
 
-      $attributes['privilegeOrder'] = !empty($cart->getExtension('loyalty_card')) ? 'order with privilege club' : 'order without privilege club';
+      $attributes['privilegeCustomer'] = !empty($cart->getExtension('loyalty_card')) ? 'Privilege Customer' : 'Regular Customer';
       $attributes['privilegesCardNumber'] = $cart->getExtension('loyalty_card');
     }
 
@@ -755,7 +751,7 @@ class AlshayaGtmManager {
       }
     }
 
-    $privilege_order = isset($order['extension']['loyalty_card']) ? TRUE : FALSE;
+    $privilege_order = isset($order['extension']['loyalty_card']) ? 'Privilege Customer' : 'Regular Customer';
 
     foreach ($orderItems as $key => $item) {
       $product = $this->fetchSkuAtttributes($item['sku']);
@@ -805,7 +801,7 @@ class AlshayaGtmManager {
       'general' => $generalInfo,
       'products' => $products,
       'actionField' => $actionData,
-      'previlegeOrder' => $privilege_order,
+      'privilegeCustomer' => $privilege_order,
     ];
   }
 
@@ -845,6 +841,7 @@ class AlshayaGtmManager {
       'customerType' => $customer_type,
       'userName' => ($data_layer['userUid'] !== 0) ? $current_user->field_first_name->value . ' ' . $current_user->field_last_name->value : '',
       'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
+      'privilegeCustomer' => $current_user->get('field_privilege_card_number')->getValue() ? 'Privilege Customer' : 'Regular Customer',
     ];
 
     return $data_layer_attributes;
@@ -912,6 +909,17 @@ class AlshayaGtmManager {
         $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
         break;
 
+      case 'department page':
+        $department_node = $current_route['route_params']['node'];
+        $taxonomy_term = Term::load($department_node->get('field_product_category')->target_id);
+        $taxonomy_parents = array_reverse($this->entityManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
+        foreach ($taxonomy_parents as $taxonomy_parent) {
+          $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+        }
+
+        $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+        break;
+
       case 'cart page':
       case 'checkout login page':
       case 'checkout delivery page':
@@ -966,6 +974,18 @@ class AlshayaGtmManager {
                 // area taken from billing address in case of C&C.
                 if (isset($page_dl_attributes['deliveryArea'])) {
                   unset($page_dl_attributes['deliveryArea']);
+                }
+              }
+
+              if (isset($page_dl_attributes['deliveryType']) && !empty($shipping_method)) {
+                $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
+                $site_current_langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+                if ($site_current_langcode !== $site_default_langcode) {
+                  if ($shipping_method->hasTranslation($site_default_langcode)) {
+                    $delivery_type_term = $shipping_method->getTranslation($site_default_langcode);
+                    $page_dl_attributes['deliveryType'] = $delivery_type_term->getName();
+                  }
                 }
               }
             }
