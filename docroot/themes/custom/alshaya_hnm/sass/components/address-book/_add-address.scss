@@ -148,9 +148,9 @@
 .c-address-book {
   .region__content {
     .profile-form {
-       @include breakpoint($desktop) {
-         margin-top: 3rem;
-       }
+      @include breakpoint($desktop) {
+        margin-top: 3rem;
+      }
     }
   }
 }
