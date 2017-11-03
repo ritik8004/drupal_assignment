@@ -6,6 +6,7 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_1_col
     - paragraphs.paragraphs_type.promo_block
     - paragraphs.paragraphs_type.title_textarea
+    - paragraphs.paragraphs_type.video
   module:
     - entity_reference_revisions
 id: paragraph.1_row_1_col.field_promo_block
@@ -24,6 +25,7 @@ settings:
     target_bundles:
       promo_block: promo_block
       title_textarea: title_textarea
+      video: video
     target_bundles_drag_drop:
       1_row_1_col:
         weight: 10
@@ -50,8 +52,8 @@ settings:
         enabled: true
         weight: 21
       video:
+        enabled: true
         weight: 22
-        enabled: false
       1_row_1_col_dept:
         weight: 23
         enabled: false
