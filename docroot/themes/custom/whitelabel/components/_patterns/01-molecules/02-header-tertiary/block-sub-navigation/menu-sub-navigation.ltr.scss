@@ -1,0 +1,56 @@
+@import '../../../../sass/config/**/*.scss';
+
+.navigation__sub-menu {
+  margin: 0;
+  padding-#{direction(left)}: 0;
+  text-transform: uppercase;
+  font-size: 0;
+
+  @include breakpoint($upto-palm) {
+    margin-top: 0.4375rem;
+  }
+
+  li {
+    display: inline-block;
+
+    &:last-child a {
+      @include breakpoint($upto-palm) {
+        margin-#{direction(right)}: 0;
+      }
+    }
+  }
+
+  a {
+    color: $black-smoke;
+    display: block;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    margin-#{direction(right)}: 0.6rem;
+    padding: 0.7rem 1rem;
+    letter-spacing: 1.5px;
+    border-bottom: 2px solid transparent;
+
+    html[lang=ar] & {
+      letter-spacing: 0;
+    }
+
+    @include breakpoint($lap) {
+      margin-#{direction(right)}: 0.5rem;
+      padding: 0.625rem 1rem;
+    }
+
+    &:hover,
+    &.is-active {
+      border-color: $medium-pink;
+    }
+  }
+}
+
+.page-store-finder,
+.page-home {
+  .navigation__sub-menu {
+    @include breakpoint($above-palm) {
+      border-bottom: 1px solid $greyish-light;
+    }
+  }
+}

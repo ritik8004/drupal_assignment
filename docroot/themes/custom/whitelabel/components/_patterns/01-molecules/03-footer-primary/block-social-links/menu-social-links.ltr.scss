@@ -1,0 +1,32 @@
+@import '../../../../sass/config/**/*.scss';
+
+.menu-social-links {
+  margin: 0;
+  padding-#{direction(left)}: 0;
+
+  li {
+    display: inline-block;
+  }
+
+  a {
+    display: block;
+
+    @include u-hidden-visually;
+
+    &::before {
+      font-size: 2rem;
+      display: block;
+      color: $white;
+      margin: 0 0.125rem;
+      text-decoration: none;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:hover::before {
+      color: $medium-pink;
+    }
+  }
+}

@@ -5,6 +5,8 @@
  * Functions around blocks.
  */
 
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_module_implements_alter().
  */
@@ -67,6 +69,62 @@ function alshaya_block_delete_blocks($blocks, $theme = NULL) {
     if (!empty($block)) {
       $block = reset($block);
       $block->delete();
+    }
+  }
+}
+
+/**
+ * Utility function to change the region of the block.
+ *
+ * @param array $block_params
+ *   An array of blocks with key and value pair as [block_id => region].
+ */
+function alshaya_block_move_blocks(array $block_params) {
+  foreach ($block_params as $block_id => $region) {
+    $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id]);
+    if (!empty($blocks)) {
+      $block = reset($blocks);
+      if ($block instanceof Block) {
+        $block->setRegion($region);
+        $block->save();
+      }
+    }
+  }
+}
+
+/**
+ * Utility function to set visibility for node type.
+ *
+ * @param array $block_params
+ *   An array of blocks with key and value pair as [block_id => params].
+ */
+function alshaya_block_set_blocks_node_visibility(array $block_params) {
+  // Default visibility variable.
+  $visibility = [
+    'id' => 'entity_bundle:node',
+    'bundles' => [],
+    'context_mapping' => [
+      'node' => '@node.node_route_context:node',
+    ],
+    'negate' => FALSE,
+  ];
+  // Loop trough all the blocks.
+  foreach ($block_params as $block_id => $param) {
+    $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id]);
+    if (!empty($blocks)) {
+      $block = reset($blocks);
+      if ($block instanceof Block) {
+        // Set key same as array values.
+        $visibility_nodes = array_combine($param['bundles'], $param['bundles']);
+        // Add bundles for visibility.
+        $block_visibility = [
+          'bundles' => $visibility_nodes,
+          'negate' => isset($param['negate']) ? $param['negate'] : FALSE,
+        ] + $visibility;
+
+        $block->setVisibilityConfig('entity_bundle:node', $block_visibility);
+        $block->save();
+      }
     }
   }
 }

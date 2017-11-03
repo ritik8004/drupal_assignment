@@ -1,0 +1,17 @@
+@import '../../../../sass/config/**/*.scss';
+
+.block-language-switcher--desktop {
+  background-color: $blackish-grey;
+  color: $white;
+  text-align: center;
+
+  @include breakpoint($upto-palm) {
+    border-bottom: 1px solid $eclipse;
+  }
+
+  @include breakpoint($above-palm) {
+    background-color: $black;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}

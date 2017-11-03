@@ -17,7 +17,9 @@ function alshaya_stores_finder_page_attachments(array &$attachments) {
   // @TODO: Check if this is really required on all pages.
   $attachments['#attached']['library'][] = 'alshaya_stores_finder/store_finder';
   $site_country = _alshaya_custom_get_site_level_country_code();
+  $marker_path = \Drupal::configFactory()->get('alshaya_stores_finder.settings')->get('marker.url');
   $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googleGeocodingAPI']['components'] = ['country' => $site_country];
+  $attachments['#attached']['drupalSettings']['alshaya_stores_finder']['map'] = ['marker_icon_path' => $marker_path];
 }
 
 /**
@@ -59,6 +61,8 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#attributes' => [
           'class' => [
             'list-view-link',
+            'block-store-finder-form__list-view',
+            'icon-list',
             $active_class,
             $hidden_class_map_list,
           ],
@@ -73,13 +77,15 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
           'class' => [
             'use-ajax',
             'map-view-link',
+            'block-store-finder-form__list-view',
+            'icon-map',
             $hidden_class_map_list,
           ],
         ],
         '#weight' => 8,
       ];
       $form['back_to_glossary'] = [
-        '#title' => t('List of all Mothercare Stores'),
+        '#title' => $store_finder_config->get('store_list_label'),
         '#type' => 'link',
         '#url' => Url::fromRoute('view.stores_finder.page_2'),
         '#attributes' => [
@@ -91,18 +97,18 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#weight' => 8,
       ];
       $form['current_location'] = [
-        '#markup' => '<a href="javascript:;" class="current-location">' . t('Near me') . '</a>',
+        '#markup' => '<a href="javascript:;" class="current-location block-store-finder-form__current-location"><span class="icon-current-location"></span>' . t('Near me') . '</a>',
         '#weight' => 1,
         '#access' => (bool) $store_finder_search_config,
       ];
 
       $form['prefix_wrapper'] = [
-        '#markup' => '<div class="store-finder--wrapper">',
+        '#markup' => '<div class="store-finder--wrapper block-store-finder-form__form__wrapper">',
         '#weight' => 2,
       ];
 
       $form['store_near_me'] = [
-        '#markup' => '<div class="label--location">' . t('Find stores near') . '</div><div class="input--wrapper">',
+        '#markup' => '<div class="label--location block-store-finder-form__form__label"><div class="block-store-finder-form__form__label__wrapper icon-search">' . t('Find stores near') . '</div></div><div class="input--wrapper block-store-finder-form__input__wrapper">',
         '#weight' => 3,
         '#access' => (bool) $store_finder_search_config,
       ];
@@ -117,10 +123,16 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
       // Adding placeholder to the input field.
       $form['geolocation_geocoder_google_places_api']['#placeholder'] = t('e.g. Salmiya');
       $form['geolocation_geocoder_google_places_api']['#access'] = (bool) $store_finder_search_config;
+      $form['geolocation_geocoder_google_places_api']['#attributes']['class'][] = 'block-store-finder-form__input__text';
       $form['actions']['#access'] = (bool) $store_finder_search_config;
       $form['actions']['#weight'] = 5;
+      $form['actions']['#attributes']['class'] = [
+        'block-store-finder-form__input__submit__wrapper',
+        'icon-search',
+      ];
+      $form['actions']['submit']['#attributes']['class'][] = 'block-store-finder-form__input__submit';
       unset($form['geolocation_geocoder_google_places_api']['#description']);
-      $form['field_latitude_longitude_proximity']['#attributes']['class'][] = 'hidden';
+      $form['field_latitude_longitude_proximity']['#attributes']['class'][] = 'hidden is-hidden';
       $form['field_latitude_longitude_proximity']['#default_value'] = $store_finder_config->get('search_proximity_radius');
       $form['field_latitude_longitude_proximity']['#value'] = $store_finder_config->get('search_proximity_radius');
     }
@@ -191,5 +203,17 @@ function alshaya_stores_finder_views_pre_build(ViewExecutable $view) {
   if (($view->id() === 'stores_finder') &&
     ($view->current_display === 'page_1')) {
     $view->display_handler->display['cache_metadata']['tags'][] = 'config:alshaya_stores_finder.settings';
+  }
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function alshaya_stores_finder_preprocess_field__node__field_store_address__store(&$variables) {
+  if (!empty($variables['items'])) {
+    // Adding 'raw' filter for the html tags that show up.
+    foreach ($variables['items'] as &$item) {
+      $item['content']['#template'] = '{{ value|raw|nl2br }}';
+    }
   }
 }

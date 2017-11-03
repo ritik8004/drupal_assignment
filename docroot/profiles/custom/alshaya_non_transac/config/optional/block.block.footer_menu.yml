@@ -10,7 +10,7 @@ dependencies:
 id: footer_menu
 theme: whitelabel_non_transac
 region: footer_secondary
-weight: -4
+weight: -8
 provider: null
 plugin: 'system_menu_block:footer'
 settings:

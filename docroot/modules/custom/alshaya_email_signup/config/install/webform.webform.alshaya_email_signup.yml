@@ -1,0 +1,149 @@
+langcode: en
+status: open
+dependencies: {  }
+open: null
+close: null
+uid: 1
+template: false
+id: alshaya_email_signup
+title: 'Be the first to know'
+description: 'Email sign up form.'
+category: ''
+elements: "first_name:\n  '#title': 'First Name'\n  '#type': textfield\n  '#required': true\nlast_name:\n  '#title': 'Last Name'\n  '#type': textfield\n  '#required': true\nmobile_number:\n  '#type': mobile_number\n  '#title': 'Mobile number'\n  '#verify': none\nemail:\n  '#title': 'Email Address'\n  '#type': email\n  '#required': true\nexclusive_deals:\n  '#type': checkbox\n  '#title': 'I would like to receive exclusive deals from [site:name].'\n  '#default_value': true\nhttp_referer:\n  '#type': hidden\n  '#value': '[server:HTTP_REFERER]'"
+css: ''
+javascript: ''
+settings:
+  page: true
+  page_submit_path: /email-sign-up
+  page_confirm_path: ''
+  form_submit_label: ''
+  form_submit_once: true
+  form_submit_attributes: {  }
+  form_exception_message: ''
+  form_open_message: ''
+  form_close_message: ''
+  form_previous_submissions: false
+  form_confidential: false
+  form_confidential_message: ''
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_disable_autocomplete: true
+  form_novalidate: false
+  form_unsaved: false
+  form_disable_back: true
+  form_autofocus: false
+  form_details_toggle: false
+  submission_log: false
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_next_button_label: ''
+  wizard_next_button_attributes: {  }
+  wizard_prev_button_label: ''
+  wizard_prev_button_attributes: {  }
+  wizard_start_label: ''
+  wizard_complete: true
+  wizard_complete_label: ''
+  preview: 0
+  preview_next_button_label: ''
+  preview_next_button_attributes: {  }
+  preview_prev_button_label: ''
+  preview_prev_button_attributes: {  }
+  preview_message: ''
+  draft: none
+  draft_auto_save: false
+  draft_button_label: ''
+  draft_button_attributes: {  }
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  confirmation_type: url_message
+  confirmation_title: ''
+  confirmation_message: 'Thank you :)'
+  confirmation_url: '/[webform_submission:values:http_referer]'
+  confirmation_attributes: {  }
+  confirmation_back: false
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  limit_total: null
+  limit_total_message: ''
+  limit_user: null
+  limit_user_message: ''
+  purge: none
+  purge_days: null
+  entity_limit_total: null
+  entity_limit_user: null
+  results_disabled: false
+  results_disabled_ignore: false
+  token_update: false
+  ajax: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_reset: false
+  submission_label: ''
+  submission_user_columns: {  }
+  preview_label: ''
+  preview_title: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  draft_multiple: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+handlers:
+  email:
+    id: email
+    label: Email
+    handler_id: email
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: default
+      to_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      from_mail: default
+      from_options: {  }
+      from_name: default
+      subject: default
+      body: default
+      excluded_elements: {  }
+      html: true
+      attachments: false
+      debug: false
+      reply_to: ''
+      return_path: ''
+      ignore_access: false
+      exclude_empty: true
+      sender_mail: ''
+      sender_name: ''

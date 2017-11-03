@@ -1,0 +1,8 @@
+// Theme configuration.
+@import 'config/**/*';
+
+// Theme components based on Atomic Design.
+@import '00-atom/**/*';
+@import '02-organisms/**/*';
+@import '03-templates/**/*';
+@import '04-pages/**/*';

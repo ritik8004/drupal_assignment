@@ -1,3 +1,8 @@
 enable_disable_store_finder_search: 1
 load_more_item_limit: 10
 search_proximity_radius: 5
+marker:
+  path: ''
+  url: ''
+  use_default: true
+store_list_label: 'List of all Stores'

@@ -1,0 +1,8 @@
+.region-footer-primary {
+  background-color: $blackish-grey;
+  min-height: 6.25rem;
+
+  @include breakpoint($above-palm) {
+    background-color: $black;
+  }
+}

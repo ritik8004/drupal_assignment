@@ -1,0 +1,154 @@
+@import '../../../../sass/config/**/*.scss';
+
+.hours--wrapper .hours--label,
+.hours--wrapper .open--hours,
+.view-on--map a,
+.get--directions a {
+  border-bottom: 1px solid $gainsboro;
+  padding: 1rem;
+  padding-#{direction(left)}: 3.3rem;
+
+  @include breakpoint($lap) {
+    padding-#{direction(left)}: 3.25rem;
+  }
+}
+
+.geolocation-common-map-container {
+  .gm-style-iw {
+    cursor: pointer;
+  }
+
+  .hours--label,
+  .open--hours {
+    padding-#{direction(left)}: 0;
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .location-content {
+    min-width: 12rem;
+  }
+
+  .views-field-title {
+    margin-bottom: 0.1875rem;
+    font-weight: bold;
+    color: $black-smoke;
+  }
+
+  .views-field-field-store-address {
+    color: $brownish-grey;
+  }
+
+  .views-field-title,
+  .get--directions a,
+  .hours--label,
+  .views-field-field-store-address {
+    font-size: 0.875rem;
+  }
+
+  .get--directions a {
+    color: $medium-pink;
+    padding-#{direction(left)}: 0;
+    border-bottom: 0;
+    font-weight: bold;
+
+    &::after {
+      content: '';
+      background: url('../../../../../../images/icons/svg/icon-direction-pink.svg') no-repeat;
+    }
+  }
+}
+
+.get--directions a,
+.view-on--map a {
+  border-bottom: 0;
+  color: $cerulean;
+  text-decoration: none;
+  position: relative;
+}
+
+.get--directions a {
+  &::after {
+    content: '';
+    background: url('../../../../../../images/icons/svg/icon-direction.svg') no-repeat;
+    background-size: contain;
+    display: inline-block;
+    position: absolute;
+    top: 1rem;
+    #{direction(right)}: 0.8rem;
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
+
+.lat-lng {
+  display: none;
+}
+
+.hours--wrapper {
+  .open--hours {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .hours--label {
+    color: $medium-pink;
+    position: relative;
+
+    @include icon(chevron#{direction(right)}, after) {
+      position: absolute;
+      font-size: 2rem;
+      #{direction(right)}: 0.3rem;
+      top: 0.5rem;
+    }
+
+    &.open {
+      @include icon(chevrondown, after);
+    }
+  }
+}
+
+.hours--label.open {
+  + .open--hours {
+    display: block;
+  }
+}
+
+.view-on--map {
+  @include breakpoint($above-palm) {
+    display: none;
+  }
+
+  a {
+    display: block;
+
+    @include icon(map, after) {
+      color: $cerulean;
+      position: absolute;
+      font-size: 1.8rem;
+      line-height: 1;
+      top: 0.7rem;
+      #{direction(right)}: 0.8rem;
+    }
+  }
+}
+
+.open--hours {
+  display: none;
+  line-height: 1.57;
+
+  div {
+    display: table;
+    width: 100%;
+    margin-bottom: 0.0625rem;
+  }
+
+  .key-value-key,
+  .key-value-value {
+    display: table-cell;
+  }
+
+  .key-value-value {
+    text-align: #{direction(right)};
+  }
+}

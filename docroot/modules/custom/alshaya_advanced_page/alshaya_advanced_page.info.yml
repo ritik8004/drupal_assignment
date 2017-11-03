@@ -7,9 +7,11 @@ dependencies:
   - block
   - block_field
   - captcha
+  - content_translation
   - entity_reference_revisions
   - field
   - field_group
+  - language
   - menu_ui
   - metatag
   - node

@@ -21,24 +21,26 @@ function alshaya_non_transac_install() {
     // 'alshaya_acm_promotion',
     'alshaya_admin',
     'alshaya_arabic',
+    'alshaya_block',
     'alshaya_captcha',
     // 'alshaya_click_collect',
     'alshaya_config',
     'alshaya_contact',
     'alshaya_default_content',
     // 'alshaya_department_page',
+    'alshaya_email_signup',
     'alshaya_i18n',
     // 'alshaya_loyalty',
     // 'alshaya_main_menu',
     'alshaya_master',
     'alshaya_menus',
+    'alshaya_non_transac_product',
     // 'alshaya_acm_cart_notification',
     // 'alshaya_newsletter',
     'alshaya_password_policy',
     'alshaya_permissions',
     // 'alshaya_product',
-    // @todo: Separate alshaya_seo for transac & non-transac.
-    // 'alshaya_seo',
+    'alshaya_seo',
     'alshaya_stores_finder',
     'alshaya_user',
     // 'alshaya_acm_knet',
@@ -55,6 +57,13 @@ function alshaya_non_transac_install() {
   // Invoke a hook to let other modules know that profile installation is done.
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya_non_transac', $modules]);
 
+  $strings = [
+    'find a store' => [
+      'ar' => 'البحث عن محل',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
   // We probably don't have any module depending on acquia_connector which is
   // required on ACSF environments.
   if (isset($_ENV['AH_SITE_NAME'])) {
@@ -65,4 +74,11 @@ function alshaya_non_transac_install() {
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_non_transac', $modules);
+}
+
+/**
+ *  Hook update to enable module.
+ */
+function alshaya_non_transac_update_8101() {
+  \Drupal::service('module_installer')->install(['alshaya_seo'], TRUE);
 }

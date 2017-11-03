@@ -3,6 +3,7 @@ type: module
 core: 8.x
 description: 'All the image styles.'
 dependencies:
+  - alshaya_config
   - block
   - image
   - imagemagick

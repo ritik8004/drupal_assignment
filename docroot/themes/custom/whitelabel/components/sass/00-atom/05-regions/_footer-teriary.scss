@@ -1,0 +1,12 @@
+.region-footer-tertiary {
+  border-top: 1px solid $greyish-light;
+
+  @include breakpoint($above-palm) {
+    position: relative;
+    padding-bottom: 2rem;
+  }
+
+  @include breakpoint($desk) {
+    padding-bottom: 2.875rem;
+  }
+}

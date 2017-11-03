@@ -1,0 +1,211 @@
+@import '../../../../sass/config/**/*.scss';
+
+.menu-logo-navigation {
+  margin: 0;
+  padding-#{direction(left)}: 0;
+  background: $black;
+
+  @include breakpoint($desk) {
+    padding-#{direction(left)}: 1.5rem;
+  }
+
+  li {
+    display: inline-block;
+    vertical-align: top;
+
+    @include breakpoint($upto-palm) {
+      width: 33.33%;
+    }
+
+    &.active-trail a {
+      background-color: $white;
+    }
+  }
+
+  a {
+    @include u-hidden-visually;
+
+    display: block;
+    padding: 0.72rem 1.6rem;
+
+    @include breakpoint($lap) {
+      padding: 0.47rem 1.5rem;
+    }
+
+    @include breakpoint($desk) {
+      padding: 0.72rem 1.5rem;
+    }
+
+    &::after {
+      content: "";
+      width: 3.4375rem;
+      height: 1.5625rem;
+      display: block;
+      margin: auto;
+    }
+
+    &:hover {
+      background-color: $white;
+    }
+  }
+}
+
+.burger {
+  display: none;
+  float: direction(left);
+
+  &::before {
+    font-size: 2rem;
+  }
+}
+
+.menu-close {
+  color: $marine-blue-two;
+  position: fixed;
+  #{direction(right)}: 2.5%;
+  top: 0.625rem;
+  display: none;
+  width: 2.1875rem;
+  height: 1.9375rem;
+  overflow: hidden;
+
+  &::before {
+    background: $white;
+    font-size: 2.25rem;
+    line-height: 31px;
+  }
+}
+
+.vertical-layout .navigation__sub-menu {
+  @include breakpoint($upto-palm) {
+    width: 84.7%;
+    position: fixed;
+    z-index: 9;
+    background: $white;
+    height: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.25s  ease-in-out;
+    clear: both;
+    will-change: transform;
+    margin-top: 3rem;
+    top: 0;
+
+    li {
+      width: 100%;
+      float: direction(left);
+      text-align: direction(left);
+      border-bottom: 1px solid $gainsboro;
+
+      .ajax-progress-throbber {
+        display: none;
+      }
+
+      a {
+        text-transform: capitalize;
+        font-size: 0.875rem;
+        color: $brownish-grey;
+        margin-#{direction(right)}: 0;
+        padding: 0.875rem 0.5625rem;
+
+        @include icon(chevronright, after) {
+          font-size: 1.75rem;
+          color: $light-pink;
+          position: absolute;
+          #{direction(right)}: 0.5rem;
+          margin-top: -0.3125rem;
+        }
+      }
+    }
+  }
+}
+
+.burger-main-menu {
+  li {
+    max-width: 90px;
+
+    a {
+      padding: 0.72rem 0;
+    }
+  }
+}
+
+.vertical-layout {
+  .is-active {
+    transform: translateX(0%) !important;
+  }
+}
+
+.show-menu-button {
+  position: relative;
+
+  .is-hidden {
+    transform: translateX(-100%);
+  }
+
+  .is-active-ul {
+    transform: translateX(-0.33%);
+  }
+
+  .is-active-close {
+    display: block;
+  }
+}
+
+.menu-close {
+  display: none;
+  z-index: $z-1;
+}
+
+.show-menu-button {
+  @include breakpoint($upto-palm) {
+    .burger {
+      display: block;
+      width: 15%;
+      height: 3rem;
+      position: relative;
+      padding-top: 0.375rem;
+      padding-#{direction(left)}: 0.6875rem;
+      background: $white;
+    }
+  }
+
+  .menu-logo-navigation {
+    display: inline-block;
+    background: $black;
+
+    @include breakpoint($upto-palm) {
+      width: 85%;
+
+      a {
+        padding: 0.72rem 0.6rem;
+      }
+    }
+  }
+}
+
+html[dir=rtl] {
+  @include breakpoint($upto-palm) {
+    .vertical-layout .navigation__sub-menu {
+      right: 0;
+      transform: translateX(100%);
+
+      li a {
+        @include icon(chevronleft, after);
+      }
+    }
+  }
+}
+
+.toolbar-vertical {
+  .vertical-layout .navigation__sub-menu {
+    @include breakpoint($upto-palm) {
+      margin-top: 5.4rem;
+    }
+  }
+
+  .menu-close {
+    @include breakpoint($upto-palm) {
+      top: 2.625rem;
+    }
+  }
+}

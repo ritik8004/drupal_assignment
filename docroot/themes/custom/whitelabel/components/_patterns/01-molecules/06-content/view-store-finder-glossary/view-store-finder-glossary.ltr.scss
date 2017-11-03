@@ -1,0 +1,90 @@
+@import '../../../../sass/config/**/*.scss';
+
+.view-store-finder--list {
+  @include breakpoint($above-palm) {
+    padding-top: 1.625rem;
+    padding-bottom: 1.625rem;
+  }
+}
+
+.view-stores-finder {
+  header {
+    color: $black-smoke;
+    margin-bottom: 2.3rem;
+    margin-top: 1.6rem;
+
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
+
+    @include breakpoint($lap) {
+      font-weight: bold;
+      margin-bottom: 1.4rem;
+      margin-top: 1.5rem;
+    }
+  }
+}
+
+.view-display-id-page_2 .geolocation-common-map-container,
+.view-store-finder--list__columns {
+  @include u-clearfix;
+
+  @include breakpoint($upto-palm) {
+    margin-bottom: 6.875rem;
+  }
+
+  @include breakpoint($lap) {
+    margin-bottom: 2.625rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-bottom: 7.5rem;
+  }
+}
+
+.view-store-finder--list__column--1,
+.view-store-finder--list__column--2 {
+  @include breakpoint($above-palm) {
+    width: 50%;
+    float: direction(left);
+  }
+
+  @include breakpoint($desk) {
+    width: 49%;
+  }
+}
+
+.view-store-finder--list__column--1 {
+  @include breakpoint($above-palm) {
+    border-#{direction(right)}: 1px solid $greyish-alto;
+  }
+}
+
+.view-store-finder--list__column--2 {
+  @include breakpoint($lap) {
+    padding-#{direction(left)}: 1rem;
+  }
+
+  @include breakpoint($desk) {
+    padding-#{direction(left)}: 2.875rem;
+  }
+}
+
+.views-view__attachment-after {
+  display: none;
+}
+
+.geolocation-common-map-container,
+.geolocation-google-map {
+  @include breakpoint($above-palm) {
+    min-height: 39rem;
+  }
+
+  @include breakpoint($lap) {
+    max-height: 39rem;
+  }
+
+  @include breakpoint($desk) {
+    min-height: 51rem;
+  }
+}

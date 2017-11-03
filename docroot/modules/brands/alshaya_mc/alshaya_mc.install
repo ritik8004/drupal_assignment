@@ -69,6 +69,11 @@ function alshaya_mc_install() {
     ->set('store_id', '3')
     ->save();
 
+  // Set the default value for back to store list link.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all Mothercare Stores');
+  $config->save();
+
   // Create default content for mothercare.
   alshaya_mc_create_default_content();
 }
@@ -101,4 +106,16 @@ function alshaya_mc_update_8301() {
       $new_block->save();
     }
   }
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Update config file for store configuration.
+ */
+function alshaya_mc_update_8303() {
+  // Set the default value.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all Mothercare Stores');
+  $config->save();
 }

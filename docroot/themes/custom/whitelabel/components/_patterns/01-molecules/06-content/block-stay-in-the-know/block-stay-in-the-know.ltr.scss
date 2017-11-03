@@ -1,0 +1,79 @@
+@import '../../../../sass/config/**/*.scss';
+
+.block-stay-in-the-know {
+  padding: 0.8125rem 0.625rem 0.625rem;
+  background-color: $medium-pink;
+  color: $white;
+  text-align: center;
+  margin-top: -1.25rem;
+
+  @include breakpoint($above-palm) {
+    padding: 1.5rem;
+    margin-top: -1.55rem;
+  }
+}
+
+.stay-in-the-know--description {
+  line-height: 1.5;
+
+  @include breakpoint($above-palm) {
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  @include breakpoint($desk) {
+    line-height: 1.5;
+    font-size: 0.75rem;
+    max-width: 29.625rem;
+    margin: auto;
+  }
+
+  a {
+    text-transform: none;
+    text-decoration: none;
+    color: $white;
+    display: inline-block;
+    border: 1px solid $white;
+    line-height: 1.1;
+    padding: 0.625rem 1.3rem;
+    margin-top: 0.5rem;
+
+    @include breakpoint($lap) {
+      padding: 0.5rem 2.3rem;
+      margin-top: 0.4rem;
+      border-width: 2px;
+    }
+
+    @include breakpoint($desk) {
+      padding: 0.625rem 1.4375rem;
+      margin-top: 0;
+
+      &:active {
+        border-width: 2px;
+        padding: 0.5625rem 1.375rem;
+      }
+    }
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.stay-in-the-know--title {
+  font-size: 1.25rem;
+  font-weight: normal;
+  margin-top: 0;
+  margin-bottom: -0.4rem;
+  text-transform: uppercase;
+
+  @include breakpoint($lap) {
+    margin-bottom: -0.5rem;
+  }
+
+  @include breakpoint($desk) {
+    font-size: 1.5rem;
+    margin-bottom: 0.8125rem;
+  }
+}
+

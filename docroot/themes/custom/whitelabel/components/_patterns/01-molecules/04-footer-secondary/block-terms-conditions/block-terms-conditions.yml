@@ -1,0 +1,7 @@
+label: ''
+content:
+  include():
+    pattern: 'molecules-menu-terms-conditions'
+attributes:
+  Attribute():
+    class: 'block-terms-conditions'

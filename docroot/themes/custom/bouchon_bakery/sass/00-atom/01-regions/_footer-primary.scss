@@ -1,0 +1,7 @@
+.region-footer-primary {
+  background-color: $blackish-grey;
+
+  @include breakpoint($above-palm) {
+    background-color: $black;
+  }
+}

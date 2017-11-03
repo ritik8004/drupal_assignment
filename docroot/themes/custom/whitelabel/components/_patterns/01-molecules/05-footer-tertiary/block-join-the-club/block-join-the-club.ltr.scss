@@ -1,0 +1,214 @@
+@import '../../../../sass/config/**/*.scss';
+
+.block-join-the-club {
+  @include u-clearfix;
+
+  padding-top: 1.5rem;
+
+  @include breakpoint($upto-palm) {
+    text-align: center;
+  }
+
+  @include breakpoint($above-palm) {
+    float: direction(left);
+  }
+
+  @include breakpoint($lap) {
+    width: 64.583%;
+    padding-top: 1rem;
+    padding-#{direction(left)}: 6%;
+    padding-bottom: 0.5625rem;
+  }
+
+  @include breakpoint($desk) {
+    width: 59.466%;
+    padding-top: 1.3rem;
+  }
+}
+
+.block-join-the-club__image-wrapper {
+  @include breakpoint($above-palm) {
+    float: direction(right);
+  }
+
+  @include breakpoint($lap) {
+    width: 47.06%;
+  }
+
+  @include breakpoint($desk) {
+    width: 28.571%;
+  }
+
+  img {
+    vertical-align: middle;
+
+    @include breakpoint($above-palm) {
+      margin-#{direction(left)}: -0.75rem;
+    }
+
+    @include breakpoint($desk) {
+      margin-#{direction(left)}: -0.3125rem;
+      margin-bottom: -0.3125rem;
+
+      html[lang=ar] & {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.block-join-the-club__title-wrapper {
+  @include breakpoint($above-palm) {
+    float: direction(left);
+  }
+
+  @include breakpoint($upto-lap) {
+    margin-bottom: 0.4rem;
+    padding-#{direction(left)}: 0.625rem;
+    padding-top: 0.125rem;
+  }
+
+  @include breakpoint($lap) {
+    width: 52.721%;
+    padding-#{direction(left)}: 6%;
+    position: relative;
+    top: 1.625rem;
+  }
+
+  @include breakpoint($desk) {
+    width: 41.3%;
+    padding-#{direction(left)}: 22%;
+    border-#{direction(right)}: 1px solid $greyish-lighter;
+    margin-top: 2rem;
+  }
+}
+
+.block-join-the-club__title {
+  font-family: $open-sans;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+
+  html[lang=ar] & {
+    font-family: $cairo-bold;
+    font-weight: normal;
+  }
+
+  @include breakpoint($lap) {
+    html[lang=ar] & {
+      font-family: $cairo;
+      font-weight: normal;
+    }
+  }
+
+  @include breakpoint($upto-palm) {
+    color: $dark-sand;
+  }
+}
+
+.block-join-the-club__title-link {
+  display: none;
+  font-size: 0.75rem;
+  font-family: $open-sans;
+
+  @include breakpoint($desk) {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    display: block;
+  }
+
+  a {
+    color: $black-smoke;
+    font-weight: bold;
+  }
+}
+
+.block-join-the-club__list {
+  color: $black-smoke;
+
+  @include breakpoint($upto-palm) {
+    font-size: 0.875rem;
+    text-align: center;
+    padding-#{direction(left)}: 0.625rem;
+
+    html[lang=ar] & {
+      padding-right: 0;
+    }
+  }
+
+  @include breakpoint($above-palm) {
+    font-family: $open-sans;
+    font-size: 0.75rem;
+    float: direction(left);
+  }
+
+  @include breakpoint($lap) {
+    width: 52.721%;
+    padding-#{direction(left)}: 6%;
+    position: relative;
+    top: 1.625rem;
+  }
+
+  @include breakpoint($desk) {
+    padding-#{direction(left)}: 5.2%;
+    width: 29.836%;
+    margin-top: 1.2rem;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0.2rem;
+
+    html[lang=ar] & {
+      line-height: 1.3;
+    }
+
+    @include breakpoint($above-palm) {
+      margin-bottom: 0;
+
+      html[lang=ar] & {
+        line-height: 1.4;
+      }
+    }
+  }
+
+  span {
+    font-size: 1.125rem;
+    padding-#{direction(right)}: 0.4375rem;
+
+    &::before {
+      position: relative;
+      top: 2px;
+
+      @include breakpoint($above-palm) {
+        color: $dark-sand;
+      }
+    }
+  }
+}
+
+.block-join-the-club__list-link {
+  color: $black-smoke;
+  font-weight: bold;
+  font-family: $open-sans;
+  padding-top: 0.25rem;
+  display: block;
+
+  html[lang=ar] & {
+    padding-top: 0.5rem;
+
+    @include breakpoint($upto-palm) {
+      font-family: $cairo-bold;
+    }
+  }
+
+  @include breakpoint($lap) {
+    font-weight: normal;
+    padding-top: 0.5rem;
+  }
+
+  @include breakpoint($desk) {
+    display: none;
+  }
+}

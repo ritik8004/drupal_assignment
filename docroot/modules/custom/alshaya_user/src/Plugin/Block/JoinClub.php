@@ -85,29 +85,26 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
   public function build() {
 
     $build = [];
+    // Default image.
+    $image_path = drupal_get_path('module', 'alshaya_user') . '/images/alshaya-priv-card.png';
 
-    // If loyalty enabled on site.
-    $loyality_settings = alshaya_loyalty_get_validation_settings();
-    if ($loyality_settings['enable_disable_loyalty']) {
-      $join_club_content = $this->configFactory->get('alshaya_user.join_club');
-      if ($image_fid = $join_club_content->get('join_club_image.fid')) {
-        $image_file = File::load($image_fid);
+    $join_club_content = $this->configFactory->get('alshaya_user.join_club');
+    if ($image_fid = $join_club_content->get('join_club_image.fid')) {
+      if ($image_file = File::load($image_fid)) {
         $image_path = $image_file->getFileUri();
       }
-      else {
-        // Default image.
-        $image_path = drupal_get_path('module', 'alshaya_user') . '/images/alshaya-priv-card.jpg';
-      }
-
-      $build['image'] = [
-        '#theme' => 'image',
-        '#uri' => $image_path,
-        '#title' => $this->label(),
-        '#alt' => $this->label(),
-      ];
-
-      $build['description']['#markup'] = $join_club_content->get('join_club_description.value');
     }
+
+    $build['image'] = [
+      '#theme' => 'image',
+      '#uri' => $image_path,
+      '#title' => $this->label(),
+      '#alt' => $this->label(),
+      '#prefix' => '<div class="block-join-the-club__image-wrapper">',
+      '#suffix' => '</div>',
+    ];
+
+    $build['description']['#markup'] = $join_club_content->get('join_club_description.value');
 
     return $build;
   }

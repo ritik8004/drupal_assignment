@@ -1,0 +1,25 @@
+<div class="block-language-switcher__tablet device__tablet">
+  {{ title_prefix }}
+  {% if label %}
+    <h2{{ title_attributes }}>{{ label }}</h2>
+  {% endif %}
+  {{ title_suffix }}
+  {% block content %}
+    {% if content_class %}
+      <div class="{{ content_class }}">
+    {% endif %}
+      {{ content }}
+    {% if content_class %}
+      </div>
+    {% endif %}
+  {% endblock %}
+</div>
+
+{% if content %}
+  <div class="block-language-switcher__cookies device__no-desktop only-first-time">
+    <div class="block-language-switcher--cookies--content">
+      {{ content }}
+      <span class="language-switcher-close icon-close"></span>
+    </div>
+  </div>
+{% endif %}

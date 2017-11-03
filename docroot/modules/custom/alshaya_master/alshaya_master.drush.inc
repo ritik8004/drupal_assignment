@@ -49,7 +49,7 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
         // Get langcodes for all languages.
         $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
 
-        // Get all config names avaiable in current module.
+        // Get all config names available in current module.
         $names = ConfigHelper::forModule($brand_module)->optional()->listAll();
 
         // Update config translations from string translations.

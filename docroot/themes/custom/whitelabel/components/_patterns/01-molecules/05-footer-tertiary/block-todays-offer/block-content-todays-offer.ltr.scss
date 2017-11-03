@@ -1,0 +1,34 @@
+@import '../../../../sass/config/**/*.scss';
+
+.block-content-todays-offer {
+  h2 {
+    font-size: 1.125rem;
+    font-weight: normal;
+    border-bottom: 1px solid $gainsboro;
+    padding-bottom: 0.4375rem;
+    margin-bottom: 1.5rem;
+    padding-#{direction(left)}: 1.8125rem;
+    position: relative;
+    text-align: direction(left);
+
+    a {
+      text-decoration: none;
+    }
+
+    .mobile-link {
+      color: $black-smoke;
+    }
+
+    .mobile-back-link {
+      font-size: 0;
+
+      @include icon(chevron#{direction(left)}, before) {
+        color: $medium-pink;
+        font-size: 1.8rem;
+        position: absolute;
+        #{direction(left)}: -0.1875rem;
+        top: -0.3125rem;
+      }
+    }
+  }
+}

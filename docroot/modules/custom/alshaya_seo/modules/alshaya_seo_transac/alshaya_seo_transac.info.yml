@@ -1,0 +1,9 @@
+name: 'Alshaya SEO Transac'
+description: 'Code around custom SEO requirements of Alshaya specific to trasac sites.'
+type: module
+core: 8.x
+package: Alshaya
+dependencies:
+  - alshaya_main_menu
+  - alshaya_seo
+version: 8.x-1.0

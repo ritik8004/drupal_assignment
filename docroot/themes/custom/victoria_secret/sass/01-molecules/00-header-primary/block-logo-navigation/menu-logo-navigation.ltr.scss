@@ -1,0 +1,46 @@
+.menu-logo-navigation {
+  a {
+    &.brand-victoria-secret {
+      &::after {
+        background: url("../../../../../images/icons/svg/vsecret.svg") no-repeat center;
+        background-size: contain;
+      }
+
+      &:hover::after {
+        background: url("../../../../../images/icons/svg/vsecret-active.svg") no-repeat center;
+        background-size: contain;
+      }
+    }
+
+    &.brand-pink {
+      &::after {
+        background: url("../../../../../images/icons/svg/pink.svg") no-repeat center;
+        background-size: contain;
+      }
+    }
+
+    &.brand-victoria-sport {
+      &::after {
+        background: url("../../../../../images/icons/svg/vsport.svg") no-repeat center;
+        background-size: contain;
+      }
+
+      &:hover::after {
+        background: url("../../../../../images/icons/svg/vsport-active.svg") no-repeat center;
+        background-size: contain;
+      }
+    }
+  }
+
+  .active-trail {
+    .brand-victoria-secret::after {
+      background: url("../../../../../images/icons/svg/vsecret-active.svg") no-repeat center;
+      background-size: contain;
+    }
+
+    .brand-victoria-sport::after {
+      background: url("../../../../../images/icons/svg/vsport-active.svg") no-repeat center;
+      background-size: contain;
+    }
+  }
+}

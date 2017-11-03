@@ -1,0 +1,92 @@
+@import '../../../../sass/config/**/*.scss';
+
+.view-store-finder--list__alphabet {
+  @include u-clearfix;
+
+  @include breakpoint($lap) {
+    margin-bottom: 2.25rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-bottom: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.625rem;
+    font-weight: normal;
+    color: $black-smoke;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    float: direction(left);
+    padding-#{direction(left)}: 1.5rem;
+
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
+
+    @include breakpoint($lap) {
+      width: 22.5%;
+      margin-top: 0.4rem;
+    }
+
+    @include breakpoint($desk) {
+      width: 13.804%;
+    }
+  }
+
+  .views-view-unformatted__rows {
+    @include breakpoint($above-palm) {
+      float: direction(left);
+    }
+
+    @include breakpoint($lap) {
+      width: 77.5%;
+    }
+
+    @include breakpoint($desk) {
+      width: 86.195%;
+    }
+  }
+
+  .ajax-progress-throbber {
+    display: none;
+  }
+}
+
+.view-store-finder--list__alphabet__item {
+  @include breakpoint($upto-palm) {
+    line-height: 2.875rem;
+    height: 2.875rem;
+    border-bottom: 1px solid $gainsboro;
+    position: relative;
+  }
+
+  @include breakpoint($above-palm) {
+    line-height: 2rem;
+  }
+
+  &::before {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.75rem;
+    color: $medium-pink;
+    #{direction(right)}: 0.5rem;
+
+    @include breakpoint($upto-palm) {
+      display: block;
+    }
+  }
+
+  a {
+    color: $brownish-grey;
+    text-decoration: none;
+    display: block;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

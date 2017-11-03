@@ -1,0 +1,37 @@
+html,
+body {
+  height: 100%;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: $TradeGothicLTStd;
+  font-size: 0.875rem;
+}
+
+.desktop-only-block {
+  display: none;
+
+  @include breakpoint($desk) {
+    display: block;
+  }
+}
+
+.above-tablet-block {
+  display: none;
+
+  @include breakpoint($above-palm) {
+    display: block;
+  }
+}
+
+.upto-tablet-block {
+  display: none;
+
+  @include breakpoint($upto-palm) {
+    display: block;
+  }
+}

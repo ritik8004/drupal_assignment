@@ -1,0 +1,12 @@
+name: 'Alshaya Bouchon Bakery'
+type: module
+description: 'The dedicated module for Bouchon Bakery brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_block
+  - alshaya_i18n
+  - alshaya_paragraph_block
+  - alshaya_stores_migrate
+themes:
+  - bouchon_bakery

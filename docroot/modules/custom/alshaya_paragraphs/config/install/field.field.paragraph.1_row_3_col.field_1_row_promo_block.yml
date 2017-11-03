@@ -4,6 +4,8 @@ dependencies:
   config:
     - field.storage.paragraph.field_1_row_promo_block
     - paragraphs.paragraphs_type.1_row_3_col
+    - paragraphs.paragraphs_type.image_title_subtitle
+    - paragraphs.paragraphs_type.offers_bordered
     - paragraphs.paragraphs_type.promo_block
   module:
     - entity_reference_revisions
@@ -22,6 +24,8 @@ settings:
   handler_settings:
     target_bundles:
       promo_block: promo_block
+      image_title_subtitle: image_title_subtitle
+      offers_bordered: offers_bordered
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         weight: 8
@@ -43,5 +47,44 @@ settings:
         weight: 13
       related_info_one_column:
         weight: 14
+        enabled: false
+      image_title_subtitle:
+        enabled: true
+        weight: 19
+      offers_bordered:
+        enabled: true
+        weight: 20
+      1_row_1_col_dept:
+        weight: 21
+        enabled: false
+      title_textarea:
+        weight: 21
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 23
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 24
+        enabled: false
+      1_row_2_col_dept:
+        weight: 25
+        enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 27
+        enabled: false
+      1_row_3_col_dept:
+        weight: 28
+        enabled: false
+      1_row_3_col_text:
+        weight: 29
+        enabled: false
+      block_reference:
+        weight: 32
+        enabled: false
+      promo_block_text:
+        weight: 34
+        enabled: false
+      views_reference:
+        weight: 36
         enabled: false
 field_type: entity_reference_revisions

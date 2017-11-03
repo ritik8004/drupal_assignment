@@ -1,0 +1,69 @@
+.block-application-links {
+  .item-list-application-links {
+    list-style: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 0;
+    padding-#{direction(left)}: 0;
+    text-align: direction(right);
+
+    @include breakpoint($upto-palm) {
+      text-align: center;
+    }
+
+    @include breakpoint($lap) {
+      margin-top: 1.125rem;
+    }
+
+    li {
+      @include breakpoint($desk) {
+        display: inline-block;
+      }
+
+      &:first-child {
+        @include breakpoint($desk) {
+          border-#{direction(right)}: 0.06rem solid $greyish-lighter;
+        }
+
+        @include breakpoint($upto-lap) {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+
+    a {
+      display: block;
+
+      @include u-hidden-visually;
+
+      &::before {
+        content: '';
+        width: 8.4375rem;
+        height: 2.8125rem;
+        display: block;
+
+        @include breakpoint($above-palm) {
+          margin-left: 1rem;
+          margin-right: 1rem;
+        }
+
+        @include breakpoint($upto-lap) {
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    }
+  }
+
+  .item-list-application-links__link--android {
+    &::before {
+      background: url("../../images/logos/play-store.svg") no-repeat center;
+    }
+  }
+
+  .item-list-application-links__link--apple {
+    &::before {
+      background: url("../../images/logos/app-store.svg") no-repeat center;
+    }
+  }
+}

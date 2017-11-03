@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_block_reference
+    - paragraphs.paragraphs_type.block_reference
+  module:
+    - block_field
+id: paragraph.block_reference.field_block_reference
+field_name: field_block_reference
+entity_type: paragraph
+bundle: block_reference
+label: 'Block Reference'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  plugin_ids: {  }
+field_type: block_field

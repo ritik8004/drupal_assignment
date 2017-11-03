@@ -1,0 +1,83 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.paragraph_block
+    - field.storage.block_content.field_paragraph_content
+    - paragraphs.paragraphs_type.1_row_3_col
+  module:
+    - entity_reference_revisions
+id: block_content.paragraph_block.field_paragraph_content
+field_name: field_paragraph_content
+entity_type: block_content
+bundle: paragraph_block
+label: 'Paragraph Content'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      1_row_3_col: 1_row_3_col
+    target_bundles_drag_drop:
+      1_row_1st_col_2_row_2nd_col:
+        weight: 20
+        enabled: false
+      1_row_1_col:
+        weight: 21
+        enabled: false
+      1_row_1_col_dept:
+        weight: 22
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 23
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 24
+        enabled: false
+      1_row_2_col_dept:
+        weight: 25
+        enabled: false
+      1_row_3_col:
+        enabled: true
+        weight: 26
+      1_row_3_col_delivery_banner:
+        weight: 27
+        enabled: false
+      1_row_3_col_dept:
+        weight: 28
+        enabled: false
+      1_row_3_col_text:
+        weight: 29
+        enabled: false
+      banner:
+        weight: 30
+        enabled: false
+      banner_full_width:
+        weight: 31
+        enabled: false
+      block_reference:
+        weight: 32
+        enabled: false
+      image_title_subtitle:
+        weight: 33
+        enabled: false
+      offers_bordered:
+        weight: 34
+        enabled: false
+      promo_block:
+        weight: 35
+        enabled: false
+      promo_block_text:
+        weight: 36
+        enabled: false
+      related_info_one_column:
+        weight: 37
+        enabled: false
+      views_reference:
+        weight: 38
+        enabled: false
+field_type: entity_reference_revisions

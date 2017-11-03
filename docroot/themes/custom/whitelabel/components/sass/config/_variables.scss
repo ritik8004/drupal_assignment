@@ -1,0 +1,49 @@
+$direction: unquote($direction);
+
+// Default $direcrion if not valid
+@if $direction != ltr and $direction != rtl {
+  $direction: ltr;
+}
+
+@function if-ltr($if, $else: null) {
+  @if $direction != rtl {
+    @return $if;
+  }
+
+  @else {
+    @return $else;
+  }
+}
+
+@function if-rtl($if, $else: null) {
+  @return if-ltr($else, $if);
+}
+
+$left: if-ltr(left, right);
+$right: if-ltr(right, left);
+
+$top: if-ltr(top, bottom);
+$bottom: if-ltr(bottom, top);
+
+$next: if-ltr(next, prev);
+$prev: if-ltr(prev, next);
+
+$first-child: if-ltr(":first-child", ":last-child");
+$last-child: if-ltr(":last-child", ":first-child");
+
+@mixin if-ltr {
+  @if $direction != rtl {
+    @content;
+  }
+}
+
+@mixin if-rtl {
+  @if $direction == rtl {
+    @content;
+  }
+}
+
+$arial: if-ltr($arial, $cairo);
+$open-sans: if-ltr($open-sans, $cairo);
+$after: if-ltr("after", "before");
+$before: if-ltr("before", "after");

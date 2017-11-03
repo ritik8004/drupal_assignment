@@ -1,0 +1,81 @@
+@import '../../../../sass/config/**/*.scss';
+
+.item-list-application-links {
+  list-style: none;
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 0;
+  padding-#{direction(left)}: 0;
+
+  @include breakpoint($upto-palm) {
+    text-align: center;
+  }
+
+  @include breakpoint($lap) {
+    margin-top: 1.125rem;
+
+    html[lang=ar] & {
+      margin-top: 1rem;
+    }
+  }
+
+  li {
+    @include breakpoint($desk) {
+      display: inline-block;
+    }
+
+    &:first-child {
+      @include breakpoint($desk) {
+        border-#{direction(right)}: 1px solid $greyish-lighter;
+      }
+
+      @include breakpoint($lap) {
+        margin-bottom: 0.6rem;
+      }
+
+      @include breakpoint($upto-palm) {
+        margin-bottom: 1.4rem;
+      }
+    }
+  }
+
+  a {
+    display: block;
+
+    @include u-hidden-visually;
+
+    &::before {
+      content: '';
+      width: 8.4375rem;
+      height: 2.8125rem;
+      display: block;
+
+      @include breakpoint($above-palm) {
+        margin-left: 2.3rem;
+        margin-right: 1.8rem;
+      }
+
+      @include breakpoint($upto-lap) {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      @include breakpoint($lap) {
+        position: relative;
+        #{direction(left)}: -0.5rem;
+      }
+    }
+  }
+}
+
+.item-list-application-links__link--android {
+  &::before {
+    background: url("../../../../../../images/logos/play-store.svg") no-repeat center;
+  }
+}
+
+.item-list-application-links__link--apple {
+  &::before {
+    background: url("../../../../../../images/logos/app-store.svg") no-repeat center;
+  }
+}

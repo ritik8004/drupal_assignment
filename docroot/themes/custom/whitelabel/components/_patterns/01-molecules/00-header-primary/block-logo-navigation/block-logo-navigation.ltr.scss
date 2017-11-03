@@ -1,0 +1,7 @@
+@import '../../../../sass/config/**/*.scss';
+
+.block-logo-navigation {
+  @include breakpoint($above-palm) {
+    background-color: $black;
+  }
+}

@@ -5,6 +5,7 @@ package: 'Alshaya'
 core: 8.x
 dependencies:
   - alshaya_i18n
+  - alshaya_menus
   - block
   - block_content_machine_name
   - menu_link_attributes

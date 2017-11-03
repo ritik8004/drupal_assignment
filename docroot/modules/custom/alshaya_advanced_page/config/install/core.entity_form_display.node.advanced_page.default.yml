@@ -20,11 +20,23 @@ dependencies:
     - workbench_moderation
 third_party_settings:
   field_group:
+    group_views_reference:
+      children:
+        - field_views
+      parent_name: ''
+      weight: 13
+      label: 'Views Reference'
+      format_type: details
+      format_settings:
+        open: false
+        required_fields: true
+        classes: ''
+        id: ''
     group_banner_full_width:
       children:
         - field_banner
       parent_name: ''
-      weight: 10
+      weight: 9
       label: 'Banner full width'
       format_type: details
       format_settings:
@@ -73,7 +85,7 @@ third_party_settings:
       children:
         - field_promo_blocks
       parent_name: ''
-      weight: 109
+      weight: 14
       label: 'Promo blocks'
       format_type: details
       format_settings:
@@ -82,6 +94,18 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
+    group_block_reference:
+      children:
+        - field_block
+      parent_name: ''
+      weight: 10
+      label: 'Block Reference'
+      format_type: details
+      format_settings:
+        open: false
+        required_fields: true
+        classes: ''
+        id: ''
 id: node.advanced_page.default
 targetEntityType: node
 bundle: advanced_page
@@ -116,7 +140,7 @@ content:
     region: content
   field_delivery_banner:
     type: entity_reference_paragraphs
-    weight: 111
+    weight: 16
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -127,7 +151,7 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 110
+    weight: 15
     settings: {  }
     third_party_settings: {  }
     type: metatag_firehose
@@ -217,6 +241,8 @@ content:
   translation:
     weight: 10
     region: content
+    settings: {  }
+    third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
     weight: 2

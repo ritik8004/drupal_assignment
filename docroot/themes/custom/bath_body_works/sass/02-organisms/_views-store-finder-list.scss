@@ -1,0 +1,155 @@
+.view--store-list {
+  overflow: hidden;
+
+  @include breakpoint($upto-palm) {
+    margin-bottom: 6.875rem;
+  }
+
+  @include breakpoint($lap) {
+    margin-bottom: 2.625rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-bottom: 7.5rem;
+  }
+
+  .view-header {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.list-store--detail {
+  width: 26.5%;
+  padding-#{direction(right)}: 1%;
+  overflow-y: scroll;
+  margin-#{direction(right)}: 1%;
+  float: direction(left);
+
+  @include breakpoint($above-palm) {
+    max-height: 51rem;
+  }
+
+  @include breakpoint($desk) {
+    padding-#{direction(right)}t: 1%;
+  }
+
+  @include breakpoint($lap) {
+    width: 35.8%;
+    margin-#{direction(right)}: 2.7%;
+  }
+
+  @include breakpoint($upto-palm) {
+    border-#{direction(right)}: 0;
+    margin-#{direction(right)}: 0;
+    padding-#{direction(right)}: 0;
+    float: none;
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+  }
+
+  .list-view-locator {
+    margin-bottom: 1.4rem;
+    background-color: $white;
+
+    &:hover,
+    &.selected {
+      background-color: $grey-smoke;
+    }
+  }
+}
+
+.list-view-locator {
+  font-size: 0.875rem;
+  padding: 1rem 0;
+  padding-bottom: 0;
+  border-top: 1px solid $gainsboro;
+  border-bottom: 1px solid $gainsboro;
+  color: $brownish-grey;
+  position: relative;
+  cursor: pointer;
+
+  .row-title {
+    font-weight: bold;
+    display: block;
+    color: $brownish-grey;
+    padding: 0 3.5rem;
+    margin-bottom: 0.1875rem;
+
+    @include breakpoint($lap) {
+      padding: 0 3.25rem;
+      color: $black;
+    }
+  }
+
+  .views-field-field-store-address {
+    border-bottom: 1px solid $gainsboro;
+    padding-bottom: 1.5rem;
+
+    .field-content {
+      padding: 0 3.5rem;
+
+      @include breakpoint($lap) {
+        padding: 0 3.25rem;
+        padding-#{direction(right)}: 2.5rem;
+      }
+    }
+  }
+}
+
+.store--map {
+  float: direction(left);
+  width: 61.5%;
+  vertical-align: top;
+
+  @include breakpoint($desk) {
+    width: 72.5%;
+  }
+
+  @include breakpoint($upto-palm) {
+    display: none;
+  }
+}
+
+.load-more-button {
+  padding-#{direction(right)}: 1%;
+  clear: both;
+  padding-top: 1rem;
+
+  @include breakpoint($lap) {
+    max-width: 35.8%;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 26.5%;
+  }
+
+  a {
+    display: block;
+    font-size: 0.813rem;
+    text-align: center;
+    border: 1px solid;
+    padding: 0.563rem 4.12rem;
+    text-decoration: none;
+  }
+}
+
+.list-view-locator {
+  .store-row--counter {
+    background-color: $peacock-blue;
+    padding-top: 0.25rem;
+    #{direction(left)}: 1rem;
+  }
+
+  .hours--wrapper .hours--label {
+    color: $black-smoke;
+
+    &::after {
+      color: $peacock-blue;
+    }
+  }
+
+  .mobile-only--back-to-glossary {
+    display: none;
+  }
+}

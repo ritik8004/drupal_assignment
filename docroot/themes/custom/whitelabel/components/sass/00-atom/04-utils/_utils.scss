@@ -1,0 +1,51 @@
+.is-hidden {
+  display: none !important;
+}
+
+.device__desktop {
+  display: none;
+
+  @include breakpoint($desk) {
+    display: block;
+  }
+}
+
+.device__tablet {
+  display: none;
+
+  @include breakpoint($lap) {
+    display: block;
+  }
+}
+
+.device__mobile {
+  @include breakpoint($above-palm) {
+    display: none;
+  }
+}
+
+.device__no-desktop {
+  @include breakpoint($desk) {
+    display: none;
+  }
+}
+
+.overlay-content {
+  background: $black;
+  opacity: 0.6;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes anim-rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
