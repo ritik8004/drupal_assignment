@@ -86,6 +86,7 @@ body.ucbrowser {
       }
     }
 
+    /*
     @include breakpoint($only-tablet) {
       .filter--mobile {
         .c-facet__blocks__wrapper--mobile.is-filter {
@@ -98,6 +99,7 @@ body.ucbrowser {
         }
       }
     }
+    */
   }
 
   .page-standard.user-page.checkout-delivery {
@@ -393,9 +395,11 @@ body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-con
   display: none;
 }
 
-.ucbrowser .c-accordion__title::after {
-  top: 5px !important;
-}
+/*
+  .ucbrowser .c-accordion__title::after {
+    top: 5px !important;
+  }
+*/
 
 .ucbrowser .user__address--column {
   width: 90%;
