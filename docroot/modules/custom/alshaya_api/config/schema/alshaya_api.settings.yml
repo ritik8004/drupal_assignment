@@ -1,0 +1,28 @@
+alshaya_api.settings:
+  type: config_object
+  label: 'Alshaya API settings'
+  mapping:
+    langcode:
+      type: string
+      label: 'Language code'
+    magento_host:
+      type: label
+      label: 'Host'
+    magento_lang_prefix:
+      type: label
+      label: 'Language prefix'
+    magento_api_base:
+      type: label
+      label: 'API Base'
+    verify_ssl:
+      type: integer
+    token_cache_time:
+      type: integer
+    username:
+      type: label
+      label: 'Username'
+    password:
+      type: label
+      label: 'Password'
+    dm_version:
+      type: integer

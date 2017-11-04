@@ -7,3 +7,4 @@ services:
       - '@logger.factory'
     calls:
       - [setStoreFinderUtility, ['@?alshaya_stores_finder.utility']]
+      - [setAddressBookManager, ['@?alshaya_addressbook.manager']]

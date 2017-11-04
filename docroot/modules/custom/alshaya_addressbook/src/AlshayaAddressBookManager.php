@@ -9,6 +9,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Entity\Profile;
 use Drupal\user\Entity\User;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Class AlshayaAddressBookManager.
@@ -436,6 +437,46 @@ class AlshayaAddressBookManager {
     }
 
     return $errors;
+  }
+
+  /**
+   * Function to update location as term.
+   *
+   * @param array $termData
+   *   Term data to save as term.
+   *
+   * @return mixed
+   *   Term object if created, or empty.
+   */
+  public function updateLocation(array $termData = []) {
+    if (empty($termData)) {
+      return;
+    }
+    // @todo: Translations missing.
+    $termData['vid'] = 'area_list';
+    $termId = \Drupal::entityQuery('taxonomy_term')
+      ->condition('vid', 'area_list')
+      ->condition('field_location_id', $termData['field_location_id'])
+      ->execute();
+    if ($termId) {
+      $term = Term::load(current($termId));
+      foreach ($termData as $termKey => $termValue) {
+        $term->set($termKey, $termValue);
+      }
+    }
+    else {
+      $term = Term::create($termData);
+    }
+
+    try {
+      $term->save();
+    }
+    catch (\Exception $e) {
+      // Log error if any.
+      \Drupal::logger('alshaya_addressbook')->error($e->getMessage());
+    }
+
+    return $term;
   }
 
 }

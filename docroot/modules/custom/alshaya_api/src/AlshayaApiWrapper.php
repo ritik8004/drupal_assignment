@@ -6,6 +6,7 @@ use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 
 /**
  * Class AcqPromotionsManager.
@@ -48,6 +49,13 @@ class AlshayaApiWrapper {
   protected $storeUtility;
 
   /**
+   * Address Book Manager object.
+   *
+   * @var object
+   */
+  protected $addressBookManager;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -72,6 +80,16 @@ class AlshayaApiWrapper {
    */
   public function setStoreFinderUtility(StoresFinderUtility $stores_utility) {
     $this->storeUtility = $stores_utility;
+  }
+
+  /**
+   * Set Address book manager when available.
+   *
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $addressBookManager
+   *   The address book manager object.
+   */
+  public function setAddressBookManager(AlshayaAddressBookManager $addressBookManager) {
+    $this->addressBookManager = $addressBookManager;
   }
 
   /**
@@ -282,7 +300,7 @@ class AlshayaApiWrapper {
    */
   public function invokeApi($endpoint, array $data = [], $method = 'POST', $requires_token = TRUE) {
     $url = $this->config->get('magento_host');
-    $url .= '/' . $this->config->get('magento_lang_prefix') . $this->langcode;
+    $url .= '/' . $this->getMagentoLangPrefix();
     $url .= '/' . $this->config->get('magento_api_base');
     $url .= '/' . $endpoint;
 
@@ -371,6 +389,104 @@ class AlshayaApiWrapper {
     }
 
     return $this->token;
+  }
+
+  /**
+   * Function to get locations for delivery matrix.
+   *
+   * @param string $filterField
+   *   The field name to filter on.
+   * @param string $filterValue
+   *   The value of the field to filter on.
+   *
+   * @return mixed
+   *   Response from API.
+   */
+  public function getLocations($filterField = 'attribute_id', $filterValue = 'governate') {
+    $endpoint = 'deliverymatrix/address-locations/search?searchCriteria[filter_groups][0][filters][0][field]=' . $filterField . '&searchCriteria[filter_groups][0][filters][0][value]=' . $filterValue . '&searchCriteria[filter_groups][0][filters][0][condition_type]=eq';
+    $response = $this->invokeApi($endpoint, [], 'GET', FALSE);
+    $locations = json_decode($response, TRUE);
+    if (is_array($locations) && !empty($locations)) {
+      return $locations;
+    }
+    return [];
+  }
+
+  /**
+   * Function to sync areas for delivery matrix.
+   */
+  public function syncAreas() {
+    $governates = $this->getLocations('attribute_id', 'governate');
+    if (isset($governates['items']) && !empty($governates['items'])) {
+      $termsProcessed = [];
+      foreach ($governates['items'] as $governate) {
+        // Assuming Parent ID is 0, for Governates.
+        $governateData = [
+          'name' => $governate['labels'][0],
+          'field_location_id' => $governate['location_id'],
+        ];
+        /** @var \Drupal\taxonomy\Entity\Term $governateTerm */
+        $governateTerm = $this->addressBookManager->updateLocation($governateData);
+        $termsProcessed[] = $governate['labels'][0];
+
+        // Fetch area's under this governate.
+        $areas = $this->getLocations('parent_id', $governate['location_id']);
+        if (isset($areas['items']) && !empty($areas['items'])) {
+          foreach ($areas['items'] as $area) {
+            $areaData = [
+              'name' => $area['labels'][0],
+              'field_location_id' => $area['location_id'],
+              'parent' => $governateTerm->id(),
+            ];
+            $this->addressBookManager->updateLocation($areaData);
+            $termsProcessed[] = $area['labels'][0];
+          }
+        }
+      }
+
+      // Delete the excess terms that exist.
+      if (!empty($termsProcessed)) {
+        $result = \Drupal::entityQuery('taxonomy_term')
+          ->condition('vid', 'area_list')
+          ->condition('name', $termsProcessed, 'NOT IN')
+          ->execute();
+
+        if ($result) {
+          $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+          $terms = $term_storage->loadMultiple($result);
+          $term_storage->delete($terms);
+        }
+      }
+
+    }
+  }
+
+  /**
+   * Method to provide the Language prefix for magento, per language.
+   *
+   * @return string
+   *   The Language prefix for current language.
+   */
+  private function getMagentoLangPrefix() {
+    $mapping = [];
+
+    $languages = \Drupal::languageManager()->getLanguages();
+
+    // Prepare the alternate locale data.
+    foreach ($languages as $lang => $language) {
+      // For default language, we access the config directly.
+      if ($lang == \Drupal::languageManager()->getDefaultLanguage()->getId()) {
+        $config = \Drupal::config('alshaya_api.settings');
+      }
+      // We get store id from translated config for other languages.
+      else {
+        $config = \Drupal::languageManager()->getLanguageConfigOverride($lang, 'alshaya_api.settings');
+      }
+
+      $mapping[$lang] = $config->get('magento_lang_prefix');
+    }
+
+    return $mapping[$this->langcode];
   }
 
 }
