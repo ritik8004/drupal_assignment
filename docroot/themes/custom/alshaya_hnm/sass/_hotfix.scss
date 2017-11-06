@@ -85,19 +85,6 @@ body.ucbrowser {
         padding-left: 40px;
       }
     }
-
-    @include breakpoint($only-tablet) {
-      .filter--mobile {
-        .c-facet__blocks__wrapper--mobile.is-filter {
-          #{$left}: -7rem;
-        }
-
-        .view-filters.is-filter {
-          position: absolute;
-          #{$left}: 1rem;
-        }
-      }
-    }
   }
 
   .page-standard.user-page.checkout-delivery {
@@ -391,10 +378,6 @@ body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-con
 
 #stcpDiv {
   display: none;
-}
-
-.ucbrowser .c-accordion__title::after {
-  top: 5px !important;
 }
 
 .ucbrowser .user__address--column {
