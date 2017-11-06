@@ -85,5 +85,15 @@ function alshaya_transac_install() {
  *  Hook update to enable module.
  */
 function alshaya_transac_update_8101() {
+  $configs = [
+    'metatag.metatag_defaults.node__acq_product',
+    'metatag.metatag_defaults.node__acq_promotion',
+    'metatag.metatag_defaults.taxonomy_term__acq_product_category',
+    'simple_sitemap.bundle_settings.node.acq_product',
+    'simple_sitemap.bundle_settings.taxonomy_term.acq_product_category',
+  ];
+  foreach ($configs as $config) {
+    \Drupal::configFactory()->getEditable($config)->delete();
+  }
   \Drupal::service('module_installer')->install(['alshaya_seo_transac'], TRUE);
 }
