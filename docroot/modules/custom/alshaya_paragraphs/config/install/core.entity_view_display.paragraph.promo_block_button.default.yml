@@ -17,7 +17,9 @@ bundle: promo_block_button
 mode: default
 content:
   field_button_link:
+    type: link
     weight: 2
+    region: content
     label: above
     settings:
       trim_length: 80
@@ -26,15 +28,13 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
-    region: content
   field_button_position:
-    weight: 3
+    type: list_default
+    weight: 4
+    region: content
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: list_default
-    region: content
   field_promo_text_1:
     weight: 0
     label: above
@@ -52,10 +52,10 @@ content:
     type: string
     region: content
   field_promo_theme:
-    weight: 4
+    type: list_default
+    weight: 3
+    region: content
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: list_default
-    region: content
 hidden: {  }
