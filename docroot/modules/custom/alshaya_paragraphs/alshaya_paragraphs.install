@@ -11,7 +11,14 @@
  * Create Image+title+subtitle paragraph type.
  */
 function alshaya_paragraphs_update_8101() {
-  \Drupal::service('module_installer')->install(['viewsreference'], TRUE);
+  $modules = [
+    'viewsreference',
+    'alshaya_media',
+  ];
+
+  foreach ($modules as $module) {
+    \Drupal::service('module_installer')->install([$module], TRUE);
+  }
 
   $configs = [
     // Image + title + subtitle paragraph type.
