@@ -5,6 +5,9 @@ alshaya_acm_product.settings:
     related_items_size:
       type: integer
       label: 'Number of related items to show'
+    list_view_items_per_page:
+      type: integer
+      label: 'Number of items to show on Listing pages'
     brand_logo_base_path:
       type: string
       label: 'Base path on server for Brand Logo'
