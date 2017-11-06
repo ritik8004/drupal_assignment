@@ -22,11 +22,11 @@ set classes = [
         {{ content.price_block }}
       </div>
 
-      {% if content.promotions %}
-        <div class="promotions">
+      <div class="promotions">
+        {% if content.promotions %}
           {{ content.promotions }}
-        </div>
-      {% endif %}
+        {% endif %}
+      </div>
 
       <div class="content--item-code">
         <span class="field__label">{{ 'Item Code'|t }}:</span>
