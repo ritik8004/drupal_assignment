@@ -448,13 +448,16 @@ class CheckoutOptionsManager {
     if ($site_current_langcode !== $site_default_langcode) {
       $shipping_options = $this->getAllShippingTerms();
       foreach ($shipping_options as $key => $shipping_option) {
+        // Prepare translation for shipping term only if translation exists,
+        // else, keep the key & value as the original term itself.
         if ($shipping_option->hasTranslation($site_default_langcode)) {
-          $shipping_translated_term = $shipping_option->getTranslation($site_default_langcode);
+          $shipping_translation = $shipping_option->getTranslation($site_current_langcode)->getName();
+          $shipping_method_translations[$shipping_translation] = $shipping_translation;
         }
         else {
-          $shipping_translated_term = $shipping_option;
+          $shipping_original = $shipping_option->getName();
+          $shipping_method_translations[$shipping_original] = $shipping_original;
         }
-        $shipping_method_translations[$shipping_option->getTranslation($site_current_langcode)->getName()] = $shipping_translated_term->getName();
       }
     }
 
