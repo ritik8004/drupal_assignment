@@ -335,3 +335,21 @@ paragraph-title-textarea:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/paragraph-title-textarea/paragraph-title-textarea.ltr.css: {}
+
+block-admin-tabs:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/block-admin-tabs/block-admin-tabs.ltr.css: {}
+
+menu-admin-task:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/block-admin-tabs/menu-admin-task.ltr.css: {}
+
+status-message:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/status-message/status-message.ltr.css: {}
