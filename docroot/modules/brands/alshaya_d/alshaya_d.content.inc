@@ -40,7 +40,7 @@ function alshaya_d_create_copyright_block_content() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Copyright',
     'body' => [
-      'value' => "<p>فيكتوريا سيكريت. كل الحقوق محفوظة. &copy;</p>",
+      'value' => "<p>دبنهامز. كل الحقوق محفوظة. &copy;</p>",
       'format' => 'rich_text',
     ]
   ]);
