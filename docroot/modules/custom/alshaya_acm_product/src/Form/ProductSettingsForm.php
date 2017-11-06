@@ -30,6 +30,7 @@ class ProductSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_acm_product.settings');
     $config->set('related_items_size', $form_state->getValue('related_items_size'));
+    $config->set('list_view_items_per_page', $form_state->getValue('list_view_items_per_page'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('brand_logo_extension', $form_state->getValue('brand_logo_extension'));
     $config->set('not_buyable_message', $form_state->getValue('not_buyable_message'));
@@ -55,6 +56,14 @@ class ProductSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Number of related items to show in Up sell / Cross sell / Related products blocks.'),
       '#required' => TRUE,
       '#default_value' => $config->get('related_items_size'),
+    ];
+
+    $form['list_view_items_per_page'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Number of items to show on Listing pages'),
+      '#description' => $this->t('Number of items to show on Listing pages on PLP / Search pages. Please clear all caches after updating this.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('list_view_items_per_page'),
     ];
 
     $form['brand_logo_base_path'] = [
