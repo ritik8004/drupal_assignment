@@ -114,7 +114,7 @@ header {
 
     .price {
       .price-amount {
-        font-family: $hnm-demibold;
+        font-family: $hnm-demibold-nodir;
         margin: 0 0.25rem;
       }
     }
@@ -330,6 +330,7 @@ header {
 
     .quantity {
       font-size: 0.625rem;
+      font-family: $hnm-regular-nodir;
       position: absolute;
       background: $hnm-red;
       color: $white-five;

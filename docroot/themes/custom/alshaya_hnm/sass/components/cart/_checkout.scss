@@ -622,6 +622,10 @@ body.alias--cart {
     @extend %l-container--full;
   }
 
+  li.select2-results__option {
+    font-family: $hnm-regular-nodir;
+  }
+
   #table-cart-items {
     table {
       width: 100%;
@@ -655,6 +659,11 @@ body.alias--cart {
       border-bottom: 1px solid $white;
 
       td {
+        .price-amount,
+        .select2-selection__rendered {
+          font-family: $hnm-regular-nodir;
+        }
+
         &:first-child {
           a {
             font-size: 14px;
@@ -1119,6 +1128,10 @@ body.alias--cart {
           color: $hnm-black-two;
           font-weight: normal;
         }
+
+        span.price-amount {
+          font-family: $hnm-bold-nodir;
+        }
       }
     }
 
@@ -1405,11 +1418,6 @@ html[lang=ar] .alias--cart #table-cart-items tr th {
 }
 
 html[lang=ar] {
-  header .block-cart-mini-block .price-amount,
-  header .block-cart-mini-block .quantity {
-    font-family: $hnm-regular-nodir;
-  }
-
   .alias--cart {
     #table-cart-items {
       .delivery-option {
