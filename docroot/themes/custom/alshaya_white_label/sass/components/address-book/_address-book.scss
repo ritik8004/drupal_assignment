@@ -422,6 +422,7 @@
 #selected-store-wrapper {
   .mobile-number-field {
     max-width: 11.625rem;
+    margin-bottom: 3.5rem;
 
     label {
       opacity: 1;
@@ -434,11 +435,62 @@
       padding-bottom: 0 !important;
     }
 
-    .form-type-select {
-      display: none;
+    .country-select {
+      border: none;
+
+      .mobile-number-flag {
+        display: none;
+      }
+
+      .arrow {
+        display: none;
+      }
+
+      select.country {
+        display: none;
+      }
+    }
+
+    .mobile-input--wrapper {
+      display: flex;
+      align-items: flex-end;
+      border-bottom: 1px solid $black;
+      position: relative;
+
+      .prefix {
+        font-size: 1rem;
+        line-height: 2.25;
+        color: $greyish;
+      }
+
+      .form-item-mobile-number-mobile {
+        position: static;
+
+        .c-input__bar {
+          position: static;
+
+          &::before,
+          &::after {
+            bottom: -1px;
+          }
+        }
+      }
+
+      #edit-mobile-number-mobile-error {
+        position: absolute;
+        top: 2rem;
+        left: 0;
+      }
     }
 
     input {
+      border: none !important;
+
+      &::placeholder {
+        display: none;
+        color: transparent;
+      }
+
       html[lang=ar] & {
         direction: ltr;
       }

@@ -15,12 +15,6 @@ Drupal.alshayaMobileNumber = Drupal.alshayaMobileNumber || {};
     attach: function (context, settings) {
       $('[mobile-prefix]').once('bind-js').each(function () {
         var element = $(this);
-
-        // Set the data prefix once.
-        element.data('prefix', element.attr('mobile-prefix'));
-
-        Drupal.alshayaMobileNumber.init(element, element.val().toString().trim());
-
         element.numeric({
           allowMinus   : false,
           allowThouSep : false,
@@ -29,16 +23,17 @@ Drupal.alshayaMobileNumber = Drupal.alshayaMobileNumber || {};
         });
 
       });
+      var prefix = $('.form-item-mobile-number-country-code .prefix').html().replace(/[{()}]/g, '');
+      $('.form-item-mobile-number-country-code .prefix').replaceWith('<div class="prefix">'+ prefix +'</div>');
+      $('.mobile-number-field .form-item-mobile-number-country-code, .mobile-number-field .form-item-mobile-number-mobile')
+          .wrapAll('<div class="mobile-input--wrapper"></div>');
+
+      if ($('label#edit-mobile-number-mobile-error')) {
+        $('#edit-mobile-number').addClass('error-mobile');
+      }
+      else if ($('label#edit-mobile-number-mobile-error').style('display', 'none')) {
+        $('#edit-mobile-number').removeClass('error-mobile');
+      }
     }
   };
-
-  // Init/Reset inputprefix js for given field.
-  Drupal.alshayaMobileNumber.init = function (element, value) {
-    if (value) {
-      value = value.replace(element.attr('mobile-prefix'), '');
-      element.val(element.attr('mobile-prefix') + value);
-    }
-    element.inputprefix();
-  };
-
 })(jQuery, Drupal);
