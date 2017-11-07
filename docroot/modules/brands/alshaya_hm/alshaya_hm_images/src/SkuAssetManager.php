@@ -305,12 +305,14 @@ class SkuAssetManager {
 
     if ($child_skus) {
       foreach ($child_skus as $child_sku) {
-        if ($first_only) {
-          $assets = $this->getSkuAsset($child_sku, $context, $location);
-          return $assets;
-        }
-        else {
-          $assets[$sku->getSku()] = $this->getSkuAsset($child_sku, $context, $location);
+        if ($child_sku instanceof SKU) {
+          if ($first_only) {
+            $assets = $this->getSkuAsset($child_sku, $context, $location);
+            return $assets;
+          }
+          else {
+            $assets[$sku->getSku()] = $this->getSkuAsset($child_sku, $context, $location);
+          }
         }
       }
     }
