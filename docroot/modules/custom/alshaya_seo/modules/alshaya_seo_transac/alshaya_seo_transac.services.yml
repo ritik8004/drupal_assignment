@@ -1,5 +1,5 @@
 services:
-  alshaya_seo.gtm_manager:
+  alshaya_seo_transac.gtm_manager:
     class: Drupal\alshaya_seo_transac\AlshayaGtmManager
     arguments:
       - '@current_route_match'

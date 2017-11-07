@@ -120,7 +120,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
   }
 
   /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtm_manager */
-  $gtm_manager = \Drupal::service('alshaya_seo.gtm_manager');
+  $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
   $currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
 
   try {
