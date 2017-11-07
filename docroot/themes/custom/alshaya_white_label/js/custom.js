@@ -21,7 +21,7 @@
   // Try to do this as early as possible during page load.
   try {
     var currentLang = $('html').attr('lang');
-    $('.language-switcher-language-url .language-link[hreflang="' + currentLang + '"]').parent().addClass('hidden-important');
+    $('.header--wrapper .language-switcher-language-url .language-link[hreflang="' + currentLang + '"]').parent().addClass('hidden-important');
   }
   catch (e) {
     // Do nothing here.
