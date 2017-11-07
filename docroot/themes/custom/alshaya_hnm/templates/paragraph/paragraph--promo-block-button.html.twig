@@ -41,6 +41,7 @@
 {%
 set classes = [
 'paragraph',
+'promo-block__position',
 'paragraph--type--' ~ paragraph.bundle|clean_class,
 view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class, 'theme-' ~ content.field_promo_theme[0]['#markup']|clean_class, 'position-' ~ content.field_button_position[0]['#markup']|clean_class
 ]
@@ -50,7 +51,9 @@ view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class, 'theme-' ~ content
     {% block content %}
       {% if promo_link == 1 %}
         {{ content|without('field_button_position', 'field_promo_theme', 'field_button_link') }}
-        {{ button_text }}
+        <div class="field--name-field-button-link">
+          <span> {{ button_text }} </span>
+        </div>
       {% else %}
         {{ content|without('field_button_position', 'field_promo_theme') }}
       {% endif %}
