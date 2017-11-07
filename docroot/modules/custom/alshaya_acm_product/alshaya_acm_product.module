@@ -95,16 +95,19 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
             }
           }
 
+          // Load all item fields, we'll need it to check condition inside loop.
+          $itemFields = $item->getFields();
+
           foreach ($data as $key => $values) {
             $field_key = 'attr_' . $key;
 
             // There is an issue with color field in indexes.
             // It is color in solr and attr_color in database index.
             // For all other fields it is attr_field in both indexes.
-            if (!empty($item->getField($field_key))) {
+            if (isset($itemFields[$field_key])) {
               $item->getField($field_key)->setValues(array_keys($values));
             }
-            elseif (!empty($item->getField($key))) {
+            elseif (isset($itemFields[$key])) {
               $item->getField($key)->setValues(array_keys($values));
             }
           }
