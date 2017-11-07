@@ -281,6 +281,10 @@
         padding: 1.0625rem 0;
         width: 47.44%;
 
+        html[lang=ar] & {
+          width: 46.96%;
+        }
+
         &.tab-home-delivery {
           &:not(.active--tab--head) {
             margin-#{$left}: -2px;
