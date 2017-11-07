@@ -781,7 +781,7 @@ function alshaya_hnm_preprocess_page_title(&$variables) {
 function alshaya_hnm_preprocess_paragraph(&$variables) {
   if ($variables['elements']['#paragraph']->getType() == 'promo_block') {
     // Get the promo block display config for twig file.
-    $variables['promo_link'] = \Drupal::configFactory()->getEditable('alshaya_master.settings')->get('promo_block_config');
+    $variables['promo_link'] = \Drupal::configFactory()->getEditable('alshaya_paragraphs.settings')->get('promo_block_config');
     if ($variables['promo_link'] == 1) {
       // Set variable to make whole promo block clickable.
       if ($variables['elements']['field_promo_block_button'][0]['#paragraph']) {
@@ -793,7 +793,7 @@ function alshaya_hnm_preprocess_paragraph(&$variables) {
 
   if ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {
     // Get the promo block display config for twig file.
-    $variables['promo_link'] = \Drupal::configFactory()->getEditable('alshaya_master.settings')->get('promo_block_config');
+    $variables['promo_link'] = \Drupal::configFactory()->getEditable('alshaya_paragraphs.settings')->get('promo_block_config');
     if ($variables['promo_link'] == 1) {
       // Get button text and set as markup.
       $variables['button_text']['#markup'] = $variables['elements']['field_button_link'][0]['#title'];

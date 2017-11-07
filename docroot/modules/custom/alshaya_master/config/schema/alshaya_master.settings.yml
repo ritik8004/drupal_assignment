@@ -19,6 +19,3 @@ alshaya_master.settings:
     js_disable_message:
       type: text
       label: 'Disabled js message'
-    promo_block_config:
-      type: integer
-      label: 'Promo block display configuration'
