@@ -404,15 +404,6 @@ function alshaya_master_form_system_site_information_settings_alter(&$form, Form
     '#description' => t('Message to be shown when JS is disabled on site'),
     '#default_value' => $disable_message,
   ];
-  $form['promo_block_config'] = [
-    '#type' => 'select',
-    '#title' => t('Promo block display configuration'),
-    '#options' => [
-      1 => t('Image and button is clickable'),
-      2 => t('Only button is clickable'),
-    ],
-    '#default_value' => \Drupal::configFactory()->getEditable('alshaya_master.settings')->get('promo_block_config'),
-  ];
 
   $form['#submit'][] = '_alshaya_admin_site_information_submit';
 }
@@ -424,10 +415,6 @@ function _alshaya_admin_site_information_submit($form, FormStateInterface $form_
   $disable_message = $form_state->getValue('js_disable_message');
   \Drupal::configFactory()->getEditable('alshaya_master.settings')
     ->set('js_disable_message', $disable_message)
-    ->save();
-
-  \Drupal::configFactory()->getEditable('alshaya_master.settings')
-    ->set('promo_block_config', $form_state->getValue('promo_block_config'))
     ->save();
 }
 
