@@ -12,12 +12,15 @@
  */
 function alshaya_paragraphs_update_8101() {
   $modules = [
+    'alshaya_config',
     'viewsreference',
     'alshaya_media',
   ];
 
   foreach ($modules as $module) {
-    \Drupal::service('module_installer')->install([$module], TRUE);
+    if (!\Drupal::moduleHandler()->moduleExists($module)) {
+      \Drupal::service('module_installer')->install([$module], TRUE);
+    }
   }
 
   $configs = [
