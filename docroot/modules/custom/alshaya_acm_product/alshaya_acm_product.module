@@ -25,6 +25,7 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\search_api\IndexInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Alter the items that are indexed.
@@ -513,6 +514,17 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
 
     unset($build['name']);
     unset($build['price']);
+  }
+}
+
+/**
+ * Implements hook_views_pre_build().
+ */
+function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
+  // Alter number of items per page for PLP / Search pages.
+  if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
+    $list_view_items_per_page = \Drupal::config('alshaya_acm_product.settings')->get('list_view_items_per_page');
+    $view->setItemsPerPage($list_view_items_per_page);
   }
 }
 
