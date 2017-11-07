@@ -8,7 +8,7 @@
 /**
  * Implements hook_update_n().
  *
- * Create Image+title+subtitle paragraph type.
+ * Create new paragraph types.
  */
 function alshaya_paragraphs_update_8101() {
   $modules = [
