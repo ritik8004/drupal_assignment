@@ -478,6 +478,7 @@
     input {
       html[lang=ar] & {
         direction: ltr;
+        font-family: $hnm-regular-nodir;
       }
     }
   }
@@ -531,7 +532,7 @@
       #{$left}: 0;
       width: 2.063rem;
       height: 2.063rem;
-      text-indent: -3px;
+      text-indent: -0.375rem;
     }
   }
 

@@ -1451,13 +1451,12 @@ header {
     }
 
     @include breakpoint($desktop) {
-      width: 6.063rem;
       margin: 0 auto;
-      height: 3.938rem;
       text-align: center;
 
       img {
-        width: 100%;
+        width: 6.063rem;
+        height: 3.938rem;
       }
     }
   }

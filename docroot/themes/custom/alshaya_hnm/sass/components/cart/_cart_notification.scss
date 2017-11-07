@@ -114,7 +114,6 @@
 html[lang=ar] #cart_notification {
   @include breakpoint($tablet) {
     top: 4.2rem;
-    #{$right}: 0.1125rem;
   }
 
   .notification,

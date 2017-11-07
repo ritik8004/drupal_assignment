@@ -259,7 +259,11 @@
       }
 
       @include breakpoint($desktop) {
-        #{$left}: 20em;
+        #{$left}: 15rem;
+
+        html[lang=ar] & {
+          #{$left}: 16rem;
+        }
       }
     }
 

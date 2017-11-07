@@ -444,6 +444,10 @@
         font-family: $hnm-bold;
         color: $hnm-black-two;
       }
+
+      span.price-amount {
+        font-family: $hnm-bold-nodir;
+      }
     }
 
     .sub-total,
