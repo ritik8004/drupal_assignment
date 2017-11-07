@@ -9,6 +9,9 @@ use Drupal\Core\Link;
 
 /**
  * Class AlshayaPDPBreadcrumbBuilder.
+ *
+ * Code here is mostly similar to AlshayaPLPBreadcrumbBuilder, any change done
+ * here must be checked for similar change required for PLP pages.
  */
 class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
@@ -26,20 +29,58 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    * {@inheritdoc}
    */
   public function build(RouteMatchInterface $route_match) {
+    /** @var \Drupal\Core\Entity\EntityRepository $entityRepository */
+    $entityRepository = \Drupal::service('entity.repository');
+
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>'));
+
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
+
     if ($field_category = $node->get('field_category')) {
       $term_list = $field_category->getValue();
       $inner_term = $this->termTreeGroup($term_list);
+
       if ($inner_term) {
-        $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($inner_term);
-        foreach (array_reverse($parents) as $term) {
-          $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
-          $breadcrumb->addCacheableDependency($term);
-          $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]));
+        $alshaya_department_pages = [];
+
+        if (\Drupal::moduleHandler()->moduleExists('alshaya_department_page')) {
+          $alshaya_department_pages = alshaya_department_page_get_pages();
         }
+
+        $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($inner_term);
+
+        foreach (array_reverse($parents) as $term) {
+          $term = $entityRepository->getTranslationFromContext($term);
+
+          $breadcrumb->addCacheableDependency($term);
+
+          // Check if current term has department page available.
+          if (isset($alshaya_department_pages[$term->id()])) {
+            $nid = $alshaya_department_pages[$term->id()];
+
+            // We use department page link instead of PLP link.
+            /** @var \Drupal\node\Entity\Node $node */
+            $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+
+            if ($node->isPublished()) {
+              // Get the translated node.
+              $node = $entityRepository->getTranslationFromContext($node);
+
+              // Add department page to breadcrumb.
+              $breadcrumb->addLink(Link::createFromRoute(_alshaya_department_page_get_node_title($node), 'entity.node.canonical', ['node' => $node->id()]));
+
+              // Add the node to cache dependency.
+              $breadcrumb->addCacheableDependency($node);
+            }
+          }
+          else {
+            // Add term to breadcrumb.
+            $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]));
+          }
+        }
+
         // This breadcrumb builder is based on a route parameter, and hence it
         // depends on the 'route' cache context.
         $breadcrumb->addCacheContexts(['route']);
