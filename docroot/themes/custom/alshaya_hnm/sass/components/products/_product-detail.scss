@@ -1554,7 +1554,7 @@
 
   .selected-text {
     font-weight: normal;
-    font-family: $hnm-bold;
+    font-family: $hnm-bold-nodir;
     color: $hnm-black-two;
     display: inline-block;
 
@@ -1588,6 +1588,7 @@
         border: 1px solid $hnm-black-two;
         text-align: center;
         padding: 0.75rem;
+        font-family: $hnm-regular-nodir;
         font-size: 0.875rem;
         color: $hnm-black-two;
 
