@@ -127,6 +127,7 @@ switch ($env) {
     // Specify the modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
+    $settings['additional_modules'][] = 'purge_ui';
     break;
 
   case '01test':
@@ -138,6 +139,7 @@ switch ($env) {
     // Specify the modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
+    $settings['additional_modules'][] = 'purge_ui';
     break;
 
   case '01uat':

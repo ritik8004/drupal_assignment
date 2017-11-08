@@ -16,6 +16,13 @@ use Drupal\node\Entity\NodeType;
 function alshaya_update_8001() {
   if (isset($_ENV['AH_SITE_NAME'])) {
     \Drupal::service('module_installer')->install(['acquia_purge']);
+
+    // Enable acquia_purge purger.
+    /** @var \Drupal\purge\Plugin\Purge\Purger\PurgersServiceInterface $purge_purgers */
+    $purge_purgers = \Drupal::service('purge.purgers');
+    $purgers_enabled = $purge_purgers->getPluginsEnabled();
+    $purgers_enabled[$purge_purgers->createId()] = 'acquia_purge';
+    $purge_purgers->setPluginsEnabled($purgers_enabled);
   }
 }
 
@@ -77,6 +84,13 @@ function alshaya_install() {
   if (isset($_ENV['AH_SITE_NAME'])) {
     // Enable acquia_purge on ACSF environments.
     \Drupal::service('module_installer')->install(['acquia_purge']);
+
+    // Enable acquia_purge purger.
+    /** @var \Drupal\purge\Plugin\Purge\Purger\PurgersServiceInterface $purge_purgers */
+    $purge_purgers = \Drupal::service('purge.purgers');
+    $purgers_enabled = $purge_purgers->getPluginsEnabled();
+    $purgers_enabled[$purge_purgers->createId()] = 'acquia_purge';
+    $purge_purgers->setPluginsEnabled($purgers_enabled);
 
     // Enable shield on ACSF environments.
     \Drupal::service('module_installer')->install(['shield']);
