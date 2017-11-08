@@ -638,34 +638,21 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // List of attributes selected by end-users on the form.
     $configurables = $form_state->getValue('configurables');
 
-    // Get the attribute code of the element that triggered the request.
-    preg_match('/^configurables\[(.*)\]$/', $form_state->getTriggeringElement()['#name'], $matches);
-    $triggering_attribute_code = $matches[1];
-
-    // Re-roder config attribute order based on the the option user selected,
-    // so that it aligns with the product tree.
-    uksort($configurables, function ($a, $b) use ($triggering_attribute_code) {
-      $weight_a = 0;
-      $weight_b = 0;
-
-      if ($a === $triggering_attribute_code) {
-        $weight_a = 1;
-      }
-
-      if ($b === $triggering_attribute_code) {
-        $weight_b = 1;
-      }
-
-      return $weight_b - $weight_a;
-    });
-
     // Traverse the product tree till the point where config attributes have a
     // value.
     $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $configurables);
+
     $enabled_options = [];
 
+    if (isset($configurables[$leaf_attribute])) {
+      unset($configurables[$leaf_attribute]);
+      $tree_pointer_parent = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $configurables);
+    }
+    else {
+      $tree_pointer_parent = $tree_pointer;
+    }
     // Items are keyed by their attribute codes.
-    foreach ($tree_pointer as $key => $value) {
+    foreach ($tree_pointer_parent as $key => $value) {
       $attribute = explode(':', $key);
       $attribute_code = $attribute[0];
       $enabled_options[] = $attribute[1];
