@@ -543,6 +543,62 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     // Process stock if number of configurable attributes is 1.
     $process_stock = (count($form_state->get('tree')['configurables']) === 1) ? TRUE : FALSE;
 
+    // In case of multiple config attributes, make sure the first one is
+    // selected by default on page load.
+    if (count($form_state->get('tree')['configurables']) > 1) {
+      $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings')->get('attribute_weights');
+
+      // Sort configurable weight by the weight value.
+      uasort($configurable_weights, function ($a, $b) {
+        return $a - $b;
+      });
+
+      $root_attribute_code = array_shift(array_keys($configurable_weights));
+      $user_input_configurables = $form_state->getUserInput('configurables');
+      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+      // Default use-case: User landing on PDP from PLP/Search/directly.
+      // Set the color applicable to first child sku as default here.
+      $child_skus = $sku_manager->getChildSkus($sku_entity);
+      $first_child = array_shift($child_skus);
+      $plugin_manager = \Drupal::service('plugin.manager.sku');
+      $plugin_definition = $plugin_manager->pluginFromSKU($sku_entity);
+
+      $class = $plugin_definition['class'];
+      $plugin = new $class();
+
+      $first_child_castor_id = $plugin->getAttributeValue($first_child, $root_attribute_code);
+      $root_attribute_options = $form['ajax']['configurables'][$root_attribute_code]['#options'];
+
+      foreach ($root_attribute_options as $key => $value) {
+        if (($key == $first_child_castor_id) && (!isset($user_input_configurables['configurables'][$root_attribute_code]))) {
+          $form['ajax']['configurables']['article_castor_id']['#options_attributes'][$key]['selected'] = 'selected';
+          $form_state->setValue('configurables', [$root_attribute_code => $key]);
+
+          // Fetch the size values available for the current color chosen.
+          $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $form_state->getValue('configurables'));
+
+          $enabled_options = [];
+
+          // Items are keyed by their attribute codes.
+          foreach ($tree_pointer as $key => $value) {
+            $attribute = explode(':', $key);
+            $attribute_code = $attribute[0];
+            $enabled_options[] = $attribute[1];
+          }
+
+          $options = $form['ajax']['configurables']['size']['#options'];
+
+          // Disable size options which don't exist for the default color.
+          foreach ($options as $key => $value) {
+            if (!in_array($key, $enabled_options)) {
+              $form['ajax']['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
+            }
+          }
+        }
+      }
+    }
+
     foreach ($form['ajax']['configurables'] as $configurable_key => &$configurable) {
       if (is_array($configurable)) {
         $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
