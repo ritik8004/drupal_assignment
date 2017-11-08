@@ -117,14 +117,14 @@ class ProductSettingsForm extends ConfigFormBase {
       '#type' => 'text_format',
       '#format' => 'rich_text',
       '#title' => $this->t('VAT Inclusion text'),
-      '#default_value' => $config->get('vat_text.value'),
+      '#default_value' => $config->get('vat_text'),
     ];
 
     $form['vat_text_footer'] = [
       '#type' => 'text_format',
       '#format' => 'rich_text',
       '#title' => $this->t('VAT disclaimer text for the footer'),
-      '#default_value' => $config->get('vat_text_footer.value'),
+      '#default_value' => $config->get('vat_text_footer'),
     ];
 
     return $form;
