@@ -23,17 +23,11 @@ Drupal.alshayaMobileNumber = Drupal.alshayaMobileNumber || {};
         });
 
       });
-      var prefix = $('.form-item-mobile-number-country-code .prefix').html().replace(/[{()}]/g, '');
-      $('.form-item-mobile-number-country-code .prefix').replaceWith('<div class="prefix">'+ prefix +'</div>');
-      $('.mobile-number-field .form-item-mobile-number-country-code, .mobile-number-field .form-item-mobile-number-mobile')
+      var prefix = $('.mobile-number-field .prefix').html().replace(/[{()}]/g, '');
+      $('.mobile-number-field .prefix').replaceWith('<div class="prefix">'+ prefix +'</div>');
+      $('.mobile-number-field .form-type-select, .mobile-number-field .form-type-textfield')
+          .once()
           .wrapAll('<div class="mobile-input--wrapper"></div>');
-
-      if ($('label#edit-mobile-number-mobile-error')) {
-        $('#edit-mobile-number').addClass('error-mobile');
-      }
-      else if ($('label#edit-mobile-number-mobile-error').style('display', 'none')) {
-        $('#edit-mobile-number').removeClass('error-mobile');
-      }
     }
   };
 })(jQuery, Drupal);

@@ -130,9 +130,6 @@
           // Trigger chance of select to ensure js dropdown shows proper value.
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').trigger('change');
 
-          // Reset Mobile number prefix js.
-          Drupal.alshayaMobileNumber.init($('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]'));
-
           // Show the form.
           $('#address-book-form-wrapper').slideDown();
         });
@@ -264,9 +261,6 @@
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val(data.administrative_area);
     // Trigger chance of select to ensure js dropdown shows proper value.
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').trigger('change');
-
-    // Init Mobile number prefix js.
-    Drupal.alshayaMobileNumber.init($('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]'), data.mobile);
 
     // Show the form.
     $('#address-book-form-wrapper').slideDown();

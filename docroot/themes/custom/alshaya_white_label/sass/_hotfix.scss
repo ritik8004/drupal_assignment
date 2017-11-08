@@ -309,9 +309,9 @@ html[lang="ar"] {
       }
     }
 
-    .mobile-number-field .form-type-textfield input {
-      height: 1.67rem;
-    }
+    //.mobile-number-field .form-type-textfield input {
+    //  height: 1.67rem;
+    //}
   }
 
   @include breakpoint($upto-desktop) {

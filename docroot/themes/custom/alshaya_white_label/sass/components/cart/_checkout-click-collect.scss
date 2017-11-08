@@ -1194,13 +1194,13 @@
     }
 
     .mobile-number-field {
-      @include breakpoint($desktop) {
-        margin-#{$left}: 1.375rem;
-      }
-
-      @include breakpoint($only-tablet) {
-        margin-#{$left}: 0.9375rem;
-      }
+      //@include breakpoint($desktop) {
+      //  margin-#{$left}: 1.375rem;
+      //}
+      //
+      //@include breakpoint($only-tablet) {
+      //  margin-#{$left}: 0.9375rem;
+      //}
     }
 
     .form-item-cc-firstname,
