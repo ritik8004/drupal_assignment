@@ -1,7 +1,8 @@
 <?php
 global $_alshaya_acm_categories;
 
-$_alshaya_acm_categories = array (
+$_alshaya_acm_categories = 
+array (
   0 => 
   array (
     'category_id' => 2,
@@ -212,7 +213,7 @@ $_alshaya_acm_categories = array (
         ),
         'children' => 
         array (
-          0 =>
+          0 => 
           array (
             'category_id' => 16,
             'parent_id' => 12,
@@ -222,13 +223,13 @@ $_alshaya_acm_categories = array (
             'position' => 1,
             'level' => 3,
             'in_menu' => true,
-            'product_ids' =>
+            'product_ids' => 
             array (
             ),
-            'children' =>
+            'children' => 
             array (
             ),
-            'extension' =>
+            'extension' => 
             array (
             ),
           ),

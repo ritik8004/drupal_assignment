@@ -1,12 +1,13 @@
 <?php
 global $_alshaya_acm_categories;
 
-$_alshaya_acm_categories = array (
+$_alshaya_acm_categories = 
+array (
   0 => 
   array (
     'category_id' => 2,
     'parent_id' => 1,
-    'store_id' => 1,
+    'store_id' => 2,
     'name' => 'Default Category',
     'description' => '',
     'position' => 1,
@@ -21,7 +22,7 @@ $_alshaya_acm_categories = array (
       array (
         'category_id' => 3,
         'parent_id' => 2,
-        'store_id' => 1,
+        'store_id' => 2,
         'name' => 'Men',
         'description' => '<p>Men</p>',
         'position' => 1,
@@ -36,7 +37,7 @@ $_alshaya_acm_categories = array (
           array (
             'category_id' => 7,
             'parent_id' => 3,
-            'store_id' => 1,
+            'store_id' => 2,
             'name' => 'Shirts',
             'description' => '',
             'position' => 1,
@@ -61,7 +62,7 @@ $_alshaya_acm_categories = array (
       array (
         'category_id' => 4,
         'parent_id' => 2,
-        'store_id' => 1,
+        'store_id' => 2,
         'name' => 'Category 1',
         'description' => '',
         'position' => 2,
@@ -81,7 +82,7 @@ $_alshaya_acm_categories = array (
       array (
         'category_id' => 5,
         'parent_id' => 2,
-        'store_id' => 1,
+        'store_id' => 2,
         'name' => 'Ladies',
         'description' => '',
         'position' => 3,
@@ -96,7 +97,7 @@ $_alshaya_acm_categories = array (
           array (
             'category_id' => 6,
             'parent_id' => 5,
-            'store_id' => 1,
+            'store_id' => 2,
             'name' => 'Dresses',
             'description' => '',
             'position' => 1,
@@ -121,7 +122,7 @@ $_alshaya_acm_categories = array (
       array (
         'category_id' => 8,
         'parent_id' => 2,
-        'store_id' => 1,
+        'store_id' => 2,
         'name' => 'Kids',
         'description' => '',
         'position' => 4,
@@ -136,7 +137,7 @@ $_alshaya_acm_categories = array (
           array (
             'category_id' => 9,
             'parent_id' => 8,
-            'store_id' => 1,
+            'store_id' => 2,
             'name' => 'Baby Girl 4-24 months',
             'description' => '',
             'position' => 1,
@@ -156,7 +157,7 @@ $_alshaya_acm_categories = array (
           array (
             'category_id' => 10,
             'parent_id' => 8,
-            'store_id' => 1,
+            'store_id' => 2,
             'name' => 'Baby Boy 4-24 months',
             'description' => '',
             'position' => 2,
@@ -181,7 +182,7 @@ $_alshaya_acm_categories = array (
       array (
         'category_id' => 11,
         'parent_id' => 2,
-        'store_id' => 1,
+        'store_id' => 2,
         'name' => 'QA Category 1',
         'description' => '',
         'position' => 5,
@@ -201,7 +202,7 @@ $_alshaya_acm_categories = array (
       array (
         'category_id' => 12,
         'parent_id' => 2,
-        'store_id' => 1,
+        'store_id' => 2,
         'name' => 'Fashion',
         'description' => '',
         'position' => 6,
@@ -212,23 +213,23 @@ $_alshaya_acm_categories = array (
         ),
         'children' => 
         array (
-          0 =>
+          0 => 
           array (
             'category_id' => 16,
             'parent_id' => 12,
-            'store_id' => 1,
+            'store_id' => 2,
             'name' => 'QA Swatch Display',
             'description' => '',
             'position' => 1,
             'level' => 3,
             'in_menu' => true,
-            'product_ids' =>
+            'product_ids' => 
             array (
             ),
-            'children' =>
+            'children' => 
             array (
             ),
-            'extension' =>
+            'extension' => 
             array (
             ),
           ),
@@ -241,7 +242,7 @@ $_alshaya_acm_categories = array (
       array (
         'category_id' => 13,
         'parent_id' => 2,
-        'store_id' => 1,
+        'store_id' => 2,
         'name' => 'Beauty',
         'description' => '',
         'position' => 7,
@@ -261,7 +262,7 @@ $_alshaya_acm_categories = array (
       array (
         'category_id' => 14,
         'parent_id' => 2,
-        'store_id' => 1,
+        'store_id' => 2,
         'name' => 'Home',
         'description' => '',
         'position' => 8,
@@ -281,7 +282,7 @@ $_alshaya_acm_categories = array (
       array (
         'category_id' => 15,
         'parent_id' => 2,
-        'store_id' => 1,
+        'store_id' => 2,
         'name' => 'Accessories',
         'description' => '',
         'position' => 9,
