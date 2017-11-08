@@ -422,6 +422,7 @@
 #selected-store-wrapper {
   .mobile-number-field {
     max-width: 11.625rem;
+    margin-bottom: 1.5rem;
 
     label {
       opacity: 1;
@@ -435,10 +436,93 @@
     }
 
     .form-type-select {
-      display: none;
+      &.form-item-guest-delivery-home-address-shipping-mobile-number-country-code,
+      &.form-item-billing-address-address-billing-mobile-number-country-code,
+      &.form-item-member-delivery-home-address-form-form-mobile-number-country-code,
+      &.form-item-field-address-0-address-mobile-number-country-code {
+        padding-bottom: 0;
+        margin-top: 0 !important;
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+
+    .country-select {
+      border: none;
+
+      .mobile-number-flag {
+        display: none;
+      }
+
+      .arrow {
+        display: none;
+      }
+
+      select.country {
+        display: none;
+      }
+    }
+
+    .mobile-input--wrapper {
+      display: flex;
+      align-items: flex-end;
+      border-bottom: 1px solid $black;
+      position: relative;
+      direction: ltr;
+
+      .form-item.verified {
+        #edit-billing-address & {
+          display: none;
+        }
+      }
+
+      .prefix {
+        font-size: 1rem;
+        line-height: 2.25;
+        color: $greyish;
+      }
+
+      .form-item-field-address-0-address-mobile-number-mobile,
+      .form-item-field-mobile-number-0-mobile,
+      .form-item-billing-address-address-billing-mobile-number-mobile,
+      .form-item-guest-delivery-home-address-shipping-mobile-number-mobile,
+      .form-item-member-delivery-home-address-form-form-mobile-number-mobile,
+      .form-item-mobile-number-mobile {
+        position: static !important;
+
+        .c-input__bar {
+          position: static;
+
+          &::before,
+          &::after {
+            bottom: -1px;
+          }
+        }
+      }
+
+      #edit-field-address-0-address-mobile-number-mobile-error,
+      #edit-mobile-number-mobile-error {
+        position: absolute;
+        top: 2rem;
+        #{$left}: 0;
+      }
+
+      .form-item--error-message {
+        position: absolute;
+        #{$left}: 0;
+      }
     }
 
     input {
+      border: none !important;
+
+      &::placeholder {
+        display: none;
+        color: transparent;
+      }
+
       html[lang=ar] & {
         direction: ltr;
       }
@@ -447,6 +531,14 @@
 
   #edit-field-address-0-address-administrative-area {
     width: 100%;
+  }
+}
+
+#edit-billing-address {
+  .address-book-address {
+    .mobile-number-field .js-form-type-select {
+      padding-bottom: 0;
+    }
   }
 }
 
@@ -603,12 +695,6 @@
       #{$left}: 0 !important;
       opacity: 1 !important;
       font-size: 0.75rem !important;
-    }
-  }
-
-  .mobile-number-field {
-    @include breakpoint($mobile) {
-      margin-top: 0 !important;
     }
   }
 
