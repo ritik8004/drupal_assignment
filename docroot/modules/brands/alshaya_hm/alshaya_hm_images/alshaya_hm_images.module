@@ -217,13 +217,14 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
               $asset = $sku_asset_manager->getSkuAsset($sku_entity, 'swatch', 'swatch');
             }
 
-          // If swatch type is not miniature_image or assets were missing from
-          // sku, use rgb color code instead.
-          $sku_configurable_options_color[$key] = [
-            'display_value' => empty($asset) ? $sku_entity->get('attr_rgb_color')->value : '<img src="' . $asset[0]['url']->toString() . '">',
-            'display_label' => $sku_entity->get('attr_color_label')->value,
-            'swatch_type' => $swatch_type,
-          ];
+            // If swatch type is not miniature_image or assets were missing from
+            // sku, use rgb color code instead.
+            $sku_configurable_options_color[$key] = [
+              'display_value' => empty($asset) ? $sku_entity->get('attr_rgb_color')->value : '<img src="' . $asset[0]['url']->toString() . '">',
+              'display_label' => $sku_entity->get('attr_color_label')->value,
+              'swatch_type' => $swatch_type,
+            ];
+          }
         }
       }
 
