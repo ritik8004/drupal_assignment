@@ -164,23 +164,28 @@
 // SideBar content theming
 
 .form-item-configurables-article-castor-id {
-  .select2Option .select-buttons a[data-swatch-type=miniature_image] {
-    margin-#{$right}: 0;
+  .select2Option .select-buttons li {
+    a[data-swatch-type=miniature_image] {
+      max-width: 3rem;
+      padding: 0;
+      border: 1px solid $white-five;
 
-    &.picked {
-      border: none;
-      background: $hnm-grey-light-three;
-    }
+      &.picked {
+        border: 1px solid $hnm-black-two;
+        background: none;
+      }
 
-    &::before {
-      background: $hnm-black-two;
-      content: '';
-      height: 100%;
-      left: 0;
-      top: 0;
-      position: absolute;
-      width: 100%;
-      opacity: 0.02;
+      &:hover {
+        &::after {
+          content: '';
+          background-color: $hnm-black-two-50;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          #{$left}: 0;
+          #{$right}: 0;
+        }
+      }
     }
   }
 }
@@ -1383,7 +1388,7 @@
 
     @include breakpoint($only-mobile) {
       .basic-details-wrapper & {
-        height: 8rem;
+        height: auto;
       }
     }
 
@@ -1392,8 +1397,7 @@
       @include breakpoint($mobile) {
         @include u-visibility(inline-block);
 
-        width: 65%;
-        margin-#{$right}: 2rem;
+        width: 100%;
       }
 
       @include breakpoint($tablet) {
@@ -1502,7 +1506,6 @@
         }
 
         @include breakpoint($desktop) {
-          margin-#{$left}: 2rem;
           margin-top: 1.45rem;
         }
       }
@@ -1551,7 +1554,7 @@
 
   .selected-text {
     font-weight: normal;
-    font-family: $hnm-bold;
+    font-family: $hnm-bold-nodir;
     color: $hnm-black-two;
     display: inline-block;
 
@@ -1570,6 +1573,10 @@
 
       @include u-visibility(inline-block);
 
+      a:hover {
+        background: $hnm-black-two-50;
+      }
+
       a,
       span {
         @include u-visibility(block);
@@ -1581,6 +1588,7 @@
         border: 1px solid $hnm-black-two;
         text-align: center;
         padding: 0.75rem;
+        font-family: $hnm-regular-nodir;
         font-size: 0.875rem;
         color: $hnm-black-two;
 
@@ -1595,8 +1603,6 @@
         }
 
         .form-item-configurables-article-castor-id & {
-          padding: 1.188rem !important;
-          border: none !important;
           cursor: pointer;
           position: relative;
 
@@ -1879,8 +1885,8 @@ article.product-out-of-stock {
     max-height: 1.9375rem;
     font-size: 0.75rem !important;
     font-family: $alshaya-thin !important;
-    margin-right: 0;
-    margin-left: 1rem;
+    margin-#{$right}: 0;
+    margin-#{$left}: 1rem;
     color: $whisper-dark !important;
 
     span {
@@ -1891,11 +1897,18 @@ article.product-out-of-stock {
 
 html[lang=ar] {
   .fake-apply-button {
-    padding: 0.1rem 1rem 0.2rem;
+    padding: 6.5px 1rem;
     margin-right: 1rem;
 
     &.inactive {
       margin-left: 0;
+      width: 3.5rem;
+    }
+  }
+
+  .clear-all-fake {
+    &.inactive {
+      margin-right: 0;
     }
   }
 }

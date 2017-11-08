@@ -903,7 +903,7 @@ html[lang=ar] {
         margin-#{$left}: -0.5rem;
 
         @include breakpoint($desktop) {
-          margin-#{$left}: -0.625rem;
+          margin-#{$left}: -0.5rem;
         }
       }
     }
@@ -916,4 +916,12 @@ html[lang=ar] {
       }
     }
   }
+}
+
+.alshaya_search_hoverimage {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+  width: 100%;
 }

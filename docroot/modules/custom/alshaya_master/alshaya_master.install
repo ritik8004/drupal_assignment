@@ -664,7 +664,7 @@ function alshaya_master_install() {
       'ar' => 'هل عنوان التوصيل هو نفس عنوان إرسال الفواتير؟',
     ],
     '<p>I confirm that I have read and accept the <a class="payment-privacy-policy" href="#">Privacy Policy</a> and <a class="payment-tnc" href="#">Terms &amp; Conditions</a> of purchase. Read our <a class="payment-return policy" href="#">Return Policy</a></p>' => [
-      'ar' => 'أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا',
+      'ar' => '<p>أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا</p>',
     ],
     'Billing address' => [
       'ar' => 'عنوان تحرير الفاتورة',

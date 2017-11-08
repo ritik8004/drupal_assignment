@@ -88,23 +88,24 @@
   }
 
   .address--content {
-    color: $grey7;
+    color: $hnm-black-two;
+    font-family: $hnm-demibold;
     direction: ltr;
+    font-weight: 600;
 
     html[lang=ar] & {
       text-align: right;
     }
 
     @include breakpoint($desktop) {
-      font-size: 0.875rem;
+      font-size: 0.75rem;
     }
   }
 
   .address--label {
     margin-bottom: 0.1875rem;
-    font-family: $hnm-demibold;
-    font-weight: normal;
-    color: $hnm-black-two;
+    font-family: $hnm-regular;
+    color: $grey-ash;
   }
 
   .address--userinfo {
@@ -280,7 +281,7 @@
   &:hover,
   &.default {
     .address--data {
-      background: $hnm-grey;
+      background: $grey3;
     }
 
     .address--primary {
@@ -357,7 +358,7 @@
     &:hover,
     &.default {
       .address--data {
-        background: $hnm-grey;
+        background: $grey3;
       }
 
       .address--deliver-to-this-address {
@@ -405,7 +406,7 @@
 
     display: block;
     margin-top: 1.25rem;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
 
     @include breakpoint($tablet) {
       display: inline-block;
@@ -477,6 +478,7 @@
     input {
       html[lang=ar] & {
         direction: ltr;
+        font-family: $hnm-regular-nodir;
       }
     }
   }
@@ -530,7 +532,7 @@
       #{$left}: 0;
       width: 2.063rem;
       height: 2.063rem;
-      text-indent: -3px;
+      text-indent: -0.375rem;
     }
   }
 

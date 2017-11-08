@@ -250,7 +250,7 @@
 
       @include breakpoint($only-tablet) {
         padding-right: 1rem;
-        vertical-align: middle;
+        vertical-align: top;
         width: 10.5rem;
       }
 
@@ -410,7 +410,7 @@
 
   .total--price {
     @include breakpoint($only-tablet) {
-      vertical-align: bottom;
+      vertical-align: top;
     }
   }
 

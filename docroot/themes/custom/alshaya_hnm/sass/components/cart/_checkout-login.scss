@@ -7,7 +7,7 @@
   }
 
   @include breakpoint($desktop) {
-    margin: 0.38em auto 4.8em;
+    margin: 0.38rem auto 4.8rem;
   }
 
   h1 {
@@ -19,7 +19,7 @@
 
     @include breakpoint($tablet) {
       padding-top: 0;
-      padding-bottom: 0.6em;
+      padding-bottom: 0.875rem;
     }
   }
 
@@ -259,7 +259,11 @@
       }
 
       @include breakpoint($desktop) {
-        #{$left}: 20em;
+        #{$left}: 15rem;
+
+        html[lang=ar] & {
+          #{$left}: 16rem;
+        }
       }
     }
 

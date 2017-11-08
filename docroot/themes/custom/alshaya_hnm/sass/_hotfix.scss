@@ -85,19 +85,6 @@ body.ucbrowser {
         padding-left: 40px;
       }
     }
-
-    @include breakpoint($only-tablet) {
-      .filter--mobile {
-        .c-facet__blocks__wrapper--mobile.is-filter {
-          #{$left}: -7rem;
-        }
-
-        .view-filters.is-filter {
-          position: absolute;
-          #{$left}: 1rem;
-        }
-      }
-    }
   }
 
   .page-standard.user-page.checkout-delivery {
@@ -193,6 +180,7 @@ html[lang=ar] {
     .price-wrapper {
       .price-amount {
         float: right !important;
+        font-family: $hnm-regular-nodir;
       }
 
       .price-currency {
@@ -256,7 +244,6 @@ html[lang=ar] {
       .price-amount {
         float: right !important;
         left: 0;
-        font-family: $arial-nodir;
       }
 
       .price-currency {
@@ -393,20 +380,8 @@ body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-con
   display: none;
 }
 
-.ucbrowser .c-accordion__title::after {
-  top: 5px !important;
-}
-
 .ucbrowser .user__address--column {
   width: 90%;
-}
-
-.select2-container {
-  .select2-selection__arrow {
-    .ie & {
-      z-index: 9 !important;
-    }
-  }
 }
 
 /**
