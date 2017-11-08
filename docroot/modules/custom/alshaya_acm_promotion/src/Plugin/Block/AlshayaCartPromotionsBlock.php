@@ -198,11 +198,11 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
             '#markup' => \Drupal::config('alshaya_acm_promotion.config')->get('free_shipping_order')['label'],
           ];
         }
-      }
-      else {
-        $promotions[] = [
-          '#markup' => $subTypePromotion->get('field_acq_promotion_label')->getString(),
-        ];
+        else {
+          $promotions[] = [
+            '#markup' => $subTypePromotion->get('field_acq_promotion_label')->getString(),
+          ];
+        }
       }
     }
 
