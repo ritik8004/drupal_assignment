@@ -1,0 +1,16 @@
+content:
+  field_product_image: '<picture>
+                    <!--[if IE 9]><video style="display: none;"><![endif]-->
+                    <source srcset="https://dummyimage.com/286x404/000/fff" media="all and (min-width: 64.0625rem)" type="image/png">
+                    <source srcset="https://dummyimage.com/231x326/000/fff" media="all and (min-width: 48rem) and (max-width: 64rem)" type="image/png">
+                    <source srcset="https://dummyimage.com/147x204/000/fff" media="all and (max-width: 47.9375rem)" type="image/png">
+                    <!--[if IE 9]></video><![endif]-->
+                    <img src="https://dummyimage.com/147x204/000/fff" alt="Home banner" typeof="foaf:Image">
+                  </picture>'
+  sharethis: '<div class="sharethis-wrapper"><span st_url="https://local.non-transac.com/en/node/19" st_title="Lorem ipsum Dolor" class="st_facebook_large" displaytext="facebook" st_processed="yes"><span style="text-decoration:none;color:#000000;display:inline-block;cursor:pointer;" class="stButton"><span class="stLarge" style="background-image: url(&quot;https://ws.sharethis.com/images/2017/facebook_32.png&quot;);"></span></span></span>
+              <span st_url="https://local.non-transac.com/en/node/19" st_title="Lorem ipsum Dolor" class="st_twitter_large" displaytext="twitter" st_processed="yes"><span style="text-decoration:none;color:#000000;display:inline-block;cursor:pointer;" class="stButton"><span class="stLarge" style="background-image: url(&quot;https://ws.sharethis.com/images/2017/twitter_32.png&quot;);"></span></span></span>
+              <span st_url="https://local.non-transac.com/en/node/19" st_title="Lorem ipsum Dolor" class="st_pinterest_large" displaytext="pinterest" st_processed="yes"><span style="text-decoration:none;color:#000000;display:inline-block;cursor:pointer;" class="stButton"><span class="stLarge" style="background-image: url(&quot;https://ws.sharethis.com/images/2017/pinterest_32.png&quot;);"></span></span></span>
+              </div>'
+  field_product_label: '<div data-quickedit-field-id="node/19/field_product_label/en/search_result" class="field__wrapper">Hot</div>'
+share_label: 'Share +'
+label: 'Lorem ipsum Dolor'

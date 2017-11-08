@@ -392,6 +392,8 @@
     }
 
     .alshaya_search_gallery {
+      overflow: hidden;
+
       .alshaya_search_mainimage {
         z-index: 5;
         height: 15.125rem;
@@ -504,16 +506,20 @@
     }
 
     .promotions {
-      margin: 0.5rem 0;
+      margin: 0.5rem 0 0;
       font-size: 0.75rem;
       color: $grey-ash;
 
-      .sku-promotion-link {
+      .sku-promotion-item {
         font-size: 0.75rem;
-        color: $cherry;
-        display: inline-block;
+        display: block;
         margin-#{$left}: 0.125rem;
         margin-#{$right}: 0.125rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .sku-promotion-link {
+        color: $cherry;
       }
     }
   }

@@ -1,0 +1,16 @@
+.region-secondary-header .block-language-switcher--desktop {
+  color: $black-smoke;
+  text-align: center;
+  background-color: $grey-smoke;
+
+  @include breakpoint($upto-palm) {
+    border-bottom: 1px solid $gainsboro;
+  }
+
+  @include breakpoint($above-palm) {
+    background-color: transparent;
+    color: $black;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}

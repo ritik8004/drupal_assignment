@@ -1,13 +1,355 @@
-# global:
-#   version: VERSION
-#   css:
-#     theme:
-#       dist/css/global.css: {}
-#   js:
-#     dist/global.js: {}
-
 reset:
   version: VERSION
   css:
     base:
-      dist/css/reset.css: {}
+      components/dist/css/sass/reset.css: {}
+
+ltr:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/sass/ltr.css: {}
+
+global:
+  version: VERSION
+  directional: 1
+  css:
+    theme:
+      components/dist/css/sass/global.ltr.css: {}
+
+fonts:
+  version: VERSION
+  css:
+    theme:
+      //fonts.googleapis.com/css?family=Open+Sans:400,600: {}
+
+block-site-logo:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/02-header-tertiary/block-site-logo/block-site-logo.ltr.css: {}
+
+block-social-links:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/03-footer-primary/block-social-links/block-social-links.ltr.css: {}
+
+menu-social-links:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/03-footer-primary/block-social-links/menu-social-links.ltr.css: {}
+
+block-join-the-club:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/05-footer-tertiary/block-join-the-club/block-join-the-club.ltr.css: {}
+
+block-copyright:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/04-footer-secondary/block-copyright/block-copyright.ltr.css: {}
+
+block-logo-navigation:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/00-header-primary/block-logo-navigation/block-logo-navigation.ltr.css: {}
+
+menu-logo-navigation:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/00-header-primary/block-logo-navigation/menu-logo-navigation.ltr.css: {}
+  js:
+    components/js/burger-menu.js: {}
+
+block-footer-store:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/03-footer-primary/block-footer-store/block-footer-store.ltr.css: {}
+
+block-header-store:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/01-header-secondary/block-header-store/block-header-store.ltr.css: {}
+
+header-language-switcher:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/01-header-secondary/block-header-language/language-switcher.ltr.css: {}
+
+block-header-language:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/01-header-secondary/block-header-language/block-header-language.ltr.css: {}
+
+block-terms-conditions:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/04-footer-secondary/block-terms-conditions/block-terms-conditions.ltr.css: {}
+
+menu-terms-conditions:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/04-footer-secondary/block-terms-conditions/menu-terms-conditions.ltr.css: {}
+
+block-header-sign-up:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/01-header-secondary/block-header-sign-up/block-header-sign-up.ltr.css: {}
+
+block-sub-navigation:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/02-header-tertiary/block-sub-navigation/block-sub-navigation.ltr.css: {}
+
+menu-sub-navigation:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/02-header-tertiary/block-sub-navigation/menu-sub-navigation.ltr.css: {}
+
+block-application-links:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/05-footer-tertiary/block-application-links/block-application-links.ltr.css: {}
+
+item-list-application-links:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/05-footer-tertiary/block-application-links/item-list-application-links.ltr.css: {}
+
+block-sub-navigation:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/02-header-tertiary/block-sub-navigation/block-sub-navigation.ltr.css: {}
+
+menu-sub-navigation:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/02-header-tertiary/block-sub-navigation/menu-sub-navigation.ltr.css: {}
+
+block-store-finder-form:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/block-store-finder-form/block-store-finder-form.ltr.css: {}
+
+views-unformatted-store-finder-glossary:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/view-store-finder-glossary/views-unformatted-store-finder-glossary.ltr.css: {}
+
+views-store-finder-glossary:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/view-store-finder-glossary/view-store-finder-glossary.ltr.css: {}
+
+paragraph-promo-one-row-one-column-two-column:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-promo-one-row-one-col-two-row-two-col/promo-one-row-one-col-two-row-two-col.ltr.css: {}
+
+paragraph-promo-one-row-three-columns:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-promo-one-row-three-col/promo-one-row-three-col.ltr.css: {}
+
+paragraph-banner-full-width:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-banner-full-width/paragraph-banner-full-width.ltr.css: {}
+
+paragraph-banner:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-banner/paragraph-banner.ltr.css: {}
+
+
+field-promo-block:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-promo-block/field-promo-block.ltr.css: {}
+
+utils:
+  js:
+    components/js/utils.js: {}
+
+field-slider:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-slider/field-slider.ltr.css: {}
+  js:
+    components/js/field-slider.js: {}
+  dependencies:
+    - whitelabel/slick
+    - whitelabel/utils
+
+field-product-listing:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-product-listing/field-product-listing.ltr.css: {}
+
+views-unformatted-product-list:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-product-listing/views-unformatted-product-list.ltr.css: {}
+
+node-product-item:
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-product-listing/node-product-item.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/06-content/field-product-listing/node-product-item.js: {}
+
+slick:
+  css:
+    theme:
+      node_modules/slick-carousel/slick/slick.css: {}
+  js:
+    node_modules/slick-carousel/slick/slick.min.js: {}
+  dependencies:
+    - core/jquery
+
+node-individual-store:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/02-organisms/00-node-individual-store/individual-store.ltr.css: {}
+
+field-store-open-hours:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/field-store-open-hours/field-store-open-hours.ltr.css: {}
+
+view-store-finder-list:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/02-organisms/01-view-store-finder-list/views-store-finder-list.ltr.css: {}
+
+view-store-list-locator:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/02-organisms/01-view-store-finder-list/views-store-list-locator.ltr.css: {}
+
+block-stay-in-the-know:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/block-stay-in-the-know/block-stay-in-the-know.ltr.css: {}
+
+form-element-textual:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/07-forms/form-element-textual/form-element-textual.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/07-forms/form-element-textual/form-element-textual.js: {}
+
+form-input-password:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/07-forms/input-password/input-password.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/07-forms/input-password/input-password.js: {}
+
+modal-generic:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/08-modal/modal-generic/modal-generic.ltr.css: {}
+
+modal-email-signup:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/08-modal/modal-email-signup/modal-email-signup.ltr.css: {}
+
+paragraph-image-title-subtitle:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-image-title-subtitle/paragraph-image-title-subtitle.ltr.css: {}
+
+block-footer-language:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/03-footer-primary/block-footer-language/block-footer-language.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/03-footer-primary/block-footer-language/one-time-language-selector.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.cookie
+
+block-todays-offer:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/05-footer-tertiary/block-todays-offer/block-todays-offer.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/05-footer-tertiary/block-todays-offer/block-todays-offer.js: {}
+
+block-content-todays-offer:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/05-footer-tertiary/block-todays-offer/block-content-todays-offer.ltr.css: {}
+
+paragraph-offers-bordered:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/05-footer-tertiary/block-todays-offer/paragraph-offers-bordered.ltr.css: {}
+
+paragraph-title-textarea:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/paragraph-title-textarea/paragraph-title-textarea.ltr.css: {}
+
+block-admin-tabs:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/block-admin-tabs/block-admin-tabs.ltr.css: {}
+
+menu-admin-task:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/block-admin-tabs/menu-admin-task.ltr.css: {}
+
+status-message:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/status-message/status-message.ltr.css: {}

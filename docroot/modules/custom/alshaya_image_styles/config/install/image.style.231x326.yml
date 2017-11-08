@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 231x326
+label: 231x326
+effects:
+  0f2d7138-561f-44ca-86dd-6907e4093130:
+    uuid: 0f2d7138-561f-44ca-86dd-6907e4093130
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 231
+      height: 326

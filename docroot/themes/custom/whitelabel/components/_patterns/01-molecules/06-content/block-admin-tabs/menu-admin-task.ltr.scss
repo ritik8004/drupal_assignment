@@ -1,0 +1,43 @@
+@import '../../../../sass/config/**/*.scss';
+
+.admin-task--primary {
+  font-size: 0;
+  margin-top: 0.75rem;
+  margin-bottom: 1rem;
+  padding-#{direction(left)}: 0;
+
+  @include breakpoint($desk) {
+    padding-#{direction(left)}: 1.5rem;
+  }
+
+  li {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+
+    @include breakpoint($above-palm) {
+      display: inline-block;
+    }
+  }
+
+  a {
+    display: block;
+    padding: 1rem 1.25rem;
+    color: $white;
+    text-decoration: none;
+
+    @include breakpoint($upto-palm) {
+      border-top: 1px solid $black;
+    }
+
+    @include breakpoint($above-palm) {
+      text-align: center;
+      min-width: 6.4375rem;
+    }
+
+    &:hover,
+    &.is-active {
+      color: $medium-pink;
+      background-color: $white;
+    }
+  }
+}

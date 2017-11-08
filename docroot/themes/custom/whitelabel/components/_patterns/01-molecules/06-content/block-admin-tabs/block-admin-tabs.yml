@@ -1,0 +1,7 @@
+label: ''
+content:
+  include():
+    pattern: 'molecules-menu-admin-task'
+attributes:
+  Attribute():
+    class: 'block-admin-tabs'

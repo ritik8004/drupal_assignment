@@ -1,0 +1,17 @@
+.page--title {
+  font-size: 1.125rem;
+  color: $black-smoke;
+  font-weight: normal;
+  margin-top: 1.6875rem;
+  margin-bottom: 0.5rem;
+
+  @include breakpoint($above-palm) {
+    font-size: 1.375rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5625rem;
+  }
+
+  @include breakpoint($desk) {
+    font-size: 1.5rem;
+  }
+}

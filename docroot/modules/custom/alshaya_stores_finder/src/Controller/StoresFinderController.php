@@ -78,18 +78,10 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new InvokeCommand('#row-' . $node->id() . ' .views-field-field-store-address', 'trigger', ['click']));
     // Adding class for selection.
     $response->addCommand(new InvokeCommand('.row-' . $node->id(), 'addClass', ['selected']));
-    // Hide the map view exposed filter.
-    $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-3', ['display' => 'none']));
     // Show the list view exposed filter.
-    $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1', ['display' => 'block']));
-    // Remove class.
-    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'removeClass', ['list-view-exposed']));
+    $response->addCommand(new CssCommand('[data-drupal-selector="views-exposed-form-stores-finder-page-1"]', ['display' => 'block']));
     // Add class.
     $response->addCommand(new InvokeCommand('.list-view-link', 'addClass', ['active']));
-
-    // Add class.
-    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'addClass', ['current-view']));
-    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'removeClass', ['current-view']));
 
     $response->addCommand(new InvokeCommand('body', 'removeClass', ['store-finder-view']));
 
@@ -114,19 +106,12 @@ class StoresFinderController extends ControllerBase {
       $display = 'page_3';
       $response->addCommand(new InvokeCommand('.map-view-link', 'addClass', ['active']));
       $response->addCommand(new InvokeCommand('.list-view-link', 'removeClass', ['active']));
-      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'removeClass', ['current-view']));
-      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'addClass', ['current-view']));
       // Remove store title from breadcrumb.
       $response->addCommand(new InvokeCommand(NULL, 'updateStoreFinderBreadcrumb'));
-
-      // Clear value from search field.
-      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3 form #edit-geolocation-geocoder-google-places-api', 'val', ['']));
     }
     else {
       $response->addCommand(new InvokeCommand('.list-view-link', 'addClass', ['active']));
       $response->addCommand(new InvokeCommand('.map-view-link', 'removeClass', ['active']));
-      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'addClass', ['current-view']));
-      $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-3', 'removeClass', ['current-view']));
       // Remove store title from breadcrumb.
       $response->addCommand(new InvokeCommand(NULL, 'updateStoreFinderBreadcrumb'));
     }
@@ -134,10 +119,10 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new HtmlCommand('.view-stores-finder:first', $view));
     $response->addCommand(new InvokeCommand('body', 'removeClass', ['store-finder-view']));
     // Removing class for mobile from store list.
-    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'removeClass', ['mobile-store-detail']));
+    $response->addCommand(new InvokeCommand('[data-drupal-selector="views-exposed-form-stores-finder-page-1"]', 'removeClass', ['mobile-store-detail']));
 
     // Clear value from search field.
-    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1 form #edit-geolocation-geocoder-google-places-api', 'val', ['']));
+    $response->addCommand(new InvokeCommand('[data-drupal-selector="views-exposed-form-stores-finder-page-1"] form #edit-geolocation-geocoder-google-places-api', 'val', ['']));
 
     // Hide the 'back to glossar' link and show list/map view link.
     $response->addCommand(new CssCommand('.list-view-link', ['display' => 'block']));
@@ -166,7 +151,7 @@ class StoresFinderController extends ControllerBase {
     $response->addCommand(new HtmlCommand('.view-stores-finder:first', $build));
     $response->addCommand(new InvokeCommand('.body', 'removeClass', ['store-finder-view']));
     // Adding class for mobile for store detail.
-    $response->addCommand(new InvokeCommand('.block-views-exposed-filter-blockstores-finder-page-1', 'addClass', ['mobile-store-detail']));
+    $response->addCommand(new InvokeCommand('[data-drupal-selector="views-exposed-form-stores-finder-page-1"]', 'addClass', ['mobile-store-detail']));
 
     // Add store finder title in breadcrumb.
     $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString();
@@ -176,7 +161,7 @@ class StoresFinderController extends ControllerBase {
     // Hide the list/map view link and show the glossary link.
     $response->addCommand(new CssCommand('.list-view-link', ['display' => 'none']));
     $response->addCommand(new CssCommand('.map-view-link', ['display' => 'none']));
-    $response->addCommand(new CssCommand('.block-views-exposed-filter-blockstores-finder-page-1 .back-to-glossary', ['display' => 'block']));
+    $response->addCommand(new CssCommand('[data-drupal-selector="views-exposed-form-stores-finder-page-1"] .back-to-glossary', ['display' => 'block']));
 
     $response->addCommand(new InvokeCommand(NULL, 'storeFinderDetailPageScrollTop'));
 

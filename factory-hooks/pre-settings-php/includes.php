@@ -134,7 +134,7 @@ switch ($env) {
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    $settings['alshaya_api.settings']['magento_host'] = 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud';
 
     // Specify the modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
@@ -149,13 +149,25 @@ switch ($env) {
     $settings['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     break;
 
-  default:
+  case '01live':
+  case '01update':
+    // Don't debug by default on Prod ENV.
     $settings['acq_commerce.conductor']['debug'] = FALSE;
 
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-prod.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
+    $settings['alshaya_api.settings']['magento_host'] = 'http://mcmena.store.alshaya.com';
+    break;
+
+  default:
+    // Don't debug by default on unknown ENV.
+    $settings['acq_commerce.conductor']['debug'] = FALSE;
+
+    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
+    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
+    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
+    $settings['alshaya_api.settings']['magento_host'] = 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud';
 }
 
 // Recaptcha settings.

@@ -1,0 +1,22 @@
+.region-top-header {
+  font-size: 0;
+
+  @include breakpoint($upto-palm) {
+    position: fixed;
+    z-index: $z-50;
+    top: 0;
+    width: 100%;
+  }
+
+  @include breakpoint($above-palm) {
+    background: $black;
+  }
+}
+
+.toolbar-vertical {
+  .region-top-header {
+    @include breakpoint($upto-palm) {
+      top: 2.4375rem;
+    }
+  }
+}

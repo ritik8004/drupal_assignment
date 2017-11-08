@@ -37,6 +37,19 @@ function alshaya_image_styles_update_8002() {
 }
 
 /**
+ * Update new image styles.
+ */
+function alshaya_image_styles_update_8101() {
+  $configs = [
+    'image.style.147x204',
+    'image.style.286x404',
+    'image.style.231x326',
+    'responsive_image.styles.286x404',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_image_styles');
+}
+
+/**
  * Implements hook_update_N().
  *
  * Configure image toolkit.

@@ -6,6 +6,110 @@
  */
 
 /**
+ * Implements hook_update_n().
+ *
+ * Create new paragraph types.
+ */
+function alshaya_paragraphs_update_8101() {
+  $modules = [
+    'alshaya_config',
+    'viewsreference',
+    'alshaya_media',
+  ];
+
+  foreach ($modules as $module) {
+    if (!\Drupal::moduleHandler()->moduleExists($module)) {
+      \Drupal::service('module_installer')->install([$module], TRUE);
+    }
+  }
+
+  $configs = [
+    // Image + title + subtitle paragraph type.
+    'paragraphs.paragraphs_type.image_title_subtitle',
+    'field.field.paragraph.image_title_subtitle.field_banner',
+    'field.field.paragraph.image_title_subtitle.field_sub_title',
+    'field.field.paragraph.image_title_subtitle.field_title',
+    'field.field.paragraph.image_title_subtitle.field_link',
+    'core.entity_form_display.paragraph.image_title_subtitle.default',
+    'core.entity_view_display.paragraph.image_title_subtitle.default',
+    'core.entity_view_display.paragraph.image_title_subtitle.326x288',
+    'language.content_settings.paragraph.image_title_subtitle',
+    'core.base_field_override.paragraph.image_title_subtitle.created',
+    'core.base_field_override.paragraph.image_title_subtitle.moderation_state',
+    'core.base_field_override.paragraph.image_title_subtitle.status',
+    'core.base_field_override.paragraph.image_title_subtitle.uid',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    // Offers bordered paragraph type.
+    'paragraphs.paragraphs_type.offers_bordered',
+    'field.field.paragraph.offers_bordered.field_banner',
+    'field.field.paragraph.offers_bordered.field_heading',
+    'field.field.paragraph.offers_bordered.field_link',
+    'field.field.paragraph.offers_bordered.field_sub_title',
+    'field.field.paragraph.offers_bordered.field_title',
+    'field.storage.paragraph.field_heading',
+    'core.base_field_override.paragraph.offers_bordered.created',
+    'core.base_field_override.paragraph.offers_bordered.moderation_state',
+    'core.base_field_override.paragraph.offers_bordered.status',
+    'core.base_field_override.paragraph.offers_bordered.uid',
+    'core.entity_form_display.paragraph.offers_bordered.default',
+    'core.entity_view_display.paragraph.offers_bordered.326x288',
+    'core.entity_view_display.paragraph.offers_bordered.default',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    'language.content_settings.paragraph.offers_bordered',
+    // Block reference paragraph type.
+    'paragraphs.paragraphs_type.block_reference',
+    'field.storage.paragraph.field_block_reference',
+    'field.field.paragraph.block_reference.field_block_reference',
+    'core.entity_form_display.paragraph.block_reference.default',
+    'core.entity_view_display.paragraph.block_reference.default',
+    'language.content_settings.paragraph.block_reference',
+    'core.base_field_override.paragraph.block_reference.created',
+    'core.base_field_override.paragraph.block_reference.moderation_state',
+    'core.base_field_override.paragraph.block_reference.status',
+    'core.base_field_override.paragraph.block_reference.uid',
+    // Views reference paragraph type.
+    'paragraphs.paragraphs_type.views_reference',
+    'field.storage.paragraph.field_html_heading',
+    'field.field.paragraph.views_reference.field_html_heading',
+    'field.storage.paragraph.field_views_reference',
+    'field.field.paragraph.views_reference.field_views_reference',
+    'core.entity_view_display.paragraph.views_reference.default',
+    'core.entity_form_display.paragraph.views_reference.default',
+    'language.content_settings.paragraph.views_reference',
+    'core.base_field_override.paragraph.views_reference.created',
+    'core.base_field_override.paragraph.views_reference.moderation_state',
+    'core.base_field_override.paragraph.views_reference.status',
+    'core.base_field_override.paragraph.views_reference.uid',
+    // Title + textarea paragraph type.
+    'paragraphs.paragraphs_type.title_textarea',
+    'field.field.paragraph.title_textarea.field_html_heading',
+    'field.field.paragraph.title_textarea.field_body',
+    'core.entity_form_display.paragraph.title_textarea.default',
+    'core.entity_view_display.paragraph.title_textarea.default',
+    'core.entity_view_display.paragraph.title_textarea.default',
+    'language.content_settings.paragraph.title_textarea',
+    'core.base_field_override.paragraph.title_textarea.created',
+    'core.base_field_override.paragraph.title_textarea.moderation_state',
+    'core.base_field_override.paragraph.title_textarea.status',
+    'core.base_field_override.paragraph.title_textarea.uid',
+    'core.entity_form_display.paragraph.1_row_1_col.default',
+    'field.field.paragraph.1_row_1_col.field_promo_block',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    // Video paragraph type.
+    'paragraphs.paragraphs_type.video',
+    'field.field.paragraph.banner.field_video',
+    'field.field.paragraph.video.field_video',
+    'field.storage.paragraph.field_video',
+    'core.entity_form_display.paragraph.video.default',
+    'core.entity_view_display.paragraph.video.default',
+    'core.entity_form_display.paragraph.banner.default',
+    'core.entity_view_display.paragraph.banner.default',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
  * Implements hook_update_N().
  *
  * Update paragraphs.

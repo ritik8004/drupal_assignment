@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+id: offers_bordered
+label: 'Offers - Bordered'
+behavior_plugins: {  }

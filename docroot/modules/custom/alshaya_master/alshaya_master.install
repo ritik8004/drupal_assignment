@@ -5,6 +5,20 @@
  * Contains install, update, uninstall hooks for alshaya_master module.
  */
 
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Override rich text config to allow div & classes.
+ */
+function alshaya_master_update_8002() {
+  $config_path = drupal_get_path('module', 'alshaya_master') . '/config/install';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write('filter.format.rich_text', $source->read('filter.format.rich_text'));
+}
+
 /**
  * Implements hook_update_N().
  *

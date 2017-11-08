@@ -224,20 +224,6 @@ function alshaya_white_label_preprocess_field__node__field_store_open_hours__sto
 }
 
 /**
- * Implements hook_preprocess_field().
- *
- * For the address field of store content type.
- */
-function alshaya_white_label_preprocess_field__node__field_store_address__store(&$variables) {
-  if (!empty($variables['items'])) {
-    // Adding 'raw' filter for the html tags that show up.
-    foreach ($variables['items'] as &$item) {
-      $item['content']['#template'] = '{{ value|raw|nl2br }}';
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_node().
  */
 function alshaya_white_label_preprocess_node(&$variables) {
@@ -670,6 +656,18 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   $block_view = \Drupal::entityManager()->getViewBuilder('block_content')->view($copyright_block, 'full', $lang);
   $variables['email_footer'] = $block_view;
   $variables['lang'] = $lang;
+
+  $menu_tree = \Drupal::menuTree();
+  // Build the typical default set of menu tree parameters.
+  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters('social-links');
+  $menus = $menu_tree->load('social-links', $parameters);
+
+  foreach ($menus as $menu) {
+    $title = $menu->link->getTitle();
+    $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+  }
+
+  $variables['links'] = $links;
 }
 
 /**
