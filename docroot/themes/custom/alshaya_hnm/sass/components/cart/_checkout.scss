@@ -1462,3 +1462,15 @@ html[lang=ar] {
     }
   }
 }
+
+html[lang=ar] {
+  .delivery-options-tooltip-wrapper .tooltip {
+    @include breakpoint($only-mobile) {
+      right: -2.1rem;
+    }
+
+    @include breakpoint($desktop) {
+      right: 2.45rem !important;
+    }
+  }
+}
