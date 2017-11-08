@@ -66,6 +66,7 @@ jQuery.fn.select2Option = function (options) {
       });
       buttonsHtml.prepend(labeltext);
       buttonsHtml.append(ulHtml);
+      Drupal.alshaya_hm_images_update_selected_label();
     };
 
     var optGroups = select.children('optgroup');
@@ -100,6 +101,27 @@ jQuery.fn.select2Option = function (options) {
   });
 };
 
+(function ($) {
+  'use strict';
+  Drupal.alshaya_hm_images_update_selected_label = function () {
+    // Set the value for selected option.
+    $('.select-buttons').find('a.picked').each(function () {
+      var selectedText = $(this).attr('class').replace(' picked', '');
+      var selectedTextSelector = $(this).closest('ul').siblings('h4.list-title').find('.selected-text');
+
+      if ($(this).attr('data-color-label').length > 0) {
+        selectedText = $(this).attr('data-color-label');
+      }
+
+      if (selectedTextSelector.length > 0) {
+        selectedTextSelector.text(selectedText);
+      }
+      else {
+        $(this).closest('ul').siblings('h4.list-title').append('<span class="selected-text">' + selectedText + '</span>');
+      }
+    });
+  };
+}(jQuery));
 
 /**
  * Helper function to generate swatch markup.
@@ -126,9 +148,10 @@ Drupal.alshaya_hm_images_generate_swatch_markup = function (currentOption, selec
   (drupalSettings.sku_configurable_options_color.hasOwnProperty(option_id))) {
     var sku_configurable_options_color = drupalSettings.sku_configurable_options_color;
     var swatch_type = sku_configurable_options_color[option_id].swatch_type;
+    var color_label = sku_configurable_options_color[option_id].display_label;
 
     // If status is disabled, use <span>, otherwise use <a>.
-    var markup = status === 'enabled' ? '<a data-swatch-type="' + swatch_type + '" href="#" class="' + currentOption.text() + '" data-select-index="' + selectIndex + '"' : '<span class="' + currentOption.text() + '"';
+    var markup = status === 'enabled' ? '<a data-color-label="' + color_label + '" data-swatch-type="' + swatch_type + '" href="#" class="' + currentOption.text() + '" data-select-index="' + selectIndex + '"' : '<span class="' + currentOption.text() + '"';
     // If swatch type is RGB, add provided value as background-color, otherwise use it as markup.
     markup += swatch_type === 'miniature_image' ? '>' + sku_configurable_options_color[option_id].display_value : ' style="background-color:' + sku_configurable_options_color[option_id].display_value + ';">';
     markup += status === 'enabled' ? '</a>' : '</span>';

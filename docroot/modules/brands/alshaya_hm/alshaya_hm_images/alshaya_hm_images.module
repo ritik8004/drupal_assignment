@@ -224,8 +224,6 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
               'display_label' => $sku_entity->get('attr_color_label')->value,
               'swatch_type' => $swatch_type,
             ];
-
-            $form['ajax']['configurables']['article_castor_id']['#options'][$key] = $sku_entity->get('attr_color_label')->value;
           }
         }
       }
