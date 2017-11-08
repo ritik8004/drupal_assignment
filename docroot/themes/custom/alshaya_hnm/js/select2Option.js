@@ -123,25 +123,6 @@ jQuery.fn.select2Option = function (options) {
   };
 }(jQuery));
 
-(function ($) {
-  'use strict';
-  Drupal.behaviors.alshaya_hm_attributes = {
-    attach: function (context, settings) {
-      // Set the value for selected option.
-      $('.select-buttons', context).find('a.picked').each(function () {
-        var selectedText = $(this).attr('class').replace(' picked', '');
-        var selectedTextSelector = $(this).closest('ul').siblings('h4.list-title').find('.selected-text');
-        if (selectedTextSelector.length > 0) {
-          selectedTextSelector.text(selectedText);
-        }
-        else {
-          $(this).closest('ul').siblings('h4.list-title').append('<span class="selected-text">' + selectedText + '</span>');
-        }
-      });
-    }
-  };
-}(jQuery));
-
 /**
  * Helper function to generate swatch markup.
  *
