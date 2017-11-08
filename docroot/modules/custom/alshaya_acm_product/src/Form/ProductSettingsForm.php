@@ -123,13 +123,13 @@ class ProductSettingsForm extends ConfigFormBase {
     $form['vat_text'] = [
       '#type' => 'textfield',
       '#title' => $this->t('VAT Inclusion text'),
-      '#default_value' => $config->get('vat_text.value'),
+      '#default_value' => $config->get('vat_text'),
     ];
 
     $form['vat_text_footer'] = [
       '#type' => 'textfield',
       '#title' => $this->t('VAT disclaimer text for the footer'),
-      '#default_value' => $config->get('vat_text_footer.value'),
+      '#default_value' => $config->get('vat_text_footer'),
     ];
 
     return $form;
