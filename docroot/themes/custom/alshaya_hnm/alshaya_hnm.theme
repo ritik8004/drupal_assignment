@@ -790,8 +790,7 @@ function alshaya_hnm_preprocess_paragraph(&$variables) {
       }
     }
   }
-
-  if ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {
+  elseif ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {
     // Get the promo block display config for twig file.
     $variables['promo_link'] = \Drupal::configFactory()->getEditable('alshaya_paragraphs.settings')->get('promo_block_config');
     if ($variables['promo_link'] == 1) {
