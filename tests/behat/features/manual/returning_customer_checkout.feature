@@ -10,7 +10,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "shweta+2@axelerant.com"
+    Then I fill in "edit-checkout-login-name" with "shweta+4@axelerant.com"
     And I fill in "edit-checkout-login-pass" with "Alshaya123$"
     When I press "sign in"
     And I wait for the page to load
@@ -58,7 +58,7 @@ Feature: Test various checkout scenarios as returning customer
     When I fill in "Ecom_Payment_Pin_id" with "1234"
     Then I press "Submit"
     When I press "Confirm"
-    And I wait 10 seconds
+    And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
     And I should see text matching "Your order number is "
 
@@ -91,13 +91,13 @@ Feature: Test various checkout scenarios as returning customer
     When I fill in "Ecom_Payment_Pin" with "1234"
     Then I press "Submit"
     And I press "Confirm"
-    When I wait 10 seconds
+    When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
     And I should see text matching "Your order number is "
 
   @hd @cs
   Scenario: As a returning customer
-  I should be able to checkout using HD - Cybersource
+    I should be able to checkout using HD - Cybersource
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I follow "deliver to this address"
@@ -113,7 +113,7 @@ Feature: Test various checkout scenarios as returning customer
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I accept terms and conditions
     And I press "place order"
-    When I wait 10 seconds
+    When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
     And I should see text matching "Your order number is "
 
@@ -141,6 +141,6 @@ Feature: Test various checkout scenarios as returning customer
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
     When I press "place order"
-    When I wait 15 seconds
+    When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
     And I should see text matching "Your order number is "

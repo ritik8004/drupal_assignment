@@ -136,8 +136,8 @@
 
   .menu--account {
     @include breakpoint($desktop) {
-      .createanaccount-link,
-      li:first-child a {
+      li:first-child a,
+      li:nth-child(2) a {
         @include icon(user);
       }
 
@@ -363,10 +363,10 @@ body {
   }
 
   @include breakpoint($only-tablet) {
-    margin-top: 8.5625rem;
+    margin-top: 9.5625rem;
 
     html[lang=ar] & {
-      margin-top: 10rem;
+      margin-top: 10.25rem;
     }
 
     &.logged-in.toolbar-vertical {

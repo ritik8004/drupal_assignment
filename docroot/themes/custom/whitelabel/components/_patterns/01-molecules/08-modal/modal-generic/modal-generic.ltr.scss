@@ -58,7 +58,20 @@
   margin-bottom: 0.625rem;
   padding-bottom: 0.625rem;
   width: 100%;
+}
+
+.ui-dialog .ui-dialog-title {
   float: direction(left);
+}
+
+.ui-dialog {
+  .form--content .input__line {
+    display: none;
+  }
+
+  .ui-dialog-buttonpane button {
+    margin: 0.5em 0;
+  }
 }
 
 .ui-state-default .ui-icon {

@@ -255,6 +255,9 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
       $term = $checkout_options_manager->loadShippingMethod($shipping_method);
       $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
+
+      // Clear the payment now.
+      $cart->clearPayment();
     }
     catch (\Exception $e) {
       drupal_set_message($e->getMessage(), 'error');

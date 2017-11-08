@@ -137,7 +137,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       if ($('.views-infinite-scroll-content-wrapper').length !== 0) {
         // Change the title of facet when open.
         var priceCurrency = settings.alshaya_search_price_currency;
-        var $finalPriceBlock = $('#block-finalprice');
+        var $finalPriceBlock = $('#block-skusskureferencefinalprice');
         if (priceCurrency) {
           var initialTitle = $finalPriceBlock.find('h3').html();
           $finalPriceBlock.find('h3').on('click', function() {
@@ -189,7 +189,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             rtl: true,
             slideMargin: 5,
             onSliderLoad: function() {
-              gallery.closest('.alshaya_search_slider').hide();
               gallery.css('height', '73px');
             }
           });
@@ -200,24 +199,11 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             item: 4,
             slideMargin: 5,
             onSliderLoad: function() {
-              gallery.closest('.alshaya_search_slider').hide();
               gallery.css('height', '73px');
             }
           });
         }
       });
-
-      // Show/Hide the slider on Mouse hover.
-      $('.c-products__item', context).hover(
-        function () {
-          if ($(window).width() > 1025) {
-            $(this).find('.alshaya_search_slider').show();
-          }
-        },
-        function () {
-          $(this).find('.alshaya_search_slider').hide();
-        }
-      );
 
       // Change the image on Mouse hover.
       $('.alshaya_search_slider img', context).hover(

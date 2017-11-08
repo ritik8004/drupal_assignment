@@ -400,15 +400,19 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    * @Then /^I should see the number of stores displayed$/
    */
   public function iShouldSeeTheNumberOfStoresDisplayed() {
-    $page = $this->getSession()->getPage();
-    $all_stores = $page->findAll('css', '#click-and-collect-list-view ul li');
-    $count = count($all_stores);
-    $value = $page->findById('edit-store-location')->getValue();
-    $text = $page->hasContent("'Available at' .$count 'stores near' .$value");
-    if (!$text) {
-      throw new \Exception('Number of stores not displayed on Click and Collect page');
-    }
-
+      $page = $this->getSession()->getPage();
+      $all_stores = $page->findAll('css', 'li.select-store');
+      $actual_count = count($all_stores);
+      $count = (string)$actual_count;
+      $text = $page->find('css', 'div.all-stores-info');
+      if ($text !== null) {
+          $actual_text = $text->find('css', 'h3')->getText();
+      } else {
+          throw new \Exception('Store search did not work on Click and collect');
+      }
+      if (strpos($actual_text, $count) === FALSE) {
+          throw new \Exception('Count is incorrect');
+      }
   }
 
   /**
@@ -459,7 +463,12 @@ class FeatureContext extends RawDrupalContext implements Context, SnippetAccepti
    * @When /^I click the label for "([^"]*)"$/
    */
   public function iClickTheLabelFor($arg1) {
-    $this->getSession()->getPage()->find('css', $arg1)->click();
+      $element = $this->getSession()->getPage()->find('css', $arg1);
+      if ($element !== NULL) {
+          $element->click();
+      } else {
+          throw new \Exception('Element not clickable at this point');
+      }
   }
 
   /**

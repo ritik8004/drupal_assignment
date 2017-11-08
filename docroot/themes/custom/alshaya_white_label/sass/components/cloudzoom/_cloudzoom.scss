@@ -285,7 +285,7 @@
     }
 
     .slick-slide {
-      width: 7rem !important;
+      width: 6rem !important;
       height: 6.375rem !important;
       padding: 0.125rem;
       border: 1px solid transparent;
@@ -295,6 +295,12 @@
         height: 100%;
         margin: 0 auto;
       }
+    }
+  }
+
+  #lightSlider {
+    .slick-slide {
+      width: 7rem !important;
     }
   }
 
@@ -309,6 +315,16 @@
       margin-#{$right}: 0.4375rem;
     }
   }
+
+  #drupal-modal #lightSlider.pager-yes {
+    .slick-slide {
+      width: 6.5rem !important;
+    }
+  }
+}
+
+.slick-disabled::before {
+  color: $white !important;
 }
 
 @include breakpoint($desktop) {
@@ -386,4 +402,12 @@
   width: 2rem !important;
   left: 48% !important;
   height: 2rem !important;
+}
+
+.cloudzoom__herocontainer {
+  .product-labels {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }

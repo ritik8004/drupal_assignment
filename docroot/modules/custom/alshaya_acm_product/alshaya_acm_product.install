@@ -5,6 +5,60 @@
  * Contains install, update, uninstall hooks for alshaya_acm_product module.
  */
 
+use Drupal\acq_sku\ProductOptionsManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add default value for new setting - list_view_items_per_page.
+ */
+function alshaya_acm_product_update_8004() {
+  $settings = Drupal::configFactory()->getEditable('alshaya_acm_product.settings');
+  $settings->set('list_view_items_per_page', 30);
+  $settings->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add the index key in config to use for adding data in parent for configurable
+ * products.
+ */
+function alshaya_acm_product_update_8003() {
+  $sku_base_fields_config = Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields');
+  $sku_base_fields_config->set('fields.color.index', 1);
+  $sku_base_fields_config->set('fields.size.index', 1);
+  $sku_base_fields_config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set weight on product options.
+ */
+function alshaya_acm_product_update_8002() {
+  $option_sets = \Drupal::service('acq_commerce.api')->getProductOptions();
+
+  $weight = 0;
+  foreach ($option_sets as $options) {
+    foreach ($options['options'] as $key => $value) {
+      $result = db_query(
+        'UPDATE {taxonomy_term_field_data} AS ttfd
+INNER JOIN {taxonomy_term__field_sku_attribute_code} ttfsac ON ttfsac.entity_id = ttfd.tid
+INNER JOIN {taxonomy_term__field_sku_option_id} ttfsoi ON ttfsoi.entity_id = ttfd.tid
+SET ttfd.weight = :weight
+WHERE ttfd.vid = :vid AND ttfsac.field_sku_attribute_code_value = :attr_code AND ttfsoi.field_sku_option_id_value = :attr_value_id',
+        [
+          ':weight' => $weight++,
+          ':vid' => ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY,
+          ':attr_code' => $options['attribute_code'],
+          ':attr_value_id' => $key,
+        ]
+      );
+    }
+  }
+}
+
 /**
  * Implements hook_update_N().
  *

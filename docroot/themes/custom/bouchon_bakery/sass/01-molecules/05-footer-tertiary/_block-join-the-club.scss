@@ -1,0 +1,192 @@
+.region-footer-tertiary {
+  .region__wrapper {
+    max-width: 64.125rem;
+    margin: auto;
+
+    @include breakpoint($lap) {
+      max-width: 45rem;
+      margin: auto;
+    }
+  }
+
+  .block-join-the-club {
+    @include u-clearfix;
+
+    padding-top: 0;
+
+    @include breakpoint($upto-palm) {
+      text-align: center;
+    }
+
+    @include breakpoint($above-palm) {
+      float: direction(left);
+    }
+
+    @include breakpoint($lap) {
+      width: 64.583%;
+      padding-#{direction(left)}: 0;
+    }
+
+    @include breakpoint($desk) {
+      width: 59.466%;
+    }
+  }
+
+  .block-join-the-club__image-wrapper {
+    @include breakpoint($upto-palm) {
+      margin-top: -1rem;
+      margin-bottom: 1rem;
+    }
+
+    @include breakpoint($above-palm) {
+      float: direction(right);
+    }
+
+    @include breakpoint($lap) {
+      width: 45.06%;
+      margin-top: -1rem;
+    }
+
+    @include breakpoint($desk) {
+      width: 37%;
+      margin-top: -1rem;
+    }
+
+    img {
+      @include breakpoint($lap) {
+        margin-#{direction(left)}: 0.0625rem;
+      }
+
+      @include breakpoint($desk) {
+        margin-#{direction(left)}: 1.1875rem;
+      }
+    }
+  }
+
+  .block-join-the-club__title-wrapper {
+    @include breakpoint($above-palm) {
+      float: direction(left);
+      text-align: direction(left);
+    }
+
+    @include breakpoint($upto-lap) {
+      margin-bottom: 0.4rem;
+    }
+
+    @include breakpoint($lap) {
+      margin-top: 1.125rem;
+      width: 54.721%;
+      padding-#{direction(left)}: 0;
+      position: static;
+    }
+
+    @include breakpoint($desk) {
+      padding-#{direction(right)}: 0;
+      width: 25%;
+      padding-#{direction(left)}: 0;
+      border-#{direction(right)}: none;
+      margin-top: 1.9rem;
+    }
+  }
+
+  .block-join-the-club__title {
+    font-family: $beton-bold;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: $dark-sand;
+
+    @include breakpoint($upto-palm) {
+      color: $dark-sand;
+    }
+  }
+
+  .block-join-the-club__title-link {
+    display: none;
+    font-size: 0.875rem;
+    font-family: $ideal-sans;
+
+    a {
+      font-weight: normal;
+      text-decoration: none;
+    }
+
+    @include breakpoint($desk) {
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+      display: block;
+    }
+  }
+
+  .block-join-the-club__list {
+    color: $black-smoke;
+
+    @include breakpoint($upto-palm) {
+      font-size: 0.875rem;
+      text-align: center;
+    }
+
+    @include breakpoint($above-palm) {
+      font-family: $ideal-sans;
+      font-size: 0.875rem;
+      float: direction(left);
+    }
+
+    @include breakpoint($lap) {
+      width: 54.721%;
+      padding-#{direction(left)}: 0;
+      position: static;
+      margin-bottom: 1rem;
+    }
+
+    @include breakpoint($desk) {
+      padding-#{direction(left)}: 4.714%;
+      width: 35.836%;
+      margin-top: 1.2rem;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0.4rem;
+
+      @include breakpoint($lap) {
+        margin-bottom: 0;
+      }
+
+      @include breakpoint($desk) {
+        margin-bottom: 0;
+      }
+    }
+
+    span {
+      font-size: 1.125rem;
+
+      &::before {
+        position: relative;
+        top: 0.12rem;
+
+        @include breakpoint($above-palm) {
+          color: $dark-sand;
+        }
+      }
+    }
+  }
+
+  .block-join-the-club__list-link {
+    color: $black-smoke;
+    font-weight: normal;
+    font-family: $open-sans;
+    text-decoration: none;
+
+    @include breakpoint($lap) {
+      font-weight: normal;
+      padding-top: 0.375rem;
+      display: block;
+    }
+
+    @include breakpoint($desk) {
+      display: none;
+    }
+  }
+}

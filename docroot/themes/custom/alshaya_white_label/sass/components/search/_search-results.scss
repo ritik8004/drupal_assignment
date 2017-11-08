@@ -269,6 +269,13 @@ ul.item-list__checkbox,
   height: 100%;
 }
 
+.alshaya_search_mainimage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 10.5rem;
+}
+
 .alshaya_search_slider {
   // Need this in px for JS consistency for slider.
   width: 264px;
@@ -278,6 +285,12 @@ ul.item-list__checkbox,
 
   .search-lightSlider {
     margin: 0 auto;
+  }
+
+  .lslide {
+    img {
+      min-height: 4rem;
+    }
   }
 
   .lSSlideWrapper {

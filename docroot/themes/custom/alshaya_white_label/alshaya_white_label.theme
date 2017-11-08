@@ -82,10 +82,15 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   }
 
+  $node_bundle = '';
   if (isset($variables['node'])) {
-    if ($variables['node']->bundle() === 'acq_product') {
-      $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
+    if (is_object($variables['node'])) {
+      $node_bundle = $variables['node']->bundle();
     }
+  }
+
+  if ($node_bundle === 'acq_product') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   }
 
   $variables['nojs_message'] = [
@@ -107,10 +112,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   }
 
   // Attach the plp search js library to the promotion product listing page.
-  if (isset($variables['node'])) {
-    if ($variables['node']->bundle() === 'acq_promotion') {
-      $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
-    }
+  if ($node_bundle === 'acq_promotion') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
   }
 
   // Make site_name and site_logo available to all TWIG templates.
@@ -653,6 +656,18 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   $block_view = \Drupal::entityManager()->getViewBuilder('block_content')->view($copyright_block, 'full', $lang);
   $variables['email_footer'] = $block_view;
   $variables['lang'] = $lang;
+
+  $menu_tree = \Drupal::menuTree();
+  // Build the typical default set of menu tree parameters.
+  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters('social-links');
+  $menus = $menu_tree->load('social-links', $parameters);
+
+  foreach ($menus as $menu) {
+    $title = $menu->link->getTitle();
+    $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+  }
+
+  $variables['links'] = $links;
 }
 
 /**
@@ -726,8 +741,7 @@ function alshaya_white_label_preprocess_acq_sku(&$variables) {
  */
 function alshaya_white_label_preprocess_page_title(&$variables) {
   if ($node = \Drupal::routeMatch()->getParameter('node')) {
-
-    if ($node->bundle() === 'acq_promotion') {
+    if (is_object($node) && $node->bundle() === 'acq_promotion') {
       $variables['title'] = $node->get('field_acq_promotion_label')->getString();
     }
   }

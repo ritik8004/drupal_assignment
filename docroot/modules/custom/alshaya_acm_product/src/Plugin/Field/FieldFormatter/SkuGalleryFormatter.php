@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter;
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
@@ -120,83 +121,85 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       /** @var \Drupal\acq_sku\Entity\SKU $sku */
       $sku = $this->viewValue($item);
       $skus[$delta] = $sku;
-      $promotion_cache_tags = [];
-      // Get the image.
-      $build['image_url'] = [];
-      $sku_media = $this->skuManager->getSkuMedia($sku);
-      $search_main_image = $thumbnails = [];
+      if ($sku instanceof SKU) {
+        $promotion_cache_tags = [];
+        // Get the image.
+        $build['image_url'] = [];
+        $sku_media = $this->skuManager->getSkuMedia($sku);
+        $search_main_image = $thumbnails = [];
 
-      // Loop through all media items and prepare thumbnails array.
-      foreach ($sku_media as $key => $media_item) {
-        // For now we are displaying only image slider on search results page
-        // and PLP.
-        if ($media_item['media_type'] === 'image') {
-          $media_item['label'] = $product_label;
-          if (empty($search_main_image)) {
-            $search_main_image = $this->skuManager->getSkuImage($media_item, '291x288');
+        // Loop through all media items and prepare thumbnails array.
+        foreach ($sku_media as $key => $media_item) {
+          // For now we are displaying only image slider on search results page
+          // and PLP.
+          if ($media_item['media_type'] === 'image') {
+            $media_item['label'] = $product_label;
+            if (empty($search_main_image)) {
+              $search_main_image = $this->skuManager->getSkuImage($media_item, '291x288');
+            }
+
+            $thumbnails[] = $this->skuManager->getSkuImage($media_item, '59x60', '291x288');
           }
-
-          $thumbnails[] = $this->skuManager->getSkuImage($media_item, '59x60', '291x288');
         }
-      }
 
-      $promotion_types = ['cart'];
-      $promotions = $this->skuManager->getPromotionsFromSkuId($sku, FALSE, $promotion_types);
-      $current_route_name = $this->currentRouteMatch->getRouteName();
-      $current_node = $this->currentRouteMatch->getParameter('node');
+        $promotion_types = ['cart'];
+        $promotions = $this->skuManager->getPromotionsFromSkuId($sku, FALSE, $promotion_types);
+        $current_route_name = $this->currentRouteMatch->getRouteName();
+        $current_node = $this->currentRouteMatch->getParameter('node');
 
-      foreach ($promotions as $key => $promotion) {
-        $promotions[$key]['render_link'] = TRUE;
-        // Check if current page is promotion page,
-        // render current promotion as text.
-        if (($current_route_name === 'entity.node.canonical') &&
-          ($current_node->bundle() === 'acq_promotion') &&
-          ((int) $current_node->id() === $key)) {
-          $promotions[$key]['render_link'] = FALSE;
+        foreach ($promotions as $key => $promotion) {
+          $promotions[$key]['render_link'] = TRUE;
+          // Check if current page is promotion page,
+          // render current promotion as text.
+          if (($current_route_name === 'entity.node.canonical') &&
+            ($current_node->bundle() === 'acq_promotion') &&
+            ((int) $current_node->id() === $key)) {
+            $promotions[$key]['render_link'] = FALSE;
+          }
+          $promotion_cache_tags[] = 'node:' . $key;
         }
-        $promotion_cache_tags[] = 'node:' . $key;
-      }
 
-      $sku_gallery = [
-        '#theme' => 'alshaya_search_gallery',
-        '#mainImage' => $search_main_image,
-        '#thumbnails' => $thumbnails,
-        '#attached' => [
-          'library' => [
-            'alshaya_search/alshaya_search',
+        $sku_gallery = [
+          '#theme' => 'alshaya_search_gallery',
+          '#mainImage' => $search_main_image,
+          '#thumbnails' => $thumbnails,
+          '#attached' => [
+            'library' => [
+              'alshaya_search/alshaya_search',
+            ],
           ],
-        ],
-      ];
-
-      $stock_placeholder = NULL;
-
-      if (alshaya_acm_product_is_buyable($sku)) {
-        $stock_placeholder = [
-          '#markup' => '<div class="stock-placeholder out-of-stock">' . t('Checking stock...') . '</div>',
         ];
+
+        $stock_placeholder = NULL;
+
+        if (alshaya_acm_product_is_buyable($sku)) {
+          $stock_placeholder = [
+            '#markup' => '<div class="stock-placeholder out-of-stock">' . t('Checking stock...') . '</div>',
+          ];
+        }
+
+        $elements[$delta] = [
+          '#theme' => 'sku_teaser',
+          '#gallery' => $sku_gallery,
+          '#product_url' => $product_url,
+          '#product_label' => $product_label,
+          '#promotions' => $promotions,
+          '#stock_placeholder' => $stock_placeholder,
+          '#cache' => [
+            'tags' => array_merge($promotion_cache_tags, ['sku:' . $sku->id()]),
+            'contexts' => ['url'],
+          ],
+        ];
+
+        $this->skuManager->buildPrice($elements[$delta], $sku);
+
+        $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku);
+
+        $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
+        $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
+
+        $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
       }
-
-      $elements[$delta] = [
-        '#theme' => 'sku_teaser',
-        '#gallery' => $sku_gallery,
-        '#product_url' => $product_url,
-        '#product_label' => $product_label,
-        '#promotions' => $promotions,
-        '#stock_placeholder' => $stock_placeholder,
-        '#cache' => [
-          'tags' => array_merge($promotion_cache_tags, ['sku:' . $sku->id()]),
-          'contexts' => ['url'],
-        ],
-      ];
-
-      $this->skuManager->buildPrice($elements[$delta], $sku);
-
-      $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku);
-
-      $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
-      $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
-
-      $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
     }
 
     // Invoke the alter hook to allow all modules to update the element.
