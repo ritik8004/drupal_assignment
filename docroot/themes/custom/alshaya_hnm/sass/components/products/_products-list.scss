@@ -185,6 +185,7 @@
               @include icon(dropdown-expand, after) {
                 position: absolute;
                 #{$left}: 1.3%;
+                top: 0.8125rem;
                 font-size: 2.125rem;
                 pointer-events: none;
                 transform: rotate(90deg);
@@ -194,6 +195,7 @@
               &::after {
                 html[lang=ar] & {
                   transform: rotate(270deg);
+                  top: 0.75rem;
                 }
               }
             }
