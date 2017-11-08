@@ -700,6 +700,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     $enabled_options = [];
 
+    // To de-select all leaf options on parent change & not re-calculate
+    // availability of parent attributes in the opposite direction.
     if (isset($configurables[$leaf_attribute])) {
       unset($configurables[$leaf_attribute]);
       $tree_pointer_parent = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $configurables);
