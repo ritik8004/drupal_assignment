@@ -1,3 +1,15 @@
+$screen: "only screen" !default;
+$mobile: 320px !default;
+$ptablet: 480px !default;
+$desktop: 1025px !default;
+$desktop-wide: 1284px !default;
+
+$upto-ptablet: max-width $ptablet - 1;
+$upto-desktop: max-width $desktop - 1;
+
+$only-pmobile: 0 $ptablet - 1;
+$only-ptablet: $ptablet $desktop - 1;
+
 body {
   -webkit-print-color-adjust: exact;
   color-adjust: exact;
@@ -44,7 +56,7 @@ body {
 
   .order-item-row {
     .blend {
-      @include breakpoint($upto-tablet) {
+      @include breakpoint($upto-ptablet) {
         vertical-align: top;
       }
     }
@@ -93,6 +105,28 @@ body {
   }
 }
 
+.order__print--wrap .user__order--detail {
+  .above-mobile {
+    display: none;
+
+    @include breakpoint($ptablet) {
+      display: table-cell;
+    }
+  }
+
+  .mobile-only {
+    display: table-cell;
+
+    @include breakpoint($ptablet) {
+      display: none;
+    }
+  }
+
+  .order-item-row .blend {
+    vertical-align: top;
+  }
+}
+
 .delivery-details {
   background-color: $white-smoke-light;
   padding: 1.25rem 1rem;
@@ -109,7 +143,7 @@ body {
     vertical-align: middle;
   }
 
-  @include breakpoint($tablet) {
+  @include breakpoint($ptablet) {
     padding: 1.38rem;
     padding-#{$left}: 3.5rem;
   }
@@ -163,7 +197,7 @@ body {
 }
 
 body.path--confirmation.alias--confirmation-print {
-  @include breakpoint($only-tablet) {
+  @include breakpoint($only-ptablet) {
     margin-top: 0;
   }
 }
@@ -175,7 +209,7 @@ body.path--confirmation.alias--confirmation-print {
     }
 
     td.above-mobile.blend {
-      @include breakpoint($only-tablet) {
+      @include breakpoint($only-ptablet) {
         width: 9rem;
       }
     }
@@ -195,7 +229,7 @@ body.path--confirmation.alias--confirmation-print {
   .price-currency {
     margin-#{$right}: 1.5625rem;
 
-    @include breakpoint($only-tablet) {
+    @include breakpoint($only-ptablet) {
       margin-#{$right}: 0.5625rem;
     }
   }
@@ -210,7 +244,7 @@ body.path--confirmation.alias--confirmation-print {
         width: 100%;
       }
 
-      @include breakpoint($tablet) {
+      @include breakpoint($ptablet) {
         width: 69%;
       }
     }
@@ -220,11 +254,11 @@ body.path--confirmation.alias--confirmation-print {
         width: 100%;
       }
 
-      @include breakpoint($tablet) {
+      @include breakpoint($ptablet) {
         width: 30%;
       }
 
-      @include breakpoint($only-mobile) {
+      @include breakpoint($only-pmobile) {
         text-align: center;
         margin-top: 2rem;
       }
@@ -232,7 +266,7 @@ body.path--confirmation.alias--confirmation-print {
   }
 
   .delivery-details {
-    @include breakpoint($upto-tablet) {
+    @include breakpoint($upto-ptablet) {
       text-indent: -3.5rem;
       padding-left: 4.5rem;
       margin-bottom: 2rem;
@@ -240,34 +274,34 @@ body.path--confirmation.alias--confirmation-print {
   }
 
   .user__order--detail {
-    @include breakpoint($upto-tablet) {
+    @include breakpoint($upto-ptablet) {
       margin-bottom: 3.5rem;
     }
 
     .order-details-row {
       .above-mobile.blend,
       .desktop-only {
-        @include breakpoint($upto-tablet) {
+        @include breakpoint($upto-ptablet) {
           display: none !important;
         }
       }
 
       .mobile-only.delivery--method {
-        @include breakpoint($upto-tablet) {
+        @include breakpoint($upto-ptablet) {
           margin-top: 1rem !important;
         }
       }
     }
 
     td {
-      @include breakpoint($only-mobile) {
+      @include breakpoint($only-pmobile) {
         width: 50%;
         display: inline-block;
       }
     }
 
     .empty--cell {
-      @include breakpoint($upto-tablet) {
+      @include breakpoint($upto-ptablet) {
         display: none !important;
       }
     }
@@ -278,7 +312,7 @@ body.path--confirmation.alias--confirmation-print {
   .total-row {
     & td:first-child,
     & td:nth-child(2) {
-      @include breakpoint($upto-tablet) {
+      @include breakpoint($upto-ptablet) {
         display: none;
       }
     }
@@ -295,7 +329,7 @@ body.path--confirmation.alias--confirmation-print {
 
 html[lang="ar"] {
   .order__user--info {
-    @include breakpoint($tablet) {
+    @include breakpoint($ptablet) {
       width: 33%;
     }
 

@@ -5,6 +5,8 @@ dependencies:
     - field.storage.paragraph.field_promo_block
     - paragraphs.paragraphs_type.1_row_1_col
     - paragraphs.paragraphs_type.promo_block
+    - paragraphs.paragraphs_type.title_textarea
+    - paragraphs.paragraphs_type.video
   module:
     - entity_reference_revisions
 id: paragraph.1_row_1_col.field_promo_block
@@ -22,6 +24,8 @@ settings:
   handler_settings:
     target_bundles:
       promo_block: promo_block
+      title_textarea: title_textarea
+      video: video
     target_bundles_drag_drop:
       1_row_1_col:
         weight: 10
@@ -49,5 +53,47 @@ settings:
         weight: 17
       related_info_one_column:
         weight: 18
+        enabled: false
+      title_textarea:
+        enabled: true
+        weight: 21
+      video:
+        enabled: true
+        weight: 22
+      1_row_1_col_dept:
+        weight: 23
+        enabled: false
+      1_row_1st_col_2_row_2nd_col:
+        weight: 24
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 25
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 26
+        enabled: false
+      1_row_2_col_dept:
+        weight: 27
+        enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 29
+        enabled: false
+      1_row_3_col_dept:
+        weight: 30
+        enabled: false
+      block_reference:
+        weight: 34
+        enabled: false
+      image_title_subtitle:
+        weight: 35
+        enabled: false
+      offers_bordered:
+        weight: 36
+        enabled: false
+      promo_block_text:
+        weight: 38
+        enabled: false
+      views_reference:
+        weight: 40
         enabled: false
 field_type: entity_reference_revisions

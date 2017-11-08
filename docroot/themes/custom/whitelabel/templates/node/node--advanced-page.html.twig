@@ -71,7 +71,7 @@
  */
 #}
 <article {{ attributes.addClass(classes) }}>
-  {% if content.field_slider %}
+  {% if content.field_slider|render %}
     <div class="field__slider">
       {{ content.field_slider }}
     </div>

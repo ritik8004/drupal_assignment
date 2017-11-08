@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_block
+    - system
+  theme:
+    - bouchon_bakery
+id: bb_custom_child_menu_block
+theme: bouchon_bakery
+region: header
+weight: 0
+provider: null
+plugin: custom_child_menu_block
+settings:
+  id: custom_child_menu_block
+  label: 'Custom Child Menu Block'
+  provider: alshaya_block
+  label_display: '0'
+  level: '2'
+  depth: '1'
+  menu_name: main
+  parent_menu_item: 'menu_link_content:1964e4c7-acc9-4fc9-89ec-d873f8e99609'
+  child_level: '1'
+  child_depth: '1'
+visibility: {  }

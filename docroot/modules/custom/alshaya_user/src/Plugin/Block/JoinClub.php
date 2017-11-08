@@ -85,7 +85,6 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
   public function build() {
 
     $build = [];
-
     // Default image.
     $image_path = drupal_get_path('module', 'alshaya_user') . '/images/alshaya-priv-card.png';
 
@@ -121,7 +120,7 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['join-the-club']);
+    return Cache::mergeTags(parent::getCacheTags(), ['loyality-on-off']);
   }
 
 }

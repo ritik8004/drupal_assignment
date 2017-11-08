@@ -2,9 +2,9 @@
 
 namespace Drupal\alshaya_acm_promotion;
 
+use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\node\Entity\Node;
@@ -68,12 +68,19 @@ class AlshayaPromotionsManager {
    *   The language manager service.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   The Entity repository service.
+   * @param \Drupal\acq_promotion\AcqPromotionsManager $acq_promotions_manager
+   *   Promotions manager service object from commerce code.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, LoggerChannelFactoryInterface $logger, LanguageManager $languageManager, EntityRepositoryInterface $entityRepository) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager,
+                              LoggerChannelFactoryInterface $logger,
+                              LanguageManager $languageManager,
+                              EntityRepositoryInterface $entityRepository,
+                              AcqPromotionsManager $acq_promotions_manager) {
     $this->nodeStorage = $entityTypeManager->getStorage('node');
-    $this->logger = $logger;
+    $this->logger = $logger->get('alshaya_acm_promotion');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
+    $this->acqPromotionsManager = $acq_promotions_manager;
   }
 
   /**
@@ -81,34 +88,14 @@ class AlshayaPromotionsManager {
    *
    * @param int $rule_id
    *   Rule id of the promotion to load.
+   * @param string $rule_type
+   *   Rule type of the promotion to load.
    *
    * @return \Drupal\node\Entity\Node|null
    *   Return node if a promotion found associated with the rule id else Null.
    */
-  public function getPromotionByRuleId($rule_id) {
-    $query = $this->nodeStorage->getQuery();
-    $query->condition('type', 'acq_promotion');
-    $query->condition('field_acq_promotion_rule_id', $rule_id);
-    $nids = $query->execute();
-
-    if (empty($nids)) {
-      return NULL;
-    }
-    else {
-      // Log a message for admin to check errors in data.
-      if (count($nids) > 1) {
-        $this->logger->critical('Multiple nodes found for rule id @rule_id', ['@rule_id' => $rule_id]);
-      }
-
-      // We only load the first node.
-      /* @var $node \Drupal\node\Entity\Node */
-      $node = $this->nodeStorage->load(reset($nids));
-      $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
-      // Get the promotion with language fallback, if it did not have a
-      // translation for $langcode.
-      $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
-      return $node;
-    }
+  public function getPromotionByRuleId($rule_id, $rule_type = 'cart') {
+    return $this->acqPromotionsManager->getPromotionByRuleId($rule_id, $rule_type);
   }
 
   /**

@@ -1,0 +1,5 @@
+alshaya_seo.redirect_bulk_upload:
+  route_name: alshaya_seo.redirect_bulk_upload
+  base_route: redirect.list
+  title: 'Bulk add redirects'
+  weight: 51

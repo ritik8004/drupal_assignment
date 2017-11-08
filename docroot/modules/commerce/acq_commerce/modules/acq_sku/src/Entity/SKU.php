@@ -246,13 +246,16 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Found SKU
    */
   public static function loadFromSku($sku, $langcode = '', $log_not_found = TRUE, $create_translation = FALSE) {
-    if (empty($langcode)) {
+    $is_multilingual = \Drupal::languageManager()->isMultilingual();
+
+    if ($is_multilingual && empty($langcode)) {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     }
 
     $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
     $skus = $storage->loadByProperties(['sku' => $sku]);
 
+    // First check if we have some result before doing anything else.
     if (count($skus) == 0) {
       // We don't log the error while doing sync.
       if ($log_not_found) {
@@ -261,14 +264,27 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
       return NULL;
     }
-    // For multiple entries, we just log the error and continue with first one.
-    elseif (count($skus) > 1) {
+
+    // Remove all skus in other languages if there are more than one available
+    // We need to have multiple languages enabled to clean db result.
+    // If only one is available, we might be adding translation, leave it as is.
+    if ($is_multilingual && !empty($skus) && count($skus) > 1) {
+      // Get rid of undesired languages. Later first one is picked up.
+      foreach ($skus as $key => $sku) {
+        if ($sku->langcode->value != $langcode) {
+          unset($skus[$key]);
+        }
+      }
+    }
+
+    // Log error message if we have more than one available even after cleanup.
+    if (count($skus) > 1) {
       \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
     $sku_entity = array_shift($skus);
 
-    if (\Drupal::languageManager()->isMultilingual()) {
+    if ($is_multilingual) {
       if ($sku_entity->hasTranslation($langcode)) {
         $sku_entity = $sku_entity->getTranslation($langcode);
       }
@@ -276,7 +292,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $sku_entity = $sku_entity->addTranslation($langcode, ['sku' => $sku]);
       }
       else {
-        throw new \Exception(new FormattableMarkup('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]), 404);
+        \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
     }
 

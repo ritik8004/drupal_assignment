@@ -483,6 +483,7 @@ function alshaya_acm_get_cart_items_by_sku() {
 function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['quantity']['#type'] = 'select';
   $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
+  $form['quantity']['#validated'] = TRUE;
   unset($form['quantity']['#size']);
 
   if (isset($form['ajax'], $form['ajax']['configurables'])) {

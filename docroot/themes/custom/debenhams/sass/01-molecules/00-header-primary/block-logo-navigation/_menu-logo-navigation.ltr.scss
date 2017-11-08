@@ -1,0 +1,213 @@
+.region-primary-header .menu-logo-navigation {
+  margin: 0 auto;
+  padding-#{direction(left)}: 0;
+  background: $white;
+  max-width: 80.25rem;
+
+  @include breakpoint($desk) {
+    padding-#{direction(left)}: 0;
+  }
+
+  li {
+    display: inline-block;
+    vertical-align: middle;
+
+    @include breakpoint($upto-palm) {
+      width: 33.33%;
+    }
+
+    &.active-trail a {
+      background-color: $white;
+    }
+  }
+
+  a {
+    display: block;
+    padding: 1rem 1.875rem;
+    font-size: 0.9375rem;
+    color: $black-smoke;
+    font-family: $lato-regular;
+    text-decoration: none;
+    text-transform: capitalize;
+
+    @include breakpoint($lap) {
+      padding: 1rem 1.6rem;
+    }
+
+    @include breakpoint($desk) {
+      padding: 1.25rem 1.6rem;
+    }
+
+    &::after {
+      content: "";
+      width: 0;
+      height: 0;
+      display: block;
+      margin: auto;
+    }
+
+    &:hover,
+    &.is-active {
+      color: $apple-light-green;
+      text-decoration: none;
+    }
+  }
+}
+
+.burger {
+  display: none;
+  float: direction(left);
+
+  &::before {
+    font-size: 2rem;
+  }
+}
+
+.region-primary-header .menu-close {
+  color: $marine-blue-two;
+  position: fixed;
+  #{direction(right)}: 2.5%;
+  top: 3.75rem;
+  display: none;
+  width: 2.1875rem;
+  height: 1.9375rem;
+  overflow: hidden;
+
+  &::before {
+    background: $white;
+    font-size: 2.25rem;
+    line-height: 1.9375rem;
+  }
+}
+
+.vertical-layout .menu-logo-navigation.navigation__sub-menu {
+  @include breakpoint($upto-palm) {
+    width: 84.7%;
+    position: fixed;
+    z-index: 9;
+    background: $white;
+    height: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease-in-out;
+    clear: both;
+    will-change: transform;
+    margin-top: 0;
+    top: 3.3125rem;
+
+    li {
+      width: 100%;
+      float: direction(left);
+      text-align: direction(left);
+      border-bottom: 0.0625rem solid $gainsboro;
+
+      .ajax-progress-throbber {
+        display: none;
+      }
+
+      a {
+        font-size: 0.875rem;
+        margin-#{direction(right)}: 0;
+        padding: 1.25rem;
+        text-transform: uppercase;
+        color: $black;
+
+        @include icon(chevronright, after) {
+          font-size: 1.75rem;
+          position: absolute;
+          #{direction(right)}: 1.875rem;
+          margin-top: -0.8125rem;
+          color: $black;
+        }
+      }
+    }
+  }
+}
+
+.burger-main-menu {
+  li {
+    max-width: 5.625rem;
+
+    a {
+      padding: 0.72rem 0;
+    }
+  }
+}
+
+.vertical-layout {
+  .is-active {
+    transform: translateX(0%) !important;
+  }
+}
+
+.show-menu-button {
+  position: relative;
+
+  .is-hidden {
+    transform: translateX(-100%);
+  }
+
+  .is-active-ul {
+    transform: translateX(-0.33%);
+  }
+
+  .is-active-close {
+    display: block;
+  }
+}
+
+.menu-close {
+  display: none;
+  z-index: $z-1;
+}
+
+.region-primary-header .show-menu-button {
+  @include breakpoint($upto-palm) {
+    .burger {
+      display: block;
+      width: 15%;
+      height: auto;
+      position: relative;
+      padding: 0.75rem 0 0.5rem;
+      background: $white;
+      color: $black-smoke;
+    }
+  }
+
+  .menu-logo-navigation {
+    display: block;
+    background: $white;
+
+    @include breakpoint($upto-palm) {
+      width: 84.7%;
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+html[dir=rtl] {
+  @include breakpoint($upto-palm) {
+    .vertical-layout .navigation__sub-menu {
+      right: 0;
+      transform: translateX(100%);
+
+      li a {
+        @include icon(chevronleft, after);
+      }
+    }
+  }
+}
+
+.toolbar-vertical {
+  .vertical-layout .navigation__sub-menu {
+    @include breakpoint($upto-palm) {
+      margin-top: 5.4rem;
+    }
+  }
+
+  .menu-close {
+    @include breakpoint($upto-palm) {
+      top: 3.75rem;
+    }
+  }
+}

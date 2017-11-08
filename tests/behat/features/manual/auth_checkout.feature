@@ -4,7 +4,7 @@ Feature: As an authenticated user
   using various payment options
 
   Background:
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
     When I am on a simple product page
@@ -38,32 +38,32 @@ Feature: As an authenticated user
 
   @hd @knet
   Scenario: As an authenticated user
-  I should be able to checkout using Home delivery
-  and pay by KNET
-    When I follow "Home delivery"
-    And I wait for AJAX to finish
-    And I follow "deliver to this address"
-    And I wait for AJAX to finish
-    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
-    And I wait for AJAX to finish
-    And I press "proceed to payment"
-    And I wait for the page to load
-    When I select a payment option "payment_method_title_knet"
-    And I wait for AJAX to finish
-    And I accept terms and conditions
-    And I wait for the page to load
-    And I press "place order"
-    And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
-    And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
-    And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
-    And I fill in "Ecom_Payment_Pin_id" with "1234"
-    And I press "Submit"
-    And I press "Confirm"
-    And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
-    And I should see text matching "Your order number is "
+    I should be able to checkout using Home delivery
+    and pay by KNET
+      When I follow "Home delivery"
+      And I wait for AJAX to finish
+      And I follow "deliver to this address"
+      And I wait for AJAX to finish
+      When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+      And I wait for AJAX to finish
+      And I press "proceed to payment"
+      And I wait for the page to load
+      When I select a payment option "payment_method_title_knet"
+      And I wait for AJAX to finish
+      And I accept terms and conditions
+      And I wait for the page to load
+      And I press "place order"
+      And I wait for the page to load
+      And I select "Knet Test Card [KNET1]" from "bank"
+      And I fill in "cardN" with "0000000001"
+      And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
+      And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
+      And I fill in "Ecom_Payment_Pin_id" with "1234"
+      And I press "Submit"
+      And I press "Confirm"
+      And I wait for the page to load
+      Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+      And I should see text matching "Your order number is "
 
   @cc @knet
   Scenario: As an authenticated user
@@ -101,8 +101,8 @@ Feature: As an authenticated user
 
   @hd @cs
   Scenario: As an authenticated user
-  I should be able to checkout on HD
-  using Cybersource payment method
+    I should be able to checkout on HD
+    using Cybersource payment method
     When I follow "Home delivery"
     And I wait for AJAX to finish
     When I follow "deliver to this address"
@@ -118,14 +118,14 @@ Feature: As an authenticated user
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I accept terms and conditions
     And I press "place order"
-    When I wait 10 seconds
+    When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
     And I should see text matching "Your order number is "
 
   @cc @cs
   Scenario: As an authenticated user
-  I should be able to checekout on Click and Collect
-  using Cybersource payment method
+    I should be able to checekout on Click and Collect
+    using Cybersource payment method
     When I follow "Click & Collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
@@ -148,6 +148,6 @@ Feature: As an authenticated user
     When I fill in "edit-billing-address-address-billing-address-line2" with "1"
     And I accept terms and conditions
     And I press "place order"
-    When I wait 10 seconds
+    When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
     And I should see text matching "Your order number is "
