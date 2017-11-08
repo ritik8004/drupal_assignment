@@ -553,7 +553,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         return $a - $b;
       });
 
-      $root_attribute_code = array_shift(array_keys($configurable_weights));
+      $config_attributes = array_keys($configurable_weights);
+      $root_attribute_code = array_shift($config_attributes);
       $user_input_configurables = $form_state->getUserInput('configurables');
       $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
