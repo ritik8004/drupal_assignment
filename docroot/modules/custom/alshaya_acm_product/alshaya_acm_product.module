@@ -571,30 +571,31 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $first_child_root_attr_value = $plugin->getAttributeValue($first_child, $root_attribute_code);
       $root_attribute_options = $form['ajax']['configurables'][$root_attribute_code]['#options'];
 
-      foreach ($root_attribute_options as $key => $value) {
-        if (($key == $first_child_root_attr_value) && (!isset($user_input_configurables['configurables'][$root_attribute_code]))) {
-          $form['ajax']['configurables']['article_castor_id']['#options_attributes'][$key]['selected'] = 'selected';
-          $form_state->setValue('configurables', [$root_attribute_code => $key]);
+      // Set the color attribute as default only if user has not made a
+      // selection.
+      if ((isset($root_attribute_options[$first_child_root_attr_value])) &&
+        (!isset($user_input_configurables['configurables'][$root_attribute_code]))) {
+        $form['ajax']['configurables']['article_castor_id']['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
+        $form_state->setValue('configurables', [$root_attribute_code => $first_child_root_attr_value]);
 
-          // Fetch the size values available for the current color chosen.
-          $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $form_state->getValue('configurables'));
+        // Fetch the size values available for the current color chosen.
+        $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $form_state->getValue('configurables'));
 
-          $enabled_options = [];
+        $enabled_options = [];
 
-          // Items are keyed by their attribute codes.
-          foreach ($tree_pointer as $key => $value) {
-            $attribute = explode(':', $key);
-            $attribute_code = $attribute[0];
-            $enabled_options[] = $attribute[1];
-          }
+        // Items are keyed by their attribute codes.
+        foreach ($tree_pointer as $key => $value) {
+          $attribute = explode(':', $key);
+          $attribute_code = $attribute[0];
+          $enabled_options[] = $attribute[1];
+        }
 
-          $options = $form['ajax']['configurables']['size']['#options'];
+        $options = $form['ajax']['configurables']['size']['#options'];
 
-          // Disable size options which don't exist for the default color.
-          foreach ($options as $key => $value) {
-            if (!in_array($key, $enabled_options)) {
-              $form['ajax']['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
-            }
+        // Disable size options which don't exist for the default color.
+        foreach ($options as $key => $value) {
+          if (!in_array($key, $enabled_options)) {
+            $form['ajax']['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
           }
         }
       }
