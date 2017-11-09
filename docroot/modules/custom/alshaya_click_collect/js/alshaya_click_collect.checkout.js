@@ -87,9 +87,15 @@
 
           if (typeof ascoords !== 'undefined') {
             var map = Drupal.checkoutClickCollect.mapCreate();
-            var center = map.googleMap.getCenter();
+
+            // Trigger resize event.
             google.maps.event.trigger(map.googleMap, 'resize');
-            map.googleMap.setCenter(center);
+
+            // Auto zoom.
+            map.googleMap.fitBounds(map.bounds);
+
+            // Auto center.
+            map.googleMap.panToBounds(map.bounds);
           }
           return false;
         }
@@ -284,12 +290,18 @@
     // Set the index to 0 to display marker label starting with 1.
     index = 0;
     if (map) {
+      // Initiate bounds object.
+      map.bounds = new google.maps.LatLngBounds();
+
       // Invoke function to add marker for each store.
       _.invoke(storeItems, Drupal.checkoutClickCollect.mapPushMarker, {geolocationMap: map});
-      // Setting to zoom level 10 which roughly covers entire Kuwait City and hence will show all the markers.
-      // We cannot zoom further as the map marker and info window is open for the first marker which can be anywhere on
-      // the map. Hence setting zoom level such that entire city will be shown.
-      map.googleMap.setZoom(10);
+
+      // Auto zoom.
+      map.googleMap.fitBounds(map.bounds);
+
+      // Auto center.
+      map.googleMap.panToBounds(map.bounds);
+
     }
   };
 
@@ -330,6 +342,12 @@
       infoWindowSolitary: true,
       label: (index).toString()
     };
+
+    if (typeof mapObj.bounds !== 'undefined') {
+      // Add new marker position to bounds.
+      mapObj.bounds.extend(position);
+    }
+
     return Drupal.geolocation.setMapMarker(mapObj, markerConfig, false);
   };
 
