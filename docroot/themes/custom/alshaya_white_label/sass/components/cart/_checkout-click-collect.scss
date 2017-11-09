@@ -594,7 +594,7 @@
               font-size: 0.75rem;
               line-height: 1.57;
 
-              @include breakpoint($desktop) {
+              @include breakpoint($tablet) {
                 display: none;
                 color: $grey-ash;
                 font-size: 0.875rem;
