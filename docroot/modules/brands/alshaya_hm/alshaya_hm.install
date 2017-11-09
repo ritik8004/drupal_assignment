@@ -158,7 +158,7 @@ function alshaya_hm_install() {
 
   // Update mobile number max length to 8 as per new fe implementation.
   \Drupal::configFactory()->getEditable('alshaya_master.mobile_number_settings')
-  ->set('maxlength', 8);
+  ->set('maxlength', 8)
   ->save();
 
   // Set initial translation strings.
