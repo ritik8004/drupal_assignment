@@ -10,6 +10,19 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add new string translations.
+ */
+function alshaya_master_update_8004() {
+  $strings = [
+    'not available' => [
+      'ar' => 'غير متوفر',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Update mobile number maxlength to 8 as per new fe implementation.
  */
 function alshaya_master_update_8003() {
@@ -1201,6 +1214,9 @@ function alshaya_master_install() {
     ],
     'Sorry, something went wrong and we are unable to process your request right now. Please try again later.' => [
       'ar' => 'عفواً، حدث خطأ ما، ولم نتمكن من متابعة تنفيذ طلبك الآن. يرجى المحاولة مجدداً في وقت لاحق.',
+    ],
+    'not available' => [
+      'ar' => 'غير متوفر',
     ],
   ];
   alshaya_i18n_save_translations($strings);
