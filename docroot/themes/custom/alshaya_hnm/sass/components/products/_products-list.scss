@@ -402,26 +402,25 @@
     position: relative;
 
     @include breakpoint($mobile) {
-      width: 49%;
+      width: calc(94.6% / 2);
       margin-bottom: 1rem;
     }
 
-    @include breakpoint($desktop) {
-      width: 33%;
+    @include breakpoint($tablet) {
+      width: calc(94.8% / 3);
 
-      &:nth-child(3n-1) {
-        margin-#{$left}: 0.5%;
-        margin-#{$right}: 0.5%;
+      &:nth-child(3n+2) {
+        margin: 0 2.6%;
       }
     }
 
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($upto-tablet) {
       &:nth-child(2n+1) {
-        margin-#{$right}: 0.5%;
+        margin-#{$right}: 2.7%;
       }
 
       &:nth-child(2n) {
-        margin-#{$left}: 0.5%;
+        margin-#{$left}: 2.7%;
       }
     }
 
