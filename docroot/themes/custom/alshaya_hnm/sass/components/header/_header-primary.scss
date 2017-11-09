@@ -92,7 +92,7 @@ header {
       vertical-align: middle;
 
       @include breakpoint($desktop) {
-        width: calc(100% / 3);
+        width: 33.33%;
       }
     }
 
