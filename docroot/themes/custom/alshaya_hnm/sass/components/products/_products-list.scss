@@ -386,39 +386,59 @@
         display: none;
       }
     }
+
+    .views-infinite-scroll-content-wrapper {
+      display: flex;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
   }
 
   .c-products__item {
-    float: $left;
     text-align: center;
     color: $black;
-    height: 23.25rem;
     margin-bottom: 0.125rem;
     font-size: 0.9375rem;
     position: relative;
 
-    @include breakpoint($only-mobile) {
-      &:nth-child(2n) {
-        float: $right;
-      }
-    }
-
     @include breakpoint($mobile) {
-      width: 49.2%;
-    }
-
-    @include breakpoint($tablet) {
-      width: 31.59%;
-      max-width: 18.1875rem;
-      height: 31.5rem;
-
-      &:nth-child(3n+2) {
-        margin: 0 2.6%;
-      }
+      width: 49%;
+      margin-bottom: 1rem;
     }
 
     @include breakpoint($desktop) {
-      height: 39.25rem;
+      width: 33%;
+
+      &:nth-child(3n-1) {
+        margin-#{$left}: 0.5%;
+        margin-#{$right}: 0.5%;
+      }
+    }
+
+    @include breakpoint($upto-desktop) {
+      &:nth-child(2n+1) {
+        margin-#{$right}: 0.5%;
+      }
+
+      &:nth-child(2n) {
+        margin-#{$left}: 0.5%;
+      }
+    }
+
+    .alshaya_search_gallery {
+      .alshaya_search_mainimage {
+        z-index: 5;
+        min-height: 15.125rem;
+        overflow: hidden;
+
+        @include breakpoint($tablet) {
+          min-height: 15.5rem;
+        }
+
+        @include breakpoint($desktop) {
+          min-height: 20.125rem;
+        }
+      }
     }
 
     .field--name-name {
