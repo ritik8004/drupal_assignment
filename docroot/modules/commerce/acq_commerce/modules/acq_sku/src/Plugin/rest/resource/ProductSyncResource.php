@@ -129,6 +129,18 @@ class ProductSyncResource extends ResourceBase {
    *   HTTP Response object.
    */
   public function post(array $products = []) {
+    // Increase timeout as we will be using locks.
+    set_time_limit(600);
+
+    $lock = \Drupal::lock();
+
+    // Acquire lock to ensure parallel processes are executed one by one.
+    do {
+      // We should be done in 120 seconds max, products are always pushed
+      // in batches.
+      $synchronizeProductsLock = $lock->acquire('synchronizeProducts', 120);
+    } while (!$synchronizeProductsLock);
+
     $em = $this->entityManager->getStorage('acq_sku');
     $created = 0;
     $updated = 0;
@@ -301,6 +313,9 @@ class ProductSyncResource extends ResourceBase {
         }
       }
     }
+
+    // Release the lock.
+    $lock->release('synchronizeProducts');
 
     if (isset($fps)) {
       foreach ($fps as $fp) {

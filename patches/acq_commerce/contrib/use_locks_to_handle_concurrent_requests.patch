@@ -1,0 +1,66 @@
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ConductorCategoryManager.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ConductorCategoryManager.php
+index 94e14bebf..abc4c127b 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ConductorCategoryManager.php
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ConductorCategoryManager.php
+@@ -138,6 +138,18 @@ public function synchronizeTreeOffline($vocabulary, array $categories) {
+    * {@inheritdoc}
+    */
+   public function synchronizeCategory($vocabulary, array $categories) {
++    // Increase timeout as we will be using locks.
++    set_time_limit(600);
++
++    $lock = \Drupal::lock();
++
++    // Acquire lock to ensure parallel processes are executed one by one.
++    do {
++      // We should be done in 120 seconds max, categories are always pushed
++      // one by one.
++      $synchronizeCategoryLock = $lock->acquire('synchronizeCategory', 120);
++    } while (!$synchronizeCategoryLock);
++
+     $this->resetResults();
+     $this->loadVocabulary($vocabulary);
+ 
+@@ -180,6 +192,9 @@ public function synchronizeCategory($vocabulary, array $categories) {
+     // Recurse the category tree and create / update nodes.
+     $this->syncCategory([$categories], $parent);
+ 
++    // Release the lock.
++    $lock->release('synchronizeCategory');
++
+     return ($this->results);
+   }
+ 
+diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+index a8d4e394c..a9763fbf0 100644
+--- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
++++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+@@ -129,6 +129,18 @@ public static function create(ContainerInterface $container, array $configuratio
+    *   HTTP Response object.
+    */
+   public function post(array $products = []) {
++    // Increase timeout as we will be using locks.
++    set_time_limit(600);
++
++    $lock = \Drupal::lock();
++
++    // Acquire lock to ensure parallel processes are executed one by one.
++    do {
++      // We should be done in 120 seconds max, products are always pushed
++      // in batches.
++      $synchronizeProductsLock = $lock->acquire('synchronizeProducts', 120);
++    } while (!$synchronizeProductsLock);
++
+     $em = $this->entityManager->getStorage('acq_sku');
+     $created = 0;
+     $updated = 0;
+@@ -302,6 +314,9 @@ public function post(array $products = []) {
+       }
+     }
+ 
++    // Release the lock.
++    $lock->release('synchronizeProducts');
++
+     if (isset($fps)) {
+       foreach ($fps as $fp) {
+         fclose($fp);
