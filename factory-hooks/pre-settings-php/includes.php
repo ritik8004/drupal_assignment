@@ -158,9 +158,6 @@ switch ($env) {
     $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'http://mcmena.store.alshaya.com';
-
-    // Disable setting readonly automatically on prod.
-    $config['acquia_search.settings']['disable_auto_switch'] = TRUE;
     break;
 
   default:
