@@ -47,8 +47,7 @@
       }
 
       .form-item.form-type-select {
-        padding-bottom: 1rem;
-        margin-top: 2.75rem !important;
+        margin-top: 1.75rem !important;
 
         label {
           top: -1.375rem;
@@ -1150,18 +1149,6 @@ html[lang=ar] {
         }
       }
     }
-  }
-}
-
-// Showing label on mobile number field.
-.address-book-address .mobile-number-field {
-  > label {
-    position: static !important;
-    line-height: 2.2;
-  }
-
-  .form-type-textfield input[type=text] {
-    padding-bottom: 0.25rem !important;
   }
 }
 

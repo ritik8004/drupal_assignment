@@ -17,7 +17,7 @@
         }
       });
 
-      $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input, .c-user-edit .user-form input, .address-book-address input').focusout(function () {
+      $('.webform-submission-alshaya-contact-form input:not([type=hidden]), .webform-submission-alshaya-contact-form textarea, .profile-form input, .c-user-edit .user-form input, .address-book-address input').focusout(function () {
         if ($(this).val() !== '') {
           $(this).parent().find('label').last().addClass('active-label');
         }
@@ -27,7 +27,7 @@
       });
 
       $(window).on('load', function () {
-        $('.webform-submission-alshaya-contact-form input, .webform-submission-alshaya-contact-form textarea, .profile-form input:not([type=hidden]), .address-book-address input:not([type=hidden])').each(function () {
+        $('.webform-submission-alshaya-contact-form input:not([type=hidden]), .webform-submission-alshaya-contact-form textarea, .profile-form input:not([type=hidden]), .address-book-address input:not([type=hidden])').each(function () {
           if ($(this).val() !== '') {
             $(this).parent().find('label').last().addClass('active-label');
           }

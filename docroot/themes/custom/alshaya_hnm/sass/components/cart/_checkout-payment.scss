@@ -33,10 +33,6 @@
       .fieldset-wrapper {
         position: relative;
 
-        .form-item {
-          display: block;
-        }
-
         .webform-options-display-one-column {
           padding-#{$left}: 1em;
         }
@@ -390,19 +386,6 @@
           background-image: url('../imgs/cards/dinersclub-active.png');
         }
       }
-    }
-  }
-}
-
-.alias--cart-checkout-payment {
-  .mobile-number-field {
-    .form-item-billing-address-address-billing-mobile-number-country-code,
-    .verified {
-      display: none !important;
-    }
-
-    & > label {
-      position: static !important;
     }
   }
 }

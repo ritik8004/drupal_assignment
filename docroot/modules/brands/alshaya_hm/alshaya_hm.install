@@ -156,6 +156,11 @@ function alshaya_hm_install() {
     ->set('email_logo_path', $site_logo . '-ar.png')
     ->save();
 
+  // Update mobile number max length to 8 as per new fe implementation.
+  \Drupal::configFactory()->getEditable('alshaya_master.mobile_number_settings')
+  ->set('maxlength', 8);
+  ->save();
+
   // Set initial translation strings.
   $strings = [
     'view cart' => [
