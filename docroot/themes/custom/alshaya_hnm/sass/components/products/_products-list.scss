@@ -305,6 +305,10 @@
       padding-bottom: 0.75rem;
       border-bottom: 1px solid $white;
       font-family: $hnm-regular;
+
+      @include breakpoint($only-mobile) {
+        border-bottom: none;
+      }
     }
 
     .promo-banner > .filter--mobile {
@@ -553,16 +557,17 @@
       border: 1px solid $hnm-black-two;
       border-#{$right}: none;
 
-      @include icon(chevron#{$right}, after) {
+      @include icon(dropdown-expand, after) {
         #{$right}: -2.188rem;
         height: 2.1875rem;
         width: 2.1875rem;
         position: absolute;
         text-align: center;
         top: 0;
-        font-size: 2rem;
+        font-size: 2.1875rem;
         border: 1px solid $hnm-black-two;
-        border-#{$left}: none;
+        border-top: none;
+        transform: rotate(-90deg);
       }
     }
 
