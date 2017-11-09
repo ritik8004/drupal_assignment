@@ -99,7 +99,10 @@
       float: $right;
       color: $hnm-black-two;
       font-family: $hnm-demibold;
-      text-decoration: underline;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     .method,
