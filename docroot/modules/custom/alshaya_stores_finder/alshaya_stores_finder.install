@@ -8,7 +8,7 @@
 /**
  * Implements hook_update_N().
  */
-function alshaya_stores_finder_update_8003() {
+function alshaya_stores_finder_update_8103() {
   // Revert the view to use relative path in links.
   $reverter = \Drupal::service('config_update.config_update');
   $reverter->revert('view', 'stores_finder');
@@ -53,7 +53,7 @@ function alshaya_stores_finder_set_default_marker_icon() {
  *
  * Update the Google Map API Key.
  */
-function alshaya_stores_finder_update_8002() {
+function alshaya_stores_finder_update_8102() {
   $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
   $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
   $config->save();
