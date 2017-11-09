@@ -10,6 +10,17 @@ use Drupal\acq_sku\ProductOptionsManager;
 /**
  * Implements hook_update_N().
  *
+ * Add default value for new setting - list_view_items_per_page.
+ */
+function alshaya_acm_product_update_8004() {
+  $settings = \Drupal::configFactory()->getEditable('alshaya_acm_product.settings');
+  $settings->set('list_view_items_per_page', 30);
+  $settings->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add the index key in config to use for adding data in parent for configurable
  * products.
  */
