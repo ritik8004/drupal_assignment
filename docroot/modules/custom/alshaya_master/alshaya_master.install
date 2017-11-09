@@ -12,7 +12,7 @@ use Drupal\Core\Config\FileStorage;
  *
  * Add new string translations.
  */
-function alshaya_master_update_8003() {
+function alshaya_master_update_8004() {
   $strings = [
     'not available' => [
       'ar' => 'غير متوفر',
@@ -20,6 +20,15 @@ function alshaya_master_update_8003() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Update mobile number maxlength to 8 as per new fe implementation.
+ */
+function alshaya_master_update_8003() {
+  $settings = \Drupal::configFactory()->getEditable('alshaya_master.mobile_number_settings');
+  $settings->set('maxlength', 8);
+  $settings->save();
 }
 
 /**
