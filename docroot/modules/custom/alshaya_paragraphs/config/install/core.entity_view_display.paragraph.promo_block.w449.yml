@@ -5,9 +5,11 @@ dependencies:
     - core.entity_view_mode.paragraph.w449
     - field.field.paragraph.promo_block.field_banner
     - field.field.paragraph.promo_block.field_link
+    - field.field.paragraph.promo_block.field_promo_block_button
     - paragraphs.paragraphs_type.promo_block
     - responsive_image.styles.w449
   module:
+    - entity_reference_revisions
     - link
     - responsive_image
 id: paragraph.promo_block.w449
@@ -36,4 +38,13 @@ content:
     third_party_settings: {  }
     type: link
     region: content
+  field_promo_block_button:
+    type: entity_reference_revisions_entity_view
+    weight: 2
+    region: content
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
 hidden: {  }

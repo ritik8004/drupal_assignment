@@ -1,0 +1,7 @@
+alshaya_paragraphs.paragraphs_custom_config_form:
+  path: 'admin/config/content/custom/paragraphs'
+  defaults:
+    _form: '\Drupal\alshaya_paragraphs\Form\ParagraphsCustomConfigForm'
+    _title: 'Paragraphs Custom Configuration'
+  requirements:
+    _permission: 'access administration pages'
