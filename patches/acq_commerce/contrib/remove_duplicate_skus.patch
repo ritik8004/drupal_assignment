@@ -61,10 +61,10 @@ index 8a2ee8532..1522cf1ba 100644
 +
 +      // Always delete the one with higher id, first one will have more
 +      // translations.
-+      rsort($ids);
++      sort($ids);
 +
-+      // Remove the last id before starting loop to delete all duplicates.
-+      array_pop($ids);
++      // Remove the first id which we don't want to delete.
++      array_shift($ids);
 +
 +      foreach ($ids as $id) {
 +        drush_print(dt('Deleting sku with id @id for sku @sku.', [
@@ -105,10 +105,10 @@ index 8a2ee8532..1522cf1ba 100644
 +
 +      // Always delete the one with higher nid, first one will have proper
 +      // url alias.
-+      rsort($ids);
++      sort($ids);
 +
-+      // Remove the last id before starting loop to delete all duplicates.
-+      array_pop($ids);
++      // Remove the first id which we don't want to delete.
++      array_shift($ids);
 +
 +      foreach ($ids as $id) {
 +        drush_print(dt('Deleting node with id @id for sku @sku.', [
