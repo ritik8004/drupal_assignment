@@ -13,7 +13,7 @@
 </defs>
 <g fill="none" fill-rule="evenodd">
     <path d="M0 0h48v48H0z"/>
-    <path fill="#FFF" d="M0 0h48v48H0z"/>
+    <path fill="" d="M0 0h48v48H0z"/>
     <use fill="url(#b)" fill-rule="nonzero" xlink:href="#a"/>
 </g>
 </svg>
