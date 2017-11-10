@@ -1,0 +1,38 @@
+@import '../../../sass/config/**/*.scss';
+
+.store-row--counter {
+  position: absolute;
+  left: 1rem;
+  width: 1.25rem;
+  background-color: $medium-pink;
+  height: 1.25rem;
+  vertical-align: middle;
+  text-align: center;
+  color: $white;
+  border-radius: 50%;
+  padding-top: 2px;
+}
+
+.mobile-only--back-to-glossary {
+  @include breakpoint($above-palm) {
+    display: none;
+  }
+
+  a {
+    display: block;
+    width: inherit;
+    overflow: hidden;
+    font-size: 0.5rem;
+    height: 0;
+
+    @include icon(chevron#{direction(left)}, after) {
+      position: absolute;
+      display: inline-block;
+      color: $medium-pink;
+      font-size: 1.875rem;
+      top: 0.125rem;
+      padding: 0.5rem;
+      #{direction(left)}: 0.125rem;
+    }
+  }
+}

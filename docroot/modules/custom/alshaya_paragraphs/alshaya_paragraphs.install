@@ -5,6 +5,91 @@
  * Contains install, update, uninstall hooks for alshaya_paragraphs module.
  */
 
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\paragraphs\Entity\ParagraphsType;
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_update_n().
+ *
+ * Create new paragraph types.
+ */
+function alshaya_paragraphs_update_8101() {
+  // Install required modules.
+  $modules = [
+    'alshaya_config',
+    'viewsreference',
+    'alshaya_media',
+  ];
+
+  foreach ($modules as $module) {
+    if (!\Drupal::moduleHandler()->moduleExists($module)) {
+      \Drupal::service('module_installer')->install([$module], TRUE);
+    }
+  }
+
+  // Create New paragraph types.
+  alshaya_paragraphs_new_paragraph_types();
+
+  // Create new fields for newly created paragraph types.
+  alshaya_paragraphs_manage_fields();
+
+  $configs = [
+    // Image + title + subtitle paragraph type.
+    'core.entity_form_display.paragraph.image_title_subtitle.default',
+    'core.entity_view_display.paragraph.image_title_subtitle.default',
+    'core.entity_view_display.paragraph.image_title_subtitle.326x288',
+    'language.content_settings.paragraph.image_title_subtitle',
+    'core.base_field_override.paragraph.image_title_subtitle.created',
+    'core.base_field_override.paragraph.image_title_subtitle.moderation_state',
+    'core.base_field_override.paragraph.image_title_subtitle.status',
+    'core.base_field_override.paragraph.image_title_subtitle.uid',
+    // Offers bordered paragraph type.
+    'core.base_field_override.paragraph.offers_bordered.created',
+    'core.base_field_override.paragraph.offers_bordered.moderation_state',
+    'core.base_field_override.paragraph.offers_bordered.status',
+    'core.base_field_override.paragraph.offers_bordered.uid',
+    'core.entity_form_display.paragraph.offers_bordered.default',
+    'core.entity_view_display.paragraph.offers_bordered.326x288',
+    'core.entity_view_display.paragraph.offers_bordered.default',
+    'language.content_settings.paragraph.offers_bordered',
+    // Block reference paragraph type.
+    'core.entity_form_display.paragraph.block_reference.default',
+    'core.entity_view_display.paragraph.block_reference.default',
+    'language.content_settings.paragraph.block_reference',
+    'core.base_field_override.paragraph.block_reference.created',
+    'core.base_field_override.paragraph.block_reference.moderation_state',
+    'core.base_field_override.paragraph.block_reference.status',
+    'core.base_field_override.paragraph.block_reference.uid',
+    // Views reference paragraph type.
+    'core.entity_view_display.paragraph.views_reference.default',
+    'core.entity_form_display.paragraph.views_reference.default',
+    'language.content_settings.paragraph.views_reference',
+    'core.base_field_override.paragraph.views_reference.created',
+    'core.base_field_override.paragraph.views_reference.moderation_state',
+    'core.base_field_override.paragraph.views_reference.status',
+    'core.base_field_override.paragraph.views_reference.uid',
+    // Title + textarea paragraph type.
+    'core.entity_form_display.paragraph.title_textarea.default',
+    'core.entity_view_display.paragraph.title_textarea.default',
+    'core.entity_view_display.paragraph.title_textarea.default',
+    'language.content_settings.paragraph.title_textarea',
+    'core.base_field_override.paragraph.title_textarea.created',
+    'core.base_field_override.paragraph.title_textarea.moderation_state',
+    'core.base_field_override.paragraph.title_textarea.status',
+    'core.base_field_override.paragraph.title_textarea.uid',
+    'core.entity_form_display.paragraph.1_row_1_col.default',
+    // Video paragraph type.
+    'core.entity_form_display.paragraph.video.default',
+    'core.entity_view_display.paragraph.video.default',
+    'core.entity_form_display.paragraph.banner.default',
+    'core.entity_view_display.paragraph.banner.default',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
 /**
  * Implements hook_update_N().
  *
@@ -13,4 +98,78 @@
 function alshaya_paragraphs_update_8001() {
   $paragraph_banner_target = \Drupal::configFactory()->getEditable('core.entity_view_display.paragraph.banner.default');
   $paragraph_banner_target->set('content.field_link.settings.target', '0')->save();
+}
+
+/**
+ * Create new paragraph types with hook_update.
+ */
+function alshaya_paragraphs_new_paragraph_types() {
+  $module_path = drupal_get_path('module', 'alshaya_paragraphs');
+
+  $paragraph_types = [
+    'paragraphs.paragraphs_type.image_title_subtitle',
+    'paragraphs.paragraphs_type.offers_bordered',
+    'paragraphs.paragraphs_type.block_reference',
+    'paragraphs.paragraphs_type.views_reference',
+    'paragraphs.paragraphs_type.title_textarea',
+    'paragraphs.paragraphs_type.video',
+  ];
+
+  foreach ($paragraph_types as $paragraph_type) {
+    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/' . $paragraph_type . '.yml'));
+    // Create the paragraph type.
+    ParagraphsType::create($yml)->save();
+  }
+}
+
+/**
+ * Create / Update fields for paragraph types.
+ */
+function alshaya_paragraphs_manage_fields() {
+  $module_path = drupal_get_path('module', 'alshaya_paragraphs');
+  // Create new fields for pagragraph types.
+  $field_storages = [
+    'field.storage.paragraph.field_heading',
+    'field.storage.paragraph.field_block_reference',
+    'field.storage.paragraph.field_html_heading',
+    'field.storage.paragraph.field_views_reference',
+    'field.storage.paragraph.field_video',
+  ];
+
+  foreach ($field_storages as $field_config) {
+    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/' . $field_config . '.yml'));
+    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
+      FieldStorageConfig::create($yml)->save();
+    }
+  }
+
+  // Update field configs.
+  $field_configs = [
+    'field.field.paragraph.block_reference.field_block_reference',
+    'field.field.paragraph.image_title_subtitle.field_banner',
+    'field.field.paragraph.image_title_subtitle.field_sub_title',
+    'field.field.paragraph.image_title_subtitle.field_title',
+    'field.field.paragraph.image_title_subtitle.field_link',
+    'field.field.paragraph.offers_bordered.field_banner',
+    'field.field.paragraph.offers_bordered.field_heading',
+    'field.field.paragraph.offers_bordered.field_link',
+    'field.field.paragraph.offers_bordered.field_sub_title',
+    'field.field.paragraph.offers_bordered.field_title',
+    'field.field.paragraph.views_reference.field_html_heading',
+    'field.field.paragraph.views_reference.field_views_reference',
+    'field.field.paragraph.title_textarea.field_html_heading',
+    'field.field.paragraph.title_textarea.field_body',
+    'field.field.paragraph.banner.field_video',
+    'field.field.paragraph.video.field_video',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    'field.field.paragraph.1_row_1_col.field_promo_block',
+  ];
+
+  foreach ($field_configs as $field_config) {
+    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/' . $field_config . '.yml'));
+    if ($field_obj = FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
+      $field_obj->delete();
+    }
+    FieldConfig::create($yml)->save();
+  }
 }

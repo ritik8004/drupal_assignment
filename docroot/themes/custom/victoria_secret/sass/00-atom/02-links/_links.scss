@@ -1,0 +1,13 @@
+a {
+  color: $medium-pink;
+}
+
+.region-footer-primary,
+.region-footer-tertiary,
+.region-footer-secondary,
+.region-secondary-header {
+  a:hover {
+    color: $medium-pink;
+    text-decoration: underline;
+  }
+}

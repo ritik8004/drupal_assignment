@@ -1,0 +1,26 @@
+@import '../../../../sass/config/**/*.scss';
+
+.status-message {
+  padding: 1rem 1.5rem;
+  color: $brownish-grey;
+  border: 2px solid $black-smoke;
+
+  @include breakpoint($above-palm) {
+    max-width: 67.125rem;
+    margin: 0.625rem auto;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 80.25rem;
+  }
+
+  ul {
+    list-style: none;
+    padding-#{direction(left)}: 0;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+}

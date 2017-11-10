@@ -1,0 +1,13 @@
+a {
+  color: $black-smoke;
+}
+
+.region-footer-primary,
+.region-footer-tertiary,
+.region-footer-secondary,
+.region-secondary-header {
+  a:hover {
+    color: $apple-light-green;
+    text-decoration: underline;
+  }
+}

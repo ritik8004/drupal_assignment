@@ -1,0 +1,130 @@
+@import '../../../../sass/config/**/*.scss';
+
+.field__slider {
+  margin-bottom: 0.5rem;
+
+  @include breakpoint($above-palm) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.field-slider-items-wrapper {
+  position: relative;
+
+  img {
+    width: 100%;
+  }
+}
+
+.slick-slider {
+  overflow: hidden;
+
+  a {
+    @include u-hidden-visually;
+  }
+}
+
+.slick-list {
+  width: 100%;
+  min-height: 10.5rem;
+
+  @include breakpoint($lap) {
+    min-height: 15.875rem;
+  }
+
+  @include breakpoint($desk) {
+    min-height: 26.5rem;
+  }
+}
+
+/* Slider Arrow Prev/Next */
+
+.slick-prev,
+.slick-next {
+  @include u-hidden-visually;
+
+  cursor: pointer;
+  position: absolute;
+  background: none;
+  border: none;
+  z-index: 3;
+  padding: 0;
+
+  &::before {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 100%;
+    height: 2.25rem;
+    line-height: 2.25rem;
+    width: 2.25rem;
+    color: $black;
+    font-size: 2rem;
+    display: block;
+  }
+
+  top: calc(50% - 1.75rem) !important;
+
+  @include breakpoint($lap) {
+    top: calc(50% - 1.125rem) !important;
+  }
+}
+
+.slick-prev {
+  @include icon(chevronleft) {
+    padding-#{direction(right)}: 0.1875rem;
+  }
+
+  left: 1rem;
+}
+
+.slick-next {
+  @include icon(chevronright) {
+    padding-#{direction(right)}: 0.1875rem;
+  }
+
+  right: 1rem;
+}
+
+/* Slider dots */
+.slick-dots {
+  margin: 0;
+  margin-top: -0.2rem;
+  text-align: center;
+  padding: 0;
+
+  @include breakpoint($above-palm) {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: 0;
+    padding-#{direction(left)}: 0.1875rem;
+  }
+
+  li {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 100%;
+    color: $marine-blue-two;
+    border: 1px solid $marine-blue-two;
+    display: inline-block;
+    margin: 1em 0.75em;
+    padding-#{direction(left)}: 0;
+
+    @include breakpoint($above-palm) {
+      color: $white;
+      border: 1px solid $white;
+    }
+
+    &.active,
+    &.slick-active {
+      background: $marine-blue-two;
+
+      @include breakpoint($above-palm) {
+        background: $white;
+      }
+    }
+
+    button {
+      display: none;
+    }
+  }
+}

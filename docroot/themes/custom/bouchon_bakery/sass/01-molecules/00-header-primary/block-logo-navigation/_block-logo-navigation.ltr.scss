@@ -1,0 +1,7 @@
+.region-primary-header {
+  .block-logo-navigation {
+    @include breakpoint($above-palm) {
+      background-color: $white;
+    }
+  }
+}

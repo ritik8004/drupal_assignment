@@ -4,7 +4,6 @@ dependencies:
   config:
     - node.type.advanced_page
   module:
-    - alshaya_advanced_page
     - content_translation
 third_party_settings:
   content_translation:

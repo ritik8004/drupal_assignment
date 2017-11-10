@@ -23,6 +23,9 @@ function alshaya_stores_finder_install() {
   $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
   $config->save();
 
+  // Set default marker icon settings.
+  alshaya_stores_finder_set_default_marker_icon();
+
   // Array of language translation strings.
   $strings = [
     'Low stock' => [
@@ -30,6 +33,19 @@ function alshaya_stores_finder_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Set default marker icon.
+ */
+function alshaya_stores_finder_set_default_marker_icon() {
+  // Set default marker image settings.
+  $marker_path = drupal_get_path('module', 'alshaya_stores_finder') . '/images/google-map-marker.svg';
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('marker.use_default', TRUE)
+    ->set('marker.path', $marker_path)
+    ->set('marker.url', file_url_transform_relative(file_create_url($marker_path)))
+    ->save(TRUE);
 }
 
 /**
@@ -41,4 +57,13 @@ function alshaya_stores_finder_update_8002() {
   $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
   $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
   $config->save();
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Set default marker icon.
+ */
+function alshaya_stores_finder_update_8101() {
+  alshaya_stores_finder_set_default_marker_icon();
 }

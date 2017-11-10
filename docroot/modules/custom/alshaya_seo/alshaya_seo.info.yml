@@ -5,7 +5,6 @@ core: 8.x
 package: Alshaya
 dependencies:
   - alshaya_i18n
-  - alshaya_main_menu
   - google_tag
   - metatag
   - metatag_open_graph

@@ -1,0 +1,55 @@
+.region-footer-primary .block-social-link {
+  background-color: $grey-smoke;
+  text-align: center;
+  text-transform: uppercase;
+  color: $brownish-grey;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+
+  @include breakpoint($above-palm) {
+    background-color: $grey-smoke;
+    margin: 0;
+  }
+
+  @include breakpoint($lap) {
+    padding-top: 1.7rem;
+    margin: 0;
+  }
+
+  @include breakpoint($desk) {
+    padding-top: 0.625rem;
+    padding-bottom: 0.9375rem;
+    margin: 0;
+  }
+}
+
+.region-footer-primary .block-social-link__title {
+  font-size: 1rem;
+  letter-spacing: 0.0625rem;
+  color: $brown;
+  font-family: $beton-bold;
+  margin-bottom: 0;
+  margin-top: 0.3125rem;
+  text-transform: uppercase;
+
+  @include breakpoint($upto-palm) {
+    html[lang=ar] & {
+      margin-bottom: 0;
+    }
+  }
+
+  @include breakpoint($lap) {
+    margin-bottom: 0;
+    margin-top: 0.3125rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-bottom: 0;
+    margin-top: 0.3125rem;
+
+    html[lang=ar] & {
+      position: relative;
+      right: auto;
+    }
+  }
+}

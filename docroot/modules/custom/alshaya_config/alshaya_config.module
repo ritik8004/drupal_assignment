@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Helper function to update / install configs.
+ *
+ * @param array $configs
+ *   The name of configs to import.
+ * @param string $module_name
+ *   Name of the module, where files resides.
+ * @param string $path
+ *   Path where configs reside. Defaults to install.
+ */
+function alshaya_config_install_configs(array $configs, $module_name, $path = 'install') {
+  if (empty($configs)) {
+    return;
+  }
+
+  foreach ($configs as $config) {
+    $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config . '.yml'));
+    \Drupal::configFactory()
+      ->getEditable($config)
+      ->setData($config_yaml)
+      ->save();
+  }
+}
