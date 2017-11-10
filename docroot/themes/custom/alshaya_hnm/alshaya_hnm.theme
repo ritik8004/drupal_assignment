@@ -108,7 +108,7 @@ function alshaya_hnm_preprocess_page(&$variables) {
 
   // Adding vat text footer to the page.
   if ($routmatch->getRouteName() == 'acq_cart.cart') {
-    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer.value');
+    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
   }
   // Attach the plp search js library to the promotion product listing page.
   if (isset($variables['node'])) {
@@ -123,17 +123,17 @@ function alshaya_hnm_preprocess_page(&$variables) {
 
   // Adding vat text footer to order detials page.
   if ($routmatch->getRouteName() == 'alshaya_acm_customer.orders_detail') {
-    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer.value');
+    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
   }
 
   // Adding vat text footer to checkout page.
   if ($routmatch->getRouteName() == 'acq_checkout.form') {
-    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer.value');
+    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
   }
 
   // Adding vat text footer to order print page.
   if ($routmatch->getRouteName() == 'alshaya_acm_customer.print_last_order') {
-    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer.value');
+    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
   }
 }
 
@@ -270,7 +270,7 @@ function alshaya_hnm_preprocess_node(&$variables) {
     $variables['label'] = NULL;
   }
   elseif ($variables['node']->bundle() === 'acq_product') {
-    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer.value');
+    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
   }
