@@ -547,28 +547,43 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     // selected by default on page load.
     if (count($form_state->get('tree')['configurables']) > 1) {
       $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings')->get('attribute_weights');
+      $config_attributes = array_keys($configurable_weights);
+      $root_attribute_code = array_shift($config_attributes);
+      $user_input_configurables = $form_state->getUserInput('configurables');
+      $first_child = '';
 
       // Sort configurable weight by the weight value.
       uasort($configurable_weights, function ($a, $b) {
         return $a - $b;
       });
 
-      $config_attributes = array_keys($configurable_weights);
-      $root_attribute_code = array_shift($config_attributes);
-      $user_input_configurables = $form_state->getUserInput('configurables');
-      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+      // Give preference to color label passed via query params.
+      $color = \Drupal::request()->query->get('color');
+      if ($color) {
+        // Get swatch_id from color value.
+        $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+        $first_child = $sku_asset_manager->getChildSkuFromColor($sku_entity, $color);
+      }
 
-      // Default use-case: User landing on PDP from PLP/Search/directly.
-      // Set the color applicable to first child sku as default here.
-      $child_skus = $sku_manager->getChildSkus($sku_entity);
-      $first_child = array_shift($child_skus);
-      $plugin_manager = \Drupal::service('plugin.manager.sku');
-      $plugin_definition = $plugin_manager->pluginFromSKU($sku_entity);
+      if (!($first_child instanceof SKU)) {
+        $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
-      $class = $plugin_definition['class'];
-      $plugin = new $class();
+        // Default use-case: User landing on PDP from PLP/Search/directly.
+        // Set the color applicable to first child sku as default here.
+        $child_skus = $sku_manager->getChildSkus($sku_entity);
+        $first_child = array_shift($child_skus);
+      }
 
-      $first_child_root_attr_value = $plugin->getAttributeValue($first_child, $root_attribute_code);
+      if ($first_child instanceof SKU) {
+        $plugin_manager = \Drupal::service('plugin.manager.sku');
+        $plugin_definition = $plugin_manager->pluginFromSKU($sku_entity);
+
+        $class = $plugin_definition['class'];
+        $plugin = new $class();
+
+        $first_child_root_attr_value = $plugin->getAttributeValue($first_child, $root_attribute_code);
+      }
+
       $root_attribute_options = $form['ajax']['configurables'][$root_attribute_code]['#options'];
 
       // Set the color attribute as default only if user has not made a
@@ -578,26 +593,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $form['ajax']['configurables']['article_castor_id']['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
         $form_state->setValue('configurables', [$root_attribute_code => $first_child_root_attr_value]);
 
-        // Fetch the size values available for the current color chosen.
+        // Traverse the product tree to the point based on the selected config.
         $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $form_state->getValue('configurables'));
 
-        $enabled_options = [];
-
-        // Items are keyed by their attribute codes.
-        foreach ($tree_pointer as $key => $value) {
-          $attribute = explode(':', $key);
-          $attribute_code = $attribute[0];
-          $enabled_options[] = $attribute[1];
-        }
-
-        $options = $form['ajax']['configurables']['size']['#options'];
-
-        // Disable size options which don't exist for the default color.
-        foreach ($options as $key => $value) {
-          if (!in_array($key, $enabled_options)) {
-            $form['ajax']['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
-          }
-        }
+        // Disable config options not available for the selected config.
+        alshay_acm_product_update_config_options($form['ajax'], $form_state->get('tree'), $tree_pointer, $form_state->getValue('configurables'), FALSE);
       }
     }
 
@@ -691,41 +691,15 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   // Calculate available config options based on the attribute value selected,
   // in case of multiple config attributes with a product.
   if (count($product_tree['configurables']) > 1) {
-    $leaf_attribute = end($product_tree['configurables'])['code'];
-
     // List of attributes selected by end-users on the form.
     $configurables = $form_state->getValue('configurables');
 
     // Traverse the product tree till the point where config attributes have a
     // value.
-    $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $configurables);
+    $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
 
-    $enabled_options = [];
-
-    // To de-select all leaf options on parent change & not re-calculate
-    // availability of parent attributes in the opposite direction.
-    if (isset($configurables[$leaf_attribute])) {
-      unset($configurables[$leaf_attribute]);
-      $tree_pointer_parent = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $configurables);
-    }
-    else {
-      $tree_pointer_parent = $tree_pointer;
-    }
-    // Items are keyed by their attribute codes.
-    foreach ($tree_pointer_parent as $key => $value) {
-      $attribute = explode(':', $key);
-      $attribute_code = $attribute[0];
-      $enabled_options[] = $attribute[1];
-    }
-
-    $options = $dynamic_parts['configurables'][$attribute_code]['#options'];
-
-    // Disable options which don't exist for the choosen config.
-    foreach ($options as $key => $value) {
-      if (!in_array($key, $enabled_options)) {
-        $dynamic_parts['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
-      }
-    }
+    // Disable config options not available for the selected config.
+    alshay_acm_product_update_config_options($dynamic_parts, $form_state->get('tree'), $tree_pointer, $configurables);
 
     // If there is only one item returned back,
     // it implies we have reached to the leaf most SKU in the tree.

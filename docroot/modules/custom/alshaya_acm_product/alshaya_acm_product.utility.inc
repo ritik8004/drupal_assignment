@@ -269,6 +269,9 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       '#attributes' => [
         'class' => ['gallery-wrapper'],
       ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
     ];
 
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -572,4 +575,49 @@ function alshaya_acm_product_get_brand_logo($sku) {
   }
 
   return $image;
+}
+
+/**
+ * Helper function to update config attributes depending on the selection made.
+ *
+ * @param array $form_parts
+ *   Configurable parts of the form.
+ * @param array $product_tree
+ *   Configurable product tree keyed with possible config tree, whose leaf items
+ *   contain the SKUs depending on the tree path traversed.
+ * @param array $tree_pointer
+ *   Product tree pointing to the config seleted by end-user.
+ * @param array $configurables
+ *   List of values selected keyed by the config attribute.
+ * @param bool $deselect_leaf_options
+ *   Clear the leaf attribute selected while selecting the parent config.
+ */
+function alshay_acm_product_update_config_options(&$form_parts, $product_tree, &$tree_pointer, $configurables, $deselect_leaf_options = TRUE) {
+  $enabled_options = [];
+  $leaf_attribute = end($product_tree['configurables'])['code'];
+
+  // To de-select all leaf options on parent change & not re-calculate
+  // availability of parent attributes in the opposite direction.
+  if ($deselect_leaf_options && isset($configurables[$leaf_attribute])) {
+    unset($configurables[$leaf_attribute]);
+    $tree_pointer_parent = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
+  }
+  else {
+    $tree_pointer_parent = $tree_pointer;
+  }
+  // Items are keyed by their attribute codes.
+  foreach ($tree_pointer_parent as $key => $value) {
+    $attribute = explode(':', $key);
+    $attribute_code = $attribute[0];
+    $enabled_options[] = $attribute[1];
+  }
+
+  $options = $form_parts['configurables'][$attribute_code]['#options'];
+
+  // Disable options which don't exist for the choosen config.
+  foreach ($options as $key => $value) {
+    if (!in_array($key, $enabled_options)) {
+      $form_parts['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
+    }
+  }
 }

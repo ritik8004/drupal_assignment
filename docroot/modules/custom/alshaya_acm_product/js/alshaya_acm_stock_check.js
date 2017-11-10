@@ -1,6 +1,13 @@
 (function ($, Drupal) {
   'use strict';
 
+  var query_params = window.location.search;
+
+  // Make sure query params coming from parent url are passed as is.
+  if (query_params) {
+    query_params = query_params.replace('?', '');
+  }
+
   /**
    * All custom js for product page.
    *
@@ -11,7 +18,6 @@
    */
   Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
-
       // Stock check on PLP, Search and Promo pages and Related products block.
       $('.stock-placeholder', context).once('check-stock').each(function () {
         var placeHolder = $(this);
@@ -23,8 +29,9 @@
         var articleNode = placeHolder.closest('article');
         var productId = articleNode.attr('data-nid');
         var productStock = articleNode.find('.out-of-stock');
+
         $.ajax({
-          url: Drupal.url('stock-check-ajax/node/' + productId) + '?cacheable',
+          url: Drupal.url('stock-check-ajax/node/' + productId) + '?cacheable' + '&' + query_params,
           type: 'GET',
           dataType: 'json',
           async: true,
@@ -40,7 +47,7 @@
         var skuId = $wrapper.attr('data-skuid');
         if (typeof skuId !== 'undefined') {
           $.ajax({
-            url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+            url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
             type: 'GET',
             dataType: 'json',
             async: true,
@@ -117,7 +124,7 @@
         var stockCheckProcessed = 'stock-check-processed';
         if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
           $.ajax({
-            url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+            url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
             type: 'GET',
             dataType: 'json',
             async: true,
@@ -246,7 +253,7 @@
       if (!(skuArticle.hasClass('stock-check-processed')) && (typeof skuId !== 'undefined')) {
         var $wrapper = skuArticle;
         $.ajax({
-          url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+          url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
           type: 'GET',
           dataType: 'json',
           async: true,

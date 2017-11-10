@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_hm_images;
 
+use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
@@ -37,6 +38,13 @@ class SkuAssetManager {
   protected $currentRouteMatch;
 
   /**
+   * The Sku Plugin Manager service.
+   *
+   * @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager
+   */
+  protected $skuPluginManager;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -45,13 +53,17 @@ class SkuAssetManager {
    *   Current route matcher service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku manager service.
+   * @param SKUPluginManager $skuPluginManager
+   *   Sku Plugin Manager.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
-                              SkuManager $skuManager) {
+                              SkuManager $skuManager,
+                              SKUPluginManager $skuPluginManager) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
+    $this->skuPluginManager = $skuPluginManager;
   }
 
   /**
@@ -338,6 +350,64 @@ class SkuAssetManager {
     }
 
     return $swatch_type;
+  }
+
+  /**
+   * Helper function to fetch list of color options supported by a parent SKU.
+   *
+   * @param SKU $sku
+   *   Parent sku.
+   *
+   * @return array
+   *   Array of RGB color values keyed by article_castor_id.
+   */
+  public function getColorsForSku(SKU $sku) {
+    $child_skus = $this->skuManager->getChildSkus($sku);
+    $article_castor_ids = [];
+
+    if (empty($child_skus)) {
+      return [];
+    }
+
+    $plugin_definition = $this->skuPluginManager->pluginFromSKU($sku);
+
+    $class = $plugin_definition['class'];
+    $plugin = new $class();
+
+    foreach ($child_skus as $key => $child_sku) {
+      if ($child_sku instanceof SKU) {
+        if (!isset($article_castor_ids[$plugin->getAttributeValue($child_sku, 'article_castor_id')])) {
+          $article_castor_ids[$child_sku->get('attr_color_label')->value] = $child_sku->get('attr_rgb_color')->value;
+        }
+      }
+    }
+
+    return $article_castor_ids;
+  }
+
+  /**
+   * Helper function to get SKU based on Castor Id.
+   *
+   * @param SKU $parent_sku
+   *   Parent Sku.
+   * @param int $rgb_color_label
+   *   Castor id for which child sku needs to be fetched.
+   *
+   * @return array|SKU
+   *   Array of SKUs or single SKU object matching the castor id.
+   */
+  public function getChildSkuFromColor(SKU $parent_sku, $rgb_color_label) {
+    $child_skus = $this->skuManager->getChildSkus($parent_sku);
+
+    if (empty($child_skus)) {
+      return NULL;
+    }
+
+    foreach ($child_skus as $child_sku) {
+      if ($child_sku->get('attr_color_label')->value == $rgb_color_label) {
+        return $child_sku;
+      }
+    }
   }
 
 }
