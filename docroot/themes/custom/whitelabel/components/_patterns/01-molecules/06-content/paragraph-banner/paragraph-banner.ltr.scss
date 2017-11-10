@@ -34,12 +34,12 @@
     }
 
     @include breakpoint($lap) {
-      #{direction(left)}: 1.5rem;
+      left: 1.5rem;
       height: 8.375rem;
     }
 
     @include breakpoint($desk) {
-      #{direction(left)}: 0.875rem;
+      left: 0.875rem;
       height: 8.375rem;
     }
 
