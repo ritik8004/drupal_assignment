@@ -42,17 +42,4 @@
     bottom: 1px;
     top: auto;
   }
-
-  &.backtotop-withfooter {
-    position: absolute;
-    top: -4.375rem;
-
-    @include breakpoint($only-mobile) {
-      top: -4rem;
-
-      .nodetype--acq_product & {
-        top: -1.875rem;
-      }
-    }
-  }
 }
