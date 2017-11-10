@@ -1291,6 +1291,18 @@ header {
       .logged-out & {
         padding: 0.9rem 0.25rem;
       }
+
+      html[lang=ar] & {
+        padding: 0.9rem 0;
+
+        &.shop {
+          width: 30%;
+        }
+
+        &.account {
+          width: 67%;
+        }
+      }
     }
 
     padding: 0.9rem 1rem;
