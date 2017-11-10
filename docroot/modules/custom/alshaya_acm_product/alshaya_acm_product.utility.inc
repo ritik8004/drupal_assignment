@@ -269,9 +269,6 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       '#attributes' => [
         'class' => ['gallery-wrapper'],
       ],
-      '#cache' => [
-        'max-age' => 0,
-      ],
     ];
 
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -592,7 +589,7 @@ function alshaya_acm_product_get_brand_logo($sku) {
  * @param bool $deselect_leaf_options
  *   Clear the leaf attribute selected while selecting the parent config.
  */
-function alshay_acm_product_update_config_options(&$form_parts, $product_tree, &$tree_pointer, $configurables, $deselect_leaf_options = TRUE) {
+function alshaya_acm_product_update_config_options(array &$form_parts, array $product_tree, array &$tree_pointer, array $configurables, $deselect_leaf_options = TRUE) {
   $enabled_options = [];
   $leaf_attribute = end($product_tree['configurables'])['code'];
 

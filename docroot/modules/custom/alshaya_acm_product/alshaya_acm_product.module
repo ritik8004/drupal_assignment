@@ -597,7 +597,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $form_state->getValue('configurables'));
 
         // Disable config options not available for the selected config.
-        alshay_acm_product_update_config_options($form['ajax'], $form_state->get('tree'), $tree_pointer, $form_state->getValue('configurables'), FALSE);
+        alshaya_acm_product_update_config_options($form['ajax'], $form_state->get('tree'), $tree_pointer, $form_state->getValue('configurables'), FALSE);
       }
     }
 
@@ -699,7 +699,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
 
     // Disable config options not available for the selected config.
-    alshay_acm_product_update_config_options($dynamic_parts, $form_state->get('tree'), $tree_pointer, $configurables);
+    alshaya_acm_product_update_config_options($dynamic_parts, $form_state->get('tree'), $tree_pointer, $configurables);
 
     // If there is only one item returned back,
     // it implies we have reached to the leaf most SKU in the tree.
