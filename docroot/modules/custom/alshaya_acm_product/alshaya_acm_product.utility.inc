@@ -407,6 +407,41 @@ function alshaya_acm_product_get_selected_option_sku(array $tree, array $configu
 }
 
 /**
+ * Helper function to get product tree based on the conf attributes values.
+ *
+ * @param array $tree
+ *   Config product tree.
+ * @param array $configurables
+ *   Config values keyed by the attributec code as selected by the end-users.
+ *
+ * @return array
+ *   Array pointing to the tree state based on the options selected.
+ */
+function alshaya_acm_product_fetch_selected_option_tree(array $tree, array $configurables) {
+  $tree_pointer = $tree['options'];
+  $tree_config_options = [];
+  foreach ($configurables as $key => $value) {
+    if (($value) && ($tree_pointer["$key:$value"])) {
+      $tree_pointer = $tree_pointer["$key:$value"];
+    }
+  }
+
+  if ($tree_pointer instanceof SKU) {
+    $tree_config_options["$key:$value"] = $tree_pointer;
+  }
+  else {
+    // Filter out all non-empty config attributes from the list.
+    foreach ($tree_pointer as $key => $value) {
+      if (!empty($value) && ($key !== '#available_config')) {
+        $tree_config_options[$key] = $value;
+      }
+    }
+  }
+
+  return $tree_config_options;
+}
+
+/**
  * Utility function to check if product is available for home delivery.
  *
  * @param mixed $sku
@@ -537,4 +572,49 @@ function alshaya_acm_product_get_brand_logo($sku) {
   }
 
   return $image;
+}
+
+/**
+ * Helper function to update config attributes depending on the selection made.
+ *
+ * @param array $form_parts
+ *   Configurable parts of the form.
+ * @param array $product_tree
+ *   Configurable product tree keyed with possible config tree, whose leaf items
+ *   contain the SKUs depending on the tree path traversed.
+ * @param array $tree_pointer
+ *   Product tree pointing to the config seleted by end-user.
+ * @param array $configurables
+ *   List of values selected keyed by the config attribute.
+ * @param bool $deselect_leaf_options
+ *   Clear the leaf attribute selected while selecting the parent config.
+ */
+function alshaya_acm_product_update_config_options(array &$form_parts, array $product_tree, array &$tree_pointer, array $configurables, $deselect_leaf_options = TRUE) {
+  $enabled_options = [];
+  $leaf_attribute = end($product_tree['configurables'])['code'];
+
+  // To de-select all leaf options on parent change & not re-calculate
+  // availability of parent attributes in the opposite direction.
+  if ($deselect_leaf_options && isset($configurables[$leaf_attribute])) {
+    unset($configurables[$leaf_attribute]);
+    $tree_pointer_parent = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
+  }
+  else {
+    $tree_pointer_parent = $tree_pointer;
+  }
+  // Items are keyed by their attribute codes.
+  foreach ($tree_pointer_parent as $key => $value) {
+    $attribute = explode(':', $key);
+    $attribute_code = $attribute[0];
+    $enabled_options[] = $attribute[1];
+  }
+
+  $options = $form_parts['configurables'][$attribute_code]['#options'];
+
+  // Disable options which don't exist for the choosen config.
+  foreach ($options as $key => $value) {
+    if (!in_array($key, $enabled_options)) {
+      $form_parts['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
+    }
+  }
 }
