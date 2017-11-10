@@ -224,7 +224,8 @@
 
   #payment_method_cybersource & {
     background: $white-five;
-    border-top: 1px solid $white;
+    border: 1px solid $white;
+    border-top: none;
 
     @include breakpoint($mobile) {
       padding: 1rem;
@@ -312,6 +313,7 @@
     padding-#{$left}: 4rem;
     position: absolute;
     top: 44%;
+    color: $grey7;
     #{$left}: 24%;
 
     @include breakpoint($only-mobile) {
@@ -415,14 +417,13 @@
       width: 1.5rem;
       height: 1.5rem;
       cursor: pointer;
-      color: $cerulean-two;
+      color: $hnm-black-two;
 
       @include icon(info, after) {
         margin-#{$left}: 0.3rem;
         display: inline-block;
         vertical-align: middle;
-        font-weight: bold;
-        font-size: 1rem;
+        font-size: 1.25rem;
       }
 
       &:hover {
@@ -439,17 +440,17 @@
       z-index: 1;
       padding: 0.5rem;
       padding-#{$left}: 3.875rem;
-      top: 1.5rem;
-      #{$left}: -7.3rem;
-      color: $windows-blue;
-      background-color: $alice-blue;
-      border: 1px solid $cerulean-two;
+      top: 1.84rem;
+      #{$left}: -7.2rem;
+      color: $hnm-black-two;
+      background-color: $grey1;
+      border: 1px solid $hnm-black-two;
       border-radius: 2px;
       width: 13.81rem;
 
       &::before {
         border-color: rgba(0, 132, 204, 0);
-        border-bottom-color: $cerulean-two;
+        border-bottom-color: $hnm-black-two;
         border-width: 0.375rem;
         border-bottom-width: 0.5rem;
         margin-#{$left}: -0.375rem;
