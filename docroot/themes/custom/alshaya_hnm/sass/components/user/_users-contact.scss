@@ -5,43 +5,6 @@
       margin-bottom: 6.25rem;
     }
 
-    .field--name-field-mobile-number {
-      position: static;
-      margin-top: 0;
-      clear: both;
-      padding-top: 1px;
-    }
-
-    .mobile-number-field {
-      margin-top: 1.4rem !important;
-
-      label {
-        color: #adadad;
-        display: block;
-        font-size: 0.75rem;
-      }
-
-      .form-type-textfield {
-        width: 138px;
-        top: 0.45rem;
-
-        @include breakpoint($only-tablet) {
-          html[lang=en] & {
-            top: 0.5rem;
-          }
-        }
-      }
-
-      input {
-        position: relative;
-        width: 14.4rem;
-
-        @include breakpoint($tablet) {
-          width: 7rem;
-        }
-      }
-    }
-
     input:disabled {
       color: #adadad;
     }
@@ -80,19 +43,10 @@
     float: $left;
     max-width: 11.7rem;
     width: calc(50% - 12px);
+    margin-top: 2.125rem;
 
     input {
       margin-top: 0.5rem;
-    }
-  }
-
-  .mobile-number-field {
-    .form-type-textfield .c-input__bar {
-      top: -1px !important;
-
-      html[lang="ar"] & {
-        top: -1px !important;
-      }
     }
   }
 
