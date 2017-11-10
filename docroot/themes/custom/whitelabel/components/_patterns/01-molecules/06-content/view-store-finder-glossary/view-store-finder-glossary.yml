@@ -1,0 +1,5 @@
+title: ''
+header: 'select a store to see details'
+rows:
+  include():
+    pattern: 'molecules-views-unformatted-store-finder-glossary'

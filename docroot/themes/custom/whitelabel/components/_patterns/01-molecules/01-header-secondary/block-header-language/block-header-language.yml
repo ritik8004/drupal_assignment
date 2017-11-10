@@ -1,0 +1,7 @@
+label: ''
+content:
+  include():
+    pattern: 'molecules-language-switcher'
+attributes:
+  Attribute():
+    class: 'block-language-switcher--desktop'

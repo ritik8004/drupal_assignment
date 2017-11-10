@@ -1,0 +1,28 @@
+<div class="individual--store">
+  <div class="individual-store--detail">
+    <div class="list-view--locator">
+      <div class="back-link">
+        <a href="{{ path('view.stores_finder.page_2') }}">{{ 'Back' | t }}</a>
+      </div>
+      <div>
+        <a class="row-title">{{ label }}</a>
+        <div class="views-row">
+          <div class="field-store--address">
+            <div class="field-content">
+              {{ content.field_store_address }}
+              {{ content.field_store_phone }}
+            </div>
+          </div>
+          <div class="field-store--open-hours">
+            <div class="field-content">
+              {{ content.field_store_open_hours }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="store--map">
+    {{ content.field_latitude_longitude }}
+  </div>
+</div>

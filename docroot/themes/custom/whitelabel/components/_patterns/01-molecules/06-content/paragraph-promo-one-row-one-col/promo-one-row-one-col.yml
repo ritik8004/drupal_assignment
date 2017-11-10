@@ -1,0 +1,25 @@
+content: '<div data-quickedit-entity-id="paragraph/9" class="paragraph-t-1-row-1-col paragraph-vm-default" data-quickedit-entity-instance-id="0">
+          <div data-quickedit-field-id="paragraph/9/field_promo_block/en/default" class="field__wrapper">
+            <div class="field__item">
+            <div data-quickedit-entity-id="paragraph/8" class="paragraph-t-promo-block paragraph-vm-1026x288" data-quickedit-entity-instance-id="0">
+              <div data-quickedit-field-id="paragraph/8/field_banner/en/1026x288" class="field__wrapper">
+                <picture>
+                  <!--[if IE 9]><video style="display: none;"><![endif]-->
+                  <source srcset="https://dummyimage.com/1026x288/000/fff&text=1-row-1-col" media="all and (min-width: 64.0625rem)" type="image/png">
+                  <source srcset="https://dummyimage.com/720x202/000/fff&text=1-row-1-col" media="all and (min-width: 48rem) and (max-width: 64rem)" type="image/png">
+                  <source srcset="https://dummyimage.com/304x132/000/fff&text=1-row-1-col" media="all and (max-width: 47.9375rem)" type="image/png">
+                  <!--[if IE 9]></video><![endif]-->
+                  <img src="https://dummyimage.com/304x132/000/fff&text=1-row-1-col" alt="Home banner" typeof="foaf:Image">
+                </picture>
+
+              </div>
+              <div data-quickedit-field-id="paragraph/8/field_link/en/1026x288" class="field__wrapper"><a href="/en">/en</a></div>
+
+              </div>
+            </div>
+          </div>
+        </div>'
+attributes:
+  Attribute():
+    class:
+    - 'region-content'

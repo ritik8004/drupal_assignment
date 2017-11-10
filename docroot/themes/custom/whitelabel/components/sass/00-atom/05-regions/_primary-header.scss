@@ -1,0 +1,10 @@
+.region-primary-header {
+  @include breakpoint($above-palm) {
+    width: 58%;
+    display: inline-block;
+  }
+
+  @include breakpoint($desk) {
+    width: 60%;
+  }
+}

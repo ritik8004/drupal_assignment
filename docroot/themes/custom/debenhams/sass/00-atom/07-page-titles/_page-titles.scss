@@ -1,0 +1,21 @@
+.node-custom-department-page .page--title {
+  color: $black-smoke;
+  font-weight: normal;
+  text-align: center;
+  font-family: $lato-regular;
+
+  &::after {
+    content: "";
+    border-top: 0.0625rem solid $gainsboro;
+    width: 100%;
+    display: block;
+    vertical-align: middle;
+    margin: -0.875rem 0 0 0;
+  }
+
+  span {
+    background: white;
+    padding: 0.9375rem 1.25rem;
+    margin: 0;
+  }
+}

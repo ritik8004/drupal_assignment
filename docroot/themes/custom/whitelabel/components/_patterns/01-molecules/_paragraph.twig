@@ -1,0 +1,13 @@
+{%
+set classes = [
+'paragraph-t-' ~ paragraph.bundle|replace('_', '-'),
+view_mode ? 'paragraph-vm-' ~ view_mode,
+]
+%}
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }}>
+    {% block content %}
+      {{ content }}
+    {% endblock %}
+  </div>
+{% endblock paragraph %}

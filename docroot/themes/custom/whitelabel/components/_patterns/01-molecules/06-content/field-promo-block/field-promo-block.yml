@@ -1,0 +1,4 @@
+items:
+- content:
+    include():
+      pattern: 'molecules-promo-one-row-one-col'

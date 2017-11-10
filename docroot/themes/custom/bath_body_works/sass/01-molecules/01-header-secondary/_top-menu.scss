@@ -1,0 +1,49 @@
+.pls-top-menu {
+  display: inline-block;
+
+  li {
+    display: inline-block;
+    padding: 0.25rem 1.2rem;
+    vertical-align: middle;
+    line-height: 1.2;
+
+    a {
+      color: $peacock-blue;
+      font-size: 0.692rem;
+      text-decoration: none;
+      display: block;
+      float: direction(left);
+
+      &::before {
+        font-size: 1rem;
+        margin-#{direction(right)}: 0.31em;
+        vertical-align: bottom;
+      }
+    }
+  }
+}
+
+.menu-language-switcher--desktop li a {
+  @include icon(language);
+
+  &::before {
+    margin-#{direction(right)}: 0.31em;
+    font-size: 1rem;
+    vertical-align: bottom;
+  }
+}
+
+.stores-finder {
+  @include icon(mappin);
+
+  &::before {
+    font-size: 1rem;
+    margin-#{direction(right)}: 0.31em;
+    vertical-align: bottom;
+  }
+}
+
+html[lang="ar"] .menu-language-switcher--desktop li a::before {
+  float: right;
+  line-height: 0.8;
+}

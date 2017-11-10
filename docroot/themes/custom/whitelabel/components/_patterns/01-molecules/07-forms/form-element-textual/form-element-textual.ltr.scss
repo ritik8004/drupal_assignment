@@ -1,0 +1,156 @@
+@import '../../../../sass/config/**/*.scss';
+
+.input--textual__container {
+  input {
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid $greyish-light;
+    line-height: 26px;
+    height: 1.625rem;
+    font-size: 1rem;
+    color: $black-smoke;
+    width: 100%;
+    -webkit-appearance: none;
+    padding: 0;
+  }
+
+  input:focus ~ .input__line,
+  input:active ~ .input__line,
+  .error ~ .input__line {
+    width: 100%;
+    #{direction(left)}: 0;
+    background: $windows-blue;
+  }
+
+  input:focus {
+    outline: 0;
+  }
+
+  input::placeholder {
+    color: $greyish;
+  }
+
+  label.error {
+    color: $venetian-red;
+    font-size: 0.75rem;
+    margin-top: 0.3125rem;
+    position: absolute;
+    bottom: -1.25rem;
+    #{direction(left)}: 0;
+  }
+
+  input.error ~ .input__line,
+  input.error:focus ~ .input__line,
+  input.error:active ~ .input__line {
+    background: $venetian-red;
+  }
+
+  input.error ~ .input__line {
+    height: 2px;
+  }
+}
+
+.form-item--error-message {
+  margin-bottom: 1.25rem;
+}
+
+.input--textual__container,
+.input--inner__container {
+  position: relative;
+}
+
+.input--textual__container {
+  margin-bottom: 2.375rem;
+}
+
+.field--name-field-first-name,
+.field--name-field-last-name {
+  width: 48%;
+}
+
+.field--name-field-first-name {
+  float: direction(left);
+}
+
+.field--name-field-last-name {
+  float: direction(right);
+
+  & ~ div {
+    clear: both;
+  }
+}
+
+.input__line {
+  position: absolute;
+  bottom: 0;
+  height: 1px;
+  background: $greyish-light;
+  left: 45%;
+  width: 0.625rem;
+  transition: left 0.25s ease-in-out, width 0.25s ease-in-out, background 0.25s ease-in-out;
+}
+
+/* Input with Label */
+.input--label .input::placeholder {
+  color: transparent;
+}
+
+.input--prefix ~ .input__label label,
+.input--active ~ .input__label label,
+input:focus ~ .input__label label,
+input:active ~ .input__label label {
+  font-size: 0.625rem;
+  top: -0.75rem;
+}
+
+.input__label label {
+  position: absolute;
+  color: $greyish;
+  top: 0;
+  #{direction(left)}: 0;
+  font-size: 1rem;
+  transition: font-size 0.25s ease-in-out, top 0.25s ease-in-out;
+  pointer-events: none;
+}
+
+.input--textual__description {
+  display: none;
+}
+
+.input__container--half {
+  &:first-child {
+    float: direction(left);
+  }
+
+  &:last-child {
+    float: direction(right);
+  }
+}
+
+.input__container--half {
+  width: 48%;
+}
+
+.input__container,
+.input__inner-container {
+  position: relative;
+}
+
+.input__container--half__wrapper {
+  @include u-clearfix;
+
+  margin-top: 1rem;
+}
+
+/* Mobile Number */
+.mobile-number-field {
+  > label {
+    display: none;
+  }
+
+  .local-number ~ .input__label label {
+    height: auto;
+    width: auto;
+    clip: unset;
+  }
+}

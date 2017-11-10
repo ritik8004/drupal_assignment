@@ -224,20 +224,6 @@ function alshaya_white_label_preprocess_field__node__field_store_open_hours__sto
 }
 
 /**
- * Implements hook_preprocess_field().
- *
- * For the address field of store content type.
- */
-function alshaya_white_label_preprocess_field__node__field_store_address__store(&$variables) {
-  if (!empty($variables['items'])) {
-    // Adding 'raw' filter for the html tags that show up.
-    foreach ($variables['items'] as &$item) {
-      $item['content']['#template'] = '{{ value|raw|nl2br }}';
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_node().
  */
 function alshaya_white_label_preprocess_node(&$variables) {

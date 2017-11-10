@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_html_heading
+    - paragraphs.paragraphs_type.title_textarea
+  module:
+    - text
+id: paragraph.title_textarea.field_html_heading
+field_name: field_html_heading
+entity_type: paragraph
+bundle: title_textarea
+label: Heading
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text

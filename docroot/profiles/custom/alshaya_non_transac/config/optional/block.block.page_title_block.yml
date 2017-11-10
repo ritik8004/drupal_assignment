@@ -8,7 +8,7 @@ dependencies:
 id: page_title_block
 theme: whitelabel_non_transac
 region: content
-weight: -7
+weight: -8
 provider: null
 plugin: page_title_block
 settings:

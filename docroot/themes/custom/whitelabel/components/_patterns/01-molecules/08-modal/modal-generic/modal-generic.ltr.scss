@@ -1,0 +1,108 @@
+@import '../../../../sass/config/**/*.scss';
+
+.ui-widget-overlay {
+  background: $black;
+  opacity: 0.6;
+}
+
+.ui-dialog {
+  background: $white;
+  padding: 2.5rem 0 1.875rem 1.5rem;
+  width: 100%;
+
+  @include breakpoint($upto-palm) {
+    width: 100% !important;
+  }
+
+  @include breakpoint($lap) {
+    width: 45rem !important;
+  }
+
+  @include breakpoint($desk) {
+    width: 54.5rem !important;
+  }
+
+  h2 {
+    font-size: 0.875rem;
+  }
+
+  .ui-dialog-buttonpane {
+    float: direction(left);
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .ui-button-icon-only {
+    position: absolute;
+    top: -1.95rem !important;
+    right: 0;
+    border: 0;
+    height: 1.9375rem;
+    width: 2.1875rem;
+    outline: transparent;
+
+    @include breakpoint($lap) {
+      background: $black;
+    }
+
+    @include breakpoint($desk) {
+      background: $gainsboro;
+    }
+  }
+}
+
+.ui-dialog-title {
+  font-size: 1.5rem;
+  color: $black-smoke;
+  border-bottom: 1px solid $gainsboro;
+  margin-bottom: 0.625rem;
+  padding-bottom: 0.625rem;
+  width: 100%;
+}
+
+.ui-dialog .ui-dialog-title {
+  float: direction(left);
+}
+
+.ui-dialog {
+  .form--content .input__line {
+    display: none;
+  }
+
+  .ui-dialog-buttonpane button {
+    margin: 0.5em 0;
+  }
+}
+
+.ui-state-default .ui-icon {
+  position: relative;
+  display: inline;
+  top: 0 !important;
+  left: 48% !important;
+
+  @include icon(close, before) {
+    font-size: 1.75rem;
+    right: 0.7rem;
+    position: relative;
+
+    @include breakpoint($lap) {
+      color: $white;
+    }
+
+    @include breakpoint($desk) {
+      color: $black-smoke;
+    }
+  }
+}
+
+.ui-dialog-buttonset.form-actions {
+  color: $medium-pink;
+  float: left;
+
+  button {
+    width: 5.6875rem;
+    height: 2.1875rem;
+    border: 1px solid $medium-pink;
+    background: transparent;
+  }
+}

@@ -1,0 +1,18 @@
+attributes:
+  Attribute():
+    class:
+    - 'menu-language-switcher--desktop'
+links:
+- item:
+  attributes:
+    Attribute():
+      class:
+      - 'en'
+      - 'is-active'
+  text: 'English'
+- item:
+  attributes:
+    Attribute():
+      class:
+      - 'ar'
+  text: 'عربية'
