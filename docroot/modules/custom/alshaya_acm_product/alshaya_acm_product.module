@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
