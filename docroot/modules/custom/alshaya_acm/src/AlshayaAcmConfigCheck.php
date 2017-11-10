@@ -29,6 +29,11 @@ class AlshayaAcmConfigCheck {
     $request_time = \Drupal::time()->getRequestTime();
     $interval = (int) \Drupal::config('alshaya_acm.settings')->get('config_check_interval');
 
+    // Check if reverting of settings is disabled.
+    if (empty($interval)) {
+      return;
+    }
+
     $flag_var = 'alshaya_acm_config_check.' . $env;
 
     // Very first request time or time at which settings were reset last.
@@ -42,7 +47,7 @@ class AlshayaAcmConfigCheck {
     }
     // The interval time below allows to do temporary overrides on non prod
     // envs for dev/test purpose.
-    elseif (empty($interval) || $request_time - $first_request < $interval) {
+    elseif ($request_time - $first_request < $interval) {
       return;
     }
 
@@ -53,6 +58,8 @@ class AlshayaAcmConfigCheck {
     $reset = [
       'acq_commerce.conductor',
       'alshaya_api.settings',
+      'acq_cybersource.settings',
+      'alshaya_acm_knet.settings',
       'recaptcha.settings',
     ];
 
