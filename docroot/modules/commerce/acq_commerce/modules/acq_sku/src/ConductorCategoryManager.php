@@ -250,9 +250,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   Parent Category.
    */
   private function syncCategory(array $categories, $parent = NULL) {
-    // Increase timeout as we will be using locks.
-    set_time_limit(600);
-
     $lock = \Drupal::lock();
 
     // Remove top level item (Default Category) from the categories, if its set

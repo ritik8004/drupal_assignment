@@ -179,3 +179,31 @@ index a9763fbf0..662cfa343 100644
  
      if (isset($fps)) {
        foreach ($fps as $fp) {
+diff --git a/modules/acq_sku/src/ConductorCategoryManager.php b/modules/acq_sku/src/ConductorCategoryManager.php
+index e5ec40791..05cdc38ab 100644
+--- a/modules/acq_sku/src/ConductorCategoryManager.php
++++ b/modules/acq_sku/src/ConductorCategoryManager.php
+@@ -250,9 +250,6 @@ private function resetResults() {
+    *   Parent Category.
+    */
+   private function syncCategory(array $categories, $parent = NULL) {
+-    // Increase timeout as we will be using locks.
+-    set_time_limit(600);
+-
+     $lock = \Drupal::lock();
+ 
+     // Remove top level item (Default Category) from the categories, if its set
+diff --git a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+index 662cfa343..3e84ea6db 100644
+--- a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
++++ b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+@@ -129,9 +129,6 @@ public static function create(ContainerInterface $container, array $configuratio
+    *   HTTP Response object.
+    */
+   public function post(array $products = []) {
+-    // Increase timeout as we will be using locks.
+-    set_time_limit(600);
+-
+     $lock = \Drupal::lock();
+ 
+     $em = $this->entityManager->getStorage('acq_sku');

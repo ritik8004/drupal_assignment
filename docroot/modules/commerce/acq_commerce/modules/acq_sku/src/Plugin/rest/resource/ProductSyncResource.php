@@ -129,9 +129,6 @@ class ProductSyncResource extends ResourceBase {
    *   HTTP Response object.
    */
   public function post(array $products = []) {
-    // Increase timeout as we will be using locks.
-    set_time_limit(600);
-
     $lock = \Drupal::lock();
 
     $em = $this->entityManager->getStorage('acq_sku');
