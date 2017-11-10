@@ -138,18 +138,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    * {@inheritdoc}
    */
   public function synchronizeCategory($vocabulary, array $categories) {
-    // Increase timeout as we will be using locks.
-    set_time_limit(600);
-
-    $lock = \Drupal::lock();
-
-    // Acquire lock to ensure parallel processes are executed one by one.
-    do {
-      // We should be done in 120 seconds max, categories are always pushed
-      // one by one.
-      $synchronizeCategoryLock = $lock->acquire('synchronizeCategory', 120);
-    } while (!$synchronizeCategoryLock);
-
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
 
@@ -191,9 +179,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
     // Recurse the category tree and create / update nodes.
     $this->syncCategory([$categories], $parent);
-
-    // Release the lock.
-    $lock->release('synchronizeCategory');
 
     return ($this->results);
   }
@@ -265,6 +250,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   Parent Category.
    */
   private function syncCategory(array $categories, $parent = NULL) {
+    // Increase timeout as we will be using locks.
+    set_time_limit(600);
+
+    $lock = \Drupal::lock();
 
     // Remove top level item (Default Category) from the categories, if its set
     // in configuration and category is with no parent.
@@ -286,6 +275,14 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       if (!$langcode) {
         continue;
       }
+
+      $lock_key = 'syncCategory' . $category['category_id'];
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $lock->acquire($lock_key);
+      } while (!$lock_acquired);
+
 
       $parent_data = ($parent) ? [$parent->id()] : [0];
       $position = (isset($category['position'])) ? (int) $category['position'] : 1;
@@ -362,6 +359,9 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       $term->setFormat('rich_text');
 
       $term->save();
+
+      // Release the lock.
+      $lock->release($lock_key);
 
       // Recurse to children categories.
       $childCats = (isset($category['children'])) ? $category['children'] : [];

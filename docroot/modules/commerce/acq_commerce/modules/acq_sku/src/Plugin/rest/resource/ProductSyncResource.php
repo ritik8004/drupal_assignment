@@ -134,13 +134,6 @@ class ProductSyncResource extends ResourceBase {
 
     $lock = \Drupal::lock();
 
-    // Acquire lock to ensure parallel processes are executed one by one.
-    do {
-      // We should be done in 120 seconds max, products are always pushed
-      // in batches.
-      $synchronizeProductsLock = $lock->acquire('synchronizeProducts', 120);
-    } while (!$synchronizeProductsLock);
-
     $em = $this->entityManager->getStorage('acq_sku');
     $created = 0;
     $updated = 0;
@@ -194,6 +187,13 @@ class ProductSyncResource extends ResourceBase {
         $failed++;
         continue;
       }
+
+      $lock_key = 'synchronizeProduct' . $product['sku'];
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $lock->acquire($lock_key);
+      } while (!$lock_acquired);
 
       if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
         if ($product['status'] != 1) {
@@ -312,10 +312,10 @@ class ProductSyncResource extends ResourceBase {
           // Do nothing, we may not have the node available in system.
         }
       }
-    }
 
-    // Release the lock.
-    $lock->release('synchronizeProducts');
+      // Release the lock.
+      $lock->release($lock_key);
+    }
 
     if (isset($fps)) {
       foreach ($fps as $fp) {
