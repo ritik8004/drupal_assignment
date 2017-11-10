@@ -44,6 +44,11 @@ class AlshayaAcmConfigCheck {
 
       // Set the first request time in state.
       \Drupal::state()->set($flag_var, $first_request);
+
+      // Always set GTM id to null on all envs (except prod) first time.
+      $config = \Drupal::configFactory()->getEditable('google_tag.settings');
+      $config->set('container_id', '');
+      $config->save();
     }
     // The interval time below allows to do temporary overrides on non prod
     // envs for dev/test purpose.
@@ -61,6 +66,7 @@ class AlshayaAcmConfigCheck {
       'acq_cybersource.settings',
       'alshaya_acm_knet.settings',
       'recaptcha.settings',
+      'geolocation.settings',
     ];
 
     // Reset the settings.
