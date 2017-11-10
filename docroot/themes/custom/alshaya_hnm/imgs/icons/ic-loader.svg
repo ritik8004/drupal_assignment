@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35" height="35" viewBox="0 0 35 35">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" viewBox="0 0 48 48">
 <defs>
     <linearGradient id="b" x1="100%" x2="0%" y1="50%" y2="50%">
         <stop offset="0%" stop-color="#D6D6D6"/>
@@ -11,5 +11,9 @@
         <animateTransform  attributeName="transform" type="rotate" from="0 24.5 24.5" to="360 24.5 24.5" dur="0.75s" repeatCount="indefinite" />
     </path>
 </defs>
-<use fill="url(#b)" fill-rule="nonzero" transform="translate(-7 -7)" xlink:href="#a"/>
+<g fill="none" fill-rule="evenodd">
+    <path d="M0 0h48v48H0z"/>
+    <path fill="#FFF" d="M0 0h48v48H0z"/>
+    <use fill="url(#b)" fill-rule="nonzero" xlink:href="#a"/>
+</g>
 </svg>
