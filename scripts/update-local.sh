@@ -67,16 +67,6 @@ drush $alias $l_argument ssh "sudo service memcached restart"
 echo "Installing database from $arg2 env"
 drush $alias $l_argument sql-cli < $local_archive
 
-# Update configs for oauth
-echo "Updating config for oauth."
-drush $alias $l_argument cset simple_oauth.settings private_key "/var/www/alshaya/box/alshaya_acm" -y
-drush $alias $l_argument cset simple_oauth.settings public_key "/var/www/alshaya/box/alshaya_acm.pub" -y
-
-# Update configs for autologout
-echo "Updating config for autologout."
-drush $alias $l_argument cset autologout.settings timeout 86400 -y
-drush $alias $l_argument cset autologout.settings max_timeout 86400 -y
-
 # Update super admin email to local default.
 echo "Update super admin email to no-reply@acquia.com."
 drush $alias $l_argument sqlq "update users_field_data set mail = 'no-reply@acquia.com', name = 'admin' where uid = 1"
