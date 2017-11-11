@@ -787,10 +787,10 @@
 
         if ((fileName !== undefined) && (fileName !== '') && (
           (fileName.indexOf('hp') === 0) ||
-      (fileName.indexOf('mm') === 0) ||
-      (fileName.indexOf('dp') === 0) ||
-      (fileName.indexOf('lp') === 0) ||
-      (fileName.indexOf('oth') === 0)
+          (fileName.indexOf('mm') === 0) ||
+          (fileName.indexOf('dp') === 0) ||
+          (fileName.indexOf('lp') === 0) ||
+          (fileName.indexOf('oth') === 0)
         )) {
           var promotion = {
             id: fileName,
