@@ -5,14 +5,42 @@
  * Install file for alshaya_store_finder.
  */
 
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update().
+ *
+ * Set default marker icon.
+ */
+function alshaya_stores_finder_update_8101() {
+  alshaya_stores_finder_set_default_marker_icon();
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_stores_finder_update_8003() {
+  // Revert the view to use relative path in links.
+  $reverter = \Drupal::service('config_update.config_update');
+  $reverter->revert('view', 'stores_finder');
+}
+
 /**
  * Implements hook_install().
  */
 function alshaya_stores_finder_install() {
   // Set default google map api key.
   $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
-  $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
+  $geolocation_settings = Settings::get('geolocation.settings');
+
+  foreach ($geolocation_settings as $key => $value) {
+    $config->set($key, $value);
+  }
+
   $config->save();
+
+  // Set default marker icon settings.
+  alshaya_stores_finder_set_default_marker_icon();
 
   // Array of language translation strings.
   $strings = [
@@ -24,12 +52,14 @@ function alshaya_stores_finder_install() {
 }
 
 /**
- * Implements hook_update().
- *
- * Update the Google Map API Key.
+ * Set default marker icon.
  */
-function alshaya_stores_finder_update_8002() {
-  $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
-  $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
-  $config->save();
+function alshaya_stores_finder_set_default_marker_icon() {
+  // Set default marker image settings.
+  $marker_path = drupal_get_path('module', 'alshaya_stores_finder') . '/images/google-map-marker.svg';
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('marker.use_default', TRUE)
+    ->set('marker.path', $marker_path)
+    ->set('marker.url', file_url_transform_relative(file_create_url($marker_path)))
+    ->save(TRUE);
 }

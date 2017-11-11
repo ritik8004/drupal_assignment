@@ -5,6 +5,59 @@
  * Contains install, update, uninstall hooks for alshaya_master module.
  */
 
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new string translations.
+ */
+function alshaya_master_update_8004() {
+  $strings = [
+    'not available' => [
+      'ar' => 'غير متوفر',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Update mobile number maxlength to 8 as per new fe implementation.
+ */
+function alshaya_master_update_8003() {
+  $settings = \Drupal::configFactory()->getEditable('alshaya_master.mobile_number_settings');
+  $settings->set('maxlength', 8);
+  $settings->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Override rich text config to allow div & classes.
+ */
+function alshaya_master_update_8002() {
+  $config_path = drupal_get_path('module', 'alshaya_master') . '/config/install';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write('filter.format.rich_text', $source->read('filter.format.rich_text'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new string translations.
+ */
+function alshaya_master_update_8001() {
+  $strings = [
+    'Please select a size.' => [
+      'ar' => 'يرجى اختيار المقاس',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
 /**
  * Implements hook_install().
  */
@@ -185,7 +238,9 @@ function alshaya_master_install() {
       'ar' => 'يرجى إدخال @title',
       'en' => 'Please enter your @title.',
     ],
-
+    'Please select a size.' => [
+      'ar' => 'يرجى اختيار المقاس',
+    ],
     '@title does not contain a valid email.' => [
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
     ],
@@ -1159,6 +1214,9 @@ function alshaya_master_install() {
     ],
     'Sorry, something went wrong and we are unable to process your request right now. Please try again later.' => [
       'ar' => 'عفواً، حدث خطأ ما، ولم نتمكن من متابعة تنفيذ طلبك الآن. يرجى المحاولة مجدداً في وقت لاحق.',
+    ],
+    'not available' => [
+      'ar' => 'غير متوفر',
     ],
   ];
   alshaya_i18n_save_translations($strings);

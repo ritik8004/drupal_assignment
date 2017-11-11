@@ -14,6 +14,11 @@ services:
     tags:
       - { name: event_subscriber }
 
+  alshaya_acm.route_subscriber:
+    class: Drupal\alshaya_acm\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
   alshaya_acm.breadcrumb:
    class: Drupal\alshaya_acm\Breadcrumb\AlshayaACMBreadcrumbBuilder
    tags:
@@ -22,6 +27,9 @@ services:
   alshaya_acm.api_helper:
     class: Drupal\alshaya_acm\ApiHelper
     arguments: ['@acq_commerce.api', '@acq_cart.cart_storage', '@config.factory', '@cache.alshaya_api', '@language_manager']
+
+  alshaya_acm.config_check:
+    class: Drupal\alshaya_acm\AlshayaAcmConfigCheck
 
   cache.alshaya_api:
     class: Drupal\Core\Cache\CacheBackendInterface

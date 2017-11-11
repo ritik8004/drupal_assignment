@@ -4,7 +4,6 @@ description: 'Default content to be created during install.'
 package: 'Alshaya'
 core: 8.x
 dependencies:
-  - default_content
   - alshaya_master
   - alshaya_menus
   - alshaya_permissions

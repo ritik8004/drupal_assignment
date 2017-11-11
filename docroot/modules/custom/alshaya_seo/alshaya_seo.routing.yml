@@ -5,13 +5,6 @@ alshaya_seo.google_knowledge_graph_form:
     _title: 'Google Knowledge Graph'
   requirements:
     _permission: 'access google knowledge graph'
-alshaya_seo.sitemap:
-  path: '/sitemap'
-  defaults:
-    _controller: '\Drupal\alshaya_seo\Controller\AlshayaSeoController::siteMap'
-    _title: 'site map'
-  requirements:
-    _access: 'TRUE'
 alshaya_seo.settings:
   path: '/admin/seo-settings'
   defaults:
@@ -19,10 +12,3 @@ alshaya_seo.settings:
     _title: 'SEO Settings'
   requirements:
     _role: 'seo_admin'
-alshaya_seo.redirect_bulk_upload:
-  path: '/admin/config/search/redirect/redirect-bulk-add'
-  defaults:
-    _form: '\Drupal\alshaya_seo\Form\AlshayaBulkUploadRedirect'
-    _title: 'Bulk add redirects'
-  requirements:
-    _permission: 'administer redirects'

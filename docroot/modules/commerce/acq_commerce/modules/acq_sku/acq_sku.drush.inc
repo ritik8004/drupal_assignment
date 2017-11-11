@@ -49,6 +49,22 @@ function acq_sku_drush_command() {
     ],
   ];
 
+  $commands['commerce-cats-remove-duplicates'] = [
+    'description' => 'Remove all duplicate categories available in system.',
+    'aliases'     => ['acccrd'],
+    'examples'    => [
+      'drush acccrd' => 'Remove all duplicate categories available in system.',
+    ],
+  ];
+
+  $commands['commerce-products-remove-duplicates'] = [
+    'description' => 'Remove all duplicate products available in system.',
+    'aliases'     => ['accprd'],
+    'examples'    => [
+      'drush accprd' => 'Remove all duplicate products available in system.',
+    ],
+  ];
+
   $commands['clean-synced-data'] = [
     'description' => 'Flush all commerce data from the site (Products, SKUs, Product Categories and Product Options).',
     'aliases'     => ['accd'],
@@ -128,7 +144,6 @@ function drush_acq_sku_sync_commerce_cats() {
   drush_print(dt('Done.'));
 }
 
-
 /**
  * Implements drush product attribute sync command.
  */
@@ -137,6 +152,78 @@ function drush_acq_sku_sync_commerce_product_options() {
   $container = \Drupal::getContainer();
   $container->get('acq_sku.product_options_manager')->synchronizeProductOptions();
   \Drupal::logger('acq_sku')->notice('Product attribute sync completed.');
+  drush_print(dt('Done.'));
+}
+
+/**
+ * Implements drush commerce-cats-remove-duplicates command.
+ */
+function drush_acq_sku_commerce_cats_remove_duplicates() {
+  drush_print(dt('Cleaning all commerce categories, please wait...'));
+
+  $db = \Drupal::database();
+
+  /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
+  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  /** @var \Drupal\node\NodeStorageInterface $nodeStorage */
+  $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
+
+  $query = $db->select('taxonomy_term__field_commerce_id', 'ttfci');
+  $query->addField('ttfci', 'field_commerce_id_value', 'commerce_id');
+  $query->groupBy('commerce_id');
+  $query->having('count(*) > 1');
+  $result = $query->execute()->fetchAllKeyed(0, 0);
+
+  if (empty($result)) {
+    drush_print(dt('No duplicate categories found.'));
+    return;
+  }
+
+  foreach ($result as $commerce_id) {
+    drush_print(dt('Duplicate categories found for commerce id: @commerce_id.', [
+      '@commerce_id' => $commerce_id,
+    ]));
+
+    $query = $db->select('taxonomy_term__field_commerce_id', 'ttfci');
+    $query->addField('ttfci', 'entity_id', 'tid');
+    $query->condition('ttfci.field_commerce_id_value', $commerce_id);
+    $query->orderBy('tid', 'DESC');
+    $tids = $query->execute()->fetchAllKeyed(0, 0);
+
+    foreach ($tids as $tid) {
+      $query = $nodeStorage->getQuery();
+      $query->condition('field_category', $tid);
+      $nodes = $query->execute();
+
+      if (empty($nodes)) {
+        drush_print(dt('No nodes found for tid: @tid for commerce id: @commerce_id. Deleting', [
+          '@commerce_id' => $commerce_id,
+          '@tid' => $tid,
+        ]));
+
+        $term = $termStorage->load($tid);
+        $term->delete();
+
+        unset($tids[$tid]);
+
+        // Break the loop if only one left now, we might not have any products
+        // added yet and categories are synced which means there will be no
+        // nodes for any term.
+        if (count($tids) == 1) {
+          break;
+        }
+      }
+      else {
+        drush_print(dt('@count nodes found for tid: @tid for commerce id: @commerce_id. Not Deleting', [
+          '@commerce_id' => $commerce_id,
+          '@tid' => $tid,
+          '@count' => count($nodes),
+        ]));
+      }
+    }
+  }
+
   drush_print(dt('Done.'));
 }
 
@@ -298,4 +385,124 @@ function drush_acq_sku_clean_stock_cache() {
   \Drupal::service('cache.stock')->deleteAllPermanent();
 
   drush_print(dt('Deleted all cache for stock.'));
+}
+
+/**
+ * Implements drush commerce-products-remove-duplicates command.
+ */
+function drush_acq_sku_commerce_products_remove_duplicates() {
+  drush_print(dt('Removing duplicates in commerce products, please wait...'));
+
+  $skus_to_sync = [];
+
+  $db = \Drupal::database();
+
+  /** @var \Drupal\node\NodeStorageInterface $nodeStorage */
+  $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
+
+  $query = $db->select('acq_sku_field_data', 't1');
+  $query->addField('t1', 'id', 'id');
+  $query->addField('t1', 'sku', 'sku');
+  $query->leftJoin('acq_sku_field_data', 't2', 't1.sku = t2.sku');
+  $query->where('t1.id != t2.id');
+  $result = $query->execute()->fetchAllKeyed(0, 1);
+
+  if (empty($result)) {
+    drush_print(dt('No duplicate skus found.'));
+  }
+  else {
+    $skus = [];
+
+    foreach ($result as $id => $sku) {
+      $skus[$sku][$id] = $id;
+      $skus_to_sync[$sku] = $sku;
+    }
+
+    foreach ($skus as $sku => $ids) {
+      drush_print(dt('Duplicate skus found for sku: @sku with ids: @ids.', [
+        '@sku' => $sku,
+        '@ids' => implode(', ', $ids),
+      ]));
+
+      // Always delete the one with higher id, first one will have more
+      // translations.
+      sort($ids);
+
+      // Remove the first id which we don't want to delete.
+      array_shift($ids);
+
+      foreach ($ids as $id) {
+        drush_print(dt('Deleting sku with id @id for sku @sku.', [
+          '@sku' => $sku,
+          '@id' => $id,
+        ]));
+
+        $sku_entity = SKU::load($id);
+        $sku_entity->delete();
+      }
+    }
+  }
+
+  $query = $db->select('node__field_skus', 't1');
+  $query->addField('t1', 'entity_id', 'id');
+  $query->addField('t1', 'field_skus_value', 'sku');
+  $query->leftJoin('node__field_skus', 't2', 't1.field_skus_value = t2.field_skus_value');
+  $query->where('t1.entity_id != t2.entity_id');
+  $result = $query->execute()->fetchAllKeyed(0, 1);
+
+  if (empty($result)) {
+    drush_print(dt('No duplicate product nodes found.'));
+  }
+  else {
+    $nids_to_delete = [];
+    $skus = [];
+
+    foreach ($result as $id => $sku) {
+      $skus[$sku][$id] = $id;
+      $skus_to_sync[$sku] = $sku;
+    }
+
+    foreach ($skus as $sku => $ids) {
+      drush_print(dt('Duplicate nodes found for sku: @sku with ids: @ids.', [
+        '@sku' => $sku,
+        '@ids' => implode(', ', $ids),
+      ]));
+
+      // Always delete the one with higher nid, first one will have proper
+      // url alias.
+      sort($ids);
+
+      // Remove the first id which we don't want to delete.
+      array_shift($ids);
+
+      foreach ($ids as $id) {
+        drush_print(dt('Deleting node with id @id for sku @sku.', [
+          '@sku' => $sku,
+          '@id' => $id,
+        ]));
+
+        $nids_to_delete[$id] = $id;
+      }
+    }
+
+    if ($nids_to_delete) {
+      $nodeStorage->delete($nodeStorage->loadMultiple($nids_to_delete));
+    }
+  }
+
+  if ($skus_to_sync) {
+    $sku_texts = implode(',', $skus_to_sync);
+
+    drush_print(dt('Requesting resync for skus @skus.', [
+      '@skus' => $sku_texts,
+    ]));
+
+    foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+      // Using very small page size to avoid any issues for skus which already
+      // had corrupt data.
+      \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, 5);
+    }
+  }
+
+  drush_print(dt('Done.'));
 }

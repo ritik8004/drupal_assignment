@@ -10,6 +10,30 @@ use Drupal\acq_sku\ProductOptionsManager;
 /**
  * Implements hook_update_N().
  *
+ * Add default value for new setting - list_view_items_per_page.
+ */
+function alshaya_acm_product_update_8004() {
+  $settings = \Drupal::configFactory()->getEditable('alshaya_acm_product.settings');
+  $settings->set('list_view_items_per_page', 30);
+  $settings->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add the index key in config to use for adding data in parent for configurable
+ * products.
+ */
+function alshaya_acm_product_update_8003() {
+  $sku_base_fields_config = Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields');
+  $sku_base_fields_config->set('fields.color.index', 1);
+  $sku_base_fields_config->set('fields.size.index', 1);
+  $sku_base_fields_config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set weight on product options.
  */
 function alshaya_acm_product_update_8002() {

@@ -1,0 +1,23 @@
+@import '../../../../sass/config/**/*.scss';
+
+.paragraph-t-title-textarea {
+  .field-html-heading h2 {
+    margin-bottom: 0.7rem;
+    font-size: 1.25rem;
+
+    @include breakpoint($desk) {
+      font-size: 1.5rem;
+    }
+  }
+
+  p {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .field-body {
+    color: $brownish-grey;
+  }
+}

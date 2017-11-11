@@ -1,0 +1,5 @@
+attributes:
+  Attribute():
+    class:
+    - 'page--title'
+title: 'Victoria Secret'

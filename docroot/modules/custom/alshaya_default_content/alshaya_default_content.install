@@ -35,6 +35,39 @@ function alshaya_default_content_install() {
   $config_factory = \Drupal::configFactory()->getEditable('alshaya_master.home');
   $config_factory->set('entity.id', $home->id());
   $config_factory->save();
+
+  $menu_items = [];
+
+  $menu_items[] = [
+    'menu' => 'mobile-navigation',
+    'en' => 'STORES',
+    'ar' => 'محلاتنا',
+    'uri' => 'internal:/store-finder',
+    'class' => 'no--desktop store',
+    'weight' => -48,
+  ];
+
+  $menu_items[] = [
+    'menu' => 'account',
+    'en' => 'Sign in',
+    'ar' => 'تسجيل الدخول',
+    'uri' => 'internal:/user/login',
+    'class' => 'sign-in-mobile',
+    'weight' => -49,
+  ];
+
+  $menu_items[] = [
+    'menu' => 'account',
+    'en' => 'create an account',
+    'ar' => 'تسجيل مستخدم جديد',
+    'uri' => 'internal:/user/register',
+    'class' => 'register-link',
+    'weight' => 0,
+  ];
+
+  foreach ($menu_items as $item) {
+    alshaya_default_content_add_menu_link_with_translations($item);
+  }
 }
 
 /**

@@ -129,6 +129,8 @@ class ProductSyncResource extends ResourceBase {
    *   HTTP Response object.
    */
   public function post(array $products = []) {
+    $lock = \Drupal::lock();
+
     $em = $this->entityManager->getStorage('acq_sku');
     $created = 0;
     $updated = 0;
@@ -183,11 +185,47 @@ class ProductSyncResource extends ResourceBase {
         continue;
       }
 
+      $lock_key = 'synchronizeProduct' . $product['sku'];
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $lock->acquire($lock_key);
+      } while (!$lock_acquired);
+
       if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
+        if ($product['status'] != 1) {
+          $this->logger->info('Removing disabled SKU from system: @sku.', ['@sku' => $product['sku']]);
+
+          try {
+            /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+            $plugin = $sku->getPluginInstance();
+
+            if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
+              // Delete the node if it is linked to this SKU only.
+              $node->delete();
+            }
+          }
+          catch (\Exception $e) {
+            // Not doing anything, we might not have node for the sku.
+          }
+
+          // Delete the SKU.
+          $sku->delete();
+
+          $updated++;
+          continue;
+        }
+
         $this->logger->info('Updating product SKU @sku.', ['@sku' => $product['sku']]);
         $updated++;
       }
       else {
+        if ($product['status'] != 1) {
+          $this->logger->info('Not creating disabled SKU in system: @sku.', ['@sku' => $product['sku']]);
+          $failed++;
+          continue;
+        }
+
         /** @var \Drupal\acq_sku\Entity\SKU $sku */
         $sku = $em->create([
           'type' => $product['type'],
@@ -207,7 +245,7 @@ class ProductSyncResource extends ResourceBase {
       $sku->attributes = $this->formatProductAttributes($product['attributes']);
 
       // Update product media to set proper position.
-      $sku->media = $this->getProcessedMedia($product);
+      $sku->media = $this->getProcessedMedia($product, $sku->media->value);
 
       $sku->attribute_set = $product['attribute_set_label'];
       $sku->product_id = $product['product_id'];
@@ -271,6 +309,9 @@ class ProductSyncResource extends ResourceBase {
           // Do nothing, we may not have the node available in system.
         }
       }
+
+      // Release the lock.
+      $lock->release($lock_key);
     }
 
     if (isset($fps)) {
@@ -468,7 +509,7 @@ class ProductSyncResource extends ResourceBase {
     }
   }
 
-  protected function getProcessedMedia($product) {
+  protected function getProcessedMedia($product, $current_value) {
     $media = [];
 
     if (isset($product['extension'], $product['extension']['media'])) {
@@ -500,6 +541,27 @@ class ProductSyncResource extends ResourceBase {
 
         return ($position1 < $position2) ? -1 : 1;
       });
+    }
+
+    // Reassign old files to not have to redownload them.
+    if (!empty($media)) {
+      $current_media = unserialize($current_value);
+      if (!empty($current_media) && is_array($current_media)) {
+        $current_mapping = [];
+        foreach ($current_media as $value) {
+          if (!empty($value['fid'])) {
+            $current_mapping[$value['value_id']]['fid'] = $value['fid'];
+            $current_mapping[$value['value_id']]['file'] = $value['file'];
+          }
+        }
+
+        foreach ($media as $key => $value) {
+          if (isset($current_mapping[$value['value_id']])) {
+            $media[$key]['fid'] = $current_mapping[$value['value_id']]['fid'];
+            $media[$key]['file'] = $current_mapping[$value['value_id']]['file'];
+          }
+        }
+      }
     }
 
     return serialize($media);

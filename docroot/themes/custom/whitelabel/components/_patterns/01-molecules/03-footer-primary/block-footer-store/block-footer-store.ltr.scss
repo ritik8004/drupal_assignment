@@ -1,0 +1,78 @@
+@import '../../../../sass/config/**/*.scss';
+
+.block-find-store-heading {
+  background-color: $black;
+  color: $white;
+  font-size: 0.875rem;
+  text-align: center;
+  padding-top: 1px;
+  padding-bottom: 1.25rem;
+  position: absolute;
+  top: 1.625rem;
+  #{direction(right)}: 3.2%;
+  z-index: $z-1;
+
+  html[lang=ar] & {
+    left: 4.6%;
+  }
+
+  @include breakpoint($upto-palm) {
+    display: none;
+  }
+
+  @include breakpoint($desk) {
+    top: 0.6rem;
+    #{direction(right)}: 9.4%;
+
+    html[lang=ar] & {
+      left: 15.4%;
+      word-spacing: 0.125rem;
+    }
+  }
+
+  h2 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    margin-bottom: 0.1875rem;
+
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
+  }
+
+  a {
+    color: $white;
+    font-family: $open-sans;
+    font-size: 0.875rem;
+
+    @include breakpoint($above-palm) {
+      font-size: 0.6875rem;
+      margin-#{direction(right)}: 2rem;
+    }
+
+    @include breakpoint($desk) {
+      margin-#{direction(right)}: 1rem;
+    }
+
+    @include icon(mappin, before) {
+      font-size: 1.2rem;
+      padding-#{direction(right)}: 0.3rem;
+      text-decoration: none;
+      vertical-align: bottom;
+      display: inline-block;
+    }
+
+    @include breakpoint($upto-palm) {
+      text-transform: uppercase;
+      text-decoration: none;
+
+      &::before {
+        content: none;
+      }
+    }
+  }
+}
+
+.block-find-store-heading--pl {
+  position: static !important;
+}

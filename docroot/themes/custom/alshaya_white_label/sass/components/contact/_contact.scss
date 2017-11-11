@@ -77,11 +77,6 @@
     border-bottom: 1px solid $grey-ash;
   }
 
-  input.error,
-  textarea.error {
-    border-bottom: 1px solid $red-error;
-  }
-
   label.error {
     font-size: 0.75rem;
     margin-top: 0.5rem;
@@ -95,14 +90,6 @@
   .form-item--error {
     input.error {
       color: $black;
-      border-bottom: 1px solid $red-error !important;
-    }
-
-    .c-input__bar {
-      &::after,
-      &::before {
-        background: $red-error;
-      }
     }
   }
 
@@ -223,7 +210,7 @@
   @extend .contact-form;
 
   .form-item {
-    margin-bottom: 2.5rem;
+    margin-bottom: 3.5rem;
     display: inline-block;
   }
 
@@ -237,13 +224,6 @@
 
   legend {
     color: $marine-blue-two;
-  }
-
-  .mobile-number-field {
-    @include breakpoint($desktop) {
-      display: block;
-      clear: both;
-    }
   }
 }
 

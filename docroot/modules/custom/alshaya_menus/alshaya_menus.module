@@ -4,3 +4,63 @@
  * @file
  * Module file.
  */
+
+use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Menu\MenuLinkInterface;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+
+/**
+ * Get menu link attributes.
+ *
+ * @param \Drupal\Core\Menu\MenuLinkInterface $menu_link_content_plugin
+ *   A menu link content plugin.
+ *
+ * @return array
+ *   An array with the attributes.
+ *
+ * @see http://jira.alshaya.com:8080/browse/ACR2-970
+ */
+function alshaya_menus_get_menu_link_attributes(MenuLinkInterface $menu_link_content_plugin) {
+  $attributes = [];
+
+  try {
+    $plugin_id = $menu_link_content_plugin->getPluginId();
+  }
+  catch (PluginNotFoundException $e) {
+    return $attributes;
+  }
+
+  if (strpos($plugin_id, ':') === FALSE) {
+    return $attributes;
+  }
+
+  list($entity_type, $uuid) = explode(':', $plugin_id, 2);
+
+  if ($entity_type == 'menu_link_content') {
+    try {
+      $entity = \Drupal::entityManager()->loadEntityByUuid($entity_type, $uuid);
+
+      $options = $entity->link->first()->options;
+      $attributes = isset($options['attributes']) ? $options['attributes'] : [];
+
+      // Class attribute needs special handling because Drupal
+      // may add an "active" class to it.
+      if (isset($attributes['class']) && !is_array($attributes['class'])) {
+        $attributes['class'] = explode(' ', $attributes['class']);
+      }
+
+      // Remove empty attributes by checking their string length.
+      foreach ($attributes as &$attribute) {
+        if (!is_array($attribute) && Unicode::strlen($attribute) === 0) {
+          unset($attribute);
+        }
+      }
+
+    }
+    catch (PluginNotfoundException $e) {
+      // Make sure we catch failed entity loadings.
+    }
+  }
+
+  return $attributes;
+}

@@ -30,12 +30,15 @@ class ProductSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_acm_product.settings');
     $config->set('related_items_size', $form_state->getValue('related_items_size'));
+    $config->set('list_view_items_per_page', $form_state->getValue('list_view_items_per_page'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('brand_logo_extension', $form_state->getValue('brand_logo_extension'));
     $config->set('not_buyable_message', $form_state->getValue('not_buyable_message'));
     $config->set('not_buyable_help_text', $form_state->getValue('not_buyable_help_text'));
     $config->set('size_guide_link', $form_state->getValue('size_guide_link'));
     $config->set('size_guide_modal_content', $form_state->getValue('size_guide_modal_content'));
+    $config->set('vat_text', $form_state->getValue('vat_text'));
+    $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -57,6 +60,14 @@ class ProductSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('related_items_size'),
     ];
 
+    $form['list_view_items_per_page'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Number of items to show on Listing pages'),
+      '#description' => $this->t('Number of items to show on Listing pages on PLP / Search pages. Please clear all caches after updating this.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('list_view_items_per_page'),
+    ];
+
     $form['brand_logo_base_path'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Base path on server for Brand Logo'),
@@ -75,14 +86,14 @@ class ProductSettingsForm extends ConfigFormBase {
 
     $form['not_buyable_message'] = [
       '#type' => 'text_format',
-      '#format' => 'rich_text',
+      '#format' => $config->get('not_buyable_message.format'),
       '#title' => $this->t('Not-buyable product message'),
       '#default_value' => $config->get('not_buyable_message.value'),
     ];
 
     $form['not_buyable_help_text'] = [
       '#type' => 'text_format',
-      '#format' => 'rich_text',
+      '#format' => $config->get('not_buyable_help_text.format'),
       '#title' => $this->t('Not-buyable product help text'),
       '#default_value' => $config->get('not_buyable_help_text.value'),
     ];
@@ -97,9 +108,21 @@ class ProductSettingsForm extends ConfigFormBase {
 
     $form['size_guide_modal_content'] = [
       '#type' => 'text_format',
-      '#format' => 'rich_text',
+      '#format' => $config->get('size_guide_modal_content.format'),
       '#title' => $this->t('Size guide content'),
       '#default_value' => $config->get('size_guide_modal_content.value'),
+    ];
+
+    $form['vat_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('VAT Inclusion text'),
+      '#default_value' => $config->get('vat_text'),
+    ];
+
+    $form['vat_text_footer'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('VAT disclaimer text for the footer'),
+      '#default_value' => $config->get('vat_text_footer'),
     ];
 
     return $form;

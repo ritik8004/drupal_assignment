@@ -1,0 +1,66 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.paragraph.326x288
+    - field.field.paragraph.offers_bordered.field_banner
+    - field.field.paragraph.offers_bordered.field_heading
+    - field.field.paragraph.offers_bordered.field_link
+    - field.field.paragraph.offers_bordered.field_sub_title
+    - field.field.paragraph.offers_bordered.field_title
+    - paragraphs.paragraphs_type.offers_bordered
+    - responsive_image.styles.326x288
+  module:
+    - link
+    - responsive_image
+id: paragraph.offers_bordered.326x288
+targetEntityType: paragraph
+bundle: offers_bordered
+mode: 326x288
+content:
+  field_banner:
+    weight: 1
+    label: hidden
+    settings:
+      responsive_image_style: 326x288
+      image_link: ''
+    third_party_settings: {  }
+    type: responsive_image
+    region: content
+  field_heading:
+    weight: 0
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_link:
+    weight: 4
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_sub_title:
+    weight: 3
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_title:
+    weight: 2
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden: {  }

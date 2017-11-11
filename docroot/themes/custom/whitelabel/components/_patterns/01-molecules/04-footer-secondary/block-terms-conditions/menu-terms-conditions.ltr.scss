@@ -1,0 +1,30 @@
+@import '../../../../sass/config/**/*.scss';
+
+.menu-terms-conditions {
+  margin: 0;
+  padding-#{direction(left)}: 0;
+  font-size: 0;
+
+  li {
+    display: inline-block;
+    border-#{direction(right)}: 1px solid $brownish-grey;
+    line-height: 1;
+
+    &:last-child {
+      border-#{direction(right)}: 0;
+    }
+  }
+
+  a {
+    color: $brownish-grey;
+    display: block;
+    font-size: 0.875rem;
+    margin: 0 0.4rem;
+    text-decoration: none;
+
+    &:hover {
+      color: $medium-pink;
+      text-decoration: underline;
+    }
+  }
+}

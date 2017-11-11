@@ -1,0 +1,56 @@
+content: '<div data-quickedit-entity-id="paragraph/12" class="paragraph-t-1-row-1st-col-2-row-2nd-col paragraph-vm-default" data-quickedit-entity-instance-id="0">
+            <div data-quickedit-field-id="paragraph/12/field_1st_col_promo_block/en/default" class="field__wrapper">
+              <div data-quickedit-entity-id="paragraph/10" class="paragraph-t-promo-block paragraph-vm-501x600" data-quickedit-entity-instance-id="0">
+                <div data-quickedit-field-id="paragraph/10/field_banner/en/501x600" class="field__wrapper">
+                  <picture>
+                    <!--[if IE 9]><video style="display: none;"><![endif]-->
+                    <source srcset="https://dummyimage.com/501x600/000/fff&text=1-row-1-col" media="all and (min-width: 64.0625rem)" type="image/png">
+                    <source srcset="https://dummyimage.com/348x428/000/fff&text=1-row-1-col" media="all and (min-width: 48rem) and (max-width: 64rem)" type="image/png">
+                    <source srcset="https://dummyimage.com/304x132/000/fff&text=1-row-1-col" media="all and (max-width: 47.9375rem)" type="image/png">
+                    <!--[if IE 9]></video><![endif]-->
+                    <img src="https://dummyimage.com/304x132/000/fff&text=1-row-1-col" alt="Home banner" typeof="foaf:Image">
+                  </picture>
+                </div>
+                <div data-quickedit-field-id="paragraph/10/field_link/en/501x600" class="field__wrapper"><a href="/en">/en</a></div>
+
+              </div>
+            </div>
+
+            <div data-quickedit-field-id="paragraph/12/field_2nd_col_promo_block/en/default" class="field__wrapper">
+              <div class="field__item">
+                <div data-quickedit-entity-id="paragraph/16" class="paragraph-t-promo-block paragraph-vm-501x288" data-quickedit-entity-instance-id="0">
+                  <div data-quickedit-field-id="paragraph/16/field_banner/en/501x288" class="field__wrapper">
+                    <picture>
+                      <!--[if IE 9]><video style="display: none;"><![endif]-->
+                      <source srcset="https://dummyimage.com/501x288/000/fff&text=2-row-2-col" media="all and (min-width: 64.0625rem)" type="image/png">
+                      <source srcset="https://dummyimage.com/348x202/000/fff&text=2-row-2-col" media="all and (min-width: 48rem) and (max-width: 64rem)" type="image/png">
+                      <source srcset="https://dummyimage.com/304x132/000/fff&text=2-row-2-col" media="all and (max-width: 47.9375rem)" type="image/png">
+                      <!--[if IE 9]></video><![endif]-->
+                      <img src="https://dummyimage.com/304x132/000/fff&text=2-row-2-col" alt="Home banner" typeof="foaf:Image">
+                    </picture>
+                  </div>
+                  <div data-quickedit-field-id="paragraph/16/field_link/en/501x288" class="field__wrapper"><a href="/en">/en</a></div>
+                </div>
+              </div>
+
+              <div class="field__item">
+                <div data-quickedit-entity-id="paragraph/17" class="paragraph-t-promo-block paragraph-vm-501x288" data-quickedit-entity-instance-id="0">
+                  <div data-quickedit-field-id="paragraph/17/field_banner/en/501x288" class="field__wrapper">
+                    <picture>
+                      <!--[if IE 9]><video style="display: none;"><![endif]-->
+                      <source srcset="https://dummyimage.com/501x288/000/fff&text=2-row-2-col" media="all and (min-width: 64.0625rem)" type="image/png">
+                      <source srcset="https://dummyimage.com/348x202/000/fff&text=2-row-2-col" media="all and (min-width: 48rem) and (max-width: 64rem)" type="image/png">
+                      <source srcset="https://dummyimage.com/304x132/000/fff&text=2-row-2-col" media="all and (max-width: 47.9375rem)" type="image/png">
+                      <!--[if IE 9]></video><![endif]-->
+                      <img src="https://dummyimage.com/304x132/000/fff&text=2-row-2-col" alt="Home banner" typeof="foaf:Image">
+                    </picture>
+                  </div>
+                  <div data-quickedit-field-id="paragraph/17/field_link/en/501x288" class="field__wrapper"><a href="/en">/en</a></div>
+                </div>
+              </div>
+            </div>
+          </div>'
+attributes:
+  Attribute():
+    class:
+    - 'region-content'

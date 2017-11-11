@@ -1,0 +1,20 @@
+.block-store-finder-form {
+  .block-store-finder-form__current-location {
+    &:hover {
+      color: $apple-light-green;
+    }
+  }
+
+  .block-store-finder-form__input__text {
+    color: $apple-light-green;
+  }
+
+  .block-store-finder-form__list-view,
+  .block-store-finder-form__map-view {
+    &.active,
+    &:hover {
+      color: $apple-light-green;
+      border-color: $apple-light-green;
+    }
+  }
+}

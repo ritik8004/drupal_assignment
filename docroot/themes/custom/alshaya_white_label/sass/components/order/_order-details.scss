@@ -665,3 +665,10 @@
     }
   }
 }
+
+.path--user .l-two--sf {
+  &.c-order-list,
+  &.order-detail {
+    margin-top: 1rem;
+  }
+}

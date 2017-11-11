@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Product label'
+vid: product_label
+description: 'Product''s label'
+hierarchy: 0
+weight: 0

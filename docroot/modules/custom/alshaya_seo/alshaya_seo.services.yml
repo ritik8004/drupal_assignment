@@ -1,20 +1,4 @@
 services:
-  alshaya_seo.gtm_manager:
-    class: Drupal\alshaya_seo\AlshayaGtmManager
-    arguments:
-      - '@current_route_match'
-      - '@config.factory'
-      - '@acq_cart.cart_storage'
-      - '@current_user'
-      - '@request_stack'
-      - '@entity.manager'
-      - '@alshaya_acm_checkout.options_manager'
-      - '@alshaya_stores_finder.utility'
-      - '@language_manager'
-      - '@cache.alshaya'
-      - '@database'
-      - '@alshaya_addressbook.manager'
-      - '@alshaya_acm_product.skumanager'
   alshaya_seo.sitemap_breadcrumb:
     class: Drupal\alshaya_seo\Breadcrumb\AlshayaSiteMapBreadcrumb
     tags:

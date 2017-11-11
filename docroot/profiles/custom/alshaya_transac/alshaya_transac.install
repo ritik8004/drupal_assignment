@@ -44,7 +44,7 @@ function alshaya_transac_install() {
     'alshaya_newsletter',
     'alshaya_permissions',
     'alshaya_product',
-    'alshaya_seo',
+    'alshaya_seo_transac',
     'alshaya_stores_finder',
     'alshaya_user',
     'alshaya_acm_knet',
@@ -73,10 +73,35 @@ function alshaya_transac_install() {
     // Save the changes.
     $configFactory->save();
   }
-  
+
   // Set whitelabel_transac as the default theme.
   \Drupal::service('theme_handler')->setDefault('whitelabel_transac');
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_transac', $modules);
+}
+
+/**
+ *  Hook update to enable module.
+ */
+function alshaya_transac_update_8101() {
+  $configs = [
+    'metatag.metatag_defaults.node__acq_product',
+    'metatag.metatag_defaults.node__acq_promotion',
+    'metatag.metatag_defaults.taxonomy_term__acq_product_category',
+    'simple_sitemap.bundle_settings.node.acq_product',
+    'simple_sitemap.bundle_settings.taxonomy_term.acq_product_category',
+  ];
+  foreach ($configs as $config) {
+    \Drupal::configFactory()->getEditable($config)->delete();
+  }
+
+  $modules = [
+    'alshaya_config',
+    'alshaya_seo_transac',
+  ];
+
+  foreach ($modules as $module) {
+    \Drupal::service('module_installer')->install([$module], TRUE);
+  }
 }
