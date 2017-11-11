@@ -254,7 +254,17 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   // Update some labels to match wireframe/mockup.
   $form['totals']['sub']['label'] = ['#markup' => t('Sub total')];
   $form['totals']['grand']['label'] = ['#markup' => t('Order Total <span>(Before Delivery)</span>')];
-
+  // Adding vat text to cart.
+  if ($vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text')) {
+    $form['totals']['vat_tax'] = [
+      'label' => [
+        '#markup' => '',
+      ],
+      'value' => [
+        '#markup' => "<span class = 'vat-text'>$vat_text</span>",
+      ],
+    ];
+  }
   $form['totals']['#weight'] = 10;
 
   // Wrap Promotion code in a fieldset.
@@ -498,6 +508,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'currency_format' => '',
         'currency_code_position' => '',
         'delivery' => [],
+        'vat_text' => '',
       ],
       'template' => 'block--checkout-summary',
     ],
