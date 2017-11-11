@@ -14,6 +14,7 @@ services:
       - '@cache.alshaya'
       - '@database'
       - '@alshaya_addressbook.manager'
+      - '@alshaya_acm_product.skumanager'
   alshaya_seo.sitemap_breadcrumb:
     class: Drupal\alshaya_seo\Breadcrumb\AlshayaSiteMapBreadcrumb
     tags:

@@ -38,7 +38,7 @@
       var leadType = '';
       var promotionImpressionSubnavFired = false;
       var ccPaymentsClicked = false;
-      var footerNewsletterSubmiClicked  = false;
+      var footerNewsletterSubmiClicked = false;
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -291,7 +291,7 @@
       }
 
       /** Newsletter tracking GTM .**/
-      $('footer .edit-newsletter').click(function() {
+      $('footer .edit-newsletter').click(function () {
         footerNewsletterSubmiClicked = true;
       });
 
@@ -495,9 +495,7 @@
       if ($(context).find('article[data-vmode="modal"]').length === 1) {
         var product = Drupal.alshaya_seo_gtm_get_product_values($(context).find('article[data-vmode="modal"]'));
 
-        if (product.hasOwnProperty('variant') && product.variant === undefined) {
-          product.variant = '';
-        }
+        product.variant = '';
 
         var data = {
           event: 'productDetailView',
@@ -617,7 +615,7 @@
 
             var data = {
               event: 'filter',
-              siteSection: section,
+              siteSection: section.trim(),
               filterValue: filterValue
             };
 
@@ -753,8 +751,11 @@
       var creative = '';
 
       if ((gtmPageType === 'Top Navigation') &&
-        ($(highlight).find('.field--name-field-highlight-image img').attr('src') !== undefined)) {
+        ($(highlight).find('.field--name-field-highlight-image img', '.field--name-field-highlight-image picture img').attr('src') !== undefined)) {
         creative = Drupal.url($(highlight).find('.field--name-field-highlight-image img').attr('src'));
+        if (!creative) {
+          creative = Drupal.url($(highlight).find('.field--name-field-highlight-image picture img').attr('src'));
+        }
         position = $(highlight).data('position');
       }
       else if ((gtmPageType === 'PLP') &&
@@ -762,8 +763,11 @@
         creative = Drupal.url($(highlight).find('.field-content img').attr('src'));
         position = 1;
       }
-      else if ($(highlight).find('.field--name-field-banner img').attr('src') !== undefined) {
+      else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
+        if (!creative) {
+          creative = Drupal.url($(highlight).find('.field--name-field-banner picture img').attr('src'));
+        }
         position = parseInt($('.paragraph--type--promo-block').index($(highlight))) + 1;
       }
 
@@ -779,8 +783,15 @@
         if (fileName.lastIndexOf('.') !== -1) {
           fileName = fileName.substring(0, fileName.lastIndexOf('.'));
         }
+        fileName = fileName.toLowerCase();
 
-        if ((fileName !== undefined) && (fileName !== '')) {
+        if ((fileName !== undefined) && (fileName !== '') && (
+          (fileName.indexOf('hp') === 0) ||
+      (fileName.indexOf('mm') === 0) ||
+      (fileName.indexOf('dp') === 0) ||
+      (fileName.indexOf('lp') === 0) ||
+      (fileName.indexOf('oth') === 0)
+        )) {
           var promotion = {
             id: fileName,
             name: gtmPageType,

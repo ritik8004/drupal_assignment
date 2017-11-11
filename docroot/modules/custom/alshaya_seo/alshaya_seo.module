@@ -424,19 +424,16 @@ function alshaya_seo_datalayer_alter(&$data_layer) {
 
     // General logic to calculate page-type in case of my account pages &
     // undefined pages.
-    if ((strpos($current_path, '/user') === 0) &&
-      (\Drupal::currentUser()->id() !== 0)) {
+    if (strpos($current_path, '/user') === 0) {
       $path_parts = explode('/', $current_path);
 
       foreach ($path_parts as $key => $part) {
         if (is_numeric($part) ||
-          ($part === 'user') ||
-          ($part == '') ||
-          ($part === '{user}')) {
+          (in_array($part, ['user', '', '{user}', '{order_id}']))) {
           unset($path_parts[$key]);
         }
       }
-      $page_type = rtrim('myaccount-' . implode('-', $path_parts), '-');
+      $page_type = 'myaccount' . implode('', $path_parts);
     }
     elseif ($page_type === 'not defined') {
       $page_type = ltrim(implode('-', explode('/', $current_path)), '-');
