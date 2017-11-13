@@ -634,6 +634,12 @@
     width: 100%;
     float: $left;
 
+    #payment_method_cybersource {
+      #payment_method_title_cybersource {
+        border-bottom: none;
+      }
+    }
+
     &:last-child {
       .payment-plugin-wrapper-div {
         border-bottom: 1px solid $grey4;
@@ -653,7 +659,9 @@
           background-size: 100%;
         }
 
-        @include icon(radio-filled, before);
+        @include icon(radio-filled, before) {
+          top: 0.9375rem;
+        }
       }
 
       &.has-description.plugin-selected {
