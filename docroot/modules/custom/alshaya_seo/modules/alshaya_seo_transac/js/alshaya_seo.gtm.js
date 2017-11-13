@@ -46,7 +46,8 @@
         'search result page',
         'product listing page',
         'product detail page',
-        'department page'
+        'department page',
+        'promotion page'
       ];
 
       // If we receive an empty page type, set page type as not defined.
@@ -587,14 +588,18 @@
       // Tracking promotion banner on PLP.
       if (listName === 'PLP') {
         if ($('.views-field-field-promotion-banner').length > 0 && (context === document)) {
-          Drupal.alshaya_seo_gtm_push_promotion_impressions($('.views-field-field-promotion-banner'), 'PLP', 'promotionImpression');
+          if ($(this).find('a').length > 0) {
+            Drupal.alshaya_seo_gtm_push_promotion_impressions($('.views-field-field-promotion-banner'), 'PLP', 'promotionImpression');
+          }
         }
 
         // Tracking click on promo banner PLP.
         $('.views-field-field-promotion-banner').each(function () {
-          $(this).once('js-event').on('click', function () {
-            Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'PLP', 'promotionClick');
-          });
+          if ($(this).find('a').length > 0) {
+            $(this).once('js-event').on('click', function () {
+              Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'PLP', 'promotionClick');
+            });
+          }
         });
       }
 
@@ -797,8 +802,8 @@
             name: gtmPageType,
             position: 'slot' + position
           };
+          promotions.push(promotion);
         }
-        promotions.push(promotion);
       }
     });
 
