@@ -15,14 +15,8 @@ class AlshayaAcmConfigCheck {
   public function checkConfig() {
     $env = Settings::get('env') ?: 'local';
 
-    // @TODO: Find a better way to check if env is prod.
-    $prod_envs = [
-      '01live',
-      '01update',
-    ];
-
     // We don't do anything on prod.
-    if (in_array($env, $prod_envs)) {
+    if (alshaya_is_env_prod()) {
       return;
     }
 
@@ -48,6 +42,11 @@ class AlshayaAcmConfigCheck {
       // Always set GTM id to null on all envs (except prod) first time.
       $config = \Drupal::configFactory()->getEditable('google_tag.settings');
       $config->set('container_id', '');
+      $config->save();
+
+      // Reset :to e-mail for contact us page.
+      $config = \Drupal::configFactory()->getEditable('webform.webform.alshaya_contact');
+      $config->set('handlers.email.settings.to_mail', 'no-reply@acquia.com');
       $config->save();
     }
     // The interval time below allows to do temporary overrides on non prod
