@@ -9,12 +9,17 @@
 
 .node-custom-department-page .layout-sidebar-first {
   display: table-cell;
-  width: 25%;
+  width: 28.3%;
   vertical-align: top;
   padding: 0 1.25rem;
 
   .block-logo-navigation {
     background-color: $white;
+  }
+
+  #block-mainnavigation-menu {
+    font-family: $lato-regular;
+    text-transform: capitalize;
   }
 
   ul {
@@ -35,6 +40,11 @@
 
     &:hover {
       color: $apple-light-green;
+    }
+
+    &.is-active {
+      color: $apple-light-green;
+      text-decoration: underline;
     }
   }
 
