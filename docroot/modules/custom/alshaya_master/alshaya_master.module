@@ -595,6 +595,13 @@ function alshaya_master_get_site_date_from_api_date($date, $format = '') {
  * Implements hook_alshaya_master_post_drupal_install().
  */
 function alshaya_master_alshaya_master_post_drupal_install() {
+  // Update default site-mail on prod.
+  if (alshaya_is_env_prod()) {
+    $config = \Drupal::configFactory()->getEditable('system.site');
+    $config->set('mail', 'no-reply@alshaya.com');
+    $config->save();
+  }
+
   // Disable unwanted core views.
   if ($views_to_disable = Settings::get('views_to_disable')) {
     $view_storage = \Drupal::service('entity.manager')->getStorage('view');

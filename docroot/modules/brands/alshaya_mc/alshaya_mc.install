@@ -11,11 +11,6 @@
 function alshaya_mc_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_mc', 'inc', 'alshaya_mc.content');
 
-  // Set default site-mail.
-  $config = \Drupal::configFactory()->getEditable('system.site');
-  $config->set('mail', 'no-reply@mothercare.com.kw');
-  $config->save();
-
   // Enable and set alshaya_white_label as default theme.
   \Drupal::service('theme_handler')->install(['alshaya_white_label'], TRUE);
   \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
