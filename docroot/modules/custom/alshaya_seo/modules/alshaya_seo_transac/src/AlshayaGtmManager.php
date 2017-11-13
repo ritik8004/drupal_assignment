@@ -912,12 +912,14 @@ class AlshayaGtmManager {
       case 'department page':
         $department_node = $current_route['route_params']['node'];
         $taxonomy_term = Term::load($department_node->get('field_product_category')->target_id);
-        $taxonomy_parents = array_reverse($this->entityManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
-        foreach ($taxonomy_parents as $taxonomy_parent) {
-          $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
-        }
+        if (!empty($taxonomy_term)) {
+          $taxonomy_parents = array_reverse($this->entityManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
+          foreach ($taxonomy_parents as $taxonomy_parent) {
+            $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+          }
 
-        $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+          $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+        }
         break;
 
       case 'cart page':

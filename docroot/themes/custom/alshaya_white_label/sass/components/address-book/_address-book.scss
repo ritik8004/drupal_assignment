@@ -424,6 +424,10 @@
     max-width: 11.625rem;
     margin-bottom: 1.5rem;
 
+    .user-page.c-user-edit & {
+      margin-bottom: 3.5rem;
+    }
+
     label {
       opacity: 1;
       font-size: 0.75rem !important;
@@ -502,6 +506,16 @@
         }
       }
 
+      .form-item-field-mobile-number-0-country-code {
+        .user-page.c-user-edit & {
+          margin-top: 0;
+
+          .prefix {
+            line-height: 2.15;
+          }
+        }
+      }
+
       #edit-field-address-0-address-mobile-number-mobile-error,
       #edit-mobile-number-mobile-error {
         position: absolute;
@@ -512,6 +526,7 @@
       .form-item--error-message {
         position: absolute;
         #{$left}: 0;
+        line-height: 1;
       }
     }
 
