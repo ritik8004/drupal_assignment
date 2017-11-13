@@ -40,8 +40,8 @@
 
   .field--name-field-first-name,
   .field--name-field-last-name {
-    float: $left;
-    max-width: 11.7rem;
+    display: inline-block;
+    max-width: 10.7rem;
     width: calc(50% - 12px);
 
     input {
