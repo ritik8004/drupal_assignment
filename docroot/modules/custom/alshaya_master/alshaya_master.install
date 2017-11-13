@@ -10,6 +10,18 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Override rich text config to allow div & classes and target in <a>.
+ */
+function alshaya_master_update_8005() {
+  $config_path = drupal_get_path('module', 'alshaya_master') . '/config/install';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write('filter.format.rich_text', $source->read('filter.format.rich_text'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new string translations.
  */
 function alshaya_master_update_8004() {
@@ -29,18 +41,6 @@ function alshaya_master_update_8003() {
   $settings = \Drupal::configFactory()->getEditable('alshaya_master.mobile_number_settings');
   $settings->set('maxlength', 8);
   $settings->save();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Override rich text config to allow div & classes.
- */
-function alshaya_master_update_8002() {
-  $config_path = drupal_get_path('module', 'alshaya_master') . '/config/install';
-  $source = new FileStorage($config_path);
-  $config_storage = \Drupal::service('config.storage');
-  $config_storage->write('filter.format.rich_text', $source->read('filter.format.rich_text'));
 }
 
 /**
@@ -1236,7 +1236,7 @@ function alshaya_master_install() {
 
   // Add <i class> for allowed html in rich text.
   \Drupal::configFactory()->getEditable('filter.format.rich_text')
-    ->set('filters.filter_html.settings.allowed_html', '<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h2 class> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <p> <p class> <br> <h1> <h1 class> <pre> <drupal-entity data-*> <i class> <span class>')
+    ->set('filters.filter_html.settings.allowed_html', '<a href hreflang target _target> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h2 class> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <p> <p class> <br> <h1> <h1 class> <pre> <drupal-entity data-*> <i class> <span class> <style> <div class>')
     ->save();
 
   // Get config for rich text editor.
