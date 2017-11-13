@@ -15,19 +15,18 @@ class AlshayaAcmConfigCheck {
   public function checkConfig() {
     $env = Settings::get('env') ?: 'local';
 
-    // @TODO: Find a better way to check if env is prod.
-    $prod_envs = [
-      '01live',
-      '01update',
-    ];
-
     // We don't do anything on prod.
-    if (in_array($env, $prod_envs)) {
+    if (alshaya_is_env_prod()) {
       return;
     }
 
     $request_time = \Drupal::time()->getRequestTime();
     $interval = (int) \Drupal::config('alshaya_acm.settings')->get('config_check_interval');
+
+    // Check if reverting of settings is disabled.
+    if (empty($interval)) {
+      return;
+    }
 
     $flag_var = 'alshaya_acm_config_check.' . $env;
 
@@ -39,10 +38,20 @@ class AlshayaAcmConfigCheck {
 
       // Set the first request time in state.
       \Drupal::state()->set($flag_var, $first_request);
+
+      // Always set GTM id to null on all envs (except prod) first time.
+      $config = \Drupal::configFactory()->getEditable('google_tag.settings');
+      $config->set('container_id', '');
+      $config->save();
+
+      // Reset :to e-mail for contact us page.
+      $config = \Drupal::configFactory()->getEditable('webform.webform.alshaya_contact');
+      $config->set('handlers.email.settings.to_mail', 'no-reply@acquia.com');
+      $config->save();
     }
     // The interval time below allows to do temporary overrides on non prod
     // envs for dev/test purpose.
-    elseif (empty($interval) || $request_time - $first_request < $interval) {
+    elseif ($request_time - $first_request < $interval) {
       return;
     }
 
@@ -53,7 +62,10 @@ class AlshayaAcmConfigCheck {
     $reset = [
       'acq_commerce.conductor',
       'alshaya_api.settings',
+      'acq_cybersource.settings',
+      'alshaya_acm_knet.settings',
       'recaptcha.settings',
+      'geolocation.settings',
     ];
 
     // Reset the settings.
