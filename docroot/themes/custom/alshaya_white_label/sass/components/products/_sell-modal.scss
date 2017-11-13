@@ -14,7 +14,7 @@
       }
 
       @include breakpoint($desktop) {
-        width: 70%;
+        width: 60%;
         float: $left;
       }
     }
@@ -35,7 +35,21 @@
       }
 
       @include breakpoint($desktop) {
-        width: 30%;
+        width: 40%;
+        float: $right;
+        margin: 0;
+      }
+    }
+
+    &__title_wrapper {
+      @include breakpoint($tablet) {
+        width: 35%;
+        float: $right;
+        margin: 0 1rem;
+      }
+
+      @include breakpoint($desktop) {
+        width: 40%;
         float: $right;
         margin: 0;
       }
