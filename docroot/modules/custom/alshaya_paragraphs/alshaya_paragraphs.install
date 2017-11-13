@@ -167,9 +167,17 @@ function alshaya_paragraphs_manage_fields() {
 
   foreach ($field_configs as $field_config) {
     $yml = Yaml::parse(file_get_contents($module_path . '/config/install/' . $field_config . '.yml'));
+
     if ($field_obj = FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-      $field_obj->delete();
+      foreach ($yml as $key => $value) {
+        if ($field_obj->get($key)) {
+          $field_obj->set($key, $value);
+        }
+        $field_obj->save();
+      }
     }
-    FieldConfig::create($yml)->save();
+    else {
+      FieldConfig::create($yml)->save();
+    }
   }
 }
