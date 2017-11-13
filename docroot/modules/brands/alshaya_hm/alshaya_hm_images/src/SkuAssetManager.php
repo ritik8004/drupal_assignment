@@ -102,7 +102,7 @@ class SkuAssetManager {
       ];
 
       $asset_urls[] = [
-        'url' => Url::fromUri($base_url, $options),
+        'url' => (isset($set['url'])) ? Url::fromUri($set['url']) : Url::fromUri($base_url, $options),
         'sortAssetType' => $asset['sortAssetType'],
         'sortFacingType' => $asset['sortFacingType'],
       ];
@@ -128,31 +128,37 @@ class SkuAssetManager {
    */
   public function getAssetAttributes(SKU $sku, $asset, $page_type, $location_image) {
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
-    $origin = $alshaya_hm_images_settings->get('origin');
-
-    $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
-    $set['origin'] = "origin[" . $origin . "]";
-    $set['type'] = "type[" . $asset['sortAssetType'] . "]";
-    $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
-    $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
-    $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
-    // Check for overrides for style identifiers & dimensions.
-    $config_overrides = $this->overrideConfig($sku, $page_type);
+    if (isset($asset['is_old_format']) && $asset['is_old_format']) {
+      return [['url' => $asset['Url']], $image_location_identifier];
+    }
+    else {
+      $origin = $alshaya_hm_images_settings->get('origin');
 
-    // If overrides are available, update style id, width & height in the url.
-    if (!empty($config_overrides)) {
-      if (isset($config_overrides['style_identifiers'][$location_image])) {
-        $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
-      }
+      $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
+      $set['origin'] = "origin[" . $origin . "]";
+      $set['type'] = "type[" . $asset['sortAssetType'] . "]";
+      $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
+      $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
+      $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
 
-      if (isset($config_overrides['dimensions'][$location_image]['width'])) {
-        $set['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
-      }
+      // Check for overrides for style identifiers & dimensions.
+      $config_overrides = $this->overrideConfig($sku, $page_type);
 
-      if (isset($config_overrides['dimensions'][$location_image]['height'])) {
-        $set['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
+      // If overrides are available, update style id, width & height in the url.
+      if (!empty($config_overrides)) {
+        if (isset($config_overrides['style_identifiers'][$location_image])) {
+          $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
+        }
+
+        if (isset($config_overrides['dimensions'][$location_image]['width'])) {
+          $set['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
+        }
+
+        if (isset($config_overrides['dimensions'][$location_image]['height'])) {
+          $set['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
+        }
       }
     }
 
@@ -404,7 +410,7 @@ class SkuAssetManager {
     }
 
     foreach ($child_skus as $child_sku) {
-      if ($child_sku->get('attr_color_label')->value == $rgb_color_label) {
+      if (($child_sku instanceof SKU) && $child_sku->get('attr_color_label')->value == $rgb_color_label) {
         return $child_sku;
       }
     }
