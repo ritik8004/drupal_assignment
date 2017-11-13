@@ -47,6 +47,7 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:department_page' => 'department page',
+    'entity.node.canonical:acq_promotion' => 'promotion page',
     'entity.node.canonical:static_html' => 'static page',
     'entity.user.canonical' => 'my account page',
     'system.404' => 'page not found',
