@@ -27,6 +27,14 @@
     // Do nothing here.
   }
 
+  Drupal.behaviors.removeContentLoadingThrobber = {
+    attach: function (context, settings) {
+      setTimeout(function () {
+        jQuery('.show-content-loading-throbber').removeClass('show-content-loading-throbber');
+      }, 100);
+    }
+  };
+
   Drupal.behaviors.joinusblock = {
     attach: function (context, settings) {
       if ($('#block-content div').hasClass('joinclub')) {
