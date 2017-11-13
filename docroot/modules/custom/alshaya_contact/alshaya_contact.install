@@ -21,3 +21,15 @@ function alshaya_contact_update_8001() {
   }
   ConfigHelper::forModule('alshaya_contact')->install()->get('captcha.captcha_point.webform_submission_alshaya_contact_add_form')->save();
 }
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_contact_install() {
+  // We use alshaya.com email only on prod as requested.
+  if (alshaya_is_env_prod()) {
+    $config = \Drupal::configFactory()->getEditable('webform.webform.alshaya_contact');
+    $config->set('handlers.email.settings.to_mail', 'customerservice@alshaya.com');
+    $config->save();
+  }
+}
