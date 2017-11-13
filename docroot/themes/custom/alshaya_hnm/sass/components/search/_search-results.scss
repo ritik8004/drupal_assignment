@@ -61,7 +61,7 @@
           a,
           span {
             color: $grey-ash;
-            font-family: $alshaya-thin;
+            font-family: $hnm-regular;
           }
 
           @include breakpoint($tablet) {
@@ -115,7 +115,7 @@
 
           &.is-active {
             a {
-              font-family: $alshaya-bold;
+              font-family: $hnm-bold;
             }
           }
 
@@ -190,12 +190,8 @@ header,
 
   li.ui-menu-item {
     display: inherit;
-    padding: 7px;
+    padding: 0.59375rem 0.4375rem;
     border: 1px solid transparent;
-
-    &:not(:last-child) {
-      border-bottom-color: $white;
-    }
 
     &.ui-state-focus,
     &.ui-state-active {
@@ -203,12 +199,12 @@ header,
     }
 
     &:hover {
-      background-color: $white-smoke-light;
+      background-color: $search-hover;
     }
 
     a {
-      font-family: $alshaya-thin;
-      color: $brownish-grey;
+      font-family: $hnm-regular;
+      color: $hnm-black-two;
     }
   }
 }
@@ -223,6 +219,9 @@ header,
 
     @include breakpoint($tablet) {
       width: 10.125rem !important;
+      left: auto !important;
+      top: auto !important;
+      border: none;
     }
   }
 }
@@ -230,10 +229,7 @@ header,
 .search-api-autocomplete-suggestion {
   font-size: 0.875rem;
   padding-#{$left}: 0.25rem;
-
-  @include breakpoint($desktop) {
-    font-size: 0.75rem;
-  }
+  line-height: 1.36;
 }
 
 .form-autocomplete.ui-autocomplete-loading {
