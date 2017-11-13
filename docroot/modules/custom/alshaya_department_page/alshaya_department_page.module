@@ -137,12 +137,20 @@ function _alshaya_department_page_get_node_title($node) {
   $tid = $node->get('field_product_category')->first()->target_id;
   // Load the term object.
   $term = Term::load($tid);
+
+  if (empty($term)) {
+    \Drupal::logger('alshaya_department_page')->warning('Department node contains invalid/obsolete category term reference.');
+    return '';
+  }
+
   // Get the current language code.
   $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+
   // Get the translations of the term based on the current lang code.
   if ($term->hasTranslation($langcode)) {
     $term = $term->getTranslation($langcode);
   }
+
   // Set the label for drupal static.
   $department_term[$node->id()] = $term->label();
 
