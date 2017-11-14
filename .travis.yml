@@ -61,7 +61,9 @@ install:
   - nvm use 6.10.0
 
 script:
-  - source $BLT_DIR/scripts/travis/run_tests
+# Changing path to disable behat test on Travis.
+# - source $BLT_DIR/scripts/travis/run_tests
+  - source ${BUILD_DIR}/blt/scripts/run_tests
 
 deploy:
    - provider: script
