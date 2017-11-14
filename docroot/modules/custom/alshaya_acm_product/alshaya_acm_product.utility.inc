@@ -9,6 +9,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\file\FileInterface;
@@ -579,8 +580,8 @@ function alshaya_acm_product_get_brand_logo($sku) {
  *
  * @param array $form_parts
  *   Configurable parts of the form.
- * @param array $product_tree
- *   Configurable product tree keyed with possible config tree, whose leaf items
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state Object.
  *   contain the SKUs depending on the tree path traversed.
  * @param array $tree_pointer
  *   Product tree pointing to the config seleted by end-user.
@@ -589,15 +590,30 @@ function alshaya_acm_product_get_brand_logo($sku) {
  * @param bool $deselect_leaf_options
  *   Clear the leaf attribute selected while selecting the parent config.
  */
-function alshaya_acm_product_update_config_options(array &$form_parts, array $product_tree, array &$tree_pointer, array $configurables, $deselect_leaf_options = TRUE) {
+function alshaya_acm_product_update_config_options(array &$form_parts, FormStateInterface &$form_state, array &$tree_pointer, array $configurables, $deselect_leaf_options = TRUE) {
   $enabled_options = [];
+  $product_tree = $form_state->get('tree');
   $leaf_attribute = end($product_tree['configurables'])['code'];
 
   // To de-select all leaf options on parent change & not re-calculate
   // availability of parent attributes in the opposite direction.
   if ($deselect_leaf_options && isset($configurables[$leaf_attribute])) {
+    foreach ($form_parts['configurables'][$leaf_attribute]['#options'] as $key => $value) {
+      // Deselect the leaf option once clicked on a non-leaf term.
+      if (($key == $configurables[$leaf_attribute]) &&
+        ($form_state->getTriggeringElement()['#name'] == 'configurables[' . $leaf_attribute . ']')) {
+        continue;
+      }
+      elseif ($form_state->getTriggeringElement()['#name'] != 'configurables[' . $leaf_attribute . ']') {
+        $form_parts['configurables'][$leaf_attribute]['#value'] = '';
+      }
+    }
     unset($configurables[$leaf_attribute]);
     $tree_pointer_parent = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
+    $form_state->setValue('configurables', $configurables);
+    $user_input = $form_state->getUserInput();
+    $user_input['configurables'] = $configurables;
+    $form_state->setUserInput($user_input);
   }
   else {
     $tree_pointer_parent = $tree_pointer;
