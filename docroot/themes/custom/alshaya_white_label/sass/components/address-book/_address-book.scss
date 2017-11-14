@@ -443,6 +443,7 @@
       &.form-item-guest-delivery-home-address-shipping-mobile-number-country-code,
       &.form-item-billing-address-address-billing-mobile-number-country-code,
       &.form-item-member-delivery-home-address-form-form-mobile-number-country-code,
+      &.form-item-cc-mobile-number-country-code,
       &.form-item-field-address-0-address-mobile-number-country-code {
         padding-bottom: 0;
         margin-top: 0 !important;
@@ -493,6 +494,7 @@
       .form-item-billing-address-address-billing-mobile-number-mobile,
       .form-item-guest-delivery-home-address-shipping-mobile-number-mobile,
       .form-item-member-delivery-home-address-form-form-mobile-number-mobile,
+      .form-item-cc-mobile-number-mobile,
       .form-item-mobile-number-mobile {
         position: static !important;
 
@@ -546,6 +548,14 @@
 
   #edit-field-address-0-address-administrative-area {
     width: 100%;
+  }
+}
+
+#selected-store-wrapper {
+  .mobile-number-field {
+    @include breakpoint($tablet) {
+      margin-#{$left}: 1rem;
+    }
   }
 }
 
