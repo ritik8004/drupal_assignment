@@ -158,6 +158,7 @@
 
     p {
       margin: 0.4rem 0;
+      font-size: 0.875rem;
 
       @include breakpoint($tablet) {
         margin: 0.5rem 0;
@@ -175,7 +176,7 @@
     a {
       color: $hnm-black-two;
       text-decoration: underline;
-      font-family: $hnm-regular;
+      font-family: $hnm-demibold;
     }
 
     h3 {
@@ -190,6 +191,7 @@
 
     .field--name-body {
       max-width: 12rem;
+      font-size: 0.875rem;
     }
 
     .field--name-field-image {
