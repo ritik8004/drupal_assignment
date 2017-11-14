@@ -133,28 +133,7 @@ header {
 
         input[type="text"] {
           width: 7.5rem;
-          font-size: 0.75rem;
-
-          &::placeholder {
-            font-size: 0.75rem;
-          }
-
-          @include breakpoint($only-mobile) {
-            font-size: 0.875rem;
-
-            &::placeholder {
-              font-size: 0.875rem;
-            }
-          }
-        }
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      .block-views-exposed-filter-blocksearch-page {
-        input[type="text"] {
-          width: 7.5rem;
-          font-size: 0.75rem;
+          font-size: 0.875rem;
 
           &::placeholder {
             font-size: 0.875rem;
@@ -264,7 +243,7 @@ header {
   }
 
   .block-cart-mini-block {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     text-align: $right;
     color: $black;
     letter-spacing: 0.5px;
@@ -309,8 +288,8 @@ header {
     .cart-link-total {
       color: $hnm-black-four;
       float: $left;
-      margin-top: 6px;
-      margin-right: 2px;
+      margin-top: 0.3125rem;
+      margin-#{$right}: 0.125rem;
       padding-#{$right}: 1rem;
 
       @include breakpoint($only-mobile) {
@@ -329,17 +308,17 @@ header {
     }
 
     .quantity {
-      font-size: 0.625rem;
+      font-size: 0.75rem;
       font-family: $hnm-regular-nodir;
       position: absolute;
       background: $hnm-red;
       color: $white-five;
       text-align: center;
-      bottom: -0.75rem;
-      #{$left}: 0.0625rem;
+      bottom: -0.625rem;
+      #{$left}: -0.5rem;
       border-radius: 50%;
       padding: 0;
-      line-height: 2;
+      line-height: 1.25rem;
       width: 1.25rem;
       height: 1.25rem;
     }
