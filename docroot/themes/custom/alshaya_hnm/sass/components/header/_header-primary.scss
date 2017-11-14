@@ -747,9 +747,7 @@ header {
       &:hover {
         & > ul.menu--two__list {
           visibility: visible;
-          opacity: 1;
           z-index: 1;
-          transform: translateY(-2rem);
 
           &::after {
             content: '';
@@ -780,16 +778,11 @@ header {
         right: 0;
         margin: auto;
         visibility: hidden;
-        opacity: 0;
         position: absolute;
         top: 100%;
         #{$left}: 0;
         width: 100%;
-        transform: translateY(-3.625rem);
-        z-index: -1;
-        transition: all 0.5s ease-in 0s, visibility 0.2s linear 0.4s, z-index 0s linear 0.1s;
-        transition-delay: 0.3s;
-        border-top: 3rem solid transparent;
+        border-top: 0.9375rem solid transparent;
       }
     }
 
