@@ -680,7 +680,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings')->get('attribute_weights');
       $config_attributes = array_keys($configurable_weights);
       $root_attribute_code = array_shift($config_attributes);
-      $user_input_configurables = $form_state->getUserInput('configurables');
+      $user_input_configurables = $form_state->getUserInput();
       $first_child = '';
 
       // Sort configurable weight by the weight value.
@@ -721,14 +721,14 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       // selection.
       if ((isset($root_attribute_options[$first_child_root_attr_value])) &&
         (!isset($user_input_configurables['configurables'][$root_attribute_code]))) {
-        $form['ajax']['configurables']['article_castor_id']['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
+        $form['ajax']['configurables'][$root_attribute_code]['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
         $form_state->setValue('configurables', [$root_attribute_code => $first_child_root_attr_value]);
 
         // Traverse the product tree to the point based on the selected config.
         $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $form_state->getValue('configurables'));
 
         // Disable config options not available for the selected config.
-        alshaya_acm_product_update_config_options($form['ajax'], $form_state->get('tree'), $tree_pointer, $form_state->getValue('configurables'), FALSE);
+        alshaya_acm_product_update_config_options($form['ajax'], $form_state, $tree_pointer, $form_state->getValue('configurables'), FALSE);
       }
     }
 
@@ -836,7 +836,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
 
     // Disable config options not available for the selected config.
-    alshaya_acm_product_update_config_options($dynamic_parts, $form_state->get('tree'), $tree_pointer, $configurables);
+    alshaya_acm_product_update_config_options($dynamic_parts, $form_state, $tree_pointer, $configurables);
 
     // If there is only one item returned back,
     // it implies we have reached to the leaf most SKU in the tree.
