@@ -50,7 +50,10 @@
   }
 
   .country-select {
-    display: none;
+    .mobile-number-flag,
+    .arrow {
+      display: none;
+    }
   }
 
   .input--inner__container .option {
