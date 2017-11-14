@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh 
 # This file runs post the deploy build is created, and is ready to be committed.
 
 set -e
