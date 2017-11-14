@@ -30,7 +30,7 @@
   Drupal.behaviors.removeContentLoadingThrobber = {
     attach: function (context, settings) {
       setTimeout(function () {
-        jQuery('.show-content-loading-throbber').removeClass('show-content-loading-throbber');
+        jQuery('.content-loading-throbber').remove();
       }, 100);
     }
   };
