@@ -1,0 +1,25 @@
+.swatches {
+  a {
+    display: inline-block;
+    margin: 2px;
+    height: 20px;
+    width: 20px;
+    position: relative;
+
+    .swatch-block {
+      display: inline-block;
+    }
+
+    &:hover {
+      &::after {
+        content: '';
+        position: absolute;
+        border: 1px solid $hnm-black-two;
+        top: -2px;
+        #{$left}: -2px;
+        #{$right}: -2px;
+        bottom: -2px;
+      }
+    }
+  }
+}
