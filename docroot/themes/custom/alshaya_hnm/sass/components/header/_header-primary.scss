@@ -746,7 +746,7 @@ header {
 
       &:hover {
         & > ul.menu--two__list {
-          visibility: visible;
+          display: block;
           z-index: 1;
 
           &::after {
@@ -777,7 +777,7 @@ header {
         left: 0;
         right: 0;
         margin: auto;
-        visibility: hidden;
+        display: none;
         position: absolute;
         top: 100%;
         #{$left}: 0;
