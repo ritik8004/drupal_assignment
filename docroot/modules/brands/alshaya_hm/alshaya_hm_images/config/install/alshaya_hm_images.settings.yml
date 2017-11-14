@@ -48,13 +48,19 @@ weights:
     DETAIL_IMAGE: 2
   teaser:
     Lookbook: 1
-    DescriptiveStillLife: 1
+    DescriptiveStillLife: 2
+    MODEL_IMAGE: 3
+    DETAIL_IMAGE: 4
   swatch:
     Lookbook: 1
     DescriptiveStillLife: 2
+    MODEL_IMAGE: 3
+    DETAIL_IMAGE: 4
   cart:
     Lookbook: 1
     DescriptiveStillLife: 2
+    MODEL_IMAGE: 3
+    DETAIL_IMAGE: 4
   angle:
     - 1C
     - 1L
