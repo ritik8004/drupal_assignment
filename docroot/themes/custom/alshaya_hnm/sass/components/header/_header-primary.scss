@@ -133,18 +133,10 @@ header {
 
         input[type="text"] {
           width: 7.5rem;
-          font-size: 0.75rem;
+          font-size: 0.875rem;
 
           &::placeholder {
-            font-size: 0.75rem;
-          }
-
-          @include breakpoint($only-mobile) {
             font-size: 0.875rem;
-
-            &::placeholder {
-              font-size: 0.875rem;
-            }
           }
         }
       }
@@ -154,8 +146,8 @@ header {
       .block-views-exposed-filter-blocksearch-page {
         input[type="text"] {
           width: 7.5rem;
-          font-size: 0.75rem;
           background-color: transparent;
+          font-size: 0.875rem;
 
           &::placeholder {
             font-size: 0.875rem;
@@ -218,6 +210,7 @@ header {
       background-image: none;
       letter-spacing: 1px;
       color: $grey6;
+      padding-#{$left}: 0.4375rem;
 
       @include breakpoint($only-mobile) {
         padding: 0.625rem;
@@ -265,7 +258,7 @@ header {
   }
 
   .block-cart-mini-block {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     text-align: $right;
     color: $black;
     letter-spacing: 0.5px;
@@ -310,8 +303,8 @@ header {
     .cart-link-total {
       color: $hnm-black-four;
       float: $left;
-      margin-top: 6px;
-      margin-right: 2px;
+      margin-top: 0.3125rem;
+      margin-#{$right}: 0.125rem;
       padding-#{$right}: 1rem;
 
       @include breakpoint($only-mobile) {
@@ -330,17 +323,17 @@ header {
     }
 
     .quantity {
-      font-size: 0.625rem;
+      font-size: 0.75rem;
       font-family: $hnm-regular-nodir;
       position: absolute;
       background: $hnm-red;
       color: $white-five;
       text-align: center;
-      bottom: -0.75rem;
-      #{$left}: 0.0625rem;
+      bottom: -0.625rem;
+      #{$left}: -0.5rem;
       border-radius: 50%;
       padding: 0;
-      line-height: 2;
+      line-height: 1.25rem;
       width: 1.25rem;
       height: 1.25rem;
     }
@@ -748,10 +741,8 @@ header {
 
       &:hover {
         & > ul.menu--two__list {
-          visibility: visible;
-          opacity: 1;
+          display: block;
           z-index: 1;
-          transform: translateY(-2rem);
 
           &::after {
             content: '';
@@ -781,17 +772,12 @@ header {
         left: 0;
         right: 0;
         margin: auto;
-        visibility: hidden;
-        opacity: 0;
+        display: none;
         position: absolute;
         top: 100%;
         #{$left}: 0;
         width: 100%;
-        transform: translateY(-3.625rem);
-        z-index: -1;
-        transition: all 0.5s ease-in 0s, visibility 0.2s linear 0.4s, z-index 0s linear 0.1s;
-        transition-delay: 0.3s;
-        border-top: 3rem solid transparent;
+        border-top: 0.9375rem solid transparent;
       }
     }
 

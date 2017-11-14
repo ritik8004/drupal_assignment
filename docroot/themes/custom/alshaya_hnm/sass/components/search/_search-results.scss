@@ -228,8 +228,8 @@ header,
 
 .search-api-autocomplete-suggestion {
   font-size: 0.875rem;
-  padding-#{$left}: 0.25rem;
   line-height: 1.36;
+  letter-spacing: 0.5px;
 }
 
 .form-autocomplete.ui-autocomplete-loading {
@@ -278,7 +278,7 @@ ul.item-list__checkbox,
 
 .alshaya_search_slider {
   // Need this in px for JS consistency for slider.
-  width: 264px;
+  width: 100%;
   margin: 0 auto;
   position: relative;
   margin-top: 0.625rem;

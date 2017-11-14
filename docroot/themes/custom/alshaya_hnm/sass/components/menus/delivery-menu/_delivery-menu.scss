@@ -10,7 +10,7 @@
 .c-delivery-menu__tab {
   text-align: center;
   list-style: none;
-  padding: 0.8125rem 0;
+  padding: 0.6875rem 0;
   margin-#{$left}: auto;
   margin-#{$right}: auto;
   width: 100%;
@@ -53,7 +53,7 @@
   .field--name-field-title {
     display: block;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 1.125rem;
     font-family: $hnm-demibold;
     font-weight: normal;
     letter-spacing: 1.5px;
@@ -66,7 +66,7 @@
   }
 
   .field--name-field-sub-title {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
     color: $link-hover;

@@ -264,6 +264,7 @@
 
       p {
         margin: 0.375rem 0;
+        font-size: 0.875rem;
 
         @include breakpoint($only-tablet) {
           margin: 0.4rem 0;
@@ -510,7 +511,6 @@
       }
 
       @include breakpoint($desktop) {
-        margin-top: 1.75rem;
         margin-bottom: 4rem;
 
         .field--type-image {
@@ -526,6 +526,7 @@
 
       p {
         margin: 0.5625rem 0;
+        font-size: 0.875rem;
 
         @include breakpoint($only-tablet) {
           margin: 0.4rem 0;
