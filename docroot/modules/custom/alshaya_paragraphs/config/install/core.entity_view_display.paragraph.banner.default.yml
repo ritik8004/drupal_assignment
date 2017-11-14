@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.paragraph.banner.field_banner
     - field.field.paragraph.banner.field_link
+    - field.field.paragraph.banner.field_video
     - paragraphs.paragraphs_type.banner
     - responsive_image.styles.w1284
   module:
@@ -34,5 +35,14 @@ content:
       target: _blank
     third_party_settings: {  }
     type: link
+    region: content
+  field_video:
+    weight: 2
+    label: hidden
+    settings:
+      link: true
+      view_mode: default
+    third_party_settings: {  }
+    type: entity_reference_entity_view
     region: content
 hidden: {  }

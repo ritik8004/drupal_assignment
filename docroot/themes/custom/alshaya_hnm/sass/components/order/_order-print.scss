@@ -241,7 +241,7 @@ body.path--confirmation.alias--confirmation-print {
     margin-#{$right}: 1.5625rem;
 
     @include breakpoint($only-tablet) {
-      margin-#{$right}: 0.5625rem;
+      margin-#{$right}: 0.4375rem;
     }
   }
 }

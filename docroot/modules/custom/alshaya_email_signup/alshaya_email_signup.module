@@ -31,3 +31,15 @@ function alshaya_email_signup_preprocess_form_element(&$form) {
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_email_signup_alshaya_i18n_onetime_translation_add() {
+  // Set email signup form translation.
+  $contact_content = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.alshaya_email_signup');
+  $contact_content->set('title', 'كن أول من يعرف');
+  $contact_content->set('elements', "first_name:\n  '#title': 'الاسم الأول'\nlast_name:\n  '#title': 'اسم العائلة'\nmobile_number:\n  '#title': 'رقم الجوال'\nemail:\n  '#title': 'عنوان البريد الإلكتروني'\nexclusive_deals:\n  '#title': 'أرغب في استلام عروض حصرية من .[site:name]'\n");
+  $contact_content->set('settings.confirmation_message', 'شكرا :)');
+  $contact_content->save();
+}

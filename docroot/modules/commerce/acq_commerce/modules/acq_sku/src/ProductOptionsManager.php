@@ -114,7 +114,7 @@ class ProductOptionsManager {
    * @param string $attribute_code
    *   Attribute code.
    */
-  protected function createProductOption($langcode, $option_id, $option_value, $attribute_id, $attribute_code) {
+  protected function createProductOption($langcode, $option_id, $option_value, $attribute_id, $attribute_code, $weight) {
     // Update the term if already available.
     if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, NULL, FALSE)) {
       $save_term = FALSE;
@@ -136,6 +136,7 @@ class ProductOptionsManager {
       }
 
       if ($save_term) {
+        $term->setWeight($weight);
         $term->save();
       }
     }
@@ -144,6 +145,7 @@ class ProductOptionsManager {
         'vid' => self::PRODUCT_OPTIONS_VOCABULARY,
         'langcode' => $langcode,
         'name' => $option_value,
+        'weight' => $weight,
         'field_sku_option_id' => $option_id,
         'field_sku_attribute_id' => $attribute_id,
         'field_sku_attribute_code' => $attribute_code,
@@ -161,9 +163,10 @@ class ProductOptionsManager {
       $this->apiWrapper->updateStoreContext($store_id);
       $option_sets = $this->apiWrapper->getProductOptions();
 
+      $weight = 0;
       foreach ($option_sets as $options) {
         foreach ($options['options'] as $key => $value) {
-          $this->createProductOption($langcode, $key, $value, $options['attribute_id'], $options['attribute_code']);
+          $this->createProductOption($langcode, $key, $value, $options['attribute_id'], $options['attribute_code'], $weight++);
         }
       }
     }

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product_category\Plugin\Block;
 
+use Drupal\alshaya_main_menu\ProductCategoryTree;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
@@ -14,6 +15,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\node\Entity\Node;
 
 /**
  * Provides a generic Menu block.
@@ -197,7 +199,6 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     // For language specific data.
     $term = $this->entityRepository->getTranslationFromContext($term);
 
-    // For cache tag bubbling up.
     $this->cacheTags[] = 'taxonomy_term:' . $term->id();
 
     $build = [
@@ -225,9 +226,21 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
       ];
     }
 
+    // Get all the department pages.
+    $alshaya_department_pages = alshaya_department_page_get_pages();
+
     $data = [];
     foreach ($terms as $term) {
       $data[$term->id()] = $this->processTermTranslations($term);
+      if (isset($alshaya_department_pages[$term->id()])) {
+        $nid = $alshaya_department_pages[$term->id()];
+        $node = Node::load($nid);
+
+        // Use the path of node instead of term path if node is published.
+        if ($node->isPublished()) {
+          $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+        }
+      }
     }
 
     $route_name = $this->routeMatch->getRouteName();
@@ -274,10 +287,14 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    // Even when the menu block renders to the empty string for a user, we want
-    // the cache tag for this menu to be set: whenever the menu is changed, this
-    // menu block must also be re-rendered for that user, because maybe a menu
-    // link that is accessible for that user has been added.
+    // Add department page node type cache tag.
+    // This is custom cache tag and cleared in hook_presave in department
+    // module.
+    $this->cacheTags[] = 'node_type:department_page';
+
+    // Discard cache for the block once a term gets updated.
+    $this->cacheTags[] = ProductCategoryTree::VOCABULARY_ID . '_list';
+
     return Cache::mergeTags(
       parent::getCacheTags(),
       $this->cacheTags

@@ -24,7 +24,8 @@
     @include breakpoint($desktop) {
       padding: 0.2rem 0 0;
       padding-#{$left}: 1.313rem;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.5rem;
+      margin-top: 1.5rem;
     }
   }
 
@@ -155,7 +156,7 @@
       position: relative;
       display: inline-block;
       z-index: 100;
-      font-family: $hnm-regular;
+      font-family: $hnm-regular-nodir;
       width: 1.3rem;
       height: 1.3rem;
       #{$left}: 37.5%;

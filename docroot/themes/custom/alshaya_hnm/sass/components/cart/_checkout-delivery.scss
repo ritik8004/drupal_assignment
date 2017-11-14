@@ -1,5 +1,5 @@
 .page-standard.user-page.checkout-delivery {
-  margin: 1.2rem auto;
+  margin: 0.5rem auto 1.2rem;
 
   .country-name {
     color: #999 !important;
@@ -8,6 +8,7 @@
   &.l-two--sf {
     @include breakpoint($upto-tablet) {
       max-width: 19rem;
+      padding-top: 0;
     }
   }
 
@@ -45,9 +46,19 @@
         }
       }
 
+      .mobile-number-field .form-item.form-type-select {
+        padding-bottom: 0;
+        margin-top: 0.9375rem !important;
+      }
+
       .form-item.form-type-select {
         padding-bottom: 1rem;
         margin-top: 2.75rem !important;
+
+        &.form-item-member-delivery-home-address-form-form-mobile-number-country-code {
+          padding-bottom: 0;
+          margin-top: 0.875rem !important;
+        }
 
         label {
           top: -1.375rem;
@@ -149,7 +160,7 @@
         }
 
         a {
-          font-weight: normal;
+          font-weight: 600;
           font-family: $hnm-demibold;
           color: $hnm-black-two;
           font-size: 0.75rem;
@@ -226,7 +237,7 @@
     }
 
     @include breakpoint($only-tablet) {
-      margin-top: 1.1rem;
+      margin-top: 0;
     }
 
     hr {
@@ -278,7 +289,11 @@
 
       @include breakpoint($desktop) {
         padding: 1.0625rem 0;
-        width: 47.05%;
+        width: 47.44%;
+
+        html[lang=ar] & {
+          width: 46.983%;
+        }
 
         &.tab-home-delivery {
           &:not(.active--tab--head) {
@@ -356,7 +371,7 @@
       }
 
       @include breakpoint($desktop) {
-        width: 6.2%;
+        width: 5.225%;
 
         html[lang=ar] & {
           width: 6.1%;
@@ -624,6 +639,12 @@
     width: 100%;
     float: $left;
 
+    #payment_method_cybersource {
+      #payment_method_title_cybersource {
+        border-bottom: none;
+      }
+    }
+
     &:last-child {
       .payment-plugin-wrapper-div {
         border-bottom: 1px solid $grey4;
@@ -643,7 +664,9 @@
           background-size: 100%;
         }
 
-        @include icon(radio-filled, before);
+        @include icon(radio-filled, before) {
+          top: 0.9375rem;
+        }
       }
 
       &.has-description.plugin-selected {
@@ -829,14 +852,14 @@
         }
 
         .title {
-          margin: 1rem 0;
+          margin: 2rem 0;
         }
 
         #addresses-header {
-          margin: 0.75rem 1.375rem;
+          margin: 0.5rem 1.375rem;
 
           .delivery-address-title {
-            width: 80%;
+            width: 77.263%;
 
             @include breakpoint($only-tablet) {
               width: 54%;
@@ -849,16 +872,14 @@
             width: 100%;
             font-size: 0.75rem;
             display: block;
-            padding: 0.5rem 0;
+            padding: 0.5625rem 1.5625rem;
             border: 1px solid $hnm-black-two;
             background: $white-five;
             font-family: $hnm-bold;
             font-weight: normal;
             color: #000;
             text-transform: uppercase;
-            padding-#{$left}: 1rem;
-            padding-#{$right}: 1rem;
-            top: -3px;
+            top: -0.3125rem;
 
             @include breakpoint($only-mobile) {
               text-align: $left;
@@ -1147,18 +1168,6 @@ html[lang=ar] {
         }
       }
     }
-  }
-}
-
-// Showing label on mobile number field.
-.address-book-address .mobile-number-field {
-  > label {
-    position: static !important;
-    line-height: 2.2;
-  }
-
-  .form-type-textfield input[type=text] {
-    padding-bottom: 0.25rem !important;
   }
 }
 

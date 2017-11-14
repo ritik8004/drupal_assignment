@@ -1,13 +1,17 @@
+uuid: 1e663f0d-cafa-42c5-b512-f71332946207
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: BoaQeRFC16aPCgZ9f36DP1zC7Gefkg7SEo8hZAVhsQE
 name: 472x202
 label: 472x202
 effects:
-  981d344a-2771-4cb7-9654-fdbb7d81da91:
-    uuid: 981d344a-2771-4cb7-9654-fdbb7d81da91
-    id: image_scale_and_crop
-    weight: 1
+  09508f98-c463-4e74-8340-d98441325e8d:
+    uuid: 09508f98-c463-4e74-8340-d98441325e8d
+    id: image_scale
+    weight: 2
     data:
       width: 472
-      height: 202
+      height: null
+      upscale: false

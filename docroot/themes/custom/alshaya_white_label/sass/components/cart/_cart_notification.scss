@@ -1,8 +1,8 @@
 #cart_notification {
   z-index: 999;
   position: absolute;
-  top: 2.7rem;
-  #{$right}: -0.25rem;
+  top: 3.4rem;
+  #{$right}: -0.35rem;
 
   @include breakpoint($tablet) {
     top: 3.5rem;

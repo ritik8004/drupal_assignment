@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_hm_images;
 
+use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
@@ -37,6 +38,13 @@ class SkuAssetManager {
   protected $currentRouteMatch;
 
   /**
+   * The Sku Plugin Manager service.
+   *
+   * @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager
+   */
+  protected $skuPluginManager;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -45,13 +53,17 @@ class SkuAssetManager {
    *   Current route matcher service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku manager service.
+   * @param SKUPluginManager $skuPluginManager
+   *   Sku Plugin Manager.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
-                              SkuManager $skuManager) {
+                              SkuManager $skuManager,
+                              SKUPluginManager $skuPluginManager) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
+    $this->skuPluginManager = $skuPluginManager;
   }
 
   /**
@@ -90,7 +102,7 @@ class SkuAssetManager {
       ];
 
       $asset_urls[] = [
-        'url' => Url::fromUri($base_url, $options),
+        'url' => (isset($set['url'])) ? Url::fromUri($set['url']) : Url::fromUri($base_url, $options),
         'sortAssetType' => $asset['sortAssetType'],
         'sortFacingType' => $asset['sortFacingType'],
       ];
@@ -116,31 +128,37 @@ class SkuAssetManager {
    */
   public function getAssetAttributes(SKU $sku, $asset, $page_type, $location_image) {
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
-    $origin = $alshaya_hm_images_settings->get('origin');
-
-    $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
-    $set['origin'] = "origin[" . $origin . "]";
-    $set['type'] = "type[" . $asset['sortAssetType'] . "]";
-    $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
-    $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
-    $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
-    // Check for overrides for style identifiers & dimensions.
-    $config_overrides = $this->overrideConfig($sku, $page_type);
+    if (isset($asset['is_old_format']) && $asset['is_old_format']) {
+      return [['url' => $asset['Url']], $image_location_identifier];
+    }
+    else {
+      $origin = $alshaya_hm_images_settings->get('origin');
 
-    // If overrides are available, update style id, width & height in the url.
-    if (!empty($config_overrides)) {
-      if (isset($config_overrides['style_identifiers'][$location_image])) {
-        $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
-      }
+      $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
+      $set['origin'] = "origin[" . $origin . "]";
+      $set['type'] = "type[" . $asset['sortAssetType'] . "]";
+      $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
+      $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
+      $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
 
-      if (isset($config_overrides['dimensions'][$location_image]['width'])) {
-        $set['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
-      }
+      // Check for overrides for style identifiers & dimensions.
+      $config_overrides = $this->overrideConfig($sku, $page_type);
 
-      if (isset($config_overrides['dimensions'][$location_image]['height'])) {
-        $set['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
+      // If overrides are available, update style id, width & height in the url.
+      if (!empty($config_overrides)) {
+        if (isset($config_overrides['style_identifiers'][$location_image])) {
+          $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
+        }
+
+        if (isset($config_overrides['dimensions'][$location_image]['width'])) {
+          $set['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
+        }
+
+        if (isset($config_overrides['dimensions'][$location_image]['height'])) {
+          $set['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
+        }
       }
     }
 
@@ -305,12 +323,14 @@ class SkuAssetManager {
 
     if ($child_skus) {
       foreach ($child_skus as $child_sku) {
-        if ($first_only) {
-          $assets = $this->getSkuAsset($child_sku, $context, $location);
-          return $assets;
-        }
-        else {
-          $assets[$sku->getSku()] = $this->getSkuAsset($child_sku, $context, $location);
+        if ($child_sku instanceof SKU) {
+          if ($first_only) {
+            $assets = $this->getSkuAsset($child_sku, $context, $location);
+            return $assets;
+          }
+          else {
+            $assets[$sku->getSku()] = $this->getSkuAsset($child_sku, $context, $location);
+          }
         }
       }
     }
@@ -336,6 +356,64 @@ class SkuAssetManager {
     }
 
     return $swatch_type;
+  }
+
+  /**
+   * Helper function to fetch list of color options supported by a parent SKU.
+   *
+   * @param SKU $sku
+   *   Parent sku.
+   *
+   * @return array
+   *   Array of RGB color values keyed by article_castor_id.
+   */
+  public function getColorsForSku(SKU $sku) {
+    $child_skus = $this->skuManager->getChildSkus($sku);
+    $article_castor_ids = [];
+
+    if (empty($child_skus)) {
+      return [];
+    }
+
+    $plugin_definition = $this->skuPluginManager->pluginFromSKU($sku);
+
+    $class = $plugin_definition['class'];
+    $plugin = new $class();
+
+    foreach ($child_skus as $key => $child_sku) {
+      if ($child_sku instanceof SKU) {
+        if (!isset($article_castor_ids[$plugin->getAttributeValue($child_sku, 'article_castor_id')])) {
+          $article_castor_ids[$child_sku->get('attr_color_label')->value] = $child_sku->get('attr_rgb_color')->value;
+        }
+      }
+    }
+
+    return $article_castor_ids;
+  }
+
+  /**
+   * Helper function to get SKU based on Castor Id.
+   *
+   * @param SKU $parent_sku
+   *   Parent Sku.
+   * @param int $rgb_color_label
+   *   Castor id for which child sku needs to be fetched.
+   *
+   * @return array|SKU
+   *   Array of SKUs or single SKU object matching the castor id.
+   */
+  public function getChildSkuFromColor(SKU $parent_sku, $rgb_color_label) {
+    $child_skus = $this->skuManager->getChildSkus($parent_sku);
+
+    if (empty($child_skus)) {
+      return NULL;
+    }
+
+    foreach ($child_skus as $child_sku) {
+      if (($child_sku instanceof SKU) && $child_sku->get('attr_color_label')->value == $rgb_color_label) {
+        return $child_sku;
+      }
+    }
   }
 
 }

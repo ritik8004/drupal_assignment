@@ -119,7 +119,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
     return;
   }
 
-  /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
+  /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtm_manager */
   $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
   $currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
 
@@ -160,10 +160,10 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
 
           $products = [];
-          $data_layer['privilegeOrder'] = $cart_item_attributes['privilegeOrder'];
+          $data_layer['privilegeCustomer'] = $cart_item_attributes['privilegeCustomer'];
           $data_layer['privilegesCardNumber'] = $cart_item_attributes['privilegesCardNumber'];
           $step = isset($cart_item_attributes['step']) ? $cart_item_attributes['step'] : NULL;
-          unset($cart_item_attributes['privilegeOrder'], $cart_item_attributes['privilegesCardNumber'], $cart_item_attributes['step']);
+          unset($cart_item_attributes['privilegeCustomer'], $cart_item_attributes['privilegesCardNumber'], $cart_item_attributes['step']);
 
           foreach ($cart_item_attributes as $key => $cart_item) {
             $product = $gtm_manager->convertHtmlAttributesToDatalayer($cart_item);
@@ -244,22 +244,39 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
     }
 
     // Generic handling of page type for user pages.
-    if ($page_type === 'not defined') {
-      $current_route = $gtm_manager->getGtmContainer();
-      $current_path = $current_route['pathinfo']->getpath();
-      if (preg_match('/^\/user\/{user}\/(\S*)$/', $current_path, $matches)) {
-        if (strpos($matches[1], '{') === 0) {
-          $route_param_identifier = trim($matches[1], '{}');
-          $route_param_val = $current_route['route_params'][$route_param_identifier]->id();
-          $matches[1] = $route_param_val;
+    $current_route = $gtm_manager->getGtmContainer();
+    $current_path = $current_route['pathinfo']->getpath();
+
+    // General logic to calculate page-type in case of my account pages &
+    // undefined pages.
+    if ((strpos($current_path, '/user') === 0) &&
+      (\Drupal::currentUser()->id() !== 0)) {
+      $path_parts = explode('/', $current_path);
+
+      foreach ($path_parts as $key => $part) {
+        if (is_numeric($part) ||
+          ($part === 'user') ||
+          ($part == '') ||
+          ($part === '{user}')) {
+          unset($path_parts[$key]);
         }
-        $page_type = 'user-' . $matches[1];
       }
+      $page_type = rtrim('myaccount-' . implode('-', $path_parts), '-');
+    }
+    elseif ($page_type === 'not defined') {
+      $page_type = ltrim(implode('-', explode('/', $current_path)), '-');
     }
 
     $data_layer['pageType'] = $page_type;
     $page_dl_attributes = $gtm_manager->fetchPageSpecificAttributes($page_type, $current_route);
     $data_layer = array_merge($data_layer, $page_dl_attributes);
+
+    // Unset few attributes specifically for HD page.
+    if (($current_route['route_name'] === 'acq_checkout.form') &&
+      ($current_route['route_params']['step'] == 'delivery') &&
+      ($current_route['query']['method'] === 'hd')) {
+      unset($data_layer['storeAddress'], $data_layer['storeLocation'], $data_layer['deliveryOption'], $data_layer['deliveryType']);
+    }
   }
   catch (Exception $e) {
     \Drupal::logger('alshaya_seo')->error('Error while fetching GTM attributes: @message', ['@message' => $e->getMessage()]);

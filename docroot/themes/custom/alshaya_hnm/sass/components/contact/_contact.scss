@@ -60,7 +60,7 @@
   margin-top: 0;
 
   legend {
-    font-weight: bold;
+    font-family: $hnm-demibold;
     font-size: 0.875rem;
     padding-bottom: 1.5rem;
   }
@@ -77,11 +77,6 @@
     border-bottom: 1px solid $grey-ash;
   }
 
-  input.error,
-  textarea.error {
-    border-bottom: 1px solid $red-error;
-  }
-
   label.error {
     font-size: 0.75rem;
     margin-top: 0.5rem;
@@ -95,14 +90,6 @@
   .form-item--error {
     input.error {
       color: $black;
-      border-bottom: 1px solid $red-error !important;
-    }
-
-    .c-input__bar {
-      &::after,
-      &::before {
-        background: $red-error;
-      }
     }
   }
 
@@ -174,8 +161,12 @@
   }
 
   fieldset {
-    margin-top: 2.875rem;
+    margin-top: 1rem;
     margin-bottom: 2.875rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 2.875rem;
+    }
   }
 
   .form-item-first-name {
@@ -226,6 +217,10 @@
   .form-item {
     margin-bottom: 2.5rem;
     display: inline-block;
+
+    &.mobile-number-field {
+      margin-bottom: 3.5rem;
+    }
   }
 
   fieldset {
@@ -234,17 +229,16 @@
 
   .form-type-radio {
     margin-bottom: 0;
+
+    label::before {
+      margin-top: -0.25rem;
+    }
   }
 
   legend {
-    color: $marine-blue-two;
-  }
-
-  .mobile-number-field {
-    @include breakpoint($desktop) {
-      display: block;
-      clear: both;
-    }
+    color: $hnm-black-two;
+    font-family: $hnm-demibold;
+    text-transform: uppercase;
   }
 }
 
@@ -262,12 +256,25 @@
     }
   }
 
+  .field--type-mobile-number {
+    clear: both;
+
+    .mobile-number-field {
+      display: inline-block;
+      margin-top: 1.313rem;
+
+      .form-type-select {
+        margin-top: 0;
+      }
+    }
+  }
+
   .form-actions {
     @include breakpoint($desktop) {
-      margin-top: 0.8rem;
+      margin-top: 2rem;
     }
 
-    @include breakpoint($tablet) {
+    @include breakpoint($only-tablet) {
       margin-top: 1rem;
     }
 

@@ -6,6 +6,53 @@
  * Contains install, update, uninstall hooks for alshaya_product module.
  */
 
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update facets config.
+ */
+function alshaya_product_update_8004() {
+  $config_path = drupal_get_path('module', 'alshaya_product') . '/config/install';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write('facets.facet.color', $source->read('facets.facet.color'));
+  $config_storage->write('facets.facet.skus_sku_reference_color', $source->read('facets.facet.skus_sku_reference_color'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update facets config.
+ */
+function alshaya_product_update_8003() {
+  $config_path = drupal_get_path('module', 'alshaya_product') . '/config/install';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write('facets.facet.final_price', $source->read('facets.facet.final_price'));
+  $config_storage->write('facets.facet.skus_sku_reference_final_price', $source->read('facets.facet.skus_sku_reference_final_price'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Correct the translation for position sort.
+ */
+function alshaya_product_update_8002() {
+  $product_list_view = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.alshaya_product_list');
+
+  $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
+الاسم تصاعدي|الاسم من أ إلى ي
+الاسم تنازلي|الاسم من ي إلى أ 
+السعر تنازلي|السعر من الأعلى إلى الأدنى
+السعر تصاعدي|السعر من الأدنى إلى الأعلى');
+
+  $product_list_view->set('display.block_1.display_options.sorts.nid.expose.label', 'ما ننصح به');
+
+  $product_list_view->save();
+}
+
 /**
  * Implements hook_update_N().
  */

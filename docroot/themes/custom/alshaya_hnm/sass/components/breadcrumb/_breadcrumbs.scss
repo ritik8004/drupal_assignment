@@ -6,15 +6,16 @@
     margin: auto;
     font-size: 0.625rem;
     letter-spacing: 0.5px;
-    padding: 0.875rem 1.5rem;
+    padding: 0.75rem 1.5rem;
   }
 
   li {
     list-style: none;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
 
     &:last-of-type a {
-      font-weight: bold;
+      font-weight: normal;
       color: $hnm-black-two;
       font-family: $hnm-bold;
       text-transform: capitalize;
@@ -27,6 +28,7 @@
       text-transform: capitalize;
       letter-spacing: 0.5px;
       font-weight: normal;
+      font-size: 0.75rem;
       color: $greyish;
 
       &:hover {
@@ -38,8 +40,9 @@
       content: '>';
       color: $greyish;
       vertical-align: middle;
-      padding-right: 0.1875rem;
-      padding-left: 0.1875rem;
+      padding-#{$right}: 0.1875rem;
+      padding-#{$left}: 0.5rem;
+      font-family: $hnm-regular-nodir;
     }
 
     &:last-of-type::after {

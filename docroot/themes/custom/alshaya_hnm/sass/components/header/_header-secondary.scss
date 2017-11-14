@@ -94,8 +94,8 @@
     @include breakpoint($desktop) {
       color: $grey8;
       display: block;
-      padding: 0.375rem 0.9375rem;
-      font-size: 0.625rem;
+      padding: 0.375rem 0.75rem;
+      font-size: 0.75rem;
       line-height: 1.2;
       vertical-align: middle;
       letter-spacing: 0.8px;

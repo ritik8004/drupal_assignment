@@ -50,7 +50,7 @@ select:focus::-ms-value {
     top: 1px;
     bottom: 1px;
     text-align: center;
-    background-color: $white-five;
+    background-color: transparent;
     width: 2.1875rem;
     height: 2.063rem;
 
@@ -76,7 +76,7 @@ select:focus::-ms-value {
   width: $select-width !important;
 
   .select2-selection {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     height: 2.1875rem;
     padding: 0.25rem 0.2rem;
     text-align: $left;
@@ -135,7 +135,7 @@ select:focus::-ms-value {
   ul.select2-results__options {
     li.select2-results__option {
       color: $hnm-black-two;
-      font-size: 0.875rem;
+      font-size: 0.75rem;
       padding: 0.625rem;
       border-bottom: 1px solid $white;
       text-transform: uppercase;

@@ -26,6 +26,7 @@
             active: active
           });
         }
+        $(this).find('.details-privilege-card-wrapper-inside').css('height', 'auto');
       });
 
       $('.alias--user-register #details-privilege-card-wrapper').each(function () {
@@ -42,6 +43,7 @@
             active: active
           });
         }
+        $(this).find('.details-privilege-card-wrapper-inside').css('height', 'auto');
       });
       $('.path--user #details-privilege-card-wrapper').each(function () {
         if (context === document) {
@@ -57,6 +59,7 @@
             active: active
           });
         }
+        $(this).find('.details-privilege-card-wrapper-inside').css('height', 'auto');
       });
     }
   };

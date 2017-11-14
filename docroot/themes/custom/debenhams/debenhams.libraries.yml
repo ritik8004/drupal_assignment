@@ -1,0 +1,17 @@
+global:
+  version: VERSION
+  css:
+    theme:
+      dist/css/global.ltr.css: {}
+
+fonts:
+  version: VERSION
+  css:
+    theme:
+      //fonts.googleapis.com/css?family=Open+Sans:400,600: {}
+
+menu-logo-navigation:
+  version: VERSION
+  css:
+    theme:
+      dist/css/01-molecules/00-header-primary/block-logo-navigation/menu-logo-navigation.ltr.css: {}

@@ -941,6 +941,8 @@
 #table-cart-totals {
   .price-wrapper {
     .price-amount {
+      font-family: $hnm-regular-nodir;
+
       @include breakpoint($only-mobile) {
         position: relative;
       }

@@ -1,6 +1,13 @@
 (function ($, Drupal) {
   'use strict';
 
+  var query_params = window.location.search;
+
+  // Make sure query params coming from parent url are passed as is.
+  if (query_params) {
+    query_params = query_params.replace('?', '');
+  }
+
   /**
    * All custom js for product page.
    *
@@ -11,7 +18,6 @@
    */
   Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
-
       // Stock check on PLP, Search and Promo pages and Related products block.
       $('.stock-placeholder', context).once('check-stock').each(function () {
         var placeHolder = $(this);
@@ -23,8 +29,9 @@
         var articleNode = placeHolder.closest('article');
         var productId = articleNode.attr('data-nid');
         var productStock = articleNode.find('.out-of-stock');
+
         $.ajax({
-          url: Drupal.url('stock-check-ajax/node/' + productId) + '?cacheable',
+          url: Drupal.url('stock-check-ajax/node/' + productId) + '?cacheable' + '&' + query_params,
           type: 'GET',
           dataType: 'json',
           async: true,
@@ -40,7 +47,7 @@
         var skuId = $wrapper.attr('data-skuid');
         if (typeof skuId !== 'undefined') {
           $.ajax({
-            url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+            url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
             type: 'GET',
             dataType: 'json',
             async: true,
@@ -75,24 +82,22 @@
           // Load cart form for active item post swipe on PDP & Basket.
           $('.owl-item').each(function () {
             var currItem = $(this);
-            var currParent = currItem.closest('.mobile-only-block');
-            // Handle owl carousel on Basket page.
-            if (currParent.length === 0) {
-              currParent = currItem.closest('#block-baskethorizontalproductrecommendation.horizontal-crossell');
-            }
+            var observerConfig = {
+              attributes: true
+            };
 
-            currItem.swipe({
-              swipeStatus: function (event, phase, direction, distance, fingerCount) {
-                switch (phase) {
-                  case 'end':
-                    setTimeout(function () {
-                      var activeItem = currParent.find('.owl-item.active');
-                      Drupal.loadTeaserCartForm(activeItem);
-                    }, '1000');
-                    break;
+            var owlItemActiveObserver = new MutationObserver(function (mutations) {
+              mutations.forEach(function (mutation) {
+                var newVal = $(mutation.target).prop(mutation.attributeName);
+                if (mutation.attributeName === "class") {
+                  if (newVal.indexOf('active') !== -1) {
+                    Drupal.loadTeaserCartForm($(mutation.target));
+                  }
                 }
-              }
+              });
             });
+
+            owlItemActiveObserver.observe(currItem[0], observerConfig);
           });
 
           // Load cart form for items which are not in the carousel on PDP & Basket.
@@ -117,7 +122,7 @@
         var stockCheckProcessed = 'stock-check-processed';
         if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
           $.ajax({
-            url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+            url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
             type: 'GET',
             dataType: 'json',
             async: true,
@@ -246,7 +251,7 @@
       if (!(skuArticle.hasClass('stock-check-processed')) && (typeof skuId !== 'undefined')) {
         var $wrapper = skuArticle;
         $.ajax({
-          url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+          url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
           type: 'GET',
           dataType: 'json',
           async: true,

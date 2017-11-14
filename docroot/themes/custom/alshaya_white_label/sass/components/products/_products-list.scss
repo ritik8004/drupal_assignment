@@ -367,39 +367,59 @@
         display: none;
       }
     }
+
+    .views-infinite-scroll-content-wrapper {
+      display: flex;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
   }
 
   .c-products__item {
-    float: $left;
     text-align: center;
     color: $black;
-    height: 23.25rem;
     margin-bottom: 4px;
     font-size: 0.9375rem;
     position: relative;
 
-    @include breakpoint($only-mobile) {
-      &:nth-child(2n) {
-        float: $right;
-      }
-    }
-
     @include breakpoint($mobile) {
-      width: 49.2%;
-    }
-
-    @include breakpoint($tablet) {
-      width: 31.59%;
-      max-width: 291px;
-      height: 25rem;
-
-      &:nth-child(3n+2) {
-        margin: 0 2.6%;
-      }
+      width: 50%;
+      margin-bottom: 1rem;
     }
 
     @include breakpoint($desktop) {
-      height: 30rem;
+      width: 33%;
+    }
+
+    .alshaya_search_gallery {
+      overflow: hidden;
+
+      .alshaya_search_mainimage {
+        z-index: 5;
+        height: 15.125rem;
+        overflow: hidden;
+
+        @include breakpoint($tablet) {
+          min-height: 15.5rem;
+        }
+
+        @include breakpoint($desktop) {
+          height: 20.125rem;
+        }
+      }
+    }
+
+    .alshaya_search_slider {
+      opacity: 0;
+      z-index: -1;
+      transform: translateY(-110%);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .product-plp-detail-wrapper,
+    .stock-placeholder.out-of-stock {
+      transform: translateY(-110%);
+      transition: all 0.3s ease-in-out;
     }
 
     .field--name-name {
@@ -445,6 +465,14 @@
       &:hover {
         z-index: 1;
 
+        .product-plp-detail-wrapper,
+        .stock-placeholder.out-of-stock,
+        .alshaya_search_slider {
+          opacity: 1;
+          z-index: 2;
+          transform: translateY(0);
+        }
+
         &::after {
           content: '';
           top: -0.75rem;
@@ -478,16 +506,20 @@
     }
 
     .promotions {
-      margin: 0.5rem 0;
+      margin: 0.5rem 0 0;
       font-size: 0.75rem;
       color: $grey-ash;
 
-      .sku-promotion-link {
+      .sku-promotion-item {
         font-size: 0.75rem;
-        color: $cherry;
-        display: inline-block;
+        display: block;
         margin-#{$left}: 0.125rem;
         margin-#{$right}: 0.125rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .sku-promotion-link {
+        color: $cherry;
       }
     }
   }
@@ -846,12 +878,11 @@ body {
 }
 
 .c-content__highlighted {
-  margin-bottom: 1.5rem;
-
   .promo-banner {
     img {
       width: 100%;
       height: auto;
+      margin-bottom: 1.5rem;
     }
   }
 }

@@ -23,7 +23,7 @@ class PasswordSpaces extends PasswordConstraintBase {
    */
   public function validate($password, $user_context) {
     $validation = new PasswordPolicyValidation();
-    if (strpos($password, ' ') || empty($password)) {
+    if (strpos($password, ' ') > -1 || empty(trim($password))) {
       $validation->setErrorMessage($this->t('Password must not contain spaces.'));
     }
     return $validation;

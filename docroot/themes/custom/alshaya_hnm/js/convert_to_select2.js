@@ -8,12 +8,14 @@
 
   Drupal.behaviors.select2select = {
     attach: function (context, settings) {
-      if ($(window).width() > 1024) {
-        $('.form-item-sort-bef-combine .form-select').select2({
+      if ($(window).width() > 767) {
+        $('.form-item-configurables-size .form-select').select2({
           minimumResultsForSearch: -1
         });
+      }
 
-        $('.form-item-configurables-size .form-select').select2({
+      if ($(window).width() > 1024) {
+        $('.form-item-sort-bef-combine .form-select').select2({
           minimumResultsForSearch: -1
         });
 

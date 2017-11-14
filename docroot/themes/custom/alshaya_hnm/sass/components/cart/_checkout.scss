@@ -284,7 +284,7 @@
   .caption {
     font-size: 0.875rem;
     border-bottom: 1px solid $white;
-    padding: 1rem 1.5rem;
+    padding: 0.9375rem 1.0625rem 0.9375rem 1.5rem;
 
     @include breakpoint($upto-desktop) {
       font-size: 0.75rem;
@@ -297,18 +297,21 @@
     }
 
     a {
-      text-decoration: underline;
       float: $right;
       font-size: 0.75rem;
       color: $hnm-black-two;
       font-weight: normal;
       font-family: $hnm-demibold;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
   .content-head {
     width: 100%;
-    padding: 1em 1.5rem;
+    padding: 0.9375rem 1.25rem 0.9375rem 1.5rem;
     font-size: 0.875rem;
     position: relative;
     cursor: pointer;
@@ -320,7 +323,7 @@
 
     @include icon(dropdown-expand, after) {
       position: absolute;
-      #{$right}: 0.5625rem;
+      #{$right}: 0;
       font-size: 2.483rem;
       top: 50%;
       transform: translateY(-50%);
@@ -444,6 +447,10 @@
         font-family: $hnm-bold;
         color: $hnm-black-two;
       }
+
+      span.price-amount {
+        font-family: $hnm-bold-nodir;
+      }
     }
 
     .sub-total,
@@ -475,7 +482,7 @@
 .totals {
   font-size: 0.875rem;
   background: $white-three;
-  padding: 1.563rem 1.5rem;
+  padding: 0.75rem 1.25rem 0.875rem 1.5rem;
 
   @include breakpoint($upto-desktop) {
     font-size: 0.75rem;
@@ -520,11 +527,11 @@
             margin-right: 0.4rem;
           }
 
-          margin-right: 1.5625rem;
+          margin-right: 0.625rem;
         }
 
         .price-amount {
-          float: none;
+          float: $right;
         }
       }
     }
@@ -537,8 +544,9 @@
   }
 
   .status {
-    font-size: 12px;
-    margin-top: 5px;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    display: block;
   }
 }
 
@@ -621,6 +629,10 @@ body.alias--cart {
     @extend %l-container--full;
   }
 
+  li.select2-results__option {
+    font-family: $hnm-regular-nodir;
+  }
+
   #table-cart-items {
     table {
       width: 100%;
@@ -654,6 +666,11 @@ body.alias--cart {
       border-bottom: 1px solid $white;
 
       td {
+        .price-amount,
+        .select2-selection__rendered {
+          font-family: $hnm-regular-nodir;
+        }
+
         &:first-child {
           a {
             font-size: 14px;
@@ -1118,6 +1135,10 @@ body.alias--cart {
           color: $hnm-black-two;
           font-weight: normal;
         }
+
+        span.price-amount {
+          font-family: $hnm-bold-nodir;
+        }
       }
     }
 
@@ -1404,11 +1425,6 @@ html[lang=ar] .alias--cart #table-cart-items tr th {
 }
 
 html[lang=ar] {
-  header .block-cart-mini-block .price-amount,
-  header .block-cart-mini-block .quantity {
-    font-family: $hnm-regular-nodir;
-  }
-
   .alias--cart {
     #table-cart-items {
       .delivery-option {
@@ -1440,6 +1456,24 @@ html[lang=ar] {
         font-weight: normal;
         font-size: 0.75rem;
       }
+    }
+  }
+
+  .view-address-book {
+    @include breakpoint($desktop) {
+      padding-top: 1.5rem;
+    }
+  }
+}
+
+html[lang=ar] {
+  .delivery-options-tooltip-wrapper .tooltip {
+    @include breakpoint($only-mobile) {
+      right: -2.1rem;
+    }
+
+    @include breakpoint($desktop) {
+      right: 2.45rem !important;
     }
   }
 }

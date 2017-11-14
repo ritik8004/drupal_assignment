@@ -163,6 +163,34 @@
 
 // SideBar content theming
 
+.form-item-configurables-article-castor-id {
+  .select2Option .select-buttons li {
+    a[data-swatch-type=miniature_image] {
+      max-width: 3rem;
+      padding: 0;
+      border: 1px solid $white-five;
+      background: none;
+
+      &.picked {
+        border: 1px solid $hnm-black-two;
+        background: none;
+      }
+
+      &:hover {
+        &::after {
+          content: '';
+          background-color: $hnm-black-two-50;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          #{$left}: 0;
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+}
+
 .basic-details-wrapper .field--name-field-skus {
   .field--name-sku {
     @include u-visibility(none);
@@ -228,44 +256,6 @@
       select.form-select {
         @include select-style(12.3125rem);
 
-        width: 100%;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      @include select-wrapper(8.75rem);
-      @include select-bg(6.5625rem);
-
-      padding: 0;
-      margin-top: 0.5em;
-      width: 100%;
-      min-height: 2.188rem;
-
-      &::after,
-      &::before {
-        top: 0.5rem;
-        background: transparent;
-      }
-
-      &::before {
-        width: 100%;
-      }
-
-      label {
-        @include u-visibility(block);
-
-        position: absolute;
-        top: -1rem;
-        font-size: 0.6875rem;
-        padding: 0.3125rem 0;
-        padding-#{$right}: 1.25rem;
-        #{$left}: 0;
-      }
-
-      select.form-select {
-        @include select-style(8.75rem);
-
-        min-width: 8.75rem;
         width: 100%;
       }
     }
@@ -1399,7 +1389,7 @@
 
     @include breakpoint($only-mobile) {
       .basic-details-wrapper & {
-        height: 8rem;
+        height: auto;
       }
     }
 
@@ -1408,8 +1398,7 @@
       @include breakpoint($mobile) {
         @include u-visibility(inline-block);
 
-        width: 65%;
-        margin-#{$right}: 2rem;
+        width: 100%;
       }
 
       @include breakpoint($tablet) {
@@ -1518,7 +1507,6 @@
         }
 
         @include breakpoint($desktop) {
-          margin-#{$left}: 2rem;
           margin-top: 1.45rem;
         }
       }
@@ -1546,8 +1534,12 @@
 .select2Option {
   text-align: $left;
 
-  @include breakpoint($mobile) {
+  @include breakpoint($only-mobile) {
     @include u-visibility(none);
+  }
+
+  .form-item-configurables-article-castor-id & {
+    @include u-visibility(block);
   }
 
   @include breakpoint($desktop) {
@@ -1563,7 +1555,7 @@
 
   .selected-text {
     font-weight: normal;
-    font-family: $hnm-bold;
+    font-family: $hnm-bold-nodir;
     color: $hnm-black-two;
     display: inline-block;
 
@@ -1582,6 +1574,10 @@
 
       @include u-visibility(inline-block);
 
+      a:hover {
+        background: $hnm-black-two-50;
+      }
+
       a,
       span {
         @include u-visibility(block);
@@ -1593,6 +1589,7 @@
         border: 1px solid $hnm-black-two;
         text-align: center;
         padding: 0.75rem;
+        font-family: $hnm-regular-nodir;
         font-size: 0.875rem;
         color: $hnm-black-two;
 
@@ -1603,6 +1600,28 @@
 
           html[lang=ar] .safari & {
             font-weight: normal;
+          }
+        }
+
+        .form-item-configurables-article-castor-id & {
+          cursor: pointer;
+          position: relative;
+
+          &[data-swatch-type=color_block] {
+            &.picked {
+              &::after {
+                content: '';
+                position: absolute;
+                display: inline-block;
+                top: -0.1875rem;
+                #{$left}: -0.1875rem;
+                #{$right}: -0.1875rem;
+                bottom: -0.1875rem;
+                z-index: 1;
+                border: 1px solid $hnm-black-two;
+                pointer-events: none;
+              }
+            }
           }
         }
       }
@@ -1618,7 +1637,7 @@
   }
 }
 
-.errors-container {
+.errors-container:not(:empty) {
   margin-top: 0.5rem;
 
   @include breakpoint($only-tablet) {
@@ -1764,7 +1783,7 @@ article[gtm-sku-type="simple"] {
 .ui-dialog,
 .acq-content-product {
   .form-item-configurables-size {
-    @include breakpoint($desktop) {
+    @include breakpoint($tablet) {
       &::before,
       &::after {
         display: none;
@@ -1772,7 +1791,7 @@ article[gtm-sku-type="simple"] {
     }
 
     .select2-container {
-      @include breakpoint($desktop) {
+      @include breakpoint($tablet) {
         display: none;
       }
     }
@@ -1853,6 +1872,7 @@ article.product-out-of-stock {
   font-size: 0.75rem;
   border: 0;
   text-transform: uppercase;
+  border-radius: 0;
 }
 
 .filter-menu-label {
@@ -1866,9 +1886,9 @@ article.product-out-of-stock {
     min-height: 1.9375rem;
     max-height: 1.9375rem;
     font-size: 0.75rem !important;
-    font-family: $alshaya-thin !important;
-    margin-right: 0;
-    margin-left: 1rem;
+    font-family: $hnm-bold;
+    margin-#{$right}: 0;
+    margin-#{$left}: 1rem;
     color: $whisper-dark !important;
 
     span {
@@ -1879,11 +1899,19 @@ article.product-out-of-stock {
 
 html[lang=ar] {
   .fake-apply-button {
-    padding: 0.1rem 1rem 0.2rem;
-    margin-right: 1rem;
+    padding: 6.5px 1rem;
+    margin-right: 0.625rem !important;
 
     &.inactive {
       margin-left: 0;
+      width: 3.5rem;
+    }
+  }
+
+  .clear-all-fake {
+    &.inactive {
+      margin-right: 0;
+      line-height: 1.3;
     }
   }
 }

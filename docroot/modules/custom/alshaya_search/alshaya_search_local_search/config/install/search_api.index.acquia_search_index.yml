@@ -18,7 +18,7 @@ field_settings:
     label: Color
     datasource_id: 'entity:node'
     property_path: 'field_skus:entity:attr_color'
-    type: text
+    type: string
     boost: 0.5
     dependencies:
       config:
@@ -35,7 +35,7 @@ field_settings:
     label: Brand
     datasource_id: 'entity:node'
     property_path: 'field_skus:entity:attr_product_brand'
-    type: text
+    type: string
     boost: 0.3
     dependencies:
       config:

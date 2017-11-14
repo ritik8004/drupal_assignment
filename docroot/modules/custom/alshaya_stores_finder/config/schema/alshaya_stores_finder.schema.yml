@@ -1,0 +1,8 @@
+block.settings.alshaya_stores_finder:
+  type: block_settings
+  label: 'Alshaya stores finder'
+  mapping:
+    link_title:
+      type: label
+      label: 'Link title'
+      

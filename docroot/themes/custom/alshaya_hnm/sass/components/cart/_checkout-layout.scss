@@ -99,7 +99,10 @@
       float: $right;
       color: $hnm-black-two;
       font-family: $hnm-demibold;
-      text-decoration: underline;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     .method,
@@ -163,12 +166,12 @@
     margin: 0 auto;
 
     @include breakpoint($tablet) {
-      padding: 1rem 1.5rem;
+      padding: 1rem 1.5rem 1rem 1.25rem;
     }
 
     @include breakpoint($desktop) {
-      padding-top: 1.8rem;
-      padding-bottom: 1.8rem;
+      padding-top: 2.0625rem;
+      padding-bottom: 1.3125rem;
     }
 
     a {
@@ -189,7 +192,7 @@
       }
 
       @include breakpoint($desktop) {
-        width: 54.5%;
+        width: 53.5%;
         text-align: $right;
       }
     }
@@ -211,33 +214,36 @@
       }
 
       .secure__checkout--label {
+        color: $hnm-black-four;
+        font-family: $hnm-demibold;
+        letter-spacing: 0.5px;
+
         @include breakpoint($only-mobile) {
-          display: none;
+          font-size: 0.5625rem;
+          letter-spacing: 0.4px;
         }
       }
     }
 
     .icon-ic_login {
-      font-size: 1.25rem;
-      line-height: 1.25rem;
-      color: $black;
+      font-size: 1.313rem;
+      background: $hnm-red;
+      color: $white-five;
+      padding: 0.125rem;
+      display: inline-block;
+      margin-#{$left}: 0.75rem;
+      height: 1.375rem;
+      width: 1.375rem;
+      vertical-align: middle;
+      border-radius: 50%;
+      text-align: center;
+      position: relative;
 
-      @include breakpoint($tablet) {
-        font-size: 1rem;
-        background: $hnm-red;
-        color: $white-five;
-        padding: 0.125rem;
-        display: inline-block;
-        margin-#{$left}: 0.75rem;
-        height: 1.375rem;
-        width: 1.375rem;
-        vertical-align: middle;
-        border-radius: 100%;
-        text-align: center;
-
-        &::before {
-          font-weight: bold;
-        }
+      &::before {
+        font-weight: bold;
+        position: absolute;
+        top: 0;
+        #{$left}: 0;
       }
     }
   }

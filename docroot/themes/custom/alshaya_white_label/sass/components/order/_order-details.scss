@@ -614,6 +614,7 @@
 .user__order--detail {
   .sub-total-row,
   .delivery-charge-row,
+  .discount-row,
   .total-row {
     td.right--align {
       text-align: $right;
@@ -662,5 +663,12 @@
     html[lang=ar] & {
       background-color: $white-smoke;
     }
+  }
+}
+
+.path--user .l-two--sf {
+  &.c-order-list,
+  &.order-detail {
+    margin-top: 1rem;
   }
 }

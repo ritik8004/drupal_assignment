@@ -99,13 +99,13 @@ function alshaya_vs_create_email_signup_form_incentive_text_block_content() {
   $block_content->save();
   // Create email signup form incentive block translation.
   $ar_block_content = $block_content->addTranslation('ar', [
-    'info' => 'Sign up to get the latest from Victoria Secret, like:',
+    'info' => 'الاشتراك للحصول على أحدث من فيكتوريا سكريت، مثل:',
     'body' => [
       'value' => "<ul>
-                    <li><p>Exclusive offers &amp; deals.</p></li>
-                    <li><p>New product alerts.</p></li>
-                    <li><p>Store events &amp; openings in your area.</p></li>
-                    <li><p>News &amp; offers from victoria's secret and its sister brands</p></li>
+                    <li><p>عروض حصرية & أمب؛ صفقات.</p></li>
+                    <li><p>تنبيهات المنتجات الجديدة.</p></li>
+                    <li><p>تخزين الأحداث والفتحات في منطقتك.</p></li>
+                    <li><p>أخبار وعروض من سر فيكتوريا والعلامات التجارية الشقيقة لها</p></li>
                   </ul>",
       'format' => 'rich_text',
     ]

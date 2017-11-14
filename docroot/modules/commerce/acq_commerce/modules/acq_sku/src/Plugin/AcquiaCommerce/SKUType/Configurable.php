@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Link;
 use Drupal\acq_sku\AddToCartErrorEvent;
+use Drupal\acq_sku\ProductOptionsManager;
 
 /**
  * Defines the configurable SKU type.
@@ -43,6 +44,8 @@ class Configurable extends SKUPluginBase {
     ];
 
     $configurables = unserialize($sku->field_configurable_attributes->getString());
+    $configurable_form_settings = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings');
+    $configurable_weights = $configurable_form_settings->get('attribute_weights');
 
     foreach ($configurables as $configurable) {
       $attribute_code = $configurable['code'];
@@ -53,20 +56,44 @@ class Configurable extends SKUPluginBase {
         $options[$value['value_id']] = $value['label'];
       }
 
-      $form['ajax']['configurables'][$attribute_code] = [
-        '#type' => 'select',
-        '#title' => $configurable['label'],
-        '#options' => $options,
-        '#required' => TRUE,
-        '#ajax' => [
-          'callback' => [$this, 'configurableAjaxCallback'],
-          'progress' => [
-            'type' => 'throbber',
-            'message' => NULL,
+      // Sort the options.
+      if (!empty($options)) {
+        $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
+        $query->fields('ttfd', ['tid', 'weight']);
+        $query->join('taxonomy_term__field_sku_attribute_code', 'ttfsac', 'ttfsac.entity_id = ttfd.tid');
+        $query->join('taxonomy_term__field_sku_option_id', 'ttfsoi', 'ttfsoi.entity_id = ttfd.tid');
+        $query->fields('ttfsoi', ['field_sku_option_id_value']);
+        $query->condition('ttfd.vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+        $query->condition('ttfsac.field_sku_attribute_code_value', $attribute_code);
+        $query->condition('ttfsoi.field_sku_option_id_value', array_keys($options), 'IN');
+        $query->distinct();
+        $query->orderBy('weight', 'ASC');
+        $tids = $query->execute()->fetchAllAssoc('tid');
+
+        $sorted_options = [];
+        foreach ($tids as $tid => $values) {
+          $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
+        }
+
+        $form['ajax']['configurables'][$attribute_code] = [
+          '#type' => 'select',
+          '#title' => $configurable['label'],
+          '#options' => $sorted_options,
+          '#weight' => $configurable_weights[$attribute_code],
+          '#required' => TRUE,
+          '#ajax' => [
+            'callback' => [$this, 'configurableAjaxCallback'],
+            'progress' => [
+              'type' => 'throbber',
+              'message' => NULL,
+            ],
+            'wrapper' => 'configurable_ajax',
           ],
-          'wrapper' => 'configurable_ajax',
-        ],
-      ];
+        ];
+      }
+      else {
+        \Drupal::logger('acq_sku')->info('Product with sku: @sku seems to be configurable without any config options.', ['@sku' => $sku->getSku()]);
+      }
     }
 
     $form['sku_id'] = [
@@ -78,6 +105,7 @@ class Configurable extends SKUPluginBase {
       '#title' => t('Quantity'),
       '#type' => 'number',
       '#default_value' => 1,
+      '#access' => $configurable_form_settings->get('show_quantity'),
       '#required' => TRUE,
       '#size' => 2,
     ];
@@ -335,6 +363,13 @@ class Configurable extends SKUPluginBase {
     foreach ($configurables as $configurable) {
       $tree['configurables'][$configurable['code']] = $configurable;
     }
+
+    $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings')->get('attribute_weights');
+
+    // Sort configurables based on the config.
+    uasort($tree['configurables'], function ($a, $b) use ($configurable_weights) {
+      return $configurable_weights[$a['code']] - $configurable_weights[$b['code']];
+    });
 
     $tree['options'] = Configurable::recursiveConfigurableTree(
       $tree,

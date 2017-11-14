@@ -15,7 +15,6 @@ mobile_number:
   version: 1.x
   js:
     js/jquery.alphanum.js: {}
-    js/jquery-plugin-input-prefix.js: {}
     js/alshaya_mobile.js: {}
   dependencies:
     - core/jquery.once

@@ -21,6 +21,10 @@
       text-transform: capitalize;
       font-size: 0.875rem;
 
+      @include breakpoint($tablet) {
+        font-size: 0.75rem;
+      }
+
       @include breakpoint($desktop) {
         font-size: 0.875rem;
       }

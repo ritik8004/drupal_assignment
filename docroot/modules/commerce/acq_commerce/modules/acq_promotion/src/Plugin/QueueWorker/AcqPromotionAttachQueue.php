@@ -52,8 +52,9 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
       $update_sku_flag = FALSE;
       $sku_entity = SKU::loadFromSku($sku['sku']);
       $sku_entity_translations = [];
+
       if ($sku_entity) {
-        $translation_languages = $sku_entity->getTranslationLanguages(FALSE);
+        $translation_languages = $sku_entity->getTranslationLanguages(TRUE);
 
         $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
         if (!in_array($promotion_attach_item, $sku_promotions, TRUE)) {

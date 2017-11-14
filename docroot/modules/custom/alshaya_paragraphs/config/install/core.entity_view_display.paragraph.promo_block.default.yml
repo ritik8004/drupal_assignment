@@ -4,8 +4,10 @@ dependencies:
   config:
     - field.field.paragraph.promo_block.field_banner
     - field.field.paragraph.promo_block.field_link
+    - field.field.paragraph.promo_block.field_promo_block_button
     - paragraphs.paragraphs_type.promo_block
   module:
+    - entity_reference_revisions
     - image
     - link
 id: paragraph.promo_block.default
@@ -34,4 +36,13 @@ content:
     third_party_settings: {  }
     type: link
     region: content
+  field_promo_block_button:
+    type: entity_reference_revisions_entity_view
+    weight: 2
+    region: content
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
 hidden: {  }

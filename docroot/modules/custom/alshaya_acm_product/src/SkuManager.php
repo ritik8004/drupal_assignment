@@ -53,6 +53,20 @@ class SkuManager {
   protected $linkedSkus;
 
   /**
+   * Cache Backend service for alshaya.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * Cache Backend service for product labels.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $productLabelsCache;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -68,7 +82,9 @@ class SkuManager {
    * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
    *   Linked SKUs service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache Backend service.
+   *   Cache Backend service for alshaya.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $product_labels_cache
+   *   Cache Backend service for product labels.
    */
   public function __construct(Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager,
@@ -76,7 +92,8 @@ class SkuManager {
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
                               AcqSkuLinkedSku $linked_skus,
-                              CacheBackendInterface $cache) {
+                              CacheBackendInterface $cache,
+                              CacheBackendInterface $product_labels_cache) {
     $this->connection = $connection;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
@@ -85,6 +102,7 @@ class SkuManager {
     $this->logger = $logger_factory->get('alshaya_acm_product');
     $this->linkedSkus = $linked_skus;
     $this->cache = $cache;
+    $this->productLabelsCache = $product_labels_cache;
   }
 
   /**
@@ -156,7 +174,9 @@ class SkuManager {
     $build['price'] = $build['final_price'] = $build['discount'] = [];
 
     if ($sku_entity->bundle() == 'configurable') {
-      $price = $final_price = $this->getMinPrice($sku_entity);
+      $prices = $this->getMinPrices($sku_entity);
+      $price = $prices['price'];
+      $final_price = $prices['final_price'];
     }
     else {
       $price = (float) $sku_entity->get('price')->getString();
@@ -197,38 +217,68 @@ class SkuManager {
   }
 
   /**
-   * Get minimum price for configurable products.
+   * Get minimum final price and associated initial price for configurable.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   SKU Entity.
    *
-   * @return float|int
-   *   Minimum price.
+   * @return array
+   *   Minimum final price and associated initial price.
    */
-  protected function getMinPrice(SKU $sku_entity) {
+  protected function getMinPrices(SKU $sku_entity) {
+    $prices = [
+      'price' => (float) $sku_entity->get('price')->getString(),
+      'final_price' => (float) $sku_entity->get('final_price')->getString(),
+    ];
+
+    // This function might get called from other places, add condition again
+    // before processing for configurable products.
+    if ($sku_entity->bundle() != 'configurable') {
+      return $prices;
+    }
+
     $sku_price = 0;
 
-    /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
-    $plugin = $sku_entity->getPluginInstance();
-    $tree = $plugin->deriveProductTree($sku_entity);
+    foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
+      try {
+        $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $sku_entity->language()->getId());
 
-    if (isset($tree['products'])) {
-      foreach ($tree['products'] as $child_sku => $child_sku_entity) {
         if ($child_sku_entity instanceof SKU) {
           $price = (float) $child_sku_entity->get('price')->getString();
           $final_price = (float) $child_sku_entity->get('final_price')->getString();
 
+          $new_sku_price = 0;
           if ($final_price > 0) {
-            $sku_price = $sku_price > 0 ? min($sku_price, $final_price) : $final_price;
+            $new_sku_price = $sku_price > 0 ? min($sku_price, $final_price) : $final_price;
           }
           elseif ($price > 0) {
-            $sku_price = $sku_price > 0 ? min($sku_price, $price) : $price;
+            $new_sku_price = $sku_price > 0 ? min($sku_price, $price) : $price;
+          }
+
+          // Do we need to update selected prices?
+          if ($new_sku_price != 0) {
+            // Have we found a new min final price?
+            if ($sku_price != $new_sku_price) {
+              $sku_price = $new_sku_price;
+              $prices = ['price' => $price, 'final_price' => $final_price];
+            }
+            // Is the difference between initial an final bigger?
+            elseif (
+              $price != 0 && $final_price != 0 && $prices['price'] != 0 && $prices['final_price'] != 0
+              && ($price - $final_price) > ($prices['price'] - $prices['final_price'])
+            ) {
+              $prices = ['price' => $price, 'final_price' => $final_price];
+            }
           }
         }
       }
-
-      return $sku_price;
+      catch (\Exception $e) {
+        // Child SKU might be deleted or translation not available.
+        // Log messages are already set in previous functions.
+      }
     }
+
+    return $prices;
   }
 
   /**
@@ -245,7 +295,7 @@ class SkuManager {
 
     $this->buildPrice($build, $sku_entity);
     // Adding vat text to product page.
-    $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text.value');
+    $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text');
 
     $price_build = [
       '#theme' => 'product_price_block',
@@ -274,10 +324,21 @@ class SkuManager {
     $final_price = (float) $item_price;
 
     if ($final_price !== $sku_cart_price['price']) {
-      $sku_cart_price['final_price'] = number_format($final_price, 3);
-      $discount = floor((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
-      $sku_cart_price['discount']['prefix'] = t('Save', [], ['context' => 'discount']);
-      $sku_cart_price['discount']['value'] = $discount . '%';
+      if ($final_price > $sku_cart_price['price']) {
+        // There must be something wrong. Trust the price coming from commerce
+        // backend.
+        $sku_cart_price['price'] = $final_price;
+        $this->logger->error(
+          'The @sku sku has a final price greater than the initial price. There must be a synchronisation issue.',
+          ['@sku' => $sku_entity->sku->value]
+        );
+      }
+      else {
+        $sku_cart_price['final_price'] = number_format($final_price, 3);
+        $discount = floor((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
+        $sku_cart_price['discount']['prefix'] = t('Save', [], ['context' => 'discount']);
+        $sku_cart_price['discount']['value'] = $discount . '%';
+      }
     }
 
     return $sku_cart_price;
@@ -396,6 +457,12 @@ class SkuManager {
           $promotion_node = $this->entityRepository->getTranslationFromContext($promotion_node, $langcode);
 
           $promotion_text = $promotion_node->get('field_acq_promotion_label')->getString();
+
+          // Let's not display links with empty text and show empty space.
+          if (empty($promotion_text)) {
+            continue;
+          }
+
           $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
           $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
 
@@ -463,8 +530,6 @@ class SkuManager {
     $static_labels_cache[$sku][$type] = [];
 
     if ($labels = $sku_entity->get('attr_labels')->getString()) {
-      $update_sku = FALSE;
-
       $labels_data = unserialize($labels);
 
       if (empty($labels_data)) {
@@ -498,19 +563,24 @@ class SkuManager {
           }
         }
 
-        if (empty($data[$image_fid_key])) {
+        $fid = $this->productLabelsCache->get($data[$image_key]);
+
+        if (empty($fid)) {
           try {
             // Prepare the File object when we access it the first time.
-            $data[$image_fid_key] = $this->downloadLabelsImage($sku_entity, $data, $image_key);
-            $update_sku = TRUE;
+            $fid = $this->downloadLabelsImage($sku_entity, $data, $image_key);
+            $this->productLabelsCache->set($data[$image_key], $fid, CacheBackendInterface::CACHE_PERMANENT);
           }
           catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             continue;
           }
         }
+        else {
+          $fid = $fid->data;
+        }
 
-        $image_file = File::load($data[$image_fid_key]);
+        $image_file = File::load($fid);
 
         $image = [
           '#theme' => 'image',
@@ -528,12 +598,6 @@ class SkuManager {
         if ($data['disable_subsequents']) {
           break;
         }
-      }
-
-      // We save the fids in SKU back to reuse.
-      if ($update_sku) {
-        $sku_entity->get('attr_labels')->setValue(serialize($labels_data));
-        $sku_entity->save();
       }
     }
 

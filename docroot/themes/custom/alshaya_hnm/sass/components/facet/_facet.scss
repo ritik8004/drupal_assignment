@@ -18,16 +18,21 @@
 
     input[type="text"] {
       border: 1px solid $white;
-      font-family: $alshaya-thin;
+      font-family: $hnm-regular;
       font-size: 0.75rem;
       padding: 0.25rem 0.5rem;
       width: 13rem;
       margin-bottom: 1.313rem;
+
+      &::placeholder {
+        color: $hnm-black-two;
+        opacity: 1;
+      }
     }
 
     li {
       margin-#{$left}: -1px;
-      margin-bottom: 0;
+      margin-bottom: 1px;
       min-height: 2.125rem;
     }
   }
@@ -76,6 +81,7 @@
 
     .facet-item__count {
       margin-#{$left}: 0.125rem;
+      font-family: $hnm-regular-nodir;
     }
   }
 }
@@ -85,7 +91,11 @@
   margin: 0.75rem 0.5rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: $hnm-black-two;
+  color: $black-two;
+
+  @include breakpoint($desktop) {
+    font-family: $hnm-bold;
+  }
 }
 
 .c-facet__blocks {

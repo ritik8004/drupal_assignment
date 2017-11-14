@@ -191,7 +191,8 @@
 
     .form-text,
     .form-email {
-      color: $black;
+      color: $black-two !important;
+      font-family: $hnm-regular;
 
       @include breakpoint($desktop) {
         padding-bottom: 0.15rem;
@@ -229,7 +230,7 @@
       }
 
       @include breakpoint($desktop) {
-        margin-top: 1.3rem;
+        margin-top: 2.5rem;
       }
 
       input {
@@ -263,6 +264,7 @@
 
       p {
         margin: 0.375rem 0;
+        font-size: 0.875rem;
 
         @include breakpoint($only-tablet) {
           margin: 0.4rem 0;
@@ -509,7 +511,6 @@
       }
 
       @include breakpoint($desktop) {
-        margin-top: 1.75rem;
         margin-bottom: 4rem;
 
         .field--type-image {
@@ -525,6 +526,7 @@
 
       p {
         margin: 0.5625rem 0;
+        font-size: 0.875rem;
 
         @include breakpoint($only-tablet) {
           margin: 0.4rem 0;

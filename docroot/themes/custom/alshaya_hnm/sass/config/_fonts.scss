@@ -170,17 +170,17 @@ $hnmpromo-regular: 'Amperserif_regular';
 $hnmpromo-regular-nodir: 'Amperserif_regular';
 
 // Arabic fonts.
-$hnm-arabic-bold: 'GESSTwoBold-Bold', 'Ampersand_bold';
-$hnm-arabic-bold-nodir: 'GESSTwoBold-Bold', 'Ampersand_bold';
+$hnm-arabic-bold: 'Ampersand_bold', 'GESSTwoBold-Bold';
+$hnm-arabic-bold-nodir: 'Ampersand_bold', 'GESSTwoBold-Bold';
 
-$hnm-arabic-medium: 'GESSTwoMedium-Medium', 'Ampersand_demibold';
-$hnm-arabic-medium-nodir: 'GESSTwoMedium-Medium', 'Ampersand_demibold';
+$hnm-arabic-medium: 'Ampersand_demibold', 'GESSTwoMedium-Medium';
+$hnm-arabic-medium-nodir: 'Ampersand_demibold', 'GESSTwoMedium-Medium';
 
-$hnm-arabic-regular: 'GESSTwoLight-Light', 'Ampersand_regular';
-$hnm-arabic-regular-nodir: 'GESSTwoLight-Light', 'Ampersand_regular';
+$hnm-arabic-regular: 'Ampersand_regular', 'GESSTwoLight-Light';
+$hnm-arabic-regular-nodir: 'Ampersand_regular', 'GESSTwoLight-Light';
 
-$hnmpromo-arabic-regular: 'GEDinarTwo-Medium', 'Amperserif_regular';
-$hnmpromo-arabic-regular-nodir: 'GEDinarTwo-Medium', 'Amperserif_regular';
+$hnmpromo-arabic-regular: 'Amperserif_regular', 'GEDinarTwo-Medium';
+$hnmpromo-arabic-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium';
 
 $hnm-icons: 'hnm-icons';
 $body_font: $hnm-regular;
@@ -204,6 +204,7 @@ $arial-nodir: 'arialmt', arial, sans-serif;
 
 // Icon Fonts
 $icons: (
+  login: "\e929",
   chevrondown: "\25bd",
   chevronleft: "\e901",
   chevronright: "\e902",
@@ -216,7 +217,7 @@ $icons: (
   check-box-empty: "\e909",
   check-box-filled: "\e90a",
   delivery: "\e90b",
-  sirection-fill: "\e90c",
+  direction-fill: "\e90c",
   direction-stroke: "\e90d",
   dropdown-collapse: "\e90e",
   dropdown-expand: "\e90f",
@@ -241,7 +242,6 @@ $icons: (
   map: "\e922",
   mylocation: "\e923",
   newsletter: "\e924",
-  next-day-delivery: "\e925",
   rewards: "\e926",
   language: "\e927",
   info: "\e928",

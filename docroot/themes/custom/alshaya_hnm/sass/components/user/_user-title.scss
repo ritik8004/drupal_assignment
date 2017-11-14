@@ -3,12 +3,13 @@
     font-size: 1.375rem;
 
     @include breakpoint($desktop) {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
     }
   }
 
   .subtitle {
     border-bottom: 1px solid $white;
+    font-family: $hnm-demibold;
   }
 }
 
@@ -70,7 +71,11 @@
 
 .c-user-password {
   h1 {
-    top: -2.7rem;
+    top: -3.875rem;
+
+    @include breakpoint($only-mobile) {
+      top: -3.188rem;
+    }
   }
 }
 
@@ -100,6 +105,8 @@
 
   .back-link {
     @include breakpoint($only-mobile) {
+      font-size: 0;
+
       @include icon(chevron#{$left}, before) {
         font-size: 1.875rem;
         margin-#{$left}: -0.75rem;
@@ -111,7 +118,9 @@
       h1.c-page-title {
         display: inline-block;
         line-height: 1.5;
+        font-size: 1.125rem;
         vertical-align: top;
+        letter-spacing: 0.8px;
       }
     }
   }
@@ -119,7 +128,8 @@
 
 .c-communication-preferences,
 .c-order-list,
-.c-user-edit {
+.c-user-edit,
+.c-address-book {
   .block-page-title-block {
     padding: 0.45rem 0 0.3rem;
 
@@ -128,7 +138,7 @@
     }
 
     @include breakpoint($desktop) {
-      padding: 0 0 1rem;
+      padding: 0 0 1.125rem;
     }
   }
 }

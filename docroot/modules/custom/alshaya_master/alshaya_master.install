@@ -5,6 +5,35 @@
  * Contains install, update, uninstall hooks for alshaya_master module.
  */
 
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Override rich text config to allow div & classes.
+ */
+function alshaya_master_update_8002() {
+  $config_path = drupal_get_path('module', 'alshaya_master') . '/config/install';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_storage->write('filter.format.rich_text', $source->read('filter.format.rich_text'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new string translations.
+ */
+function alshaya_master_update_8001() {
+  $strings = [
+    'Please select a size.' => [
+      'ar' => 'يرجى اختيار المقاس',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
 /**
  * Implements hook_install().
  */
@@ -185,7 +214,9 @@ function alshaya_master_install() {
       'ar' => 'يرجى إدخال @title',
       'en' => 'Please enter your @title.',
     ],
-
+    'Please select a size.' => [
+      'ar' => 'يرجى اختيار المقاس',
+    ],
     '@title does not contain a valid email.' => [
       'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
     ],
@@ -664,7 +695,7 @@ function alshaya_master_install() {
       'ar' => 'هل عنوان التوصيل هو نفس عنوان إرسال الفواتير؟',
     ],
     '<p>I confirm that I have read and accept the <a class="payment-privacy-policy" href="#">Privacy Policy</a> and <a class="payment-tnc" href="#">Terms &amp; Conditions</a> of purchase. Read our <a class="payment-return policy" href="#">Return Policy</a></p>' => [
-      'ar' => 'أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا',
+      'ar' => '<p>أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا</p>',
     ],
     'Billing address' => [
       'ar' => 'عنوان تحرير الفاتورة',

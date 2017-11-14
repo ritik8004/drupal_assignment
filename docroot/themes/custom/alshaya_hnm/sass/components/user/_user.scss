@@ -56,6 +56,10 @@
   padding: 1em 0;
   position: relative;
 
+  &.c-user-password {
+    padding: 1.563rem 0;
+  }
+
   @include breakpoint($only-mobile) {
     margin-top: 2.5em;
     padding: 1em 0.5em;
@@ -67,10 +71,11 @@
 
   .c-sidebar-second {
     h3 {
-      color: $hnm-black-two;
-      font-size: 0.75rem;
+      color: $black-three;
+      font-size: 0.875rem;
       font-family: $hnm-demibold;
-      font-weight: normal;
+      letter-spacing: 0.4px;
+      line-height: 1.29;
     }
 
     p {
@@ -96,7 +101,7 @@
   }
 
   #block-youllbeableto {
-    margin-top: 2.2rem;
+    margin-top: 0.5rem;
     margin-bottom: 4.1rem;
 
     @include breakpoint($only-tablet) {
@@ -108,7 +113,6 @@
     }
 
     a {
-      font-weight: bold;
       padding-top: 0.25rem;
       display: inline-block;
     }
@@ -120,7 +124,6 @@
     padding-top: 0.5rem;
 
     @include breakpoint($tablet) {
-      border-top: 0;
       margin-top: 4.4rem;
       padding-top: 3.5rem;
       width: 20.625rem;
@@ -130,7 +133,6 @@
     }
 
     @include breakpoint($desktop) {
-      border-top: 1px solid $hnm-black-two;
       margin-#{$left}: -5.5em;
       padding-#{$left}: 5.5em;
       width: 30.25rem;
@@ -150,13 +152,13 @@
     }
 
     a {
-      font-weight: bold;
       margin-top: 1em;
       display: inline-block;
     }
 
     p {
       margin: 0.4rem 0;
+      font-size: 0.875rem;
 
       @include breakpoint($tablet) {
         margin: 0.5rem 0;
@@ -172,7 +174,6 @@
     }
 
     a {
-      font-weight: normal;
       color: $hnm-black-two;
       text-decoration: underline;
       font-family: $hnm-demibold;
@@ -190,6 +191,7 @@
 
     .field--name-body {
       max-width: 12rem;
+      font-size: 0.875rem;
     }
 
     .field--name-field-image {
@@ -351,7 +353,6 @@
 
         a {
           color: $cerulean;
-          font-weight: bold;
         }
       }
     }
@@ -365,18 +366,12 @@
       width: 100%;
       height: 1.563rem;
       outline: transparent;
-      font-size: 16px;
-    }
-
-    @include breakpoint($desktop) {
-      .form-email {
-        //margin-top: 9px;
-      }
+      font-size: 1rem;
     }
 
     input.error {
-      border-color: $red-error;
-      border-width: 0 0 2px;
+      border-color: $red-error !important;
+      border-width: 0 0 0.125rem !important;
 
       &:focus,
       &.active {
@@ -445,7 +440,6 @@
     bottom: -3.5em;
     text-decoration: underline;
     font-size: 0.75rem;
-    font-weight: bold;
     z-index: 2;
     width: 100%;
     text-align: center;
@@ -595,16 +589,15 @@
           #{$right}: 1rem;
           border-radius: 100%;
           color: $black;
-          padding: 2px;
-          padding-#{$left}: 4px;
+          padding: 0.125rem;
+          padding-#{$left}: 0.25rem;
           top: 2rem;
-          height: 35px;
-          width: 35px;
+          height: 2.1875rem;
+          width: 2.1875rem;
 
           @include breakpoint($only-mobile) {
-            background-color: $white-smoke;
-            #{$right}: 3rem;
-            top: 62%;
+            #{$right}: 3.125rem;
+            top: 50%;
           }
         }
 
@@ -700,6 +693,7 @@
             > div {
               display: table-cell;
               padding: 0;
+              vertical-align: middle;
             }
 
             .second {
@@ -777,7 +771,7 @@
         .light {
           color: $greyish;
           height: 14px;
-          font-family: $arial;
+          font-family: $hnm-regular;
           font-size: 12px;
           margin-bottom: 5px;
 
@@ -789,9 +783,8 @@
         .dark {
           color: $black-two;
           height: 16px;
-          font-family: $arial;
+          font-family: $hnm-demibold;
           font-size: 14px;
-          font-weight: bold;
           letter-spacing: 0.5px;
 
           @include breakpoint($upto-desktop) {
@@ -869,7 +862,7 @@
 
     .form-text {
       color: $black;
-      margin-top: 0.56rem;
+      margin-top: 0;
       padding-bottom: 0.5rem;
       font-size: 1.25rem;
       letter-spacing: 0.312rem;
@@ -908,10 +901,6 @@
     }
   }
 
-  #unmask_password {
-    top: 0.6875rem;
-  }
-
   .form-actions {
     margin-top: 0.7rem;
 
@@ -927,7 +916,7 @@
     line-height: 1;
 
     html[lang=ar] & {
-      font-family: $arial-nodir;
+      font-family: $hnm-regular-nodir;
     }
   }
 }
@@ -1049,7 +1038,10 @@
     a {
       color: $white-five;
       font-family: $hnm-regular;
-      text-decoration: underline;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     li {

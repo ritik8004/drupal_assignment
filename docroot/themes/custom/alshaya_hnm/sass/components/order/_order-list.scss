@@ -3,7 +3,7 @@
     border-bottom: 1px solid $white;
     margin-top: 1.25rem;
     font-size: 0.875rem;
-    font-weight: normal;
+    font-family: $hnm-demibold;
 
     @include breakpoint($desktop) {
       margin-top: 2.625rem;
@@ -75,7 +75,9 @@
 
     input::placeholder {
       text-transform: uppercase;
-      color: $hnm-black-two;
+      color: $grey6;
+      font-size: 0.6875rem;
+      letter-spacing: 1px;
     }
 
     label {
@@ -83,7 +85,7 @@
       text-transform: uppercase;
       display: none;
       float: $left;
-      line-height: 35px;
+      line-height: 2.1875rem;
 
       @include breakpoint($tablet) {
         display: block;
@@ -171,8 +173,8 @@
 
   .form-submit {
     font-size: 0;
-    height: 35px;
-    width: 35px;
+    height: 2.1875rem;
+    width: 2.1875rem;
     position: relative;
     float: left;
     #{$left}: -5px;
@@ -248,7 +250,7 @@
 
       @include breakpoint($only-tablet) {
         padding-right: 1rem;
-        vertical-align: middle;
+        vertical-align: top;
         width: 10.5rem;
       }
 
@@ -338,8 +340,9 @@
     position: relative;
   }
 
-  .toggle--icon .icon-ic_chevrondown {
-    font-size: 30px;
+  .toggle--icon .icon-ic_dropdown-expand {
+    font-size: 2.125rem;
+    color: $hnm-black-two;
     position: absolute;
     #{$right}: 3.2rem;
     top: 50%;
@@ -364,7 +367,7 @@
     }
 
     a {
-      color: $windows-blue;
+      color: $hnm-black-two;
     }
   }
 
@@ -407,7 +410,7 @@
 
   .total--price {
     @include breakpoint($only-tablet) {
-      vertical-align: bottom;
+      vertical-align: top;
     }
   }
 
@@ -432,6 +435,14 @@
         display: table-cell;
       }
     }
+  }
+}
+
+.block-alshaya-user-recent-orders {
+  a.show-all {
+    color: $hnm-black-two;
+    font-family: $hnm-regular;
+    text-transform: none;
   }
 }
 
@@ -503,7 +514,7 @@
 
 .open--accordion {
   .order-summary-row td {
-    background-color: $whisper-light;
+    background-color: $whisper-light-59;
   }
 
   .order--items {
@@ -517,8 +528,8 @@
   }
 
   .toggle--icon {
-    .icon-ic_chevrondown {
-      @include icon(chevronup);
+    .icon-ic_dropdown-expand {
+      @include icon(dropdown-collapse);
     }
   }
 }
@@ -546,6 +557,7 @@
   @include breakpoint($upto-tablet) {
     text-align: $left;
     position: relative;
+    height: 2.1875rem;
 
     .form-item-search {
       width: 47.5%;
@@ -629,6 +641,33 @@
     @include breakpoint($only-mobile) {
       margin-bottom: 0.4rem;
       padding-top: 0.75rem;
+    }
+  }
+}
+
+.recent__orders--list {
+  .price-wrapper {
+    .price-currency {
+      margin-#{$right}: 0;
+    }
+  }
+
+  .recent__orders--body {
+    .icon-ic_chevrondown {
+      @include icon(dropdown-expand, before) {
+        position: absolute;
+        top: 50%;
+        #{$right}: 0.3125rem;
+        transform: translate(-50%, -50%);
+        color: $hnm-black-two;
+        font-size: 2.125rem;
+      }
+    }
+
+    &.open--accordion {
+      .icon-ic_chevrondown {
+        @include icon(dropdown-collapse, before);
+      }
     }
   }
 }
