@@ -364,6 +364,13 @@ class Configurable extends SKUPluginBase {
       $tree['configurables'][$configurable['code']] = $configurable;
     }
 
+    $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings')->get('attribute_weights');
+
+    // Sort configurables based on the config.
+    uasort($tree['configurables'], function ($a, $b) use ($configurable_weights) {
+      return $configurable_weights[$a['code']] - $configurable_weights[$b['code']];
+    });
+
     $tree['options'] = Configurable::recursiveConfigurableTree(
       $tree,
       $tree['configurables']
