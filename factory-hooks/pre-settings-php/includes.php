@@ -9,6 +9,17 @@
 
 require DRUPAL_ROOT . '/../vendor/acquia/blt/settings/blt.settings.php';
 
+$env = 'local';
+if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+  $env = $_ENV['AH_SITE_ENVIRONMENT'];
+}
+elseif (getenv('TRAVIS')) {
+  $env = 'travis';
+}
+
+// Set the env in settings to allow re-using in custom code.
+$settings['env'] = $env;
+
 // Configure your hash salt here.
 // TODO: Security.
 // $settings['hash_salt'] = '';
