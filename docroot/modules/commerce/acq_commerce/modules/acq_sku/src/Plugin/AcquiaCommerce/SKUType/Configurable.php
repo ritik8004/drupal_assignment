@@ -51,6 +51,7 @@ class Configurable extends SKUPluginBase {
       $attribute_code = $configurable['code'];
 
       $options = [];
+      $sorted_options = [];
 
       foreach ($configurable['values'] as $value) {
         $options[$value['value_id']] = $value['label'];
@@ -70,7 +71,6 @@ class Configurable extends SKUPluginBase {
         $query->orderBy('weight', 'ASC');
         $tids = $query->execute()->fetchAllAssoc('tid');
 
-        $sorted_options = [];
         foreach ($tids as $tid => $values) {
           $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
         }
@@ -94,6 +94,21 @@ class Configurable extends SKUPluginBase {
       else {
         \Drupal::logger('acq_sku')->info('Product with sku: @sku seems to be configurable without any config options.', ['@sku' => $sku->getSku()]);
       }
+
+      $form['ajax']['configurables'][$attribute_code] = [
+        '#type' => 'select',
+        '#title' => $configurable['label'],
+        '#options' => $sorted_options,
+        '#required' => TRUE,
+        '#ajax' => [
+          'callback' => [$this, 'configurableAjaxCallback'],
+          'progress' => [
+            'type' => 'throbber',
+            'message' => NULL,
+          ],
+          'wrapper' => 'configurable_ajax',
+        ],
+      ];
     }
 
     $form['sku_id'] = [

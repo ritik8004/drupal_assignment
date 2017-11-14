@@ -51,6 +51,16 @@
   }
 }
 
+.node-custom-department-page {
+  .region-content,
+  .paragraph-vm-default {
+    @include breakpoint($desk) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
 .ajax-progress-throbber {
   display: none;
 }

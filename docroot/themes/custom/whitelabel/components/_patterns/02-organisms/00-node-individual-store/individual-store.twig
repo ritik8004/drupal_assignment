@@ -2,11 +2,7 @@
   <div class="individual-store--detail">
     <div class="list-view--locator">
       <div class="back-link">
-        {% if previous_page == 'list' %}
-          <a href="{{ url('view.stores_finder.page_2') }}">{{ 'Back' | t }}</a>
-        {% else %}
-          <a href="{{ url('view.stores_finder.page_2') }}">{{ 'Back' | t }}</a>
-        {% endif %}
+        <a href="{{ path('view.stores_finder.page_2') }}">{{ 'Back' | t }}</a>
       </div>
       <div>
         <a class="row-title">{{ label }}</a>

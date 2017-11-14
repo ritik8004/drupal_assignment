@@ -1,0 +1,16 @@
+.region-secondary-header .block-language-switcher--desktop {
+  background-color: $blackish-grey;
+  color: $white;
+  text-align: center;
+
+  @include breakpoint($upto-palm) {
+    border-bottom: 0.0625rem solid $eclipse;
+    padding: 0.75rem 0;
+  }
+
+  @include breakpoint($above-palm) {
+    background-color: $black;
+    display: inline-block;
+    vertical-align: top;
+  }
+}

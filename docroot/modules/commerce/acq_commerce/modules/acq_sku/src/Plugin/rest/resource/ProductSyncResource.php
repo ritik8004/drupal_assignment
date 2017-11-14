@@ -129,6 +129,8 @@ class ProductSyncResource extends ResourceBase {
    *   HTTP Response object.
    */
   public function post(array $products = []) {
+    $lock = \Drupal::lock();
+
     $em = $this->entityManager->getStorage('acq_sku');
     $created = 0;
     $updated = 0;
@@ -182,6 +184,13 @@ class ProductSyncResource extends ResourceBase {
         $failed++;
         continue;
       }
+
+      $lock_key = 'synchronizeProduct' . $product['sku'];
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $lock->acquire($lock_key);
+      } while (!$lock_acquired);
 
       if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
         if ($product['status'] != 1) {
@@ -303,6 +312,9 @@ class ProductSyncResource extends ResourceBase {
           // Do nothing, we may not have the node available in system.
         }
       }
+
+      // Release the lock.
+      $lock->release($lock_key);
     }
 
     if (isset($fps)) {

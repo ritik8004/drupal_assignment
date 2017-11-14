@@ -1,0 +1,310 @@
+html[lang="ar"] .form--signup-elements.field-checkbox p {
+  margin-top: 0.62rem;
+}
+
+.signup-form-title {
+  width: 100%;
+  font-family: $lato-regular;
+  color: $black-smoke;
+  font-size: 1.512rem;
+  border-bottom: 0.06rem solid $gainsboro;
+  padding-bottom: 0.51rem;
+  margin: 2.3rem 1rem 0.5rem 0;
+  display: block;
+  text-transform: uppercase;
+}
+
+.signup-form input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 62.5rem white inset;
+}
+
+.signup-form form {
+  width: 50%;
+  float: direction(left);
+
+  @include breakpoint($upto-palm) {
+    width: 100%;
+  }
+}
+
+.form-signup-note {
+  width: 40%;
+  float: direction(left);
+  margin-#{direction(left)}: 2rem;
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    span {
+      color: $apple-green;
+      display: inline-block;
+      margin-right: 0.521rem;
+      font-size: 1rem;
+    }
+  }
+}
+
+button {
+  background-color: $black;
+  border: 0;
+  padding: 0.85rem 2.783rem 0.75rem;
+  color: $white;
+
+  @include breakpoint($thumb) {
+    width: 100%;
+  }
+}
+
+.signup-form .form button {
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+
+.form--signup-elements {
+  margin-bottom: 1.56rem;
+  position: relative;
+  margin-top: 0.75rem;
+  width: 100%;
+  height: 2.5rem;
+  float: direction(left);
+
+  &.field-email,
+  &.form-item-country-code {
+    clear: both;
+  }
+
+  & span.country-code-label {
+    position: absolute;
+    bottom: 0.76rem;
+    z-index: 1;
+    opacity: 0.6;
+  }
+
+  &.field-mobile {
+    width: 48%;
+
+    input {
+      padding-#{direction(left)}: 2.81rem;
+    }
+  }
+
+  &.form-item-country-code {
+    pointer-events: none;
+  }
+
+  p {
+    display: none;
+  }
+
+  &.field-checkbox {
+    clear: both;
+    width: 100%;
+    margin: 2rem 0;
+    height: auto;
+
+    label {
+      color: $brownish-grey;
+      overflow: initial;
+      font-size: 0.75rem;
+      white-space: normal;
+      padding-#{direction(left)}: 1.56rem;
+      display: inline-block;
+      margin-top: 0;
+      position: static;
+
+      &::before {
+        padding-#{direction(right)}: 0.62rem;
+        vertical-align: text-bottom;
+        margin-#{direction(left)}: -1.56rem;
+      }
+    }
+
+    p {
+      font-size: 0.75rem;
+      padding-#{direction(left)}: 1.56rem;
+      margin-top: 0.12rem;
+
+      strong {
+        color: $windows-blue;
+      }
+    }
+  }
+
+  input {
+    color: $black-smoke;
+    font-size: 1rem;
+    height: 2.5rem;
+    background-color: transparent;
+    width: 100%;
+    border: none;
+    border-bottom: 0.06rem solid $black-smoke;
+    padding: 0;
+    outline: none;
+  }
+
+  input[type="checkbox"] {
+    width: auto;
+    height: auto;
+  }
+
+  label.error {
+    font-size: 0;
+  }
+
+  label::after {
+    content: ' ';
+  }
+
+  label:not(.error) span {
+    color: $greyish;
+    font-weight: normal;
+  }
+
+  label:not(.error),
+  input {
+    -webkit-transition: all 200ms ease 0s;
+    -moz-transition: all 200ms ease 0s;
+    -o-transition: all 200ms ease 0s;
+    transition: all 200ms ease 0s;
+    touch-action: manipulation;
+  }
+
+  label:not(.error) {
+    position: absolute;
+    top: 0;
+    #{direction(left)}: 0;
+    cursor: text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.75rem;
+    width: auto;
+    text-align: direction(left);
+    margin-top: -0.62rem;
+    line-height: normal;
+    color: $greyish;
+    background-color: $white;
+  }
+
+  input::-webkit-input-placeholder,
+  input:-moz-placeholder,
+  input::-moz-placeholder,
+  input:-ms-input-placeholder {
+    opacity: 0;
+    -webkit-transition: inherit;
+    -moz-transition: inherit;
+    -o-transition: inherit;
+    transition: inherit;
+    font-size: 0.75rem;
+  }
+
+  input:focus::-webkit-input-placeholder,
+  input:focus:-moz-placeholder,
+  input:focus::-moz-placeholder,
+  input:focus:-ms-input-placeholder {
+    opacity: 1;
+  }
+
+  input:placeholder-shown ~ label:not(.error) {
+    font-size: 1rem;
+    -webkit-transform: translate(0, 1.5rem);
+    -webkit-transform-origin: left bottom;
+    -moz-transform: translate(0, 1.5rem);
+    -moz-transform-origin: left bottom;
+    -ms-transform: translate(0, 1.5rem);
+    -ms-transform-origin: left bottom;
+    -o-transform: translate(0, 1.5rem);
+    -o-transform-origin: left bottom;
+    transform: translate(0, 1.5rem);
+    transform-origin: left bottom;
+  }
+
+  input:not(:placeholder-shown) ~ label:not(.error),
+  input:focus ~ label:not(.error) {
+    -webkit-transform: translate(0, 0);
+    -moz-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    -o-transform: translate(0, 0);
+    transform: translate(0, 0);
+    cursor: pointer;
+    font-size: 0.75rem;
+    color: $greyish;
+    left: 0;
+  }
+
+  input:focus ~ .bdr-effect {
+    width: 100%;
+    transition: 0.4s;
+    left: 0;
+  }
+
+  input ~ .bdr-effect {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0.12rem;
+    background-color: $windows-blue;
+    transition: 0.4s;
+  }
+
+  input.mce_inline_error ~ .bdr-effect {
+    background-color: $venetian-red;
+  }
+
+  .form-control {
+    display: block;
+    width: 100%;
+    height: 2.12rem;
+    padding: 0.37rem 0;
+    font-size: 1rem;
+    background-color: $white;
+    border-bottom: 0.06rem solid $greyish;
+    border-radius: 0;
+  }
+}
+
+.signup-form #mc_embed_signup form .form--signup-elements div.mce_inline_error {
+  background-color: transparent;
+  color: $venetian-red;
+  padding-left: 0;
+  font-size: 0.75rem;
+}
+
+.signup-form form .row {
+  clear: both;
+
+  &.flex {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+
+    & .flex-child {
+      flex: 1;
+      width: 50%;
+
+      &:nth-child(2) {
+        padding-#{direction(left)}: 1.25rem;
+      }
+    }
+
+    @include breakpoint($thumb) {
+      display: block;
+
+      .flex-child,
+      .flex-child:nth-child(2) {
+        width: 100%;
+        padding-#{direction(left)}: 0;
+      }
+
+      .form--signup-elements.field-mobile {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.geolocation-common-map-container {
+  display: block;
+}

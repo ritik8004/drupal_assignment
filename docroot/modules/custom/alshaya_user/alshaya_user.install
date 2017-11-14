@@ -122,23 +122,25 @@ function alshaya_user_install() {
   $config->save();
   $config = \Drupal::configFactory()->getEditable('user_registrationpassword.mail');
   $config->set('register_withpassword.subject', 'Account details for [user:name] at [site:name]');
+
   $config->set('register_withpassword.body', '<h1>Hello [user:field_first_name:value],</h1>
 
-Thank you for registering with [site:name] and welcome.
+Thank you for registering with [site:name] and welcome.<br/><br/>
 
-You have registered with the following e-mail address: [user:mail]
+You have registered with the following e-mail address: [user:mail]<br/><br/>
 
-<b>Please verify your email address and activate your account by clicking the below link</b>
-<a href="[user:registrationpassword-url]" class="button">verify your email</a>
+<b>Please verify your email address and activate your account by clicking the below link</b><br/>
+<a href="[user:registrationpassword-url]" class="button">verify your email</a><br/><br/>
 
-Or verify using this link: <a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a>
+Or verify using this link: <a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a><br/><br/>
 
-If you have any questions, check our <a href="[site:url]">FAQs page</a> here or contact our Customer Service team.
+If you have any questions, check our <a href="[site:url]">FAQs page</a> here or contact our Customer Service team.<br/><br/>
 
-Best Wishes,
-The [site:name] Team
-Tel: 182-12-12
+Best Wishes,<br/>
+The [site:name] Team<br/>
+Tel: <a href="tel:+9651821212">(+965) 182-12-12</a><br/>
 <a href="[site:url]">[site:url-brief]</a>');
+
   $config->save();
 
   // Set default body for password reset email.
@@ -146,17 +148,18 @@ Tel: 182-12-12
   $config->set('password_reset.subject', 'Replacement login information for [user:field_first_name:value] at [site:name]');
   $config->set('password_reset.body', '<h1>Hi [user:field_first_name:value]!</h1>
 
-A request to reset the password for your account has been made at [site:name].
+A request to reset the password for your account has been made at [site:name].<br><br>
 
-You may now log in by clicking this link or copying and pasting it into your browser:
+You may now log in by clicking this link or copying and pasting it into your browser:<br><br>
 
-<a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
+<a href="[user:one-time-login-url]">[user:one-time-login-url]</a><br><br>
 
-This link can only be used once to log in and will lead you to a page where you can set your password. It expires after one day and nothing will happen if it\'s not used.
+This link can only be used once to log in and will lead you to a page where you can set your password. It expires after one day and nothing will happen if it\'s not used.<br><br>
 
-Best Wishes,
-The [site:name] Team
-Tel: 182-12-12
+Best Wishes,<br>
+The [site:name] Team<br>
+Tel: <a href="tel:+9651821212">(+965) 182-12-12</a><br/>
 <a href="[site:url]">[site:url-brief]</a>');
+
   $config->save();
 }

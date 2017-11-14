@@ -1,0 +1,14 @@
+.region-secondary-header .menu-language-switcher--desktop {
+  li.ar.is-active {
+    line-height: 25px;
+    padding: 0;
+  }
+
+  li.ar {
+    .language-link {
+      font-family: $cairo;
+      vertical-align: top;
+      padding: 0 0.875rem;
+    }
+  }
+}
