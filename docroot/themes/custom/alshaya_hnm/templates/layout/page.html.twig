@@ -131,9 +131,8 @@
 
         <div class="c-content">
           <div class="c-content__region">
-            {% block page_content %}
-              {{ page.content }}
-            {% endblock %}
+            {{ page.content }}
+            {% block after_content %}{% endblock %}
           </div>
         </div>
 
