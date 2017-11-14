@@ -42,10 +42,3 @@ $dir: rtl;
     }
   }
 }
-
-@include breakpoint($upto-desktop) {
-  .menu__back,
-  .c-menu-primary .my-account-nav ul li::after {
-    transform: rotate(180deg);
-  }
-}

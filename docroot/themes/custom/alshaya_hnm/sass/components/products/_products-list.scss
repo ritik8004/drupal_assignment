@@ -568,6 +568,10 @@
         border: 1px solid $hnm-black-two;
         border-top: none;
         transform: rotate(-90deg);
+
+        html[lang=ar] & {
+          transform: rotate(-270deg);
+        }
       }
     }
 
