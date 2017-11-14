@@ -295,6 +295,18 @@ display:
           expose:
             label: Name
           plugin_id: search_api
+        stock:
+          id: stock
+          table: search_api_index_acquia_search_index
+          field: stock
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
       header:
         result:
           id: result

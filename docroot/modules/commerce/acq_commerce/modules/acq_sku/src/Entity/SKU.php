@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku\Entity;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
@@ -433,6 +434,17 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
+    $fields['stock'] = BaseFieldDefinition::create('integer')
+      ->setLabel(t('Stock'))
+      ->setDescription(t('Stock quantity.'))
+      ->setTranslatable(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'number',
+        'weight' => -10,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['price'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Display Price'))
       ->setDescription(t('Display Price of this SKU.'))
@@ -633,6 +645,25 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
 
     return $fields;
+  }
+
+  /**
+   * Helper function to clear stock cache for particular sku.
+   */
+  public function clearStockCache() {
+    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+
+    if ($stock_mode == 'push') {
+      return;
+    }
+
+    $stock_cid = 'stock:' . $this->getSku();
+
+    // Clear stock cache.
+    \Drupal::cache('stock')->invalidate($stock_cid);
+
+    // Clear product and forms related to sku.
+    Cache::invalidateTags(['acq_sku:' . $this->id()]);
   }
 
 }

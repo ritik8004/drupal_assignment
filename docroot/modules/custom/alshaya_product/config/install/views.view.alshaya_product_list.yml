@@ -473,6 +473,18 @@ display:
           expose:
             label: Price
           plugin_id: search_api
+        stock:
+          id: stock
+          table: search_api_index_product
+          field: stock
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
       title: ''
       header:
         result:
@@ -583,6 +595,18 @@ display:
           exposed: true
           expose:
             label: Price
+          plugin_id: search_api
+        stock:
+          id: stock
+          table: search_api_index_product
+          field: stock
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
           plugin_id: search_api
     cache_metadata:
       max-age: -1

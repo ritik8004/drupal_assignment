@@ -10,4 +10,5 @@ dependencies:
   - content_translation
   - form_options_attributes
   - metatag
+  - pcb
   - views

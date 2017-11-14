@@ -340,21 +340,9 @@ function _acq_sku_clean_process(&$context) {
  */
 function drush_acq_sku_get_stock_cache($sku) {
   if ($sku_entity = SKU::loadFromSku($sku)) {
-    // Clear stock cache for particular sku in all languages.
-    foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
-      $sku_entity_to_get_stock = $sku_entity->getTranslation($langcode);
-
-      // Get the stock cache id.
-      $stock_cid = acq_sku_get_stock_cache_id($sku_entity_to_get_stock);
-
-      // Get particular cache.
-      if ($cache = \Drupal::cache('stock')->get($stock_cid)) {
-        drush_print(dt('@langcode: !stock', [
-          '@langcode' => $langcode,
-          '!stock' => print_r($cache->data, TRUE),
-        ]));
-      }
-    }
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
+    $plugin = $sku_entity->getPluginInstance();
+    drush_print($plugin->getProcessedStock($sku_entity));
   }
   else {
     drush_print(dt('SKU not found.'));
@@ -368,7 +356,7 @@ function drush_acq_sku_clean_stock_cache() {
   // Check if we are asked to clear cache of specific SKU.
   if ($sku = drush_get_option('sku', '')) {
     if ($sku_entity = SKU::loadFromSku($sku)) {
-      acq_sku_clear_sku_stock_cache($sku_entity);
+      $sku_entity->clearStockCache();
 
       drush_print(dt('Invalidated stock cache for @sku.', [
         '@sku' => $sku,

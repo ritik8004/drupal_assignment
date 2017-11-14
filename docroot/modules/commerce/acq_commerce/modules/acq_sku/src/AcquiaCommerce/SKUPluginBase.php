@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_sku\AcquiaCommerce;
 
+use Drupal\acq_commerce\Conductor\ConductorException;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -191,6 +192,88 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     }
 
     return $node;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProcessedStock(SKU $sku, $reset = FALSE) {
+    return $this->getStock($sku, $reset);
+  }
+
+  /**
+   * Returns the stock for the given sku.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity object.
+   * @param bool $reset
+   *   Flag to mention if we should always try to get fresh value.
+   *
+   * @return array|mixed
+   *   Available stock quantity.
+   */
+  protected function getStock(SKU $sku, $reset = FALSE) {
+    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+
+    if ($stock_mode == 'push') {
+      return (int) $sku->get('stock')->getString();
+    }
+
+    $stock = NULL;
+
+    // Cache id.
+    $cid = 'stock:' . $sku->getSku();
+
+    $cache = \Drupal::cache('stock')->get($cid);
+
+    // If information is cached.
+    if (!$reset && !empty($cache)) {
+      $stock = $cache->data;
+    }
+    else {
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('acq_commerce.api');
+
+      // Update API context to match the store id with requested langcode.
+      $api_wrapper->updateStoreContext(acq_commerce_get_store_id_from_langcode($sku->language()->getId()));
+
+      try {
+        // Get the stock.
+        $stock_info = $api_wrapper->skuStockCheck($sku->getSku());
+      }
+      catch (ConductorException $e) {
+        // Log the stock error, do not throw error if stock info is missing.
+        \Drupal::logger('acq_sku')->warning('Unable to get the stock for @sku : @message', [
+          '@sku' => $sku->getSku(),
+          '@message' => $e->getMessage(),
+        ]);
+
+        // We will cache this also for sometime to reduce load.
+        $stock_info['is_in_stock'] = FALSE;
+      }
+
+      // Magento uses additional flag as well for out of stock.
+      if (isset($stock_info['is_in_stock']) && empty($stock_info['is_in_stock'])) {
+        $stock_info['quantity'] = 0;
+      }
+
+      $stock = $stock_info['quantity'];
+
+      // If cache multiplier is zero we don't cache the stock.
+      if ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
+        $default_cache_lifetime = $stock ? $stock * $cache_multiplier : $cache_multiplier;
+        $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
+
+        // Calculate the timestamp when we want the cache to expire.
+        $stock_cache_lifetime = min($default_cache_lifetime, $max_cache_lifetime);
+        $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
+
+        // Set the stock in cache.
+        \Drupal::cache('stock')->set($cid, $stock, $expire);
+      }
+    }
+
+    return $stock;
   }
 
 }

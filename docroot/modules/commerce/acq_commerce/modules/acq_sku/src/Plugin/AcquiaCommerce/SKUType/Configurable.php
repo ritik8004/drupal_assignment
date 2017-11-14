@@ -4,7 +4,6 @@ namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Link;
@@ -262,11 +261,7 @@ class Configurable extends SKUPluginBase {
       }
       catch (\Exception $e) {
         // Clear stock cache.
-        $stock_cid = acq_sku_get_stock_cache_id($tree_pointer);
-        \Drupal::cache('stock')->invalidate($stock_cid);
-
-        // Clear product and forms related to sku.
-        Cache::invalidateTags(['acq_sku:' . $tree_pointer->id()]);
+        $tree_pointer->clearStockCache();
 
         // Dispatch event so action can be taken.
         $dispatcher = \Drupal::service('event_dispatcher');
@@ -502,6 +497,37 @@ class Configurable extends SKUPluginBase {
     $url = $display_node->toUrl();
     $link = Link::fromTextAndUrl($label, $url)->toRenderable();
     return render($link);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProcessedStock(SKU $sku, $reset = FALSE) {
+    static $stock = [];
+
+    if (!$reset && isset($stock[$sku->getSku()])) {
+      return $stock[$sku->getSku()];
+    }
+
+    $quantities = [];
+
+    foreach ($sku->get('field_configured_skus') as $child_sku) {
+      try {
+        $child_sku_entity = SKU::loadFromSku($child_sku->getString());
+
+        if ($child_sku_entity instanceof SKU) {
+          $quantities[$child_sku_entity->getSku()] = (int) $this->getStock($child_sku_entity, $reset);
+        }
+      }
+      catch (\Exception $e) {
+        // Child SKU might be deleted or translation not available.
+        // Log messages are already set in previous functions.
+      }
+    }
+
+    $stock[$sku->getSku()] = empty($quantities) ? 0 : max($quantities);
+
+    return $stock[$sku->getSku()];
   }
 
 }
