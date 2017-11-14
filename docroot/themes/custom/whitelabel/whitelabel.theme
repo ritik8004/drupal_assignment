@@ -88,28 +88,38 @@ function whitelabel_preprocess_block(&$variables) {
     $machine_name = $elements_id;
   }
 
-  if ($machine_name == 'todaysoffer') {
+  if (in_array($machine_name, ['todaysoffer', 'today_s_offer'])) {
+    $lang = \Drupal::languageManager()->getCurrentLanguage();
+    $lang_code = $lang->getId();
+    $link_options = ['language' => $lang];
+    $variables['#cache']['contexts'][] = 'session';
+  }
+
+  if ($machine_name == 'todaysoffer' && alshaya_master_detect_device() == 'mobile') {
+
     if ($variables['content']) {
       // Make label a link to redirect to today's offer page on mobile.
       $label = $variables['label'];
-      $variables['label'] = [
+      $element['label'] = [
         '#type' => 'link',
         '#title' => $label,
-        '#url' => Url::fromUri('internal:/todays-offer'),
+        '#url' => Url::fromUri('internal:/todays-offer', $link_options),
         '#options' => [
           'attributes' => [
             'class' => ['mobile-link'],
           ],
         ],
       ];
+
+      // Change default label with link.
+      $variables['label'] = [
+        '#markup' => \Drupal::service('renderer')->render($element),
+      ];
     }
   }
 
   if ($machine_name == 'today_s_offer') {
     if ($variables['content']) {
-      $lang = \Drupal::languageManager()->getCurrentLanguage();
-      $lang_code = $lang->getId();
-      $link_options = ['language' => $lang];
       // If the block is added to block reference paragraph type.
       if ($machine_name != $block_content) {
         // Get the referer path.
@@ -129,25 +139,6 @@ function whitelabel_preprocess_block(&$variables) {
           ],
         ];
       }
-
-      // Make label a link to redirect to today's offer page on mobile.
-      $label = $variables['label'];
-      $element['label'] = [
-        '#type' => 'link',
-        '#title' => $label,
-        '#url' => Url::fromUri('internal:/todays-offer', $link_options),
-        '#options' => [
-          'attributes' => [
-            'class' => ['mobile-link'],
-          ],
-        ],
-      ];
-
-      // Change default label with link.
-      $variables['label'] = [
-        '#markup' => \Drupal::service('renderer')->render($element),
-      ];
-
     }
   }
 }
@@ -422,4 +413,15 @@ function whitelabel_preprocess_html(&$variables) {
       $html_head[$index][0]['#attributes']['content'] .= ', user-scalable=no';
     }
   }
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function whitelabel_js_alter(&$javascript) {
+  $jquery_widget = 'themes/custom/whitelabel/libraries/jquery-ui/1.11.0/widget.js';
+
+  // Alter jquery.ui widget-min.js v1.11.4 with v1.11.0
+  // to enable support for Internet Explorer 10.
+  $javascript['core/assets/vendor/jquery.ui/ui/widget-min.js']['data'] = $jquery_widget;
 }

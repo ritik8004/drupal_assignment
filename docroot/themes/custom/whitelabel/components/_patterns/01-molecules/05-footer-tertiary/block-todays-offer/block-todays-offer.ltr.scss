@@ -61,7 +61,7 @@
 
     @include breakpoint($above-palm) {
       position: fixed;
-      bottom: 0;
+      bottom: -1px;
       left: 50%;
       right: auto;
       transform: translateX(-50%);

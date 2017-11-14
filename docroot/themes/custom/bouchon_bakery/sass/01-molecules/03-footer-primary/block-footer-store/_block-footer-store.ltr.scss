@@ -1,0 +1,81 @@
+.region-footer-primary .block-find-store-heading {
+  background-color: $grey-smoke;
+  color: $white;
+  font-size: 0.875rem;
+  text-align: center;
+  padding-top: 0.625rem;
+  padding-bottom: 0.3125rem;
+  position: relative;
+  margin: 1.25rem 0 0;
+  top: auto;
+  #{direction(right)}: auto;
+  z-index: $z-1;
+
+  html[lang=ar] & {
+    left: auto;
+  }
+
+  @include breakpoint($upto-palm) {
+    display: none;
+  }
+
+  @include breakpoint($desk) {
+    top: auto;
+    #{direction(right)}: auto;
+
+    html[lang=ar] & {
+      left: auto;
+      word-spacing: 0.125rem;
+    }
+  }
+
+  h2 {
+    font-size: 1rem;
+    letter-spacing: 0.0625rem;
+    font-family: $beton-bold;
+    color: $brown;
+    text-transform: uppercase;
+    margin-bottom: 0.1875rem;
+
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
+  }
+
+  a {
+    color: $brownish-grey;
+    font-family: $ideal-sans;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+
+    @include breakpoint($above-palm) {
+      font-size: 0.875rem;
+      margin-#{direction(right)}: 0;
+    }
+
+    @include breakpoint($desk) {
+      margin-#{direction(right)}: 0;
+    }
+
+    @include icon(mappin, before) {
+      font-size: 1.2rem;
+      padding-#{direction(right)}: 0;
+      text-decoration: none;
+      vertical-align: bottom;
+      display: inline-block;
+    }
+
+    @include breakpoint($upto-palm) {
+      text-transform: uppercase;
+      text-decoration: none;
+
+      &::before {
+        content: none;
+      }
+    }
+  }
+}
+
+.block-find-store-heading--pl {
+  position: static !important;
+}

@@ -91,7 +91,11 @@
   margin: 0.75rem 0.5rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: $hnm-black-two;
+  color: $black-two;
+
+  @include breakpoint($desktop) {
+    font-family: $hnm-bold;
+  }
 }
 
 .c-facet__blocks {

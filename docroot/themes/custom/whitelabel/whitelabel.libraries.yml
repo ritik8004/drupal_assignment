@@ -194,6 +194,10 @@ field-promo-block:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/field-promo-block/field-promo-block.ltr.css: {}
 
+utils:
+  js:
+    components/js/utils.js: {}
+
 field-slider:
   css:
     theme:
@@ -202,6 +206,7 @@ field-slider:
     components/js/field-slider.js: {}
   dependencies:
     - whitelabel/slick
+    - whitelabel/utils
 
 field-product-listing:
   css:
@@ -298,6 +303,12 @@ block-footer-language:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/03-footer-primary/block-footer-language/block-footer-language.ltr.css: {}
+  js:
+    components/dist/js/01-molecules/03-footer-primary/block-footer-language/one-time-language-selector.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.cookie
 
 block-todays-offer:
   version: VERSION
@@ -324,3 +335,21 @@ paragraph-title-textarea:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/paragraph-title-textarea/paragraph-title-textarea.ltr.css: {}
+
+block-admin-tabs:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/block-admin-tabs/block-admin-tabs.ltr.css: {}
+
+menu-admin-task:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/block-admin-tabs/menu-admin-task.ltr.css: {}
+
+status-message:
+  version: VERSION
+  css:
+    theme:
+      components/dist/css/_patterns/01-molecules/06-content/status-message/status-message.ltr.css: {}

@@ -249,7 +249,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['totals']['sub']['label'] = ['#markup' => t('Sub total')];
   $form['totals']['grand']['label'] = ['#markup' => t('Order Total <span>(Before Delivery)</span>')];
   // Adding vat text to cart.
-  if ($vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text.value')) {
+  if ($vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text')) {
     $form['totals']['vat_tax'] = [
       'label' => [
         '#markup' => '',
@@ -483,6 +483,7 @@ function alshaya_acm_get_cart_items_by_sku() {
 function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['quantity']['#type'] = 'select';
   $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
+  $form['quantity']['#validated'] = TRUE;
   unset($form['quantity']['#size']);
 
   if (isset($form['ajax'], $form['ajax']['configurables'])) {

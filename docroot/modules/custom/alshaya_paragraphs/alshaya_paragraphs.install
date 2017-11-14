@@ -2,15 +2,26 @@
 
 /**
  * @file
- * Install file for alshaya_paragraphs.
+ * Contains install, update, uninstall hooks for alshaya_paragraphs module.
  */
 
 /**
  * Implements hook_update_n().
  *
- * Create Image+title+subtitle paragraph type.
+ * Create new paragraph types.
  */
 function alshaya_paragraphs_update_8101() {
+  $modules = [
+    'alshaya_config',
+    'viewsreference',
+    'alshaya_media',
+  ];
+
+  foreach ($modules as $module) {
+    if (!\Drupal::moduleHandler()->moduleExists($module)) {
+      \Drupal::service('module_installer')->install([$module], TRUE);
+    }
+  }
 
   $configs = [
     // Image + title + subtitle paragraph type.
@@ -84,6 +95,15 @@ function alshaya_paragraphs_update_8101() {
     'core.entity_form_display.paragraph.1_row_1_col.default',
     'field.field.paragraph.1_row_1_col.field_promo_block',
     'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    // Video paragraph type.
+    'paragraphs.paragraphs_type.video',
+    'field.field.paragraph.banner.field_video',
+    'field.field.paragraph.video.field_video',
+    'field.storage.paragraph.field_video',
+    'core.entity_form_display.paragraph.video.default',
+    'core.entity_view_display.paragraph.video.default',
+    'core.entity_form_display.paragraph.banner.default',
+    'core.entity_view_display.paragraph.banner.default',
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
@@ -117,4 +137,14 @@ function alshaya_paragraphs_update_8301() {
 
   // Update the installed config.
   alshaya_config_install_configs(['field.field.paragraph.promo_block.field_banner'], 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update paragraphs.
+ */
+function alshaya_paragraphs_update_8001() {
+  $paragraph_banner_target = \Drupal::configFactory()->getEditable('core.entity_view_display.paragraph.banner.default');
+  $paragraph_banner_target->set('content.field_link.settings.target', '0')->save();
 }

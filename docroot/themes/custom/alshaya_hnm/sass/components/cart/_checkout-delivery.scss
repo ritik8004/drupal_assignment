@@ -50,6 +50,11 @@
         padding-bottom: 1rem;
         margin-top: 2.75rem !important;
 
+        &.form-item-member-delivery-home-address-form-form-mobile-number-country-code {
+          padding-bottom: 0;
+          margin-top: 0.875rem !important;
+        }
+
         label {
           top: -1.375rem;
           font-size: 0.75rem;
@@ -282,7 +287,7 @@
         width: 47.44%;
 
         html[lang=ar] & {
-          width: 46.96%;
+          width: 46.983%;
         }
 
         &.tab-home-delivery {
@@ -629,6 +634,12 @@
     width: 100%;
     float: $left;
 
+    #payment_method_cybersource {
+      #payment_method_title_cybersource {
+        border-bottom: none;
+      }
+    }
+
     &:last-child {
       .payment-plugin-wrapper-div {
         border-bottom: 1px solid $grey4;
@@ -648,7 +659,9 @@
           background-size: 100%;
         }
 
-        @include icon(radio-filled, before);
+        @include icon(radio-filled, before) {
+          top: 0.9375rem;
+        }
       }
 
       &.has-description.plugin-selected {
@@ -1150,18 +1163,6 @@ html[lang=ar] {
         }
       }
     }
-  }
-}
-
-// Showing label on mobile number field.
-.address-book-address .mobile-number-field {
-  > label {
-    position: static !important;
-    line-height: 2.2;
-  }
-
-  .form-type-textfield input[type=text] {
-    padding-bottom: 0.25rem !important;
   }
 }
 

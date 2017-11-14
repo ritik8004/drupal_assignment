@@ -297,12 +297,15 @@
     }
 
     a {
-      text-decoration: underline;
       float: $right;
       font-size: 0.75rem;
       color: $hnm-black-two;
       font-weight: normal;
       font-family: $hnm-demibold;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 

@@ -1,0 +1,7 @@
+alshaya_paragraphs.paragraphs_custom_config:
+  type: config_object
+  label: 'Paragraphs Custom Configuration'
+  mapping:
+    promo_block_display:
+      type: integer
+      label: 'Promo block display'

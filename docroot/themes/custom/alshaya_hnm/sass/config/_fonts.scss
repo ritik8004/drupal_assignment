@@ -204,6 +204,7 @@ $arial-nodir: 'arialmt', arial, sans-serif;
 
 // Icon Fonts
 $icons: (
+  login: "\e929",
   chevrondown: "\25bd",
   chevronleft: "\e901",
   chevronright: "\e902",
@@ -216,7 +217,7 @@ $icons: (
   check-box-empty: "\e909",
   check-box-filled: "\e90a",
   delivery: "\e90b",
-  sirection-fill: "\e90c",
+  direction-fill: "\e90c",
   direction-stroke: "\e90d",
   dropdown-collapse: "\e90e",
   dropdown-expand: "\e90f",
@@ -241,7 +242,6 @@ $icons: (
   map: "\e922",
   mylocation: "\e923",
   newsletter: "\e924",
-  next-day-delivery: "\e925",
   rewards: "\e926",
   language: "\e927",
   info: "\e928",

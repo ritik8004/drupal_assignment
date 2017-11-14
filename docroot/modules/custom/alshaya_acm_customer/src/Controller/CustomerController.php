@@ -198,7 +198,7 @@ class CustomerController extends ControllerBase {
 
     $build['#print_link'] = Url::fromRoute('alshaya_acm_customer.orders_print', ['user' => $user->id(), 'order_id' => $order_id]);
     $build['#account'] = $account;
-    if ($vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text.value')) {
+    if ($vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text')) {
       $build['#vat_text'] = $vat_text;
     }
     $build['#theme'] = 'user_order_detail';
@@ -262,7 +262,7 @@ class CustomerController extends ControllerBase {
     ];
     $build['#barcode'] = alshaya_acm_customer_get_barcode($order);
     $build['#account'] = $account;
-    if ($vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text.value')) {
+    if ($vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text')) {
       $build['#vat_text'] = $vat_text;
     }
     $build['#theme'] = 'user_order_print';

@@ -39,5 +39,15 @@
     .c-department {
       margin-top: 0;
     }
+
+    .field--name-field-1-row-2-col {
+      .c-promo-1-1--eq__item {
+        width: 100%;
+
+        &:first-child {
+          margin-bottom: 0.75rem;
+        }
+      }
+    }
   }
 }

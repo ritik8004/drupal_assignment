@@ -295,10 +295,6 @@ html[lang="ar"] {
         width: 103% !important;
       }
     }
-
-    .mobile-number-field .form-type-textfield input {
-      height: 1.67rem;
-    }
   }
 
   @include breakpoint($upto-desktop) {

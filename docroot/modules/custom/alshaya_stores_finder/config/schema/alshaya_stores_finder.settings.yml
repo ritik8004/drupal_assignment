@@ -30,11 +30,3 @@ alshaya_stores_finder.settings:
         use_default:
           type: boolean
           label: 'Use the default marker icon supplied by the module.'
-
-block.settings.alshaya_stores_finder:
-  type: block_settings
-  label: 'Alshaya stores finder'
-  mapping:
-    link_title:
-      type: label
-      label: 'Link title'
