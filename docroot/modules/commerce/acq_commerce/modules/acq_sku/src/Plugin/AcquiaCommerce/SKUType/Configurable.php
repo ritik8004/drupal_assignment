@@ -44,6 +44,8 @@ class Configurable extends SKUPluginBase {
     ];
 
     $configurables = unserialize($sku->field_configurable_attributes->getString());
+    $configurable_form_settings = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings');
+    $configurable_weights = $configurable_form_settings->get('attribute_weights');
 
     foreach ($configurables as $configurable) {
       $attribute_code = $configurable['code'];
@@ -77,6 +79,7 @@ class Configurable extends SKUPluginBase {
           '#type' => 'select',
           '#title' => $configurable['label'],
           '#options' => $sorted_options,
+          '#weight' => $configurable_weights[$attribute_code],
           '#required' => TRUE,
           '#ajax' => [
             'callback' => [$this, 'configurableAjaxCallback'],
@@ -102,6 +105,7 @@ class Configurable extends SKUPluginBase {
       '#title' => t('Quantity'),
       '#type' => 'number',
       '#default_value' => 1,
+      '#access' => $configurable_form_settings->get('show_quantity'),
       '#required' => TRUE,
       '#size' => 2,
     ];
