@@ -1,0 +1,14 @@
+.vat-text,
+.vat-text-footer {
+  font-family: $hnm-regular;
+  font-size: 0.75rem;
+  color: $light-greyish;
+
+  .c-pdp & {
+    margin: 0.5rem 0;
+  }
+
+  .checkout & {
+    margin: 1rem 0;
+  }
+}
