@@ -76,7 +76,7 @@
             centerMode: false,
             infinite: false,
             focusOnSelect: true,
-            initialSlide: 1
+            initialSlide: 0
           };
 
           var gallery = $('#product-image-gallery-mob');
