@@ -419,8 +419,9 @@ function _alshaya_addressbook_area_list($country_code = 'KW') {
   if (!empty($term_tree)) {
     /* \Drupal\taxonomy\Entity\Term $term */
     foreach ($term_tree as $term) {
-      // If DM is 2, we skip terms, where parent = 0, as they are governates.
-      if (\Drupal::config('alshaya_api.settings')->get('dm_version') == 2
+      // @todo: Convert DM version into a constant.
+      if (\Drupal::config('alshaya_addressbook.settings')->get('dm_version') == 2
+      // If DM is 2 and where parent = 0, we skip terms as they are governates.
       && empty(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($term->id()))) {
         continue;
       }
@@ -428,6 +429,7 @@ function _alshaya_addressbook_area_list($country_code = 'KW') {
       $area_list[$term->getName()] = $term->getName();
     }
   }
+  asort($area_list);
 
   return $area_list;
 }

@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_addressbook;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -42,6 +43,13 @@ class AlshayaAddressBookManager {
   protected $termStorage;
 
   /**
+   * Alshaya API Wrapper object.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $alshayaApiWrapper;
+
+  /**
    * AlshayaAddressBookManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -52,12 +60,15 @@ class AlshayaAddressBookManager {
    *   The MobileNumber util service object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshayaApiWrapper
+   *   Alshaya API Wrapper object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, MobileNumberUtilInterface $mobile_util, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, MobileNumberUtilInterface $mobile_util, LoggerChannelFactoryInterface $logger_factory, AlshayaApiWrapper $alshayaApiWrapper) {
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->apiWrapper = $api_wrapper;
     $this->mobileUtil = $mobile_util;
+    $this->alshayaApiWrapper = $alshayaApiWrapper;
     $this->logger = $logger_factory->get('alshaya_addressbook');
   }
 
@@ -355,6 +366,37 @@ class AlshayaAddressBookManager {
   }
 
   /**
+   * Helper method to fetch TID from area vocab, from the param provided.
+   *
+   * @param array $conditions
+   *   An array of associative array containing conditions, to be used in query,
+   *   with following elements:
+   *   - 'field': Name of the field being queried.
+   *   - 'value': The value for field.
+   *   - 'operator': Possible values like '=', '<>', '>', '>=', '<', '<='.
+   *
+   * @return array
+   *   Array of term objects.
+   */
+  private function getLocationTerms(array $conditions = []) {
+    $terms = [];
+    $query = \Drupal::entityQuery('taxonomy_term')
+      ->condition('vid', self::AREA_VOCAB);
+    foreach ($conditions as $condition) {
+      if (!empty($condition['field']) && !empty($condition['value'])) {
+        $condition['operator'] = empty($condition['operator']) ? '=' : $condition['operator'];
+        $query->condition($condition['field'], $condition['value'], $condition['operator']);
+      }
+    }
+    $tids = $query->execute();
+    if (!empty($tids)) {
+      $terms = Term::loadMultiple($tids);
+    }
+
+    return $terms;
+  }
+
+  /**
    * Convert magento address into drupal address.
    *
    * @param array $address
@@ -376,16 +418,21 @@ class AlshayaAddressBookManager {
     $magento_address['extension']['address_block_segment'] = (string) $address['locality'];
     $magento_address['country_id'] = $address['country_code'];
 
-    $areaTerm = current($this->getLocationTerm([
+    $areaTerm = current($this->getLocationTerms([
       [
         'field' => 'name',
         'value' => $magento_address['extension']['address_area_segment'],
       ],
     ]));
-    $magento_address['extension']['area'] = $areaTerm->get('field_location_id')->getString();
 
-    $governateTerm = current($this->termStorage->loadParents($areaTerm->id()));
-    $magento_address['extension']['governate'] = $governateTerm->get('field_location_id')->getString();
+    if (!empty($areaTerm)) {
+      $governateTerm = current($this->termStorage->loadParents($areaTerm->id()));
+    }
+
+    if (!empty($areaTerm) && !empty($governateTerm)) {
+      $magento_address['extension']['area'] = $areaTerm->get('field_location_id')->getString();
+      $magento_address['extension']['governate'] = $governateTerm->get('field_location_id')->getString();
+    }
 
     // City is core attribute in Magento and hard to remove validation.
     $magento_address['city'] = '&#8203;';
@@ -483,7 +530,7 @@ class AlshayaAddressBookManager {
 
     // @todo: Translations missing.
     /** @var \Drupal\taxonomy\Entity\Term $term */
-    $term = current($this->getLocationTerm([
+    $term = current($this->getLocationTerms([
       [
         'field' => 'field_location_id',
         'value' => $termData['field_location_id'],
@@ -511,34 +558,52 @@ class AlshayaAddressBookManager {
   }
 
   /**
-   * Helper method to fetch TID from area vocab, from the param provided.
-   *
-   * @param array $conditions
-   *   An array of associative array containing conditions, to be used in query,
-   *   with following elements:
-   *   - 'field': Name of the field being queried.
-   *   - 'value': The value for field.
-   *   - 'operator': Possible values like '=', '<>', '>', '>=', '<', '<='.
-   *
-   * @return array
-   *   Array of term objects.
+   * Function to sync areas for delivery matrix.
    */
-  private function getLocationTerm(array $conditions = []) {
-    $terms = [];
-    $query = \Drupal::entityQuery('taxonomy_term')
-      ->condition('vid', self::AREA_VOCAB);
-    foreach ($conditions as $condition) {
-      if (!empty($condition['field']) && !empty($condition['value'])) {
-        $condition['operator'] = empty($condition['operator']) ? '=' : $condition['operator'];
-        $query->condition($condition['field'], $condition['value'], $condition['operator']);
-      }
-    }
-    $tids = $query->execute();
-    if (!empty($tids)) {
-      $terms = Term::loadMultiple($tids);
-    }
+  public function syncAreas() {
+    $governates = $this->alshayaApiWrapper->getLocations('attribute_id', 'governate');
+    if (!empty($governates['items'])) {
+      $termsProcessed = [];
+      foreach ($governates['items'] as $governate) {
+        // Assuming Parent ID is 0, for Governates.
+        $governateData = [
+          'name' => $governate['labels'][0],
+          'field_location_id' => $governate['location_id'],
+          'parent' => 0,
+        ];
+        /** @var \Drupal\taxonomy\Entity\Term $governateTerm */
+        $governateTerm = $this->updateLocation($governateData);
+        $termsProcessed[] = $governate['location_id'];
 
-    return $terms;
+        // Fetch area's under this governate.
+        $areas = $this->alshayaApiWrapper->getLocations('parent_id', $governate['location_id']);
+        if (!empty($areas['items'])) {
+          foreach ($areas['items'] as $area) {
+            $areaData = [
+              'name' => $area['labels'][0],
+              'field_location_id' => $area['location_id'],
+              'parent' => $governateTerm->id(),
+            ];
+            $this->updateLocation($areaData);
+            $termsProcessed[] = $area['location_id'];
+          }
+        }
+      }
+
+      // Delete the excess terms that exist.
+      if (!empty($termsProcessed)) {
+        $result = \Drupal::entityQuery('taxonomy_term')
+          ->condition('vid', self::AREA_VOCAB)
+          ->condition('field_location_id', $termsProcessed, 'NOT IN')
+          ->execute();
+
+        if ($result) {
+          $terms = $this->termStorage->loadMultiple($result);
+          $this->termStorage->delete($terms);
+        }
+      }
+
+    }
   }
 
 }

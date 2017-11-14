@@ -7,12 +7,7 @@
 
 use Drupal\Core\Site\Settings;
 
-/**
- * Implements hook_update_N().
- */
-function alshaya_api_update_8301() {
-  alshaya_config_install_configs(['alshaya_api.settings'], 'alshaya_api');
-}
+// @todo: Write an update hook to install the schema config object.
 
 /**
  * Implements hook_install().
