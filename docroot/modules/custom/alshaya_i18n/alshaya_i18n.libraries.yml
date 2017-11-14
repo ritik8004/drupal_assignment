@@ -1,0 +1,8 @@
+language_selection:
+  version: 1.x
+  js:
+    js/alshaya_i18n.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/jquery.cookie

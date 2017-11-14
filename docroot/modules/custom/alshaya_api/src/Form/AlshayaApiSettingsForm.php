@@ -35,7 +35,15 @@ class AlshayaApiSettingsForm extends ConfigFormBase {
     $config->set('verify_ssl', $form_state->getValue('verify_ssl'));
     $config->set('token_cache_time', $form_state->getValue('token_cache_time'));
     $config->set('username', $form_state->getValue('username'));
-    $config->set('password', $form_state->getValue('password'));
+
+    // Update value for password in config only if it is changed.
+    // Password is required and it will never be empty string.
+    // But since we use password field, value won't be available when
+    // re-saving the form.
+    if ($form_state->getValue('password')) {
+      $config->set('password', $form_state->getValue('password'));
+    }
+
     $config->save();
 
     return parent::submitForm($form, $form_state);

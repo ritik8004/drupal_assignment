@@ -225,7 +225,7 @@ class SkuManager {
    * @return array
    *   Minimum final price and associated initial price.
    */
-  protected function getMinPrices(SKU $sku_entity) {
+  public function getMinPrices(SKU $sku_entity) {
     $prices = [
       'price' => (float) $sku_entity->get('price')->getString(),
       'final_price' => (float) $sku_entity->get('final_price')->getString(),

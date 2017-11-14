@@ -132,6 +132,9 @@
         <div class="c-content">
           <div class="c-content__region">
             {{ page.content }}
+            {% block page_content %}
+              {{ page.content }}
+            {% endblock %}
           </div>
         </div>
 

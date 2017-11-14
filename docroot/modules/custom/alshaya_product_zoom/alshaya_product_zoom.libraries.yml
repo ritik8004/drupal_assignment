@@ -24,7 +24,6 @@ lightslider:
 product.cloud_zoom:
   version: 1.x
   js:
-    js/hammer.min.js: {}
     js/alshaya_product_zoom.js: {}
     js/alshaya_product_mobile_zoom.js: {}
   css:

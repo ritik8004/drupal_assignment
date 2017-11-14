@@ -1,0 +1,6 @@
+.region-secondary-header .block-store-link {
+  @include breakpoint($above-palm) {
+    font-family: $lato-regular;
+    text-transform: capitalize;
+  }
+}
