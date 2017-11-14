@@ -90,3 +90,11 @@ input::-ms-reveal {
     }
   }
 }
+
+input,
+textarea {
+  &.error {
+    border-color: $red-error !important;
+    border-width: 0 0 0.125rem !important;
+  }
+}
