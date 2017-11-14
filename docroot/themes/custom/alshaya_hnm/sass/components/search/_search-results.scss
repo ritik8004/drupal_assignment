@@ -228,8 +228,8 @@ header,
 
 .search-api-autocomplete-suggestion {
   font-size: 0.875rem;
-  padding-#{$left}: 0.25rem;
   line-height: 1.36;
+  letter-spacing: 0.5px;
 }
 
 .form-autocomplete.ui-autocomplete-loading {

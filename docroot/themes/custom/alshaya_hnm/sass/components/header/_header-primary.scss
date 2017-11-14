@@ -196,6 +196,7 @@ header {
       background-image: none;
       letter-spacing: 1px;
       color: $grey6;
+      padding-#{$left}: 0.4375rem;
 
       @include breakpoint($only-mobile) {
         padding: 0.625rem;
