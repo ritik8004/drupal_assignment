@@ -139,8 +139,10 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         // Change the title of facet when open.
         var priceCurrency = settings.alshaya_search_price_currency;
         var $finalPriceBlock = $('#block-skusskureferencefinalprice');
+        var finalPriceBlockSearch = $('#block-finalprice');
         if (priceCurrency) {
           var initialTitle = $finalPriceBlock.find('h3').html();
+          var initialTitleSearch = finalPriceBlockSearch.find('h3').html();
           $finalPriceBlock.find('h3').on('click', function() {
             if ($(this).hasClass('ui-state-active')) {
               $finalPriceBlock.find('h3').html(initialTitle + ' (' + priceCurrency + ')');
@@ -149,12 +151,26 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
               $finalPriceBlock.find('h3').html(initialTitle);
             }
           });
+
+          finalPriceBlockSearch.find('h3').on('click', function() {
+            if ($(this).hasClass('ui-state-active')) {
+              finalPriceBlockSearch.find('h3').html(initialTitleSearch + ' (' + priceCurrency + ')');
+            }
+            else {
+              finalPriceBlockSearch.find('h3').html(initialTitleSearch);
+            }
+          });
         }
 
         // Price facets to respect Soft Limit.
         var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
         var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
         $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
+
+        // Price facets to respect Soft Limit.
+        var facetNameSearch = finalPriceBlockSearch.find('ul').attr('data-drupal-facet-id');
+        var zeroBasedLimitSearch = settings.facets.softLimit[facetNameSearch] - 1;
+        finalPriceBlockSearch.find('li:gt(' + zeroBasedLimitSearch + ')').hide();
       }
 
       $('.ui-autocomplete').on("touchend",function(e) {
