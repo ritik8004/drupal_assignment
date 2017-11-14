@@ -74,25 +74,26 @@ class Configurable extends SKUPluginBase {
         foreach ($tids as $tid => $values) {
           $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
         }
+
+        $form['ajax']['configurables'][$attribute_code] = [
+          '#type' => 'select',
+          '#title' => $configurable['label'],
+          '#options' => $sorted_options,
+          '#weight' => $configurable_weights[$attribute_code],
+          '#required' => TRUE,
+          '#ajax' => [
+            'callback' => [$this, 'configurableAjaxCallback'],
+            'progress' => [
+              'type' => 'throbber',
+              'message' => NULL,
+            ],
+            'wrapper' => 'configurable_ajax',
+          ],
+        ];
       }
       else {
         \Drupal::logger('acq_sku')->info('Product with sku: @sku seems to be configurable without any config options.', ['@sku' => $sku->getSku()]);
       }
-
-      $form['ajax']['configurables'][$attribute_code] = [
-        '#type' => 'select',
-        '#title' => $configurable['label'],
-        '#options' => $sorted_options,
-        '#required' => TRUE,
-        '#ajax' => [
-          'callback' => [$this, 'configurableAjaxCallback'],
-          'progress' => [
-            'type' => 'throbber',
-            'message' => NULL,
-          ],
-          'wrapper' => 'configurable_ajax',
-        ],
-      ];
     }
 
     $form['sku_id'] = [
