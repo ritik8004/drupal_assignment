@@ -109,7 +109,7 @@ jQuery.fn.select2Option = function (options) {
       var selectedText = $(this).attr('class').replace(' picked', '');
       var selectedTextSelector = $(this).closest('ul').siblings('h4.list-title').find('.selected-text');
 
-      if (($(this).attr('data-color-label') !== undefined) && ($(this).attr('data-color-label').length > 0)) {
+      if ((typeof $(this).attr('data-color-label') !== 'undefined') && ($(this).attr('data-color-label').length > 0)) {
         selectedText = $(this).attr('data-color-label');
       }
 
