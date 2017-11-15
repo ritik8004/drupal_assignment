@@ -197,8 +197,15 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
   /**
    * {@inheritdoc}
    */
-  public function getProcessedStock(SKU $sku, $reset = FALSE) {
-    return $this->getStock($sku, $reset);
+  public function getProcessedStock(SKU $sku, $recheck = FALSE, $reset = FALSE) {
+    $stock = (int) $this->getStock($sku, $reset);
+
+    // We reset and check again once if reset is false and recheck is true.
+    if (empty($stock) && $recheck && !$reset) {
+      $stock = (int) $this->getStock($sku, TRUE);
+    }
+
+    return $stock;
   }
 
   /**

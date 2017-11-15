@@ -106,12 +106,14 @@ interface SKUPluginInterface {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU Entity.
+   * @param bool $recheck
+   *   Flag to specify if we should recheck.
    * @param bool $reset
    *   Flag to mention if we should always try to get fresh value.
    *
    * @return mixed
    *   Stock quantity.
    */
-  public function getProcessedStock(SKU $sku, $reset = FALSE);
+  public function getProcessedStock(SKU $sku, $recheck = FALSE, $reset = FALSE);
 
 }
