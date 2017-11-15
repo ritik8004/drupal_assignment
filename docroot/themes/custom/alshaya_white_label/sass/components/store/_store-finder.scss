@@ -240,6 +240,12 @@
     }
   }
 
+  .label--location {
+    .block-store-finder-form__form__label__wrapper {
+      display: inline;
+    }
+  }
+
   .current-location {
     @include breakpoint($only-tablet) {
       #{$left}: 0;
