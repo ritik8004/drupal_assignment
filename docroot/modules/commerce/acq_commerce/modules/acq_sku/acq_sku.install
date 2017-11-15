@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  */
-function acq_sku_update_8001() {
+function acq_sku_update_8002() {
   // Apply updates to add stock field.
   \Drupal::service('entity.definition_update_manager')->applyUpdates();
 
