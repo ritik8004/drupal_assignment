@@ -42,6 +42,8 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
     return !empty($field['index']);
   });
 
+  $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+
   foreach ($items as $item_id => $item) {
     $object = $item->getOriginalObject()->getValue();
 
@@ -62,14 +64,19 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
           continue;
         }
 
-        // For stock index, we use only in stock (1) or out of stock (0).
+        // For stock index, we use only in stock (2) or out of stock (0).
+        // We will use 2 for not-buyable products too.
+        // We will use 1 for all in pull mode.
         $in_stock = 0;
 
-        if (!alshaya_acm_product_is_buyable($sku_entity)) {
+        if ($stock_mode == 'pull') {
           $in_stock = 1;
         }
+        elseif (!alshaya_acm_product_is_buyable($sku_entity)) {
+          $in_stock = 2;
+        }
         elseif (alshaya_acm_get_product_stock($sku_entity)) {
-          $in_stock = 1;
+          $in_stock = 2;
         }
 
         $item->getField('stock')->setValues([$in_stock]);
