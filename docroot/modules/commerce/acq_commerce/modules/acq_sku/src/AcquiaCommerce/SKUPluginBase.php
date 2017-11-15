@@ -280,9 +280,11 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
         // Set the stock in cache.
         \Drupal::cache('stock')->set($cid, $stock, $expire);
 
-        // Also set in SKU for PLP / SEARCH to work properly.
-        $sku->get('stock')->setValue($stock);
-        $sku->save();
+        // Save the value in SKU if we came here as fallback of push mode.
+        if ($stock_mode == 'push') {
+          $sku->get('stock')->setValue($stock);
+          $sku->save();
+        }
       }
     }
 
