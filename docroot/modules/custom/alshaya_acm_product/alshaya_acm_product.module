@@ -269,28 +269,24 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
       elseif ($view_mode == 'full') {
+        $related_items_size = \Drupal::config('alshaya_acm_product.settings')->get('related_items_size');
+
         $up_sell_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_UPSELL);
 
         if (!empty($up_sell_skus)) {
-          $upsell_items = $skuManager->filterRelatedSkus(array_unique($up_sell_skus));
-
-          if (!empty($upsell_items)) {
-            $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $upsell_items));
-            // Weight will have no effect later once template is modified.
-            $build['up_sell']['#weight'] = 10;
-          }
+          $upsell_items = array_slice($up_sell_skus, 0, $related_items_size);
+          $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($upsell_items)));
+          // Weight will have no effect later once template is modified.
+          $build['up_sell']['#weight'] = 10;
         }
 
         $related_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_RELATED);
 
         if (!empty($related_skus)) {
-          $related_items = $skuManager->filterRelatedSkus(array_unique($related_skus));
-
-          if (!empty($related_items)) {
-            $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $related_items));
-            // Weight will have no effect later once template is modified.
-            $build['related']['#weight'] = 11;
-          }
+          $related_items = array_slice($related_skus, 0, $related_items_size);
+          $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', array_unique($related_items)));
+          // Weight will have no effect later once template is modified.
+          $build['related']['#weight'] = 11;
         }
 
         alshaya_acm_product_get_gallery($build, $sku_entity);
