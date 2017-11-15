@@ -467,9 +467,11 @@ function _alshaya_master_mobile_number_process(array &$element, FormStateInterfa
     'profile_address_book_add_form',
     'profile_address_book_edit_form',
     'profile_address_book_form',
+    'multistep_checkout',
   ];
 
   if (in_array($form_state->getBuildInfo()['form_id'], $mobile_number_required_forms)) {
+    $element['mobile']['#attributes']['data-msg-required'] = t('@title is required.', ['@title' => $element['#title']]);
     $element['mobile']['#required'] = TRUE;
   }
 
