@@ -2,8 +2,8 @@
 Feature: Test privilege card features for Guest
 
   Scenario: As a Guest
-  no PC number should be displayed on Order Confirmation page
-  when there is no value on basket page and loyalty block details should appear
+    no PC number should be displayed on Order Confirmation page
+    when there is no value on basket page and loyalty block details should appear
     Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
@@ -40,7 +40,7 @@ Feature: Test privilege card features for Guest
     Then I should see the link "Learn more"
 
   Scenario: As a Guest
-  PC number from the basket should be displayed on Order confirmation page
+    PC number from the basket should be displayed on Order confirmation page
     Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"

@@ -1,10 +1,12 @@
-@1735 @javascript @manual
+@mmcpa-1735 @javascript @manual
 Feature: Search feature
 
   Scenario: As a Guest user
-  I should be able to search products
+    I should be able to search products
     Given I am on homepage
     And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     When I fill in "edit-keywords" with "baby carrier"
     And I press "Search"
     Then I should see Search results page for "baby carrier"
@@ -14,11 +16,15 @@ Feature: Search feature
   I should be able to search products
     Given I am on homepage
     And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     And I follow "عربية"
     When I wait for the page to load
-    When I fill in "edit-keywords" with "Green تي- شيرت"
+    When I fill in "edit-keywords" with "والأزرق"
+#    When I fill in "edit-keywords" with "الرضع"
     And I press "Search"
-    Then I should see Search results page in Arabic for "Green تي- شيرت"
+    Then I should see Search results page in Arabic for "والأزرق"
+#    Then I should see Search results page in Arabic for "الرضع"
 
   Scenario: As an authenticated user
   I should be able to search products
@@ -32,20 +38,24 @@ Feature: Search feature
   @arabic
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     And I follow "عربية"
     When I wait for the page to load
-    When I fill in "edit-keywords" with "Green تي- شيرت"
+    When I fill in "edit-keywords" with "Arb. انت"
+#    When I fill in "edit-keywords" with "الرضع"
     And I press "Search"
     And I wait for the page to load
-    Then I should see Search results page for "Green تي- شيرت"
+    Then I should see Search results page for "Arb. انت"
+#    Then I should see Search results page in Arabic for "الرضع"
 
   Scenario: As an user
-  I should be prompted with a correct message
-  when my search yields no results
+    I should be prompted with a correct message
+    when my search yields no results
     Given I am on homepage
     And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     When I fill in "edit-keywords" with "randomtext"
     And I press "Search"
     Then I should see "Your search did not return any results."
@@ -56,6 +66,8 @@ Feature: Search feature
   when my search yields no results
     Given I am on homepage
     And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     And I follow "عربية"
     When I wait for the page to load
     When I fill in "edit-keywords" with "نص عشوائي"
@@ -63,10 +75,12 @@ Feature: Search feature
     Then I should see "لا يوجد نتائج لبحثك"
 
   Scenario: As a Guest
-  I should be able to search for a product
-  and add it to the cart
+    I should be able to search for a product
+    and add it to the cart
     Given I am on homepage
     And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     When I fill in "edit-keywords" with "green t shirt"
     And I press "Search"
     And I wait for AJAX to finish
@@ -107,9 +121,11 @@ Feature: Search feature
   and add it to the cart on Arabic site
     Given I am on homepage
     And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     And I follow "عربية"
     When I wait for the page to load
-    When I fill in "edit-keywords" with "Green تي- شيرت"
+    When I fill in "edit-keywords" with "ملابس "
     And I press "Search"
     And I wait for AJAX to finish
     When I select a product in stock
@@ -145,34 +161,40 @@ Feature: Search feature
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على"
 
   Scenario: As a Guest user
-  I should be able to sort search results
-  in ascending, descending order
+    I should be able to sort search results
+    in ascending, descending order
     Given I am on homepage
     And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     When I fill in "edit-keywords" with "black"
     And I press "Search"
     And I wait for the page to load
-    When I select "Name A to Z" from "edit-sort-bef-combine"
+    When I select "Name A to Z" from the dropdown
     And I wait 10 seconds
     Then I should see results sorted in ascending order
-    When I select "Name Z to A" from "edit-sort-bef-combine"
+    When I select "Name Z to A" from the dropdown
     And I wait 10 seconds
     Then I should see results sorted in descending order
-    When I select "Price High to Low" from "edit-sort-bef-combine"
+    When I select "Price High to Low" from the dropdown
     And I wait 10 seconds
     Then I should see results sorted in descending price order
-    When I select "Price Low to High" from "edit-sort-bef-combine"
+    When I select "Price Low to High" from the dropdown
     And I wait 10 seconds
     Then I should see results sorted in ascending price order
 
   Scenario: As a Guest user
-  when I type an Arabic term on English site
-  then I should be redirected to to the Arabic site and vice-versa
+    when I type an Arabic term on English site
+    then I should be redirected to to the Arabic site and vice-versa
     Given I am on homepage
     And I wait for the page to load
-    When I fill in "edit-keywords" with "Green تي- شيرت"
+    When I close the popup
+    And I wait 2 seconds
+#    When I fill in "edit-keywords" with "بكحتة"
+    When I fill in "edit-keywords" with "Arb. انت"
     And I press "Search"
-    Then I should see Search results page in Arabic for "Green تي- شيرت"
+#    Then I should see Search results page in Arabic for "بكحتة"
+    Then I should see Search results page in Arabic for "Arb. انت"
     When I fill in "edit-keywords" with "baby"
     And I press "Search"
     When I wait for the page to load

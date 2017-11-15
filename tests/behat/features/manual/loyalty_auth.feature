@@ -7,8 +7,8 @@ Feature:
     And I wait for the page to load
 
   Scenario: As an authenticated user
-  privilege card number should not be displayed on order confirmation page
-  when the field is empty in both my account section and basket page
+    privilege card number should not be displayed on order confirmation page
+    when the field is empty in both my account section and basket page
     When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
@@ -42,8 +42,8 @@ Feature:
     Then I should not see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 0013 - 5844"
 
   Scenario: As an authenticated user
-  PC value from the basket should be displayed on Order confirmation page when my account is null
-  and my account value should not get updated with the basket PC value
+    PC value from the basket should be displayed on Order confirmation page when my account is null
+    and my account value should not get updated with the basket PC value
     When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
@@ -84,8 +84,8 @@ Feature:
     Then I should not see "6362 - 5440 - 1511 - 8942"
 
   Scenario: As an authenticated user
-  no PC number should be displayed on Order confirmation page
-  when the basket value is edited to be null, but my account has a PC number
+    no PC number should be displayed on Order confirmation page
+    when the basket value is edited to be null, but my account has a PC number
     When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""
@@ -127,8 +127,8 @@ Feature:
     Then I should see "6362 - 5440 - 0013 - 5844"
 
   Scenario: As an authenticated user
-  PC value from the basket should be displayed on order confirmation page
-  and not from the my account section
+    PC value from the basket should be displayed on order confirmation page
+    and not from the my account section
     When I follow "edit account details"
     And I wait for the page to load
     When I fill in "edit-field-mobile-number-0-mobile" with ""

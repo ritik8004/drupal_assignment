@@ -447,6 +447,7 @@
       &.form-item-field-address-0-address-mobile-number-country-code {
         padding-bottom: 0;
         margin-top: 0 !important;
+        max-width: 2.8rem;
 
         &::after {
           display: none;
@@ -555,6 +556,18 @@
   .mobile-number-field {
     @include breakpoint($tablet) {
       margin-#{$left}: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$left}: 1.5rem;
+    }
+  }
+
+  #selected-store-elements-wrapper {
+    #edit-cc-mobile-number {
+      & > label {
+        top: -1rem;
+      }
     }
   }
 }
