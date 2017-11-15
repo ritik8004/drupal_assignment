@@ -351,9 +351,15 @@ function drush_acq_sku_sync_stock() {
   $query->isNull('asfd.stock');
   $result = $query->execute()->fetchAllKeyed(0, 0);
 
-  drush_print(sprintf('Found %d skus without stock info, processing.', count($result)));
+  drush_print(sprintf('Found %d skus without stock info.', count($result)));
 
-  $batches = array_chunk($result, 50);
+  if (empty($result)) {
+    return;
+  }
+
+  drush_print('Processing in batches of 25');
+
+  $batches = array_chunk($result, 25);
 
   // Entity storage can blow up with caches so clear them out.
   $container = \Drupal::getContainer();
@@ -361,6 +367,7 @@ function drush_acq_sku_sync_stock() {
   /** @var \Drupal\Core\Entity\EntityManagerInterface $manager */
   $manager = $container->get('entity.manager');
 
+  // We always process for en.
   $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
 
   $counter = 0;
@@ -369,26 +376,39 @@ function drush_acq_sku_sync_stock() {
     foreach ($batch as $sku) {
       $sku_entity = SKU::loadFromSku($sku, $langcode, FALSE, FALSE);
 
-      if ($sku_entity) {
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
-        $plugin = $sku_entity->getPluginInstance();
-        $plugin->getProcessedStock($sku_entity, FALSE, TRUE);
-
-        // Reset static caches to release memory.
-        drupal_static_reset();
-
-        usleep(200);
+      // Sanity check, another process can delete the sku.
+      if (empty($sku_entity)) {
+        continue;
       }
+
+      // Check again this sku doesn't have stock saved once.
+      // Another process might have updated the info while we were processing.
+      $stock = $sku_entity->get('stock')->getString();
+      if (!($stock === '' || $stock === NULL)) {
+        continue;
+      }
+
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
+      $plugin = $sku_entity->getPluginInstance();
+      $plugin->getProcessedStock($sku_entity, FALSE, TRUE);
+
+      // Reset static caches to release memory.
+      drupal_static_reset();
+
+      // Adding sleep of 200 ms to ensure API calls don't overload the server.
+      usleep(200);
     }
 
     $counter++;
 
-    drush_print(sprintf('Processed %d of %d.', $counter * DELETE_BATCH_COUNT, count($result)));
+    drush_print(sprintf('Processed batch %d of %d.', $counter, count($batches)));
 
     foreach ($manager->getDefinitions() as $id => $definition) {
       $manager->getStorage($id)->resetCache();
     }
   }
+
+  drush_print('Done');
 }
 
 /**
