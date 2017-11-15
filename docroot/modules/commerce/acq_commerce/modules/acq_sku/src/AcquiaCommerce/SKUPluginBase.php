@@ -241,9 +241,6 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
       /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
       $api_wrapper = \Drupal::service('acq_commerce.api');
 
-      // Update API context to match the store id with requested langcode.
-      $api_wrapper->updateStoreContext(acq_commerce_get_store_id_from_langcode($sku->language()->getId()));
-
       try {
         // Get the stock.
         $stock_info = $api_wrapper->skuStockCheck($sku->getSku());
