@@ -242,7 +242,7 @@
     @include breakpoint($desktop) {
       clear: both;
       padding-top: 1px;
-      margin-top: 3.813rem;
+      margin-top: 0;
     }
   }
 
@@ -297,7 +297,7 @@
       max-width: 19.75rem;
     }
 
-    @include breakpoint($desktop-wide) {
+    @include breakpoint($desktop) {
       max-width: 24.75rem;
     }
 
