@@ -2,7 +2,7 @@
 Feature: Test the PLP page
 
   Background:
-    Given I am on "/gift-ideas"
+    Given I am on "/baby-clothing-0"
     And I wait for the page to load
 
   Scenario: As a Guest
@@ -22,16 +22,16 @@ Feature: Test the PLP page
 
   Scenario: As a Guest
     I should be able to sort in ascending and descending order the list
-    When I select "Name A to Z" from "edit-sort-bef-combine"
+    When I select "Name A to Z" from the dropdown
     And I wait for the page to load
     Then I should see results sorted in ascending order
-    When I select "Name Z to A" from "edit-sort-bef-combine"
+    When I select "Name Z to A" from the dropdown
     And I wait 15 seconds
     Then I should see results sorted in descending order
-    When I select "Price High to Low" from "edit-sort-bef-combine"
+    When I select "Price High to Low" from the dropdown
     And I wait 15 seconds
     Then I should see results sorted in descending price order
-    When I select "Price Low to High" from "edit-sort-bef-combine"
+    When I select "Price Low to High" from the dropdown
     And I wait 15 seconds
     Then I should see results sorted in ascending price order
 

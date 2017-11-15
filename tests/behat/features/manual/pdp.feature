@@ -1,4 +1,4 @@
-@javascript @manual @mmcpa-2421
+@javascript
 Feature: Test the product detail page
 
   Scenario: As a Guest
@@ -10,14 +10,14 @@ Feature: Test the product detail page
     Then it should display title, price and item code
     Then it should display quantity
     Then I should see the button "Add to basket"
-    Then I should see "Product Description"
+    Then I should see "product description"
     And I should see the link for ".read-more-description-link"
     Then I should see buttons for facebook, Twitter and Pinterest
-    And I should see "Delivery Options"
+    And I should see "delivery options"
     Then I should see "Home Delivery"
-    And I should see "For orders over KWD99"
-    Then I should see "Click and Collect"
-    And I should see "Collect the order from store in 99 days"
+    And I should see "Delivered in 2-5 days for just KWD 1"
+    Then I should see "click and collect"
+    And I should see "FREE delivery to stores across Kuwait in 2-3 days"
     Then I should be able to see the footer
 
   Scenario: As a Guest user
@@ -25,8 +25,8 @@ Feature: Test the product detail page
     Given I am on a simple product page
     And I wait for the page to load
     When I click the label for "#ui-id-2"
-    Then I should see "Standard Delivery"
-    And I should see "(within 4 working days)"
+    Then I should see "to all areas"
+    And I should see "(Kuwait)"
     When I click the label for "#ui-id-2"
     When I click the label for "#ui-id-4"
     Then I should see "This service is "
@@ -66,14 +66,14 @@ Feature: Test the product detail page
     And it should display size
     Then it should display quantity
     Then I should see the button "Add to basket"
-    Then I should see "Product Description"
+    Then I should see "product description"
     And I should see the link for ".read-more-description-link"
     Then I should see buttons for facebook, Twitter and Pinterest
-    And I should see "Delivery Options"
+    And I should see "delivery options"
     Then I should see "Home Delivery"
-    And I should see "For orders over KWD99"
-    Then I should see "Click and Collect"
-    And I should see "Collect the order from store in 99 days"
+    And I should see "Delivered in 2-5 days for just KWD 1"
+    Then I should see "click and collect"
+    And I should see "FREE delivery to stores across Kuwait in 2-3 days"
     Then I should be able to see the footer
 
   Scenario: As a Guest user
@@ -81,8 +81,8 @@ Feature: Test the product detail page
     Given I am on a configurable product
     And I wait for the page to load
     When I click the label for "#ui-id-2"
-    Then I should see "Standard Delivery"
-    And I should see "(within 4 working days)"
+    Then I should see "to all areas"
+    And I should see "(Kuwait)"
     When I click the label for "#ui-id-2"
     When I click the label for "#ui-id-4"
     Then I should see "This service is "
@@ -91,14 +91,14 @@ Feature: Test the product detail page
     And I should see "Check in-store availability"
     When I select the first autocomplete option for "shuwaikh" on the "edit-location" field
     And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then I should see "Shuwaikh Industrial 1, Shuwaikh Industrial, Kuwait"
     And I should see the link for ".change-location-link"
     Then I should see "Other stores nearby"
     When I click the label for ".change-location-link"
     Then I select the first autocomplete option for "kuwait" on the "store-location" field
     And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then I should see "Sharq, Kuwait City, Kuwait"
     When I click the label for ".other-stores-link"
     And I wait for AJAX to finish
@@ -158,7 +158,7 @@ Feature: Test the product detail page
     And I should see "خيارات التوصيل"
     Then I should see "خدمة التوصيل للمنزل"
     Then I should see "اختر واستلم"
-    And I should see "استلم طلبيتك من المحل خلال 99 أيام"
+    And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 2 – 3 أيام"
     Then I should be able to see the footer in Arabic
 
   @arabic
@@ -169,15 +169,15 @@ Feature: Test the product detail page
     When I follow "عربية"
     And I wait for the page to load
     When I click the label for "#ui-id-2"
-    Then I should see "التوصيل العادي"
-    And I should see "(خلال 4 أيام عمل)"
+    Then I should see "لجميع المناطق"
+    And I should see "(الكويت)"
     When I click the label for "#ui-id-2"
     When I click the label for "#ui-id-4"
     Then I should see "استلم من المحل مجاناً"
     And I should see "تحقق من توفر الكمية في المحلات"
     When I select the first autocomplete option for "الشويخ" on the "edit-location" field
     And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I should see the link for ".change-location-link"
     Then I should see "محلات أخرى قريبة إليك"
     When I click the label for ".change-location-link"
@@ -197,14 +197,17 @@ Feature: Test the product detail page
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
-  @arabic
+  @arabic @fail
   Scenario: As a Guest on Arabic site
   I should be able to see all the various sections
   on a configurable product detail page
     Given I am on a configurable product
     And I wait for the page to load
+    When I scroll to x "0" y "0" coordinates of page
     When I follow "عربية"
     And I wait for the page to load
+    When I select a size for the product
+    And I wait for AJAX to finish
     Then I should be able to see the header in Arabic
     Then it should display title, price and item code
     And it should display size
@@ -216,34 +219,35 @@ Feature: Test the product detail page
     And I should see "خيارات التوصيل"
     Then I should see "خدمة التوصيل للمنزل"
     Then I should see "اختر واستلم"
-    And I should see "استلم طلبيتك من المحل خلال 99 أيام"
+    And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 2 – 3 أيام"
     Then I should be able to see the footer in Arabic
 
-  @arabic
+  @arabic @fail
   Scenario: As a Guest user on Arabic site
   I should be able to expand HD and CC on a configurable PDP
     Given I am on a configurable product
     And I wait for the page to load
+    When I scroll to x "0" y "0" coordinates of page
     When I follow "عربية"
     And I wait for the page to load
-    When I follow "4-3‏‏ سنوات"
+    When I select a size for the product
     And I wait for AJAX to finish
     When I click the label for "#ui-id-2"
-    Then I should see "التوصيل العادي"
-    And I should see "(خلال 4 أيام عمل)"
+    Then I should see "لجميع المناطق"
+    And I should see "(الكويت)"
     When I click the label for "#ui-id-2"
     When I click the label for "#ui-id-4"
     Then I should see "استلم من المحل مجاناً"
     And I should see "تحقق من توفر الكمية في المحلات"
     When I select the first autocomplete option for "الشويخ" on the "edit-location" field
     And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I should see the link for ".change-location-link"
     Then I should see "محلات أخرى قريبة إليك"
     When I click the label for ".change-location-link"
     Then I select the first autocomplete option for "الكويت" on the "store-location" field
     And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     When I click the label for ".other-stores-link"
     And I wait for AJAX to finish
     Then I should see the inline modal for ".click-collect-all-stores.inline-modal-wrapper.desc-open"
@@ -279,8 +283,11 @@ Feature: Test the product detail page
   I should be able to connect via Social media
     Given I am on a configurable product
     And I wait for the page to load
+    When I scroll to x "0" y "0" coordinates of page
     When I follow "عربية"
     And I wait for the page to load
+    When I follow "3-2‏‏ سنوات"
+    And I wait for AJAX to finish
     When I click the label for "<social_media_link>"
     And I wait 5 seconds
     Then I should be directed to window having "<text>"

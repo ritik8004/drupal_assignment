@@ -4,7 +4,7 @@ Feature: As an authenticated user
   using various payment options on Arabic site
 
   Background:
-    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+    When I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
     Given I am on a simple product page
@@ -31,7 +31,7 @@ Feature: As an authenticated user
     When I accept terms and conditions
     And I press "سجل الطلبية"
     When I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Anjali Nikumb"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -58,7 +58,7 @@ Feature: As an authenticated user
     And I press "إرسال"
     And I press "تأكيد العملية"
     And I wait 10 seconds
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Anjali Nikumb"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -80,7 +80,7 @@ Feature: As an authenticated user
     When I accept terms and conditions
     And I press "سجل الطلبية"
     When I wait 10 seconds
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Anjali Nikumb"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -118,7 +118,7 @@ Feature: As an authenticated user
     And I press "إرسال"
     And I press "تأكيد العملية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Anjali Nikumb"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -151,6 +151,6 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I press "سجل الطلبية"
     When I wait 10 seconds
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Anjali Nikumb"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
