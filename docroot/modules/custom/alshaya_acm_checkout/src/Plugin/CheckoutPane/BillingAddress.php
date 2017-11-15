@@ -178,9 +178,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
     $values = $form_state->getValue($pane_form['#parents']);
-    if (empty($values['address']['billing']['mobile_number']['mobile'])) {
-      $form_state->setErrorByName('billing_address][address][billing][mobile_number][mobile]', 'Please enter your Mobilr Number');
-    }
+
     if ($values['same_as_shipping'] != self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
       $address_values = $values['address']['billing'] ?: [];
 
