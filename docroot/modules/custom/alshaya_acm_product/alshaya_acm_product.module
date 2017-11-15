@@ -58,7 +58,23 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
         $langcode = $object->language()->getId();
         $sku_entity = SKU::loadFromSku($sku, $langcode);
 
-        if (!empty($sku_entity) && $sku_entity->bundle() == 'configurable') {
+        if (empty($sku_entity)) {
+          continue;
+        }
+
+        // For stock index, we use only in stock (1) or out of stock (0).
+        $in_stock = 0;
+
+        if (!alshaya_acm_product_is_buyable($sku_entity)) {
+          $in_stock = 1;
+        }
+        elseif (alshaya_acm_get_product_stock($sku_entity)) {
+          $in_stock = 1;
+        }
+
+        $item->getField('stock')->setValues([$in_stock]);
+
+        if ($sku_entity->bundle() == 'configurable') {
           $data = [];
 
           // Update final_price based on final_price of children.

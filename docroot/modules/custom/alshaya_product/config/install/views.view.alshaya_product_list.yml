@@ -449,6 +449,18 @@ display:
             group_items: {  }
           plugin_id: search_api_language
       sorts:
+        stock:
+          id: stock
+          table: search_api_index_product
+          field: stock
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
         name_1:
           id: name_1
           table: search_api_index_product
@@ -472,18 +484,6 @@ display:
           exposed: true
           expose:
             label: Price
-          plugin_id: search_api
-        stock:
-          id: stock
-          table: search_api_index_product
-          field: stock
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: false
-          expose:
-            label: ''
           plugin_id: search_api
       title: ''
       header:
@@ -560,6 +560,18 @@ display:
         sorts: false
       exposed_block: true
       sorts:
+        stock:
+          id: stock
+          table: search_api_index_product
+          field: stock
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
         nid:
           id: nid
           table: search_api_index_product
@@ -595,18 +607,6 @@ display:
           exposed: true
           expose:
             label: Price
-          plugin_id: search_api
-        stock:
-          id: stock
-          table: search_api_index_product
-          field: stock
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: false
-          expose:
-            label: ''
           plugin_id: search_api
     cache_metadata:
       max-age: -1

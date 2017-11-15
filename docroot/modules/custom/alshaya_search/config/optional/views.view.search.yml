@@ -259,6 +259,18 @@ display:
             group_items: {  }
           plugin_id: search_api_language
       sorts:
+        stock:
+          id: stock
+          table: search_api_index_acquia_search_index
+          field: stock
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
         search_api_relevance:
           id: search_api_relevance
           table: search_api_index_acquia_search_index
@@ -294,18 +306,6 @@ display:
           exposed: true
           expose:
             label: Name
-          plugin_id: search_api
-        stock:
-          id: stock
-          table: search_api_index_acquia_search_index
-          field: stock
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: false
-          expose:
-            label: ''
           plugin_id: search_api
       header:
         result:
