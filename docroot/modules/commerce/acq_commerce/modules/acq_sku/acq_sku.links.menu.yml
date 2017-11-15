@@ -5,6 +5,13 @@ entity.acq_sku_type.collection:
   parent: acq_commerce.configuration
   weight: 10
 
+acq_sku.settings:
+  title: 'SKU Custom Settings'
+  route_name: acq_sku.settings
+  description: 'Change SKU Custom settings.'
+  parent: acq_commerce.configuration
+  weight: 11
+
 entity.acq_sku.collection:
   title: 'SKUs'
   route_name: 'entity.acq_sku.collection'
