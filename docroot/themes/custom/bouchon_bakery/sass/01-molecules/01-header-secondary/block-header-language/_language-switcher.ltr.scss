@@ -1,0 +1,48 @@
+.region-secondary-header .menu-language-switcher--desktop {
+  margin: 0;
+  padding-#{direction(left)}: 0;
+
+  .en {
+    font-family: $at-sackers-gothic;
+  }
+
+  .ar {
+    font-family: $ge-dinar-one;
+  }
+
+  li {
+    display: inline-block;
+    text-transform: uppercase;
+    font-size: 0.625rem;
+    padding: 0;
+
+    @include breakpoint($upto-palm) {
+      a {
+        color: lighten($brownish-grey, 12);
+        display: block;
+        text-decoration: none;
+        padding: 0.95rem;
+
+        &.is-active {
+          color: $brown;
+          text-decoration: underline;
+        }
+      }
+    }
+
+    @include breakpoint($above-palm) {
+      font-size: 0.625rem;
+
+      a {
+        color: lighten($brownish-grey, 12);
+        padding: 0.4375rem 0.875rem 0.3125rem;
+        vertical-align: middle;
+        line-height: 0.75rem;
+
+        &.is-active {
+          background: $white;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+attributes:
+  Attribute():
+    class:
+title: ''
+items:
+- value: '<a class="item-list-application-links__link--android" href="">Andriod Application</a>'
+- value: '<a class="item-list-application-links__link--apple" href="">Apple Application</a>'
+list_type: 'ul'

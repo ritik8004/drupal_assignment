@@ -1,0 +1,52 @@
+.node-custom-department-page .page--title {
+  color: $black-smoke;
+  font-weight: normal;
+  text-align: direction(left);
+  font-family: $lato-regular;
+  padding: 0;
+}
+
+.page--title {
+  color: $black;
+  font-weight: bold;
+  text-align: direction(left);
+  font-family: $lato-regular;
+
+  span {
+    margin: 0;
+    padding: 0;
+    background: none;
+    padding-bottom: 0.625rem;
+    display: block;
+  }
+}
+
+.page--title::after {
+  content: "";
+  border-bottom: 0.0625rem solid $gainsboro;
+  margin: 0;
+  display: block;
+}
+
+.h2-title {
+  color: $black-smoke;
+  font-weight: normal;
+  text-align: center;
+  font-family: $lato-regular;
+  padding: 1.25rem 0;
+
+  span {
+    background: $white;
+    padding: 0.9375rem 2rem 0;
+    margin: 0;
+  }
+}
+
+.h2-title::after {
+  content: "";
+  border-top: 0.0625rem solid $gainsboro;
+  width: 100%;
+  display: block;
+  vertical-align: middle;
+  margin: -0.75rem 0 0 0;
+}

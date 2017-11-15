@@ -1,0 +1,45 @@
+@import '../../../../sass/config/**/*.scss';
+
+.paragraph-t-image-title-subtitle {
+  text-align: center;
+  letter-spacing: 0.8px;
+  margin-bottom: 1.4rem;
+  cursor: pointer;
+
+  html[lang=ar] & {
+    letter-spacing: 0;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.image-title-subtitle--banner {
+  img {
+    vertical-align: middle;
+
+    @include breakpoint($upto-palm) {
+      min-height: 18rem;
+    }
+  }
+}
+
+.image-title-subtitle--title {
+  h2 {
+    font-size: 1.375rem;
+    margin-top: 1.625rem;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+}
+
+.image-title-subtitle--subtitle {
+  color: $brownish-grey;
+  font-size: 1rem;
+
+  .field__wrapper {
+    margin-top: 0.5rem;
+  }
+}

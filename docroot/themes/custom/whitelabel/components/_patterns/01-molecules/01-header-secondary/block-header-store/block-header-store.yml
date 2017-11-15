@@ -1,0 +1,4 @@
+content: '<a href="/en/store-finder">Find Store</a>'
+attributes:
+  Attribute():
+    class: 'block-store-link'

@@ -1,0 +1,54 @@
+.region-primary-header {
+  .block-logo-navigation {
+    @include breakpoint($above-palm) {
+      background-color: $white;
+      border-bottom: 0.125rem solid $apple-light-green;
+    }
+  }
+}
+
+.node-custom-department-page .layout-sidebar-first {
+  display: table-cell;
+  width: 28.3%;
+  vertical-align: top;
+  padding: 0 1.25rem;
+
+  .block-logo-navigation {
+    background-color: $white;
+  }
+
+  #block-mainnavigation-menu {
+    font-family: $lato-regular;
+    text-transform: capitalize;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    padding: 0.625rem 0;
+    margin: 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: $brownish-grey;
+    font-family: $lato-regular;
+
+    &:hover {
+      color: $apple-light-green;
+    }
+
+    &.is-active {
+      color: $apple-light-green;
+      text-decoration: underline;
+    }
+  }
+
+  @include breakpoint($upto-lap) {
+    display: none;
+  }
+}

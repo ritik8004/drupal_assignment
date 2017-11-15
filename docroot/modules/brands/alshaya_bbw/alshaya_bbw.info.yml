@@ -1,0 +1,11 @@
+name: 'Alshaya Bath and body works'
+type: module
+description: 'The dedicated module for Bath and body works brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_block
+  - alshaya_i18n
+  - alshaya_paragraph_block
+themes:
+  - bath_body_works

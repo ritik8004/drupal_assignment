@@ -5,7 +5,6 @@
         $('.content-items', $(this)).slideUp();
 
         $('.content-head', $(this)).on('click', function () {
-          $(this).parent().parent().parent().toggleClass('contain');
           $(this).parent().toggleClass('active--accordion');
           $(this).next().slideToggle();
         });

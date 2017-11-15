@@ -6,7 +6,7 @@ dependencies:
 id: tabs
 theme: whitelabel_non_transac
 region: content
-weight: -8
+weight: -7
 provider: null
 plugin: local_tasks_block
 settings:

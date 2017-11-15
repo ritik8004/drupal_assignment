@@ -25,6 +25,7 @@ product.cloud_zoom:
   version: 1.x
   js:
     js/alshaya_product_zoom.js: {}
+    js/alshaya_product_mobile_zoom.js: {}
   css:
     theme:
       css/alshaya_product_zoom.css: {}

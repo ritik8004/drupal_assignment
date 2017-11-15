@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Alshaya email signup module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_email_signup_form_webform_submission_alshaya_email_signup_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Add terms and conditions suffix.
+  $form['elements']['first_name']['#prefix'] = '<div class="form__form-fields"><div class="input__container--half__wrapper">';
+  $form['elements']['last_name']['#suffix'] = '</div>';
+  $form['elements']['exclusive_deals']['#suffix'] = \Drupal::config('alshaya_user.settings')->get('terms_conditions.value') . '</div>';
+}
+
+/**
+ * Implements hook_form_Email_Signup_preprocess_element().
+ */
+function alshaya_email_signup_preprocess_form_element(&$form) {
+  // This should only run on frontend webform.
+  if (isset($form['element']['#webform']) && $form['element']['#webform'] == 'alshaya_email_signup') {
+    if ($form['name'] == 'first_name') {
+      $form['attributes']['class'][] = 'input__container input__container--half';
+    }
+    elseif ($form['name'] == 'last_name') {
+      $form['attributes']['class'][] = 'input__container input__container--half';
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_email_signup_alshaya_i18n_onetime_translation_add() {
+  // Set email signup form translation.
+  $contact_content = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.alshaya_email_signup');
+  $contact_content->set('title', 'كن أول من يعرف');
+  $contact_content->set('elements', "first_name:\n  '#title': 'الاسم الأول'\nlast_name:\n  '#title': 'اسم العائلة'\nmobile_number:\n  '#title': 'رقم الجوال'\nemail:\n  '#title': 'عنوان البريد الإلكتروني'\nexclusive_deals:\n  '#title': 'أرغب في استلام عروض حصرية من .[site:name]'\n");
+  $contact_content->set('settings.confirmation_message', 'شكرا :)');
+  $contact_content->save();
+}

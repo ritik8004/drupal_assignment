@@ -288,20 +288,25 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
   $signup_mail->set('register_withpassword.body', '<h1>،[user:field_first_name:value] مرحباً</h1>
 
 .أهلاً بك في موقع [site:name] و شكراً على الانضمام إلينا
-
+<br/><br/>
 [user:mail] :لقد قمت بالتسجيل عن طريق عنوان البريد الإلكتروني
-
+<br/><br/>
 <b>الرجاء الضغط على رابط “التحقق من بريدك الإلكتروني” ليتم تأكيد بريدك آلإلكتروني و تفعيل حسابك</b>
+<br/>
 <a href="[user:registrationpassword-url]" class="button">التحقق من بريدك الإلكتروني</a>
-
+<br/><br/>
 <a href="[user:registrationpassword-url]">[user:registrationpassword-url]</a> :أو تحقق عبر الضغط على الرابط التالي
-
+<br/><br/>
 .إذا كان لديك أي سؤال، يرجى الاطلاع على <a href="[site:url]">صفحة الأسئلة المتكررة</a>  أو يمكنك الاتصال في أي وقت بمركز خدمة الزبائن
 
 ،مع أطيب التحيات
+<br/>
 فريق عمل [site:name]
-هاتف:12-12-182
+<br/>
+<a href="tel:+9651821212">(+965) 182-12-12</a> :هاتف
+<br/>
 <a href="[site:url]">[site:url-brief]</a>');
+
   $signup_mail->save();
 
   // Disable account activation mail.
@@ -317,17 +322,21 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
   $reset_password_mail->set('password_reset.body', '<h1>،[user:field_first_name:value] أهلاً بك </h1>
 
 تم إجراء طلب لإعادة تعيين كلمة المرور لحسابك على موقع [site:name]
-
+<br/><br/>
 :يمكنك الآن تسجيل الدخول بالضغط على هذا الرابط أو نسخه ولصقه في المتصفح
-
+<br/><br/>
 <a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
-
+<br/><br/>
 .لا يمكن استخدام هذا الرابط إلا مرة واحدة لتسجيل الدخول وسيقودك إلى صفحة حيث يمكنك تعيين كلمة المرور الخاصة بك. تنتهي صلاحيتها بعد يوم واحد ولن يحدث شيء إذا لم يتم استخدامها
-
+<br/><br/>
 ،مع أطيب التحيات
+<br/>
 فريق عمل [site:name]
-هاتف:12-12-182
+<br/>
+<a href="tel:+9651821212">(+965) 182-12-12</a> :هاتف
+<br/>
 <a href="[site:url]">[site:url-brief]</a>');
+
   $reset_password_mail->save();
 }
 

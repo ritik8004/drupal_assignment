@@ -1,0 +1,33 @@
+@import '../../../../sass/config/**/*.scss';
+
+.block-store-link {
+  background-color: $blackish-grey;
+  color: $white;
+  font-size: 0.875rem;
+  padding: 0.9rem;
+  padding-bottom: 1rem;
+  text-transform: uppercase;
+  text-align: center;
+
+  @include breakpoint($upto-palm) {
+    border-bottom: 1px solid $eclipse;
+  }
+
+  @include breakpoint($above-palm) {
+    background-color: $black;
+    font-size: 0.75rem;
+    padding: 0.7rem 0.625rem;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  @include breakpoint($desk) {
+    padding: 1.1rem 0.625rem;
+    padding-bottom: 0.4rem;
+  }
+
+  a {
+    color: $white;
+    text-decoration: none;
+  }
+}

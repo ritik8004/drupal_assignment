@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library("whitelabel/view-store-list-locator") }}
+{% include "@organisms/01-view-store-finder-list/_views-store-list-locator.twig" with
+  {
+    title: title,
+    row: row,
+    view: view,
+    default_row_class: default_row_class
+  }
+%}
+

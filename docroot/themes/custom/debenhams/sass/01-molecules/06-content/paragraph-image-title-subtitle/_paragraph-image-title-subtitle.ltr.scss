@@ -1,0 +1,40 @@
+.region-content .image-title-subtitle--title {
+  h2 {
+    color: $black;
+    font-size: 1rem;
+    text-transform: capitalize;
+    text-decoration: underline;
+    font-family: $lato-regular;
+    font-weight: normal;
+  }
+
+  h2:hover {
+    color: $apple-light-green;
+  }
+}
+
+.field-1-row-2-col {
+  display: flex;
+}
+
+.field-1-row-2-col > .field__item {
+  width: 50%;
+}
+
+.field-1-row-2-col .field__item:first-child {
+  margin-right: 1.5625rem;
+}
+
+@include breakpoint($upto-palm) {
+  .field-1-row-2-col {
+    display: block;
+  }
+
+  .field-1-row-2-col > .field__item {
+    width: 100%;
+  }
+
+  .field-1-row-2-col .field__item:first-child {
+    margin-right: 0;
+  }
+}

@@ -1,0 +1,40 @@
+.block-social-link {
+  background-color: $grey-smoke;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: $black;
+  padding-top: 1.9rem;
+  padding-bottom: 2.3rem;
+
+  @include breakpoint($desk) {
+    padding-top: 0.6rem;
+    padding-bottom: 2.5rem;
+    margin-top: 1.5rem;
+  }
+}
+
+.block-social-link__title {
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+
+  @include breakpoint($lap) {
+    margin-bottom: 0.8rem;
+  }
+
+  @include breakpoint($desk) {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.region-footer-primary {
+  .block-social-link {
+    background-color: $grey-smoke;
+    color: $black;
+  }
+
+  .block-social-link__title {
+    font-size: 1.125rem;
+  }
+}

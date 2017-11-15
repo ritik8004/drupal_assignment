@@ -16,7 +16,6 @@ dependencies:
     - metatag
     - text
     - user
-third_party_settings: { }
 id: node.advanced_page.default
 targetEntityType: node
 bundle: advanced_page
@@ -49,7 +48,7 @@ content:
     region: content
   field_meta_tags:
     weight: 10
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     type: metatag_empty_formatter
