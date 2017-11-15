@@ -10,8 +10,8 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "anjali.nikumb@acquia.com"
-    And I fill in "edit-checkout-login-pass" with "password@1"
+    Then I fill in "edit-checkout-login-name" with "shweta+4@axelerant.com"
+    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
     When I press "تسجيل الدخول"
     And I wait for the page to load
 
@@ -28,7 +28,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Anjali Nikumb"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -53,7 +53,7 @@ Feature: Test various checkout scenarios as returning customer
     And I press "إرسال"
     And I press "تأكيد العملية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Anjali Nikumb"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -73,7 +73,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "سجل الطلبية"
     When I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Anjali Nikumb"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -110,7 +110,7 @@ Feature: Test various checkout scenarios as returning customer
     And I press "إرسال"
     And I press "تأكيد العملية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Anjali Nikumb"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -142,6 +142,6 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "سجل الطلبية"
     When I wait 10 seconds
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Anjali Nikumb"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"

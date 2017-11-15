@@ -10,6 +10,36 @@ use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Symfony\Component\Yaml\Yaml;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add index for SKU and langcode on acq_sku_field_data table.
+ */
+function acq_sku_update_8001() {
+  // Add index for SKU and langcode on acq_sku_field_data table.
+  \Drupal::database()->schema()->addIndex('acq_sku_field_data',
+    'acq_sku_sku_langcode',
+    [
+      ['sku', 64],
+      ['langcode', 10],
+    ],
+    [
+      'fields' => [
+        'sku' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+        'langcode' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ]
+  );
+}
+
+/**
  * Implements hook_install().
  */
 function acq_sku_install() {
@@ -43,6 +73,30 @@ function acq_sku_install() {
       ],
     ],
   ]);
+
+
+  // Add index for SKU and langcode on acq_sku_field_data table.
+  \Drupal::database()->schema()->addIndex('acq_sku_field_data',
+    'acq_sku_sku_langcode',
+    [
+      ['sku', 64],
+      ['langcode', 10],
+    ],
+    [
+      'fields' => [
+        'sku' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+        'langcode' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ]
+  );
 }
 
 /**

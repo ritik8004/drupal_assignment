@@ -3,8 +3,11 @@ Feature: Test generic features on the site
   like Header, footer and subscription
 
   Scenario: As a Guest user
-  I should be able to view the header and the footer
+    I should be able to view the header and the footer
     Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     Then I should be able to see the header
     And I should be able to see the footer
 
@@ -13,6 +16,9 @@ Feature: Test generic features on the site
   As a Guest user
   I should be able to view the header and the footer
     Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     When I follow "عربية"
     Then I should be able to see the header in Arabic
     And I should be able to see the footer in Arabic
@@ -20,6 +26,9 @@ Feature: Test generic features on the site
   Scenario: As a Guest user
   I should be able to subscribe with Mothercare
     Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     When I enter a valid Email ID in field "edit-email"
     And I press "sign up"
     And I wait for AJAX to finish
@@ -29,6 +38,9 @@ Feature: Test generic features on the site
   Scenario: As a Guest user
   I should be able to subscribe with Mothercare
     Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     And I follow "عربية"
     When I enter a valid Email ID in field "edit-email"
     And I press "سجل الآن"
@@ -36,10 +48,13 @@ Feature: Test generic features on the site
     Then I should see "شكراً لاشتراككم في نشرتنا الاخبارية"
 
   Scenario: As a Guest user
-  I should be displayed a warning message
-  If I try to subscribe with subscribed Email ID
+    I should be displayed a warning message
+    If I try to subscribe with subscribed Email ID
     Given I am on homepage
-    When I fill in "edit-email" with "me+knet@nik4u.com"
+    And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
+    When I fill in "edit-email" with "shweta+2@axelerant.com"
     And I press "sign up"
     And I wait for AJAX to finish
     Then I should see "This email address is already subscribed."
@@ -49,8 +64,18 @@ Feature: Test generic features on the site
   I should be displayed a warning message
   If I try to subscribe with subscribed Email ID
     Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
     And I follow "عربية"
-    When I fill in "edit-email" with "me+knet@nik4u.com"
+    When I fill in "edit-email" with "shweta+2@axelerant.com"
     And I press "سجل الآن"
     And I wait for AJAX to finish
     Then I should see "هذا العنوان البريد الإلكتروني مستعمل مسبقاً"
+
+  Scenario: As a visitor
+    I should be able to subscribe to the newsletter
+    from the popup displayed
+    Given I am on homepage
+    When I wait for the page to load
+    Then I should be able to subscribe to the newsletter displayed on the popup
