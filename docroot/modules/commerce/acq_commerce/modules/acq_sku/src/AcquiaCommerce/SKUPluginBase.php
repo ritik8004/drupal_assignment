@@ -257,7 +257,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
         $stock_info['quantity'] = 0;
       }
 
-      $stock = $stock_info['quantity'];
+      $stock = (int) $stock_info['quantity'];
 
       // If cache multiplier is zero we don't cache the stock.
       if ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
@@ -270,6 +270,10 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
         // Set the stock in cache.
         \Drupal::cache('stock')->set($cid, $stock, $expire);
+
+        // Also set in SKU for PLP / SEARCH to work properly.
+        $sku->get('stock')->setValue($stock);
+        $sku->save();
       }
     }
 
