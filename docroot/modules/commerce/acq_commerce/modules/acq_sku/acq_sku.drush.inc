@@ -73,14 +73,18 @@ function acq_sku_drush_command() {
     ],
   ];
 
+  $commands['sync-stock'] = [
+    'description' => 'Sync stock into all SKU entities using API.',
+  ];
+
   $commands['get-stock-cache'] = [
-    'description' => 'Get stock cache for particualar SKU in all languages',
+    'description' => 'Get stock cache for particualar SKU',
     'aliases'     => ['acgsc'],
     'arguments'     => [
       'sku' => 'SKU to get stock of.',
     ],
     'examples'    => [
-      'drush acgsc SKU' => 'Get stock cache for particualar SKU in all languages',
+      'drush acgsc SKU' => 'Get stock cache for particualar SKU',
     ],
   ];
 
@@ -91,8 +95,8 @@ function acq_sku_drush_command() {
       'sku' => 'SKU to clean stock of.',
     ],
     'examples'    => [
-      'drush accsc' => 'Flush stock cache for all SKUs in all languages.',
-      'drush accsc --sku=SKU' => 'Flush stock cache for particular SKU in all languages',
+      'drush accsc' => 'Flush stock cache for all SKUs.',
+      'drush accsc --sku=SKU' => 'Flush stock cache for particular SKU',
     ],
   ];
 
@@ -332,6 +336,58 @@ function _acq_sku_clean_process(&$context) {
   $context['message'] = 'Processed ' . $context['sandbox']['progress'] . ' out of ' . $context['sandbox']['max'] . '.';
   if ($context['sandbox']['progress'] !== $context['sandbox']['max']) {
     $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
+  }
+}
+
+/**
+ * Implements drush sync-stock command.
+ */
+function drush_acq_sku_sync_stock() {
+  $db = \Drupal::database();
+
+  $query = $db->select('acq_sku_field_data', 'asfd');
+  $query->addField('asfd', 'sku', 'sku');
+  $query->condition('asfd.type', 'simple');
+  $query->isNull('asfd.stock');
+  $result = $query->execute()->fetchAllKeyed(0, 0);
+
+  drush_print(sprintf('Found %d skus without stock info, processing.', count($result)));
+
+  $batches = array_chunk($result, 50);
+
+  // Entity storage can blow up with caches so clear them out.
+  $container = \Drupal::getContainer();
+
+  /** @var \Drupal\Core\Entity\EntityManagerInterface $manager */
+  $manager = $container->get('entity.manager');
+
+  $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+
+  $counter = 0;
+
+  foreach ($batches as $batch) {
+    foreach ($batch as $sku) {
+      $sku_entity = SKU::loadFromSku($sku, $langcode, FALSE, FALSE);
+
+      if ($sku_entity) {
+        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
+        $plugin = $sku_entity->getPluginInstance();
+        $plugin->getProcessedStock($sku_entity, FALSE, TRUE);
+
+        // Reset static caches to release memory.
+        drupal_static_reset();
+
+        usleep(200);
+      }
+    }
+
+    $counter++;
+
+    drush_print(sprintf('Processed %d of %d.', $counter * DELETE_BATCH_COUNT, count($result)));
+
+    foreach ($manager->getDefinitions() as $id => $definition) {
+      $manager->getStorage($id)->resetCache();
+    }
   }
 }
 
