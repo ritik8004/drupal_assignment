@@ -223,7 +223,12 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
 
     if ($stock_mode == 'push') {
-      return (int) $sku->get('stock')->getString();
+      $stock = $sku->get('stock')->getString();
+
+      // Fallback to pull mode if no value available for the SKU.
+      if (!($stock === '' || $stock === NULL)) {
+        return (int) $stock;
+      }
     }
 
     $stock = NULL;
