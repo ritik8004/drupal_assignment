@@ -69,6 +69,11 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
       if ($sku_field = $node->get('field_skus')) {
         $sku_id = $sku_field->first()->getString();
         $sku_entity = SKU::loadFromSku($sku_id);
+
+        if (empty($sku_entity)) {
+          return [];
+        }
+
         $product_title = "";
 
         // Including the utility file.
