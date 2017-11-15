@@ -62,6 +62,22 @@
   }
 }
 
+.webform-submission-form {
+  margin-bottom: 1rem;
+
+  .form-actions {
+    clear: both;
+  }
+
+  .webform-button--submit {
+    color: $medium-pink;
+    width: 5.6875rem;
+    height: 2.1875rem;
+    border: 1px solid $medium-pink;
+    background: transparent;
+  }
+}
+
 .webform-submission-alshaya-email-signup-form {
   .input__container--half {
     @include breakpoint($upto-palm) {
