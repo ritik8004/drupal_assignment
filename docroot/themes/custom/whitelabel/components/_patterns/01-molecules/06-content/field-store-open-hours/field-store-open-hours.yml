@@ -1,0 +1,8 @@
+multiple: true
+items:
+- content: '<span class="key-value-key">Sunday</span><span class="key-value-value">10:00AM-10:00PM</span>'
+- content: '<span class="key-value-key">Monday</span><span class="key-value-value">10:00AM-10:00PM</span>'
+- content: '<span class="key-value-key">Tuesday</span><span class="key-value-value">10:00AM-10:00PM</span>'
+- content: '<span class="key-value-key">Thursday</span><span class="key-value-value">10:00AM-10:00PM</span>'
+- content: '<span class="key-value-key">Friday</span><span class="key-value-value">10:00AM-10:00PM</span>'
+- content: '<span class="key-value-key">Saturday</span><span class="key-value-value">10:00AM-10:00PM</span>'

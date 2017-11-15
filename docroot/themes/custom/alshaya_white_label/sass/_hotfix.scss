@@ -308,10 +308,6 @@ html[lang="ar"] {
         width: 103% !important;
       }
     }
-
-    .mobile-number-field .form-type-textfield input {
-      height: 1.67rem;
-    }
   }
 
   @include breakpoint($upto-desktop) {
@@ -387,6 +383,10 @@ body.path--cart.ucbrowser .ui-dialog,
 body.nodetype--acq_product.ucbrowser .ui-dialog,
 body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
   padding: 10rem 2rem !important;
+}
+
+body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container-mobile {
+  padding: 0 !important;
 }
 
 #stcpDiv {

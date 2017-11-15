@@ -95,16 +95,19 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
             }
           }
 
+          // Load all item fields, we'll need it to check condition inside loop.
+          $itemFields = $item->getFields();
+
           foreach ($data as $key => $values) {
             $field_key = 'attr_' . $key;
 
             // There is an issue with color field in indexes.
             // It is color in solr and attr_color in database index.
             // For all other fields it is attr_field in both indexes.
-            if (!empty($item->getField($field_key))) {
+            if (isset($itemFields[$field_key])) {
               $item->getField($field_key)->setValues(array_keys($values));
             }
-            elseif (!empty($item->getField($key))) {
+            elseif (isset($itemFields[$key])) {
               $item->getField($key)->setValues(array_keys($values));
             }
           }
@@ -615,6 +618,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $site_default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
     $configurable_sizes = $form['ajax']['configurables']['size'];
     if (\Drupal::languageManager()->getCurrentLanguage()->getId() !== $site_default_langcode) {
+      $options = [];
+
       foreach ($configurable_sizes['#options'] as $key => $option) {
         $product_options_manager = \Drupal::service('acq_sku.product_options_manager');
 
@@ -673,13 +678,31 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           }
         }
 
-        // If all the options are disabled, we show the product is out of stock.
-        if (count($configurable['#options']) == count($configurable['#options_attributes'])) {
+        // If there are no options to display, we show the product as not
+        // available.
+        if (empty($configurable['#options'])) {
+          $configurable = [
+            '#markup' => '',
+          ];
           $form['quantity'] = [
-            '#markup' => '<div class="quantity out-of-stock">' . t('Quantity') . '<div><span class="dash">-</span><span class="arrow"></span></div></div>',
+            '#title' => '',
+            '#markup' => '',
           ];
           $form['add_to_cart'] = [
-            '#markup' => '<div class="add-to-cart out-of-stock">' . t('Out of stock') . '</div>',
+            '#markup' => '<span class="out-of-stock">' . t('not available') . '</span>',
+          ];
+        }
+        // If all the options are disabled, we show the product is out of stock.
+        elseif (count($configurable['#options']) == count($configurable['#options_attributes'])) {
+          $configurable = [
+            '#markup' => '',
+          ];
+          $form['quantity'] = [
+            '#title' => '',
+            '#markup' => '',
+          ];
+          $form['add_to_cart'] = [
+            '#markup' => '<span class="out-of-stock">' . t('Out of stock') . '</span>',
           ];
         }
       }

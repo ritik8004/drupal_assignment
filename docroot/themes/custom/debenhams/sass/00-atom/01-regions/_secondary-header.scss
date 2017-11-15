@@ -1,0 +1,25 @@
+.region-secondary-header {
+  @include breakpoint($above-palm) {
+    display: block;
+    width: 100%;
+    font-size: 0;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  @include breakpoint($desk) {
+    width: 100%;
+  }
+
+  html[lang=ar] & {
+    line-height: normal;
+  }
+}
+
+header[role=banner] {
+  .region-secondary-header {
+    @include breakpoint($upto-palm) {
+      display: none;
+    }
+  }
+}

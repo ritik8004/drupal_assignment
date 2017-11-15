@@ -1,0 +1,18 @@
+.block-store-finder-form {
+  .geolocation-common-map-container {
+    .get--directions a {
+      color: $apple-light-green;
+
+      &::after {
+        content: '';
+        background: url("../../../../../../images/icons/svg/icon-direction-active.svg") no-repeat;
+      }
+    }
+  }
+
+  .hours--wrapper {
+    .hours--label {
+      color: $apple-light-green;
+    }
+  }
+}

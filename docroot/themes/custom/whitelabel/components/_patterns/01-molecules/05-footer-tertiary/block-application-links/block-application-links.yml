@@ -1,0 +1,8 @@
+label: ''
+content:
+  include():
+    pattern: 'molecules-item-list-application-links'
+attributes:
+  Attribute():
+    class:
+    - 'block-application-links'

@@ -1,0 +1,33 @@
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+
+{% for row in rows %}
+  {%
+    set row_classes = [
+      default_row_class ? 'views-row',
+    ]
+  %}
+
+  <div class="list-view-locator row-{{ row.nid }}" data-row="{{ row.nid }}">
+    <div class="store-row--counter">{{ row.counter }}</div>
+    <div class="mobile-only--back-to-glossary">
+      <a href="{{ path('view.stores_finder.page_2') }}">{{ 'Back' | t }}</a>
+    </div>
+
+    <div class="row-title">{{ row.title }}</div>
+
+    <div class="set-center-location" id="row-{{ row.nid }}">
+      <div{{ row.attributes.addClass(row_classes) }}>
+        {{ row.content }}
+      </div>
+
+      {% if row.lat_long is not empty %}
+        <div class="lat-lng">
+          <div class="lat">{{ row.lat_long.lat }}</div>
+          <div class="lng">{{ row.lat_long.lng }}</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}

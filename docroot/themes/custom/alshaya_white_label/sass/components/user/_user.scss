@@ -242,7 +242,7 @@
     @include breakpoint($desktop) {
       clear: both;
       padding-top: 1px;
-      margin-top: 3.813rem;
+      margin-top: 0;
     }
   }
 
@@ -259,8 +259,8 @@
   .field--name-field-first-name,
   .field--name-field-last-name {
     @include breakpoint($desktop) {
-      float: $left;
-      max-width: 186px;
+      display: inline-block;
+      max-width: 10.7rem;
       width: calc(50% - 12px);
     }
   }
@@ -297,7 +297,7 @@
       max-width: 19.75rem;
     }
 
-    @include breakpoint($desktop-wide) {
+    @include breakpoint($desktop) {
       max-width: 24.75rem;
     }
 

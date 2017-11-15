@@ -1,0 +1,14 @@
+prefix: ''
+attributes:
+  Attributes():
+description_display: ''
+description:
+  content: ''
+  attributes:
+    Attributes():
+label_display: 'before'
+children: '<input type="email" id="edit-mail" name="mail" value="" size="60" maxlength="254" class="form-email required input--active" required="required" aria-required="true">'
+suffix: ''
+label: '<label for="edit-mail" class="js-form-required form-required">Email address</label>'
+errors: ''
+is_checkbox: FALSE

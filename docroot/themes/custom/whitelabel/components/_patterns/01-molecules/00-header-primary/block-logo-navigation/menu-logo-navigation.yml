@@ -1,0 +1,27 @@
+attributes:
+  Attribute():
+    class:
+    - 'menu-logo-navigation'
+items:
+- title: 'Victoria Secret'
+  url: '/'
+  link:
+    attributes:
+      Attribute():
+        class:
+        - 'brand-victoria-secret'
+        - 'is-active'
+- title: 'Pink'
+  url: '/'
+  link:
+    attributes:
+      Attribute():
+        class:
+        - 'brand-pink'
+- title: 'Victoria Sport'
+  url: '/'
+  link:
+    attributes:
+      Attribute():
+        class:
+        - 'brand-victoria-sport'

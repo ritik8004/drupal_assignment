@@ -1,0 +1,29 @@
+@import '../../../../sass/config/**/*.scss';
+
+.menu-language-switcher--desktop {
+  margin: 0;
+  padding-#{direction(left)}: 0;
+
+  li {
+    display: inline-block;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    padding: 0.95rem;
+
+    @include breakpoint($above-palm) {
+      font-size: 0.75rem;
+      padding: 0.7rem 0.875rem;
+    }
+
+    @include breakpoint($desk) {
+      padding: 1.1rem 0.875rem;
+      padding-bottom: 0.4rem;
+    }
+  }
+
+  a {
+    color: $white;
+    display: block;
+    text-decoration: none;
+  }
+}

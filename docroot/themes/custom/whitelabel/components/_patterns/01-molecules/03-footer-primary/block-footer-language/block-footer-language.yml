@@ -1,0 +1,9 @@
+label: ''
+content:
+  include():
+    pattern: 'molecules-language-switcher'
+attributes:
+  Attribute():
+    class:
+    - 'block-language-switcher__tablet'
+    - 'block-language-switcher__tablet--pl'

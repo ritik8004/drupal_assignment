@@ -1,0 +1,156 @@
+// Paragraph: Promo blocks.
+.paragraph-t-promo-block {
+  position: relative;
+
+  a {
+    @include u-hidden-visually;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  img {
+    vertical-align: middle;
+    width: 100%;
+  }
+}
+
+.field-promo-block {
+  margin: auto;
+
+  & > .field__item {
+    @include breakpoint($upto-palm) {
+      margin-bottom: 0.75rem;
+    }
+
+    @include breakpoint($above-palm) {
+      margin-bottom: 1.5rem;
+    }
+  }
+}
+
+// @TODO: Move to single class.
+.paragraph-t-1-row-1st-col-2-row-2nd-col,
+.paragraph-t-1-row-3-col {
+  .field__item {
+    @include breakpoint($upto-palm) {
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .field__wrapper {
+    @include breakpoint($upto-palm) {
+      margin-top: 0.75rem;
+    }
+  }
+}
+
+.paragraph-vm-default {
+  @include breakpoint($upto-palm) {
+    margin-bottom: 1.2rem;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 67.125rem;
+    margin: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.paragraph-t-banner,
+.paragraph-t-views-reference {
+  @include breakpoint($desk) {
+    max-width: none;
+  }
+}
+
+.paragraph-t-banner {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.paragraph-t-1-row-3-col {
+  .field__wrapper {
+    @include u-clearfix;
+  }
+
+  .field__item {
+    @include breakpoint($above-palm) {
+      float: direction(left);
+    }
+
+    @include breakpoint($lap) {
+      width: 31.388%;
+    }
+
+    @include breakpoint($desk) {
+      width: 31.773%;
+    }
+
+    &:nth-child(2) {
+      @include breakpoint($lap) {
+        margin-right: 2.916%;
+        margin-left: 2.916%;
+      }
+
+      @include breakpoint($desk) {
+        margin-right: 2.339%;
+        margin-left: 2.339%;
+      }
+    }
+  }
+}
+
+.paragraph-t-1-row-1st-col-2-row-2nd-col {
+  @include u-clearfix;
+
+  & > .field__wrapper {
+    @include breakpoint($above-palm) {
+      float: direction(left);
+    }
+
+    @include breakpoint($lap) {
+      width: 48.33%;
+    }
+
+    @include breakpoint($desk) {
+      width: 48.83%;
+    }
+
+    &:first-child {
+      @include breakpoint($lap) {
+        margin-#{right}: 1.666%;
+      }
+
+      @include breakpoint($desk) {
+        margin-#{right}: 1.169%;
+      }
+    }
+
+    &:last-child {
+      @include breakpoint($lap) {
+        margin-#{left}: 1.666%;
+      }
+
+      @include breakpoint($desk) {
+        margin-#{left}: 1.169%;
+      }
+    }
+  }
+
+  .field__item {
+    &:first-child {
+      @include breakpoint($lap) {
+        margin-bottom: 1.125rem;
+      }
+
+      @include breakpoint($desk) {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+}

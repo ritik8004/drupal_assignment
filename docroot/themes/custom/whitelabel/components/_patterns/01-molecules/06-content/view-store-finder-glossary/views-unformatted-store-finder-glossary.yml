@@ -1,0 +1,6 @@
+title: A
+rows:
+- content: A
+- content: B
+- content: C
+default_row_class: view-store-finder--list__alphabet__item icon-chevronright

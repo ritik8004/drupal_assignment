@@ -1,0 +1,5 @@
+content: ''
+attributes:
+  Attribute():
+    class:
+    - 'field-slider-items-wrapper'

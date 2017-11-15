@@ -595,6 +595,13 @@ function alshaya_master_get_site_date_from_api_date($date, $format = '') {
  * Implements hook_alshaya_master_post_drupal_install().
  */
 function alshaya_master_alshaya_master_post_drupal_install() {
+  // Update default site-mail on prod.
+  if (alshaya_is_env_prod()) {
+    $config = \Drupal::configFactory()->getEditable('system.site');
+    $config->set('mail', 'no-reply@alshaya.com');
+    $config->save();
+  }
+
   // Disable unwanted core views.
   if ($views_to_disable = Settings::get('views_to_disable')) {
     $view_storage = \Drupal::service('entity.manager')->getStorage('view');
@@ -626,4 +633,61 @@ function alshaya_master_webform_submission_presave(EntityInterface $entity) {
   if ($value_changed) {
     $entity->setData($data);
   }
+}
+
+/**
+ * Getter function to retrieve a Mobile_Detect() singleton.
+ *
+ * @return object
+ *   Instance of Mobile_Detect(), NULL if failure.
+ */
+function alshaya_master_mobile_detect_object() {
+  $mobile_detect = &drupal_static(__FUNCTION__);
+
+  if (!isset($mobile_detect)) {
+    if (class_exists('Mobile_Detect')) {
+      try {
+        // Detect platform from headers.
+        $mobile_detect = new Mobile_Detect();
+      }
+      catch (Exception $e) {
+        $mobile_detect = NULL;
+        \Drupal::logger('mobile_detect')->alert('Could not instantiate Mobile_Detect(): %message', ['%message' => $e->getMessage()]);
+      }
+    }
+    else {
+      $mobile_detect = NULL;
+      \Drupal::logger('mobile_detect')->alert('Mobile_Detect() class does not exist');
+    }
+  }
+
+  return $mobile_detect;
+}
+
+/**
+ * Detect current device.
+ *
+ * @return string
+ *   Return the current device type (mobile|desktop|tablet).
+ */
+function alshaya_master_detect_device() {
+  $mobile_detect = alshaya_master_mobile_detect_object();
+
+  if ($mobile_detect->isMobile()) {
+    return 'mobile';
+  }
+  elseif ($mobile_detect->isTablet()) {
+    return 'tablet';
+  }
+  else {
+    return 'desktop';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_master_preprocess_html(&$variables) {
+  // Add settings variable for current device type.
+  $variables['#attached']['drupalSettings']['alshaya_master']['device'] = alshaya_master_detect_device();
 }

@@ -1,0 +1,65 @@
+.ui-dialog {
+  background: $white;
+  padding: 0;
+
+  @include breakpoint($upto-lap) {
+    width: 95%;
+  }
+
+  .ui-dialog-titlebar {
+    padding: 0;
+
+    .ui-dialog-title {
+      font-family: $lato-regular;
+      color: $black-smoke;
+      font-size: 1.512rem;
+      border-bottom: 0.06rem solid $gainsboro;
+      padding-bottom: 0.51rem;
+      margin: 2.3rem 1rem 0.5rem;
+      display: block;
+      text-transform: uppercase;
+    }
+  }
+
+  .ui-dialog-titlebar-close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 2.2rem;
+    margin: 0;
+    padding: 0;
+    height: 2.1rem;
+    background: $black;
+    color: $white;
+    border: 0;
+
+    .ui-icon-closethick {
+      font-size: 2rem;
+      text-indent: 0;
+      padding: 0;
+      margin: 0;
+      position: static;
+
+      &::before {
+        content: '\e90b';
+        font-family: 'font-icons';
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    }
+  }
+}
+
+.ui-widget-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.ui-dialog .hide-in-popup {
+  display: none;
+}

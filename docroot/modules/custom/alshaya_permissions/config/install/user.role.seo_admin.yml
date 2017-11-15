@@ -11,9 +11,11 @@ label: 'SEO admin'
 weight: 17
 is_admin: null
 permissions:
+  - 'access administration pages'
   - 'access google knowledge graph'
   - 'access content overview'
   - 'access toolbar'
+  - 'administer meta tags'
   - 'administer robots.txt'
   - 'administer sitemap settings'
   - 'edit any acq_product content'
