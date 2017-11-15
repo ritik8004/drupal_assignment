@@ -556,6 +556,18 @@
     @include breakpoint($tablet) {
       margin-#{$left}: 1rem;
     }
+
+    @include breakpoint($desktop) {
+      margin-#{$left}: 1.5rem;
+    }
+  }
+
+  #selected-store-elements-wrapper {
+    #edit-cc-mobile-number {
+      & > label {
+        top: -1rem;
+      }
+    }
   }
 }
 
