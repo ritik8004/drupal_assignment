@@ -451,6 +451,7 @@
       &.form-item-field-address-0-address-mobile-number-country-code {
         padding-bottom: 0;
         margin-top: 0 !important;
+        width: 3rem;
 
         &::after {
           display: none;
@@ -501,6 +502,11 @@
       .form-item-cc-mobile-number-mobile,
       .form-item-mobile-number-mobile {
         position: static !important;
+        width: 9.375rem;
+
+        html[lang=ar] & {
+          height: 1.65rem;
+        }
 
         .c-input__bar {
           position: static;
