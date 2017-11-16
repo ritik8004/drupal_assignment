@@ -10,9 +10,7 @@
     $.cookie('alshaya_lang', current_language, cookie_options);
   }
   else if (current_language !== language) {
-    // If current language doesn't match the language in cookie
-    // we redirect to language in cookie.
-    window.location.href = $('.language-switcher-language-url:first .language-link[hreflang="' + language + '"]').attr('href');
+    // Do nothing.
   }
   else {
     // Keep increasing the time, we don't want it to expire at all.
