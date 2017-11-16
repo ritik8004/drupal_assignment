@@ -1,5 +1,4 @@
 <?php
-// @codingStandardsIgnoreFile
 
 namespace Drupal\alshaya_acm_knet;
 
@@ -541,9 +540,6 @@ class E24PaymentPipe {
       throw new \RuntimeException('Cannot read data from zip file.');
     }
 
-    // To allow concurrent requests to work fine, we don't unlink any files.
-    // unlink($this->resourcePath . 'resource.cgz');
-
     return $this->parseSettings($s);
   }
 
@@ -599,9 +595,6 @@ class E24PaymentPipe {
       $xmlHandleInput = fopen($xmlNameInput, 'r');
       $xmlContentsInput = fread($xmlHandleInput, filesize($xmlNameInput));
       fclose($xmlHandleInput);
-
-      // To allow concurrent requests to work fine, we don't unlink any files.
-      // unlink($xmlNameInput);
 
       $s = $xmlContentsInput;
 
