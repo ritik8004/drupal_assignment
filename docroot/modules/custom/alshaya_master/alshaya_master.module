@@ -20,8 +20,15 @@ use Drupal\user\Entity\Role;
  */
 function alshaya_master_acsf_staging_scrub_admin_roles_alter(array &$admin_roles) {
   // Don't scrub admin/back-office accounts.
-  $role = Role::load('administrator');
-  $admin_roles[] = $role->id();
+  $roles = Role::loadMultiple();
+
+  // Remove authenticated role from list.
+  unset($roles[Role::AUTHENTICATED_ID]);
+
+  // Remove anonymous role from list.
+  unset($roles[Role::ANONYMOUS_ID]);
+
+  $admin_roles = array_merge($admin_roles, array_keys($roles));
 }
 
 /**
