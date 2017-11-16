@@ -302,6 +302,9 @@ function _acq_sku_clean_process(&$context) {
       $context['sandbox']['results'][] = [$sku_product_option_entity, 'taxonomy_term'];
     }
 
+    // Allow other modules to add data to be deleted when cleaning up.
+    \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context);
+
     $context['sandbox']['progress'] = 0;
     $context['sandbox']['current_id'] = 0;
     $context['sandbox']['max'] = count($context['sandbox']['results']);
