@@ -127,11 +127,8 @@
 
       var header_timer;
       $('.main--menu').hover(function () {
-        header_timer = setTimeout(function () {
-          $('body').addClass('overlay');
-        }, 300);
+        $('body').addClass('overlay');
       }, function () {
-        clearTimeout(header_timer);
         $('body').removeClass('overlay');
       });
 
@@ -190,9 +187,7 @@
         var parent = $('.block-alshaya-main-menu li.menu--one__list-item');
 
         $('.block-alshaya-main-menu').mouseenter(function () {
-          setTimeout(function () {
-            $(parent).parent().addClass('active--menu--links');
-          }, 310);
+          $(parent).parent().addClass('active--menu--links');
         });
 
         $('.block-alshaya-main-menu').mouseleave(function () {
