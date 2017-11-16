@@ -13,6 +13,16 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_acsf_staging_scrub_admin_roles_alter().
+ */
+function alshaya_master_acsf_staging_scrub_admin_roles_alter(array &$admin_roles) {
+  // Don't scrub admin/back-office accounts.
+  $role = Role::load('administrator');
+  $admin_roles[] = $role->id();
+}
 
 /**
  * Implements hook_editor_js_settings_alter().
