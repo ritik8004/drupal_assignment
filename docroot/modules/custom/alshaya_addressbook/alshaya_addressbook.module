@@ -17,6 +17,11 @@ use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
 
 /**
+ * Delivery Matrix version 2.
+ */
+const DM_VERSION_2 = '2';
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$form, FormStateInterface $form_state) {
@@ -419,8 +424,7 @@ function _alshaya_addressbook_area_list($country_code = 'KW') {
   if (!empty($term_tree)) {
     /* \Drupal\taxonomy\Entity\Term $term */
     foreach ($term_tree as $term) {
-      // @todo: Convert DM version into a constant.
-      if (\Drupal::config('alshaya_addressbook.settings')->get('dm_version') == 2
+      if (\Drupal::config('alshaya_addressbook.settings')->get('dm_version') == DM_VERSION_2
       // If DM is 2 and where parent = 0, we skip terms as they are governates.
       && empty(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($term->id()))) {
         continue;

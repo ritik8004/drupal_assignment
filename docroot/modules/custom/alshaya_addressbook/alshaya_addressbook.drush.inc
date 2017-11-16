@@ -23,7 +23,7 @@ function alshaya_addressbook_drush_command() {
  * Implements drush areas sync command.
  */
 function drush_alshaya_addressbook_sync_areas() {
-  if (\Drupal::config('alshaya_addressbook.settings')->get('dm_version') == 2) {
+  if (\Drupal::config('alshaya_addressbook.settings')->get('dm_version') == DM_VERSION_2) {
     drush_print(dt('Synchronizing all areas, please wait...'));
     // Import DM data.
     \Drupal::service('alshaya_addressbook.manager')->syncAreas();
