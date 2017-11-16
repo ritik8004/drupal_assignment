@@ -31,7 +31,7 @@ index 6fa25b4eb..5ff5a5bce 100644
 +  - size
 \ No newline at end of file
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
-index bc9c3f3cc..b1c3c0871 100644
+index bc9c3f3cc..05df554bc 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/AcquiaCommerce/SKUType/Configurable.php
 @@ -59,20 +59,26 @@ public function addToCartForm(array $form, FormStateInterface $form_state, SKU $
@@ -52,7 +52,7 @@ index bc9c3f3cc..b1c3c0871 100644
 -
 -        foreach ($tids as $tid => $values) {
 -          $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
-+        $sortable_attributes = $configurable_form_settings->get('sort_options');
++        $sortable_attributes = $configurable_form_settings->get('sortable_options');
 +        if (in_array($attribute_code, $sortable_attributes)) {
 +          $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
 +          $query->fields('ttfd', ['tid', 'weight']);
