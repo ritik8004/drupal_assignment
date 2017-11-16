@@ -59,7 +59,7 @@ class Configurable extends SKUPluginBase {
 
       // Sort the options.
       if (!empty($options)) {
-        $sortable_attributes = $configurable_form_settings->get('sort_options');
+        $sortable_attributes = $configurable_form_settings->get('sortable_options');
         if (in_array($attribute_code, $sortable_attributes)) {
           $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
           $query->fields('ttfd', ['tid', 'weight']);
