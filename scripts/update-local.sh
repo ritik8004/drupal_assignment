@@ -9,9 +9,9 @@ arg2="$2"
 if [ $arg2 = "test" ]
 then
   remote_alias="@alshaya.01test"
-  remote_l_argument=" -l whitelabel16.test-alshaya.acsitefactory.com"
-  origin_dir="sites/g/files/bndsjb6116test/files/"
-  origin="https://whitelabel16.test-alshaya.acsitefactory.com"
+  remote_l_argument=" -l mckw.test-alshaya.acsitefactory.com"
+  origin_dir="sites/g/files/bndsjb246/files/"
+  origin="https://mckw.test-alshaya.acsitefactory.com"
 elif [ $arg2 = "uat" ]
 then
   remote_alias="@alshaya.01uat"

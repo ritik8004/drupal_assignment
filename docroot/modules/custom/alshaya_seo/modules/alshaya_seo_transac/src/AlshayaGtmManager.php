@@ -300,6 +300,10 @@ class AlshayaGtmManager {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
+    if (empty($sku)) {
+      return [];
+    }
+
     // We always use en for tracking.
     if ($sku->hasTranslation('en')) {
       $sku = $sku->getTranslation('en');
@@ -880,7 +884,12 @@ class AlshayaGtmManager {
           $node = $node->getTranslation('en');
         }
         $product_sku = $node->get('field_skus')->getString();
+
         $sku_entity = SKU::loadFromSku($product_sku);
+
+        if (empty($sku_entity)) {
+          return [];
+        }
 
         if ($sku_entity->hasTranslation('en')) {
           $sku_entity = $sku_entity->getTranslation('en');
@@ -889,7 +898,7 @@ class AlshayaGtmManager {
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 
         // Check if this product is in stock.
-        $stock_response = alshaya_acm_is_product_in_stock($sku_entity);
+        $stock_response = alshaya_acm_get_product_stock($sku_entity);
         $stock_status = $stock_response ? 'in stock' : 'out of stock';
         $product_terms = $this->fetchProductCategories($node);
 

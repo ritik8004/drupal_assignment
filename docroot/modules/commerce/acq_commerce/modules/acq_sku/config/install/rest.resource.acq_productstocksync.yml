@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - acq_sku
+    - serialization
+    - simple_oauth
+    - user
+id: acq_productstocksync
+plugin_id: acq_productstocksync
+granularity: method
+configuration:
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - oauth2
