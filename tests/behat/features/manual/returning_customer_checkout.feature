@@ -65,7 +65,7 @@ Feature: Test various checkout scenarios as returning customer
   @cc @knet
   Scenario: As a returning customer
   I should be able to place an order for CC - KNET
-    And I follow "Click & Collect"
+    And I follow "click & collect"
     And I wait for AJAX to finish
     And I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
@@ -120,7 +120,7 @@ Feature: Test various checkout scenarios as returning customer
   @cc @cs
   Scenario: As a returning customer
   I should be able to checkout using CC - Cybersource
-    When I follow "Click & Collect"
+    When I follow "click & collect"
     And I wait for AJAX to finish
     When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
@@ -142,5 +142,24 @@ Feature: Test various checkout scenarios as returning customer
     And I accept terms and conditions
     When I press "place order"
     When I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    And I should see text matching "Your order number is "
+
+  @hd @checkmo
+  Scenario: As a returning customer
+  I should be able to place an order for HD - check / money order
+    When I follow "Home delivery"
+    And I wait for AJAX to finish
+    When I follow "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
+    Then I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_checkmo"
+    And I wait for AJAX to finish
+    Then I accept terms and conditions
+    When I press "place order"
+    And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
     And I should see text matching "Your order number is "

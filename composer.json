@@ -69,6 +69,7 @@
         "drupal/imagemagick": "~2.0",
         "acquia/acsf-tools": "^8.1",
         "drupal/metatag": "1.2",
+        "drupal/acquia_purge": "^1.0@beta",
         "drupal/video_embed_field": "1.x-dev"
     },
     "require-dev": {
@@ -129,7 +130,8 @@
                 "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/metatag-n2628934-23.patch"
             },
             "drupal/acquia_connector": {
-                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch"
+                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
+                "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-4.patch"
             },
             "drupal/search_api": {
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"

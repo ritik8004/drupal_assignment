@@ -133,6 +133,8 @@ select:focus::-ms-value {
   }
 
   ul.select2-results__options {
+    border-radius: 4px;
+
     li.select2-results__option {
       color: $hnm-black-two;
       font-size: 0.75rem;

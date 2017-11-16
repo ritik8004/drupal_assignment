@@ -9,8 +9,6 @@
     margin-top: 0;
 
     .details-privilege-card-wrapper-inside {
-      height: auto !important;
-
       #edit-privilege-card-number2-error,
       #edit-privilege-card-number-error {
         font-size: 0.75rem;
@@ -149,10 +147,6 @@
           text-transform: lowercase;
           margin: 0;
           font-family: $alshaya-thin;
-        }
-
-        .details-privilege-card-wrapper-inside {
-          height: auto !important;
         }
 
         label:not(.error),

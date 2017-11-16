@@ -32,3 +32,14 @@ function alshaya_hm_acq_sku_product_node_alter(Drupal\node\Entity\Node &$node, a
     $node->created = strtotime($product['attributes']['product_activation_date']);
   }
 }
+
+/**
+ * Implements template_preprocess_block().
+ */
+function alshaya_hm_preprocess_block(&$variables) {
+  // Set alshaya-private-card image path.
+  $image_path = drupal_get_path('module', 'alshaya_hm') . '/images/alshaya-priv-card.svg';
+  if($variables['base_plugin_id'] == 'join_the_club') {
+    $variables['content']['image']['#uri'] = $image_path;
+  }
+}

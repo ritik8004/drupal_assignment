@@ -12,12 +12,11 @@ elements: "select_your_preference_of_channel_of_communication:\n  '#type': radio
 css: ''
 javascript: ''
 settings:
+  ajax: false
   page: true
   page_submit_path: /contact
   page_confirm_path: ''
-  form_submit_label: ''
   form_submit_once: false
-  form_submit_attributes: {  }
   form_exception_message: ''
   form_open_message: ''
   form_close_message: ''
@@ -27,33 +26,34 @@ settings:
   form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_reset: false
   form_disable_autocomplete: false
   form_novalidate: false
   form_unsaved: false
   form_disable_back: false
   form_autofocus: false
   form_details_toggle: false
+  submission_label: ''
   submission_log: false
+  submission_user_columns: {  }
   wizard_progress_bar: true
   wizard_progress_pages: false
   wizard_progress_percentage: false
-  wizard_next_button_label: ''
-  wizard_next_button_attributes: {  }
-  wizard_prev_button_label: ''
-  wizard_prev_button_attributes: {  }
   wizard_start_label: ''
   wizard_complete: true
   wizard_complete_label: ''
   preview: 0
-  preview_next_button_label: ''
-  preview_next_button_attributes: {  }
-  preview_prev_button_label: ''
-  preview_prev_button_attributes: {  }
+  preview_label: ''
+  preview_title: ''
   preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
   draft: none
+  draft_multiple: false
   draft_auto_save: false
-  draft_button_label: ''
-  draft_button_attributes: {  }
   draft_saved_message: ''
   draft_loaded_message: ''
   confirmation_type: page
@@ -81,42 +81,47 @@ access:
       - anonymous
       - authenticated
     users: {  }
+    permissions: {  }
   view_any:
     roles:
       - webmaster
     users: {  }
+    permissions: {  }
   update_any:
     roles: {  }
     users: {  }
+    permissions: {  }
   delete_any:
     roles: {  }
     users: {  }
+    permissions: {  }
   purge_any:
     roles: {  }
     users: {  }
+    permissions: {  }
   view_own:
     roles: {  }
     users: {  }
+    permissions: {  }
   update_own:
     roles: {  }
     users: {  }
+    permissions: {  }
   delete_own:
     roles: {  }
     users: {  }
+    permissions: {  }
 handlers:
   email:
     id: email
-    label: Email
+    label: email
     handler_id: email
     status: true
+    conditions: {  }
     weight: 0
     settings:
       states:
-        completed: completed
-        draft: '0'
-        converted: '0'
-        updated: '0'
-        deleted: '0'
+        - completed
       to_mail: no-reply@acquia.com
       to_options: {  }
       cc_mail: ''
@@ -125,12 +130,16 @@ handlers:
       bcc_options: {  }
       from_mail: default
       from_options: {  }
-      from_name: default
-      subject: default
+      from_name: 'Contact us form submission on [site:name]'
+      subject: 'Contact us form submission on [site:name]'
       body: "<strong>Communication preference</strong> - [webform_submission:values:select_your_preference_of_channel_of_communication]<br />\n<br />\n<strong>Name</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:last_name]<br />\n<br />\n<strong>Mobile</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:mobile_number]<br />\n<br />\n<strong>Email</strong> -&nbsp;[webform_submission:values:first_name]&nbsp;[webform_submission:values:email]<br />\n<br />\n<strong>Message</strong> -&nbsp;<br />\n<br />\n[webform_submission:values:first_name]&nbsp;[webform_submission:values:message]"
       excluded_elements: {  }
+      ignore_access: false
+      exclude_empty: true
       html: true
       attachments: false
       debug: false
       reply_to: ''
       return_path: ''
+      sender_mail: ''
+      sender_name: ''

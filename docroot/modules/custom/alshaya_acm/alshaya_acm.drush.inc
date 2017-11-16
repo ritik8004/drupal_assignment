@@ -25,6 +25,18 @@ function alshaya_acm_drush_command() {
     ],
   ];
 
+  $commands['alshaya-acm-print-category-menu-tree'] = [
+    'description' => 'Print the category menu true for specified language.',
+    'aliases'     => ['aapcmt'],
+    'arguments'     => [
+      'langcode' => 'Language code for which we want to get category tree.',
+    ],
+    'required-arguments' => TRUE,
+    'examples'    => [
+      'drush aapcmt en' => 'Print the category menu true for en language.',
+    ],
+  ];
+
   return $commands;
 }
 
@@ -155,4 +167,29 @@ function drush_alshaya_acm_offline_products_sync() {
   }
 
   drush_print(dt('Done.'));
+}
+
+/**
+ * Implements drush alshaya-acm-print-category-menu-tree.
+ *
+ * @param string $langcode
+ *   Language code for which we want to get category tree.
+ */
+function drush_alshaya_acm_print_category_menu_tree($langcode) {
+  /** @var \Drupal\alshaya_main_menu\ProductCategoryTree $product_category_tree */
+  $product_category_tree = \Drupal::service('alshaya_main_menu.product_category_tree');
+
+  $tree = $product_category_tree->getCategoryTree($langcode);
+
+  foreach ($tree as $level1) {
+    drush_print($level1['label']);
+
+    foreach ($level1['child'] as $level2) {
+      drush_print('--' . $level2['label']);
+
+      foreach ($level2['child'] as $level3) {
+        drush_print('----' . $level3['label']);
+      }
+    }
+  }
 }

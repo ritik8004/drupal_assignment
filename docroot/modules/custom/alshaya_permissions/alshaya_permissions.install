@@ -12,6 +12,24 @@ use Drupal\user\Entity\Role;
  *
  * Grant translation interface access to webmaster.
  */
+function alshaya_permissions_update_8002() {
+  $role = Role::load('seo_admin');
+  $role->grantPermission('access administration pages');
+  $role->grantPermission('administer meta tags');
+  $role->save();
+
+  $role = Role::load('webmaster');
+  $role->grantPermission('administer menu link attributes');
+  $role->grantPermission('administer meta tags');
+  $role->grantPermission('use menu link attributes');
+  $role->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Grant translation interface access to webmaster.
+ */
 function alshaya_permissions_update_8001() {
   $role = Role::load('webmaster');
   $role->grantPermission('translate interface');

@@ -9,9 +9,9 @@ arg2="$2"
 if [ $arg2 = "test" ]
 then
   remote_alias="@alshaya.01test"
-  remote_l_argument=" -l whitelabel16.test-alshaya.acsitefactory.com"
-  origin_dir="sites/g/files/bndsjb6116test/files/"
-  origin="https://whitelabel16.test-alshaya.acsitefactory.com"
+  remote_l_argument=" -l mckw.test-alshaya.acsitefactory.com"
+  origin_dir="sites/g/files/bndsjb246/files/"
+  origin="https://mckw.test-alshaya.acsitefactory.com"
 elif [ $arg2 = "uat" ]
 then
   remote_alias="@alshaya.01uat"
@@ -66,16 +66,6 @@ drush $alias $l_argument ssh "sudo service memcached restart"
 # Install the dump.
 echo "Installing database from $arg2 env"
 drush $alias $l_argument sql-cli < $local_archive
-
-# Update configs for oauth
-echo "Updating config for oauth."
-drush $alias $l_argument cset simple_oauth.settings private_key "/var/www/alshaya/box/alshaya_acm" -y
-drush $alias $l_argument cset simple_oauth.settings public_key "/var/www/alshaya/box/alshaya_acm.pub" -y
-
-# Update configs for autologout
-echo "Updating config for autologout."
-drush $alias $l_argument cset autologout.settings timeout 86400 -y
-drush $alias $l_argument cset autologout.settings max_timeout 86400 -y
 
 # Update super admin email to local default.
 echo "Update super admin email to no-reply@acquia.com."

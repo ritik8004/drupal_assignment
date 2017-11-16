@@ -13,6 +13,10 @@
 
   img {
     width: 100%;
+
+    @include breakpoint($above-palm) {
+      min-height: 16.625rem;
+    }
   }
 }
 
@@ -25,20 +29,15 @@
 }
 
 .slick-list {
-  width: 47.5rem;
-  #{direction(left)}: calc((100vw - 47.5rem) / 2);
+  width: 100%;
   min-height: 10.5rem;
 
   @include breakpoint($lap) {
-    width: 71.875rem;
     min-height: 15.875rem;
-    #{direction(left)}: calc((100vw - 71.875rem) / 2);
   }
 
   @include breakpoint($desk) {
-    width: 120rem;
     min-height: 26.5rem;
-    #{direction(left)}: calc((100vw - 120rem) / 2);
   }
 }
 
@@ -91,7 +90,8 @@
 
 /* Slider dots */
 .slick-dots {
-  margin: 0.5rem 0 0;
+  margin: 0;
+  margin-top: -0.2rem;
   text-align: center;
   padding: 0;
 

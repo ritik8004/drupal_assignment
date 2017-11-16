@@ -51,6 +51,7 @@ class Configurable extends SKUPluginBase {
       $attribute_code = $configurable['code'];
 
       $options = [];
+      $sorted_options = [];
 
       foreach ($configurable['values'] as $value) {
         $options[$value['value_id']] = $value['label'];
@@ -70,7 +71,6 @@ class Configurable extends SKUPluginBase {
         $query->orderBy('weight', 'ASC');
         $tids = $query->execute()->fetchAllAssoc('tid');
 
-        $sorted_options = [];
         foreach ($tids as $tid => $values) {
           $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
         }
@@ -436,20 +436,28 @@ class Configurable extends SKUPluginBase {
    *   Reference to SKU in existing tree.
    */
   public static function &findProductInTreeWithConfig(array &$tree, array $config) {
-    $sku = $tree['parent']->getSKU();
-    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    if (isset($tree['products'])) {
+      $child_skus = array_keys($tree['products']);
+      $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
 
-    $query->addField('acq_sku', 'sku');
-    $query->condition('sku', "%$sku%", 'LIKE');
+      $query->addField('acq_sku', 'sku');
 
-    foreach ($config as $key => $value) {
-      $query->join('acq_sku__attributes', $key, "acq_sku.id = $key.entity_id");
-      $query->condition("$key.attributes_key", $key);
-      $query->condition("$key.attributes_value", $value);
+      if (!empty($child_skus)) {
+        $query->condition('sku', $child_skus, 'IN');
+      }
+
+      foreach ($config as $key => $value) {
+        $query->join('acq_sku__attributes', $key, "acq_sku.id = $key.entity_id");
+        $query->condition("$key.attributes_key", $key);
+        $query->condition("$key.attributes_value", $value);
+      }
+
+      $sku = $query->execute()->fetchField();
+      return $tree['products'][$sku];
     }
-
-    $sku = $query->execute()->fetchField();
-    return $tree['products'][$sku];
+    else {
+      return NULL;
+    }
   }
 
   /**

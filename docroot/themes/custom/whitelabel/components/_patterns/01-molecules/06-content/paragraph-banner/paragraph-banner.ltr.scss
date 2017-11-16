@@ -11,3 +11,60 @@
     vertical-align: middle;
   }
 }
+
+.paragraph-t-banner {
+  position: relative;
+
+  .field-link a {
+    @include breakpoint($above-palm) {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: $z-1;
+    }
+  }
+
+  .field-video {
+    @include breakpoint($above-palm) {
+      position: absolute;
+      z-index: $z-2;
+    }
+
+    @include breakpoint($lap) {
+      left: 1.5rem;
+      height: 8.375rem;
+      bottom: 1.8rem;
+    }
+
+    @include breakpoint($desk) {
+      left: 0.875rem;
+      height: 8.375rem;
+      bottom: 3.1rem;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+
+      @include breakpoint($upto-palm) {
+        min-height: 12.1875rem;
+      }
+
+      @include breakpoint($above-palm) {
+        position: static;
+      }
+
+      @include breakpoint($lap) {
+        width: 18.625rem;
+        height: 8.375rem;
+      }
+
+      @include breakpoint($desk) {
+        width: 20.5rem;
+        height: 9.125rem;
+      }
+    }
+  }
+}

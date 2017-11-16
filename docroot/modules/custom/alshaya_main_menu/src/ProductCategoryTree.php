@@ -7,7 +7,6 @@ use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
@@ -38,13 +37,6 @@ class ProductCategoryTree {
   protected $nodeStorage;
 
   /**
-   * Entity repository.
-   *
-   * @var \Drupal\Core\Entity\EntityRepositoryInterface
-   */
-  protected $entityRepository;
-
-  /**
    * Language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -56,15 +48,12 @@ class ProductCategoryTree {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
-   *   Entity repository.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityRepositoryInterface $entity_repository, LanguageManagerInterface $language_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
-    $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
   }
 
@@ -75,13 +64,15 @@ class ProductCategoryTree {
    *   Processed term data from cache if available or fresh.
    */
   public function getCategoryTreeCached() {
-    $cid = self::CACHE_ID . '_' . $this->languageManager->getCurrentLanguage()->getId();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    $cid = self::CACHE_ID . '_' . $langcode;
 
     if ($term_data = \Drupal::cache(self::CACHE_BIN)->get($cid)) {
       return $term_data->data;
     }
 
-    $term_data = $this->getCategoryTree();
+    $term_data = $this->getCategoryTree($langcode);
 
     $cache_tags = [
       self::CACHE_TAG,
@@ -96,13 +87,15 @@ class ProductCategoryTree {
   /**
    * Get the term tree for 'product_category' vocabulary.
    *
+   * @param string $langcode
+   *   Language code in which we need term to be displayed.
    * @param int $parent_tid
    *   Parent term id.
    *
    * @return array
    *   Processed term data.
    */
-  protected function getCategoryTree($parent_tid = 0) {
+  public function getCategoryTree($langcode, $parent_tid = 0) {
     $data = [];
 
     /* @var \Drupal\taxonomy\TermInterface[] $terms */
@@ -116,8 +109,16 @@ class ProductCategoryTree {
     $alshaya_department_pages = alshaya_department_page_get_pages();
 
     foreach ($terms as $term) {
-      // For language specific data.
-      $term = $this->entityRepository->getTranslationFromContext($term);
+      // Check for translations if not browsing in the site-default language.
+      if ($langcode !== $this->languageManager->getDefaultLanguage()->getId()) {
+        // For language specific data.
+        if ($term->hasTranslation($langcode)) {
+          $term = $term->getTranslation($langcode);
+        }
+        else {
+          continue;
+        }
+      }
 
       // Get value of boolean field which will decide if we show/hide this
       // term and child terms in the menu.
@@ -153,7 +154,7 @@ class ProductCategoryTree {
         }
       }
 
-      $data[$term->id()]['child'] = $this->getCategoryTree($term->id());
+      $data[$term->id()]['child'] = $this->getCategoryTree($langcode, $term->id());
     }
 
     return $data;

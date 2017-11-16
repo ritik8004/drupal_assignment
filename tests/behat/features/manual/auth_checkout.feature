@@ -4,7 +4,7 @@ Feature: As an authenticated user
   using various payment options
 
   Background:
-    Given I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
     When I am on a simple product page
@@ -69,7 +69,7 @@ Feature: As an authenticated user
   Scenario: As an authenticated user
   I should be able to use click and collect option
   and pay by KNET
-    And I follow "Click & Collect"
+    And I follow "click & collect"
     And I wait for the page to load
     And I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
@@ -126,7 +126,7 @@ Feature: As an authenticated user
   Scenario: As an authenticated user
     I should be able to checekout on Click and Collect
     using Cybersource payment method
-    When I follow "Click & Collect"
+    When I follow "click & collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
@@ -149,5 +149,25 @@ Feature: As an authenticated user
     And I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    And I should see text matching "Your order number is "
+
+  @hd @checkmo
+  Scenario: As an authenticated user
+  I should be able to checkout using Home delivery
+  and pay by Check / Money Order
+    When I follow "Home delivery"
+    And I wait for AJAX to finish
+    When I follow "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
+    And I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_checkmo"
+    And I wait for AJAX to finish
+    And I accept terms and conditions
+    And I press "place order"
+    And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
     And I should see text matching "Your order number is "

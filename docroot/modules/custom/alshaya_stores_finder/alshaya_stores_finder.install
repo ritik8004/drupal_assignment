@@ -5,6 +5,17 @@
  * Install file for alshaya_store_finder.
  */
 
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update().
+ *
+ * Set default marker icon.
+ */
+function alshaya_stores_finder_update_8101() {
+  alshaya_stores_finder_set_default_marker_icon();
+}
+
 /**
  * Implements hook_update_N().
  */
@@ -20,7 +31,12 @@ function alshaya_stores_finder_update_8103() {
 function alshaya_stores_finder_install() {
   // Set default google map api key.
   $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
-  $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
+  $geolocation_settings = Settings::get('geolocation.settings');
+
+  foreach ($geolocation_settings as $key => $value) {
+    $config->set($key, $value);
+  }
+
   $config->save();
 
   // Set default marker icon settings.
@@ -57,13 +73,4 @@ function alshaya_stores_finder_update_8102() {
   $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
   $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
   $config->save();
-}
-
-/**
- * Implements hook_update().
- *
- * Set default marker icon.
- */
-function alshaya_stores_finder_update_8101() {
-  alshaya_stores_finder_set_default_marker_icon();
 }
