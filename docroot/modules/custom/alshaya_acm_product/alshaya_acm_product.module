@@ -704,7 +704,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // Default use-case: User landing on PDP from PLP/Search/directly.
         // Set the color applicable to first child sku as default here.
         $child_skus = $sku_manager->getChildSkus($sku_entity);
-        $first_child = array_shift($child_skus);
+        $first_child = array_shift(array_filter($child_skus));
       }
 
       if ($first_child instanceof SKU) {
@@ -745,6 +745,19 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // We are not going to show the form right now, we don't do any
         // stock check for variant SKUs.
         if (!$process_stock) {
+          // Disable options which don't have skus in the product tree.
+          if (count($form_state->get('tree')['configurables']) > 1) {
+            foreach ($configurable['#options'] as $key => $value) {
+              $product_tree = $form_state->get('tree');
+              if (isset($product_tree['options'][$configurable_key . ':' . $key])) {
+                $variations = array_filter($product_tree['options'][$configurable_key . ':' . $key]);
+                if (isset($variations['#available_config']) &&
+                  (count($variations) === 1)) {
+                  $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
+                }
+              }
+            }
+          }
           continue;
         }
 
