@@ -236,7 +236,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
           }
 
           if ($sku_entity instanceof SKU) {
-            if ($swatch_type === 'miniature_image') {
+            if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_DEFAULT) {
               $asset = $sku_asset_manager->getSkuAsset($sku_entity, 'swatch', 'swatch');
             }
 
