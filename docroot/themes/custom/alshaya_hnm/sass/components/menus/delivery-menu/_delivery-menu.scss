@@ -59,10 +59,6 @@
     letter-spacing: 1.5px;
     text-transform: uppercase;
     color: $hnm-black-two;
-
-    @include breakpoint($only-mobile) {
-      font-size: 16px;
-    }
   }
 
   .field--name-field-sub-title {
@@ -70,10 +66,6 @@
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
     color: $link-hover;
-
-    @include breakpoint($only-mobile) {
-      font-size: 0.625rem;
-    }
   }
 
   .field--name-field-link a {
