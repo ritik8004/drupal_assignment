@@ -175,6 +175,24 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['#prefix'] = '<div class="address-book-address">';
   $element['#suffix'] = '</div>';
 
+  // @todo: Do this change conditionally.
+  $element['locality'] = [
+    '#type' => 'select',
+    '#title' => t('Emirate', [], ['context' => 'Address label']),
+    '#required' => TRUE,
+    '#multiple' => FALSE,
+    '#default_value' => $element['locality']['#default_value'],
+    '#options' => ['' => t('Select Governate')] + _alshaya_addressbook_area_list('KW', FALSE),
+    '#attributes' => [
+      'class' => ['select2-select'],
+    ],
+    '#attached' => [
+      'library' => [
+        'alshaya_white_label/convert_to_select2',
+      ],
+    ],
+  ];
+
   return $element;
 }
 
@@ -414,28 +432,34 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
  *
  * @param string $country_code
  *   The country code.
+ * @param bool $has_parent
+ *   Identifier if parents or children are to returned.
  *
  * @return array
  *   List or areas.
  */
-function _alshaya_addressbook_area_list($country_code = 'KW') {
+function _alshaya_addressbook_area_list($country_code = 'KW', $has_parent = TRUE) {
   $term_tree = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree('area_list', 0, NULL, TRUE);
-  $area_list = [];
+  $term_list = $area_list = $governate_list = [];
   if (!empty($term_tree)) {
     /* \Drupal\taxonomy\Entity\Term $term */
     foreach ($term_tree as $term) {
-      if (\Drupal::config('alshaya_addressbook.settings')->get('dm_version') == DM_VERSION_2
-      // If DM is 2 and where parent = 0, we skip terms as they are governates.
-      && empty(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($term->id()))) {
-        continue;
-      }
       $term = \Drupal::service('entity.repository')->getTranslationFromContext($term);
-      $area_list[$term->getName()] = $term->getName();
+      // If has_parent is false, DM is 2 and parent = 0, they are governates.
+      if (!$has_parent
+      && \Drupal::config('alshaya_addressbook.settings')->get('dm_version') == DM_VERSION_2
+      && empty(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($term->id()))) {
+        $governate_list[$term->getName()] = $term->getName();
+      }
+      else {
+        $area_list[$term->getName()] = $term->getName();
+      }
     }
   }
-  asort($area_list);
+  $term_list = ($has_parent) ? $area_list : $governate_list;
+  asort($term_list);
 
-  return $area_list;
+  return $term_list;
 }
 
 /**

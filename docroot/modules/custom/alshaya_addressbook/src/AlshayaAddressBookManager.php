@@ -573,7 +573,7 @@ class AlshayaAddressBookManager {
         ];
         /** @var \Drupal\taxonomy\Entity\Term $governateTerm */
         $governateTerm = $this->updateLocation($governateData);
-        $termsProcessed[] = $governate['location_id'];
+        $termsProcessed[] = $governateTerm->id();
 
         // Fetch area's under this governate.
         $areas = $this->alshayaApiWrapper->getLocations('parent_id', $governate['location_id']);
@@ -584,8 +584,8 @@ class AlshayaAddressBookManager {
               'field_location_id' => $area['location_id'],
               'parent' => $governateTerm->id(),
             ];
-            $this->updateLocation($areaData);
-            $termsProcessed[] = $area['location_id'];
+            $areaTerm = $this->updateLocation($areaData);
+            $termsProcessed[] = $areaTerm->id();
           }
         }
       }
@@ -594,7 +594,7 @@ class AlshayaAddressBookManager {
       if (!empty($termsProcessed)) {
         $result = \Drupal::entityQuery('taxonomy_term')
           ->condition('vid', self::AREA_VOCAB)
-          ->condition('field_location_id', $termsProcessed, 'NOT IN')
+          ->condition('tid', $termsProcessed, 'NOT IN')
           ->execute();
 
         if ($result) {
