@@ -559,8 +559,12 @@
     input {
       border: none !important;
 
+      &:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: $white-five !important;
+      }
+
       &::placeholder {
-        display: none;
         color: transparent;
       }
 
