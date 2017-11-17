@@ -32,6 +32,12 @@
       color: $white-five;
       font-size: 1.75rem;
     }
+
+    &:hover {
+      &::before {
+        color: $grey5;
+      }
+    }
   }
 
   .c-social-links--facebook {

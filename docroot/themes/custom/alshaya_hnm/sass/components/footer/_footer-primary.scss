@@ -287,7 +287,7 @@
 
         @include breakpoint($desktop) {
           font-size: 0.875rem;
-          line-height: 1.6;
+          line-height: 1.57;
         }
 
         &:hover {
@@ -352,7 +352,7 @@
   h3 {
     font-family: $hnm-bold;
     -webkit-font-smoothing: antialiased;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     letter-spacing: 1.2px;
     text-align: $left;
     color: $white-five;
@@ -361,12 +361,10 @@
     margin-bottom: 0.625rem;
 
     @include breakpoint($tablet) {
-      font-size: 0.875rem;
       margin-bottom: 0.5rem;
     }
 
     @include breakpoint($desktop) {
-      font-size: 0.875rem;
       letter-spacing: 1px;
       margin-bottom: 0.625rem;
     }
@@ -378,21 +376,18 @@
 
   .newsletter-block-label {
     font-family: $hnm-regular;
-    width: calc(100% - 1.5625rem);
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     line-height: 1.5;
     text-align: $left;
     color: $grey5;
 
     @include breakpoint($tablet) {
-      font-size: 0.875rem;
       width: 11.875rem;
       line-height: 1.29;
     }
 
     @include breakpoint($desktop) {
       width: 100%;
-      font-size: 0.875rem;
       line-height: 1.5;
     }
   }
@@ -429,7 +424,7 @@
   }
 
   input[type="email"] {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     line-height: 2;
     text-align: $left;
     background-color: $hnm-black;
@@ -445,7 +440,6 @@
 
     @include breakpoint($desktop) {
       margin-top: 1.6875rem;
-      font-size: 0.875rem;
     }
 
     &::placeholder {
@@ -477,7 +471,7 @@
     }
 
     @include breakpoint($desktop) {
-      #{$right}: -1.5rem;
+      #{$right}: 0;
       font-size: 0.875rem;
     }
 
@@ -493,6 +487,7 @@
       margin: 0;
       padding: 0.875rem 0;
       position: relative;
+      overflow: hidden;
 
       @include icon(dropdown-expand, after) {
         position: absolute;

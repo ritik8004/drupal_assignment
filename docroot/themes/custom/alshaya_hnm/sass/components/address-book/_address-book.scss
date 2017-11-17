@@ -410,7 +410,12 @@
 
     display: block;
     margin-top: 1.25rem;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
+
+    html[lang=en] & {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
     @include breakpoint($tablet) {
       display: inline-block;
@@ -519,6 +524,10 @@
         }
       }
 
+      .form-item-mobile-number-country-code {
+        min-width: 2.688rem;
+      }
+
       .prefix {
         font-size: 1rem;
         line-height: 2.25;
@@ -559,8 +568,12 @@
     input {
       border: none !important;
 
+      &:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: $white-five !important;
+      }
+
       &::placeholder {
-        display: none;
         color: transparent;
       }
 

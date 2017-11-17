@@ -74,12 +74,27 @@
   }
 
   a {
-    color: $marine-blue-two;
+    color: $hnm-black-two;
     display: block;
-    font-size: 0.813rem;
+    font-size: 0.875rem;
     text-align: center;
-    border: 1px solid $marine-blue-two;
+    border: 1px solid $hnm-black-two;
     padding: 0.563rem 4.12rem;
-    font-family: $arial;
+    font-family: $hnm-regular;
+  }
+}
+
+button.edit-add-to-cart {
+  &.ladda-button[data-style=zoom-in][data-loading] {
+    .ladda-spinner {
+      background-image: url("../imgs/icons/ic-loader.svg");
+      background-size: contain;
+      top: 2px;
+      #{$left}: 42%;
+
+      > div {
+        display: none;
+      }
+    }
   }
 }
