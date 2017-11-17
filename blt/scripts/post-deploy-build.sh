@@ -21,7 +21,7 @@ do
     if [ uname_string == 'Darwin' ]
     then
       sed -i '' '/dist/d' $deployDir/docroot/themes/custom/$i/.gitignore
-    elif
+    else
       sed -i '/dist/d' $deployDir/docroot/themes/custom/$i/.gitignore
     fi
   fi
