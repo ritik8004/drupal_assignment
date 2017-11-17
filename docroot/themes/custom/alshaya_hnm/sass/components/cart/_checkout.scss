@@ -538,7 +538,6 @@
   }
 
   .order-total {
-    font-weight: bold;
     color: $black-two;
     margin-top: 10px;
   }
@@ -1074,7 +1073,6 @@ body.alias--cart {
       @include breakpoint($tablet) {
         display: block;
         font-family: $hnm-bold;
-        font-weight: normal;
         text-transform: uppercase;
         text-decoration: underline;
         border: 0;
@@ -1133,7 +1131,6 @@ body.alias--cart {
         span.price-amount {
           font-family: $hnm-bold;
           color: $hnm-black-two;
-          font-weight: normal;
         }
 
         span.price-amount {
@@ -1201,8 +1198,7 @@ body.alias--cart {
   #edit-continue-shopping,
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    font-size: 12px;
-    font-weight: bold;
+    font-size: 0.75rem;
     border: 1px solid $hnm-black-two;
     display: block;
     padding: 0.625rem 1.6rem;
@@ -1309,7 +1305,6 @@ body.alias--cart {
   .edit-continue-shopping-mobile {
     font-size: 0.875rem;
     font-family: $hnm-bold;
-    font-weight: normal;
     border: 1px solid $hnm-black-two;
     background: $hnm-black-two;
     padding: 0.53125rem 0;

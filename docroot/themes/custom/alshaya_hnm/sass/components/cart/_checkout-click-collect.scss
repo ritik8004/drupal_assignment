@@ -76,8 +76,6 @@
       cursor: pointer;
       line-height: 1.2;
       text-transform: lowercase;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
 
       &:hover {
         color: $hnm-black-two;
@@ -484,8 +482,6 @@
               width: 10.13rem;
               margin-top: 0.9375rem;
               text-transform: lowercase;
-              -webkit-font-smoothing: antialiased;
-              -moz-osx-font-smoothing: grayscale;
 
               @include icon(map, before) {
                 color: $hnm-black-two;
