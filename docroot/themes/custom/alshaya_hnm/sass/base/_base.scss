@@ -15,6 +15,8 @@ body {
 
 body {
   font-family: $hnm-regular;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html[lang='ar'] {
