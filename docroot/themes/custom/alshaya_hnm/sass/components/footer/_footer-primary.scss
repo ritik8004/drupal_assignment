@@ -471,7 +471,7 @@
     }
 
     @include breakpoint($desktop) {
-      #{$right}: -1.5rem;
+      #{$right}: 0;
       font-size: 0.875rem;
     }
 
