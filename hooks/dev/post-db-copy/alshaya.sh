@@ -19,7 +19,7 @@ source_env="$4"
 uri=`/usr/bin/env php /mnt/www/html/$site.$target_env/hooks/acquia/uri.php $site $target_env $db_role`
 
 # Print a statement to the cloud log.
-echo "$site.$target_env: Received copy of database $db_name from $source_env."
+echo "$site.$target_env: Received copy of database $db_role from $source_env."
 
 # Check status once so hook_drush_command_alter is triggered.
 drush8 @$site.$target_env --uri=$uri status
@@ -30,8 +30,23 @@ drush8 @$site.$target_env --uri=$uri sync-commerce-cats
 drush8 @$site.$target_env --uri=$uri sync-commerce-product-options
 drush8 @$site.$target_env --uri=$uri sync-commerce-products en 30 -y
 drush8 @$site.$target_env --uri=$uri sync-commerce-products ar 15 -y
-
-# Now we need to wait for products to finish loading for promotions to get applied
-# Which we can do here but for sure it will be done in cron jobs.
-# @TODO: Sync stores - will this be applicable even in non transac?
 drush8 @$site.$target_env --uri=$uri alshaya-api-sync-stores
+
+# Now wait for SKUs to be loaded.
+while :
+do
+  sleep 60
+  SKUCOUNT=$(drush8 @$site.$target_env --uri=$uri sqlq "select count(*) from acq_sku_field_data")
+
+  if [ $SKUCOUNT -gt 20000 ]
+  then
+    break
+  fi
+done
+
+drush8 @$site.$target_env --uri=$uri sync-commerce-promotions
+drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_attach_queue
+drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_detach_queue
+
+timestamp=$(date +%s)
+drush8 @$site.$target_env --uri=$uri sql-dump | gzip > ~/$target_env/post_db_copy_$timestamp.sql
