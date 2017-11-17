@@ -1,21 +1,20 @@
-@manual @javascript @arabic @mmcpa-2178
+@manual @javascript @arabic @my_account
 Feature: Test the My account section for authenticated user
 
   Background:
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load
 
   Scenario:
-  As an authenticated user
-  I should be able to see all the sections
-  after logging in
+    As an authenticated user
+    I should be able to see all the sections
+    after logging in
     Then I should see the link "حسابي" in ".my-account-nav" section
     And I should see the link "الطلبيات" in ".my-account-nav" section
     Then I should see the link "تفاصيل الاتصال" in ".my-account-nav" section
     And I should see the link "سجل العناوين" in ".my-account-nav" section
-    Then I should see the link "تفضيلات التواصل" in ".my-account-nav" section
     And I should see the link "تغيير كلمة السر" in ".my-account-nav" section
     And I should see the link "عرض كل الطلبيات"
 
@@ -25,7 +24,7 @@ Feature: Test the My account section for authenticated user
   and access the links under Need help
     When I see the text "هل تحتاج إلى مساعدة في طلبيتك؟"
     Then I should see the link "خدمة الزبائن"
-    Then I should see the link "سياسية الاسترجاع اونلاين وفي المحلات"
+    Then I should see the link "شروط وأحكام الشراء "
     And I should see the link "معلومات التوصيل"
     When I follow "<link>"
     And I wait for the page to load
@@ -35,7 +34,7 @@ Feature: Test the My account section for authenticated user
     Examples:
       |link|text|url|
       |خدمة الزبائ|Contact us|/contact|
-      |سياسية الاسترجاع اونلاين وفي المحلات|Contact us|/contact|
+      |شروط وأحكام الشراء |Contact us|/contact|
       |معلومات التوصيل|Contact us|/contact|
 
   Scenario:
@@ -49,50 +48,50 @@ Feature: Test the My account section for authenticated user
     Then the url should match "/orders"
     And I should see text matching "هل تحتاج إلى مساعدة في طلبيتك؟"
     Then I should see the link "خدمة الزبائن"
-    Then I should see the link "سياسية الاسترجاع اونلاين وفي المحلات"
+    Then I should see the link "شروط وأحكام الشراء "
     And I should see the link "معلومات التوصيل"
 
-  Scenario: As an authenticated user
-  I should be prompted to join the privilege club
-  if I don't have a privilege account
-    When I follow "تعديل معلومات الحساب"
-    And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
-    When I click the label for "#ui-id-2 > p.title"
-    When I fill in "edit-privilege-card-number" with ""
-    And I press "حفظ"
-    And I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
-    And I wait for the page to load
-    Then I should see "نادي الامتيازات"
-    And I should see "اربح جوائز مدهشة"
-    Then I should see "احصل على مكافآت حصرية"
-    And I should see "كُن أول من يعلم"
-    Then I should see the link "مزيد من المعلومات"
-    And I should not see "رقم بطاقة نادي الامتيازات"
-
-  Scenario: As an authenticated user
-  account details section should display Privilege card number
-  along with Email address
-    When I follow "تعديل معلومات الحساب"
-    And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
-    When I click the label for "#ui-id-2 > p.title"
-    When I fill in "edit-privilege-card-number" with "000135844"
-    When I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
-    And I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
-    And I wait for the page to load
-    Then I should see "shweta+2@axelerant.com"
-    Then I should see "6362 - 5440 - 0013 - 5844"
-    And I should not see "اربح جوائز مدهشة"
-    Then I should not see "احصل على مكافآت حصرية"
-    And I should not see "كُن أول من يعلم"
-    Then I should not see the link "مزيد من المعلومات"
-    And I should see "رقم بطاقة نادي الامتيازات"
+#  Scenario: As an authenticated user
+#  I should be prompted to join the privilege club
+#  if I don't have a privilege account
+#    When I follow "تعديل معلومات الحساب"
+#    And I wait for the page to load
+#    When I fill in "edit-field-mobile-number-0-mobile" with ""
+#    When I click the label for "#ui-id-2 > p.title"
+#    When I fill in "edit-privilege-card-number" with ""
+#    And I press "حفظ"
+#    And I wait for the page to load
+#    Then I should see "تم حفظ ببيانات الاتصال"
+#    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
+#    And I wait for the page to load
+#    Then I should see "نادي الامتيازات"
+#    And I should see "اربح جوائز مدهشة"
+#    Then I should see "احصل على مكافآت حصرية"
+#    And I should see "كُن أول من يعلم"
+#    Then I should see the link "مزيد من المعلومات"
+#    And I should not see "رقم بطاقة نادي الامتيازات"
+#
+#  Scenario: As an authenticated user
+#  account details section should display Privilege card number
+#  along with Email address
+#    When I follow "تعديل معلومات الحساب"
+#    And I wait for the page to load
+#    When I fill in "edit-field-mobile-number-0-mobile" with ""
+#    When I click the label for "#ui-id-2 > p.title"
+#    When I fill in "edit-privilege-card-number" with "000135844"
+#    When I fill in "edit-privilege-card-number2" with "000135844"
+#    And I press "حفظ"
+#    And I wait for the page to load
+#    Then I should see "تم حفظ ببيانات الاتصال"
+#    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
+#    And I wait for the page to load
+#    Then I should see "shweta+3@axelerant.com"
+#    Then I should see "6362 - 5440 - 0013 - 5844"
+#    And I should not see "اربح جوائز مدهشة"
+#    Then I should not see "احصل على مكافآت حصرية"
+#    And I should not see "كُن أول من يعلم"
+#    Then I should not see the link "مزيد من المعلومات"
+#    And I should see "رقم بطاقة نادي الامتيازات"
 
   Scenario: As an authenticated user
   I should be able to filter the listed orders
@@ -100,11 +99,11 @@ Feature: Test the My account section for authenticated user
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
 #    When I fill in "edit-search" with "شورت من قماش الجورسيه با…"
-    When I fill in "edit-search" with "Horse Photographic تي- ش…"
+    When I fill in "edit-search" with "حاملة"
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
 #    Then I should see all "شورت من قماش الجورسيه با…" orders
-    Then I should see all "Horse Photographic تي- ش…" orders
+    Then I should see all "حاملة" orders
     When I fill in "edit-search" with "MCKWRCE"
     And I wait 2 seconds
     When I click the label for "#edit-submit-orders"
@@ -115,13 +114,10 @@ Feature: Test the My account section for authenticated user
   I should be able to filter on all cancelled, dispatched and processing orders
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
-    When I select Cancelled from the status dropdown
-    And I wait for the page to load
-    Then I should see all "المعالجة" orders listed on orders tab
-    When I select Dispatched from the status dropdown
+    When I select "اعادة ايجاد" from the dropdown
     And I wait for the page to load
     Then I should see all "اعادة ايجاد" orders listed on orders tab
-    When I select Processing from the status dropdown
+    When I select "المعالجة" from the dropdown
     And I wait for the page to load
     Then I should see all "المعالجة" orders listed on orders tab
 
@@ -155,7 +151,7 @@ Feature: Test the My account section for authenticated user
     When I fill in "field_address[0][address][given_name]" with "علية"
     And I fill in "field_address[0][address][family_name]" with "خان"
     When I fill in "field_address[0][address][mobile_number][mobile]" with "97004455"
-    When I select a value from Area dropdown
+    When I select "العبدلي" from the dropdown
     When I fill in "field_address[0][address][locality]" with "بلوك A"
     When I fill in "field_address[0][address][address_line1]" with "شارع B"
     When I fill in "field_address[0][address][dependent_locality]" with "شقة سانيوجيتا"
@@ -211,19 +207,8 @@ Feature: Test the My account section for authenticated user
     And the address block should be deleted from address book
 
   Scenario: As an authenticated user
-  I should be able to set my communication preferences
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
-    And I wait for the page to load
-    Then I should see "تفضيلات التواصل"
-    And I should see "يرجى اختيار وسيلة التواصل المناسبة "
-    When I check the ".form-item-communication-preference-email > label" checkbox
-    And I press "حفظ"
-    When I wait for the page to load
-    Then I should see "تم حفظ تفضيلات الاتصال بنجاح."
-
-  Scenario: As an authenticated user
   I should see the options to change my password
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(6) > a"
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
     And I wait for the page to load
     Then I should see "تغيير كلمة السر"
     Then I should see "كلمة السر الحالية"

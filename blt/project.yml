@@ -29,8 +29,8 @@ target-hooks:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''
   post-deploy-build:
-    dir: '${deploy.dir}'
-    command: 'sh ../blt/scripts/post-deploy-build.sh ${deploy.dir}'
+    dir: '${repo.root}/blt/scripts'
+    command: 'bash post-deploy-build.sh ${deploy.dir}'
   post-setup-build:
     dir: '${docroot}'
     command: 'echo ''No post-setup build configured.'''

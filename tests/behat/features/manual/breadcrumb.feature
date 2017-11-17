@@ -12,14 +12,14 @@ Feature: Test breadcrumbs displayed across the site
     |/baby-clothing/baby-newborn-18-months|home > baby clothing > baby (newborn - 18 months)|
     |/baby-clothing/baby-newborn-18-months/new-baby-clothing|home > baby clothing > baby (newborn - 18 months) > new in: baby clothing|
     |/disney-mickey-mouse-t-shirt-and-shorts-set            |home > baby clothing > baby (newborn - 18 months) > baby boys > disney mickey mouse t-shirt and shorts set|
-    |/vk-promo-001                                         |home > baby clothing > vk promo 001                                                                      |
+    |/vk-promo-001                                         |home > toys > vk promo 001                                                                      |
     |/cart                                                 |home > basket                                                                                            |
     |/store-finder                                         |home > find stores                                                                                       |
     |/ar/ملابس-الرضع                                       |الصفحة الرئيسية > ملابس الرضع                                                                            |
     |/ar/للأطفال-منذ-الولادة-وحتى-18-شهراً/ملابس-الرضع     |الصفحة الرئيسية > ملابس الرضع > للأطفال (منذ الولادة وحتى 18 شهراً)                                      |
     |/ar/جديدنا-من-ملابس-الأطفال/للأطفال-منذ-الولادة-وحتى-18-شهراً/ملابس-الرضع|الصفحة الرئيسية > ملابس الرضع > للأطفال (منذ الولادة وحتى 18 شهراً) > جديدنا من: ملابس الأطفال|
     |/ar/طقم-تي-شيرت-برسمة-disney-mickey-mouse-وشورت-جينز                     |الصفحة الرئيسية > ملابس الرضع > للأطفال (منذ الولادة وحتى 18 شهراً) > للأولاد > طقم تي-شيرت برسمة disney mickey mouse وشورت جينز|
-    |/ar/vk-promo-001                                                         |الصفحة الرئيسية > ملابس الرضع > vk promo 001                                                                                    |
+    |/ar/vk-promo-001                                                         |الصفحة الرئيسية > vk promo 001 < toys                                                                                                  |
     |/ar/cart                                                                 |الرئيسية > حقيبة التسوق                                                                                                         |
     |/ar/store-finder                                                         |الصفحة الرئيسية > البحث عن المحلات                                                                                              |
 
@@ -42,7 +42,7 @@ Feature: Test breadcrumbs displayed across the site
 
   Scenario: As an authenticated user
     I should be able to view breadcrumbs on My account section
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then the breadcrumb "home > my account" should be displayed
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
@@ -64,7 +64,7 @@ Feature: Test breadcrumbs displayed across the site
   @arabic
   Scenario: As an authenticated user on Arabic site
   I should be able to view breadcrumbs on My account section
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load
