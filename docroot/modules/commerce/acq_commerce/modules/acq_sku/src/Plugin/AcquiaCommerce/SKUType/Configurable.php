@@ -113,7 +113,6 @@ class Configurable extends SKUPluginBase {
       '#default_value' => 1,
       '#access' => $configurable_form_settings->get('show_quantity'),
       '#required' => TRUE,
-      '#access' => $configurable_form_settings->get('show_quantity'),
       '#size' => 2,
     ];
 
