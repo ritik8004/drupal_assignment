@@ -1,25 +1,10 @@
-#!/bin/sh
+#!/usr/bin/screen -d -m -S resetData /bin/bash
 #
-# Cloud Hook: post-db-copy
-#
-# The post-db-copy hook is run whenever you use the Workflow page to copy a
-# database from one environment to another. See ../README.md for
-# details.
-#
-# Usage: post-db-copy site target-env db-role source-env
+# Usage: reset-post-db-copy.sh site target-env uri
 
 site="$1"
 target_env="$2"
-db_role="$3"
-source_env="$4"
-
-# You need the URI of the site factory website in order for drush to target that
-# site. Without it, the drush command will fail. The uri.php file below will
-# locate the URI based on the site, environment and db role arguments.
-uri=`/usr/bin/env php /mnt/www/html/$site.$target_env/hooks/acquia/uri.php $site $target_env $db_role`
-
-# Print a statement to the cloud log.
-echo "$site.$target_env: Received copy of database $db_role from $source_env."
+uri="$3"
 
 # Check status once so hook_drush_command_alter is triggered.
 drush8 @$site.$target_env --uri=$uri status
