@@ -1,3 +1,4 @@
 /docroot/web.config
 /docroot/core/install.php
 /docroot/update.php
+/docroot/modules/brands/*/data
