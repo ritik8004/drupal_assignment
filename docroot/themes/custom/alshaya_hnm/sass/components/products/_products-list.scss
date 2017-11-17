@@ -406,12 +406,12 @@
     position: relative;
 
     @include breakpoint($mobile) {
-      width: calc(94.6% / 2);
+      width: 47%;
       margin-bottom: 1rem;
     }
 
     @include breakpoint($tablet) {
-      width: calc(94.8% / 3);
+      width: 31.6%;
 
       &:nth-child(3n+2) {
         margin: 0 2.6%;
