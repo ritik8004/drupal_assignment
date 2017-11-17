@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_sku\ProductOptionsManager;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_update_N().
@@ -74,7 +75,12 @@ function alshaya_acm_product_update_8001() {
  * Install the new fields.
  */
 function alshaya_acm_product_update_8101() {
-  // Add fields to store the values from attributes as fields.
+  // Reset sku_base_fields config from the YAML file.
+  $config_path = drupal_get_path('module', 'alshaya_acm_product') . '/config/install/alshaya_acm_product.sku_base_fields.yml';
+  $data = Yaml::parse($config_path);
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields')->setData($data)->save(TRUE);
+
+  // Add base fields from the updated sku_base_fields config.
   $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
 }
