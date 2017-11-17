@@ -225,13 +225,14 @@ node-product-item:
   js:
     components/dist/js/01-molecules/06-content/field-product-listing/node-product-item.js: {}
 
-# As of now node_modules doesn't have slick.min.js. that's why using slick.js.
+# As of now node_modules doesn't have slick.min.js. that's why placing it to
+# libraries/slick folder.
 slick:
   css:
     theme:
       node_modules/slick-carousel/slick/slick.css: {}
   js:
-    node_modules/slick-carousel/slick/slick.js: {}
+    libraries/slick/slick.min.js: {}
   dependencies:
     - core/jquery
 
