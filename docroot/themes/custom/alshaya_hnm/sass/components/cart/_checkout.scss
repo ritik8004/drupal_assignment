@@ -1177,9 +1177,9 @@ body.alias--cart {
     min-width: 10.8125rem;
     text-transform: uppercase;
     font-family: $hnm-bold;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     letter-spacing: normal;
-    padding: 0.625rem 1.3rem;
+    padding: 0.625rem 0.25rem;
 
     @include breakpoint($upto-tablet) {
       display: block;
@@ -1254,7 +1254,7 @@ body.alias--cart {
       cursor: pointer;
       background: $hnm-black-two;
       color: $white-five;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       font-family: $hnm-bold;
       text-transform: uppercase;
       font-weight: normal;
@@ -1262,9 +1262,9 @@ body.alias--cart {
       height: 2.188rem;
       display: inline-block;
       text-align: center;
-      padding: 0 1.125rem;
+      padding: 0 0.25rem;
       max-height: 2.188rem;
-      line-height: 2.7;
+      line-height: 2.4;
 
       &.disabled {
         &:hover {
@@ -1307,7 +1307,7 @@ body.alias--cart {
   #edit-continue-shopping,
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-family: $hnm-bold;
     font-weight: normal;
     border: 1px solid $hnm-black-two;
@@ -1318,6 +1318,11 @@ body.alias--cart {
     color: $white-five;
     position: relative;
     padding-#{$left}: 1.688rem;
+
+    html[lang=en] & {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
     @include icon(shopping-bag, after) {
       font-size: 1.5rem;
@@ -1454,7 +1459,12 @@ html[lang=ar] {
       .form-submit {
         font-family: $hnm-bold;
         font-weight: normal;
-        font-size: 0.75rem;
+        font-size: 0.875rem;
+
+        html[lang=en] & {
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
       }
     }
   }

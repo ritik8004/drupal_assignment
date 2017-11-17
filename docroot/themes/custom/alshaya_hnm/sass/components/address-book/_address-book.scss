@@ -410,7 +410,12 @@
 
     display: block;
     margin-top: 1.25rem;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
+
+    html[lang=en] & {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
     @include breakpoint($tablet) {
       display: inline-block;

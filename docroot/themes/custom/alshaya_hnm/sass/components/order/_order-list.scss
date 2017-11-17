@@ -541,8 +541,13 @@
   line-height: 1;
   color: $white-five;
   top: -5.7rem;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   height: 2.1875rem;
+
+  html[lang=en] & {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
   @include breakpoint($desktop) {
     min-width: 11.625rem;
