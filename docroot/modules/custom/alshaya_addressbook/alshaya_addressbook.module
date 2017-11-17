@@ -175,23 +175,38 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['#prefix'] = '<div class="address-book-address">';
   $element['#suffix'] = '</div>';
 
-  // @todo: Do this change conditionally.
-  $element['locality'] = [
-    '#type' => 'select',
-    '#title' => t('Emirate', [], ['context' => 'Address label']),
-    '#required' => TRUE,
-    '#multiple' => FALSE,
-    '#default_value' => $element['locality']['#default_value'],
-    '#options' => ['' => t('Select Governate')] + _alshaya_addressbook_area_list('KW', FALSE),
-    '#attributes' => [
-      'class' => ['select2-select'],
-    ],
-    '#attached' => [
-      'library' => [
-        'alshaya_white_label/convert_to_select2',
-      ],
-    ],
-  ];
+  // Change the Locality field if magento's response is a select field.
+  $magento_form = \Drupal::service('alshaya_api.api')->getCustomerAddressForm();
+  foreach ($magento_form as $magento_form_element) {
+    if ($magento_form_element['attribute_code'] == 'area' && $magento_form_element['frontend_input'] == 'select') {
+      // Update locality field.
+      $element['locality'] = [
+        '#type' => 'select',
+        '#title' => t('Governate', [], ['context' => 'Address label']),
+        '#required' => TRUE,
+        '#multiple' => FALSE,
+        '#default_value' => $element['locality']['#default_value'],
+        '#options' => ['' => t('Select Governate')] + _alshaya_addressbook_area_list('KW', FALSE),
+        '#attributes' => [
+          'class' => ['select2-select'],
+        ],
+        '#attached' => [
+          'library' => [
+            'alshaya_white_label/convert_to_select2',
+          ],
+        ],
+      ];
+
+      // Update field weight.
+      $element['locality']['#weight'] = 1;
+      $element['administrative_area']['#weight'] = 2;
+      $element['address_line1']['#weight'] = 2;
+      $element['dependent_locality']['#weight'] = 2;
+      $element['address_line2']['#weight'] = 2;
+
+      break;
+    }
+  }
 
   return $element;
 }
