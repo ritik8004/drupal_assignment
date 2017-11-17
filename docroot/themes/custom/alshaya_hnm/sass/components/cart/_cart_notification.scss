@@ -6,7 +6,7 @@
 
   @include breakpoint($tablet) {
     top: 3.1rem;
-    #{$right}: -0.8875rem;
+    #{$right}: -0.375rem;
   }
 
   @include breakpoint($desktop) {
@@ -73,9 +73,9 @@
       a {
         width: 6.563rem;
         height: 35px;
-        margin-top: 13px;
+        margin-top: 0.8125rem;
         display: block;
-        line-height: 35px;
+        line-height: 32px;
         text-align: center;
         background: $white-five;
         border: 2px solid $hnm-black-two;
@@ -83,7 +83,7 @@
         color: $hnm-black-two;
         font-family: $hnm-bold;
         letter-spacing: 1px;
-        font-size: 0.8125rem;
+        font-size: 0.875rem;
       }
 
       .sub-text {
@@ -113,7 +113,7 @@
 
 html[lang=ar] #cart_notification {
   @include breakpoint($tablet) {
-    top: 4.2rem;
+    top: 3.98rem;
   }
 
   .notification,
