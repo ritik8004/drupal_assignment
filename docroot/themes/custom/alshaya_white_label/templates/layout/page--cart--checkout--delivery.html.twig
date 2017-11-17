@@ -34,6 +34,11 @@
           <a class="back-link" href="javascript:window.history.back()"></a>
           <div class="c-content__region">
             {{ page.content }}
+            {% if vat_text_footer %}
+              <div class = 'vat-text-footer'>
+                {{ vat_text_footer }}
+              </div>
+            {% endif %}
           </div>
         </div>
 

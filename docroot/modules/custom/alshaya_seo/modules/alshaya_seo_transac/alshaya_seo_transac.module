@@ -69,6 +69,11 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
       if ($sku_field = $node->get('field_skus')) {
         $sku_id = $sku_field->first()->getString();
         $sku_entity = SKU::loadFromSku($sku_id);
+
+        if (empty($sku_entity)) {
+          return [];
+        }
+
         $product_title = "";
 
         // Including the utility file.
@@ -119,7 +124,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
     return;
   }
 
-  /** @var \Drupal\alshaya_seo\AlshayaGtmManager $gtm_manager */
+  /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
   $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
   $currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
 
@@ -218,7 +223,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
             $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
             $data_layer = array_merge($data_layer, $attributes['general']);
 
-            $data_layer['privilegeOrder'] = $attributes['previlegeOrder'] ? 'order with privilege club' : 'order without privilege club';
+            $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
 
             $data_layer['ecommerce'] = [
               'currencyCode' => $currency_code,
@@ -255,13 +260,11 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
       foreach ($path_parts as $key => $part) {
         if (is_numeric($part) ||
-          ($part === 'user') ||
-          ($part == '') ||
-          ($part === '{user}')) {
+          (in_array($part, ['user', '', '{user}', '{order_id}']))) {
           unset($path_parts[$key]);
         }
       }
-      $page_type = rtrim('myaccount-' . implode('-', $path_parts), '-');
+      $page_type = 'myaccount' . implode('', $path_parts);
     }
     elseif ($page_type === 'not defined') {
       $page_type = ltrim(implode('-', explode('/', $current_path)), '-');
@@ -274,7 +277,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
     // Unset few attributes specifically for HD page.
     if (($current_route['route_name'] === 'acq_checkout.form') &&
       ($current_route['route_params']['step'] == 'delivery') &&
-      ($current_route['query']['method'] === 'hd')) {
+      (!isset($current_route['query']['method']) || $current_route['query']['method'] === 'hd')) {
       unset($data_layer['storeAddress'], $data_layer['storeLocation'], $data_layer['deliveryOption'], $data_layer['deliveryType']);
     }
   }

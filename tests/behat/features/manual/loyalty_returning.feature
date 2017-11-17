@@ -2,8 +2,8 @@
 Feature: Test the privilege card functionality for returning customer
 
   Scenario: As a returning customer
-  no PC number should be displayed on Order confirmation page
-  when the PC number is null on basket
+    no PC number should be displayed on Order confirmation page
+    when the PC number is null on basket
     Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
@@ -31,8 +31,8 @@ Feature: Test the privilege card functionality for returning customer
     Then I should not see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 0013 - 5844"
 
   Scenario: As a returning customer
-  PC number from the basket should be displayed on Order confirmation page when my account is null
-  and my account field for PC should remain null after placing order
+    PC number from the basket should be displayed on Order confirmation page when my account is null
+    and my account field for PC should remain null after placing order
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "edit account details"
@@ -81,8 +81,8 @@ Feature: Test the privilege card functionality for returning customer
     Then I should not see "6362 - 5440 - 0013 - 5844"
 
   Scenario: As a returning customer
-  no PC number should be displayed on order confirmation page when basket PC number is null
-  and my account PC number is not null
+    no PC number should be displayed on order confirmation page when basket PC number is null
+    and my account PC number is not null
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "edit account details"
@@ -165,8 +165,8 @@ Feature: Test the privilege card functionality for returning customer
     Then I should see value "6362-5440-0013-5844" for element "#edit-privilege-card-number"
 
   Scenario: As a returning customer
-  value from basket page should be displayed on Order confirmation page
-  even when user has different PC number in his account
+    value from basket page should be displayed on Order confirmation page
+    even when user has different PC number in his account
     Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "edit account details"

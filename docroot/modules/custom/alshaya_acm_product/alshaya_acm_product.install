@@ -65,7 +65,7 @@ WHERE ttfd.vid = :vid AND ttfsac.field_sku_attribute_code_value = :attr_code AND
  * Apply entity updates to apply t() for field labels in SKU entity.
  */
 function alshaya_acm_product_update_8001() {
-  \Drupal::service("entity.definition_update_manager")->applyUpdates();
+  \Drupal::service('entity.definition_update_manager')->applyUpdates();
 }
 
 /**

@@ -56,6 +56,16 @@
   padding: 1em 0;
   position: relative;
 
+  &.c-user-register-complete {
+    border-top: none;
+    margin: 1rem auto 2rem;
+    padding: 1rem;
+
+    main {
+      width: 100%;
+    }
+  }
+
   @include breakpoint($only-mobile) {
     margin-top: 2.5em;
     padding: 1em 0.5em;
@@ -827,6 +837,8 @@
   .c-page-title {
     font-family: $alshaya-bold;
     font-weight: normal;
+    border-bottom: 1px solid $white;
+    padding-bottom: 1rem;
 
     @include breakpoint($only-tablet) {
       padding: 0 1rem;
