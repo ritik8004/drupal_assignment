@@ -571,6 +571,10 @@ header {
     .store {
       top: 1.125rem;
       #{$right}: 2.25rem;
+
+      html[lang=ar] & {
+        left: 0;
+      }
     }
 
     .mobile--menu {
