@@ -31,6 +31,11 @@ class SkuAssetManager {
   const LP_SWATCH_DEFAULT = 'RGB';
 
   /**
+   * Constant for RGB swatch display type.
+   */
+  const LP_SWATCH_RGB = 'RGB';
+
+  /**
    * The Config factory service.
    *
    * @var \Drupal\Core\Config\ConfigFactory

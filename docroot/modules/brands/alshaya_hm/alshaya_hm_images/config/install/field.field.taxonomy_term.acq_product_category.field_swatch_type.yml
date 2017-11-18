@@ -9,7 +9,7 @@ field_name: field_swatch_type
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: swatch_type
-description: ''
+description: 'Use RGB or any image style in liquid pixel here.'
 required: false
 translatable: false
 default_value:
