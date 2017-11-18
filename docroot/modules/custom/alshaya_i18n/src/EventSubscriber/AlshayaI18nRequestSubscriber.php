@@ -71,43 +71,25 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
 
       $options = [];
 
-      // By default we redirect to the language set in config.
-      // Not the site default language.
-      $options['language'] = $languages[$this->config->get('default_langcode')];
-
-      // Check if we have cookie set.
+      // Check if we have cookie set and check if value is proper.
       $preferred_lang = $request->cookies->get('alshaya_lang');
 
-      if (!empty($preferred_lang)) {
-        $langcodes = array_keys($languages);
-
-        // Sanity check, cookies can be edited by anyone.
-        if (in_array($preferred_lang, $langcodes)) {
-          $options['language'] = $languages[$preferred_lang];
-        }
+      if (!empty($preferred_lang) && isset($languages[$preferred_lang])) {
+        $options['language'] = $languages[$preferred_lang];
+      }
+      else {
+        // By default we redirect to the language set in config.
+        // Not the site default language.
+        $options['language'] = $languages[$this->config->get('default_langcode')];
       }
 
       $redirect_uri = $this->urlGenerator->generateFromRoute('<front>', [], $options);
 
-      // Strip off query parameters added by the route such as a CSRF token.
-      if (strpos($redirect_uri, '?') !== FALSE) {
-        $redirect_uri = strtok($redirect_uri, '?');
-      }
-
-      // Append back the request query string from $_SERVER.
-      $query_string = $request->server->get('QUERY_STRING');
-      if ($query_string) {
-        $redirect_uri .= '?' . $query_string;
-      }
-
       $response = new RedirectResponse($redirect_uri, 302);
       $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
       $event->setResponse($response);
-      // Disable page cache for redirects as that results in unpredictable
-      // behavior, e.g. when a trailing ? without query parameters is
-      // involved.
-      // @todo Remove when https://www.drupal.org/node/2761639 is fixed in
-      //   Drupal core.
+
+      // Disable page cache, we want to change the redirect based on cookie.
       \Drupal::service('page_cache_kill_switch')->trigger();
     }
   }
