@@ -73,6 +73,9 @@ $settings['acq_commerce.conductor']['debug'] = TRUE;
 // Set page size to sync products to 30.
 $settings['acq_commerce.conductor']['product_page_size'] = 30;
 
+// Default language code for redirects.
+$settings['alshaya_i18n.settings']['default_langcode'] = 'ar';
+
 // Disable unwanted core views.
 $settings['views_to_disable'] = [
   'frontpage',

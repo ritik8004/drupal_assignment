@@ -5,6 +5,8 @@
  * Alshaya i18n module.
  */
 
+use Drupal\Core\Block\BlockPluginInterface;
+
 /**
  * Function to import custom initial translations.
  */
@@ -81,6 +83,15 @@ function alshaya_i18n_save_translations($strings) {
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function alshaya_i18n_block_view_alter(array &$build, BlockPluginInterface $block) {
+  if ($block->getBaseId() === 'language_block') {
+    $build['#attached']['library'][] = 'alshaya_i18n/language_selection';
   }
 }
 
