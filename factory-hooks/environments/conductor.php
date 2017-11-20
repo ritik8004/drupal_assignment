@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * List all known Conductor environments keyed by environment machien name.
+ */
 function alshaya_get_conductor_host_data() {
   return [
     // Mothercare.
