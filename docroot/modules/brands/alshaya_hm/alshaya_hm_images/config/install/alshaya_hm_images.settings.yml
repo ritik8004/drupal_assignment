@@ -90,7 +90,6 @@ style_identifiers:
   teaser: 'file:/product/style'
   swatch: 'file:/product/miniature'
   cart: 'file:/product/thumb'
-swatch_type: 'miniature_image'
 # Sample structure for override, until we have a config UI.
 #overrides:
 #  146:

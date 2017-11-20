@@ -8,6 +8,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * SkuAssetManager Class.
@@ -23,6 +24,17 @@ class SkuAssetManager {
    * Constant for default weight in case no weight has been set via config.
    */
   const LP_DEFAULT_WEIGHT = 100;
+
+  /**
+   * Constant for default swatch display type.
+   */
+  const LP_SWATCH_DEFAULT = 'RGB';
+
+  /**
+   * Constant for RGB swatch display type.
+   */
+  const LP_SWATCH_RGB = 'RGB';
+
   /**
    * The Config factory service.
    *
@@ -348,11 +360,16 @@ class SkuAssetManager {
    *   Swatch type for the sku.
    */
   public function getSkuSwatchType(SKU $sku) {
-    $swatch_type = $this->configFactory->get('alshaya_hm_images.settings')->get('swatch_type');
-    $config_override = $this->overrideConfig($sku, 'swatch');
+    $swatch_type = self::LP_SWATCH_DEFAULT;
+    $product_node = alshaya_acm_product_get_display_node($sku);
 
-    if (!empty($config_override['swatch_type'])) {
-      $swatch_type = $config_override['swatch_type'];
+    if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
+      // Use the first term found with an override for
+      // location identifier.
+      $tid = $terms[0]['target_id'];
+      $term = Term::load($tid);
+      $swatch_type = ($term->get('field_swatch_type')->first()) ? $term->get('field_swatch_type')->getString() : self::LP_SWATCH_DEFAULT;
+
     }
 
     return $swatch_type;
