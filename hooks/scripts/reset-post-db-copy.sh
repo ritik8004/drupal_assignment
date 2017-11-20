@@ -6,6 +6,12 @@ site="$1"
 target_env="$2"
 uri="$3"
 
+if [ $target_env = "01live" -o $target_env = "01update" ]
+then
+  echo "Lets not try developer scripts on prod env :)"
+  exit
+fi
+
 # Check status once so hook_drush_command_alter is triggered.
 drush8 @$site.$target_env --uri=$uri status
 
