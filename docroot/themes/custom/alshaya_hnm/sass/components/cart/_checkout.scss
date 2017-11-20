@@ -1401,10 +1401,6 @@ html[lang=ar] {
     @include breakpoint($only-mobile) {
       #{$left}: -1.9rem;
     }
-
-    @include breakpoint (($only-tablet) (orientation landscape)) {
-      #{$left}: -2.3rem;
-    }
   }
 }
 
@@ -1472,13 +1468,21 @@ html[lang=ar] {
 }
 
 html[lang=ar] {
-  .delivery-options-tooltip-wrapper .tooltip {
-    @include breakpoint($only-mobile) {
-      right: -2.1rem;
+  .delivery-options-tooltip-wrapper {
+    .click-collect + .tooltip {
+      @include breakpoint($only-mobile) {
+        right: -4.9rem;
+      }
     }
 
-    @include breakpoint($desktop) {
-      right: 2.45rem !important;
+    .tooltip {
+      @include breakpoint($only-mobile) {
+        right: -2.1rem;
+      }
+
+      @include breakpoint($desktop) {
+        right: 2.45rem;
+      }
     }
   }
 }
