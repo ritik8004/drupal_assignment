@@ -576,11 +576,11 @@ function alshaya_master_install() {
     ],
     'add to cart' => [
       'ar' => 'أضف إلى سلة التسوق',
-      'en' => 'add to basket',
+      'en' => 'add to cart',
     ],
     'Add to cart' => [
       'ar' => 'أضف إلى سلة التسوق',
-      'en' => 'Add to basket',
+      'en' => 'Add to cart',
     ],
     '@name field is required.' => [
       'ar' => 'يرجى إدخال @name',

@@ -450,7 +450,7 @@ class CheckoutOptionsManager {
       foreach ($shipping_options as $key => $shipping_option) {
         // Prepare translation for shipping term only if translation exists,
         // else, keep the key & value as the original term itself.
-        if ($shipping_option->hasTranslation($site_default_langcode)) {
+        if ($shipping_option->hasTranslation($site_current_langcode)) {
           $shipping_translation = $shipping_option->getTranslation($site_current_langcode)->getName();
           $shipping_method_translations[$shipping_translation] = $shipping_translation;
         }

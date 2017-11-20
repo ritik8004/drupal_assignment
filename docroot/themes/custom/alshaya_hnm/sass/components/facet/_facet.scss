@@ -95,6 +95,7 @@
 
   @include breakpoint($desktop) {
     font-family: $hnm-bold;
+    font-weight: normal;
   }
 }
 

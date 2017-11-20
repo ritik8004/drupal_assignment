@@ -229,7 +229,6 @@
 
       .is-accordion {
         font-family: $hnm-bold;
-        -webkit-font-smoothing: antialiased;
         text-align: $left;
         color: $white-five;
         text-transform: uppercase;
@@ -351,7 +350,7 @@
 
   h3 {
     font-family: $hnm-bold;
-    -webkit-font-smoothing: antialiased;
+    font-weight: normal;
     font-size: 0.875rem;
     letter-spacing: 1.2px;
     text-align: $left;
@@ -483,6 +482,8 @@
 
 .c-footer-is-accordion {
   .is-accordion {
+    font-weight: normal;
+
     @include breakpoint($only-mobile) {
       margin: 0;
       padding: 0.875rem 0;
@@ -543,7 +544,6 @@
       font-size: 0.75rem;
       padding: 0.3125rem 0.875rem;
       margin-top: 0.1875rem;
-      font-weight: bold;
       display: block;
     }
   }
