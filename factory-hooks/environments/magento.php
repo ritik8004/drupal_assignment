@@ -6,7 +6,7 @@
 function alshaya_get_magento_host_data() {
   return [
     // Mothercare.
-    'mc_conductor_update' => 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud',
+    'mc_dev' => 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud',
     'mc_qa' => 'http://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',
     'mc_test' => 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud',
     'mc_uat' => 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud',

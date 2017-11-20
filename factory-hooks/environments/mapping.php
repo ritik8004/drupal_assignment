@@ -32,7 +32,7 @@ function alshaya_get_env_keys($site, $env) {
     // Mothercare Kuwait.
     'mckw' => [
       'local' => [
-        'magento' => 'mc_conductor_update',
+        'magento' => 'mc_dev',
         'conductor' => 'mc_dev'
       ],
       'default' => [
