@@ -120,6 +120,7 @@
     h1,
     h1 span {
       font-family: $hnm-regular;
+      font-weight: normal;
       font-size: 1.125rem;
       color: $hnm-black-two;
     }
@@ -551,7 +552,6 @@
   .read-more-description-link {
     font-family: $hnm-regular;
     font-size: 0.75rem;
-    font-weight: bold;
     line-height: 1.83;
     color: $black-three;
     cursor: pointer;
