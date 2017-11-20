@@ -372,7 +372,6 @@
   a {
     font-family: $hnm-regular;
     font-size: 0.875rem;
-    font-weight: bold;
     line-height: 1.83;
     color: $hnm-black-two;
   }
@@ -397,7 +396,6 @@
   .show-less-link {
     font-family: $arial;
     font-size: 0.875rem;
-    font-weight: bold;
     line-height: 1.83;
     color: $black-two;
     text-transform: lowercase;
@@ -488,7 +486,7 @@
     }
 
     &__content {
-      font-size: 0.875rem;
+      font-size: 0.75rem;
       line-height: 1.5;
 
       .desc-wrapper {
@@ -542,7 +540,6 @@
   .show-less-link {
     font-family: $hnm-regular;
     font-size: 0.875rem;
-    font-weight: bold;
     line-height: 1.83;
     color: $black-three;
     text-transform: lowercase;
@@ -565,7 +562,6 @@
   .read-more-description-link-mobile {
     font-family: $hnm-regular;
     font-size: 0.875rem;
-    font-weight: bold;
     line-height: 1.83;
     color: $black-three;
     cursor: pointer;
