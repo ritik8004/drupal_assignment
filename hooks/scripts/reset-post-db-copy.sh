@@ -9,6 +9,9 @@ uri="$3"
 # Check status once so hook_drush_command_alter is triggered.
 drush8 @$site.$target_env --uri=$uri status
 
+# Run updb to ensure we have everything updated.
+drush8 @$site.$target_env --uri=$uri updb -y
+
 # Now clean all data.
 drush8 @$site.$target_env --uri=$uri clean-synced-data -y
 drush8 @$site.$target_env --uri=$uri sync-commerce-cats
@@ -33,5 +36,6 @@ drush8 @$site.$target_env --uri=$uri sync-commerce-promotions
 drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_attach_queue
 drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_detach_queue
 
+# Save the dump for later use and use in local.
 timestamp=$(date +%s)
-drush8 @$site.$target_env --uri=$uri sql-dump | gzip > ~/$target_env/post_db_copy_$timestamp.sql
+drush8 @$site.$target_env --uri=$uri sql-dump | gzip > ~/$target_env/post_db_copy_$timestamp.sql.gz
