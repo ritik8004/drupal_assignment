@@ -7,8 +7,6 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
-use Symfony\Component\Yaml\Yaml;
-
 require DRUPAL_ROOT . '/../vendor/acquia/blt/settings/blt.settings.php';
 
 $env = 'local';
@@ -84,19 +82,6 @@ $settings['views_to_disable'] = [
   'who_s_new',
   'who_s_online',
 ];
-
-// Here we deal only with local environment. For other environments, we use
-// the post-sites-php hook instead so we are sure the site detection has been
-// properly done yet. We can use post-sites-php for local has this is not
-// invoked on local. See sites/sites.php for site detection.
-if ($env == 'local' && $_SERVER['HTTP_HOST'] == 'local.alshaya.com') {
-  $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/project.local.yml'));
-  $site = $data['brands']['transac'];
-
-  // We merge the entire settings with the specific ones.
-  include_once DRUPAL_ROOT . '/../factory-hooks/environments/mapping.php';
-  $settings = array_merge($settings, alshaya_get_specific_settings($site, $env));
-}
 
 // Specify the modules to be enabled/uninstalled - just initialised here.
 $settings['additional_modules'] = [];
