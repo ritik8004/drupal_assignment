@@ -15,6 +15,8 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 
 /**
  * Delivery Matrix version 2.
@@ -195,7 +197,15 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
             'alshaya_white_label/convert_to_select2',
           ],
         ],
+        '#ajax' => [
+          'callback' => 'alshaya_addressbook_fetch_areas',
+          'wrapper' => 'alshaya-addressbook-area',
+        ],
       ];
+
+      // Wrap area dropdown with a div.
+      $element['administrative_area']['#prefix'] = '<div id="alshaya-addressbook-area">';
+      $element['administrative_area']['#suffix'] = '</div>';
 
       // Update field weight.
       $element['locality']['#weight'] = 1;
@@ -449,13 +459,15 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
  *   The country code.
  * @param bool $has_parent
  *   Identifier if parents or children are to returned.
+ * @param int $parent
+ *   Parent TID for which terms are to be fetched.
  *
  * @return array
  *   List or areas.
  */
-function _alshaya_addressbook_area_list($country_code = 'KW', $has_parent = TRUE) {
-  $term_tree = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree('area_list', 0, NULL, TRUE);
-  $term_list = $area_list = $governate_list = [];
+function _alshaya_addressbook_area_list($country_code = 'KW', $has_parent = TRUE, $parent = 0) {
+  $term_tree = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree(AlshayaAddressBookManager::AREA_VOCAB, $parent, NULL, TRUE);
+  $area_list = $governate_list = [];
   if (!empty($term_tree)) {
     /* \Drupal\taxonomy\Entity\Term $term */
     foreach ($term_tree as $term) {
@@ -722,4 +734,44 @@ function _alshaya_addressbook_get_area_from_id($tid) {
   }
 
   return $tid;
+}
+
+/**
+ * Ajax callback to fetch areas from selected governates.
+ */
+function alshaya_addressbook_fetch_areas(&$form, FormStateInterface $form_state) {
+  if (empty($form_state->getErrors())) {
+    $values = $form_state->getValues();
+    foreach ($values as $value) {
+      if (is_array($value) && isset($value['address'])) {
+        $locality = $value['address']['shipping']['locality'];
+        break;
+      }
+    }
+    if (!empty($locality)) {
+      $locality_term = current(taxonomy_term_load_multiple_by_name($locality, AlshayaAddressBookManager::AREA_VOCAB));
+      $response = new AjaxResponse();
+      $element = [
+        '#type' => 'select',
+        '#title' => t('Area'),
+        '#required' => TRUE,
+        '#multiple' => FALSE,
+        '#options' => ['' => t('Select Area')] + _alshaya_addressbook_area_list('kw', TRUE, $locality_term->id()),
+        '#attributes' => [
+          'class' => ['select2-select'],
+        ],
+        '#attached' => [
+          'library' => [
+            'alshaya_white_label/convert_to_select2',
+          ],
+        ],
+      ];
+      $element['#prefix'] = '<div id="alshaya-addressbook-area">';
+      $element['#suffix'] = '</div>';
+
+      $response->addCommand(new ReplaceCommand('#alshaya-addressbook-area', $element));
+
+      return $response;
+    }
+  }
 }
