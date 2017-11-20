@@ -44,6 +44,13 @@ function alshaya_hm_install() {
       ->set('marker.path', $marker_path)
       ->set('marker.url', file_url_transform_relative(file_create_url($marker_path)))
       ->save(TRUE);
+     $view_displays = ['attachment_1', 'page_3', 'page_2'];
+     foreach ($view_displays as $view_display){
+       \Drupal::configFactory()->getEditable('views.view.stores_finder')
+         ->set('display.' .$view_display .'.display_options.style.options.google_map_settings.marker_icon_path', file_url_transform_relative(file_create_url($marker_path)))
+         ->save(TRUE);
+     }
+
   }
 
   // Update the customer service text.
