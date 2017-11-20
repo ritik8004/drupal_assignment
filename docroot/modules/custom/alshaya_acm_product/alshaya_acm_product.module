@@ -751,9 +751,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               $product_tree = $form_state->get('tree');
               if (isset($product_tree['options'][$configurable_key . ':' . $key])) {
                 $variations = array_filter($product_tree['options'][$configurable_key . ':' . $key]);
+                // Check if product tree doesn't have any variations available
+                // for this option.
                 if (isset($variations['#available_config']) &&
                   (count($variations) === 1)) {
                   $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
+                  \Drupal::logger('alshaya_acm_product')->alert('No SKU found for Config sku: %sku and %option : %option_value',
+                    [
+                      '%sku' => $sku_entity->getSku(),
+                      '%option' => $configurable_key,
+                      '%option_value' => $key,
+                    ]);
                 }
               }
             }
