@@ -1,0 +1,6 @@
+services:
+  alshaya_i18n.request_subscriber:
+    class: Drupal\alshaya_i18n\EventSubscriber\AlshayaI18nRequestSubscriber
+    arguments: ['@url_generator', '@language_manager', '@config.factory']
+    tags:
+      - { name: event_subscriber }
