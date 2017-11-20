@@ -4,8 +4,5 @@
 # make them visible here. In fact we will list all ACSF files here, just to make
 # sure.
 !.gitignore
-!apc_rebuild.php
-!services.yml
+!acsf.settings.php
 !settings.php
-!SimpleRest.php
-!sites.inc
