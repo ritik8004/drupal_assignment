@@ -97,6 +97,9 @@ drush $alias $l_argument user-password admin --password="admin"
 echo "Unblocking super admin user"
 drush $alias $l_argument uublk --name=admin
 
+# Clear cache once.
+drush $alias $l_argument cr
+
 drush $alias $l_argument en dblog -y
 
 # Set stage file proxy settings if module available

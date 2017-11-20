@@ -9,8 +9,11 @@ uri="$3"
 # Check status once so hook_drush_command_alter is triggered.
 drush8 @$site.$target_env --uri=$uri status
 
-# Run updb to ensure we have everything updated.
-drush8 @$site.$target_env --uri=$uri updb -y
+# Clear cache, we want to avoid fatals because of updated services.
+drush8 @$site.$target_env --uri=$uri cr
+
+# Enable developer modules, we are going to use this script only on non-prod envs.
+drush8 @$site.$target_env --uri=$uri en -y dblog views_ui features_ui restui
 
 # Now clean all data.
 drush8 @$site.$target_env --uri=$uri clean-synced-data -y
