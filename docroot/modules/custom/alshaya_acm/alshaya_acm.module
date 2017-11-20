@@ -16,6 +16,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_drush_command_alter().
@@ -52,6 +53,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   ];
 
   // Get the current cart.
+  /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
   $cart_storage = \Drupal::service('acq_cart.cart_storage');
 
   /** @var \Drupal\acq_cart\Cart $cart */
@@ -119,6 +121,26 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     if (is_array($item) && isset($item['quantity'])) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku_entity */
       $sku_entity = SKU::loadFromSku($id);
+
+      // Product might get disabled and deleted, need to handle exception
+      // gracefully.
+      if (empty($sku_entity)) {
+        // Remove items that are no longer available from from.
+        unset($form['cart'][$id]);
+
+        // Remove items that are no longer available from cart.
+        $cart->removeItemFromCart($id);
+
+        // Update the cart object in session.
+        $cart_storage->addCart($cart);
+
+        // Reload the page (at-least to avoid issues in form display if it was
+        // the only or last item in cart).
+        $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+        $response->send();
+        exit;
+      }
+
       $is_item_free = FALSE;
 
       // Check if a discount equal to the price of product was applied.
