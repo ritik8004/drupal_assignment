@@ -71,7 +71,7 @@
       }
 
       a {
-        width: 6.563rem;
+        width: 7.38rem;
         height: 35px;
         margin-top: 0.8125rem;
         display: block;
@@ -85,6 +85,10 @@
         font-weight: normal;
         letter-spacing: 1px;
         font-size: 0.875rem;
+
+        html[lang=ar] & {
+          width: auto;
+        }
       }
 
       .sub-text {
