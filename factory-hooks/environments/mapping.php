@@ -42,7 +42,12 @@ function alshaya_get_env_keys($site, $env) {
     // Mothercare UAE.
     'mcuae' => [],
     // H&M Kuwait.
-    'hmkw' => [],
+    'hmkw' => [
+      'local' => [
+        'magento' => 'hm_qa',
+        'conductor' => 'hm_dev',
+      ],
+    ],
     // Default.
     'default' => [
       'local' => [
