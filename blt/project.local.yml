@@ -1,0 +1,20 @@
+example: value
+drush:
+  default_alias: alshaya.local
+  aliases:
+    local: alshaya.local
+behat:
+  launch-selenium: false
+  launch-phantomjs: true
+
+brands:
+  transac: mckw
+  non-transac: hmkw
+
+sites:
+  mckw:
+    module: alshaya_mc
+    type: transac
+  hmkw:
+    moduel:
+    type: transac
