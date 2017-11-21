@@ -86,7 +86,6 @@ $settings['views_to_disable'] = [
 // Specify the modules to be enabled/uninstalled - just initialised here.
 $settings['additional_modules'] = [];
 
-// @TODO: Remove all the conductor + magento hosts settings.
 switch ($env) {
   case 'local':
     // Specify the modules to be enabled on this env.
@@ -108,6 +107,8 @@ switch ($env) {
     break;
 
   case '01dev':
+  case '01dev2':
+  case '01dev3':
   case '01test':
     // Specify the modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
