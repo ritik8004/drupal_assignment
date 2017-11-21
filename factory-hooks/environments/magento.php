@@ -1,7 +1,7 @@
 <?php
 
 /**
- * List all known Magento environments keyed by environment machien name.
+ * List all known Magento environments keyed by environment machine name.
  */
 function alshaya_get_magento_host_data() {
   return [
