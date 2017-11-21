@@ -1,5 +1,5 @@
 alshaya_addressbook.add_address_ajax:
-  path: 'user/{user}/{profile_type}/{js}/add'
+  path: '/user/{user}/{profile_type}/{js}/add'
   defaults:
     _controller: '\Drupal\alshaya_addressbook\Controller\AlshayaAddressBookController::addAddress'
     _title: 'Add Address'
@@ -15,7 +15,7 @@ alshaya_addressbook.add_address_ajax:
     js: 'nojs|ajax'
 
 alshaya_addressbook.edit_address_ajax:
-  path: 'profile/{profile}/{js}/edit'
+  path: '/profile/{profile}/{js}/edit'
   defaults:
     _controller: '\Drupal\alshaya_addressbook\Controller\AlshayaAddressBookController::editAddress'
     _title: 'Edit Address'
@@ -37,3 +37,15 @@ alshaya_addressbook.profile.set_default:
         type: entity:profile
   requirements:
     _entity_access: 'profile.update'
+
+alshaya_addressbook.get_areas_from_governate:
+  path: '/addressbook/get-areas-from-governate'
+  defaults:
+    _controller: '\Drupal\alshaya_addressbook\Controller\AlshayaAddressBookController::getAreasFromGovernate'
+    _title: ''
+  options:
+    parameters:
+      profile:
+        type: entity:profile
+  requirements:
+    _permission: 'access content'
