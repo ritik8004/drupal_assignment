@@ -63,7 +63,11 @@ class AlshayaAddressBookManager {
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshayaApiWrapper
    *   Alshaya API Wrapper object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, MobileNumberUtilInterface $mobile_util, LoggerChannelFactoryInterface $logger_factory, AlshayaApiWrapper $alshayaApiWrapper) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              APIWrapper $api_wrapper,
+                              MobileNumberUtilInterface $mobile_util,
+                              LoggerChannelFactoryInterface $logger_factory,
+                              AlshayaApiWrapper $alshayaApiWrapper) {
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->apiWrapper = $api_wrapper;
@@ -349,10 +353,12 @@ class AlshayaAddressBookManager {
         $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
       }
       if (isset($magento_address['extension']['area'])) {
-        $address['area'] = $magento_address['extension']['area'];
+        $term = $this->getLocationTermFromLocationId($magento_address['extension']['area']);
+        $address['area'] = $term->id();
       }
       if (isset($magento_address['extension']['governate'])) {
-        $address['governate'] = $magento_address['extension']['governate'];
+        $term = $this->getLocationTermFromLocationId($magento_address['extension']['governate']);
+        $address['locality'] = $term->id();
       }
     }
 
@@ -363,6 +369,30 @@ class AlshayaAddressBookManager {
     }
 
     return $address;
+  }
+
+  /**
+   * Get location term from location id.
+   *
+   * @param mixed $location_id
+   *   Location id.
+   *
+   * @return \Drupal\taxonomy\Entity\Term|null
+   *   Term if found or null.
+   */
+  public function getLocationTermFromLocationId($location_id) {
+    $terms = $this->getLocationTerms([
+      [
+        'field' => 'field_location_id',
+        'value' => $location_id,
+      ],
+    ]);
+
+    if (!empty($terms)) {
+      return reset($terms);
+    }
+
+    return NULL;
   }
 
   /**
@@ -380,8 +410,7 @@ class AlshayaAddressBookManager {
    */
   private function getLocationTerms(array $conditions = []) {
     $terms = [];
-    $query = \Drupal::entityQuery('taxonomy_term')
-      ->condition('vid', self::AREA_VOCAB);
+    $query = \Drupal::entityQuery('taxonomy_term')->condition('vid', self::AREA_VOCAB);
     foreach ($conditions as $condition) {
       if (!empty($condition['field']) && !empty($condition['value'])) {
         $condition['operator'] = empty($condition['operator']) ? '=' : $condition['operator'];
@@ -415,23 +444,27 @@ class AlshayaAddressBookManager {
     $magento_address['extension']['address_apartment_segment'] = (string) $address['address_line2'];
     $magento_address['extension']['address_area_segment'] = (string) $address['administrative_area'];
     $magento_address['extension']['address_building_segment'] = (string) $address['dependent_locality'];
-    $magento_address['extension']['address_block_segment'] = (string) $address['locality'];
     $magento_address['country_id'] = $address['country_code'];
 
-    $areaTerm = current($this->getLocationTerms([
-      [
-        'field' => 'name',
-        'value' => $magento_address['extension']['address_area_segment'],
-      ],
-    ]));
+    $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
 
-    if (!empty($areaTerm)) {
-      $governateTerm = current($this->termStorage->loadParents($areaTerm->id()));
+    if ($dm_version == DM_VERSION_2) {
+      $area = $this->termStorage->load($address['administrative_area']);
+
+      if (!empty($area)) {
+        $magento_address['extension']['address_area_segment'] = $area->label();
+        $magento_address['extension']['area'] = $area->get('field_location_id')->getString();
+
+        // This will be available only in R2.
+        $governate = current($this->termStorage->loadParents($area->id()));
+        if (!empty($governate)) {
+          $magento_address['extension']['governate'] = $governate->get('field_location_id')->getString();
+        }
+      }
     }
-
-    if (!empty($areaTerm) && !empty($governateTerm)) {
-      $magento_address['extension']['area'] = $areaTerm->get('field_location_id')->getString();
-      $magento_address['extension']['governate'] = $governateTerm->get('field_location_id')->getString();
+    else {
+      // This is used in V2 as governate.
+      $magento_address['extension']['address_block_segment'] = (string) $address['locality'];
     }
 
     // City is core attribute in Magento and hard to remove validation.
@@ -456,6 +489,8 @@ class AlshayaAddressBookManager {
     $magento_address['extension']['address_area_segment'] = '&#8203;';
     $magento_address['extension']['address_building_segment'] = '&#8203;';
     $magento_address['extension']['address_block_segment'] = '&#8203;';
+    $magento_address['extension']['area'] = '&#8203;';
+    $magento_address['extension']['governate'] = '&#8203;';
     $magento_address['country_id'] = _alshaya_custom_get_site_level_country_code();
     $magento_address['city'] = '&#8203;';
 
@@ -529,13 +564,8 @@ class AlshayaAddressBookManager {
     }
 
     // @todo: Translations missing.
-    /** @var \Drupal\taxonomy\Entity\Term $term */
-    $term = current($this->getLocationTerms([
-      [
-        'field' => 'field_location_id',
-        'value' => $termData['field_location_id'],
-      ],
-    ]));
+    $term = $this->getLocationTermFromLocationId($termData['field_location_id']);
+
     if (!empty($term)) {
       foreach ($termData as $termKey => $termValue) {
         $term->set($termKey, $termValue);
