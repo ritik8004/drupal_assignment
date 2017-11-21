@@ -911,4 +911,39 @@ class SkuManager {
     return $linked_skus_requested;
   }
 
+  /**
+   * Helper function to filter skus by stock status.
+   *
+   * @param array $skus
+   *   Array containing skus as string.
+   *
+   * @return array
+   *   Filtered skus.
+   */
+  public function filterRelatedSkus(array $skus) {
+    $related_items_size = \Drupal::config('alshaya_acm_product.settings')->get('related_items_size');
+    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+
+    // No stock check for related items in pull mode.
+    if ($stock_mode == 'pull') {
+      return array_slice($skus, 0, $related_items_size);
+    }
+
+    $related = [];
+
+    foreach ($skus as $sku) {
+      $sku_entity = SKU::loadFromSku($sku);
+
+      if (!empty($sku_entity) && alshaya_acm_get_product_stock($sku_entity)) {
+        $related[] = $sku;
+
+        if (count($related) >= $related_items_size) {
+          break;
+        }
+      }
+    }
+
+    return $related;
+  }
+
 }

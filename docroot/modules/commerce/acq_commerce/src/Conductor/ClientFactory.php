@@ -118,7 +118,7 @@ final class ClientFactory {
     }
 
     // Create key and middleware.
-    $key = new Key($config->get('hmac_id'), $config->get('hmac_secret'));
+    $key = new Key($config->get('hmac_id'), base64_encode($config->get('hmac_secret')));
     $middleware = new HmacAuthMiddleware($key);
     // Register the middleware.
     $stack = HandlerStack::create();

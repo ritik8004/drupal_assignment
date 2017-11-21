@@ -11,6 +11,19 @@ use Drupal\views\ViewExecutable;
 use Drupal\Core\Block\BlockPluginInterface;
 
 /**
+ * Implements hook_acq_sku_clean_synced_data_alter().
+ */
+function alshaya_stores_finder_acq_sku_clean_synced_data_alter(&$context) {
+  $query = \Drupal::entityQuery('node');
+  $query->addTag('node');
+  $query->condition('type', 'store');
+  $entities = $query->execute();
+  foreach ($entities as $entity) {
+    $context['sandbox']['results'][] = [$entity, 'node'];
+  }
+}
+
+/**
  * Implements hook_page_attachments().
  */
 function alshaya_stores_finder_page_attachments(array &$attachments) {

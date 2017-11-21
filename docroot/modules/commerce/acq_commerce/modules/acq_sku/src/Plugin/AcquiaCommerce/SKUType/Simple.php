@@ -4,7 +4,6 @@ namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\AddToCartErrorEvent;
@@ -90,11 +89,7 @@ class Simple extends SKUPluginBase {
     }
     catch (\Exception $e) {
       // Clear stock cache.
-      $stock_cid = acq_sku_get_stock_cache_id($sku_entity);
-      \Drupal::cache('stock')->invalidate($stock_cid);
-
-      // Clear product and forms related to sku.
-      Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
+      $sku_entity->clearStockCache();
 
       // Dispatch event so action can be taken.
       $dispatcher = \Drupal::service('event_dispatcher');

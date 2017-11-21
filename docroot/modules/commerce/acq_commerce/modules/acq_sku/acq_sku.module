@@ -8,10 +8,7 @@
  * connector.
  */
 
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Render\Element;
-use Drupal\acq_commerce\Conductor\ConductorException;
 
 /**
  * Implements hook_theme().
@@ -103,100 +100,4 @@ function acq_sku_theme_suggestions_acq_sku(array $variables) {
   $suggestions[] = 'acq_sku__' . $sku->id();
   $suggestions[] = 'acq_sku__' . $sku->id() . '__' . $sanitized_view_mode;
   return $suggestions;
-}
-
-/**
- * Helper function to get cache id for sku stock.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku_entity
- *   SKU Entity object.
- *
- * @return string
- *   Cache id.
- */
-function acq_sku_get_stock_cache_id(SKU $sku_entity) {
-  // We use only SKU for cache id, it will always be the same for same SKU
-  // in any store (language in Drupal).
-  return 'stock:' . $sku_entity->getSku();
-}
-
-/**
- * Checks the stock for the given sku.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku_entity
- *   SKU Entity object.
- *
- * @return array|mixed
- *   Available stock detail.
- *
- * @throws \Exception
- */
-function acq_sku_get_sku_stock(SKU $sku_entity, $reset = FALSE) {
-  $stock = NULL;
-
-  try {
-    // Cache id.
-    $cid = acq_sku_get_stock_cache_id($sku_entity);
-
-    $cache = \Drupal::cache('stock')->get($cid);
-
-    // If information is cached.
-    if (!$reset && !empty($cache)) {
-      $stock = $cache->data;
-    }
-    else {
-      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-      $api_wrapper = \Drupal::service('acq_commerce.api');
-
-      // Update API context to match the store id with requested langcode.
-      $api_wrapper->updateStoreContext(acq_commerce_get_store_id_from_langcode($sku_entity->language()->getId()));
-
-      // Get the stock.
-      $stock = $api_wrapper->skuStockCheck($sku_entity->getSku());
-    }
-  }
-  catch (ConductorException $e) {
-    // Log the stock error, do not throw error if stock info is missing.
-    \Drupal::logger('acq_sku')->emergency('Unable to get the stock for @sku : @message', ['@sku' => $sku_entity->getSku(), '@message' => $e->getMessage()]);
-
-    // We will cache this also for sometime to reduce load.
-    $stock['is_in_stock'] = FALSE;
-  }
-
-  // Magento uses additional flag as well for out of stock.
-  if (isset($stock['is_in_stock']) && empty($stock['is_in_stock'])) {
-    $stock['quantity'] = 0;
-  }
-
-  // If cache multiplier is zero we don't cache the stock.
-  if ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
-    $default_cache_lifetime = $stock['quantity'] ? $stock['quantity'] * $cache_multiplier : $cache_multiplier;
-    $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
-
-    // Calculate the timestamp when we want the cache to expire.
-    $stock_cache_lifetime = min($default_cache_lifetime, $max_cache_lifetime);
-    $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
-
-    // Set the stock in cache.
-    \Drupal::cache('stock')->set($cid, $stock, $expire);
-  }
-
-  return $stock;
-}
-
-/**
- * Clear stock cache of particular SKU.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku_entity
- *   SKU Entity object.
- */
-function acq_sku_clear_sku_stock_cache(SKU $sku_entity) {
-  foreach ($sku_entity->getTranslationLanguages() as $langcode => $language) {
-    $sku_entity_to_reset_stock = $sku_entity->getTranslation($langcode);
-    $cid = acq_sku_get_stock_cache_id($sku_entity_to_reset_stock);
-    \Drupal::cache('stock')->invalidate($cid);
-  }
-
-  // Clear product and forms related to sku.
-  Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
 }
