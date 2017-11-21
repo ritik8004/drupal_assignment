@@ -18,7 +18,7 @@ do
   if [ -f $deployDir/docroot/themes/custom/$i/.gitignore ]
   then
     uname_string=`uname`
-    if [ uname_string == 'Darwin' ]
+    if [ $uname_string == 'Darwin' ]
     then
       sed -i '' '/dist/d' $deployDir/docroot/themes/custom/$i/.gitignore
     else
