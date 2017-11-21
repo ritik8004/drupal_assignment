@@ -292,11 +292,13 @@ class SkuManager {
    */
   public function getPriceBlock(SKU $sku_entity) {
     $build = [];
-
+    $vat_text = '';
     $this->buildPrice($build, $sku_entity);
     // Adding vat text to product page.
-    $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text');
-
+    $current_route = \Drupal::routeMatch();
+    if ($current_route->getRouteName() == 'entity.node.canonical') {
+      $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text');
+    }
     $price_build = [
       '#theme' => 'product_price_block',
       '#price' => $build['price'],
@@ -888,7 +890,7 @@ class SkuManager {
     foreach ($skus as $sku) {
       $sku_entity = SKU::loadFromSku($sku);
 
-      if (alshaya_acm_get_product_stock($sku_entity)) {
+      if (!empty($sku_entity) && alshaya_acm_get_product_stock($sku_entity)) {
         $related[] = $sku;
 
         if (count($related) >= $related_items_size) {

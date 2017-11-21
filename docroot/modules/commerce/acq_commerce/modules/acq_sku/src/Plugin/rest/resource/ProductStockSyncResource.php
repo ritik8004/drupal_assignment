@@ -112,6 +112,17 @@ class ProductStockSyncResource extends ResourceBase {
       return (new ResourceResponse($response));
     }
 
+    $langcode = NULL;
+
+    if (isset($stock['store_id'])) {
+      $langcode = acq_commerce_get_langcode_from_store_id($stock['store_id']);
+
+      if (empty($langcode)) {
+        // It could be for a different store/website, don't do anything.
+        return (new ResourceResponse($response));
+      }
+    }
+
     $lock_key = 'synchronizeProduct' . $stock['sku'];
 
     // Acquire lock to ensure parallel processes are executed one by one.
@@ -120,7 +131,7 @@ class ProductStockSyncResource extends ResourceBase {
     } while (!$lock_acquired);
 
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
-    if ($sku = SKU::loadFromSku($stock['sku'])) {
+    if ($sku = SKU::loadFromSku($stock['sku'], $langcode)) {
       $this->logger->info('Updating stock for SKU @sku.', ['@sku' => $stock['sku']]);
 
       if (isset($stock['is_in_stock']) && empty($stock['is_in_stock'])) {
