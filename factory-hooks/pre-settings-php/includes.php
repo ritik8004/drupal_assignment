@@ -55,6 +55,9 @@ $settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
 $settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b6549e';
 
 // Common ACM settings.
+$settings['store_id']['en'] = 1;
+$settings['store_id']['ar'] = 3;
+
 $settings['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;
@@ -72,6 +75,9 @@ $config['acq_commerce.conductor']['debug'] = TRUE;
 
 // Set page size to sync products to 30.
 $settings['acq_commerce.conductor']['product_page_size'] = 30;
+
+// Default language code for redirects.
+$settings['alshaya_i18n.settings']['default_langcode'] = 'ar';
 
 // Disable unwanted core views.
 $settings['views_to_disable'] = [
@@ -115,4 +121,8 @@ switch ($env) {
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';
     break;
+
+  default:
+    // Don't debug by default on unknown ENV.
+    $settings['acq_commerce.conductor']['debug'] = FALSE;
 }

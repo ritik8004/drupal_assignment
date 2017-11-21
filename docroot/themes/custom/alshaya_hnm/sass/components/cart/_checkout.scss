@@ -812,7 +812,7 @@ body.alias--cart {
           position: relative;
           display: inline-block;
           min-height: 4.5rem;
-          margin-top: -0.5rem;
+          margin-top: 0.5rem;
         }
 
         @include breakpoint($upto-tablet) {
@@ -1314,11 +1314,6 @@ body.alias--cart {
     position: relative;
     padding-#{$left}: 1.688rem;
 
-    html[lang=en] & {
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
     @include icon(shopping-bag, after) {
       font-size: 1.5rem;
       #{$left}: 0.875rem;
@@ -1401,10 +1396,6 @@ html[lang=ar] {
     @include breakpoint($only-mobile) {
       #{$left}: -1.9rem;
     }
-
-    @include breakpoint (($only-tablet) (orientation landscape)) {
-      #{$left}: -2.3rem;
-    }
   }
 }
 
@@ -1455,11 +1446,6 @@ html[lang=ar] {
         font-family: $hnm-bold;
         font-weight: normal;
         font-size: 0.875rem;
-
-        html[lang=en] & {
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-        }
       }
     }
   }
@@ -1472,13 +1458,21 @@ html[lang=ar] {
 }
 
 html[lang=ar] {
-  .delivery-options-tooltip-wrapper .tooltip {
-    @include breakpoint($only-mobile) {
-      right: -2.1rem;
+  .delivery-options-tooltip-wrapper {
+    .click-collect + .tooltip {
+      @include breakpoint($only-mobile) {
+        right: -4.9rem;
+      }
     }
 
-    @include breakpoint($desktop) {
-      right: 2.45rem !important;
+    .tooltip {
+      @include breakpoint($only-mobile) {
+        right: -2.1rem;
+      }
+
+      @include breakpoint($desktop) {
+        right: 2.45rem;
+      }
     }
   }
 }

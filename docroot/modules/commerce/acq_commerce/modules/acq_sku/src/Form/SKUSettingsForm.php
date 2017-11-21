@@ -45,6 +45,7 @@ class SKUSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $sku_settings = $this->config('acq_sku.settings');
+    $sku_settings->set('stock_mode', $form_state->getValue('stock_mode'));
     $sku_settings->set('stock_cache_multiplier', $form_state->getValue('stock_cache_multiplier'));
     $sku_settings->set('stock_cache_max_lifetime', $form_state->getValue('stock_cache_max_lifetime'));
     $sku_settings->set('linked_skus_cache_max_lifetime', $form_state->getValue('linked_skus_cache_max_lifetime'));
@@ -66,6 +67,17 @@ class SKUSettingsForm extends ConfigFormBase {
     $form = parent::buildForm($form, $form_state);
 
     $sku_settings = $this->config('acq_sku.settings');
+
+    $form['stock_mode'] = [
+      '#type' => 'select',
+      '#options' => [
+        'pull' => $this->t('Pull'),
+        'push' => $this->t('Push'),
+      ],
+      '#title' => $this->t('Stock Mode'),
+      '#default_value' => $sku_settings->get('stock_mode'),
+    ];
+
     $form['stock_cache_multiplier'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Stock Cache Multiplier'),

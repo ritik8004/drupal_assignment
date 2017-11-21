@@ -346,6 +346,12 @@
       top: 50%;
       transform: translateY(-50%);
     }
+
+    html[lang=ar] & {
+      @include breakpoint($above-palm) {
+        transform: translateY(-44%) rotate(180deg);
+      }
+    }
   }
 
   &.active,

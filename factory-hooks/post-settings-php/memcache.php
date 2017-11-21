@@ -13,5 +13,48 @@ $settings['memcache']['stampede_protection'] = TRUE;
 // Set default cache backend to memcache.
 $settings['cache']['default'] = 'cache.backend.memcache';
 
+$class_loader->addPsr4('Drupal\\memcache\\', 'modules/contrib/memcache/src');
+
+// Define custom bootstrap container definition to use Memcache for cache.container.
+$settings['bootstrap_container_definition'] = [
+  'parameters' => [],
+  'services' => [
+    'database' => [
+      'class' => 'Drupal\Core\Database\Connection',
+      'factory' => 'Drupal\Core\Database\Database::getConnection',
+      'arguments' => ['default'],
+    ],
+    'settings' => [
+      'class' => 'Drupal\Core\Site\Settings',
+      'factory' => 'Drupal\Core\Site\Settings::getInstance',
+    ],
+    'memcache.config' => [
+      'class' => 'Drupal\memcache\DrupalMemcacheConfig',
+      'arguments' => ['@settings'],
+    ],
+    'memcache.backend.cache.factory' => [
+      'class' => 'Drupal\memcache\DrupalMemcacheFactory',
+      'arguments' => ['@memcache.config']
+    ],
+    'memcache.backend.cache.container' => [
+      'class' => 'Drupal\memcache\DrupalMemcacheFactory',
+      'factory' => ['@memcache.backend.cache.factory', 'get'],
+      'arguments' => ['container'],
+    ],
+    'lock.container' => [
+      'class' => 'Drupal\memcache\Lock\MemcacheLockBackend',
+      'arguments' => ['container', '@memcache.backend.cache.container'],
+    ],
+    'cache_tags_provider.container' => [
+      'class' => 'Drupal\Core\Cache\DatabaseCacheTagsChecksum',
+      'arguments' => ['@database'],
+    ],
+    'cache.container' => [
+      'class' => 'Drupal\memcache\MemcacheBackend',
+      'arguments' => ['container', '@memcache.backend.cache.container', '@lock.container', '@memcache.config', '@cache_tags_provider.container'],
+    ],
+  ],
+];
+
 // Use pcb_memcache for stock.
 $settings['cache']['bins']['stock'] = 'cache.backend.permanent_memcache';

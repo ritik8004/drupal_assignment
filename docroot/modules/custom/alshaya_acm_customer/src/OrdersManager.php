@@ -79,7 +79,7 @@ class OrdersManager {
 
     foreach ($order['items'] as $item) {
       if ($sku_entity = SKU::loadFromSku($item['sku'])) {
-        acq_sku_clear_sku_stock_cache($sku_entity);
+        $sku_entity->clearStockCache();
       }
     }
   }

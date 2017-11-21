@@ -116,7 +116,7 @@
             // Set product size to selected size.
             if (product.dimension2 !== 'simple') {
               var currentLangCode = drupalSettings.path.currentLanguage;
-              if (currentLangCode !== 'en') {
+              if ((currentLangCode !== 'en') && (typeof size !== 'undefined')) {
                 size = drupalSettings.alshaya_product_size_config[size];
               }
               product.dimension6 = size;

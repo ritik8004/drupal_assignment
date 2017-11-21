@@ -256,6 +256,7 @@
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val(data.address_line1);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val(data.dependent_locality);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val(data.address_line2);
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]').val(data.mobile);
 
     // Select value.
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val(data.administrative_area);
