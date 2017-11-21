@@ -18,9 +18,6 @@ drush8 @$site.$target_env --uri=$uri status
 # Clear cache, we want to avoid fatals because of updated services.
 drush8 @$site.$target_env --uri=$uri cr
 
-# Set the uri in state to add it in db.
-drush8 @$site.$target_env --uri=$uri sset post_db_copy_uri $uri
-
 # Enable developer modules, we are going to use this script only on non-prod envs.
 drush8 @$site.$target_env --uri=$uri en -y dblog views_ui features_ui restui
 
@@ -50,4 +47,5 @@ drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_detach_queue
 
 # Save the dump for later use and use in local.
 timestamp=$(date +%s)
-drush8 @$site.$target_env --uri=$uri sql-dump | gzip > ~/$target_env/post_db_copy_$timestamp.sql.gz
+db_prefix=${uri//[-._]/}
+drush8 @$site.$target_env --uri=$uri sql-dump | gzip > ~/$target_env/post_db_copy_$db_prefix_$timestamp.sql.gz
