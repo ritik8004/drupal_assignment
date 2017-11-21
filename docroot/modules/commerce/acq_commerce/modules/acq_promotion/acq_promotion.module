@@ -7,3 +7,16 @@
  * Provides base hooks to the promotions functionality of Acquia Commerce
  * connector.
  */
+
+/**
+ * Implements hook_acq_sku_clean_synced_data_alter().
+ */
+function acq_promotion_acq_sku_clean_synced_data_alter(&$context) {
+  $query = \Drupal::entityQuery('node');
+  $query->addTag('node');
+  $query->condition('type', 'acq_promotion');
+  $entities = $query->execute();
+  foreach ($entities as $entity) {
+    $context['sandbox']['results'][] = [$entity, 'node'];
+  }
+}

@@ -18,3 +18,11 @@ function alshaya_email_signup_install() {
   ];
   alshaya_i18n_save_translations($strings);
 }
+
+/**
+ * Set machine name for default content of email signup settings.
+ */
+function alshaya_email_signup_update_8101() {
+  $configs = ['alshaya_email_signup.settings'];
+  alshaya_config_install_configs($configs, 'alshaya_email_signup');
+}
