@@ -888,7 +888,7 @@ class SkuManager {
     foreach ($skus as $sku) {
       $sku_entity = SKU::loadFromSku($sku);
 
-      if (alshaya_acm_get_product_stock($sku_entity)) {
+      if (!empty($sku_entity) && alshaya_acm_get_product_stock($sku_entity)) {
         $related[] = $sku;
 
         if (count($related) >= $related_items_size) {
