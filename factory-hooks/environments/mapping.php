@@ -65,8 +65,11 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'hm_qa',
         'conductor' => 'hm_test',
       ],
-      // Local, travis, 01dev, 01dev2, 01dev3, 01test, 01uat, 01pprod, 01live
-      // 01update.
+      '01pprod' => [
+        'magento' => 'hm_uat',
+        'conductor' => 'mc_pprod'
+      ],
+      // Local, travis, 01dev, 01dev2, 01dev3, 01test, 01uat, 01live, 01update.
       'default' => [
         'magento' => 'hm_qa',
         'conductor' => 'hm_dev',
