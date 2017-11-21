@@ -126,3 +126,19 @@ function alshaya_mc_update_8303() {
   $config->set('store_list_label', 'List of all Mothercare Stores');
   $config->save();
 }
+
+/**
+ * Implements hook_update().
+ *
+ * Update the C&C STS message, change placeholder to stop forced italic.
+ */
+function alshaya_mc_update_8304() {
+  // Array of language translation strings.
+  $strings = [
+    'Your order will be available in %duration' => [
+      'en' => 'Your order will be available in @duration',
+      'ar' => 'سيتم توصيل طلبيتك خلال @duration',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}

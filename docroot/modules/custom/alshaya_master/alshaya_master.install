@@ -1037,8 +1037,8 @@ function alshaya_master_install() {
     '1 hour' => [
       'ar' => 'ساعة واحدة',
     ],
-    'Your order will be available in %duration' => [
-      'ar' => 'سيتم توصيل طلبيتك خلال %duration',
+    'Your order will be available in @duration' => [
+      'ar' => 'سيتم توصيل طلبيتك خلال @duration',
     ],
     'View Full Product Details' => [
       'ar' => 'عرض جميع تفاصيل المنتج',
