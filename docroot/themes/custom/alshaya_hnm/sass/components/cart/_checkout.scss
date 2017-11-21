@@ -1314,11 +1314,6 @@ body.alias--cart {
     position: relative;
     padding-#{$left}: 1.688rem;
 
-    html[lang=en] & {
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
     @include icon(shopping-bag, after) {
       font-size: 1.5rem;
       #{$left}: 0.875rem;
@@ -1451,11 +1446,6 @@ html[lang=ar] {
         font-family: $hnm-bold;
         font-weight: normal;
         font-size: 0.875rem;
-
-        html[lang=en] & {
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-        }
       }
     }
   }
