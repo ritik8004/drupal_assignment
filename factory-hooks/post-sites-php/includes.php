@@ -20,7 +20,7 @@ if (!function_exists('gardens_data_get_sites_from_file')) {
    * @return array|mixed|null
    *   An array of sites indexed by domain that matches the given site name.
    */
-  function gardens_data_get_sites_from_file($name, $reset) {
+  function gardens_data_get_sites_from_file($name, $reset = FALSE) {
     static $domains = NULL;
 
     if (!isset($domains)) {
