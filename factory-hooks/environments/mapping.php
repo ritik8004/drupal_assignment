@@ -79,7 +79,7 @@ function alshaya_get_env_keys($site, $env) {
 
   // Get the keys following this fallback (from the more specific to the more
   // generic one): site+env > site+default > default+env > default+default.
-  $map = $mapping['default']['default'];
+  $map = [];
   if (isset($mapping[$site][$env])) {
     $map = $mapping[$site][$env];
   }
@@ -88,6 +88,9 @@ function alshaya_get_env_keys($site, $env) {
   }
   elseif (isset($mapping['default'][$env])) {
     $map = $mapping['default'][$env];
+  }
+  elseif (isset($mapping['default']['default'])) {
+    $map = $mapping['default']['default'];
   }
 
   return $map;
