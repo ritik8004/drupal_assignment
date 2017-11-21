@@ -553,15 +553,31 @@
       }
 
       #edit-field-address-0-address-mobile-number-mobile-error,
-      #edit-mobile-number-mobile-error {
+      #edit-mobile-number-mobile-error,
+      label.error {
         position: absolute;
         top: 2rem;
         #{$left}: 0;
+        // Show red border for mobile number error.
+        border-top: 2px solid $red-error;
+        padding-top: 0.4375rem;
+        margin-top: -0.1875rem;
+        z-index: 1;
+        width: 100%;
+
+        .checkout & {
+          top: 2.85rem;
+        }
       }
 
       .form-item--error-message {
         position: absolute;
         #{$left}: 0;
+        border-top: 2px solid $red-error;
+        padding-top: 0.4375rem;
+        margin-top: 0;
+        z-index: 1;
+        width: 100%;
       }
     }
 

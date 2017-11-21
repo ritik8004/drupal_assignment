@@ -123,8 +123,6 @@
           }
 
           .dark {
-            font-weight: bold;
-
             a {
               font-size: 0.75rem;
               font-weight: bold;
@@ -706,7 +704,6 @@
 
   #apply_coupon {
     font-family: $hnm-bold;
-    font-weight: normal;
     text-transform: uppercase;
     display: inline-block;
     margin-bottom: 14px;
