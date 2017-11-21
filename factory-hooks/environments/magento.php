@@ -16,6 +16,7 @@ function alshaya_get_magento_host_data() {
     'hm_qa' => 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud',
     'hm_uat' => 'https://uat-irjkrqa-zbrr3sobrsb3o.eu.magentosite.cloud',
     'hm_swatch' => 'https://acr2-27-o7wcoxy-zbrr3sobrsb3o.eu.magentosite.cloud',
+    'hm_prod' => 'http://hm.store.alshaya.com.c.zbrr3sobrsb3o.ent.magento.cloud',
   ];
 }
 
