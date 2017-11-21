@@ -31,31 +31,45 @@ function alshaya_get_env_keys($site, $env) {
   $mapping = [
     // Mothercare Kuwait.
     'mckw' => [
-      'local' => [
+      '01test' => [
+        'magento' => 'mc_qa',
+        'conductor' => 'mc_test',
+      ],
+      '01uat' => [
+        'magento' => 'mc_uat',
+        'conductor' => 'mc_uat',
+      ],
+      '01pprod' => [
+        'magento' => 'mc_dev',
+        'conductor' => 'mc_pprod',
+      ],
+      '01live' => [
+        'magento' => 'mc_prod',
+        'conductor' => 'mc_prod',
+      ],
+      '01update' => [
+        'magento' => 'mc_prod',
+        'conductor' => 'mc_prod',
+      ],
+      // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
+      'default' => [
         'magento' => 'mc_dev',
         'conductor' => 'mc_dev'
-      ],
-      'default' => [
-        'magento' => 'mckw_magento_default',
       ],
     ],
     // Mothercare UAE.
     'mcuae' => [],
     // H&M Kuwait.
     'hmkw' => [
-      'local' => [
+      '01qa2' => [
+        'magento' => 'hm_qa',
+        'conductor' => 'hm_test',
+      ],
+      // Local, travis, 01dev, 01dev2, 01dev3, 01test, 01uat, 01pprod, 01live
+      // 01update.
+      'default' => [
         'magento' => 'hm_qa',
         'conductor' => 'hm_dev',
-      ],
-    ],
-    // Default.
-    'default' => [
-      'local' => [
-        'magento' => 'default_magento_local',
-        'conductor' => '',
-      ],
-      'default' => [
-        'magento' => 'default_magento_default',
       ],
     ],
   ];
