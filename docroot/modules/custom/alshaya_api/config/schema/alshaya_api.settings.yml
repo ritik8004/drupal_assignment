@@ -6,23 +6,23 @@ alshaya_api.settings:
       type: string
       label: 'Language code'
     magento_host:
-      type: label
+      type: string
       label: 'Host'
     magento_lang_prefix:
       type: label
       label: 'Language prefix'
     magento_api_base:
-      type: label
+      type: string
       label: 'API Base'
     verify_ssl:
       type: integer
     token_cache_time:
       type: integer
     username:
-      type: label
+      type: string
       label: 'Username'
     password:
-      type: label
+      type: string
       label: 'Password'
     dm_version:
       type: integer

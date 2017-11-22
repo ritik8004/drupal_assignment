@@ -401,25 +401,16 @@ class AlshayaApiWrapper {
    *   The Language prefix for current language.
    */
   private function getMagentoLangPrefix() {
-    $mapping = [];
-
-    $languages = \Drupal::languageManager()->getLanguages();
-
-    // Prepare the alternate locale data.
-    foreach ($languages as $lang => $language) {
-      // For default language, we access the config directly.
-      if ($lang == \Drupal::languageManager()->getDefaultLanguage()->getId()) {
-        $config = \Drupal::config('alshaya_api.settings');
-      }
-      // We get store id from translated config for other languages.
-      else {
-        $config = \Drupal::languageManager()->getLanguageConfigOverride($lang, 'alshaya_api.settings');
-      }
-
-      $mapping[$lang] = $config->get('magento_lang_prefix');
+    // For current language, we access the config directly.
+    if ($this->langcode == $this->languageManager->getDefaultLanguage()->getId()) {
+      $config = \Drupal::config('alshaya_api.settings');
+    }
+    // We get store id from translated config for other languages.
+    else {
+      $config = \Drupal::languageManager()->getLanguageConfigOverride($this->langcode, 'alshaya_api.settings');
     }
 
-    return $mapping[$this->langcode];
+    return $config->get('magento_lang_prefix');
   }
 
   /**

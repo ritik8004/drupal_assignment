@@ -5,12 +5,12 @@ namespace Drupal\alshaya_addressbook;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Entity\Profile;
 use Drupal\user\Entity\User;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * Class AlshayaAddressBookManager.
@@ -50,6 +50,13 @@ class AlshayaAddressBookManager {
   protected $alshayaApiWrapper;
 
   /**
+   * Lanaguage Manager object.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaAddressBookManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -62,17 +69,21 @@ class AlshayaAddressBookManager {
    *   LoggerFactory object.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshayaApiWrapper
    *   Alshaya API Wrapper object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   Language manager object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               APIWrapper $api_wrapper,
                               MobileNumberUtilInterface $mobile_util,
                               LoggerChannelFactoryInterface $logger_factory,
-                              AlshayaApiWrapper $alshayaApiWrapper) {
+                              AlshayaApiWrapper $alshayaApiWrapper,
+                              LanguageManagerInterface $languageManager) {
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->apiWrapper = $api_wrapper;
     $this->mobileUtil = $mobile_util;
     $this->alshayaApiWrapper = $alshayaApiWrapper;
+    $this->languageManager = $languageManager;
     $this->logger = $logger_factory->get('alshaya_addressbook');
   }
 
@@ -433,7 +444,7 @@ class AlshayaAddressBookManager {
     }
     $tids = $query->execute();
     if (!empty($tids)) {
-      $terms = Term::loadMultiple($tids);
+      $terms = $this->termStorage->loadMultiple($tids);
     }
 
     return $terms;
@@ -568,17 +579,25 @@ class AlshayaAddressBookManager {
    *
    * @param array $termData
    *   Term data to save as term.
+   * @param string $langcode
+   *   Language code.
    *
-   * @return mixed
+   * @return \Drupal\taxonomy\Entity\Term|null
    *   Term object if created, or empty.
    */
-  public function updateLocation(array $termData = []) {
+  public function updateLocation(array $termData, $langcode) {
     if (empty($termData)) {
-      return;
+      return NULL;
     }
 
-    // @todo: Translations missing.
     $term = $this->getLocationTermFromLocationId($termData['field_location_id']);
+
+    if ($term && $term->hasTranslation($langcode)) {
+      $term = $term->getTranslation($langcode);
+    }
+    elseif ($term) {
+      $term = $term->addTranslation($langcode);
+    }
 
     if (!empty($term)) {
       foreach ($termData as $termKey => $termValue) {
@@ -587,7 +606,8 @@ class AlshayaAddressBookManager {
     }
     else {
       $termData['vid'] = self::AREA_VOCAB;
-      $term = Term::create($termData);
+      $termData['langcode'] = $langcode;
+      $term = $this->termStorage->create($termData);
     }
 
     try {
@@ -595,7 +615,7 @@ class AlshayaAddressBookManager {
     }
     catch (\Exception $e) {
       // Log error if any.
-      \Drupal::logger('alshaya_addressbook')->error($e->getMessage());
+      $this->logger->error($e->getMessage());
     }
 
     return $term;
@@ -605,49 +625,59 @@ class AlshayaAddressBookManager {
    * Function to sync areas for delivery matrix.
    */
   public function syncAreas() {
-    $governates = $this->alshayaApiWrapper->getLocations('attribute_id', 'governate');
-    if (!empty($governates['items'])) {
-      $termsProcessed = [];
-      foreach ($governates['items'] as $governate) {
-        // Assuming Parent ID is 0, for Governates.
-        $governateData = [
-          'name' => $governate['labels'][0],
-          'field_location_id' => $governate['location_id'],
-          'parent' => 0,
-        ];
-        /** @var \Drupal\taxonomy\Entity\Term $governateTerm */
-        $governateTerm = $this->updateLocation($governateData);
-        $termsProcessed[] = $governateTerm->id();
+    $termsProcessed = [];
 
-        // Fetch area's under this governate.
-        $areas = $this->alshayaApiWrapper->getLocations('parent_id', $governate['location_id']);
-        if (!empty($areas['items'])) {
-          foreach ($areas['items'] as $area) {
-            $areaData = [
-              'name' => $area['labels'][0],
-              'field_location_id' => $area['location_id'],
-              'parent' => $governateTerm->id(),
-            ];
-            $areaTerm = $this->updateLocation($areaData);
-            $termsProcessed[] = $areaTerm->id();
+    $languages = $this->languageManager->getLanguages();
+
+    foreach ($languages as $langcode => $language) {
+      $this->alshayaApiWrapper->updateStoreContext($langcode);
+
+      $governates = $this->alshayaApiWrapper->getLocations('attribute_id', 'governate');
+
+      if (!empty($governates['items'])) {
+        foreach ($governates['items'] as $governate) {
+          // Assuming Parent ID is 0, for Governates.
+          $governateData = [
+            'name' => $governate['labels'][0],
+            'field_location_id' => $governate['location_id'],
+            'parent' => 0,
+          ];
+
+          $governateTerm = $this->updateLocation($governateData, $langcode);
+          $termsProcessed[$governateTerm->id()] = $governateTerm->id();
+
+          // Fetch area's under this governate.
+          $areas = $this->alshayaApiWrapper->getLocations('parent_id', $governate['location_id']);
+
+          if (!empty($areas['items'])) {
+            foreach ($areas['items'] as $area) {
+              $areaData = [
+                'name' => $area['labels'][0],
+                'field_location_id' => $area['location_id'],
+                'parent' => $governateTerm->id(),
+              ];
+
+              $areaTerm = $this->updateLocation($areaData, $langcode);
+              $termsProcessed[$areaTerm->id()] = $areaTerm->id();
+            }
           }
         }
       }
-
-      // Delete the excess terms that exist.
-      if (!empty($termsProcessed)) {
-        $result = \Drupal::entityQuery('taxonomy_term')
-          ->condition('vid', self::AREA_VOCAB)
-          ->condition('tid', $termsProcessed, 'NOT IN')
-          ->execute();
-
-        if ($result) {
-          $terms = $this->termStorage->loadMultiple($result);
-          $this->termStorage->delete($terms);
-        }
-      }
-
     }
+
+    // Delete the excess terms that exist.
+    if (!empty($termsProcessed)) {
+      $result = \Drupal::entityQuery('taxonomy_term')
+        ->condition('vid', self::AREA_VOCAB)
+        ->condition('tid', $termsProcessed, 'NOT IN')
+        ->execute();
+
+      if ($result) {
+        $terms = $this->termStorage->loadMultiple($result);
+        $this->termStorage->delete($terms);
+      }
+    }
+
   }
 
 }
