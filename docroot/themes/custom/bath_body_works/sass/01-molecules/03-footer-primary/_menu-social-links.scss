@@ -30,7 +30,7 @@ $path-social-icons: "../../images/icons/social-icons";
 
 @mixin ic-social {
   content: '';
-  background-repeat: none;
+  background-repeat: no-repeat;
   width: 1.56rem;
   height: 1.59rem;
 }
