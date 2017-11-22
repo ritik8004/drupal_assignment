@@ -43,3 +43,14 @@ function alshaya_permissions_uninstall() {
   \Drupal::configFactory()->getEditable('user.role.webmaster')->delete();
   \Drupal::configFactory()->getEditable('user.role.reviewer')->delete();
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Grant webmaster product permission.
+ */
+function alshaya_permissions_update_8004() {
+  $role = Role::load('webmaster');
+  $role->grantPermission('access commerce product settings');
+  $role->save();
+}
