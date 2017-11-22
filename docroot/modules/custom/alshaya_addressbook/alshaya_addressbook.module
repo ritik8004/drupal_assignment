@@ -227,22 +227,22 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
       // Label changes to other fields.
       if ($magento_form_element['attribute_code'] == 'firstname') {
-        $element['given_name']['#title'] = t('@firstname', ['@firstname' => $magento_form_element['frontend_label']]);
+        $element['given_name']['#title'] = $magento_form_element['frontend_label'];
       }
       if ($magento_form_element['attribute_code'] == 'lastname') {
-        $element['family_name']['#title'] = t('@lastname', ['@lastname' => $magento_form_element['frontend_label']]);
+        $element['family_name']['#title'] = $magento_form_element['frontend_label'];
       }
       if ($magento_form_element['attribute_code'] == 'telephone') {
-        $element['mobile_number']['#title'] = t('@telephone', ['@telephone' => $magento_form_element['frontend_label']]);
+        $element['mobile_number']['#title'] = $magento_form_element['frontend_label'];
       }
       if ($magento_form_element['attribute_code'] == 'area') {
-        $element['administrative_area']['#title'] = t('@area', ['@area' => $magento_form_element['frontend_label']]);
+        $element['administrative_area']['#title'] = $magento_form_element['frontend_label'];
       }
       if ($magento_form_element['attribute_code'] == 'country_id') {
-        $element['country_name']['#markup'] = '<div class="country-field-wrapper"><div class="country-label">' . t('@country', ['@country' => $magento_form_element['frontend_label']]) . '</div><div class="country-name">' . $country_list[$default_country_code] . '</div></div>',
+        $element['country_name']['#markup'] = '<div class="country-field-wrapper"><div class="country-label">' . t('@country', ['@country' => $magento_form_element['frontend_label']]) . '</div><div class="country-name">' . $country_list[$default_country_code] . '</div></div>';
       }
       if ($magento_form_element['attribute_code'] == 'street') {
-        $element['address_line1']['#title'] = t('@street', ['@street' => $magento_form_element['frontend_label']]);
+        $element['address_line1']['#title'] = $magento_form_element['frontend_label'];
       }
     }
 
