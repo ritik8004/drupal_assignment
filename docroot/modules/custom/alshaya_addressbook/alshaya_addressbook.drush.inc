@@ -30,12 +30,6 @@ function drush_alshaya_addressbook_sync_areas() {
     \Drupal::service('alshaya_addressbook.manager')->syncAreas();
     \Drupal::logger('alshaya_addressbook')->notice('Area sync completed.');
     drush_print(dt('Done.'));
-
-    // Set the cache for form data from magento.
-    drush_print(dt('Fetching form, and setting cache'));
-    $magento_form = \Drupal::service('alshaya_api.api')->getCustomerAddressForm();
-    \Drupal::state()->set('magento_customer_address_form', $magento_form);
-    drush_print(dt('Done.'));
   }
   else {
     drush_print(dt('Incorrect DM version for this command.'));

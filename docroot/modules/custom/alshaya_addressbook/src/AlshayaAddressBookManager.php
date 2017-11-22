@@ -680,4 +680,32 @@ class AlshayaAddressBookManager {
 
   }
 
+  /**
+   * Get address form fields from Magento.
+   *
+   * @return array
+   *   Address form fields.
+   */
+  public function getMagentoFormFields() {
+    // Cache the form per language.
+    $cid = 'magento_customer_address_form_' . $this->languageManager->getCurrentLanguage()->getId();
+
+    $cache = \Drupal::cache()->get($cid);
+
+    if ($cache) {
+      return $cache->data;
+    }
+
+    try {
+      $magento_form = $this->alshayaApiWrapper->getCustomerAddressForm();
+
+      \Drupal::cache()->set($cid, $magento_form);
+    }
+    catch (\Exception $e) {
+      $magento_form = [];
+    }
+
+    return $magento_form;
+  }
+
 }

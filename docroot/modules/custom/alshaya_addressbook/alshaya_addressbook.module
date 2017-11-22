@@ -85,7 +85,15 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
  */
 function _alshaya_addressbook_country_process(array &$element, FormStateInterface $form_state) {
   $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
-  $magento_form = \Drupal::state()->get('magento_customer_address_form', []);
+
+  $magento_form = NULL;
+
+  if ($dm_version == DM_VERSION_2) {
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
+    $magento_form = $address_book_manager->getMagentoFormFields();
+  }
 
   $default_country_code = $element['#default_value']['country_code'];
   $element['country_code'] = [
@@ -121,38 +129,37 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     $element['organization']['#access'] = FALSE;
   }
 
-  // Only for 'Kuwait'.
-  if ($default_country_code == 'KW') {
-    $area_parent = $dm_version == DM_VERSION_2 ? $element['locality']['#default_value'] : 0;
+  $area_parent = $dm_version == DM_VERSION_2 ? $element['locality']['#default_value'] : 0;
 
-    $administrative_area_default_value = $element['administrative_area']['#default_value'];
-    $element['administrative_area'] = [
-      '#type' => 'select',
-      '#title' => t('Area'),
-      '#required' => TRUE,
-      '#multiple' => FALSE,
-      '#default_value' => $administrative_area_default_value,
-      '#options' => ['' => t('Select Area')] + _alshaya_addressbook_area_list($area_parent),
-      '#attributes' => [
-        'class' => [
-          'select2-select',
-          'area-list-dropdown',
-        ],
+  // Modifications for all countries (overridden in code below if required).
+  $administrative_area_default_value = $element['administrative_area']['#default_value'];
+  $element['administrative_area'] = [
+    '#type' => 'select',
+    '#title' => t('Area'),
+    '#required' => TRUE,
+    '#multiple' => FALSE,
+    '#default_value' => $administrative_area_default_value,
+    '#options' => ['' => t('Select Area')] + _alshaya_addressbook_area_list($area_parent),
+    '#attributes' => [
+      'class' => [
+        'select2-select',
+        'area-list-dropdown',
       ],
-      '#attached' => [
-        'library' => [
-          'alshaya_white_label/convert_to_select2',
-        ],
+    ],
+    '#attached' => [
+      'library' => [
+        'alshaya_white_label/convert_to_select2',
       ],
-    ];
-    $element['address_line1']['#title'] = t('Street Name / No.', [], ['context' => 'Address label']);
-    $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);
-    $element['locality']['#title'] = t('Block', [], ['context' => 'Address label']);
-    $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
-    $element['address_line2']['#attributes']['class'][] = 'form-item-field-address-floor';
-    $element['address_line2']['#attached']['library'][] = 'alshaya_addressbook/alshaya_addressbook';
-    $element['address_line2']['#title_display'] = 'before';
-  }
+    ],
+  ];
+
+  $element['address_line1']['#title'] = t('Street Name / No.', [], ['context' => 'Address label']);
+  $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);
+  $element['locality']['#title'] = t('Block', [], ['context' => 'Address label']);
+  $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
+  $element['address_line2']['#attributes']['class'][] = 'form-item-field-address-floor';
+  $element['address_line2']['#attached']['library'][] = 'alshaya_addressbook/alshaya_addressbook';
+  $element['address_line2']['#title_display'] = 'before';
 
   // Adding mobile number.
   $mobile_number = [
@@ -179,6 +186,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   // Adding mobile number field to appropriate position.
   $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'organization');
+
   // Adding country code field to appropriate position.
   $element = _alshaya_addressbook_array_insert($element, $country_name, 'mobile_number');
 
