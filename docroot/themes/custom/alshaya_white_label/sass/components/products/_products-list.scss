@@ -412,14 +412,21 @@
     .alshaya_search_slider {
       opacity: 0;
       z-index: -1;
-      transform: translateY(-110%);
-      transition: all 0.3s ease-in-out;
+      display: none;
+
+      @include breakpoint($desktop) {
+        display: block;
+        transform: translateY(-110%);
+        transition: all 0.3s ease-in-out;
+      }
     }
 
     .product-plp-detail-wrapper,
     .stock-placeholder.out-of-stock {
-      transform: translateY(-110%);
-      transition: all 0.3s ease-in-out;
+      @include breakpoint($desktop) {
+        transform: translateY(-110%);
+        transition: all 0.3s ease-in-out;
+      }
     }
 
     .field--name-name {
