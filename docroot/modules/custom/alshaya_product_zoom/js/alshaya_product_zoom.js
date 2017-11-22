@@ -66,19 +66,17 @@
 
 
       // Slider - 3 For Mobile - Image Gallery.
-      if ($(window).width() < 768) {
-        var slickModalMobileOptions = {
-          slidesToShow: 1,
-          vertical: false,
-          dots: true,
-          centerMode: false,
-          infinite: false,
-          focusOnSelect: true,
-          initialSlide: 0
-        };
-        var mobilegallery = $('#product-image-gallery-mobile', context);
-        applyRtl(mobilegallery, slickModalMobileOptions);
-      }
+      var slickMobileOptions = {
+        slidesToShow: 1,
+        vertical: false,
+        dots: true,
+        centerMode: false,
+        infinite: false,
+        focusOnSelect: true,
+        initialSlide: 0
+      };
+      var mobilegallery = $('#product-image-gallery-mobile', context);
+      applyRtl(mobilegallery, slickMobileOptions);
 
       // Show mobile slider only on mobile resolution.
       toggleProductImageGallery();
