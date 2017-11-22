@@ -522,15 +522,23 @@ class E24PaymentPipe {
    */
   protected function getSecureSettings() {
     $s = '';
-    if (!$this->createReadableZip()) {
-      throw new \RuntimeException('Cannot create readable zip file.');
+
+    // Try to read the contents of zip if already exists.
+    try {
+      $s = $this->readZip();
     }
-    $s = $this->readZip();
+    catch (\Exception $e) {
+      // Zip file seems not available, try to create it and read again.
+      if (!$this->createReadableZip()) {
+        throw new \RuntimeException('Cannot create readable zip file.');
+      }
+
+      $s = $this->readZip();
+    }
+
     if ($s == '') {
       throw new \RuntimeException('Cannot read data from zip file.');
     }
-
-    unlink($this->resourcePath . 'resource.cgz');
 
     return $this->parseSettings($s);
   }
@@ -544,7 +552,10 @@ class E24PaymentPipe {
     $contentsInput = fread($handleInput, filesize($filenameInput));
 
     $filenameOutput = $this->resourcePath . 'resource.cgz';
+
+    // Unlink the file if exists before re-creating it.
     @unlink($filenameOutput);
+
     $handleOutput = fopen($filenameOutput, 'w');
 
     $inByteArray = $this->getBytes($contentsInput);
@@ -584,7 +595,7 @@ class E24PaymentPipe {
       $xmlHandleInput = fopen($xmlNameInput, 'r');
       $xmlContentsInput = fread($xmlHandleInput, filesize($xmlNameInput));
       fclose($xmlHandleInput);
-      unlink($xmlNameInput);
+
       $s = $xmlContentsInput;
 
       $s = $this->getString($this->simplexor($this->getBytes($s)));

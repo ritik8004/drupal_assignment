@@ -26,6 +26,12 @@ alshaya_acm_product.settings:
     size_guide_modal_content:
       type: text_format
       label: 'Size guide content'
+    vat_text:
+      type: label
+      label: 'VAT Inclusion text'
+    vat_text_footer:
+      type: label
+      label: 'VAT disclaimer text for the footer'
     langcode:
       type: string
       label: 'Language code'

@@ -83,7 +83,7 @@ Feature: Test Checkout feature
   I should be able to use click and collect option
   and pay by KNET
     And I should be able to see the header for checkout
-    And I follow "Click & Collect"
+    When I follow "click & collect"
     And I wait for AJAX to finish
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
@@ -154,7 +154,7 @@ Feature: Test Checkout feature
     Buttons to toggle between list and Map view
     and link to navigate to the basket
     And I should be able to see the header for checkout
-    And I follow "Click & Collect"
+    And I follow "click & collect"
     And I wait for AJAX to finish
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
@@ -162,13 +162,13 @@ Feature: Test Checkout feature
     Then I should see the number of stores displayed
     And I should see the link "List view"
     And I should see the link "Map view"
-    And I should see the link "Back to basket"
+    And I should see the link "back to basket"
 
   @cc
   Scenario: As a Guest
     I should be able to see the two tabs
     on Click and Collect
-    When I follow "Click & Collect"
+    When I follow "click & collect"
     And I wait for the page to load
     Then I should see the link "List view"
     And I should see the link "Map view"
@@ -177,8 +177,8 @@ Feature: Test Checkout feature
   @cc
   Scenario: As a Guest
     I should be able to see various options
-    for each Store on Click & Collect
-    When I follow "Click & Collect"
+    for each Store on click & collect
+    When I follow "click & collect"
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     When I wait for AJAX to finish
     And I wait 5 seconds
@@ -192,12 +192,12 @@ Feature: Test Checkout feature
   Scenario: As a Guest
     I should be navigated to basket page
     On clicking 'back to basket' from checkout CC page
-    When I follow "Click & Collect"
+    When I follow "click & collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
     When I wait 5 seconds
-    When I follow "Back to basket"
+    When I follow "back to basket"
     Then I should see the button "checkout securely"
     And the url should match "/cart"
 
@@ -206,7 +206,7 @@ Feature: Test Checkout feature
     I should be able to see the store timings
     on clicking the Opening hours link and
     link should toggle
-    When I follow "Click & Collect"
+    When I follow "click & collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
@@ -252,7 +252,7 @@ Feature: Test Checkout feature
   Scenario:  As a Guest
   I should be able to checkout on Click and Collect
   using Cybersource payment method
-    When I follow "Click & Collect"
+    When I follow "click & collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
     And I wait for AJAX to finish
@@ -289,10 +289,9 @@ Feature: Test Checkout feature
   and the customer service block
     When I follow "Home delivery"
     And I wait for the page to load
-    Then I should see "Standard delivery for purchases over KD 250"
     Then I should see the Order Summary block
     And I should see the Customer Service block
-    When I follow "Edit"
+    When I follow "edit"
     And I wait for the page to load
     Then the url should match "/cart"
     And I should see the button "checkout securely"
@@ -335,7 +334,7 @@ Feature: Test Checkout feature
   Scenario: As a Guest user
   I should be able to search for a store on Map view
   select it and complete the checkout journey
-    When I follow "Click & Collect"
+    When I follow "click & collect"
     And I wait for the page to load
     When I follow "Map view"
     Then the "Map view" tab should be selected
@@ -374,7 +373,7 @@ Feature: Test Checkout feature
   Scenario: As a Guest user
   whenever I click 'back to basket' link on Map view
   I should be redirected to the basket page
-    When I follow "Click & Collect"
+    When I follow "click & collect"
     And I wait for the page to load
     When I follow "Map view"
     Then the "Map view" tab should be selected
@@ -387,6 +386,32 @@ Feature: Test Checkout feature
     And I wait 2 seconds
     Then I should see "Monday"
     And I should see "Sunday"
-    When I follow "Back to basket"
+    When I follow "back to basket"
     Then I should see the button "checkout securely"
     And the url should match "/cart"
+
+  @checkmo @hd
+  Scenario: As a Guest
+    I should be able to checkout using HD and Check / Money order
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
+    And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
+    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
+    When I fill in "edit-guest-delivery-home-address-shipping-address-line2" with "2"
+    And I press "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
+    And I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_checkmo"
+    And I wait for AJAX to finish
+    And I accept terms and conditions
+    And I press "place order"
+    And I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    And I should see text matching "Your order number is "

@@ -11,6 +11,44 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Add field for stock in index.
+ */
+function alshaya_product_update_8006() {
+  $config = \Drupal::configFactory()->getEditable('search_api.index.product');
+
+  $config->set('field_settings.stock', [
+    'label' => 'Stock',
+    'datasource_id' => 'entity:node',
+    'property_path' => 'field_skus:entity:stock',
+    'type' => 'integer',
+    'dependencies' => [
+      'config' => [
+        'field.storage.node.field_skus',
+      ],
+      'module' => [
+        'acq_sku',
+      ],
+    ],
+  ]);
+
+  $config->save();
+
+  $index = Index::load('product');
+
+  // Re-index all items.
+  $index->reindex();
+
+  // Save index to reflect new stock field.
+  $index->save();
+
+  // Revert the view.
+  $reverter = \Drupal::service('config_update.config_update');
+  $reverter->revert('view', 'alshaya_product_list');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove 'vid' and 'vid_1' fields from search api 'Product' index.
  */
 function alshaya_product_update_8005() {

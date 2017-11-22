@@ -11,10 +11,6 @@
       text-align: center;
     }
 
-    @include breakpoint($lap) {
-      margin-top: 1.125rem;
-    }
-
     li {
       @include breakpoint($desk) {
         display: inline-block;
@@ -23,10 +19,6 @@
       &:first-child {
         @include breakpoint($desk) {
           border-#{direction(right)}: 0.06rem solid $greyish-lighter;
-        }
-
-        @include breakpoint($upto-lap) {
-          margin-bottom: 1rem;
         }
       }
     }

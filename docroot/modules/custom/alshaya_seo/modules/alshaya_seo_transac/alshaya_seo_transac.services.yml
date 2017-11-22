@@ -14,3 +14,4 @@ services:
       - '@cache.alshaya'
       - '@database'
       - '@alshaya_addressbook.manager'
+      - '@alshaya_acm_product.skumanager'

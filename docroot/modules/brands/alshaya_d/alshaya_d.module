@@ -5,42 +5,11 @@
  * The Module file.
  */
 
-use Drupal\block_content\Entity\BlockContent;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\block\Entity\Block;
 
-/**
- * Implements hook_form_alter().
- */
-function alshaya_d_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_email_signup') && $form_id == 'webform_submission_alshaya_email_signup_add_form') {
-    $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $uuid = '19207aad-0e43-4d3a-96d7-c74141f75bb1';
-    $entity_manager = \Drupal::getContainer()->get('entity.manager');
-    $block = $entity_manager->loadEntityByUuid('block_content', $uuid);
-    if (!empty($block)) {
-      $block_content = BlockContent::load($block->id());
-      $build = $entity_manager->getViewBuilder('block_content')->view($block, 'full', $lang);
 
-      // Add the title to text so it is searchable.
-      $build['search_title'] = [
-        '#prefix' => '<h2>',
-        '#plain_text' => $block_content->getTranslation($lang)->label(),
-        '#suffix' => '</h2>',
-        '#weight' => -1000
-      ];
-
-      $form['info_block'] = [
-        '#type' => 'item',
-        '#markup' => \Drupal::getContainer()->get('renderer')->renderPlain($build),
-        '#weight' => -100,
-        '#prefix' => '<div class="form--content">',
-        '#suffix' => '</div>'
-      ];
-    }
-  }
-}
 
 /**
  * Implements hook_module_implements_alter().
