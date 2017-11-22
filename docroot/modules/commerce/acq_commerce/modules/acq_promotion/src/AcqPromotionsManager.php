@@ -170,7 +170,7 @@ class AcqPromotionsManager {
       // Unpublish all translations of the current node as well.
       $translation_langauges = $node->getTranslationLanguages();
 
-      foreach ($translation_languages as $langcode => $lang_obj) {
+      foreach ($translation_langauges as $langcode => $lang_obj) {
         $node_translation = $node->getTranslation($langcode);
         $node_translation->setPublished(Node::NOT_PUBLISHED);
         $node_translation->save();
