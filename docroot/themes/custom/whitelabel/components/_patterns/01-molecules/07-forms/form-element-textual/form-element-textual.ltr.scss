@@ -20,6 +20,7 @@
     width: 100%;
     #{direction(left)}: 0;
     background: $windows-blue;
+    z-index: 2;
   }
 
   input:focus {
@@ -144,13 +145,49 @@ input:active ~ .input__label label {
 
 /* Mobile Number */
 .mobile-number-field {
+  float: direction(left);
+
   > label {
     display: none;
+  }
+
+  + div {
+    clear: both;
+  }
+
+  html[lang=ar] & {
+    .input__line {
+      left: 0;
+    }
   }
 
   .local-number ~ .input__label label {
     height: auto;
     width: auto;
     clip: unset;
+  }
+
+  .mobile-input--wrapper .form-item {
+    vertical-align: top;
+  }
+
+  .country-select .prefix {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: $greyish;
+    vertical-align: top;
+    min-width: 2.875rem;
+  }
+}
+
+.mobile-input--wrapper {
+  direction: ltr;
+
+  .form-type-textfield {
+    label {
+      font-size: 0.75rem;
+      left: -2.875rem;
+      top: -0.875rem;
+    }
   }
 }

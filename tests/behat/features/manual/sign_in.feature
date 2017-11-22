@@ -5,8 +5,8 @@ Feature: Test Sign in and Forgot password features
   I should be able to sign in after providing valid credentials
     Given I am on homepage
     And I go to "/user/login"
-    When I fill in "edit-name" with "shweta+2@axelerant.com"
-    And I fill in "edit-pass" with "Alshaya123$"
+    When I fill in "edit-name" with "anjali.nikumb@acquia.com"
+    And I fill in "edit-pass" with "password@1"
     And I press "sign in"
     Then I should see the link "My account"
     And I should see the link "Sign out"
@@ -17,8 +17,8 @@ Feature: Test Sign in and Forgot password features
   I should be able to sign in after providing valid credentials
     Given I go to "/user/login"
     And I follow "عربية"
-    When I fill in "edit-name" with "shweta+2@axelerant.com"
-    And I fill in "edit-pass" with "Alshaya123$"
+    When I fill in "edit-name" with "anjali.nikumb@acquia.com"
+    And I fill in "edit-pass" with "password@1"
     And I press "تسجيل الدخول"
     Then I should see the link "حسابي"
     And I should see the link "تسجيل الخروج"
@@ -49,10 +49,10 @@ Feature: Test Sign in and Forgot password features
   when I try to login using invalid email ID and password
     Given I am on "/user/login"
     When I fill in "edit-name" with "name@surname@gmail.com"
-    And I fill in "edit-pass" with "invalidpassword"
     And I press "sign in"
     And I wait 2 seconds
-    Then I should see text matching "The email address name@surname@gmail.com is not valid."
+    Then I should see text matching "email address does not contain a valid email."
+    And I should see text matching "Please enter your password."
 
   @arabic
   Scenario: As a Guest user
@@ -61,10 +61,9 @@ Feature: Test Sign in and Forgot password features
     Given I am on "/user/login"
     And I follow "عربية"
     When I fill in "edit-name" with "name@surname@gmail.com"
-    And I fill in "edit-pass" with "invalidpassword"
     And I press "تسجيل الدخول"
     And I wait 2 seconds
-    Then I should see text matching "The email address name@surname@gmail.com is not valid."
+    Then I should see text matching "عنوان البريد الإلكتروني لا يشمل عنوان بريد إلكتروني صحيح"
 
   Scenario: As a Guest user
     I should be able to reset my password
@@ -72,7 +71,7 @@ Feature: Test Sign in and Forgot password features
     Given I am on "/user/login"
     And I follow "Forgot password?"
     And the url should match "/user/password"
-    When I fill in "edit-name" with "shweta+2@axelerant.com"
+    When I fill in "edit-name" with "anjali.nikumb@acquia.com"
     And I press "Submit"
     Then I should see "Further instructions have been sent to your email address."
     And the url should match "/user/login"
@@ -85,8 +84,8 @@ Feature: Test Sign in and Forgot password features
     And I follow "عربية"
     And I follow "هل نسيت كلمة السر؟"
     And the url should match "/user/password"
-    When I fill in "edit-name" with "shweta+2@axelerant.com"
-    And I press "إضافة"
+    When I fill in "edit-name" with "anjali.nikumb@acquia.com"
+    And I press "إرسال"
     Then I should see "تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني"
     And the url should match "/user/login"
 
@@ -97,6 +96,7 @@ Feature: Test Sign in and Forgot password features
     And I follow "Forgot password?"
     When I fill in "edit-name" with "noemail@gmail.com"
     And I press "Submit"
+    When I wait for the page to load
     Then I should see " is not recognized as a username or an email address."
 
   @arabic
@@ -107,6 +107,6 @@ Feature: Test Sign in and Forgot password features
     And I follow "عربية"
     And I follow "هل نسيت كلمة السر؟"
     When I fill in "edit-name" with "noemail@gmail.com"
-    And I press "إضافة"
+    And I press "إرسال"
     Then I should see "كاسم مستخدم أو عنوان بريد إلكتروني "
     And I should see " لم يتم التعرف على"

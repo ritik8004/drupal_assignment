@@ -451,7 +451,7 @@
       &.form-item-field-address-0-address-mobile-number-country-code {
         padding-bottom: 0;
         margin-top: 0 !important;
-        max-width: 2.8rem;
+        width: 3rem;
 
         &::after {
           display: none;
@@ -461,6 +461,7 @@
 
     .country-select {
       border: none;
+      height: auto;
 
       .mobile-number-flag {
         display: none;
@@ -490,8 +491,16 @@
 
       .prefix {
         font-size: 1rem;
-        line-height: 2.25;
+        line-height: 1.5;
         color: $greyish;
+
+        html[lang=ar] .safari & {
+          line-height: 1.2;
+        }
+
+        html[lang=ar] .ie & {
+          line-height: 1.3;
+        }
       }
 
       .form-item-field-address-0-address-mobile-number-mobile,
@@ -502,6 +511,7 @@
       .form-item-cc-mobile-number-mobile,
       .form-item-mobile-number-mobile {
         position: static !important;
+        width: 9.375rem;
 
         .c-input__bar {
           position: static;
@@ -516,10 +526,6 @@
       .form-item-field-mobile-number-0-country-code {
         .user-page.c-user-edit & {
           margin-top: 0;
-
-          .prefix {
-            line-height: 2.15;
-          }
         }
       }
 

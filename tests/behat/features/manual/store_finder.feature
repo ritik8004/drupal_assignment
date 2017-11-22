@@ -1,8 +1,9 @@
-@javascript @manual @mmcpa-2081
+@javascript @manual @2081 @store
 Feature: Test Store finder page
 
   Background:
     Given I am on "/store-finder"
+    And I wait for the page to load
 
   Scenario: As a Guest user,
   I should be navigated to Store detail page
@@ -32,12 +33,10 @@ Feature: Test Store finder page
     And I should see "Friday"
     Then I should see "Saturday"
     And I should see "Sunday"
-    Then I should see "9am to 6pm"
     When I click the label for ".hours--label.open"
     And I wait for AJAX to finish
     Then I should not see "Monday"
     And I should not see "Sunday"
-    Then I should not see "9am to 6pm"
 
   Scenario: As a Guest user,
   I should be navigated to Google Maps
@@ -77,19 +76,17 @@ Feature: Test Store finder page
     And I wait for AJAX to finish
     Then I should see "Monday"
     And I should see "Sunday"
-    Then I should see "9am to 6pm"
     When I click the label for "div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div > div.views-field.views-field-field-store-open-hours > div > div.hours--wrapper.selector--hours > div > div.hours--label.open"
     And I wait for AJAX to finish
     Then I should not see "Monday"
     And I should not see "Sunday"
-    Then I should not see "9am to 6pm"
     When I click the label for "div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div > div.views-field.views-field-field-store-open-hours > div > div.get--directions > div > a.device__desktop"
     And I wait for the page to load
     Then I should be redirected to Google Maps Window
 
   Scenario: As a Guest user
-  I should be able to search a nearby store
-  on Map view
+    I should be able to search a nearby store
+    on Map view
     When I follow "Map view"
     And I wait for AJAX to finish
     When I wait 3 seconds

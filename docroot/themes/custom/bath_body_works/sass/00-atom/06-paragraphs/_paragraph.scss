@@ -44,6 +44,10 @@
   .field__wrapper {
     @include breakpoint($upto-palm) {
       margin-top: 0.75rem;
+
+      &.field-sub-title {
+        font-size: 1.25rem;
+      }
     }
   }
 }
@@ -135,8 +139,12 @@
     text-align: center;
     font-family: $TradeGothicLTStdBold;
     overflow: hidden;
-    height: 1.56rem;
+    height: 1.996rem;
     font-size: 1.5rem;
+
+    @include breakpoint($upto-palm) {
+      font-size: 1rem;
+    }
   }
 
   h2.border span {
@@ -157,11 +165,19 @@
   h2.border span::before {
     right: 100%;
     margin-right: 0.93rem;
+
+    @include breakpoint($lap) {
+      margin-right: 2.3rem;
+    }
   }
 
   h2.border span::after {
     left: 100%;
     margin-left: 0.93rem;
+
+    @include breakpoint($lap) {
+      margin-left: 2.3rem;
+    }
   }
 }
 
@@ -170,6 +186,10 @@
     h2 {
       font-size: 1.13rem;
       text-transform: capitalize;
+
+      @include breakpoint($upto-palm) {
+        font-size: 0.875rem;
+      }
     }
   }
 

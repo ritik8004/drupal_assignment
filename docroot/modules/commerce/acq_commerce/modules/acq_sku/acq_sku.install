@@ -7,6 +7,58 @@
 
 use Drupal\node\Entity\Node;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_update_N().
+ */
+function acq_sku_update_8002() {
+  // Apply updates to add stock field.
+  \Drupal::service('entity.definition_update_manager')->applyUpdates();
+
+  $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', 'acq_sku') . '/config/install/rest.resource.acq_productstocksync.yml'));
+
+  \Drupal::configFactory()
+    ->getEditable('rest.resource.acq_productstocksync')
+    ->setData($config_yaml)
+    ->save();
+
+  // Set stock mode to pull by default.
+  \Drupal::configFactory()
+    ->getEditable('acq_sku.settings')
+    ->set('stock_mode', 'pull')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add index for SKU and langcode on acq_sku_field_data table.
+ */
+function acq_sku_update_8001() {
+  // Add index for SKU and langcode on acq_sku_field_data table.
+  \Drupal::database()->schema()->addIndex('acq_sku_field_data',
+    'acq_sku_sku_langcode',
+    [
+      ['sku', 64],
+      ['langcode', 10],
+    ],
+    [
+      'fields' => [
+        'sku' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+        'langcode' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ]
+  );
+}
 
 /**
  * Implements hook_install().
@@ -42,5 +94,29 @@ function acq_sku_install() {
       ],
     ],
   ]);
+
+
+  // Add index for SKU and langcode on acq_sku_field_data table.
+  \Drupal::database()->schema()->addIndex('acq_sku_field_data',
+    'acq_sku_sku_langcode',
+    [
+      ['sku', 64],
+      ['langcode', 10],
+    ],
+    [
+      'fields' => [
+        'sku' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+        'langcode' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ]
+  );
 }
 

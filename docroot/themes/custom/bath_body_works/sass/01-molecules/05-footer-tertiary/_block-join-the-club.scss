@@ -33,8 +33,17 @@
   }
 
   .block-join-the-club__image-wrapper {
+    img {
+      margin-top: -20px;
+
+      @include breakpoint($upto-palm) {
+        max-width: 62%;
+        margin-bottom: 2rem;
+        margin-#{direction(left)}: 0;
+      }
+    }
+
     @include breakpoint($palm) {
-      margin-top: -1rem;
       margin-bottom: 1rem;
     }
 
@@ -44,16 +53,26 @@
 
     @include breakpoint($lap) {
       width: 45.06%;
-      margin-top: -1rem;
+
+      img {
+        margin-#{direction(left)}: 0.21rem;
+      }
     }
 
     @include breakpoint($desk) {
       width: 37%;
-      margin-top: -1rem;
+
+      img {
+        margin-#{direction(left)}: 1.21rem;
+      }
     }
   }
 
   .block-join-the-club__title-wrapper {
+    @include breakpoint($upto-palm) {
+      padding-#{direction(left)}: 0;
+    }
+
     @include breakpoint($above-palm) {
       float: direction(left);
       text-align: direction(left);
@@ -138,7 +157,10 @@
 
     p {
       margin-top: 0;
-      margin-bottom: 0.4rem;
+
+      @include breakpoint($upto-palm) {
+        font-size: 0.75rem;
+      }
 
       @include breakpoint($lap) {
         margin-bottom: 0;
@@ -151,6 +173,8 @@
 
     span {
       font-size: 1.125rem;
+      color: $dark-sand;
+      padding-#{direction(right)}: 0.3125rem;
 
       &::before {
         position: relative;
@@ -168,6 +192,10 @@
     font-weight: normal;
     font-family: $TradeGothicLTStd;
     text-decoration: none;
+
+    @include breakpoint($upto-palm) {
+      margin-top: 1rem;
+    }
 
     @include breakpoint($lap) {
       font-weight: normal;

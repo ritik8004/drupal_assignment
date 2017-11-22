@@ -104,10 +104,8 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
     }
 
     if (!empty($cross_sell_skus)) {
-      $related_items_size = \Drupal::config('alshaya_acm_product.settings')->get('related_items_size');
-
       $view_skus = array_unique($cross_sell_skus);
-      $view_skus = array_slice($view_skus, 0, $related_items_size, TRUE);
+      $view_skus = $this->skuManager->filterRelatedSkus($view_skus);
       return views_embed_view('product_slider', 'block_product_slider', implode(',', $view_skus));
     }
 

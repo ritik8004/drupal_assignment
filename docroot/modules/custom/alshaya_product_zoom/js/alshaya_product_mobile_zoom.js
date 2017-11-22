@@ -82,7 +82,7 @@
           var gallery = $('#product-image-gallery-mob');
           applyRtl(gallery, slickModalOptions);
 
-
+          $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
           $('#product-image-gallery-mob .mob-imagegallery__thumbnails__image img').doubletap(function(e) {
             $(this).parent().siblings().find('img.expand').each(function () {
               $(this).removeClass('expand').css({'transform': 'scale(1)', 'transition': 'transform 300ms ease-out'});

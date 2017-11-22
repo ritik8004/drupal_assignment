@@ -84,6 +84,10 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
     $sku = $entity->get('field_skus')->first()->getString();
     $sku_entity = SKU::loadFromSku($sku);
 
+    if (empty($sku_entity)) {
+      return;
+    }
+
     // Display delivery options only if product is buyable.
     if (!alshaya_acm_product_is_buyable($sku_entity)) {
       return;

@@ -1,27 +1,30 @@
-@manual @javascript @mmcpa-2178
+@manual @javascript @my_account
 Feature: Test the My account section for authenticated user
 
   Background:
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait 2 seconds
+    When I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
 
   Scenario:
-  As an authenticated user
-  I should be able to see all the sections
-  after logging in
+    As an authenticated user
+    I should be able to see all the sections
+    after logging in
     Then I should see the link "my account" in ".my-account-nav" section
     And I should see the link "orders" in ".my-account-nav" section
     Then I should see the link "contact details" in ".my-account-nav" section
     And I should see the link "address book" in ".my-account-nav" section
-    Then I should see the link "communication preferences" in ".my-account-nav" section
     And I should see the link "change password" in ".my-account-nav" section
     Then the "my account" tab should be selected
     And I should see the link "View all orders"
 
   Scenario:
-  As an authenticated user
-  I should be able to see my most recent three orders
-  on my account section
+    As an authenticated user
+    I should be able to see my most recent three orders
+    on my account section
     Then I should see at most "3" recent orders listed
     And the order status should be visible for all products
 
@@ -31,7 +34,7 @@ Feature: Test the My account section for authenticated user
   and access the links under Need help
     When I see the text "Need help with your order?"
     Then I should see the link "Contact customer services"
-    Then I should see the link "Online and in-store return policy"
+    Then I should see the link "Terms and Conditions of Sale"
     And I should see the link "Delivery Information"
     When I follow "<link>"
     And I wait for the page to load
@@ -41,13 +44,13 @@ Feature: Test the My account section for authenticated user
     Examples:
       |link|text|url|
       |Contact customer services|Contact us|/contact|
-      |Online and in-store return policy|Contact us|/contact|
-      |Delivery Information             |Contact us|/contact|
+      |Terms and Conditions of Sale|Contact us|/terms-and-conditions-of-sale|
+      |Delivery Information             |Contact us|/delivery-information|
 
   Scenario:
-  As an authenticated user
-  I should be able to view all my orders
-  from my account page
+    As an authenticated user
+    I should be able to view all my orders
+    from my account page
     When I follow "View all orders"
     And I wait for the page to load
     Then the "orders" tab should be selected
@@ -55,54 +58,54 @@ Feature: Test the My account section for authenticated user
     Then the url should match "/orders"
     And I should see text matching "Need help with your order?"
     Then I should see the link "Contact customer services"
-    And I should see the link "Online and in-store return policy"
+    And I should see the link "Terms and Conditions of Sale"
     Then I should see the link "Delivery Information"
 
-  Scenario: As an authenticated user
-  I should be prompted to join the privilege club
-  if I don't have a privilege account
-    When I follow "edit account details"
-    And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
-    When I click the label for "#ui-id-2 > p.title"
-    When I fill in "edit-privilege-card-number" with ""
-    And I press "Save"
-    And I wait for the page to load
-    Then I should see "Contact details changes have been saved."
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
-    And I wait for the page to load
-    Then I should see "Join the club"
-    And I should see "Win exciting prizes"
-    Then I should see "Unlock exclusive rewards"
-    And I should see "Be the first to know"
-    Then I should see the link "Learn more"
-    And I should not see "Privilege card number"
+#  Scenario: As an authenticated user
+#    I should be prompted to join the privilege club
+#    if I don't have a privilege account
+#    When I follow "edit account details"
+#    And I wait for the page to load
+#    When I fill in "edit-field-mobile-number-0-mobile" with ""
+#    When I click the label for "#ui-id-2 > p.title"
+#    When I fill in "edit-privilege-card-number" with ""
+#    And I press "Save"
+#    And I wait for the page to load
+#    Then I should see "Contact details changes have been saved."
+#    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
+#    And I wait for the page to load
+#    Then I should see "Join the club"
+#    And I should see "Win exciting prizes"
+#    Then I should see "Unlock exclusive rewards"
+#    And I should see "Be the first to know"
+#    Then I should see the link "Learn more"
+#    And I should not see "Privilege card number"
+
+#  Scenario: As an authenticated user
+#    account details section should display Privilege card number
+#    along with Email address and Contact number
+#    When I follow "edit account details"
+#    And I wait for the page to load
+#    When I fill in "edit-field-mobile-number-0-mobile" with ""
+#    When I click the label for "#ui-id-2 > p.title"
+#    When I fill in "edit-privilege-card-number" with "000135844"
+#    And I fill in "edit-privilege-card-number2" with "000135844"
+#    And I press "Save"
+#    And I wait for the page to load
+#    Then I should see "Contact details changes have been saved."
+#    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
+#    And I wait for the page to load
+#    Then I should see "shweta+3@axelerant.com"
+#    Then I should see "6362 - 5440 - 0013 - 5844"
+#    But I should not see "Join the club"
+#    And I should not see "Win exciting prizes"
+#    Then I should not see "Unlock exclusive rewards"
+#    And I should not see "Be the first to know"
+#    Then I should not see the link "Learn more"
 
   Scenario: As an authenticated user
-  account details section should display Privilege card number
-  along with Email address and Contact number
-    When I follow "edit account details"
-    And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
-    When I click the label for "#ui-id-2 > p.title"
-    When I fill in "edit-privilege-card-number" with "000135844"
-    And I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "Save"
-    And I wait for the page to load
-    Then I should see "Contact details changes have been saved."
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
-    And I wait for the page to load
-    Then I should see "shweta+2@axelerant.com"
-    Then I should see "6362 - 5440 - 0013 - 5844"
-    But I should not see "Join the club"
-    And I should not see "Win exciting prizes"
-    Then I should not see "Unlock exclusive rewards"
-    And I should not see "Be the first to know"
-    Then I should not see the link "Learn more"
-
-  Scenario: As an authenticated user
-  I should be able to see most recent 10 orders
-  listed on Orders tab
+    I should be able to see most recent 10 orders
+    listed on Orders tab
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
     Then I should see at most "10" recent orders listed on orders tab
@@ -112,17 +115,17 @@ Feature: Test the My account section for authenticated user
     Then I should see at most "20" recent orders listed on orders tab
 
   Scenario: As an authenticated user
-  I should be able to filter the listed orders
-  by ID, name, SKU in combination with the Status of the order
+    I should be able to filter the listed orders
+    by ID, name, SKU in combination with the Status of the order
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
     When I fill in "edit-search" with "stronglax"
-#    When I fill in "edit-search" with "Horse Photographic"
+#    When I fill in "edit-search" with "Mothercare"
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
     Then I should see at most "10" recent orders listed on orders tab
     Then I should see all "Stronglax" orders
-#    Then I should see all "Horse Photographic T-Shi…" orders
+#    Then I should see all "Mothercare" orders
     When I fill in "edit-search" with "MCKWRCE"
     And I wait 2 seconds
     When I click the label for "#edit-submit-orders"
@@ -131,16 +134,13 @@ Feature: Test the My account section for authenticated user
     And I should see all orders for "MCKWRCE"
 
   Scenario: As an authenticated user
-  I should be able to filter on all cancelled, dispatched and processing orders
+    I should be able to filter on all cancelled, dispatched and processing orders
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
-    When I select Cancelled from the status dropdown
-    And I wait for the page to load
-    Then I should see all "Cancelled" orders listed on orders tab
-    When I select Dispatched from the status dropdown
+    When I select "Dispatched" from the dropdown
     And I wait for the page to load
     Then I should see all "Dispatched" orders listed on orders tab
-    When I select Processing from the status dropdown
+    When I select "Processing" from the dropdown
     And I wait for the page to load
     Then I should see all "Processing" orders listed on orders tab
 
@@ -158,10 +158,10 @@ Feature: Test the My account section for authenticated user
     Then I fill in "edit-field-first-name-0-value" with "Shweta"
     And I fill in "edit-field-last-name-0-value" with "Sharma"
     And I press "Save"
-
+    
   Scenario: As an authenticated user
-  I should be able to add a new address
-  to my address book
+    I should be able to add a new address
+    to my address book
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
     And I wait for the page to load
     Then I get the total count of address blocks
@@ -182,22 +182,22 @@ Feature: Test the My account section for authenticated user
     And the new address block should be displayed on address book
 
   Scenario: As an authenticated user
-  I should be able to perform Cancel action on add/edit address pages
+    I should be able to perform Cancel action on add/edit address pages
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
     And I wait for the page to load
     When I follow "Add new Address"
     And I wait for AJAX to finish
-    When I follow "Cancel"
+    When I follow "cancel"
     And I wait for the page to load
     Then I should not see the text "First Name"
     When I click Edit Address
     And I wait for AJAX to finish
-    When I follow "Cancel"
+    When I follow "cancel"
     And I wait for the page to load
     Then I should not see the text "First Name"
 
   Scenario: As an authenticated user
-  I should be able to edit an address
+    I should be able to edit an address
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
     And I wait for the page to load
     When I click Edit Address
@@ -209,8 +209,8 @@ Feature: Test the My account section for authenticated user
     Then I should see "Address is updated successfully."
 
   Scenario: As an authenticated user
-  I should not be able to delete my primary address
-  but I should be able to delete any other address
+    I should not be able to delete my primary address
+    but I should be able to delete any other address
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
     And I wait for the page to load
     Then I should not see the delete button for primary address
@@ -227,19 +227,8 @@ Feature: Test the My account section for authenticated user
     And the address block should be deleted from address book
 
   Scenario: As an authenticated user
-  I should be able to set my communication preferences
+    I should see the options to change my password
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
-    And I wait for the page to load
-    Then I should see "Communication preferences"
-    And I should see "Select your preferred communication channel"
-    When I check the ".form-item-communication-preference-email > label" checkbox
-    And I press "save"
-    When I wait for the page to load
-    Then I should see "Your communication preference saved successfully."
-
-  Scenario: As an authenticated user
-  I should see the options to change my password
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(6) > a"
     And I wait for the page to load
     Then I should see "Change Password"
     Then I should see "current password"

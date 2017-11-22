@@ -43,14 +43,20 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     }
 
     if ($tid) {
-      $order = QueryInterface::SORT_ASC;
       $position_type = 'position';
       $db_query->leftJoin('acq_sku_position', 'acq_sku_position', "(t.nid = acq_sku_position.nid AND acq_sku_position.tid = :tid AND acq_sku_position.position_type = :position_type)", [':tid' => $tid, ':position_type' => $position_type]);
+
       // If no position found for product, set the default position.
       $db_query->addExpression('IFNULL(acq_sku_position.position, 99999999)', 'no_position');
-      $db_query->orderBy('no_position', $order);
+
+      // First order by stock (always).
+      $db_query->orderBy('stock', QueryInterface::SORT_DESC);
+
+      // Order by position.
+      $db_query->orderBy('no_position', QueryInterface::SORT_ASC);
+
       // Order by name if two products have same position (to avoid duplicity).
-      $db_query->orderBy('t.name_1', 'ASC');
+      $db_query->orderBy('t.name_1', QueryInterface::SORT_ASC);
     }
   }
 }

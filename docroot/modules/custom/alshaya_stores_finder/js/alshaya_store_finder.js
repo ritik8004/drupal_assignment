@@ -157,8 +157,11 @@
                 }
                 $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form #edit-submit-stores-finder').trigger('click');
               }
+
               // Close the overlay.
-              $('body').removeClass('modal-overlay--spinner');
+              if ($('body').hasClass('alias--store-finder-list')) {
+                $('body').removeClass('modal-overlay--spinner');
+              }
             }, 500);
           }
         });
