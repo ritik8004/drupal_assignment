@@ -50,7 +50,6 @@ function alshaya_permissions_uninstall() {
  * Grant webmaster product permission.
  */
 function alshaya_permissions_update_8004() {
-  $role = Role::load('webmaster');
-  $role->grantPermission('access commerce product settings');
-  $role->save();
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config('webmaster');
 }
