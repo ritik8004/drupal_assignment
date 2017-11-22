@@ -110,99 +110,25 @@ switch ($env) {
     $_alshaya_acm_disable_stock_check = TRUE;
 
     $config['acq_commerce.conductor']['debug'] = FALSE;
-
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-hm-dev.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '139fbcb466984b39aea5fd200984a2af';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'oMSt6AXgn3TqlMVj5D8A3Q';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud';
     break;
 
   case '01dev':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'c37e4ed2d937425db29385d08491d53a';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'dZWSbz_TyTbyaJoBmIyNcA';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud';
-
-    // Specify the modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dblog';
-    $settings['additional_modules'][] = 'views_ui';
-    $settings['additional_modules'][] = 'purge_ui';
-    break;
-
-  case '01test':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'edda8c2a78af42b9af1e42221145fd01';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'hTVYIu3SDzLh3BwNI6ZEjw';
-    // TO REMOVE WHEN UPGRADING ACM.
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
-
-    // Specify the modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dblog';
-    $settings['additional_modules'][] = 'views_ui';
-    $settings['additional_modules'][] = 'purge_ui';
-    break;
-
-  case '01uat':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-uat.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'ec11fb2f54d34b2f9d35ec1d3575b89e';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'gpW7PQFKKDU-qPrcIgaYNQ';
-    // TO REMOVE WHEN UPGRADING ACM.
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
-    break;
-
-  // R2 environments. While Conductor does not handle multiple Magento, all R2
-  // environments are connected to the same Conductor and Magento.
   case '01dev2':
   case '01dev3':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-hm-dev.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '139fbcb466984b39aea5fd200984a2af';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'oMSt6AXgn3TqlMVj5D8A3Q';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud';
-    break;
-
-  case '01qa2':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-hm-test.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '0c1158d278c24ff586792de9bc01eaa7';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'NMGIo_W2s4VA66_6UKM2pQ';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud';
-    break;
-
-  case '01pprod':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '676f2059d53d407791472c31783ae32c';
-    $settings['acq_commerce.conductor']['hmac_secret'] = '-2Ok7ywndwcpsraYIIZ__w';
-    // TO REMOVE WHEN UPGRADING ACM.
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://uat-irjkrqa-zbrr3sobrsb3o.eu.magentosite.cloud';
+  case '01test':
+    // Specify the modules to be enabled on this env.
+    $settings['additional_modules'][] = 'dblog';
+    $settings['additional_modules'][] = 'views_ui';
+    $settings['additional_modules'][] = 'purge_ui';
     break;
 
   case '01live':
   case '01update':
-    // Don't debug by default on Prod ENV.
     $settings['acq_commerce.conductor']['debug'] = FALSE;
-
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-prod.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '3d136846d24040099a7eed6c1f4e80b9';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'zUt1psyEWi5xO-glHlH_tw';
-    // TO REMOVE WHEN UPGRADING ACM.
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'http://mcmena.store.alshaya.com';
-
     $settings['store_id']['ar'] = 4;
     break;
 
   default:
     // Don't debug by default on unknown ENV.
     $settings['acq_commerce.conductor']['debug'] = FALSE;
-
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '75fba487a3043b35740e93a97513c3cf';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'cVA/OSE1I1Zka3JZRFE';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://uat-irjkrqa-zbrr3sobrsb3o.eu.magentosite.cloud';
 }
