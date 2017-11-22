@@ -352,13 +352,17 @@ class AlshayaAddressBookManager {
       if (isset($magento_address['extension']['address_building_segment'])) {
         $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
       }
+
       if (isset($magento_address['extension']['area'])) {
         $term = $this->getLocationTermFromLocationId($magento_address['extension']['area']);
-        $address['area'] = $term->id();
+        $address['administrative_area'] = $term->id();
+        $address['administrative_area_display'] = $term->label();
       }
+
       if (isset($magento_address['extension']['governate'])) {
         $term = $this->getLocationTermFromLocationId($magento_address['extension']['governate']);
         $address['locality'] = $term->id();
+        $address['locality_display'] = $term->label();
       }
     }
 

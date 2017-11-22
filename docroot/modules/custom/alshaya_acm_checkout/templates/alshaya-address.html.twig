@@ -12,10 +12,18 @@
   <div class="address--content">{{ address.address_line1 }}</div>
 {% endif %}
 {% if address.administrative_area is not empty %}
-  <div class="address--content">{{ address.administrative_area }}</div>
+  {% if address.administrative_area_display is not empty %}
+    <div class="address--content">{{ address.administrative_area_display }}</div>
+  {% else %}
+    <div class="address--content">{{ address.administrative_area }}</div>
+  {% endif %}
 {% endif %}
 {% if address.locality is not empty %}
-  <div class="address--content">{{ address.locality }}</div>
+  {% if address.locality_display is not empty %}
+    <div class="address--content">{{ address.locality_display }}</div>
+  {% else %}
+    <div class="address--content">{{ address.locality }}</div>
+  {% endif %}
 {% endif %}
 {% if address.country is not empty %}
   <div class="address--content">{{ address.country }}</div>

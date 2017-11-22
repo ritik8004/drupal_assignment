@@ -44,10 +44,18 @@
           <div class="address--content">{{ delivery_address.address_line1 }}</div>
         {% endif %}
         {% if delivery_address.administrative_area is not empty %}
-          <div class="address--content">{{ delivery_address.administrative_area }}</div>
+          {% if delivery_address.administrative_area_display is not empty %}
+            <div class="address--content">{{ delivery_address.administrative_area_display }}</div>
+          {% else %}
+            <div class="address--content">{{ delivery_address.administrative_area }}</div>
+          {% endif %}
         {% endif %}
         {% if delivery_address.locality is not empty %}
-          <div class="address--content">{{ delivery_address.locality }}</div>
+          {% if delivery_address.locality_display is not empty %}
+            <div class="address--content">{{ delivery_address.locality_display }}</div>
+          {% else %}
+            <div class="address--content">{{ delivery_address.locality }}</div>
+          {% endif %}
         {% endif %}
         {% if delivery_address.sorting_code is not empty %}
           <div class="address--content">{{ delivery_address.sorting_code }}</div>

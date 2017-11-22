@@ -203,7 +203,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           $line1[] = $shipping_address['address_line2'];
           $line1[] = $shipping_address['dependent_locality'];
 
-          $line2[] = $shipping_address['locality'] . ',';
+          $line2[] = _alshaya_addressbook_get_area_from_id($shipping_address['locality']) . ',';
 
           $line2[] = $shipping_address['address_line1'];
           $line2[] = $this->t('@area Area', ['@area' => _alshaya_addressbook_get_area_from_id($shipping_address['administrative_area'])]);

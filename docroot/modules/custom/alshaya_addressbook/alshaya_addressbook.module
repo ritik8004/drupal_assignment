@@ -187,6 +187,10 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   // Change the Locality field if magento's response is a select field.
   $magento_form = \Drupal::service('alshaya_api.api')->getCustomerAddressForm();
   foreach ($magento_form as $magento_form_element) {
+    if (empty($magento_form_element['attribute_code'])) {
+      continue;
+    }
+
     if ($magento_form_element['attribute_code'] == 'area' && $magento_form_element['frontend_input'] == 'select') {
       // Update locality field.
       $element['locality'] = [
@@ -765,6 +769,13 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
  *   Term name.
  */
 function _alshaya_addressbook_get_area_from_id($tid) {
+  $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
+
+  // Return as is for older version.
+  if ($dm_version != DM_VERSION_2) {
+    return $tid;
+  }
+
   $term = Term::load($tid);
 
   if ($term) {
