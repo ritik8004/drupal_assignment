@@ -355,14 +355,20 @@ class AlshayaAddressBookManager {
 
       if (isset($magento_address['extension']['area'])) {
         $term = $this->getLocationTermFromLocationId($magento_address['extension']['area']);
-        $address['administrative_area'] = $term->id();
-        $address['administrative_area_display'] = $term->label();
+
+        if ($term) {
+          $address['administrative_area'] = $term->id();
+          $address['administrative_area_display'] = $term->label();
+        }
       }
 
       if (isset($magento_address['extension']['governate'])) {
         $term = $this->getLocationTermFromLocationId($magento_address['extension']['governate']);
-        $address['locality'] = $term->id();
-        $address['locality_display'] = $term->label();
+
+        if ($term) {
+          $address['locality'] = $term->id();
+          $address['locality_display'] = $term->label();
+        }
       }
     }
 
@@ -385,6 +391,10 @@ class AlshayaAddressBookManager {
    *   Term if found or null.
    */
   public function getLocationTermFromLocationId($location_id) {
+    if (empty($location_id)) {
+      return NULL;
+    }
+
     $terms = $this->getLocationTerms([
       [
         'field' => 'field_location_id',
