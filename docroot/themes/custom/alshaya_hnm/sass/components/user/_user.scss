@@ -234,7 +234,7 @@
     position: relative;
 
     @include breakpoint($desktop) {
-      margin-top: 2.6em;
+      margin-top: 3.125rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -386,7 +386,7 @@
   .form-item input:active ~ label:not(.error),
   .form-item input:not(:active):valid ~ label:not(.error),
   .form-item input.error ~ label:not(.error) {
-    top: -1.25em;
+    top: -2.17em;
     bottom: 0;
     #{$left}: 0;
     opacity: 1;
