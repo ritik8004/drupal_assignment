@@ -308,3 +308,51 @@ button {
 .geolocation-common-map-container {
   display: block;
 }
+
+// Drupal Webform
+
+form.webform-submission-form {
+  .webform-button--submit {
+    background-color: $black;
+    font-size: 1rem;
+    border-radius: 0;
+    border-color: $black;
+    color: $white;
+    width: 8.812rem;
+    height: 2.56rem;
+    text-transform: uppercase;
+    padding: 0.71rem 0;
+  }
+
+  input[type=checkbox]:checked ~ label {
+    padding-#{direction(left)}: 1.5625rem;
+    display: inline-block;
+    line-height: 1rem;
+
+    &::before {
+      margin-#{direction(right)}: 0.51rem;
+      margin-#{direction(left)}: -1.5625rem;
+      vertical-align: text-bottom;
+    }
+  }
+
+  .modal-form-elements-wrapper {
+    .form__form-fields > p {
+      margin-#{direction(left)}: 1.4rem;
+    }
+
+    .mobile-number-field .form-type-textfield input {
+      padding-#{direction(left)}: 0.5rem;
+    }
+  }
+
+  @include breakpoint($upto-palm) {
+    .input__container--half {
+      width: 100%;
+    }
+
+    .webform-button--submit {
+      width: 100%;
+    }
+  }
+}
