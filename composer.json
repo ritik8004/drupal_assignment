@@ -52,7 +52,7 @@
         "drupal/search_api_solr_multilingual": "^1.0@beta",
         "drupal/views_block_filter_block": "1.x-dev",
         "mobiledetect/mobiledetectlib": "^2.8",
-        "acquia/http-hmac-php": "~3.2",
+        "acquia/http-hmac-php": "~3.1.0",
         "drupal/simple_oauth": "^2.0@RC",
         "drupal/pcb": "^1.0@RC",
         "drupal/components": "^1.0",

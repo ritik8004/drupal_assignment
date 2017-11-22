@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "57f530f48a953f16248fa6372359a2bb",
+    "content-hash": "4a7688c1d939b1bdd8d66143611faac4",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -117,16 +117,16 @@
         },
         {
             "name": "acquia/http-hmac-php",
-            "version": "3.2.0",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/http-hmac-php.git",
-                "reference": "cf4ad39fe4efadb978d49c4fe8671cadf8805920"
+                "reference": "6edd829a2a53001de091a7982af84a124a3fd3c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/http-hmac-php/zipball/cf4ad39fe4efadb978d49c4fe8671cadf8805920",
-                "reference": "cf4ad39fe4efadb978d49c4fe8671cadf8805920",
+                "url": "https://api.github.com/repos/acquia/http-hmac-php/zipball/6edd829a2a53001de091a7982af84a124a3fd3c8",
+                "reference": "6edd829a2a53001de091a7982af84a124a3fd3c8",
                 "shasum": ""
             },
             "require": {
@@ -176,7 +176,7 @@
             ],
             "description": "An implementation of the HTTP HMAC Spec in PHP that integrates with popular libraries such as Symfony and Guzzle.",
             "homepage": "https://github.com/acquia/http-hmac-php",
-            "time": "2017-10-27T12:46:34+00:00"
+            "time": "2016-08-08T13:47:47+00:00"
         },
         {
             "name": "acquia/lightning",
@@ -14429,7 +14429,7 @@
                 }
             ],
             "description": "Zone management library.",
-            "time": "2017-04-20T12:44:24+00:00"
+            "time": "2017-04-20 12:44:24"
         },
         {
             "name": "dflydev/dot-access-configuration",
