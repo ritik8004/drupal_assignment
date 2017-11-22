@@ -30,8 +30,8 @@ function alshaya_get_conductor_host_data() {
     'mc_pprod' => [
       'url' => 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/',
       // To be removed when Conductor is updated.
-      'hmac_id' => 'uAfqsl!BMf5xd8Z',
-      'hmac_secret' => 'eS#8&0@XyegNUO',
+      'hmac_id' => '75fba487a3043b35740e93a97513c3cf',
+      'hmac_secret' => 'cVA/OSE1I1Zka3JZRFE',
       //'hmac_id' => '676f2059d53d407791472c31783ae32c',
       //'hmac_secret' => '-2Ok7ywndwcpsraYIIZ__w',
     ],
