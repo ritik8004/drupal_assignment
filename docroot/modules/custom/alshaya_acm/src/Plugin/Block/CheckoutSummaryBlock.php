@@ -169,7 +169,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
             $duration = $cc_settings->get('click_collect_rnc');
           }
 
-          $delivery['method_description'] = $this->t('Your order will be available in %duration', ['%duration' => $duration]);
+          $delivery['method_description'] = $this->t('Your order will be available in @duration', ['@duration' => $duration]);
           $delivery['address_label'] = $this->t('Collection Store');
 
           $delivery['address'] = [
