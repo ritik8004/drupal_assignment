@@ -135,7 +135,7 @@ function alshaya_mc_update_8303() {
 function alshaya_mc_update_8304() {
   // Array of language translation strings.
   $strings = [
-    'Your order will be available in %duration' => [
+    'Your order will be available in @duration' => [
       'en' => 'Your order will be available in @duration',
       'ar' => 'سيتم توصيل طلبيتك خلال @duration',
     ],
