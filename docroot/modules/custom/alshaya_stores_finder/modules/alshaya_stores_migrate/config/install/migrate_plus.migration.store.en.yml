@@ -1,0 +1,51 @@
+id: store_en
+label: Stores EN
+migration_group: custom
+migration_tags:
+  - store
+  - node
+dependencies:
+  enforced:
+    module:
+      - alshaya_stores_finder
+source:
+  plugin: store
+  path: 'temporary://store.data.en.csv'
+  header_row_count: 1
+  keys:
+    - Store code
+destination:
+  plugin: entity:node
+  default_bundle: store
+process:
+  langcode:
+    plugin: default_value
+    default_value: en
+  title: Address line 1
+  sticky:
+    plugin: default_value
+    default_value: 0
+  promote:
+    plugin: default_value
+    default_value: 0
+  status:
+    plugin: default_value
+    default_value: 1
+  uid:
+    plugin: default_value
+    default_value: 1
+  moderation_state:
+    plugin: default_value
+    default_value: 'published'
+  field_store_locator_id: Store code
+  field_store_address: address
+  field_store_area: Administrative area
+  field_store_phone: Primary phone
+  'field_latitude_longitude/lat': Latitude
+  'field_latitude_longitude/lng': Longitude
+  field_store_open_hours:
+    plugin: iterator
+    source: opening_hours
+    process:
+      key: day
+      value: hours

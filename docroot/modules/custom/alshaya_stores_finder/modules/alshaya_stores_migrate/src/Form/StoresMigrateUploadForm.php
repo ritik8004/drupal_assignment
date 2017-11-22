@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\migrate\MigrateExecutable;
 use Drupal\migrate\MigrateMessage;
+use Drupal\Core\Language\LanguageManager;
 
 /**
  * Class StoresMigrateUploadForm.
@@ -23,6 +24,17 @@ class StoresMigrateUploadForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $languages = \Drupal::languageManager()->getLanguages();
+    foreach ($languages as $language) {
+      $langs[$language->getId()] = $language->getName();
+    }
+
+    $form['language'] = [
+      '#title' => $this->t('Select Language'),
+      '#description' => $this->t('Language for which you want to upload CSV.'),
+      '#type' => 'select',
+      '#options' => $langs,
+    ];
     $form['upload'] = [
       '#title' => $this->t('Stores CSV'),
       '#description' => $this->t('Upload the CSV exported from Google Business Places'),
@@ -61,6 +73,7 @@ class StoresMigrateUploadForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $language = $form_state->getValue('language');
     $filepath = $form_state->getValue('upload')->getFileUri();
 
     $migrate_plus_migration_store_config = \Drupal::service('config.factory')->getEditable('migrate_plus.migration.store');
@@ -72,7 +85,7 @@ class StoresMigrateUploadForm extends FormBase {
     $migrate_plus_migration_store_config->set('source.path', $filepath);
     $migrate_plus_migration_store_config->save();
 
-    $migration = \Drupal::service('plugin.manager.migration')->createInstance('store');
+    $migration = \Drupal::service('plugin.manager.migration')->createInstance('store_' . $language);
     $executable = new MigrateExecutable($migration, new MigrateMessage());
     $executable->import();
 
