@@ -85,6 +85,7 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
  */
 function _alshaya_addressbook_country_process(array &$element, FormStateInterface $form_state) {
   $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
+  $magento_form = \Drupal::state()->get('magento_customer_address_form', []);
 
   $default_country_code = $element['#default_value']['country_code'];
   $element['country_code'] = [
@@ -184,45 +185,67 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['#prefix'] = '<div class="address-book-address">';
   $element['#suffix'] = '</div>';
 
-  // Change the Locality field if magento's response is a select field.
-  $magento_form = \Drupal::service('alshaya_api.api')->getCustomerAddressForm();
-  foreach ($magento_form as $magento_form_element) {
-    if (empty($magento_form_element['attribute_code'])) {
-      continue;
-    }
+  // Change the fields if dm version is 2 and magento form has data.
+  if ($dm_version == DM_VERSION_2 && !empty($magento_form)) {
+    foreach ($magento_form as $magento_form_element) {
+      if (empty($magento_form_element['attribute_code'])) {
+        continue;
+      }
 
-    if ($magento_form_element['attribute_code'] == 'area' && $magento_form_element['frontend_input'] == 'select') {
-      // Update locality field.
-      $element['locality'] = [
-        '#type' => 'select',
-        '#title' => t('Governate', [], ['context' => 'Address label']),
-        '#required' => TRUE,
-        '#multiple' => FALSE,
-        '#default_value' => $element['locality']['#default_value'],
-        '#options' => ['' => t('Select Governate')] + _alshaya_addressbook_governate_list(),
-        '#attributes' => [
-          'class' => ['select2-select'],
-        ],
-        '#attached' => [
-          'library' => [
-            'alshaya_white_label/convert_to_select2',
+      // Change the locality field to be used as Governates / Emirates.
+      if ($magento_form_element['attribute_code'] == 'governate' && $magento_form_element['frontend_input'] == 'select') {
+        // Update locality field.
+        $element['locality'] = [
+          '#type' => 'select',
+          '#title' => t('@governate', ['@governate' => $magento_form_element['frontend_label']], ['context' => 'Address label']),
+          '#required' => TRUE,
+          '#multiple' => FALSE,
+          '#default_value' => $element['locality']['#default_value'],
+          '#options' => ['' => t('Select @label', ['@label' => $magento_form_element['frontend_label']])] + _alshaya_addressbook_governate_list(),
+          '#attributes' => [
+            'class' => ['select2-select'],
           ],
-        ],
-        '#ajax' => [
-          'url' => Url::fromRoute('alshaya_addressbook.get_areas_from_governate'),
-          'wrapper' => 'alshaya-addressbook-area',
-        ],
-      ];
+          '#attached' => [
+            'library' => [
+              'alshaya_white_label/convert_to_select2',
+            ],
+          ],
+          '#ajax' => [
+            'url' => Url::fromRoute('alshaya_addressbook.get_areas_from_governate'),
+            'wrapper' => 'alshaya-addressbook-area',
+          ],
+        ];
 
-      // Update field weight.
-      $element['locality']['#weight'] = 1;
-      $element['administrative_area']['#weight'] = 2;
-      $element['address_line1']['#weight'] = 2;
-      $element['dependent_locality']['#weight'] = 2;
-      $element['address_line2']['#weight'] = 2;
+        // Update field weight.
+        $element['locality']['#weight'] = 1;
+        $element['administrative_area']['#weight'] = 2;
+        $element['address_line1']['#weight'] = 2;
+        $element['dependent_locality']['#weight'] = 2;
+        $element['address_line2']['#weight'] = 2;
 
-      break;
+      }
+
+      // Label changes to other fields.
+      if ($magento_form_element['attribute_code'] == 'firstname') {
+        $element['given_name']['#title'] = t('@firstname', ['@firstname' => $magento_form_element['frontend_label']]);
+      }
+      if ($magento_form_element['attribute_code'] == 'lastname') {
+        $element['family_name']['#title'] = t('@lastname', ['@lastname' => $magento_form_element['frontend_label']]);
+      }
+      if ($magento_form_element['attribute_code'] == 'telephone') {
+        $element['mobile_number']['#title'] = t('@telephone', ['@telephone' => $magento_form_element['frontend_label']]);
+      }
+      if ($magento_form_element['attribute_code'] == 'area') {
+        $element['administrative_area']['#title'] = t('@area', ['@area' => $magento_form_element['frontend_label']]);
+      }
+      if ($magento_form_element['attribute_code'] == 'country_id') {
+        $element['country_name']['#markup'] = '<div class="country-field-wrapper"><div class="country-label">' . t('@country', ['@country' => $magento_form_element['frontend_label']]) . '</div><div class="country-name">' . $country_list[$default_country_code] . '</div></div>',
+      }
+      if ($magento_form_element['attribute_code'] == 'street') {
+        $element['address_line1']['#title'] = t('@street', ['@street' => $magento_form_element['frontend_label']]);
+      }
     }
+
   }
 
   return $element;
