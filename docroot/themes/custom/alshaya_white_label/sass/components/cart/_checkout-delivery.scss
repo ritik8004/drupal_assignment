@@ -1,5 +1,9 @@
 .page-standard.user-page.checkout-delivery {
-  margin: 1.2rem auto;
+  margin: 0 auto 1.2rem;
+
+  @include breakpoint($tablet) {
+    margin: 1.2rem auto;
+  }
 
   .country-name {
     color: #999 !important;
