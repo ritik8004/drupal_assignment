@@ -11,6 +11,7 @@
   font-family: $hnm-demibold;
   letter-spacing: 1px;
   text-transform: uppercase;
+  line-height: 1;
 }
 
 @mixin form-selector-wrap {
@@ -46,6 +47,7 @@
 form {
   .error,
   .form-item--error-message {
+    display: block;
     font-size: 0.75rem;
     color: $red-error;
     padding-top: 0.3125rem;
