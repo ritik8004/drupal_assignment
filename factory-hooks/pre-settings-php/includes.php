@@ -122,6 +122,12 @@ switch ($env) {
     $settings['additional_modules'][] = 'purge_ui';
     break;
 
+  case '01live':
+  case '01update':
+    $settings['acq_commerce.conductor']['debug'] = FALSE;
+    $settings['store_id']['ar'] = 4;
+    break;
+
   default:
     // Don't debug by default on unknown ENV.
     $settings['acq_commerce.conductor']['debug'] = FALSE;
