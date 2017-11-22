@@ -142,7 +142,7 @@
       };
       // Open Gallery modal when we click on the zoom image.
       var mobileDialog = Drupal.dialog(element, dialogsettings);
-      $('#product-image-gallery-mobile .lslide').off().on('click', function () {
+      $('#product-image-gallery-mobile .slick-slide').off().on('click', function () {
         $('body').addClass('pdp-modal-overlay');
         mobileDialog.show();
         mobileDialog.showModal();
