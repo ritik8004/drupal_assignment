@@ -698,6 +698,7 @@ header {
       text-align: center;
       width: 100%;
       margin: 0;
+      font-size: 0;
       background: $white-five;
       padding: 0 calc((100% - 1284px) / 2);
     }
@@ -709,10 +710,9 @@ header {
       text-align: center;
       text-transform: lowercase;
       height: 2.6875rem;
-      margin-#{$right}: 0.6875rem;
 
       a.menu--one__link {
-        padding: 0.625rem;
+        padding: 0.625rem 0.8rem;
         padding-bottom: 0.6rem;
         display: block;
         height: 2.75rem;
@@ -777,14 +777,17 @@ header {
         left: 0;
         right: 0;
         margin: auto;
-        visibility: hidden;
-        opacity: 0;
-        position: absolute;
         top: 100%;
         #{$left}: 0;
         width: 100%;
         z-index: -1;
         border-top: 0.9375rem solid transparent;
+        position: absolute;
+        display: block;
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        transition: all 0.4s ease 0.075s;
       }
     }
 
