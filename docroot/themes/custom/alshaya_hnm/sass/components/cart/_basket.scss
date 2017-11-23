@@ -1454,3 +1454,8 @@ html[lang=ar] {
 .mobile-number-field .country-select .prefix {
   width: 2.6875rem;
 }
+
+.alias--cart #table-cart-totals tr:nth-child(2) td:first-child span {
+  font-size: 0.75rem;
+  display: block;
+}
