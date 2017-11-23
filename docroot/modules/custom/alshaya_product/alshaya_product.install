@@ -2,11 +2,51 @@
 
 /**
  * @file
- * Contains install, update, uninstall hooks for alshaya_acm_promotion module.
+ * Contains install, update, uninstall hooks for alshaya_product module.
  */
 
 use Drupal\Core\Config\FileStorage;
 use Drupal\search_api\Entity\Index;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Revert alshaya_product_list view and add field for promotion_nid in index.
+ */
+function alshaya_product_update_8007() {
+  $config = \Drupal::configFactory()->getEditable('search_api.index.product');
+
+  $config->set('field_settings.promotion_nid', [
+    'label' => 'Promotion NID',
+    'datasource_id' => 'entity:node',
+    'property_path' => 'field_skus:entity:field_acq_sku_promotions:entity:nid',
+    'type' => 'integer',
+    'dependencies' => [
+      'config' => [
+        'field.storage.node.field_skus',
+        'field.storage.acq_sku.field_acq_sku_promotions',
+      ],
+      'module' => [
+        'acq_sku',
+        'node',
+      ],
+    ],
+  ]);
+
+  $config->save();
+
+  $index = Index::load('product');
+
+  // Re-index all items.
+  $index->reindex();
+
+  // Save index to reflect new stock field.
+  $index->save();
+
+  // Revert the view.
+  $reverter = \Drupal::service('config_update.config_update');
+  $reverter->revert('view', 'alshaya_product_list');
+}
 
 /**
  * Implements hook_update_N().
