@@ -638,7 +638,7 @@ class AlshayaAddressBookManager {
         foreach ($governates['items'] as $governate) {
           // Assuming Parent ID is 0, for Governates.
           $governateData = [
-            'name' => $governate['labels'][0],
+            'name' => $governate['label'],
             'field_location_id' => $governate['location_id'],
             'parent' => 0,
           ];
@@ -652,7 +652,7 @@ class AlshayaAddressBookManager {
           if (!empty($areas['items'])) {
             foreach ($areas['items'] as $area) {
               $areaData = [
-                'name' => $area['labels'][0],
+                'name' => $area['label'],
                 'field_location_id' => $area['location_id'],
                 'parent' => $governateTerm->id(),
               ];
