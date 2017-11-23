@@ -107,6 +107,8 @@
         }
 
         h2 {
+          @include arabic-letter-spacing;
+
           font-size: 0.75rem;
           color: $hnm-black-two;
           text-transform: uppercase;
@@ -958,6 +960,8 @@
         }
 
         .title {
+          @include arabic-letter-spacing;
+
           color: $hnm-black-two;
           font-size: 1rem;
           font-family: $hnm-demibold;

@@ -228,6 +228,8 @@
       }
 
       .is-accordion {
+        @include arabic-letter-spacing;
+
         font-family: $hnm-bold;
         text-align: $left;
         color: $white-five;
@@ -349,6 +351,8 @@
   }
 
   h3 {
+    @include arabic-letter-spacing;
+
     font-family: $hnm-bold;
     font-weight: normal;
     font-size: 0.875rem;
@@ -449,6 +453,8 @@
 
   .form-submit {
     @extend %btn;
+
+    @include arabic-letter-spacing;
 
     font-family: $hnm-bold;
     background: $white-five;

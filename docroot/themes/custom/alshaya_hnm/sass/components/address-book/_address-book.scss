@@ -176,6 +176,8 @@
   }
 
   .address--primary {
+    @include arabic-letter-spacing;
+
     width: 9.438rem;
     position: relative;
     padding-#{$right}: 0.5625rem;
@@ -288,6 +290,8 @@
     }
 
     .address--primary {
+      @include arabic-letter-spacing;
+
       font-family: $hnm-bold;
       font-weight: normal;
       color: $hnm-black-two;
@@ -628,6 +632,8 @@
   }
 
   .select2-selection {
+    @include arabic-letter-spacing;
+
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
     text-transform: uppercase;

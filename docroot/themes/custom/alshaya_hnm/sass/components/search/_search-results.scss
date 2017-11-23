@@ -227,6 +227,8 @@ header,
 }
 
 .search-api-autocomplete-suggestion {
+  @include arabic-letter-spacing;
+
   font-size: 0.875rem;
   line-height: 1.36;
   letter-spacing: 0.5px;

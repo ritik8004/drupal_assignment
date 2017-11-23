@@ -71,6 +71,8 @@
 
   .c-sidebar-second {
     h3 {
+      @include arabic-letter-spacing;
+
       color: $black-three;
       font-size: 0.875rem;
       font-family: $hnm-demibold;
@@ -782,6 +784,8 @@
         }
 
         .dark {
+          @include arabic-letter-spacing;
+
           color: $black-two;
           height: 16px;
           font-family: $hnm-demibold;
@@ -862,6 +866,8 @@
     padding-top: 1px;
 
     .form-text {
+      @include arabic-letter-spacing;
+
       color: $black;
       margin-top: 0;
       padding-bottom: 0.5rem;

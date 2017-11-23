@@ -499,6 +499,8 @@
   }
 
   .subtitle {
+    @include arabic-letter-spacing;
+
     border-bottom: 1px solid $hnm-black-two;
     margin-bottom: 0.75rem;
     color: $hnm-black-two;
@@ -583,6 +585,8 @@
     }
 
     .value {
+      @include arabic-letter-spacing;
+
       letter-spacing: 0.1875rem;
       right: 0;
       top: -0.4375rem;
@@ -685,6 +689,8 @@
 }
 
 .confirmation__signup--title {
+  @include arabic-letter-spacing;
+
   color: $hnm-black-two;
   font-family: $hnm-demibold;
   font-weight: normal;

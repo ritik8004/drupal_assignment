@@ -71,6 +71,8 @@
       }
 
       a {
+        @include arabic-letter-spacing;
+
         width: 7.38rem;
         height: 35px;
         margin-top: 0.8125rem;

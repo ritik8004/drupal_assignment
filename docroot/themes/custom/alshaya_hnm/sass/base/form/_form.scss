@@ -4,6 +4,8 @@
 //
 // Style guide: base.form
 %btn {
+  @include arabic-letter-spacing;
+
   color: $white-five;
   padding: 0.625rem 1.6rem;
   border: 0;

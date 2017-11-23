@@ -27,6 +27,8 @@ form.user-communication-preference {
   }
 
   .form-submit {
+    @include arabic-letter-spacing;
+
     margin-top: 0;
     font-size: 0.875rem;
     width: 100%;

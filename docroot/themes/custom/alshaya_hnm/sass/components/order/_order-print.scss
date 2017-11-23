@@ -26,6 +26,8 @@ body {
 
   .head-thank-you {
     h3 {
+      @include arabic-letter-spacing;
+
       font-family: $hnm-demibold;
       letter-spacing: 0.8px;
       color: $hnm-black-two;
@@ -46,6 +48,8 @@ body {
   }
 
   .subtitle {
+    @include arabic-letter-spacing;
+
     font-family: $hnm-demibold;
     font-weight: normal;
     letter-spacing: 1px;
@@ -196,6 +200,8 @@ body {
     }
 
     .value {
+      @include arabic-letter-spacing;
+
       color: $grey-ash;
       top: -0.4375rem;
       position: relative;
