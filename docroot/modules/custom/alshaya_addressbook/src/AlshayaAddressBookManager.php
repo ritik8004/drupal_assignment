@@ -321,72 +321,94 @@ class AlshayaAddressBookManager {
    *   Drupal address.
    */
   public function getAddressArrayFromMagentoAddress(array $magento_address) {
-    // Fix for current invalid data.
-    if (empty($magento_address['extension'])) {
-      $magento_address['extension'] = [
-        'address_apartment_segment' => '',
-        'address_area_segment' => '',
-        'address_block_segment' => '',
-        'address_building_segment' => '',
-        'area' => '',
-        'governate' => '',
-      ];
-    }
+    $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
 
     $address = [];
 
-    $address['given_name'] = $magento_address['firstname'];
-    $address['family_name'] = $magento_address['lastname'];
-    $address['mobile_number'] = [
-      'value' => $magento_address['telephone'],
-    ];
-    $address['address_line1'] = $magento_address['street'];
+    if ($dm_version == DM_VERSION_2) {
+      $mapping = $this->getMagentoFieldMappings();
+      $mapping = array_flip($mapping);
 
-    $address['address_line2'] = '';
-    $address['administrative_area'] = '';
-    $address['locality'] = '';
-    $address['dependent_locality'] = '';
+      foreach ($magento_address as $attribute_code => $value) {
+        if (is_array($value)) {
+          continue;
+        }
 
-    if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
-      if (isset($magento_address['extension']['address_apartment_segment'])) {
-        $address['address_line2'] = $magento_address['extension']['address_apartment_segment'];
-      }
+        switch ($mapping[$attribute_code]) {
+          case 'mobile_number':
+            $address[$mapping[$attribute_code]] = ['value' => $value];
+            break;
 
-      if (isset($magento_address['extension']['address_area_segment'])) {
-        $address['administrative_area'] = $magento_address['extension']['address_area_segment'];
-      }
-
-      if (isset($magento_address['extension']['address_block_segment'])) {
-        $address['locality'] = $magento_address['extension']['address_block_segment'];
-      }
-
-      if (isset($magento_address['extension']['address_building_segment'])) {
-        $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
-      }
-
-      if (isset($magento_address['extension']['area'])) {
-        $term = $this->getLocationTermFromLocationId($magento_address['extension']['area']);
-
-        if ($term) {
-          $address['administrative_area'] = $term->id();
-          $address['administrative_area_display'] = $term->label();
+          default:
+            if (isset($mapping[$attribute_code])) {
+              $address[$mapping[$attribute_code]] = $value;
+            }
+            break;
         }
       }
 
-      if (isset($magento_address['extension']['governate'])) {
-        $term = $this->getLocationTermFromLocationId($magento_address['extension']['governate']);
+      if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
+        foreach ($magento_address['extension'] as $attribute_code => $value) {
+          switch ($mapping[$attribute_code]) {
+            case 'administrative_area':
+            case 'area_parent':
+              $term = $this->getLocationTermFromLocationId($value);
 
-        if ($term) {
-          $address['locality'] = $term->id();
-          $address['locality_display'] = $term->label();
+              if ($term) {
+                $address[$mapping[$attribute_code]] = $term->id();
+                $address[$mapping[$attribute_code] . '_display'] = $term->label();
+              }
+              else {
+                $address[$mapping[$attribute_code]] = $value;
+              }
+
+              break;
+
+            default:
+              if (isset($mapping[$attribute_code])) {
+                $address[$mapping[$attribute_code]] = $value;
+              }
+              break;
+          }
         }
       }
     }
+    else {
+      $address['given_name'] = $magento_address['firstname'];
+      $address['family_name'] = $magento_address['lastname'];
+      $address['mobile_number'] = [
+        'value' => $magento_address['telephone'],
+      ];
+      $address['address_line1'] = $magento_address['street'];
 
-    $address['country_code'] = $magento_address['country_id'];
+      $address['address_line2'] = '';
+      $address['administrative_area'] = '';
+      $address['locality'] = '';
+      $address['dependent_locality'] = '';
 
-    if (isset($magento_address['region'])) {
-      $address['region'] = $magento_address['region'];
+      if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
+        if (isset($magento_address['extension']['address_apartment_segment'])) {
+          $address['address_line2'] = $magento_address['extension']['address_apartment_segment'];
+        }
+
+        if (isset($magento_address['extension']['address_area_segment'])) {
+          $address['administrative_area'] = $magento_address['extension']['address_area_segment'];
+        }
+
+        if (isset($magento_address['extension']['address_block_segment'])) {
+          $address['locality'] = $magento_address['extension']['address_block_segment'];
+        }
+
+        if (isset($magento_address['extension']['address_building_segment'])) {
+          $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
+        }
+      }
+
+      $address['country_code'] = $magento_address['country_id'];
+
+      if (isset($magento_address['region'])) {
+        $address['region'] = $magento_address['region'];
+      }
     }
 
     return $address;
@@ -462,38 +484,54 @@ class AlshayaAddressBookManager {
   public function getMagentoAddressFromAddressArray(array $address) {
     $magento_address = [];
 
-    $magento_address['firstname'] = (string) $address['given_name'];
-    $magento_address['lastname'] = (string) $address['family_name'];
-    $magento_address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['mobile_number']);
-    $magento_address['street'] = (string) $address['address_line1'];
-    $magento_address['extension']['address_apartment_segment'] = (string) $address['address_line2'];
-    $magento_address['extension']['address_area_segment'] = (string) $address['administrative_area'];
-    $magento_address['extension']['address_building_segment'] = (string) $address['dependent_locality'];
-    $magento_address['country_id'] = $address['country_code'];
+    // City is core attribute in Magento and hard to remove validation.
+    $magento_address['city'] = '&#8203;';
 
     $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
 
     if ($dm_version == DM_VERSION_2) {
-      $area = $this->termStorage->load($address['administrative_area']);
+      $mapping = $this->getMagentoFieldMappings();
+      $custom_fields = $this->getMagentoCustomFields();
 
-      if (!empty($area)) {
-        $magento_address['extension']['address_area_segment'] = $area->label();
-        $magento_address['extension']['area'] = $area->get('field_location_id')->getString();
+      foreach ($mapping as $field_code => $attribute_code) {
+        switch ($field_code) {
+          case 'mobile_number':
+            $magento_address[$attribute_code] = _alshaya_acm_checkout_clean_address_phone($address[$field_code]);
+            break;
 
-        // This will be available only in R2.
-        $governate = current($this->termStorage->loadParents($area->id()));
-        if (!empty($governate)) {
-          $magento_address['extension']['governate'] = $governate->get('field_location_id')->getString();
+          case 'administrative_area':
+          case 'area_parent':
+            $term = $this->termStorage->load($address[$field_code]);
+
+            if (empty($term)) {
+              $magento_address['extension'][$attribute_code] = $term->get('field_location_id')->getString();
+            }
+            else {
+              $magento_address['extension'][$attribute_code] = $address[$field_code];
+            }
+            break;
+
+          default:
+            if (isset($custom_fields[$attribute_code])) {
+              $magento_address['extension'][$attribute_code] = $address[$field_code];
+            }
+            else {
+              $magento_address[$attribute_code] = $address[$field_code];
+            }
         }
       }
     }
     else {
-      // This is used in V2 as governate.
-      $magento_address['extension']['address_block_segment'] = (string) $address['locality'];
+      $magento_address['firstname'] = (string) $address['given_name'];
+      $magento_address['lastname'] = (string) $address['family_name'];
+      $magento_address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['mobile_number']);
+      $magento_address['street'] = (string) $address['address_line1'];
+      $magento_address['extension']['address_apartment_segment'] = (string) $address['address_line2'];
+      $magento_address['extension']['address_area_segment'] = (string) $address['administrative_area'];
+      $magento_address['extension']['address_building_segment'] = (string) $address['dependent_locality'];
+      $magento_address['country_id'] = $address['country_code'];
     }
 
-    // City is core attribute in Magento and hard to remove validation.
-    $magento_address['city'] = '&#8203;';
     return $magento_address;
   }
 
@@ -698,6 +736,9 @@ class AlshayaAddressBookManager {
 
     try {
       $magento_form = $this->alshayaApiWrapper->getCustomerAddressForm();
+      $magento_form = array_filter($magento_form, function ($form_item) {
+        return (bool) $form_item['visible'];
+      });
 
       \Drupal::cache()->set($cid, $magento_form);
     }
@@ -706,6 +747,54 @@ class AlshayaAddressBookManager {
     }
 
     return $magento_form;
+  }
+
+  /**
+   * Function to get field mapping betting magento form and address fields.
+   *
+   * @return array
+   *   Mapping Address field <-> Magento form field.
+   */
+  public function getMagentoFieldMappings() {
+    // Fields that can be used in area_parent: governate, city, emirates.
+    $mapping = [
+      'country_code' => 'country_id',
+      'given_name' => 'firstname',
+      'family_name' => 'lastname',
+      'mobile_number' => 'telephone',
+      'address_line1' => 'street',
+      'address_line2' => 'address_apartment_segment',
+      'locality' => 'address_block_segment',
+      'dependent_locality' => 'address_building_segment',
+      'administrative_area' => 'area',
+      'area_parent' => 'governate',
+    ];
+
+    return $mapping;
+  }
+
+  /**
+   * Helper function to get all custom fields from magento form.
+   *
+   * @return array
+   *   Custom fields array.
+   */
+  public function getMagentoCustomFields() {
+    $custom_fields = [];
+
+    $magento_form = $this->getMagentoFormFields();
+
+    $magento_form = array_filter($magento_form, function ($form_item) {
+      return (bool) $form_item['user_defined'];
+    });
+
+    foreach ($magento_form as $field) {
+      if ($field['user_defined']) {
+        $custom_fields[$field['attribute_code']] = 1;
+      }
+    }
+
+    return $custom_fields;
   }
 
 }
