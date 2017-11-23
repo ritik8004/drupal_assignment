@@ -8,6 +8,8 @@
 }
 
 .c-accordion__title {
+  @include arabic-letter-spacing;
+
   position: relative;
   border-top: 1px solid $white;
   color: $hnm-black-two;

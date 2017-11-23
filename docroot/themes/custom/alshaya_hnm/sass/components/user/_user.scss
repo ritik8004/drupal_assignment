@@ -71,6 +71,8 @@
 
   .c-sidebar-second {
     h3 {
+      @include arabic-letter-spacing;
+
       color: $black-three;
       font-size: 0.875rem;
       font-family: $hnm-demibold;
@@ -234,7 +236,7 @@
     position: relative;
 
     @include breakpoint($desktop) {
-      margin-top: 2.6em;
+      margin-top: 3.125rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -386,7 +388,7 @@
   .form-item input:active ~ label:not(.error),
   .form-item input:not(:active):valid ~ label:not(.error),
   .form-item input.error ~ label:not(.error) {
-    top: -1.25em;
+    top: -2.17em;
     bottom: 0;
     #{$left}: 0;
     opacity: 1;
@@ -782,6 +784,8 @@
         }
 
         .dark {
+          @include arabic-letter-spacing;
+
           color: $black-two;
           height: 16px;
           font-family: $hnm-demibold;
@@ -862,6 +866,8 @@
     padding-top: 1px;
 
     .form-text {
+      @include arabic-letter-spacing;
+
       color: $black;
       margin-top: 0;
       padding-bottom: 0.5rem;

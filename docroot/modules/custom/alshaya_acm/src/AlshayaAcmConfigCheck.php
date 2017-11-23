@@ -79,6 +79,18 @@ class AlshayaAcmConfigCheck {
 
       $config->save();
     }
+
+    // We can code here to support more or different languages later when
+    // we encounter those scenarios, keeping it simple and static for now.
+    // Reset store id - EN.
+    \Drupal::configFactory()->getEditable('acq_commerce.store')
+      ->set('store_id', Settings::get('store_id')['en'])
+      ->save();
+
+    // Reset store id - AR.
+    \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
+      ->set('store_id', Settings::get('store_id')['ar'])
+      ->save();
   }
 
 }

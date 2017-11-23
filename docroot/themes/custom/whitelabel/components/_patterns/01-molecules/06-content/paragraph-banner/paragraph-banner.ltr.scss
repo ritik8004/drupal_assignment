@@ -27,6 +27,11 @@
   }
 
   .field-video {
+    @include breakpoint($upto-palm) {
+      margin-top: -1px;
+      margin-bottom: 1.5rem;
+    }
+
     @include breakpoint($above-palm) {
       position: absolute;
       z-index: $z-2;

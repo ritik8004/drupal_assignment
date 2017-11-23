@@ -51,6 +51,8 @@
   }
 
   .field--name-field-title {
+    @include arabic-letter-spacing;
+
     display: block;
     text-decoration: none;
     font-size: 1.125rem;
@@ -62,6 +64,8 @@
   }
 
   .field--name-field-sub-title {
+    @include arabic-letter-spacing;
+
     font-size: 0.875rem;
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
@@ -74,6 +78,8 @@
   }
 
   .c-delivery-menu__title {
+    @include arabic-letter-spacing;
+
     font-family: $hnm-demibold;
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -89,6 +95,8 @@
     }
 
     .c-delivery-menu__description {
+      @include arabic-letter-spacing;
+
       font-family: $hnm-regular;
       letter-spacing: 0.5px;
       text-transform: capitalize;

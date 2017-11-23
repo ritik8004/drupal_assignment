@@ -227,6 +227,8 @@ header,
 }
 
 .search-api-autocomplete-suggestion {
+  @include arabic-letter-spacing;
+
   font-size: 0.875rem;
   line-height: 1.36;
   letter-spacing: 0.5px;
@@ -270,7 +272,7 @@ ul.item-list__checkbox,
 }
 
 .alshaya_search_mainimage {
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
   min-height: 10.5rem;

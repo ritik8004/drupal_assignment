@@ -232,6 +232,8 @@
 }
 
 .field--name-field-promo-text-1 {
+  @include arabic-letter-spacing;
+
   font-size: 0.9375rem;
   font-family: $hnm-demibold;
   font-weight: 600;
@@ -347,5 +349,11 @@
         font-size: 1.275rem;
       }
     }
+  }
+}
+
+.paragraph--type--promo-block {
+  .field--name-field-link {
+    display: none;
   }
 }

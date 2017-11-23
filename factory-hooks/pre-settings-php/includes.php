@@ -55,6 +55,9 @@ $settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
 $settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b6549e';
 
 // Common ACM settings.
+$settings['store_id']['en'] = 1;
+$settings['store_id']['ar'] = 3;
+
 $settings['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;
@@ -72,6 +75,9 @@ $config['acq_commerce.conductor']['debug'] = TRUE;
 
 // Set page size to sync products to 30.
 $settings['acq_commerce.conductor']['product_page_size'] = 30;
+
+// Default language code for redirects.
+$settings['alshaya_i18n.settings']['default_langcode'] = 'ar';
 
 // Disable unwanted core views.
 $settings['views_to_disable'] = [
@@ -104,64 +110,25 @@ switch ($env) {
     $_alshaya_acm_disable_stock_check = TRUE;
 
     $config['acq_commerce.conductor']['debug'] = FALSE;
-
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-hm-dev.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '139fbcb466984b39aea5fd200984a2af';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'oMSt6AXgn3TqlMVj5D8A3Q';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud';
     break;
 
   case '01dev':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud';
-
-    // Specify the modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dblog';
-    $settings['additional_modules'][] = 'views_ui';
-    $settings['additional_modules'][] = 'purge_ui';
-    break;
-
-  case '01test':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://master-7rqtwti-z3gmkbwmwrl4g.eu.magentosite.cloud';
-
-    // Specify the modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dblog';
-    $settings['additional_modules'][] = 'views_ui';
-    $settings['additional_modules'][] = 'purge_ui';
-    break;
-
-  case '01uat':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-uat.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
-    break;
-
-  // R2 environments. While Conductor does not handle multiple Magento, all R2
-  // environments are connected to the same Conductor and Magento.
   case '01dev2':
   case '01dev3':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-hm-dev.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '139fbcb466984b39aea5fd200984a2af';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'oMSt6AXgn3TqlMVj5D8A3Q';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud';
+  case '01test':
+    // Specify the modules to be enabled on this env.
+    $settings['additional_modules'][] = 'dblog';
+    $settings['additional_modules'][] = 'views_ui';
+    $settings['additional_modules'][] = 'purge_ui';
     break;
 
-  case '01qa2':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-hm-test.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '0c1158d278c24ff586792de9bc01eaa7';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'NMGIo_W2s4VA66_6UKM2pQ';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud';
+  case '01live':
+  case '01update':
+    $settings['acq_commerce.conductor']['debug'] = FALSE;
+    $settings['store_id']['ar'] = 4;
     break;
 
   default:
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '75fba487a3043b35740e93a97513c3cf';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'cVA/OSE1I1Zka3JZRFE';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://uat-irjkrqa-zbrr3sobrsb3o.eu.magentosite.cloud';
+    // Don't debug by default on unknown ENV.
+    $settings['acq_commerce.conductor']['debug'] = FALSE;
 }

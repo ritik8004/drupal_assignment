@@ -181,3 +181,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@mixin arabic-letter-spacing {
+  html[lang='ar'] & {
+    letter-spacing: normal;
+  }
+}

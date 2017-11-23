@@ -84,6 +84,8 @@
         margin-bottom: 1.375rem;
 
         .my-account-mobile-title1 {
+          @include arabic-letter-spacing;
+
           display: block;
           font-family: $hnm-demibold;
           text-transform: uppercase;
@@ -200,6 +202,8 @@
     }
 
     .form-type-password .form-text {
+      @include arabic-letter-spacing;
+
       font-size: 1rem;
       letter-spacing: 0.1875rem;
     }

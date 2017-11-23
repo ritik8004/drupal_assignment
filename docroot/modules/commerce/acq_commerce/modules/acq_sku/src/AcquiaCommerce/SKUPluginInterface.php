@@ -101,4 +101,19 @@ interface SKUPluginInterface {
    */
   public function getDisplayNode(SKU $sku, $check_parent = TRUE, $create_translation = FALSE);
 
+  /**
+   * Function to get stock for particular SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   * @param bool $recheck
+   *   Flag to specify if we should recheck.
+   * @param bool $reset
+   *   Flag to mention if we should always try to get fresh value.
+   *
+   * @return mixed
+   *   Stock quantity.
+   */
+  public function getProcessedStock(SKU $sku, $recheck = FALSE, $reset = FALSE);
+
 }

@@ -834,6 +834,8 @@
 }
 
 #block-basketpromotionmessage {
+  @include arabic-letter-spacing;
+
   background: $rosy-pink;
   color: $white-four;
   padding: 0.85rem 1rem;
@@ -1449,4 +1451,13 @@ html[lang=ar] {
       }
     }
   }
+}
+
+.mobile-number-field .country-select .prefix {
+  width: 2.6875rem;
+}
+
+.alias--cart #table-cart-totals tr:nth-child(2) td:first-child span {
+  font-size: 0.75rem;
+  display: block;
 }

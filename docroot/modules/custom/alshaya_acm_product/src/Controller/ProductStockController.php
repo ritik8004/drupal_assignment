@@ -52,7 +52,7 @@ class ProductStockController extends ControllerBase {
       $build['max_quantity'] = 100;
       $build['html'] = '';
     }
-    elseif ($max_quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
+    elseif ($max_quantity = alshaya_acm_get_product_stock($sku_entity)) {
       $build['max_quantity'] = $max_quantity;
       $build['html'] = '';
     }
@@ -68,12 +68,9 @@ class ProductStockController extends ControllerBase {
     // Adding cacheability metadata, so whenever, cache invalidates, this
     // url's cached response also gets invalidate.
     $cacheMeta = new CacheableMetadata();
+
     // Adding cache tags.
     $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
-    // Adding max-age.
-    $expiration_time = _alshaya_acm_get_stock_expiration_time($sku_entity);
-    $max_age = $expiration_time - \Drupal::time()->getRequestTime();
-    $cacheMeta->setCacheMaxAge($max_age);
     $response->addCacheableDependency($cacheMeta);
 
     return $response;
@@ -123,7 +120,7 @@ class ProductStockController extends ControllerBase {
 
       return $response;
     }
-    elseif ($max_quantity = alshaya_acm_is_product_in_stock($sku_entity)) {
+    elseif ($max_quantity = alshaya_acm_get_product_stock($sku_entity)) {
       $build['max_quantity'] = $max_quantity;
 
       $form = $this->fetchAddCartForm($sku_entity);
@@ -167,12 +164,9 @@ class ProductStockController extends ControllerBase {
         // Adding cacheability metadata, so whenever, cache invalidates, this
         // url's cached response also gets invalidate.
         $cacheMeta = new CacheableMetadata();
+
         // Adding cache tags.
         $cacheMeta->addCacheTags(['acq_sku:' . $sku_entity->id()]);
-        // Adding max-age.
-        $expiration_time = _alshaya_acm_get_stock_expiration_time($sku_entity);
-        $max_age = $expiration_time - \Drupal::time()->getRequestTime();
-        $cacheMeta->setCacheMaxAge($max_age);
         $response->addCacheableDependency($cacheMeta);
         return $response;
       }
