@@ -244,6 +244,20 @@ class ProductSyncResource extends ResourceBase {
       $sku->final_price->value = $product['final_price'];
       $sku->attributes = $this->formatProductAttributes($product['attributes']);
 
+      // Set default value of stock to 0.
+      $stock = 0;
+
+      if (isset($product['extension']['stock_item'],
+          $product['extension']['stock_item']['is_in_stock'],
+          $product['extension']['stock_item']['qty'])
+        && $product['extension']['stock_item']['is_in_stock']) {
+
+        // Store stock value in sku.
+        $stock = $product['extension']['stock_item']['qty'];
+      }
+
+      $sku->get('stock')->setValue($stock);
+
       // Update product media to set proper position.
       $sku->media = $this->getProcessedMedia($product, $sku->media->value);
 

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_seo_transac;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Cache\Cache;
@@ -46,11 +47,11 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:department_page' => 'department page',
+    'entity.node.canonical:acq_promotion' => 'promotion page',
+    'entity.node.canonical:static_html' => 'static page',
     'entity.user.canonical' => 'my account page',
     'system.404' => 'page not found',
-    'user.login' => 'user login page',
     'alshaya_user.user_register_complete' => 'register complete page',
-    'user.register' => 'register page',
     'acq_cart.cart' => 'cart page',
     'acq_checkout.form:login' => 'checkout login page',
     'acq_checkout.form:click_collect' => 'checkout click and collect page',
@@ -106,6 +107,7 @@ class AlshayaGtmManager {
     'dimension7' => 'gtm-dimension7',
     'dimension8' => 'gtm-dimension8',
     'dimension3' => 'gtm-dimension3',
+    'metric1' => 'gtm-metric1',
   ];
 
   /**
@@ -186,6 +188,13 @@ class AlshayaGtmManager {
   private $addressBookManager;
 
   /**
+   * Sku Manager service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -212,6 +221,8 @@ class AlshayaGtmManager {
    *   Database connection service.
    * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $addressBookManager
    *   Address Book Manager service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   Sku Manager service.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -224,7 +235,8 @@ class AlshayaGtmManager {
                               LanguageManagerInterface $languageManager,
                               CacheBackendInterface $cache,
                               Connection $database,
-                              AlshayaAddressBookManager $addressBookManager) {
+                              AlshayaAddressBookManager $addressBookManager,
+                              SkuManager $skuManager) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -237,6 +249,7 @@ class AlshayaGtmManager {
     $this->cache = $cache;
     $this->database = $database;
     $this->addressBookManager = $addressBookManager;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -287,6 +300,10 @@ class AlshayaGtmManager {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
+    if (empty($sku)) {
+      return [];
+    }
+
     // We always use en for tracking.
     if ($sku->hasTranslation('en')) {
       $sku = $sku->getTranslation('en');
@@ -296,6 +313,11 @@ class AlshayaGtmManager {
     $product_node = alshaya_acm_product_get_display_node($sku);
     $original_price = (float) $sku->get('price')->getString();
     $final_price = (float) $sku->get('final_price')->getString();
+
+    if ($sku->bundle() == 'configurable') {
+      $prices = $this->skuManager->getMinPrices($sku);
+      $original_price = $prices['price'];
+    }
 
     $product_type = 'Regular Product';
 
@@ -580,12 +602,14 @@ class AlshayaGtmManager {
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
 
         $attributes[$skuId]['gtm-product-sku'] = $cartItem['sku'];
-        if ($dimension7) {
-          $attributes[$skuId]['gtm-dimension7'] = $dimension7;
+        $delivery_page = ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) === 'checkout payment page');
+
+        if (($dimension7) && ($delivery_page)) {
+          $attributes[$skuId]['gtm-dimension7'] = trim($dimension7);
         }
 
-        if ($dimension8) {
-          $attributes[$skuId]['gtm-dimension8'] = $dimension8;
+        if (($dimension8) && ($delivery_page)) {
+          $attributes[$skuId]['gtm-dimension8'] = trim($dimension8);
         }
       }
 
@@ -817,6 +841,7 @@ class AlshayaGtmManager {
     $request_ua = $this->requestStack->getCurrentRequest()->headers->get('HTTP_USER_AGENT');
     $mobile_detect = new Mobile_Detect($request_headers, $request_ua);
     $platform = 'Desktop';
+
     if ($mobile_detect->isMobile()) {
       $platform = 'Mobile';
     }
@@ -841,7 +866,7 @@ class AlshayaGtmManager {
       'customerType' => $customer_type,
       'userName' => ($data_layer['userUid'] !== 0) ? $current_user->field_first_name->value . ' ' . $current_user->field_last_name->value : '',
       'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
-      'privilegeCustomer' => $current_user->get('field_privilege_card_number')->getValue() ? 'Privilege Customer' : 'Regular Customer',
+      'privilegeCustomer' => !empty($current_user->get('field_privilege_card_number')->getValue()) ? 'Privilege Customer' : 'Regular Customer',
     ];
 
     return $data_layer_attributes;
@@ -859,7 +884,12 @@ class AlshayaGtmManager {
           $node = $node->getTranslation('en');
         }
         $product_sku = $node->get('field_skus')->getString();
+
         $sku_entity = SKU::loadFromSku($product_sku);
+
+        if (empty($sku_entity)) {
+          return [];
+        }
 
         if ($sku_entity->hasTranslation('en')) {
           $sku_entity = $sku_entity->getTranslation('en');
@@ -868,7 +898,7 @@ class AlshayaGtmManager {
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 
         // Check if this product is in stock.
-        $stock_response = alshaya_acm_is_product_in_stock($sku_entity);
+        $stock_response = alshaya_acm_get_product_stock($sku_entity);
         $stock_status = $stock_response ? 'in stock' : 'out of stock';
         $product_terms = $this->fetchProductCategories($node);
 
@@ -895,6 +925,11 @@ class AlshayaGtmManager {
           'productReviews' => '',
           'magentoProductID' => $sku_entity->get('product_id')->getString(),
         ];
+
+        if ($sku_entity->bundle() == 'configurable') {
+          $prices = $this->skuManager->getMinPrices($sku_entity);
+          $page_dl_attributes['productOldPrice'] = $prices['price'];
+        }
 
         $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
         break;
@@ -1060,7 +1095,7 @@ class AlshayaGtmManager {
   public function fetchDepartmentAttributes($terms) {
     $term_ids = array_keys($terms);
 
-    return [
+    return array_filter([
       'departmentName' => implode('|', $terms),
       'departmentId' => current($term_ids),
       'listingName' => end($terms),
@@ -1068,7 +1103,7 @@ class AlshayaGtmManager {
       'majorCategory' => array_shift($terms) ?: '',
       'minorCategory' => array_shift($terms) ?: '',
       'subCategory' => array_shift($terms) ?: '',
-    ];
+    ]);
   }
 
   /**

@@ -13,6 +13,11 @@
 
   img {
     width: 100%;
+    vertical-align: middle;
+
+    @include breakpoint($above-palm) {
+      min-height: 16.625rem;
+    }
   }
 }
 

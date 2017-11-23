@@ -37,6 +37,8 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('not_buyable_help_text', $form_state->getValue('not_buyable_help_text'));
     $config->set('size_guide_link', $form_state->getValue('size_guide_link'));
     $config->set('size_guide_modal_content', $form_state->getValue('size_guide_modal_content'));
+    $config->set('vat_text', $form_state->getValue('vat_text'));
+    $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -109,6 +111,18 @@ class ProductSettingsForm extends ConfigFormBase {
       '#format' => $config->get('size_guide_modal_content.format'),
       '#title' => $this->t('Size guide content'),
       '#default_value' => $config->get('size_guide_modal_content.value'),
+    ];
+
+    $form['vat_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('VAT Inclusion text'),
+      '#default_value' => $config->get('vat_text'),
+    ];
+
+    $form['vat_text_footer'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('VAT disclaimer text for the footer'),
+      '#default_value' => $config->get('vat_text_footer'),
     ];
 
     return $form;

@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_sku\AcquiaCommerce;
 
+use Drupal\acq_commerce\Conductor\ConductorException;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -187,10 +188,112 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
         return $node->addTranslation($sku->language()->getId());
       }
 
-      throw new \Exception(new FormattableMarkup('Node translation not found of @sku for @langcode', ['@sku' => $sku->id(), '@langcode' => $sku->language()->getId()]), 404);
+      // Just log the message and continue.
+      // Don't want to show any fatal error anywhere.
+      \Drupal::logger('acq_sku')->warning('Node translation not found of @sku for @langcode', [
+        '@sku' => $sku->getSku(),
+        '@langcode' => $sku->language()->getId(),
+      ]);
     }
 
     return $node;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProcessedStock(SKU $sku, $recheck = FALSE, $reset = FALSE) {
+    $stock = (int) $this->getStock($sku, $reset);
+
+    // We reset and check again once if reset is false and recheck is true.
+    if (empty($stock) && $recheck && !$reset) {
+      $stock = (int) $this->getStock($sku, TRUE);
+    }
+
+    return $stock;
+  }
+
+  /**
+   * Returns the stock for the given sku.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity object.
+   * @param bool $reset
+   *   Flag to mention if we should always try to get fresh value.
+   *
+   * @return array|mixed
+   *   Available stock quantity.
+   */
+  protected function getStock(SKU $sku, $reset = FALSE) {
+    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+
+    if ($stock_mode == 'push') {
+      $stock = $sku->get('stock')->getString();
+
+      // Fallback to pull mode if no value available for the SKU.
+      if (!($stock === '' || $stock === NULL)) {
+        return (int) $stock;
+      }
+    }
+
+    $stock = NULL;
+
+    // Cache id.
+    $cid = 'stock:' . $sku->getSku();
+
+    $cache = \Drupal::cache('stock')->get($cid);
+
+    // If information is cached.
+    if (!$reset && !empty($cache)) {
+      $stock = $cache->data;
+    }
+    else {
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('acq_commerce.api');
+
+      try {
+        // Get the stock.
+        $stock_info = $api_wrapper->skuStockCheck($sku->getSku());
+      }
+      catch (ConductorException $e) {
+        // Log the stock error, do not throw error if stock info is missing.
+        \Drupal::logger('acq_sku')->warning('Unable to get the stock for @sku : @message', [
+          '@sku' => $sku->getSku(),
+          '@message' => $e->getMessage(),
+        ]);
+
+        // We will cache this also for sometime to reduce load.
+        $stock_info['is_in_stock'] = FALSE;
+      }
+
+      // Magento uses additional flag as well for out of stock.
+      if (isset($stock_info['is_in_stock']) && empty($stock_info['is_in_stock'])) {
+        $stock_info['quantity'] = 0;
+      }
+
+      $stock = (int) $stock_info['quantity'];
+
+      // If cache multiplier is zero we don't cache the stock.
+      if ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
+        $default_cache_lifetime = $stock ? $stock * $cache_multiplier : $cache_multiplier;
+        $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
+
+        // Calculate the timestamp when we want the cache to expire.
+        $stock_cache_lifetime = min($default_cache_lifetime, $max_cache_lifetime);
+        $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
+
+        // Set the stock in cache.
+        \Drupal::cache('stock')->set($cid, $stock, $expire);
+
+        // Save the value in SKU if we came here as fallback of push mode.
+        if ($stock_mode == 'push') {
+          $sku->get('stock')->setValue($stock);
+          $sku->save();
+        }
+      }
+    }
+
+    return $stock;
   }
 
 }

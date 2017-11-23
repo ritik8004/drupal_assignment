@@ -11,12 +11,18 @@ rm $deployDir/docroot/core/install.php
 
 # Built css files are ignored in the repository. We need to remove these from
 # .gitignore for the css files to be pushed to ACSF.
-themes=( "whitelabel" "whitelabel_transac" "whitelabel_non_transac" "victoria_secret" "alshaya_white_label" "bath_body_works" "debenhams" )
+themes=( "whitelabel" "whitelabel_transac" "whitelabel_non_transac" "victoria_secret" "alshaya_white_label" "pottery_barn_non_trans" "bath_body_works" "debenhams" )
 
 for i in "${themes[@]}"
 do
   if [ -f $deployDir/docroot/themes/custom/$i/.gitignore ]
   then
-    sed -i '' '/dist/d' $deployDir/docroot/themes/custom/$i/.gitignore
+    uname_string=`uname`
+    if [ $uname_string == 'Darwin' ]
+    then
+      sed -i '' '/dist/d' $deployDir/docroot/themes/custom/$i/.gitignore
+    else
+      sed -i '/dist/d' $deployDir/docroot/themes/custom/$i/.gitignore
+    fi
   fi
 done
