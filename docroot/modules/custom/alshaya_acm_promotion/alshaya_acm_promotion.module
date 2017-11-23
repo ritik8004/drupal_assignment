@@ -5,10 +5,6 @@
  * Contains general hooks and alters.
  */
 
-use Symfony\Component\HttpFoundation\Request;
-use Drupal\views\ViewExecutable;
-use Drupal\views\Plugin\views\query\QueryPluginBase;
-
 /**
  * Implements hook_views_data_alter().
  */
@@ -36,75 +32,4 @@ function alshaya_acm_promotion_theme_registry_alter(&$theme_registry) {
   $theme_registry['acq_commerce_price']['variables']['promotions'] = NULL;
   $theme_registry['acq_commerce_price']['variables']['final_price'] = NULL;
   $theme_registry['acq_commerce_price']['variables']['discount'] = NULL;
-}
-
-/**
- * Implements hook_views_query_alter().
- */
-function alshaya_acm_promotion_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
-  // Whole code below is to fix HTTP 414 error when we have too many skus
-  // linked to a promotion and so we can't use context filter.
-  if ($view->id() == 'alshaya_product_list' && $view->current_display == 'block_2') {
-    $request = \Drupal::request();
-
-    // Get the node from args.
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = $request->attributes->get('node');
-
-    // For ajax requests we won't have node URL.
-    if (empty($node)) {
-
-      // Try to get node id from referer.
-      // We know we will get it in GET, we have added custom patch for it.
-      // If we have reverted back to POST, this code is not required and
-      // instead we should use the contextual filter to get skus.
-      $referer = $request->server->get('HTTP_REFERER');
-
-      // Return if nothing found.
-      if (empty($referer)) {
-        return;
-      }
-
-      // Create fake request to validate and get url object.
-      $fake_request = Request::create($referer);
-
-      /** @var \Drupal\Core\Url $url_object */
-      $url_object = \Drupal::service('path.validator')->getUrlIfValid($fake_request->getRequestUri());
-
-      // Return if nothing found.
-      if (empty($url_object)) {
-        return;
-      }
-
-      $params = $url_object->getRouteParameters();
-      $promotion_node_id = isset($params['node']) ? $params['node'] : NULL;
-
-      // Sanity check.
-      if ($promotion_node_id) {
-        $node = \Drupal::entityTypeManager()->getStorage('node')->load($promotion_node_id);
-      }
-    }
-
-    // Remove content for product category page.
-    if ($node && $node->isPublished()) {
-      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-
-      // Get skus attached to the promotion.
-      $skus = $sku_manager->getSkutextsForPromotion($node);
-
-      // For Drupal\search_api\Plugin\views\querySearchApiQuery we can't
-      // access where directly as it is protected but it provides a function
-      // getWhere().
-      /** @var \Drupal\search_api\Plugin\views\query\SearchApiQuery $query */
-      foreach ($query->getWhere() as &$condition_group) {
-        foreach ($condition_group['conditions'] as &$condition) {
-          if (isset($condition[0]) && $condition[0] == 'field_skus') {
-            $condition[1] = $skus;
-            $condition[2] = 'IN';
-          }
-        }
-      }
-    }
-  }
 }
