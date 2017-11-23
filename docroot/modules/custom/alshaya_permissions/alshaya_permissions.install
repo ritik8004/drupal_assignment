@@ -51,5 +51,5 @@ function alshaya_permissions_uninstall() {
  */
 function alshaya_permissions_update_8004() {
   // Update role permissions from the config.
-  _alshaya_permissions_update_role_from_config('webmaster');
+  _alshaya_permissions_update_role_from_config(['webmaster']);
 }
