@@ -169,13 +169,13 @@ class AlshayaApiWrapper {
    * @param float $lon
    *   Longitude.
    *
-   * @return mixed
+   * @return array
    *   Stores array.
    */
   public function getSkuStores($sku, $lat, $lon) {
     $stores = $this->getProductStores($sku, $lat, $lon);
     if (empty($stores)) {
-      return;
+      return [];
     }
 
     // Add missing information to store data.
