@@ -198,6 +198,8 @@ header {
     }
 
     input[type="text"] {
+      @include arabic-letter-spacing;
+
       font-family: $hnm-regular;
       padding: 0.4375rem;
       padding-#{$left}: 0;
@@ -258,6 +260,8 @@ header {
   }
 
   .block-cart-mini-block {
+    @include arabic-letter-spacing;
+
     font-size: 0.875rem;
     text-align: $right;
     color: $black;
@@ -496,6 +500,8 @@ header {
     display: block;
 
     a {
+      @include arabic-letter-spacing;
+
       text-decoration: none;
       color: $hnm-black-four;
       font-size: 0.875rem;
@@ -712,6 +718,8 @@ header {
       height: 2.6875rem;
 
       a.menu--one__link {
+        @include arabic-letter-spacing;
+
         padding: 0.625rem 0.8rem;
         padding-bottom: 0.6rem;
         display: block;
@@ -846,6 +854,8 @@ header {
         z-index: 10;
 
         a {
+          @include arabic-letter-spacing;
+
           font-family: $hnm-demibold;
           letter-spacing: 0.5px;
           font-weight: normal;
@@ -1052,6 +1062,8 @@ header {
   }
 
   .main--menu a {
+    @include arabic-letter-spacing;
+
     font-family: $hnm-regular;
     font-size: 0.875rem;
     letter-spacing: 1px;
@@ -1061,6 +1073,8 @@ header {
   }
 
   .menu__list-item {
+    @include arabic-letter-spacing;
+
     border-bottom: 1px solid $white;
     margin-#{$left}: 0.625rem;
     margin-#{$right}: 0.625rem;
@@ -1286,6 +1300,8 @@ header {
 }
 
 .toggle--sign {
+  @include arabic-letter-spacing;
+
   @include breakpoint($only-mobile) {
     color: $black;
   }
@@ -1309,6 +1325,8 @@ header {
   }
 
   .one {
+    @include arabic-letter-spacing;
+
     @include breakpoint($only-tablet) {
       color: $hnm-black-three;
     }

@@ -82,6 +82,8 @@
   }
 
   a {
+    @include arabic-letter-spacing;
+
     font-family: $hnm-regular;
 
     @include breakpoint($upto-desktop) {
@@ -174,6 +176,8 @@
   }
 
   h3 {
+    @include arabic-letter-spacing;
+
     color: $hnm-black-four;
     font-size: 0.75rem;
     padding: 0.94rem 0;

@@ -74,6 +74,8 @@
     }
 
     input::placeholder {
+      @include arabic-letter-spacing;
+
       text-transform: uppercase;
       color: $grey6;
       font-size: 0.6875rem;

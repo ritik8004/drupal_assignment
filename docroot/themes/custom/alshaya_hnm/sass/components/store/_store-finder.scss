@@ -199,6 +199,8 @@
 
   .view-stores-finder {
     .view-header p {
+      @include arabic-letter-spacing;
+
       color: $marine-blue;
       letter-spacing: 0.00625rem;
     }
@@ -1183,12 +1185,16 @@
   .hours--label,
   .get--directions div,
   .view-on--map {
+    @include arabic-letter-spacing;
+
     position: relative;
     color: $hnm-black-two;
     cursor: pointer;
     letter-spacing: 0.5px;
 
     a {
+      @include arabic-letter-spacing;
+
       color: $hnm-black-two;
       letter-spacing: 0.5px;
     }

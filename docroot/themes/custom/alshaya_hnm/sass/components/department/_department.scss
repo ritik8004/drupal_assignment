@@ -2,6 +2,8 @@
   margin-top: 1.875rem;
 
   .c-page-title {
+    @include arabic-letter-spacing;
+
     border-bottom: 1px solid $white;
     margin-bottom: 1.438rem;
     padding-bottom: 0.875rem;

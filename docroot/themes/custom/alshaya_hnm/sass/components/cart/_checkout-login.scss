@@ -117,6 +117,8 @@
   }
 
   .tab {
+    @inlcude arabic-letter-spacing;
+
     padding: 0.5rem 2rem;
     border: 1px solid $grey5;
     display: inline-block;
