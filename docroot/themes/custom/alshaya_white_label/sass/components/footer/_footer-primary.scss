@@ -404,12 +404,10 @@
 
   .subscription-status {
     .success {
-      background: $tealish;
-      color: $white-four;
+      color: $windows-blue;
       font-size: 0.75rem;
-      padding: 0.3125rem 0.875rem;
+      padding: 0.3125rem 0;
       margin-top: 0.1875rem;
-      font-weight: bold;
       display: block;
     }
 
