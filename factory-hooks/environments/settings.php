@@ -23,12 +23,23 @@ function alshaya_get_additional_settings($site, $env) {
           'ar' => 4,
         ],
       ],
+      'default' => [
+        'store_id' => [
+          'ar' => 3,
+        ]
+      ]
+    ],
+    'hmkw' => [
+      'default' => [
+        'store_id' => [
+          'ar' => 2,
+        ]
+      ]
     ],
     'default' => [
       'default' => [
         'store_id' => [
           'en' => 1,
-          'ar' => 3,
         ],
       ],
     ],
