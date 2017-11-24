@@ -6,7 +6,6 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\migrate\MigrateExecutable;
 use Drupal\migrate\MigrateMessage;
-use Drupal\Core\Language\LanguageManager;
 
 /**
  * Class StoresMigrateUploadForm.
@@ -24,6 +23,9 @@ class StoresMigrateUploadForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    // Set message for users.
+    drupal_set_message('Please import stores in English language first.', 'warning');
+
     $languages = \Drupal::languageManager()->getLanguages();
     foreach ($languages as $language) {
       $langs[$language->getId()] = $language->getName();
@@ -76,7 +78,7 @@ class StoresMigrateUploadForm extends FormBase {
     $language = $form_state->getValue('language');
     $filepath = $form_state->getValue('upload')->getFileUri();
 
-    $migrate_plus_migration_store_config = \Drupal::service('config.factory')->getEditable('migrate_plus.migration.store');
+    $migrate_plus_migration_store_config = \Drupal::service('config.factory')->getEditable('migrate_plus.migration.store_' . $language);
 
     // Store the initial migrate configuration.
     $initial_filepath = $migrate_plus_migration_store_config->get('source.path');
@@ -85,7 +87,10 @@ class StoresMigrateUploadForm extends FormBase {
     $migrate_plus_migration_store_config->set('source.path', $filepath);
     $migrate_plus_migration_store_config->save();
 
-    $migration = \Drupal::service('plugin.manager.migration')->createInstance('store_' . $language);
+    /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
+    $migration = \Drupal::service('plugin.manager.migration')->createInstance('store_' . $language, ['source' => ['path' => $filepath]]);
+    // Set the nodes for updating.
+    $migration->getIdMap()->prepareUpdate();
     $executable = new MigrateExecutable($migration, new MigrateMessage());
     $executable->import();
 
