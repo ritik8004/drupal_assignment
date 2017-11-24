@@ -62,6 +62,9 @@ $settings['alshaya_api.settings']['verify_ssl'] = 0;
 $settings['alshaya_api.settings']['username'] = 'acquiaapi';
 $settings['alshaya_api.settings']['password'] = 'password123';
 
+// Security - autologout settings.
+$settings['autologout.settings']['timeout'] = 1200;
+
 // Set the debug dir of conductor.
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
 $config['acq_commerce.conductor']['debug'] = FALSE;
@@ -85,18 +88,28 @@ $settings['views_to_disable'] = [
 // Specify the modules to be enabled/uninstalled - just initialised here.
 $settings['additional_modules'] = [];
 
+// ################################################################
+// This switch/case is ONLY for per environment settings. If any of these
+// settings must be overridden on a per site basis, please, check
+// factory-hooks/environments/settings.php to see the other settings.
+// ################################################################
 switch ($env) {
   case 'local':
-    // Specify the modules to be enabled on this env.
+    // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'features_ui';
 
+    // Increase autologout timeout on local so we are not always logged out.
+    $config['autologout.settings']['timeout'] = 86400;
+
     $config['simple_oauth.settings']['private_key'] = $settings['alshaya_acm_soauth_private_key'];
     $config['simple_oauth.settings']['public_key'] = $settings['alshaya_acm_soauth_public_key'];
 
+  // Please note there is no "break" at the end of "local" case so "travis"
+  // settings are applied both on "local" and on "travis" environments.
   case 'travis':
-    // Disable stock check in local.
+    // Disable stock check.
     global $_alshaya_acm_disable_stock_check;
     $_alshaya_acm_disable_stock_check = TRUE;
     break;
@@ -105,7 +118,7 @@ switch ($env) {
   case '01dev2':
   case '01dev3':
   case '01test':
-    // Specify the modules to be enabled on this env.
+    // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';

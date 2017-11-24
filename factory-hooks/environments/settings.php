@@ -25,18 +25,10 @@ function alshaya_get_additional_settings($site, $env) {
       ],
     ],
     'default' => [
-      'local' => [
-        'autologout.settings' => [
-          'timeout' => 86400,
-        ],
-      ],
       'default' => [
         'store_id' => [
           'en' => 1,
           'ar' => 3,
-        ],
-        'autologout.settings' => [
-          'timeout' => 1200,
         ],
       ],
     ],
