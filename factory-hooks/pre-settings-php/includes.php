@@ -54,10 +54,6 @@ $settings['alshaya_acm_soauth_private_key'] = $soauth_key_dir . $soauth_key_name
 $settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
 $settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b6549e';
 
-// Common ACM settings.
-$settings['store_id']['en'] = 1;
-$settings['store_id']['ar'] = 3;
-
 $settings['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;
@@ -71,7 +67,7 @@ $settings['autologout.settings']['timeout'] = 1200;
 
 // Set the debug dir of conductor.
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
-$config['acq_commerce.conductor']['debug'] = TRUE;
+$config['acq_commerce.conductor']['debug'] = FALSE;
 
 // Set page size to sync products to 30.
 $settings['acq_commerce.conductor']['product_page_size'] = 30;
@@ -92,43 +88,42 @@ $settings['views_to_disable'] = [
 // Specify the modules to be enabled/uninstalled - just initialised here.
 $settings['additional_modules'] = [];
 
+// ################################################################
+// This switch/case is ONLY for per environment settings. If any of these
+// settings must be overridden on a per site basis, please, check
+// factory-hooks/environments/settings.php to see the other settings.
+// ################################################################
 switch ($env) {
   case 'local':
-    // Specify the modules to be enabled on this env.
+    // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'features_ui';
 
+    // Increase autologout timeout on local so we are not always logged out.
     $config['autologout.settings']['timeout'] = 86400;
 
     $config['simple_oauth.settings']['private_key'] = $settings['alshaya_acm_soauth_private_key'];
     $config['simple_oauth.settings']['public_key'] = $settings['alshaya_acm_soauth_public_key'];
 
+  // Please note there is no "break" at the end of "local" case so "travis"
+  // settings are applied both on "local" and on "travis" environments.
   case 'travis':
-    // Disable stock check in local.
+    // Disable stock check.
     global $_alshaya_acm_disable_stock_check;
     $_alshaya_acm_disable_stock_check = TRUE;
-
-    $config['acq_commerce.conductor']['debug'] = FALSE;
     break;
 
   case '01dev':
   case '01dev2':
   case '01dev3':
   case '01test':
-    // Specify the modules to be enabled on this env.
+    // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';
-    break;
 
-  case '01live':
-  case '01update':
-    $settings['acq_commerce.conductor']['debug'] = FALSE;
-    $settings['store_id']['ar'] = 4;
+    // We only debug on ACSF dev/test environments.
+    $config['acq_commerce.conductor']['debug'] = TRUE;
     break;
-
-  default:
-    // Don't debug by default on unknown ENV.
-    $settings['acq_commerce.conductor']['debug'] = FALSE;
 }
