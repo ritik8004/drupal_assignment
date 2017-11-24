@@ -216,12 +216,21 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     $area_parent = 0;
 
     if (isset($element['area_parent'])) {
+      $address_value = $form_state->getValue(explode('[', str_replace(']', '', $element['#name'])));
+      if (!empty($address_value['area_parent'])) {
+        $area_parent = $address_value['area_parent'];
+      }
+      else {
+        $parent = $address_book_manager->getLocationParentTerm($element['administrative_area']['#default_value']);
+        $area_parent = $parent ? $parent->id() : NULL;
+      }
+
       // Configure area_parent field.
       $element['area_parent']['#type'] = 'select';
       $element['area_parent']['#required'] = TRUE;
       $element['area_parent']['#access'] = TRUE;
       $element['area_parent']['#multiple'] = FALSE;
-      $element['area_parent']['#default_value'] = $element['area_parent']['#default_value'];
+      $element['area_parent']['#default_value'] = $area_parent;
       $element['area_parent']['#options'] = ['' => t('Select @label', ['@label' => $element['area_parent']['#title']])] + _alshaya_addressbook_governate_list();
       $element['area_parent']['#attributes'] = [
         'class' => ['select2-select'],
@@ -244,13 +253,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       $element[$field_code]['#required'] = FALSE;
       $element[$field_code]['#validated'] = TRUE;
       $element[$field_code]['#default_value'] = '&#8203;';
-    }
-
-    $area_parent = $element['area_parent']['#default_value'];
-
-    $address_value = $form_state->getValue(explode('[', str_replace(']', '', $element['#name'])));
-    if (!empty($address_value['area_parent'])) {
-      $area_parent = $address_value['area_parent'];
     }
   }
 
@@ -661,10 +663,6 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       $variables['delivery_to'] = $values[0]['given_name'] . ' ' . $values[0]['family_name'];
     }
 
-    // Address info.
-    // @TODO: We should change keys here to match the validations doc so for FE
-    // it becomes the final implementation and we then just need to change
-    // value assignment here.
     $variables['delivery_address'] = [
       'organization' => $values[0]['organization'],
       'address_line1' => $values[0]['address_line1'],
@@ -672,11 +670,28 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       'postal_code' => $values[0]['postal_code'],
       'sorting_code' => $values[0]['sorting_code'],
       'dependent_locality' => $values[0]['dependent_locality'],
-      'administrative_area' => '',
+      'locality' => $values[0]['locality'],
+      'administrative_area' => $values[0]['administrative_area'],
     ];
 
-    $variables['delivery_address']['administrative_area'] = _alshaya_addressbook_get_area_from_id($values[0]['administrative_area']);
-    $variables['delivery_address']['locality'] = _alshaya_addressbook_get_area_from_id($values[0]['locality']);
+    $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
+
+    if ($dm_version == DM_VERSION_2) {
+      $variables['delivery_address']['administrative_area'] = _alshaya_addressbook_get_area_from_id($values[0]['administrative_area']);
+
+      // Get full mapping to see if we need to display parent.
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+      $mapping = $address_book_manager->getMagentoFieldMappings();
+
+      if ($mapping['area_parent']) {
+        $parent = $address_book_manager->getLocationParentTerm($values[0]['administrative_area']);
+
+        if ($parent) {
+          $variables['delivery_address']['area_parent'] = $parent->label();
+        }
+      }
+    }
 
     // Get country list.
     $country_list = \Drupal::service('address.country_repository')->getList();

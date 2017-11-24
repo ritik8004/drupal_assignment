@@ -199,14 +199,26 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
         $shipping_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
 
-        if (isset($shipping_address['address_line1'])) {
+        if (!empty($shipping_address['address_line1'])) {
           $line1[] = $shipping_address['address_line2'];
           $line1[] = $shipping_address['dependent_locality'];
 
-          $line2[] = _alshaya_addressbook_get_area_from_id($shipping_address['locality']) . ',';
+          if (!empty($shipping_address['locality'])) {
+            $line2[] = $shipping_address['locality'] . ',';
+          }
 
           $line2[] = $shipping_address['address_line1'];
-          $line2[] = $this->t('@area Area', ['@area' => _alshaya_addressbook_get_area_from_id($shipping_address['administrative_area'])]);
+
+          if (!empty($shipping_address['area_parent_display'])) {
+            $line2[] = $shipping_address['area_parent_display'] . ',';
+          }
+
+          if (!empty($shipping_address['administrative_area_display'])) {
+            $line2[] = $this->t('@area Area', ['@area' => $shipping_address['administrative_area_display']]);
+          }
+          elseif (!empty($shipping_address['administrative_area'])) {
+            $line2[] = $this->t('@area Area', ['@area' => $shipping_address['administrative_area']]);
+          }
 
           $country_list = \Drupal::service('address.country_repository')->getList();
           $line3[] = $country_list[$shipping_address['country_code']];

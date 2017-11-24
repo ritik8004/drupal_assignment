@@ -327,10 +327,21 @@ class AlshayaAddressBookManager {
 
     if ($dm_version == DM_VERSION_2) {
       $mapping = $this->getMagentoFieldMappings();
+
+      // Flip the mapping to make it easy below.
       $mapping = array_flip($mapping);
+
+      // Initialise with NULL for all fields to avoid notices.
+      foreach ($mapping as $field_code) {
+        $address[$field_code] = NULL;
+      }
 
       foreach ($magento_address as $attribute_code => $value) {
         if (is_array($value)) {
+          continue;
+        }
+
+        if (!isset($mapping[$attribute_code])) {
           continue;
         }
 
@@ -412,6 +423,29 @@ class AlshayaAddressBookManager {
     }
 
     return $address;
+  }
+
+  /**
+   * Get parent location from location id.
+   *
+   * @param int $area_term_id
+   *   Area term id.
+   *
+   * @return \Drupal\taxonomy\Entity\Term|null
+   *   Term if found or null.
+   */
+  public function getLocationParentTerm($area_term_id) {
+    if (empty($area_term_id)) {
+      return NULL;
+    }
+
+    $parents = $this->termStorage->loadParents($area_term_id);
+
+    if (!empty($parents)) {
+      return reset($parents);
+    }
+
+    return NULL;
   }
 
   /**
@@ -504,10 +538,10 @@ class AlshayaAddressBookManager {
             $term = $this->termStorage->load($address[$field_code]);
 
             if (empty($term)) {
-              $magento_address['extension'][$attribute_code] = $term->get('field_location_id')->getString();
+              $magento_address['extension'][$attribute_code] = $address[$field_code];
             }
             else {
-              $magento_address['extension'][$attribute_code] = $address[$field_code];
+              $magento_address['extension'][$attribute_code] = $term->get('field_location_id')->getString();
             }
             break;
 

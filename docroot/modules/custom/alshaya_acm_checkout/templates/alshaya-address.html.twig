@@ -11,18 +11,18 @@
 {% if address.address_line1 is not empty %}
   <div class="address--content">{{ address.address_line1 }}</div>
 {% endif %}
-{% if address.area_parent is not empty %}
-  {% if address.area_parent_display is not empty %}
-    <div class="address--content">{{ address.area_parent_display }}</div>
-  {% else %}
-    <div class="address--content">{{ address.area_parent }}</div>
-  {% endif %}
-{% endif %}
 {% if address.administrative_area is not empty %}
   {% if address.administrative_area_display is not empty %}
     <div class="address--content">{{ address.administrative_area_display }}</div>
   {% else %}
     <div class="address--content">{{ address.administrative_area }}</div>
+  {% endif %}
+{% endif %}
+{% if address.area_parent is not empty %}
+  {% if address.area_parent_display is not empty %}
+    <div class="address--content">{{ address.area_parent_display }}</div>
+  {% else %}
+    <div class="address--content">{{ address.area_parent }}</div>
   {% endif %}
 {% endif %}
 {% if address.locality is not empty %}

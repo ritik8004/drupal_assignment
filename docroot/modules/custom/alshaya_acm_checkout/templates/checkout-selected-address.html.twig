@@ -50,6 +50,13 @@
             <div class="address--content">{{ delivery_address.administrative_area }}</div>
           {% endif %}
         {% endif %}
+        {% if delivery_address.area_parent is not empty %}
+          {% if delivery_address.area_parent_display is not empty %}
+            <div class="address--content">{{ delivery_address.area_parent_display }}</div>
+          {% else %}
+            <div class="address--content">{{ delivery_address.area_parent }}</div>
+          {% endif %}
+        {% endif %}
         {% if delivery_address.locality is not empty %}
           {% if delivery_address.locality_display is not empty %}
             <div class="address--content">{{ delivery_address.locality_display }}</div>
