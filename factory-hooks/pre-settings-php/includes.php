@@ -54,10 +54,6 @@ $settings['alshaya_acm_soauth_private_key'] = $soauth_key_dir . $soauth_key_name
 $settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
 $settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b6549e';
 
-// Common ACM settings.
-$settings['store_id']['en'] = 1;
-$settings['store_id']['ar'] = 3;
-
 $settings['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;
@@ -66,12 +62,9 @@ $settings['alshaya_api.settings']['verify_ssl'] = 0;
 $settings['alshaya_api.settings']['username'] = 'acquiaapi';
 $settings['alshaya_api.settings']['password'] = 'password123';
 
-// Security - autologout settings.
-$settings['autologout.settings']['timeout'] = 1200;
-
 // Set the debug dir of conductor.
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
-$config['acq_commerce.conductor']['debug'] = TRUE;
+$config['acq_commerce.conductor']['debug'] = FALSE;
 
 // Set page size to sync products to 30.
 $settings['acq_commerce.conductor']['product_page_size'] = 30;
@@ -99,8 +92,6 @@ switch ($env) {
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'features_ui';
 
-    $config['autologout.settings']['timeout'] = 86400;
-
     $config['simple_oauth.settings']['private_key'] = $settings['alshaya_acm_soauth_private_key'];
     $config['simple_oauth.settings']['public_key'] = $settings['alshaya_acm_soauth_public_key'];
 
@@ -108,8 +99,6 @@ switch ($env) {
     // Disable stock check in local.
     global $_alshaya_acm_disable_stock_check;
     $_alshaya_acm_disable_stock_check = TRUE;
-
-    $config['acq_commerce.conductor']['debug'] = FALSE;
     break;
 
   case '01dev':
@@ -120,15 +109,8 @@ switch ($env) {
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';
-    break;
 
-  case '01live':
-  case '01update':
-    $settings['acq_commerce.conductor']['debug'] = FALSE;
-    $settings['store_id']['ar'] = 4;
+    // We only debug on ACSF dev/test environments.
+    $config['acq_commerce.conductor']['debug'] = TRUE;
     break;
-
-  default:
-    // Don't debug by default on unknown ENV.
-    $settings['acq_commerce.conductor']['debug'] = FALSE;
 }
