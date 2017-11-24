@@ -19,5 +19,5 @@ if (empty($site_name) && $settings['env'] == 'local' && $_SERVER['HTTP_HOST'] ==
 }
 
 // We merge the entire settings with the specific ones.
-include_once DRUPAL_ROOT . '/../factory-hooks/environments/mapping.php';
+include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
 $settings = array_merge($settings, alshaya_get_specific_settings($site_name, $settings['env']));
