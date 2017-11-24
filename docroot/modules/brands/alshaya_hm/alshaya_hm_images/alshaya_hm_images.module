@@ -33,6 +33,9 @@ function _alshaya_hm_images_acq_sku_process_assets($product) {
     $assets = $product['extension']['assets'];
 
     foreach ($assets as $key => $asset) {
+      if (empty($asset['Data']['AssetType'])) {
+        continue;
+      }
       $asset_type_parts = explode('/', $asset['Data']['AssetType']);
       $assets[$key]['sortAssetType'] = ($asset['is_old_format']) ? $asset['Type'] : end($asset_type_parts);
       $face_type = SkuAssetManager::LP_DEFAULT_ANGLE;
