@@ -1,9 +1,19 @@
 <?php
+/**
+ * @file
+ * This file contains the mapping between environment+site and magento /
+ * conductor. This only returns machine names of magento / conductor the site
+ * must connect to. The mapping between machine names and system url is stored
+ * in dedicated files.
+ *
+ * @see factory-hooks/environments/conductor.php
+ * @see factory-hooks/environments/magento.php
+ */
 
 /**
- * Get specific settings for specific site + environment combination.
+ * Get commerce third party settings for specific site + environment combination.
  */
-function alshaya_get_specific_settings($site, $env) {
+function alshaya_get_commerce_third_party_settings($site, $env) {
   // From the given site and environment, get the magento and conductor
   // environments keys.
   $env_keys = alshaya_get_env_keys($site, $env);
