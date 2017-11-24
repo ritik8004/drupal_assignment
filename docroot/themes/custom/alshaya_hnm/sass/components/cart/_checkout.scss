@@ -709,6 +709,12 @@ body.alias--cart {
               margin-#{$left}: 13px;
             }
           }
+
+          .inline-stock-error {
+            @include breakpoint($upto-tablet) {
+              margin: 0.2rem 0;
+            }
+          }
         }
 
         &.price {
@@ -876,6 +882,13 @@ body.alias--cart {
 
       img {
         max-width: 8rem;
+
+        @include breakpoint($only-mobile) {
+          max-width: 8rem;
+          max-height: 9.2rem;
+          width: 100%;
+          object-fit: contain;
+        }
 
         @include breakpoint($tablet) {
           max-width: 7.125rem;
@@ -1081,6 +1094,11 @@ body.alias--cart {
       }
 
       @include breakpoint($only-mobile) {
+        border: 0;
+        font-family: $hnm-bold;
+        text-decoration: underline;
+        text-transform: capitalize;
+        letter-spacing: 1px;
         width: 100%;
       }
     }
@@ -1181,6 +1199,10 @@ body.alias--cart {
     @include breakpoint($upto-tablet) {
       display: block;
       width: 100%;
+      margin-bottom: 0;
+      font-size: 0.75rem;
+      padding: 0.75rem 0.25rem;
+      letter-spacing: 1px;
     }
 
     @include breakpoint($tablet) {
