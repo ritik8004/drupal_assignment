@@ -731,7 +731,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // Default use-case: User landing on PDP from PLP/Search/directly.
         // Set the color applicable to first child sku as default here.
         $child_skus = $sku_manager->getChildSkus($sku_entity);
-        $first_child = array_shift(array_filter($child_skus));
+        $filtered_child_skus = array_filter($child_skus);
+        $first_child = array_shift($filtered_child_skus);
       }
 
       if ($first_child instanceof SKU) {
