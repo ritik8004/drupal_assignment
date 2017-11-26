@@ -570,7 +570,7 @@ display:
           exposed: true
           expose:
             label: Position
-          plugin_id: alshaya_product_position_sort
+          plugin_id: search_api
         name_1:
           id: name_1
           table: search_api_index_product

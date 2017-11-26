@@ -90,7 +90,8 @@ function alshaya_product_search_api_db_query_alter(SelectInterface &$db_query, Q
   if ($query->hasTag('views_alshaya_product_list')) {
     $sorts =& $query->getSorts();
 
-    if (empty($sorts['stock'])) {
+    // We should have something here to prepend it.
+    if (!empty($sorts) && empty($sorts['stock'])) {
       $sorts = ['stock' => QueryInterface::SORT_DESC] + $sorts;
     }
   }

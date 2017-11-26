@@ -10,28 +10,19 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Query\QueryInterface;
 
 /**
- * Implements hook_views_data_alter().
- */
-function alshaya_acm_product_position_views_data_alter(array &$data) {
-  // Custom sort plugin for nid which is actually used for sort per position.
-  $data['search_api_index_product']['nid']['sort']['id'] = 'alshaya_product_position_sort';
-}
-
-/**
  * Implements hook_search_api_db_query_alter().
  */
 function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface &$db_query, QueryInterface $query) {
   if ($query->hasTag('views_alshaya_product_list')) {
-    $sorts = $query->getSorts();
+    $sorts =& $query->getSorts();
 
-    // We will have stock by default every-time.
-    // Unset here to check for other available sorts in condition below.
-    unset($sorts['stock']);
-
-    // If we don't have any sort now, we will add sort by position.
-    if (!empty($sorts)) {
+    // Check if nid is there in sorts, we are using it for position.
+    if (!isset($sorts['nid'])) {
       return;
     }
+
+    // Remove all query sorts, we will sort in db_query.
+    $sorts = [];
 
     // Find the tid.
     $tid = NULL;
@@ -49,7 +40,7 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     }
 
     if ($tid) {
-      $db_query->leftJoin('acq_sku_position', 'acq_sku_position', "(t.nid = acq_sku_position.nid AND acq_sku_position.tid = :tid AND acq_sku_position.position_type = :position_type)", [
+      $db_query->leftJoin('acq_sku_position', 'acq_sku_position', '(t.nid = acq_sku_position.nid AND acq_sku_position.tid = :tid AND acq_sku_position.position_type = :position_type)', [
         ':tid' => $tid,
         ':position_type' => 'position',
       ]);
