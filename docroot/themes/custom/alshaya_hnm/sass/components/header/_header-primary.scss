@@ -752,6 +752,7 @@ header {
           visibility: visible;
           opacity: 1;
           z-index: 1;
+          border-bottom: 2px solid $black;
 
           &::after {
             content: '';
@@ -801,7 +802,7 @@ header {
           a.menu--one__link {
             &::after {
               content: '';
-              height: 1px;
+              height: 2px;
               background: $white-smoke-border;
               display: inherit;
               width: 100%;
