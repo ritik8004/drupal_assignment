@@ -2,10 +2,22 @@
   <div class="l-container">
     <div class="c-footer-primary__region">
       <div class="footer--menu">
+        <div class="language--switcher mobile-only-block only-first-time" style="display: none;">
+          {{ page.footer_primary.languageswitcher_2 }}
+          <span class="language-switcher-close"></span>
+        </div>
+        <div class="language--switcher mobile-only-block">
+          {{ page.footer_primary.languageswitcher_2 }}
+        </div>
         {{ page.footer_primary.shopby }}
         {{ page.footer_primary.aboutbrand }}
         {{ page.footer_primary.alshaya_help}}
-        {{ page.footer_primary.alshayanewslettersubscription}}
+        <div class="footer_primary-right-block">
+          {{ page.footer_primary.alshayanewslettersubscription}}
+          <div class="language--switcher tablet-only-block">
+            {{ page.footer_primary.languageswitcher_2 }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
