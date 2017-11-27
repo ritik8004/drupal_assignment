@@ -14,10 +14,11 @@ use Drupal\user\RoleInterface;
 function alshaya_addressbook_update_8301() {
   $configs = [
     'alshaya_addressbook.settings',
-    'core.entity_form_display.taxonomy_term.area_list.default',
-    'field.field.taxonomy_term.area_list.field_location_id',
     'field.storage.taxonomy_term.field_location_id',
+    'field.field.taxonomy_term.area_list.field_location_id',
+    'core.entity_form_display.taxonomy_term.area_list.default',
   ];
+
   alshaya_config_install_configs($configs, 'alshaya_addressbook');
 }
 
