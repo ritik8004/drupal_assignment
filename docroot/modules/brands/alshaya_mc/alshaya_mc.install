@@ -8,6 +8,21 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Set the magento language prefix again.
+ */
+function alshaya_mc_update_8101() {
+  \Drupal::configFactory()->getEditable('alshaya_api.settings')
+    ->set('magento_lang_prefix', 'kwt_en')
+    ->save();
+
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
+    ->set('magento_lang_prefix', 'kwt_ar')
+    ->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_mc_install() {
@@ -74,6 +89,14 @@ function alshaya_mc_install() {
   // Translate store id in config.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
     ->set('store_id', Settings::get('store_id')['ar'])
+    ->save();
+
+  \Drupal::configFactory()->getEditable('alshaya_api.settings')
+    ->set('magento_lang_prefix', 'kwt_en')
+    ->save();
+
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
+    ->set('magento_lang_prefix', 'kwt_ar')
     ->save();
 
   // Set the default value for back to store list link.
