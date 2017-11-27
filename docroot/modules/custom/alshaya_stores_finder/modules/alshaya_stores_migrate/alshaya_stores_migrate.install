@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_store_migrate.
+ */
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_store_migrate_8301() {
+  // Install new configs.
+  alshaya_config_install_configs([
+    'migrate_plus.migration.store.ar',
+    'migrate_plus.migration.store.en',
+  ], 'alshaya_store_migrate');
+
+  // Remove the old configs.
+  // @todo: Use generic method alshaya_config_delete_configs, when available.
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.store')->delete();
+}
