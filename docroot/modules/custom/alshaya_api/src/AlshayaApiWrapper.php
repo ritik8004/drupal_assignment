@@ -416,14 +416,11 @@ class AlshayaApiWrapper {
   /**
    * Function to get customer address form.
    *
-   * @param string $form_id
-   *   The form ID to fetch.
-   *
    * @return array
    *   The Form array from API response OR empty array.
    */
-  public function getCustomerAddressForm($form_id = 'customer_address_edit') {
-    $endpoint = 'deliverymatrix/customerAddressAttributeMetadata/form/' . $form_id;
+  public function getCustomerAddressForm() {
+    $endpoint = 'attributeMetadata/customerAddress';
     $response = $this->invokeApi($endpoint, [], 'GET', FALSE);
     $form = json_decode($response, TRUE);
     if (is_array($form) && !empty($form)) {
