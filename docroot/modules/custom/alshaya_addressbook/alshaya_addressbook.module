@@ -203,12 +203,12 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
         // Special case for country.
         if ($field_code == 'country_code') {
-          $country_label = $form_item['frontend_label'];
+          $country_label = $form_item['store_label'];
           continue;
         }
 
         $element[$field_code]['#access'] = TRUE;
-        $element[$field_code]['#title'] = $form_item['frontend_label'];
+        $element[$field_code]['#title'] = $form_item['store_label'];
         $element[$field_code]['#weight'] = $form_item['sort_order'];
       }
     }

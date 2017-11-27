@@ -360,6 +360,10 @@ class AlshayaAddressBookManager {
 
       if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
         foreach ($magento_address['extension'] as $attribute_code => $value) {
+          if (!isset($mapping[$attribute_code])) {
+            continue;
+          }
+
           switch ($mapping[$attribute_code]) {
             case 'administrative_area':
             case 'area_parent':
@@ -791,18 +795,7 @@ class AlshayaAddressBookManager {
    */
   public function getMagentoFieldMappings() {
     // Fields that can be used in area_parent: governate, city, emirates.
-    $mapping = [
-      'country_code' => 'country_id',
-      'given_name' => 'firstname',
-      'family_name' => 'lastname',
-      'mobile_number' => 'telephone',
-      'address_line1' => 'street',
-      'address_line2' => 'address_apartment_segment',
-      'locality' => 'address_block_segment',
-      'dependent_locality' => 'address_building_segment',
-      'administrative_area' => 'area',
-      'area_parent' => 'governate',
-    ];
+    $mapping = \Drupal::config('alshaya_addressbook.settings')->get('mapping');
 
     return $mapping;
   }
