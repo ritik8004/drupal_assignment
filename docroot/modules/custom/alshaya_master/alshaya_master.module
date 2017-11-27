@@ -664,8 +664,11 @@ function alshaya_master_mobile_detect_object() {
   if (!isset($mobile_detect)) {
     if (class_exists('Mobile_Detect')) {
       try {
+
         // Detect platform from headers.
-        $mobile_detect = new Mobile_Detect();
+        $request_headers = \Drupal::requestStack()->getCurrentRequest()->headers->all();
+        $request_ua = \Drupal::requestStack()->getCurrentRequest()->headers->get('HTTP_USER_AGENT');
+        $mobile_detect = new Mobile_Detect($request_headers, $request_ua);
       }
       catch (Exception $e) {
         $mobile_detect = NULL;
