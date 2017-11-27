@@ -5,4 +5,3 @@ verify_ssl: 1
 token_cache_time: 86400
 username: ''
 password: ''
-langcode: en

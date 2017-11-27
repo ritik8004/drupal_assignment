@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_addressbook\Controller;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
@@ -13,48 +12,12 @@ use Drupal\profile\Entity\ProfileInterface;
 use Drupal\user\UserInterface;
 use Drupal\profile\Entity\ProfileTypeInterface;
 use Drupal\Core\Link;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * AlshayaAddressBookController class.
  */
 class AlshayaAddressBookController extends ProfileController {
-
-  /**
-   * AJAX callback to get list of areas for a governate.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request object.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   AJAX Response.
-   */
-  public function getAreasFromGovernate(Request $request) {
-    $element = $request->request->get('_triggering_element_name');
-
-    // Confirm it is a POST request and contains form data.
-    if (empty($element)) {
-      throw new NotFoundHttpException();
-    }
-
-    // Get governate value dynamically to ensure it doesn't depend on form
-    // structure.
-    $governate = NestedArray::getValue($request->request->all(), explode('[', str_replace(']', '', $element)));
-
-    // Check if we have value available for governate.
-    if (empty($governate)) {
-      throw new NotFoundHttpException();
-    }
-
-    $areas = _alshaya_addressbook_area_list($governate);
-
-    $response = new AjaxResponse();
-    $response->addCommand(new InvokeCommand(NULL, 'updateAreaList', [$areas]));
-
-    return $response;
-  }
 
   /**
    * Mark profile as default.
