@@ -15,7 +15,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
-use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 
 /**
@@ -187,6 +186,8 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     ],
   ];
 
+  $area_parent = 0;
+
   // Change the fields if dm version is 2 and magento form has data.
   if ($dm_version == DM_VERSION_2 && !empty($magento_form)) {
     $mapping = $address_book_manager->getMagentoFieldMappings();
@@ -212,8 +213,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
         $element[$field_code]['#weight'] = $form_item['sort_order'];
       }
     }
-
-    $area_parent = 0;
 
     if (isset($element['area_parent'])) {
       $address_value = $form_state->getValue(explode('[', str_replace(']', '', $element['#name'])));
@@ -844,44 +843,4 @@ function _alshaya_addressbook_get_area_from_id($tid) {
   }
 
   return $tid;
-}
-
-/**
- * Ajax callback to fetch areas from selected governates.
- */
-function alshaya_addressbook_fetch_areas(&$form, FormStateInterface $form_state) {
-  if (empty($form_state->getErrors())) {
-    $values = $form_state->getValues();
-    foreach ($values as $value) {
-      if (is_array($value) && isset($value['address'])) {
-        $locality = $value['address']['shipping']['locality'];
-        break;
-      }
-    }
-    if (!empty($locality)) {
-      $locality_term = current(taxonomy_term_load_multiple_by_name($locality, AlshayaAddressBookManager::AREA_VOCAB));
-      $response = new AjaxResponse();
-      $element = [
-        '#type' => 'select',
-        '#title' => t('Area'),
-        '#required' => TRUE,
-        '#multiple' => FALSE,
-        '#options' => ['' => t('Select Area')] + _alshaya_addressbook_area_list('kw', TRUE, $locality_term->id()),
-        '#attributes' => [
-          'class' => ['select2-select'],
-        ],
-        '#attached' => [
-          'library' => [
-            'alshaya_white_label/convert_to_select2',
-          ],
-        ],
-      ];
-      $element['#prefix'] = '<div id="alshaya-addressbook-area">';
-      $element['#suffix'] = '</div>';
-
-      $response->addCommand(new ReplaceCommand('#alshaya-addressbook-area', $element));
-
-      return $response;
-    }
-  }
 }
