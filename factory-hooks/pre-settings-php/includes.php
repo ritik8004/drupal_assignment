@@ -134,9 +134,6 @@ switch ($env) {
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'edda8c2a78af42b9af1e42221145fd01';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'hTVYIu3SDzLh3BwNI6ZEjw';
-    // TO REMOVE WHEN UPGRADING ACM.
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud';
 
     // Specify the modules to be enabled on this env.
@@ -149,9 +146,6 @@ switch ($env) {
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-uat.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = 'ec11fb2f54d34b2f9d35ec1d3575b89e';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'gpW7PQFKKDU-qPrcIgaYNQ';
-    // TO REMOVE WHEN UPGRADING ACM.
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
     break;
 
@@ -159,9 +153,6 @@ switch ($env) {
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = '676f2059d53d407791472c31783ae32c';
     $settings['acq_commerce.conductor']['hmac_secret'] = '-2Ok7ywndwcpsraYIIZ__w';
-    // TO REMOVE WHEN UPGRADING ACM.
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'https://uat-irjkrqa-zbrr3sobrsb3o.eu.magentosite.cloud';
     break;
 
@@ -173,9 +164,6 @@ switch ($env) {
     $settings['acq_commerce.conductor']['url'] = 'https://alshaya-prod.eu-west-1.prod.acm.acquia.io/';
     $settings['acq_commerce.conductor']['hmac_id'] = '3d136846d24040099a7eed6c1f4e80b9';
     $settings['acq_commerce.conductor']['hmac_secret'] = 'zUt1psyEWi5xO-glHlH_tw';
-    // TO REMOVE WHEN UPGRADING ACM.
-    $settings['acq_commerce.conductor']['hmac_id'] = 'uAfqsl!BMf5xd8Z';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'eS#8&0@XyegNUO';
     $settings['alshaya_api.settings']['magento_host'] = 'http://mcmena.store.alshaya.com';
 
     $settings['store_id']['ar'] = 4;
