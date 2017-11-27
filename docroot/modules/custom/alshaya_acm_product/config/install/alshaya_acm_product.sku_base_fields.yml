@@ -297,8 +297,10 @@ fields:
     label: 'Composition'
     description: 'Product Composition.'
     cardinality: 1
-    configurable: 0
     type: 'text_long'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
 
   is_buyable:
     parent: 'attributes'

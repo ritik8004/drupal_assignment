@@ -397,11 +397,11 @@
 
   .form-type-email {
     margin-bottom: 0;
-    width: 100%;
+    width: calc(100% - 5.7rem);
     float: $left;
 
-    @include breakpoint($tablet) {
-      width: calc(100% - 0.75rem);
+    @include breakpoint($desktop) {
+      width: calc(100% - 5.95rem);
     }
 
     #edit-email-error {
@@ -436,6 +436,10 @@
     height: 2rem;
     color: $white-five !important;
     margin-top: 1.75rem;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.75rem;
+    }
 
     @include breakpoint($tablet) {
       margin-top: 1.5rem;
