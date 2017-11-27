@@ -10,7 +10,7 @@
     $('a[data-dialog-type="modal"],  a.mobile-link').each(function () {
       var href = $(this).attr('href');
       $(this).click(function () {
-        window.open(Drupal.settings.basePath + href);
+        window.open(drupalSettings.path.baseUrl + href);
         return false;
       });
     });
