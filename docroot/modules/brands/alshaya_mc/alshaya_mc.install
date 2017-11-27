@@ -22,7 +22,6 @@ function alshaya_mc_update_8101() {
     ->save();
 }
 
-
 /**
  * Implements hook_install().
  */
