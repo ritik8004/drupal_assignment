@@ -1,0 +1,13 @@
+.paragraph-t-block-reference {
+  .field__wrapper {
+    iframe {
+      @include breakpoint($upto-lap) {
+        height: 25.312rem;
+      }
+
+      @include breakpoint($upto-palm) {
+        height: 11.125rem;
+      }
+    }
+  }
+}

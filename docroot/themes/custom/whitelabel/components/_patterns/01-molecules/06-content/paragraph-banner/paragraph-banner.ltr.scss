@@ -15,6 +15,13 @@
 .paragraph-t-banner {
   position: relative;
 
+  img {
+    @include breakpoint($upto-palm) {
+      min-height: 10.5rem;
+      object-fit: cover;
+    }
+  }
+
   .field-link a {
     @include breakpoint($above-palm) {
       position: absolute;
@@ -28,7 +35,7 @@
 
   .field-video {
     @include breakpoint($upto-palm) {
-      margin-top: -1px;
+      margin-top: 1.5rem;
       margin-bottom: 1.5rem;
     }
 
@@ -52,10 +59,6 @@
     iframe {
       width: 100%;
       height: 100%;
-
-      @include breakpoint($upto-palm) {
-        min-height: 12.1875rem;
-      }
 
       @include breakpoint($above-palm) {
         position: static;

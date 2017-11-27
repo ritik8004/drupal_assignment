@@ -2,4 +2,8 @@ div.page-generic {
   @include breakpoint($upto-palm) {
     padding-top: 0;
   }
+
+  main {
+    margin-bottom: 1.25rem;
+  }
 }

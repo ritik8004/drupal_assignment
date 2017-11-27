@@ -79,3 +79,4 @@ permissions:
   - 'edit any static_html content'
   - 'use text format full_text'
   - 'translate interface'
+  - 'access commerce product settings'

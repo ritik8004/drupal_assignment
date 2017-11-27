@@ -12,7 +12,7 @@ alshaya_acm_product.product_settings_form:
     _form: '\Drupal\alshaya_acm_product\Form\ProductSettingsForm'
     _title: 'Product Settings'
   requirements:
-    _permission: 'access commerce administration pages'
+    _permission: 'access commerce product settings'
 
 alshaya_acm_product.basket_delivery_settings_form:
   path: '/admin/commerce/config/basket-delivery'

@@ -1,4 +1,4 @@
-.site__logo {
+.region-page-header .site__logo {
   display: table;
   padding: 1.1rem;
   padding-bottom: 0.8rem;
@@ -13,13 +13,24 @@
     width: 100%;
   }
 
+  @include breakpoint($lap) {
+    display: block;
+    padding: 2rem 1.1rem 1.2rem;
+    height: auto;
+    margin: 0;
+
+    a {
+      display: inline-block;
+    }
+  }
+
   a {
     vertical-align: middle;
   }
 
   img {
     @include breakpoint($lap) {
-      max-width: 20.75rem;
+      max-width: 21.31rem;
       max-height: 2.25rem;
     }
   }
@@ -28,5 +39,8 @@
 .region-page-header .site__logo {
   @include breakpoint($upto-palm) {
     display: table;
+    padding: 0.8rem 3.99rem 0;
+    height: auto;
+    margin: 0;
   }
 }
