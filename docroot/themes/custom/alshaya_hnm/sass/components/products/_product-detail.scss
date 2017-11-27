@@ -123,6 +123,7 @@
       font-weight: normal;
       font-size: 1.125rem;
       color: $hnm-black-two;
+      margin-top: 0;
     }
 
     .price {
@@ -360,6 +361,7 @@
     &__label {
       font-size: 0.875rem;
       font-family: $hnm-bold;
+      text-transform: uppercase;
       font-weight: normal;
       color: $hnm-black-two;
       margin-top: 0;
@@ -486,6 +488,7 @@
 
       font-size: 0.875rem;
       font-family: $hnm-bold;
+      text-transform: uppercase;
       font-weight: normal;
       color: $hnm-black-two;
       letter-spacing: 0.5px;
@@ -631,6 +634,7 @@
 
       font-size: 0.875rem;
       font-family: $hnm-bold;
+      text-transform: uppercase;
       font-weight: normal;
       letter-spacing: 0.5px;
       color: $hnm-black-two;
@@ -830,8 +834,9 @@
     }
 
     .highlight {
-      color: $windows-blue;
-      font-weight: bold;
+      color: $hnm-black-two;
+      font-family: $hnm-bold;
+      font-weight: normal;
       cursor: pointer;
     }
   }
@@ -1481,7 +1486,8 @@
         }
 
         @include breakpoint($only-mobile) {
-          &.hide-button {
+          &.hide-button,
+          &::before {
             display: none;
           }
         }
@@ -1594,7 +1600,9 @@
         margin-#{$left}: 0;
         border: 1px solid $hnm-black-two;
         text-align: center;
-        padding: 0.75rem;
+        padding: 0.596rem;
+        min-width: 2.375rem;
+        max-height: 2.375rem;
         font-family: $hnm-regular-nodir;
         font-size: 0.875rem;
         color: $hnm-black-two;
@@ -1613,7 +1621,13 @@
           cursor: pointer;
           position: relative;
 
-          &[data-swatch-type=color_block] {
+          &[data-swatch-type=RGB] {
+            width: 2.375rem;
+            height: 2.375rem;
+            border: none;
+          }
+
+          &[data-swatch-type=RGB] {
             &.picked {
               &::after {
                 content: '';
@@ -1635,8 +1649,9 @@
       &.disabled {
         a,
         span {
-          background: url("../imgs/icons/disabled.png") no-repeat;
-          background-size: 100% 100%;
+          background: none;
+          border: 1px solid $white;
+          color: $white;
         }
       }
     }
