@@ -15,7 +15,7 @@
 
         @include breakpoint($desktop) {
           top: 1rem;
-          #{$left}: 2rem;
+          #{$left}: 1rem;
         }
       }
 
@@ -30,7 +30,7 @@
 
         @include breakpoint($desktop) {
           top: 1rem;
-          #{$right}: 2rem;
+          #{$right}: 1rem;
         }
       }
     }
@@ -47,7 +47,7 @@
 
         @include breakpoint($desktop) {
           bottom: 12.5rem;
-          #{$left}: 2rem;
+          #{$left}: 1rem;
         }
       }
 
@@ -62,7 +62,7 @@
 
         @include breakpoint($desktop) {
           bottom: 12.5rem;
-          #{$right}: 2rem;
+          #{$right}: 1rem;
         }
       }
     }
