@@ -378,21 +378,19 @@
     }
 
     if (typeof marker_icon_path === 'string') {
-      if (typeof markerSettings.icon === 'undefined') {
-        // Add the marker icon.
-        markerSettings.icon = {
-          url: marker_icon_path,
-          labelOrigin: new google.maps.Point(15, 15),
-          scaledSize: new google.maps.Size(31, 48)
-        };
-        if (drupalSettings.path.currentLanguage === 'ar') {
-          // If only single digit move them closer to the center.
-          if (markerSettings.label.length === 1) {
-            markerSettings.icon.labelOrigin = new google.maps.Point(11, 15);
-          }
-          else {
-            markerSettings.icon.labelOrigin = new google.maps.Point(7, 15);
-          }
+      // Add the marker icon.
+      markerSettings.icon = {
+        url: marker_icon_path,
+        labelOrigin: new google.maps.Point(15, 15),
+        scaledSize: new google.maps.Size(31, 48)
+      };
+      if (drupalSettings.path.currentLanguage === 'ar') {
+        // If only single digit move them closer to the center.
+        if (markerSettings.label.length === 1) {
+          markerSettings.icon.labelOrigin = new google.maps.Point(11, 15);
+        }
+        else {
+          markerSettings.icon.labelOrigin = new google.maps.Point(7, 15);
         }
       }
     }
