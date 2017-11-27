@@ -58,7 +58,6 @@ $settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b65
 $settings['store_id']['en'] = 1;
 $settings['store_id']['ar'] = 3;
 
-$settings['alshaya_api.settings']['magento_lang_prefix'] = 'kwt_';
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;
 
