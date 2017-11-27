@@ -4,6 +4,7 @@ namespace Drupal\alshaya_addressbook;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -20,6 +21,13 @@ use Drupal\user\Entity\User;
 class AlshayaAddressBookManager {
 
   const AREA_VOCAB = 'area_list';
+
+  /**
+   * Entity Repository object.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
 
   /**
    * Profile storage object.
@@ -61,6 +69,8 @@ class AlshayaAddressBookManager {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   EntityTypeManager object.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity Repository object.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   ApiWrapper object.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
@@ -73,11 +83,13 @@ class AlshayaAddressBookManager {
    *   Language manager object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              EntityRepositoryInterface $entity_repository,
                               APIWrapper $api_wrapper,
                               MobileNumberUtilInterface $mobile_util,
                               LoggerChannelFactoryInterface $logger_factory,
                               AlshayaApiWrapper $alshayaApiWrapper,
                               LanguageManagerInterface $languageManager) {
+    $this->entityRepository = $entity_repository;
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->apiWrapper = $api_wrapper;
@@ -370,6 +382,8 @@ class AlshayaAddressBookManager {
               $term = $this->getLocationTermFromLocationId($value);
 
               if ($term) {
+                $term = $this->entityRepository->getTranslationFromContext($term);
+
                 $address[$mapping[$attribute_code]] = $term->id();
                 $address[$mapping[$attribute_code] . '_display'] = $term->label();
               }
@@ -434,11 +448,13 @@ class AlshayaAddressBookManager {
    *
    * @param int $area_term_id
    *   Area term id.
+   * @param bool $return_translated
+   *   Flag to specify if return value is required in current language or not.
    *
    * @return \Drupal\taxonomy\Entity\Term|null
    *   Term if found or null.
    */
-  public function getLocationParentTerm($area_term_id) {
+  public function getLocationParentTerm($area_term_id, $return_translated = TRUE) {
     if (empty($area_term_id)) {
       return NULL;
     }
@@ -446,7 +462,13 @@ class AlshayaAddressBookManager {
     $parents = $this->termStorage->loadParents($area_term_id);
 
     if (!empty($parents)) {
-      return reset($parents);
+      $parent = reset($parents);
+
+      if ($return_translated) {
+        $parent = $this->entityRepository->getTranslationFromContext($parent);
+      }
+
+      return $parent;
     }
 
     return NULL;

@@ -11,6 +11,7 @@ services:
     class: Drupal\alshaya_addressbook\AlshayaAddressBookManager
     arguments:
       - '@entity_type.manager'
+      - '@entity.repository'
       - '@acq_commerce.api'
       - '@mobile_number.util'
       - '@logger.factory'
