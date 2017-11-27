@@ -32,4 +32,10 @@ function alshaya_hm_images_install() {
   $source = new FileStorage($config_install_path);
   $config_storage = \Drupal::service('config.storage');
   $config_storage->write('acq_sku.configurable_form_settings', $source->read('acq_sku.configurable_form_settings'));
+
+  $configs = [
+    'core.entity_form_display.taxonomy_term.acq_product_category.default.yml',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_hm_images', 'optional');
 }
