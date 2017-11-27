@@ -108,8 +108,7 @@
         font-family: $hnm-regular;
 
         @include breakpoint($only-tablet) {
-          margin-#{$left}: 0;
-          margin-#{$right}: 1.125rem;
+          margin: 0 1.125rem 0 0;
         }
       }
     }
