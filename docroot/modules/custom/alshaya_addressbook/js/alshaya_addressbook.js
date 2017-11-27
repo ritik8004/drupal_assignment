@@ -8,6 +8,15 @@
     }
   };
 
+  /**
+   * Updates area list options based on options provided in argument.
+   *
+   * This function is called as AJAX command (InvokeCommand) in our
+   * custom AJAX callback endpoint.
+   *
+   * @param areas
+   *   New areas based on selected parent.
+   */
   $.fn.updateAreaList = function (areas) {
     var emptyOption = $('.area-list-dropdown option[value=""]');
     $('.area-list-dropdown option').remove();
