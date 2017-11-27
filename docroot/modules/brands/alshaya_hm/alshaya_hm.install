@@ -27,10 +27,6 @@ function alshaya_hm_install() {
     ->set('magento_lang_prefix', 'kwt_ar')
     ->save();
 
-  \Drupal::configFactory()->getEditable('alshaya_addressbook.settings')
-    ->set('dm_version', DM_VERSION_2)
-    ->save();
-
   // Create default content for the site.
   alshaya_hm_create_default_content();
 

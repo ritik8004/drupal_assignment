@@ -59,6 +59,11 @@ function alshaya_addressbook_update_8001() {
  * Implements hook_install().
  */
 function alshaya_addressbook_install() {
+  // For all the new sites we want to use DM Version 2.
+  \Drupal::configFactory()->getEditable('alshaya_addressbook.settings')
+    ->set('dm_version', DM_VERSION_2)
+    ->save();
+
   // Save permission of address_book for authenticated user.
   $role = Role::load(RoleInterface::AUTHENTICATED_ID);
   $role->grantPermission('create address_book profile');
