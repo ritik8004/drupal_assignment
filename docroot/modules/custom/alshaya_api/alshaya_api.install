@@ -7,8 +7,6 @@
 
 use Drupal\Core\Site\Settings;
 
-// @todo: Write an update hook to install the schema config object.
-
 /**
  * Implements hook_install().
  */
