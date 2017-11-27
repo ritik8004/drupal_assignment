@@ -1,15 +1,5 @@
 <a href="{{ product_url }}">{{ gallery }}</a>
 
-{% if swatches %}
-	<div class="swatches">
-		{% for key,swatch in swatches %}
-			<a href="{{ product_url }}?color={{ key }}">
-				<span class='swatch-block' style="background-color:{{ swatch }};"></span>
-			</a>
-		{% endfor %}
-	</div>
-{% endif %}
-
 <h2 class="field--name-name">
 	<a href="{{ product_url }}">{{ product_label }}</a>
 </h2>
@@ -29,6 +19,16 @@
 				{{ promotion.text }}
 			{% endif %}
 		{% endfor %}
+	</div>
+{% endif %}
+
+{% if swatches %}
+	<div class="swatches">
+    {% for key,swatch in swatches %}
+			<a href="{{ product_url }}?color={{ key }}">
+				<span class='swatch-block' style="background-color:{{ swatch }};"></span>
+			</a>
+    {% endfor %}
 	</div>
 {% endif %}
 
