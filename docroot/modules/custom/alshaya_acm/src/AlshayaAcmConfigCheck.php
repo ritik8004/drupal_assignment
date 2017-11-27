@@ -21,42 +21,22 @@ class AlshayaAcmConfigCheck {
     }
 
     $request_time = \Drupal::time()->getRequestTime();
-    $interval = (int) \Drupal::config('alshaya_acm.settings')->get('config_check_interval');
 
     // Check if reverting of settings is disabled.
-    if (empty($interval)) {
+    if (!empty(Settings::get('disable_config_reset'))) {
       return;
     }
 
     $flag_var = 'alshaya_acm_config_check.' . $env;
 
-    // Very first request time or time at which settings were reset last.
-    $first_request = \Drupal::state()->get($flag_var);
+    // We store reset time in state, check if variable is set for our ENV.
+    $reset_time = \Drupal::state()->get($flag_var);
 
-    if (empty($first_request)) {
-      $first_request = $request_time;
-
-      // Set the first request time in state.
-      \Drupal::state()->set($flag_var, $first_request);
-
-      // Always set GTM id to null on all envs (except prod) first time.
-      $config = \Drupal::configFactory()->getEditable('google_tag.settings');
-      $config->set('container_id', '');
-      $config->save();
-
-      // Reset :to e-mail for contact us page.
-      $config = \Drupal::configFactory()->getEditable('webform.webform.alshaya_contact');
-      $config->set('handlers.email.settings.to_mail', 'no-reply@acquia.com');
-      $config->save();
-    }
-    // The interval time below allows to do temporary overrides on non prod
-    // envs for dev/test purpose.
-    elseif ($request_time - $first_request < $interval) {
+    if (!empty($reset_time)) {
       return;
     }
 
-    // Set the current request time in state.
-    // We reset here to calculate interval with reference to this value.
+    // Set the first request time in state.
     \Drupal::state()->set($flag_var, $request_time);
 
     $reset = [
@@ -79,6 +59,16 @@ class AlshayaAcmConfigCheck {
 
       $config->save();
     }
+
+    // Always set GTM id to null on all envs (except prod) first time.
+    $config = \Drupal::configFactory()->getEditable('google_tag.settings');
+    $config->set('container_id', '');
+    $config->save();
+
+    // Reset :to e-mail for contact us page.
+    $config = \Drupal::configFactory()->getEditable('webform.webform.alshaya_contact');
+    $config->set('handlers.email.settings.to_mail', 'no-reply@acquia.com');
+    $config->save();
 
     // We can code here to support more or different languages later when
     // we encounter those scenarios, keeping it simple and static for now.
