@@ -25,12 +25,15 @@ function alshaya_get_commerce_third_party_settings($site, $env) {
   $conductors = alshaya_get_conductor_host_data();
 
   // This is the format to be merge with $settings.
-  return [
-    'acq_commerce.conductor' => $conductors[$env_keys['conductor']],
-    'alshaya_api.settings' => [
-      'magento_host' => $magentos[$env_keys['magento']],
-    ],
-  ];
+  $settings = [];
+  if (isset($env_keys['conductor']) && isset($conductors[$env_keys['conductor']])) {
+    $settings['acq_commerce.conductor'] = $conductors[$env_keys['conductor']];
+  }
+  if (isset($env_keys['magento']) && isset($magentos[$env_keys['magento']])) {
+    $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']];
+  }
+
+  return $settings;
 }
 
 /**
