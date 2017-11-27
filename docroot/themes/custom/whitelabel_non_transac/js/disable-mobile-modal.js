@@ -5,7 +5,7 @@
 
 (function ($, Drupal) {
   'use strict';
-  
+
   if (drupalSettings.alshaya_master.device === 'mobile') {
     $('a[data-dialog-type="modal"],  a.mobile-link').each(function () {
       var href = $(this).attr('href');
