@@ -86,135 +86,6 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Method to provide the Language prefix for magento, per language.
-   *
-   * @return string
-   *   The Language prefix for current language.
-   */
-  private function getMagentoLangPrefix() {
-    // For current language, we access the config directly.
-    if ($this->langcode == $this->languageManager->getDefaultLanguage()->getId()) {
-      $config = \Drupal::config('alshaya_api.settings');
-    }
-    // We get store id from translated config for other languages.
-    else {
-      $config = \Drupal::languageManager()->getLanguageConfigOverride($this->langcode, 'alshaya_api.settings');
-    }
-
-    return $config->get('magento_lang_prefix');
-  }
-
-  /**
-   * Function to get token to access Magento APIs.
-   *
-   * @return string
-   *   Token as string.
-   */
-  private function getToken() {
-    if ($this->token) {
-      return $this->token;
-    }
-
-    $cid = 'alshaya_api_token';
-
-    if ($cache = \Drupal::cache('data')->get($cid)) {
-      $this->token = $cache->data;
-    }
-    else {
-      $endpoint = 'integration/admin/token';
-
-      $data = [];
-      $data['username'] = $this->config->get('username');
-      $data['password'] = $this->config->get('password');
-
-      $token = $this->invokeApi($endpoint, $data, 'POST', FALSE);
-
-      $response = json_decode($token, TRUE);
-      if (is_array($response) && isset($response['message'])) {
-        $this->logger->critical('Unable to get token from magento');
-        throw new \Exception('Unable to get token from magento');
-      }
-
-      $this->token = str_replace('"', '', $token);
-
-      // Calculate the timestamp when we want the cache to expire.
-      $expire = \Drupal::time()->getRequestTime() + $this->config->get('token_cache_time');
-
-      // Set the stock in cache.
-      \Drupal::cache('data')->set($cid, $this->token, $expire);
-    }
-
-    return $this->token;
-  }
-
-  /**
-   * Function to invoke the API and get response.
-   *
-   * Note: GET parameters must be handled in invoking function itself.
-   *
-   * @param string $endpoint
-   *   Endpoint URL, specific for the API call.
-   * @param array $data
-   *   Post data to send to API.
-   * @param string $method
-   *   GET or POST.
-   * @param bool $requires_token
-   *   Flag to specify if this API requires token or not.
-   *
-   * @return mixed
-   *   Response from the API.
-   */
-  public function invokeApi($endpoint, array $data = [], $method = 'POST', $requires_token = TRUE) {
-    $url = $this->config->get('magento_host');
-    $url .= '/' . $this->getMagentoLangPrefix();
-    $url .= '/' . $this->config->get('magento_api_base');
-    $url .= '/' . $endpoint;
-
-    $header = [];
-
-    $curl = curl_init();
-
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-    if ($requires_token) {
-      try {
-        $token = $this->getToken();
-      }
-      catch (\Exception $e) {
-        return [];
-      }
-
-      $header[] = 'Authorization: Bearer ' . $token;
-    }
-
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->config->get('verify_ssl'));
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->config->get('verify_ssl'));
-
-    if ($method == 'POST') {
-      curl_setopt($curl, CURLOPT_POST, TRUE);
-      curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-    }
-    elseif ($method == 'JSON') {
-      $data_string = json_encode($data);
-
-      $header[] = 'Content-Type: application/json';
-      $header[] = 'Content-Length: ' . strlen($data_string);
-
-      curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
-      curl_setopt($curl, CURLOPT_POST, TRUE);
-      curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-    }
-
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-
-    $result = curl_exec($curl);
-    curl_close($curl);
-
-    return $result;
-  }
-
-  /**
    * API to create transaction entry for K-Net.
    *
    * @param string $order_id
@@ -393,40 +264,113 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Function to get locations for delivery matrix.
+   * Function to invoke the API and get response.
    *
-   * @param string $filterField
-   *   The field name to filter on.
-   * @param string $filterValue
-   *   The value of the field to filter on.
+   * Note: GET parameters must be handled in invoking function itself.
+   *
+   * @param string $endpoint
+   *   Endpoint URL, specific for the API call.
+   * @param array $data
+   *   Post data to send to API.
+   * @param string $method
+   *   GET or POST.
+   * @param bool $requires_token
+   *   Flag to specify if this API requires token or not.
    *
    * @return mixed
-   *   Response from API.
+   *   Response from the API.
    */
-  public function getLocations($filterField = 'attribute_id', $filterValue = 'governate') {
-    $endpoint = 'deliverymatrix/address-locations/search?searchCriteria[filter_groups][0][filters][0][field]=' . $filterField . '&searchCriteria[filter_groups][0][filters][0][value]=' . $filterValue . '&searchCriteria[filter_groups][0][filters][0][condition_type]=eq';
-    $response = $this->invokeApi($endpoint, [], 'GET', FALSE);
-    $locations = json_decode($response, TRUE);
-    if (is_array($locations) && !empty($locations)) {
-      return $locations;
+  public function invokeApi($endpoint, array $data = [], $method = 'POST', $requires_token = TRUE) {
+    $url = $this->config->get('magento_host');
+    $url .= '/' . $this->config->get('magento_lang_prefix') . $this->langcode;
+    $url .= '/' . $this->config->get('magento_api_base');
+    $url .= '/' . $endpoint;
+
+    $header = [];
+
+    $curl = curl_init();
+
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+    if ($requires_token) {
+      try {
+        $token = $this->getToken();
+      }
+      catch (\Exception $e) {
+        return [];
+      }
+
+      $header[] = 'Authorization: Bearer ' . $token;
     }
-    return [];
+
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->config->get('verify_ssl'));
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->config->get('verify_ssl'));
+
+    if ($method == 'POST') {
+      curl_setopt($curl, CURLOPT_POST, TRUE);
+      curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    }
+    elseif ($method == 'JSON') {
+      $data_string = json_encode($data);
+
+      $header[] = 'Content-Type: application/json';
+      $header[] = 'Content-Length: ' . strlen($data_string);
+
+      curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+      curl_setopt($curl, CURLOPT_POST, TRUE);
+      curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
+    }
+
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+
+    $result = curl_exec($curl);
+    curl_close($curl);
+
+    return $result;
   }
 
   /**
-   * Function to get customer address form.
+   * Function to get token to access Magento APIs.
    *
-   * @return array
-   *   The Form array from API response OR empty array.
+   * @return string
+   *   Token as string.
    */
-  public function getCustomerAddressForm() {
-    $endpoint = 'attributeMetadata/customerAddress';
-    $response = $this->invokeApi($endpoint, [], 'GET', FALSE);
-    $form = json_decode($response, TRUE);
-    if (is_array($form) && !empty($form)) {
-      return $form;
+  private function getToken() {
+    if ($this->token) {
+      return $this->token;
     }
-    return [];
+
+    $cid = 'alshaya_api_token';
+
+    if ($cache = \Drupal::cache('data')->get($cid)) {
+      $this->token = $cache->data;
+    }
+    else {
+      $endpoint = 'integration/admin/token';
+
+      $data = [];
+      $data['username'] = $this->config->get('username');
+      $data['password'] = $this->config->get('password');
+
+      $token = $this->invokeApi($endpoint, $data, 'POST', FALSE);
+
+      $response = json_decode($token, TRUE);
+      if (is_array($response) && isset($response['message'])) {
+        $this->logger->critical('Unable to get token from magento');
+        throw new \Exception('Unable to get token from magento');
+      }
+
+      $this->token = str_replace('"', '', $token);
+
+      // Calculate the timestamp when we want the cache to expire.
+      $expire = \Drupal::time()->getRequestTime() + $this->config->get('token_cache_time');
+
+      // Set the stock in cache.
+      \Drupal::cache('data')->set($cid, $this->token, $expire);
+    }
+
+    return $this->token;
   }
 
 }

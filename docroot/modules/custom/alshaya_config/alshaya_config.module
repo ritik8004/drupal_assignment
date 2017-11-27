@@ -5,8 +5,6 @@
  * Contains general hooks and alters.
  */
 
-use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -26,35 +24,6 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
 
   foreach ($configs as $config) {
     $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config . '.yml'));
-
-    // Field Storage config.
-    if (strpos($config, 'field.storage.') === 0) {
-      if (!FieldStorageConfig::loadByName($config_yaml['entity_type'], $config_yaml['field_name'])) {
-        FieldStorageConfig::create($config_yaml)->save();
-        continue;
-      }
-    }
-
-    // Field config.
-    if (strpos($config, 'field.field.') === 0) {
-      if ($field_obj = FieldConfig::loadByName($config_yaml['entity_type'], $config_yaml['bundle'], $config_yaml['field_name'])) {
-        // Update field config.
-        foreach ($config_yaml as $key => $value) {
-          if ($field_obj->get($key)) {
-            $field_obj->set($key, $value);
-          }
-          $field_obj->save();
-        }
-      }
-      // Create field config.
-      else {
-        FieldConfig::create($config_yaml)->save();
-      }
-
-      continue;
-    }
-
-    // Update config using config factory.
     \Drupal::configFactory()
       ->getEditable($config)
       ->setData($config_yaml)

@@ -4,8 +4,6 @@ core: 8.x
 dependencies:
   - address
   - alshaya_acm
-  - alshaya_api
-  - alshaya_config
   - block
   - content_translation
   - field
