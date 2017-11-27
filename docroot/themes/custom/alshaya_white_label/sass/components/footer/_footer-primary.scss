@@ -1,14 +1,13 @@
 .c-footer {
   position: relative;
-  margin-top: 3.5rem;
-  background-color: $white-four;
+  padding-top: 3.5rem;
 
   @include breakpoint($tablet) {
-    margin-top: 2.75rem;
+    padding-top: 2.75rem;
   }
 
   @include breakpoint($desktop) {
-    margin-top: 3.75rem;
+    padding-top: 3.75rem;
   }
 }
 
@@ -19,7 +18,6 @@
   position: relative;
   background: $white-five;
   -webkit-transform: translate3d(0, 0, 0);
-  z-index: 4;
 
   @include breakpoint($tablet) {
     padding: 1.25em 1.5em;
@@ -406,12 +404,10 @@
 
   .subscription-status {
     .success {
-      background: $tealish;
-      color: $white-four;
+      color: $windows-blue;
       font-size: 0.75rem;
-      padding: 0.3125rem 0.875rem;
+      padding: 0.3125rem 0;
       margin-top: 0.1875rem;
-      font-weight: bold;
       display: block;
     }
 

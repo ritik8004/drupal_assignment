@@ -26,5 +26,15 @@ function hook_acq_sku_product_node_alter(NodeInterface $node, array $product) {
 }
 
 /**
+ * Alter (add) data that needs to be deleted while removing all synced data.
+ *
+ * @param mixed $context
+ *   Whole batch context array.
+ */
+function hook_acq_sku_clean_synced_data_alter(&$context) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

@@ -5,7 +5,6 @@ dependencies:
     - search_api.index.product
   module:
     - alshaya_acm_product_position
-    - alshaya_product
     - better_exposed_filters
     - search_api
     - user
@@ -560,18 +559,6 @@ display:
         sorts: false
       exposed_block: true
       sorts:
-        stock:
-          id: stock
-          table: search_api_index_product
-          field: stock
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: false
-          expose:
-            label: ''
-          plugin_id: search_api
         nid:
           id: nid
           table: search_api_index_product
@@ -583,7 +570,7 @@ display:
           exposed: true
           expose:
             label: Position
-          plugin_id: alshaya_product_position_sort
+          plugin_id: search_api
         name_1:
           id: name_1
           table: search_api_index_product
@@ -627,10 +614,10 @@ display:
     display_options:
       display_extenders: {  }
       arguments:
-        field_skus:
-          id: field_skus
+        promotion_nid:
+          id: promotion_nid
           table: search_api_index_product
-          field: field_skus
+          field: promotion_nid
           relationship: none
           group_type: group
           admin_label: ''
@@ -641,10 +628,10 @@ display:
             title: All
           title_enable: false
           title: ''
-          default_argument_type: promotion_sku_id
+          default_argument_type: node
           default_argument_options: {  }
           default_argument_skip_url: false
-          summary_options: null
+          summary_options: {  }
           summary:
             sort_order: asc
             number_of_records: 0
@@ -654,12 +641,14 @@ display:
             type: none
             fail: 'not found'
           validate_options: {  }
-          break_phrase: true
-          not: 0
-          plugin_id: search_api_index_product
+          break_phrase: false
+          not: false
+          plugin_id: search_api
       defaults:
         arguments: false
         cache: false
+        filters: true
+        filter_groups: true
       display_description: ''
       cache:
         type: search_api_tag
