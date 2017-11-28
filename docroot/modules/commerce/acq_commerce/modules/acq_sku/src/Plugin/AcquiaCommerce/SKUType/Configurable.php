@@ -59,8 +59,7 @@ class Configurable extends SKUPluginBase {
 
       // Sort the options.
       if (!empty($options)) {
-        $sortable_attributes = $configurable_form_settings->get('sortable_options');
-        if (in_array($attribute_code, $sortable_attributes)) {
+        if (in_array($attribute_code, $configurable_form_settings->get('sortable_options'))) {
           $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
           $query->fields('ttfd', ['tid', 'weight']);
           $query->join('taxonomy_term__field_sku_attribute_code', 'ttfsac', 'ttfsac.entity_id = ttfd.tid');
