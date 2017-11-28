@@ -26,13 +26,6 @@ function alshaya_hm_images_install() {
   $alshaya_acm_base_field_additions->set('color_label.configurable', 1)->save();
   $alshaya_acm_base_field_additions->set('color_label.label', 'Color')->save();
 
-  // Override the config for form settings explicitly. Inside install, the
-  // config sync would complain about having duplicate config in active storage.
-  $config_install_path = \Drupal::moduleHandler()->getModule('alshaya_hm_images')->getPath() . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
-  $source = new FileStorage($config_install_path);
-  $config_storage = \Drupal::service('config.storage');
-  $config_storage->write('acq_sku.configurable_form_settings', $source->read('acq_sku.configurable_form_settings'));
-
   $configs = [
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
   ];
