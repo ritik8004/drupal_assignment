@@ -615,7 +615,6 @@
   .my-account-mobile-title1 {
     @include breakpoint($only-mobile) {
       margin-bottom: 0.4rem;
-      padding-top: 0.75rem;
     }
   }
 }

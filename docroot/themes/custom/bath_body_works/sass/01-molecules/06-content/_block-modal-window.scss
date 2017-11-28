@@ -1,6 +1,6 @@
-.ui-dialog {
+html .ui-dialog {
   background: $white;
-  padding: 0;
+  padding: 0 0 0 0.625rem;
 
   @include breakpoint($upto-lap) {
     width: 95%;
@@ -32,6 +32,8 @@
     background: $black;
     color: $white;
     border: 0;
+    border-right: 0;
+    border-radius: 0;
 
     .ui-icon-closethick {
       font-size: 2rem;
@@ -52,6 +54,21 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
+    }
+  }
+
+  .ui-dialog-buttonset.form-actions {
+    float: direction(left);
+
+    button {
+      background-color: $black;
+      font-size: 1rem;
+      border-radius: 0;
+      border-color: $black;
+      color: $white;
+      width: 8.812rem;
+      height: 2.56rem;
+      text-transform: uppercase;
     }
   }
 }

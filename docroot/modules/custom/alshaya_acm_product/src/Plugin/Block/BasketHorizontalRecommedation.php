@@ -106,7 +106,10 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
     if (!empty($cross_sell_skus)) {
       $view_skus = array_unique($cross_sell_skus);
       $view_skus = $this->skuManager->filterRelatedSkus($view_skus);
-      return views_embed_view('product_slider', 'block_product_slider', implode(',', $view_skus));
+
+      if (!empty($view_skus)) {
+        return views_embed_view('product_slider', 'block_product_slider', implode(',', $view_skus));
+      }
     }
 
     return [];

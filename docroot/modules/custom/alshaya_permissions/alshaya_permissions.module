@@ -8,6 +8,8 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\user\Entity\User;
+use Symfony\Component\Yaml\Yaml;
+use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -60,6 +62,24 @@ function alshaya_permissions_form_alter(array &$form, FormStateInterface $form_s
   if ($user = User::load($current_user_id)) {
     if ($user->hasRole('reviewer') && isset($form['revision_log'])) {
       $form['revision_log']['#access'] = TRUE;
+    }
+  }
+}
+
+/**
+ * Implements a helper to update role permissions from config.
+ */
+function _alshaya_permissions_update_role_from_config(array $roles = NULL) {
+  $roles = Role::loadMultiple($roles);
+  $module_handler = Drupal::service('module_handler');
+  foreach ($roles as $rid => $role) {
+    $path = $module_handler->getModule('alshaya_permissions')->getPath() . '/config/install/user.role.' . $rid . '.yml';
+    if (file_exists($path)) {
+      $ymldata = Yaml::parse($path);
+      foreach ($ymldata['permissions'] as $permission) {
+        $role->grantPermission($permission);
+      }
+      $role->save();
     }
   }
 }
