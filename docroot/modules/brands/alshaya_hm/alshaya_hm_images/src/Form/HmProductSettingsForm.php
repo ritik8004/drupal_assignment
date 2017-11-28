@@ -37,7 +37,7 @@ class HmProductSettingsForm extends ProductSettingsForm
       '#type' => 'textfield',
       '#title' => t('Liquid Pixel Base url'),
       '#description' => t("Base Url for Liquid pixel. No trailing '/'. e.g., https://lp2.hm.com/hmgoepprod"),
-      '#default_value' => \Drupal::config('alshaya_hm_images.settings')->get('base_url'),
+      '#default_value' => $this->config('alshaya_hm_images.settings')->get('base_url'),
     ];
 
     return parent::buildForm($form, $form_state);;
