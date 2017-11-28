@@ -66,6 +66,7 @@ class NewsLetterForm extends FormBase {
       '#required' => TRUE,
       '#placeholder' => $this->t('Enter your email address'),
       '#prefix' => '<div class="newsletter-block-label">' . $this->t('get email offers and the latest news from @site_name', ['@site_name' => $site_name]) . '</div>',
+      '#element_validate' => ['alshaya_valid_email_address'],
     ];
 
     $form['newsletter'] = [
