@@ -35,7 +35,7 @@
       p {
         margin-top: 0.875rem;
         margin-bottom: 1.4rem;
-        font-size: 0.75rem;
+        font-size: 0.875rem;
 
         @include breakpoint($only-mobile) {
           margin-#{$right}: 5rem;
@@ -453,6 +453,7 @@
     border-top: 0.625rem solid $white-five;
     font-size: 0.875rem;
     color: $hnm-black-two;
+    background-color: $hnm-grey;
 
     @include breakpoint($tablet) {
       border-bottom: 1px solid $white-five;
