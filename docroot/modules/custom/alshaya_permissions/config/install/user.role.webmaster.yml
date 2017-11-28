@@ -84,3 +84,8 @@ permissions:
   - 'create media'
   - 'delete any media'
   - 'update any media'
+  - 'create store content'
+  - 'delete any store content'
+  - 'edit any store content'
+  - 'translate store node'
+  - 'create content translations'
