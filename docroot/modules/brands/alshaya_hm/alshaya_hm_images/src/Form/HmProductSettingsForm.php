@@ -10,15 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @package Drupal\alshaya_hm_images\Form
  */
-class HmProductSettingsForm extends ProductSettingsForm
-{
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFormId() {
-    return 'product_settings_form';
-  }
+class HmProductSettingsForm extends ProductSettingsForm {
 
   /**
    * {@inheritdoc}
@@ -35,8 +27,8 @@ class HmProductSettingsForm extends ProductSettingsForm
 
     $form['lp_base_url'] = [
       '#type' => 'textfield',
-      '#title' => t('Liquid Pixel Base url'),
-      '#description' => t("Base Url for Liquid pixel. No trailing '/'. e.g., https://lp2.hm.com/hmgoepprod"),
+      '#title' => $this->t('Liquid Pixel Base url'),
+      '#description' => $this->t("Base Url for Liquid pixel. No trailing '/'. e.g., https://lp2.hm.com/hmgoepprod"),
       '#default_value' => $this->config('alshaya_hm_images.settings')->get('base_url'),
     ];
 
