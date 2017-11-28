@@ -53,3 +53,24 @@ function alshaya_permissions_update_8004() {
   // Update role permissions from the config.
   _alshaya_permissions_update_role_from_config(['webmaster']);
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create a new role 'Site builder' and assign some permissions.
+ */
+function alshaya_permissions_update_8005() {
+  $site_builder = Role::load('site_builder');
+  // If role already not exists.
+  if (!$site_builder) {
+    // Creating new role.
+    $role = Role::create([
+      'id' => 'site_builder',
+      'label' => 'Site builder',
+    ]);
+    $role->save();
+  }
+
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['site_builder', 'webmaster']);
+}
