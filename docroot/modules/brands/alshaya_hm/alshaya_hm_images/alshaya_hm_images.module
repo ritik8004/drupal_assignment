@@ -33,7 +33,7 @@ function _alshaya_hm_images_acq_sku_process_assets($product) {
     $assets = $product['extension']['assets'];
 
     foreach ($assets as $key => $asset) {
-      if (empty($asset['Data']['AssetType'])) {
+      if (empty($asset['Data']['AssetType']) && (empty($asset['Type']))) {
         continue;
       }
       $asset_type_parts = explode('/', $asset['Data']['AssetType']);
