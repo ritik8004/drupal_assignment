@@ -34,7 +34,7 @@ function alshaya_hm_images_install() {
   $config_storage->write('acq_sku.configurable_form_settings', $source->read('acq_sku.configurable_form_settings'));
 
   $configs = [
-    'core.entity_form_display.taxonomy_term.acq_product_category.default.yml',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_hm_images', 'optional');
