@@ -954,20 +954,21 @@
   }
 
   .price-currency {
-    @include breakpoint($only-tablet) {
-      margin-right: 0.4rem;
-    }
-
     float: left !important;
     padding: 0;
-    margin-right: 1.3625rem;
   }
 }
 
 html[lang=ar] {
-  #table-cart-totals .price-currency {
-    @include breakpoint($only-mobile) {
-      padding-right: 0.5rem;
+  #table-cart-totals {
+    .price-currency {
+      @include breakpoint($only-mobile) {
+        padding-right: 0.5rem;
+      }
+    }
+
+    .price-amount {
+      margin-left: 0.9rem;
     }
   }
 
