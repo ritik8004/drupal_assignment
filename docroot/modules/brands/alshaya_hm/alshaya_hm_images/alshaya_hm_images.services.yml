@@ -6,3 +6,7 @@ services:
       - '@current_route_match'
       - '@alshaya_acm_product.skumanager'
       - '@plugin.manager.sku'
+  alshaya_hm_images.route_subscriber:
+    class: Drupal\alshaya_hm_images\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
