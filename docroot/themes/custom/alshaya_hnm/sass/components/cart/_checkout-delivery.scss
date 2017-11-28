@@ -446,7 +446,7 @@
       height: auto;
     }
 
-    &:nth-child(odd) {
+    &.selected {
       background-color: $hnm-grey;
     }
 
@@ -488,7 +488,7 @@
 
           &-title {
             font-size: 0.875rem;
-            font-weight: $hnm-demibold;
+            font-family: $hnm-demibold;
             color: $hnm-black-two;
           }
 
