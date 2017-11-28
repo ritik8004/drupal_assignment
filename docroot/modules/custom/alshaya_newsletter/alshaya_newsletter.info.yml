@@ -10,3 +10,4 @@ dependencies:
   - system
   - views
   - alshaya_master
+  - alshaya_user
