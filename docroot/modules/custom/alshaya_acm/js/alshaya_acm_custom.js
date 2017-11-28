@@ -24,6 +24,27 @@
           $('[data-drupal-selector="edit-checkout"]').trigger('click');
         });
       });
+
+      $('#apply_coupon').once('load').each(function () {
+        // Hide the apply button on page load or after AJAX call replacing form.
+        $(this).hide();
+
+        // Also store current value in data attributes to use for validation later.
+        $(this).data('applied-coupon', $('[data-drupal-selector="edit-coupon"]').val().trim());
+      });
+
+      $('[data-drupal-selector="edit-coupon"]').bind('bind-events').on('keyup', function () {
+        var applied_coupon = $('#apply_coupon').data('applied-coupon');
+        var new_value = $(this).val().trim();
+
+        // If new value is not equal to stored value, we show the apply button.
+        if (new_value !== applied_coupon) {
+          $('#apply_coupon').slideDown();
+        }
+        else {
+          $('#apply_coupon').slideUp();
+        }
+      });
     }
   };
 

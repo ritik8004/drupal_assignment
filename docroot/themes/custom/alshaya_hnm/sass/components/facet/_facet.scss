@@ -68,7 +68,7 @@
     .facet-item__count,
     .facet-item__value {
       font-size: 0.875rem;
-      text-transform: lowercase;
+      text-transform: capitalize;
       line-height: 1.57;
       vertical-align: middle;
       margin-top: 0.125rem;
@@ -90,7 +90,7 @@
   @include arabic-letter-spacing;
 
   font-size: 0.875rem;
-  margin: 0.75rem 0.5rem;
+  margin: 0 0.5rem 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: $black-two;

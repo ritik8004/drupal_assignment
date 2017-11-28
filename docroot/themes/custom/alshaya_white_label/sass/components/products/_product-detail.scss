@@ -16,7 +16,11 @@
 // Layout of the detail page
 .nodetype--acq_product {
   .region__content {
-    margin: 1.25rem 0;
+    margin: 0 0 1.25rem;
+
+    @include breakpoint($tablet) {
+      margin: 1.25rem 0;
+    }
   }
 
   #backtotop {

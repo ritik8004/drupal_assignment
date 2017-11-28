@@ -125,7 +125,7 @@
         $('.menu--one__list').find('.menu__list--active').removeClass('.menu__list--active');
       });
 
-      $('.main--menu').hover(function () {
+      $('.menu--one__list-item').hover(function () {
         $('body').addClass('overlay');
       }, function () {
         $('body').removeClass('overlay');

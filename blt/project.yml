@@ -10,7 +10,6 @@ project:
 git:
   default_branch: develop
   remotes:
-#    - 'alshayasde@svn-6182.devcloud.hosting.acquia.com:alshayasde.git'
     - 'alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git'
 drush:
   aliases:
@@ -74,4 +73,3 @@ multisite:
     - g
 cm:
   strategy: features
-

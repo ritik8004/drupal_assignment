@@ -44,7 +44,7 @@ form.user-communication-preference {
   }
 
   input[checked=checked]:checked + label {
-    font-weight: $hnm-demibold;
+    font-family: $hnm-demibold;
   }
 
   input[type=checkbox] {

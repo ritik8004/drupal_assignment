@@ -13,9 +13,9 @@ use Symfony\Component\Yaml\Yaml;
 global $site_name;
 
 // If we are on local environment, the site name has not been detected yet.
-if (empty($site_name) && $settings['env'] == 'local' && $_SERVER['HTTP_HOST'] == 'local.alshaya.com') {
+if (empty($site_name) && $settings['env'] == 'local') {
   $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/project.local.yml'));
-  $site_name = $data['brands']['transac'];
+  $site_name = $_SERVER['HTTP_HOST'] == 'local.alshaya.com' ? $data['brands']['transac'] : $data['brands']['non-transac'];
 }
 
 // We merge the entire settings with the specific ones.

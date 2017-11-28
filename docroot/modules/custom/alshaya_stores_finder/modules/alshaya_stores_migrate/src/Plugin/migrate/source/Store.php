@@ -30,10 +30,12 @@ class Store extends CSV {
     ];
     $map = [];
     foreach ($days as $day) {
-      $map[] = [
-        'day' => $day,
-        'hours' => $row->getSourceProperty(ucfirst($day) . ' hours'),
-      ];
+      if (!empty($row->getSourceProperty(ucfirst($day) . ' hours'))) {
+        $map[] = [
+          'day' => $day,
+          'hours' => $row->getSourceProperty(ucfirst($day) . ' hours'),
+        ];
+      }
     }
     $row->setSourceProperty('opening_hours', $map);
 
