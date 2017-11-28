@@ -80,6 +80,8 @@ function alshaya_d_install() {
 }
 
 /**
+ * Implements hook_update_n().
+ *
  * Update translation of sign up block content.
  */
 function alshaya_d_update_8101() {

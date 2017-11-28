@@ -89,6 +89,8 @@ function alshaya_bbw_install() {
 }
 
 /**
+ * Implements hook_update_n().
+ *
  * Update translation of sign up block content.
  */
 function alshaya_bbw_update_8101() {
