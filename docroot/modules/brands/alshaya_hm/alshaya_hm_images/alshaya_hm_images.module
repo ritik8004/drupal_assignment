@@ -240,7 +240,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
 
           if ($sku_entity instanceof SKU) {
             if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
-              $asset = $sku_asset_manager->getSkuAsset($sku_entity, 'swatch', 'swatch');
+              $asset = $sku_asset_manager->getSkuAsset($sku_entity, 'swatch', 'swatch', $swatch_type);
             }
 
             // If swatch type is not miniature_image or assets were missing from

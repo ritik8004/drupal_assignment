@@ -91,7 +91,7 @@ class SkuAssetManager {
    * @return array
    *   Array of urls to sku assets.
    */
-  public function getSkuAsset($sku, $page_type, $location_image) {
+  public function getSkuAsset($sku, $page_type, $location_image, $style = "") {
     $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
     if (!($sku instanceof SKU)) {
@@ -118,6 +118,13 @@ class SkuAssetManager {
         'sortAssetType' => $asset['sortAssetType'],
         'sortFacingType' => $asset['sortFacingType'],
       ];
+    }
+    if ($style) {
+      foreach ($asset_urls as $asset) {
+        if ($asset['sortAssetType'] === $style) {
+          return [$asset];
+        }
+      }
     }
 
     return $asset_urls;
