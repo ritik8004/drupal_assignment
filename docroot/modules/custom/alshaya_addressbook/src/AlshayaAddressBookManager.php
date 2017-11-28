@@ -589,6 +589,7 @@ class AlshayaAddressBookManager {
       $magento_address['extension']['address_apartment_segment'] = (string) $address['address_line2'];
       $magento_address['extension']['address_area_segment'] = (string) $address['administrative_area'];
       $magento_address['extension']['address_building_segment'] = (string) $address['dependent_locality'];
+      $magento_address['extension']['address_block_segment'] = (string) $address['locality'];
       $magento_address['country_id'] = $address['country_code'];
     }
 
