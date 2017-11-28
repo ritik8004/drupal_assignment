@@ -13,6 +13,12 @@ class AlshayaAcmConfigCheck {
    * Helper function to check config and reset if required.
    */
   public function checkConfig() {
+    // Do this only after installation is done.
+    if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('module'))) {
+      return;
+    }
+
+    // Get the current env.
     $env = Settings::get('env') ?: 'local';
 
     // We don't do anything on prod.
