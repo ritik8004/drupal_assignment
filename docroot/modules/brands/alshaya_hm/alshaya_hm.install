@@ -42,11 +42,18 @@ function alshaya_hm_install() {
   // Set default marker image for stores finder.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     $marker_path = drupal_get_path('module', 'alshaya_hm') . '/images/ic-map-marker.svg';
+    $icon_path = file_url_transform_relative(file_create_url($marker_path));
     \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
       ->set('marker.use_default', FALSE)
       ->set('marker.path', $marker_path)
-      ->set('marker.url', file_url_transform_relative(file_create_url($marker_path)))
+      ->set('marker.url', $icon_path)
       ->save(TRUE);
+    $view_displays = ['attachment_1', 'page_3', 'page_2'];
+    foreach ($view_displays as $view_display) {
+      \Drupal::configFactory()->getEditable('views.view.stores_finder')
+        ->set('display.' . $view_display . '.display_options.style.options.google_map_settings.marker_icon_path', $icon_path)
+        ->save(TRUE);
+    }
   }
 
   // Update the customer service text.
@@ -57,7 +64,7 @@ function alshaya_hm_install() {
   $checkout_customer_service = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
   $checkout_customer_service->set('checkout_customer_service.value', $customer_service_text);
   $checkout_customer_service->save();
-  
+
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
   // Get current theme name.

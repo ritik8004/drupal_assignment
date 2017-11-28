@@ -176,6 +176,8 @@
   }
 
   .address--primary {
+    @include arabic-letter-spacing;
+
     width: 9.438rem;
     position: relative;
     padding-#{$right}: 0.5625rem;
@@ -288,6 +290,8 @@
     }
 
     .address--primary {
+      @include arabic-letter-spacing;
+
       font-family: $hnm-bold;
       font-weight: normal;
       color: $hnm-black-two;
@@ -412,11 +416,6 @@
     margin-top: 1.25rem;
     font-size: 0.875rem;
 
-    html[lang=en] & {
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
     @include breakpoint($tablet) {
       display: inline-block;
       position: absolute;
@@ -524,7 +523,7 @@
         }
       }
 
-      .form-item-mobile-number-country-code {
+      > .form-type-select {
         min-width: 2.688rem;
       }
 
@@ -633,6 +632,8 @@
   }
 
   .select2-selection {
+    @include arabic-letter-spacing;
+
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
     text-transform: uppercase;

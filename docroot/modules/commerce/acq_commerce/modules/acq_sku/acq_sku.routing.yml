@@ -65,6 +65,6 @@ acq_sku.settings:
   path: '/admin/commerce/sku/settings'
   defaults:
     _form: '\Drupal\acq_sku\Form\SKUSettingsForm'
-    _title: 'SKU Settings Form'
+    _title: 'SKU Custom Settings'
   requirements:
     _permission: 'access commerce administration pages'

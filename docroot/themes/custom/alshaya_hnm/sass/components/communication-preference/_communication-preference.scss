@@ -27,6 +27,8 @@ form.user-communication-preference {
   }
 
   .form-submit {
+    @include arabic-letter-spacing;
+
     margin-top: 0;
     font-size: 0.875rem;
     width: 100%;
@@ -42,7 +44,7 @@ form.user-communication-preference {
   }
 
   input[checked=checked]:checked + label {
-    font-weight: $hnm-demibold;
+    font-family: $hnm-demibold;
   }
 
   input[type=checkbox] {

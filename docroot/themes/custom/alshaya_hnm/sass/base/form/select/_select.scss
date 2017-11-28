@@ -136,6 +136,8 @@ select:focus::-ms-value {
     border-radius: 4px;
 
     li.select2-results__option {
+      @include arabic-letter-spacing;
+
       color: $hnm-black-two;
       font-size: 0.75rem;
       padding: 0.625rem;

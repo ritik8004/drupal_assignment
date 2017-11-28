@@ -12,6 +12,21 @@ use Drupal\user\Entity\User;
 use Symfony\Component\Yaml\Yaml;
 
 /**
+ * Implements hook_update().
+ *
+ * Update the C&C STS message, change placeholder to stop forced italic.
+ */
+function alshaya_acm_update_8005() {
+  // Array of language translation strings.
+  $strings = [
+    'Your order will be available in @duration' => [
+      'ar' => 'سيتم توصيل طلبيتك خلال @duration',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_update_N().
  *
  * Set new config for interval in alshaya_acm.settings.
@@ -96,20 +111,6 @@ function alshaya_acm_install() {
   $client->set('roles', ['administrator']);
   $client->set('uuid', Settings::get('alshaya_acm_soauth_client_uuid'));
   $client->save();
-
-  // Update category sync resource to allow basic_auth.
-  $config = \Drupal::configFactory()->getEditable('rest.resource.acq_categorysync');
-  $configuration = $config->get('configuration');
-  $configuration['POST']['supported_auth'][] = 'basic_auth';
-  $config->set('configuration', $configuration);
-  $config->save();
-
-  // Update product sync resource to allow basic_auth.
-  $config = \Drupal::configFactory()->getEditable('rest.resource.acq_productsync');
-  $configuration = $config->get('configuration');
-  $configuration['POST']['supported_auth'][] = 'basic_auth';
-  $config->set('configuration', $configuration);
-  $config->save();
 
   // Update product category sync root setting.
   $config = \Drupal::configFactory()->getEditable('acq_commerce.conductor');

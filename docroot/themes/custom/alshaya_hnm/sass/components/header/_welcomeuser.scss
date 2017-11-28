@@ -4,6 +4,8 @@
     display: inline-block;
 
     h3 {
+      @include arabic-letter-spacing;
+
       margin: 0 1.5rem;
       display: block;
       font-family: $hnm-regular;

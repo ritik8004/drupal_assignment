@@ -107,6 +107,8 @@
         }
 
         h2 {
+          @include arabic-letter-spacing;
+
           font-size: 0.75rem;
           color: $hnm-black-two;
           text-transform: uppercase;
@@ -444,7 +446,7 @@
       height: auto;
     }
 
-    &:nth-child(odd) {
+    &.selected {
       background-color: $hnm-grey;
     }
 
@@ -486,7 +488,7 @@
 
           &-title {
             font-size: 0.875rem;
-            font-weight: $hnm-demibold;
+            font-family: $hnm-demibold;
             color: $hnm-black-two;
           }
 
@@ -958,6 +960,8 @@
         }
 
         .title {
+          @include arabic-letter-spacing;
+
           color: $hnm-black-two;
           font-size: 1rem;
           font-family: $hnm-demibold;

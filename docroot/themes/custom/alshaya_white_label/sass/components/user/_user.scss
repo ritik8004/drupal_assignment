@@ -252,7 +252,7 @@
     @include breakpoint($desktop) {
       clear: both;
       padding-top: 1px;
-      margin-top: 3.813rem;
+      margin-top: 0;
     }
   }
 
@@ -307,7 +307,7 @@
       max-width: 19.75rem;
     }
 
-    @include breakpoint($desktop-wide) {
+    @include breakpoint($desktop) {
       max-width: 24.75rem;
     }
 
@@ -841,7 +841,11 @@
     padding-bottom: 1rem;
 
     @include breakpoint($only-tablet) {
-      padding: 0 1rem;
+      padding: 0 1rem 1rem 0;
+
+      html[lang=ar] {
+        padding: 0 0 1rem;
+      }
     }
   }
 
@@ -849,7 +853,11 @@
     padding-top: 1rem;
 
     @include breakpoint($only-tablet) {
-      padding: 0 1rem;
+      padding: 0 1rem 1rem 0;
+
+      html[lang=ar] {
+        padding: 0 0 1rem;
+      }
     }
 
     span {

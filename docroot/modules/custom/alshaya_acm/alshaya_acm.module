@@ -7,6 +7,7 @@
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber;
+use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
@@ -16,7 +17,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
-use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_drush_command_alter().
@@ -53,6 +54,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   ];
 
   // Get the current cart.
+  /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
   $cart_storage = \Drupal::service('acq_cart.cart_storage');
 
   /** @var \Drupal\acq_cart\Cart $cart */
@@ -120,6 +122,26 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     if (is_array($item) && isset($item['quantity'])) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku_entity */
       $sku_entity = SKU::loadFromSku($id);
+
+      // Product might get disabled and deleted, need to handle exception
+      // gracefully.
+      if (empty($sku_entity)) {
+        // Remove items that are no longer available from from.
+        unset($form['cart'][$id]);
+
+        // Remove items that are no longer available from cart.
+        $cart->removeItemFromCart($id);
+
+        // Update the cart object in session.
+        $cart_storage->addCart($cart);
+
+        // Reload the page (at-least to avoid issues in form display if it was
+        // the only or last item in cart).
+        $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+        $response->send();
+        exit;
+      }
+
       $is_item_free = FALSE;
 
       // Check if a discount equal to the price of product was applied.
@@ -634,53 +656,7 @@ function _alshaya_acm_get_cart_quantity_options($max = NULL, $selected = NULL) {
 }
 
 /**
- * Get the stock info of given sku.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku_entity
- *   SKU Entity object.
- * @param bool $reset
- *   Flag to reset cache and get fresh stock.
- *
- * @return bool|array
- *   Return the stock response or boolean value.
- */
-function alshaya_acm_get_product_stock(SKU $sku_entity, $reset = FALSE) {
-  $stock = &drupal_static(__FUNCTION__, []);
-
-  // TODO: Remove this after go live probably.
-  global $_alshaya_acm_disable_stock_check;
-  if ($_alshaya_acm_disable_stock_check) {
-    return [
-      'stock_id' => 2,
-      'quantity' => 7,
-      'is_in_stock' => TRUE,
-    ];
-  }
-
-  if ($reset || !isset($stock[$sku_entity->getSku()])) {
-    $stock[$sku_entity->getSku()] = NULL;
-
-    try {
-      // Stock check.
-      $sku_stock = acq_sku_get_sku_stock($sku_entity, $reset);
-
-      if (empty($sku_stock) || (!empty($sku_stock) && !$sku_stock['is_in_stock'])) {
-        $stock[$sku_entity->getSku()] = NULL;
-      }
-      elseif (isset($sku_stock['is_in_stock'])) {
-        $stock[$sku_entity->getSku()] = $sku_stock;
-      }
-    }
-    catch (\Exception $e) {
-      // Error is already logged so we just suppress it here and don't pass
-      // in frontend.
-    }
-  }
-  return $stock[$sku_entity->getSku()];
-}
-
-/**
- * Check if product is in stock for the given sku.
+ * Get stock quantity for a SKU.
  *
  * @param \Drupal\acq_sku\Entity\SKU $sku_entity
  *   The Sku entity object.
@@ -689,42 +665,21 @@ function alshaya_acm_get_product_stock(SKU $sku_entity, $reset = FALSE) {
  * @param bool $reset
  *   Flag to reset cache and get fresh stock.
  *
- * @return int|bool
- *   Return quantity if stock exists, else false.
+ * @return int
+ *   Return quantity of stock.
  */
-function alshaya_acm_is_product_in_stock(SKU $sku_entity, $recheck = FALSE, $reset = FALSE) {
-  // @TODO: Add condition and handle stock check for grouped.
-  if ($sku_entity->bundle() == 'simple') {
-    if ($sku_stock = alshaya_acm_get_product_stock($sku_entity, $reset)) {
-      if ($sku_stock['is_in_stock']) {
-        return $sku_stock['quantity'];
-      }
-      elseif (!$reset && $recheck) {
-        if ($sku_stock = alshaya_acm_get_product_stock($sku_entity, TRUE)) {
-          return $sku_stock['quantity'];
-        }
-      }
-    }
-  }
-  elseif ($sku_entity->bundle() == 'configurable') {
-    /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
-    $plugin = $sku_entity->getPluginInstance();
-    $tree = $plugin->deriveProductTree($sku_entity);
+function alshaya_acm_get_product_stock(SKU $sku_entity, $recheck = FALSE, $reset = FALSE) {
+  static $stock = [];
 
-    if (isset($tree['products'])) {
-      $quantities = [];
-
-      foreach ($tree['products'] as $child_sku => $child_sku_entity) {
-        if ($child_sku_entity instanceof SKU) {
-          $quantities[$child_sku] = (int) alshaya_acm_is_product_in_stock($child_sku_entity, $recheck, $reset);
-        }
-      }
-
-      return empty($quantities) ? FALSE : max($quantities);
-    }
+  if (isset($stock[$sku_entity->getSku()])) {
+    return $stock[$sku_entity->getSku()];
   }
 
-  return FALSE;
+  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
+  $plugin = $sku_entity->getPluginInstance();
+  $stock[$sku_entity->getSku()] = $plugin->getProcessedStock($sku_entity, $recheck, $reset);
+
+  return $stock[$sku_entity->getSku()];
 }
 
 /**
@@ -880,7 +835,7 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
   $selected_quantity = $item['quantity']['#default_value'];
 
   // If item is not available in stock.
-  if ($quantity = alshaya_acm_is_product_in_stock($sku_entity, TRUE)) {
+  if ($quantity = alshaya_acm_get_product_stock($sku_entity, TRUE)) {
     if ($selected_quantity > $quantity) {
       Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
       $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');

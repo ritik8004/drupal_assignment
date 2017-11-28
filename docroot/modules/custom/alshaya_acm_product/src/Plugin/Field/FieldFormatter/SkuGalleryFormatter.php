@@ -103,6 +103,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    * @throws \InvalidArgumentException
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
+    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+
     $elements = [];
     $product_url = $product_label = '';
 
@@ -173,9 +175,17 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $stock_placeholder = NULL;
 
         if (alshaya_acm_product_is_buyable($sku)) {
-          $stock_placeholder = [
-            '#markup' => '<div class="stock-placeholder out-of-stock">' . t('Checking stock...') . '</div>',
-          ];
+          if ($stock_mode == 'pull') {
+            $stock_placeholder = [
+              '#markup' => '<div class="stock-placeholder out-of-stock">' . t('Checking stock...') . '</div>',
+            ];
+          }
+          // In push mode we check stock on page load only.
+          elseif (!alshaya_acm_get_product_stock($sku)) {
+            $stock_placeholder = [
+              '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
+            ];
+          }
         }
 
         $elements[$delta] = [

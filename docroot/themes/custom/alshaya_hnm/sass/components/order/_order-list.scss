@@ -74,6 +74,8 @@
     }
 
     input::placeholder {
+      @include arabic-letter-spacing;
+
       text-transform: uppercase;
       color: $grey6;
       font-size: 0.6875rem;
@@ -543,11 +545,6 @@
   top: -5.7rem;
   font-size: 0.875rem;
   height: 2.1875rem;
-
-  html[lang=en] & {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
 
   @include breakpoint($desktop) {
     min-width: 11.625rem;

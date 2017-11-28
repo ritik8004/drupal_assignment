@@ -214,6 +214,8 @@
       }
 
       .secure__checkout--label {
+        @include arabic-letter-spacing;
+
         color: $hnm-black-four;
         font-family: $hnm-demibold;
         letter-spacing: 0.5px;
@@ -351,6 +353,8 @@
   }
 
   h3 {
+    @include arabic-letter-spacing;
+
     font-family: $hnm-bold;
     font-weight: normal;
     color: $white-five;

@@ -1,5 +1,9 @@
 .c-plp {
-  padding-top: 1.75rem;
+  padding-top: 1.5rem;
+
+  @include breakpoint($only-mobile) {
+    padding-top: 0.75rem;
+  }
 
   > .c-sidebar-first {
     @include breakpoint($desktop) {
@@ -72,7 +76,7 @@
                 float: $left;
                 margin-#{$right}: 1px;
                 line-height: 1;
-                text-transform: lowercase;
+                text-transform: capitalize;
               }
 
               &.facet-item__count {
@@ -172,6 +176,8 @@
               @include u-visibility(inline-block);
 
               .label {
+                @include arabic-letter-spacing;
+
                 font-family: $hnm-bold;
                 font-size: 0.875rem;
                 padding-#{$left}: 1.5rem;
@@ -222,6 +228,8 @@
           }
 
           .applied-filter-count {
+            @include arabic-letter-spacing;
+
             font-family: $hnm-bold;
             color: $hnm-black-two;
             letter-spacing: 1px;
@@ -299,7 +307,8 @@
     }
 
     .view-header.search-count {
-      margin-top: 1.125rem;
+      margin-top: 0.9rem;
+      margin-bottom: 0.75rem;
       font-size: 0.875rem;
       color: $grey7;
       padding-bottom: 0.75rem;
@@ -307,7 +316,7 @@
       font-family: $hnm-regular;
 
       @include breakpoint($only-mobile) {
-        border-bottom: none;
+        margin-top: 0.75rem;
       }
     }
 
@@ -429,6 +438,10 @@
       }
     }
 
+    .swatches {
+      margin: 0.625rem 0;
+    }
+
     .alshaya_search_gallery {
       .alshaya_search_mainimage {
         z-index: 5;
@@ -486,6 +499,8 @@
     }
 
     .out-of-stock span {
+      @include arabic-letter-spacing;
+
       background: $hnm-red;
       color: $white-five;
       font-family: $hnm-bold;
@@ -567,12 +582,7 @@
         top: 0;
         font-size: 2.1875rem;
         border: 1px solid $hnm-black-two;
-        border-top: none;
-        transform: rotate(-90deg);
-
-        html[lang=ar] & {
-          transform: rotate(-270deg);
-        }
+        border-#{$left}: none;
       }
     }
 
@@ -659,6 +669,8 @@
       @include u-visibility(inline-block);
 
       .label {
+        @include arabic-letter-spacing;
+
         font-family: $hnm-bold;
         font-size: 0.875rem;
         padding-#{$left}: 1.5rem;
@@ -702,6 +714,8 @@
     }
 
     .applied-filter-count {
+      @include arabic-letter-spacing;
+
       font-family: $hnm-bold;
       color: $hnm-black-two;
       letter-spacing: 1px;
@@ -898,12 +912,15 @@ body {
 }
 
 .c-content__highlighted {
-  margin-bottom: 1.5rem;
-
   .promo-banner {
     img {
+      margin-bottom: 1.5rem;
       width: 100%;
       height: auto;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0.75rem;
+      }
     }
   }
 }

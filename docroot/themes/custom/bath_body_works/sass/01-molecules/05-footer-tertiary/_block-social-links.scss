@@ -32,9 +32,25 @@
   .block-social-link {
     background-color: $grey-smoke;
     color: $black;
+
+    @include breakpoint($lap) {
+      padding: 0.785rem 0 1rem;
+    }
+
+    @include breakpoint($upto-palm) {
+      padding: 1rem 0 1.5rem;
+    }
   }
 
   .block-social-link__title {
     font-size: 1.125rem;
+
+    @include breakpoint($lap) {
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($upto-palm) {
+      margin-bottom: 0.5rem;
+    }
   }
 }

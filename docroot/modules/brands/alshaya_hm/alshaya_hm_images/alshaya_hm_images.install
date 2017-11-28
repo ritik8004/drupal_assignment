@@ -5,6 +5,9 @@
  * Contains install, update, uninstall hooks for alshaya_hm_images module.
  */
 
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\InstallStorage;
+
 /**
  * Implements hook_install().
  */
@@ -22,4 +25,10 @@ function alshaya_hm_images_install() {
   $alshaya_acm_base_field_additions = \Drupal::configFactory()->getEditable('acq_sku.base_field_additions');
   $alshaya_acm_base_field_additions->set('color_label.configurable', 1)->save();
   $alshaya_acm_base_field_additions->set('color_label.label', 'Color')->save();
+
+  $configs = [
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_hm_images', 'optional');
 }
