@@ -954,20 +954,21 @@
   }
 
   .price-currency {
-    @include breakpoint($only-tablet) {
-      margin-right: 0.4rem;
-    }
-
     float: left !important;
     padding: 0;
-    margin-right: 1.3625rem;
   }
 }
 
 html[lang=ar] {
-  #table-cart-totals .price-currency {
-    @include breakpoint($only-mobile) {
-      padding-right: 0.5rem;
+  #table-cart-totals {
+    .price-currency {
+      @include breakpoint($only-mobile) {
+        padding-right: 0.5rem;
+      }
+    }
+
+    .price-amount {
+      margin-left: 0.9rem;
     }
   }
 
@@ -1422,26 +1423,34 @@ html[lang=ar] {
 
       .price--discount {
         .discount-prefix {
-          float: none !important;
+          float: right !important;
+          min-width: 33%;
           font-family: $alshaya-thin;
           font-size: 0.75rem;
+          padding-right: 0.8125rem;
 
           @include breakpoint($only-tablet) {
             font-size: 0.75rem !important;
+            padding-right: 0.9375rem;
           }
 
           @include breakpoint($only-mobile) {
             font-size: 0.625rem;
+          }
+
+          @include breakpoint($desktop) {
+            padding-right: 1.438rem;
           }
         }
 
         .discount-value {
           float: right;
           min-width: 47%;
+          padding-right: 0.75rem;
 
           @include breakpoint($only-tablet) {
             font-size: 0.75rem;
-            min-width: 66%;
+            min-width: 51%;
           }
 
           @include breakpoint($only-mobile) {

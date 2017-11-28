@@ -582,12 +582,7 @@
         top: 0;
         font-size: 2.1875rem;
         border: 1px solid $hnm-black-two;
-        border-top: none;
-        transform: rotate(-90deg);
-
-        html[lang=ar] & {
-          transform: rotate(-270deg);
-        }
+        border-#{$left}: none;
       }
     }
 

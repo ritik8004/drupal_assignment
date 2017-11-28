@@ -113,6 +113,10 @@ jQuery.fn.select2Option = function (options) {
         selectedText = $(this).attr('data-color-label');
       }
 
+      if (selectedText === 'undefined') {
+        selectedText = '';
+      }
+
       if (selectedTextSelector.length > 0) {
         selectedTextSelector.text(selectedText);
       }

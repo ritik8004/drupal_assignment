@@ -22,12 +22,14 @@
 	</div>
 {% endif %}
 
-{% if swatches %}
+{% if swatches is not empty %}
 	<div class="swatches">
     {% for key,swatch in swatches %}
-			<a href="{{ product_url }}?color={{ key }}">
-				<span class='swatch-block' style="background-color:{{ swatch }};"></span>
-			</a>
+			{% if swatch is not empty %}
+				<a href="{{ product_url }}?color={{ key }}">
+					<span class='swatch-block' style="background-color:{{ swatch }};"></span>
+				</a>
+			{% endif %}
     {% endfor %}
 	</div>
 {% endif %}

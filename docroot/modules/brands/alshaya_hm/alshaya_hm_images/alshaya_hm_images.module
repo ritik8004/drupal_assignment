@@ -94,7 +94,7 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
       $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
       $plp_hover_image = !empty($hover_image_assets) ? $hover_image_assets[0] : NULL;
       if ($sku instanceof SKU) {
-        $swatches = $sku_assets_manager->getColorsForSku($sku);
+        $swatches = array_filter($sku_assets_manager->getColorsForSku($sku));
 
         if ($plp_main_image) {
           $sku_gallery = [
@@ -247,9 +247,12 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
             // sku, use rgb color code instead.
             $sku_configurable_options_color[$key] = [
               'display_value' => empty($asset) ? $sku_entity->get('attr_rgb_color')->value : '<img src="' . $asset[0]['url']->toString() . '">',
-              'display_label' => $sku_entity->get('attr_color_label')->value,
               'swatch_type' => $swatch_type,
             ];
+
+            if ($sku_entity->get('attr_color_label')->value) {
+              $sku_configurable_options_color[$key]['display_label'] = $sku_entity->get('attr_color_label')->value;
+            }
           }
         }
       }

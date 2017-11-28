@@ -49,6 +49,7 @@
       .mobile-number-field .form-item.form-type-select {
         padding-bottom: 0;
         margin-top: 0.9375rem !important;
+        width: auto;
       }
 
       .form-item.form-type-select {
@@ -446,7 +447,7 @@
       height: auto;
     }
 
-    &:nth-child(odd) {
+    &.selected {
       background-color: $hnm-grey;
     }
 
@@ -488,7 +489,7 @@
 
           &-title {
             font-size: 0.875rem;
-            font-weight: $hnm-demibold;
+            font-family: $hnm-demibold;
             color: $hnm-black-two;
           }
 
