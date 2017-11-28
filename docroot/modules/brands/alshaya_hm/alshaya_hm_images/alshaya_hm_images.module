@@ -261,6 +261,9 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
   }
 }
 
+/**
+ * Implements template_preprocess_product_zoom().
+ */
 function alshaya_hm_images_preprocess_product_zoom(&$variables) {
   $variables['#cache']['contexts'][] = 'url.query_args:color';
 }
