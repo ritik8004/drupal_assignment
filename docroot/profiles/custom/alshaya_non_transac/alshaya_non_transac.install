@@ -64,6 +64,9 @@ function alshaya_non_transac_install() {
   ];
   alshaya_i18n_save_translations($strings);
 
+  // Create default content for non transac site.
+  alshaya_non_transac_create_default_content();
+
   // We probably don't have any module depending on acquia_connector which is
   // required on ACSF environments.
   if (isset($_ENV['AH_SITE_NAME'])) {
