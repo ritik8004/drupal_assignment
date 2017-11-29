@@ -7,6 +7,7 @@
 
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_install().
@@ -17,9 +18,24 @@ function alshaya_hm_install() {
   \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
   \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
 
+  // Set store id - EN.
+  \Drupal::configFactory()->getEditable('acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['en'])
+    ->save();
+
   // Translate store id in config.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
-    ->set('store_id', '2')
+    ->set('store_id', Settings::get('store_id')['ar'])
+    ->save();
+
+  // Save language prefix - EN.
+  \Drupal::configFactory()->getEditable('alshaya_api.settings')
+    ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['en'])
+    ->save();
+
+  // Save language prefix - AR.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
+    ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
     ->save();
 
   // Create default content for the site.
