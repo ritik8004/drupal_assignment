@@ -24,6 +24,6 @@ image_style_mappings:
     breakpoint_id: whitelabel.palm
     multiplier: 1x
     image_mapping_type: image_style
-    image_mapping: w146
+    image_mapping: w326
 breakpoint_group: whitelabel
 fallback_image_style: w146
