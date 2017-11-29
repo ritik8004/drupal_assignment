@@ -1221,7 +1221,20 @@ function alshaya_master_install() {
     "Add a promotional code" => [
       'ar' => 'هل لديك رمز عرض ؟',
     ],
+    'care instructions' => [
+      'ar' => 'إرشادات العناية',
+    ],
+    'New In' => [
+      'ar' => 'جديدنا',
+    ],
+    'Best Seller' => [
+      'ar' => 'الأفضل مبيعاً',
+    ],
+    'Please enter your selection' => [
+      'ar' => 'يرجى تحديد الاختيار',
+    ],
   ];
+
   alshaya_i18n_save_translations($strings);
 
   // Get config factory object.
