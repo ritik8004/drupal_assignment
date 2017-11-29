@@ -1130,7 +1130,7 @@ body.alias--cart {
       }
     }
 
-    tr:last-child {
+    tr[data-drupal-selector="edit-totals-grand"] {
       td:first-child span {
         display: block;
         font-size: 0.625rem;
@@ -1144,16 +1144,18 @@ body.alias--cart {
         background-color: $whisper-light;
       }
 
-      &:last-child {
-        span.price-currency,
-        span.price-amount {
-          font-family: $hnm-bold;
-          color: $hnm-black-two;
-        }
+      span.price-currency,
+      span.price-amount {
+        font-family: $hnm-bold;
+        color: $hnm-black-two;
+      }
 
-        span.price-amount {
-          font-family: $hnm-bold-nodir;
-        }
+      span.price-currency {
+        padding-top: 0;
+      }
+
+      span.price-amount {
+        font-family: $hnm-bold-nodir;
       }
     }
 
