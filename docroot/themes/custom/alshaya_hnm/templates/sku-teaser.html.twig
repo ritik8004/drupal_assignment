@@ -31,6 +31,9 @@
 				</a>
 			{% endif %}
     {% endfor %}
+		{% if swatch_more_text %}
+			<a class="swatch-more-link" href="{{ product_url }}">{{ swatch_more_text }}</a>
+		{% endif %}
 	</div>
 {% endif %}
 
