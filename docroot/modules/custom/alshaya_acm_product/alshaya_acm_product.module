@@ -764,11 +764,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $form['ajax']['configurables'][$root_attribute_code]['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
         $form_state->setValue('configurables', [$root_attribute_code => $first_child_root_attr_value]);
 
-        // Traverse the product tree to the point based on the selected config.
-        $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($form_state->get('tree'), $form_state->getValue('configurables'));
-
         // Disable config options not available for the selected config.
-        alshaya_acm_product_update_config_options($form['ajax'], $form_state, $tree_pointer, $form_state->getValue('configurables'), FALSE);
+        alshaya_acm_product_update_config_options($form['ajax'], $form_state, $form_state->getValue('configurables'), FALSE);
       }
     }
 
@@ -910,12 +907,12 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // List of attributes selected by end-users on the form.
     $configurables = $form_state->getValue('configurables');
 
+    // Disable config options not available for the selected config.
+    alshaya_acm_product_update_config_options($dynamic_parts, $form_state, $configurables);
+
     // Traverse the product tree till the point where config attributes have a
     // value.
     $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
-
-    // Disable config options not available for the selected config.
-    alshaya_acm_product_update_config_options($dynamic_parts, $form_state, $tree_pointer, $configurables);
 
     // If there is only one item returned back,
     // it implies we have reached to the leaf most SKU in the tree.
@@ -1031,6 +1028,9 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
 
     $selector = '.configurable-wrapper-' . $sku_identifier;
+
+    // Don't display placeholder again.
+    unset($dynamic_parts['add_to_cart']);
 
     // @TODO: Remove this once https://www.drupal.org/node/736066 gets fixed.
     $data['replaceWith'] = \Drupal::service('renderer')->render($dynamic_parts);

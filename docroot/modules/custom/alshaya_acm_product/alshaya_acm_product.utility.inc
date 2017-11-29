@@ -583,14 +583,12 @@ function alshaya_acm_product_get_brand_logo($sku) {
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   Form state Object.
  *   contain the SKUs depending on the tree path traversed.
- * @param array $tree_pointer
- *   Product tree pointing to the config seleted by end-user.
  * @param array $configurables
  *   List of values selected keyed by the config attribute.
  * @param bool $deselect_leaf_options
  *   Clear the leaf attribute selected while selecting the parent config.
  */
-function alshaya_acm_product_update_config_options(array &$form_parts, FormStateInterface &$form_state, array &$tree_pointer, array $configurables, $deselect_leaf_options = TRUE) {
+function alshaya_acm_product_update_config_options(array &$form_parts, FormStateInterface &$form_state, array &$configurables, $deselect_leaf_options = TRUE) {
   $enabled_options = [];
   $product_tree = $form_state->get('tree');
   $leaf_attribute = end($product_tree['configurables'])['code'];
@@ -609,15 +607,15 @@ function alshaya_acm_product_update_config_options(array &$form_parts, FormState
       }
     }
     unset($configurables[$leaf_attribute]);
-    $tree_pointer_parent = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
+
     $form_state->setValue('configurables', $configurables);
     $user_input = $form_state->getUserInput();
     $user_input['configurables'] = $configurables;
     $form_state->setUserInput($user_input);
   }
-  else {
-    $tree_pointer_parent = $tree_pointer;
-  }
+
+  $tree_pointer_parent = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
+
   // Items are keyed by their attribute codes.
   foreach ($tree_pointer_parent as $key => $value) {
     $attribute = explode(':', $key);
