@@ -399,10 +399,6 @@
     width: calc(100% - 5.7rem);
     float: $left;
 
-    @include breakpoint($desktop) {
-      width: calc(100% - 5.95rem);
-    }
-
     #edit-email-error {
       line-height: 1.36;
       display: inline-block;
@@ -466,7 +462,7 @@
     font-size: 0.8125rem;
     #{$right}: 0;
     bottom: 0;
-    padding: 0.5rem 1.02875rem;
+    padding: 0.563rem 0.907rem;
     border-radius: 0;
     z-index: 2;
     text-transform: uppercase;
