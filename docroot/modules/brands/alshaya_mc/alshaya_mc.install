@@ -12,7 +12,7 @@ use Drupal\Core\Site\Settings;
  *
  * Set the magento language prefix again.
  */
-function alshaya_mc_update_8101() {
+function alshaya_mc_update_8304() {
   \Drupal::configFactory()->getEditable('alshaya_api.settings')
     ->set('magento_lang_prefix', 'kwt_en')
     ->save();
