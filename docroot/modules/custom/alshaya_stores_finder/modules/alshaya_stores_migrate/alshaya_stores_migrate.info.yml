@@ -4,6 +4,7 @@ core: 8.x
 package: Alshaya
 description: 'Utility to migrate stores.'
 dependencies:
+  - alshaya_config
   - migrate
   - migrate_plus
   - migrate_source_csv

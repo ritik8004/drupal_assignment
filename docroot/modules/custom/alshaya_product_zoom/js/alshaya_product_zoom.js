@@ -66,24 +66,17 @@
 
 
       // Slider - 3 For Mobile - Image Gallery.
-      if (isRTL() && $(window).width() < 768) {
-        $('#product-image-gallery-mobile', context).attr('dir', 'rtl');
-        $('#product-image-gallery-mobile', context).lightSlider({
-          item: 1,
-          rtl: true,
-          onAfterSlide: function (el) {
-            el.children('iframe').remove();
-          }
-        });
-      }
-      else {
-        $('#product-image-gallery-mobile', context).lightSlider({
-          item: 1,
-          onAfterSlide: function (el) {
-            el.children('iframe').remove();
-          }
-        });
-      }
+      var slickMobileOptions = {
+        slidesToShow: 1,
+        vertical: false,
+        dots: true,
+        centerMode: false,
+        infinite: false,
+        focusOnSelect: true,
+        initialSlide: 0
+      };
+      var mobilegallery = $('#product-image-gallery-mobile', context);
+      applyRtl(mobilegallery, slickMobileOptions);
 
       // Show mobile slider only on mobile resolution.
       toggleProductImageGallery();

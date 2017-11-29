@@ -4,12 +4,13 @@ dependencies:
   config:
     - field.storage.node.field_category
     - field.storage.node.field_skus
+    - field.storage.acq_sku.field_acq_sku_promotions
     - search_api.server.database
   module:
     - taxonomy
     - acq_sku
-    - search_api
     - node
+    - search_api
 id: product
 name: Product
 description: ''
@@ -123,6 +124,18 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  promotion_nid:
+    label: 'Promotions NID'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:field_acq_sku_promotions:entity:nid'
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+        - field.storage.acq_sku.field_acq_sku_promotions
+      module:
+        - acq_sku
+        - node
 datasource_settings:
   'entity:node':
     bundles:
