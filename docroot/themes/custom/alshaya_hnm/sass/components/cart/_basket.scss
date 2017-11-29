@@ -955,7 +955,10 @@
 
   .price-currency {
     float: left !important;
-    padding: 0;
+
+    html[lang=ar] & {
+      padding: 0;
+    }
   }
 }
 
