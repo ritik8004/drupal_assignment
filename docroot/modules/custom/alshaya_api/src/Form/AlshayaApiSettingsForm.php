@@ -66,7 +66,7 @@ class AlshayaApiSettingsForm extends ConfigFormBase {
     $form['magento_lang_prefix'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Language prefix'),
-      '#required' => TRUE,
+      '#required' => FALSE,
       '#default_value' => $config->get('magento_lang_prefix'),
     ];
 

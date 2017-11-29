@@ -1047,7 +1047,7 @@ html[lang=ar] {
           padding: 0 1.2rem;
 
           @include breakpoint($tablet) {
-            padding: 1.9rem 1rem;
+            padding: 1.9rem 0.7rem;
           }
 
           @include breakpoint($desktop) {
@@ -1213,7 +1213,6 @@ html[lang=ar] {
 
   .customer-cart-form .price-currency.suffix {
     @include breakpoint($only-tablet) {
-      margin-right: 0.25rem;
       padding: 0;
       line-height: 1;
     }

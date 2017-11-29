@@ -86,13 +86,26 @@
           $('#product-image-gallery-mob .mob-imagegallery__thumbnails__image img').doubletap(function(e) {
             $(this).parent().siblings().find('img.expand').each(function () {
               $(this).removeClass('expand').css({'transform': 'scale(1)', 'transition': 'transform 300ms ease-out'});
+              gallery.slick("slickSetOption", "accessibility", true);
+              gallery.slick("slickSetOption", "draggable", true);
+              gallery.slick("slickSetOption", "swipe", true);
+              gallery.slick("slickSetOption", "touchMove", true);
             });
             if ($(e.target).hasClass('expand')) {
               $(e.target).removeClass('expand').css({'transform': 'scale(1)', 'transition': 'transform 300ms ease-out'});
+              gallery.slick("slickSetOption", "accessibility", true);
+              gallery.slick("slickSetOption", "draggable", true);
+              gallery.slick("slickSetOption", "swipe", true);
+              gallery.slick("slickSetOption", "touchMove", true);
             } else
             {
               $(e.target).addClass('expand').css({'transform': 'scale(3)', 'transition': 'transform 300ms ease-out'});
+              gallery.slick("slickSetOption", "accessibility", false);
+              gallery.slick("slickSetOption", "draggable", false);
+              gallery.slick("slickSetOption", "swipe", false);
+              gallery.slick("slickSetOption", "touchMove", false);
             }
+
           });
 
           $('.zoomin').removeClass('disabled');
@@ -142,7 +155,7 @@
       };
       // Open Gallery modal when we click on the zoom image.
       var mobileDialog = Drupal.dialog(element, dialogsettings);
-      $('#product-image-gallery-mobile .lslide').off().on('click', function () {
+      $('#product-image-gallery-mobile .slick-slide').off().on('click', function () {
         $('body').addClass('pdp-modal-overlay');
         mobileDialog.show();
         mobileDialog.showModal();

@@ -29,7 +29,7 @@
       }
 
       if ($('.field-slider-items-wrapper').find('.paragraph-t-banner').children().length > 0) {
-        $('.field-slider-items-wrapper').slick(options);
+        $('.field-slider-items-wrapper').once('initiate-slick').slick(options);
       }
 
       // eslint-disable-next-line.
