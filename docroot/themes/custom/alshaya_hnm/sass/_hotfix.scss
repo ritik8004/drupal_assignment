@@ -65,6 +65,16 @@ body.ucbrowser {
     }
   }
 
+  @include breakpoint($upto-desktop) {
+    .c-menu-primary {
+      .store,
+      .mobile--menu,
+      .mobile-search {
+        font-size: 0 !important;
+      }
+    }
+  }
+
   // Fix for direction attribute support for UC browser.
   // Select elements for size and quantity.
   .c-pdp {
