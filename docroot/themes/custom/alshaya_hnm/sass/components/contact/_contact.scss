@@ -321,29 +321,3 @@ html[lang=ar] {
     }
   }
 }
-
-.c-user-edit {
-  .user-form {
-    position: relative;
-    min-height: 450px;
-
-    #details-privilege-card-wrapper {
-      position: absolute;
-      width: 396px;
-
-      .privilege-card-wrapper {
-        border-bottom: 0;
-      }
-
-      .privilege-card-wrapper-title {
-        border-top: 0;
-        padding-#{$left}: 0;
-      }
-    }
-
-    .form-actions {
-      position: absolute;
-      bottom: 0;
-    }
-  }
-}
