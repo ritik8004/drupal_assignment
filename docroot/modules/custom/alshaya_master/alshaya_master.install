@@ -1218,6 +1218,9 @@ function alshaya_master_install() {
     'not available' => [
       'ar' => 'غير متوفر',
     ],
+    "Add a promotional code" => [
+      'ar' => 'هل لديك رمز عرض ؟',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
