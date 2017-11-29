@@ -86,7 +86,14 @@ jQuery.fn.select2Option = function (options) {
       var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
       $(this).closest('.select2Option').find('.list-title .selected-text').remove();
       $(this).closest('.sku-base-form').find('.error').remove();
-      $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+
+      var selectedText = clickedOption.text();
+
+      if ($(this).attr('data-color-label')) {
+        selectedText = $(this).attr('data-color-label');
+      }
+
+      $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + selectedText + '</span>');
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
         clickedOption.removeProp('selected');
@@ -107,9 +114,10 @@ jQuery.fn.select2Option = function (options) {
     // Set the value for selected option.
     $('.select-buttons').find('a.picked').each(function () {
       var selectedText = $(this).attr('class').replace(' picked', '');
+
       var selectedTextSelector = $(this).closest('ul').siblings('h4.list-title').find('.selected-text');
 
-      if ((typeof $(this).attr('data-color-label') !== 'undefined') && ($(this).attr('data-color-label').length > 0)) {
+      if ($(this).attr('data-color-label')) {
         selectedText = $(this).attr('data-color-label');
       }
 
