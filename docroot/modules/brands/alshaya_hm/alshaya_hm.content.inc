@@ -56,11 +56,11 @@ function alshaya_hm_create_footer_logo_block() {
     'uuid' => '6a8aca33-da8d-4c88-953c-0ffbdcc63447',
     'machine_name' => 'footerhnmlogo',
     'body' => [
-      'value' => "<h1 class='footer-brand-home'>
+      'value' => "<div class='footer-brand-home'>
                    <a href='/en' title='footer-brand-logo' rel='home' class='logo'>
                      <img src='/themes/custom/alshaya_hnm/h-m-logo-bw.svg' alt='HnM Logo'>
                    </a>
-                 </h1>",
+                 </div>",
       'format' => 'rich_text',
     ],
     'type' => 'basic',
@@ -71,11 +71,11 @@ function alshaya_hm_create_footer_logo_block() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Footer HnM logo',
     'body' => [
-      'value' => "<h1 class='footer-brand-home'>
+      'value' => "<div class='footer-brand-home'>
                    <a href='/ar' title='footer-brand-logo' rel='home' class='logo'>
                      <img src='/themes/custom/alshaya_hnm/h-m-logo-bw.svg' alt='HnM Logo'>
                    </a>
-                 </h1>",
+                 </div>",
       'format' => 'rich_text',
     ]
   ]);
