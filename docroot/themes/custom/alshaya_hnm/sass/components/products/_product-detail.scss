@@ -638,6 +638,7 @@
       font-weight: normal;
       letter-spacing: 0.5px;
       color: $hnm-black-two;
+      margin-bottom: 0.9375rem;
 
       &.disabled {
         opacity: 0.4;
@@ -675,10 +676,14 @@
       font-family: $hnm-regular;
       font-size: 0.875rem;
       color: $hnm-black-two;
-      line-height: 2;
+      line-height: 2.5;
       cursor: pointer;
       position: relative;
       text-transform: none;
+
+      &::after {
+        #{$right}: 0.9375rem;
+      }
 
       &.ui-state-active {
         border-bottom: none;
@@ -692,6 +697,8 @@
         color: $grey6;
         line-height: 1;
         text-transform: none;
+        margin-top: -0.5rem;
+        padding-bottom: 0;
       }
 
       .title-price {
@@ -1486,6 +1493,8 @@
         }
 
         @include breakpoint($only-mobile) {
+          padding-#{$left}: 1.3701rem;
+
           &.hide-button,
           &::before {
             display: none;

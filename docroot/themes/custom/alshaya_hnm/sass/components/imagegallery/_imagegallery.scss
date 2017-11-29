@@ -166,15 +166,29 @@
 
 .mobilegallery {
   #product-image-gallery-mobile {
-    li {
+    padding: 0;
+
+    li.slick-slide {
       width: 100%;
       height: 276px;
-      text-align: center;
+      display: flex;
+      justify-content: center;
 
       img {
         height: 100%;
         width: auto;
       }
+    }
+
+    ul.slick-dots {
+      position: absolute;
+      width: 100%;
+      #{$left}: 0;
+      text-align: center;
+    }
+
+    button.slick-arrow {
+      top: 40%;
     }
   }
 }
