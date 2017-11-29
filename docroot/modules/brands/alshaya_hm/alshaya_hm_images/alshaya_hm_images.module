@@ -132,6 +132,7 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
  */
 function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb_images, $sku) {
   if (empty($main_image)) {
+    /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
     $color = \Drupal::request()->query->get('color');
 
@@ -159,6 +160,7 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
       $thumb_images[$key]['mediumurl'] = $main_images[$key]['url'];
       $thumb_images[$key]['type'] = 'image';
       $thumb_images[$key]['fullurl'] = $fullscreen_images[$key]['url'];
+      $thumb_images[$key]['label'] = $sku->label();
     }
 
     // Check on main images is sufficient here, since zoom images are variations
@@ -166,6 +168,7 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
     if ($main_images) {
       $main_image['zoomurl'] = $zoom_images[0]['url'];
       $main_image['mediumurl'] = $main_images[0]['url'];
+      $main_image['label'] = $sku->label();
     }
   }
 }
