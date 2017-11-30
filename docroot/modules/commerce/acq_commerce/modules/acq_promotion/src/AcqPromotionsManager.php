@@ -166,8 +166,15 @@ class AcqPromotionsManager {
     foreach ($nids as $nid) {
       /* @var $node \Drupal\node\Entity\Node */
       $node = $this->nodeStorage->load($nid);
-      $node->setPublished(Node::NOT_PUBLISHED);
-      $node->save();
+
+      // Unpublish all translations of the current node as well.
+      $translation_languages = $node->getTranslationLanguages();
+
+      foreach ($translation_languages as $langcode => $lang_obj) {
+        $node_translation = $node->getTranslation($langcode);
+        $node_translation->setPublished(Node::NOT_PUBLISHED);
+        $node_translation->save();
+      }
 
       // Detach promotion from all skus.
       $attached_promotion_skus = $this->getSkusForPromotion($node);

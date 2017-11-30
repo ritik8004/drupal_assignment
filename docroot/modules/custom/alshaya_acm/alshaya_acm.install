@@ -12,6 +12,21 @@ use Drupal\user\Entity\User;
 use Symfony\Component\Yaml\Yaml;
 
 /**
+ * Implements hook_update().
+ *
+ * Update the C&C STS message, change placeholder to stop forced italic.
+ */
+function alshaya_acm_update_8005() {
+  // Array of language translation strings.
+  $strings = [
+    'Your order will be available in @duration' => [
+      'ar' => 'سيتم توصيل طلبيتك خلال @duration',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_update_N().
  *
  * Set new config for interval in alshaya_acm.settings.

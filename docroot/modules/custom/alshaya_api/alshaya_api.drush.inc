@@ -20,7 +20,7 @@ function alshaya_api_drush_command() {
 }
 
 /**
- * Implements drush categories sync command.
+ * Implements drush store sync command.
  */
 function drush_alshaya_api_sync_stores() {
   drush_print(dt('Synchronizing all stores, please wait...'));

@@ -1,6 +1,5 @@
-uuid: 420356d8-cb4e-42e7-91ee-bdd46ea3729e
-id: store
-label: Stores
+id: store_ar
+label: Stores AR
 migration_group: custom
 migration_tags:
   - store
@@ -11,14 +10,23 @@ dependencies:
       - alshaya_stores_finder
 source:
   plugin: store
-  path: 'temporary://store.data.csv'
+  path: 'temporary://store.data.ar.csv'
   header_row_count: 1
   keys:
     - Store code
 destination:
   plugin: entity:node
   default_bundle: store
+  translations: true
 process:
+  langcode:
+    plugin: default_value
+    default_value: ar
+  nid:
+    plugin: migration
+    source: Store code
+    migration: store_en
+  content_translation_source: en
   title: Address line 1
   sticky:
     plugin: default_value
@@ -47,3 +55,6 @@ process:
     process:
       key: day
       value: hours
+migration_dependencies:
+  required:
+    - store_en
