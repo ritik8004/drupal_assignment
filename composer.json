@@ -186,7 +186,7 @@
                 "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"
             },
             "drupal/recaptcha" : {
-                "modal support": "https://www.drupal.org/files/issues/2493183-recaptcha-use-behaviors-74.patch"
+                "modal support": "https://www.drupal.org/files/issues/2493183-recaptcha-use-behaviors-76.patch"
             }
         },
         "installer-paths": {

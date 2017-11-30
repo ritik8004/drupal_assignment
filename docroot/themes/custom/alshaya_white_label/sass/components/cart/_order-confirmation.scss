@@ -635,6 +635,10 @@
   }
 
   &.expanded-table {
+    @include breakpoint($only-mobile) {
+      margin-top: 2rem;
+    }
+
     @include breakpoint($tablet) {
       margin-#{$right}: 4.15rem;
       width: 8.5rem;
@@ -701,5 +705,11 @@
         min-width: 57.5rem;
       }
     }
+  }
+}
+
+.vat-text-footer {
+  @include breakpoint($only-mobile) {
+    text-align: center;
   }
 }

@@ -32,10 +32,7 @@ function alshaya_acm_update_8005() {
  * Set new config for interval in alshaya_acm.settings.
  */
 function alshaya_acm_update_8004() {
-  \Drupal::configFactory()
-    ->getEditable('alshaya_acm.settings')
-    ->set('config_check_interval', 300)
-    ->save();
+  // This setting is no longer in use.
 }
 
 /**

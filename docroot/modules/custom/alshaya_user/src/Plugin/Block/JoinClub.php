@@ -83,8 +83,17 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function build() {
-
     $build = [];
+
+    // If loyalty enabled on site.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
+      $loyalty_settings = alshaya_loyalty_get_validation_settings();
+
+      if (!($loyalty_settings['enable_disable_loyalty'])) {
+        return $build;
+      }
+    }
+
     // Default image.
     $image_path = drupal_get_path('module', 'alshaya_user') . '/images/alshaya-priv-card.png';
 
