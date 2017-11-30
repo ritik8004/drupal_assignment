@@ -399,6 +399,18 @@
     width: calc(100% - 5.7rem);
     float: $left;
 
+    html[lang=ar] & {
+      width: calc(100% - 5.55rem);
+    }
+
+    @include breakpoint($upto-desktop) {
+      width: calc(100% - 5.45rem);
+
+      html[lang=ar] & {
+        width: calc(100% - 5.3rem);
+      }
+    }
+
     #edit-email-error {
       line-height: 1.36;
       display: inline-block;
