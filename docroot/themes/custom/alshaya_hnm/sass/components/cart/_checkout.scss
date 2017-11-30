@@ -980,7 +980,6 @@ body.alias--cart {
 
         &:nth-child(2) {
           background: $white-five;
-          padding-top: 0.5em !important;
 
           @include breakpoint($only-mobile) {
             padding-top: 1.4em !important;
@@ -990,18 +989,6 @@ body.alias--cart {
 
       td:first-child {
         font-size: 12px;
-
-        @include breakpoint($mobile) {
-          padding-top: 0.1rem !important;
-        }
-
-        @include breakpoint($tablet) {
-          padding-top: 0.3rem !important;
-        }
-
-        @include breakpoint($desktop) {
-          padding-top: 0.5rem !important;
-        }
       }
     }
 
