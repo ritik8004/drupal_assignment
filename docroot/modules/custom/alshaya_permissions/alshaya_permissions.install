@@ -53,3 +53,16 @@ function alshaya_permissions_update_8004() {
   // Update role permissions from the config.
   _alshaya_permissions_update_role_from_config(['webmaster']);
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create a new role 'Site builder' and assign some permissions.
+ */
+function alshaya_permissions_update_8005() {
+  // Creating 'Site builder' role.
+  alshaya_config_install_configs(['user.role.site_builder'], 'alshaya_permissions');
+
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['site_builder', 'webmaster']);
+}
