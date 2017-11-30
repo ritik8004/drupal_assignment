@@ -352,13 +352,14 @@
       position: absolute;
       z-index: 1;
       padding: 10px 11px;
-      top: 1rem;
+      top: 1.6rem;
       #{$left}: -4.3rem;
       color: $hnm-black-two;
       background-color: $grey1;
       border: 1px solid $hnm-black-two;
       border-radius: 2px;
       width: 10.81rem;
+      margin: 0;
 
       @include breakpoint($desktop) {
         #{$left}: 0.95rem;
@@ -437,7 +438,8 @@
   .tooltip::after {
     @extend %tooltip-after;
 
-    border-bottom-width: 6px;
+    border-bottom-width: 0.4375rem;
+    bottom: calc(100% + -1px);
 
     @include breakpoint($desktop) {
       #{$right}: 5.05rem;

@@ -1,0 +1,82 @@
+// Theming of mobile image gallery popup on PDP.
+.nodetype--acq_product .dialog-product-image-gallery-container-mobile {
+  padding: 0;
+}
+
+.mob-imagegallery {
+  &.ui-dialog-content {
+    padding: 0;
+    height: 100% !important;
+    width: 100% !important;
+    background: $white-five;
+  }
+
+  .subtext {
+    width: 100%;
+    padding: 1rem;
+    font-size: 0.75rem;
+    text-align: center;
+    color: $white-five;
+    line-height: 1;
+    background: $black-two;
+    margin-top: 0;
+    opacity: 0.62;
+    position: absolute;
+    bottom: 3.125rem;
+
+    p {
+      margin: 0.1875rem;
+    }
+  }
+
+  .mob-imagegallery__wrapper {
+    position: relative;
+  }
+
+  .button__wrapper {
+    width: 7rem;
+    position: absolute;
+    #{$left}: calc((100vw - 7rem) / 2);
+    bottom: 5%;
+
+    .zoomout,
+    .zoomin {
+      font-family: $alshaya-thin;
+      cursor: pointer;
+      border-radius: 2.1875rem;
+      border: none;
+      font-size: 1.5rem;
+      margin: 0 1rem;
+      background-color: $white;
+      padding: 0.625rem;
+      height: 0;
+
+      &.disabled {
+        background-color: $light-ash;
+      }
+    }
+
+    .zoomout {
+      background: url(../imgs/assets/ic-zoomout.svg) no-repeat;
+      background-size: contain;
+    }
+
+    .zoomin {
+      background: url(../imgs/assets/ic-zoomin.svg) no-repeat;
+      background-size: contain;
+    }
+  }
+}
+
+.mob-imagegallery__thumbnails {
+  margin: 0;
+  padding: 0;
+
+  .slick-dots {
+    text-align: center;
+  }
+}
+
+.mob-imagegallery__thumbnails__image {
+  overflow: scroll;
+}
