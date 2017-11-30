@@ -60,6 +60,7 @@ function alshaya_hm_images_theme($existing, $type, $theme, $path) {
       'variables' => [
         'mainImage' => '',
         'hoverImage' => '',
+        'label' => '',
       ],
     ],
   ];
@@ -110,6 +111,9 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
               ],
             ],
           ];
+
+          // We don't get alt/title, we use product's title for that.
+          $sku_gallery['#label'] = $sku->label();
 
           if ($plp_hover_image) {
             $sku_gallery['#hoverImage'] = $plp_hover_image;
@@ -186,6 +190,8 @@ function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
         '#theme' => 'image',
         '#attributes' => [
           'src' => $teaser_assets[0]['url']->toString(),
+          'title' => $sku_entity->label(),
+          'alt' => $sku_entity->label(),
         ],
       ];
     }
