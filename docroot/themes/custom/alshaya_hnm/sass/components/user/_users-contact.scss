@@ -61,11 +61,29 @@
       margin-top: -13px;
 
       #edit-account {
-        margin-top: 4.375rem;
+        margin-top: 2.875rem;
       }
 
       .field--name-field-privilege-card-number {
         margin-top: 3rem;
+      }
+    }
+
+    .field--type-mobile-number {
+      @include breakpoint($only-mobile) {
+        margin-top: 0.4375rem;
+
+        .mobile-number-field {
+          margin-bottom: 0.4375rem;
+        }
+      }
+
+      @include breakpoint($tablet) {
+        margin-top: 1px;
+
+        .mobile-number-field {
+          margin-bottom: 0.4375rem;
+        }
       }
     }
   }
