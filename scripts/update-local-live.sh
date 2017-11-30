@@ -8,38 +8,39 @@ arg2="$2"
 
 if [ $arg2 = "dev" ]
 then
-  remote_user="alshaya.01dev"
-  server="staging-1505.enterprise-g1.hosting.acquia.com"
-  dir="/home/alshaya/01dev"
+  remote_alias="@alshaya.01dev"
+  remote_l_argument=" -l mckw.dev-alshaya.acsitefactory.com"
   origin_dir="sites/g/files/bndsjb246/files/"
   origin="https://mckw.dev-alshaya.acsitefactory.com"
 elif [ $arg2 = "test" ]
 then
-  remote_user="alshaya.01test"
-  server="staging-1505.enterprise-g1.hosting.acquia.com"
-  dir="/home/alshaya/01test"
+  remote_alias="@alshaya.01test"
+  remote_l_argument=" -l mckw.test-alshaya.acsitefactory.com"
   origin_dir="sites/g/files/bndsjb246/files/"
   origin="https://mckw.test-alshaya.acsitefactory.com"
 elif [ $arg2 = "uat" ]
 then
-  remote_user="alshaya.01uat"
-  server="staging-1509.enterprise-g1.hosting.acquia.com"
-  dir="/home/alshaya/01uat"
+  remote_alias="@alshaya.01uat"
+  remote_l_argument=" -l whitelabel1.uat-alshaya.acsitefactory.com"
   origin_dir="sites/g/files/bndsjb5371uat/files/"
   origin="https://whitelabel1.uat-alshaya.acsitefactory.com"
-elif [ $arg2 = "hmkw_dev3" ]
+elif [ $arg2 = "prod" ]
 then
-  remote_user="alshaya.01dev3"
-  server="staging-2001.enterprise-g1.hosting.acquia.com"
-  dir="/home/alshaya/01dev3"
+  remote_alias="@alshaya.01live"
+  remote_l_argument=" -l mckw.factory.alshaya.com"
+  origin_dir="sites/g/files/bndsjb246/files/"
+  origin="https://mckw.factory.alshaya.com"
+elif [ $arg2 = "hmkw_dev" ]
+then
+  remote_alias="@alshaya.01dev3"
+  remote_l_argument=" -l hmkw.dev3-alshaya.acsitefactory.com"
   origin_dir="sites/g/files/bndsjb5371dev3/files/"
   origin="https://hmkw.dev3-alshaya.acsitefactory.com"
 else
 elif [ $arg2 = "hmkw_pprod" ]
 then
-  remote_user="alshaya.01pprod"
-  server="staging-1510.enterprise-g1.hosting.acquia.com"
-  dir="/home/alshaya/01uat"
+  remote_alias="@alshaya.01pprod"
+  remote_l_argument=" -l hmkw.pprod-alshaya.acsitefactory.com"
   origin_dir="sites/g/files/bndsjb5321pprod/files/"
   origin="https://hmkw.pprod-alshaya.acsitefactory.com"
 else
@@ -58,7 +59,7 @@ l_argument=""
 # Check if we have an existing archive if we want to reuse existing one.
 if [ $arg1 = "reuse" ]
 then
-  if [ ! -f $local_archive.gz ]
+  if [ ! -f $local_archive ]
   then
     echo "No existing archive found for $arg2"
     exit 0
@@ -67,23 +68,11 @@ then
 elif [ $arg1 = "download" ]
 then
   echo "Downloading latest database from $arg2"
-  scp $remote_user@$server:$(ssh $remote_user@$server "ls -t $dir/post_db_copy_* | head -1") $local_archive.gz
+  drush $remote_alias $remote_l_argument sql-dump > $local_archive
 else
   echo "Please provide valid argument to download or reuse db."
   exit 0
 fi
-
-if [ ! -f $local_archive.gz ]
-then
-  echo "Unable to download, check logs above."
-  exit 0
-fi
-
-# Delete un-zipped version if exists.
-rm $local_archive
-
-# Un-zip.
-gunzip --keep $local_archive.gz
 
 # Drop the current database.
 echo "Dropping local database"
@@ -97,9 +86,6 @@ drush $alias $l_argument ssh "sudo service memcached restart"
 echo "Installing database from $arg2 env"
 drush $alias $l_argument sql-cli < $local_archive
 
-# Delete un-zipped version to save space.
-rm $local_archive
-
 # Update super admin email to local default.
 echo "Update super admin email to no-reply@acquia.com."
 drush $alias $l_argument sqlq "update users_field_data set mail = 'no-reply@acquia.com', name = 'admin' where uid = 1"
@@ -111,9 +97,6 @@ drush $alias $l_argument user-password admin --password="admin"
 # Unblock user 1
 echo "Unblocking super admin user"
 drush $alias $l_argument uublk --name=admin
-
-# Clear cache once.
-drush $alias $l_argument cr
 
 drush $alias $l_argument en dblog -y
 
