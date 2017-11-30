@@ -764,10 +764,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // Disable config options not available for the selected config.
         alshaya_acm_product_update_config_options($form['ajax'], $form_state, $form_state->getValue('configurables'), FALSE);
       }
-    }
 
-    // Stock check for products with multiple configurables.
-    if (count($form_state->get('tree')['configurables']) > 1) {
       // Check stock in case of Configurable products with multiple attributes.
       $selected_configs = $form_state->getValue('configurables');
 
