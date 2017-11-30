@@ -36,6 +36,10 @@
 
   .field--name-field-first-name {
     margin-#{$right}: 1.5rem;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: 1rem;
+    }
   }
 
   .field--name-field-first-name,
