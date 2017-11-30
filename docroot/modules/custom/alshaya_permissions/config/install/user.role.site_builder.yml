@@ -25,4 +25,4 @@ permissions:
   - 'translate store node'
   - 'create content translations'
   - 'administer site configuration'
-  - 'Translate configuration'
+  - 'translate configuration'
