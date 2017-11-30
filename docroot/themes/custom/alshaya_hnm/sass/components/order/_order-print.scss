@@ -359,3 +359,16 @@ html[lang="ar"] {
     line-height: 1.4;
   }
 }
+
+.user__order--detail .total-row {
+  @include breakpoint($only-mobile) {
+    position: relative;
+  }
+
+  .warm--white {
+    @include breakpoint($only-mobile) {
+      position: absolute;
+      #{$right}: 0;
+    }
+  }
+}
