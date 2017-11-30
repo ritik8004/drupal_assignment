@@ -28,7 +28,7 @@ class AlshayaSearchGranular extends SearchApiGranular {
    * {@inheritdoc}
    */
   public function calculateResultFilter($value) {
-    $range = $this->getRange(ceil($value));
+    $range = $this->getRange(floor($value));
 
     $t_options = [
       '@start' => alshaya_acm_price_format($range['start']),
@@ -36,7 +36,7 @@ class AlshayaSearchGranular extends SearchApiGranular {
     ];
 
     // If this is the first range, display, "under X".
-    if ($range['start'] === 0) {
+    if ($range['start'] == 0) {
       $displayValue = t('under @stop', $t_options)->render();
     }
     else {
@@ -63,20 +63,14 @@ class AlshayaSearchGranular extends SearchApiGranular {
     $start = 0;
     $stop = $granularity;
 
-    if ($value > $granularity) {
-      // If we are at the end of a range, we need to start one range back.
-      if (($value % $granularity) === 0) {
-        $start = $value - $granularity + 1;
-      }
-      // Otherwise, we need to find the closest range by removing the remainder.
-      else {
-        // Remove the remainder.
-        $start = $value - ($value % $granularity) + 1;
-      }
-
-      // Calculate the stop of the range.
-      $stop = $start + $granularity - 1;
+    if ($value % $granularity) {
+      $start = $value - ($value % $granularity);
     }
+    else {
+      $start = $value;
+    }
+
+    $stop = $start + $granularity;
 
     return [
       'start' => $start,

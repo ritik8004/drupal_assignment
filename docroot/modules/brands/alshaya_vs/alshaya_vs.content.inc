@@ -68,7 +68,7 @@ function alshaya_vs_create_email_signup_cta_block_content() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'إبقى دائماً على معرفة',
     'body' => [
-      'value' => "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/email-sign-up\" class=\"use-ajax\" data-dialog-type=\"modal\">تسجيل مستخدم جديد</a></p>",
+      'value' => "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/ar/email-sign-up\" class=\"use-ajax\" data-dialog-type=\"modal\">تسجيل مستخدم جديد</a></p>",
       'format' => 'full_text',
     ]
   ]);

@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.storage.paragraph.field_1_row_2_col
     - paragraphs.paragraphs_type.1_row_2_col_dept
+    - paragraphs.paragraphs_type.image_title_subtitle
     - paragraphs.paragraphs_type.promo_block
   module:
     - entity_reference_revisions
@@ -22,6 +23,7 @@ settings:
   handler_settings:
     target_bundles:
       promo_block: promo_block
+      image_title_subtitle: image_title_subtitle
     target_bundles_drag_drop:
       1_row_2_col_dept:
         weight: 11
