@@ -671,6 +671,10 @@
   }
 
   &.expanded-table {
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+    }
+
     @include breakpoint($only-tablet) {
       margin-right: 2.8rem;
 
@@ -719,3 +723,10 @@
   font-weight: bold;
   font-family: $arial;
 }
+
+.vat-text-footer {
+  @include breakpoint($only-mobile) {
+    text-align: center;
+  }
+}
+
