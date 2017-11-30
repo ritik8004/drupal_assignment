@@ -123,6 +123,60 @@
       </phingcall>
   </target>
 
+  <target name="refresh:hm-local:drupal"
+          description="Reinstall local dev environment.">
+    <phingcall target="setup:composer:install"/>
+    <phingcall target="frontend:build"/>
+    <phingcall target="local:reset-local-settings"/>
+    <phingcall target="local:drupal:install">
+      <property name="drush.uri" value="https://local.alshaya-hm.com" />
+    </phingcall>
+    <phingcall target="setup:toggle-modules">
+      <property name="drush.uri" value="https://local.alshaya-hm.com" />
+    </phingcall>
+    <phingcall target="local:reset-settings-file"/>
+    <phingcall target="local:post-install">
+      <property name="drush.uri" value="https://local.alshaya-hm.com" />
+      <property name="drush.brand_module" value="alshaya_hm" />
+    </phingcall>
+    <phingcall target="sync:products">
+      <property name="drush.uri" value="https://local.alshaya-hm.com" />
+    </phingcall>
+    <phingcall target="sync:promotions">
+      <property name="drush.uri" value="https://local.alshaya-hm.com" />
+    </phingcall>
+    <phingcall target="sync:stores">
+      <property name="drush.uri" value="https://local.alshaya-hm.com" />
+    </phingcall>
+  </target>
+
+  <target name="refresh:mcksa-local:drupal"
+          description="Reinstall local dev environment.">
+    <phingcall target="setup:composer:install"/>
+    <phingcall target="frontend:build"/>
+    <phingcall target="local:reset-local-settings"/>
+    <phingcall target="local:drupal:install">
+      <property name="drush.uri" value="https://local.alshaya-mcksa.com" />
+    </phingcall>
+    <phingcall target="setup:toggle-modules">
+      <property name="drush.uri" value="https://local.alshaya-mcksa.com" />
+    </phingcall>
+    <phingcall target="local:reset-settings-file"/>
+    <phingcall target="local:post-install">
+      <property name="drush.uri" value="https://local.alshaya-mcksa.com" />
+      <property name="drush.brand_module" value="alshaya_mcksa" />
+    </phingcall>
+    <phingcall target="sync:products">
+      <property name="drush.uri" value="https://local.alshaya-mcksa.com" />
+    </phingcall>
+    <phingcall target="sync:promotions">
+      <property name="drush.uri" value="https://local.alshaya-mcksa.com" />
+    </phingcall>
+    <phingcall target="sync:stores">
+      <property name="drush.uri" value="https://local.alshaya-mcksa.com" />
+    </phingcall>
+  </target>
+
   <target name="refresh:non-transac-local:drupal"
           description="Reinstall local dev environment with non-transac profile.">
       <phingcall target="setup:composer:install"/>
