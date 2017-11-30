@@ -36,6 +36,10 @@
 
   .field--name-field-first-name {
     margin-#{$right}: 1.5rem;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: 1rem;
+    }
   }
 
   .field--name-field-first-name,
@@ -61,11 +65,23 @@
       margin-top: -13px;
 
       #edit-account {
-        margin-top: 4.375rem;
+        margin-top: 2.875rem;
       }
 
       .field--name-field-privilege-card-number {
         margin-top: 3rem;
+      }
+    }
+
+    .field--type-mobile-number {
+      margin-top: 0.4375rem;
+
+      .mobile-number-field {
+        margin-bottom: 0.4375rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-top: 1px;
       }
     }
   }
