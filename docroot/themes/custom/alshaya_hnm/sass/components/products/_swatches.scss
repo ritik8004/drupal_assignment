@@ -1,24 +1,32 @@
 .swatches {
   a {
     display: inline-block;
-    margin: 0.125rem;
-    height: 1.25rem;
-    width: 1.25rem;
     position: relative;
 
     .swatch-block {
       display: inline-block;
     }
+  }
+}
 
-    &:hover {
-      &::after {
-        content: '';
-        position: absolute;
-        border: 1px solid $hnm-black-two;
+.c-plp {
+  .field--name-field-skus {
+    .swatches {
+      a:not(.swatch-more-link) {
+        margin-#{$right}: 0.625rem;
+      }
+
+      a:not(.swatch-more-link),
+      .swatch-block {
+        width: 0.875rem;
+        height: 0.875rem;
+      }
+
+      a.swatch-more-link {
+        font-size: 0.75rem;
+        color: $hnm-black-two;
+        width: auto;
         top: -0.125rem;
-        #{$left}: -0.125rem;
-        #{$right}: -0.125rem;
-        bottom: -0.125rem;
       }
     }
   }

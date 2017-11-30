@@ -119,7 +119,7 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
 
           if ($swatches) {
             $elements[$delta]['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit);
-            $elements[$delta]['#swatch_more_text'] = count($swatches) > $swatch_plp_limit ? t('+ %swatch_count more', ['%swatch_count' => count($swatches) - $swatch_plp_limit]) : FALSE;
+            $elements[$delta]['#swatch_more_text'] = count($swatches) > $swatch_plp_limit ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit]) : FALSE;
           }
         }
       }
