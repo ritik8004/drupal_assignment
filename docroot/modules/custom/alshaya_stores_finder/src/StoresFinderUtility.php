@@ -163,7 +163,7 @@ class StoresFinderUtility {
 
       $node->get('field_store_locator_id')->setValue($store['store_code']);
 
-      $this->logger->info('Creating store @store_code in @langcode', ['@store_code' => $store['store_code'], 'langcode' => $store['langcode']]);
+      $this->logger->info('Creating store @store_code in @langcode', ['@store_code' => $store['store_code'], '@langcode' => $store['langcode']]);
     }
 
     if (!empty($store['store_name'])) {

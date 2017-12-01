@@ -12,6 +12,23 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Update facets config.
+ */
+function alshaya_product_update_8009() {
+  $configs = [
+    'facets.facet.collection',
+    'facets.facet.size',
+    'facets.facet.skus_sku_reference_brand',
+    'facets.facet.skus_sku_reference_collection',
+    'facets.facet.skus_sku_reference_size',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Revert alshaya_product_list view remove stock sort for PLP.
  * It is added programmatically now.
  */
