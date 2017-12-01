@@ -1664,6 +1664,17 @@
         }
       }
     }
+
+    li.disabled {
+      .form-item-configurables-article-castor-id & {
+        vertical-align: top;
+
+        span {
+          width: 2.375rem;
+          height: 2.375rem;
+        }
+      }
+    }
   }
 }
 
