@@ -64,7 +64,7 @@ To prepare your local env:
   * `composer blt-alias`
   * `blt vm`
   * `blt refresh:local`
-  * Enter the site code you want to setup the site for
+  * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local -Dsite=mckw`)
   * `drush @alshaya.local uli`
 * Load commerce content (already included in refresh:local and refresh:local:drupal):
   * `drush @alshaya.local -l [alias] alshaya-acm-offline-categories-sync`
