@@ -710,9 +710,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $form['#attached']['drupalSettings']['alshaya_product_size_config'] = $options;
     }
 
-    // Process stock if number of configurable attributes is 1.
-    $process_stock = (count($form_state->get('tree')['configurables']) === 1) ? TRUE : FALSE;
-
     // In case of multiple config attributes, make sure the first one is
     // selected by default on page load.
     if (count($form_state->get('tree')['configurables']) > 1) {
@@ -767,6 +764,35 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // Disable config options not available for the selected config.
         alshaya_acm_product_update_config_options($form['ajax'], $form_state, $form_state->getValue('configurables'), FALSE);
       }
+
+      // Check stock in case of Configurable products with multiple attributes.
+      $selected_configs = $form_state->getValue('configurables');
+
+      // While selecting an attribute, the user input is available under inputs.
+      if (empty($selected_configs)) {
+        $selected_configs = $form_state->getUserInput()['configurables'];
+      }
+
+      // Get skus for the selected config.
+      $variations = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), $selected_configs);
+
+      // Check stock for variations & update options.
+      foreach ($variations as $key => $variation) {
+        if ($key === '#available_config') {
+          continue;
+        }
+
+        if ($variation instanceof SKU) {
+          $form['#cache']['tags'][] = 'acq_sku:' . $variation->id();
+          if (!($quantity = alshaya_acm_get_product_stock($variation))) {
+            $attribute_parts = explode(':', $key);
+            if (isset($form['ajax']['configurables'][$attribute_parts[0]])) {
+              $form['ajax']['configurables'][$attribute_parts[0]]['#options_attributes'][$attribute_parts[1]]['disabled'] = 'disabled';
+            }
+          }
+        }
+      }
+      $process_stock = FALSE;
     }
 
     foreach ($form['ajax']['configurables'] as $configurable_key => &$configurable) {
@@ -801,6 +827,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               }
             }
           }
+
           continue;
         }
 
