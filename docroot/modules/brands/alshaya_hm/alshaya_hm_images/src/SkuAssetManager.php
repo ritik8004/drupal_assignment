@@ -146,6 +146,11 @@ class SkuAssetManager {
    *   Array of asset attributes.
    */
   public function getAssetAttributes(SKU $sku, $asset, $page_type, $location_image) {
+    // For cross / up / related blocks we use the images of PLP.
+    if ($location_image == 'teaser') {
+      $location_image = 'plp';
+    }
+
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
