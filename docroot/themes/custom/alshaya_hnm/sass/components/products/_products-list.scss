@@ -1,0 +1,975 @@
+.c-plp {
+  padding-top: 1.5rem;
+
+  @include breakpoint($only-mobile) {
+    padding-top: 0.75rem;
+  }
+
+  > .c-sidebar-first {
+    @include breakpoint($desktop) {
+      .c-facet__label,
+      .c-accordion {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+
+  .region__content {
+    position: relative;
+
+    .block-views-blockplp-promotional-banner-block-1.promo-banner,
+    .block-views-blockpromotion-banner-block-1.promo-banner {
+      margin-bottom: 1.5rem;
+
+      @include breakpoint($desktop) {
+        padding-top: 0.875rem;
+      }
+    }
+
+    .block-views-exposed-filter-blocksearch-page form.views-exposed-form-search-page {
+      @include breakpoint($only-mobile) {
+        border: none;
+      }
+    }
+
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar {
+      overflow: hidden;
+
+      &.empty {
+        clear: both;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      ul {
+        padding: 0;
+        margin: 0;
+
+        @include breakpoint($tablet) {
+          display: inline-block;
+          margin-bottom: 0;
+          margin-top: 1.5rem;
+          width: 100%;
+        }
+
+        li {
+          list-style: none;
+          float: $left;
+          margin-#{$right}: 0.75rem;
+          padding-bottom: 0.75rem;
+
+          a {
+            color: $white-four;
+            font-size: 12px;
+
+            span {
+              background: $hnm-black-two;
+              display: inline;
+              padding: 0.657rem 17px;
+              text-align: center;
+              vertical-align: middle;
+              height: 35px;
+
+              &.facet-item__value {
+                float: $left;
+                margin-#{$right}: 1px;
+                line-height: 1;
+                text-transform: capitalize;
+              }
+
+              &.facet-item__count {
+                display: none;
+              }
+
+              &.js-facet-deactivate {
+                @include icon(close, after) {
+                  position: absolute;
+                  top: 2.15%;
+                  #{$left}: 3.5%;
+                  color: $white-four;
+                }
+
+                color: transparent;
+                font-size: 2.09rem;
+                width: 35px;
+                height: 35px;
+                position: relative;
+                float: $right;
+              }
+
+              div {
+                display: inline;
+              }
+            }
+
+            .price-type__wrapper {
+              padding: 0;
+
+              div,
+              span {
+                padding: 0;
+              }
+            }
+          }
+
+          &.clear-all {
+            border: 2px solid $hnm-black-two;
+            padding: 0.407rem 1.5rem;
+            text-transform: lowercase;
+            line-height: 1;
+            height: 2.188rem;
+
+            a {
+              color: $hnm-black-two;
+              font-family: $hnm-bold;
+              text-transform: uppercase;
+            }
+          }
+        }
+      }
+    }
+
+    .filter--mobile {
+      @include breakpoint($tablet) {
+        top: 0;
+
+        html[lang=ar] & {
+          top: 0;
+        }
+      }
+
+      .form-type-select {
+        text-transform: lowercase;
+
+        select {
+          @include breakpoint($desktop) {
+            width: 9.4rem;
+          }
+        }
+
+        label {
+          #{$left}: -3.8125rem;
+
+          html[lang=ar] & {
+            #{$left}: -4.5rem;
+          }
+        }
+      }
+
+      .c-facet__blocks__wrapper--mobile {
+        transform: none;
+
+        @include breakpoint($tablet) {
+          transform: translate(#{negate-value(-3.7)}rem, 0);
+        }
+
+        .c-facet__blocks {
+          .filter-menu-label {
+            display: none;
+
+            @include breakpoint($only-mobile) {
+              margin-bottom: 0.82rem;
+              margin-top: 0.875rem;
+
+              @include u-visibility(inline-block);
+
+              .label {
+                @include arabic-letter-spacing;
+
+                font-family: $hnm-bold;
+                font-size: 0.875rem;
+                padding-#{$left}: 1.5rem;
+                color: $black;
+                float: $left;
+                margin-top: 0.4375rem;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+              }
+
+              @include icon(dropdown-expand, after) {
+                position: absolute;
+                #{$left}: 1.3%;
+                top: 0.8125rem;
+                font-size: 2.125rem;
+                pointer-events: none;
+                transform: rotate(90deg);
+                color: $hnm-black-two;
+              }
+
+              &::after {
+                html[lang=ar] & {
+                  transform: rotate(270deg);
+                  top: 0.75rem;
+                }
+              }
+            }
+          }
+
+          li.clear-all {
+            @include breakpoint($only-mobile) {
+              display: none;
+            }
+
+            list-style: none;
+            display: inline-block;
+            border: 1px solid $hnm-black-two;
+            margin-#{$left}: 5.6rem;
+            font-size: 12px;
+            text-align: center;
+            padding: 0.407rem 0.532rem;
+            font-family: alshaya-thin;
+            text-transform: lowercase;
+
+            a {
+              color: $cerulean-two;
+            }
+          }
+
+          .applied-filter-count {
+            @include arabic-letter-spacing;
+
+            font-family: $hnm-bold;
+            color: $hnm-black-two;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+          }
+
+          .c-accordion__title.ui-state-active {
+            border-bottom: none;
+          }
+
+          .c-accordion {
+            margin-left: 0;
+            margin-right: 0;
+
+            @include breakpoint($only-tablet) {
+              ul {
+                padding-top: 0;
+              }
+            }
+
+            .c-accordion__title::after {
+              #{$right}: 0;
+            }
+          }
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        .c-facet__blocks__wrapper--mobile {
+          width: 38%;
+          width: calc(50% - 42px);
+
+          .c-facet__label {
+            width: 100%;
+          }
+        }
+
+        .view-filters.is-filter {
+          width: 49%;
+
+          .form-type-select,
+          .select2-container,
+          .select2-selection {
+            width: 100% !important;
+          }
+        }
+      }
+    }
+
+    &.promo-banner {
+      .block-page-title-block {
+        @include breakpoint($tablet) {
+          padding-top: 0 !important;
+        }
+      }
+    }
+
+    .block-page-title-block {
+      @include breakpoint($tablet) {
+        width: 73%;
+        padding-top: 0.75rem;
+      }
+
+      &.mobile {
+        + .view-header.search-count {
+          margin-top: 5px;
+        }
+
+        h1 {
+          border-bottom: 0;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
+      }
+    }
+
+    .view-header.search-count {
+      margin-top: 0.9rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.875rem;
+      color: $grey7;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid $white;
+      font-family: $hnm-regular;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0.75rem;
+      }
+    }
+
+    .promo-banner > .filter--mobile {
+      top: 213px !important;
+
+      @include breakpoint($only-tablet) {
+        top: 161px !important;
+      }
+    }
+
+    .form-item-keywords {
+      display: none;
+    }
+  }
+
+  .block-system-main-block {
+    @include breakpoint($tablet) {
+      display: block;
+      margin-top: 1.5rem;
+    }
+  }
+
+  .c-page-title {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid $white;
+    }
+
+    @include breakpoint($only-tablet) {
+      max-width: 20rem;
+    }
+  }
+
+  .c-page-title__description,
+  .field--name-field-acq-promotion-description {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+
+    @include breakpoint($only-tablet) {
+      max-width: 50%;
+    }
+
+    width: 65%;
+    font-size: 1rem;
+    font-weight: normal;
+    text-transform: lowercase;
+    color: $grey7;
+    margin-top: 0.3125rem;
+    font-family: $hnm-regular;
+    line-height: 1.56;
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0;
+
+      html[lang=ar] & {
+        line-height: 1.75;
+      }
+    }
+
+    a {
+      text-decoration: underline;
+    }
+  }
+
+  .c-products-list {
+    .view-header {
+      margin-top: 1.125rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      color: $black;
+      padding-bottom: 9px;
+      border-bottom: 1px solid $white;
+      font-family: $alshaya-thin;
+
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+
+    .views-infinite-scroll-content-wrapper {
+      display: flex;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+  }
+
+  .c-products__item {
+    text-align: center;
+    color: $black;
+    margin-bottom: 0.125rem;
+    font-size: 0.9375rem;
+    position: relative;
+
+    @include breakpoint($mobile) {
+      width: 47%;
+      margin-bottom: 1rem;
+    }
+
+    @include breakpoint($tablet) {
+      width: 31.6%;
+
+      &:nth-child(3n+2) {
+        margin: 0 2.6%;
+        margin-bottom: 1rem;
+      }
+    }
+
+    @include breakpoint($upto-tablet) {
+      &:nth-child(2n+1) {
+        margin-#{$right}: 2.7%;
+      }
+
+      &:nth-child(2n) {
+        margin-#{$left}: 2.7%;
+      }
+    }
+
+    .swatches {
+      margin: 0.625rem 0;
+    }
+
+    .alshaya_search_gallery {
+      .alshaya_search_mainimage {
+        z-index: 5;
+        min-height: 15.125rem;
+        overflow: hidden;
+
+        @include breakpoint($tablet) {
+          min-height: 15.5rem;
+        }
+
+        @include breakpoint($desktop) {
+          min-height: 20.125rem;
+        }
+      }
+    }
+
+    .field--name-name {
+      margin-top: 0.625rem;
+      margin-bottom: 0.625rem;
+      font-family: $hnm-regular;
+      font-size: 0.875rem;
+      padding: 0 1.25rem;
+
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
+
+      a {
+        color: $hnm-black-two;
+      }
+
+      @include breakpoint($tablet) {
+        font-size: 0.875rem;
+      }
+    }
+
+    .field--name-price {
+      font-size: 0.75rem;
+
+      &.special-price-exists {
+        color: $scarlet;
+        text-decoration: line-through;
+        margin-#{$right}: 4px;
+      }
+
+      @include breakpoint($tablet) {
+        font-size: 0.9375rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      &:hover {
+        z-index: 1;
+      }
+    }
+
+    .out-of-stock span {
+      @include arabic-letter-spacing;
+
+      background: $hnm-red;
+      color: $white-five;
+      font-family: $hnm-bold;
+      font-size: 0.8125rem;
+      letter-spacing: 1px;
+      padding: 0.5rem 0.8125rem;
+      margin-top: 0.25rem;
+      display: inline-block;
+      text-transform: uppercase;
+    }
+
+    .promotions {
+      margin: 0.5rem 0;
+      font-size: 0.75rem;
+      color: $grey-ash;
+
+      .sku-promotion-link {
+        font-size: 0.75rem;
+        color: $cherry;
+        display: inline-block;
+        margin-#{$left}: 0.125rem;
+        margin-#{$right}: 0.125rem;
+      }
+    }
+  }
+
+  .c-products__item__label {
+    margin-top: 0;
+    margin-bottom: 0;
+    display: none;
+  }
+
+  .c-products__item__link {
+    color: $black;
+  }
+
+  ul.js-pager__items {
+    text-align: center;
+    padding: 0;
+    list-style: none;
+    margin-bottom: 7.1rem;
+
+    a {
+      color: $hnm-black-two;
+      font-size: 0.75rem;
+      border: 2px solid $hnm-black-two;
+      padding: 0.5625rem 6.935rem;
+      font-family: $hnm-bold;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.c-facet__blocks__wrapper--mobile {
+  @include breakpoint($only-mobile) {
+    transform: none !important;
+  }
+
+  @include breakpoint($desktop) {
+    display: none;
+  }
+
+  position: relative;
+  z-index: 5;
+
+  .c-facet__label {
+    @include breakpoint($only-mobile) {
+      width: 6.75rem;
+      font-size: 0.75rem;
+      border: 1px solid $hnm-black-two;
+      border-#{$right}: none;
+
+      @include icon(dropdown-expand, after) {
+        #{$right}: -2.188rem;
+        height: 2.1875rem;
+        width: 2.1875rem;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        font-size: 2.1875rem;
+        border: 1px solid $hnm-black-two;
+        border-#{$left}: none;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      width: 6.3125rem;
+
+      @include icon(dropdown-expand, after) {
+        #{$right}: -2.15rem;
+        height: 2.1875rem;
+        width: 2.1875rem;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        font-size: 2.1875rem;
+        border: 1px solid $hnm-black-two;
+        border-#{$left}: none;
+      }
+    }
+
+    border: 1px solid $hnm-black-two;
+    border-#{$right}: none;
+    height: 2.1875rem;
+    padding: 0.625rem;
+    font-weight: normal;
+    margin: 0;
+
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 1rem;
+      font-size: 0.75rem;
+    }
+
+    &.is-active {
+      background: $white-five;
+      position: relative;
+
+      @include breakpoint($only-tablet) {
+        @include icon(dropdown-collapse, after);
+
+        border: none;
+      }
+
+      &::after {
+        border-#{$left}: none;
+
+        @include breakpoint($only-mobile) {
+          top: -1px;
+        }
+
+        @include breakpoint($tablet) {
+          border: none;
+          background-color: $white-five;
+        }
+      }
+    }
+  }
+
+  .c-facet__blocks {
+    @include breakpoint($only-tablet) {
+      top: 2.1875rem;
+      #{$right}: -10.55rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      overflow-y: scroll;
+    }
+
+    width: 16.85rem;
+    position: absolute;
+    display: none;
+    background-color: $white-five;
+    z-index: 1;
+    padding: 0 1rem;
+
+    .filter-menu-label {
+      margin-bottom: 0.82rem;
+      width: 100%;
+
+      @include u-visibility(inline-block);
+
+      .label {
+        @include arabic-letter-spacing;
+
+        font-family: $hnm-bold;
+        font-size: 0.875rem;
+        padding-#{$left}: 1.5rem;
+        color: $black;
+        float: $left;
+        margin-top: 7px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+
+        @include breakpoint($only-mobile) {
+          min-width: 6rem;
+        }
+      }
+
+      @include icon(chevron-#{$left}, after) {
+        position: absolute;
+        #{$left}: 1.3%;
+        font-size: 2rem;
+        pointer-events: none;
+      }
+    }
+
+    li.clear-all {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+
+      list-style: none;
+      display: inline-block;
+      border: 1px solid $hnm-black-two;
+      margin-#{$left}: 5.6rem;
+      font-size: 12px;
+      text-align: center;
+      padding: 0.407rem 0.532rem;
+      font-family: alshaya-thin;
+      text-transform: lowercase;
+
+      a {
+        color: $cerulean-two;
+      }
+    }
+
+    .applied-filter-count {
+      @include arabic-letter-spacing;
+
+      font-family: $hnm-bold;
+      color: $hnm-black-two;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .c-accordion__title.ui-state-active {
+      border-bottom: none;
+    }
+
+    .c-accordion {
+      margin-left: 0;
+      margin-right: 0;
+
+      @include breakpoint($only-tablet) {
+        ul {
+          padding-top: 0;
+        }
+      }
+
+      .c-accordion__title::after {
+        #{$right}: 0;
+      }
+    }
+  }
+
+  .c-facet:first-child {
+    .c-facet__title {
+      border-top: none;
+    }
+  }
+
+  .region__sidebar-first {
+    .block-facets-summary {
+      display: none;
+
+      @include breakpoint($only-mobile) {
+        display: inline-block;
+      }
+    }
+
+    > .block-facets-summary {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.filter--mobile {
+  @include breakpoint($tablet) {
+    position: absolute;
+    top: 0;
+    #{$right}: 0;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 0.75rem;
+  }
+}
+
+.is-filter {
+  @include breakpoint($only-mobile) {
+    &:last-child {
+      float: $right;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    &:first-child {
+      float: $left;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    &:first-child {
+      transform: none;
+      float: $left;
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    display: inline-block;
+  }
+
+  &.view-filters {
+    label {
+      @include breakpoint($only-tablet) {
+        display: none;
+      }
+
+      @include u-center--vertically;
+
+      position: absolute;
+      #{$left}: -4rem;
+      font-size: 0.75rem;
+      color: $hnm-black-two;
+      text-transform: uppercase;
+    }
+
+    .select2-container {
+      @include select2-style(11.625rem);
+
+      html[lang=ar] & {
+        @include select2-style(13.625rem);
+      }
+
+      @include breakpoint($upto-desktop) {
+        width: 9rem !important;
+
+        .select2-selection {
+          width: 9rem !important;
+        }
+      }
+    }
+
+    .select2-container--open {
+      .select2-selection__arrow {
+        @include icon(dropdown-collapse, after);
+      }
+    }
+
+    @include breakpoint($upto-desktop) {
+      .form-type-select {
+        @include select-wrapper(8.5rem);
+
+        select {
+          @include select-style(8.5rem);
+
+          width: 100%;
+
+          html[lang=ar] & {
+            @include breakpoint($only-mobile) {
+              padding-left: 60px;
+            }
+
+            @include breakpoint($only-tablet) {
+              padding-left: 35px;
+            }
+
+            @include breakpoint($upto-desktop) {
+              padding-top: 0;
+              padding-bottom: 0;
+              line-height: 32px;
+              height: 35px;
+            }
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .form-type-select label {
+        display: block;
+        position: absolute;
+        top: 1.125rem;
+        #{$left}: 0.125rem !important;
+        background: $white-five;
+        width: 83%;
+        pointer-events: none;
+        height: 2rem;
+        vertical-align: middle;
+        padding: 0.5rem 0;
+        padding-#{$left}: 0.5625rem;
+      }
+    }
+  }
+
+  // So that show-overlay adds effect on sort dropdown as well when filter
+  // is open on tablet.
+  &.view-filters.low-zindex {
+    .form-type-select {
+      @include breakpoint($only-tablet) {
+        z-index: 0;
+      }
+    }
+  }
+}
+
+body {
+  &.filter-open-no-scroll {
+    @include breakpoint($only-mobile) {
+      overflow: hidden;
+    }
+  }
+}
+
+.plp-page-only {
+  @include breakpoint($only-mobile) {
+    .branding__menu.show-overlay {
+      z-index: 2;
+    }
+  }
+}
+
+.c-content__highlighted {
+  .promo-banner {
+    img {
+      margin-bottom: 1.5rem;
+      width: 100%;
+      height: auto;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0.75rem;
+      }
+    }
+  }
+}
+
+// Brands wont be translated.
+html[lang=ar] {
+  .block-facet-blockbrand {
+    .facet-item__value,
+    .facet-item__count {
+      direction: ltr;
+      display: inline-block;
+    }
+  }
+}
+
+.region__sidebar-first {
+  > .block-facets-summary-blockfilter-bar-plp {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+  }
+}
+
+.c-plp {
+  .facet-item {
+    input[type=checkbox] ~ label {
+      &::before {
+        margin-#{$left}: -0.5rem;
+
+        @include breakpoint($desktop) {
+          margin-#{$left}: -0.5rem;
+        }
+      }
+    }
+  }
+
+  .block-facets-ajax {
+    .applied-filter-count {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+}
+
+.alshaya_search_hoverimage {
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+  width: 100%;
+}

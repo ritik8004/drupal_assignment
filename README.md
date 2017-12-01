@@ -91,10 +91,8 @@ install the specific configuration. See existing brand modules for example.
 * Run the appropriate `blt refresh:*` commands depending on the required
 installation profile.
 
-/!\ Currently, the blt commands are hardcoded to install the Mothercare or
-Victoria Secret sites. While the blt commands don't accept brand argument,
-please edit the `blt/setup.local.xml` file to change the brand name. Don't
-commit that change.
+/!\ Site `blt/project.local.yml` to choose which site to install locally
+when using blt commands. Be sure to not commit that change.
 
 ### Local setup of Behat:
 * Start Behat installation on your local by following the steps below:

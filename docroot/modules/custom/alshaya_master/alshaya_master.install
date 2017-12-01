@@ -576,11 +576,11 @@ function alshaya_master_install() {
     ],
     'add to cart' => [
       'ar' => 'أضف إلى سلة التسوق',
-      'en' => 'add to basket',
+      'en' => 'add to cart',
     ],
     'Add to cart' => [
       'ar' => 'أضف إلى سلة التسوق',
-      'en' => 'Add to basket',
+      'en' => 'Add to cart',
     ],
     '@name field is required.' => [
       'ar' => 'يرجى إدخال @name',
@@ -719,7 +719,7 @@ function alshaya_master_install() {
       'ar' => 'هل عنوان التوصيل هو نفس عنوان إرسال الفواتير؟',
     ],
     '<p>I confirm that I have read and accept the <a class="payment-privacy-policy" href="#">Privacy Policy</a> and <a class="payment-tnc" href="#">Terms &amp; Conditions</a> of purchase. Read our <a class="payment-return policy" href="#">Return Policy</a></p>' => [
-      'ar' => 'أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا',
+      'ar' => '<p>أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا</p>',
     ],
     'Billing address' => [
       'ar' => 'عنوان تحرير الفاتورة',
@@ -1218,7 +1218,23 @@ function alshaya_master_install() {
     'not available' => [
       'ar' => 'غير متوفر',
     ],
+    "Add a promotional code" => [
+      'ar' => 'هل لديك رمز عرض ؟',
+    ],
+    'care instructions' => [
+      'ar' => 'إرشادات العناية',
+    ],
+    'New In' => [
+      'ar' => 'جديدنا',
+    ],
+    'Best Seller' => [
+      'ar' => 'الأفضل مبيعاً',
+    ],
+    'Please enter your selection' => [
+      'ar' => 'يرجى تحديد الاختيار',
+    ],
   ];
+
   alshaya_i18n_save_translations($strings);
 
   // Get config factory object.

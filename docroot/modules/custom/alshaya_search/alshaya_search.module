@@ -76,6 +76,34 @@ function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface
 
     if ($form['#id'] === 'views-exposed-form-search-page') {
       array_unshift($form['#submit'], 'alshaya_search_keyword_language_redirect');
+
+      // Best relevance ascending option removed.
+      if (isset($form['sort_bef_combine']['#options']['search_api_relevance ASC'])) {
+        unset($form['sort_bef_combine']['#options']['search_api_relevance ASC']);
+      }
+
+      // New In ascending option removed.
+      if (isset($form['sort_bef_combine']['#options']['created ASC'])) {
+        unset($form['sort_bef_combine']['#options']['created ASC']);
+      }
+
+      // Disable sort options if not enabled.
+      $enabled_sorts = _alshaya_search_get_config();
+      if (!$enabled_sorts) {
+        $form['#access'] = FALSE;
+      }
+      else {
+        foreach ($enabled_sorts as $key => $sort) {
+          if (!$sort) {
+            if (isset($form['sort_bef_combine']['#options']["$key ASC"])) {
+              unset($form['sort_bef_combine']['#options']["$key ASC"]);
+            }
+            if (isset($form['sort_bef_combine']['#options']["$key DESC"])) {
+              unset($form['sort_bef_combine']['#options']["$key DESC"]);
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -266,6 +294,13 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
       }
     }
   }
+}
+
+/**
+ * Function to get SRP sort options config.
+ */
+function _alshaya_search_get_config() {
+  return \Drupal::config('alshaya_search.settings')->get('sort_options');
 }
 
 /**

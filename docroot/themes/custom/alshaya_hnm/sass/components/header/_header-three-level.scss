@@ -1,0 +1,111 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .menu--two__list {
+      -webkit-column-count: 3;
+      -moz-column-count: 3;
+      column-count: 3;
+      max-height: 24rem;
+      padding-#{$right}: 52%;
+      padding-#{$left}: 6.1rem;
+      padding-bottom: 1.5rem;
+      column-fill: auto;
+      min-height: 24rem;
+      padding-top: 1.5rem;
+
+      .menu--two__list-item .menu--three__list {
+        padding-#{$left}: 0;
+        padding-top: 0;
+        position: static;
+        margin-top: 0;
+      }
+    }
+
+    .level-three__wrapper {
+      width: 100%;
+      display: block;
+    }
+
+    .highlights {
+      position: absolute;
+      #{$right}: 0;
+      top: -0.875rem;
+      margin-top: 0;
+      height: 21.875rem;
+      width: auto;
+      padding: 2.5rem 6.5625rem 2.5rem 3rem;
+      background-color: $grey1;
+
+      .title {
+        @include arabic-letter-spacing;
+
+        text-transform: uppercase;
+        margin-bottom: 0.9rem;
+        font-family: $hnm-demibold;
+        font-size: 0.8125rem;
+        letter-spacing: 0.5px;
+        font-weight: normal;
+        color: $black-three;
+      }
+    }
+
+    .menu--two__list .menu--two__list-item > .menu-two__link-wrapper {
+      background: transparent;
+      padding: 0;
+      margin-bottom: 2px;
+      max-width: 10rem;
+
+      &::after {
+        content: none;
+      }
+
+      a {
+        color: $black-three !important;
+
+        html[lang=ar] & {
+          line-height: 1.7;
+        }
+      }
+    }
+
+    .menu--three__list-item > .menu-two__link-wrapper a {
+      @include arabic-letter-spacing;
+
+      font-size: 0.75rem !important;
+      color: $grey7 !important;
+      font-family: $hnm-regular !important;
+      letter-spacing: 0.3px;
+      line-height: 1.1;
+      text-transform: capitalize;
+
+      &:hover {
+        color: $link-hover !important;
+        text-decoration: underline;
+      }
+    }
+
+    .menu--two__list .menu--three__list-item {
+      display: block;
+      margin-bottom: 0;
+    }
+
+    .menu--two__list .menu--two__list-item {
+      max-width: none;
+      display: block;
+      vertical-align: top;
+      padding-#{$left}: 0.5rem;
+      margin-bottom: 1.563rem;
+    }
+  }
+
+  .menu-two__link-wrapper p {
+    display: none;
+  }
+}
+
+.block-alshaya-main-menu .has--three-levels {
+  &.menu--one__list-item ul ul {
+    @include breakpoint($desktop) {
+      display: block;
+    }
+  }
+}

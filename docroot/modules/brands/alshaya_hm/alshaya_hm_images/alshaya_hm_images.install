@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_hm_images module.
+ */
+
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\InstallStorage;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_hm_images_install() {
+  // Add fields to store the values from attributes as fields.
+  $fields = \Drupal::config('alshaya_hm_images.sku_base_fields')->get('fields');
+  acq_sku_add_base_fields($fields);
+
+  // Update color label to be a configurable value & its label to Color.
+  $alshaya_acm_product_fields = \Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields');
+  $alshaya_acm_product_fields->set('fields.color_label.configurable', 1)->save();
+  $alshaya_acm_product_fields->set('fields.color_label.label', 'Color')->save();
+
+  // Update the above in base field additions config as well.
+  $alshaya_acm_base_field_additions = \Drupal::configFactory()->getEditable('acq_sku.base_field_additions');
+  $alshaya_acm_base_field_additions->set('color_label.configurable', 1)->save();
+  $alshaya_acm_base_field_additions->set('color_label.label', 'Color')->save();
+
+  $configs = [
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_hm_images', 'optional');
+}

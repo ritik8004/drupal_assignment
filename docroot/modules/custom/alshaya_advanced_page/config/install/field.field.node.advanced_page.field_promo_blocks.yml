@@ -6,6 +6,7 @@ dependencies:
     - node.type.advanced_page
     - paragraphs.paragraphs_type.1_row_1_col
     - paragraphs.paragraphs_type.1_row_1st_col_2_row_2nd_col
+    - paragraphs.paragraphs_type.1_row_2_col
     - paragraphs.paragraphs_type.1_row_2_col_dept
     - paragraphs.paragraphs_type.1_row_3_col
     - paragraphs.paragraphs_type.1_row_3_col_text
@@ -29,6 +30,7 @@ settings:
     target_bundles:
       1_row_1st_col_2_row_2nd_col: 1_row_1st_col_2_row_2nd_col
       1_row_1_col: 1_row_1_col
+      1_row_2_col: 1_row_2_col
       1_row_3_col: 1_row_3_col
       1_row_3_col_text: 1_row_3_col_text
       1_row_3_col_text: 1_row_2_col_dept
@@ -56,6 +58,9 @@ settings:
       related_info_one_column:
         weight: 14
         enabled: false
+      1_row_2_col:
+        enabled: true
+        weight: 15
       1_row_3_col_text:
         enabled: true
         weight: 16

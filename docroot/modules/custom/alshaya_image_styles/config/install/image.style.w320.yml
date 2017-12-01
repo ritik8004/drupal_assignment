@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w320
+label: w320
+effects:
+  574105bd-4d40-48cf-b897-33791daee4b3:
+    uuid: 574105bd-4d40-48cf-b897-33791daee4b3
+    id: image_scale
+    weight: 1
+    data:
+      width: 320
+      height: null
+      upscale: false

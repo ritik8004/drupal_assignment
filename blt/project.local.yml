@@ -1,0 +1,25 @@
+drush:
+  default_alias: alshaya.local
+  aliases:
+    local: alshaya.local
+behat:
+  launch-selenium: false
+  launch-phantomjs: true
+
+# This values determine which sites are currently installed.
+brands:
+  transac: hmkw
+  non-transac: vskw
+
+# This is all the sites which are currently installed (or will be installed
+# soon) on the factory.
+sites:
+  mckw:
+    module: alshaya_mc
+    type: transac
+  hmkw:
+    module: alshaya_hm
+    type: transac
+  vskw:
+    module: alshaya_vs
+    type: non-transac

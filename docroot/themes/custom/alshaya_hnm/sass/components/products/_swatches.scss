@@ -1,0 +1,33 @@
+.swatches {
+  a {
+    display: inline-block;
+    position: relative;
+
+    .swatch-block {
+      display: inline-block;
+    }
+  }
+}
+
+.c-plp {
+  .field--name-field-skus {
+    .swatches {
+      a:not(.swatch-more-link) {
+        margin-#{$right}: 0.625rem;
+      }
+
+      a:not(.swatch-more-link),
+      .swatch-block {
+        width: 0.875rem;
+        height: 0.875rem;
+      }
+
+      a.swatch-more-link {
+        font-size: 0.75rem;
+        color: $hnm-black-two;
+        width: auto;
+        top: -0.125rem;
+      }
+    }
+  }
+}

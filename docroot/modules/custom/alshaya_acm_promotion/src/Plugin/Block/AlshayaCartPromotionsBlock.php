@@ -14,6 +14,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Driver\Exception\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a 'AlshayaCartPromotionsBlock' block.
@@ -121,8 +122,11 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
 
     if (!empty($promotion_nodes)) {
       foreach ($promotion_nodes as $key => $promotion_node) {
-        $promotion_rule_id = $promotion_node->get('field_acq_promotion_rule_id')->first()->getValue();
-        $options[$promotion_rule_id['value']] = $promotion_node->getTitle();
+        // Only allow promotions with value "other".
+        if ($promotion_node->get('field_alshaya_promotion_subtype')->getString() == AlshayaPromotionsManager::SUBTYPE_OTHER) {
+          $promotion_rule_id = $promotion_node->get('field_acq_promotion_rule_id')->first()->getValue();
+          $options[$promotion_rule_id['value']] = $promotion_node->getTitle();
+        }
       }
     }
 
@@ -172,8 +176,39 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
           }
         }
       }
+    }
 
-      $promotions = array_filter($promotions);
+    $cartRulesApplied = $this->cartStorage->getCart(FALSE)->getCart()->cart_rules;
+    $subTypePromotions = $this->alshayaAcmPromotionManager->getAllPromotions([
+      [
+        'field' => 'field_alshaya_promotion_subtype',
+        'value' => [
+          AlshayaPromotionsManager::SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER,
+          AlshayaPromotionsManager::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER,
+          AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER,
+        ],
+        'operator' => 'IN',
+      ],
+    ]);
+    foreach ($subTypePromotions as $subTypePromotion) {
+      // Add the label to the promotions array.
+      if (in_array($subTypePromotion->get('field_acq_promotion_rule_id')->getString(), $cartRulesApplied)) {
+        if ($subTypePromotion->get('field_alshaya_promotion_subtype')->getString() == AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER) {
+          $promotions[] = [
+            '#markup' => \Drupal::config('alshaya_acm_promotion.config')->get('free_shipping_order')['label'],
+          ];
+        }
+      }
+      else {
+        $promotions[] = [
+          '#markup' => $subTypePromotion->get('field_acq_promotion_label')
+            ->getString(),
+        ];
+      }
+    }
+
+    $promotions = array_filter($promotions);
+    if (!empty($promotions)) {
       $build = [
         '#theme' => 'cart_top_promotions',
         '#promotions' => $promotions,
@@ -202,6 +237,13 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     catch (Exception $e) {
       return AccessResult::forbidden();
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return Cache::mergeTags(parent::getCacheTags(), ['cart:' . $this->cartStorage->getCart(FALSE)->id()]);
   }
 
 }

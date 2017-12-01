@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:6a8aca33-da8d-4c88-953c-0ffbdcc63447'
+  module:
+    - block_content
+  theme:
+    - alshaya_hnm
+id: footerhnmlogo
+theme: alshaya_hnm
+region: footer_secondary
+weight: -34
+provider: null
+plugin: 'block_content:6a8aca33-da8d-4c88-953c-0ffbdcc63447'
+settings:
+  id: 'block_content:6a8aca33-da8d-4c88-953c-0ffbdcc63447'
+  label: 'Footer HnM logo'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: "/cart/checkout\r\n/cart/checkout/*"
+    negate: true
+    context_mapping: {  }

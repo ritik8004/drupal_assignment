@@ -92,6 +92,7 @@ post_provision_scripts:
   - "../../../acquia/blt/scripts/drupal-vm/post-provision.sh"
   - "../../../../box/scripts/configure-solr.sh"
   - "../../../../box/scripts/configure-varnish.sh"
+  - "../../../../box/scripts/configure-oauth.sh"
 
 apache_vhosts_ssl:
   - servername: "{{ drupal_domain }}"

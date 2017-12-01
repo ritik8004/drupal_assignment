@@ -1,0 +1,169 @@
+select::-ms-expand {
+  display: none;
+}
+
+select:focus::-ms-value {
+  background: transparent;
+  color: $black;
+}
+
+@mixin select-style($select-width) {
+  appearance: none;
+  border: 1px solid $hnm-black-two;
+  border-radius: 0;
+  background-color: $white-five;
+  padding: 0.5rem;
+  padding-#{$left}: 0.7rem;
+  padding-#{$right}: 1.5rem;
+  width: $select-width;
+  height: 2.1875rem;
+  font-size: 0.75rem;
+  outline: none;
+  direction: $dir;
+  text-transform: uppercase;
+  color: $hnm-black-two;
+
+  @include breakpoint($tablet) {
+    background-color: transparent;
+    position: relative;
+    z-index: 3;
+  }
+
+  // Arabic font is longer so it gets clipped from bottom.
+  html[lang=ar] & {
+    line-height: 1.2;
+  }
+}
+
+@mixin select-wrapper($wrapper-width) {
+  width: $wrapper-width;
+  margin-bottom: 0.75rem;
+  position: relative;
+
+  @include icon(dropdown-expand, after) {
+    font-size: 2.1875rem;
+    color: $hnm-black-two;
+    text-indent: -3px;
+    pointer-events: none;
+    position: absolute;
+    #{$right}: 1px;
+    top: 1px;
+    bottom: 1px;
+    text-align: center;
+    background-color: transparent;
+    width: 2.1875rem;
+    height: 2.063rem;
+
+    @include breakpoint($tablet) {
+      z-index: 3;
+    }
+  }
+}
+
+@mixin select-bg($select-width) {
+  &::before {
+    width: $select-width;
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 2.1875rem;
+    z-index: 1;
+  }
+}
+
+@mixin select2-style($select-width) {
+  width: $select-width !important;
+
+  .select2-selection {
+    font-size: 0.75rem;
+    height: 2.1875rem;
+    padding: 0.25rem 0.2rem;
+    text-align: $left;
+    width: $select-width;
+    border: 1px solid $hnm-black-two;
+    border-radius: 0;
+    outline: none;
+
+    .select2-selection__rendered {
+      color: $hnm-black-two;
+      text-transform: uppercase;
+
+      .select2-selection__placeholder {
+        color: $hnm-black-two;
+      }
+    }
+  }
+
+  html[lang=ar] & {
+    .select2-selection--single .select2-selection__rendered {
+      width: 94%;
+    }
+  }
+
+  .select2-selection__arrow {
+    top: 1px;
+    #{$right}: 1px;
+    width: 2.063rem;
+    height: 2.063rem;
+    background: $white-five;
+
+    &::after {
+      // IE10 needs this in px.
+      line-height: 35px;
+      font-size: 2.1875rem;
+      top: 0;
+      #{$left}: auto;
+      width: 2.1875rem;
+      height: 2.1875rem;
+      #{$right}: 0;
+      text-align: center;
+      display: inline-block;
+      text-indent: -2px;
+    }
+  }
+}
+
+.select2-dropdown {
+  border-color: $hnm-black-two;
+  margin-top: -1px;
+
+  .select2-search__field {
+    outline: none;
+  }
+
+  ul.select2-results__options {
+    border-radius: 4px;
+
+    li.select2-results__option {
+      @include arabic-letter-spacing;
+
+      color: $hnm-black-two;
+      font-size: 0.75rem;
+      padding: 0.625rem;
+      border-bottom: 1px solid $white;
+      text-transform: uppercase;
+      font-family: $hnm-regular;
+      letter-spacing: 1px;
+
+      &:first-child {
+        border-top: 1px solid $white;
+      }
+
+      &.select2-results__option--highlighted,
+      &[aria-selected=true] {
+        background-color: $white-five;
+      }
+
+      &[aria-disabled=true],
+      &:hover {
+        color: $grey-ash;
+        background: $white-four;
+      }
+
+      &[aria-disabled=true] {
+        color: $greyish;
+      }
+    }
+  }
+}

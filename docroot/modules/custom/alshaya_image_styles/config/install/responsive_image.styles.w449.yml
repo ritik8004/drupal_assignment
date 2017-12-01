@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.w146
+    - image.style.w349
+    - image.style.w449
+  theme:
+    - whitelabel
+id: w449
+label: w449
+image_style_mappings:
+  -
+    breakpoint_id: whitelabel.desk
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: w449
+  -
+    breakpoint_id: whitelabel.lap
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: w349
+  -
+    breakpoint_id: whitelabel.palm
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: w326
+breakpoint_group: whitelabel
+fallback_image_style: w146

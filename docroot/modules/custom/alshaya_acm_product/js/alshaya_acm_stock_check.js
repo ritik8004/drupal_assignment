@@ -1,6 +1,13 @@
 (function ($, Drupal) {
   'use strict';
 
+  var query_params = window.location.search;
+
+  // Make sure query params coming from parent url are passed as is.
+  if (query_params) {
+    query_params = query_params.replace('?', '');
+  }
+
   /**
    * All custom js for product page.
    *
@@ -11,7 +18,6 @@
    */
   Drupal.behaviors.alshayaStockCheck = {
     attach: function (context, settings) {
-
       // Stock check on PLP, Search and Promo pages and Related products block.
       $('.stock-placeholder', context).once('check-stock').each(function () {
         var placeHolder = $(this);
@@ -23,8 +29,9 @@
         var articleNode = placeHolder.closest('article');
         var productId = articleNode.attr('data-nid');
         var productStock = articleNode.find('.out-of-stock');
+
         $.ajax({
-          url: Drupal.url('stock-check-ajax/node/' + productId) + '?cacheable',
+          url: Drupal.url('stock-check-ajax/node/' + productId) + '?cacheable' + '&' + query_params,
           type: 'GET',
           dataType: 'json',
           async: true,
@@ -40,7 +47,7 @@
         var skuId = $wrapper.attr('data-skuid');
         if (typeof skuId !== 'undefined') {
           $.ajax({
-            url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+            url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
             type: 'GET',
             dataType: 'json',
             async: true,
@@ -115,7 +122,7 @@
         var stockCheckProcessed = 'stock-check-processed';
         if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
           $.ajax({
-            url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+            url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
             type: 'GET',
             dataType: 'json',
             async: true,
@@ -179,6 +186,21 @@
       url: postUrl
     };
 
+    var editConfigCastorIdElementSettings = {
+      callback: 'alshaya_acm_product_configurable_form_ajax_callback',
+      dialogType: 'ajax',
+      event: 'change',
+      selector: "[data-drupal-selector='edit-configurables-article-castor-id']",
+      progress: {
+        message: null,
+        type: 'throbber'
+      },
+      submit: {
+        _triggering_element_name: 'configurables[article_castor_id]'
+      },
+      url: postUrl
+    };
+
     // Re-attach Ajax to add-to-cart buttons, since there are duplicate ids on the page, Drupal will attach
     // AJAX only with the first button it finds.
     $(element).find('.edit-add-to-cart').each(function () {
@@ -203,6 +225,17 @@
         Drupal.ajax[configSizeBase] = new Drupal.Ajax(configSizeBase, this, editConfigSizeElementSettings);
       }
     });
+
+    $("select[data-drupal-selector='edit-configurables-article-castor-id']").each(function () {
+      var is_mobile_only_sell = $(this).closest('.mobile--only--sell');
+      var is_modal_product = $(this).closest('#drupal-modal');
+      var sku_id = $(this).siblings('input[name="sku_id"]').val();
+      if (((is_mobile_only_sell.length > 0) || (is_modal_product.length > 0)) && (!$(this).hasClass('reattached-castorid-ajax'))) {
+        $(this).addClass('reattached-castorid-ajax');
+        var configCastorIdBase = 'edit-configurables-castorid_mobile--only--sell--' + sku_id;
+        Drupal.ajax[configCastorIdBase] = new Drupal.Ajax(configCastorIdBase, this, editConfigCastorIdElementSettings);
+      }
+    });
   };
 
   /**
@@ -218,7 +251,7 @@
       if (!(skuArticle.hasClass('stock-check-processed')) && (typeof skuId !== 'undefined')) {
         var $wrapper = skuArticle;
         $.ajax({
-          url: Drupal.url('get-cart-form/acq_sku/' + skuId),
+          url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
           type: 'GET',
           dataType: 'json',
           async: true,

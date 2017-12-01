@@ -7,6 +7,7 @@
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber;
+use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
@@ -299,7 +300,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['promotion_code_wrapper']['coupon'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
-    '#prefix' => '<div class="coupon-code-wrapper"><div class="card__header">' . t('Add a promo code') . '</div>',
+    '#prefix' => '<div class="coupon-code-wrapper"><div class="card__header">' . t('Add a promotional code') . '</div>',
     '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span></div>',
     '#default_value' => $cart->getCoupon(),
   ];
@@ -386,6 +387,34 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
 
   if ((float) $totals['shipping'] != 0) {
     $totals['grand'] -= $totals['shipping'];
+  }
+
+  // Add shipping info.
+  $cart_rules_applied = $cart->getCart()->cart_rules;
+  if (!empty($cart_rules_applied)) {
+    $subtype_promotions = \Drupal::service('alshaya_acm_promotion.manager')
+      ->getAllPromotions([
+        [
+          'field' => 'field_alshaya_promotion_subtype',
+          'value' => AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER,
+        ],
+      ]);
+    if (!empty($subtype_promotions)) {
+      foreach ($subtype_promotions as $subtype_promotion) {
+        // If subtype is free_shipping_order and is applied, add it to totals.
+        if (in_array($subtype_promotion->get('field_acq_promotion_rule_id')->getString(), $cart_rules_applied)) {
+          $form['totals']['shipping'] = [
+            'label' => [
+              '#markup' => t('Shipping'),
+            ],
+            'value' => [
+              '#markup' => t('Free'),
+            ],
+          ];
+          break;
+        }
+      }
+    }
   }
 
   $form['totals']['grand']['value'] = [

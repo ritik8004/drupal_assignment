@@ -1,0 +1,9 @@
+{% extends 'page.html.twig' %}
+{% set attributes = attributes.addClass('l-two--sf order-detail') %}
+{% block after_content %}
+    {% if vat_text_footer %}
+        <div class = 'vat-text-footer'>
+            {{ vat_text_footer }}
+        </div>
+    {% endif %}
+{% endblock %}

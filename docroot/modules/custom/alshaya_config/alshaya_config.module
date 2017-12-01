@@ -61,3 +61,19 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
       ->save();
   }
 }
+
+/**
+ * Helper function to delete configs.
+ *
+ * @param array $configs
+ *   The name of configs to delete.
+ */
+function alshaya_config_delete_configs(array $configs) {
+  if (empty($configs)) {
+    return;
+  }
+
+  foreach ($configs as $config) {
+    \Drupal::configFactory()->getEditable($config)->delete();
+  }
+}

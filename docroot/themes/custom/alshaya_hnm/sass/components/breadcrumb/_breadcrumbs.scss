@@ -1,0 +1,58 @@
+.c-breadcrumb {
+  background: $white-four;
+
+  ol {
+    @include arabic-letter-spacing;
+
+    max-width: 80.25rem;
+    margin: auto;
+    font-size: 0.625rem;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 1.5rem;
+  }
+
+  li {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+
+    &:last-of-type a {
+      color: $hnm-black-two;
+      font-family: $hnm-bold;
+      text-transform: capitalize;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    a {
+      @include arabic-letter-spacing;
+
+      font-family: $hnm-regular;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      font-size: 0.75rem;
+      color: $greyish;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &::after {
+      content: '>';
+      color: $greyish;
+      vertical-align: middle;
+      padding-#{$right}: 0.1875rem;
+      padding-#{$left}: 0.5rem;
+      font-family: $hnm-regular-nodir;
+    }
+
+    &:last-of-type::after {
+      display: none;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+}

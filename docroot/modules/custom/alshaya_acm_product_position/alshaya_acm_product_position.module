@@ -8,6 +8,7 @@
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Query\QueryInterface;
+use Drupal\Views\ViewExecutable;
 
 /**
  * Implements hook_search_api_db_query_alter().
@@ -61,11 +62,83 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
 }
 
 /**
+ * Implements hook_views_pre_execute().
+ */
+function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
+  if ($view->id() != 'alshaya_product_list') {
+    return;
+  }
+
+  $filters = $view->getExposedInput();
+  if (empty($filters['sort_bef_combine'])) {
+    // Get sorts.
+    if (is_array($view->sort) && !empty($sorts = array_keys($view->sort))) {
+      $enabled_sorts = _alshaya_acm_product_position_get_config();
+      if ($enabled_sorts) {
+        $default_sort = FALSE;
+        foreach ($sorts as $sort) {
+          if (isset($enabled_sorts[$sort])) {
+            $default_sort = $sort . ' ASC';
+            break;
+          }
+        }
+
+        if ($default_sort) {
+          $filters['sort_bef_combine'] = $default_sort;
+        }
+        $view->setExposedInput($filters);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_form_alter().
  */
 function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-alshaya-product-list-block-1') {
     // Best seller descending option removed.
-    unset($form['sort_bef_combine']['#options']['nid DESC']);
+    if (isset($form['sort_bef_combine']['#options']['nid DESC'])) {
+      unset($form['sort_bef_combine']['#options']['nid DESC']);
+    }
+
+    // New In ascending option removed.
+    if (isset($form['sort_bef_combine']['#options']['created ASC'])) {
+      unset($form['sort_bef_combine']['#options']['created ASC']);
+    }
+
+    // Disable sort options if not enabled.
+    $enabled_sorts = _alshaya_acm_product_position_get_config();
+    if (!$enabled_sorts) {
+      $form['#access'] = FALSE;
+    }
+    else {
+      // Get first sort key to check later to set second key as default.
+      reset($form['sort_bef_combine']['#options']);
+      $first_sort_key = key($form['sort_bef_combine']['#options']);
+      foreach ($enabled_sorts as $key => $sort) {
+        if (!$sort) {
+          if (isset($form['sort_bef_combine']['#options']["$key ASC"])) {
+            unset($form['sort_bef_combine']['#options']["$key ASC"]);
+          }
+          if (isset($form['sort_bef_combine']['#options']["$key DESC"])) {
+            unset($form['sort_bef_combine']['#options']["$key DESC"]);
+          }
+        }
+      }
+      // Set the second sort as default value if first is disabled from backend.
+      // Make sure this only runs once on page refresh not ajax request.
+      $user_inputs = $form_state->getUserInput();
+      if (!array_key_exists($first_sort_key, $form['sort_bef_combine']['#options']) && !empty($form['sort_bef_combine']['#options']) && !isset($user_inputs['pager_query_method'])) {
+        $form['sort_bef_combine']['#value'] = $form['sort_bef_combine']['#default_value'] = key($form['sort_bef_combine']['#options']);
+      }
+    }
   }
+}
+
+/**
+ * Function to get sort options config.
+ */
+function _alshaya_acm_product_position_get_config() {
+  return \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
 }
