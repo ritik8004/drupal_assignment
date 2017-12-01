@@ -69,12 +69,12 @@
 
       <phingcall target="local:reset-local-settings"/>
       <phingcall target="local:setup">
-          <property name="drush.uri" value="${sites.${site}.alias}" />
+          <property name="drush.uri" value="local.alshaya-${site}.com" />
           <property name="project.profile.name" value="${sites.${site}.type}" />
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
-          <property name="drush.uri" value="${sites.${site}.alias}" />
+          <property name="drush.uri" value="local.alshaya-${site}.com" />
           <property name="drush.brand_module" value="${sites.${site}.module}" />
       </phingcall>
 
@@ -83,13 +83,13 @@
         <equals arg1="${sites.${site}.type}" arg2="alshaya_transac" />
         <then>
           <phingcall target="sync:products">
-              <property name="drush.uri" value="${sites.${site}.alias}" />
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
           </phingcall>
           <phingcall target="sync:promotions">
-              <property name="drush.uri" value="${sites.${site}.alias}" />
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
           </phingcall>
           <phingcall target="sync:stores">
-              <property name="drush.uri" value="${sites.${site}.alias}" />
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
           </phingcall>
         </then>
       </if>
@@ -106,15 +106,15 @@
       <phingcall target="frontend:build"/>
       <phingcall target="local:reset-local-settings"/>
       <phingcall target="local:drupal:install">
-          <property name="drush.uri" value="${sites.${site}.alias}" />
+          <property name="drush.uri" value="local.alshaya-${site}.com" />
           <property name="project.profile.name" value="${sites.${site}.type}" />
       </phingcall>
       <phingcall target="setup:toggle-modules">
-          <property name="drush.uri" value="${sites.${site}.alias}" />
+          <property name="drush.uri" value="local.alshaya-${site}.com" />
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
-          <property name="drush.uri" value="${sites.${site}.alias}" />
+          <property name="drush.uri" value="local.alshaya-${site}.com" />
           <property name="drush.brand_module" value="${sites.${site}.module}" />
       </phingcall>
 
@@ -123,13 +123,13 @@
         <equals arg1="${sites.${site}.type}" arg2="alshaya_transac" />
         <then>
           <phingcall target="sync:products">
-              <property name="drush.uri" value="${sites.${site}.alias}" />
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
           </phingcall>
           <phingcall target="sync:promotions">
-              <property name="drush.uri" value="${sites.${site}.alias}" />
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
           </phingcall>
           <phingcall target="sync:stores">
-              <property name="drush.uri" value="${sites.${site}.alias}" />
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
           </phingcall>
         </then>
       </if>

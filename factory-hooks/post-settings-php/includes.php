@@ -17,7 +17,8 @@ if (empty($site_name) && $settings['env'] == 'local') {
   $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/project.local.yml'));
 
   foreach ($data['sites'] as $site_code => $site_info) {
-    if ($_SERVER['HTTP_HOST'] == $site_info['alias']) {
+    $site_alias = 'local.alshaya-' . $site_code . '.com';
+    if ($_SERVER['HTTP_HOST'] == $site_alias) {
       $site_name = $site_code;
       break;
     }

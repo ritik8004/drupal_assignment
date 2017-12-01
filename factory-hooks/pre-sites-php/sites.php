@@ -13,6 +13,6 @@ if (!isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   $data = Yaml::parse(file_get_contents(__DIR__ . '/../../blt/project.local.yml'));
 
   foreach ($data['sites'] as $site_code => $site_info) {
-    $sites[$site_info['alias']] = 'g';
+    $sites['local.alshaya-' . $site_code . '.com'] = 'g';
   }
 }

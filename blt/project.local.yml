@@ -11,17 +11,13 @@ behat:
 sites:
   mckw:
     module: alshaya_mc
-    alias: local.alshaya-mckw.com
     type: alshaya_transac
   mcksa:
     module: alshaya_mc
-    alias: local.alshaya-mcksa.com
     type: alshaya_transac
   hmkw:
     module: alshaya_hm
-    alias: local.alshaya-hmkw.com
     type: alshaya_transac
   vskw:
     module: alshaya_vs
-    alias: local.alshaya-vskw.com
     type: alshaya_non_transac
