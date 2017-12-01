@@ -11,7 +11,7 @@ behat:
 sites:
   mckw:
     module: alshaya_mc
-    alias: local.alshaya.com
+    alias: local.alshaya-mckw.com
     type: alshaya_transac
   mcksa:
     module: alshaya_mc
