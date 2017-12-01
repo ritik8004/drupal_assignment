@@ -11,6 +11,27 @@ use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_update_N().
+ */
+function alshaya_acm_promotion_update_8007() {
+  // Add the new field "Subtype".
+  $configs = [
+    'field.storage.node.field_alshaya_promotion_subtype',
+    'field.field.node.acq_promotion.field_alshaya_promotion_subtype',
+    'alshaya_acm_promotion.config',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_acm_promotion');
+
+  // Add Translations.
+  $strings = [
+    'Your order qualifies for free standard delivery.' => [
+      'ar' => 'طلبك مؤهل للتسليم القياسي مجانا',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
  *
  * Update facets config.
  */
@@ -46,27 +67,6 @@ function alshaya_acm_promotion_update_8004() {
   $source = new FileStorage($config_path);
   $config_storage = \Drupal::service('config.storage');
   $config_storage->write('facets.facet.promotion_price_facet', $source->read('facets.facet.promotion_price_facet'));
-}
-
-/**
- * Implements hook_update_N().
- */
-function alshaya_acm_promotion_update_8101() {
-  // Add the new field "Subtype".
-  $configs = [
-    'field.storage.node.field_alshaya_promotion_subtype',
-    'field.field.node.acq_promotion.field_alshaya_promotion_subtype',
-    'alshaya_acm_promotion.config',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_acm_promotion');
-
-  // Add Translations.
-  $strings = [
-    'Your order qualifies for free standard delivery.' => [
-      'ar' => 'طلبك مؤهل للتسليم القياسي مجانا',
-    ],
-  ];
-  alshaya_i18n_save_translations($strings);
 }
 
 /**

@@ -8,6 +8,16 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Default config for all_products_buyable.
+ */
+function alshaya_mc_update_8305() {
+  // Setting all products buyable to be false by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('all_products_buyable', 0)
+    ->save();
+}
+
+/**
  * Implements hook_update_N().
  *
  * Set the magento language prefix again.
@@ -20,6 +30,48 @@ function alshaya_mc_update_8304() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
     ->set('magento_lang_prefix', 'kwt_ar')
     ->save();
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Update config file for store configuration.
+ */
+function alshaya_mc_update_8303() {
+  // Set the default value.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all Mothercare Stores');
+  $config->save();
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Rename block IDs to generic ones.
+ */
+function alshaya_mc_update_8301() {
+  $blocks = [
+    'alshaya_white_label_branding' => 'branding',
+    'alshaya_white_label_content' => 'content',
+    'alshaya_white_label_account_menu' => 'account_menu',
+    'alshaya_white_label_breadcrumbs' => 'breadcrumbs',
+    'alshaya_white_label_help' => 'help',
+    'alshaya_white_label_local_actions' => 'local_actions',
+    'alshaya_white_label_local_tasks' => 'local_tasks',
+    'alshaya_white_label_messages' => 'messages',
+    'alshaya_white_label_page_title' => 'page_title',
+  ];
+
+  foreach ($blocks as $old_block_id => $new_block_id) {
+    $old_block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $old_block_id]);
+
+    if (!empty($old_block)) {
+      $old_block = reset($old_block);
+      $new_block = $old_block->createDuplicateBlock($new_block_id);
+      $old_block->delete();
+      $new_block->save();
+    }
+  }
 }
 
 /**
@@ -111,56 +163,4 @@ function alshaya_mc_install() {
 
   // Create default content for mothercare.
   alshaya_mc_create_default_content();
-}
-
-/**
- * Implements hook_update().
- *
- * Rename block IDs to generic ones.
- */
-function alshaya_mc_update_8301() {
-  $blocks = [
-    'alshaya_white_label_branding' => 'branding',
-    'alshaya_white_label_content' => 'content',
-    'alshaya_white_label_account_menu' => 'account_menu',
-    'alshaya_white_label_breadcrumbs' => 'breadcrumbs',
-    'alshaya_white_label_help' => 'help',
-    'alshaya_white_label_local_actions' => 'local_actions',
-    'alshaya_white_label_local_tasks' => 'local_tasks',
-    'alshaya_white_label_messages' => 'messages',
-    'alshaya_white_label_page_title' => 'page_title',
-  ];
-
-  foreach ($blocks as $old_block_id => $new_block_id) {
-    $old_block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $old_block_id]);
-
-    if (!empty($old_block)) {
-      $old_block = reset($old_block);
-      $new_block = $old_block->createDuplicateBlock($new_block_id);
-      $old_block->delete();
-      $new_block->save();
-    }
-  }
-}
-
-/**
- * Default config for all_products_buyable.
- */
-function alshaya_mc_update_8322() {
-  // Setting all products buyable to be false by default.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
-    ->set('all_products_buyable', 0)
-    ->save();
-}
-
-/**
- * Implements hook_update().
- *
- * Update config file for store configuration.
- */
-function alshaya_mc_update_8303() {
-  // Set the default value.
-  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
-  $config->set('store_list_label', 'List of all Mothercare Stores');
-  $config->save();
 }

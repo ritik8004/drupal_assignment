@@ -10,6 +10,43 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Remove unused image styles.
+ */
+function alshaya_image_styles_update_8102() {
+  $configs = [
+    'image.style.291x256',
+    'image.style.449x256',
+    'image.style.501x288',
+    'image.style.501x600',
+    'image.style.606x256',
+    'image.style.921x256',
+    'responsive_image.styles.291x256',
+    'responsive_image.styles.449x256',
+    'responsive_image.styles.501x288',
+    'responsive_image.styles.501x600',
+    'responsive_image.styles.606x256',
+    'responsive_image.styles.921x256',
+  ];
+
+  alshaya_config_delete_configs($configs);
+}
+
+/**
+ * Update new image styles.
+ */
+function alshaya_image_styles_update_8101() {
+  $configs = [
+    'image.style.147x204',
+    'image.style.286x404',
+    'image.style.231x326',
+    'responsive_image.styles.286x404',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_image_styles');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update image styles.
  */
 function alshaya_image_styles_update_8002() {
@@ -34,19 +71,6 @@ function alshaya_image_styles_update_8002() {
       ->setData($config_yaml)
       ->save();
   }
-}
-
-/**
- * Update new image styles.
- */
-function alshaya_image_styles_update_8101() {
-  $configs = [
-    'image.style.147x204',
-    'image.style.286x404',
-    'image.style.231x326',
-    'responsive_image.styles.286x404',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_image_styles');
 }
 
 /**
@@ -82,28 +106,4 @@ function _alshaya_image_styles_configure_image_toolkit() {
     ->getEditable('imagemagick.settings')
     ->set('quality', 100)
     ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Remove unused image styles.
- */
-function alshaya_image_styles_update_8301() {
-  $configs = [
-    'image.style.291x256',
-    'image.style.449x256',
-    'image.style.501x288',
-    'image.style.501x600',
-    'image.style.606x256',
-    'image.style.921x256',
-    'responsive_image.styles.291x256',
-    'responsive_image.styles.449x256',
-    'responsive_image.styles.501x288',
-    'responsive_image.styles.501x600',
-    'responsive_image.styles.606x256',
-    'responsive_image.styles.921x256',
-  ];
-
-  alshaya_config_delete_configs($configs);
 }

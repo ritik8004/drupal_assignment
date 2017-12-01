@@ -12,9 +12,32 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_update_N().
+ *
+ * Remove unused view modes.
  */
-function alshaya_paragraphs_update_8002() {
-  alshaya_config_install_configs(['field.field.paragraph.1_row_2_col_dept.field_1_row_2_col'], 'alshaya_paragraphs');
+function alshaya_paragraphs_update_8102() {
+  $configs = [
+    'core.entity_view_display.paragraph.1_row_3_col.326x288',
+    'core.entity_view_display.paragraph.promo_block.1026x288',
+    'core.entity_view_display.paragraph.promo_block.291x256',
+    'core.entity_view_display.paragraph.promo_block.326x288',
+    'core.entity_view_display.paragraph.promo_block.449x256',
+    'core.entity_view_display.paragraph.promo_block.501x288',
+    'core.entity_view_display.paragraph.promo_block.501x600',
+    'core.entity_view_display.paragraph.promo_block.606x256',
+    'core.entity_view_display.paragraph.promo_block.921x256',
+    'core.entity_view_mode.paragraph.291x256',
+    'core.entity_view_mode.paragraph.449x256',
+    'core.entity_view_mode.paragraph.501x288',
+    'core.entity_view_mode.paragraph.501x600',
+    'core.entity_view_mode.paragraph.606x256',
+    'core.entity_view_mode.paragraph.921x256',
+  ];
+
+  alshaya_config_delete_configs($configs);
+
+  // Update the installed config.
+  alshaya_config_install_configs(['field.field.paragraph.promo_block.field_banner'], 'alshaya_paragraphs');
 }
 
 /**
@@ -99,32 +122,9 @@ function alshaya_paragraphs_update_8101() {
 
 /**
  * Implements hook_update_N().
- *
- * Remove unused view modes.
  */
-function alshaya_paragraphs_update_8301() {
-  $configs = [
-    'core.entity_view_display.paragraph.1_row_3_col.326x288',
-    'core.entity_view_display.paragraph.promo_block.1026x288',
-    'core.entity_view_display.paragraph.promo_block.291x256',
-    'core.entity_view_display.paragraph.promo_block.326x288',
-    'core.entity_view_display.paragraph.promo_block.449x256',
-    'core.entity_view_display.paragraph.promo_block.501x288',
-    'core.entity_view_display.paragraph.promo_block.501x600',
-    'core.entity_view_display.paragraph.promo_block.606x256',
-    'core.entity_view_display.paragraph.promo_block.921x256',
-    'core.entity_view_mode.paragraph.291x256',
-    'core.entity_view_mode.paragraph.449x256',
-    'core.entity_view_mode.paragraph.501x288',
-    'core.entity_view_mode.paragraph.501x600',
-    'core.entity_view_mode.paragraph.606x256',
-    'core.entity_view_mode.paragraph.921x256',
-  ];
-
-  alshaya_config_delete_configs($configs);
-
-  // Update the installed config.
-  alshaya_config_install_configs(['field.field.paragraph.promo_block.field_banner'], 'alshaya_paragraphs');
+function alshaya_paragraphs_update_8002() {
+  alshaya_config_install_configs(['field.field.paragraph.1_row_2_col_dept.field_1_row_2_col'], 'alshaya_paragraphs');
 }
 
 /**

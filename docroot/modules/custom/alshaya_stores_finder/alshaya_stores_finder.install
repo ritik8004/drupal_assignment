@@ -10,6 +10,17 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update().
  *
+ * Update the Google Map API Key.
+ */
+function alshaya_stores_finder_update_8102() {
+  $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
+  $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
+  $config->save();
+}
+
+/**
+ * Implements hook_update().
+ *
  * Set default marker icon.
  */
 function alshaya_stores_finder_update_8101() {
@@ -19,7 +30,7 @@ function alshaya_stores_finder_update_8101() {
 /**
  * Implements hook_update_N().
  */
-function alshaya_stores_finder_update_8103() {
+function alshaya_stores_finder_update_8003() {
   // Revert the view to use relative path in links.
   $reverter = \Drupal::service('config_update.config_update');
   $reverter->revert('view', 'stores_finder');
@@ -62,15 +73,4 @@ function alshaya_stores_finder_set_default_marker_icon() {
     ->set('marker.path', $marker_path)
     ->set('marker.url', file_url_transform_relative(file_create_url($marker_path)))
     ->save(TRUE);
-}
-
-/**
- * Implements hook_update().
- *
- * Update the Google Map API Key.
- */
-function alshaya_stores_finder_update_8102() {
-  $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
-  $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
-  $config->save();
 }

@@ -11,19 +11,10 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Install the new fields.
  * Revert product_slider view to use nid instead of field_skus.
  */
-function alshaya_acm_product_update_8102() {
-  $reverter = \Drupal::service('config_update.config_update');
-  $reverter->revert('view', 'product_slider');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Install the new fields.
- */
-function alshaya_acm_product_update_8101() {
+function alshaya_acm_product_update_8005() {
   // Reset sku_base_fields config from the YAML file.
   $config_path = drupal_get_path('module', 'alshaya_acm_product') . '/config/install/alshaya_acm_product.sku_base_fields.yml';
   $data = Yaml::parse($config_path);
@@ -32,6 +23,9 @@ function alshaya_acm_product_update_8101() {
   // Add base fields from the updated sku_base_fields config.
   $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
+
+  $reverter = \Drupal::service('config_update.config_update');
+  $reverter->revert('view', 'product_slider');
 }
 
 /**

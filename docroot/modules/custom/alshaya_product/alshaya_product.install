@@ -11,6 +11,18 @@ use Drupal\search_api\Entity\Index;
 
 /**
  * Implements hook_update_N().
+ */
+function alshaya_product_update_8010() {
+  // Update search index field.
+  $configs = [
+    'search_api.index.product',
+    'views.view.alshaya_product_list',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_product');
+}
+
+/**
+ * Implements hook_update_N().
  *
  * Update facets config.
  */
@@ -176,18 +188,6 @@ function alshaya_product_update_8002() {
   $product_list_view->set('display.block_1.display_options.sorts.nid.expose.label', 'ما ننصح به');
 
   $product_list_view->save();
-}
-
-/**
- * Implements hook_update_N().
- */
-function alshaya_product_update_8101() {
-  // Update search index field.
-  $configs = [
-    'search_api.index.product',
-    'views.view.alshaya_product_list',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_product');
 }
 
 /**
