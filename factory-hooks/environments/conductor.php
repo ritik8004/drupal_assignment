@@ -13,35 +13,23 @@ function alshaya_get_conductor_host_data() {
     ],
     'mc_test' => [
       'url' => 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/',
-      // To be removed when Conductor is updated.
-      'hmac_id' => 'uAfqsl!BMf5xd8Z',
-      'hmac_secret' => 'eS#8&0@XyegNUO',
-      //'hmac_id' => 'edda8c2a78af42b9af1e42221145fd01',
-      //'hmac_secret' => 'hTVYIu3SDzLh3BwNI6ZEjw',
+      'hmac_id' => 'edda8c2a78af42b9af1e42221145fd01',
+      'hmac_secret' => 'hTVYIu3SDzLh3BwNI6ZEjw',
     ],
     'mc_uat' => [
       'url' => 'https://alshaya-uat.eu-west-1.prod.acm.acquia.io/',
-      // To be removed when Conductor is updated.
-      'hmac_id' => 'uAfqsl!BMf5xd8Z',
-      'hmac_secret' => 'eS#8&0@XyegNUO',
-      //'hmac_id' => 'ec11fb2f54d34b2f9d35ec1d3575b89e',
-      //'hmac_secret' => 'gpW7PQFKKDU-qPrcIgaYNQ',
+      'hmac_id' => 'ec11fb2f54d34b2f9d35ec1d3575b89e',
+      'hmac_secret' => 'gpW7PQFKKDU-qPrcIgaYNQ',
     ],
     'mc_pprod' => [
       'url' => 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/',
-      // To be removed when Conductor is updated.
-      'hmac_id' => '75fba487a3043b35740e93a97513c3cf',
-      'hmac_secret' => 'cVA/OSE1I1Zka3JZRFE',
-      //'hmac_id' => '676f2059d53d407791472c31783ae32c',
-      //'hmac_secret' => '-2Ok7ywndwcpsraYIIZ__w',
+      'hmac_id' => '676f2059d53d407791472c31783ae32c',
+      'hmac_secret' => '-2Ok7ywndwcpsraYIIZ__w',
     ],
     'mc_prod' => [
       'url' => 'https://alshaya-prod.eu-west-1.prod.acm.acquia.io/',
-      // To be removed when Conductor is updated.
-      'hmac_id' => 'uAfqsl!BMf5xd8Z',
-      'hmac_secret' => 'eS#8&0@XyegNUO',
-      //'hmac_id' => '3d136846d24040099a7eed6c1f4e80b9',
-      //'hmac_secret' => 'zUt1psyEWi5xO-glHlH_tw',
+      'hmac_id' => '3d136846d24040099a7eed6c1f4e80b9',
+      'hmac_secret' => 'zUt1psyEWi5xO-glHlH_tw',
     ],
     // H&M.
     'hm_dev' => [

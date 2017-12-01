@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a7688c1d939b1bdd8d66143611faac4",
+    "content-hash": "57f530f48a953f16248fa6372359a2bb",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -117,16 +117,16 @@
         },
         {
             "name": "acquia/http-hmac-php",
-            "version": "3.1.2",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/http-hmac-php.git",
-                "reference": "6edd829a2a53001de091a7982af84a124a3fd3c8"
+                "reference": "cf4ad39fe4efadb978d49c4fe8671cadf8805920"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/http-hmac-php/zipball/6edd829a2a53001de091a7982af84a124a3fd3c8",
-                "reference": "6edd829a2a53001de091a7982af84a124a3fd3c8",
+                "url": "https://api.github.com/repos/acquia/http-hmac-php/zipball/cf4ad39fe4efadb978d49c4fe8671cadf8805920",
+                "reference": "cf4ad39fe4efadb978d49c4fe8671cadf8805920",
                 "shasum": ""
             },
             "require": {
@@ -176,7 +176,7 @@
             ],
             "description": "An implementation of the HTTP HMAC Spec in PHP that integrates with popular libraries such as Symfony and Guzzle.",
             "homepage": "https://github.com/acquia/http-hmac-php",
-            "time": "2016-08-08T13:47:47+00:00"
+            "time": "2017-10-27T12:46:34+00:00"
         },
         {
             "name": "acquia/lightning",
@@ -1982,7 +1982,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.40",
-                    "datestamp": "1504093444",
+                    "datestamp": "1511345285",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2005,10 +2005,6 @@
                     "email": "support@acquia.com"
                 },
                 {
-                    "name": "Kevin Hankens",
-                    "homepage": "https://www.drupal.org/user/78090"
-                },
-                {
                     "name": "Rok Žlender",
                     "homepage": "https://www.drupal.org/user/61873"
                 },
@@ -2031,14 +2027,6 @@
                 {
                     "name": "paul.lovvik",
                     "homepage": "https://www.drupal.org/user/289213"
-                },
-                {
-                    "name": "psynaptic",
-                    "homepage": "https://www.drupal.org/user/93429"
-                },
-                {
-                    "name": "scor",
-                    "homepage": "https://www.drupal.org/user/52142"
                 }
             ],
             "description": "Connects a site with Acquia Cloud Site Factory.",
@@ -2061,7 +2049,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.40",
-                    "datestamp": "1504093444",
+                    "datestamp": "1511345285",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2076,10 +2064,6 @@
                 {
                     "name": "Alan Evans",
                     "homepage": "https://www.drupal.org/user/14023"
-                },
-                {
-                    "name": "Kevin Hankens",
-                    "homepage": "https://www.drupal.org/user/78090"
                 },
                 {
                     "name": "Rok Žlender",
@@ -2104,14 +2088,6 @@
                 {
                     "name": "paul.lovvik",
                     "homepage": "https://www.drupal.org/user/289213"
-                },
-                {
-                    "name": "psynaptic",
-                    "homepage": "https://www.drupal.org/user/93429"
-                },
-                {
-                    "name": "scor",
-                    "homepage": "https://www.drupal.org/user/52142"
                 }
             ],
             "description": "Helper module for duplicating Acquia Cloud Site Factory sites.",
@@ -2135,7 +2111,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.40",
-                    "datestamp": "1504093444",
+                    "datestamp": "1511345285",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2150,10 +2126,6 @@
                 {
                     "name": "Alan Evans",
                     "homepage": "https://www.drupal.org/user/14023"
-                },
-                {
-                    "name": "Kevin Hankens",
-                    "homepage": "https://www.drupal.org/user/78090"
                 },
                 {
                     "name": "Rok Žlender",
@@ -2178,14 +2150,6 @@
                 {
                     "name": "paul.lovvik",
                     "homepage": "https://www.drupal.org/user/289213"
-                },
-                {
-                    "name": "psynaptic",
-                    "homepage": "https://www.drupal.org/user/93429"
-                },
-                {
-                    "name": "scor",
-                    "homepage": "https://www.drupal.org/user/52142"
                 }
             ],
             "description": "Handles VCS-based themes on Acquia Cloud Site Factory.",
@@ -2208,7 +2172,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.40",
-                    "datestamp": "1504093444",
+                    "datestamp": "1511345285",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2223,10 +2187,6 @@
                 {
                     "name": "Alan Evans",
                     "homepage": "https://www.drupal.org/user/14023"
-                },
-                {
-                    "name": "Kevin Hankens",
-                    "homepage": "https://www.drupal.org/user/78090"
                 },
                 {
                     "name": "Rok Žlender",
@@ -2251,14 +2211,6 @@
                 {
                     "name": "paul.lovvik",
                     "homepage": "https://www.drupal.org/user/289213"
-                },
-                {
-                    "name": "psynaptic",
-                    "homepage": "https://www.drupal.org/user/93429"
-                },
-                {
-                    "name": "scor",
-                    "homepage": "https://www.drupal.org/user/52142"
                 }
             ],
             "description": "Stores sensitive variables in a single place for easy scrubbing.",
@@ -2955,7 +2907,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0",
-                    "datestamp": "1503305044",
+                    "datestamp": "1511779985",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3022,7 +2974,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.2",
-                    "datestamp": "1506875344",
+                    "datestamp": "1511810585",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4099,7 +4051,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.1",
-                    "datestamp": "1505808844",
+                    "datestamp": "1502200443",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5670,8 +5622,8 @@
                     "version": "8.x-1.3",
                     "datestamp": "1506600543",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -8194,6 +8146,10 @@
                 {
                     "name": "Cadila",
                     "homepage": "https://www.drupal.org/user/2669241"
+                },
+                {
+                    "name": "miteshmap",
+                    "homepage": "https://www.drupal.org/user/1404966"
                 }
             ],
             "description": "Provides field for storing taxonomy depth value and some wrappers integration with modules",
@@ -8673,7 +8629,7 @@
                 },
                 "drupal": {
                     "version": "8.x-5.0-beta23",
-                    "datestamp": "1509673984",
+                    "datestamp": "1510867685",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
