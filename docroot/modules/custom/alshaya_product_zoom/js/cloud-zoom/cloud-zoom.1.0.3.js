@@ -174,7 +174,7 @@
 		We need the dummy background image as IE does not trap mouse events on
 		transparent parts of a div.
 		*/
-            var $m = $("<div class='mousetrap' style='background-image:url(\"" + scriptPath + "/blank.png\")" + "\'></div>");
+            var $m = $("<div class='mousetrap'></div>");
             $mouseTrap = jWin.parent().append($m).find(':last');
             $mouseTrap = $('.mousetrap',jWin.parent());
             $mouseTrap.css({
