@@ -20,4 +20,4 @@ if (empty($site_name) && $settings['env'] == 'local') {
 
 // We merge the entire settings with the specific ones.
 include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
-$settings = array_merge_recursive($settings, alshaya_get_specific_settings($site_name, $settings['env']));
+$settings = array_replace_recursive($settings, alshaya_get_specific_settings($site_name, $settings['env']));
