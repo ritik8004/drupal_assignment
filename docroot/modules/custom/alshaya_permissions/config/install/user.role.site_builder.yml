@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - lightning_core
+third_party_settings:
+  lightning_core:
+    description: ''
+id: site_builder
+label: 'Site builder'
+weight: 18
+is_admin: null
+permissions:
+  - 'administer google tag manager'
+  - 'administer meta tags'
+  - 'administer recaptcha'
+  - 'administer robots.txt'
+  - 'configure geolocation'
+  - 'access webform overview'
+  - 'administer themes'
+  - 'access toolbar'
+  - 'create store content'
+  - 'delete any store content'
+  - 'edit any store content'
+  - 'translate store node'
+  - 'create content translations'
+  - 'administer site configuration'
+  - 'translate configuration'

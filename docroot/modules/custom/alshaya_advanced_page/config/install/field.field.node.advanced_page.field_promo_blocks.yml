@@ -7,6 +7,7 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_1_col
     - paragraphs.paragraphs_type.1_row_1st_col_2_row_2nd_col
     - paragraphs.paragraphs_type.1_row_2_col
+    - paragraphs.paragraphs_type.1_row_2_col_dept
     - paragraphs.paragraphs_type.1_row_3_col
     - paragraphs.paragraphs_type.1_row_3_col_text
     - paragraphs.paragraphs_type.block_reference
@@ -32,6 +33,7 @@ settings:
       1_row_2_col: 1_row_2_col
       1_row_3_col: 1_row_3_col
       1_row_3_col_text: 1_row_3_col_text
+      1_row_3_col_text: 1_row_2_col_dept
       block_reference: block_reference
       views_reference: views_reference
     target_bundles_drag_drop:
@@ -73,7 +75,7 @@ settings:
         enabled: false
       1_row_2_col_dept:
         weight: 22
-        enabled: false
+        enabled: true
       1_row_3_col_dept:
         weight: 24
         enabled: false
