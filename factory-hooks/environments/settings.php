@@ -29,22 +29,41 @@ function alshaya_get_additional_settings($site, $env) {
         ]
       ]
     ],
+    'mcksa' => [
+      'default' => [
+        'store_id' => [
+          'en' => 1,
+          'ar' => 2,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'default',
+          'ar' => 'kwt_ar',
+        ],
+      ],
+    ],
     'hmkw' => [
       'default' => [
         'store_id' => [
           'ar' => 2,
-        ]
-      ]
+        ],
+      ],
+      '01pprod' => [
+        'magento_lang_prefix' => [
+          'en' => 'default',
+          'ar' => 'kwt_ar',
+        ],
+      ],
     ],
     'default' => [
       'default' => [
         'store_id' => [
           'en' => 1,
+          'ar' => 2,
         ],
         'magento_lang_prefix' => [
           'en' => 'kwt_en',
           'ar' => 'kwt_ar',
-        ]
+        ],
       ],
     ],
   ];

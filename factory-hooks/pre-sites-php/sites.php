@@ -4,11 +4,15 @@
  * Customisation of sites.php for local dev env.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 if (!isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   $sites['default'] = 'g';
   $sites['127.0.0.1'] = 'g';
-  $sites['local.alshaya.com'] = 'g';
-  $sites['local.alshaya-hm.com'] = 'g';
-  $sites['local.alshaya-mcksa.com'] = 'g';
-  $sites['local.non-transac.com'] = 'g';
+
+  $data = Yaml::parse(file_get_contents(__DIR__ . '/../../blt/project.local.yml'));
+
+  foreach ($data['sites'] as $site_code => $site_info) {
+    $sites[$site_info['alias']] = 'g';
+  }
 }

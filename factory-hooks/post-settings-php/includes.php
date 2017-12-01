@@ -15,7 +15,18 @@ global $site_name;
 // If we are on local environment, the site name has not been detected yet.
 if (empty($site_name) && $settings['env'] == 'local') {
   $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/project.local.yml'));
-  $site_name = $_SERVER['HTTP_HOST'] == 'local.alshaya.com' ? $data['brands']['transac'] : $data['brands']['non-transac'];
+
+  foreach ($data['sites'] as $site_code => $site_info) {
+    if ($_SERVER['HTTP_HOST'] == $site_info['alias']) {
+      $site_name = $site_code;
+      break;
+    }
+  }
+
+  if (empty($site_name)) {
+    print 'Invalid domain';
+    die();
+  }
 }
 
 // We merge the entire settings with the specific ones.
