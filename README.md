@@ -63,11 +63,12 @@ To prepare your local env:
   * `composer install`
   * `composer blt-alias`
   * `blt vm`
-  * `blt refresh:local` or `blt refresh:non-transac-local`
+  * `blt refresh:local`
+  * Enter the site code you want to setup the site for
   * `drush @alshaya.local uli`
 * Load commerce content (already included in refresh:local and refresh:local:drupal):
-  * `drush @alshaya.local alshaya-acm-offline-categories-sync`
-  * `drush @alshaya.local alshaya-acm-offline-products-sync`
+  * `drush @alshaya.local -l [alias] alshaya-acm-offline-categories-sync`
+  * `drush @alshaya.local -l [alias] alshaya-acm-offline-products-sync`
 * Access site through Varnish in local
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
   * Access the site on port 81
@@ -88,11 +89,15 @@ more information on how to create a custom theme.
 * Create a custom module in `docroot/modules/brands`. This module goal is to
 enable the appropriate theme, place the blocks in the theme's regions and
 install the specific configuration. See existing brand modules for example.
-* Run the appropriate `blt refresh:*` commands depending on the required
-installation profile.
-
-/!\ Site `blt/project.local.yml` to choose which site to install locally
-when using blt commands. Be sure to not commit that change.
+* Add a new brand support:
+  * Add DB and Alias in `box/config.yml`
+  * Add site in `blt/project.local.yml` with proper values (check existing sites for example)
+  * Add proper settings for the new site in 
+    * factory-hooks/environments/magento.php
+    * factory-hooks/environments/settings.php
+    * factory-hooks/environments/conductor.php
+* `vagrant reload --provision`
+* Run `blt refresh:local` commands and enter appropriate site code when asked.
 
 ### Local setup of Behat:
 * Start Behat installation on your local by following the steps below:
