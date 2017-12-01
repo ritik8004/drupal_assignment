@@ -183,7 +183,7 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
 function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
   if (empty($build['image'])) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $teaser_assets = $sku_assets_manager->getSkuAsset($sku_entity, 'teaser', 'teaser');
+    $teaser_assets = $sku_assets_manager->getSkuAsset($sku_entity, 'teaser', 'plp');
 
     if (!empty($teaser_assets)) {
       $build['image'] = [
