@@ -246,10 +246,6 @@
       display: none;
     }
 
-    .tab-click-collect:hover {
-      background: $hnm-grey;
-    }
-
     .tab {
       text-align: center;
       font-size: 0.75rem;
@@ -359,6 +355,10 @@
         h2 {
           color: $hnm-black-two;
         }
+      }
+
+      &:hover {
+        background: $hnm-grey;
       }
     }
 
@@ -1135,6 +1135,26 @@
 
     .select-transaction-type {
       display: block;
+    }
+  }
+}
+
+@include breakpoint($upto-tablet) {
+  #edit-delivery-tabs {
+    .active--tab--head {
+      background-color: #fff !important;
+
+      &:hover {
+        background-color: $hnm-grey !important;
+      }
+    }
+  }
+
+  .show-form {
+    #edit-delivery-tabs {
+      .active--tab--head {
+        background-color: $hnm-grey !important;
+      }
     }
   }
 }
