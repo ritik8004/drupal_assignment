@@ -11,6 +11,8 @@ use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_update_N().
+ *
+ * Add field for promotion sub type and config for free shipping message.
  */
 function alshaya_acm_promotion_update_8007() {
   // Add the new field "Subtype".
