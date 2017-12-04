@@ -6,7 +6,6 @@
  */
 
 use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -26,14 +25,6 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
 
   foreach ($configs as $config) {
     $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config . '.yml'));
-
-    // Field Storage config.
-    if (strpos($config, 'field.storage.') === 0) {
-      if (!FieldStorageConfig::loadByName($config_yaml['entity_type'], $config_yaml['field_name'])) {
-        FieldStorageConfig::create($config_yaml)->save();
-        continue;
-      }
-    }
 
     // Field config.
     if (strpos($config, 'field.field.') === 0) {
