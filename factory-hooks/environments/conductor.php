@@ -57,6 +57,11 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => 'f952574229334fd895b8ad5ace602414',
       'hmac_secret' => 'EqiVIs70Y_zLj6wSMD4c0g',
     ],
+    'mcksa_dev' => [
+      'url' => 'https://alshaya-mcksa-dev.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '9575450fa913452ba46526463ad56edb',
+      'hmac_secret' => '5pUmey7AhYgFhowkWpzEHA',
+    ],
   ];
 }
 
