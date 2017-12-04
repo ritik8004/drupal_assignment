@@ -77,7 +77,7 @@ drush $alias $l_argument user-password admin --password="admin"
 echo "Unblocking super admin user"
 drush $alias $l_argument uublk --name=admin
 
-drush $alias $l_argument en dblog -y
+drush $alias $l_argument en dblog views_ui features_ui restui -y
 
 # Set stage file proxy settings if module available
 if [ -d "$ROOT/docroot/modules/contrib/stage_file_proxy" ]
