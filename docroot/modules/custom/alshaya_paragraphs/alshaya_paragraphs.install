@@ -13,6 +13,18 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Remove target blank for banner links.
+ */
+function alshaya_paragraphs_update_8103() {
+  // Update the installed config.
+  $reverter = \Drupal::service('config_update.config_update');
+  $reverter->revert('entity_view_display', 'paragraph.banner.w1026');
+  $reverter->revert('entity_view_display', 'paragraph.banner.w1920');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove unused view modes.
  */
 function alshaya_paragraphs_update_8102() {
