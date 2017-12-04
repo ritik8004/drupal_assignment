@@ -416,7 +416,7 @@
 
     @include breakpoint($mobile) {
       width: 47%;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
     }
 
     @include breakpoint($tablet) {
