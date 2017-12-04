@@ -70,6 +70,13 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'mc_dev'
       ],
     ],
+    // Mothercare KSA.
+    'mcksa' => [
+      'default' => [
+        'magento' => 'mcksa_dev',
+        'conductor' => 'hm_pprod',
+      ],
+    ],
     // Mothercare UAE.
     'mcuae' => [],
     // H&M Kuwait.
