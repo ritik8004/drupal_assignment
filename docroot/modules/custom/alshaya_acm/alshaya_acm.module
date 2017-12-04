@@ -467,6 +467,12 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
   $mini_cart_block_entity = \Drupal::entityTypeManager()->getStorage('block')->load('cartminiblock');
   $mini_cart_block_view = \Drupal::entityTypeManager()->getViewBuilder('block')->view($mini_cart_block_entity);
   $response->addCommand(new ReplaceCommand('div[data-block-plugin-id="cart_mini_block"]', $mini_cart_block_view));
+
+  // Update Promotions Block with updated data.
+  $cart_promo_block_entity = \Drupal::entityTypeManager()->getStorage('block')->load('alshayacartpromotionsblock');
+  $cart_promo_block_view = \Drupal::entityTypeManager()->getViewBuilder('block')->view($cart_promo_block_entity);
+  $response->addCommand(new ReplaceCommand('div[data-block-plugin-id="alshaya_cart_promotions_block"]', $cart_promo_block_view));
+
   return $response;
 }
 

@@ -7,11 +7,11 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityRepository;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Driver\Exception\Exception;
+use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Cache\Cache;
@@ -156,29 +156,40 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    */
   public function build() {
     $promotions = [];
-    $build = [];
+
+    $build = [
+      // We need empty markup to ensure wrapper div is always available.
+      '#markup' => '',
+    ];
+
+    // This is for R1 and all promotions except for the three types for which
+    // we check for conditions below.
     $selected_promotions = $this->configuration['promotions'];
+
     if (!empty($selected_promotions)) {
       foreach ($selected_promotions as $key => $promotion_rule_id) {
         if ($promotion_rule_id) {
           $node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($promotion_rule_id);
-          $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
-            ->getId();
+
           if ($node) {
-            // Get the promotion with language fallback, if it did not have a
-            // translation for $langcode.
-            $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
-            if ($node) {
-              $promotions[] = [
-                '#markup' => $node->get('field_acq_promotion_label')->getString(),
-              ];
+            // Get translation if available.
+            $node = $this->entityRepository->getTranslationFromContext($node);
+
+            $message = $node->get('field_acq_promotion_label')->getString();
+
+            if ($message) {
+              $promotions[$promotion_rule_id] = ['#markup' => $message];
             }
           }
         }
       }
     }
 
+    // Get all the rules applied in cart.
     $cartRulesApplied = $this->cartStorage->getCart(FALSE)->getCart()->cart_rules;
+
+    // Load all the promotions of the three specific types we check below.
+    // We load only published promotions.
     $subTypePromotions = $this->alshayaAcmPromotionManager->getAllPromotions([
       [
         'field' => 'field_alshaya_promotion_subtype',
@@ -189,25 +200,41 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
         ],
         'operator' => 'IN',
       ],
+      [
+        'field' => 'status',
+        'value' => Node::PUBLISHED,
+      ],
     ]);
+
     foreach ($subTypePromotions as $subTypePromotion) {
-      // Add the label to the promotions array.
-      if (in_array($subTypePromotion->get('field_acq_promotion_rule_id')->getString(), $cartRulesApplied)) {
-        if ($subTypePromotion->get('field_alshaya_promotion_subtype')->getString() == AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER) {
-          $promotions[] = [
-            '#markup' => \Drupal::config('alshaya_acm_promotion.config')->get('free_shipping_order')['label'],
-          ];
+      $message = '';
+      $promotion_rule_id = $subTypePromotion->get('field_acq_promotion_rule_id')->getString();
+      $sub_type = $subTypePromotion->get('field_alshaya_promotion_subtype')->getString();
+
+      // Special condition for free shipping type promotion.
+      if ($sub_type == AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER) {
+        // For free shipping, we only show if it is applied.
+        if (in_array($promotion_rule_id, $cartRulesApplied)) {
+          // Get message from config for free shipping.
+          $message = \Drupal::config('alshaya_acm_promotion.config')->get('free_shipping_order')['label'];
         }
       }
-      else {
-        $promotions[] = [
-          '#markup' => $subTypePromotion->get('field_acq_promotion_label')
-            ->getString(),
-        ];
+      // For the rest, we show only if they are not applied.
+      elseif (!in_array($promotion_rule_id, $cartRulesApplied)) {
+        // Get translation if available.
+        $subTypePromotion = $this->entityRepository->getTranslationFromContext($subTypePromotion);
+
+        // Get message from magento data stored in drupal.
+        $message = $subTypePromotion->get('field_acq_promotion_label')->getString();
+      }
+
+      if ($message) {
+        $promotions[$promotion_rule_id] = ['#markup' => $message];
       }
     }
 
     $promotions = array_filter($promotions);
+
     if (!empty($promotions)) {
       $build = [
         '#theme' => 'cart_top_promotions',
@@ -243,7 +270,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['cart:' . $this->cartStorage->getCart(FALSE)->id()]);
+    return Cache::mergeTags(parent::getCacheTags(), ['cart_' . $this->cartStorage->getCart(FALSE)->id()]);
   }
 
 }
