@@ -1,9 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nik
- * Date: 04/12/17
- * Time: 2:40 PM
+ * Script helper file to parse yaml and get required data.
  */
 
 $autoloader = require_once __DIR__ . '/../docroot/autoload.php';
