@@ -118,6 +118,8 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
       $form['#access'] = FALSE;
     }
     else {
+      // We loop through all the sort options and check if it is available in
+      // config. If not available, we remove them.
       foreach ($form['sort_bef_combine']['#options'] as $key => $option) {
         $field_name = trim(trim($key, ' DESC'), ' ASC');
 
