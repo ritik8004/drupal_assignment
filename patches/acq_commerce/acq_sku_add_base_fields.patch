@@ -14,7 +14,7 @@ index 66defbcca..af0fc9253 100644
      // Check if the field is already available in config.
      if (isset($additionalFields[$machine_name])) {
 -      throw new \Exception('Field machine name used already.');
-+      \Drupal::logger('acq_sku')->error('Field @machine_name already exists.', ['@machine_name' => $machine_name]);
++      \Drupal::logger('acq_sku')->notice('Field @machine_name already exists.', ['@machine_name' => $machine_name]);
 +      continue;
      }
  
