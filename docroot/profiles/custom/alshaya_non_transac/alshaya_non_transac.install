@@ -6,6 +6,22 @@
  */
 
 /**
+ *  Hook update to disable user registration for visitors.
+ */
+function alshaya_non_transac_update_8102() {
+  // Set registration to administrator only.
+  $config = \Drupal::configFactory()->getEditable('user.settings');
+  $config->set('register', USER_REGISTER_ADMINISTRATORS_ONLY)->save();
+}
+
+/**
+ *  Hook update to enable module.
+ */
+function alshaya_non_transac_update_8101() {
+  \Drupal::service('module_installer')->install(['alshaya_seo'], TRUE);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_non_transac_install() {
@@ -83,20 +99,4 @@ function alshaya_non_transac_install() {
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_non_transac', $modules);
-}
-
-/**
- *  Hook update to enable module.
- */
-function alshaya_non_transac_update_8101() {
-  \Drupal::service('module_installer')->install(['alshaya_seo'], TRUE);
-}
-
-/**
- *  Hook update to disable user registration for visitors.
- */
-function alshaya_non_transac_update_8102() {
-  // Set registration to administrator only.
-  $config = \Drupal::configFactory()->getEditable('user.settings');
-  $config->set('register', USER_REGISTER_ADMINISTRATORS_ONLY)->save();
 }
