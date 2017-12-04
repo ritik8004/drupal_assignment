@@ -71,7 +71,7 @@ function acq_sku_add_base_fields(array $fields) {
 
     // Check if the field is already available in config.
     if (isset($additionalFields[$machine_name])) {
-      \Drupal::logger('acq_sku')->error('Field @machine_name already exists.', ['@machine_name' => $machine_name]);
+      \Drupal::logger('acq_sku')->notice('Field @machine_name already exists.', ['@machine_name' => $machine_name]);
       continue;
     }
 
