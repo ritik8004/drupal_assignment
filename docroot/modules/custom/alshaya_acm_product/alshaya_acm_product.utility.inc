@@ -595,7 +595,7 @@ function alshaya_acm_product_update_config_options(array &$form_parts, FormState
 
   // To de-select all leaf options on parent change & not re-calculate
   // availability of parent attributes in the opposite direction.
-  if ($deselect_leaf_options && isset($configurables[$leaf_attribute])) {
+  if ($deselect_leaf_options && !empty($configurables[$leaf_attribute])) {
     foreach ($form_parts['configurables'][$leaf_attribute]['#options'] as $key => $value) {
       // Deselect the leaf option once clicked on a non-leaf term.
       if (($key == $configurables[$leaf_attribute]) &&
@@ -627,7 +627,7 @@ function alshaya_acm_product_update_config_options(array &$form_parts, FormState
 
   // Disable options which don't exist for the choosen config.
   foreach ($options as $key => $value) {
-    if (!in_array($key, $enabled_options)) {
+    if ($key && !in_array($key, $enabled_options)) {
       $form_parts['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
     }
   }

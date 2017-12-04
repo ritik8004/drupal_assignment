@@ -172,7 +172,7 @@ class Configurable extends SKUPluginBase {
 
       foreach ($available_config as $key => $config) {
         $options = [
-          '' => $dynamic_parts['configurables']['color']['#options'][''],
+          '' => $dynamic_parts['configurables'][$key]['#options'][''],
         ];
 
         foreach ($config['values'] as $value) {

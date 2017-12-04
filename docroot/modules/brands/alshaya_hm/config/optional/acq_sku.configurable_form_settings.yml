@@ -4,3 +4,4 @@ attribute_weights:
 show_quantity: FALSE
 sortable_options:
   - size
+  - color
