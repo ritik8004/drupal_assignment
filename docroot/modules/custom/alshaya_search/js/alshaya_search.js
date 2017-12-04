@@ -102,7 +102,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             ($(this).find('.facets-search-input').length === 0)) {
             // Prepend the text field before the checkboxes, if not exists.
             $(this).find('ul').prepend('<input type="text" placeholder="'
-              + Drupal.t('Please enter your selection')
+              + Drupal.t('Enter your filter name')
               + '" class="facets-search-input">').on('keyup', function () {
               var facetFilterKeyword = $(this).find('.facets-search-input').val().toLowerCase();
               if (facetFilterKeyword) {

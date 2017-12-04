@@ -11,6 +11,26 @@ use Drupal\search_api\Entity\Index;
 
 /**
  * Implements hook_update_N().
+ *
+ * Add translations for sorting option New In on PLP.
+ */
+function alshaya_product_update_8011() {
+  $product_list_view = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.alshaya_product_list');
+
+  $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
+جديدنا تنازلي|جديدنا
+الاسم تصاعدي|الاسم من أ إلى ي
+الاسم تنازلي|الاسم من ي إلى أ 
+السعر تنازلي|السعر من الأعلى إلى الأدنى
+السعر تصاعدي|السعر من الأدنى إلى الأعلى');
+
+  $product_list_view->set('display.block_1.display_options.sorts.created.expose.label', 'جديدنا');
+
+  $product_list_view->save();
+}
+
+/**
+ * Implements hook_update_N().
  */
 function alshaya_product_update_8010() {
   // Update search index field.
