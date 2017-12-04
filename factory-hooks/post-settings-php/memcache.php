@@ -10,6 +10,13 @@
 $settings['memcache']['extension'] = 'Memcached';
 $settings['memcache']['stampede_protection'] = TRUE;
 
+if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
+  $hostname = $_SERVER['HTTP_HOST'];
+  $hostname_parts = explode('.', $hostname);
+
+  $settings['memcache']['key_prefix'] = str_replace('-', '', $hostname_parts[1]);
+}
+
 // Set default cache backend to memcache.
 $settings['cache']['default'] = 'cache.backend.memcache';
 

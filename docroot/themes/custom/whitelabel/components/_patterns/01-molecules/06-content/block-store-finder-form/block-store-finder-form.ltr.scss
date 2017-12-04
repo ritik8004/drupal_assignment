@@ -426,6 +426,10 @@
   &:hover {
     background-color: $grey-smoke;
   }
+
+  &:first-child {
+    border-top: none;
+  }
 }
 
 .pac-item,

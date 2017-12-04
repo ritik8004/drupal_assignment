@@ -113,6 +113,11 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  created:
+    label: 'Authored on'
+    datasource_id: 'entity:node'
+    property_path: created
+    type: date
   stock:
     label: Stock
     datasource_id: 'entity:node'

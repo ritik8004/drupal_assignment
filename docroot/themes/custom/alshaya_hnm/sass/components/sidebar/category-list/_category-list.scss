@@ -1,0 +1,37 @@
+.c-category-list__title {
+  @include arabic-letter-spacing;
+
+  font-size: 0.75rem;
+  margin-bottom: 0.375rem;
+  font-family: $hnm-demibold;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+
+  a {
+    color: $hnm-black-two;
+  }
+}
+
+.c-category-list__items {
+  margin-bottom: 1.75rem;
+}
+
+.c-category-list__item {
+  font-size: 0.75rem;
+  line-height: 2;
+  text-transform: capitalize;
+
+  a {
+    @include arabic-letter-spacing;
+
+    color: $grey7;
+    font-family: $hnm-regular;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      text-decoration: underline;
+      color: $link-hover;
+    }
+  }
+}

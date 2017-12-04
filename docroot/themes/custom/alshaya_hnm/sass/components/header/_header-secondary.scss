@@ -1,0 +1,399 @@
+.c-menu-secondary {
+  @include breakpoint($only-tablet) {
+    max-width: 84.375%;
+  }
+
+  @include breakpoint($upto-desktop) {
+    background: $white-five;
+    display: none;
+    position: fixed;
+    width: 84.375%;
+    height: 100%;
+    z-index: 4;
+    top: 2.9rem;
+
+    @include breakpoint($only-tablet) {
+      width: 20rem;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    text-align: $right;
+
+    .c-menu-secondary__region {
+      @include container(1284px);
+
+      margin: 0 auto;
+    }
+  }
+
+  background: $white-five;
+  text-transform: lowercase;
+
+  &.block--display {
+    z-index: 1000;
+  }
+
+  ul {
+    @extend %list-clear;
+  }
+
+  .menu--account {
+    li {
+      @include breakpoint($desktop) {
+        @at-root {
+          &:first-child {
+            .logged-out & {
+              @include u-visibility(none);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  li {
+    @include breakpoint($upto-desktop) {
+      @include icon(chevron#{$right}, after) {
+        #{$right}: 0;
+        color: $hnm-black-two;
+        font-weight: bold;
+        position: absolute;
+        margin-top: -2.0625rem;
+        font-size: 1.313rem;
+        cursor: pointer;
+        pointer-events: none;
+      }
+
+      &:last-child {
+        @include u-visibility(none);
+      }
+
+      border-bottom: 1px solid #ddd;
+      margin-left: 0.625rem;
+      margin-right: 0.625rem;
+      position: relative;
+    }
+
+    @include breakpoint($desktop) {
+      display: inline-block;
+      height: 1.5rem;
+    }
+  }
+
+  a {
+    @include arabic-letter-spacing;
+
+    font-family: $hnm-regular;
+
+    @include breakpoint($upto-desktop) {
+      color: $hnm-black-four;
+      text-transform: uppercase;
+      display: block;
+      font-size: 0.875rem;
+      letter-spacing: 1px;
+      padding: 1rem 0;
+      padding-bottom: 0.9375rem;
+      padding-right: 0.25rem;
+      line-height: 1.4;
+    }
+
+    @include breakpoint($desktop) {
+      color: $grey8;
+      display: block;
+      padding: 0.375rem 0.75rem;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      vertical-align: middle;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+
+      &:hover,
+      &.is-active {
+        background-color: $grey1;
+      }
+
+      &.language-link {
+        font-family: $hnm-arabic-medium;
+        letter-spacing: normal;
+      }
+    }
+
+    line-height: 1;
+
+    &::before,
+    &::after {
+      font-size: 1.1rem;
+      padding-#{$right}: 0.5rem;
+      position: relative;
+      top: 0.125rem;
+    }
+  }
+
+  .menu--account,
+  .block-alshaya-stores-finder,
+  .block-language-blocklanguage-interface {
+    @include breakpoint($desktop) {
+      display: inline-block;
+      height: 1.5rem;
+    }
+  }
+
+  .block-alshaya-stores-finder,
+  .block-language-blocklanguage-interface {
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
+  }
+
+  .menu--account {
+    @include breakpoint($desktop) {
+      .register-link,
+      li:first-child a {
+        &:hover,
+        &.is-active {
+          background-color: $grey1;
+        }
+      }
+    }
+  }
+
+  .block-language-blocklanguage-interface {
+    .is-active {
+      @include u-visibility(none);
+    }
+  }
+}
+
+.c-my-account-nav {
+  @include breakpoint($only-tablet) {
+    width: 20rem;
+  }
+
+  display: none;
+
+  ul {
+    @extend %list-clear;
+  }
+
+  h3 {
+    @include arabic-letter-spacing;
+
+    color: $hnm-black-four;
+    font-size: 0.75rem;
+    padding: 0.94rem 0;
+    margin: 0 0.625rem;
+    border-bottom: 1px solid $white;
+    text-transform: lowercase;
+    font-weight: normal;
+    font-family: $alshaya-bold;
+
+    @include breakpoint($upto-desktop) {
+      color: $hnm-black-four;
+      font-family: $hnm-bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  position: fixed;
+  width: 84.375%;
+  top: 2.9rem;
+  background: $white-five;
+  height: 100%;
+  z-index: 1000;
+  padding: 0;
+
+  &.block.block-alshaya-my-account-links {
+    margin-top: 0;
+  }
+
+  a {
+    &::before {
+      margin: 0;
+    }
+  }
+
+  li {
+    display: block;
+    font-family: $hnm-regular;
+    text-transform: capitalize;
+    border-bottom: 1px solid $white;
+    padding: 0.94rem 0;
+    margin-left: 0.625rem;
+    margin-right: 0.625rem;
+    text-align: $left;
+    position: relative;
+
+    &:hover {
+      background: none;
+
+      a {
+        color: $hnm-black-four;
+      }
+    }
+
+    @include icon(chevron#{$right}, after) {
+      color: $hnm-black-two;
+      font-weight: bold;
+      font-size: 1.313rem;
+      cursor: pointer;
+      pointer-events: none;
+      position: absolute;
+      margin-top: -1.1625rem;
+      #{$right}: 0;
+    }
+
+    &.my-account {
+      display: none;
+    }
+  }
+}
+
+.contains-sublink .menu__link {
+  @include breakpoint($upto-desktop) {
+    pointer-events: none;
+  }
+}
+
+.menu--three__list-item {
+  .menu--three__link {
+    position: relative;
+
+    @include breakpoint($upto-desktop) {
+      @include icon(chevron#{$right}, after) {
+        position: absolute;
+        color: $marine-blue;
+        #{$right}: 0;
+        font-size: 1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+  .contains-sublink .menu--three__link {
+    &::after {
+      @include breakpoint($upto-desktop) {
+        content: none;
+      }
+    }
+  }
+}
+
+.branding__menu.navbar-fixed-top {
+  position: fixed;
+  top: 0 !important;
+  width: 100%;
+  z-index: 999;
+  background-color: $white-five;
+}
+
+.branding__menu {
+  position: relative;
+  z-index: 6;
+  background-color: $white-five;
+
+  @include breakpoint($upto-desktop) {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+
+  @include breakpoint($only-mobile) {
+    box-shadow: 0 0 0.125rem $greyish;
+  }
+
+  @include breakpoint($only-tablet) {
+    height: 4.5rem;
+  }
+}
+
+.mobile--overlay .branding__menu {
+  z-index: 7;
+  background: transparent;
+
+  &.navbar-fixed-top,
+  .block-views-exposed-filter-blocksearch-page {
+    background: transparent;
+  }
+
+  &::before {
+    content: '';
+    background: rgba(133, 133, 133, 0.27);
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 6;
+    top: 0;
+    bottom: 0;
+  }
+}
+
+.header--fixed {
+  @include breakpoint($desktop) {
+    margin-top: 9.75rem;
+  }
+
+  .branding__menu {
+    box-shadow: 0 0 0.125rem $greyish;
+  }
+}
+
+body {
+  @include breakpoint($only-mobile) {
+    margin-top: 3.625rem;
+
+    &.logged-in.toolbar-vertical {
+      margin-top: 5.9375rem;
+      padding-top: 0 !important;
+    }
+
+    &.logged-in.toolbar-vertical .branding__menu {
+      top: 2.4375rem;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 4.5rem;
+
+    &.logged-in.toolbar-vertical {
+      margin-top: 7rem;
+      padding-top: 0 !important;
+    }
+
+    &.logged-in.toolbar-vertical .branding__menu {
+      top: 2.4375rem;
+    }
+  }
+}
+
+.block-alshaya-main-menu .active--menu--links {
+  li.menu--one__list-item ul.menu--two__list {
+    @include breakpoint($desktop) {
+      display: block;
+      transition: all ease 0s;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-menu-secondary {
+    .region__menu-secondary,
+    ul {
+      font-size: 0;
+    }
+
+    .region__menu-secondary {
+      text-align: center;
+    }
+  }
+}
+
+html[lang='ar'] {
+  .c-menu-secondary {
+    a {
+      font-family: $hnm-arabic-regular;
+    }
+  }
+}

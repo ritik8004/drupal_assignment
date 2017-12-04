@@ -60,7 +60,7 @@ display:
                 collapsible: false
                 collapsible_label: 'Sort options'
                 combine: true
-                combine_rewrite: "Position Asc| Position\nName Asc|Name A to Z\nName Desc|Name Z to A\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
+                combine_rewrite: "Position Asc|Position\nNew In Desc|New In\nName Asc|Name A to Z\nName Desc|Name Z to A\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
                 reset: false
                 reset_label: ''
                 is_secondary: false
@@ -570,6 +570,18 @@ display:
           exposed: true
           expose:
             label: Position
+          plugin_id: alshaya_product_position_sort
+        created:
+          id: created
+          table: search_api_index_product
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: 'New In'
+          order: DESC
+          exposed: true
+          expose:
+            label: 'New In'
           plugin_id: search_api
         name_1:
           id: name_1

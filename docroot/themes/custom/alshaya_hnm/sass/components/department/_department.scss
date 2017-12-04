@@ -1,0 +1,55 @@
+.c-department {
+  margin-top: 1.875rem;
+
+  .c-page-title {
+    @include arabic-letter-spacing;
+
+    border-bottom: 1px solid $white;
+    margin-bottom: 1.438rem;
+    padding-bottom: 0.875rem;
+    font-family: $hnm-demibold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: $hnm-black-two;
+  }
+
+  .c-page-title__description {
+    display: none;
+  }
+
+  .content {
+    .c-promo__items--department img {
+      width: 100%;
+    }
+  }
+
+  .c-sidebar-first .block:first-child {
+    margin-top: 0;
+  }
+}
+
+.nodetype--department_page {
+  @include breakpoint($only-mobile) {
+    .c-hero-content__region {
+      margin-top: 1rem;
+    }
+
+    .block-page-title-block {
+      @include u-visibility(none);
+    }
+
+    .c-department {
+      margin-top: 0;
+    }
+
+    .field--name-field-1-row-2-col {
+      .c-promo-1-1--eq__item {
+        width: 100%;
+
+        &:first-child {
+          margin-bottom: 0.75rem;
+        }
+      }
+    }
+  }
+}

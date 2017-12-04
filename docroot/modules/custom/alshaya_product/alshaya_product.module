@@ -57,6 +57,7 @@ function alshaya_product_alshaya_i18n_onetime_translation_add() {
 
   $product_list_view->set('display.default.display_options.exposed_form.options.exposed_sorts_label', 'رتب حسب');
   $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
+جديدنا تنازلي|جديدنا
 الاسم تصاعدي|الاسم من أ إلى ي
 الاسم تنازلي|الاسم من ي إلى أ 
 السعر تنازلي|السعر من الأعلى إلى الأدنى
@@ -69,6 +70,7 @@ function alshaya_product_alshaya_i18n_onetime_translation_add() {
   $product_list_view->set('display.default.display_options.header.result.content', '@total القطع');
   $product_list_view->set('display.default.display_options.pager.options.views_infinite_scroll.button_text', 'عرض المزيد');
   $product_list_view->set('display.block_1.display_options.sorts.nid.expose.label', 'ما ننصح به');
+  $product_list_view->set('display.block_1.display_options.sorts.created.expose.label', 'جديدنا');
 
   $product_list_view->save();
 }

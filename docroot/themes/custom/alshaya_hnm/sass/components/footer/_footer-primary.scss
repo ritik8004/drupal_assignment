@@ -1,0 +1,598 @@
+.language--switcher {
+  @include breakpoint($tablet) {
+    margin-top: 0.75rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 1.875rem;
+  }
+}
+
+.region__footer-primary {
+  @include breakpoint($tablet) {
+    // padding-left: 0.312rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    max-width: 21.94rem;
+  }
+}
+
+.c-footer-menu--category {
+  text-transform: lowercase;
+}
+
+.c-footer .language-switcher-language-url,
+.only-first-time .language-switcher-language-url {
+  position: relative;
+  clear: both;
+  padding: 1.1875rem 0 1.125rem;
+
+  @include breakpoint($only-mobile) {
+    border-bottom: 1px solid $white-smoke-border;
+  }
+
+  @include breakpoint($only-tablet) {
+    padding-top: 1.875rem;
+    padding-bottom: 0;
+  }
+
+  ul {
+    @extend %list-clear;
+
+    padding: 0;
+    direction: ltr;
+    text-align: $left;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
+    li {
+      display: inline-block;
+      padding: 0 2px;
+
+      @include breakpoint($only-tablet) {
+        padding: 0;
+      }
+
+      &.en {
+        font-family: $hnm-regular;
+      }
+
+      &:first-child {
+        position: relative;
+
+        a {
+          margin: 0 1.125rem 0 0;
+          margin-top: 0;
+          margin-bottom: 0;
+
+          @include breakpoint($desktop) {
+            margin-#{$right}: 0.6875rem;
+          }
+        }
+      }
+
+      &:last-child {
+        a {
+          letter-spacing: normal;
+        }
+      }
+
+      a {
+        @include arabic-letter-spacing;
+
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        color: $white-five;
+        line-height: 1.29;
+        letter-spacing: 1px;
+        text-decoration: underline;
+
+        @include breakpoint($upto-desktop) {
+          font-family: $hnm-regular;
+        }
+
+        &.is-active {
+          color: $grey5;
+          text-decoration: none;
+        }
+      }
+
+      &.ar a {
+        font-family: $hnm-arabic-regular-nodir;
+      }
+
+      &.en a {
+        font-family: $hnm-regular;
+
+        @include breakpoint($only-tablet) {
+          margin: 0 1.125rem 0 0;
+        }
+      }
+    }
+  }
+}
+
+.language--switcher.only-first-time {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: $hnm-black-two;
+  z-index: 9;
+
+  .links {
+    @include breakpoint($only-tablet) {
+      text-align: center;
+    }
+  }
+
+  ul {
+    height: 2.188rem;
+
+    li {
+      padding: 0.375rem;
+
+      a {
+        color: $white-two;
+
+        &.is-active {
+          color: $grey5;
+        }
+      }
+
+      &:first-child {
+        &::after {
+          color: $white-two;
+        }
+      }
+    }
+  }
+
+  .language-switcher-language-url {
+    padding: 0;
+  }
+
+  .language-switcher-close {
+    width: 1.063rem;
+    height: 1.063rem;
+    display: block;
+    position: absolute;
+    #{$right}: 1.375rem;
+    top: -0.3125rem;
+
+    @include icon(close, after) {
+      position: absolute;
+      color: $white-two;
+      font-size: 2.688rem;
+    }
+  }
+}
+
+.c-footer {
+  position: relative;
+  margin-top: 3.5rem;
+  background-color: $hnm-black;
+
+  @include breakpoint($tablet) {
+    margin-top: 2.75rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 3.75rem;
+  }
+}
+
+.c-footer-primary {
+  @include clearfix;
+
+  background-color: $hnm-black;
+
+  &__region {
+    @include clearfix;
+
+    max-width: 64rem;
+    margin: 0 auto;
+    border-top: none;
+    padding-bottom: 2.5rem;
+
+    @include breakpoint($tablet) {
+      padding-top: 4rem;
+      padding-bottom: 45px;
+      margin: 0 1.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin: 0 auto;
+      padding-bottom: 2.5rem;
+    }
+  }
+
+  .footer--menu {
+    @include breakpoint($desktop) {
+      padding: 0 1rem;
+    }
+  }
+
+  .c-footer {
+    &-is-accordion {
+      display: inline-block;
+      vertical-align: top;
+
+      @include breakpoint($upto-tablet) {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid $white-smoke-border;
+      }
+
+      .is-accordion {
+        @include arabic-letter-spacing;
+
+        font-family: $hnm-bold;
+        text-align: $left;
+        color: $white-five;
+        text-transform: uppercase;
+        margin-top: 0;
+        font-size: 0.875rem;
+        letter-spacing: 1.2px;
+        margin-bottom: 0.5rem;
+
+        @include breakpoint($upto-tablet) {
+          margin: 0;
+          padding: 1.21875rem 0.5rem;
+        }
+
+        @include breakpoint($desktop) {
+          font-size: 0.875rem;
+          letter-spacing: 1px;
+          margin-bottom: 0.625rem;
+        }
+      }
+
+      .accordion--body {
+        display: none;
+        border-top: 1px solid $white-smoke-border;
+
+        @include breakpoint($tablet) {
+          border-top: 0;
+          display: block !important;
+          height: 100% !important;
+        }
+      }
+    }
+
+    &-menu {
+      @extend %list-clear;
+
+      @include breakpoint($tablet) {
+        display: block;
+        width: 100%;
+        border-top: none;
+      }
+
+      a {
+        display: block;
+        text-decoration: none;
+        font-size: 0.875rem;
+        line-height: 1.71;
+        text-align: $left;
+        color: $grey5;
+        text-transform: capitalize;
+
+        @include breakpoint($upto-tablet) {
+          text-align: center;
+          padding: 0.625rem 0;
+        }
+
+        @include breakpoint($desktop) {
+          font-size: 0.875rem;
+          line-height: 1.57;
+        }
+
+        &:hover {
+          color: $white-five;
+        }
+      }
+
+      &--category {
+        .is-accordion {
+          @include breakpoint($tablet) {
+            width: 6.625rem;
+          }
+        }
+      }
+
+      &--about {
+        @include breakpoint($tablet) {
+          padding-#{$left}: 0.834%;
+          padding-#{$right}: 7.62%;
+        }
+
+        @include breakpoint($desktop) {
+          padding-#{$left}: 9.7%;
+          padding-#{$right}: 14.25%;
+        }
+
+        .is-accordion {
+          @include breakpoint($tablet) {
+            width: 8.8125rem;
+          }
+        }
+
+        .c-footer-menu {
+          @include breakpoint($tablet) {
+            width: 8.8125rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.block-alshaya-newsletter {
+  @include clearfix;
+
+  color: $white-five;
+  float: $right;
+  position: relative;
+  width: 100%;
+  padding: 1.25rem 0 0;
+  background-color: $hnm-black;
+
+  @include breakpoint($tablet) {
+    width: 14.875rem;
+    padding: 0;
+  }
+
+  @include breakpoint($desktop) {
+    width: 15.9375rem;
+  }
+
+  h3 {
+    @include arabic-letter-spacing;
+
+    font-family: $hnm-bold;
+    font-weight: normal;
+    font-size: 0.875rem;
+    letter-spacing: 1.2px;
+    text-align: $left;
+    color: $white-five;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 0.625rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 0.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      letter-spacing: 1px;
+      margin-bottom: 0.625rem;
+    }
+  }
+
+  form {
+    overflow: auto;
+  }
+
+  .newsletter-block-label {
+    font-family: $hnm-regular;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-align: $left;
+    color: $grey5;
+
+    @include breakpoint($tablet) {
+      width: 11.875rem;
+      line-height: 1.29;
+    }
+
+    @include breakpoint($desktop) {
+      width: 100%;
+      line-height: 1.5;
+    }
+  }
+
+  .form-type-email {
+    margin-bottom: 0;
+    width: calc(100% - 5.7rem);
+    float: $left;
+
+    html[lang=ar] & {
+      width: calc(100% - 5.55rem);
+    }
+
+    @include breakpoint($upto-desktop) {
+      width: calc(100% - 5.45rem);
+
+      html[lang=ar] & {
+        width: calc(100% - 5.3rem);
+      }
+    }
+
+    #edit-email-error {
+      line-height: 1.36;
+      display: inline-block;
+      width: 100%;
+      position: absolute;
+      #{$right}: 0;
+      top: 100%;
+      color: $red-error;
+      padding: 0.3125rem 0;
+      z-index: 9;
+      font-size: 0.75rem;
+      margin-top: 0.1875rem;
+      text-align: $left;
+      background-color: $hnm-black;
+
+      @include breakpoint($upto-tablet) {
+        #{$right}: 0.5rem;
+        #{$left}: 0.5rem;
+      }
+    }
+  }
+
+  input[type="email"] {
+    font-size: 0.875rem;
+    line-height: 2;
+    text-align: $left;
+    background-color: $hnm-black;
+    border-bottom: 1px solid $white-five !important;
+    padding-#{$right}: 33%;
+    height: 2rem;
+    color: $white-five !important;
+    margin-top: 1.75rem;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.75rem;
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: 1.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 1.6875rem;
+    }
+
+    &::placeholder {
+      color: $grey5;
+      opacity: 1;
+    }
+  }
+
+  .form-submit {
+    @extend %btn;
+
+    @include arabic-letter-spacing;
+
+    font-family: $hnm-bold;
+    background: $white-five;
+    color: $hnm-black-two;
+    position: absolute;
+    font-size: 0.8125rem;
+    #{$right}: 0;
+    bottom: 0;
+    padding: 0.563rem 0.907rem;
+    border-radius: 0;
+    z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: $left;
+
+    @include breakpoint($tablet) {
+      font-size: 0.8125rem;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+    }
+
+    &:focus {
+      position: absolute;
+    }
+  }
+}
+
+.c-footer-is-accordion {
+  .is-accordion {
+    font-weight: normal;
+
+    @include breakpoint($only-mobile) {
+      margin: 0;
+      padding: 0.875rem 0;
+      position: relative;
+      overflow: hidden;
+
+      @include icon(dropdown-expand, after) {
+        position: absolute;
+        #{$right}: 0.33rem;
+        font-size: 2.25rem;
+        width: 1.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+}
+
+.c-footer-primary {
+  .open--accordion {
+    .is-accordion {
+      @include breakpoint($only-mobile) {
+        @include icon(dropdown-collapse, after);
+      }
+    }
+
+    .accordion--body {
+      @include breakpoint($only-mobile) {
+        border-top: 2px solid $white-smoke-border;
+      }
+    }
+  }
+}
+
+#footer-newsletter-form-wrapper {
+  line-height: 1.36;
+  display: inline-block;
+  width: 100%;
+  position: absolute;
+  #{$left}: 0;
+  top: 100%;
+  padding: 0.3125rem 0.5rem;
+
+  @include breakpoint($tablet) {
+    padding: 0.3125rem 0;
+  }
+
+  @include breakpoint($tablet) {
+    width: 95.5%;
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  .subscription-status {
+    .success {
+      background: $tealish;
+      color: $white-four;
+      font-size: 0.75rem;
+      padding: 0.3125rem 0.875rem;
+      margin-top: 0.1875rem;
+      display: block;
+    }
+  }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    background: $white-five;
+  }
+
+  .ladda-spinner {
+    background: url("../imgs/icons/ic-loader.svg") no-repeat;
+    background-size: cover;
+    height: 2.1875rem;
+    width: 2.1875rem;
+    position: absolute;
+    top: 0;
+    #{$left}: 1.6875rem !important;
+    margin-top: -0.125rem;
+  }
+}
+
+.footer_primary-right-block {
+  color: $white-five;
+  float: $right;
+  position: relative;
+  width: 100%;
+  padding: 1.25rem 0.5rem 0;
+  background-color: $hnm-black;
+
+  @include breakpoint($tablet) {
+    width: 14.875rem;
+    padding: 0;
+  }
+
+  @include breakpoint($desktop) {
+    width: 15.9375rem;
+  }
+}

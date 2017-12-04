@@ -1,0 +1,97 @@
+@mixin promo-style-two-large {
+  font-family: $hnmpromo-regular;
+  font-size: 3.875rem;
+  line-height: 1;
+}
+
+@mixin promo-style-two-medium {
+  font-family: $hnmpromo-regular;
+  font-size: 2.625rem;
+  line-height: 1.2;
+}
+
+@mixin promo-style-two-small {
+  font-family: $hnmpromo-regular;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+@mixin promo-style-one-large {
+  font-family: $hnm-bold;
+  font-size: 2.625rem;
+  line-height: 1.24;
+}
+
+@mixin promo-style-one-medium {
+  font-family: $hnm-demibold;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  letter-spacing: 0.2rem;
+}
+
+@mixin promo-style-one-small {
+  font-family: $hnm-demibold;
+  font-size: 0.9375rem;
+  line-height: 1.26;
+  letter-spacing: 0.2rem;
+}
+
+@mixin display-heading {
+  font-family: $hnm-demibold;
+  font-size: 1.625rem;
+  line-height: 0.73;
+}
+
+@mixin page-heading {
+  font-family: $hnm-demibold;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+@mixin product-heading-bold {
+  font-family: $hnm-demibold;
+  font-size: 1.125rem;
+  line-height: 0.94;
+}
+
+@mixin product-heading-regular {
+  font-family: $hnm-regular;
+  font-size: 1.125rem;
+  line-height: 0.94;
+}
+
+@mixin subheading-bold {
+  font-family: $hnm-demibold;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+@mixin subheading-regular {
+  font-family: $hnm-regular;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+@mixin body-bold {
+  font-family: $hnm-bold;
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+
+@mixin body-regular {
+  font-family: $hnm-regular;
+  font-size: 0.875rem;
+  line-height: 1.36;
+}
+
+@mixin caption-regular {
+  font-family: $hnm-regular;
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+
+@mixin caption-bold {
+  font-family: $hnm-bold;
+  font-size: 0.75rem;
+  line-height: 1.42;
+}

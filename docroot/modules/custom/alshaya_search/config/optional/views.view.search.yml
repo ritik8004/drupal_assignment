@@ -64,7 +64,7 @@ display:
                 collapsible: false
                 collapsible_label: 'Sort options'
                 combine: true
-                combine_rewrite: "Relevance Desc|Relevance\nName Asc|Name A to Z\nName Desc|Name Z to A\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
+                combine_rewrite: "Relevance Desc|Relevance\nNew In Desc|New In\nName Asc|Name A to Z\nName Desc|Name Z to A\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
                 reset: false
                 reset_label: ''
                 is_secondary: false
@@ -282,6 +282,18 @@ display:
           exposed: true
           expose:
             label: Relevance
+          plugin_id: search_api
+        created:
+          id: created
+          table: search_api_index_acquia_search_index
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: 'New In'
+          order: DESC
+          exposed: true
+          expose:
+            label: 'New In'
           plugin_id: search_api
         final_price:
           id: final_price

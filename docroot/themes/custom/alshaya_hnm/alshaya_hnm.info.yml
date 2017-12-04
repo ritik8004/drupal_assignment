@@ -1,0 +1,58 @@
+name: Alshaya H&M
+type: theme
+description: 'Theme for H&M.'
+core: 8.x
+base theme: cog
+
+regions:
+  menu_primary: 'Menu Primary'
+  menu_secondary: 'Menu Secondary'
+  header: Header
+  pre_content: 'Pre content'
+  breadcrumb: Breadcrumb
+  hero_content: 'Hero Content'
+  highlighted: 'Highlight Content'
+  content: Content
+  sidebar_first: 'Sidebar first'
+  sidebar_second: 'Sidebar second'
+  post_content: 'Post content'
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - alshaya_hnm/global_styles
+  - alshaya_hnm/color_styles
+  - alshaya_hnm/ucfix
+
+libraries-override:
+  back_to_top/back_to_top_icon:
+    css:
+      theme:
+        css/back_to_top.css: false
+  core/drupal.autocomplete:
+    js:
+      misc/autocomplete.js: js/autocomplete.js
+  core/jquery.ui:
+    css:
+      component:
+        assets/vendor/jquery.ui/themes/base/core.css: false
+      theme:
+        assets/vendor/jquery.ui/themes/base/theme.css: false
+  core/jquery.ui.accordion:
+    css:
+      component:
+        assets/vendor/jquery.ui/themes/base/accordion.css: false
+  geolocation/geolocation.commonmap:
+    js:
+      js/geolocation-common-map.js: js/geolocation/alshaya_geolocation_common_map.js
+  geolocation/geolocation.formatter.googlemap:
+    js:
+      js/geolocation-formatter-googlemap.js: js/geolocation/alshaya_geolocation_formatter_googlemap.js
+  geolocation/geolocation.googlemapsapi:
+    js:
+      js/geolocation-google-maps-api.js: js/geolocation/alshaya_geolocation_google_maps_api.js
+  views-infinite-scroll/views-infinite-scroll:
+    js:
+      js/infinite-scroll.js : js/infinite-scroll.js
+ckeditor_stylesheets:
+  - css/ckeditor.css
