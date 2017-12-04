@@ -13,7 +13,7 @@ sites:
     module: alshaya_mc
     type: alshaya_transac
   mcksa:
-    module: alshaya_hm
+    module: alshaya_mc
     type: alshaya_transac
   hmkw:
     module: alshaya_hm

@@ -72,6 +72,26 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Mothercare KSA.
     'mcksa' => [
+      '01test' => [
+        'magento' => 'mcksa_qa',
+        'conductor' => 'mcksa_test',
+      ],
+      '01uat' => [
+        'magento' => 'mcksa_uat',
+        'conductor' => 'mcksa_uat',
+      ],
+      '01pprod' => [
+        'magento' => 'mcksa_uat',
+        'conductor' => 'mcksa_pprod',
+      ],
+      '01live' => [
+        'magento' => 'mcksa_prod',
+        'conductor' => 'mcksa_prod',
+      ],
+      '01update' => [
+        'magento' => 'mcksa_prod',
+        'conductor' => 'mcksa_prod',
+      ],
       'default' => [
         'magento' => 'mcksa_dev',
         'conductor' => 'mcksa_dev',
