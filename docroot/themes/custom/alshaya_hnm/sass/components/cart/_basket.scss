@@ -832,10 +832,10 @@
   }
 }
 
-#block-basketpromotionmessage {
+.cart-promotions-wrapper {
   @include arabic-letter-spacing;
 
-  background: $rosy-pink;
+  background: $info;
   color: $white-four;
   padding: 0.85rem 1rem;
   margin-bottom: 0.875rem;
@@ -864,6 +864,13 @@
     @include breakpoint($desktop) {
       font-size: 0.9375rem;
     }
+  }
+
+  .continue-shopping a {
+    font-family: $hnm-bold;
+    text-transform: uppercase;
+    text-decoration: underline;
+    color: $hnm-black-two;
   }
 }
 
@@ -1093,7 +1100,7 @@ html[lang=ar] {
 
   .promo-continue-shopping-wrapper summary,
   .alias--cart #table-cart-totals td:first-child,
-  #block-basketpromotionmessage p,
+  .cart-promotions-wrapper p,
   .alias--cart #table-cart-items tr th {
     font-size: 0.75rem;
   }
@@ -1129,7 +1136,7 @@ html[lang=ar] {
     }
   }
 
-  #block-basketpromotionmessage {
+  .cart-promotions-wrapper {
     @include breakpoint($only-tablet) {
       margin-top: -0.4rem;
     }
@@ -1381,17 +1388,13 @@ body .ladda-button {
   }
 
   @include breakpoint($desktop) {
-    #{$right}: 25%;
+    #{$right}: 23.5%;
   }
 
   a {
-    color: $white-five;
-    font-size: 1rem;
+    color: $hnm-black-two;
+    font-size: 0.75rem;
     text-decoration: underline;
-
-    @include breakpoint($tablet) {
-      font-size: 0.75rem;
-    }
   }
 }
 
