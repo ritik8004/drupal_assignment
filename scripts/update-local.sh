@@ -1,89 +1,55 @@
 #!/bin/sh
 
-# "download" or "reuse".
-arg1="$1"
+# Usage: scripts/update-local.sh "site" "env" "mode"
 
-# "dev" or ""test" or "uat" or "prod" or "hmkw_dev" or "hmkw_pprod"
-arg2="$2"
+# "mckw" or "hmkw".
+site="$1"
 
-if [ $arg2 = "dev" ]
-then
-  remote_user="alshaya.01dev"
-  server="staging-1505.enterprise-g1.hosting.acquia.com"
-  dir="/home/alshaya/01dev"
-  origin_dir="sites/g/files/bndsjb246/files/"
-  origin="https://mckw.dev-alshaya.acsitefactory.com"
-elif [ $arg2 = "test" ]
-then
-  remote_user="alshaya.01test"
-  server="staging-1505.enterprise-g1.hosting.acquia.com"
-  dir="/home/alshaya/01test"
-  origin_dir="sites/g/files/bndsjb246/files/"
-  origin="https://mckw.test-alshaya.acsitefactory.com"
-elif [ $arg2 = "uat" ]
-then
-  remote_user="alshaya.01uat"
-  server="staging-1509.enterprise-g1.hosting.acquia.com"
-  dir="/home/alshaya/01uat"
-  origin_dir="sites/g/files/bndsjb5371uat/files/"
-  origin="https://whitelabel1.uat-alshaya.acsitefactory.com"
-elif [ $arg2 = "hmkw_dev3" ]
-then
-  remote_user="alshaya.01dev3"
-  server="staging-2001.enterprise-g1.hosting.acquia.com"
-  dir="/home/alshaya/01dev3"
-  origin_dir="sites/g/files/bndsjb5371dev3/files/"
-  origin="https://hmkw.dev3-alshaya.acsitefactory.com"
-else
-elif [ $arg2 = "hmkw_pprod" ]
-then
-  remote_user="alshaya.01pprod"
-  server="staging-1510.enterprise-g1.hosting.acquia.com"
-  dir="/home/alshaya/01uat"
-  origin_dir="sites/g/files/bndsjb5321pprod/files/"
-  origin="https://hmkw.pprod-alshaya.acsitefactory.com"
-else
-  echo "Please provide valid env."
-  exit 0
-fi
+# "01dev" or "01test" or "01uat" or "01live".
+env="$2"
 
-local_archive="/tmp/alshaya_$arg2.sql"
+# "reuse" or "download".
+mode="$3"
+
+remote_alias="@alshaya.$env"
+
+# Get acsf info from remote.
+remote_info=$(drush $remote_alias acsf-tools-list --fields=name,domains)
+
+remote_db_role=$(echo "$remote_info" | php scripts/get-acsf-info.php $site db_role)
+remote_url=$(echo "$remote_info" | php scripts/get-acsf-info.php $site url)
+
+remote_l_argument="-l $remote_url"
+
+# Below stuff is used for stage file proxy.
+origin_dir="sites/g/files/$remote_db_role/files/"
+origin="https://$remote_url"
+
+local_archive="/tmp/alshaya_$env.sql"
 
 ROOT=$(git rev-parse --show-toplevel 2> /dev/null)
 path=$(dirname $0)
 
 alias="@alshaya.local"
-l_argument=""
+l_argument="-l local.alshaya-$site.com"
 
 # Check if we have an existing archive if we want to reuse existing one.
-if [ $arg1 = "reuse" ]
+if [ $mode = "reuse" ]
 then
-  if [ ! -f $local_archive.gz ]
+  if [ ! -f $local_archive ]
   then
-    echo "No existing archive found for $arg2"
+    echo "No existing archive found for $env"
     exit 0
   fi
   echo "Re-using downloaded database."
-elif [ $arg1 = "download" ]
+elif [ $mode = "download" ]
 then
-  echo "Downloading latest database from $arg2"
-  scp $remote_user@$server:$(ssh $remote_user@$server "ls -t $dir/post_db_copy_* | head -1") $local_archive.gz
+  echo "Downloading latest database from $env"
+  drush $remote_alias $remote_l_argument sql-dump > $local_archive
 else
   echo "Please provide valid argument to download or reuse db."
   exit 0
 fi
-
-if [ ! -f $local_archive.gz ]
-then
-  echo "Unable to download, check logs above."
-  exit 0
-fi
-
-# Delete un-zipped version if exists.
-rm $local_archive
-
-# Un-zip.
-gunzip --keep $local_archive.gz
 
 # Drop the current database.
 echo "Dropping local database"
@@ -94,11 +60,8 @@ echo "Clearing memcache"
 drush $alias $l_argument ssh "sudo service memcached restart"
 
 # Install the dump.
-echo "Installing database from $arg2 env"
+echo "Installing database from $env env"
 drush $alias $l_argument sql-cli < $local_archive
-
-# Delete un-zipped version to save space.
-rm $local_archive
 
 # Update super admin email to local default.
 echo "Update super admin email to no-reply@acquia.com."
@@ -111,9 +74,6 @@ drush $alias $l_argument user-password admin --password="admin"
 # Unblock user 1
 echo "Unblocking super admin user"
 drush $alias $l_argument uublk --name=admin
-
-# Clear cache once.
-drush $alias $l_argument cr
 
 drush $alias $l_argument en dblog -y
 
@@ -134,5 +94,5 @@ drush $alias $l_argument cr
 if [ -f "$path/install-site-dev.sh" ]
 then
   echo "Execute dev steps."
-  sh "$path/install-site-dev.sh" "$alias" "$l_argument" "$arg2"
+  sh "$path/install-site-dev.sh" "$alias" "$l_argument" "$env"
 fi
