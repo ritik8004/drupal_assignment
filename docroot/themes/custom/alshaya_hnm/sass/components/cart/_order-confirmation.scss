@@ -446,6 +446,15 @@
 
     &.label {
       color: $grey7;
+      font-family: $hnm-regular;
+    }
+  }
+
+  .price-row {
+    .right--align {
+      &.label {
+        padding: 0 1.125rem;
+      }
     }
   }
 
@@ -532,6 +541,7 @@
       .dark--text {
         font-family: $hnm-bold;
         color: $hnm-black-two;
+        font-weight: bold;
       }
 
       @include breakpoint($tablet) {
@@ -689,7 +699,7 @@
   }
 
   @include breakpoint($desktop) {
-    margin-#{$right}: 8.375rem;
+    margin-#{$right}: 1.5rem;
   }
 }
 
