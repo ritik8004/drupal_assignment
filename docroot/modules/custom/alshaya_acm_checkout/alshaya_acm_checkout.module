@@ -221,6 +221,15 @@ function alshaya_acm_checkout_alshaya_profile_installed_final_task($profile, arr
     $cod_ar->setName('نقداً عند التسليم');
     $cod_ar->save();
 
+    // Cybersource.
+    $cybersource = $checkout_options_manager->loadPaymentMethod('cybersource');
+    $cybersource->setName('Credit Card');
+    $cybersource->save();
+
+    $cybersource_ar = $cybersource->addTranslation('ar', []);
+    $cybersource_ar->setName('البطاقة الإئتمانية');
+    $cybersource_ar->save();
+
     // K-Net.
     $knet = $checkout_options_manager->loadPaymentMethod('knet');
     $knet->get('description')->setValue('Please proceed to K-Net payment gateway by clicking the "Place Order" button below.');

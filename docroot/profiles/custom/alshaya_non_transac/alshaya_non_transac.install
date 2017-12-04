@@ -9,6 +9,8 @@
  * Implements hook_install().
  */
 function alshaya_non_transac_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_non_transac', 'inc', 'alshaya_non_transac.content');
+
   $modules = [
     // Custom modules.
     'alshaya_custom',

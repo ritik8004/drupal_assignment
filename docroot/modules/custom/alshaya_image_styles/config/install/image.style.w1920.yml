@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w1920
+label: w1920
+effects:
+  3a24b2ff-d395-431b-9331-51dfd90d0b72:
+    uuid: 3a24b2ff-d395-431b-9331-51dfd90d0b72
+    id: image_scale
+    weight: 1
+    data:
+      width: 1920
+      height: null
+      upscale: false

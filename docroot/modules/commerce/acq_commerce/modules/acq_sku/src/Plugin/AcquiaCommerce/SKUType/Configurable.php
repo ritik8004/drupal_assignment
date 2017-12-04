@@ -43,6 +43,8 @@ class Configurable extends SKUPluginBase {
     ];
 
     $configurables = unserialize($sku->field_configurable_attributes->getString());
+    $configurable_form_settings = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings');
+    $configurable_weights = $configurable_form_settings->get('attribute_weights');
 
     foreach ($configurables as $configurable) {
       $attribute_code = $configurable['code'];
@@ -56,40 +58,46 @@ class Configurable extends SKUPluginBase {
 
       // Sort the options.
       if (!empty($options)) {
-        $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
-        $query->fields('ttfd', ['tid', 'weight']);
-        $query->join('taxonomy_term__field_sku_attribute_code', 'ttfsac', 'ttfsac.entity_id = ttfd.tid');
-        $query->join('taxonomy_term__field_sku_option_id', 'ttfsoi', 'ttfsoi.entity_id = ttfd.tid');
-        $query->fields('ttfsoi', ['field_sku_option_id_value']);
-        $query->condition('ttfd.vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
-        $query->condition('ttfsac.field_sku_attribute_code_value', $attribute_code);
-        $query->condition('ttfsoi.field_sku_option_id_value', array_keys($options), 'IN');
-        $query->distinct();
-        $query->orderBy('weight', 'ASC');
-        $tids = $query->execute()->fetchAllAssoc('tid');
+        if (in_array($attribute_code, $configurable_form_settings->get('sortable_options'))) {
+          $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
+          $query->fields('ttfd', ['tid', 'weight']);
+          $query->join('taxonomy_term__field_sku_attribute_code', 'ttfsac', 'ttfsac.entity_id = ttfd.tid');
+          $query->join('taxonomy_term__field_sku_option_id', 'ttfsoi', 'ttfsoi.entity_id = ttfd.tid');
+          $query->fields('ttfsoi', ['field_sku_option_id_value']);
+          $query->condition('ttfd.vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+          $query->condition('ttfsac.field_sku_attribute_code_value', $attribute_code);
+          $query->condition('ttfsoi.field_sku_option_id_value', array_keys($options), 'IN');
+          $query->distinct();
+          $query->orderBy('weight', 'ASC');
+          $tids = $query->execute()->fetchAllAssoc('tid');
 
-        foreach ($tids as $tid => $values) {
-          $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
+          foreach ($tids as $tid => $values) {
+            $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
+          }
         }
+        else {
+          $sorted_options = $options;
+        }
+
+        $form['ajax']['configurables'][$attribute_code] = [
+          '#type' => 'select',
+          '#title' => $configurable['label'],
+          '#options' => $sorted_options,
+          '#weight' => $configurable_weights[$attribute_code],
+          '#required' => TRUE,
+          '#ajax' => [
+            'callback' => [$this, 'configurableAjaxCallback'],
+            'progress' => [
+              'type' => 'throbber',
+              'message' => NULL,
+            ],
+            'wrapper' => 'configurable_ajax',
+          ],
+        ];
       }
       else {
         \Drupal::logger('acq_sku')->info('Product with sku: @sku seems to be configurable without any config options.', ['@sku' => $sku->getSku()]);
       }
-
-      $form['ajax']['configurables'][$attribute_code] = [
-        '#type' => 'select',
-        '#title' => $configurable['label'],
-        '#options' => $sorted_options,
-        '#required' => TRUE,
-        '#ajax' => [
-          'callback' => [$this, 'configurableAjaxCallback'],
-          'progress' => [
-            'type' => 'throbber',
-            'message' => NULL,
-          ],
-          'wrapper' => 'configurable_ajax',
-        ],
-      ];
     }
 
     $form['sku_id'] = [
@@ -101,6 +109,7 @@ class Configurable extends SKUPluginBase {
       '#title' => t('Quantity'),
       '#type' => 'number',
       '#default_value' => 1,
+      '#access' => $configurable_form_settings->get('show_quantity'),
       '#required' => TRUE,
       '#size' => 2,
     ];
@@ -163,7 +172,7 @@ class Configurable extends SKUPluginBase {
 
       foreach ($available_config as $key => $config) {
         $options = [
-          '' => $dynamic_parts['configurables']['color']['#options'][''],
+          '' => $dynamic_parts['configurables'][$key]['#options'][''],
         ];
 
         foreach ($config['values'] as $value) {
@@ -355,6 +364,13 @@ class Configurable extends SKUPluginBase {
       $tree['configurables'][$configurable['code']] = $configurable;
     }
 
+    $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings')->get('attribute_weights');
+
+    // Sort configurables based on the config.
+    uasort($tree['configurables'], function ($a, $b) use ($configurable_weights) {
+      return $configurable_weights[$a['code']] - $configurable_weights[$b['code']];
+    });
+
     $tree['options'] = Configurable::recursiveConfigurableTree(
       $tree,
       $tree['configurables']
@@ -420,20 +436,28 @@ class Configurable extends SKUPluginBase {
    *   Reference to SKU in existing tree.
    */
   public static function &findProductInTreeWithConfig(array &$tree, array $config) {
-    $sku = $tree['parent']->getSKU();
-    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    if (isset($tree['products'])) {
+      $child_skus = array_keys($tree['products']);
+      $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
 
-    $query->addField('acq_sku', 'sku');
-    $query->condition('sku', "%$sku%", 'LIKE');
+      $query->addField('acq_sku', 'sku');
 
-    foreach ($config as $key => $value) {
-      $query->join('acq_sku__attributes', $key, "acq_sku.id = $key.entity_id");
-      $query->condition("$key.attributes_key", $key);
-      $query->condition("$key.attributes_value", $value);
+      if (!empty($child_skus)) {
+        $query->condition('sku', $child_skus, 'IN');
+      }
+
+      foreach ($config as $key => $value) {
+        $query->join('acq_sku__attributes', $key, "acq_sku.id = $key.entity_id");
+        $query->condition("$key.attributes_key", $key);
+        $query->condition("$key.attributes_value", $value);
+      }
+
+      $sku = $query->execute()->fetchField();
+      return $tree['products'][$sku];
     }
-
-    $sku = $query->execute()->fetchField();
-    return $tree['products'][$sku];
+    else {
+      return NULL;
+    }
   }
 
   /**

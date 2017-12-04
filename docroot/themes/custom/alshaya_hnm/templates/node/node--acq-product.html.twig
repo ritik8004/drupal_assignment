@@ -1,0 +1,38 @@
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
+
+<article{{ attributes }}>
+  {{ title_prefix }}
+  {% if not page %}
+    <h2{{ title_attributes.addClass("c-products__item__label") }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <footer>
+      {{ author_picture }}
+      <div{{ author_attributes }}>
+        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+        {{ metadata }}
+      </div>
+    </footer>
+  {% endif %}
+
+  {% if view_mode == 'full' %}
+    <div{{ content_attributes }}>
+      {{ content }}
+    </div>
+  {% else %}
+      <div{{ content_attributes }}>
+        <a class="c-products__item__link" href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ content }}</a>
+      </div>
+  {% endif %}
+
+</article>

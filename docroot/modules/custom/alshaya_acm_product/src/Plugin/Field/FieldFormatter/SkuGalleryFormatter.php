@@ -122,6 +122,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     foreach ($items as $delta => $item) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku */
       $sku = $this->viewValue($item);
+      $skus[$delta] = $sku;
       if ($sku instanceof SKU) {
         $promotion_cache_tags = [];
         // Get the image.
@@ -210,6 +211,9 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
       }
     }
+
+    // Invoke the alter hook to allow all modules to update the element.
+    \Drupal::moduleHandler()->alter('acq_sku_gallery_view', $elements, $skus);
 
     return $elements;
   }

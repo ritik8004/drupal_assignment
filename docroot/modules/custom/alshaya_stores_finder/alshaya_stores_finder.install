@@ -10,6 +10,17 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update().
  *
+ * Update the Google Map API Key.
+ */
+function alshaya_stores_finder_update_8102() {
+  $config = \Drupal::service('config.factory')->getEditable('geolocation.settings');
+  $config->set('google_map_api_key', 'AIzaSyDVuag7oeJChLcMHCmAz8D6Bl8dLvPzpo0');
+  $config->save();
+}
+
+/**
+ * Implements hook_update().
+ *
  * Set default marker icon.
  */
 function alshaya_stores_finder_update_8101() {

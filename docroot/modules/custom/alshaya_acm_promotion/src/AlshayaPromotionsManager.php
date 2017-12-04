@@ -17,6 +17,26 @@ use Drupal\node\Entity\Node;
 class AlshayaPromotionsManager {
 
   /**
+   * Denotes the fixed_percentage_discount_order promotion subtype.
+   */
+  const SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER = 'fixed_percentage_discount_order';
+
+  /**
+   * Denotes the fixed_amount_discount_order promotion subtype.
+   */
+  const SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER = 'fixed_amount_discount_order';
+
+  /**
+   * Denotes the free_shipping_order promotion subtype.
+   */
+  const SUBTYPE_FREE_SHIPPING_ORDER = 'free_shipping_order';
+
+  /**
+   * Denotes other promotion subtype.
+   */
+  const SUBTYPE_OTHER = 'other';
+
+  /**
    * Entity Manager service.
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
@@ -80,16 +100,70 @@ class AlshayaPromotionsManager {
 
   /**
    * Helper function to fetch all promotions.
+   *
+   * @param array $conditions
+   *   An array of associative array containing conditions, to be used in query,
+   *   with following elements:
+   *   - 'field': Name of the field being queried.
+   *   - 'value': The value for field.
+   *   - 'operator': Possible values like '=', '<>', '>', '>=', '<', '<='.
+   *
+   * @return array
+   *   Array of node objects.
+   *
+   * @see \Drupal\Core\Entity\Query\QueryInterface
    */
-  public function getAllPromotions() {
+  public function getAllPromotions(array $conditions = []) {
     $nodes = [];
     $query = $this->nodeStorage->getQuery();
-    $nids = $query->condition('type', 'acq_promotion')->execute();
+    $query->condition('type', 'acq_promotion');
+    foreach ($conditions as $condition) {
+      if (!empty($condition['field']) && !empty($condition['value'])) {
+        $condition['operator'] = empty($condition['operator']) ? '=' : $condition['operator'];
+        $query->condition($condition['field'], $condition['value'], $condition['operator']);
+      }
+    }
+
+    $nids = $query->execute();
     if (!empty($nids)) {
       $nodes = Node::loadMultiple($nids);
     }
 
     return $nodes;
+  }
+
+  /**
+   * Helper function to fetch promotion SubType.
+   *
+   * @param array $promotion
+   *   The promotion array.
+   *
+   * @return string
+   *   String containing the type of promotion.
+   */
+  public function getSubType(array $promotion) {
+    if (empty($promotion)) {
+      return '';
+    }
+
+    if (
+      (!isset($promotion['product_discounts']) || empty($promotion['product_discounts'])) &&
+      (!isset($promotion['action_condition']['conditions']) || empty($promotion['action_condition']['conditions'])) &&
+      (isset($promotion['condition']['conditions'][0]['attribute']) && $promotion['condition']['conditions'][0]['attribute'] == 'base_subtotal')
+    ) {
+      if (!$promotion['apply_to_shipping']) {
+        if ($promotion['action'] == 'by_percent') {
+          return self::SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER;
+        }
+        elseif ($promotion['action'] == 'cart_fixed') {
+          return self::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER;
+        }
+      }
+      elseif (isset($promotion['free_shipping']) && $promotion['free_shipping'] == 2) {
+        return self::SUBTYPE_FREE_SHIPPING_ORDER;
+      }
+    }
+    return self::SUBTYPE_OTHER;
   }
 
 }

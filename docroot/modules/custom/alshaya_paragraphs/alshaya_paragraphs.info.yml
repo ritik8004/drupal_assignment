@@ -17,6 +17,7 @@ dependencies:
   - language
   - lightning_core
   - link
+  - options
   - media_entity
   - paragraphs
   - path
