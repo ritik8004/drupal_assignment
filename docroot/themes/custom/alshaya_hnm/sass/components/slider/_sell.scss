@@ -389,13 +389,13 @@
 .special--price .price-amount,
 .special--price .price-currency,
 .special--price .price-wrapper {
-  color: $scarlet !important;
+  color: $cherry !important;
 }
 
 .price--discount {
   margin-top: 0;
   font-size: 0.625rem;
-  color: $scarlet;
+  color: $cherry;
 
   @include breakpoint($tablet) {
     margin-top: 0.75rem;

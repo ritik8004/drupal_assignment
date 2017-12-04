@@ -50,7 +50,7 @@
         @include breakpoint($tablet) {
           display: inline-block;
           margin-bottom: 0;
-          margin-top: 1.5rem;
+          margin-top: 0.75rem;
           width: 100%;
         }
 
@@ -69,7 +69,7 @@
               display: inline;
               padding: 0.657rem 17px;
               text-align: center;
-              vertical-align: middle;
+              vertical-align: top;
               height: 35px;
 
               &.facet-item__value {
@@ -417,7 +417,7 @@
 
     @include breakpoint($mobile) {
       width: 47%;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
     }
 
     @include breakpoint($tablet) {
@@ -461,7 +461,7 @@
 
     .field--name-name {
       margin-top: 0.625rem;
-      margin-bottom: 0.625rem;
+      margin-bottom: 0.5rem;
       font-family: $hnm-regular;
       font-size: 0.875rem;
       padding: 0 1.25rem;

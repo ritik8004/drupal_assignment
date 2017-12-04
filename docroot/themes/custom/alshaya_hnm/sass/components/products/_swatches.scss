@@ -12,6 +12,8 @@
 .c-plp {
   .field--name-field-skus {
     .swatches {
+      font-size: 0;
+
       a:not(.swatch-more-link) {
         margin-#{$right}: 0.625rem;
       }
