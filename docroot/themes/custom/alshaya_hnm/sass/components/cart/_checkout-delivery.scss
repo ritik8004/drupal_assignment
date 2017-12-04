@@ -264,7 +264,7 @@
       }
 
       p {
-        color: $grey8;
+        color: $grey-ash;
         font-family: $hnm-regular;
 
         @include breakpoint($only-mobile) {
@@ -343,7 +343,7 @@
       }
 
       &.disabled--tab--head {
-        border-color: $light-greyish;
+        border-color: $light-greyish !important;
 
         h2,
         p {
@@ -445,6 +445,8 @@
     @include breakpoint($only-mobile) {
       padding: 1.125rem 1rem;
       height: auto;
+      border-left: 1px solid $white;
+      border-right: 1px solid $white;
     }
 
     &.selected {
@@ -974,6 +976,11 @@
             padding-bottom: 0.4375rem;
             border-bottom: 1px solid $hnm-black-two;
           }
+
+          @include breakpoint($only-mobile) {
+            padding-bottom: 0.5625rem;
+            border-bottom: 1px solid $hnm-black-two;
+          }
         }
 
         .fieldset-wrapper {
@@ -1109,7 +1116,7 @@
 
     .tab-click-collect,
     .tab-home-delivery {
-      border-color: $greyish !important;
+      border-color: $hnm-black-two !important;
       border-width: 1px !important;
       padding: 0.5rem 0 !important;
       display: block !important;
