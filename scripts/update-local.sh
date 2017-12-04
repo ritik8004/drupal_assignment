@@ -19,6 +19,8 @@ remote_info=$(drush $remote_alias acsf-tools-list --fields=name,domains)
 remote_db_role=$(echo "$remote_info" | php scripts/get-acsf-info.php $site db_role)
 remote_url=$(echo "$remote_info" | php scripts/get-acsf-info.php $site url)
 
+echo "Remote URL: $remote_url"
+
 remote_l_argument="-l $remote_url"
 
 # Below stuff is used for stage file proxy.
