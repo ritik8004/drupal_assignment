@@ -269,7 +269,7 @@ header {
 
     @include breakpoint($only-tablet) {
       width: 2rem;
-      position: absolute;
+      position: absolute !important;
       #{$right}: 1.5rem;
       top: 0.6875rem;
     }
