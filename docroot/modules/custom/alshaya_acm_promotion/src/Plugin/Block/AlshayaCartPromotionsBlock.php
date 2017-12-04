@@ -156,7 +156,11 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    */
   public function build() {
     $promotions = [];
-    $build = [];
+
+    $build = [
+      // We need empty markup to ensure wrapper div is always available.
+      '#markup' => '',
+    ];
 
     // This is for R1 and all promotions except for the three types for which
     // we check for conditions below.
@@ -230,6 +234,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     }
 
     $promotions = array_filter($promotions);
+
     if (!empty($promotions)) {
       $build = [
         '#theme' => 'cart_top_promotions',
