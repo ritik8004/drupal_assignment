@@ -32,7 +32,7 @@ content:
       url_only: false
       url_plain: false
       rel: '0'
-      target: _blank
+      target: '0'
     third_party_settings: {  }
     type: link
     region: content
