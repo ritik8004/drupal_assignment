@@ -34,8 +34,8 @@ function alshaya_get_conductor_host_data() {
     // H&M.
     'hm_dev' => [
       'url' => 'https://alshaya-hm-dev.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '139fbcb466984b39aea5fd200984a2af',
-      'hmac_secret' => 'oMSt6AXgn3TqlMVj5D8A3Q',
+      'hmac_id' => '0a38353bdb364be589fc56ac45084778',
+      'hmac_secret' => '8xl_BQ1bDa8jAcYZ8smX-A',
     ],
     'hm_test' => [
       'url' => 'https://alshaya-hm-test.eu-west-1.prod.acm.acquia.io/',
