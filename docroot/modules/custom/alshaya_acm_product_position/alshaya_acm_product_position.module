@@ -96,7 +96,12 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
  * Implements hook_form_alter().
  */
 function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-alshaya-product-list-block-1') {
+  $plp_forms = [
+    'views-exposed-form-alshaya-product-list-block-1',
+    'views-exposed-form-alshaya-product-list-block-2',
+  ];
+
+  if (in_array($form['#id'], $plp_forms)) {
     // Best seller descending option removed.
     if (isset($form['sort_bef_combine']['#options']['nid DESC'])) {
       unset($form['sort_bef_combine']['#options']['nid DESC']);
@@ -113,24 +118,17 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
       $form['#access'] = FALSE;
     }
     else {
-      // Get first sort key to check later to set second key as default.
-      reset($form['sort_bef_combine']['#options']);
-      $first_sort_key = key($form['sort_bef_combine']['#options']);
-      foreach ($enabled_sorts as $key => $sort) {
-        if (!$sort) {
-          if (isset($form['sort_bef_combine']['#options']["$key ASC"])) {
-            unset($form['sort_bef_combine']['#options']["$key ASC"]);
-          }
-          if (isset($form['sort_bef_combine']['#options']["$key DESC"])) {
-            unset($form['sort_bef_combine']['#options']["$key DESC"]);
-          }
+      foreach ($form['sort_bef_combine']['#options'] as $key => $option) {
+        $field_name = trim(trim($key, ' DESC'), ' ASC');
+
+        if (!in_array($field_name, $enabled_sorts)) {
+          unset($form['sort_bef_combine']['#options'][$key]);
         }
       }
-      // Set the second sort as default value if first is disabled from backend.
-      // Make sure this only runs once on page refresh not ajax request.
-      $user_inputs = $form_state->getUserInput();
-      if (!array_key_exists($first_sort_key, $form['sort_bef_combine']['#options']) && !empty($form['sort_bef_combine']['#options']) && !isset($user_inputs['pager_query_method'])) {
-        $form['sort_bef_combine']['#value'] = $form['sort_bef_combine']['#default_value'] = key($form['sort_bef_combine']['#options']);
+
+      // Re-set default value if sort option no longer available.
+      if (!isset($form['sort_bef_combine']['#options'][$form['sort_bef_combine']['#default_value']])) {
+        $form['sort_bef_combine']['#default_value'] = key($form['sort_bef_combine']['#options']);
       }
     }
   }
