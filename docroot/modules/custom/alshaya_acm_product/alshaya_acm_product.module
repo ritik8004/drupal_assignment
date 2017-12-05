@@ -801,6 +801,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
         // Add custom ajax callback for configurables to refresh the gallery.
         $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
+
+        // Disable refocus.
+        $configurable['#ajax']['disable-refocus'] = TRUE;
+
         unset($configurable['#ajax']['wrapper']);
 
         // We are not going to show the form right now, we don't do any
