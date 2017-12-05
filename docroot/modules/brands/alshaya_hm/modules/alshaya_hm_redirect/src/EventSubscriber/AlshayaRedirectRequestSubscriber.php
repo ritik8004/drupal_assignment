@@ -15,6 +15,16 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
 
   /**
+   * Constant to hold the cookie name set by HM entrance gate.
+   */
+  const HMCORP_COOKIE_NAME = 'HMCORP_locale';
+
+  /**
+   * Constant to identify redirected urls from HM entrance gate.
+   */
+  const HM_REDIRECT_URL_IDENTIFIER = '/forwarded/kw';
+
+  /**
    * Language Manager service.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -64,7 +74,7 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
 
       // Redirect response will by default be not cached server-side. Still
       // adding a no-cache header to avoid http level caching.
-      $response = new RedirectResponse('/' . $langcode . str_replace('/forwarded/kw', '', $path), 302, ['cache-control' => 'no-cache']);
+      $response = new RedirectResponse('/' . $langcode . str_replace(self::HM_REDIRECT_URL_IDENTIFIER, '', $path), 302, ['cache-control' => 'no-cache']);
 
       // Avoid page cache for Anonymous requests.
       $this->killSwitch->trigger();
@@ -82,7 +92,7 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
    *   Language code to be used for redirection.
    */
   public function resolveLangcode(Request $request) {
-    $hmcorp_locale_cookie = $request->cookies->get('HMCORP_locale');
+    $hmcorp_locale_cookie = $request->cookies->get(self::HMCORP_COOKIE_NAME);
 
     if (!empty($hmcorp_locale_cookie)) {
       return str_replace('_KW', '', $hmcorp_locale_cookie);
