@@ -773,25 +773,28 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $selected_configs = $form_state->getUserInput()['configurables'];
       }
 
-      // Get skus for the selected config.
-      $variations = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), $selected_configs);
+      if (!empty($selected_configs)) {
+        // Get skus for the selected config.
+        $variations = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), $selected_configs);
 
-      // Check stock for variations & update options.
-      foreach ($variations as $key => $variation) {
-        if ($key === '#available_config') {
-          continue;
-        }
+        // Check stock for variations & update options.
+        foreach ($variations as $key => $variation) {
+          if ($key === '#available_config') {
+            continue;
+          }
 
-        if ($variation instanceof SKU) {
-          $form['#cache']['tags'][] = 'acq_sku:' . $variation->id();
-          if (!($quantity = alshaya_acm_get_product_stock($variation))) {
-            $attribute_parts = explode(':', $key);
-            if (isset($form['ajax']['configurables'][$attribute_parts[0]])) {
-              $form['ajax']['configurables'][$attribute_parts[0]]['#options_attributes'][$attribute_parts[1]]['disabled'] = 'disabled';
+          if ($variation instanceof SKU) {
+            $form['#cache']['tags'][] = 'acq_sku:' . $variation->id();
+            if (!($quantity = alshaya_acm_get_product_stock($variation))) {
+              $attribute_parts = explode(':', $key);
+              if (isset($form['ajax']['configurables'][$attribute_parts[0]])) {
+                $form['ajax']['configurables'][$attribute_parts[0]]['#options_attributes'][$attribute_parts[1]]['disabled'] = 'disabled';
+              }
             }
           }
         }
       }
+
       $process_stock = FALSE;
     }
 
