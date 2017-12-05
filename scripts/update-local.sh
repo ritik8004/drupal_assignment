@@ -27,7 +27,9 @@ remote_l_argument="-l $remote_url"
 origin_dir="sites/g/files/$remote_db_role/files/"
 origin="https://$remote_url"
 
-local_archive="/tmp/alshaya_$env.sql"
+local_archive="/tmp/alshaya_${site}_${env}.sql"
+
+echo "Local archive: $local_archive"
 
 ROOT=$(git rev-parse --show-toplevel 2> /dev/null)
 path=$(dirname $0)
