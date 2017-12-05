@@ -8,7 +8,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.behaviors.alshayaSearch = {
     attach: function (context, settings) {
-      $('#edit-sort-bef-combine option[value="search_api_relevance ASC"]').remove();
       // Hide the sort drop down and filters text, if no results.
       if ($('.view-id-search .view-empty').length !== 0) {
         $('#views-exposed-form-search-page .form-item-sort-bef-combine').hide();

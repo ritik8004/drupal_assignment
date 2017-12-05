@@ -1,0 +1,301 @@
+// Define Fonts
+@font-face {
+  font-family: 'Mothercare';
+  src: url('../fonts/alshaya-bold.woff2') format('woff2'), url('../fonts/alshaya-bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MothercareThin';
+  src: url('../fonts/alshaya-thin.woff2') format('woff2'), url('../fonts/alshaya-thin.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cairo-300';
+  src: url('../fonts/alshaya-arabic-thin.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-thin.woff') format('woff'), url('../fonts/alshaya-arabic-thin.ttf')  format('truetype'), url('../fonts/alshaya-arabic-thin.svg#NotoKufiArabic-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cairo-bold';
+  src: url('../fonts/alshaya-arabic-bold.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-bold.woff') format('woff'), url('../fonts/alshaya-arabic-bold.ttf')  format('truetype'), url('../fonts/alshaya-arabic-bold.svg#NotoKufiArabic-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'alshaya-icons';
+  src: url('../fonts/alshaya-icons.eot?2pxs5l');
+  src: url('../fonts/alshaya-icons.eot?2pxs5l#iefix') format('embedded-opentype'), url('../fonts/alshaya-icons.ttf?2pxs5l') format('truetype'), url('../fonts/alshaya-icons.woff?2pxs5l') format('woff'), url('../fonts/alshaya-icons.svg?2pxs5l#alshaya-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ampersand_bold';
+  src: url('../fonts/HMAmpersand-Bold.eot');
+  src:
+    url('../fonts/HMAmpersand-Bold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/HMAmpersand-Bold.woff2') format('woff2'),
+    url('../fonts/HMAmpersand-Bold.woff') format('woff'),
+    url('../fonts/HMAmpersand-Bold.ttf') format('truetype'),
+    url('../fonts/HMAmpersand-Bold.svg#HMAmpersand-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Amperserif_regular';
+  src: url('../fonts/HMAmperserif-Regular.eot');
+  src:
+    url('../fonts/HMAmperserif-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/HMAmperserif-Regular.woff2') format('woff2'),
+    url('../fonts/HMAmperserif-Regular.woff') format('woff'),
+    url('../fonts/HMAmperserif-Regular.ttf') format('truetype'),
+    url('../fonts/HMAmperserif-Regular.svg#HMAmperserif-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ampersand_regular';
+  src: url('../fonts/HMAmpersand-Regular.eot');
+  src:
+    url('../fonts/HMAmpersand-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/HMAmpersand-Regular.woff2') format('woff2'),
+    url('../fonts/HMAmpersand-Regular.woff') format('woff'),
+    url('../fonts/HMAmpersand-Regular.ttf') format('truetype'),
+    url('../fonts/HMAmpersand-Regular.svg#HMAmpersand-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ampersand_demibold';
+  src: url('../fonts/HMAmpersand-DemiBold.eot');
+  src:
+    url('../fonts/HMAmpersand-DemiBold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/HMAmpersand-DemiBold.woff2') format('woff2'),
+    url('../fonts/HMAmpersand-DemiBold.woff') format('woff'),
+    url('../fonts/HMAmpersand-DemiBold.ttf') format('truetype'),
+    url('../fonts/HMAmpersand-DemiBold.svg#HMAmpersand-DemiBold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GESSTwoMedium-Medium";
+  src: url("../fonts/GESSTwoMedium.eot");
+  src:
+    url("../fonts/GESSTwoMedium.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/GESSTwoMedium.otf") format("opentype"),
+    url("../fonts/GESSTwoMedium.svg") format("svg"),
+    url("../fonts/GESSTwoMedium.ttf") format("truetype"),
+    url("../fonts/GESSTwoMedium.woff") format("woff"),
+    url("../fonts/GESSTwoMedium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GESSTwoLight-Light";
+  src: url("../fonts/GESSTwoLight.eot");
+  src:
+    url("../fonts/GESSTwoLight.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/GESSTwoLight.otf") format("opentype"),
+    url("../fonts/GESSTwoLight.svg") format("svg"),
+    url("../fonts/GESSTwoLight.ttf") format("truetype"),
+    url("../fonts/GESSTwoLight.woff") format("woff"),
+    url("../fonts/GESSTwoLight.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GESSTwoBold-Bold";
+  src: url("../fonts/GESSTwoBold.eot");
+  src:
+    url("../fonts/GESSTwoBold.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/GESSTwoBold.otf") format("opentype"),
+    url("../fonts/GESSTwoBold.svg") format("svg"),
+    url("../fonts/GESSTwoBold.ttf") format("truetype"),
+    url("../fonts/GESSTwoBold.woff") format("woff"),
+    url("../fonts/GESSTwoBold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GEDinarTwo-Medium";
+  src: url("../fonts/GEDinarTwoMedium.eot");
+  src:
+    url("../fonts/GEDinarTwoMedium.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/GEDinarTwoMedium.otf") format("opentype"),
+    url("../fonts/GEDinarTwoMedium.svg") format("svg"),
+    url("../fonts/GEDinarTwoMedium.ttf") format("truetype"),
+    url("../fonts/GEDinarTwoMedium.woff") format("woff"),
+    url("../fonts/GEDinarTwoMedium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'hnm-icons';
+  src: url('../fonts/HMIcons.eot?yy6ec8');
+  src:
+    url('../fonts/HMIcons.eot?yy6ec8#iefix') format('embedded-opentype'),
+    url('../fonts/HMIcons.ttf?yy6ec8') format('truetype'),
+    url('../fonts/HMIcons.woff?yy6ec8') format('woff'),
+    url('../fonts/HMIcons.svg?yy6ec8#HMIcons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// hnm specific font family
+// English fonts.
+$hnm-bold: 'Ampersand_bold';
+$hnm-bold-nodir: 'Ampersand_bold';
+
+$hnm-demibold: 'Ampersand_demibold';
+$hnm-demibold-nodir: 'Ampersand_demibold';
+
+$hnm-regular: 'Ampersand_regular';
+$hnm-regular-nodir: 'Ampersand_regular';
+
+$hnmpromo-regular: 'Amperserif_regular';
+$hnmpromo-regular-nodir: 'Amperserif_regular';
+
+// Arabic fonts.
+$hnm-arabic-bold: 'Ampersand_bold', 'GESSTwoBold-Bold';
+$hnm-arabic-bold-nodir: 'Ampersand_bold', 'GESSTwoBold-Bold';
+
+$hnm-arabic-medium: 'Ampersand_demibold', 'GESSTwoMedium-Medium';
+$hnm-arabic-medium-nodir: 'Ampersand_demibold', 'GESSTwoMedium-Medium';
+
+$hnm-arabic-regular: 'Ampersand_regular', 'GESSTwoLight-Light';
+$hnm-arabic-regular-nodir: 'Ampersand_regular', 'GESSTwoLight-Light';
+
+$hnmpromo-arabic-regular: 'Amperserif_regular', 'GEDinarTwo-Medium';
+$hnmpromo-arabic-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium';
+
+$hnm-icons: 'hnm-icons';
+$body_font: $hnm-regular;
+
+// Mothercare font Family.
+$alshaya-bold: 'Mothercare';
+$alshaya-bold-nodir: 'Mothercare';
+
+$alshaya-thin: 'MothercareThin';
+$alshaya-thin-nodir: 'MothercareThin';
+
+$alshaya-arabic-bold: 'Cairo-bold', 'Mothercare';
+$alshaya-arabic-bold-nodir: 'Cairo-bold', 'Mothercare';
+
+$alshaya-arabic-thin: 'Cairo-300', 'MothercareThin';
+$alshaya-arabic-thin-nodir: 'Cairo-300', 'MothercareThin';
+
+$alshaya-icons: 'alshaya-icons';
+$arial: 'arialmt', arial, sans-serif;
+$arial-nodir: 'arialmt', arial, sans-serif;
+
+// Icon Fonts
+$icons: (
+  login: "\e929",
+  chevrondown: "\25bd",
+  chevronleft: "\e901",
+  chevronright: "\e902",
+  chevronup: "\e903",
+  check: "\e904",
+  close: "\e905",
+  checkshape: "\e906",
+  circle-stroke-shape: "\e907",
+  circle-shape: "\e908",
+  check-box-empty: "\e909",
+  check-box-filled: "\e90a",
+  delivery: "\e90b",
+  direction-fill: "\e90c",
+  direction-stroke: "\e90d",
+  dropdown-collapse: "\e90e",
+  dropdown-expand: "\e90f",
+  favorite-fill: "\e910",
+  favorite-stroke: "\e911",
+  paginator-active: "\e912",
+  paginator-inactive: "\e913",
+  radio-empty: "\e914",
+  radio-filled: "\e915",
+  rating-empty: "\e916",
+  rating-filled: "\e917",
+  video path1: "\e918",
+  video path2: "\e919",
+  loader path1: "\e91a",
+  loader path2: "\e91b",
+  loader path3: "\e91c",
+  search: "\e91d",
+  menu: "\e91e",
+  list: "\e91f",
+  shopping-bag: "\e920",
+  mappin: "\e921",
+  map: "\e922",
+  mylocation: "\e923",
+  newsletter: "\e924",
+  rewards: "\e926",
+  language: "\e927",
+  info: "\e928",
+  warning: "\2757",
+  googleplus: "\1f576",
+  facebook: "\1f575",
+  twitter: "\1f425",
+  pinterest: "\1f4cc",
+  instagram: "\1f305",
+  youtube: "\1f4fa"
+);
+
+@mixin iconbase() {
+  font-family: $hnm-icons !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin icon($icon: false, $position: before, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $icon {
+      content: "#{map-get($icons, $icon)}";
+    }
+
+    @if $styles {
+      @include iconbase;
+    }
+
+    @content;
+  }
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  &::before {
+    @include iconbase;
+  }
+}
+
+@each $icon, $unicode in $icons {
+  %icon-ic_#{$icon},
+  .icon-ic_#{$icon} {
+    &::before {
+      content: $unicode;
+    }
+  }
+}

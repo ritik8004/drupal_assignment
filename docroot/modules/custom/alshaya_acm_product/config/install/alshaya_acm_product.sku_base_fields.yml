@@ -142,6 +142,166 @@ fields:
     visible_view: 0
     visible_form: 0
 
+  concept:
+    parent: 'attributes'
+    label: 'Concept'
+    description: 'Concept attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  washing_instructions:
+    parent: 'attributes'
+    label: 'Washing Instructions'
+    description: 'Washing instructions attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  dry_cleaning_instructions:
+    parent: 'attributes'
+    label: 'Dry Cleaning Instructions'
+    description: 'Dry cleaning instructions attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  rgb_color:
+    parent: 'attributes'
+    label: 'RGB color'
+    description: 'RGB color code.'
+    cardinality: 1
+    type: 'string'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  color_label:
+    parent: 'attributes'
+    label: 'Color label'
+    description: 'Color label.'
+    cardinality: 1
+    type: 'string'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  article_visual_description:
+    parent: 'attributes'
+    label: 'Visual description'
+    description: 'A visual description of the article.'
+    cardinality: 1
+    type: 'string'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  product_designer_collection:
+    parent: 'attributes'
+    label: 'Product Designer Collection'
+    description: 'Product designer collection attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  product_feature:
+    parent: 'attributes'
+    label: 'Product Feature'
+    description: 'Product feature attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  product_environment:
+    parent: 'attributes'
+    label: 'Product Environment'
+    description: 'Product environment attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  product_quality:
+    parent: 'attributes'
+    label: 'Product Quality'
+    description: 'Product quality attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  article_pattern:
+    parent: 'attributes'
+    label: 'Article Pattern'
+    description: 'Article pattern attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  article_license_company:
+    parent: 'attributes'
+    label: 'Article License Company'
+    description: 'Article license company attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  article_license_item:
+    parent: 'attributes'
+    label: 'Article License Item'
+    description: 'Article license item attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  article_fragrance_description:
+    parent: 'attributes'
+    label: 'Article Fragrance Description'
+    description: 'Article fragrance description attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  article_warning:
+    parent: 'attributes'
+    label: 'Article Warning'
+    description: 'Article warning attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  composition:
+    parent: 'attributes'
+    label: 'Composition'
+    description: 'Product Composition.'
+    cardinality: 1
+    type: 'text_long'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
   is_buyable:
     parent: 'attributes'
     label: 'Is Buyable'

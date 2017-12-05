@@ -1,0 +1,76 @@
+{%
+set classes = [
+'node',
+'node--type-' ~ node.bundle|clean_class,
+view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+]
+%}
+
+<article{{ attributes }} {{ gtm_attributes }}>
+  <a class="use-ajax above-mobile-block" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.product_modal', {'node': node.id, 'js': 'nojs'}) }}">
+    {% if content.image is not null %}
+      {{ content.image }}
+    {% endif %}
+
+    {{ content.labels }}
+
+    {{ title_prefix }}
+    {% if not page %}
+      <h2{{ title_attributes.addClass("c-products__item__label") }}>
+        {{ label }}
+      </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    <div class="price-block {{ content.price_block_identifier }}">
+      {{ content.price_block }}
+    </div>
+
+  </a>
+  {% if content.promotions %}
+    <div class="promotions">
+      {{ content.promotions }}
+    </div>
+  {% endif %}
+
+  <table class="mobile--only--sell">
+    <tr>
+      <td class="sell--image">
+        {% if content.image is not null %}
+          {{ content.image }}
+        {% endif %}
+
+        {{ content.labels }}
+      </td>
+
+      <td class="sell--description">
+        {{ title_prefix }}
+        {% if not page %}
+          <h2{{ title_attributes.addClass("c-products__item__label") }}>
+            {{ label }}
+          </h2>
+        {% endif %}
+        {{ title_suffix }}
+
+        <div class="price-block {{ content.price_block_identifier }}">
+            {{ content.price_block }}
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2" class="sell-sku">
+        {{ content.field_skus }}
+      </td>
+    </tr>
+
+    {% if content.promotions %}
+      <tr>
+        <td colspan="2" class="sell-promotions">
+          {{ content.promotions }}
+        </td>
+      </tr>
+    {% endif %}
+
+  </table>
+</article>

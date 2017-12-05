@@ -1,0 +1,19 @@
+<div class="order__print--wrap">
+    <div class="clearfix">
+        <div{{ attributes.addClass('l-container l-one--w c-order-print') }}>
+            <main>
+                <div class="c-content">
+                    <div class="c-content__region">
+                        {{ page.content }}
+                        {% if vat_text_footer %}
+                          <div class = 'vat-text-footer'>
+                            {{ vat_text_footer }}
+                          </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</div>

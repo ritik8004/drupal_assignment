@@ -54,10 +54,6 @@ $settings['alshaya_acm_soauth_private_key'] = $soauth_key_dir . $soauth_key_name
 $settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
 $settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b6549e';
 
-// Common ACM settings.
-$settings['store_id']['en'] = 1;
-$settings['store_id']['ar'] = 3;
-
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;
 
@@ -70,7 +66,7 @@ $settings['autologout.settings']['timeout'] = 1200;
 
 // Set the debug dir of conductor.
 $config['acq_commerce.conductor']['debug_dir'] = '/home/alshaya/' . $env;
-$settings['acq_commerce.conductor']['debug'] = TRUE;
+$config['acq_commerce.conductor']['debug'] = FALSE;
 
 // Set page size to sync products to 30.
 $settings['acq_commerce.conductor']['product_page_size'] = 30;
@@ -91,90 +87,41 @@ $settings['views_to_disable'] = [
 // Specify the modules to be enabled/uninstalled - just initialised here.
 $settings['additional_modules'] = [];
 
+// ################################################################
+// This switch/case is ONLY for per environment settings. If any of these
+// settings must be overridden on a per site basis, please, check
+// factory-hooks/environments/settings.php to see the other settings.
+// ################################################################
 switch ($env) {
   case 'local':
-    $config['acq_commerce.conductor']['debug_dir'] = '/home/vagrant/';
-
-    // Specify the modules to be enabled on this env.
+    // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'features_ui';
 
+    // Increase autologout timeout on local so we are not always logged out.
     $config['autologout.settings']['timeout'] = 86400;
 
     $config['simple_oauth.settings']['private_key'] = $settings['alshaya_acm_soauth_private_key'];
     $config['simple_oauth.settings']['public_key'] = $settings['alshaya_acm_soauth_public_key'];
 
+  // Please note there is no "break" at the end of "local" case so "travis"
+  // settings are applied both on "local" and on "travis" environments.
   case 'travis':
-    // Disable stock check in local.
+    // Disable stock check.
     global $_alshaya_acm_disable_stock_check;
     $_alshaya_acm_disable_stock_check = TRUE;
-
-    $settings['acq_commerce.conductor']['debug'] = FALSE;
-
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'c37e4ed2d937425db29385d08491d53a';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'dZWSbz_TyTbyaJoBmIyNcA';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud';
     break;
 
   case '01dev':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'c37e4ed2d937425db29385d08491d53a';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'dZWSbz_TyTbyaJoBmIyNcA';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud';
-
-    // Specify the modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dblog';
-    $settings['additional_modules'][] = 'views_ui';
-    $settings['additional_modules'][] = 'purge_ui';
-    break;
-
+  case '01dev2':
+  case '01dev3':
   case '01test':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'edda8c2a78af42b9af1e42221145fd01';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'hTVYIu3SDzLh3BwNI6ZEjw';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud';
-
-    // Specify the modules to be enabled on this env.
+    // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';
+    // We only debug on ACSF dev/test environments.
+    $config['acq_commerce.conductor']['debug'] = TRUE;
     break;
-
-  case '01uat':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-uat.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'ec11fb2f54d34b2f9d35ec1d3575b89e';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'gpW7PQFKKDU-qPrcIgaYNQ';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud';
-    break;
-
-  case '01pprod':
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-pprod.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '676f2059d53d407791472c31783ae32c';
-    $settings['acq_commerce.conductor']['hmac_secret'] = '-2Ok7ywndwcpsraYIIZ__w';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://uat-irjkrqa-zbrr3sobrsb3o.eu.magentosite.cloud';
-    break;
-
-  case '01live':
-  case '01update':
-    // Don't debug by default on Prod ENV.
-    $settings['acq_commerce.conductor']['debug'] = FALSE;
-
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-prod.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = '3d136846d24040099a7eed6c1f4e80b9';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'zUt1psyEWi5xO-glHlH_tw';
-    $settings['alshaya_api.settings']['magento_host'] = 'http://mcmena.store.alshaya.com';
-
-    $settings['store_id']['ar'] = 4;
-    break;
-
-  default:
-    // Don't debug by default on unknown ENV.
-    $settings['acq_commerce.conductor']['debug'] = FALSE;
-
-    $settings['acq_commerce.conductor']['url'] = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/';
-    $settings['acq_commerce.conductor']['hmac_id'] = 'c37e4ed2d937425db29385d08491d53a';
-    $settings['acq_commerce.conductor']['hmac_secret'] = 'dZWSbz_TyTbyaJoBmIyNcA';
-    $settings['alshaya_api.settings']['magento_host'] = 'https://conductor-update-alqhiyq-z3gmkbwmwrl4g.eu.magentosite.cloud';
 }

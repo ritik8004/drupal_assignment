@@ -1,0 +1,58 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.promo_block_button.field_button_link
+    - field.field.paragraph.promo_block_button.field_button_position
+    - field.field.paragraph.promo_block_button.field_promo_text_1
+    - field.field.paragraph.promo_block_button.field_promo_text_2
+    - field.field.paragraph.promo_block_button.field_promo_theme
+    - paragraphs.paragraphs_type.promo_block_button
+  module:
+    - link
+    - workbench_moderation
+id: paragraph.promo_block_button.default
+targetEntityType: paragraph
+bundle: promo_block_button
+mode: default
+content:
+  field_button_link:
+    type: link_default
+    weight: 0
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_button_position:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_promo_text_1:
+    weight: 1
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_promo_text_2:
+    weight: 2
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_promo_theme:
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+hidden:
+  created: true
+  status: true
+  uid: true

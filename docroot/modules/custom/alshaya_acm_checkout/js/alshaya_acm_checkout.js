@@ -80,6 +80,12 @@
         }
       });
 
+      // Highlight the shipping method row when an option is selected.
+      $('#shipping_methods_wrapper .form-type-radio input[type="radio"]:checked').parent().addClass('selected');
+      $('#shipping_methods_wrapper .form-type-radio input[type="radio"]').once('bind-events').on('click', function () {
+          $(this).parent().addClass('selected').siblings().removeClass('selected');
+      });
+
       $('#change-address').once('bind-events').each(function () {
         // We display the address boxes as is if we don't have any shipping method.
         if ($('#shipping_methods_wrapper input:radio').length === 0) {

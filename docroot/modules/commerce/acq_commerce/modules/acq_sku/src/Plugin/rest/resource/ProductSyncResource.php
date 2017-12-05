@@ -283,6 +283,9 @@ class ProductSyncResource extends ResourceBase {
       $plugin = $sku->getPluginInstance();
       $plugin->processImport($sku, $product);
 
+      // Invoke the alter hook to allow all modules to update the node.
+      \Drupal::moduleHandler()->alter('acq_sku_product_sku', $sku, $product);
+
       $sku->save();
 
       if ($product['status'] == 1 && $product['visibility'] == 1) {

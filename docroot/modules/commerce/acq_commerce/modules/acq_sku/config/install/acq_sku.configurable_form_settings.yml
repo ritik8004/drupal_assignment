@@ -1,0 +1,5 @@
+attribute_weights:
+  size: 1
+show_quantity: TRUE
+sortable_options:
+  - size

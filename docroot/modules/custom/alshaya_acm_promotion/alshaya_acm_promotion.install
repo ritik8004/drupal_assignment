@@ -10,6 +10,44 @@ use Drupal\Core\Config\FileStorage;
 use Drupal\field\Entity\FieldConfig;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add field for promotion sub type and config for free shipping message.
+ */
+function alshaya_acm_promotion_update_8007() {
+  // Add the new field "Subtype".
+  $configs = [
+    'field.storage.node.field_alshaya_promotion_subtype',
+    'field.field.node.acq_promotion.field_alshaya_promotion_subtype',
+    'alshaya_acm_promotion.config',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_acm_promotion');
+
+  // Add Translations.
+  $strings = [
+    'Your order qualifies for free standard delivery.' => [
+      'ar' => 'طلبك مؤهل للتسليم القياسي مجانا',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update facets config.
+ */
+function alshaya_acm_promotion_update_8006() {
+  $configs = [
+    'facets.facet.promotion_brand_facet',
+    'facets.facet.promotion_collection_facet',
+    'facets.facet.promotion_size_facet',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_acm_promotion', 'optional');
+}
+
+/**
  * Implements hook_update_N()
  *
  * Update facets config.

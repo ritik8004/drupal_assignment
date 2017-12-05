@@ -768,6 +768,50 @@ class SkuManager {
   }
 
   /**
+   * Function to format composition field content.
+   *
+   * @param array $array
+   *   Array of composition field data.
+   * @param bool $list
+   *   Boolean value to generate or not generate list.
+   *
+   * @return string
+   *   UL / LI HTML list.
+   */
+  public function transformCompositionArrayToList(array $array, $list = TRUE) {
+    $out = '';
+    $materials = [];
+
+    if ($list) {
+      $out = "<ul>";
+    }
+
+    foreach ($array as $key => $elem) {
+      if (!is_array($elem)) {
+        $materials[] = "$key $elem%";
+      }
+      else {
+        // Eliminate "materials" from the list.
+        if ($key == 'materials') {
+          $out .= $this->transformCompositionArrayToList($elem, FALSE);
+        }
+        else {
+          $out .= "<li>$key: " . $this->transformCompositionArrayToList($elem, FALSE) . "</li>";
+        }
+      }
+    }
+
+    if ($list) {
+      $out .= "</ul>";
+    }
+    elseif (!empty($materials)) {
+      $out = implode('; ', $materials);
+    }
+
+    return $out;
+  }
+
+  /**
    * Helper function to get parent skus of all simple ones in one go.
    *
    * @param array $simple_skus
@@ -880,22 +924,39 @@ class SkuManager {
     $related_items_size = \Drupal::config('alshaya_acm_product.settings')->get('related_items_size');
     $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
 
-    // No stock check for related items in pull mode.
-    if ($stock_mode == 'pull') {
-      return array_slice($skus, 0, $related_items_size);
-    }
-
     $related = [];
 
     foreach ($skus as $sku) {
-      $sku_entity = SKU::loadFromSku($sku);
+      try {
+        $sku_entity = SKU::loadFromSku($sku);
 
-      if (!empty($sku_entity) && alshaya_acm_get_product_stock($sku_entity)) {
-        $related[] = $sku;
-
-        if (count($related) >= $related_items_size) {
-          break;
+        if (empty($sku_entity)) {
+          continue;
         }
+
+        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+        $plugin = $sku_entity->getPluginInstance();
+
+        $node = $plugin->getDisplayNode($sku_entity);
+
+        if (empty($node)) {
+          continue;
+        }
+
+        // No stock check for related items in pull mode.
+        if ($stock_mode == 'pull') {
+          $related[] = $node->id();
+        }
+        elseif (alshaya_acm_get_product_stock($sku_entity)) {
+          $related[] = $node->id();
+        }
+      }
+      catch (\Exception $e) {
+        // Do nothing.
+      }
+
+      if (count($related) >= $related_items_size) {
+        break;
       }
     }
 

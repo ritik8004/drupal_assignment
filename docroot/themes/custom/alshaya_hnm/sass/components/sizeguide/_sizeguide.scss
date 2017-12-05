@@ -1,0 +1,98 @@
+// Size Guide Link theme
+.size-guide-link {
+  position: absolute;
+  #{$right}: 0;
+  padding-top: 0;
+  font-size: 0.6875rem;
+  color: $windows-blue;
+  top: -0.25rem;
+
+  @include breakpoint($desktop) {
+    padding-top: 0.5rem;
+    top: -0.125rem;
+  }
+
+  .sell-sku & {
+    padding-top: 0.625rem;
+  }
+
+  + .ajax-progress-throbber {
+    position: absolute;
+    top: -0.5rem;
+    #{$right}: 31%;
+    display: block !important;
+
+    html[lang=ar] & {
+      #{$right}: 41%;
+    }
+
+    @include breakpoint($desktop) {
+      top: 0.125rem;
+      #{$right}: 18%;
+
+      html[lang=ar] & {
+        #{$right}: 28%;
+      }
+    }
+
+    .message {
+      display: none;
+    }
+
+    .throbber {
+      background-image: url(../imgs/icons/ic-loader.svg) !important;
+      background-position: $right center !important;
+      background-repeat: no-repeat !important;
+      background-size: 1.5rem;
+      padding: 0.5rem;
+    }
+  }
+}
+
+// Size Guide modal popup theming
+.path--cart .ui-dialog,
+.nodetype--acq_product .ui-dialog {
+  height: 100% !important;
+  width: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+  background: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+
+  @include breakpoint($tablet) {
+    padding: calc((100vh - 36rem) / 2) calc((100vw - 45rem) / 2);
+  }
+
+  @include breakpoint($desktop) {
+    padding: calc((100vh - 34.75rem) / 2) calc((100vw - 64.13rem) / 2);
+  }
+
+  .ui-dialog-titlebar {
+    padding: 0;
+
+    @include breakpoint($only-tablet) {
+      width: 94% !important;
+      margin: 0 auto;
+    }
+  }
+
+  .ui-dialog-content {
+    max-height: none !important;
+  }
+
+  #drupal-modal,
+  div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
+    background: $white-five;
+    padding: 1.5em;
+    overflow: hidden;
+    height: 100% !important;
+
+    @include breakpoint($tablet) {
+      height: 36rem !important;
+    }
+
+    @include breakpoint($desktop) {
+      height: 34.75rem !important;
+    }
+  }
+}

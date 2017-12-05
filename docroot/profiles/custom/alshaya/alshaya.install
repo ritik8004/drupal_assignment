@@ -91,17 +91,6 @@ function alshaya_install() {
     $purgers_enabled = $purge_purgers->getPluginsEnabled();
     $purgers_enabled[$purge_purgers->createId()] = 'acquia_purge';
     $purge_purgers->setPluginsEnabled($purgers_enabled);
-
-    // Enable shield on ACSF environments.
-    \Drupal::service('module_installer')->install(['shield']);
-
-    \Drupal::getContainer()->get('config.factory')
-      ->getEditable('shield.settings')
-      ->set('allow_cli', TRUE)
-      ->set('user', Settings::get('alshaya_custom_shield_default_user'))
-      ->set('pass', Settings::get('alshaya_custom_shield_default_pass'))
-      ->set('print', '')
-      ->save();
   }
 
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya', $modules]);
@@ -126,8 +115,23 @@ function alshaya_final_common_install_task($profile) {
   // Get the modules to be enabled for this env.
   $additional_modules = Settings::get('additional_modules');
 
+  // Enable shield on ACSF Environments.
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    $additional_modules[] = 'shield';
+  }
+
   foreach ($additional_modules as $module) {
     \Drupal::service('module_installer')->install([$module]);
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('shield')) {
+    \Drupal::getContainer()->get('config.factory')
+      ->getEditable('shield.settings')
+      ->set('allow_cli', TRUE)
+      ->set('user', Settings::get('alshaya_custom_shield_default_user'))
+      ->set('pass', Settings::get('alshaya_custom_shield_default_pass'))
+      ->set('print', '')
+      ->save();
   }
 
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed_final_task', [$profile, $_alshaya_modules_installed]);

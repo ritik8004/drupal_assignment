@@ -1,0 +1,58 @@
+// Define theme fonts here.
+
+@font-face {
+  font-family: 'Ampersand_bold';
+  src: url('../../fonts/HMAmpersand-Bold.eot');
+  src:
+    url('../../fonts/HMAmpersand-Bold.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/HMAmpersand-Bold.woff2') format('woff2'),
+    url('../../fonts/HMAmpersand-Bold.woff') format('woff'),
+    url('../../fonts/HMAmpersand-Bold.ttf') format('truetype'),
+    url('../../fonts/HMAmpersand-Bold.svg#HMAmpersand-Bold') format('svg');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Amperserif_regular';
+  src: url('../../fonts/HMAmperserif-Regular.eot');
+  src:
+    url('../../fonts/HMAmperserif-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/HMAmperserif-Regular.woff2') format('woff2'),
+    url('../../fonts/HMAmperserif-Regular.woff') format('woff'),
+    url('../../fonts/HMAmperserif-Regular.ttf') format('truetype'),
+    url('../../fonts/HMAmperserif-Regular.svg#HMAmperserif-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ampersand_regular';
+  src: url('../../fonts/HMAmpersand-Regular.eot');
+  src:
+    url('../../fonts/HMAmpersand-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/HMAmpersand-Regular.woff2') format('woff2'),
+    url('../../fonts/HMAmpersand-Regular.woff') format('woff'),
+    url('../../fonts/HMAmpersand-Regular.ttf') format('truetype'),
+    url('../../fonts/HMAmpersand-Regular.svg#HMAmpersand-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ampersand_demibold';
+  src: url('../../fonts/HMAmpersand-DemiBold.eot');
+  src:
+    url('../../fonts/HMAmpersand-DemiBold.eot?#iefix') format('embedded-opentype'),
+    url('../../fonts/HMAmpersand-DemiBold.woff2') format('woff2'),
+    url('../../fonts/HMAmpersand-DemiBold.woff') format('woff'),
+    url('../../fonts/HMAmpersand-DemiBold.ttf') format('truetype'),
+    url('../../fonts/HMAmpersand-DemiBold.svg#HMAmpersand-DemiBold') format('svg');
+  font-weight: 600;
+  font-style: normal;
+}
+
+$hnm-bold: 'Ampersand_bold';
+$hnm-regular: 'Ampersand_regular';
+$hnm-demibold: 'Ampersand_demibold';
+$hnmpromo-regular: 'Amperserif_regular';

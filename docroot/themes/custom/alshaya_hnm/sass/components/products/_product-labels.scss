@@ -1,0 +1,70 @@
+.labels-container {
+  .label {
+    position: absolute;
+    z-index: 4;
+
+    &.top {
+      &-left {
+        top: 0.5rem;
+        #{$left}: 0.5rem;
+
+        @include breakpoint($only-tablet) {
+          top: 0.9375rem;
+          #{$left}: 0.9375rem;
+        }
+
+        @include breakpoint($desktop) {
+          top: 1rem;
+          #{$left}: 1rem;
+        }
+      }
+
+      &-right {
+        top: 0.5rem;
+        #{$right}: 0.5rem;
+
+        @include breakpoint($only-tablet) {
+          top: 0.9375rem;
+          #{$right}: 0.9375rem;
+        }
+
+        @include breakpoint($desktop) {
+          top: 1rem;
+          #{$right}: 1rem;
+        }
+      }
+    }
+
+    &.bottom {
+      &-left {
+        bottom: 10.5rem;
+        #{$left}: 0.5rem;
+
+        @include breakpoint($only-tablet) {
+          bottom: 16.5rem;
+          #{$left}: 0.9375rem;
+        }
+
+        @include breakpoint($desktop) {
+          bottom: 12.5rem;
+          #{$left}: 1rem;
+        }
+      }
+
+      &-right {
+        bottom: 10.5rem;
+        #{$right}: 0.5rem;
+
+        @include breakpoint($only-tablet) {
+          bottom: 16.5rem;
+          #{$right}: 0.9375rem;
+        }
+
+        @include breakpoint($desktop) {
+          bottom: 12.5rem;
+          #{$right}: 1rem;
+        }
+      }
+    }
+  }
+}

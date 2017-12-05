@@ -41,13 +41,15 @@
         }
       });
 
-      $('[data-drupal-selector="edit-configurables-size"]').on('change', function () {
+      $('[data-drupal-selector="edit-configurables-size"], [data-drupal-selector="edit-configurables-article-castor-id"]').on('change', function () {
         // Start loading.
         $(this).closest('.sku-base-form').find('.edit-add-to-cart').ladda('start');
       });
 
       $(document).ajaxComplete(function (event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) && (settings.extraData._triggering_element_name === 'configurables[size]')) {
+        if ((settings.hasOwnProperty('extraData')) &&
+          ((settings.extraData._triggering_element_name === 'configurables[size]') ||
+     (settings.extraData._triggering_element_name === 'configurables[article_castor_id]'))) {
           $(this).stopSpinner(['success']);
         }
         else if (!settings.hasOwnProperty('extraData')) {
@@ -114,7 +116,7 @@
             // Set product size to selected size.
             if (product.dimension2 !== 'simple') {
               var currentLangCode = drupalSettings.path.currentLanguage;
-              if (currentLangCode !== 'en') {
+              if ((currentLangCode !== 'en') && (typeof size !== 'undefined')) {
                 size = drupalSettings.alshaya_product_size_config[size];
               }
               product.dimension6 = size;

@@ -1,0 +1,22 @@
+<?php
+// @codingStandardsIgnoreFile
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_product_position module.
+ */
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_acm_product_position_update_8001() {
+  // Enable sort options on PLP page.
+  $sort_options = [
+    'nid',
+    'name_1',
+    'final_price',
+  ];
+  $config = \Drupal::configFactory()
+    ->getEditable('alshaya_acm_product_position.settings');
+  $config->set('sort_options', $sort_options)->save();
+}

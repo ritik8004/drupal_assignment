@@ -62,83 +62,76 @@
 
   <target name="refresh:local"
           description="Setup local dev environment.">
-      <phingcall target="local:reset-local-settings"/>
-      <phingcall target="local:setup">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-      </phingcall>
-      <phingcall target="local:reset-settings-file"/>
-      <phingcall target="local:post-install">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-          <property name="drush.brand_module" value="alshaya_mc" />
-      </phingcall>
-      <phingcall target="sync:products">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-      </phingcall>
-      <phingcall target="sync:promotions">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-      </phingcall>
-      <phingcall target="sync:stores">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-      </phingcall>
-  </target>
+      <if>
+        <not><isset property="site" /></not>
+        <then><input propertyname="site">Enter site code to reinstall:</input></then>
+      </if>
 
-  <target name="refresh:non-transac-local"
-          description="Setup local dev environment with non-transac profile.">
       <phingcall target="local:reset-local-settings"/>
       <phingcall target="local:setup">
-          <property name="drush.uri" value="https://local.non-transac.com" />
-          <property name="project.profile.name" value="alshaya_non_transac" />
+          <property name="drush.uri" value="local.alshaya-${site}.com" />
+          <property name="project.profile.name" value="${sites.${site}.type}" />
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
-          <property name="drush.uri" value="https://local.non-transac.com" />
-          <property name="drush.brand_module" value="alshaya_vs" />
+          <property name="drush.uri" value="local.alshaya-${site}.com" />
+          <property name="drush.brand_module" value="${sites.${site}.module}" />
       </phingcall>
+
+      <!-- Following commands are required only for transac -->
+      <if>
+        <equals arg1="${sites.${site}.type}" arg2="alshaya_transac" />
+        <then>
+          <phingcall target="sync:products">
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
+          </phingcall>
+          <phingcall target="sync:promotions">
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
+          </phingcall>
+          <phingcall target="sync:stores">
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
+          </phingcall>
+        </then>
+      </if>
   </target>
 
   <target name="refresh:local:drupal"
           description="Reinstall local dev environment.">
-      <phingcall target="setup:composer:install"/>
-      <phingcall target="frontend:build"/>
-      <phingcall target="local:reset-local-settings"/>
-      <phingcall target="local:drupal:install">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-      </phingcall>
-      <phingcall target="setup:toggle-modules">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-      </phingcall>
-      <phingcall target="local:reset-settings-file"/>
-      <phingcall target="local:post-install">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-          <property name="drush.brand_module" value="alshaya_mc" />
-      </phingcall>
-      <phingcall target="sync:products">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-      </phingcall>
-      <phingcall target="sync:promotions">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-      </phingcall>
-      <phingcall target="sync:stores">
-          <property name="drush.uri" value="https://local.alshaya.com" />
-      </phingcall>
-  </target>
+      <if>
+        <not><isset property="site" /></not>
+        <then><input propertyname="site">Enter site code to reinstall:</input></then>
+      </if>
 
-  <target name="refresh:non-transac-local:drupal"
-          description="Reinstall local dev environment with non-transac profile.">
       <phingcall target="setup:composer:install"/>
       <phingcall target="frontend:build"/>
       <phingcall target="local:reset-local-settings"/>
       <phingcall target="local:drupal:install">
-          <property name="drush.uri" value="https://local.non-transac.com" />
-          <property name="project.profile.name" value="alshaya_non_transac" />
+          <property name="drush.uri" value="local.alshaya-${site}.com" />
+          <property name="project.profile.name" value="${sites.${site}.type}" />
       </phingcall>
       <phingcall target="setup:toggle-modules">
-          <property name="drush.uri" value="https://local.non-transac.com" />
+          <property name="drush.uri" value="local.alshaya-${site}.com" />
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
-        <property name="drush.uri" value="https://local.non-transac.com" />
-        <property name="drush.brand_module" value="alshaya_vs" />
+          <property name="drush.uri" value="local.alshaya-${site}.com" />
+          <property name="drush.brand_module" value="${sites.${site}.module}" />
       </phingcall>
+
+      <!-- Following commands are required only for transac -->
+      <if>
+        <equals arg1="${sites.${site}.type}" arg2="alshaya_transac" />
+        <then>
+          <phingcall target="sync:products">
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
+          </phingcall>
+          <phingcall target="sync:promotions">
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
+          </phingcall>
+          <phingcall target="sync:stores">
+              <property name="drush.uri" value="local.alshaya-${site}.com" />
+          </phingcall>
+        </then>
+      </if>
   </target>
 </project>
