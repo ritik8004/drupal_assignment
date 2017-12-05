@@ -69,7 +69,8 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
   public function onRequest(GetResponseEvent $event) {
     $path = $event->getRequest()->getPathInfo();
 
-    if (strpos($path, '/forwarded/kw') === 0) {
+    // Check if the url starts with the identifier.
+    if (strpos($path, self::HM_REDIRECT_URL_IDENTIFIER) === 0) {
       $langcode = $this->resolveLangcode($event->getRequest());
 
       // Redirect response will by default be not cached server-side. Still
