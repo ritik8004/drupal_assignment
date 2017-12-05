@@ -16,10 +16,15 @@ use Symfony\Component\Yaml\Yaml;
  * Remove target blank for banner links.
  */
 function alshaya_paragraphs_update_8103() {
-  // Update the installed config.
-  $reverter = \Drupal::service('config_update.config_update');
-  $reverter->revert('entity_view_display', 'paragraph.banner.w1026');
-  $reverter->revert('entity_view_display', 'paragraph.banner.w1920');
+  // These were missing in previous updates and not added to MCKW at all.
+  // Adding them here.
+  $configs = [
+    'core.entity_view_display.paragraph.banner.default',
+    'core.entity_view_display.paragraph.banner.w1026',
+    'core.entity_view_display.paragraph.banner.w1920',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
 }
 
 /**

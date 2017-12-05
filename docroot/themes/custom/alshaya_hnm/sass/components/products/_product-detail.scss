@@ -1630,6 +1630,34 @@
           cursor: pointer;
           position: relative;
 
+          &:not([data-swatch-type=RGB]) {
+            border: none;
+            width: 2.75rem;
+            max-height: 100%;
+            padding: 0;
+
+            &.picked {
+              background: none;
+              border: 1px solid $hnm-black-two;
+            }
+
+            &:hover {
+              background: none;
+
+              &::before {
+                content: '';
+                background: $hnm-black-two-50;
+                box-shadow: none;
+                height: 100%;
+                top: 0;
+                left: 0;
+                position: absolute;
+                width: 100%;
+                z-index: 1;
+              }
+            }
+          }
+
           &[data-swatch-type=RGB] {
             width: 2.375rem;
             height: 2.375rem;

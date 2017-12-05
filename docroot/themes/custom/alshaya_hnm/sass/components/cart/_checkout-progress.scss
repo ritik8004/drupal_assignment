@@ -41,10 +41,6 @@
     padding: 0.5rem 0;
     cursor: default;
 
-    html[lang=ar] & {
-      font-family: $hnm-regular-nodir;
-    }
-
     @include breakpoint($tablet) {
       overflow: hidden;
       margin-#{$right}: 0.5%;
@@ -392,4 +388,8 @@
 
 #block-checkoutsummaryblock {
   border: 1px solid $hnm-black-two;
+}
+
+.cybersource-ajax-progress-throbber .cybersource-throbber {
+  background: url(../imgs/icons/ic-loader.svg) center no-repeat !important;
 }
