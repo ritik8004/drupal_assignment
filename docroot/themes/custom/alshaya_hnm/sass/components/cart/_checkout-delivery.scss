@@ -301,6 +301,10 @@
 
         &.tab-click-collect {
           margin-#{$left}: -1px;
+
+          &.active--tab--head {
+            margin-#{$left}: 1px;
+          }
         }
       }
 

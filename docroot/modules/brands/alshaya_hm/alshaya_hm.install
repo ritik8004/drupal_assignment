@@ -193,6 +193,10 @@ function alshaya_hm_install() {
       'ar' => 'عرض سلة التسوق',
       'en' => 'view cart',
     ],
+    'find your closest collection point' => [
+      'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
+      'en' => 'Find your closest collection point',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
