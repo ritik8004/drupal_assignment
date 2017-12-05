@@ -185,6 +185,17 @@ function alshaya_hm_images_acq_sku_teaser_media_alter(&$build, $sku_entity) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
     $teaser_assets = $sku_assets_manager->getSkuAsset($sku_entity, 'teaser', 'plp');
 
+    // Try once with plp assets if nothing found for teaser.
+    if (empty($teaser_assets)) {
+      $teaser_assets = $sku_assets_manager->getSkuAsset($sku_entity, 'plp', 'plp');
+    }
+
+    // If no assets attached & the sku is configurable, try to use the
+    // assets attached with first child sku attached.
+    if (empty($teaser_assets) && ($sku_entity->bundle() === 'configurable')) {
+      $teaser_assets = $sku_assets_manager->getChildSkuAssets($sku_entity, 'plp', 'plp');
+    }
+
     if (!empty($teaser_assets)) {
       $build['image'] = [
         '#theme' => 'image',
