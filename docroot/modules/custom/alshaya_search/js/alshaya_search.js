@@ -47,6 +47,13 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.alshayaSearchActiveFacetResetAfterAjax = function () {
     if (alshayaSearchActiveFacet) {
+      if (typeof drupalSettings.facets.softLimit !== 'undefined'
+        && typeof drupalSettings.facets.softLimit[alshayaSearchActiveFacet] !== 'undefined') {
+
+        var limit = drupalSettings.facets.softLimit[alshayaSearchActiveFacet];
+        Drupal.facets.applySoftLimit(alshayaSearchActiveFacet, limit);
+      }
+
       var facetBlock = $('[data-block-plugin-id="' + alshayaSearchActiveFacet + '"]:visible');
       facetBlock.addClass('facet-active');
       facetBlock.find('.c-accordion__title').addClass('ui-state-active');
