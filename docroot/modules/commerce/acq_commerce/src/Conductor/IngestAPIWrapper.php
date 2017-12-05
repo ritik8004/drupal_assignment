@@ -35,7 +35,7 @@ class IngestAPIWrapper {
   /**
    * Performs full conductor sync.
    */
-  public function productFullSync($store_id, $langcode, $skus = '', $page_size = 0) {
+  public function productFullSync($store_id, $langcode, $skus = '', $page_size = 0, $category_id = '') {
     if ($this->debug && !empty($this->debugDir)) {
       // Export product data into file.
       $filename = $this->debugDir . '/products_' . $langcode . '.data';
@@ -51,12 +51,15 @@ class IngestAPIWrapper {
 
     $endpoint = $this->apiVersion . '/ingest/product/sync';
 
-    $doReq = function ($client, $opt) use ($endpoint, $store_id, $skus, $product_page_size) {
+    $doReq = function ($client, $opt) use ($endpoint, $store_id, $skus, $category_id, $product_page_size) {
       if ($product_page_size > 0) {
         $opt['query']['page_size'] = $product_page_size;
       }
 
-      if (!empty($skus)) {
+      if (!empty($category_id)) {
+        $opt['query']['category_id'] = $category_id;
+      }
+      elseif (!empty($skus)) {
         $opt['query']['skus'] = $skus;
       }
 
