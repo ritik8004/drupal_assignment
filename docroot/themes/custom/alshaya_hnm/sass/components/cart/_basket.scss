@@ -701,20 +701,28 @@
     }
   }
 
-  #coupon-button.add {
-    font-family: $hnm-bold;
-    text-transform: uppercase;
-    display: inline-block;
-    margin-bottom: 14px;
-    padding: 9px 30px;
-    background: $hnm-black-two;
-    color: $white-five;
-    cursor: pointer;
-    margin-#{$left}: 1.5rem;
-    font-size: 0.8125rem;
-
-    @include breakpoint($only-tablet) {
+  #coupon-button {
+    &.add {
+      font-family: $hnm-bold;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 9px 30px;
+      background: $hnm-black-two;
+      color: $white-five;
+      cursor: pointer;
       margin-#{$left}: 1.5rem;
+      font-size: 0.8125rem;
+    }
+
+    &.remove {
+      margin-#{$left}: 1.5rem;
+      text-decoration: underline;
+      color: $hnm-black-two;
+      font-family: $hnm-bold;
+      font-size: 0.75rem;
+      display: block;
+      margin-bottom: 0.75rem;
     }
   }
 
