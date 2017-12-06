@@ -34,8 +34,15 @@ function alshaya_install() {
   $uri = "public://google_tag";
   file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
 
-  // Set default country to KW.
-  \Drupal::configFactory()->getEditable('system.date')->set('country.default', 'KW')->save();
+  // Set default country from settings.
+  \Drupal::configFactory()->getEditable('system.date')
+    ->set('country.default', Settings::get('country_code'))
+    ->save();
+
+  // Set default timezone from settings.
+  \Drupal::configFactory()->getEditable('system.date')
+    ->set('timezone.default', Settings::get('timezone'))
+    ->save();
 
   // Remove all roles created by Lightning.
   $coreRoles = [

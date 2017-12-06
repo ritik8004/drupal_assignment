@@ -26,7 +26,7 @@ function alshaya_get_additional_settings($site, $env) {
       'default' => [
         'store_id' => [
           'ar' => 3,
-        ]
+        ],
       ]
     ],
     'mcksa' => [
@@ -39,6 +39,8 @@ function alshaya_get_additional_settings($site, $env) {
           'en' => 'default',
           'ar' => 'kwt_ar',
         ],
+        'country_code' => 'SA',
+        'timezone' => 'Asia/Riyadh',
       ],
     ],
     'hmkw' => [
@@ -64,6 +66,8 @@ function alshaya_get_additional_settings($site, $env) {
           'en' => 'kwt_en',
           'ar' => 'kwt_ar',
         ],
+        'country_code' => 'KW',
+        'timezone' => 'Asia/Kuwait',
       ],
     ],
   ];

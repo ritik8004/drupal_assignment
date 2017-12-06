@@ -1375,9 +1375,4 @@ function alshaya_master_install() {
     ->set('display_denied_message', FALSE)
     ->set('redirect_authenticated_users_to', '/user')
     ->save();
-
-  // Set default timezone.
-  \Drupal::configFactory()->getEditable('system.date')
-    ->set('timezone.default', 'Asia/Kuwait')
-    ->save();
 }
