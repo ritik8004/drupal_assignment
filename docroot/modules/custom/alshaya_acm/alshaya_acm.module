@@ -298,19 +298,22 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
 
   unset($form['coupon']);
 
-  $promo_button_text = (empty($cart->getCoupon())) ? t('apply') : t('remove');
-  $coupon_button_class = (empty($cart->getCoupon())) ? 'add' : 'remove';
-
   $form['promotion_code_wrapper']['coupon'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
     '#prefix' => '<div class="coupon-code-wrapper"><div class="card__header">' . t('Add a promotional code') . '</div>',
-    '#suffix' => '<span id="coupon-button" class="' . $coupon_button_class . '">' . $promo_button_text . '</span></div>',
     '#default_value' => $cart->getCoupon(),
     '#attributes' => [
       'class' => [(empty($cart->getCoupon())) ? 'apply-promocode' : 'cancel-promocode'],
     ],
   ];
+
+  if (empty($cart->getCoupon())) {
+    $form['promotion_code_wrapper']['coupon']['#suffix'] = '<span id="coupon-button" class="add">' . t('apply') . '</span></div>';
+  }
+  else {
+    $form['promotion_code_wrapper']['coupon']['#suffix'] = '<a href="#" id="coupon-button" class="remove">' . t('remove') . '</a></div>';
+  }
 
   if (!empty($cart_items)) {
     // Add continue shopping link, that redirect user to homepage.
