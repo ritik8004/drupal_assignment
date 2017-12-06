@@ -431,7 +431,7 @@ class AlshayaApiWrapper {
    */
   public function getLocations($filterField = 'attribute_id', $filterValue = 'governate') {
     $endpoint = 'deliverymatrix/address-locations/search?searchCriteria[filter_groups][0][filters][0][field]=' . $filterField . '&searchCriteria[filter_groups][0][filters][0][value]=' . $filterValue . '&searchCriteria[filter_groups][0][filters][0][condition_type]=eq';
-    $response = $this->invokeApi($endpoint, [], 'GET', FALSE);
+    $response = $this->invokeApi($endpoint, [], 'GET');
 
     if ($response && is_string($response)) {
       $locations = json_decode($response, TRUE);
@@ -452,7 +452,7 @@ class AlshayaApiWrapper {
    */
   public function getCustomerAddressForm() {
     $endpoint = 'attributeMetadata/customerAddress';
-    $response = $this->invokeApi($endpoint, [], 'GET', FALSE);
+    $response = $this->invokeApi($endpoint, [], 'GET');
 
     if ($response && is_string($response)) {
       $form = json_decode($response, TRUE);
