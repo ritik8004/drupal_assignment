@@ -17,6 +17,11 @@ elseif (getenv('TRAVIS')) {
   $env = 'travis';
 }
 
+// Handle cases like 01uatup.
+if (strlen(rtrim($env, 'up')) > 0) {
+  $env = rtrim($env, 'up');
+}
+
 // Set the env in settings to allow re-using in custom code.
 $settings['env'] = $env;
 
