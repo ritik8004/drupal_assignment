@@ -11,7 +11,7 @@ dependencies:
 id: plpconcept
 theme: alshaya_hnm
 region: sidebar_first
-weight: 0
+weight: -34
 provider: null
 plugin: 'facet_block:plp_concept'
 settings:

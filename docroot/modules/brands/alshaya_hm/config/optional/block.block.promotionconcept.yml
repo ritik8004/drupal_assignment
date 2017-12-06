@@ -11,7 +11,7 @@ dependencies:
 id: promotionconcept
 theme: alshaya_hnm
 region: sidebar_first
-weight: 0
+weight: -25
 provider: null
 plugin: 'facet_block:promotion_concept'
 settings:
