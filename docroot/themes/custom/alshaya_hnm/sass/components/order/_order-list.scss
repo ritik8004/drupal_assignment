@@ -252,7 +252,7 @@
 
       @include breakpoint($only-tablet) {
         padding-right: 1rem;
-        vertical-align: top;
+        vertical-align: middle;
         width: 10.5rem;
       }
 
@@ -412,7 +412,7 @@
 
   .total--price {
     @include breakpoint($only-tablet) {
-      vertical-align: top;
+      vertical-align: bottom;
     }
   }
 
@@ -457,10 +457,6 @@
   position: absolute;
   #{$right}: 0;
   top: 0;
-
-  @include breakpoint($tablet) {
-    top: 1.875rem;
-  }
 
   @include breakpoint($desktop) {
     top: 0.3125rem;
@@ -670,6 +666,18 @@
       .icon-ic_chevrondown {
         @include icon(dropdown-collapse, before);
       }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .order__details--description {
+    position: relative;
+
+    .tablet-only {
+      position: absolute;
+      bottom: 1.8rem;
+      margin-bottom: 0;
     }
   }
 }
