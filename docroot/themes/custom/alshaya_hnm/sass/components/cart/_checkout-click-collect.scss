@@ -683,13 +683,13 @@
       }
 
       .store-delivery-time {
-        margin-top: 1.563rem;
         color: $black;
         font-size: 0.875rem;
+        margin-top: 0.95rem;
 
         @include breakpoint($only-tablet) {
-          margin-top: 0.35rem;
           font-size: 0.625rem;
+          margin-top: 0.5rem;
         }
 
         .label--delivery-time {
@@ -720,8 +720,8 @@
           }
 
           @include breakpoint($desktop) {
-            padding-bottom: 0;
             padding-top: 0.95rem;
+            margin-top: 0.95rem;
 
             @include icon(dropdown-expand, after) {
               color: $hnm-black-two;
@@ -748,12 +748,27 @@
 
           @include breakpoint($only-tablet) {
             font-size: 0.625rem;
-            color: $black;
+            color: $hnm-black-two;
             font-weight: bold;
-            padding-bottom: 0;
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
 
-            &::after {
-              display: none;
+            @include icon(dropdown-expand, after) {
+              color: $hnm-black-two;
+              font-size: 1.875rem;
+              position: absolute;
+              top: 1px;
+              #{$left}: 4rem;
+            }
+
+            &.open {
+              @include icon(dropdown-collapse, after) {
+                color: $hnm-black-two;
+                font-size: 1.875rem;
+                position: absolute;
+                top: 1px;
+                #{$left}: 4rem;
+              }
             }
           }
         }
@@ -841,8 +856,8 @@
   }
 
   #selected-store-wrapper {
-    @include breakpoint($desktop) {
-      margin-top: 1.938rem;
+    @include breakpoint($tablet) {
+      margin-top: 0;
     }
 
     @include breakpoint($tablet) {
@@ -851,12 +866,11 @@
 
     .selected-store-content {
       border-bottom: 1px solid $white-two;
-      border-top: 1px solid $white-two;
       padding-#{$left}: 1.375rem;
       padding-#{$right}: 1.313rem;
       padding-top: 1.438rem;
       padding-bottom: 1.188rem;
-      background: $white-four;
+      background: $white-five;
 
       .store-name-and-address,
       .store-open-hours,
@@ -1088,8 +1102,8 @@
           color: $black;
           margin-bottom: 0.875rem;
 
-          @include icon(chevrondown, after) {
-            color: $black;
+          @include icon(dropdown-expand, after) {
+            color: $hnm-black-two;
             font-size: 1.938rem;
             position: absolute;
             top: -0.375rem;
@@ -1098,10 +1112,8 @@
           }
 
           &.open {
-            font-weight: bold;
-
-            @include icon(chevronup, after) {
-              color: $black;
+            @include icon(dropdown-collapse, after) {
+              color: $hnm-black-two;
               font-size: 1.938rem;
               position: absolute;
               top: -0.375rem;
