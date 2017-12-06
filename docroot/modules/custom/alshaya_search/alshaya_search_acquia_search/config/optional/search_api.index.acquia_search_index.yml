@@ -145,6 +145,6 @@ processor_settings:
 tracker_settings:
   default: {  }
 options:
-  index_directly: true
-  cron_limit: 50
+  index_directly: false
+  cron_limit: 1000
 server: acquia_search_server
