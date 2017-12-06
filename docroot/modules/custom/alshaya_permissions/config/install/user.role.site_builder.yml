@@ -26,3 +26,4 @@ permissions:
   - 'create content translations'
   - 'administer site configuration'
   - 'translate configuration'
+  - 'view the administration theme'
