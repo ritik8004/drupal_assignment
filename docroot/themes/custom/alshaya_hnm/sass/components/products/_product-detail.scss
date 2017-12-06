@@ -1525,9 +1525,6 @@
 
         @include breakpoint($tablet) {
           float: $left;
-        }
-
-        @include breakpoint($desktop) {
           margin-top: 1.45rem;
         }
       }
@@ -1750,24 +1747,12 @@
 article[gtm-sku-type="simple"] {
   .acq-content-product {
     .sku-base-form {
-      .form-item-quantity {
-        float: $left !important;
-
-        @include breakpoint($tablet) {
-          margin-top: 2.5rem;
-        }
-      }
-
       button[type="submit"] {
         @include breakpoint($only-tablet) {
-          float: $right;
-          margin-top: 2rem;
+          float: $left;
+          margin-top: 0.3125rem;
           height: 2.188rem;
           text-align: center;
-        }
-
-        @include breakpoint($desktop) {
-          margin-top: 2.5rem !important;
         }
       }
     }
