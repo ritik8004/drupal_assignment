@@ -559,8 +559,12 @@ class AlshayaAddressBookManager {
             $magento_address[$attribute_code] = _alshaya_acm_checkout_clean_address_phone($address[$field_code]);
             break;
 
-          case 'administrative_area':
           case 'area_parent':
+            if (empty($address['area_parent']) && !empty($address['administrative_area'])) {
+              $parent = $this->getLocationParentTerm($address['administrative_area']);
+              $address[$field_code] = $parent ? $parent->id() : NULL;
+            }
+          case 'administrative_area':
             $term = $this->termStorage->load($address[$field_code]);
 
             if (empty($term)) {
