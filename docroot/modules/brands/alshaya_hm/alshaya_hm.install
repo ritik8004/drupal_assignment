@@ -8,6 +8,7 @@
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Site\Settings;
+use Drupal\search_api\Entity\Index;
 
 /**
  * Implements hook_install().
@@ -200,4 +201,65 @@ function alshaya_hm_install() {
   $configs = ['acq_sku.configurable_form_settings'];
 
   alshaya_config_install_configs($configs, 'alshaya_hm', 'optional');
+
+  $alshaya_search_indexes = [
+    'product' => 'search_api.index.product',
+    'acquia_search_index' => 'search_api.index.acquia_search_index',
+  ];
+
+  $concept_index_config = [
+    'label' => 'Concept',
+    'datasource_id' => 'entity:node',
+    'property_path' => 'field_skus:entity:attr_concept',
+    'type' => 'string',
+    'dependencies' => [
+      'config' => [
+        'field.storage.node.field_skus',
+      ],
+      'module' => [
+        'acq_sku',
+      ],
+    ],
+  ];
+
+  foreach ($alshaya_search_indexes as $key => $search_index) {
+    $config = \Drupal::configFactory()->getEditable($search_index);
+
+    // Index attr concept data in search_api_db.
+    $config->set('field_settings.attr_concept', $concept_index_config);
+
+    $config->save();
+
+    $index = Index::load($key);
+
+    // Re-index all items.
+    $index->reindex();
+
+    // Save index to reflect new stock field.
+    $index->save();
+  }
+
+  $filter_bar_add_concept = [
+    'checked' => TRUE,
+    'label' => 'Concept',
+    'separator' => ', ',
+    'show_count' => TRUE,
+    'show_label' => FALSE,
+    'weight' => 0,
+  ];
+
+  $filter_summary_facets = [
+    'plp_concept' => 'facets_summary.facets_summary.filter_bar_plp',
+    'concept' => 'facets_summary.facets_summary.filter_bar',
+    'promotion_concept' => 'facets_summary.facets_summary.filter_bar_promotions',
+  ];
+
+  foreach ($filter_summary_facets as $key => $filter_summary_facet) {
+    $config = \Drupal::configFactory()->getEditable($filter_summary_facet);
+
+    // Index attr concept data in search_api_db.
+    $config->set('facets.' . $key, $filter_bar_add_concept);
+
+    $config->save();
+  }
 }
