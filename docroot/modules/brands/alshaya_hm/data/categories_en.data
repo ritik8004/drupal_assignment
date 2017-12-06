@@ -1,0 +1,306 @@
+<?php
+global $_alshaya_acm_categories;
+
+$_alshaya_acm_categories = 
+array (
+  0 => 
+  array (
+    'category_id' => 2,
+    'parent_id' => 1,
+    'store_id' => 2,
+    'name' => 'Default Category',
+    'description' => '',
+    'position' => 1,
+    'level' => 1,
+    'in_menu' => true,
+    'product_ids' => 
+    array (
+    ),
+    'children' => 
+    array (
+      0 => 
+      array (
+        'category_id' => 3,
+        'parent_id' => 2,
+        'store_id' => 2,
+        'name' => 'Men',
+        'description' => '<p>Men</p>',
+        'position' => 1,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 7,
+            'parent_id' => 3,
+            'store_id' => 2,
+            'name' => 'Shirts',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      1 => 
+      array (
+        'category_id' => 4,
+        'parent_id' => 2,
+        'store_id' => 2,
+        'name' => 'Category 1',
+        'description' => '',
+        'position' => 2,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      2 => 
+      array (
+        'category_id' => 5,
+        'parent_id' => 2,
+        'store_id' => 2,
+        'name' => 'Ladies',
+        'description' => '',
+        'position' => 3,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 6,
+            'parent_id' => 5,
+            'store_id' => 2,
+            'name' => 'Dresses',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      3 => 
+      array (
+        'category_id' => 8,
+        'parent_id' => 2,
+        'store_id' => 2,
+        'name' => 'Kids',
+        'description' => '',
+        'position' => 4,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 9,
+            'parent_id' => 8,
+            'store_id' => 2,
+            'name' => 'Baby Girl 4-24 months',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+          1 => 
+          array (
+            'category_id' => 10,
+            'parent_id' => 8,
+            'store_id' => 2,
+            'name' => 'Baby Boy 4-24 months',
+            'description' => '',
+            'position' => 2,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      4 => 
+      array (
+        'category_id' => 11,
+        'parent_id' => 2,
+        'store_id' => 2,
+        'name' => 'QA Category 1',
+        'description' => '',
+        'position' => 5,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      5 => 
+      array (
+        'category_id' => 12,
+        'parent_id' => 2,
+        'store_id' => 2,
+        'name' => 'Fashion',
+        'description' => '',
+        'position' => 6,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+          0 => 
+          array (
+            'category_id' => 16,
+            'parent_id' => 12,
+            'store_id' => 2,
+            'name' => 'QA Swatch Display',
+            'description' => '',
+            'position' => 1,
+            'level' => 3,
+            'in_menu' => true,
+            'product_ids' => 
+            array (
+            ),
+            'children' => 
+            array (
+            ),
+            'extension' => 
+            array (
+            ),
+          ),
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      6 => 
+      array (
+        'category_id' => 13,
+        'parent_id' => 2,
+        'store_id' => 2,
+        'name' => 'Beauty',
+        'description' => '',
+        'position' => 7,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      7 => 
+      array (
+        'category_id' => 14,
+        'parent_id' => 2,
+        'store_id' => 2,
+        'name' => 'Home',
+        'description' => '',
+        'position' => 8,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+      8 => 
+      array (
+        'category_id' => 15,
+        'parent_id' => 2,
+        'store_id' => 2,
+        'name' => 'Accessories',
+        'description' => '',
+        'position' => 9,
+        'level' => 2,
+        'in_menu' => true,
+        'product_ids' => 
+        array (
+        ),
+        'children' => 
+        array (
+        ),
+        'extension' => 
+        array (
+        ),
+      ),
+    ),
+    'extension' => 
+    array (
+    ),
+  ),
+);

@@ -36,11 +36,17 @@ settings:
       1_row_3_col_text:
         weight: 12
         enabled: false
+      2_row_2_col:
+        weight: 13
+        enabled: false
       banner:
         weight: 14
         enabled: false
       banner_full_width:
         weight: 15
+        enabled: false
+      banner_with_link:
+        weight: 16
         enabled: false
       promo_block:
         enabled: true

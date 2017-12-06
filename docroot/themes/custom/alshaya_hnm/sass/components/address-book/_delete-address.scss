@@ -1,0 +1,116 @@
+.path--user {
+  .ui-dialog-title {
+    @extend %page-title;
+
+    border-bottom: 1px solid $white;
+    font-size: 18px;
+    float: $left;
+    padding-bottom: 7px;
+    margin-top: 25px;
+    margin-bottom: 18px;
+    width: 70%;
+  }
+
+  .profile-address-book-delete-form {
+    color: $black;
+    font-size: 0.875rem;
+    min-height: 2rem;
+  }
+
+  .ui-dialog {
+    background: $white-five;
+    padding: 0;
+    padding-bottom: 1.25rem;
+    padding-#{$left}: 1.25rem;
+    z-index: 8;
+
+    @include breakpoint($only-mobile) {
+      width: 100% !important;
+    }
+
+    .ui-dialog-buttonpane .ui-dialog-buttonset,
+    .ui-dialog-content,
+    .ui-dialog-titlebar {
+      float: none;
+      padding: 0;
+    }
+
+    .ui-dialog-buttonpane .ui-dialog-buttonset {
+      float: $left;
+    }
+
+    .ui-dialog-buttonpane {
+      margin: 0;
+      padding: 0;
+
+      button {
+        margin: 0;
+      }
+    }
+
+    .ui-button .ui-button-text {
+      font-weight: 700;
+    }
+
+    .ui-dialog-content {
+      margin-bottom: 2rem;
+      padding-#{$right}: 3rem;
+    }
+  }
+
+  .ui-widget-header {
+    overflow: hidden;
+  }
+
+  .ui-dialog .ui-dialog-titlebar-close {
+    color: $white-five;
+    height: 3.125rem;
+    font-size: 1rem;
+    #{$right}: 0;
+    #{$left}: initial;
+    top: 0;
+    width: 2.5rem;
+    outline: none;
+    background-color: transparent;
+
+    &::before {
+      content: none;
+    }
+
+    @include icon(close) {
+      color: $white-five;
+      background: $hnm-black-two;
+      width: 2.188rem;
+      height: 2.188rem;
+      font-size: 2.688rem;
+      text-indent: -3px;
+      line-height: 0.8;
+    }
+  }
+
+  .button--primary span {
+    @extend %button-wide;
+
+    min-width: 0;
+  }
+
+  .dialog-cancel span {
+    color: $hnm-black-two;
+    font-family: $hnm-bold;
+    font-weight: normal;
+    font-size: 0.625rem;
+
+    @include breakpoint($tablet) {
+      font-size: 0.625rem;
+    }
+
+    @include breakpoint($desktop) {
+      font-size: 0.75rem;
+    }
+  }
+
+  button {
+    background: #fff;
+    border: none;
+  }
+}

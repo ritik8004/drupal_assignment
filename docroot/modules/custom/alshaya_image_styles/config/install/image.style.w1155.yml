@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: w1155
+label: w1155
+effects:
+  dca47774-fe47-4063-9b3f-1ea06bf464c8:
+    uuid: dca47774-fe47-4063-9b3f-1ea06bf464c8
+    id: image_scale
+    weight: 1
+    data:
+      width: 1155
+      height: null
+      upscale: false

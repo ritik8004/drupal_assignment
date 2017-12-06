@@ -1,0 +1,10 @@
+dependencies:
+  config:
+    - field.field.node.acq_promotion.field_alshaya_promotion_subtype
+content:
+  field_alshaya_promotion_subtype:
+    type: options_select
+    weight: 17
+    region: content
+    settings: {  }
+    third_party_settings: {  }

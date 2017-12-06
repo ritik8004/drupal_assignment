@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-alshaya-product-list-block-1') {
+    // Change position label.
+    if (isset($form['sort_bef_combine']['#options']['nid ASC']) && $form['sort_bef_combine']['#options']['nid ASC']) {
+      $form['sort_bef_combine']['#options']['nid ASC'] = t('Best Seller');
+    }
+  }
+
+  if ($form_id == 'alshaya_newsletter_subscribe') {
+    $form['email']['#prefix']   = '<div class="newsletter-block-label">' . t('Be the first to know about our newest arrivals, special offers and store events near you.') . '</div>';
+  }
+}
+
+/**
+ * Implements hook_acq_sku_product_node_alter().
+ */
+function alshaya_hm_acq_sku_product_node_alter(Drupal\node\Entity\Node &$node, array $product) {
+  // Set product activation date if available.
+  if (isset($product['attributes']['product_activation_date'])) {
+    $node->created = strtotime($product['attributes']['product_activation_date']);
+  }
+}
+
+/**
+ * Implements template_preprocess_block().
+ */
+function alshaya_hm_preprocess_block(&$variables) {
+  // Set alshaya-private-card image path.
+  $image_path = drupal_get_path('module', 'alshaya_hm') . '/images/alshaya-priv-card.svg';
+  if($variables['base_plugin_id'] == 'join_the_club') {
+    $variables['content']['image']['#uri'] = $image_path;
+  }
+}

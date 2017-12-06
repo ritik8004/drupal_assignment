@@ -16,7 +16,7 @@ content:
     weight: 0
     label: hidden
     settings:
-      view_mode: 326x288
+      view_mode: w326
       link: ''
     third_party_settings: {  }
     region: content

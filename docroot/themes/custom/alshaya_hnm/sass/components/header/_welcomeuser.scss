@@ -1,0 +1,18 @@
+// Theming of Welcome User block in header.
+@include breakpoint($desktop) {
+  #block-welcomeuser {
+    display: inline-block;
+
+    h3 {
+      @include arabic-letter-spacing;
+
+      margin: 0 1.5rem;
+      display: block;
+      font-family: $hnm-regular;
+      font-size: 0.75rem;
+      letter-spacing: 0.8px;
+      color: $hnm-black-four;
+      text-transform: uppercase;
+    }
+  }
+}

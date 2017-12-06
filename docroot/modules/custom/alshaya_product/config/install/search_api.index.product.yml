@@ -114,6 +114,11 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: nid
     type: integer
+  created:
+    label: 'Authored on'
+    datasource_id: 'entity:node'
+    property_path: created
+    type: date
   stock:
     label: Stock
     datasource_id: 'entity:node'

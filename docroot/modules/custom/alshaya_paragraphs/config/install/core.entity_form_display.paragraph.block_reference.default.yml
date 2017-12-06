@@ -20,6 +20,9 @@ content:
     third_party_settings: {  }
     type: block_field_default
     region: content
+  translation:
+    weight: 10
+    region: content
 hidden:
   created: true
   status: true

@@ -1,0 +1,168 @@
+.c-content__slider {
+  text-align: center;
+
+  @include breakpoint($only-mobile) {
+    min-height: 11.5rem;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  @include breakpoint($tablet) {
+    margin-bottom: 1.5rem;
+  }
+
+  .slick-slider {
+    overflow: hidden;
+
+    .slick-list {
+      width: 47.5rem;
+      #{$left}: calc((100vw - 47.5rem) / 2);
+      min-height: 10.5rem;
+
+      @include breakpoint($tablet) {
+        width: 71.875rem;
+        min-height: 15.875rem;
+        #{$left}: calc((100vw - 71.875rem) / 2);
+      }
+
+      .ucbrowser & {
+        @include breakpoint(orientation portrait) {
+          #{$left}: -25%;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        width: 120rem;
+        min-height: 26.5rem;
+        #{$left}: calc((100vw - 120rem) / 2);
+      }
+    }
+  }
+}
+
+.c-slider-promo__items {
+  position: relative;
+
+  a {
+    @include u-overlay-content;
+    @include u-image-replacement;
+
+    display: none;
+  }
+
+  .slick-active a {
+    display: block;
+  }
+
+  .owl-prev,
+  .owl-next,
+  .slick-prev,
+  .slick-next {
+    top: 45% !important;
+    top: calc(50% - 2.25rem) !important;
+
+    @include breakpoint($tablet) {
+      top: 45% !important;
+      top: calc(50% - 1.125rem) !important;
+    }
+  }
+}
+
+.owl-prev,
+.owl-next,
+.slick-prev,
+.slick-next {
+  @include u-image-replacement;
+
+  cursor: pointer;
+  position: absolute;
+  background: none;
+  border: none;
+  z-index: 3;
+  padding: 0;
+
+  &::before {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 100%;
+    height: 2.25rem;
+    line-height: 1.15 !important;
+    width: 2.25rem;
+    color: #000;
+    font-size: 2rem;
+    display: block;
+  }
+}
+
+.owl-prev,
+.slick-prev {
+  @include breakpoint($tablet) {
+    left: 1.65rem;
+  }
+
+  @include icon(chevronleft) {
+    padding-#{$right}: 0.1875rem;
+  }
+
+  left: 0.5rem;
+}
+
+.owl-next,
+.slick-next {
+  @include breakpoint($tablet) {
+    right: 1.65rem;
+  }
+
+  @include icon(chevronright) {
+    padding-#{$left}: 0.1875rem;
+  }
+
+  right: 0.5rem;
+}
+
+.owl-dots,
+.slick-dots {
+  .ie & {
+    /* IE 10 */
+    background: url('../imgs/assets/FFFFFF.png') repeat;
+  }
+
+  @include breakpoint($tablet) {
+    @include u-center--horizontally;
+
+    bottom: 0;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: 0;
+  }
+
+  padding-#{$left}: 0;
+}
+
+.owl-dot,
+.slick-dots li {
+  @include breakpoint($tablet) {
+    color: $white-five;
+  }
+
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 100%;
+  color: $hnm-black-two;
+  border: 1px solid currentColor;
+  display: inline-block;
+  margin: 1em 0.75em;
+  padding-#{$left}: 0;
+
+  &.active,
+  &.slick-active {
+    background: currentColor;
+  }
+
+  button {
+    display: none;
+  }
+}

@@ -1,0 +1,405 @@
+.user-page.checkout-login {
+  border: 0;
+  margin: 0 auto 1em;
+
+  @include breakpoint($tablet) {
+    margin: 1.2rem auto 9.2rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin: 0.38rem auto 4.8rem;
+  }
+
+  h1 {
+    position: relative;
+    padding-top: 0.25rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid $white;
+    margin-#{$left}: 0;
+
+    @include breakpoint($tablet) {
+      padding-top: 0;
+      padding-bottom: 0.875rem;
+    }
+  }
+
+  .multistep-checkout {
+    max-width: 100%;
+  }
+
+  .checkout-login-actions-wrapper {
+    background: $white-four;
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+    padding: 1em;
+    line-height: 2.8;
+
+    @include breakpoint($only-tablet) {
+      padding: 1rem 1.375rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 1.375rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+      line-height: 3.8;
+      background: white;
+      margin-top: 1rem;
+      padding: 0;
+      margin-bottom: 1rem;
+    }
+
+    .form-submit {
+      float: $right;
+      margin: 0;
+      margin-#{$right}: 0.75em;
+
+      @include breakpoint($tablet) {
+        margin-#{$right}: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        float: none;
+      }
+    }
+
+    a {
+      font-weight: normal;
+      font-family: $hnm-demibold;
+      color: $hnm-black-two;
+      font-size: 0.75rem;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &.back-to-basket {
+        @include breakpoint($desktop) {
+          padding: 0.625rem 0;
+        }
+      }
+    }
+  }
+}
+
+.alias--cart-checkout-login {
+  .form-wrapper,
+  .form-item {
+    @include breakpoint($tablet) {
+      margin-top: 2.1rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.25rem;
+    }
+  }
+
+  .tabs--content {
+    max-width: 65.3125rem;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  #edit-login-tabs {
+    font-size: 0;
+    margin-top: 0.6rem;
+
+    @include breakpoint($tablet) {
+      display: none;
+    }
+  }
+
+  .tab-new-customer {
+    margin-#{$right}: 2%;
+  }
+
+  .tab {
+    @inlcude arabic-letter-spacing;
+
+    padding: 0.5rem 2rem;
+    border: 1px solid $grey5;
+    display: inline-block;
+    color: $hnm-black-two;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    width: 49%;
+    height: 3.125rem;
+    vertical-align: top;
+    text-align: center;
+    letter-spacing: 0.5px;
+
+    &.active {
+      border: 1px solid $hnm-black-two;
+      color: $hnm-black-two;
+      font-weight: normal;
+      font-family: $hnm-bold;
+      text-transform: uppercase;
+      background: $hnm-grey;
+    }
+
+    &.active--tab--head {
+      color: $marine-blue;
+      font-weight: bold;
+      border: 2px solid $marine-blue;
+    }
+
+    span {
+      max-width: 4.75rem;
+      display: block;
+      margin: auto;
+    }
+  }
+
+  .tabs--content.active {
+    @include breakpoint($only-mobile) {
+      #edit-checkout-guest,
+      #edit-checkout-login {
+        display: none;
+
+        &.active {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.multistep-checkout {
+  .tabs--content fieldset {
+    width: 100%;
+    border: 0;
+
+    @include breakpoint($tablet) {
+      width: 50%;
+      display: inline-block;
+      vertical-align: top;
+      float: $left;
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 2.05rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.5rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: 0;
+      margin-top: 1rem;
+      padding: 0;
+    }
+
+    &.active--tab--content {
+      display: block;
+    }
+
+    legend {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+
+  #edit-checkout-guest {
+    @include breakpoint($only-tablet) {
+      padding: 0;
+    }
+
+    @include breakpoint($desktop) {
+      border-#{$right}: 1px solid $white;
+    }
+  }
+
+  fieldset legend {
+    @include breakpoint($tablet) {
+      pointer-events: none;
+    }
+
+    span {
+      font-size: 0.875rem;
+      font-family: $hnm-demibold;
+      line-height: 1.29;
+      text-transform: uppercase;
+      font-weight: normal;
+      color: $hnm-black-two;
+    }
+  }
+
+  #edit-checkout-login {
+    @include breakpoint($tablet) {
+      border-#{$left}: 1px solid $white;
+      padding-#{$left}: 2.2rem;
+      position: relative;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: 6.6em;
+      border-#{$left}: 0;
+    }
+
+    .request-password-link {
+      margin-top: 1.6rem;
+      display: block;
+      text-align: center;
+      font-family: $hnm-demibold;
+      font-weight: normal;
+      color: $hnm-black-two;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      @include breakpoint($tablet) {
+        position: absolute;
+        bottom: 1.5em;
+        #{$left}: 15em;
+        width: auto;
+        font-size: 0.75rem;
+      }
+
+      @include breakpoint($desktop) {
+        #{$left}: 13.5rem;
+
+        html[lang=ar] & {
+          #{$left}: 16rem;
+        }
+      }
+    }
+
+    .form-actions {
+      margin-top: 1.4rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 2.2rem;
+      }
+    }
+
+    .fieldset-wrapper {
+      margin-top: 0.5625rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 0.5rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 0.9375rem;
+        font-size: 0.75rem;
+        line-height: 1.5;
+      }
+    }
+  }
+
+  #edit-checkout-guest {
+    a {
+      @extend %btn;
+
+      background: $hnm-black-two;
+      display: inline-block;
+      margin: 1em 0;
+      margin-bottom: 2rem;
+      padding: 0.625rem 1.5rem;
+      line-height: 1.14;
+
+      @include breakpoint($desktop) {
+        margin-top: 0.75rem;
+        margin-bottom: 2rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        text-align: center;
+        margin: 0.4rem 0;
+        margin-bottom: 0.6rem;
+      }
+    }
+  }
+
+  .fieldset-wrapper {
+    font-size: 0.75rem;
+
+    @include breakpoint($only-mobile) {
+      color: $black;
+    }
+
+    .tabs--content {
+      @include breakpoint($tablet) {
+        margin-top: 0.35rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-#{$left}: 0;
+        margin-top: 1.1rem;
+        width: 94%;
+      }
+    }
+
+    .form-type-password {
+      margin-top: 2.8rem;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 3.4rem;
+      }
+
+      #unmask_password {
+        top: 0.5rem;
+
+        @include breakpoint($desktop) {
+          top: 0.1rem;
+        }
+
+        @include breakpoint($tablet) {
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    .checkout-guest-email-usage {
+      color: $hnm-black-two;
+      margin-bottom: 1.85rem;
+      font-family: $hnm-bold;
+      font-weight: normal;
+
+      @include breakpoint($tablet) {
+        color: $hnm-black-two;
+        margin-bottom: 1.4rem;
+        font-size: 13px;
+        width: 80%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 58%;
+      }
+    }
+  }
+
+  .checkout-guest-summary {
+    line-height: 1.6;
+    color: $grey-ash;
+
+    @include breakpoint($tablet) {
+      font-size: 0.8125rem;
+      width: 92%;
+      line-height: 1.5;
+    }
+
+    @include breakpoint($desktop) {
+      width: 80%;
+    }
+  }
+
+  .checkout-guest-summary ul {
+    padding-#{$left}: 2em;
+
+    @include breakpoint($only-mobile) {
+      margin-top: -0.375rem;
+      line-height: 1.45;
+    }
+  }
+}
+
+.form-item--error-message a {
+  color: $cerulean-two;
+}

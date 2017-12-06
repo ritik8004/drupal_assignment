@@ -1,0 +1,23 @@
+drush:
+  default_alias: alshaya.local
+  aliases:
+    local: alshaya.local
+behat:
+  launch-selenium: false
+  launch-phantomjs: true
+
+# This is all the sites which are currently installed (or will be installed
+# soon) on the factory.
+sites:
+  mckw:
+    module: alshaya_mc
+    type: alshaya_transac
+  mcksa:
+    module: alshaya_mc
+    type: alshaya_transac
+  hmkw:
+    module: alshaya_hm
+    type: alshaya_transac
+  vskw:
+    module: alshaya_vs
+    type: alshaya_non_transac

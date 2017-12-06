@@ -1,0 +1,28 @@
+input[type=checkbox] {
+  display: none;
+}
+
+input[type=checkbox] ~ label {
+  @include icon(check-box-empty);
+
+  color: $hnm-black-four;
+
+  &::before {
+    font-size: 2.125rem;
+  }
+}
+
+input[type=checkbox]:checked ~ label {
+  @include icon(check-box-filled) {
+    color: $hnm-black-two;
+  }
+}
+
+// Fix for facets without translations.
+.c-facet {
+  input[type=checkbox] ~ label {
+    &::before {
+      float: $left;
+    }
+  }
+}

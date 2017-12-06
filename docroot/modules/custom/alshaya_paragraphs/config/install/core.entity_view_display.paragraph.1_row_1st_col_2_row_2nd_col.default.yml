@@ -17,7 +17,7 @@ content:
     weight: 0
     label: hidden
     settings:
-      view_mode: 501x600
+      view_mode: w501
       link: ''
     third_party_settings: {  }
     region: content
@@ -26,7 +26,7 @@ content:
     weight: 1
     label: hidden
     settings:
-      view_mode: 501x288
+      view_mode: w501
       link: ''
     third_party_settings: {  }
     region: content

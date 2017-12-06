@@ -1,0 +1,374 @@
+body {
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
+}
+
+.c-order-print {
+  .block-page-title-block {
+    display: none;
+  }
+
+  .delivery-details {
+    border: 1px solid $hnm-black-two;
+    color: $hnm-black-two;
+    background: $white-five;
+    margin-bottom: 1.5rem;
+  }
+
+  .delivery-details,
+  .barcode--wrapper {
+    strong {
+      font-family: $hnm-bold;
+      color: $hnm-black-two;
+      font-weight: normal;
+    }
+  }
+
+  .head-thank-you {
+    h3 {
+      @include arabic-letter-spacing;
+
+      font-family: $hnm-demibold;
+      letter-spacing: 0.8px;
+      color: $hnm-black-two;
+      font-size: 1.125rem;
+      border-bottom: 1px solid $grey4;
+      padding-bottom: 1rem;
+    }
+  }
+
+  .site--brand {
+    border-bottom: 1px solid $white;
+    margin-bottom: 1.56rem;
+    text-align: center;
+
+    img {
+      padding: 1.75rem 0;
+    }
+  }
+
+  .subtitle {
+    @include arabic-letter-spacing;
+
+    font-family: $hnm-demibold;
+    font-weight: normal;
+    letter-spacing: 1px;
+    color: $hnm-black-two;
+    border-bottom: 1px solid $hnm-black-two;
+    margin-bottom: 0.75rem;
+  }
+
+  .user__order--detail {
+    background: none;
+
+    .total-row {
+      .price-currency,
+      .price-amount {
+        font-family: $hnm-bold;
+        color: $hnm-black-two;
+      }
+    }
+  }
+}
+
+.order--print {
+  border-top: none;
+
+  .order-details-row {
+    background: $grey2-19;
+
+    .label {
+      color: $hnm-black-two;
+      font-family: $hnm-demibold;
+    }
+
+    .blend {
+      background-color: $grey4-30;
+
+      .delivery--method {
+        margin-top: 1.7rem;
+      }
+    }
+  }
+
+  .order-item-row {
+    .blend {
+      background: $grey9;
+
+      @include breakpoint($upto-tablet) {
+        vertical-align: top;
+      }
+    }
+
+    td:nth-child(3) {
+      padding-#{$left}: 0 !important;
+    }
+  }
+
+  .product--count {
+    background: $hnm-grey;
+    color: $hnm-black-two;
+    border-top: 1px solid $white-five;
+    border-bottom: 1px solid $white-five;
+
+    @include breakpoint($desktop) {
+      td {
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+      }
+    }
+  }
+
+  .sub-total-row .blend,
+  .delivery-charge-row .blend {
+    background: $white-four;
+  }
+
+  .total-row {
+    .warm--white {
+      background-color: $whisper-light;
+    }
+
+    td:nth-child(3) {
+      div {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .right--align {
+    text-align: $right;
+    padding-#{$right}: 2.4rem !important;
+  }
+
+  .delivery-charge-row .right--align {
+    padding-#{$left}: 0 !important;
+  }
+}
+
+.delivery-details {
+  background-color: $white-smoke-light;
+  padding: 1.25rem 1rem;
+  padding-#{$left}: 3.5rem;
+  text-indent: -2.5rem;
+  vertical-align: middle;
+  margin-bottom: 3.4rem;
+  margin-top: 1.9rem;
+
+  .icon-ic_info {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-right: 1.06rem;
+    vertical-align: middle;
+  }
+
+  @include breakpoint($tablet) {
+    padding: 1.38rem;
+    padding-#{$left}: 3.5rem;
+  }
+}
+
+.dark--text {
+  color: $black;
+}
+
+.barcode--wrapper {
+  .inner--wrap {
+    display: inline-block;
+    vertical-align: middle;
+    width: 50%;
+
+    @include breakpoint($desktop) {
+      width: 78%;
+    }
+  }
+
+  p {
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 0.4rem;
+  }
+
+  .print--barcode {
+    display: inline-block;
+    vertical-align: middle;
+    width: 45%;
+    text-align: $right;
+
+    @include breakpoint($desktop) {
+      width: 20%;
+    }
+
+    .value {
+      @include arabic-letter-spacing;
+
+      color: $grey-ash;
+      top: -0.4375rem;
+      position: relative;
+      font-size: 12px;
+      letter-spacing: 0.1875rem;
+      right: 0.9em;
+    }
+  }
+}
+
+// Hide backtotop Button on print page.
+.order__print--wrap ~ #backtotop {
+  visibility: hidden;
+}
+
+body.path--confirmation.alias--confirmation-print {
+  @include breakpoint($only-tablet) {
+    margin-top: 0;
+  }
+}
+
+.user__order--detail {
+  .order-item-row {
+    td.above-mobile.blend {
+      @include breakpoint($only-tablet) {
+        width: 9rem;
+      }
+    }
+
+    .price-currency,
+    .price-amount {
+      color: $black;
+      font-weight: bold;
+
+      html[lang=ar] & {
+        font-weight: normal;
+        font-family: $alshaya-arabic-bold;
+      }
+    }
+  }
+
+  .price-currency {
+    margin-#{$right}: 1.5625rem;
+
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: 0.4375rem;
+    }
+  }
+}
+
+.alias--confirmation-print {
+  margin-top: 0;
+
+  .barcode--wrapper {
+    .inner--wrap {
+      @include breakpoint($mobile) {
+        width: 100%;
+      }
+
+      @include breakpoint($tablet) {
+        width: 69%;
+      }
+    }
+
+    .print--barcode {
+      @include breakpoint($mobile) {
+        width: 100%;
+      }
+
+      @include breakpoint($tablet) {
+        width: 30%;
+      }
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+        margin-top: 2rem;
+      }
+    }
+  }
+
+  .delivery-details {
+    @include breakpoint($upto-tablet) {
+      text-indent: -3.5rem;
+      padding-left: 4.5rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .user__order--detail {
+    @include breakpoint($upto-tablet) {
+      margin-bottom: 3.5rem;
+    }
+
+    .order-details-row {
+      .above-mobile.blend,
+      .desktop-only {
+        @include breakpoint($upto-tablet) {
+          display: none !important;
+        }
+      }
+
+      .mobile-only.delivery--method {
+        @include breakpoint($upto-tablet) {
+          margin-top: 1rem !important;
+        }
+      }
+    }
+
+    td {
+      @include breakpoint($only-mobile) {
+        width: 50%;
+        display: inline-block;
+      }
+    }
+
+    .empty--cell {
+      @include breakpoint($upto-tablet) {
+        display: none !important;
+      }
+    }
+  }
+
+  .sub-total-row,
+  .delivery-charge-row,
+  .total-row {
+    & td:first-child,
+    & td:nth-child(2) {
+      @include breakpoint($upto-tablet) {
+        display: none;
+      }
+    }
+
+    & td:nth-child(3) {
+      text-align: right;
+    }
+  }
+
+  .user__order--detail .total-row td:nth-child(3) {
+    padding-right: 1.3rem;
+  }
+}
+
+html[lang="ar"] {
+  .order__user--info {
+    @include breakpoint($tablet) {
+      width: 33%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 22%;
+    }
+  }
+
+  .user__order--detail .order-item-row .dark {
+    line-height: 1.4;
+  }
+}
+
+.user__order--detail .total-row {
+  @include breakpoint($only-mobile) {
+    position: relative;
+  }
+
+  .warm--white {
+    @include breakpoint($only-mobile) {
+      position: absolute;
+      #{$right}: 0;
+    }
+  }
+}

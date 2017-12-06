@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.field.paragraph.banner_full_width.field_banner
     - paragraphs.paragraphs_type.banner_full_width
-    - responsive_image.styles.1284x424
+    - responsive_image.styles.w1284
   module:
     - responsive_image
 id: paragraph.banner_full_width.default
@@ -16,7 +16,7 @@ content:
     weight: 0
     label: hidden
     settings:
-      responsive_image_style: 1284x424
+      responsive_image_style: w1284
       image_link: ''
     third_party_settings: {  }
     type: responsive_image

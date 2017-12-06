@@ -1,0 +1,112 @@
+.path--sitemap {
+  .page-standard {
+    max-width: 77.25rem;
+    width: 100%;
+    margin: auto;
+    padding-top: 1.5rem;
+
+    @include breakpoint($upto-desktop) {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+  }
+
+  .c-page-title {
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid $white;
+  }
+
+  .sitemap {
+    text-transform: lowercase;
+    margin-bottom: 3rem;
+  }
+
+  .level--1 {
+    margin-bottom: 1.25rem;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    @include breakpoint($only-mobile) {
+      border-bottom: 1px solid $white;
+    }
+
+    @include breakpoint($tablet) {
+      clear: both;
+      overflow: hidden;
+    }
+  }
+
+  .level--1__label {
+    font-family: $alshaya-bold;
+    margin-bottom: 0.5rem;
+    display: block;
+
+    @include breakpoint($desktop) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .level--2 {
+    margin-bottom: 0.75rem;
+
+    @include breakpoint($only-tablet) {
+      width: 33.33%;
+      float: $left;
+    }
+
+    @include breakpoint($tablet) {
+      padding-right: 0.5rem;
+
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 20%;
+      float: $left;
+    }
+  }
+
+  .level--2__label {
+    font-family: $alshaya-bold;
+    font-size: 0.8125rem;
+
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+    }
+  }
+
+  .level--3__label {
+    display: block;
+    font-size: 0.75rem;
+    line-height: 1.75;
+    color: $grey-ash;
+
+    @include breakpoint($desktop) {
+      line-height: 2.5;
+    }
+
+    &:hover {
+      color: $cerulean-two;
+      text-decoration: underline;
+    }
+  }
+
+  .level--1__meta {
+    @include breakpoint($tablet) {
+      width: 20%;
+      float: $left;
+    }
+  }
+
+  .level--1__children {
+    @include breakpoint($tablet) {
+      width: 75%;
+      float: $right;
+    }
+  }
+}

@@ -224,6 +224,8 @@ class CartSessionStorage implements CartStorageInterface {
         $cart = new Cart($cartObject);
       }
 
+      Cache::invalidateTags(['cart:' . $cart_id]);
+
       $this->addCart($cart);
 
       return $cart;

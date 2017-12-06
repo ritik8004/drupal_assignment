@@ -1,0 +1,35 @@
+.is-hidden {
+  @include u-visibility(none);
+}
+
+.upcase {
+  text-transform: uppercase;
+}
+
+.mobile-only-hide {
+  @include breakpoint($mobile) {
+    @include u-visibility(none);
+  }
+
+  @include breakpoint($tablet) {
+    @include u-visibility(block);
+  }
+}
+
+.mobile-only-show {
+  @include breakpoint($mobile) {
+    @include u-visibility(block);
+  }
+
+  @include breakpoint($tablet) {
+    @include u-visibility(none);
+  }
+}
+
+.pdp-modal-overlay {
+  overflow: hidden;
+}
+
+.show-content-loading-throbber {
+  opacity: 0;
+}

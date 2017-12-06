@@ -115,7 +115,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
 
       foreach ($media_data as &$data) {
-        if ($data['media_type'] == 'image') {
+        if (isset($data['media_type']) && $data['media_type'] == 'image') {
           if (empty($data['fid'])) {
             try {
               // Prepare the File object when we access it the first time.
@@ -205,7 +205,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // We loop through all the media items and return the first image.
     foreach ($media as $media_item) {
-      if ($media_item['media_type'] == 'image') {
+      if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
         return $media_item;
       }
     }
