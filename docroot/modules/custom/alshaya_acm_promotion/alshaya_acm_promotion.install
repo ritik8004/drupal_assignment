@@ -25,8 +25,8 @@ function alshaya_acm_promotion_update_8007() {
 
   // Add Translations.
   $strings = [
-    'Your order qualifies for free standard delivery.' => [
-      'ar' => 'طلبك مؤهل للتسليم القياسي مجانا',
+    'Your order qualifies for free delivery.' => [
+      'ar' => 'طلبيتك جاهزة للتوصيل المجاني',
     ],
   ];
   alshaya_i18n_save_translations($strings);
