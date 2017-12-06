@@ -17,9 +17,6 @@ use Drupal\search_api\Entity\Index;
 function alshaya_search_update_8006() {
   $index = Index::load('acquia_search_index');
 
-  // Re-index all items.
-  $index->reindex();
-
   // Save index to reflect new created field.
   $index->save();
 }
