@@ -827,8 +827,8 @@ class AlshayaAddressBookManager {
    */
   public function getMagentoFieldMappings() {
     // Fields that can be used in area_parent: governate, city, emirates.
-    $mapping = \Drupal::config('alshaya_addressbook.settings')->get('mapping');
-
+    $mapping_key = 'mapping_' . strtolower(_alshaya_custom_get_site_level_country_code());
+    $mapping = \Drupal::config('alshaya_addressbook.settings')->get($mapping_key);
     return $mapping;
   }
 
