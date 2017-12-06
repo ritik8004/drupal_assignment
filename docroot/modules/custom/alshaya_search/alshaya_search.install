@@ -17,6 +17,10 @@ use Drupal\search_api\Entity\Index;
 function alshaya_search_update_8006() {
   $index = Index::load('acquia_search_index');
 
+  // Update index options to index only on cron and 1000 per batch.
+  $index->setOption('index_directly', FALSE);
+  $index->setOption('cron_limit', 1000);
+
   // Save index to reflect new created field.
   $index->save();
 }
