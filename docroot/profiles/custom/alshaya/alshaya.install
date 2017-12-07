@@ -39,9 +39,15 @@ function alshaya_install() {
     ->set('country.default', Settings::get('country_code'))
     ->save();
 
+  // Try to get timezone from country code.
+  $timezones = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, Settings::get('country_code'));
+
+  // Use Kuwait by default, use first one from the result if found.
+  $timezone = empty($timezones) ? 'Asia/Kuwait' : reset($timezones);
+
   // Set default timezone from settings.
   \Drupal::configFactory()->getEditable('system.date')
-    ->set('timezone.default', Settings::get('timezone'))
+    ->set('timezone.default', $timezone)
     ->save();
 
   // Remove all roles created by Lightning.
