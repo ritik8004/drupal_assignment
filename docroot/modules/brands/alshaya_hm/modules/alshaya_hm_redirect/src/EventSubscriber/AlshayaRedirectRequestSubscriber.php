@@ -95,6 +95,8 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
   public function resolveLangcode(Request $request) {
     $hmcorp_locale_cookie = $request->cookies->get(self::HMCORP_COOKIE_NAME);
 
+    // hmcorp_locale cookie would be of format <langcode>_<country code> &
+    // <langcode>_KW KW for Kuwait.
     if (!empty($hmcorp_locale_cookie)) {
       return str_replace('_KW', '', $hmcorp_locale_cookie);
     }
