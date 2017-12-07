@@ -58,7 +58,7 @@
 
   .c-products__item__label {
     font-size: 0.8125rem;
-    font-family: $alshaya-thin;
+    font-family: $hnm-regular;
     color: $grey-ash;
     font-weight: normal;
     max-width: 10rem;
@@ -221,7 +221,7 @@
 
 .subtitle.crossell-title {
   font-size: 1rem;
-  font-family: $alshaya-bold;
+  font-family: $hnm-bold;
   font-weight: normal;
   text-align: $left;
   margin-bottom: 0.3rem;
@@ -274,9 +274,10 @@
       font-size: 0.875rem;
       text-transform: lowercase;
       color: $white-five;
-      background: $pumpkin-orange;
+      background: $hnm-black-two;
       border: none;
       padding: 0.656rem;
+      margin-top: 1rem;
 
       @include breakpoint($only-mobile) {
         max-width: 100%;
@@ -308,10 +309,27 @@
 
         @include breakpoint($only-mobile) {
           padding-bottom: 1rem;
+
+          &::after {
+            display: none;
+          }
         }
 
         .ajax-progress {
           display: none;
+        }
+
+        &.form-item-configurables-size {
+          @include breakpoint($only-mobile) {
+            width: 48%;
+            margin-top: 1rem;
+          }
+        }
+
+        &.form-item-configurables-color {
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
         }
       }
 
@@ -352,6 +370,21 @@
         @include select-style(4.375rem);
 
         direction: $dir;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    [class^="acq-sku-configurable-"] {
+      .js-form-submit {
+        width: 48%;
+        position: absolute;
+        #{$right}: 0;
+        bottom: 0.3125rem;
+      }
+
+      label {
+        display: none;
       }
     }
   }
