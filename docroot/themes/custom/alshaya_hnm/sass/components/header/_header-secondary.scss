@@ -262,12 +262,14 @@
 
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
+        color: $hnm-black-two;
+        font-weight: bold;
+        font-size: 1.313rem;
+        cursor: pointer;
+        pointer-events: none;
         position: absolute;
-        color: $marine-blue;
+        margin-top: -0.25rem;
         #{$right}: 0;
-        font-size: 1.25rem;
-        top: 50%;
-        transform: translateY(-50%);
       }
     }
   }
