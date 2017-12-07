@@ -5,9 +5,20 @@
  * Install, uninstall and update for alshaya_hm.
  */
 
-use Drupal\Core\Config\FileStorage;
-use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable alshaya_hm_redirect module.
+ */
+function alshaya_hm_update_8001() {
+  $enable_modules = [
+    'alshaya_hm_redirect',
+  ];
+
+  \Drupal::service('module_installer')->install($enable_modules, TRUE);
+}
 
 /**
  * Implements hook_install().
