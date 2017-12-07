@@ -272,7 +272,7 @@
       width: 100%;
       clear: both;
       font-size: 0.875rem;
-      text-transform: lowercase;
+      text-transform: uppercase;
       color: $white-five;
       background: $hnm-black-two;
       border: none;
@@ -310,8 +310,16 @@
         @include breakpoint($only-mobile) {
           padding-bottom: 1rem;
 
-          &::after {
-            display: none;
+          &.form-item-configurables-article-castor-id {
+            &::after {
+              display: none;
+            }
+
+            .select-buttons {
+              a {
+                margin-#{$left}: 0.1875rem
+              }
+            }
           }
         }
 
