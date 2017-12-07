@@ -144,3 +144,32 @@ function _alshaya_department_page_get_node_title($node) {
 
   return $department_term[$node->id()];
 }
+
+/**
+ * Check for given term, department page exists.
+ *
+ * Check for given term, department page exists. If department page exists
+ * then return that department page node or return false.
+ *
+ * @param int $tid
+ *   The term id.
+ *
+ * @return \Drupal\node\Entity\Node|bool
+ *   Department page node object of false.
+ */
+function alshaya_department_page_is_department_page($tid) {
+  // Get all department pages.
+  $department_pages = alshaya_department_page_get_pages();
+  // If there is department page available for given term.
+  if (isset($department_pages[$tid])) {
+    $nid = $department_pages[$tid];
+    /** @var \Drupal\node\Entity\Node $node */
+    if ($node = Node::load($nid)) {
+      if ($node->isPublished()) {
+        return $node;
+      }
+    }
+  }
+
+  return FALSE;
+}

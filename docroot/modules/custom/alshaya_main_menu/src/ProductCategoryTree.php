@@ -105,9 +105,6 @@ class ProductCategoryTree {
       return [];
     }
 
-    // Get all the department pages.
-    $alshaya_department_pages = alshaya_department_page_get_pages();
-
     foreach ($terms as $term) {
       // We don't show the term in menu if translation not available.
       if (!$term->hasTranslation($langcode)) {
@@ -137,20 +134,6 @@ class ProductCategoryTree {
       ];
 
       $data[$term->id()]['highlight_image'] = $this->getHighlightImage($term);
-
-      // Check if there is a department page available for this term.
-      if (isset($alshaya_department_pages[$term->id()])) {
-        $nid = $alshaya_department_pages[$term->id()];
-
-        /** @var \Drupal\node\Entity\Node $node */
-        $node = $this->nodeStorage->load($nid);
-
-        // Use the path of node instead of term path if node is published.
-        if ($node->isPublished()) {
-          $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
-        }
-      }
-
       $data[$term->id()]['child'] = $this->getCategoryTree($langcode, $term->id());
     }
 
