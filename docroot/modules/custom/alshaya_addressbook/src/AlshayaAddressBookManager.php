@@ -797,6 +797,11 @@ class AlshayaAddressBookManager {
 
     try {
       $magento_form = $this->alshayaApiWrapper->getCustomerAddressForm();
+
+      if (empty($magento_form)) {
+        return [];
+      }
+
       $magento_form = array_filter($magento_form, function ($form_item) {
         return (bool) $form_item['visible'];
       });
