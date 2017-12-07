@@ -465,7 +465,7 @@
 .webform-submission-alshaya-contact-form,
 #selected-store-wrapper {
   .mobile-number-field {
-    max-width: 11.625rem;
+    max-width: 24.75rem;
     margin-bottom: 1.5rem;
 
     label {
@@ -524,6 +524,7 @@
 
       > .form-type-select {
         min-width: 2.688rem;
+        width: auto;
       }
 
       .prefix {
