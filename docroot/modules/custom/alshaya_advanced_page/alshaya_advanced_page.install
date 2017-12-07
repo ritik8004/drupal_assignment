@@ -5,9 +5,94 @@
  * Contains install, update, uninstall hooks for alshaya_advanced_page module.
  */
 
+use Drupal\field\Entity\FieldConfig;
+use Drupal\paragraphs\Entity\Paragraph;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enabling translation on paragraph referenced fields.
+ */
+function alshaya_advanced_page_update_8002() {
+  $fields = [
+    'field_banner',
+    'field_delivery_banner',
+    'field_promo_banner_full_width',
+    'field_promo_blocks',
+    'field_related_info',
+    'field_slider',
+  ];
+
+  foreach ($fields as $field) {
+    $field = FieldConfig::loadByName('node', 'advanced_page', $field);
+
+    if ($field) {
+      $field->setTranslatable(TRUE);
+      $field->save();
+    }
+  }
+
+  $pages = \Drupal::entityTypeManager()
+    ->getListBuilder('node')
+    ->getStorage()
+    ->loadByProperties([
+      'type' => 'advanced_page',
+    ]);
+
+  // Save all pages again.
+  foreach ($pages as $page) {
+    /** @var \Drupal\node\Entity\Node $page */
+    if ($page->hasTranslation('ar')) {
+      /** @var \Drupal\node\Entity\Node $node */
+      $node = $page->getTranslation('ar');
+
+      foreach ($fields as $field) {
+        $value = $page->get($field)->getValue();
+        if ($value) {
+          $node->get($field)->setValue(_alshaya_paragraphs_prepare_migrated_data($value));
+        }
+      }
+
+      $node->save();
+    }
+  }
+}
+
 /**
  * Implements hook_update_N().
  */
 function alshaya_advanced_page_update_8001() {
   alshaya_config_install_configs(['field.field.node.advanced_page.field_promo_blocks'], 'alshaya_advanced_page');
+}
+
+/**
+ * Helper function to prepare migrated value after enable translation.
+ *
+ * @param mixed $values
+ *   Current values array.
+ *
+ * @return array
+ *   Migrated values array.
+ */
+function _alshaya_paragraphs_prepare_migrated_data($values) {
+  $new_values = [];
+
+  foreach ($values as &$paragraph_value) {
+    $paragraph = Paragraph::load($paragraph_value['target_id']);
+
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    if ($paragraph->hasTranslation('ar')) {
+      $paragraph = $paragraph->getTranslation('ar');
+    }
+
+    $new_paragraph = $paragraph->createDuplicate();
+    $new_paragraph->save();
+
+    $new_values[] = [
+      'target_id' => $new_paragraph->id(),
+      'target_revision_id' => $new_paragraph->getRevisionId(),
+    ];
+  }
+
+  return $new_values;
 }

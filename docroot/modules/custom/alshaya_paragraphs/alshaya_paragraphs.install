@@ -13,6 +13,42 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Enabling translation on paragraph referenced fields.
+ */
+function alshaya_paragraphs_update_8104() {
+  $fields = [
+    'field.field.paragraph.promo_block_button.field_button_link',
+    'field.field.paragraph.video.field_video',
+    'field.field.paragraph.offers_bordered.field_heading',
+    'field.field.paragraph.promo_block_button.field_promo_text_2',
+    'field.field.paragraph.promo_block_button.field_promo_text_1',
+    'field.field.paragraph.promo_block_button.field_promo_theme',
+    'field.field.paragraph.promo_block_button.field_button_position',
+  ];
+
+  foreach ($fields as $field) {
+    $info = explode('.', $field);
+    try {
+      $field = FieldConfig::loadByName($info[2], $info[3], $info[4]);
+
+      if ($field) {
+        $field->setTranslatable(TRUE);
+        $field->save();
+      }
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_paragraphs')->error('Failed updating field setting for @field - $message', [
+        '@field' => $field,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+  }
+
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove target blank for banner links.
  */
 function alshaya_paragraphs_update_8103() {
