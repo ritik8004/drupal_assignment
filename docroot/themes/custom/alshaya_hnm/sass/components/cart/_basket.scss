@@ -750,20 +750,24 @@
   }
 
   & > h3 {
-    color: $marine-blue;
+    @include arabic-letter-spacing;
+
+    color: $hnm-black-two;
     margin-bottom: 0.3rem;
     padding-bottom: 0.56rem;
-    font-family: $alshaya-bold;
+    font-family: $hnm-bold;
     font-size: 1rem;
-    margin-#{$left}: 0.875rem;
     font-weight: normal;
-    text-transform: lowercase;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 1px;
 
     @include breakpoint($tablet) {
       font-size: 0.875rem;
       margin-bottom: 0;
       padding-bottom: 0;
       margin-#{$left}: 2.75rem;
+      text-align: $left;
     }
 
     @include breakpoint($desktop) {
@@ -831,7 +835,7 @@
     }
 
     .owl-dots .owl-dot {
-      color: $marine-blue-two;
+      color: $hnm-black-two;
     }
   }
 
