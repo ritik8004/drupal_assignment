@@ -22,7 +22,7 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
   /**
    * Constant to identify redirected urls from HM entrance gate.
    */
-  const HM_REDIRECT_URL_IDENTIFIER = '/forwarded/kw';
+  const HM_REDIRECT_URL_IDENTIFIER = '/^\/forwarded\/(\w*)(\/(\w|\W)*)*$/';
 
   /**
    * Language Manager service.
@@ -70,12 +70,13 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
     $path = $event->getRequest()->getPathInfo();
 
     // Check if the url starts with the identifier.
-    if (strpos($path, self::HM_REDIRECT_URL_IDENTIFIER) === 0) {
+    preg_match(self::HM_REDIRECT_URL_IDENTIFIER, $path, $matches);
+    if (!empty($matches)) {
       $langcode = $this->resolveLangcode($event->getRequest());
 
       // Redirect response will by default be not cached server-side. Still
       // adding a no-cache header to avoid http level caching.
-      $response = new RedirectResponse('/' . $langcode . str_replace(self::HM_REDIRECT_URL_IDENTIFIER, '', $path), 302, ['cache-control' => 'no-cache']);
+      $response = new RedirectResponse('/' . $langcode . preg_replace(self::HM_REDIRECT_URL_IDENTIFIER, '${2}', $path), 302, ['cache-control' => 'no-cache']);
 
       // Avoid page cache for Anonymous requests.
       $this->killSwitch->trigger();
@@ -95,12 +96,16 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
   public function resolveLangcode(Request $request) {
     $hmcorp_locale_cookie = $request->cookies->get(self::HMCORP_COOKIE_NAME);
 
-    // hmcorp_locale cookie would be of format <langcode>_<country code> &
-    // <langcode>_KW KW for Kuwait.
+    // hmcorp_locale cookie would be of format <langcode>_<country code>.
     if (!empty($hmcorp_locale_cookie)) {
-      return str_replace('_KW', '', $hmcorp_locale_cookie);
+      $hmcorp_locale_cookie_parts = explode('_', $hmcorp_locale_cookie);
+      if (isset($hmcorp_locale_cookie_parts[0]) &&
+        (in_array($hmcorp_locale_cookie_parts[0], array_keys($this->languageManager->getLanguages())))) {
+        return $hmcorp_locale_cookie_parts[0];
+      }
     }
-    elseif ($request->cookies->get('alshaya_lang')) {
+
+    if ($request->cookies->get('alshaya_lang')) {
       return $request->cookies->get('alshaya_lang');
     }
     else {

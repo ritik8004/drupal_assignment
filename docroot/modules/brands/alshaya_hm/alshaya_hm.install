@@ -5,8 +5,6 @@
  * Install, uninstall and update for alshaya_hm.
  */
 
-use Drupal\Core\Config\FileStorage;
-use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Site\Settings;
 
 /**
