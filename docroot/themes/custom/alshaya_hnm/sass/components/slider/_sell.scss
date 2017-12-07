@@ -317,7 +317,7 @@
 
             .select-buttons {
               a {
-                margin-#{$left}: 0.1875rem
+                margin-#{$left}: 0.1875rem;
               }
             }
           }
@@ -329,8 +329,14 @@
 
         &.form-item-configurables-size {
           @include breakpoint($only-mobile) {
-            width: 48%;
+            width: 40%;
             margin-top: 1rem;
+
+            html[lang=ar] & {
+              &::after {
+                #{left}: -0.4375rem;
+              }
+            }
           }
         }
 
@@ -385,7 +391,7 @@
   @include breakpoint($only-mobile) {
     [class^="acq-sku-configurable-"] {
       .js-form-submit {
-        width: 48%;
+        width: 54%;
         position: absolute;
         #{$right}: 0;
         bottom: 0.3125rem;
