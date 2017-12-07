@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bbe86b2a2f8697f6e6efba36c20b8f38",
+    "content-hash": "98ae6b4446640590856a5568307a513c",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -6434,6 +6434,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

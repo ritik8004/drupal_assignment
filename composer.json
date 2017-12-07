@@ -190,6 +190,9 @@
             },
             "drupal/recaptcha" : {
                 "modal support": "https://www.drupal.org/files/issues/2493183-recaptcha-use-behaviors-76.patch"
+            },
+            "drupal/paragraphs" : {
+                "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
             }
         },
         "installer-paths": {
