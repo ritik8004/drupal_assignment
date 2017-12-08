@@ -93,7 +93,7 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
 
       // Redirect response will by default be not cached server-side. Still
       // adding a no-cache header to avoid http level caching.
-      $response = new RedirectResponse(Url::fromUserInput('/' . preg_replace(self::HM_REDIRECT_URL_IDENTIFIER, '${2}', $path), $url_options)->toString(), 302, ['cache-control' => 'must-revalidate, no-cache, no-store, private']);
+      $response = new RedirectResponse(Url::fromUserInput(preg_replace(self::HM_REDIRECT_URL_IDENTIFIER, '${2}', $path), $url_options)->toString(), 302, ['cache-control' => 'must-revalidate, no-cache, no-store, private']);
 
       // Avoid page cache for Anonymous requests.
       $this->killSwitch->trigger();
