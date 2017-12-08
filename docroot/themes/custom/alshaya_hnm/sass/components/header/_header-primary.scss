@@ -211,13 +211,20 @@ header {
       border-bottom: 1px solid $white-smoke-border;
       background-image: none;
       letter-spacing: 1px;
-      color: $grey6;
+      color: $hnm-black-two;
       padding-#{$left}: 0.4375rem;
 
       @include breakpoint($only-mobile) {
-        padding: 0.625rem;
-        border-bottom: none;
-        font-size: 0.6875rem;
+        padding: 0.4375rem;
+        vertical-align: bottom;
+        border: none;
+        border: 0;
+        background-image: none;
+        font-family: $hnm-regular;
+        color: $hnm-black-two;
+        font-size: 0.875rem;
+        line-height: 1.36;
+        letter-spacing: 0.5px;
       }
 
       @include breakpoint($tablet) {
@@ -439,9 +446,6 @@ header {
   }
 
   input {
-    color: $grey-ash;
-    font-family: $hnm-regular;
-
     @include breakpoint($only-mobile) {
       font-size: 0.875rem;
     }

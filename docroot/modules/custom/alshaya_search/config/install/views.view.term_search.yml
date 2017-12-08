@@ -22,7 +22,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'access content'
+          perm: 'view all revisions'
       cache:
         type: tag
         options: {  }

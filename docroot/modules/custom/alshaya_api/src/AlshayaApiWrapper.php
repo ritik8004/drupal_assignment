@@ -127,15 +127,17 @@ class AlshayaApiWrapper {
       $data['username'] = $this->config->get('username');
       $data['password'] = $this->config->get('password');
 
-      $token = $this->invokeApi($endpoint, $data, 'POST', FALSE);
+      $response = $this->invokeApi($endpoint, $data, 'POST', FALSE);
+      $token = trim($response, '"');
 
-      $response = json_decode($token, TRUE);
-      if (is_array($response) && isset($response['message'])) {
+      // We always get token wrapped in double quotes.
+      // For any other case we get either an array of full html.
+      if (strlen($token) !== strlen($response) - 2) {
         $this->logger->critical('Unable to get token from magento');
         throw new \Exception('Unable to get token from magento');
       }
 
-      $this->token = str_replace('"', '', $token);
+      $this->token = $token;
 
       // Calculate the timestamp when we want the cache to expire.
       $expire = \Drupal::time()->getRequestTime() + $this->config->get('token_cache_time');
@@ -182,7 +184,7 @@ class AlshayaApiWrapper {
         $token = $this->getToken();
       }
       catch (\Exception $e) {
-        return [];
+        return NULL;
       }
 
       $header[] = 'Authorization: Bearer ' . $token;
@@ -262,30 +264,43 @@ class AlshayaApiWrapper {
     $this->updateStoreContext($langcode);
 
     $endpoint = 'storeLocator/search?searchCriteria=';
-
     $response = $this->invokeApi($endpoint, [], 'GET');
 
-    $stores = json_decode($response, TRUE);
+    $stores = NULL;
+
+    if ($response && is_string($response)) {
+      $stores = json_decode($response, TRUE);
+    }
 
     return $stores;
   }
 
   /**
    * Function to sync all stores.
+   *
+   * @return bool
+   *   Flag to specify if sync was successful or not.
    */
   public function syncStores() {
+    $stored_synced = FALSE;
+
     // Do API call to get stores for each language.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       // Get all stores for particular language.
       $stores = $this->getStores($langcode);
 
-      if (!empty($stores['items'])) {
+      if ($stores && is_array($stores) && !empty($stores['items'])) {
         // Loop through all the stores and add/edit/translate the store node.
         foreach ($stores['items'] as $store) {
           $this->storeUtility->updateStore($store, $langcode);
+
+          // If we update even single store, we return TRUE.
+          $stored_synced = TRUE;
         }
       }
     }
+
+    return $stored_synced;
   }
 
   /**
@@ -362,7 +377,13 @@ class AlshayaApiWrapper {
 
     $endpoint = 'click-and-collect/stores/product/' . $sku . '/lat/' . $lat . '/lon/' . $lon;
     $response = $this->invokeApi($endpoint, [], 'GET');
-    $stores = json_decode($response, TRUE);
+
+    $stores = [];
+
+    if ($response && is_string($response)) {
+      $stores = json_decode($response, TRUE);
+    }
+
     return $stores;
   }
 
@@ -387,9 +408,11 @@ class AlshayaApiWrapper {
 
     $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
     $response = $this->invokeApi($endpoint, [], 'GET');
-    $stores = json_decode($response, TRUE);
-    if (is_array($stores) && !empty($stores['message'])) {
-      return [];
+
+    $stores = [];
+
+    if ($response && is_string($response)) {
+      $stores = json_decode($response, TRUE);
     }
 
     return $stores;
@@ -409,10 +432,15 @@ class AlshayaApiWrapper {
   public function getLocations($filterField = 'attribute_id', $filterValue = 'governate') {
     $endpoint = 'deliverymatrix/address-locations/search?searchCriteria[filter_groups][0][filters][0][field]=' . $filterField . '&searchCriteria[filter_groups][0][filters][0][value]=' . $filterValue . '&searchCriteria[filter_groups][0][filters][0][condition_type]=eq';
     $response = $this->invokeApi($endpoint, [], 'GET', FALSE);
-    $locations = json_decode($response, TRUE);
-    if (is_array($locations) && !empty($locations)) {
-      return $locations;
+
+    if ($response && is_string($response)) {
+      $locations = json_decode($response, TRUE);
+
+      if ($locations && is_array($locations)) {
+        return $locations;
+      }
     }
+
     return [];
   }
 
@@ -425,10 +453,15 @@ class AlshayaApiWrapper {
   public function getCustomerAddressForm() {
     $endpoint = 'attributeMetadata/customerAddress';
     $response = $this->invokeApi($endpoint, [], 'GET', FALSE);
-    $form = json_decode($response, TRUE);
-    if (is_array($form) && !empty($form)) {
-      return $form;
+
+    if ($response && is_string($response)) {
+      $form = json_decode($response, TRUE);
+
+      if ($form && is_array($form)) {
+        return $form;
+      }
     }
+
     return [];
   }
 
