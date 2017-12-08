@@ -1517,10 +1517,6 @@ header {
 
   @include breakpoint($only-mobile) {
     max-width: 10rem;
-
-    html[lang=ar] & {
-      max-width: 6.5625rem;
-    }
   }
 
   a {
