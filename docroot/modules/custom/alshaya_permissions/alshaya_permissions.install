@@ -66,3 +66,23 @@ function alshaya_permissions_update_8005() {
   // Update role permissions from the config.
   _alshaya_permissions_update_role_from_config(['site_builder', 'webmaster']);
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enabling 'role_delegation' module.
+ */
+function alshaya_permissions_update_8006() {
+  $module_handler = \Drupal::moduleHandler();
+  // If module already not installed.
+  if (!$module_handler->moduleExists('role_delegation')) {
+    /* @var \Drupal\Core\Extension\ModuleInstaller $module_installer */
+    $module_installer = \Drupal::service('module_installer');
+    // Install the module.
+    $module_installer->install(['role_delegation']);
+  }
+
+  // Adding permission to 'Site builder' role.
+  alshaya_config_install_configs(['user.role.site_builder'], 'alshaya_permissions');
+
+}

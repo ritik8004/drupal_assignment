@@ -10,6 +10,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for - Tax.
+ */
+function alshaya_master_update_8006() {
+  $strings = [
+    'Tax' => [
+      'ar' => 'الضريبة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Override rich text config to allow div & classes and target in <a>.
  */
 function alshaya_master_update_8005() {
@@ -1232,6 +1247,9 @@ function alshaya_master_install() {
     ],
     'Please enter your selection' => [
       'ar' => 'يرجى تحديد الاختيار',
+    ],
+    'Tax' => [
+      'ar' => 'الضريبة',
     ],
   ];
 

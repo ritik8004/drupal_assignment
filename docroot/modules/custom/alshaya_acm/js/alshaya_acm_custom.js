@@ -11,10 +11,19 @@
       });
 
       // Hide apply coupon button on page load.
-      var applyCoupon = $('#apply_coupon');
-
       $('.customer-cart-form', context).once('bind-events').each(function () {
-        $('#apply_coupon', $(this)).on('click', function () {
+        // Activate the accordion in case we have a coupon code applied to the
+        // cart.
+        if (($('input.cancel-promocode').length > 0) &&
+          ($('input.cancel-promocode').val() !== '')) {
+          $('.coupon-code-wrapper.ui-accordion').accordion( "option", "active", 0 );
+        }
+        $('#coupon-button', $(this)).on('click', function (e) {
+          if ($(this).hasClass('remove')) {
+            e.preventDefault();
+            e.stopPropagation();
+            $('input.cancel-promocode').val('');
+          }
           $('[data-drupal-selector="edit-update"]').trigger('click');
         });
 
@@ -25,7 +34,7 @@
         });
       });
 
-      $('#apply_coupon').once('load').each(function () {
+      $('#coupon-button.add').once('load').each(function () {
         // Hide the apply button on page load or after AJAX call replacing form.
         $(this).hide();
 
@@ -34,15 +43,15 @@
       });
 
       $('[data-drupal-selector="edit-coupon"]').bind('bind-events').on('keyup', function () {
-        var applied_coupon = $('#apply_coupon').data('applied-coupon');
+        var applied_coupon = $('#coupon-button').data('applied-coupon');
         var new_value = $(this).val().trim();
 
         // If new value is not equal to stored value, we show the apply button.
         if (new_value !== applied_coupon) {
-          $('#apply_coupon').slideDown();
+          $('#coupon-button').slideDown();
         }
         else {
-          $('#apply_coupon').slideUp();
+          $('#coupon-button').slideUp();
         }
       });
     }
@@ -62,6 +71,6 @@
     var removedItem = $('#edit-cart [gtm-product-sku="' + sku + '"]');
     removedItem.trigger('cart-item-removed');
     window.location.reload();
-  }
+  };
 
 })(jQuery);
