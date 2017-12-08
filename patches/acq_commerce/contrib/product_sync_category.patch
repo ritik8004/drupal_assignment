@@ -119,7 +119,7 @@ index eede00561..22965e926 100644
        // Using very small page size to avoid any issues for skus which already
        // had corrupt data.
 -      \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, 5);
-+      \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, '', 5);
++      \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, NULL, 5);
      }
    }
  
