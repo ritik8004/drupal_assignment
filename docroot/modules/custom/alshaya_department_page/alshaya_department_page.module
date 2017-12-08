@@ -181,9 +181,7 @@ function _alshaya_department_page_language_switcher_block_prerender(array $build
   $route_match = \Drupal::routeMatch();
   // If department page.
   // @see AlshayaDepartmentPageRouteProvider::getRoutesByPath().
-  if ($route_match->getRouteObject()->hasOption('_department_page_node')) {
-    // Get department page term.
-    $department_page_term = $route_match->getRouteObject()->getOption('_department_page_term');
+  if ($department_page_term = $route_match->getRouteObject()->getOption('_department_page_term')) {
     if (is_numeric($department_page_term)) {
       $url_object = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $department_page_term]);
       foreach ($build['content']['#links'] as $langcode => $url) {
