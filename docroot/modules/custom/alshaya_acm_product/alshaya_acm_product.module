@@ -1050,7 +1050,22 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $build = [];
     $sku = $product_tree['parent'];
 
-    alshaya_acm_product_get_gallery($build, $sku);
+    // Pull out & update gallery image based on the selected color & sizes one
+    // by one.
+    foreach ($tree_pointer as $node) {
+      if ($node instanceof SKU) {
+        alshaya_acm_product_get_gallery($build, $node);
+        if (!empty($build['gallery']['product_zoom'])) {
+          break;
+        }
+      }
+    }
+
+    // If no image found on simple SKUs, use
+    if (empty($build['gallery']['product_zoom'])) {
+      alshaya_acm_product_get_gallery($build, $sku);
+    }
+
     $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
 
     $response = new AjaxResponse();
