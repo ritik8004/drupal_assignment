@@ -200,24 +200,20 @@ header {
     input[type="text"] {
       @include arabic-letter-spacing;
 
-      font-family: $hnm-regular;
       padding: 0.4375rem;
-      padding-#{$left}: 0;
-      padding-bottom: 0;
       vertical-align: bottom;
-      text-transform: lowercase;
       max-width: 17.5rem;
       border: none;
-      border-bottom: 1px solid $white-smoke-border;
+      border: 0;
       background-image: none;
-      letter-spacing: 1px;
-      color: $grey6;
-      padding-#{$left}: 0.4375rem;
+      font-family: $hnm-regular;
+      color: $hnm-black-two;
+      font-size: 0.875rem;
+      line-height: 1.36;
+      letter-spacing: 0.5px;
 
       @include breakpoint($only-mobile) {
-        padding: 0.625rem;
         border-bottom: none;
-        font-size: 0.6875rem;
       }
 
       @include breakpoint($tablet) {
@@ -439,8 +435,8 @@ header {
   }
 
   input {
-    color: $grey-ash;
-    font-family: $hnm-regular;
+    //color: $grey-ash;
+    //font-family: $hnm-regular;
 
     @include breakpoint($only-mobile) {
       font-size: 0.875rem;
