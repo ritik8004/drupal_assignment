@@ -28,6 +28,7 @@ class AlshayaDepartmentPageRouter extends Router {
             // from the term page.
             // @see AlshayaDepartmentPageEventSubscriber::onRequest().
             $route->setOption('_is_department_page', TRUE);
+            $route->setOption('_department_page_term', $matches['term']);
           }
         }
       }

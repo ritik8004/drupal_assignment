@@ -7,6 +7,8 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Url;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\node\Entity\Node;
 
 /**
@@ -143,6 +145,44 @@ function _alshaya_department_page_get_node_title($node) {
   $department_term[$node->id()] = $term->label();
 
   return $department_term[$node->id()];
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function alshaya_department_page_block_view_alter(array &$build, BlockPluginInterface $block) {
+  // If language switcher block.
+  if ($block->getPluginId() == 'language_block:language_interface') {
+    // Register as pre-render callback for language switcher block.
+    $build['#pre_render'][] = '_alshaya_department_page_language_switcher_block_prerender';
+  }
+}
+
+/**
+ * Pre-render for the language switcher block to change link urls.
+ *
+ * @param array $build
+ *   Render array.
+ *
+ * @return array
+ *   Render array.
+ */
+function _alshaya_department_page_language_switcher_block_prerender(array $build) {
+  $route_match = \Drupal::routeMatch();
+  // If department page.
+  // @see AlshayaDepartmentPageRouter::matchCollection().
+  if ($route_match->getRouteObject()->hasOption('_is_department_page')) {
+    // Get department page term.
+    $department_page_term = $route_match->getRouteObject()->getOption('_department_page_term');
+    if (is_numeric($department_page_term)) {
+      $url_object = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $department_page_term]);
+      foreach ($build['content']['#links'] as $langcode => $url) {
+        $build['content']['#links'][$langcode]['url'] = $url_object;
+      }
+    }
+  }
+
+  return $build;
 }
 
 /**
