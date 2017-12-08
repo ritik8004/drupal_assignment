@@ -602,12 +602,9 @@ header {
     }
 
     .store {
-      &:hover {
-        background-color: $marine-blue-two;
-        color: $white-five;
-
-        @include icon(mappin) {
-          color: $white-five;
+      &.is-active {
+        &::before {
+          color: $hnm-red;
         }
       }
     }
