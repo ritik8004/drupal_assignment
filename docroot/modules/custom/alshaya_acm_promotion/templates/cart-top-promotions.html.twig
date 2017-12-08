@@ -1,3 +1,9 @@
+{% if free_shipping %}
+  <div class="free-shipping-message-wrapper messages messages--status">
+    {{ free_shipping }}
+  </div>
+{% endif %}
+
 {% if promotions is not empty %}
   <div class="cart-promotions-wrapper" id="block-basketpromotionmessage">
     {% for id, promotion in promotions %}

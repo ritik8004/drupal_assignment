@@ -128,7 +128,7 @@ class AlshayaApiWrapper {
       $data['password'] = $this->config->get('password');
 
       $response = $this->invokeApi($endpoint, $data, 'POST', FALSE);
-      $token = rtrim($response, '"');
+      $token = trim($response, '"');
 
       // We always get token wrapped in double quotes.
       // For any other case we get either an array of full html.

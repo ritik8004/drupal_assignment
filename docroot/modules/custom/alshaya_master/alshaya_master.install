@@ -1251,6 +1251,9 @@ function alshaya_master_install() {
     'Tax' => [
       'ar' => 'الضريبة',
     ],
+    'Your order qualifies for free delivery.' => [
+      'ar' => 'طلبيتك جاهزة للتوصيل المجاني',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
