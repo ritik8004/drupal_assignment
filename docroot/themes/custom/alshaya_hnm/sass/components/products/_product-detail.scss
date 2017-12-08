@@ -1781,6 +1781,7 @@ article[gtm-sku-type="simple"] {
   @include breakpoint($only-mobile) {
     article.stock-check-processed {
       min-height: 5rem;
+      position: relative;
     }
   }
 
