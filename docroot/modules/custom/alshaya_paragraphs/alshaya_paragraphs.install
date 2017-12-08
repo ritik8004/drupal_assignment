@@ -29,11 +29,10 @@ function alshaya_paragraphs_update_8104() {
   foreach ($fields as $field) {
     $info = explode('.', $field);
     try {
-      $field = FieldConfig::loadByName($info[2], $info[3], $info[4]);
+      $field_config = FieldConfig::loadByName($info[2], $info[3], $info[4]);
 
-      if ($field) {
-        $field->setTranslatable(TRUE);
-        $field->save();
+      if ($field_config) {
+        alshaya_config_install_configs([$field], 'alshaya_paragraphs');
       }
     }
     catch (\Exception $e) {
@@ -255,19 +254,5 @@ function alshaya_paragraphs_manage_fields() {
     'field.field.paragraph.1_row_1_col.field_promo_block',
   ];
 
-  foreach ($field_configs as $field_config) {
-    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/' . $field_config . '.yml'));
-
-    if ($field_obj = FieldConfig::loadByName($yml['entity_type'], $yml['bundle'], $yml['field_name'])) {
-      foreach ($yml as $key => $value) {
-        if ($field_obj->get($key)) {
-          $field_obj->set($key, $value);
-        }
-        $field_obj->save();
-      }
-    }
-    else {
-      FieldConfig::create($yml)->save();
-    }
-  }
+  alshaya_config_install_configs($field_configs, 'alshaya_paragraphs');
 }
