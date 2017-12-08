@@ -588,7 +588,7 @@ function alshaya_acm_product_get_brand_logo($sku) {
  * @param bool $deselect_leaf_options
  *   Clear the leaf attribute selected while selecting the parent config.
  */
-function alshaya_acm_product_update_config_options(array &$form_parts, FormStateInterface &$form_state, array &$configurables, $deselect_leaf_options = TRUE) {
+function alshaya_acm_product_update_config_options(array &$form_parts, FormStateInterface &$form_state, array $configurables, $deselect_leaf_options = TRUE) {
   $enabled_options = [];
   $product_tree = $form_state->get('tree');
   $leaf_attribute = end($product_tree['configurables'])['code'];
