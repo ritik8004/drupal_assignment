@@ -2,8 +2,10 @@
 
 namespace Drupal\alshaya_hm_redirect\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
+use Drupal\Core\Url;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,16 +41,28 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
   protected $killSwitch;
 
   /**
+   * Config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $config;
+
+  /**
    * Constructs a new AlshayaRedirectRequestSubscriber object.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language manager service.
    * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $killSwitch
    *   Page cache kill service.
+   * @param ConfigFactoryInterface $config
+   *   Config factory service.
    */
-  public function __construct(LanguageManagerInterface $languageManager, KillSwitch $killSwitch) {
+  public function __construct(LanguageManagerInterface $languageManager,
+                              KillSwitch $killSwitch,
+                              ConfigFactoryInterface $config) {
     $this->languageManager = $languageManager;
     $this->killSwitch = $killSwitch;
+    $this->config = $config->get('alshaya_i18n.settings');
   }
 
   /**
@@ -73,10 +87,13 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
     preg_match(self::HM_REDIRECT_URL_IDENTIFIER, $path, $matches);
     if (!empty($matches)) {
       $langcode = $this->resolveLangcode($event->getRequest());
+      $languages = $this->languageManager->getLanguages();
+
+      $url_options = ['language' => $languages[$langcode], 'absolute' => TRUE];
 
       // Redirect response will by default be not cached server-side. Still
       // adding a no-cache header to avoid http level caching.
-      $response = new RedirectResponse('/' . $langcode . preg_replace(self::HM_REDIRECT_URL_IDENTIFIER, '${2}', $path), 302, ['cache-control' => 'no-cache']);
+      $response = new RedirectResponse(Url::fromUserInput('/' . preg_replace(self::HM_REDIRECT_URL_IDENTIFIER, '${2}', $path), $url_options)->toString(), 302, ['cache-control' => 'must-revalidate, no-cache, no-store, private']);
 
       // Avoid page cache for Anonymous requests.
       $this->killSwitch->trigger();
@@ -107,6 +124,9 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
 
     if ($request->cookies->get('alshaya_lang')) {
       return $request->cookies->get('alshaya_lang');
+    }
+    elseif ($this->config->get('default_langcode')) {
+      return $this->config->get('default_langcode');
     }
     else {
       return $this->languageManager->getDefaultLanguage()->getId();
