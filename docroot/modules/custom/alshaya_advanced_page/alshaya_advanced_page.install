@@ -49,7 +49,7 @@ function alshaya_advanced_page_update_8002() {
       foreach ($fields as $field) {
         $value = $page->get($field)->getValue();
         if ($value) {
-          $node->get($field)->setValue(_alshaya_paragraphs_prepare_migrated_data($value));
+          $node->get($field)->setValue(_alshaya_advanced_page_prepare_migrated_data($value));
         }
       }
 
@@ -74,7 +74,7 @@ function alshaya_advanced_page_update_8001() {
  * @return array
  *   Migrated values array.
  */
-function _alshaya_paragraphs_prepare_migrated_data($values) {
+function _alshaya_advanced_page_prepare_migrated_data($values) {
   $new_values = [];
 
   foreach ($values as &$paragraph_value) {
