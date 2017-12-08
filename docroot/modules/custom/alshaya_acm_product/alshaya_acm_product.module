@@ -1061,7 +1061,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       }
     }
 
-    // If no image found on simple SKUs, use
+    // If no image found on simple SKUs, use parent SKUs image.
     if (empty($build['gallery']['product_zoom'])) {
       alshaya_acm_product_get_gallery($build, $sku);
     }
