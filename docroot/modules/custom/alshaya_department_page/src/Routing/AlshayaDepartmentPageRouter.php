@@ -14,23 +14,10 @@ class AlshayaDepartmentPageRouter extends Router {
    * {@inheritdoc}
    */
   protected function matchCollection($pathinfo, RouteCollection $routes) {
-    // Regex to check for the '/taxonomy/term/{tid}'.
-    $regex = "#^/taxonomy/term/(?P<term>\d+)$#su";
-    // If matches.
-    if (preg_match($regex, $pathinfo, $matches)) {
-      if (isset($matches['term']) && is_numeric($matches['term'])) {
-        // If department page exists.
-        if ($department_node = alshaya_department_page_is_department_page($matches['term'])) {
-          // If route object is there with node canonical.
-          if ($route = $routes->get('entity.node.canonical')) {
-            $pathinfo = '/node/' . $department_node->id();
-            // Setting this to identify that this is department page coming
-            // from the term page.
-            // @see AlshayaDepartmentPageEventSubscriber::onRequest().
-            $route->setOption('_is_department_page', TRUE);
-            $route->setOption('_department_page_term', $matches['term']);
-          }
-        }
+    if ($route = $routes->get('entity.node.canonical')) {
+      // @see AlshayaDepartmentPageRouteProvider::getRoutesByPath().
+      if ($department_node = $route->getOption('_department_page_node')) {
+        $pathinfo = '/node/' . $department_node;
       }
     }
 

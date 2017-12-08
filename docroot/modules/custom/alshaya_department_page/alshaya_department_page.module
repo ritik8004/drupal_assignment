@@ -180,8 +180,8 @@ function alshaya_department_page_block_view_alter(array &$build, BlockPluginInte
 function _alshaya_department_page_language_switcher_block_prerender(array $build) {
   $route_match = \Drupal::routeMatch();
   // If department page.
-  // @see AlshayaDepartmentPageRouter::matchCollection().
-  if ($route_match->getRouteObject()->hasOption('_is_department_page')) {
+  // @see AlshayaDepartmentPageRouteProvider::getRoutesByPath().
+  if ($route_match->getRouteObject()->hasOption('_department_page_node')) {
     // Get department page term.
     $department_page_term = $route_match->getRouteObject()->getOption('_department_page_term');
     if (is_numeric($department_page_term)) {

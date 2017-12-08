@@ -30,22 +30,19 @@ class AlshayaDepartmentPageEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Check for request.
+   * Check for term route and change context to department page node.
    *
    * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
    *   The event to process.
    */
   public function onRequest(GetResponseEvent $event) {
-    // Only for the node routes.
-    if ($this->routeMatch->getRouteName() == 'entity.node.canonical') {
-      $route = $this->routeMatch->getRouteObject();
+    $route = $this->routeMatch->getRouteObject();
+    if ($route && $route->hasOption('_department_page_node')) {
       // This is to stop/override the redirect.
       // @see RouteNormalizerRequestSubscriber::onKernelRequestRedirect().
-      // @see AlshayaDepartmentPageRouter::matchCollection().
-      if ($route && $route->hasOption('_is_department_page')) {
-        $request = $event->getRequest();
-        $request->attributes->set('_disable_route_normalizer', TRUE);
-      }
+      // @see AlshayaDepartmentPageRouteProvider::getRoutesByPath().
+      $request = $event->getRequest();
+      $request->attributes->set('_disable_route_normalizer', TRUE);
     }
   }
 
