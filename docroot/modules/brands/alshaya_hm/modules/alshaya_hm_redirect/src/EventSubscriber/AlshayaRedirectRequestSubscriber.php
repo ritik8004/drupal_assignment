@@ -129,7 +129,7 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
       return $this->config->get('default_langcode');
     }
     else {
-      $this->languageManager->getDefaultLanguage()->getId();
+      return $this->languageManager->getDefaultLanguage()->getId();
     }
   }
 
