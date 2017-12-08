@@ -70,7 +70,8 @@
         "acquia/acsf-tools": "^8.1",
         "drupal/metatag": "1.2",
         "drupal/acquia_purge": "^1.0@beta",
-        "drupal/video_embed_field": "1.x-dev"
+        "drupal/video_embed_field": "1.x-dev",
+        "drupal/role_delegation": "^1.0@alpha"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
