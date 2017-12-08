@@ -158,39 +158,15 @@ function alshaya_department_page_block_build_alter(array &$build, BlockPluginInt
 }
 
 /**
- * Implements hook_block_view_alter().
+ * Implements hook_language_switch_links_alter().
  */
-function alshaya_department_page_block_view_alter(array &$build, BlockPluginInterface $block) {
-  // If language switcher block.
-  if ($block->getPluginId() == 'language_block:language_interface') {
-    // Register as pre-render callback for language switcher block.
-    $build['#pre_render'][] = '_alshaya_department_page_language_switcher_block_prerender';
-  }
-}
-
-/**
- * Pre-render for the language switcher block to change link urls.
- *
- * @param array $build
- *   Render array.
- *
- * @return array
- *   Render array.
- */
-function _alshaya_department_page_language_switcher_block_prerender(array $build) {
-  $route_match = \Drupal::routeMatch();
-  // If department page.
-  // @see AlshayaDepartmentPageRouteProvider::getRoutesByPath().
-  if ($department_page_term = $route_match->getRouteObject()->getOption('_department_page_term')) {
-    if (is_numeric($department_page_term)) {
-      $url_object = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $department_page_term]);
-      foreach ($build['content']['#links'] as $langcode => $url) {
-        $build['content']['#links'][$langcode]['url'] = $url_object;
-      }
+function alshaya_department_page_language_switch_links_alter(array &$links, $type, Url $url) {
+  $route = \Drupal::routeMatch()->getRouteObject();
+  if ($department_term = $route->getOption('_department_page_term')) {
+    foreach ($links as $lang => $url) {
+      $links[$lang]['url'] = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $department_term]);
     }
   }
-
-  return $build;
 }
 
 /**
