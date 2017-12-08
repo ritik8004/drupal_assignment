@@ -164,8 +164,9 @@ function alshaya_department_page_language_switch_links_alter(array &$links, $typ
   $route = \Drupal::routeMatch()->getRouteObject();
   // @see AlshayaDepartmentPageRouteProvider::getRoutesByPath().
   if ($department_term = $route->getOption('_department_page_term')) {
-    foreach ($links as $lang => $url) {
-      $links[$lang]['url'] = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $department_term]);
+    $department_term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $department_term]);
+    foreach ($links as $lang => $url_object) {
+      $links[$lang]['url'] = $department_term_url;
     }
   }
 }
