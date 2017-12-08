@@ -534,6 +534,10 @@
   }
 }
 
+.free-shipping-message-wrapper {
+  margin-bottom: 1.3rem;
+}
+
 .promo-continue-shopping-wrapper {
   @include breakpoint($tablet) {
     border-top: 1px solid $white;
