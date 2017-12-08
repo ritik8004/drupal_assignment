@@ -89,4 +89,89 @@ index 51ecbab40f..0076ac6084 100644
 +      elseif (!empty($skus)) {
          $opt['query']['skus'] = $skus;
        }
+ diff --git a/modules/acq_sku/acq_sku.drush.inc b/modules/acq_sku/acq_sku.drush.inc
+index eede00561..22965e926 100644
+--- a/modules/acq_sku/acq_sku.drush.inc
++++ b/modules/acq_sku/acq_sku.drush.inc
+@@ -136,14 +136,18 @@ function drush_acq_sku_sync_commerce_products($langcode, $page_size) {
  
+   // Ask for confirmation from user if attempt is to run full sync.
+   if (empty($skus) && empty($category_id)) {
+-    if (!drush_confirm(dt("Are you sure you want to import all products for selected language?"))) {
++    $confirm = dt('Are you sure you want to import all products for @language language?', [
++      '@language' => $langcode,
++    ]);
++
++    if (!drush_confirm($confirm)) {
+       return drush_user_abort();
+     }
+   }
+ 
+   drush_print(dt('Requesting all commerce products for selected language code...'));
+   $container = \Drupal::getContainer();
+-  $container->get('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $page_size, $category_id);
++  $container->get('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $category_id, $page_size);
+   drush_print(dt('Done.'));
+ }
+ 
+@@ -576,7 +580,7 @@ function drush_acq_sku_commerce_products_remove_duplicates() {
+     foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+       // Using very small page size to avoid any issues for skus which already
+       // had corrupt data.
+-      \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, 5);
++      \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, '', 5);
+     }
+   }
+ 
+diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
+index 055393872..c9ffdb082 100644
+--- a/src/Conductor/APIWrapper.php
++++ b/src/Conductor/APIWrapper.php
+@@ -691,9 +691,20 @@ public function getProductsByUpdatedDate(\DateTime $date_time) {
+    *
+    * Surrogate method for the ingest method. This is done to not have trait
+    * conflicts.
++   *
++   * @param int $store_id
++   *   Store id.
++   * @param string $langcode
++   *   Language code.
++   * @param string $skus
++   *   SKUs separated by comma.
++   * @param string $category_id
++   *   Category id.
++   * @param int $page_size
++   *   Page size.
+    */
+-  public function productFullSync($store_id, $langcode, $skus = '', $page_size = 0, $category_id = '') {
+-    \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $page_size, $category_id);
++  public function productFullSync($store_id, $langcode, $skus = '', $category_id = '', $page_size = 0) {
++    \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $category_id, $page_size);
+   }
+ 
+   /**
+diff --git a/src/Conductor/IngestAPIWrapper.php b/src/Conductor/IngestAPIWrapper.php
+index 0076ac608..f47d6f150 100644
+--- a/src/Conductor/IngestAPIWrapper.php
++++ b/src/Conductor/IngestAPIWrapper.php
+@@ -34,8 +34,19 @@ public function __construct(ClientFactory $client_factory, ConfigFactoryInterfac
+ 
+   /**
+    * Performs full conductor sync.
++   *
++   * @param int $store_id
++   *   Store id.
++   * @param string $langcode
++   *   Language code.
++   * @param string $skus
++   *   SKUs separated by comma.
++   * @param string $category_id
++   *   Category id.
++   * @param int $page_size
++   *   Page size.
+    */
+-  public function productFullSync($store_id, $langcode, $skus = '', $page_size = 0, $category_id = '') {
++  public function productFullSync($store_id, $langcode, $skus = '', $category_id = '', $page_size = 0) {
+     if ($this->debug && !empty($this->debugDir)) {
+       // Export product data into file.
+       $filename = $this->debugDir . '/products_' . $langcode . '.data';
