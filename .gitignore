@@ -134,3 +134,7 @@ install-site-dev.sh
 
 # Allow developers to override config in local.
 factory-hooks/*/local.php
+
+alshaya_behat/bin
+alshaya_behat/vendor
+alshaya_behat/media
