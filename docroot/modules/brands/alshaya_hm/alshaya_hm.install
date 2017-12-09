@@ -10,6 +10,15 @@ use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ */
+function alshaya_hm_update_8001() {
+  \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')
+    ->set('enable_disable_loyalty', FALSE)
+    ->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_hm_install() {
@@ -209,13 +218,4 @@ function alshaya_hm_install() {
   $configs = ['acq_sku.configurable_form_settings'];
 
   alshaya_config_install_configs($configs, 'alshaya_hm', 'optional');
-}
-
-/**
- * Implements hook_update_N().
- */
-function alshaya_hm_update_8001() {
-  \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')
-    ->set('enable_disable_loyalty', FALSE)
-    ->save();
 }
