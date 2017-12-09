@@ -768,16 +768,12 @@
 
     @include breakpoint($tablet) {
       font-size: 0.875rem;
-      margin-bottom: 0;
-      padding-bottom: 0;
       margin-#{$left}: 2.75rem;
       text-align: $left;
     }
 
     @include breakpoint($desktop) {
       font-size: 1.125rem;
-      margin-bottom: 0.3rem;
-      padding-bottom: 0.56rem;
     }
   }
 
