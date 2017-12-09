@@ -459,12 +459,19 @@
 }
 
 .no-carousel {
+  @include breakpoint($tablet) {
+    display: flex;
+    justify-content: start;
+  }
+
   @include clearfix;
 
   .views-row {
     @include breakpoint($tablet) {
       width: 33%;
       float: $left;
+      max-width: 12rem;
+      margin: 0 1rem;
     }
   }
 }
