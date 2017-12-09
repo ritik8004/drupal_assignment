@@ -985,10 +985,17 @@ class SkuManager {
       return $attribute_value;
     }
     elseif (($search_direction == 'children') &&
-      (!empty($child_skus = $this->getChildSkus($sku)))) {
-      foreach ($child_skus as $child_sku) {
-        if (($child_sku instanceof SKU) &&
-          ($attribute_value = $child_sku->get($attribute_machine_name)->getString())) {
+      ($sku->getType() == 'configurable')) {
+      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs')
+        ->fields('asfcs', ['field_configured_skus_value'])
+        ->condition('asfcs.delta', 0)
+        ->condition('asfcs.entity_id', $sku->id());
+
+      $result = $query->execute();
+
+      while ($row = $result->fetchAssoc()) {
+        if ((($first_child_sku = SKU::loadFromSku($row['field_configured_skus_value'])) instanceof SKU) &&
+        ($attribute_value = $first_child_sku->get($attribute_machine_name)->getString())) {
           return $attribute_value;
         }
       }
