@@ -963,4 +963,44 @@ class SkuManager {
     return $related;
   }
 
+  /**
+   * Helper function to fetch attributes for PDP.
+   *
+   * Use configurable SKU for configurable attributes & simple SKUs as source
+   * for non-configurable attribtues.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity for which the attribute data needs to be pulled.
+   * @param string $attribute_machine_name
+   *   Attribute field name.
+   * @param string $search_direction
+   *   Direction in which to look for fallback while fetching the attribute.
+   *
+   * @return string
+   *   Attribute value.
+   */
+  public function fetchProductAttribute(SKU $sku, $attribute_machine_name, $search_direction) {
+    if (($search_direction == 'self') &&
+      ($attribute_value = $sku->get($attribute_machine_name)->getString())) {
+      return $attribute_value;
+    }
+    elseif (($search_direction == 'children') &&
+      (!empty($child_skus = $this->getChildSkus($sku)))) {
+      foreach ($child_skus as $child_sku) {
+        if (($child_sku instanceof SKU) &&
+          ($attribute_value = $child_sku->get($attribute_machine_name)->getString())) {
+          return $attribute_value;
+        }
+      }
+    }
+    elseif (($search_direction == 'parent') &&
+      (($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) instanceof SKU)) {
+      if ($attribute_value = $parent_sku->get($attribute_machine_name)->getString()) {
+        return $attribute_value;
+      }
+    }
+
+    return '';
+  }
+
 }

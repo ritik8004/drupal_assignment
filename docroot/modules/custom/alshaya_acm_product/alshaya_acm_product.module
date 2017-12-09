@@ -200,6 +200,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['product_composition_markup'] = [
+    'variables' => [
+      'composition' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -348,11 +354,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $description_value .= '</div>';
         }
 
-        if ($composition = $sku_entity->get('attr_composition')->getString()) {
-          $description_value .= '<div class="composition-wrapper">';
-          $description_value .= '<div class="composition-label">' . t('composition') . '</div>';
-          $description_value .= '<div class="composition-value">' . $composition . '</div>';
-          $description_value .= '</div>';
+        if ($composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', 'children')) {
+          $composition_markup = [
+            '#theme' => 'product_composition_markup',
+            '#composition' => $composition,
+          ];
+          $description_value .= render($composition_markup);
         }
 
         $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
@@ -1022,6 +1029,15 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // Remove the class if in stock.
     $class_command = $quantity ? 'removeClass' : 'addClass';
     $response->addCommand(new InvokeCommand('article[data-vmode="full"]', $class_command, ['product-out-of-stock']));
+
+    // Update simple product description attributes.
+    $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
+    $composition_markup = [
+      '#theme' => 'product_composition_markup',
+      '#composition' => $composition,
+    ];
+
+    $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
 
     // React for click & collect if stock is available.
     if (\Drupal::moduleHandler()->moduleExists('alshaya_click_collect') && $quantity) {
