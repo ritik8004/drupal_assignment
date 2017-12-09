@@ -26,18 +26,18 @@ function alshaya_get_additional_settings($site, $env) {
       'default' => [
         'store_id' => [
           'ar' => 3,
-        ]
+        ],
       ]
     ],
     'mcksa' => [
       'default' => [
         'store_id' => [
-          'en' => 1,
-          'ar' => 2,
+          'en' => 3,
+          'ar' => 4,
         ],
         'magento_lang_prefix' => [
-          'en' => 'default',
-          'ar' => 'kwt_ar',
+          'en' => 'ksa_en',
+          'ar' => 'ksa_ar',
         ],
       ],
     ],

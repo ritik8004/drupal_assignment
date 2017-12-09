@@ -295,10 +295,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
       if (count($tids) > 1) {
         $this->logger->error('Multiple terms found for category id @cid', ['@cid' => $category['category_id']]);
-        $this->results['failed']++;
-        continue;
       }
-      elseif (count($tids) == 1) {
+
+      // Always use the first term and continue.
+      if (count($tids) > 0) {
         $this->logger->info('Updating category term @name [@id]', [
           '@name' => $category['name'],
           '@id' => $category['category_id'],
@@ -355,7 +355,19 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       $term->get('description')->setValue($category['description']);
       $term->setFormat('rich_text');
 
-      $term->save();
+      try {
+        $term->save();
+      }
+      catch (\Exception $e) {
+        $this->logger->warning('Failed saving category term @name [@id]',
+          ['@name' => $category['name'], '@id' => $category['category_id']]
+        );
+
+        // Release the lock.
+        $lock->release($lock_key);
+
+        continue;
+      }
 
       // Release the lock.
       $lock->release($lock_key);
