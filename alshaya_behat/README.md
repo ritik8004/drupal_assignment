@@ -1,5 +1,4 @@
 ### Local setup of Behat:
-* Create a directory, say 'alshaya_behat'
   * Clone alshaya git repo
   * cd alshaya_behat
   * composer install
