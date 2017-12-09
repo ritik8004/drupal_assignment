@@ -1,16 +1,49 @@
 #behat.yml
-default:
-#  autoload:
-#    '': %paths.base%/features/bootstrap
+mckwqa:
   suites:
     default:
       contexts:
-        - FeatureContext
+        - FeatureContext:
+            parameters:
+              simpleurl: '/mothercare-three-position-baby-carrier-test-black'
+              simpletitle: 'Mothercare Three Position Baby Carrier test - Black'
+              configurl: '/grey-navy-and-yellow-jersey-shorts-3-pack'
+              configtitle: 'Grey, Navy and Yellow Jersey Shorts - 3 Pack'
+              configvariant: '2-3 Years'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
-#      paths:
-#        - %paths.base%/features
+  extensions:
+    Behat\MinkExtension:
+      browser_name: chrome
+      goutte:
+        guzzle_parameters:
+          verify: false
+      javascript_session: selenium2
+      selenium2:
+        wd_host: http://127.0.0.1:4444/wd/hub
+        browser: chrome
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
+      base_url: 'https://mckw-test.factory.alshaya.com/en'
+      files_path: "%paths.base%/media"
+    Drupal\DrupalExtension:
+      blackbox: ~
+mckwuat:
+  suites:
+    default:
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/baby-boys-socks-gift-box'
+              simpletitle: 'Baby Boys Socks Gift Box'
+              simpletitlear: 'صندوق هدية جوارب للأولاد'
+              configurl: '/paradise-graphic-tee'
+              configtitle: 'Paradise Graphic Tee'
+              configtitlear: 'تي-شيرت برسمة Paradise'
+              configvariant: '2-3 Years'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
   extensions:
     Behat\MinkExtension:
       browser_name: chrome

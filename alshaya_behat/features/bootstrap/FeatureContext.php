@@ -29,13 +29,36 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
 
   private $item_count;
 
+  private $simple_url;
+
+  private $config_url;
+
+  private $config_variant;
+
+  private $simple_title;
+
+  private $simple_title_ar;
+
+  private $config_title;
+
+  private $config_title_ar;
+
   /**
    * Every scenario gets its own context instance.
    *
    * You can also pass arbitrary arguments to the
    * context constructor through behat.yml.
    */
-  public function __construct() {
+  public function __construct($parameters) {
+
+    $this->simple_url = $parameters['simpleurl'];
+    $this->simple_title = $parameters['simpletitle'];
+    $this->simple_title_ar = $parameters['simpletitlear'];
+
+    $this->config_url = $parameters['configurl'];
+    $this->config_title = $parameters['configtitle'];
+    $this->config_title_ar = $parameters['configtitlear'];
+    $this->config_variant = $parameters['configvariant'];
 
   }
 
@@ -62,7 +85,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iAmOnASimpleProductPage()
   {
-    $this->visitPath('/stronglax');
+    $this->visitPath($this->simple_url);
   }
 
   /**
@@ -70,9 +93,9 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iAmOnAConfigurableProduct()
   {
-    $this->visitPath('/grey-navy-and-yellow-jersey-shorts-3-pack');
+    $this->visitPath($this->config_url);
     $this->iWaitForThePageToLoad();
-    $this->getSession()->getPage()->clickLink('2-3 Years');
+    $this->getSession()->getPage()->clickLink($this->config_variant);
     $this->getSession()
       ->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
   }
@@ -83,7 +106,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function iShouldSeeTheLinkForSimpleProduct()
   {
     $page = $this->getSession()->getPage();
-    $this->simple_product = 'Stronglax';
+    $this->simple_product = $this->simple_title;
     $link = $page->findLink($this->simple_product);
     if (!$link) {
       throw new \Exception('Link for simple product not found');
@@ -96,7 +119,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function iShouldSeeTheLinkForConfigurableProduct()
   {
     $page = $this->getSession()->getPage();
-    $this->config_product = 'Grey, Navy and Yellow Jersey Shorts - 3 Pack';
+    $this->config_product = $this->config_title;
     $link = $page->hasLink($this->config_product);
     if (!$link) {
       throw new \Exception('Link for configurable product not found');
@@ -109,7 +132,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function iShouldNotSeeTheLinkForSimpleProduct()
   {
     $element = $this->getSession()->getPage();
-    $this->simple_product = 'Stronglax';
+    $this->simple_product = $this->simple_title;
     $result = $element->findLink($this->simple_product);
 
     try {
@@ -136,7 +159,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function iShouldNotSeeTheLinkForConfigurableProduct()
   {
     $element = $this->getSession()->getPage();
-    $this->config_product = 'Grey, Navy and Yellow Jersey Shorts - 3 Pack';
+    $this->config_product = $this->config_title;
     $result = $element->findLink($this->config_product);
 
     try {
@@ -163,7 +186,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function iShouldSeeTheLinkForSimpleProductInArabic()
   {
     $page = $this->getSession()->getPage();
-    $this->simple_product = 'انت انتانتانت';
+    $this->simple_product = $this->simple_title_ar;
     $link = $page->hasLink($this->simple_product);
     if (!$link) {
       throw new \Exception('Link for simple product not found');
@@ -176,7 +199,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function iShouldSeeTheLinkForConfigurableProductInArabic()
   {
     $page = $this->getSession()->getPage();
-    $this->config_product = 'شورت من قماش الجورسيه باللون الرمادي والأزرق الداكن والأصفر – عبوة من 3 قطع';
+    $this->config_product = $this->config_title_ar;
     $link = $page->hasLink($this->config_product);
     if (!$link) {
       throw new \Exception('Link for configurable product not found');

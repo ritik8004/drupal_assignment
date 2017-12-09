@@ -9,19 +9,10 @@
     "drupal/drupal-extension": "3.0.*",
     "drupal/drupal-driver": "*",
     "jakoch/phantomjs-installer": "*",
-    "se/selenium-server-standalone": "3.4.0",
-    "enm1989/chromedriver": "*"
+    "se/selenium-server-standalone": "3.4.0"
   },
   "config": {
     "bin-dir": "bin"
   },
-  "minimum-stability": "dev",
-  "scripts": {
-    "post-install-cmd": [
-      "PhantomInstaller\\Installer::installPhantomJS"
-    ],
-    "post-update-cmd": [
-      "PhantomInstaller\\Installer::installPhantomJS"
-    ]
-  }
+  "minimum-stability": "dev"
 }
