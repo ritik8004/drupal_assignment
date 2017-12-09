@@ -22,6 +22,7 @@ function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
     'cart_top_promotions' => [
       'variables' => [
         'promotions' => NULL,
+        'free_shipping' => NULL,
       ],
     ],
   ];

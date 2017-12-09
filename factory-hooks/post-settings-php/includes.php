@@ -30,6 +30,9 @@ if (empty($site_name) && $settings['env'] == 'local') {
   }
 }
 
+// Calculate country code for current site name.
+$settings['country_code'] = strtoupper(substr($site_name, -2));
+
 // We merge the entire settings with the specific ones.
 include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
 $settings = array_replace_recursive($settings, alshaya_get_specific_settings($site_name, $settings['env']));

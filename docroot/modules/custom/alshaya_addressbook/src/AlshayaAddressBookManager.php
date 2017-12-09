@@ -559,8 +559,12 @@ class AlshayaAddressBookManager {
             $magento_address[$attribute_code] = _alshaya_acm_checkout_clean_address_phone($address[$field_code]);
             break;
 
-          case 'administrative_area':
           case 'area_parent':
+            if (empty($address['area_parent']) && !empty($address['administrative_area'])) {
+              $parent = $this->getLocationParentTerm($address['administrative_area']);
+              $address[$field_code] = $parent ? $parent->id() : NULL;
+            }
+          case 'administrative_area':
             $term = $this->termStorage->load($address[$field_code]);
 
             if (empty($term)) {
@@ -797,6 +801,11 @@ class AlshayaAddressBookManager {
 
     try {
       $magento_form = $this->alshayaApiWrapper->getCustomerAddressForm();
+
+      if (empty($magento_form)) {
+        return [];
+      }
+
       $magento_form = array_filter($magento_form, function ($form_item) {
         return (bool) $form_item['visible'];
       });
@@ -818,8 +827,8 @@ class AlshayaAddressBookManager {
    */
   public function getMagentoFieldMappings() {
     // Fields that can be used in area_parent: governate, city, emirates.
-    $mapping = \Drupal::config('alshaya_addressbook.settings')->get('mapping');
-
+    $mapping_key = 'mapping_' . strtolower(_alshaya_custom_get_site_level_country_code());
+    $mapping = \Drupal::config('alshaya_addressbook.settings')->get($mapping_key);
     return $mapping;
   }
 

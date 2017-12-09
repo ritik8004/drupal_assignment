@@ -58,3 +58,11 @@
     }
   }
 }
+
+.nodetype--acq_product {
+  #backtotop {
+    @include breakpoint($only-mobile) {
+      bottom: 0;
+    }
+  }
+}

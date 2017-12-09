@@ -58,7 +58,7 @@
 
   .c-products__item__label {
     font-size: 0.8125rem;
-    font-family: $alshaya-thin;
+    font-family: $hnm-regular;
     color: $grey-ash;
     font-weight: normal;
     max-width: 10rem;
@@ -221,7 +221,7 @@
 
 .subtitle.crossell-title {
   font-size: 1rem;
-  font-family: $alshaya-bold;
+  font-family: $hnm-bold;
   font-weight: normal;
   text-align: $left;
   margin-bottom: 0.3rem;
@@ -272,11 +272,12 @@
       width: 100%;
       clear: both;
       font-size: 0.875rem;
-      text-transform: lowercase;
+      text-transform: uppercase;
       color: $white-five;
-      background: $pumpkin-orange;
+      background: $hnm-black-two;
       border: none;
       padding: 0.656rem;
+      margin-top: 1rem;
 
       @include breakpoint($only-mobile) {
         max-width: 100%;
@@ -308,10 +309,41 @@
 
         @include breakpoint($only-mobile) {
           padding-bottom: 1rem;
+
+          &.form-item-configurables-article-castor-id {
+            &::after {
+              display: none;
+            }
+
+            .select-buttons {
+              a {
+                margin-#{$left}: 0.1875rem;
+              }
+            }
+          }
         }
 
         .ajax-progress {
           display: none;
+        }
+
+        &.form-item-configurables-size {
+          @include breakpoint($only-mobile) {
+            width: 40%;
+            margin-top: 1rem;
+
+            html[lang=ar] & {
+              &::after {
+                #{left}: -0.4375rem;
+              }
+            }
+          }
+        }
+
+        &.form-item-configurables-color {
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
         }
       }
 
@@ -352,6 +384,21 @@
         @include select-style(4.375rem);
 
         direction: $dir;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    [class^="acq-sku-configurable-"] {
+      .js-form-submit {
+        width: 54%;
+        position: absolute;
+        #{$right}: 0;
+        bottom: 0.3125rem;
+      }
+
+      label {
+        display: none;
       }
     }
   }
@@ -412,12 +459,19 @@
 }
 
 .no-carousel {
+  @include breakpoint($tablet) {
+    display: flex;
+    justify-content: start;
+  }
+
   @include clearfix;
 
   .views-row {
     @include breakpoint($tablet) {
       width: 33%;
       float: $left;
+      max-width: 12rem;
+      margin: 0 1rem;
     }
   }
 }
