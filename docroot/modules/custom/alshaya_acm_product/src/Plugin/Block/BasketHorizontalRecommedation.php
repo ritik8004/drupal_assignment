@@ -81,11 +81,12 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
       $items = $cart->items();
 
       foreach ($items as $item) {
+        // Get linked skus of current sku always.
+        $skus[] = $item['sku'];
+
+        // Get linked skus of parent as well.
         if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($item['sku'])) {
           $skus[] = $parent_sku->getSku();
-        }
-        else {
-          $skus[] = $item['sku'];
         }
       }
 
