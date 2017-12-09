@@ -1050,8 +1050,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $build = [];
     $sku = $product_tree['parent'];
 
-    // Pull out & update gallery image based on the selected color & sizes one
-    // by one.
+    // Pull out & update gallery image based on the selected color & first item
+    // having images.
     foreach ($tree_pointer as $node) {
       if ($node instanceof SKU) {
         alshaya_acm_product_get_gallery($build, $node);
