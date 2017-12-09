@@ -360,15 +360,23 @@ html[lang="ar"] {
   }
 }
 
-.user__order--detail .total-row {
+.user__order--detail .total-row:not(.price-row) {
   @include breakpoint($only-mobile) {
     position: relative;
   }
 
   .warm--white {
+    background-color: $white-five;
+
+    .dark {
+      font-family: $hnm-regular;
+      color: $light-greyish;
+      font-weight: normal;
+    }
+
     @include breakpoint($only-mobile) {
-      position: absolute;
-      #{$right}: 0;
+      position: relative;
+      #{$left}: 50%;
     }
   }
 }
