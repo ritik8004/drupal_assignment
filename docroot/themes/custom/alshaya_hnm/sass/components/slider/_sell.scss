@@ -459,8 +459,10 @@
 }
 
 .no-carousel {
-  display: flex;
-  justify-content: space-evenly;
+  @include breakpoint($tablet) {
+    display: flex;
+    justify-content: start;
+  }
 
   @include clearfix;
 
@@ -469,6 +471,7 @@
       width: 33%;
       float: $left;
       max-width: 12rem;
+      margin: 0 1rem;
     }
   }
 }
