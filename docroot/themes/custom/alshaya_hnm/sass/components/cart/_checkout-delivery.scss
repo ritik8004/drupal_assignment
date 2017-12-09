@@ -304,6 +304,10 @@
 
           &.active--tab--head {
             margin-#{$left}: 1px;
+
+            html[lang=ar] & {
+              margin-right: 0;
+            }
           }
         }
       }
