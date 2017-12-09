@@ -52,6 +52,13 @@
         Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
       });
 
+      $('#edit-store-location').once('bind-js').on('focusin', function () {
+        if (geoPerm === false && typeof $(this).data('second-try') === 'undefined') {
+          $(this).data('second-try', 'done');
+          Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+        }
+      });
+
       $('.hours--wrapper').once('initiate-toggle').on('click', '.hours--label', function () {
         $(this).toggleClass('open');
       });
