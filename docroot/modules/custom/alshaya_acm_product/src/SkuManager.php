@@ -391,13 +391,13 @@ class SkuManager {
    *
    * @param mixed $sku
    *   sku text or Sku object.
+   * @param bool $first_only
+   *   Boolean flag to indicate if we want to load only the first child.
    *
-   * @return array
-   *   Array of child skus.
-   *
-   * @throws \Drupal\Core\Database\InvalidQueryException
+   * @return mixed
+   *   Array of child skus/ Child SKU when loading first child only.
    */
-  public function getChildSkus($sku) {
+  public function getChildSkus($sku, $first_only = FALSE) {
     $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $child_skus = [];
 
@@ -409,6 +409,9 @@ class SkuManager {
       $result = $query->execute();
 
       while ($row = $result->fetchAssoc()) {
+        if ($first_only) {
+          return SKU::loadFromSku($row['field_configured_skus_value']);
+        }
         $child_skus[] = SKU::loadFromSku($row['field_configured_skus_value']);
       }
     }
@@ -985,20 +988,10 @@ class SkuManager {
       return $attribute_value;
     }
     elseif (($search_direction == 'children') &&
-      ($sku->getType() == 'configurable')) {
-      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs')
-        ->fields('asfcs', ['field_configured_skus_value'])
-        ->condition('asfcs.delta', 0)
-        ->condition('asfcs.entity_id', $sku->id());
-
-      $result = $query->execute();
-
-      while ($row = $result->fetchAssoc()) {
-        if ((($first_child_sku = SKU::loadFromSku($row['field_configured_skus_value'])) instanceof SKU) &&
-        ($attribute_value = $first_child_sku->get($attribute_machine_name)->getString())) {
-          return $attribute_value;
-        }
-      }
+      ($sku->getType() == 'configurable') &&
+      (($first_child_sku = $this->getChildSkus($sku, TRUE)) instanceof SKU) &&
+      ($attribute_value = $first_child_sku->get($attribute_machine_name)->getString())) {
+      return $attribute_value;
     }
     elseif (($search_direction == 'parent') &&
       (($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) instanceof SKU)) {
