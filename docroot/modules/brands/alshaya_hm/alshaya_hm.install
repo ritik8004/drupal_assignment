@@ -187,6 +187,11 @@ function alshaya_hm_install() {
   ->set('maxlength', 8)
   ->save();
 
+  // Disable loyalty.
+  \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')
+    ->set('enable_disable_loyalty', FALSE)
+    ->save();
+
   // Set initial translation strings.
   $strings = [
     'view cart' => [
