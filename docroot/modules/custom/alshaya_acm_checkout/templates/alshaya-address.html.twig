@@ -13,9 +13,13 @@
 {% endif %}
 {% if address.administrative_area is not empty %}
   {% if address.administrative_area_display is not empty %}
-    <div class="address--content">{{ address.administrative_area_display }}</div>
+    {% autoescape false %}
+      <div class="address--content">{{ address.administrative_area_display }}</div>
+    {% endautoescape %}
   {% else %}
-    <div class="address--content">{{ address.administrative_area }}</div>
+    {% autoescape false %}
+      <div class="address--content">{{ address.administrative_area }}</div>
+    {% endautoescape %}
   {% endif %}
 {% endif %}
 {% if address.area_parent is not empty %}

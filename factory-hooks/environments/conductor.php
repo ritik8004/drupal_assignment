@@ -39,8 +39,8 @@ function alshaya_get_conductor_host_data() {
     ],
     'hm_test' => [
       'url' => 'https://alshaya-hm-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '0c1158d278c24ff586792de9bc01eaa7',
-      'hmac_secret' => 'NMGIo_W2s4VA66_6UKM2pQ',
+      'hmac_id' => 'b01954179c164c0192676a4d4114f45d',
+      'hmac_secret' => 'cEF-LqxkmIF3ousifm5pvA',
     ],
     'hm_uat' => [
       'url' => 'https://alshaya-hm-uat.eu-west-1.prod.acm.acquia.io/',
@@ -49,13 +49,38 @@ function alshaya_get_conductor_host_data() {
     ],
     'hm_pprod' => [
       'url' => 'https://alshaya-hm-pprod.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => 'beada22aefef4538a7952691031b1f1d',
-      'hmac_secret' => 'GzIsxmPOnDnqcado9ZQg8w',
+      'hmac_id' => 'd57a1fdc153946afbc3b4b821f2029e1',
+      'hmac_secret' => 'c0VSHfPxVXuJM0ioX_4thA',
     ],
     'hm_prod' => [
       'url' => 'https://alshaya-hm-prod.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => 'f952574229334fd895b8ad5ace602414',
-      'hmac_secret' => 'EqiVIs70Y_zLj6wSMD4c0g',
+      'hmac_id' => '3844f45d61d7467d9a671f3e1cf4bea8',
+      'hmac_secret' => 'ngRQUE3QBP9zL-0-TC9XhQ',
+    ],
+    'mcksa_dev' => [
+      'url' => 'https://alshaya-mcksa-dev.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '9575450fa913452ba46526463ad56edb',
+      'hmac_secret' => '5pUmey7AhYgFhowkWpzEHA',
+    ],
+    'mcksa_test' => [
+      'url' => 'https://alshaya-mcksa-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'b4d60c5665624a21b1d03f75060f52cb',
+      'hmac_secret' => 'HMWH2Yc8AlWujYegPP96jA',
+    ],
+    'mcksa_uat' => [
+      'url' => 'https://alshaya-mcksa-uat.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '6686b9362f9c48789c08782dc0f85b59',
+      'hmac_secret' => 'QIMU6nVtVUVJ3NtSErE5PA',
+    ],
+    'mcksa_pprod' => [
+      'url' => 'https://alshaya-mcksa-pprod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '08bf3c91aeba4b18b78354b38e0ef566',
+      'hmac_secret' => 'FY6YF9sOQzj2sTBS9hWFKA',
+    ],
+    'mcksa_prod' => [
+      'url' => 'https://alshaya-mcksa-prod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd6b5bf8e0ea74347aaeb10dd5548c827',
+      'hmac_secret' => 'nSAHBiZvuTiiJa-HC9xdnw',
     ],
   ];
 }

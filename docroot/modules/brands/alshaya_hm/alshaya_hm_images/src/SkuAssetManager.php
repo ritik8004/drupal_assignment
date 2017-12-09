@@ -106,15 +106,29 @@ class SkuAssetManager {
       list($set, $image_location_identifier)  = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
 
       // Prepare query options for image url.
-      $options = [
-        'query' => [
-          'set' => implode(',', $set),
-          'call' => 'url[' . $image_location_identifier . ']',
-        ],
-      ];
+      if (isset($set['url'])) {
+        $url_parts = parse_url(urldecode($set['url']));
+        if (!empty($url_parts['query'])) {
+          parse_str($url_parts['query'], $query_options);
+          // Overwrite the product style coming from season 5 image url with the
+          // one based on context in which the image is being rendered.
+          $query_options['call'] = 'url[' . $image_location_identifier . ']';
+          $options = [
+            'query' => $query_options,
+          ];
+        }
+      }
+      else {
+        $options = [
+          'query' => [
+            'set' => implode(',', $set),
+            'call' => 'url[' . $image_location_identifier . ']',
+          ],
+        ];
+      }
 
       $asset_urls[] = [
-        'url' => (isset($set['url'])) ? Url::fromUri($set['url']) : Url::fromUri($base_url, $options),
+        'url' => Url::fromUri($base_url, $options),
         'sortAssetType' => $asset['sortAssetType'],
         'sortFacingType' => $asset['sortFacingType'],
       ];

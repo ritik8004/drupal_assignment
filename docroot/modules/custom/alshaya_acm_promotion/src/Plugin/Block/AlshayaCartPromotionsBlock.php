@@ -156,6 +156,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    */
   public function build() {
     $promotions = [];
+    $free_shipping = [];
 
     $build = [
       // We need empty markup to ensure wrapper div is always available.
@@ -208,6 +209,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
 
     foreach ($subTypePromotions as $subTypePromotion) {
       $message = '';
+
       $promotion_rule_id = $subTypePromotion->get('field_acq_promotion_rule_id')->getString();
       $sub_type = $subTypePromotion->get('field_alshaya_promotion_subtype')->getString();
 
@@ -215,8 +217,11 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       if ($sub_type == AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER) {
         // For free shipping, we only show if it is applied.
         if (in_array($promotion_rule_id, $cartRulesApplied)) {
+          // Add the message as success message for free shipping.
           // Get message from config for free shipping.
-          $message = \Drupal::config('alshaya_acm_promotion.config')->get('free_shipping_order')['label'];
+          $free_shipping = [
+            '#markup' => \Drupal::config('alshaya_acm_promotion.config')->get('free_shipping_order')['label'],
+          ];
         }
       }
       // For the rest, we show only if they are not applied.
@@ -235,10 +240,11 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
 
     $promotions = array_filter($promotions);
 
-    if (!empty($promotions)) {
+    if (!empty($promotions) || !empty($free_shipping)) {
       $build = [
         '#theme' => 'cart_top_promotions',
         '#promotions' => $promotions,
+        '#free_shipping' => $free_shipping,
       ];
     }
 

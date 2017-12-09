@@ -177,18 +177,12 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
           e.stopPropagation();
           e.preventDefault();
           if (e.handled !== true) {
-            if ($(e.target).hasClass('.autocomplete-suggestion-user-input')) {
-              var $userInput = $(e.currentTarget);
-            }
-            else {
-              var $userInput = $(e.currentTarget).find('.autocomplete-suggestion-user-input');
-            }
-            var input = $userInput.html() + $userInput.siblings('.autocomplete-suggestion-suggestion-suffix').html();
+            // Taking keyword input and suggestion from e.target, which is more reliable than class.
+            var input = $(e.target.firstElementChild).html() + $(e.target.lastElementChild).html();
             $('#edit-keywords').val(input);
             $('#views-exposed-form-search-page').submit();
           }
         }
-
       });
     }
   };

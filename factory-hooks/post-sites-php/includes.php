@@ -60,3 +60,6 @@ $domains = gardens_data_get_sites_from_file($data['gardens_site_settings']['conf
 // Get the site's name from the first domain.
 global $site_name;
 $site_name = explode('.', array_keys($domains)[0])[0];
+
+// Support cases like hmkw1 or mckw12.
+$site_name = preg_replace('/\d/', '', $site_name);
