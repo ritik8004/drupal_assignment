@@ -380,6 +380,12 @@ body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-con
   padding: 10rem 2rem !important;
 }
 
+body.nodetype--acq_product.ucbrowser .dialog-product-image-gallery-container-mobile {
+  @include breakpoint($only-mobile) {
+    padding: 0 !important;
+  }
+}
+
 #stcpDiv {
   display: none;
 }
