@@ -381,9 +381,7 @@ body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-con
 }
 
 body.nodetype--acq_product.ucbrowser .dialog-product-image-gallery-container-mobile {
-  @include breakpoint($only-mobile) {
-    padding: 0 !important;
-  }
+  padding: 0 !important;
 }
 
 #stcpDiv {
