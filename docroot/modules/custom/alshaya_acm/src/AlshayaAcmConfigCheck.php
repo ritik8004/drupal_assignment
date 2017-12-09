@@ -92,6 +92,16 @@ class AlshayaAcmConfigCheck {
     \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
       ->set('store_id', Settings::get('store_id')['ar'])
       ->save();
+
+    // Reset magento_lang_prefix - EN.
+    \Drupal::configFactory()->getEditable('alshaya_api.settings')
+      ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['en'])
+      ->save();
+
+    // Reset magento_lang_prefix - AR.
+    \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
+      ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
+      ->save();
   }
 
 }
