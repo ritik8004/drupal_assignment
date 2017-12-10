@@ -12,7 +12,7 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * Add field for stock in index.
+ * Add field for created in index & remove corrupt tables .
  */
 function alshaya_product_update_8012() {
   // Clean up tables which got created due to missing actual table.
