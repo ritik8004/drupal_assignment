@@ -380,3 +380,17 @@ html[lang="ar"] {
     }
   }
 }
+
+.alias--confirmation-print {
+  .block-customer-service-block {
+    border-top: 2px solid $hnm-black;
+    background-color: $grey1;
+    padding-top: 1.5rem;
+    padding-bottom: 2px;
+
+    h3,
+    p {
+      color: $hnm-black-two;
+    }
+  }
+}
