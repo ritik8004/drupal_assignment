@@ -354,13 +354,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $description_value .= '</div>';
         }
 
-        if ($composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', 'children')) {
-          $composition_markup = [
-            '#theme' => 'product_composition_markup',
-            '#composition' => $composition,
-          ];
-          $description_value .= render($composition_markup);
-        }
+        // Render the wrapper div for composition always so that the same can be
+        // filled with data on variant selection.
+        $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', 'children');
+        $composition_markup = [
+          '#theme' => 'product_composition_markup',
+          '#composition' => $composition,
+        ];
+        $description_value .= render($composition_markup);
 
         $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
         $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
