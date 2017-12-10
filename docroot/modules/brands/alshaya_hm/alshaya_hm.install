@@ -6,6 +6,95 @@
  */
 
 use Drupal\Core\Site\Settings;
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add concept field to index, create facets, blocks.
+ */
+function alshaya_hm_update_8003() {
+  $alshaya_search_indexes = [
+    'product' => 'search_api.index.product',
+    'acquia_search_index' => 'search_api.index.acquia_search_index',
+  ];
+
+  $concept_index_config = [
+    'label' => 'Concept',
+    'datasource_id' => 'entity:node',
+    'property_path' => 'field_skus:entity:attr_concept',
+    'type' => 'string',
+    'dependencies' => [
+      'config' => [
+        'field.storage.node.field_skus',
+      ],
+      'module' => [
+        'acq_sku',
+      ],
+    ],
+  ];
+
+  // Add concept field to index on both SOLR & DB.
+  foreach ($alshaya_search_indexes as $key => $search_index) {
+    $config = \Drupal::configFactory()->getEditable($search_index);
+
+    // Index attr concept data in search_api_db.
+    $config->set('field_settings.attr_concept', $concept_index_config);
+
+    $config->save();
+
+    $index = Index::load($key);
+
+    // Re-index all items.
+    $index->reindex();
+
+    // Save index to reflect new concept field.
+    $index->save();
+  }
+
+  $filter_bar_add_concept = [
+    'checked' => TRUE,
+    'label' => 'Concept',
+    'separator' => ', ',
+    'show_count' => TRUE,
+    'show_label' => FALSE,
+    'weight' => 0,
+  ];
+
+  $facet_configs = [
+    'facets.facet.concept',
+    'facets.facet.plp_concept',
+    'facets.facet.promotion_concept',
+  ];
+
+  // Create facet for concept field.
+  alshaya_config_install_configs($facet_configs, 'alshaya_hm', 'install');
+
+  $filter_summary_facets = [
+    'plp_concept' => 'facets_summary.facets_summary.filter_bar_plp',
+    'concept' => 'facets_summary.facets_summary.filter_bar',
+    'promotion_concept' => 'facets_summary.facets_summary.filter_bar_promotions',
+  ];
+
+  // Update filter bars to show the selected concept facets.
+  foreach ($filter_summary_facets as $key => $filter_summary_facet) {
+    $config = \Drupal::configFactory()->getEditable($filter_summary_facet);
+
+    // Index attr concept data in search_api_db.
+    $config->set('facets.' . $key, $filter_bar_add_concept);
+
+    $config->save();
+  }
+
+  $facet_block_configs = [
+    'block.block.concept',
+    'block.block.plpconcept',
+    'block.block.promotionconcept',
+  ];
+
+  // Create facet blocks & place them appropriately.
+  alshaya_config_install_configs($facet_block_configs, 'alshaya_hm', 'optional');
+}
 
 /**
  * Implements hook_update().

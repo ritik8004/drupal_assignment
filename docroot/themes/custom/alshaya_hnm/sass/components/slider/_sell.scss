@@ -304,7 +304,7 @@
         padding: 0;
         position: relative;
         padding-bottom: 3rem;
-        margin-top: 2.1875rem;
+        margin-top: 1rem;
         background: $white-five;
 
         @include breakpoint($only-mobile) {
@@ -397,8 +397,10 @@
         bottom: 0.3125rem;
       }
 
-      label {
-        display: none;
+      .form-item-configurables-article-castor-id {
+        label {
+          display: none;
+        }
       }
     }
   }

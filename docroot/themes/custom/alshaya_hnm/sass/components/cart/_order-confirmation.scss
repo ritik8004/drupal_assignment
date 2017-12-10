@@ -746,3 +746,14 @@
   }
 }
 
+.alias--cart-checkout-confirmation {
+  .order-confirmation {
+    .user__order--detail {
+      .desktop-only {
+        @include breakpoint($only-tablet) {
+          display: block;
+        }
+      }
+    }
+  }
+}
