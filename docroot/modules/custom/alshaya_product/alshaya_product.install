@@ -43,7 +43,7 @@ function alshaya_product_update_8012() {
   // Re-index all items.
   $index->reindex();
 
-  // Save index to reflect new stock field.
+  // Save index to reflect created field.
   $index->save();
 }
 
