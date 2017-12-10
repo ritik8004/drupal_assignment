@@ -2,15 +2,17 @@
 Feature: Test various checkout scenarios for Arabic site
 
   Background:
-    Given I am on a configurable product
+    Given I am on a simple product page
     And I wait for the page to load
     When I press "add to cart"
     And I wait for AJAX to finish
-    And I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "عربية"
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    And I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "إتمام عملية الشراء كزبون زائر"
     And I wait for the page to load
 
   @hd @cod
@@ -249,41 +251,6 @@ Feature: Test various checkout scenarios for Arabic site
     Then the url should match "/ar/cart"
     And I should see the button "إتمام الشراء بأمان"
 
-  @knet
-  Scenario: As a Guest user
-  I should be prompted with validation message on entering incorrect KNET details
-  and I should be able to proceed with the transaction on entering correct details
-    When I follow "خدمة التوصيل للمنزل"
-    And I wait for the page to load
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
-    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
-    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
-    When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
-    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
-    When I fill in "edit-guest-delivery-home-address-shipping-address-line2" with "2"
-    And I press "توصيل إلى هذا العنوان"
-    And I wait for AJAX to finish
-    When I press "تابع للدفع"
-    And I wait for the page to load
-    When I select a payment option "payment_method_title_knet"
-    And I wait for AJAX to finish
-    And I accept terms and conditions
-    And I wait for the page to load
-    When I press "سجل الطلبية"
-    And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "000000001"
-    And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
-    And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
-    And I fill in "Ecom_Payment_Pin_id" with "1234"
-    And I press "إرسال"
-    And I wait 5 seconds
-    Then I should not see "Invalid data - Please check your"
-    And I should not see "Card-Number(16 digits) & Pin(4 digits)"
-
   @cc
   Scenario: As a Guest user
   whenever I click 'back to basket' link on Map view
@@ -295,9 +262,9 @@ Feature: Test various checkout scenarios for Arabic site
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
     When I wait 5 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
     And I wait 2 seconds
     Then I should see "الإثنين"
     And I should see "الأحد"

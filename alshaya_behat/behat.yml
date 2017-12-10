@@ -72,7 +72,7 @@ hmuat:
     '': %paths.base%/features/hmkw/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/hmkw/features ]
+      paths: [ %paths.base%/features/hmkw/manual ]
       contexts:
         - FeatureContext:
             parameters:
@@ -82,7 +82,7 @@ hmuat:
               configurl: '/hooded-jacket-1'
               configtitle: 'Hooded jacket'
               configtitlear: 'جاكيت بقبعة'
-              configvariant: 'XS'
+              configvariant: 'M'
               base_url: 'https://hmkw-uat.factory.alshaya.com/'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
@@ -107,7 +107,7 @@ hmqa:
     '': %paths.base%/features/hmkw/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/hmkw/features ]
+      paths: [ %paths.base%/features/hmkw/manual ]
       contexts:
         - FeatureContext:
             parameters:

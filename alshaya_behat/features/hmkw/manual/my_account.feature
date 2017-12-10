@@ -113,17 +113,17 @@ Feature: Test the My account section for authenticated user
     by ID, name, SKU in combination with the Status of the order
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
-    When I fill in "edit-search" with "product"
+    When I fill in "edit-search" with "jersey"
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
     Then I should see at most "10" recent orders listed on orders tab
-    Then I should see all "product" orders
-#    When I fill in "edit-search" with "00000"
-#    And I wait 2 seconds
-#    When I click the label for "#edit-submit-orders"
-#    And I wait for the page to load
-#    Then I should see at most "10" recent orders listed on orders tab
-#    And I should see all orders for "00000"
+    Then I should see all "jersey" orders
+    When I fill in "edit-search" with "HMKWSSE"
+    And I wait 2 seconds
+    When I click the label for "#edit-submit-orders"
+    And I wait for the page to load
+    Then I should see at most "10" recent orders listed on orders tab
+    And I should see all orders for "HMKWSSE"
 
   Scenario: As an authenticated user
     I should be able to filter on all cancelled, dispatched and processing orders

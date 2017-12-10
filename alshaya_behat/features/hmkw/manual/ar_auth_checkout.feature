@@ -7,11 +7,13 @@ Feature: As an authenticated user
     Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
-    Given I am on a configurable product
+    Given I am on a simple product page
     And I wait for the page to load
     When I press "add to cart"
     And I wait for AJAX to finish
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    And I follow "عربية"
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
@@ -43,8 +45,10 @@ Feature: As an authenticated user
     and pay by KNET on Arabic site
     When I follow "خدمة التوصيل للمنزل"
     And I wait for the page to load
-    When I follow "توصيل إلى هذا العنوان"
-    And I wait for AJAX to finish
+    When I select address for Arabic
+    And I wait for the page to load
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for the page to load
     When I press "تابع للدفع"
     And I wait for the page to load
     When I select a payment option "payment_method_title_knet"
@@ -69,9 +73,11 @@ Feature: As an authenticated user
     I should be able to checkout using Home delivery
     and pay by Cybersource on Arabic site
     When I follow "خدمة التوصيل للمنزل"
-    And I wait for AJAX to finish
-    When I follow "توصيل إلى هذا العنوان"
-    And I wait for AJAX to finish
+    And I wait for the page to load
+    When I select address for Arabic
+    And I wait for the page to load
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for the page to load
     When I press "تابع للدفع"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cybersource"

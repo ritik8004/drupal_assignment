@@ -105,7 +105,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should see at most "10" recent orders listed on orders tab
     And the order status should be visible for all products
-    When I press "show more"
+    When I press "عرض المزيد"
     And I wait for AJAX to finish
     Then I should see at most "20" recent orders listed on orders tab
 
@@ -114,31 +114,23 @@ Feature: Test the My account section for authenticated user
   by ID, name, SKU in combination with the Status of the order
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
-#    When I fill in "edit-search" with "شورت من قماش الجورسيه با…"
-    When I fill in "edit-search" with "product"
+    When I fill in "edit-search" with "بلوزة من"
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
-#    Then I should see all "شورت من قماش الجورسيه با…" orders
-    Then I should see all "product" orders
-#    When I fill in "edit-search" with "MCKWRCE"
-#    And I wait 2 seconds
-#    When I click the label for "#edit-submit-orders"
-#    And I wait for the page to load
-#    And I should see all orders for "MCKWRCE"
+    Then I should see all "بلوزة من" orders
+    When I fill in "edit-search" with "HMKWSSA"
+    And I wait 2 seconds
+    When I click the label for "#edit-submit-orders"
+    And I wait for the page to load
+    And I should see all orders for "HMKWSSA"
 
-#  Scenario: As an authenticated user
-#  I should be able to filter on all cancelled, dispatched and processing orders
-#    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
-#    And I wait for the page to load
-#    When I select Cancelled from the status dropdown
-#    And I wait for the page to load
-#    Then I should see all "المعالجة" orders listed on orders tab
-#    When I select Dispatched from the status dropdown
-#    And I wait for the page to load
-#    Then I should see all "اعادة ايجاد" orders listed on orders tab
-#    When I select Processing from the status dropdown
-#    And I wait for the page to load
-#    Then I should see all "المعالجة" orders listed on orders tab
+  Scenario: As an authenticated user
+  I should be able to filter on all cancelled, dispatched and processing orders
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
+    And I wait for the page to load
+    When I select "قيد التنفيذ" from the dropdown
+    And I wait for the page to load
+    Then I should see all "قيد التنفيذ" orders listed on orders tab
 
   Scenario: As an authenticated user
   I should be able to update my contact details
@@ -167,8 +159,8 @@ Feature: Test the My account section for authenticated user
     Then I get the total count of address blocks
     When I follow "إضافة العنوان جديد"
     And I wait for AJAX to finish
-    When I fill in "field_address[0][address][given_name]" with "علية"
-    And I fill in "field_address[0][address][family_name]" with "خان"
+    When I fill in "field_address[0][address][given_name]" with "Test"
+    And I fill in "field_address[0][address][family_name]" with "Test"
     When I fill in "field_address[0][address][mobile_number][mobile]" with "55004455"
     When I select a value from Area dropdown
     When I fill in "field_address[0][address][locality]" with "بلوك A"

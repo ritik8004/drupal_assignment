@@ -2,7 +2,7 @@
 Feature: Test the PLP page
 
   Background:
-    Given I am on "/ladies"
+    Given I am on "/hm-home/shop-concept/test"
     And I wait for the page to load
 
   @eng
@@ -25,16 +25,16 @@ Feature: Test the PLP page
   Scenario: As a Guest
     I should be able to sort in ascending and descending order the list
     When I select "Name A to Z" from "edit-sort-bef-combine"
-    And I wait for the page to load
+    And I wait for AJAX to finish
     Then I should see results sorted in ascending order
     When I select "Name Z to A" from "edit-sort-bef-combine"
-    And I wait 15 seconds
+    And I wait for AJAX to finish
     Then I should see results sorted in descending order
     When I select "Price High to Low" from "edit-sort-bef-combine"
-    And I wait 15 seconds
+    And I wait for AJAX to finish
     Then I should see results sorted in descending price order
     When I select "Price Low to High" from "edit-sort-bef-combine"
-    And I wait 15 seconds
+    And I wait for AJAX to finish
     Then I should see results sorted in ascending price order
 
   @eng
@@ -109,7 +109,9 @@ Feature: Test the PLP page
     And I wait for AJAX to finish
     When I press "أضف إلى سلة التسوق"
     And I wait for AJAX to finish
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "عربية"
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
