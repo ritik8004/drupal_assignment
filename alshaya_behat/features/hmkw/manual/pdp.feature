@@ -208,8 +208,6 @@ Feature: Test the product detail page
     When I scroll to x "0" y "0" coordinates of page
     When I follow "عربية"
     And I wait for the page to load
-    When I follow "3-2‏‏ سنوات"
-    And I wait for AJAX to finish
     Then I should be able to see the header in Arabic
     Then it should display title, price and item code
     And it should display size
@@ -290,7 +288,9 @@ Feature: Test the product detail page
     When I scroll to x "0" y "0" coordinates of page
     When I follow "عربية"
     And I wait for the page to load
-    When I follow "3-2‏‏ سنوات"
+    When I select a color for the product
+    And I wait for AJAX to finish
+    When I select a size for the product
     And I wait for AJAX to finish
     When I click the label for "<social_media_link>"
     And I wait 5 seconds

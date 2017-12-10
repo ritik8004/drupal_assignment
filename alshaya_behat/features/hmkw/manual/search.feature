@@ -6,32 +6,34 @@ Feature: Search feature
     I should be able to search products
     Given I am on homepage
     And I wait for the page to load
-    When I fill in "edit-keywords" with "string"
+    When I close the popup
+    And I wait for the page to load
+    When I fill in "edit-keywords" with "bikini bottoms"
     And I press "Search"
-    Then I should see Search results page for "string"
+    Then I should see Search results page for "bikini bottoms"
 
   @arabic
   Scenario: As a Guest user
   I should be able to search products
     Given I am on homepage
     And I wait for the page to load
+    When I close the popup
+    And I wait for the page to load
     And I follow "عربية"
     When I wait for the page to load
-    When I fill in "edit-keywords" with "بلوزة بحمالات مع قبة على شكل حرف V"
-#    When I fill in "edit-keywords" with "الرضع"
+    When I fill in "edit-keywords" with ""
     And I press "Search"
     Then I should see Search results page in Arabic for "بلوزة بحمالات مع قبة على شكل حرف V"
-#    Then I should see Search results page in Arabic for "الرضع"
 
   @eng
   Scenario: As an authenticated user
   I should be able to search products
     Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I fill in "edit-keywords" with "Product"
+    When I fill in "edit-keywords" with "bikini bottoms"
     And I press "Search"
     And I wait for the page to load
-    Then I should see Search results page for "Product"
+    Then I should see Search results page for "bikini bottoms"
 
   @arabic
   Scenario: As an authenticated user
@@ -53,6 +55,8 @@ Feature: Search feature
     when my search yields no results
     Given I am on homepage
     And I wait for the page to load
+    When I close the popup
+    And I wait for the page to load
     When I fill in "edit-keywords" with "randomtext"
     And I press "Search"
     Then I should see "Your search did not return any results."
@@ -62,6 +66,8 @@ Feature: Search feature
   I should be prompted with a correct message
   when my search yields no results
     Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
     And I wait for the page to load
     And I follow "عربية"
     When I wait for the page to load
@@ -75,7 +81,9 @@ Feature: Search feature
     and add it to the cart
     Given I am on homepage
     And I wait for the page to load
-    When I fill in "edit-keywords" with "Product"
+    When I close the popup
+    And I wait for the page to load
+    When I fill in "edit-keywords" with "bikini bottoms"
     And I press "Search"
     And I wait for AJAX to finish
     When I select a product in stock
@@ -114,6 +122,8 @@ Feature: Search feature
   I should be able to search for a product
   and add it to the cart on Arabic site
     Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
     And I wait for the page to load
     And I follow "عربية"
     When I wait for the page to load
@@ -157,7 +167,9 @@ Feature: Search feature
     in ascending, descending order
     Given I am on homepage
     And I wait for the page to load
-    When I fill in "edit-keywords" with "Product"
+    When I close the popup
+    And I wait for the page to load
+    When I fill in "edit-keywords" with "bikini bottoms"
     And I press "Search"
     And I wait for the page to load
     When I select "Name A to Z" from "edit-sort-bef-combine"
@@ -178,12 +190,14 @@ Feature: Search feature
     then I should be redirected to to the Arabic site and vice-versa
     Given I am on homepage
     And I wait for the page to load
+    When I close the popup
+    And I wait for the page to load
 #    When I fill in "edit-keywords" with "بكحتة"
     When I fill in "edit-keywords" with "تي- شيرت"
     And I press "Search"
 #    Then I should see Search results page in Arabic for "بكحتة"
     Then I should see Search results page in Arabic for "تي- شيرت"
-    When I fill in "edit-keywords" with "baby"
+    When I fill in "edit-keywords" with "bikini bottoms"
     And I press "Search"
     When I wait for the page to load
-    Then I should see Search results page for "baby"
+    Then I should see Search results page for "bikini bottoms"

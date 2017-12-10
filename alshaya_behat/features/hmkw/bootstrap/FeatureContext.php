@@ -76,7 +76,6 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         $this->config_title = $parameters['configtitle'];
         $this->config_title_ar = $parameters['configtitlear'];
         $this->config_variant = $parameters['configvariant'];
-
     }
 
     /**
@@ -1187,7 +1186,7 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     public function iClickAPointerOnTheMap() {
         $this->getSession()
             ->getPage()
-            ->find('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img')
+            ->find('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(2) > img')
             ->click();
     }
 
@@ -1219,13 +1218,14 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
      */
     public function theOrderStatusShouldBeVisibleForAllProducts() {
         $page = $this->getSession()->getPage();
-        $status_codes = array("Processing", "Cancelled", "Confirmed", "Dispatched", "المعالجة", "تم الإلغاء", "قيد التوصيل");
+        $status_codes = array("Processing", "Cancelled", "Confirmed", "Dispatched", "قيد التنفيذ");
         $status_codes_length = count($status_codes);
 
         $all_rows = $page->findAll('css', '.order-summary-row');
         foreach ($all_rows as $row) {
             $status_button_text = $row->find('css', 'td.desktop-only > div')
                 ->getText();
+
             $success = false;
             for($status=0; $status < $status_codes_length; $status++){
                 if(strcasecmp($status_button_text, $status_codes[$status]) == 0) {
@@ -1506,15 +1506,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         $page = $this->getSession()->getPage();
         $page->find('css', '.select2-selection__arrow')->click();
         $page->find('css', 'ul.select2-results__options li:nth-child(3)')->click();
-    }
-
-    /**
-     * @When /^I select Processing from the status dropdown$/
-     */
-    public function iSelectProcessingFromTheStatusDropdown() {
-        $page = $this->getSession()->getPage();
-        $page->find('css', '.select2-selection__arrow')->click();
-        $page->find('css', 'ul.select2-results__options li:nth-child(4)')->click();
     }
 
     /**
@@ -2128,6 +2119,21 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         $expected_total = $sub_total - $discounted_price;
         if($actual_total !== $expected_total){
             throw new Exception('Discount of '.$discount_percent. ' did not get applied');
+        }
+    }
+
+    /**
+     * @When /^I close the popup$/
+     */
+    public function iCloseThePopup()
+    {
+        $page = $this->getSession()->getPage();
+        $popup = $this->getSession()->getPage()->findById("popup");
+        if($popup->isVisible()){
+            $page->findById('close-popup')->click();
+        }
+        else{
+            echo 'Welcome Popup is currently not displayed';
         }
     }
 }

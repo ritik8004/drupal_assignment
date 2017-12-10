@@ -2,27 +2,29 @@
 Feature: Test Store finder page
 
   Background:
-    Given I am on "/store-finder"
+    Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait for the page to load
+    When I follow "Find Store"
     And I wait for the page to load
 
   Scenario: As a Guest user,
   I should be navigated to Store detail page
   On clicking a link from the list on Store finder page
-    When I follow "M.H. Alshaya Building"
+    When I follow "Avenues Family"
     And I wait for the page to load
-    Then I should see "M.H. Alshaya Building"
-    And I should see text matching "AlDabbous St, Fahaheel, Kuwait"
-    And I should see "Fahaheel (First Floor)"
-    And I should see "+965 22081332"
+    Then I should see "Avenues Family"
+    And I should see text matching "Al-Rai- 5th Ring Road Sheikh Zayed Bin Sultan Al Nahyan Road"
+    And I should see "+965 2228 3334"
     And I should see "Opening Hours"
     And I should see the link "Get directions"
-    But I should not see "Al Mughateer Mall"
-    But I should not see "Rawda Co-op."
+    But I should not see "H&M Grand Avenue"
 
   Scenario: As a Guest user,
   I should be able to see the opening hours
   On Store detail page
-    When I follow "M.H. Alshaya Building"
+    When I follow "Avenues Family"
     And I wait for the page to load
     And I click the label for ".hours--label"
     And I wait for AJAX to finish
@@ -41,7 +43,7 @@ Feature: Test Store finder page
   Scenario: As a Guest user,
   I should be navigated to Google Maps
   On clicking Get Direction from Store detail page
-    When I follow "M.H. Alshaya Building"
+    When I follow "Avenues Family"
     And I wait for the page to load
     And I follow "Get directions"
     And I wait for the page to load

@@ -2,6 +2,10 @@
 Feature: Test basket page
 
   Background:
+    Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait for the page to load
     Given I am on a simple product page
     And I wait for the page to load
     When I press "Add to cart"
@@ -57,9 +61,9 @@ Feature: Test basket page
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
     Then I should see "Home delivery in 2 days on orders over KWD 35"
-#    When I hover over tooltip "p.click-collect.tooltip--head"
-#    And I wait 2 seconds
-#    Then I should see "Collect the order in store from 2-3 days"
+    When I hover over tooltip "p.click-collect.tooltip--head"
+    And I wait 2 seconds
+    Then I should see "Collect the order in store from 2-3 days"
 
   Scenario: As a Guest
     I should be warned about privelege card number mismatch
@@ -102,19 +106,23 @@ Feature: Test basket page
   Scenario: As a Guest on arabic site
   I should be able to see tooltips
   for both Home Deliver and Click and Collect
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "عربية"
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
     Then I should see "خدمة التوصيل للمنازل خلال 2 أيام للطلبيات التي تزيد عن 35 د.ك."
-#    When I hover over tooltip "p.click-collect.tooltip--head"
-#    And I wait 2 seconds
-#    Then I should see "استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى 2-3 أيام"
+    When I hover over tooltip "p.click-collect.tooltip--head"
+    And I wait 2 seconds
+    Then I should see "استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى 2-3 أيام"
 
   @arabic
   Scenario: As a Guest
   I should be warned about privelege card number mismatch
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "عربية"
     And I wait for the page to load
     When I click the label for "#details-privilege-card-wrapper > div"
     Then I should see "إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني"
