@@ -5,6 +5,7 @@
  * Module file for Alshaya ACM Product Position.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Query\QueryInterface;
@@ -86,10 +87,25 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
         if ($default_sort) {
           $filters['sort_bef_combine'] = $default_sort;
         }
+
         $view->setExposedInput($filters);
       }
     }
   }
+
+  // Nid is used for position sort, this is hard coded so we use it directly.
+  if (isset($filters['sort_bef_combine']) && strpos($filters['sort_bef_combine'], 'nid') === 0) {
+    $view->element['#cache']['tags'][] = 'search_api_list:product:sort_position';
+  }
+}
+
+/**
+ * Implements hook_acq_sku_position_sync_finished().
+ */
+function alshaya_acm_product_position_acq_sku_position_sync_finished() {
+  // Invalidate the cache tag for product index pages using position sort.
+  $tags = ["search_api_list:product:sort_position"];
+  Cache::invalidateTags($tags);
 }
 
 /**

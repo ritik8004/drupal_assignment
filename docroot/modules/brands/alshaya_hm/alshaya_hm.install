@@ -8,7 +8,17 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_update_N().
+ * Implements hook_update().
+ *
+ * Disable loyalty.
+ */
+function alshaya_hm_update_8002() {
+  \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')
+    ->set('enable_disable_loyalty', FALSE)
+    ->save();
+}
+
+/**
  *
  * Enable alshaya_hm_redirect module.
  */
@@ -197,6 +207,11 @@ function alshaya_hm_install() {
   \Drupal::configFactory()->getEditable('alshaya_master.mobile_number_settings')
   ->set('maxlength', 8)
   ->save();
+
+  // Disable loyalty.
+  \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')
+    ->set('enable_disable_loyalty', FALSE)
+    ->save();
 
   // Set initial translation strings.
   $strings = [
