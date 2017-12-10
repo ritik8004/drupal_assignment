@@ -248,12 +248,9 @@
     }
 
     &.above-mobile {
-      width: 14.38rem;
-
       @include breakpoint($only-tablet) {
         padding-right: 1rem;
         vertical-align: middle;
-        width: 10.5rem;
       }
 
       @include breakpoint($desktop) {
@@ -266,8 +263,6 @@
     }
 
     &.toggle--icon {
-      width: 14.38rem;
-
       @include breakpoint($desktop) {
         width: 28.7%;
       }
