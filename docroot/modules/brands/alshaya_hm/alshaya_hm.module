@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Implements hook_form_alter().
@@ -42,4 +43,76 @@ function alshaya_hm_preprocess_block(&$variables) {
   if($variables['base_plugin_id'] == 'join_the_club') {
     $variables['content']['image']['#uri'] = $image_path;
   }
+}
+
+
+/**
+ * Implements hook_datalayer_alter().
+ */
+function alshaya_hm_datalayer_alter(&$data_layer) {
+  if (!_alshaya_seo_process_gtm()) {
+    return;
+  }
+  try {
+    if (isset($data_layer['cartItemsFlocktory'])) {
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+      $cart = $cart_storage->getCart(FALSE);
+      if ($cart) {
+        $cart_items = $cart->get('items');
+        foreach ($cart_items as $key => $item) {
+          $sku = SKU::loadFromSku($item['sku']);
+          $images = _alshaya_hm_get_sku_images($sku);
+          $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
+        }
+      }
+    }
+  }
+  catch (Exception $e) {
+    \Drupal::logger('alshaya_seo')->error('Error while fetching GTM attributes: @message', ['@message' => $e->getMessage()]);
+  }
+}
+
+/**
+ * Implemented hook_gtm_product_attributes_alter().
+ */
+function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAttributes) {
+  // Changes for the image count.
+  $skuId = $product->get('field_skus')->first()->getString();
+  if (isset($skuId)) {
+    $sku = SKU::loadFromSku($skuId);
+    $images = _alshaya_hm_get_sku_images($sku);
+    if (!empty($images)) {
+      $skuAttributes['gtm-dimension4'] = count($images);
+    }
+  }
+}
+
+/**
+ * Implemented hook_module_implements_alter().
+ */
+function alshaya_hm_module_implements_alter(&$implementations, $hook) {
+  if ($hook != 'datalayer_alter') {
+    return;
+  }
+  $module = 'alshaya_hm';
+  $group = array($module => $implementations[$module]);
+  unset($implementations[$module]);
+  $implementations = $implementations + $group;
+}
+
+/**
+ * Helper function to get all the images for an sku.
+ *
+ * @param $sku
+ * @return mixed
+ */
+function _alshaya_hm_get_sku_images($sku) {
+  $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+  if ($sku->bundle() == 'simple') {
+    $images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_main');
+  }
+  elseif ($sku->bundle() == 'configurable') {
+    $images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_main');
+  }
+  return $images;
 }
