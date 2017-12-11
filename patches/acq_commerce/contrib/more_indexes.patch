@@ -115,7 +115,7 @@ index 433715eb2..89e4e70a4 100644
        'fields' => [
          'sku' => [
            'type' => 'varchar',
-@@ -125,6 +142,55 @@ function acq_sku_install() {
+@@ -125,6 +142,54 @@ function acq_sku_install() {
            'default' => '',
          ],
        ],
@@ -169,7 +169,6 @@ index 433715eb2..89e4e70a4 100644
 +      ],
 +    ],
 +  ];
-+
 +
 +  return $indexes;
  }
