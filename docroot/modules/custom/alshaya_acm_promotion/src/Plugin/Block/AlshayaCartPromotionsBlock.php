@@ -14,7 +14,6 @@ use Drupal\Driver\Exception\Exception;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
-use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a 'AlshayaCartPromotionsBlock' block.
@@ -218,9 +217,8 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
         // For free shipping, we only show if it is applied.
         if (in_array($promotion_rule_id, $cartRulesApplied)) {
           // Add the message as success message for free shipping.
-          // Get message from config for free shipping.
           $free_shipping = [
-            '#markup' => \Drupal::config('alshaya_acm_promotion.config')->get('free_shipping_order')['label'],
+            '#markup' => $this->t('Your order qualifies for free delivery.'),
           ];
         }
       }
@@ -275,8 +273,9 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['cart_' . $this->cartStorage->getCart(FALSE)->id()]);
+  public function getCacheMaxAge() {
+    // Disable cache for highly dynamic content.
+    return 0;
   }
 
 }

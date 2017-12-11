@@ -49,6 +49,14 @@ function alshaya_product_views_pre_execute(ViewExecutable $view) {
 }
 
 /**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_product_alshaya_master_post_drupal_install() {
+  // @TODO: ACR2-2190 - get promotion_nid created properly during install.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+}
+
+/**
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_product_alshaya_i18n_onetime_translation_add() {
