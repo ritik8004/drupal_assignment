@@ -306,12 +306,12 @@
       &--about {
         @include breakpoint($tablet) {
           padding-#{$left}: 0.834%;
-          padding-#{$right}: 7.62%;
+          padding-#{$right}: 2%;
         }
 
         @include breakpoint($desktop) {
           padding-#{$left}: 9.7%;
-          padding-#{$right}: 14.25%;
+          padding-#{$right}: 8.25%;
         }
 
         .is-accordion {
@@ -322,7 +322,7 @@
 
         .c-footer-menu {
           @include breakpoint($tablet) {
-            width: 8.8125rem;
+            width: 12.5rem;
           }
         }
       }
