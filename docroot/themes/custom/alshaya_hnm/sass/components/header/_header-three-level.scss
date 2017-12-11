@@ -30,9 +30,9 @@
       #{$right}: 0;
       top: -0.875rem;
       margin-top: 0;
-      height: 21.875rem;
+      height: 18.4375rem;
       width: auto;
-      padding: 2.5rem 6.5625rem 2.5rem 3rem;
+      padding: 2.5rem 1.875rem;
       background-color: $grey1;
 
       .title {
@@ -45,6 +45,7 @@
         letter-spacing: 0.5px;
         font-weight: normal;
         color: $black-three;
+        margin-#{$left}: 0.625rem;
       }
     }
 

@@ -301,6 +301,14 @@
 
         &.tab-click-collect {
           margin-#{$left}: -1px;
+
+          &.active--tab--head {
+            margin-#{$left}: 1px;
+
+            html[lang=ar] & {
+              margin-right: 0;
+            }
+          }
         }
       }
 
@@ -868,6 +876,10 @@
             @include breakpoint($only-tablet) {
               width: 54%;
               font-size: 0.875rem;
+            }
+
+            &.full-width {
+              width: 100%;
             }
           }
 

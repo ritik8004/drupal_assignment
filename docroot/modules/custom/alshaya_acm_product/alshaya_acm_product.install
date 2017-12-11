@@ -11,6 +11,15 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Avoid rendering cross-sell by default.
+ */
+function alshaya_acm_product_update_8006() {
+  \Drupal::configFactory()->getEditable('alshaya_acm.settings')->set('display_crosssell', FALSE)->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install the new fields.
  * Revert product_slider view to use nid instead of field_skus.
  */

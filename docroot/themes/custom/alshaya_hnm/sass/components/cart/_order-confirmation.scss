@@ -216,7 +216,7 @@
 
     strong {
       font-family: $hnm-bold;
-      font-weight: normal;
+      font-weight: bold;
     }
 
     @include icon(info, before) {
@@ -450,10 +450,14 @@
     }
   }
 
-  .price-row {
+  .total-row {
     .right--align {
       &.label {
         padding: 0 1.125rem;
+
+        @include breakpoint($only-tablet) {
+          padding: 0 2.5rem 0 0;
+        }
       }
     }
   }
@@ -660,7 +664,7 @@
 #edit-confirmation-continue-shopping {
   font-size: 0.75rem;
   font-family: $hnm-bold;
-  font-weight: normal;
+  font-weight: bold;
   border: 1px solid $hnm-black-two;
   color: $hnm-black-two;
   float: $right;
@@ -676,8 +680,10 @@
   }
 
   @include breakpoint($tablet) {
-    margin-#{$right}: 6.1rem;
+    margin-#{$right}: 1.5rem;
+    transition: margin 0.25s ease-in-out;
     width: 9.875rem;
+    min-width: 11.625rem;
   }
 
   &.expanded-table {
@@ -686,7 +692,7 @@
     }
 
     @include breakpoint($only-tablet) {
-      margin-right: 2.8rem;
+      margin-right: 3.8rem;
 
       html[lang=ar] & {
         margin-left: 1.2rem;
@@ -694,12 +700,13 @@
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 7.8rem;
+      margin-#{$right}: 1.5rem;
     }
   }
 
   @include breakpoint($desktop) {
     margin-#{$right}: 1.5rem;
+    transition: margin 0.25s ease-in-out;
   }
 }
 
@@ -740,3 +747,14 @@
   }
 }
 
+.alias--cart-checkout-confirmation {
+  .order-confirmation {
+    .user__order--detail {
+      .desktop-only {
+        @include breakpoint($only-tablet) {
+          display: block;
+        }
+      }
+    }
+  }
+}

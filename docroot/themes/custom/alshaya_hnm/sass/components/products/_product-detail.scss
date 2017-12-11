@@ -930,7 +930,7 @@
 
   .change-location-link,
   .change-store-link {
-    color: $cerulean-two;
+    color: $black;
     font-size: 0.75rem;
     font-family: $arial;
     font-weight: bold;
@@ -1016,8 +1016,8 @@
 
   .pac-item,
   .pac-not-found {
-    padding: 0.125rem 0.3125rem;
-    font-family: $arial;
+    padding: 0.125rem 0.6rem;
+    font-family: $hnm-regular;
 
     &:hover {
       background-color: $white-four;
@@ -1137,7 +1137,7 @@
   font-family: $arial;
   font-size: 0.75rem;
   font-weight: bold;
-  color: $marine-blue;
+  color: $black;
   padding: 1.063rem 0;
   border-top: 1px solid $white;
   cursor: pointer;
@@ -1179,7 +1179,7 @@
       #{$right}: -100%;
       transition: #{$right} 1s ease;
       height: 33.75rem;
-      border: 1px solid $marine-blue;
+      border: 1px solid $black;
       padding: 1rem 1.5rem 0;
       background: $white-five;
       overflow: hidden;
@@ -1216,7 +1216,7 @@
             }
 
             .store-name {
-              color: $breadcrumb-active;
+              color: $hnm-black-two;
             }
           }
         }
@@ -1242,7 +1242,7 @@
       font-size: 30px;
       text-align: center;
       color: $white-two;
-      background-color: $marine-blue;
+      background-color: $hnm-black-two;
       cursor: pointer;
     }
 
@@ -1288,7 +1288,7 @@
       h3 {
         font-family: $arial;
         font-weight: bold;
-        color: $marine-blue;
+        color: $hnm-black-two;
         margin-top: 0;
         margin-bottom: 0.5625rem;
         font-size: 0.875rem;
@@ -1341,7 +1341,7 @@
 
           &-name {
             font-weight: bold;
-            color: $blue-three;
+            color: $hnm-black-two;
           }
 
           &-delivery-time {
@@ -1354,7 +1354,7 @@
           }
 
           &-low-stock {
-            font-family: $arial;
+            font-family: $hnm-regular;
             font-size: 0.75rem;
             font-weight: bold;
             color: $pumpkin-orange;
@@ -1525,9 +1525,6 @@
 
         @include breakpoint($tablet) {
           float: $left;
-        }
-
-        @include breakpoint($desktop) {
           margin-top: 1.45rem;
         }
       }
@@ -1750,24 +1747,12 @@
 article[gtm-sku-type="simple"] {
   .acq-content-product {
     .sku-base-form {
-      .form-item-quantity {
-        float: $left !important;
-
-        @include breakpoint($tablet) {
-          margin-top: 2.5rem;
-        }
-      }
-
       button[type="submit"] {
         @include breakpoint($only-tablet) {
-          float: $right;
-          margin-top: 2rem;
+          float: $left;
+          margin-top: 0.3125rem;
           height: 2.188rem;
           text-align: center;
-        }
-
-        @include breakpoint($desktop) {
-          margin-top: 2.5rem !important;
         }
       }
     }
@@ -1777,7 +1762,7 @@ article[gtm-sku-type="simple"] {
 .nodetype--acq_product,
 .path--cart {
   .stock-checker {
-    font-family: $alshaya-thin;
+    font-family: $hnm-regular;
     padding: 0.625rem 0;
     font-size: 0.75rem;
 
@@ -1796,12 +1781,14 @@ article[gtm-sku-type="simple"] {
   @include breakpoint($only-mobile) {
     article.stock-check-processed {
       min-height: 5rem;
+      position: relative;
     }
   }
 
   span.out-of-stock {
     background-color: $cherry;
-    font-family: $alshaya-bold;
+    font-family: $hnm-bold;
+    text-transform: uppercase;
     font-size: 0.75rem;
     display: block;
     vertical-align: middle;
@@ -2011,6 +1998,46 @@ html[lang=ar] {
       @include breakpoint($only-mobile) {
         margin-left: 0;
         width: 6rem;
+      }
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .labels-container {
+    .label {
+      &.top {
+        &-left {
+          @include breakpoint($only-tablet) {
+            #{$left}: 1.3rem;
+          }
+
+          @include breakpoint($desktop) {
+            #{$left}: 5.3rem;
+          }
+        }
+
+        &-right {
+          @include breakpoint($only-tablet) {
+            #{$right}: 1.3rem;
+          }
+
+          @include breakpoint($desktop) {
+            #{$right}: 5.3rem;
+          }
+        }
+      }
+
+      &.bottom {
+        &-right {
+          @include breakpoint($only-tablet) {
+            #{$right}: 1.3rem;
+          }
+
+          @include breakpoint($desktop) {
+            #{$right}: 5.3rem;
+          }
+        }
       }
     }
   }

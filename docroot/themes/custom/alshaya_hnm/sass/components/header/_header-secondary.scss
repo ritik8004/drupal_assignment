@@ -116,6 +116,10 @@
       &.language-link {
         font-family: $hnm-arabic-medium;
         letter-spacing: normal;
+
+        html[lang='ar'] & {
+          letter-spacing: 0.8px;
+        }
       }
     }
 
@@ -186,7 +190,7 @@
     border-bottom: 1px solid $white;
     text-transform: lowercase;
     font-weight: normal;
-    font-family: $alshaya-bold;
+    font-family: $hnm-bold;
 
     @include breakpoint($upto-desktop) {
       color: $hnm-black-four;
@@ -262,12 +266,14 @@
 
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
+        color: $hnm-black-two;
+        font-weight: bold;
+        font-size: 1.313rem;
+        cursor: pointer;
+        pointer-events: none;
         position: absolute;
-        color: $marine-blue;
+        margin-top: -0.25rem;
         #{$right}: 0;
-        font-size: 1.25rem;
-        top: 50%;
-        transform: translateY(-50%);
       }
     }
   }
@@ -300,10 +306,6 @@
     width: 100%;
   }
 
-  @include breakpoint($only-mobile) {
-    box-shadow: 0 0 0.125rem $greyish;
-  }
-
   @include breakpoint($only-tablet) {
     height: 4.5rem;
   }
@@ -332,11 +334,7 @@
 
 .header--fixed {
   @include breakpoint($desktop) {
-    margin-top: 9.75rem;
-  }
-
-  .branding__menu {
-    box-shadow: 0 0 0.125rem $greyish;
+    margin-top: 7.125rem;
   }
 }
 

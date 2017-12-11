@@ -138,6 +138,8 @@
 
           // Show the form.
           $('#address-book-form-wrapper').slideDown();
+          $(this).hide();
+          $('.delivery-address-title').addClass('full-width');
         });
 
         $('#cancel-address-add-edit').on('click', function (event) {
@@ -153,6 +155,8 @@
 
           // Display the hidden address which was being edited.
           $('#edit-member-delivery-home-addresses').slideDown();
+          $('#add-address-button').show();
+          $('.delivery-address-title').removeClass('full-width');
         });
       });
 
@@ -244,6 +248,13 @@
           });
         });
       }
+
+      // For view on map link (in mobile) we hide the loader after
+      // few seconds as user will come back on same page.
+      // Ideally it should not trigger before unload event but it does.
+      $('.view-on-map.mobile-only').once('bind-js').on('click', function () {
+        setTimeout('jQuery(".checkout-ajax-progress-throbber").remove()', 250);
+      });
     }
   };
 

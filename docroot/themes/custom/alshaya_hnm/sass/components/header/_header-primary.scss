@@ -57,8 +57,8 @@ header {
     padding-right: 1.5rem;
 
     @include breakpoint($desktop) {
-      padding-bottom: 1.25rem;
-      padding-top: 1.813rem;
+      padding-bottom: 0.25rem;
+      padding-top: 0.75rem;
       background: $white-five;
       margin-top: 0;
     }
@@ -211,13 +211,20 @@ header {
       border-bottom: 1px solid $white-smoke-border;
       background-image: none;
       letter-spacing: 1px;
-      color: $grey6;
+      color: $hnm-black-two;
       padding-#{$left}: 0.4375rem;
 
       @include breakpoint($only-mobile) {
-        padding: 0.625rem;
-        border-bottom: none;
-        font-size: 0.6875rem;
+        padding: 0.4375rem;
+        vertical-align: bottom;
+        border: none;
+        border: 0;
+        background-image: none;
+        font-family: $hnm-regular;
+        color: $hnm-black-two;
+        font-size: 0.875rem;
+        line-height: 1.36;
+        letter-spacing: 0.5px;
       }
 
       @include breakpoint($tablet) {
@@ -292,7 +299,13 @@ header {
     }
 
     .cart-link {
-      background: url('../imgs/icons/bag.svg') no-repeat;
+      @include icon(shopping-bag) {
+        font-size: 2.125rem;
+        position: absolute;
+        #{$right}: -0.5rem;
+        top: -0.375rem;
+      }
+
       display: inline-block;
       width: 1.375rem;
       height: 1.375rem;
@@ -439,9 +452,6 @@ header {
   }
 
   input {
-    color: $grey-ash;
-    font-family: $hnm-regular;
-
     @include breakpoint($only-mobile) {
       font-size: 0.875rem;
     }
@@ -602,12 +612,9 @@ header {
     }
 
     .store {
-      &:hover {
-        background-color: $marine-blue-two;
-        color: $white-five;
-
-        @include icon(mappin) {
-          color: $white-five;
+      &.is-active {
+        &::before {
+          color: $hnm-red;
         }
       }
     }
@@ -736,14 +743,14 @@ header {
         font-size: 0.9375rem;
         text-transform: uppercase;
         font-family: $hnm-demibold;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
       }
 
       &.active {
         a.menu--one__link {
           &::after {
             content: '';
-            height: 1px;
+            height: 2px;
             background: $white-smoke-border;
             display: inherit;
             width: 100%;
@@ -1009,6 +1016,7 @@ header {
       display: inline-block;
       max-width: 11.5rem;
       vertical-align: top;
+      margin: 0 0.625rem;
     }
 
     img {
@@ -1513,10 +1521,6 @@ header {
 
   @include breakpoint($only-mobile) {
     max-width: 10rem;
-
-    html[lang=ar] & {
-      max-width: 6.5625rem;
-    }
   }
 
   a {
@@ -1533,7 +1537,7 @@ header {
       margin: 0 auto;
       text-align: center;
       width: 6.063rem;
-      height: 3.938rem;
+      height: 3.375rem;
     }
   }
 }
@@ -1571,8 +1575,11 @@ header {
 .c-pre-content__region {
   @include breakpoint($desktop) {
     height: 2.75rem;
-    border-bottom: 1px solid $white;
   }
+}
+
+.branding__menu {
+  border-bottom: 1px solid $white;
 }
 
 html[lang='ar'] {
