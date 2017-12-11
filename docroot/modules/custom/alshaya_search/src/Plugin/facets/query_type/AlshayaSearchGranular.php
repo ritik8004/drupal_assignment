@@ -27,11 +27,55 @@ class AlshayaSearchGranular extends SearchApiGranular {
   /**
    * {@inheritdoc}
    */
+  public function build() {
+    // We display overlapping values in frontend, but internally
+    // we need ranges that are exclusive of each other.
+    // For instance on FE we show 4-6 and 6-8, here if there are products
+    // with price exactly 6 it is shown in 4-6 by facets but for counting
+    // we were displaying it in 6-8.
+    if (!empty($this->results)) {
+      // Get granularity to clean-up based on that.
+      $granularity = $this->getGranularity();
+
+      $filters = [];
+
+      // Result contains quotes as it is stored as string.
+      foreach ($this->results as $key => $result) {
+        $filter = str_replace('"', '', $result['filter']);
+        $filters[$filter] = $key;
+      }
+
+      // Sort them by key, we have int now.
+      ksort($filters);
+
+      foreach ($filters as $filter => $key) {
+        // No checking for cases between 0 and granularity.
+        if ($filter < $granularity) {
+          continue;
+        }
+
+        // Check if the value is edge case (== granularity).
+        if ($filter % $granularity === 0) {
+          // We decrease it by 1 decimal point to ensure it is shown in 4 to 6
+          // instead of 6 to 8 (by making it 5.999).
+          $new_value = $filter - (1 / pow(10, self::getDecimals()));
+          $this->results[$key]['filter'] = '"' . $new_value . '"';
+        }
+      }
+    }
+
+    // Call parent's build now to use the contrib code as is.
+    return parent::build();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function calculateResultFilter($value) {
     $range = $this->getRange(floor($value));
 
     $t_options = [
-      '@start' => alshaya_acm_price_format($range['start_display']),
+      '@start' => alshaya_acm_price_format($range['start']),
       '@stop' => alshaya_acm_price_format($range['stop']),
     ];
 
@@ -72,12 +116,8 @@ class AlshayaSearchGranular extends SearchApiGranular {
 
     $stop = $start + $granularity;
 
-    // Add 0.001 or similar to ensure we don't have overlapping values.
-    $start_raw = $start + 1 / pow(10, self::getDecimals());
-
     return [
-      'start' => $start_raw,
-      'start_display' => $start,
+      'start' => $start,
       'stop' => $stop,
     ];
   }
@@ -85,45 +125,45 @@ class AlshayaSearchGranular extends SearchApiGranular {
   /**
    * {@inheritdoc}
    */
-  public function build() {
-    // We display overlapping values in frontend, but internally
-    // we need ranges that are exclusive of each other.
-    // For instance on FE we show 4-6 and 6-8, here if there are products
-    // with price exactly 6 it is shown in 4-6 by facets but for counting
-    // we were displaying it in 6-8.
-    if (!empty($this->results)) {
-      // Get granularity to clean-up based on that.
-      $granularity = $this->getGranularity();
+  public function execute() {
+    $query = $this->query;
 
-      $filters = [];
+    // Alter the query here.
+    if (!empty($query)) {
+      $options = &$query->getOptions();
 
-      // Result contains quotes as it is stored as string.
-      foreach ($this->results as $key => $result) {
-        $filter = str_replace('"', '', $result['filter']);
-        $filters[$filter] = $key;
-      }
+      $operator = $this->facet->getQueryOperator();
+      $field_identifier = $this->facet->getFieldIdentifier();
+      $exclude = $this->facet->getExclude();
+      $options['search_api_facets'][$field_identifier] = [
+        'field' => $field_identifier,
+        'limit' => $this->facet->getHardLimit(),
+        'operator' => $this->facet->getQueryOperator(),
+        'min_count' => $this->facet->getMinCount(),
+        'missing' => FALSE,
+      ];
 
-      // Sort them by key, we have int now.
-      ksort($filters);
+      // Add the filter to the query if there are active values.
+      $active_items = $this->facet->getActiveItems();
+      $filter = $query->createConditionGroup($operator, ['facet:' . $field_identifier]);
+      if (count($active_items)) {
+        foreach ($active_items as $value) {
+          $range = $this->calculateRange($value);
 
-      foreach ($filters as $filter => $key) {
-        // No checking for cases between 0 and granularity.
-        if ($filter < $granularity) {
-          continue;
+          $item_filter = $query->createConditionGroup('AND', ['facet:' . $field_identifier]);
+
+          // Below line is the only change from default implementation of
+          // parent::build(). We want to keep the results exclusive in
+          // calculation but overlapping on display (frontend) so we use
+          // GT instead GTEQ in condition below.
+          $item_filter->addCondition($this->facet->getFieldIdentifier(), $range['start'], $exclude ? '<' : '>');
+          $item_filter->addCondition($this->facet->getFieldIdentifier(), $range['stop'], $exclude ? '>' : '<=');
+
+          $filter->addConditionGroup($item_filter);
         }
-
-        // Check if the value is edge case (== granularity).
-        if ($filter % $granularity === 0) {
-          // We decrease it by 1 decimal point to ensure it is shown in 4 to 6
-          // instead of 6 to 8 (by making it 5.999).
-          $new_value = $filter - (1 / pow(10, self::getDecimals()));
-          $this->results[$key]['filter'] = '"' . $new_value . '"';
-        }
+        $query->addConditionGroup($filter);
       }
     }
-
-    // Call parent's build now to use the contrib code as is.
-    return parent::build();
   }
 
   /**
