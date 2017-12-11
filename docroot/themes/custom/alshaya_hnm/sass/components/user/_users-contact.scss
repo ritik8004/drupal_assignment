@@ -92,5 +92,7 @@
 }
 
 .field--name-field-last-name {
-  float: $right;
+  @include breakpoint($desktop) {
+    float: $right;
+  }
 }
