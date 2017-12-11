@@ -14,7 +14,7 @@ use Symfony\Component\Yaml\Yaml;
  * Avoid rendering cross-sell by default.
  */
 function alshaya_acm_product_update_8006() {
-  \Drupal::configFactory()->get('alshaya_acm.settings')->set('display_crosssell', FALSE)->save();
+  \Drupal::configFactory()->getEditable('alshaya_acm.settings')->set('display_crosssell', FALSE)->save();
 }
 
 /**
