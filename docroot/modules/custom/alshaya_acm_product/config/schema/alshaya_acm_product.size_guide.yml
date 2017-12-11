@@ -1,0 +1,13 @@
+alshaya_acm_product.size_guide:
+  type: config_object
+  label: 'Alshaya Style Guide Config'
+  mapping:
+    size_guide_link:
+      type: integer
+      label: 'Enable Size Guide link'
+    size_guide_modal_content:
+      type: text_format
+      label: 'Size guide content'
+    langcode:
+      type: string
+      label: 'Language code'

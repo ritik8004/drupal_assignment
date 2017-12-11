@@ -102,7 +102,7 @@ function alshaya_permissions_update_8006() {
  *
  * Add permission to site builder and webmaster role.
  */
-function alshaya_permissions_update_8007() {
+function alshaya_permissions_update_8008() {
   // Update role permissions from the config.
   _alshaya_permissions_update_role_from_config(['site_builder', 'webmaster']);
 }
