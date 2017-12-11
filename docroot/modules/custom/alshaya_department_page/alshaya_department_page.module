@@ -8,7 +8,6 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Core\Url;
-use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\node\Entity\Node;
 
 /**
@@ -145,16 +144,6 @@ function _alshaya_department_page_get_node_title($node) {
   $department_term[$node->id()] = $term->label();
 
   return $department_term[$node->id()];
-}
-
-/**
- * Implements hook_block_build_alter().
- */
-function alshaya_department_page_block_build_alter(array &$build, BlockPluginInterface $block) {
-  // Adding cache context to the user account menu as its get cached.
-  if ($block->getPluginId() == 'system_menu_block:account') {
-    $build['#cache']['contexts'][] = 'url';
-  }
 }
 
 /**
