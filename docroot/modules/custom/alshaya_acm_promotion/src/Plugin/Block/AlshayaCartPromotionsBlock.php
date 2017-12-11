@@ -14,7 +14,6 @@ use Drupal\Driver\Exception\Exception;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
-use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a 'AlshayaCartPromotionsBlock' block.
@@ -275,8 +274,9 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['cart_' . $this->cartStorage->getCart(FALSE)->id()]);
+  public function getCacheMaxAge() {
+    // Disable cache for highly dynamic content.
+    return 0;
   }
 
 }
