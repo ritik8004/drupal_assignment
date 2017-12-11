@@ -62,7 +62,7 @@
 
           a {
             color: $white-four;
-            font-size: 12px;
+            font-size: 0.875rem;
 
             span {
               background: $hnm-black-two;
@@ -75,7 +75,7 @@
               &.facet-item__value {
                 float: $left;
                 margin-#{$right}: 1px;
-                line-height: 1;
+                line-height: 0.9375rem;
                 text-transform: capitalize;
               }
 
@@ -425,7 +425,7 @@
 
       &:nth-child(3n+2) {
         margin: 0 2.6%;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
       }
     }
 
@@ -446,7 +446,7 @@
     .alshaya_search_gallery {
       .alshaya_search_mainimage {
         z-index: 5;
-        min-height: 15.125rem;
+        min-height: 13.375rem;
         overflow: hidden;
 
         @include breakpoint($tablet) {
@@ -461,7 +461,7 @@
 
     .field--name-name {
       margin-top: 0.625rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
       font-family: $hnm-regular;
       font-size: 0.875rem;
       padding: 0 1.25rem;
@@ -546,7 +546,7 @@
     text-align: center;
     padding: 0;
     list-style: none;
-    margin-bottom: 7.1rem;
+    margin-bottom: 2rem;
 
     a {
       color: $hnm-black-two;
@@ -813,12 +813,14 @@
       }
 
       @include u-center--vertically;
+      @include arabic-letter-spacing;
 
       position: absolute;
       #{$left}: -4rem;
       font-size: 0.75rem;
       color: $hnm-black-two;
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .select2-container {
@@ -849,8 +851,10 @@
 
         select {
           @include select-style(8.5rem);
+          @include arabic-letter-spacing;
 
           width: 100%;
+          letter-spacing: 1px;
 
           html[lang=ar] & {
             @include breakpoint($only-mobile) {

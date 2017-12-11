@@ -23,6 +23,7 @@
     padding-bottom: 1.25rem;
     padding-#{$left}: 1.25rem;
     z-index: 8;
+    width: 25rem !important;
 
     html[lang=ar] & {
       padding-right: 1rem;
