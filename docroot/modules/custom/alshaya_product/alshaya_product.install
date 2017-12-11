@@ -12,6 +12,40 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Add field for created in index & remove corrupt tables .
+ */
+function alshaya_product_update_8012() {
+  $config = \Drupal::configFactory()->getEditable('search_api.index.product');
+
+  $config->set('field_settings.created', [
+    'label' => 'Authored on',
+    'datasource_id' => 'entity:node',
+    'property_path' => 'field_skus:entity:created',
+    'type' => 'date',
+    'dependencies' => [
+      'config' => [
+        'field.storage.node.field_skus',
+      ],
+      'module' => [
+        'acq_sku',
+      ],
+    ],
+  ]);
+
+  $config->save();
+
+  $index = Index::load('product');
+
+  // Re-index all items.
+  $index->reindex();
+
+  // Save index to reflect created field.
+  $index->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations for sorting option New In on PLP.
  */
 function alshaya_product_update_8011() {

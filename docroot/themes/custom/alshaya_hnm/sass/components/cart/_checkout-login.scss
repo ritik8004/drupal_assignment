@@ -258,6 +258,10 @@
         #{$left}: 15em;
         width: auto;
         font-size: 0.75rem;
+
+        html[lang=ar] & {
+          right: 12.5rem;
+        }
       }
 
       @include breakpoint($desktop) {

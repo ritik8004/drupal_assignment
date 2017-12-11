@@ -302,10 +302,6 @@
       @include breakpoint($desktop) {
         vertical-align: middle;
       }
-
-      &.above-mobile {
-        width: 260px;
-      }
     }
 
     .mobile-only {

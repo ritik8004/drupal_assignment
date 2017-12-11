@@ -1,15 +1,18 @@
 // Size Guide Link theme
 .size-guide-link {
-  position: absolute;
-  #{$right}: 0;
   padding-top: 0;
   font-size: 0.6875rem;
-  color: $windows-blue;
-  top: -0.25rem;
+  color: $grey7;
+  float: $right;
+  margin-top: -0.1875rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 0.5rem;
+  }
 
   @include breakpoint($desktop) {
     padding-top: 0.5rem;
-    top: -0.125rem;
+    margin-top: 0;
   }
 
   .sell-sku & {
@@ -93,6 +96,16 @@
 
     @include breakpoint($desktop) {
       height: 34.75rem !important;
+    }
+  }
+}
+
+.mobile--only--sell {
+  .sell-sku {
+    .size-guide-link {
+      position: absolute;
+      bottom: 4.3125rem;
+      left: 4.375rem;
     }
   }
 }
