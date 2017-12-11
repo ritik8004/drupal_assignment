@@ -46,6 +46,9 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
   };
 
   Drupal.alshayaSearchActiveFacetResetAfterAjax = function () {
+    // We apply soft-limit js again after ajax calls here.
+    // Soft limit is feature provided by facets module but it
+    // doesn't support ajax, we add code here to handle that.
     if (alshayaSearchActiveFacet) {
       if (typeof drupalSettings.facets.softLimit !== 'undefined'
         && typeof drupalSettings.facets.softLimit[alshayaSearchActiveFacet] !== 'undefined') {

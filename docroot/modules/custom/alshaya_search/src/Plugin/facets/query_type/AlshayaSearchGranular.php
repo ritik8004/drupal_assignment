@@ -86,33 +86,43 @@ class AlshayaSearchGranular extends SearchApiGranular {
    * {@inheritdoc}
    */
   public function build() {
-    // First cleanup result to avoid edge-cases.
+    // We display overlapping values in frontend, but internally
+    // we need ranges that are exclusive of each other.
+    // For instance on FE we show 4-6 and 6-8, here if there are products
+    // with price exactly 6 it is shown in 4-6 by facets but for counting
+    // we were displaying it in 6-8.
     if (!empty($this->results)) {
       // Get granularity to clean-up based on that.
       $granularity = $this->getGranularity();
 
       $filters = [];
 
+      // Result contains quotes as it is stored as string.
       foreach ($this->results as $key => $result) {
         $filter = str_replace('"', '', $result['filter']);
         $filters[$filter] = $key;
       }
 
+      // Sort them by key, we have int now.
       ksort($filters);
 
       foreach ($filters as $filter => $key) {
+        // No checking for cases between 0 and granularity.
         if ($filter < $granularity) {
           continue;
         }
 
+        // Check if the value is edge case (== granularity).
         if ($filter % $granularity === 0) {
+          // We decrease it by 1 decimal point to ensure it is shown in 4 to 6
+          // instead of 6 to 8 (by making it 5.999).
           $new_value = $filter - (1 / pow(10, self::getDecimals()));
           $this->results[$key]['filter'] = '"' . $new_value . '"';
         }
       }
     }
 
-    // Call parent's build now to use the code as is.
+    // Call parent's build now to use the contrib code as is.
     return parent::build();
   }
 
