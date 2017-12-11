@@ -218,9 +218,8 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
         // For free shipping, we only show if it is applied.
         if (in_array($promotion_rule_id, $cartRulesApplied)) {
           // Add the message as success message for free shipping.
-          // Get message from config for free shipping.
           $free_shipping = [
-            '#markup' => \Drupal::config('alshaya_acm_promotion.config')->get('free_shipping_order')['label'],
+            '#markup' => $this->t('Your order qualifies for free delivery.'),
           ];
         }
       }

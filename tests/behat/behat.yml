@@ -1,19 +1,139 @@
-default:
+#behat.yml
+mckwqa:
+  autoload:
+    '': %paths.base%/features/mckw/bootstrap
   suites:
     default:
-      paths:
-        - %paths.base%/features
+      paths: [ %paths.base%/features/mckw/manual ]
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/mothercare-three-position-baby-carrier-test-black'
+              simpletitle: 'Mothercare Three Position Baby Carrier test - Black'
+              simpletitlear: 'Mothercare Three Position Baby Carrier test - Black'
+              configurl: '/grey-navy-and-yellow-jersey-shorts-3-pack'
+              configtitle: 'Grey, Navy and Yellow Jersey Shorts - 3 Pack'
+              configtitlear: 'Grey, Navy and Yellow Jersey Shorts - 3 Pack'
+              configvariant: '2-3 Years'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
   extensions:
     Behat\MinkExtension:
-      default_session: goutte
-      javascript_session: selenium2
+      browser_name: chrome
       goutte:
         guzzle_parameters:
           verify: false
+      javascript_session: selenium2
+      selenium2:
+        wd_host: http://127.0.0.1:4444/wd/hub
+        browser: chrome
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
+      base_url: 'https://mckw-test.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~
-      api_driver: "drupal"
-    jarnaiz\JUnitFormatter\JUnitFormatterExtension:
-        filename: report.xml
-        outputDir: %paths.base%/build/tests
+mckwuat:
+  autoload:
+    '': %paths.base%/features/mckw/bootstrap
+  suites:
+    default:
+      paths: [ %paths.base%/features/mckw/manual ]
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/baby-boys-socks-gift-box'
+              simpletitle: 'Baby Boys Socks Gift Box'
+              simpletitlear: 'صندوق هدية جوارب للأولاد'
+              configurl: '/paradise-graphic-tee'
+              configtitle: 'Paradise Graphic Tee'
+              configtitlear: 'تي-شيرت برسمة Paradise'
+              configvariant: '2-3 Years'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  extensions:
+    Behat\MinkExtension:
+      browser_name: chrome
+      goutte:
+        guzzle_parameters:
+          verify: false
+      javascript_session: selenium2
+      selenium2:
+        wd_host: http://127.0.0.1:4444/wd/hub
+        browser: chrome
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
+      base_url: 'https://mckw-uat.factory.alshaya.com/en'
+      files_path: "%paths.base%/media"
+    Drupal\DrupalExtension:
+      blackbox: ~
+hmuat:
+  autoload:
+    '': %paths.base%/features/hmkw/bootstrap
+  suites:
+    default:
+      paths: [ %paths.base%/features/hmkw/manual ]
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/short-jumper'
+              simpletitle: 'Short jumper'
+              simpletitlear: 'Short jumper'
+              configurl: '/hooded-jacket-1'
+              configtitle: 'Hooded jacket'
+              configtitlear: 'جاكيت بقبعة'
+              configvariant: 'M'
+              base_url: 'https://hmkw-uat.factory.alshaya.com/en'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  extensions:
+    Behat\MinkExtension:
+      browser_name: chrome
+      goutte:
+        guzzle_parameters:
+          verify: false
+      javascript_session: selenium2
+      selenium2:
+        wd_host: http://127.0.0.1:4444/wd/hub
+        browser: chrome
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
+      base_url: 'https://hmkw-uat.factory.alshaya.com/en'
+      files_path: "%paths.base%/media"
+    Drupal\DrupalExtension:
+      blackbox: ~
+hmqa:
+  autoload:
+    '': %paths.base%/features/hmkw/bootstrap
+  suites:
+    default:
+      paths: [ %paths.base%/features/hmkw/manual ]
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/short-jumper'
+              simpletitle: 'Short jumper'
+              simpletitlear: 'Short jumper'
+              configurl: '/hooded-jacket-1'
+              configtitle: 'Hooded jacket'
+              configtitlear: 'جاكيت بقبعة'
+              configvariant: 'XS'
+              base_url: 'https://hmkw-dev.factory.alshaya.com/en'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  extensions:
+    Behat\MinkExtension:
+      browser_name: chrome
+      goutte:
+        guzzle_parameters:
+          verify: false
+      javascript_session: selenium2
+      selenium2:
+        wd_host: http://127.0.0.1:4444/wd/hub
+        browser: chrome
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
+      base_url: 'https://hmkw-dev.factory.alshaya.com/en'
+      files_path: "%paths.base%/media"
+    Drupal\DrupalExtension:
+      blackbox: ~
