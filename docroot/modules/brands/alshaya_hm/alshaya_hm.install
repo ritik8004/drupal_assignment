@@ -11,6 +11,15 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Display cross-sell region for HnM.
+ */
+function alshaya_hm_update_8004() {
+  \Drupal::configFactory()->getEditable('alshaya_acm.settings')->set('display_crosssell', TRUE)->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add concept field to index, create facets, blocks.
  */
 function alshaya_hm_update_8003() {

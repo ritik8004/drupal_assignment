@@ -86,8 +86,11 @@ select:focus::-ms-value {
     outline: none;
 
     .select2-selection__rendered {
+      @include arabic-letter-spacing;
+
       color: $hnm-black-two;
       text-transform: uppercase;
+      letter-spacing: 1px;
 
       .select2-selection__placeholder {
         color: $hnm-black-two;
