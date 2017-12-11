@@ -89,3 +89,4 @@ permissions:
   - 'edit any store content'
   - 'translate store node'
   - 'create content translations'
+  - 'migrate alshaya_stores'
