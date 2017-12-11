@@ -795,11 +795,17 @@ class SkuManager {
       }
       else {
         // Eliminate "materials" from the list.
-        if ($key == 'materials') {
+        if ((strcasecmp($key, 'materials') === 0) ||
+          (strcasecmp($key, 'undefined') === 0)) {
           $out .= $this->transformCompositionArrayToList($elem, FALSE);
         }
         else {
-          $out .= "<li>$key: " . $this->transformCompositionArrayToList($elem, FALSE) . "</li>";
+          $out .= "<li>";
+          if ($key) {
+            $out .= "$key: ";
+          }
+
+          $out .= $this->transformCompositionArrayToList($elem, FALSE) . "</li>";
         }
       }
     }

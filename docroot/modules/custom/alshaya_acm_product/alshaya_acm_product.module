@@ -261,8 +261,8 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
  */
 function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
   // Update composition field.
-  $composition = json_decode($sku->get('attr_composition')
-    ->getString(), TRUE);
+  $composition = json_decode(str_replace('\\', '', $sku->get('attr_composition')
+    ->getString()), TRUE);
   if (!empty($composition)) {
     $sku->set('attr_composition', \Drupal::service('alshaya_acm_product.skumanager')
       ->transformCompositionArrayToList($composition));
@@ -366,7 +366,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', 'children');
         $composition_markup = [
           '#theme' => 'product_composition_markup',
-          '#composition' => $composition,
+          '#composition' => [
+            '#markup' => $composition,
+          ],
         ];
         $description_value .= render($composition_markup);
 
@@ -1042,7 +1044,9 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
     $composition_markup = [
       '#theme' => 'product_composition_markup',
-      '#composition' => $composition,
+      '#composition' => [
+        '#markup' => $composition,
+      ],
     ];
 
     $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
