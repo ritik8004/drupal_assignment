@@ -83,7 +83,7 @@ hmuat:
               configtitle: 'Hooded jacket'
               configtitlear: 'جاكيت بقبعة'
               configvariant: 'M'
-              base_url: 'https://hmkw-uat.factory.alshaya.com/'
+              base_url: 'https://hmkw-uat.factory.alshaya.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -98,7 +98,7 @@ hmuat:
         wd_host: http://127.0.0.1:4444/wd/hub
         browser: chrome
         capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
-      base_url: 'https://hmkw-uat.factory.alshaya.com/'
+      base_url: 'https://hmkw-uat.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~
@@ -118,7 +118,7 @@ hmqa:
               configtitle: 'Hooded jacket'
               configtitlear: 'جاكيت بقبعة'
               configvariant: 'XS'
-              base_url: 'https://hmkw-dev3.factory.alshaya.com/'
+              base_url: 'https://hmkw-dev.factory.alshaya.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -133,7 +133,7 @@ hmqa:
         wd_host: http://127.0.0.1:4444/wd/hub
         browser: chrome
         capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
-      base_url: 'https://hmkw-dev3.factory.alshaya.com/'
+      base_url: 'https://hmkw-dev.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~

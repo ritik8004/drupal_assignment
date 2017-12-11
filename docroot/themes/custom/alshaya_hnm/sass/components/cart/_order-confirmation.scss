@@ -683,6 +683,7 @@
     margin-#{$right}: 1.5rem;
     transition: margin 0.25s ease-in-out;
     width: 9.875rem;
+    min-width: 11.625rem;
   }
 
   &.expanded-table {
@@ -699,7 +700,7 @@
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 7.8rem;
+      margin-#{$right}: 1.5rem;
     }
   }
 

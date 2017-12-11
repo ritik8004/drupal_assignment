@@ -117,8 +117,13 @@ field_settings:
   created:
     label: 'Authored on'
     datasource_id: 'entity:node'
-    property_path: created
+    property_path: 'field_skus:entity:created'
     type: date
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
   stock:
     label: Stock
     datasource_id: 'entity:node'

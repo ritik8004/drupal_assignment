@@ -138,6 +138,8 @@
 
           // Show the form.
           $('#address-book-form-wrapper').slideDown();
+          $(this).hide();
+          $('.delivery-address-title').addClass('full-width');
         });
 
         $('#cancel-address-add-edit').on('click', function (event) {
@@ -153,6 +155,8 @@
 
           // Display the hidden address which was being edited.
           $('#edit-member-delivery-home-addresses').slideDown();
+          $('#add-address-button').show();
+          $('.delivery-address-title').removeClass('full-width');
         });
       });
 
