@@ -8,6 +8,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Path\AliasManagerInterface;
 
 /**
  * Class ProductCategoryTree.
@@ -44,17 +45,27 @@ class ProductCategoryTree {
   protected $languageManager;
 
   /**
+   * Alias manager.
+   *
+   * @var \Drupal\Core\Path\AliasManagerInterface
+   */
+  protected $aliasManager;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   *   Alias manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, AliasManagerInterface $alias_manager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
+    $this->aliasManager = $alias_manager;
   }
 
   /**
@@ -134,6 +145,17 @@ class ProductCategoryTree {
       ];
 
       $data[$term->id()]['highlight_image'] = $this->getHighlightImage($term);
+
+      $path = '/taxonomy/term/' . $term->id();
+      // If path and alias are same, means term has no alias. In this case check
+      // for the department page node.
+      if ($path == $this->aliasManager->getAliasByPath($path, $langcode)) {
+        // If department page node exists.
+        if ($department_page_node = alshaya_department_page_is_department_page($term->id())) {
+          $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $department_page_node->id()])->toString();
+        }
+      }
+
       $data[$term->id()]['child'] = $this->getCategoryTree($langcode, $term->id());
     }
 
