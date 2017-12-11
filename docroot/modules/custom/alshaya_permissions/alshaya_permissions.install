@@ -86,3 +86,13 @@ function alshaya_permissions_update_8006() {
   alshaya_config_install_configs(['user.role.site_builder'], 'alshaya_permissions');
 
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add permission to site builder role.
+ */
+function alshaya_permissions_update_8007() {
+  // Adding permission to 'Site builder' role.
+  alshaya_config_install_configs(['user.role.site_builder'], 'alshaya_permissions');
+}
