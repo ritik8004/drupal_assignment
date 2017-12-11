@@ -681,6 +681,7 @@
 
   @include breakpoint($tablet) {
     margin-#{$right}: 1.5rem;
+    transition: margin 0.25s ease-in-out;
     width: 9.875rem;
   }
 
@@ -690,7 +691,7 @@
     }
 
     @include breakpoint($only-tablet) {
-      margin-right: 2.8rem;
+      margin-right: 3.8rem;
 
       html[lang=ar] & {
         margin-left: 1.2rem;
@@ -704,6 +705,7 @@
 
   @include breakpoint($desktop) {
     margin-#{$right}: 1.5rem;
+    transition: margin 0.25s ease-in-out;
   }
 }
 
@@ -744,3 +746,14 @@
   }
 }
 
+.alias--cart-checkout-confirmation {
+  .order-confirmation {
+    .user__order--detail {
+      .desktop-only {
+        @include breakpoint($only-tablet) {
+          display: block;
+        }
+      }
+    }
+  }
+}

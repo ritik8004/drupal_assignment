@@ -746,7 +746,8 @@
       position: absolute;
       #{$left}: 0;
       top: -0.125rem;
-      transition: 0.2s ease all;
+      transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+      pointer-events: none;
     }
 
     input:focus ~ label:last-of-type,
