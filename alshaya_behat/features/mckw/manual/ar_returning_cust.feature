@@ -28,7 +28,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -53,7 +53,7 @@ Feature: Test various checkout scenarios as returning customer
     And I press "إرسال"
     And I press "تأكيد العملية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -73,7 +73,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "سجل الطلبية"
     When I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -93,7 +93,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     When I fill in "edit-billing-address-address-billing-given-name" with "شويتا"
     And I fill in "edit-billing-address-address-billing-family-name" with "شارما"
-    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "العباسية" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "كتلة A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
@@ -110,7 +110,7 @@ Feature: Test various checkout scenarios as returning customer
     And I press "إرسال"
     And I press "تأكيد العملية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
@@ -133,7 +133,7 @@ Feature: Test various checkout scenarios as returning customer
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I fill in "edit-billing-address-address-billing-given-name" with "شويتا"
     And I fill in "edit-billing-address-address-billing-family-name" with "شارما"
-    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "العباسية" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "كتلة A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
@@ -142,6 +142,6 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "سجل الطلبية"
     When I wait 10 seconds
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
