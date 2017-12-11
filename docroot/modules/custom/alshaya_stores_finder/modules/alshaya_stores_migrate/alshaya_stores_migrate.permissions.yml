@@ -1,0 +1,3 @@
+migrate alshaya_stores:
+  title: 'Alshaya store migration'
+  description: 'Allows a user to migrate stores.'

@@ -33,3 +33,5 @@ permissions:
   - 'assign seo_admin role'
   - 'assign site_builder role'
   - 'assign webmaster role'
+  - 'view any webform submission'
+  - 'migrate alshaya_stores'

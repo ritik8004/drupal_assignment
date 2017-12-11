@@ -231,6 +231,7 @@
     margin-#{$left}: 2.7rem;
     margin-bottom: 0.6rem;
     padding-#{$left}: 0.5rem;
+    text-align: center;
   }
 
   @include breakpoint($desktop) {
