@@ -305,6 +305,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
       elseif ($view_mode == 'full') {
+        // Get cross sell block for the product.
+        if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
+          $cross_sell_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_CROSSSELL);
+
+          if (!empty($cross_sell_skus)) {
+            $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+            if (!empty($crosssell_items)) {
+              $build['cross_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items));
+              // Weight will have no effect later once template is modified.
+              $build['cross_sell']['#weight'] = 11;
+            }
+          }
+        }
+
         $up_sell_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_UPSELL);
 
         if (!empty($up_sell_skus)) {
