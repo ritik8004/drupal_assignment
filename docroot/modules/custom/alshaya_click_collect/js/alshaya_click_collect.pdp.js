@@ -37,9 +37,6 @@
       }
 
       $('#pdp-stores-container', context).once('initiate-stores').each(function () {
-        // Get the permission track the user location.
-        Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
-
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.
         if ($(this).attr('state') === 'disabled') {
@@ -49,6 +46,14 @@
         else {
           // Get the permission track the user location.
           Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+
+          $('#pdp-stores-container').on('click', function () {
+            // Try again if we were not able to get location on page load.
+            if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
+              $('#pdp-stores-container').data('second-try', 'done');
+              Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+            }
+          });
         }
       });
 

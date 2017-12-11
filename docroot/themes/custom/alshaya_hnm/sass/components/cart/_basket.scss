@@ -534,6 +534,10 @@
   }
 }
 
+.free-shipping-message-wrapper {
+  margin-bottom: 1.3rem;
+}
+
 .promo-continue-shopping-wrapper {
   @include breakpoint($tablet) {
     border-top: 1px solid $white;
@@ -701,20 +705,28 @@
     }
   }
 
-  #apply_coupon {
-    font-family: $hnm-bold;
-    text-transform: uppercase;
-    display: inline-block;
-    margin-bottom: 14px;
-    padding: 9px 30px;
-    background: $hnm-black-two;
-    color: $white-five;
-    cursor: pointer;
-    margin-#{$left}: 1.5rem;
-    font-size: 0.8125rem;
-
-    @include breakpoint($only-tablet) {
+  #coupon-button {
+    &.add {
+      font-family: $hnm-bold;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 9px 30px;
+      background: $hnm-black-two;
+      color: $white-five;
+      cursor: pointer;
       margin-#{$left}: 1.5rem;
+      font-size: 0.8125rem;
+    }
+
+    &.remove {
+      margin-#{$left}: 1.5rem;
+      text-decoration: underline;
+      color: $hnm-black-two;
+      font-family: $hnm-bold;
+      font-size: 0.75rem;
+      display: block;
+      margin-bottom: 0.75rem;
     }
   }
 
@@ -742,26 +754,26 @@
   }
 
   & > h3 {
-    color: $marine-blue;
+    @include arabic-letter-spacing;
+
+    color: $hnm-black-two;
     margin-bottom: 0.3rem;
     padding-bottom: 0.56rem;
-    font-family: $alshaya-bold;
+    font-family: $hnm-bold;
     font-size: 1rem;
-    margin-#{$left}: 0.875rem;
     font-weight: normal;
-    text-transform: lowercase;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 1px;
 
     @include breakpoint($tablet) {
       font-size: 0.875rem;
-      margin-bottom: 0;
-      padding-bottom: 0;
       margin-#{$left}: 2.75rem;
+      text-align: $left;
     }
 
     @include breakpoint($desktop) {
       font-size: 1.125rem;
-      margin-bottom: 0.3rem;
-      padding-bottom: 0.56rem;
     }
   }
 
@@ -823,12 +835,12 @@
     }
 
     .owl-dots .owl-dot {
-      color: $marine-blue-two;
+      color: $hnm-black-two;
     }
   }
 
   .view-product-slider .views-row {
-    height: 18.75rem;
+    min-height: 18.75rem;
   }
 }
 

@@ -14,7 +14,6 @@ use Drupal\Driver\Exception\Exception;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
-use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a 'AlshayaCartPromotionsBlock' block.
@@ -156,6 +155,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
    */
   public function build() {
     $promotions = [];
+    $free_shipping = [];
 
     $build = [
       // We need empty markup to ensure wrapper div is always available.
@@ -208,6 +208,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
 
     foreach ($subTypePromotions as $subTypePromotion) {
       $message = '';
+
       $promotion_rule_id = $subTypePromotion->get('field_acq_promotion_rule_id')->getString();
       $sub_type = $subTypePromotion->get('field_alshaya_promotion_subtype')->getString();
 
@@ -215,8 +216,10 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       if ($sub_type == AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER) {
         // For free shipping, we only show if it is applied.
         if (in_array($promotion_rule_id, $cartRulesApplied)) {
-          // Get message from config for free shipping.
-          $message = \Drupal::config('alshaya_acm_promotion.config')->get('free_shipping_order')['label'];
+          // Add the message as success message for free shipping.
+          $free_shipping = [
+            '#markup' => $this->t('Your order qualifies for free delivery.'),
+          ];
         }
       }
       // For the rest, we show only if they are not applied.
@@ -235,10 +238,11 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
 
     $promotions = array_filter($promotions);
 
-    if (!empty($promotions)) {
+    if (!empty($promotions) || !empty($free_shipping)) {
       $build = [
         '#theme' => 'cart_top_promotions',
         '#promotions' => $promotions,
+        '#free_shipping' => $free_shipping,
       ];
     }
 
@@ -269,8 +273,9 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['cart_' . $this->cartStorage->getCart(FALSE)->id()]);
+  public function getCacheMaxAge() {
+    // Disable cache for highly dynamic content.
+    return 0;
   }
 
 }

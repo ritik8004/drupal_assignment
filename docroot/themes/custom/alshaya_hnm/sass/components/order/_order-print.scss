@@ -360,15 +360,37 @@ html[lang="ar"] {
   }
 }
 
-.user__order--detail .total-row {
+.user__order--detail .total-row:not(.price-row) {
   @include breakpoint($only-mobile) {
     position: relative;
   }
 
   .warm--white {
+    background-color: $white-five;
+
+    .dark {
+      font-family: $hnm-regular;
+      color: $light-greyish;
+      font-weight: normal;
+    }
+
     @include breakpoint($only-mobile) {
-      position: absolute;
-      #{$right}: 0;
+      position: relative;
+      #{$left}: 50%;
+    }
+  }
+}
+
+.alias--confirmation-print {
+  .block-customer-service-block {
+    border-top: 2px solid $hnm-black;
+    background-color: $grey1;
+    padding-top: 1.5rem;
+    padding-bottom: 2px;
+
+    h3,
+    p {
+      color: $hnm-black-two;
     }
   }
 }

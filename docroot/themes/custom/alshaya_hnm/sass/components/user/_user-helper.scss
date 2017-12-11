@@ -215,15 +215,7 @@
     }
 
     .form-item {
-      margin-top: 4.55rem;
-
-      @include breakpoint($only-tablet) {
-        margin-top: 4.6rem;
-      }
-
-      @include breakpoint($desktop) {
-        margin-top: 4.438rem;
-      }
+      margin-top: 2.8rem;
     }
 
     #edit-actions {
@@ -390,7 +382,7 @@
 
     .form-item.form-type-password {
       @include breakpoint($only-mobile) {
-        margin-top: 4.4rem;
+        margin-top: 2.8rem;
       }
     }
 
@@ -436,7 +428,7 @@
 
     .form-type-password {
       @include breakpoint($desktop) {
-        margin-top: 4.4rem;
+        margin-top: 2.8rem;
 
         .c-input__bar {
           position: absolute;

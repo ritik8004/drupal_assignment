@@ -391,13 +391,13 @@ class SkuManager {
    *
    * @param mixed $sku
    *   sku text or Sku object.
+   * @param bool $first_only
+   *   Boolean flag to indicate if we want to load only the first child.
    *
-   * @return array
-   *   Array of child skus.
-   *
-   * @throws \Drupal\Core\Database\InvalidQueryException
+   * @return mixed
+   *   Array of child skus/ Child SKU when loading first child only.
    */
-  public function getChildSkus($sku) {
+  public function getChildSkus($sku, $first_only = FALSE) {
     $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $child_skus = [];
 
@@ -409,6 +409,9 @@ class SkuManager {
       $result = $query->execute();
 
       while ($row = $result->fetchAssoc()) {
+        if ($first_only) {
+          return SKU::loadFromSku($row['field_configured_skus_value']);
+        }
         $child_skus[] = SKU::loadFromSku($row['field_configured_skus_value']);
       }
     }
@@ -792,11 +795,17 @@ class SkuManager {
       }
       else {
         // Eliminate "materials" from the list.
-        if ($key == 'materials') {
+        if ((strcasecmp($key, 'materials') === 0) ||
+          (strcasecmp($key, 'undefined') === 0)) {
           $out .= $this->transformCompositionArrayToList($elem, FALSE);
         }
         else {
-          $out .= "<li>$key: " . $this->transformCompositionArrayToList($elem, FALSE) . "</li>";
+          $out .= "<li>";
+          if ($key) {
+            $out .= "$key: ";
+          }
+
+          $out .= $this->transformCompositionArrayToList($elem, FALSE) . "</li>";
         }
       }
     }
@@ -961,6 +970,43 @@ class SkuManager {
     }
 
     return $related;
+  }
+
+  /**
+   * Helper function to fetch attributes for PDP.
+   *
+   * Use configurable SKU for configurable attributes & simple SKUs as source
+   * for non-configurable attribtues.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity for which the attribute data needs to be pulled.
+   * @param string $attribute_machine_name
+   *   Attribute field name.
+   * @param string $search_direction
+   *   Direction in which to look for fallback while fetching the attribute.
+   *
+   * @return string
+   *   Attribute value.
+   */
+  public function fetchProductAttribute(SKU $sku, $attribute_machine_name, $search_direction) {
+    if (($search_direction == 'self') &&
+      ($attribute_value = $sku->get($attribute_machine_name)->getString())) {
+      return $attribute_value;
+    }
+    elseif (($search_direction == 'children') &&
+      ($sku->getType() == 'configurable') &&
+      (($first_child_sku = $this->getChildSkus($sku, TRUE)) instanceof SKU) &&
+      ($attribute_value = $first_child_sku->get($attribute_machine_name)->getString())) {
+      return $attribute_value;
+    }
+    elseif (($search_direction == 'parent') &&
+      (($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) instanceof SKU)) {
+      if ($attribute_value = $parent_sku->get($attribute_machine_name)->getString()) {
+        return $attribute_value;
+      }
+    }
+
+    return '';
   }
 
 }

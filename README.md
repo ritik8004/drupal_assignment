@@ -99,6 +99,25 @@ install the specific configuration. See existing brand modules for example.
 * `vagrant reload --provision`
 * Run `blt refresh:local` commands and enter appropriate site code when asked.
 
+### Update local site from cloud.
+Script is created to download db from cloud env and configure local env
+with that. We also enable stage_file_proxy to ensure files are available
+in local as and when required. All required changes are done.
+* Configure stage_file_proxy
+* Update super admin user
+* Enable dblog and other ui modules
+* Allows hooking into the script, we can create scripts/install-site-dev.sh
+which is already added to .gitignore and add any code we want to execute post
+this script (for instance command to shout loud in mac - `say installation done`)
+
+Script usage:
+* `scripts/update-local.sh "site" "env" "mode"`
+* `scripts/update-local.sh mckw 01dev reuse`
+* `scripts/update-local.sh mckw 01dev download`
+
+Be careful in using the mode download, it will take time as it does sql-dump
+using drush which can take too much of time.
+
 ### Local setup of Behat:
 * Start Behat installation on your local by following the steps below:
   * Create a directory, say 'alshaya_behat'

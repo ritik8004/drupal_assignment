@@ -78,11 +78,21 @@
 
       .mobile-number-field {
         margin-bottom: 0.4375rem;
+
+        .form-type-select .form-item--error-message {
+          display: none;
+        }
       }
 
       @include breakpoint($tablet) {
         margin-top: 1px;
       }
     }
+  }
+}
+
+.field--name-field-last-name {
+  @include breakpoint($desktop) {
+    float: $right;
   }
 }

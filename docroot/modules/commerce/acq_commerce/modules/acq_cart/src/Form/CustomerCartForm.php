@@ -209,12 +209,17 @@ class CustomerCartForm extends FormBase {
   /**
    * Cart update utility.
    *
-   * @param Drupal\Core\Form\FormStateInterface $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   FormStateInterface object.
    */
   private function updateCart(FormStateInterface $form_state) {
     try {
+      if (empty($form_state->getValue('coupon'))) {
+        $this->cart->setCoupon('');
+      }
+
       $cart = $this->cartStorage->updateCart();
+
       $response_message = $cart->get('response_message');
       // We will have type of message like error or success. key '0' contains
       // the response message string while key '1' contains the response

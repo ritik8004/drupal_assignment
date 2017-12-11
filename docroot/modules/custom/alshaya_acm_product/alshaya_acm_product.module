@@ -200,6 +200,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['product_composition_markup'] = [
+    'variables' => [
+      'composition' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -255,11 +261,18 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
  */
 function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
   // Update composition field.
-  $composition = json_decode($sku->get('attr_composition')
-    ->getString(), TRUE);
+  $composition = json_decode(str_replace('\\', '', $sku->get('attr_composition')
+    ->getString()), TRUE);
   if (!empty($composition)) {
     $sku->set('attr_composition', \Drupal::service('alshaya_acm_product.skumanager')
       ->transformCompositionArrayToList($composition));
+  }
+  else {
+    if (!empty($sku->get('attr_composition')->getString())) {
+      \Drupal::logger('alshaya_acm_product')->info('Invalid JSON. Unable to parse JSON data for SKU: @sku. JSON: @json', ['@sku' => $sku->getSku(), '@json' => $sku->get('attr_composition')->getString()]);
+    }
+
+    $sku->set('attr_composition', NULL);
   }
 }
 
@@ -292,6 +305,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
       elseif ($view_mode == 'full') {
+        // Get cross sell block for the product.
+        if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
+          $cross_sell_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_CROSSSELL);
+
+          if (!empty($cross_sell_skus)) {
+            $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+            if (!empty($crosssell_items)) {
+              $build['cross_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items));
+              // Weight will have no effect later once template is modified.
+              $build['cross_sell']['#weight'] = 11;
+            }
+          }
+        }
+
         $up_sell_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_UPSELL);
 
         if (!empty($up_sell_skus)) {
@@ -348,12 +375,16 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $description_value .= '</div>';
         }
 
-        if ($composition = $sku_entity->get('attr_composition')->getString()) {
-          $description_value .= '<div class="composition-wrapper">';
-          $description_value .= '<div class="composition-label">' . t('composition') . '</div>';
-          $description_value .= '<div class="composition-value">' . $composition . '</div>';
-          $description_value .= '</div>';
-        }
+        // Render the wrapper div for composition always so that the same can be
+        // filled with data on variant selection.
+        $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', 'children');
+        $composition_markup = [
+          '#theme' => 'product_composition_markup',
+          '#composition' => [
+            '#markup' => $composition,
+          ],
+        ];
+        $description_value .= render($composition_markup);
 
         $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
         $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
@@ -804,6 +835,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
         // Add custom ajax callback for configurables to refresh the gallery.
         $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
+
+        // Disable refocus.
+        $configurable['#ajax']['disable-refocus'] = TRUE;
+
         unset($configurable['#ajax']['wrapper']);
 
         // We are not going to show the form right now, we don't do any
@@ -1019,6 +1054,17 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $class_command = $quantity ? 'removeClass' : 'addClass';
     $response->addCommand(new InvokeCommand('article[data-vmode="full"]', $class_command, ['product-out-of-stock']));
 
+    // Update simple product description attributes.
+    $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
+    $composition_markup = [
+      '#theme' => 'product_composition_markup',
+      '#composition' => [
+        '#markup' => $composition,
+      ],
+    ];
+
+    $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
+
     // React for click & collect if stock is available.
     if (\Drupal::moduleHandler()->moduleExists('alshaya_click_collect') && $quantity) {
       // Settings variable.
@@ -1046,7 +1092,22 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $build = [];
     $sku = $product_tree['parent'];
 
-    alshaya_acm_product_get_gallery($build, $sku);
+    // Pull out & update gallery image based on the selected color & first item
+    // having images.
+    foreach ($tree_pointer as $sku_item) {
+      if ($sku_item instanceof SKU) {
+        alshaya_acm_product_get_gallery($build, $sku_item);
+        if (!empty($build['gallery']['product_zoom'])) {
+          break;
+        }
+      }
+    }
+
+    // If no image found on simple SKUs, use parent SKUs image.
+    if (empty($build['gallery']['product_zoom'])) {
+      alshaya_acm_product_get_gallery($build, $sku);
+    }
+
     $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
 
     $response = new AjaxResponse();

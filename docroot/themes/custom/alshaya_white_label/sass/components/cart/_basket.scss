@@ -737,19 +737,26 @@
     }
   }
 
-  #apply_coupon {
-    font-family: $alshaya-bold;
-    display: inline-block;
-    margin-bottom: 14px;
-    padding: 9px 30px;
-    background: $pumpkin-orange;
-    color: $white-five;
-    cursor: pointer;
-    margin-#{$left}: 1.5rem;
-    font-size: 0.75rem;
-
-    @include breakpoint($only-tablet) {
+  #coupon-button {
+    &.add {
+      font-family: $alshaya-bold;
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 9px 30px;
+      background: $pumpkin-orange;
+      color: $white-five;
+      cursor: pointer;
       margin-#{$left}: 1.5rem;
+      font-size: 0.75rem;
+    }
+
+    &.remove {
+      margin-#{$left}: 1.5rem;
+      text-decoration: underline;
+      color: $cerulean-two;
+      font-family: $arial;
+      font-size: 0.75rem;
+      margin-bottom: 0.75rem;
     }
   }
 
@@ -862,6 +869,10 @@
       color: $marine-blue-two;
     }
   }
+}
+
+.free-shipping-message-wrapper {
+  margin-bottom: 1.3rem;
 }
 
 #block-basketpromotionmessage {

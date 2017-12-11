@@ -190,6 +190,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   // Change the fields if dm version is 2 and magento form has data.
   if ($dm_version == DM_VERSION_2 && !empty($magento_form)) {
+    $fields_mapped = [];
     $mapping = $address_book_manager->getMagentoFieldMappings();
     $mapping = array_flip($mapping);
 

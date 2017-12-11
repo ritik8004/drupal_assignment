@@ -10,7 +10,7 @@ use Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -297,13 +297,23 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   ];
 
   unset($form['coupon']);
+
   $form['promotion_code_wrapper']['coupon'] = [
     '#title' => t('Promotion code'),
     '#type' => 'textfield',
     '#prefix' => '<div class="coupon-code-wrapper"><div class="card__header">' . t('Add a promotional code') . '</div>',
-    '#suffix' => '<span id="apply_coupon">' . t('apply') . '</span></div>',
     '#default_value' => $cart->getCoupon(),
+    '#attributes' => [
+      'class' => [(empty($cart->getCoupon())) ? 'apply-promocode' : 'cancel-promocode'],
+    ],
   ];
+
+  if (empty($cart->getCoupon())) {
+    $form['promotion_code_wrapper']['coupon']['#suffix'] = '<span id="coupon-button" class="add">' . t('apply') . '</span></div>';
+  }
+  else {
+    $form['promotion_code_wrapper']['coupon']['#suffix'] = '<a href="#" id="coupon-button" class="remove">' . t('Remove') . '</a></div>';
+  }
 
   if (!empty($cart_items)) {
     // Add continue shopping link, that redirect user to homepage.
@@ -430,8 +440,6 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
     return $form;
   }
 
-  $message = '';
-
   // Prepare the ajax Response.
   $response = new AjaxResponse();
 
@@ -446,32 +454,8 @@ function alshaya_acm_cart_ajax_quantity_callback(&$form, FormStateInterface $for
     }
   }
 
-  // Show the error or remove existing errors.
-  $response->addCommand(new HtmlCommand('.form-level-error-wrapper', $message));
-
-  // Update the cart table (product rows).
-  $response->addCommand(new ReplaceCommand('#table-cart-items', $form['cart']));
-
-  // Update totals.
-  $cart_total = [];
-  $cart_total['totals'] = $form['totals'];
-  $cart_total['actions'] = $form['actions'];
-  $response->addCommand(new ReplaceCommand('#table-cart-totals', $cart_total));
-
-  // Update page title.
-  $cartStorage = \Drupal::service('acq_cart.cart_storage');
-  $cart = $cartStorage->getCart();
-  $response->addCommand(new HtmlCommand('h1.c-page-title', t("Basket (%count)", ['%count' => $cart->getCartItemsCount()])));
-
-  // Update mini cart Block with correct price & quantity.
-  $mini_cart_block_entity = \Drupal::entityTypeManager()->getStorage('block')->load('cartminiblock');
-  $mini_cart_block_view = \Drupal::entityTypeManager()->getViewBuilder('block')->view($mini_cart_block_entity);
-  $response->addCommand(new ReplaceCommand('div[data-block-plugin-id="cart_mini_block"]', $mini_cart_block_view));
-
-  // Update Promotions Block with updated data.
-  $cart_promo_block_entity = \Drupal::entityTypeManager()->getStorage('block')->load('alshayacartpromotionsblock');
-  $cart_promo_block_view = \Drupal::entityTypeManager()->getViewBuilder('block')->view($cart_promo_block_entity);
-  $response->addCommand(new ReplaceCommand('div[data-block-plugin-id="alshaya_cart_promotions_block"]', $cart_promo_block_view));
+  // Refresh the page.
+  $response->addCommand(new RedirectCommand(Url::fromRoute('acq_cart.cart')->toString()));
 
   return $response;
 }

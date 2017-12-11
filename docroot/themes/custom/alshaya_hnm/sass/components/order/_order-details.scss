@@ -302,10 +302,6 @@
       @include breakpoint($desktop) {
         vertical-align: middle;
       }
-
-      &.above-mobile {
-        width: 260px;
-      }
     }
 
     .mobile-only {
@@ -337,7 +333,7 @@
 
   .order-details-row {
     background: $info-19;
-    color: $black-two;
+    color: $grey8;
 
     .label {
       color: $hnm-black-two;
@@ -455,7 +451,7 @@
   .desktop-only {
     display: none;
 
-    @include breakpoint($tablet) {
+    @include breakpoint($desktop) {
       display: table-cell;
     }
   }
@@ -669,5 +665,28 @@
     html[lang=ar] & {
       background-color: $white-smoke;
     }
+  }
+}
+
+.user__order--detail .total-row:not(.price-row) .warm--white {
+  background: $white-five;
+
+  .dark {
+    font-size: 0.75rem;
+    color: $light-greyish;
+    line-height: 1.125rem;
+    font-weight: normal;
+    font-family: $hnm-regular;
+  }
+}
+
+.alias--cart-checkout-confirmation .block-alshaya-acm-checkout .form-type-checkbox .option::before {
+  position: relative;
+  top: 0.6rem;
+  #{$left}: -0.1875rem;
+  font-size: 2rem;
+
+  @include breakpoint($tablet) {
+    font-size: 2.125rem;
   }
 }

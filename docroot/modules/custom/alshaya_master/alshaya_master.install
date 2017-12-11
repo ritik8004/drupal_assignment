@@ -10,6 +10,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for - Tax.
+ */
+function alshaya_master_update_8006() {
+  $strings = [
+    'Tax' => [
+      'ar' => 'الضريبة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Override rich text config to allow div & classes and target in <a>.
  */
 function alshaya_master_update_8005() {
@@ -1233,6 +1248,12 @@ function alshaya_master_install() {
     'Please enter your selection' => [
       'ar' => 'يرجى تحديد الاختيار',
     ],
+    'Tax' => [
+      'ar' => 'الضريبة',
+    ],
+    'Your order qualifies for free delivery.' => [
+      'ar' => 'طلبيتك جاهزة للتوصيل المجاني',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -1356,10 +1377,5 @@ function alshaya_master_install() {
   \Drupal::configFactory()->getEditable('r4032login.settings')
     ->set('display_denied_message', FALSE)
     ->set('redirect_authenticated_users_to', '/user')
-    ->save();
-
-  // Set default timezone.
-  \Drupal::configFactory()->getEditable('system.date')
-    ->set('timezone.default', 'Asia/Kuwait')
     ->save();
 }

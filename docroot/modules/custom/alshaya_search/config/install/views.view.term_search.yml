@@ -22,7 +22,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'access content'
+          perm: 'edit terms in acq_product_category'
       cache:
         type: tag
         options: {  }

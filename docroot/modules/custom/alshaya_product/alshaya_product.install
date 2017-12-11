@@ -12,6 +12,66 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Add promotion_nid field again.
+ */
+function alshaya_product_update_8013() {
+  $config = \Drupal::configFactory()->getEditable('search_api.index.product');
+
+  // Promotion nid is field is missing on all hmkw envs, adding a hook to
+  // create it again if missing.
+  if (empty($config->get('field_settings.promotion_nid'))) {
+    $configs = [
+      'search_api.index.product',
+      // Also revert the view to ensure there is no issue left at all.
+      'views.view.alshaya_product_list',
+    ];
+
+    alshaya_config_install_configs($configs, 'alshaya_product');
+
+    $index = Index::load('product');
+
+    // Save index to reflect promotion_nid field.
+    $index->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add field for created in index & remove corrupt tables .
+ */
+function alshaya_product_update_8012() {
+  $config = \Drupal::configFactory()->getEditable('search_api.index.product');
+
+  $config->set('field_settings.created', [
+    'label' => 'Authored on',
+    'datasource_id' => 'entity:node',
+    'property_path' => 'field_skus:entity:created',
+    'type' => 'date',
+    'dependencies' => [
+      'config' => [
+        'field.storage.node.field_skus',
+      ],
+      'module' => [
+        'acq_sku',
+      ],
+    ],
+  ]);
+
+  $config->save();
+
+  $index = Index::load('product');
+
+  // Re-index all items.
+  $index->reindex();
+
+  // Save index to reflect created field.
+  $index->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations for sorting option New In on PLP.
  */
 function alshaya_product_update_8011() {

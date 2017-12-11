@@ -17,6 +17,16 @@
     }
   });
 
+  // Hide the current language link in language switcher block.
+  // Try to do this as early as possible during page load.
+  try {
+    var currentLang = $('html').attr('lang');
+    $('.header--wrapper .language-switcher-language-url .language-link[hreflang="' + currentLang + '"]').parent().addClass('hidden-important');
+  }
+  catch (e) {
+    // Do nothing here.
+  }
+
   Drupal.behaviors.removeContentLoadingThrobber = {
     attach: function (context, settings) {
       setTimeout(function () {

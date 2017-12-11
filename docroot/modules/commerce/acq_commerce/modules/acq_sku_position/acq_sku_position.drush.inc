@@ -6,7 +6,6 @@
  */
 
 use Drupal\taxonomy\Entity\Term;
-use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_drush_command().
@@ -113,9 +112,8 @@ function drush_acq_sku_position_position_sync($position_type = 'position') {
     }
   }
 
-  // Invalidate the cache tag for product index.
-  $tags = ["search_api_list:product"];
-  Cache::invalidateTags($tags);
+  // Allow other modules to take action after position sync finished.
+  \Drupal::moduleHandler()->invokeAll('acq_sku_position_sync_finished');
 
   drush_print(dt('Product position sync completed!'));
 }
