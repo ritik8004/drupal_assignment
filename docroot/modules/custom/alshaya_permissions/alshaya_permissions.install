@@ -90,9 +90,9 @@ function alshaya_permissions_update_8006() {
 /**
  * Implements hook_update_N().
  *
- * Add permission to site builder role.
+ * Add permission to site builder and webmaster role.
  */
 function alshaya_permissions_update_8007() {
-  // Adding permission to 'Site builder' role.
-  alshaya_config_install_configs(['user.role.site_builder'], 'alshaya_permissions');
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['site_builder', 'webmaster']);
 }
