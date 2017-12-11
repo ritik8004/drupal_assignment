@@ -1,9 +1,0 @@
-alshaya_acm_promotion.config:
-  type: config_object
-  label: 'Alshaya promotion config'
-  mapping:
-    free_shipping_order:
-      mapping:
-        label:
-          type: 'label'
-          label: 'Free shipping label'
