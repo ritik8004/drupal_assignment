@@ -69,7 +69,6 @@ AddEncoding gzip svgz
 <IfModule mod_rewrite.c>
   RewriteEngine on
 
-
   # Rewrite rule to remove .html and remove kwt-* from url.
   RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
 
@@ -82,8 +81,11 @@ AddEncoding gzip svgz
   RewriteCond %{HTTP:X-Forwarded-Proto} https
   RewriteRule ^ - [E=protossl:s]
 
-  # Remove trailing slash from all URLs (except home, which is practically not possible).
+  # Remove trailing slash from all URLs (except home which is practically not possible).
+  # We also don't remove it from /forwarded/* URLs as these are redirects from
+  # H&M and we loose access to the HMCORP cookie after redirect.
   RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !(/forwarded)
   RewriteRule ^(.*)/$ http%{ENV:protossl}://%{HTTP_HOST}/$1 [L,R=301]
 
   # Make sure Authorization HTTP header is available to PHP
