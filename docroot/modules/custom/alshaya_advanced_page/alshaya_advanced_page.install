@@ -5,9 +5,120 @@
  * Contains install, update, uninstall hooks for alshaya_advanced_page module.
  */
 
+use Drupal\field\Entity\FieldConfig;
+use Drupal\paragraphs\Entity\Paragraph;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enabling translation on paragraph referenced fields.
+ */
+function alshaya_advanced_page_update_8002() {
+  $fields = [
+    'field.field.node.advanced_page.field_banner',
+    'field.field.node.advanced_page.field_delivery_banner',
+    'field.field.node.advanced_page.field_promo_banner_full_width',
+    'field.field.node.advanced_page.field_promo_blocks',
+    'field.field.node.advanced_page.field_related_info',
+    'field.field.node.advanced_page.field_slider',
+  ];
+
+  foreach ($fields as $field) {
+    $info = explode('.', $field);
+    $field_config = FieldConfig::loadByName($info[2], $info[3], $info[4]);
+
+    if ($field_config) {
+      alshaya_config_install_configs([$field], 'alshaya_advanced_page');
+    }
+  }
+
+  // Load all advanced page content.
+  $pages = \Drupal::entityTypeManager()
+    ->getListBuilder('node')
+    ->getStorage()
+    ->loadByProperties([
+      'type' => 'advanced_page',
+    ]);
+
+  // Save all content again with proper data.
+  /** @var \Drupal\node\Entity\Node $page */
+  foreach ($pages as $page) {
+    // Check if we have AR translation available for the content.
+    // Data correction is required only for AR.
+    if (!$page->hasTranslation('ar')) {
+      continue;
+    }
+
+    // Load the ar translation.
+    /** @var \Drupal\node\Entity\Node $node */
+    $node = $page->getTranslation('ar');
+
+    // Loop through all the paragraph fields which require data correction.
+    foreach ($fields as $field) {
+      $info = explode('.', $field);
+      $field = $info[4];
+
+      // Get existing value from EN / default translation.
+      $value = $page->get($field)->getValue();
+
+      // If there is value, prepare translated value and add to the translated
+      // content.
+      if ($value) {
+        $node->get($field)->setValue(_alshaya_advanced_page_prepare_migrated_data($value));
+      }
+    }
+
+    $node->save();
+  }
+}
+
 /**
  * Implements hook_update_N().
  */
 function alshaya_advanced_page_update_8001() {
   alshaya_config_install_configs(['field.field.node.advanced_page.field_promo_blocks'], 'alshaya_advanced_page');
+}
+
+/**
+ * Helper function to prepare migrated value after enable translation.
+ *
+ * This function loops through all the existing paragraph entities and creates
+ * duplicate of their arabic translations (or default if arabic not available)
+ * and returns them back to add them to arabic content (parent node).
+ *
+ * @param mixed $values
+ *   Current values array.
+ *
+ * @return array
+ *   Migrated values array.
+ */
+function _alshaya_advanced_page_prepare_migrated_data($values) {
+  $new_values = [];
+
+  // Loop through all existing values.
+  foreach ($values as $paragraph_value) {
+    // Load the paragraph from the target_id in value.
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = Paragraph::load($paragraph_value['target_id']);
+
+    // Check if we have arabic translation available, we use translation then.
+    if ($paragraph->hasTranslation('ar')) {
+      $paragraph = $paragraph->getTranslation('ar');
+    }
+
+    // Duplicate the entity to have new entity id for saving in translation of
+    // parent/host entity.
+    $new_paragraph = $paragraph->createDuplicate();
+
+    // Save it to get id and revision id.
+    $new_paragraph->save();
+
+    // Add to new values array.
+    $new_values[] = [
+      'target_id' => $new_paragraph->id(),
+      'target_revision_id' => $new_paragraph->getRevisionId(),
+    ];
+  }
+
+  return $new_values;
 }
