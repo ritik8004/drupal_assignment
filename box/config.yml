@@ -175,5 +175,5 @@ pimpmylog_grant_all_privs: true
 
 # MySQL settings.
 mysql_slow_query_log_enabled: true
-mysql_slow_query_time: 2
+mysql_slow_query_time: 1
 mysql_wait_timeout: 300
