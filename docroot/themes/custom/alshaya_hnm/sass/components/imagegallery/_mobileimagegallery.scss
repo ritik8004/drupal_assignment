@@ -78,5 +78,10 @@
 }
 
 .mob-imagegallery__thumbnails__image {
-  overflow: scroll;
+  overflow: auto;
+  height: 28.875rem;
+
+  .expand {
+    max-width: initial;
+  }
 }
