@@ -114,7 +114,16 @@ class AlshayaPromotionsManager {
    * @see \Drupal\Core\Entity\Query\QueryInterface
    */
   public function getAllPromotions(array $conditions = []) {
+    static $nodes = NULL;
+
+    // Static cache.
+    if (isset($nodes)) {
+      return $nodes;
+    }
+
+    // Initialise with array, we may have no active promotions at all.
     $nodes = [];
+
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
     foreach ($conditions as $condition) {
