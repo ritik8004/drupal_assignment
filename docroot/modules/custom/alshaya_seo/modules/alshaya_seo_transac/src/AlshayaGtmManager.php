@@ -863,6 +863,7 @@ class AlshayaGtmManager {
     else {
       $customer_type = 'New Customer';
     }
+
     $privilege_card = $current_user->get('field_privilege_card_number')->getValue();
     $privilege_customer = 'Regular Customer';
     if (!empty($privilege_card) && isset($privilege_card[0]['value'])) {

@@ -45,7 +45,6 @@ function alshaya_hm_preprocess_block(&$variables) {
   }
 }
 
-
 /**
  * Implements hook_datalayer_alter().
  */
@@ -59,10 +58,13 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
       $cart = $cart_storage->getCart(FALSE);
       if ($cart) {
         $cart_items = $cart->get('items');
-        foreach ($cart_items as $key => $item) {
-          $sku = SKU::loadFromSku($item['sku']);
-          $images = _alshaya_hm_get_sku_images($sku);
-          $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
+        if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
+          foreach ($cart_items as $key => $item) {
+            $sku = SKU::loadFromSku($item['sku']);
+            $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+            $images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
+            $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
+          }
         }
       }
     }
@@ -76,13 +78,17 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
  * Implemented hook_gtm_product_attributes_alter().
  */
 function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAttributes) {
-  // Changes for the image count.
-  $skuId = $product->get('field_skus')->first()->getString();
-  if (isset($skuId)) {
-    $sku = SKU::loadFromSku($skuId);
-    $images = _alshaya_hm_get_sku_images($sku);
-    if (!empty($images)) {
-      $skuAttributes['gtm-dimension4'] = count($images);
+
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
+    $skuId = $product->get('field_skus')->first()->getString();
+    if (isset($skuId)) {
+      $sku = SKU::loadFromSku($skuId);
+      $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+      $images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
+      if (!empty($images)) {
+        // Changes for the image count.
+        $skuAttributes['gtm-dimension4'] = count($images);
+      }
     }
   }
 }
@@ -91,6 +97,7 @@ function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAt
  * Implemented hook_module_implements_alter().
  */
 function alshaya_hm_module_implements_alter(&$implementations, $hook) {
+  // To call the alshaya_hm_datalayer_alter at the end for HnM specific changes.
   if ($hook != 'datalayer_alter') {
     return;
   }
@@ -98,21 +105,4 @@ function alshaya_hm_module_implements_alter(&$implementations, $hook) {
   $group = array($module => $implementations[$module]);
   unset($implementations[$module]);
   $implementations = $implementations + $group;
-}
-
-/**
- * Helper function to get all the images for an sku.
- *
- * @param $sku
- * @return mixed
- */
-function _alshaya_hm_get_sku_images($sku) {
-  $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-  if ($sku->bundle() == 'simple') {
-    $images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_main');
-  }
-  elseif ($sku->bundle() == 'configurable') {
-    $images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_main');
-  }
-  return $images;
 }

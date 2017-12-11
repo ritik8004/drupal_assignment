@@ -440,4 +440,25 @@ class SkuAssetManager {
     }
   }
 
+  /**
+   * Helper function to get images for a SKU.
+   *
+   * @param SKU $parent_sku
+   *   Parent Sku.
+   * @param string $image_type
+   *   Type of image.
+   *
+   * @return array|$images
+   *   Array of images for the SKU.
+   */
+  public function getImagesForSKU(SKU $sku, $page_type, $image_type) {
+    if ($sku->bundle() == 'simple') {
+      $images = $this->getSkuAsset($sku, $page_type, $image_type);
+    }
+    elseif ($sku->bundle() == 'configurable') {
+      $images = $this->getChildSkuAssets($sku, $page_type, $image_type);
+    }
+    return $images;
+  }
+
 }
