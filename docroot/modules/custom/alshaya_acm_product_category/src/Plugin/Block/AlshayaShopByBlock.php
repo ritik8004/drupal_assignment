@@ -240,17 +240,7 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     $data = [];
     foreach ($terms as $term) {
       $data[$term->id()] = $this->processTermTranslations($term);
-
-      // Term path.
-      $path = '/taxonomy/term/' . $term->id();
-      // If path and alias are same, means term has no alias. In this case check
-      // for the department page node.
-      if ($path == $this->aliasManager->getAliasByPath($path)) {
-        // If department page node exists.
-        if ($department_page_node = alshaya_department_page_is_department_page($term->id())) {
-          $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $department_page_node->id()])->toString();
-        }
-      }
+      $data[$term->id()]['path'] = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString();
     }
 
     $route_name = $this->routeMatch->getRouteName();
