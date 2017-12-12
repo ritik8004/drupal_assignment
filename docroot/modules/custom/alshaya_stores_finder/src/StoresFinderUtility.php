@@ -147,11 +147,11 @@ class StoresFinderUtility {
     if ($node = $this->getStoreFromCode($store['store_code'], FALSE)) {
       if ($node->hasTranslation($langcode)) {
         $node = $node->getTranslation($langcode);
-        $this->logger->info('Updating store @store_code and @langcode', ['@store_code' => $store['store_code'], '@langcode' => $store['langcode']]);
+        $this->logger->info('Updating store @store_code and @langcode', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
       }
       else {
         $node = $node->addTranslation($langcode);
-        $this->logger->info('Adding @langcode translation for store @store_code', ['@store_code' => $store['store_code'], '@langcode' => $store['langcode']]);
+        $this->logger->info('Adding @langcode translation for store @store_code', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
       }
     }
     else {
@@ -163,7 +163,7 @@ class StoresFinderUtility {
 
       $node->get('field_store_locator_id')->setValue($store['store_code']);
 
-      $this->logger->info('Creating store @store_code in @langcode', ['@store_code' => $store['store_code'], '@langcode' => $store['langcode']]);
+      $this->logger->info('Creating store @store_code in @langcode', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
     }
 
     if (!empty($store['store_name'])) {
