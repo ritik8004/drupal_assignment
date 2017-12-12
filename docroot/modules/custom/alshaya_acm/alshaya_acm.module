@@ -424,6 +424,7 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
             ],
           ];
 
+          \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.array');
           $form['totals'] = _alshaya_array_insert($form['totals'], 'grand', 'shipping', $shipping_info, FALSE);
           break;
         }
