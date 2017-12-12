@@ -85,7 +85,7 @@ AddEncoding gzip svgz
   # We also don't remove it from /forwarded/* URLs as these are redirects from
   # H&M and we loose access to the HMCORP cookie after redirect.
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_URI} !(/forwarded)
+  RewriteCond %{REQUEST_URI} !(/forwarded) [NC]
   RewriteRule ^(.*)/$ http%{ENV:protossl}://%{HTTP_HOST}/$1 [L,R=301]
 
   # Make sure Authorization HTTP header is available to PHP
@@ -153,6 +153,7 @@ AddEncoding gzip svgz
   # redirect rules after an internal redirection.
   RewriteCond %{ENV:REDIRECT_internal_redirect} !true
   RewriteCond %{REQUEST_URI} !(knet) [NC]
+  RewriteCond %{REQUEST_URI} !(/forwarded) [NC]
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Redirect common PHP files to their new locations.
