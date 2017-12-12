@@ -8,7 +8,6 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Path\AliasManagerInterface;
 
 /**
  * Class ProductCategoryTree.
@@ -45,27 +44,17 @@ class ProductCategoryTree {
   protected $languageManager;
 
   /**
-   * Alias manager.
-   *
-   * @var \Drupal\Core\Path\AliasManagerInterface
-   */
-  protected $aliasManager;
-
-  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
-   *   Alias manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, AliasManagerInterface $alias_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
-    $this->aliasManager = $alias_manager;
   }
 
   /**

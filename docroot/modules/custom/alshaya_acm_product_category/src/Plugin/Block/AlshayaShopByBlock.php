@@ -12,7 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Database\Connection;
@@ -77,13 +76,6 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
   protected $languageManager;
 
   /**
-   * Alias manager.
-   *
-   * @var \Drupal\Core\Path\AliasManagerInterface
-   */
-  protected $aliasManager;
-
-  /**
    * AlshayaShopByBlock constructor.
    *
    * @param array $configuration
@@ -102,17 +94,14 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
    *   Database connection.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language
    *   The Language manager.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
-   *   Alias manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, EntityRepositoryInterface $entity_repository, RouteMatchInterface $route_match, Connection $connection, LanguageManagerInterface $language, AliasManagerInterface $alias_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, EntityRepositoryInterface $entity_repository, RouteMatchInterface $route_match, Connection $connection, LanguageManagerInterface $language) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityManager = $entity_manager;
     $this->entityRepository = $entity_repository;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
     $this->languageManager = $language;
-    $this->aliasManager = $alias_manager;
   }
 
   /**
@@ -127,8 +116,7 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
       $container->get('entity.repository'),
       $container->get('current_route_match'),
       $container->get('database'),
-      $container->get('language_manager'),
-      $container->get('path.alias_manager')
+      $container->get('language_manager')
     );
   }
 
