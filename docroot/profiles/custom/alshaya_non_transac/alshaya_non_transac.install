@@ -6,6 +6,25 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update the simple auth public/private key file path.
+ */
+function alshaya_non_transac_update_8103() {
+  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+    $env = $_ENV['AH_SITE_ENVIRONMENT'];
+    // Update the simple auth key file path.
+    $public_key = '/home/alshaya/simple-oauth/' . $env . '/alshaya_acm.pub';
+    $private_key = '/home/alshaya/simple-oauth/' . $env . '/alshaya_acm';
+    $config = \Drupal::configFactory()->getEditable('simple_oauth.settings');
+    $config->set('private_key', $private_key);
+    $config->set('public_key', $public_key);
+    $config->save();
+  }
+
+}
+
+/**
  *  Hook update to disable user registration for visitors.
  */
 function alshaya_non_transac_update_8102() {
