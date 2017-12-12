@@ -248,7 +248,7 @@ class SkuManager {
       return $prices;
     }
 
-    $cid = 'configurable_price:' . $sku_entity->language()->getId() . ':' . $sku_entity->getSku();
+    $cid = 'configurable_price:' . $sku_entity->getSku();
 
     // Return from cache if available.
     if ($cache = $this->configurablePriceCache->get($cid)) {
