@@ -10,6 +10,24 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for - Free and Shipping.
+ */
+function alshaya_master_update_8007() {
+  $strings = [
+    'Free' => [
+      'ar' => 'مجاناً',
+    ],
+    'Shipping' => [
+      'ar' => 'التوصيل',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - Tax.
  */
 function alshaya_master_update_8006() {
@@ -651,6 +669,12 @@ function alshaya_master_install() {
     ],
     'FREE' => [
       'ar' => 'مجاناً',
+    ],
+    'Free' => [
+      'ar' => 'مجاناً',
+    ],
+    'Shipping' => [
+      'ar' => 'التوصيل',
     ],
     'Next day delivery' => [
       'ar' => 'التوصيل في اليوم التالي',
