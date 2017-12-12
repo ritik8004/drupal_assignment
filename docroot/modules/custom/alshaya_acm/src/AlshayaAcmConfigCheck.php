@@ -106,18 +106,25 @@ class AlshayaAcmConfigCheck {
     \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
       ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
       ->save();
+  }
+
+  /**
+   * Function to reset country specific settings.
+   */
+  public function resetCountrySpecificSettings() {
+    \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
 
     // Get country code for current site.
     $country_code = _alshaya_custom_get_site_level_country_code();
 
     // Reset currency code - EN.
     \Drupal::configFactory()->getEditable('acq_commerce.currency')
-      ->set('currency_code', _alshaya_transac_get_currency_code($country_code, 'en'))
+      ->set('currency_code', _alshaya_get_currency_code($country_code, 'en'))
       ->save();
 
     // Reset currency code - AR.
     \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency')
-      ->set('currency_code', _alshaya_transac_get_currency_code($country_code, 'ar'))
+      ->set('currency_code', _alshaya_get_currency_code($country_code, 'ar'))
       ->save();
   }
 

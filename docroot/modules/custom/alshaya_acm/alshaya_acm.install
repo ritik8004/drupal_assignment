@@ -122,7 +122,9 @@ function alshaya_acm_install() {
   $config->save();
 
   $country_code = _alshaya_custom_get_site_level_country_code();
-  $currency_code = _alshaya_transac_get_currency_code($country_code, 'en');
+
+  \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
+  $currency_code = _alshaya_get_currency_code($country_code, 'en');
 
   // Update the currency code to one required for the site.
   $config = \Drupal::configFactory()->getEditable('acq_commerce.currency');
