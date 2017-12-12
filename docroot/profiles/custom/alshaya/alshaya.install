@@ -14,7 +14,7 @@ use Drupal\node\Entity\NodeType;
  * Enable acquia_purge on ACSF environments.
  */
 function alshaya_update_8001() {
-  if (isset($_ENV['AH_SITE_NAME'])) {
+  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     \Drupal::service('module_installer')->install(['acquia_purge']);
 
     // Enable acquia_purge purger.
@@ -94,7 +94,7 @@ function alshaya_install() {
     $_alshaya_modules_installed[] = $module;
   }
 
-  if (isset($_ENV['AH_SITE_NAME'])) {
+  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     // Enable acquia_purge on ACSF environments.
     \Drupal::service('module_installer')->install(['acquia_purge']);
 
@@ -129,7 +129,7 @@ function alshaya_final_common_install_task($profile) {
   $additional_modules = Settings::get('additional_modules');
 
   // Enable shield on ACSF Environments.
-  if (isset($_ENV['AH_SITE_NAME'])) {
+  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     $additional_modules[] = 'shield';
   }
 
