@@ -11,6 +11,7 @@ index bdacc40..0629f97 100644
 +  # redirect rules after an internal redirection.
 +  RewriteCond %{ENV:REDIRECT_internal_redirect} !true
 +  RewriteCond %{REQUEST_URI} !(knet) [NC]
++  RewriteCond %{REQUEST_URI} !(/forwarded) [NC]
    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
  
    # Redirect common PHP files to their new locations.
