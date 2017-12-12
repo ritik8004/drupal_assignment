@@ -10,7 +10,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "shweta+4@axelerant.com"
+    Then I fill in "edit-checkout-login-name" with "Test+4@axelerant.com"
     And I fill in "edit-checkout-login-pass" with "Alshaya123$"
     When I press "sign in"
     And I wait for the page to load
@@ -31,7 +31,7 @@ Feature: Test various checkout scenarios as returning customer
     Then I accept terms and conditions
     When I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @hd @knet
@@ -59,7 +59,7 @@ Feature: Test various checkout scenarios as returning customer
     Then I press "Submit"
     When I press "Confirm"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @cc @knet
@@ -76,7 +76,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_knet"
     And I wait for AJAX to finish
-    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
@@ -92,7 +92,7 @@ Feature: Test various checkout scenarios as returning customer
     Then I press "Submit"
     And I press "Confirm"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @hd @cs
@@ -114,7 +114,7 @@ Feature: Test various checkout scenarios as returning customer
     And I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @cc @cs
@@ -134,7 +134,7 @@ Feature: Test various checkout scenarios as returning customer
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
-    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
@@ -142,7 +142,7 @@ Feature: Test various checkout scenarios as returning customer
     And I accept terms and conditions
     When I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @hd @checkmo
@@ -161,5 +161,5 @@ Feature: Test various checkout scenarios as returning customer
     Then I accept terms and conditions
     When I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "

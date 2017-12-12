@@ -38,7 +38,7 @@ Feature:
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     Then I should not see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 0013 - 5844"
 
   Scenario: As an authenticated user
@@ -75,7 +75,7 @@ Feature:
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     Then I should see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 1511 - 8942"
     When I am on homepage
     And I wait for the page to load
@@ -117,7 +117,7 @@ Feature:
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     Then I should not see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 0013 - 5844"
     When I am on homepage
     And I wait for the page to load
@@ -161,7 +161,7 @@ Feature:
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     Then I should see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 1511 - 8942"
     When I am on homepage
     And I wait for the page to load
@@ -203,7 +203,7 @@ Feature:
     And I accept terms and conditions
     And I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should not see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
 
   @arabic
@@ -241,7 +241,7 @@ Feature:
     And I accept terms and conditions
     And I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 1511 - 8942"
     When I go to "/ar"
     And I wait for the page to load
@@ -284,7 +284,7 @@ Feature:
     And I accept terms and conditions
     And I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should not see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 0013 - 5844"
     When I go to "/ar"
     And I wait for the page to load
@@ -329,7 +329,7 @@ Feature:
     And I accept terms and conditions
     And I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 1511 - 8942"
     When I go to "/ar"
     And I wait for the page to load
