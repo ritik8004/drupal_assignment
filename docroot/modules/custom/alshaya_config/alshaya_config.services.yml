@@ -6,6 +6,6 @@ services:
       - {name: config.factory.override, priority: 10}
   alshaya_config.config_subscriber:
     class: Drupal\alshaya_config\EventSubscriber\AlshayaConfigSubscriber
-    arguments: ['@app.root', '@module_handler', '@config.storage' ]
+    arguments: [ '@module_handler', '@config.storage' ]
     tags:
       - {name: event_subscriber}

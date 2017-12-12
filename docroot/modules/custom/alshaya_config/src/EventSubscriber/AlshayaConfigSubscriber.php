@@ -24,13 +24,6 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
   protected $moduleHandler;
 
   /**
-   * The app root.
-   *
-   * @var string
-   */
-  protected $root;
-
-  /**
    * Config Storage service.
    *
    * @var \Drupal\Core\Config\StorageInterface
@@ -40,17 +33,13 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
   /**
    * Constructs a new AlshayaConfigSubscriber object.
    *
-   * @param string $root
-   *   The app root.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module handler object.
    * @param \Drupal\Core\Config\StorageInterface $configStorage
    *   Config storage object.
    */
-  public function __construct($root,
-                              ModuleHandlerInterface $moduleHandler,
+  public function __construct(ModuleHandlerInterface $moduleHandler,
                               StorageInterface $configStorage) {
-    $this->root = $root;
     $this->moduleHandler = $moduleHandler;
     $this->configStorage = $configStorage;
   }
