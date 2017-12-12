@@ -1010,13 +1010,13 @@ header {
 
     div:nth-child(2) {
       float: $left;
-      margin-#{$right}: 1.5rem;
     }
 
     .highlighted {
       display: inline-block;
       max-width: 11.5rem;
       vertical-align: top;
+      margin: 0 0.625rem;
     }
 
     img {

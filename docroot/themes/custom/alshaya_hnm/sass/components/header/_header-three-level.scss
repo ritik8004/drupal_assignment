@@ -28,11 +28,12 @@
     .highlights {
       position: absolute;
       #{$right}: 0;
-      top: 0.75rem;
+      top: -0.875rem;
       margin-top: 0;
-      height: 18.4375rem;
+      height: 24rem;
       width: auto;
-      margin-#{$right}: 1.5rem;
+      padding: 2.5rem 5.9375rem 2.5rem 1.875rem;
+      background-color: $grey1;
 
       .title {
         @include arabic-letter-spacing;
@@ -44,6 +45,7 @@
         letter-spacing: 0.5px;
         font-weight: normal;
         color: $black-three;
+        margin-#{$left}: 0.625rem;
       }
     }
 
