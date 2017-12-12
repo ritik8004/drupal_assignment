@@ -42,9 +42,9 @@ function _alshaya_transac_get_currency_code($country_code, $lang_code) {
   $currency['sa']['en'] = 'SR';
   $currency['sa']['ar'] = '.ر.س';
 
-  // @TODO: Add it for UAE once we reach there.
-  $currency['ae']['en'] = 'KWD';
-  $currency['ae']['ar'] = 'KWD';
+  // UAE.
+  $currency['ae']['en'] = 'AED';
+  $currency['ae']['ar'] = '.ر.إ';
 
   return $currency[$country_code][$lang_code];
 }
