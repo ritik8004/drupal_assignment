@@ -11,7 +11,7 @@ index 91bb98a..7b93e45 100644
 +  # We also don't remove it from /forwarded/* URLs as these are redirects from
 +  # H&M and we loose access to the HMCORP cookie after redirect.
 +  RewriteCond %{REQUEST_FILENAME} !-d
-+  RewriteCond %{REQUEST_URI} !(/forwarded)
++  RewriteCond %{REQUEST_URI} !(/forwarded) [NC]
 +  RewriteRule ^(.*)/$ http%{ENV:protossl}://%{HTTP_HOST}/$1 [L,R=301]
 
   # Make sure Authorization HTTP header is available to PHP

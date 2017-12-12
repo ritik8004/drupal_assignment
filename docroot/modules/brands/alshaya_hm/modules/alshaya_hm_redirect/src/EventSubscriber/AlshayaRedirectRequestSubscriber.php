@@ -87,15 +87,14 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
     preg_match(self::HM_REDIRECT_URL_IDENTIFIER, $path, $matches);
     if (!empty($matches)) {
       $langcode = $this->resolveLangcode($event->getRequest());
-      $languages = $this->languageManager->getLanguages();
 
-      $url_options = ['language' => $languages[$langcode], 'absolute' => TRUE];
+      $url_options = ['absolute' => TRUE];
       // Set redirect_url to '/' in case of empty path.
       $redirect_url = preg_replace(self::HM_REDIRECT_URL_IDENTIFIER, '${2}', $path) ?: '/';
 
       // Redirect response will by default be not cached server-side. Still
       // adding a no-cache header to avoid http level caching.
-      $response = new RedirectResponse(Url::fromUserInput($redirect_url, $url_options)->toString(), 302, ['cache-control' => 'must-revalidate, no-cache, no-store, private']);
+      $response = new RedirectResponse(Url::fromUserInput('/' . $langcode . $redirect_url, $url_options)->toString(), 302, ['cache-control' => 'must-revalidate, no-cache, no-store, private']);
 
       // Avoid page cache for Anonymous requests.
       $this->killSwitch->trigger();
