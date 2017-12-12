@@ -70,12 +70,12 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
       // If there is an override, we merge it with the initial config.
       if (file_exists($override_path)) {
         $override = Yaml::parse(file_get_contents($override_path));
-        $data = NestedArray::mergeDeep($data, $override)
+        $data = NestedArray::mergeDeep($data, $override);
       }
     }
 
     // Re-write the config to make sure the overrides are not lost.
-    $this->configStorage->write($config->getName(), $config_data);
+    $this->configStorage->write($config->getName(), $data);
     Cache::invalidateTags($config->getCacheTags());
   }
 
