@@ -65,7 +65,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
 
     // We browse all the modules to check for override.
     foreach ($this->moduleHandler->getModuleList() as $module) {
-      $override_path = drupal_get_path('module', $module['name']) . '/config/override/' . $config->getName() . '.yml';
+      $override_path = drupal_get_path('module', $module->getName()) . '/config/override/' . $config->getName() . '.yml';
 
       // If there is an override, we merge it with the initial config.
       if (file_exists($override_path)) {
