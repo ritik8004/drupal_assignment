@@ -34,7 +34,7 @@ index 82aaa2c05..6afef5912 100644
  
      $response = [
 -      'success' => (bool) (($created > 0) || ($updated > 0)),
-+      'success' => !$failed && $created || $updated || $ignored || $deleted,
++      'success' => !$failed && ($created || $updated || $ignored || $deleted),
        'created' => $created,
        'updated' => $updated,
        'failed' => $failed,
