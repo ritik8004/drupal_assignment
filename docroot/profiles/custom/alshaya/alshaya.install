@@ -119,8 +119,8 @@ function alshaya_final_common_install_task($profile) {
   // Additional modules which are to be enabled are to be done here
   // as it cant be done in the hook_install.
   if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
-    $additional_modules[] = ['shield'];
-    $additional_modules[] = ['acquia_purge'];
+    $additional_modules[] = 'shield';
+    $additional_modules[] = 'acquia_purge';
   }
 
   foreach ($additional_modules as $module) {
