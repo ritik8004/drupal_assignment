@@ -33,7 +33,7 @@ function alshaya_hm_update_8005() {
   if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     $env = $_ENV['AH_SITE_ENVIRONMENT'];
     $resource_path = '/home/alshaya/knet-resource/' . $env . '/hmkw/';
-    \Drupal::configFactory()->getEditable('alshaya_acm_knet_settings')->set('resource_path', $resource_path)->save();
+    \Drupal::configFactory()->getEditable('alshaya_acm_knet.settings')->set('resource_path', $resource_path)->save();
   }
 }
 
