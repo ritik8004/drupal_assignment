@@ -6,10 +6,10 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
-use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\Core\Serialization\Yaml;
 
 /**
  * Class AlshayaConfigSubscriber.
@@ -72,44 +72,26 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    */
   public function onConfigSave(ConfigCrudEvent $event) {
     $config = $event->getConfig();
+    $data = $config->getRawData();
+
     $modules = $this->moduleHandler->getModuleList();
     $overridden_configs = [];
     $overrides_config_folders = [];
 
-    // Check all enabled modules & fetch overridden config names keyed by
-    // folder paths.
-    foreach ($modules as $module) {
-      $folder = $this->root . '/' . $module->getPath() . '/config/override';
-      if (file_exists($folder)) {
-        $file_storage = new FileStorage($folder);
-        $overridden_configs[$folder] = $file_storage->listAll();
+    // We browse all the modules to check for override.
+    foreach ($this->moduleHandler->getModuleList() as $module) {
+      $override_path = drupal_get_path('module', $module['name']) . '/config/override/' . $config->getName() . '.yml';
+
+      // If there is an override, we merge it with the initial config.
+      if (file_exists($override_path)) {
+        $override = Yaml::parse(file_get_contents($override_path));
+        $data = NestedArray::mergeDeep($data, $override)
       }
     }
 
-    // Simplify the data & group folders by config names.
-    foreach ($overridden_configs as $folder => $collections) {
-      foreach ($collections as $collection) {
-        $overrides_config_folders[$collection][] = $folder;
-      }
-    }
-
-    // Check if we have an override for the config being saved.
-    if (in_array($config->getName(), array_keys($overrides_config_folders))) {
-      $config_data = $config->getRawData();
-      $overrides_folders = $overrides_config_folders[$config->getName()];
-
-      // Merge the data available with the config & in the override YAML files.
-      foreach ($overrides_folders as $folder) {
-        $file_storage = new FileStorage($folder);
-        if ($override = $file_storage->read($config->getName())) {
-          $config_data = NestedArray::mergeDeep($config_data, $override);
-        }
-      }
-
-      // Re-write the config to make sure the overrides are not lost.
-      $this->configStorage->write($config->getName(), $config_data);
-      Cache::invalidateTags($config->getCacheTags());
-    }
+    // Re-write the config to make sure the overrides are not lost.
+    $this->configStorage->write($config->getName(), $config_data);
+    Cache::invalidateTags($config->getCacheTags());
   }
 
 }
