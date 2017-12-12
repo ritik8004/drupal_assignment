@@ -17,3 +17,34 @@ require_once __DIR__ . '/../alshaya/alshaya.profile';
 function alshaya_transac_form_install_configure_form_alter(&$form, FormStateInterface $form_state) {
   alshaya_form_install_configure_form_alter($form, $form_state);
 }
+
+/**
+ * Function to return currency code for current country in requested language.
+ *
+ * @param string $country_code
+ *   Country code.
+ * @param string $lang_code
+ *   Language code.
+ *
+ * @return string
+ *   Currency code.
+ */
+function _alshaya_transac_get_currency_code($country_code, $lang_code) {
+  $country_code = strtolower($country_code);
+  $lang_code = strtolower($lang_code);
+  $currency = [];
+
+  // KW.
+  $currency['kw']['en'] = 'KWD';
+  $currency['kw']['ar'] = 'د٠ك٠';
+
+  // KSA.
+  $currency['sa']['en'] = 'SR';
+  $currency['sa']['ar'] = '.ر.س';
+
+  // @TODO: Add it for UAE once we reach there.
+  $currency['ae']['en'] = 'KWD';
+  $currency['ae']['ar'] = 'KWD';
+
+  return $currency[$country_code][$lang_code];
+}

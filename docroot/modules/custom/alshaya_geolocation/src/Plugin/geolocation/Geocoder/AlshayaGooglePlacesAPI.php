@@ -129,6 +129,11 @@ class AlshayaGooglePlacesAPI extends GeocoderBase {
         if (empty($restriction)) {
           continue;
         }
+
+        if (isset($restriction['country'])) {
+          $restriction['country'] = _alshaya_custom_get_site_level_country_code();
+        }
+
         $render_array['geolocation_geocoder_google_places_api'] = array_merge_recursive($render_array['geolocation_geocoder_google_places_api'], [
           '#attached' => [
             'drupalSettings' => [

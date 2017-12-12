@@ -11,8 +11,11 @@ class AlshayaAcmConfigCheck {
 
   /**
    * Helper function to check config and reset if required.
+   *
+   * @param bool $force
+   *   Force reset.
    */
-  public function checkConfig() {
+  public function checkConfig($force = FALSE) {
     // Do this only after installation is done.
     if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('module'))) {
       return;
@@ -26,15 +29,16 @@ class AlshayaAcmConfigCheck {
       return;
     }
 
+    // If we want to force reset, we don't check for other conditions.
     // We don't do anything on prod.
-    if (alshaya_is_env_prod()) {
+    if (!$force && alshaya_is_env_prod()) {
       return;
     }
 
     $request_time = \Drupal::time()->getRequestTime();
 
     // Check if reverting of settings is disabled.
-    if (!empty(Settings::get('disable_config_reset'))) {
+    if (!$force && !empty(Settings::get('disable_config_reset'))) {
       return;
     }
 
@@ -43,7 +47,7 @@ class AlshayaAcmConfigCheck {
     // We store reset time in state, check if variable is set for our ENV.
     $reset_time = \Drupal::state()->get($flag_var);
 
-    if (!empty($reset_time)) {
+    if (!$force && !empty($reset_time)) {
       return;
     }
 
@@ -101,6 +105,19 @@ class AlshayaAcmConfigCheck {
     // Reset magento_lang_prefix - AR.
     \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
       ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
+      ->save();
+
+    // Get country code for current site.
+    $country_code = _alshaya_custom_get_site_level_country_code();
+
+    // Reset currency code - EN.
+    \Drupal::configFactory()->getEditable('acq_commerce.currency')
+      ->set('currency_code', _alshaya_transac_get_currency_code($country_code, 'en'))
+      ->save();
+
+    // Reset currency code - AR.
+    \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency')
+      ->set('currency_code', _alshaya_transac_get_currency_code($country_code, 'ar'))
       ->save();
   }
 

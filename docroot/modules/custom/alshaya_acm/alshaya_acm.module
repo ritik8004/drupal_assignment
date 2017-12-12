@@ -683,7 +683,9 @@ function alshaya_acm_get_product_stock(SKU $sku_entity, $recheck = FALSE, $reset
 function alshaya_acm_alshaya_i18n_onetime_translation_add() {
   // Translate currency code in config.
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency');
-  $config->set('currency_code', 'د٠ك٠');
+  $country_code = _alshaya_custom_get_site_level_country_code();
+  $currency_code = _alshaya_transac_get_currency_code($country_code, 'ar');
+  $config->set('currency_code', $currency_code);
   $config->set('currency_code_position', 'after');
   $config->save();
 
