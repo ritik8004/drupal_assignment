@@ -228,7 +228,7 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity) {
     if ($parent = $plugin->getParentSku($entity)) {
       // Clear cache for processed price of configurable.
       // Check for SkuManager::getMinPrices() for implementation.
-      $cid = 'configurable_price:' . $entity->language()->getId() . ':' . $entity->getSku();
+      $cid = 'configurable_price:' . $parent->language()->getId() . ':' . $parent->getSku();
       \Drupal::cache('configurable_price')->delete($cid);
     }
 
