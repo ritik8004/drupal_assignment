@@ -265,7 +265,7 @@
 
     .order__unit--price {
       @include breakpoint($desktop) {
-        min-width: 10rem;
+        min-width: 9rem;
       }
     }
 
