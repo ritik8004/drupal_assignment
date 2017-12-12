@@ -176,14 +176,14 @@ class ProductSyncResource extends ResourceBase {
 
       if (!isset($product['sku']) || !strlen($product['sku'])) {
         $this->logger->error('Invalid or empty product SKU.');
-        $failed++;
+        $ignored++;
         continue;
       }
 
       // Don't import configurable SKU if it has no configurable options.
       if ($product['type'] == 'configurable' && empty($product['extension']['configurable_product_options'])) {
         $this->logger->error('Empty configurable options for SKU: @sku', ['@sku' => $product['sku']]);
-        $failed++;
+        $ignored++;
         continue;
       }
 
@@ -340,7 +340,7 @@ class ProductSyncResource extends ResourceBase {
     }
 
     $response = [
-      'success' => !$failed || $created || $updated || $ignored || $deleted,
+      'success' => !$failed && $created || $updated || $ignored || $deleted,
       'created' => $created,
       'updated' => $updated,
       'failed' => $failed,
