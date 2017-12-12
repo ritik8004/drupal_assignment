@@ -1146,6 +1146,12 @@ body.alias--cart {
       }
     }
 
+    tr[data-drupal-selector="edit-totals-vat-tax"] {
+      td:nth-child(2) {
+        background-color: #fff;
+      }
+    }
+
     tr > td {
       @include breakpoint($tablet) {
         padding-#{$right}: 1rem;
