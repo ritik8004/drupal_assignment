@@ -9,7 +9,7 @@ use Drupal\Core\Config\ConfigEvents;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\Core\Serialization\Yaml;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class AlshayaConfigSubscriber.
