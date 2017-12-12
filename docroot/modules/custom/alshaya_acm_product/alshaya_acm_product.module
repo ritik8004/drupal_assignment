@@ -853,10 +853,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               if (isset($product_tree['options'][$configurable_key . ':' . $key])) {
                 $variations = array_filter($product_tree['options'][$configurable_key . ':' . $key]);
                 // Check if product tree doesn't have any variations available
-                // for this option.
+                // for this option. Hide options like this one.
                 if (isset($variations['#available_config']) &&
                   (count($variations) === 1)) {
-                  $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
+                  unset($configurable['#options'][$key]);
                   \Drupal::logger('alshaya_acm_product')->alert('No SKU found for Config sku: %sku and %option : %option_value',
                     [
                       '%sku' => $sku_entity->getSku(),
