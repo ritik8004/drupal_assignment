@@ -1399,10 +1399,6 @@
 
 .field--name {
   &-field-skus {
-    .c-pdp & {
-      border-bottom: 1px solid $whisper-dark;
-    }
-
     .acq-content-product-modal & {
       border-bottom: none;
     }
@@ -2006,38 +2002,40 @@ html[lang=ar] {
 }
 
 .nodetype--acq_product {
-  .labels-container {
-    .label {
-      &.top {
-        &-left {
-          @include breakpoint($only-tablet) {
-            #{$left}: 1.3rem;
+  .gallery-wrapper {
+    .labels-container {
+      .label {
+        &.top {
+          &-left {
+            @include breakpoint($only-tablet) {
+              #{$left}: 1.3rem;
+            }
+
+            @include breakpoint($desktop) {
+              #{$left}: 5.3rem;
+            }
           }
 
-          @include breakpoint($desktop) {
-            #{$left}: 5.3rem;
+          &-right {
+            @include breakpoint($only-tablet) {
+              #{$right}: 1.3rem;
+            }
+
+            @include breakpoint($desktop) {
+              #{$right}: 5.3rem;
+            }
           }
         }
 
-        &-right {
-          @include breakpoint($only-tablet) {
-            #{$right}: 1.3rem;
-          }
+        &.bottom {
+          &-right {
+            @include breakpoint($only-tablet) {
+              #{$right}: 1.3rem;
+            }
 
-          @include breakpoint($desktop) {
-            #{$right}: 5.3rem;
-          }
-        }
-      }
-
-      &.bottom {
-        &-right {
-          @include breakpoint($only-tablet) {
-            #{$right}: 1.3rem;
-          }
-
-          @include breakpoint($desktop) {
-            #{$right}: 5.3rem;
+            @include breakpoint($desktop) {
+              #{$right}: 5.3rem;
+            }
           }
         }
       }
