@@ -76,25 +76,29 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     $overridden_configs = [];
     $overrides_config_folders = [];
 
+    // Check all enabled modules & fetch overridden config names keyed by
+    // folder paths.
     foreach ($modules as $module) {
       $folder = $this->root . '/' . $module->getPath() . '/config/override';
       if (file_exists($folder)) {
         $file_storage = new FileStorage($folder);
-        $file_storage->listAll();
         $overridden_configs[$folder] = $file_storage->listAll();
       }
     }
 
+    // Simplify the data & group folders by config names.
     foreach ($overridden_configs as $folder => $collections) {
       foreach ($collections as $collection) {
         $overrides_config_folders[$collection][] = $folder;
       }
     }
 
+    // Check if we have an override for the config being saved.
     if (in_array($config->getName(), array_keys($overrides_config_folders))) {
       $config_data = $config->getRawData();
       $overrides_folders = $overrides_config_folders[$config->getName()];
 
+      // Merge the data available with the config & in the override YAML files.
       foreach ($overrides_folders as $folder) {
         $file_storage = new FileStorage($folder);
         if ($override = $file_storage->read($config->getName())) {
@@ -102,6 +106,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
         }
       }
 
+      // Re-write the config to make sure the overrides are not lost.
       $this->configStorage->write($config->getName(), $config_data);
       Cache::invalidateTags($config->getCacheTags());
     }
