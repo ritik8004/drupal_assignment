@@ -57,7 +57,7 @@
   }
 
   .c-products__item__label {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-family: $hnm-regular;
     color: $hnm-black-two;
     font-weight: normal;
@@ -220,11 +220,14 @@
 }
 
 .subtitle.crossell-title {
+  @include arabic-letter-spacing;
+
   font-size: 1rem;
   font-family: $hnm-demibold;
   font-weight: normal;
   text-align: center;
   margin-bottom: 0.3rem;
+  letter-spacing: 1px;
 
   @include breakpoint($tablet) {
     margin-bottom: 0.25rem;
