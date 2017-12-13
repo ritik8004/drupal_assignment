@@ -277,6 +277,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   // Update some labels to match wireframe/mockup.
   $form['totals']['sub']['label'] = ['#markup' => t('Sub total')];
   $form['totals']['grand']['label'] = ['#markup' => t('Order Total <span>(Before Delivery)</span>')];
+
   // Adding vat text to cart.
   if ($vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text')) {
     $form['totals']['vat_tax'] = [
@@ -288,6 +289,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       ],
     ];
   }
+
   $form['totals']['#weight'] = 10;
 
   // Wrap Promotion code in a fieldset.
@@ -413,7 +415,7 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
       foreach ($subtype_promotions as $subtype_promotion) {
         // If subtype is free_shipping_order and is applied, add it to totals.
         if (in_array($subtype_promotion->get('field_acq_promotion_rule_id')->getString(), $cart_rules_applied)) {
-          $form['totals']['shipping'] = [
+          $shipping_info = [
             'label' => [
               '#markup' => t('Shipping'),
             ],
@@ -421,6 +423,9 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
               '#markup' => t('Free'),
             ],
           ];
+
+          \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.array');
+          $form['totals'] = _alshaya_array_insert($form['totals'], 'grand', 'shipping', $shipping_info, FALSE);
           break;
         }
       }

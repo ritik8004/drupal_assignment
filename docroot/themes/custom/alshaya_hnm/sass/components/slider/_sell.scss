@@ -57,9 +57,9 @@
   }
 
   .c-products__item__label {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     font-family: $hnm-regular;
-    color: $grey-ash;
+    color: $hnm-black-two;
     font-weight: normal;
     max-width: 10rem;
     margin: 0.625rem auto;
@@ -186,19 +186,19 @@
     margin: auto;
     max-width: 11.625rem;
 
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($only-tablet) {
       object-fit: cover;
+    }
+
+    @include breakpoint($only-mobile) {
+      object-fit: scale-down;
     }
   }
 
   .owl-prev,
   .owl-next {
     @include breakpoint($tablet) {
-      top: 21.7%;
-    }
-
-    @include breakpoint($tablet) {
-      top: 25%;
+      top: 32%;
     }
   }
 }
@@ -220,22 +220,17 @@
 }
 
 .subtitle.crossell-title {
+  @include arabic-letter-spacing;
+
   font-size: 1rem;
-  font-family: $hnm-bold;
+  font-family: $hnm-demibold;
   font-weight: normal;
-  text-align: $left;
+  text-align: center;
   margin-bottom: 0.3rem;
+  letter-spacing: 1px;
 
   @include breakpoint($tablet) {
-    font-size: 1.125rem;
-    margin-#{$left}: 2.7rem;
-    margin-bottom: 0.6rem;
-    padding-#{$left}: 0.5rem;
-    text-align: center;
-  }
-
-  @include breakpoint($desktop) {
-    margin-#{$left}: 3.5rem;
+    margin-bottom: 0.25rem;
   }
 }
 

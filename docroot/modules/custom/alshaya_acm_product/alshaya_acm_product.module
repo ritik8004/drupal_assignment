@@ -377,13 +377,16 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // Render the wrapper div for composition always so that the same can be
         // filled with data on variant selection.
-        $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', 'children');
+        $search_direction = $sku_entity->getType == 'configurable' ? 'children' : 'self';
+        $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
         $composition_markup = [
           '#theme' => 'product_composition_markup',
-          '#composition' => [
-            '#markup' => $composition,
-          ],
         ];
+
+        if (!empty($composition)) {
+          $composition_markup['#composition']['#markup'] = $composition;
+        }
+
         $description_value .= render($composition_markup);
 
         $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
@@ -851,10 +854,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               if (isset($product_tree['options'][$configurable_key . ':' . $key])) {
                 $variations = array_filter($product_tree['options'][$configurable_key . ':' . $key]);
                 // Check if product tree doesn't have any variations available
-                // for this option.
+                // for this option. Hide options like this one.
                 if (isset($variations['#available_config']) &&
                   (count($variations) === 1)) {
-                  $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
+                  unset($configurable['#options'][$key]);
                   \Drupal::logger('alshaya_acm_product')->alert('No SKU found for Config sku: %sku and %option : %option_value',
                     [
                       '%sku' => $sku_entity->getSku(),
@@ -1058,10 +1061,11 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
     $composition_markup = [
       '#theme' => 'product_composition_markup',
-      '#composition' => [
-        '#markup' => $composition,
-      ],
     ];
+
+    if (!empty($composition)) {
+      $composition_markup['#composition']['#markup'] = $composition;
+    }
 
     $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
 
