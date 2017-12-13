@@ -86,21 +86,13 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
     // Check if the url starts with the identifier.
     preg_match(self::HM_REDIRECT_URL_IDENTIFIER, $path, $matches);
     if (!empty($matches)) {
+      global $base_url;
       $langcode = $this->resolveLangcode($event->getRequest());
 
-      $url_options = ['absolute' => TRUE];
-
-      // If the redirect does not target the HP, we build the url from the
-      // given path. Otherwise, we redirect to HP with appropriate language.
-      if ($new_path = preg_replace(self::HM_REDIRECT_URL_IDENTIFIER, '${2}', rtrim($path, '//'))) {
-        $new_path = Url::fromUserInput('/' . $langcode . $new_path, $url_options)->toString();
-      }
-      else {
-        $languages = $this->languageManager->getLanguages();
-
-        $url_options['language'] = $languages[$langcode];
-        $new_path = Url::fromRoute('<front>', [], $url_options)->toString();
-      }
+      // We simply build a URL manually instead of using Drupal Url methods as
+      // it does not deal properly with edge-cases (trailing slash, language,
+      // route, etc). See Git history for previous tentative.
+      $new_path = $base_url . '/' . $langcode . preg_replace(self::HM_REDIRECT_URL_IDENTIFIER, '${2}', rtrim($path, '/'));
 
       // Redirect response will by default be not cached server-side. Still
       // adding a no-cache header to avoid http level caching.
