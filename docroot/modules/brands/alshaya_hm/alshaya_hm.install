@@ -11,16 +11,6 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * Update knet resource path.
- */
-function alshaya_hm_update_8006() {
-  $resource_path = Settings::get('knet_resource_path');
-  \Drupal::configFactory()->getEditable('alshaya_acm_knet.settings')->set('resource_path', $resource_path)->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add translation for concept facet.
  */
 function alshaya_hm_update_8005() {

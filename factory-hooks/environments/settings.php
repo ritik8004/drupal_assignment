@@ -40,6 +40,7 @@ function alshaya_get_additional_settings($site, $env) {
           'en' => 'ksa_en',
           'ar' => 'ksa_ar',
         ],
+        'knet_resource_path' => '/home/alshaya/knet-resource/' . $env . '/mcksa/',
       ],
     ],
     'hmkw' => [
