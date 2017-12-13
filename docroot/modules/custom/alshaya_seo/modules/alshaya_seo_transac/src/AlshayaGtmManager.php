@@ -267,6 +267,12 @@ class AlshayaGtmManager {
    * @throws \InvalidArgumentException
    */
   public function fetchProductGtmAttributes(Node $product, $view_mode) {
+    static $gtm_container = NULL;
+
+    if (!isset($gtm_container)) {
+      $gtm_container = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
+    }
+
     if ($product->hasTranslation('en')) {
       $product = $product->getTranslation('en');
     }
@@ -276,7 +282,7 @@ class AlshayaGtmManager {
 
     $attributes['gtm-type'] = 'gtm-product-link';
     $attributes['gtm-category'] = implode('/', $this->fetchProductCategories($product));
-    $attributes['gtm-container'] = $this->convertCurrentRouteToGtmPageName($this->getGtmContainer());
+    $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
     $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
