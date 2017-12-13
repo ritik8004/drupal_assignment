@@ -63,7 +63,9 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
             $sku = SKU::loadFromSku($item['sku']);
             $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
             $images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
-            $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
+            if (isset($images[0]['url'])) {
+              $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
+            }
           }
         }
       }
@@ -78,7 +80,6 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
  * Implemented hook_gtm_product_attributes_alter().
  */
 function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAttributes) {
-
   if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
     $skuId = $product->get('field_skus')->first()->getString();
     if (isset($skuId)) {
@@ -98,11 +99,9 @@ function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAt
  */
 function alshaya_hm_module_implements_alter(&$implementations, $hook) {
   // To call the alshaya_hm_datalayer_alter at the end for HnM specific changes.
-  if ($hook != 'datalayer_alter') {
-    return;
+  if ($hook == 'datalayer_alter') {
+    $group = $implementations['alshaya_hm'];
+    unset($implementations['alshaya_hm']);
+    $implementations['alshaya_hm'] = $group;
   }
-  $module = 'alshaya_hm';
-  $group = array($module => $implementations[$module]);
-  unset($implementations[$module]);
-  $implementations = $implementations + $group;
 }
