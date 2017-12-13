@@ -8,6 +8,17 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ */
+function alshaya_user_update_8001() {
+  $configs = [
+    'field.storage.user.field_mobile_number.yml',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_user');
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_user_install() {
