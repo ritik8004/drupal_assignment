@@ -27,7 +27,7 @@ function alshaya_get_additional_settings($site, $env) {
         'store_id' => [
           'ar' => 3,
         ],
-        'knet_resource_path' => '/home/alshaya/knet-resource/' . $env . '/mckw/',
+        'resource_path' => '/home/alshaya/knet-resource/' . $env . '/mckw/',
       ]
     ],
     'mcksa' => [
@@ -40,7 +40,7 @@ function alshaya_get_additional_settings($site, $env) {
           'en' => 'ksa_en',
           'ar' => 'ksa_ar',
         ],
-        'knet_resource_path' => '/home/alshaya/knet-resource/' . $env . '/mcksa/',
+        'resource_path' => '/home/alshaya/knet-resource/' . $env . '/mcksa/',
       ],
     ],
     'hmkw' => [
@@ -48,7 +48,7 @@ function alshaya_get_additional_settings($site, $env) {
         'store_id' => [
           'ar' => 2,
         ],
-        'knet_resource_path' => '/home/alshaya/knet-resource/' . $env . '/hmkw/',
+        'resource_path' => '/home/alshaya/knet-resource/' . $env . '/hmkw/',
       ],
       '01pprod' => [
         'magento_lang_prefix' => [
