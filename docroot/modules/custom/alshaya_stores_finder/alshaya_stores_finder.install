@@ -81,21 +81,8 @@ function alshaya_stores_finder_set_default_marker_icon() {
  * Refactor store detail page link for store finder glossary view.
  */
 function alshaya_stores_finder_update_8103() {
-  $view = \Drupal::configFactory()->getEditable('views.view.stores_finder');
-  $displays = $view->get('display');
-
-  foreach ($displays as $display_name => &$display) {
-    if ($display_name == 'page_2') {
-      if (!empty($display['display_options']['fields'])) {
-        foreach ($display['display_options']['fields'] as $field_name => &$field) {
-          if (!empty($field['alter']['text']) && $field['id'] == 'title') {
-            $field['alter']['text'] = '<a href="#" data-glossary-view="{{nid|raw}}" id="glossary-store-{{nid|raw}}">{{ title }}</a>';
-          }
-        }
-      }
-    }
-  }
-
-  $view->set('display', $displays);
-  $view->save(TRUE);
+  $configs = [
+    'views.view.stores_finder',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_stores_finder');
 }
