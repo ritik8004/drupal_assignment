@@ -88,7 +88,7 @@ function alshaya_stores_finder_update_8103() {
     if ($display_name == 'page_2') {
       if (!empty($display['display_options']['fields'])) {
         foreach ($display['display_options']['fields'] as $field_name => &$field) {
-          if (!empty($field['alter']['text'])) {
+          if (!empty($field['alter']['text']) && $field['id'] == 'title') {
             $field['alter']['text'] = '<a href="#" data-glossary-view="{{nid|raw}}" id="glossary-store-{{nid|raw}}">{{ title }}</a>';
           }
         }
