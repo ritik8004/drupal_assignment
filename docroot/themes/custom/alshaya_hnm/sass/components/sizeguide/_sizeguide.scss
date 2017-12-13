@@ -5,6 +5,7 @@
   color: $grey7;
   float: $right;
   margin-top: -0.1875rem;
+  outline: none !important;
 
   @include breakpoint($tablet) {
     margin-top: 0.5rem;
@@ -20,22 +21,12 @@
   }
 
   + .ajax-progress-throbber {
-    position: absolute;
-    top: -0.5rem;
-    #{$right}: 31%;
     display: block !important;
+    float: $right;
+    margin-top: -0.5rem;
 
-    html[lang=ar] & {
-      #{$right}: 41%;
-    }
-
-    @include breakpoint($desktop) {
-      top: 0.125rem;
-      #{$right}: 18%;
-
-      html[lang=ar] & {
-        #{$right}: 28%;
-      }
+    @include breakpoint($tablet) {
+      margin-top: 0;
     }
 
     .message {
@@ -47,7 +38,11 @@
       background-position: $right center !important;
       background-repeat: no-repeat !important;
       background-size: 1.5rem;
-      padding: 0.5rem;
+      padding: 0.625rem;
+
+      @include breakpoint($desktop) {
+        padding: 0.5rem;
+      }
     }
   }
 }
@@ -105,7 +100,7 @@
     .size-guide-link {
       position: absolute;
       bottom: 4.3125rem;
-      left: 4.375rem;
+      #{$right}: 60%;
     }
   }
 }

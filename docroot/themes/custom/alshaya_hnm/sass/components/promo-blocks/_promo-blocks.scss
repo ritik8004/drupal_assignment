@@ -10,6 +10,11 @@
   .paragraph {
     position: relative;
   }
+
+  .field--type-link a {
+    @include u-image-replacement;
+    @include u-overlay-content;
+  }
 }
 
 .c-promo__item {
@@ -349,11 +354,5 @@
         font-size: 1.275rem;
       }
     }
-  }
-}
-
-.paragraph--type--promo-block {
-  .field--name-field-link {
-    display: none;
   }
 }
