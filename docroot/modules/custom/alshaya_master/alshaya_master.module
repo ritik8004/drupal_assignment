@@ -490,13 +490,6 @@ function _alshaya_master_mobile_number_process(array &$element, FormStateInterfa
     $element['mobile']['#attributes']['data-msg-required'] = t('@title is required.', ['@title' => $element['#title']]);
     $element['mobile']['#required'] = TRUE;
   }
-  elseif ($form_state->getBuildInfo()['form_id'] == 'webform_submission_alshaya_contact_add_form') {
-    $element['mobile']['#states'] = [
-      'required' => [
-        ['input[name="select_your_preference_of_channel_of_communication"]' => ['value' => 'Mobile']],
-      ],
-    ];
-  }
 
   // Add input prefix library.
   $element['#attached']['library'][] = 'alshaya_master/mobile_number';
