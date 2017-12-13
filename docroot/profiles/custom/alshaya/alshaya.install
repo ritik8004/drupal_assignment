@@ -11,6 +11,15 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_performance on all sites on all environments.
+ */
+function alshaya_update_8002() {
+  \Drupal::service('module_installer')->install(['alshaya_performance']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable acquia_purge on ACSF environments.
  */
 function alshaya_update_8001() {
