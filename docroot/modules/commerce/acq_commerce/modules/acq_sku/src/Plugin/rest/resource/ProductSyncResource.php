@@ -222,9 +222,10 @@ class ProductSyncResource extends ResourceBase {
 
             $deleted++;
 
-            // Throw exception with INTERNAL in message to ensure finally
-            // is executed where we release the lock.
-            throw new \Exception('INTERNAL');
+            // Release the lock.
+            $lock->release($lock_key);
+
+            continue;
           }
 
           $this->logger->info('Updating product SKU @sku.', ['@sku' => $product['sku']]);
@@ -235,9 +236,10 @@ class ProductSyncResource extends ResourceBase {
             $this->logger->info('Not creating disabled SKU in system: @sku.', ['@sku' => $product['sku']]);
             $ignored++;
 
-            // Throw exception with INTERNAL in message to ensure finally
-            // is executed where we release the lock.
-            throw new \Exception('INTERNAL');
+            // Release the lock.
+            $lock->release($lock_key);
+
+            continue;
           }
 
           /** @var \Drupal\acq_sku\Entity\SKU $sku */
@@ -342,17 +344,15 @@ class ProductSyncResource extends ResourceBase {
         }
       }
       catch (\Exception $e) {
-        if ($e->getMessage() !== 'INTERNAL') {
-          // We consider this as failure as it failed for an unknown reason.
-          // (not taken care of above).
-          $failed++;
+        // We consider this as failure as it failed for an unknown reason.
+        // (not taken care of above).
+        $failed++;
 
-          // Add the unknown reason to logs.
-          $this->logger->warning('Not able to save product SKU @sku. Exception: @message', [
-            '@sku' => $product['sku'],
-            '@message' => $e->getMessage(),
-          ]);
-        }
+        // Add the unknown reason to logs.
+        $this->logger->warning('Not able to save product SKU @sku. Exception: @message', [
+          '@sku' => $product['sku'],
+          '@message' => $e->getMessage(),
+        ]);
       }
       finally {
         // Release the lock if acquired.
