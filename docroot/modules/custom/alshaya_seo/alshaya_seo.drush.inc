@@ -117,10 +117,9 @@ function drush_alshaya_seo_bulk_redirect_import($file) {
         }
         else {
           // Create redirect for the path.
-          $destination = Url::fromUri($base_url . '/' . $value[1])->getUri();
           $redirect_entity = [
             'redirect_source' => $value[0],
-            'redirect_redirect' => $destination,
+            'redirect_redirect' => 'internal:/' . $value[1],
             'status_code' => '301',
             'language' => $value[2],
           ];
