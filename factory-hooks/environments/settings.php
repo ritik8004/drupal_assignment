@@ -27,7 +27,6 @@ function alshaya_get_additional_settings($site, $env) {
         'store_id' => [
           'ar' => 3,
         ],
-        'resource_path' => '/home/alshaya/knet-resource/' . $env . '/mckw/',
       ]
     ],
     'mcksa' => [
@@ -40,7 +39,6 @@ function alshaya_get_additional_settings($site, $env) {
           'en' => 'ksa_en',
           'ar' => 'ksa_ar',
         ],
-        'resource_path' => '/home/alshaya/knet-resource/' . $env . '/mcksa/',
       ],
     ],
     'hmkw' => [
@@ -48,7 +46,6 @@ function alshaya_get_additional_settings($site, $env) {
         'store_id' => [
           'ar' => 2,
         ],
-        'resource_path' => '/home/alshaya/knet-resource/' . $env . '/hmkw/',
       ],
       '01pprod' => [
         'magento_lang_prefix' => [
@@ -78,6 +75,9 @@ function alshaya_get_additional_settings($site, $env) {
       ],
     ],
   ];
+
+  // Setting the knet resource path.
+  $mapping[$site][$env]['resource_path'] = '/home/alshaya/knet-resource/' . $env . '/' . $site .'/';
 
   // Get the settings following this fallback (from the more generic to the
   // more specific one): default+default > default+env > site+default >
