@@ -1005,24 +1005,30 @@ class SkuManager {
    *   Attribute field name.
    * @param string $search_direction
    *   Direction in which to look for fallback while fetching the attribute.
+   * @param bool $multivalued
+   *   Boolean value indicating if the field we looking for is multi-valued.
    *
-   * @return string
+   * @return array|string
    *   Attribute value.
    */
-  public function fetchProductAttribute(SKU $sku, $attribute_machine_name, $search_direction) {
-    if (($search_direction == 'self') &&
-      ($attribute_value = $sku->get($attribute_machine_name)->getString())) {
-      return $attribute_value;
-    }
-    elseif (($search_direction == 'children') &&
+  public function fetchProductAttribute(SKU $sku, $attribute_machine_name, $search_direction, $multivalued = FALSE) {
+    if (($search_direction == 'children') &&
       ($sku->getType() == 'configurable') &&
-      (($first_child_sku = $this->getChildSkus($sku, TRUE)) instanceof SKU) &&
-      ($attribute_value = $first_child_sku->get($attribute_machine_name)->getString())) {
-      return $attribute_value;
+      ($child_sku = $this->getChildSkus($sku, TRUE))) {
+      $sku = $child_sku;
     }
     elseif (($search_direction == 'parent') &&
-      (($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) instanceof SKU)) {
-      if ($attribute_value = $parent_sku->get($attribute_machine_name)->getString()) {
+      ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku))) {
+      $sku = $parent_sku;
+    }
+
+    if ($sku instanceof SKU) {
+      if (($multivalued) &&
+        ($attribute_value = $sku->get($attribute_machine_name)->getString()) &&
+        (!empty($attribute_value))) {
+        return $attribute_value;
+      }
+      elseif ($attribute_value = $sku->get($attribute_machine_name)->getString()) {
         return $attribute_value;
       }
     }
