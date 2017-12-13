@@ -144,19 +144,10 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
       $sku = $sku_assets_manager->getChildSkuFromColor($sku, $color);
     }
 
-    if ($sku->bundle() == 'simple') {
-      $main_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_main');
-      $thumb_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_thumbnail');
-
-      $zoom_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_zoom');
-      $fullscreen_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_fullscreen');
-    }
-    elseif ($sku->bundle() == 'configurable') {
-      $thumb_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_thumbnail');
-      $zoom_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_zoom');
-      $fullscreen_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_fullscreen');
-      $main_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_main');
-    }
+    $thumb_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_thumbnail');
+    $zoom_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_zoom');
+    $fullscreen_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_fullscreen');
+    $main_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
 
     foreach ($thumb_images as $key => $thumbnail) {
       $thumb_images[$key]['zoomurl'] = $zoom_images[$key]['url'];
