@@ -53,6 +53,14 @@ function alshaya_get_additional_settings($site, $env) {
           'ar' => 'kwt_ar',
         ],
       ],
+      '01live' => [
+        'magento_lang_prefix' => [
+          'en' => 'default',
+        ],
+        'store_id' => [
+          'ar' => 5,
+        ],
+      ]
     ],
     'default' => [
       'default' => [

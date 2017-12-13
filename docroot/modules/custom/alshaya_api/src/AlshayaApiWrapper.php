@@ -217,41 +217,6 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * API to create transaction entry for K-Net.
-   *
-   * @param string $order_id
-   *   Order increment id.
-   * @param string $transaction_id
-   *   K-Net transaction id.
-   * @param string $auth
-   *   K-Net auth.
-   *
-   * @return mixed
-   *   Response of API or NULL.
-   */
-  public function addKnetTransaction($order_id, $transaction_id, $auth) {
-    $endpoint = 'knet/transaction';
-
-    $data = [
-      'orderId' => $order_id,
-      'transactionId' => $transaction_id,
-      'authCode' => $auth,
-    ];
-
-    try {
-      return $this->invokeApi($endpoint, $data, 'JSON');
-    }
-    catch (\Exception $e) {
-      $this->logger->critical('Error occurred while adding transaction for knet order: %info <br> %message', [
-        '%info' => print_r($data, TRUE),
-        '%message' => $e->getMessage(),
-      ]);
-    }
-
-    return NULL;
-  }
-
-  /**
    * Function to get all the stores from the API.
    *
    * @param string $langcode

@@ -15,8 +15,10 @@ elseif (getenv('TRAVIS')) {
   $env = 'travis';
 }
 
+global $site_name;
+
 // Set the knet resource path which should be outside GIT root.
-$knet_resource_dir = $env == 'local' ? '/home/vagrant/knet-resource/' : '/home/alshaya/knet-resource/' . $env . '/mckw/';
+$knet_resource_dir = $env == 'local' ? '/home/vagrant/knet-resource/' : '/home/alshaya/knet-resource/' . $env . '/' . $site_name . '/';
 $settings['alshaya_acm_knet.settings']['resource_path'] = $knet_resource_dir;
 
 // We have valid SSL now, by default we will use secure response url.

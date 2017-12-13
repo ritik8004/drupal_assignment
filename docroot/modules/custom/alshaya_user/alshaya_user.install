@@ -5,6 +5,8 @@
  * Custom installation for Alshaya user.
  */
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_install().
  */
@@ -92,7 +94,7 @@ function alshaya_user_install() {
     'weight' => 2,
     'type' => 'mobile_number_default',
     'settings' => [
-      'default_country' => 'KW',
+      'default_country' => Settings::get('country_code'),
       'countries' => [],
       'placeholder' => ' ',
     ],

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_stores_finder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 
 /**
@@ -144,14 +145,20 @@ class StoresFinderUtility {
    *   Language code.
    */
   public function updateStore(array $store, $langcode) {
+    static $user;
+
+    if (empty($user)) {
+      $user = user_load_by_name(Settings::get('alshaya_acm_user_username'));
+    }
+
     if ($node = $this->getStoreFromCode($store['store_code'], FALSE)) {
       if ($node->hasTranslation($langcode)) {
         $node = $node->getTranslation($langcode);
-        $this->logger->info('Updating store @store_code and @langcode', ['@store_code' => $store['store_code'], '@langcode' => $store['langcode']]);
+        $this->logger->info('Updating store @store_code and @langcode', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
       }
       else {
         $node = $node->addTranslation($langcode);
-        $this->logger->info('Adding @langcode translation for store @store_code', ['@store_code' => $store['store_code'], '@langcode' => $store['langcode']]);
+        $this->logger->info('Adding @langcode translation for store @store_code', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
       }
     }
     else {
@@ -163,7 +170,7 @@ class StoresFinderUtility {
 
       $node->get('field_store_locator_id')->setValue($store['store_code']);
 
-      $this->logger->info('Creating store @store_code in @langcode', ['@store_code' => $store['store_code'], '@langcode' => $store['langcode']]);
+      $this->logger->info('Creating store @store_code in @langcode', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
     }
 
     if (!empty($store['store_name'])) {
@@ -206,6 +213,9 @@ class StoresFinderUtility {
 
     // Set the status.
     $node->setPublished((bool) $store['status']);
+
+    // Set node owner to acm user.
+    $node->setOwner($user);
 
     $node->save();
   }

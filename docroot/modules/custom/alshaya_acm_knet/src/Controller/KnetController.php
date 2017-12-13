@@ -6,7 +6,6 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm_checkout\CheckoutHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
-use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -26,13 +25,6 @@ class KnetController extends ControllerBase {
    * @var \Drupal\acq_commerce\Conductor\APIWrapper
    */
   protected $apiWrapper;
-
-  /**
-   * Alshaya API Wrapper object.
-   *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
-   */
-  protected $alshayaApiWrapper;
 
   /**
    * Drupal\acq_cart\CartStorageInterface definition.
@@ -67,8 +59,6 @@ class KnetController extends ControllerBase {
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   API wrapper object.
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api_wrapper
-   *   Alshaya API wrapper object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
@@ -81,14 +71,12 @@ class KnetController extends ControllerBase {
    *   Logger Factory object.
    */
   public function __construct(APIWrapper $api_wrapper,
-                              AlshayaApiWrapper $alshaya_api_wrapper,
                               ConfigFactoryInterface $config_factory,
                               OrdersManager $orders_manager,
                               CartStorageInterface $cart_storage,
                               CheckoutHelper $checkout_helper,
                               LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
-    $this->alshayaApiWrapper = $alshaya_api_wrapper;
     $this->knetSettings = $config_factory->get('alshaya_acm_knet.settings');
     $this->ordersManager = $orders_manager;
     $this->cartStorage = $cart_storage;
@@ -102,7 +90,6 @@ class KnetController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acq_commerce.api'),
-      $container->get('alshaya_api.api'),
       $container->get('config.factory'),
       $container->get('alshaya_acm_customer.orders_manager'),
       $container->get('acq_cart.cart_storage'),
@@ -180,7 +167,7 @@ class KnetController extends ControllerBase {
       $result_url .= Url::fromRoute('alshaya_acm_knet.success', ['state_key' => $state_key], $url_options)->toString();
 
       $this->logger->info('KNET update for @quote_id: @result_url @message', [
-        '@quote_id' => $response['order_id'],
+        '@quote_id' => $response['quote_id'],
         '@result_url' => $result_url,
         '@message' => json_encode($response),
       ]);
@@ -206,6 +193,10 @@ class KnetController extends ControllerBase {
     $data = \Drupal::state()->get($state_key);
 
     if (empty($data)) {
+      $this->logger->warning('KNET success page requested with invalid state_key: @state_key', [
+        '@state_key' => $state_key,
+      ]);
+
       throw new AccessDeniedHttpException();
     }
 
@@ -213,6 +204,12 @@ class KnetController extends ControllerBase {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if (empty($cart) || $cart->id() != $data['quote_id']) {
+      $this->logger->warning('KNET success page requested with valid state_key: @state_key but cart id in session do not match with one in state data. Cart: @cart, State Data: @data', [
+        '@state_key' => $state_key,
+        '@data' => json_encode($data),
+        '@cart' => json_encode($cart),
+      ]);
+
       throw new AccessDeniedHttpException();
     }
 
@@ -253,6 +250,11 @@ class KnetController extends ControllerBase {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if ($cart->id() != $quote_id) {
+      $this->logger->warning('KNET error page requested with invalid quote_id: @quote_id. Cart in session: @cart', [
+        '@quote_id' => $quote_id,
+        '@cart' => json_encode($cart),
+      ]);
+
       throw new AccessDeniedHttpException();
     }
 
@@ -281,6 +283,10 @@ class KnetController extends ControllerBase {
     $data = \Drupal::state()->get($state_key);
 
     if (empty($data)) {
+      $this->logger->warning('KNET failed page requested with invalid state_key: @state_key', [
+        '@state_key' => $state_key,
+      ]);
+
       throw new AccessDeniedHttpException();
     }
 
