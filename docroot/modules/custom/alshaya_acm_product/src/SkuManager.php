@@ -989,10 +989,6 @@ class SkuManager {
    *   Attribute value.
    */
   public function fetchProductAttribute(SKU $sku, $attribute_machine_name, $search_direction) {
-    if ($sku->getType !== 'configurable') {
-      $search_direction = 'self';
-    }
-
     if (($search_direction == 'self') &&
       ($attribute_value = $sku->get($attribute_machine_name)->getString())) {
       return $attribute_value;
