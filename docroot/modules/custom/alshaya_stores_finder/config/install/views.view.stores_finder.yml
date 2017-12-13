@@ -1663,7 +1663,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '<a href="{{ path(''alshaya_stores_finder.store_detail'', {''node'': nid|raw, ''type'': ''glossary''}) }}" class="use-ajax">{{ title }}</a>'
+            text: '<a href="#" data-glossary-view="{{nid|raw}}" id="glossary-store-{{nid|raw}}">{{ title }}</a>'
             make_link: false
             path: '/store-glossay/{{ nid }}'
             absolute: false
