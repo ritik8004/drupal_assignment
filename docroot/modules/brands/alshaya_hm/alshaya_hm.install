@@ -11,6 +11,23 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Install Acquia Purge module on HnM.
+ */
+function alshaya_hm_update_8006() {
+  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+    \Drupal::service('module_installer')->install(['acquia_purge']);
+
+    // Enable acquia_purge purger.
+    $purge_purgers = \Drupal::service('purge.purgers');
+    $purgers_enabled = $purge_purgers->getPluginsEnabled();
+    $purgers_enabled[$purge_purgers->createId()] = 'acquia_purge';
+    $purge_purgers->setPluginsEnabled($purgers_enabled);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translation for concept facet.
  */
 function alshaya_hm_update_8005() {
