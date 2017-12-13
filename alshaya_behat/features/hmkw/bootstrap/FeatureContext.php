@@ -626,7 +626,7 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
      */
     public function iSelectAProductInStock() {
         $page = $this->getSession()->getPage();
-        $all_products = $page->findById('block-views-block-alshaya-product-list-block-1');
+        $all_products = $page->findById('block-content');
         if ($all_products !== NULL) {
             $all_products = $all_products->findAll('css', '.c-products__item');
             $total_products = count($all_products);
@@ -2129,11 +2129,34 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     {
         $page = $this->getSession()->getPage();
         $popup = $this->getSession()->getPage()->findById("popup");
-        if($popup->isVisible()){
+        if($popup !==null && $popup->isVisible()){
             $page->findById('close-popup')->click();
         }
         else{
             echo 'Welcome Popup is currently not displayed';
+        }
+    }
+
+    /**
+     * @When /^I select a store$/
+     */
+    public function iSelectAStore()
+    {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('change store');
+        if ($address_button !== null && $address_button->isVisible()) {
+            $this->iSelectAnElementHavingClass('.cc-action');
+        } else {
+            $this->iSelectFirstAutocomplete('Shuwaikh', 'edit-store-location');
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iWaitSeconds('5');
+            $select_store = $page->findLink('select this store');
+            if ($select_store->isVisible()) {
+                $select_store->click();
+            }
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iSelectAnElementHavingClass('.cc-action');
+            $this->iWaitForThePageToLoad();
         }
     }
 }
