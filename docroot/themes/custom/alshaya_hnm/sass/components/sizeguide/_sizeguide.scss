@@ -105,7 +105,7 @@
     .size-guide-link {
       position: absolute;
       bottom: 4.3125rem;
-      left: 4.375rem;
+      #{$right}: 60%;
     }
   }
 }
