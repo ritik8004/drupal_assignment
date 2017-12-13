@@ -129,11 +129,9 @@
 
           if ($('#product-image-gallery').hasClass('pager-no')) {
             $('#product-image-gallery li[data-slick-index="' + currentSlide + '"]').addClass('slick-current', function () {
-              $(this).siblings().removeClass('slick-current')
+              $(this).siblings().removeClass('slick-current');
             });
           }
-
-          var curSlide = $('#product-image-gallery').slick('slickCurrentSlide');
           var defaultMainImage = $('#product-image-gallery li[data-slick-index="' + currentSlide + '"]');
           var bigImgUrl = defaultMainImage.children('a').attr('href');
           $('#full-image-wrapper img').attr('src', bigImgUrl);
@@ -160,19 +158,19 @@
             var y2 = imgPos.top;
 
             $('#full-image').css({
-              'left':0,
-              'top': 0
+              left: 0,
+              top: 0
             });
 
             // Make image draggable inside the window.
             var click = {x: 0, y: 0};
             $('#full-image').draggable({
               containment: [x1, y1, x2, y2],
-              start: function(event) {
+              start: function (event) {
                 click.x = event.clientX;
                 click.y = event.clientY;
               },
-              drag: function(event, ui) {
+              drag: function (event, ui) {
                 // This is the parameter for scale().
                 var matrix = image.css('transform').match(/-?[\d\.]+/g);
                 var zoom = parseFloat(matrix[3]);
@@ -180,7 +178,7 @@
                 // jQuery will simply use the same object we alter here.
                 ui.position = {
                   left: ((event.clientX - click.x + original.left) / zoom),
-                  top:  (event.clientY - click.y + original.top ) / zoom
+                  top: (event.clientY - click.y + original.top) / zoom
                 };
               }
             });
@@ -192,7 +190,7 @@
             $('.zoomout').removeClass('disabled');
 
             $('.zoomin').on('click', function () {
-              if(img_scale < 1.75) {
+              if (img_scale < 1.75) {
                 img_scale = img_scale + 0.25;
 
                 image.css('transform', 'scale(' + img_scale + ')');
@@ -207,7 +205,8 @@
               if (img_scale <= 1) {
                 $(this).addClass('disabled');
                 return;
-              } else {
+              }
+              else {
                 img_scale = img_scale - 0.25;
                 $('.zoomin').removeClass('disabled');
                 image.css('transform', 'scale(' + img_scale + ')');
@@ -222,8 +221,8 @@
 
               // Make image draggable inside the window.
               $('#full-image').css({
-                'left': 0,
-                'top': 0
+                left: 0,
+                top: 0
               });
 
               if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
@@ -250,13 +249,13 @@
               $('.zoomout').removeClass('disabled');
 
               $('#full-image').css({
-                'left': 0,
-                'top': 0
+                left: 0,
+                top: 0
               });
 
               var previndex = $(this).parent().slick('slickCurrentSlide');
               $(this).parent().slick('slickGoTo', previndex);
-              var prevImage = $(this).parent().find('li[data-slick-index = "'+ previndex +'"] a.imagegallery__thumbnails__image').attr('href');
+              var prevImage = $(this).parent().find('li[data-slick-index = "' + previndex + '"] a.imagegallery__thumbnails__image').attr('href');
               $('#full-image-wrapper img').attr('src', prevImage);
               $('#full-image-wrapper img').css('transform', 'scale(1)');
               $('#full-image-wrapper iframe').remove();
@@ -269,13 +268,13 @@
               $('.zoomout').removeClass('disabled');
 
               $('#full-image').css({
-                'left': 0,
-                'top': 0
+                left: 0,
+                top: 0
               });
 
               var nextindex = $(this).parent().slick('slickCurrentSlide');
               $(this).parent().slick('slickGoTo', nextindex);
-              var nextImage = $(this).parent().find('li[data-slick-index = "'+ nextindex +'"] a.imagegallery__thumbnails__image').attr('href');
+              var nextImage = $(this).parent().find('li[data-slick-index = "' + nextindex + '"] a.imagegallery__thumbnails__image').attr('href');
               $('#full-image-wrapper img').attr('src', nextImage);
               $('#full-image-wrapper img').css('transform', 'scale(1)');
               $('#full-image-wrappert iframe').remove();
@@ -353,7 +352,7 @@
       $('.acq-content-product #lightSlider li a').once().on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        var index = $(this).parent().attr("data-slick-index");
+        var index = $(this).parent().attr('data-slick-index');
         if ($('#lightSlider').slick('slickCurrentSlide') !== index) {
           $('#lightSlider').slick('slickGoTo', index);
         }
@@ -364,7 +363,7 @@
       $('.acq-content-product-modal #lightSlider li a').once().on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        var index = $(this).parent().attr("data-slick-index");
+        var index = $(this).parent().attr('data-slick-index');
         if ($('.acq-content-product-modal #lightSlider').slick('slickCurrentSlide') !== index) {
           $('.acq-content-product-modal #lightSlider').slick('slickGoTo', index);
         }
@@ -406,7 +405,7 @@
       $('#lightSlider .slick-prev', context).on('click', function () {
         var previndex = $(this).parent().slick('slickCurrentSlide');
         $(this).parent().slick('slickGoTo', previndex);
-        var prevImage = $(this).parent().find('li[data-slick-index = "'+ previndex +'"] a.cloudzoom__thumbnails__image').attr('href');
+        var prevImage = $(this).parent().find('li[data-slick-index = "' + previndex + '"] a.cloudzoom__thumbnails__image').attr('href');
         $('.acq-content-product #cloud-zoom-wrap img').attr('src', prevImage);
         $('.acq-content-product #cloud-zoom-wrap img').css('transform', 'scale(1)');
         $('.acq-content-product #cloud-zoom-wrap iframe').remove();
@@ -416,7 +415,7 @@
       $('#lightSlider .slick-next', context).on('click', function () {
         var nextindex = $(this).parent().slick('slickCurrentSlide');
         $(this).parent().slick('slickGoTo', nextindex);
-        var nextImage = $(this).parent().find('li[data-slick-index = "'+ nextindex +'"] a.cloudzoom__thumbnails__image').attr('href');
+        var nextImage = $(this).parent().find('li[data-slick-index = "' + nextindex + '"] a.cloudzoom__thumbnails__image').attr('href');
         $('.acq-content-product #cloud-zoom-wrap img').attr('src', nextImage);
         $('.acq-content-product #cloud-zoom-wrap img').css('transform', 'scale(1)');
         $('.acq-content-product #cloud-zoom-wrap iframe').remove();
@@ -461,7 +460,7 @@
        */
       function appendVideoIframe(element, href, width, height) {
         element.append('<iframe id="player" width="' + width + '" height="' + height + '" src="' + href
-          + '" frameborder="0" allowfullscreen></iframe>');
+            + '" frameborder="0" allowfullscreen></iframe>');
       }
     }
   };
