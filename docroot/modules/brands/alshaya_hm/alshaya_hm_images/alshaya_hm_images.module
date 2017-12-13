@@ -38,7 +38,7 @@ function _alshaya_hm_images_acq_sku_process_assets($product) {
       }
 
       $asset_type_parts = (!empty($asset['Data']['AssetType'])) ? explode('/', $asset['Data']['AssetType']) : [];
-      $assets[$key]['sortAssetType'] = ($asset['is_old_format']) ? $asset['Type'] : end($asset_type_parts);
+      $assets[$key]['sortAssetType'] = !empty($asset['is_old_format']) ? $asset['Type'] : end($asset_type_parts);
       $face_type = SkuAssetManager::LP_DEFAULT_ANGLE;
 
       if (!empty($asset['Data']['Angle']['Facing']) && !empty($asset['Data']['Angle']['Identifier'])) {

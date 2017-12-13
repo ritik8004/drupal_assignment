@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "98ae6b4446640590856a5568307a513c",
+    "content-hash": "4c63216c7333c3207a568cc7d3e5974d",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -1830,7 +1830,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.13",
-                    "datestamp": "1502799051",
+                    "datestamp": "1511982786",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1838,7 +1838,7 @@
                 },
                 "patches_applied": {
                     "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
-                    "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-4.patch"
+                    "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

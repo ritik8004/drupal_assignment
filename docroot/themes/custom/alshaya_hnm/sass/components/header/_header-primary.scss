@@ -555,7 +555,7 @@ header {
         #{$right}: 1.25rem;
 
         html[lang=ar] & {
-          left: 0;
+          left: -0.75rem;
         }
       }
 
@@ -634,6 +634,10 @@ header {
 
       &::before {
         margin-#{$right}: 0.3125rem;
+      }
+
+      html[lang=ar] & {
+        left: 1.5rem;
       }
     }
 
