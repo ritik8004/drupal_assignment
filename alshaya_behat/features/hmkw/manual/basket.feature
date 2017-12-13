@@ -82,7 +82,9 @@ Feature: Test basket page
   Scenario: As a Guest on arabic site
   I should be able to see the products added to basket
   and the header and footer
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "عربية"
     And I wait for the page to load
     Then I should be able to see the header in Arabic
     Then I should see the link for simple product in Arabic

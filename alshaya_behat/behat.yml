@@ -96,13 +96,13 @@ hmuat:
       contexts:
         - FeatureContext:
             parameters:
-              simpleurl: '/short-jumper'
-              simpletitle: 'Short jumper'
-              simpletitlear: 'Short jumper'
-              configurl: '/hooded-jacket-1'
-              configtitle: 'Hooded jacket'
-              configtitlear: 'جاكيت بقبعة'
-              configvariant: 'M'
+              simpleurl: '/knitted-jumper'
+              simpletitle: 'Knitted jumper'
+              simpletitlear: 'Knitted jumper'
+              configurl: '/bikini-bottoms-3'
+              configtitle: 'Bikini bottoms'
+              configtitlear: 'سروال سباحة'
+              configvariant: '8'
               base_url: 'https://hmkw-uat.factory.alshaya.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
@@ -141,14 +141,14 @@ hmqa:
       contexts:
         - FeatureContext:
             parameters:
-              simpleurl: '/short-jumper'
-              simpletitle: 'Short jumper'
-              simpletitlear: 'Short jumper'
-              configurl: '/hooded-jacket-1'
-              configtitle: 'Hooded jacket'
-              configtitlear: 'جاكيت بقبعة'
-              configvariant: 'XS'
-              base_url: 'https://hmkw-dev.factory.alshaya.com/en'
+              simpleurl: '/test-products-demo'
+              simpletitle: 'Test Products on Demo'
+              simpletitlear: 'Test Products on Demo'
+              configurl: '/2-pack-long-sleeved-bodysuits'
+              configtitle: '2-pack long-sleeved bodysuits'
+              configtitlear: '2-pack long-sleeved bodysuits'
+              configvariant: '50'
+              base_url: 'https://hmkw-test.factory.alshaya.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -166,7 +166,7 @@ hmqa:
         wd_host: http://127.0.0.1:4444/wd/hub
         browser: chrome
         capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
-      base_url: 'https://hmkw-dev.factory.alshaya.com/en'
+      base_url: 'https://hmkw-test.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~
