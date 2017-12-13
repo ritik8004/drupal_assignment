@@ -19,6 +19,13 @@ function alshaya_seo_drush_command() {
     'aliases' => ['rac'],
   ];
 
+  $items['bulk-redirect-import'] = [
+    'description' => 'Creates bulk redirects',
+    'aliases' => ['brc'],
+    'arguments' => [
+      'file' => 'Path to the csv file',
+    ],
+  ];
   return $items;
 }
 
@@ -70,4 +77,62 @@ function drush_alshaya_seo_redirect_arabic_categories() {
   }
 
   drush_print('Done creating redirect rules');
+}
+
+/**
+ * Creates bulk redirects.
+ */
+function drush_alshaya_seo_bulk_redirect_import($file) {
+
+  if (empty($file)) {
+    drush_print('Please provide a valid file path');
+    return drush_user_abort();
+  }
+  elseif (!is_file($file)) {
+    drush_print("\nFile not found. Make sure you specified the correct path.");
+    return drush_user_abort();
+  }
+  elseif (!drush_confirm(dt("\nAre you sure you want to import the URL Redirects?"))) {
+    return drush_user_abort();
+  }
+
+  $csv = array_map('str_getcsv', file($file));
+  global $base_url;
+  $redirect_repository = \Drupal::service('redirect.repository');
+  $redirects_created_count = 0;
+  drush_print('Importing Redirects...');
+
+  if (count($csv)) {
+    foreach (array_slice($csv, 1) as $value) {
+      if (empty($value[2]) || !in_array($value[2], ['ar', 'en'])) {
+        $value[2] = 'und';
+      }
+      $redirect_exists = $redirect_repository->findMatchingRedirect($value[0], [], $value[2]);
+
+      // Check if the redirect already exists.
+      if ($redirect_exists) {
+        drush_print(dt('Redirect rule already exists for : /@lang/@url', [
+          '@lang' => $value[2],
+          '@url' => $value[0],
+        ]));
+        continue;
+      }
+      else {
+        // Create redirect for the path.
+        $destination = Url::fromUri($base_url . '/' . $value[1])->getUri();
+        $redirect_entity = [
+          'redirect_source' => $value[0],
+          'redirect_redirect' => $destination,
+          'status_code' => '301',
+          'language' => $value[2],
+        ];
+        $new_redirect = Redirect::create($redirect_entity);
+        $new_redirect->save();
+        $redirects_created_count++;
+      }
+    }
+    drush_print(dt('@count redirects created.', [
+      '@count' => $redirects_created_count,
+    ]));
+  }
 }
