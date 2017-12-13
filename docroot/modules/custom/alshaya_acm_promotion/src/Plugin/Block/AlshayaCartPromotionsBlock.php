@@ -270,9 +270,16 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function getCacheMaxAge() {
-    // Disable cache for highly dynamic content.
-    return 0;
+  public function getCacheTags() {
+    $cacheTags = [];
+
+    // It depends on cart id of the user.
+    $cacheTags[] = 'cart_' . $this->cartStorage->getCart(FALSE)->id();
+
+    // It depends on promotions content.
+    $cacheTags[] = 'node_type:acq_promotion';
+
+    return Cache::mergeTags(parent::getCacheTags(), $cacheTags);
   }
 
 }
