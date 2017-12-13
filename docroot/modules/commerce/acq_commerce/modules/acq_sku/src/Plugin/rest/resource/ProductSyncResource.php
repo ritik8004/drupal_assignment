@@ -221,7 +221,10 @@ class ProductSyncResource extends ResourceBase {
             $sku->delete();
 
             $deleted++;
-            continue;
+
+            // Throw exception with INTERNAL in message to ensure finally
+            // is executed where we release the lock.
+            throw new \Exception('INTERNAL');
           }
 
           $this->logger->info('Updating product SKU @sku.', ['@sku' => $product['sku']]);
@@ -231,7 +234,10 @@ class ProductSyncResource extends ResourceBase {
           if ($product['status'] != 1) {
             $this->logger->info('Not creating disabled SKU in system: @sku.', ['@sku' => $product['sku']]);
             $ignored++;
-            continue;
+
+            // Throw exception with INTERNAL in message to ensure finally
+            // is executed where we release the lock.
+            throw new \Exception('INTERNAL');
           }
 
           /** @var \Drupal\acq_sku\Entity\SKU $sku */
@@ -334,25 +340,30 @@ class ProductSyncResource extends ResourceBase {
             // Do nothing, we may not have the node available in system.
           }
         }
-
-        // Release the lock.
-        $lock->release($lock_key);
       }
       catch (\Exception $e) {
-        // We consider this as failure as it failed for an unknown reason.
-        // (not taken care of above).
-        $failed++;
+        if ($e->getMessage() !== 'INTERNAL') {
+          // We consider this as failure as it failed for an unknown reason.
+          // (not taken care of above).
+          $failed++;
 
-        // Add the unknown reason to logs.
-        $this->logger->info('Not able to save product SKU @sku. Exception: @message', [
-          '@sku' => $product['sku'],
-          '@message' => $e->getMessage(),
-        ]);
-
+          // Add the unknown reason to logs.
+          $this->logger->warning('Not able to save product SKU @sku. Exception: @message', [
+            '@sku' => $product['sku'],
+            '@message' => $e->getMessage(),
+          ]);
+        }
+      }
+      finally {
         // Release the lock if acquired.
-        if (!empty($lock_acquired) && !empty($lock_key)) {
-          // Release the lock.
+        if (!empty($lock_key) && !empty($lock_acquired)) {
           $lock->release($lock_key);
+
+          // We will come here again for next loop item and we might face
+          // exception before we reach the code that sets $lock_key.
+          // To ensure we don't keep releasing the lock again and again
+          // we set it to NULL here.
+          $lock_key = NULL;
         }
       }
     }
