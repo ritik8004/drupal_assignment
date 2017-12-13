@@ -18,6 +18,9 @@ mckwqa:
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
+  formatters:
+      html:
+        output_path: %paths.base%/features/mckw/reports/html/behat
   extensions:
     Behat\MinkExtension:
       browser_name: chrome
@@ -28,11 +31,18 @@ mckwqa:
       selenium2:
         wd_host: http://127.0.0.1:4444/wd/hub
         browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://mckw-test.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true
 mckwuat:
   autoload:
     '': %paths.base%/features/mckw/bootstrap
@@ -52,6 +62,9 @@ mckwuat:
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
+  formatters:
+      html:
+        output_path: %paths.base%/features/mckw/reports/html/behat
   extensions:
     Behat\MinkExtension:
       browser_name: chrome
@@ -62,11 +75,18 @@ mckwuat:
       selenium2:
         wd_host: http://127.0.0.1:4444/wd/hub
         browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://mckw-uat.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true
 hmuat:
   autoload:
     '': %paths.base%/features/hmkw/bootstrap
@@ -87,6 +107,9 @@ hmuat:
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
+  formatters:
+      html:
+        output_path: %paths.base%/features/hmkw/reports/html/behat
   extensions:
     Behat\MinkExtension:
       browser_name: chrome
@@ -97,11 +120,18 @@ hmuat:
       selenium2:
         wd_host: http://127.0.0.1:4444/wd/hub
         browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://hmkw-uat.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true
 hmqa:
   autoload:
     '': %paths.base%/features/hmkw/bootstrap
@@ -122,6 +152,9 @@ hmqa:
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
+  formatters:
+      html:
+        output_path: %paths.base%/features/hmkw/reports/html/behat
   extensions:
     Behat\MinkExtension:
       browser_name: chrome
@@ -132,8 +165,15 @@ hmqa:
       selenium2:
         wd_host: http://127.0.0.1:4444/wd/hub
         browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--no-sandbox']}}
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://hmkw-dev.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true
