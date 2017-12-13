@@ -27,6 +27,7 @@ function alshaya_get_additional_settings($site, $env) {
         'store_id' => [
           'ar' => 3,
         ],
+        'knet_resource_path' => '/home/alshaya/knet-resource/' . $env . '/mckw/',
       ]
     ],
     'mcksa' => [
@@ -46,6 +47,7 @@ function alshaya_get_additional_settings($site, $env) {
         'store_id' => [
           'ar' => 2,
         ],
+        'knet_resource_path' => '/home/alshaya/knet-resource/' . $env . '/hmkw/',
       ],
       '01pprod' => [
         'magento_lang_prefix' => [
