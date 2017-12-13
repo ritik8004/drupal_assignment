@@ -216,10 +216,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
       if ($sub_type == AlshayaPromotionsManager::SUBTYPE_FREE_SHIPPING_ORDER) {
         // For free shipping, we only show if it is applied.
         if (in_array($promotion_rule_id, $cartRulesApplied)) {
-          // Add the message as success message for free shipping.
-          $free_shipping = [
-            '#markup' => $this->t('Your order qualifies for free delivery.'),
-          ];
+          $message = $this->t('Your order qualifies for free delivery.');
         }
       }
       // For the rest, we show only if they are not applied.

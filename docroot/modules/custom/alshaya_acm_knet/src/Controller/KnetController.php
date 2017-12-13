@@ -180,7 +180,7 @@ class KnetController extends ControllerBase {
       $result_url .= Url::fromRoute('alshaya_acm_knet.success', ['state_key' => $state_key], $url_options)->toString();
 
       $this->logger->info('KNET update for @quote_id: @result_url @message', [
-        '@quote_id' => $response['order_id'],
+        '@quote_id' => $response['quote_id'],
         '@result_url' => $result_url,
         '@message' => json_encode($response),
       ]);
@@ -206,6 +206,10 @@ class KnetController extends ControllerBase {
     $data = \Drupal::state()->get($state_key);
 
     if (empty($data)) {
+      $this->logger->warning('KNET success page requested with invalid state_key: @state_key', [
+        '@state_key' => $state_key,
+      ]);
+
       throw new AccessDeniedHttpException();
     }
 
@@ -213,6 +217,12 @@ class KnetController extends ControllerBase {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if (empty($cart) || $cart->id() != $data['quote_id']) {
+      $this->logger->warning('KNET success page requested with valid state_key: @state_key but cart id in session do not match with one in state data. Cart: @cart, State Data: @data', [
+        '@state_key' => $state_key,
+        '@data' => json_encode($data),
+        '@cart' => json_encode($cart),
+      ]);
+
       throw new AccessDeniedHttpException();
     }
 
@@ -253,6 +263,11 @@ class KnetController extends ControllerBase {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if ($cart->id() != $quote_id) {
+      $this->logger->warning('KNET error page requested with invalid quote_id: @quote_id. Cart in session: @cart', [
+        '@quote_id' => $quote_id,
+        '@cart' => json_encode($cart),
+      ]);
+
       throw new AccessDeniedHttpException();
     }
 
@@ -281,6 +296,10 @@ class KnetController extends ControllerBase {
     $data = \Drupal::state()->get($state_key);
 
     if (empty($data)) {
+      $this->logger->warning('KNET failed page requested with invalid state_key: @state_key', [
+        '@state_key' => $state_key,
+      ]);
+
       throw new AccessDeniedHttpException();
     }
 

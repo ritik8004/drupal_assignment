@@ -135,6 +135,8 @@ class ProductSyncResource extends ResourceBase {
     $created = 0;
     $updated = 0;
     $failed = 0;
+    $ignored = 0;
+    $deleted = 0;
 
     $config = $this->configFactory->get('acq_commerce.conductor');
     $debug = $config->get('debug');
@@ -174,14 +176,14 @@ class ProductSyncResource extends ResourceBase {
 
       if (!isset($product['sku']) || !strlen($product['sku'])) {
         $this->logger->error('Invalid or empty product SKU.');
-        $failed++;
+        $ignored++;
         continue;
       }
 
       // Don't import configurable SKU if it has no configurable options.
       if ($product['type'] == 'configurable' && empty($product['extension']['configurable_product_options'])) {
         $this->logger->error('Empty configurable options for SKU: @sku', ['@sku' => $product['sku']]);
-        $failed++;
+        $ignored++;
         continue;
       }
 
@@ -212,7 +214,7 @@ class ProductSyncResource extends ResourceBase {
           // Delete the SKU.
           $sku->delete();
 
-          $updated++;
+          $deleted++;
           continue;
         }
 
@@ -222,7 +224,7 @@ class ProductSyncResource extends ResourceBase {
       else {
         if ($product['status'] != 1) {
           $this->logger->info('Not creating disabled SKU in system: @sku.', ['@sku' => $product['sku']]);
-          $failed++;
+          $ignored++;
           continue;
         }
 
@@ -338,10 +340,12 @@ class ProductSyncResource extends ResourceBase {
     }
 
     $response = [
-      'success' => (bool) (($created > 0) || ($updated > 0)),
+      'success' => !$failed && ($created || $updated || $ignored || $deleted),
       'created' => $created,
       'updated' => $updated,
       'failed' => $failed,
+      'ignored' => $ignored,
+      'deleted' => $deleted,
     ];
 
     return (new ResourceResponse($response));
