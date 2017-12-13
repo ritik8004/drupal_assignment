@@ -76,9 +76,6 @@ function alshaya_get_additional_settings($site, $env) {
     ],
   ];
 
-  // Setting the knet resource path.
-  $mapping[$site][$env]['alshaya_acm_knet.settings']['resource_path'] = '/home/alshaya/knet-resource/' . $env . '/' . $site .'/';
-
   // Get the settings following this fallback (from the more generic to the
   // more specific one): default+default > default+env > site+default >
   // site+env.
