@@ -32,10 +32,8 @@
       $('.gallery-wrapper #cloud-zoom img').removeAttr('title');
       $('.gallery-wrapper #cloud-zoom img').removeAttr('alt');
 
-      // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Initialize Product Zoom using CloudZoom library.
       // Initialize lightSliders.
-      // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       var items = $('.acq-content-product .cloud-zoom:not(cloud-zoom-processed), .acq-content-product .cloudzoom__thumbnails__image:not(cloud-zoom-processed)');
       if (items.length) {
         items.addClass('cloud-zoom-processed', context).once('bind-events').CloudZoom();
@@ -63,8 +61,6 @@
       var modallightslider = $('#drupal-modal #lightSlider', context);
       applyRtl(lightslider, slickOptions);
       applyRtl(modallightslider, slickOptions);
-
-
       // Slider - 3 For Mobile - Image Gallery.
       var slickMobileOptions = {
         slidesToShow: 1,
@@ -84,9 +80,7 @@
         toggleProductImageGallery();
       });
 
-      // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Modal view on image click in desktop and tablet.
-      // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Modal view for Slider-2 when clicking on big image - Image Gallery.
       var element = document.getElementById('product-image-gallery-container');
       var dialogsettings = {
@@ -301,15 +295,10 @@
         myDialog.showModal();
       });
 
-
-
-      // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Handling videos inside sliders.
       // Swapping the containers or Inserting video iframes inside containers on click of video thumbnails.
-      // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
       // Fetch Vimeo thumbnail via a GET call. Vimeo doesnot give thumbnails via URL like YT.
-      // @TODO: Can we do this in PHP?
+      // @TODO: Can we do this in PHP
       $('#lightSlider li.cloudzoom__thumbnails__video.vimeo, #product-image-gallery li.vimeo, #product-image-gallery-mobile li.vimeo').each(function () {
         var vimeoVideoUrl = $(this).attr('data-iframe');
         var match = /vimeo.*\/(\d+)/i.exec(vimeoVideoUrl);
@@ -333,6 +322,7 @@
           appendVideoIframe($(this), href, 320, 320);
         }
       });
+
       // For Desktop slider, we add a iframe on click on the image.
       $('#lightSlider li', context).on('click', function (e) {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
@@ -428,10 +418,7 @@
         event.preventDefault();
       });
 
-      // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // Helper functions.
-      // //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
       /**
        * Toggles the product gallery based on screen width [between tab and mobile].
        */
