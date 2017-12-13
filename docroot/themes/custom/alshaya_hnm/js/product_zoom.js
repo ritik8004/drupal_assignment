@@ -105,7 +105,7 @@
           }
 
           var slickModalOptions = {
-            slidesToShow: 5,
+            slidesToShow: 4,
             vertical: true,
             arrows: true,
             centerMode: true,
