@@ -20,49 +20,11 @@ function alshaya_acm_product_update_8008() {
 /**
  * Implements hook_update_N().
  *
- * Change cardinality for article_waning field to 1.
+ * Change cardinality for article_warning field to 1.
  */
 function alshaya_acm_product_update_8007() {
-  $entity_type_manager = \Drupal::entityTypeManager();
-  $bundle_of = 'acq_sku';
-
-  // Get data table name for entity.
-  $base_table = $entity_type_manager->getStorage($bundle_of)->getDataTable();
-  $database = \Drupal::database();
-
-  // Field table from which we need to migrate data.
-  $field_table_name = 'acq_sku__attr_article_warning';
-
-  // Pull the data stored in the field, keyed by the id.
-  $field_table_values = $database->select($field_table_name)
-    ->fields($field_table_name, [
-      'entity_id', 'langcode', 'attr_article_warning_value',
-    ])
-    ->condition('delta', 0)
-    ->execute()
-    ->fetchAll();
-
-  // Truncate the field table data to be able to update the entity definition
-  // for the field. This is necessary else Entity update manager would complain
-  // about existing data in the field.
-  $database->delete($field_table_name)->execute();
-
-  // Update the cardinality of article warning field to single-valued field.
-  $sku_entity_config = \Drupal::configFactory()->getEditable('acq_sku.base_field_additions');
-  $sku_entity_data = $sku_entity_config->getRawData();
-  $sku_entity_data['article_warning']['cardinality'] = 1;
-  $sku_entity_config->setData($sku_entity_data)->save();
-  \Drupal::service("entity.definition_update_manager")->applyUpdates();
-
-  // Restore data for warning field.
-  foreach ($field_table_values as $value) {
-    $database->update($base_table)
-      ->fields(['attr_article_warning' => $value->attr_article_warning_value])
-      ->condition('id', $value->entity_id)
-      ->condition('langcode', $value->langcode)
-      ->execute();
-  }
-
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+  alshaya_acm_product_update_field_cardinality_from_unlimited_to_unique('attr_article_warning', 'article_warning');
 }
 
 /**
