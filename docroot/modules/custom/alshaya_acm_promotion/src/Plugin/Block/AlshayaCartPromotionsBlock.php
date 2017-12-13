@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_promotion\Plugin\Block;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityRepository;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManager;
