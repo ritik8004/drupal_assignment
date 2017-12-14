@@ -5,7 +5,7 @@
 
 (function ($, Drupal) {
   'use strict';
-  
+
   if (navigator.userAgent.match(/Mobi/)) {
     $('a[data-dialog-type="modal"],  a.mobile-link').each(function () {
       $(this).removeClass('use-ajax');
