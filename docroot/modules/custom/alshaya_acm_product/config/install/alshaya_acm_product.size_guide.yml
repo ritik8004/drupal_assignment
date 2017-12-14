@@ -1,5 +1,3 @@
-size_guide_link: 0
-size_guide_modal_content:
-  format: rich_text
-  value: '<div>Size guide content is here.</div>'
+size_guide_enabled: 0
+size_guide_modal_content_node: null
 langcode: en
