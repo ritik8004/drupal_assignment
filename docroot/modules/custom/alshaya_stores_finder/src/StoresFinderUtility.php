@@ -233,28 +233,28 @@ class StoresFinderUtility {
   }
 
   /**
-   * Deletes all stores.
+   * Delete stores with given node ids.
+   *
+   * @param array $nids
+   *   Array of $nids of store bundle.
    */
-  public function deleteAllStores() {
-    $nids = $this->database->select('node', 'n')
-      ->fields('n', ['nid'])
-      ->condition('type', 'store')
-      ->execute()->fetchCol();
+  public function deleteStores(array $nids) {
+    // If nothing, no need to process.
+    if (empty($nids)) {
+      return;
+    }
 
-    // If there are any store nodes.
-    if (!empty($nids)) {
-      $nodes = Node::loadMultiple($nids);
-      if (!empty($nodes)) {
-        /* @var \Drupal\node\Entity\Node $node */
-        foreach ($nodes as $node) {
-          try {
-            // Delete the node.
-            $node->delete();
-          }
-          catch (\Exception $e) {
-            // If something goes wrong.
-            $this->logger->error('Unable to delete the node with id @nid', ['@nid' => $node->id()]);
-          }
+    $nodes = Node::loadMultiple($nids);
+    if (!empty($nodes)) {
+      /* @var \Drupal\node\Entity\Node $node */
+      foreach ($nodes as $node) {
+        try {
+          // Delete the node.
+          $node->delete();
+        }
+        catch (\Exception $e) {
+          // If something goes wrong.
+          $this->logger->error('Unable to delete the @bundle node with id @nid', ['@bundle' => $node->bundle(), '@nid' => $node->id()]);
         }
       }
     }
