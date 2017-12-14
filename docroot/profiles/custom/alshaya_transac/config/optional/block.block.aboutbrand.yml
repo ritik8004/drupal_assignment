@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: aboutbrand
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: footer_primary
 weight: -17
 provider: null

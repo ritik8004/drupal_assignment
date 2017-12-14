@@ -5,9 +5,9 @@ dependencies:
     - alshaya_user
     - user
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: welcomeuser
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: menu_secondary
 weight: -33
 provider: null

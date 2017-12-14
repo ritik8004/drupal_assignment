@@ -4,9 +4,9 @@ dependencies:
   module:
     - language
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: languageswitcher_2
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: footer_primary
 weight: -20
 provider: null
