@@ -6,11 +6,13 @@
 (function ($, Drupal) {
   'use strict';
 
-  if (drupalSettings.alshaya_master.device === 'mobile') {
+  if (navigator.userAgent.match(/Mobi/)) {
     $('a[data-dialog-type="modal"],  a.mobile-link').each(function () {
+      $(this).removeClass('use-ajax');
       var href = $(this).attr('href');
-      $(this).click(function () {
-        window.open(drupalSettings.path.baseUrl + href);
+      $(this).click(function (e) {
+        e.preventDefault();
+        window.location.href = href;
         return false;
       });
     });
