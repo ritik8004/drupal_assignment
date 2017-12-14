@@ -272,7 +272,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
             $sku_configurable_options_color[$key] = [
               'display_value' => empty($asset) ? $sku_entity->get('attr_rgb_color')->value : '<img src="' . $asset[0]['url']->toString() . '">',
               'display_label' => $sku_entity->get('attr_color_label')->getString(),
-              'swatch_type' => $swatch_type,
+              'swatch_type' => empty($asset) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
             ];
           }
         }
