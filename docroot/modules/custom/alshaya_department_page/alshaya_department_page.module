@@ -5,8 +5,6 @@
  * Constains hooks and alters for Alshaya Department page.
  */
 
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\node\Entity\Node;
@@ -56,16 +54,6 @@ function alshaya_department_page_get_pages() {
   }
 
   return $department_pages;
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function alshaya_department_page_node_presave(EntityInterface $entity) {
-  // Allows for clearing of blocks based on node type.
-  // Used for mega menu block.
-  $tags = ['node_type:' . $entity->getType()];
-  Cache::invalidateTags($tags);
 }
 
 /**

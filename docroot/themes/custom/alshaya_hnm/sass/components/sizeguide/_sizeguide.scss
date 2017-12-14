@@ -5,6 +5,7 @@
   color: $grey7;
   float: $right;
   margin-top: -0.1875rem;
+  outline: none !important;
 
   @include breakpoint($tablet) {
     margin-top: 0.5rem;
@@ -20,22 +21,12 @@
   }
 
   + .ajax-progress-throbber {
-    position: absolute;
-    top: -0.5rem;
-    #{$right}: 31%;
     display: block !important;
+    float: $right;
+    margin-top: -0.5rem;
 
-    html[lang=ar] & {
-      #{$right}: 41%;
-    }
-
-    @include breakpoint($desktop) {
-      top: 0.125rem;
-      #{$right}: 18%;
-
-      html[lang=ar] & {
-        #{$right}: 28%;
-      }
+    @include breakpoint($tablet) {
+      margin-top: 0;
     }
 
     .message {
@@ -47,7 +38,11 @@
       background-position: $right center !important;
       background-repeat: no-repeat !important;
       background-size: 1.5rem;
-      padding: 0.5rem;
+      padding: 0.625rem;
+
+      @include breakpoint($desktop) {
+        padding: 0.5rem 0.625rem;
+      }
     }
   }
 }
@@ -106,6 +101,27 @@
       position: absolute;
       bottom: 4.3125rem;
       #{$right}: 60%;
+    }
+  }
+}
+
+.sizeguide-modal-overlay {
+  .ui-dialog {
+    @include breakpoint($tablet) {
+      padding: calc((100vh - 34.75rem) / 2) calc((100vw - 33.375rem) / 2);
+    }
+
+    div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
+      max-width: 33.375rem !important;
+      margin: 0 auto;
+      width: 100%;
+      overflow: auto !important;
+    }
+
+    .ui-dialog-titlebar-close {
+      @include breakpoint($only-tablet) {
+        #{$right}: -1.0625rem;
+      }
     }
   }
 }

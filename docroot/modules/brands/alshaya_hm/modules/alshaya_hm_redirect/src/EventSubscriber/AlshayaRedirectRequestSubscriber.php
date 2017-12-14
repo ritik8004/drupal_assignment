@@ -86,14 +86,17 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
     // Check if the url starts with the identifier.
     preg_match(self::HM_REDIRECT_URL_IDENTIFIER, $path, $matches);
     if (!empty($matches)) {
+      global $base_url;
       $langcode = $this->resolveLangcode($event->getRequest());
-      $languages = $this->languageManager->getLanguages();
 
-      $url_options = ['language' => $languages[$langcode], 'absolute' => TRUE];
+      // We simply build a URL manually instead of using Drupal Url methods as
+      // it does not deal properly with edge-cases (trailing slash, language,
+      // route, etc). See Git history for previous tentative.
+      $new_path = $base_url . '/' . $langcode . preg_replace(self::HM_REDIRECT_URL_IDENTIFIER, '${2}', rtrim($path, '/'));
 
       // Redirect response will by default be not cached server-side. Still
       // adding a no-cache header to avoid http level caching.
-      $response = new RedirectResponse(Url::fromUserInput(preg_replace(self::HM_REDIRECT_URL_IDENTIFIER, '${2}', $path), $url_options)->toString(), 302, ['cache-control' => 'must-revalidate, no-cache, no-store, private']);
+      $response = new RedirectResponse($new_path, 302, ['cache-control' => 'must-revalidate, no-cache, no-store, private']);
 
       // Avoid page cache for Anonymous requests.
       $this->killSwitch->trigger();

@@ -17,6 +17,16 @@
     }
   });
 
+  // Hide the current language link in language switcher block.
+  // Try to do this as early as possible during page load.
+  try {
+    var currentLang = $('html').attr('lang');
+    $('.header--wrapper .language-switcher-language-url .language-link[hreflang="' + currentLang + '"]').parent().addClass('hidden-important');
+  }
+  catch (e) {
+    // Do nothing here.
+  }
+
   Drupal.behaviors.removeContentLoadingThrobber = {
     attach: function (context, settings) {
       setTimeout(function () {
@@ -104,6 +114,15 @@
 
         $(document).ajaxComplete(function () {
           modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
+        });
+      });
+
+      $('.size-guide-link ').click(function () {
+        $('body').addClass('sizeguide-modal-overlay');
+        modalOverlay('.ui-dialog-titlebar-close', 'sizeguide-modal-overlay');
+
+        $(document).ajaxComplete(function () {
+          modalOverlay('.ui-dialog-titlebar-close', 'sizeguide-modal-overlay');
         });
       });
     }

@@ -278,6 +278,11 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       // Acquire lock to ensure parallel processes are executed one by one.
       do {
         $lock_acquired = $lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+        }
       } while (!$lock_acquired);
 
 

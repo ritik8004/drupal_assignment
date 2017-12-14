@@ -115,6 +115,7 @@ class AlshayaPromotionsManager {
    */
   public function getAllPromotions(array $conditions = []) {
     $nodes = [];
+
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
     foreach ($conditions as $condition) {

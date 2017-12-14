@@ -46,7 +46,17 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
   };
 
   Drupal.alshayaSearchActiveFacetResetAfterAjax = function () {
+    // We apply soft-limit js again after ajax calls here.
+    // Soft limit is feature provided by facets module but it
+    // doesn't support ajax, we add code here to handle that.
     if (alshayaSearchActiveFacet) {
+      if (typeof drupalSettings.facets.softLimit !== 'undefined'
+        && typeof drupalSettings.facets.softLimit[alshayaSearchActiveFacet] !== 'undefined') {
+
+        var limit = drupalSettings.facets.softLimit[alshayaSearchActiveFacet];
+        Drupal.facets.applySoftLimit(alshayaSearchActiveFacet, limit);
+      }
+
       var facetBlock = $('[data-block-plugin-id="' + alshayaSearchActiveFacet + '"]:visible');
       facetBlock.addClass('facet-active');
       facetBlock.find('.c-accordion__title').addClass('ui-state-active');

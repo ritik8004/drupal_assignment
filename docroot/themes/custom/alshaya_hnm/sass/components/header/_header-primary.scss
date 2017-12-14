@@ -299,7 +299,13 @@ header {
     }
 
     .cart-link {
-      background: url('../imgs/icons/bag.svg') no-repeat;
+      @include icon(shopping-bag) {
+        font-size: 2.125rem;
+        position: absolute;
+        #{$right}: -0.5rem;
+        top: -0.375rem;
+      }
+
       display: inline-block;
       width: 1.375rem;
       height: 1.375rem;
@@ -549,7 +555,7 @@ header {
         #{$right}: 1.25rem;
       }
 
-      @include breakpoint($only-tablet) {
+      @include breakpoint($upto-desktop) {
         html[lang=ar] & {
           font-size: 1px;
         }
@@ -796,7 +802,6 @@ header {
         #{$left}: 0;
         width: 100%;
         z-index: -1;
-        border-top: 0.9375rem solid transparent;
         position: absolute;
         display: block;
         opacity: 0;
@@ -1002,14 +1007,11 @@ header {
     vertical-align: top;
     display: inline-block;
 
-    div:nth-child(2) {
-      float: $left;
-    }
-
     .highlighted {
       display: inline-block;
       max-width: 11.5rem;
       vertical-align: top;
+      margin: 0 0.625rem;
     }
 
     img {
@@ -1568,8 +1570,11 @@ header {
 .c-pre-content__region {
   @include breakpoint($desktop) {
     height: 2.75rem;
-    border-bottom: 1px solid $white;
   }
+}
+
+.branding__menu {
+  border-bottom: 1px solid $white;
 }
 
 html[lang='ar'] {

@@ -73,47 +73,64 @@ class CheckoutHelper {
       throw new \Exception('Cannot place order for empty cart');
     }
 
-    // Place an order.
-    $response = $this->apiWrapper->placeOrder($cart->id());
+    try {
+      // Place an order.
+      $response = $this->apiWrapper->placeOrder($cart->id());
 
-    // Once we reach here, we clear cart related cache.
-    Cache::invalidateTags(['cart_' . $cart->id()]);
+      // Once we reach here, we clear cart related cache.
+      Cache::invalidateTags(['cart_' . $cart->id()]);
 
-    // @TODO: Remove the fix when we get the full order details.
-    $order_id = str_replace('"', '', $response['order']['id']);
+      // @TODO: Remove the fix when we get the full order details.
+      $order_id = str_replace('"', '', $response['order']['id']);
 
-    $session = \Drupal::request()->getSession();
-    $session->set('last_order_id', $order_id);
+      $session = \Drupal::request()->getSession();
+      $session->set('last_order_id', $order_id);
 
-    $current_user_id = 0;
+      $current_user_id = 0;
 
-    // Clear orders list cache if user is logged in.
-    if (\Drupal::currentUser()->isAnonymous() || !alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
-      // Store the email address of customer in session.
-      $email = $cart->customerEmail();
-      $session->set('email_order_' . $order_id, $email);
-    }
-    else {
-      $email = \Drupal::currentUser()->getEmail();
-      $current_user_id = \Drupal::currentUser()->id();
-
-      // Update user's mobile number if empty.
-      $account = User::load($current_user_id);
-
-      if (empty($account->get('field_mobile_number')->getString())) {
-        $billing = (array) $cart->getBilling();
-        $account->get('field_mobile_number')->setValue($billing['telephone']);
-        $account->save();
+      // Clear orders list cache if user is logged in.
+      if (\Drupal::currentUser()->isAnonymous() || !alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
+        // Store the email address of customer in session.
+        $email = $cart->customerEmail();
+        $session->set('email_order_' . $order_id, $email);
       }
+      else {
+        $email = \Drupal::currentUser()->getEmail();
+        $current_user_id = \Drupal::currentUser()->id();
+
+        // Update user's mobile number if empty.
+        $account = User::load($current_user_id);
+
+        if (empty($account->get('field_mobile_number')->getString())) {
+          $billing = (array) $cart->getBilling();
+          $account->get('field_mobile_number')->setValue($billing['telephone']);
+          $account->save();
+        }
+      }
+
+      $session->save();
+
+      $this->ordersManager->clearOrderCache($email, $current_user_id);
+      $this->ordersManager->clearLastOrderRelatedProductsCache();
+
+      // Add success message in logs.
+      $this->logger->info('Placed order. Cart: @cart.', [
+        '@cart' => json_encode($cart->getCart()),
+      ]);
+
+      // Clear the cart in session.
+      $this->cartStorage->clearCart();
     }
+    catch (\Exception $e) {
+      // Add message in logs.
+      $this->logger->critical('Error occurred while placing order. Cart: @cart. Exception: @message', [
+        '@cart' => json_encode($cart->getCart()),
+        '@message' => $e->getMessage(),
+      ]);
 
-    $session->save();
-
-    $this->ordersManager->clearOrderCache($email, $current_user_id);
-    $this->ordersManager->clearLastOrderRelatedProductsCache();
-
-    // Clear the cart in session.
-    $this->cartStorage->clearCart();
+      // Throw the message for calling function too.
+      throw $e;
+    }
   }
 
 }

@@ -5,6 +5,15 @@
   padding-top: 1.5rem;
   max-width: 76.375rem;
   margin: 0 auto 2rem;
+  margin-bottom: 4.5rem;
+
+  @include breakpoint($upto-desktop) {
+    top: 2.5rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-bottom: 6.5rem;
+  }
 
   html[lang=ar] & {
     line-height: 1.125;
@@ -34,43 +43,39 @@
     direction: ltr;
   }
 
+  .not-found__body__container {
+    padding-top: 3rem;
+  }
+
   .not-found__body {
-    position: absolute;
-    z-index: 1;
-    right: 5.375rem;
-    width: 38.75rem;
-    bottom: 0;
+    width: 620px;
     text-align: center;
     font-size: 1.5625rem;
-    font-family: $alshaya-thin;
+    font-family: $hnm-regular;
+    margin: 0 auto;
+    margin-top: 10%;
     color: $matterhorn;
-    display: table;
-    height: 25.875rem;
+    padding-bottom: 2.5rem;
 
     .maintenance-page & {
-      font-family: $alshaya-thin-nodir;
-    }
-
-    .not-found__body__container {
-      display: table-cell;
-      vertical-align: middle;
+      font-family: $hnm-regular;
     }
 
     h1 {
       line-height: 1;
       font-size: 2.25rem;
-      font-family: $alshaya-bold;
+      font-family: $hnm-bold;
       font-weight: normal;
       color: $marine-blue;
       margin-bottom: 5px;
       margin-top: 0;
 
       .maintenance-page & {
-        font-family: $alshaya-bold-nodir;
+        font-family: $hnm-bold;
       }
 
       &.title--arabic {
-        font-family: $alshaya-arabic-thin-nodir;
+        font-family: $hnm-regular;
         font-size: 30px;
         direction: rtl;
         color: $marine-blue;
@@ -80,14 +85,19 @@
     h2 {
       margin-top: 0;
       margin-bottom: 0;
-      font-size: 1.5625rem;
-      color: $marine-blue;
-      font-family: $alshaya-bold;
+      color: $black;
+      font-family: $hnmpromo-regular;
       font-weight: normal;
+      font-size: 1.625rem;
 
       .maintenance-page & {
-        font-family: $alshaya-bold-nodir;
+        font-family: $hnmpromo-regular;
       }
+    }
+
+    h2:first-child {
+      font-size: 2.25rem;
+      margin-bottom: 0.5rem;
     }
   }
 
@@ -98,9 +108,16 @@
   p {
     margin-top: 0;
     margin-bottom: 0;
+    color: $grey-ash;
+    font-family: $hnm-regular;
+
+    a {
+      color: $black;
+      font-family: $hnm-regular;
+    }
 
     &.arabic {
-      font-family: $alshaya-arabic-thin-nodir;
+      font-family: $hnm-regular;
       font-size: 20px;
       direction: rtl;
     }
@@ -166,19 +183,36 @@
   }
 
   .maintenance__logo {
+    margin-top: 3rem;
+
     @include breakpoint($upto-desktop) {
-      text-align: right;
+      text-align: center;
       margin: 2rem 1rem;
     }
 
     @include breakpoint($desktop) {
-      float: right;
-      margin-top: 1rem;
+      text-align: center;
       margin-right: 2rem;
     }
 
-    svg {
+    svg,
+    img {
       height: 4rem;
+    }
+  }
+}
+
+.maintenance-page {
+  .not-found__body {
+    margin-top: 4%;
+  }
+
+  .not-found {
+    min-height: auto;
+
+    p {
+      color: $black;
+      line-height: 1.32;
     }
   }
 }

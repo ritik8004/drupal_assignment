@@ -4,4 +4,4 @@ alshaya_stores_migrate.upload:
     _form: '\Drupal\alshaya_stores_migrate\Form\StoresMigrateUploadForm'
     _title: 'Migrate stores'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'migrate alshaya_stores'

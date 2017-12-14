@@ -74,3 +74,15 @@ function alshaya_stores_finder_set_default_marker_icon() {
     ->set('marker.url', file_url_transform_relative(file_create_url($marker_path)))
     ->save(TRUE);
 }
+
+/**
+ * Implements hook_update().
+ *
+ * Refactor store detail page link for store finder glossary view.
+ */
+function alshaya_stores_finder_update_8103() {
+  $configs = [
+    'views.view.stores_finder',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_stores_finder');
+}

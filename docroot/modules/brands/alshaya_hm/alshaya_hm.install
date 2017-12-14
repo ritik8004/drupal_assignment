@@ -13,12 +13,51 @@ use Drupal\search_api\Entity\Index;
  *
  * Set visiblity rule for customerservice block.
  */
-function alshaya_hm_update_8004() {
+function alshaya_hm_update_8007() {
   \Drupal::configFactory()->getEditable('block.block.customerservice')
-    ->set('visibility.request_path.id', 'request_path')
-    ->set('visibility.request_path.pages', '/cart/checkout' . PHP_EOL . '/cart/checkout/*' . PHP_EOL . '/confirmation/print')
-    ->set('visibility.request_path.negate', FALSE)
     ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install Acquia Purge module on HnM.
+ */
+function alshaya_hm_update_8006() {
+  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+    \Drupal::service('module_installer')->install(['acquia_purge']);
+
+    // Enable acquia_purge purger.
+    $purge_purgers = \Drupal::service('purge.purgers');
+    $purgers_enabled = $purge_purgers->getPluginsEnabled();
+    $purgers_enabled[$purge_purgers->createId()] = 'acquia_purge';
+    $purge_purgers->setPluginsEnabled($purgers_enabled);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add translation for concept facet.
+ */
+function alshaya_hm_update_8005() {
+  $concept_translation = [
+    'Concept' => [
+      'ar' => 'المفهوم',
+      'en' => 'Concept',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($concept_translation);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Display cross-sell region for HnM.
+ */
+function alshaya_hm_update_8004() {
+  \Drupal::configFactory()->getEditable('alshaya_acm.settings')->set('display_crosssell', TRUE)->save();
 }
 
 /**
@@ -324,6 +363,10 @@ function alshaya_hm_install() {
     'find your closest collection point' => [
       'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
       'en' => 'Find your closest collection point',
+    ],
+    'Concept' => [
+      'ar' => 'المفهوم',
+      'en' => 'Concept',
     ],
   ];
   alshaya_i18n_save_translations($strings);

@@ -109,16 +109,13 @@ class ProductCategoryTree {
     $alshaya_department_pages = alshaya_department_page_get_pages();
 
     foreach ($terms as $term) {
-      // Check for translations if not browsing in the site-default language.
-      if ($langcode !== $this->languageManager->getDefaultLanguage()->getId()) {
-        // For language specific data.
-        if ($term->hasTranslation($langcode)) {
-          $term = $term->getTranslation($langcode);
-        }
-        else {
-          continue;
-        }
+      // We don't show the term in menu if translation not available.
+      if (!$term->hasTranslation($langcode)) {
+        continue;
       }
+
+      // Load translation for requested langcode.
+      $term = $term->getTranslation($langcode);
 
       // Get value of boolean field which will decide if we show/hide this
       // term and child terms in the menu.

@@ -759,7 +759,7 @@
     color: $hnm-black-two;
     margin-bottom: 0.3rem;
     padding-bottom: 0.56rem;
-    font-family: $hnm-bold;
+    font-family: $hnm-demibold;
     font-size: 1rem;
     font-weight: normal;
     text-transform: uppercase;
@@ -767,13 +767,7 @@
     letter-spacing: 1px;
 
     @include breakpoint($tablet) {
-      font-size: 0.875rem;
-      margin-#{$left}: 2.75rem;
-      text-align: $left;
-    }
-
-    @include breakpoint($desktop) {
-      font-size: 1.125rem;
+      text-align: center;
     }
   }
 
@@ -811,17 +805,6 @@
       }
     }
 
-    .owl-prev,
-    .owl-next {
-      @include breakpoint($tablet) {
-        top: 20.3%;
-      }
-
-      @include breakpoint($desktop) {
-        top: 19.7%;
-      }
-    }
-
     .owl-prev {
       @include breakpoint($desktop) {
         left: -2.2rem;
@@ -840,7 +823,7 @@
   }
 
   .view-product-slider .views-row {
-    height: 18.75rem;
+    min-height: 18.75rem;
   }
 }
 
@@ -1412,7 +1395,7 @@ body .ladda-button {
 
 #block-baskethorizontalproductrecommendation {
   .owl-item a.above-mobile-block:hover .c-products__item__label {
-    color: $cerulean-two;
+    color: $hnm-black-two;
     text-decoration: underline;
   }
 }

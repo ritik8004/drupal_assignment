@@ -210,23 +210,33 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Mark node for reindexing on add/update/delete of SKUs.
+ * Perform actions related to entity just added/updated/deleted.
  *
  * @param \Drupal\acq_sku\Entity\SKU $entity
  *   SKU for which display node is to be updated.
  */
-function _alshaya_acm_product_node_mark_for_reindex(SKU $entity) {
+function _alshaya_acm_product_post_sku_operation(SKU $entity) {
   // Don't do anything if search_api is not enabled.
   if (!\Drupal::moduleHandler()->moduleExists('search_api')) {
     return;
   }
 
   try {
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $entity->getPluginInstance();
+
+    if ($parent = $plugin->getParentSku($entity)) {
+      // Clear cache for processed price of configurable.
+      // Check for SkuManager::getMinPrices() for implementation.
+      $cid = 'configurable_price:' . $parent->getSku();
+      \Drupal::cache('configurable_price')->delete($cid);
+    }
 
     // Check if node is available.
     if ($node = $plugin->getDisplayNode($entity)) {
       $node->original = clone $node;
+
+      // Mark node for reindexing on add/update/delete of SKUs.
       search_api_entity_update($node);
     }
   }
@@ -239,21 +249,21 @@ function _alshaya_acm_product_node_mark_for_reindex(SKU $entity) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function alshaya_acm_product_acq_sku_insert(SKU $entity) {
-  _alshaya_acm_product_node_mark_for_reindex($entity);
+  _alshaya_acm_product_post_sku_operation($entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
 function alshaya_acm_product_acq_sku_update(SKU $entity) {
-  _alshaya_acm_product_node_mark_for_reindex($entity);
+  _alshaya_acm_product_post_sku_operation($entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
 function alshaya_acm_product_acq_sku_delete(SKU $entity) {
-  _alshaya_acm_product_node_mark_for_reindex($entity);
+  _alshaya_acm_product_post_sku_operation($entity);
 }
 
 /**
@@ -261,11 +271,18 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
  */
 function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
   // Update composition field.
-  $composition = json_decode($sku->get('attr_composition')
-    ->getString(), TRUE);
+  $composition = json_decode(str_replace('\\', '', $sku->get('attr_composition')
+    ->getString()), TRUE);
   if (!empty($composition)) {
     $sku->set('attr_composition', \Drupal::service('alshaya_acm_product.skumanager')
       ->transformCompositionArrayToList($composition));
+  }
+  else {
+    if (!empty($sku->get('attr_composition')->getString())) {
+      \Drupal::logger('alshaya_acm_product')->info('Invalid JSON. Unable to parse JSON data for SKU: @sku. JSON: @json', ['@sku' => $sku->getSku(), '@json' => $sku->get('attr_composition')->getString()]);
+    }
+
+    $sku->set('attr_composition', NULL);
   }
 }
 
@@ -298,6 +315,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
       elseif ($view_mode == 'full') {
+        // Get cross sell block for the product.
+        if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
+          $cross_sell_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_CROSSSELL);
+
+          if (!empty($cross_sell_skus)) {
+            $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+            if (!empty($crosssell_items)) {
+              $build['cross_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items));
+              // Weight will have no effect later once template is modified.
+              $build['cross_sell']['#weight'] = 11;
+            }
+          }
+        }
+
         $up_sell_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_UPSELL);
 
         if (!empty($up_sell_skus)) {
@@ -354,13 +385,19 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $description_value .= '</div>';
         }
 
-        if ($composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', 'children')) {
-          $composition_markup = [
-            '#theme' => 'product_composition_markup',
-            '#composition' => $composition,
-          ];
-          $description_value .= render($composition_markup);
+        // Render the wrapper div for composition always so that the same can be
+        // filled with data on variant selection.
+        $search_direction = $sku_entity->getType == 'configurable' ? 'children' : 'self';
+        $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
+        $composition_markup = [
+          '#theme' => 'product_composition_markup',
+        ];
+
+        if (!empty($composition)) {
+          $composition_markup['#composition']['#markup'] = $composition;
         }
+
+        $description_value .= render($composition_markup);
 
         $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
         $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
@@ -827,10 +864,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               if (isset($product_tree['options'][$configurable_key . ':' . $key])) {
                 $variations = array_filter($product_tree['options'][$configurable_key . ':' . $key]);
                 // Check if product tree doesn't have any variations available
-                // for this option.
+                // for this option. Hide options like this one.
                 if (isset($variations['#available_config']) &&
                   (count($variations) === 1)) {
-                  $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
+                  unset($configurable['#options'][$key]);
                   \Drupal::logger('alshaya_acm_product')->alert('No SKU found for Config sku: %sku and %option : %option_value',
                     [
                       '%sku' => $sku_entity->getSku(),
@@ -1034,8 +1071,11 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
     $composition_markup = [
       '#theme' => 'product_composition_markup',
-      '#composition' => $composition,
     ];
+
+    if (!empty($composition)) {
+      $composition_markup['#composition']['#markup'] = $composition;
+    }
 
     $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
 
