@@ -14,6 +14,7 @@ use Drupal\search_api\Entity\Index;
  * Set visiblity rule for customerservice block.
  */
 function alshaya_hm_update_8007() {
+  // This will save override added in /config/override/block.block.customerservice.
   \Drupal::configFactory()->getEditable('block.block.customerservice')
     ->save();
 }
