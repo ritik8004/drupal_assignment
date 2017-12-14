@@ -2,9 +2,9 @@ langcode: en
 status: true
 dependencies:
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: local_actions
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: content
 weight: -20
 provider: null

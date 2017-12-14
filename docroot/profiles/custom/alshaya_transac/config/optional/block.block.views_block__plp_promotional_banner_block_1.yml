@@ -7,9 +7,9 @@ dependencies:
     - system
     - views
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: views_block__plp_promotional_banner_block_1
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: highlighted
 weight: -29
 provider: null
