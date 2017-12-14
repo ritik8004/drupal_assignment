@@ -13,12 +13,19 @@
 # post-code-update only runs if your site is using a Git repository. It does
 # not support SVN.
 
-drush acsf-tools-ml updb
+site="$1"
+target_env="$2"
 
-var = drush acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF
+cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 
-echo "$var" | while IFS= read -r line
+echo "Executing updb."
+drush8 acsf-tools-ml updb
+
+domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
+
+echo "$domains" | while IFS= read -r line
 do
+ echo "Clearing varnish cache for $line"
  curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1495.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
  curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1496.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
  curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2295.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
