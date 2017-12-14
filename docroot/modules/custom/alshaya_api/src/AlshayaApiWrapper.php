@@ -463,7 +463,7 @@ class AlshayaApiWrapper {
    * @return array
    *   Orphan store node ids.
    */
-  protected function getOrphanStores(array $store_locator_ids) {
+  public function getOrphanStores(array $store_locator_ids = []) {
     // If nothing, no need to process.
     if (empty($store_locator_ids)) {
       return [];

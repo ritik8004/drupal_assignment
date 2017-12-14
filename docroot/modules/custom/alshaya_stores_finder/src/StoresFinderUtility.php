@@ -238,7 +238,7 @@ class StoresFinderUtility {
    * @param array $nids
    *   Array of $nids of store bundle.
    */
-  public function deleteStores(array $nids) {
+  public function deleteStores(array $nids = []) {
     // If nothing, no need to process.
     if (empty($nids)) {
       return;
