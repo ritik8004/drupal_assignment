@@ -2,11 +2,13 @@
 
 namespace Drupal\alshaya_stores_finder;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 
 /**
  * Class StoresFinderUtility.
@@ -28,18 +30,28 @@ class StoresFinderUtility {
   protected $languageManager;
 
   /**
+   * The database connection object.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * Constructs a new StoresFinderUtility object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, Connection $database, LoggerChannelFactoryInterface $logger_factory) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
+    $this->database = $database;
     $this->logger = $logger_factory->get('alshaya_stores_finder');
   }
 
@@ -218,6 +230,34 @@ class StoresFinderUtility {
     $node->setOwner($user);
 
     $node->save();
+  }
+
+  /**
+   * Deletes all stores.
+   */
+  public function deleteAllStores() {
+    $nids = $this->database->select('node', 'n')
+      ->fields('n', ['nid'])
+      ->condition('type', 'store')
+      ->execute()->fetchCol();
+
+    // If there are any store nodes.
+    if (!empty($nids)) {
+      $nodes = Node::loadMultiple($nids);
+      if (!empty($nodes)) {
+        /* @var \Drupal\node\Entity\Node $node */
+        foreach ($nodes as $node) {
+          try {
+            // Delete the node.
+            $node->delete();
+          }
+          catch (\Exception $e) {
+            // If something goes wrong.
+            $this->logger->error('Unable to delete the node with id @nid', ['@nid' => $node->id()]);
+          }
+        }
+      }
+    }
   }
 
 }
