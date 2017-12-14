@@ -15,6 +15,28 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add new role for sync user.
+ */
+function alshaya_acm_update_8008() {
+  // Add the new role.
+  alshaya_config_install_configs(['user.role.acm_sync'], 'alshaya_acm');
+
+  /** @var \Drupal\user\Entity\User $user */
+  $user = user_load_by_name(Settings::get('alshaya_acm_user_username'));
+
+  if ($user) {
+    // Add new role to sync user.
+    $user->addRole('acm_sync');
+
+    // Remove admin role from sync user.
+    $user->removeRole('administrator');
+    $user->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Delete all nodes of 'page' type bundle.
  */
 function alshaya_acm_update_8007() {
@@ -101,8 +123,7 @@ function alshaya_acm_install() {
   $user->setEmail(Settings::get('alshaya_acm_user_email'));
   $user->setUsername(Settings::get('alshaya_acm_user_username'));
   $user->activate();
-  // TODO: Security.
-  $user->addRole('administrator');
+  $user->addRole('acm_sync');
   $user->save();
 
   // Configure Simple Oauth.
