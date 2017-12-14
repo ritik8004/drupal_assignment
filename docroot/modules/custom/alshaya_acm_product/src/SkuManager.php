@@ -67,6 +67,13 @@ class SkuManager {
   protected $productLabelsCache;
 
   /**
+   * Cache Backend service for configurable price info.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $configurablePriceCache;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -85,6 +92,8 @@ class SkuManager {
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Cache\CacheBackendInterface $product_labels_cache
    *   Cache Backend service for product labels.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $configurable_price_cache
+   *   Cache Backend service for configurable price info.
    */
   public function __construct(Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager,
@@ -93,7 +102,8 @@ class SkuManager {
                               LoggerChannelFactoryInterface $logger_factory,
                               AcqSkuLinkedSku $linked_skus,
                               CacheBackendInterface $cache,
-                              CacheBackendInterface $product_labels_cache) {
+                              CacheBackendInterface $product_labels_cache,
+                              CacheBackendInterface $configurable_price_cache) {
     $this->connection = $connection;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
@@ -103,6 +113,7 @@ class SkuManager {
     $this->linkedSkus = $linked_skus;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
+    $this->configurablePriceCache = $configurable_price_cache;
   }
 
   /**
@@ -237,6 +248,13 @@ class SkuManager {
       return $prices;
     }
 
+    $cid = 'configurable_price:' . $sku_entity->getSku();
+
+    // Return from cache if available.
+    if ($cache = $this->configurablePriceCache->get($cid)) {
+      return $cache->data;
+    }
+
     $sku_price = 0;
 
     foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
@@ -277,6 +295,9 @@ class SkuManager {
         // Log messages are already set in previous functions.
       }
     }
+
+    // Set the price info to cache.
+    $this->configurablePriceCache->set($cid, $prices);
 
     return $prices;
   }

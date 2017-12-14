@@ -10,6 +10,24 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for - address related strings.
+ */
+function alshaya_master_update_8008() {
+  $strings = [
+    ',' => [
+      'ar' => '،',
+    ],
+    '@area Area' => [
+      'ar' => 'المنطقة @area',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - Free and Shipping.
  */
 function alshaya_master_update_8007() {
@@ -98,6 +116,9 @@ function alshaya_master_install() {
   // Set initial translation string for en language.
   // Array of language translation strings.
   $strings = [
+    ',' => [
+      'ar' => '،',
+    ],
     'Log in' => [
       'en' => 'Sign in',
       'ar' => 'تسجيل الدخول',
@@ -905,6 +926,9 @@ function alshaya_master_install() {
     ],
     'Area' => [
       'ar' => 'المنطقة',
+    ],
+    '@area Area' => [
+      'ar' => 'المنطقة @area',
     ],
     'You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one using the form below.' => [
       'ar' => 'لقد حاولت استخدام رابطاً معداً للاستخدام مرة واحدة. هذا الرابط إما قد تم استخدامه أو لم يعد صالحاً، لذا يرجى طلب رابط جديد باستخدام الطلب أدناه.',

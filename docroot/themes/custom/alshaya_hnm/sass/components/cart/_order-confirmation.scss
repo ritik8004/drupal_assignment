@@ -111,7 +111,7 @@
       .order__user--info,
       .order__delivery-details {
         @include breakpoint($tablet) {
-          min-width: 12rem;
+          min-width: 13rem;
         }
 
         @include breakpoint($desktop) {
@@ -700,7 +700,7 @@
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 1.5rem;
+      margin-#{$right}: 7.5rem;
     }
   }
 

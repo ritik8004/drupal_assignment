@@ -133,11 +133,11 @@ Feature: Test the My account section for authenticated user
     Then I should see "تم حفظ ببيانات الاتصال"
     Then I should see "علية"
     And I should see "خان"
-    And I should not see "Shweta"
-    And I should not see "Sharma"
-    Then I fill in "edit-field-first-name-0-value" with "Shweta"
-    And I fill in "edit-field-last-name-0-value" with "Sharma"
-    Then I fill in "edit-field-mobile-number-0-mobile" with "97004455"
+    And I should not see "Test"
+    And I should not see "Test"
+    Then I fill in "edit-field-first-name-0-value" with "Test"
+    And I fill in "edit-field-last-name-0-value" with "Test"
+    Then I fill in "edit-field-mobile-number-0-mobile" with "55004455"
     And I press "حفظ"
 
   Scenario: As an authenticated user
@@ -148,9 +148,9 @@ Feature: Test the My account section for authenticated user
     Then I get the total count of address blocks
     When I follow "إضافة العنوان جديد"
     And I wait for AJAX to finish
-    When I fill in "field_address[0][address][given_name]" with "علية"
-    And I fill in "field_address[0][address][family_name]" with "خان"
-    When I fill in "field_address[0][address][mobile_number][mobile]" with "97004455"
+    When I fill in "field_address[0][address][given_name]" with "Test"
+    And I fill in "field_address[0][address][family_name]" with "Test"
+    When I fill in "field_address[0][address][mobile_number][mobile]" with "55004455"
     When I select "العبدلي" from the dropdown
     When I fill in "field_address[0][address][locality]" with "بلوك A"
     When I fill in "field_address[0][address][address_line1]" with "شارع B"

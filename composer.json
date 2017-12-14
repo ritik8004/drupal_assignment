@@ -132,7 +132,7 @@
             },
             "drupal/acquia_connector": {
                 "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
-                "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-4.patch"
+                "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch"
             },
             "drupal/search_api": {
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
@@ -140,7 +140,8 @@
             "drupal/facets": {
                 "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
                 "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch",
-                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha11-57.patch"
+                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha11-57.patch",
+                "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
@@ -189,6 +190,9 @@
             },
             "drupal/recaptcha" : {
                 "modal support": "https://www.drupal.org/files/issues/2493183-recaptcha-use-behaviors-76.patch"
+            },
+            "drupal/paragraphs" : {
+                "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
             }
         },
         "installer-paths": {

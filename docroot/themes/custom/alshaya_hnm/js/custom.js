@@ -116,6 +116,15 @@
           modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
         });
       });
+
+      $('.size-guide-link ').click(function () {
+        $('body').addClass('sizeguide-modal-overlay');
+        modalOverlay('.ui-dialog-titlebar-close', 'sizeguide-modal-overlay');
+
+        $(document).ajaxComplete(function () {
+          modalOverlay('.ui-dialog-titlebar-close', 'sizeguide-modal-overlay');
+        });
+      });
     }
   };
 

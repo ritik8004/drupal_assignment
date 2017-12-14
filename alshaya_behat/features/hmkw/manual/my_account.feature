@@ -57,6 +57,7 @@ Feature: Test the My account section for authenticated user
     And I should see the link "Online and in-store return policy"
     Then I should see the link "Delivery Information"
 
+  @loyalty
   Scenario: As an authenticated user
     I should be prompted to join the privilege club
     if I don't have a privilege account
@@ -76,6 +77,7 @@ Feature: Test the My account section for authenticated user
     Then I should see the link "Learn more"
     And I should not see "Privilege card number"
 
+  @loyalty
   Scenario: As an authenticated user
     account details section should display Privilege card number
     along with Email address and Contact number
@@ -129,9 +131,6 @@ Feature: Test the My account section for authenticated user
     I should be able to filter on all cancelled, dispatched and processing orders
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
-#    When I select "Dispatched" from the dropdown
-#    And I wait for the page to load
-#    Then I should see all "Dispatched" orders listed on orders tab
     When I select "Processing" from the dropdown
     And I wait for the page to load
     Then I should see all "Processing" orders listed on orders tab

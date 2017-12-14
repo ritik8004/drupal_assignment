@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_promotion\Plugin\Block;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityRepository;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManager;
@@ -270,9 +271,16 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function getCacheMaxAge() {
-    // Disable cache for highly dynamic content.
-    return 0;
+  public function getCacheTags() {
+    $cacheTags = [];
+
+    // It depends on cart id of the user.
+    $cacheTags[] = 'cart_' . $this->cartStorage->getCart(FALSE)->id();
+
+    // It depends on promotions content.
+    $cacheTags[] = 'node_type:acq_promotion';
+
+    return Cache::mergeTags(parent::getCacheTags(), $cacheTags);
   }
 
 }
