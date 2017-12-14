@@ -5,9 +5,12 @@
       -moz-column-count: 3;
       column-count: 3;
       max-height: 24rem;
+      padding-#{$right}: 52%;
+      padding-#{$left}: 6.1rem;
+      padding-bottom: 2.5rem;
+      padding-top: 2.5rem;
       column-fill: auto;
       min-height: 24rem;
-      padding: 2.5rem 52% 2.5rem 6.1rem;
 
       .menu--two__list-item .menu--three__list {
         padding-#{$left}: 0;
