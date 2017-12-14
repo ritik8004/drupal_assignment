@@ -16,8 +16,10 @@
 site="$1"
 target_env="$2"
 
+cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
+
 echo "Executing updb."
-drush8 @$site.$target_env acsf-tools-ml updb
+drush8 acsf-tools-ml updb
 
 domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
 
