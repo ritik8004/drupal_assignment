@@ -58,11 +58,7 @@
     }
 
     @include icon(mappin, before) {
-      font-size: 1.2rem;
-      padding-#{direction(right)}: 0;
-      text-decoration: none;
-      vertical-align: bottom;
-      display: inline-block;
+      display: none;
     }
 
     @include breakpoint($upto-palm) {
