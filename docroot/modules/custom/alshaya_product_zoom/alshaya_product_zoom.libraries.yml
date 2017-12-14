@@ -23,16 +23,6 @@ lightslider:
 
 product.cloud_zoom:
   version: 1.x
-  js:
-    js/alshaya_product_zoom.js: {}
-    js/alshaya_product_mobile_zoom.js: {}
   css:
     theme:
       css/alshaya_product_zoom.css: {}
-  dependencies:
-    - core/drupal.dialog
-    - core/jquery.ui.draggable
-    - alshaya_product_zoom/cloud_zoom
-    - alshaya_white_label/slick
-    - alshaya_white_label/utils
-    - alshaya_product_zoom/lightslider
