@@ -188,3 +188,20 @@ function alshaya_department_page_is_department_page($tid) {
 
   return FALSE;
 }
+
+/**
+ * Delete the redirects from the 'redirect' table.
+ *
+ * @param string $source_path
+ *   Source path.
+ */
+function _alshaya_department_page_delete_alias($source_path) {
+  /* @var \Drupal\redirect\RedirectRepository $redirect_repository */
+  $redirect_repository = \Drupal::service('redirect.repository');
+  $redirects = $redirect_repository->findBySourcePath($source_path);
+  if ($redirects) {
+    foreach ($redirects as $redirect) {
+      $redirect->delete();
+    }
+  }
+}

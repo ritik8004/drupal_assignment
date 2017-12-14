@@ -40,6 +40,12 @@ function alshaya_department_page_update_8001() {
               $alias_storage->delete(['pid' => $node_alias['pid']]);
               // Create alias for the term page from the department node page.
               $alias_storage->save('/taxonomy/term/' . $tid, $node_alias['alias'], $langcode);
+
+              // We need to delete the alias as well as causing redirect loop
+              // when we switch from english to arabic.
+              if ($langcode == 'en') {
+                _alshaya_department_page_delete_alias(substr($node_alias['alias'], 1));
+              }
             }
             catch (\Exception $e) {
               // If something goes wrong.
