@@ -5,29 +5,25 @@
 
 /* global isRTL */
 
-(function($) {
+(function ($) {
+  'use strict';
 
   // Based on https://gist.github.com/asgeo1/1652946
-
-  /**
-   * Bind an event handler to a "double tap" JavaScript event.
-   * @param {function} handler
-   * @param {number} [delay=300]
-   */
-  $.fn.doubletap = $.fn.doubletap || function(handler, delay) {
+  $.fn.doubletap = $.fn.doubletap || function (handler, delay) {
     delay = delay == null ? 300 : delay;
-    this.bind('touchend', function(event) {
+    this.bind('touchend', function (event) {
       var now = new Date().getTime();
       // The first time this will make delta a negative number.
       var lastTouch = $(this).data('lastTouch') || now + 1;
       var delta = now - lastTouch;
-      if (delta < delay && 0 < delta) {
+      if (delta < delay && delta > 0) {
         // After we detect a doubletap, start over.
         $(this).data('lastTouch', null);
         if (handler !== null && typeof handler === 'function') {
           handler(event);
         }
-      } else {
+      }
+      else {
         $(this).data('lastTouch', now);
       }
     });
@@ -83,27 +79,27 @@
           applyRtl(gallery, slickModalOptions);
 
           $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
-          $('#product-image-gallery-mob .mob-imagegallery__thumbnails__image img').doubletap(function(e) {
+          $('#product-image-gallery-mob .mob-imagegallery__thumbnails__image img').doubletap(function (e) {
             $(this).parent().siblings().find('img.expand').each(function () {
               $(this).removeClass('expand');
-              gallery.slick("slickSetOption", "accessibility", true);
-              gallery.slick("slickSetOption", "draggable", true);
-              gallery.slick("slickSetOption", "swipe", true);
-              gallery.slick("slickSetOption", "touchMove", true);
+              gallery.slick('slickSetOption', 'accessibility', true);
+              gallery.slick('slickSetOption', 'draggable', true);
+              gallery.slick('slickSetOption', 'swipe', true);
+              gallery.slick('slickSetOption', 'touchMove', true);
             });
             if ($(e.target).hasClass('expand')) {
               $(e.target).removeClass('expand');
-              gallery.slick("slickSetOption", "accessibility", true);
-              gallery.slick("slickSetOption", "draggable", true);
-              gallery.slick("slickSetOption", "swipe", true);
-              gallery.slick("slickSetOption", "touchMove", true);
-            } else
-            {
+              gallery.slick('slickSetOption', 'accessibility', true);
+              gallery.slick('slickSetOption', 'draggable', true);
+              gallery.slick('slickSetOption', 'swipe', true);
+              gallery.slick('slickSetOption', 'touchMove', true);
+            }
+            else {
               $(e.target).addClass('expand');
-              gallery.slick("slickSetOption", "accessibility", false);
-              gallery.slick("slickSetOption", "draggable", false);
-              gallery.slick("slickSetOption", "swipe", false);
-              gallery.slick("slickSetOption", "touchMove", false);
+              gallery.slick('slickSetOption', 'accessibility', false);
+              gallery.slick('slickSetOption', 'draggable', false);
+              gallery.slick('slickSetOption', 'swipe', false);
+              gallery.slick('slickSetOption', 'touchMove', false);
             }
           });
 
@@ -115,7 +111,7 @@
             if (img_scale < 1.75) {
               img_scale = img_scale + 0.25;
 
-              image.css({'transform': 'scale(' + img_scale + ')', 'transition': 'transform 300ms ease-out'});
+              image.css({transform: 'scale(' + img_scale + ')', transition: 'transform 300ms ease-out'});
               $('.zoomout').removeClass('disabled');
             }
             else {
@@ -128,15 +124,16 @@
             if (img_scale <= 1) {
               $(this).addClass('disabled');
               return;
-            } else {
+            }
+            else {
               img_scale = img_scale - 0.25;
               $('.zoomin').removeClass('disabled');
-              image.css({'transform': 'scale(' + img_scale + ')', 'transition': 'transform 300ms ease-out'});
+              image.css({transform: 'scale(' + img_scale + ')', transition: 'transform 300ms ease-out'});
             }
           });
 
           $('#product-image-gallery-mob').on('swipe', function (event, slick) {
-            var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="'+ slick.currentSlide +'"] img');
+            var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img');
             $('.zoomin').removeClass('disabled');
             $('.zoomout').removeClass('disabled');
             image.parent().siblings().each(function () {
