@@ -272,7 +272,7 @@ class AlshayaApiWrapper {
         foreach ($stores['items'] as $store) {
           $this->storeUtility->updateStore($store, $langcode);
 
-          // Store code will be uniqueue for node/language.
+          // Store code will be unique for node/language.
           $store_locator_ids[] = $store['store_code'];
 
           // If we update even single store, we return TRUE.
