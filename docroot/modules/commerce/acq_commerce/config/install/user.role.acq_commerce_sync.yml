@@ -1,8 +1,8 @@
 langcode: en
 status: true
 dependencies: {  }
-id: acm_sync
-label: ACM Sync
+id: acq_commerce_sync
+label: ACQ Commerce Sync
 weight: 15
 is_admin: null
 permissions:

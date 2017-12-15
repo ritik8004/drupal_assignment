@@ -1,0 +1,40 @@
+diff --git a/acq_commerce.install b/acq_commerce.install
+new file mode 100644
+index 000000000..681a7bd34
+--- /dev/null
++++ b/acq_commerce.install
+@@ -0,0 +1,16 @@
++<?php
++
++/**
++ * @file
++ * Install file.
++ */
++
++/**
++ * Implements hook_update_N().
++ *
++ * Add new role for sync user.
++ */
++function acq_commerce_update_8001() {
++  // Add the new role.
++  alshaya_config_install_configs(['user.role.acq_commerce_sync'], 'acq_commerce');
++}
+diff --git a/config/install/user.role.acq_commerce_sync.yml b/config/install/user.role.acq_commerce_sync.yml
+new file mode 100644
+index 000000000..4f9704e07
+--- /dev/null
++++ b/config/install/user.role.acq_commerce_sync.yml
+@@ -0,0 +1,12 @@
++langcode: en
++status: true
++dependencies: {  }
++id: acq_commerce_sync
++label: ACQ Commerce Sync
++weight: 15
++is_admin: null
++permissions:
++  - 'restful post acq_categorysync'
++  - 'restful post acq_customer_delete'
++  - 'restful post acq_productstocksync'
++  - 'restful post acq_productsync'
