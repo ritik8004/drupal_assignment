@@ -709,7 +709,7 @@
     &.add {
       font-family: $hnm-bold;
       text-transform: uppercase;
-      display: inline-block;
+      display: block;
       margin-bottom: 14px;
       padding: 9px 30px;
       background: $hnm-black-two;
@@ -717,6 +717,7 @@
       cursor: pointer;
       margin-#{$left}: 1.5rem;
       font-size: 0.8125rem;
+      max-width: 6.25rem;
     }
 
     &.remove {
