@@ -69,7 +69,7 @@ php_packages_extra:
   - "php{{ php_version }}-bz2"
   - "php{{ php_version }}-bcmath"
   - "php{{ php_version }}-zip"
-php_memory_limit: "512M"
+php_memory_limit: "256M"
 
 # Solr Configuration.
 solr_version: "4.5.1"
