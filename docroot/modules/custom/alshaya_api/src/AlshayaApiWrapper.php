@@ -4,7 +4,6 @@ namespace Drupal\alshaya_api;
 
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
@@ -49,13 +48,6 @@ class AlshayaApiWrapper {
   protected $storeUtility;
 
   /**
-   * The database connection object.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $database;
-
-  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -64,15 +56,12 @@ class AlshayaApiWrapper {
    *   The language manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
-   * @param \Drupal\Core\Database\Connection $database
-   *   The database connection.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory, Connection $database) {
+  public function __construct(ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
     $this->config = $config_factory->get('alshaya_api.settings');
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
     $this->logger = $logger_factory->get('alshaya_api');
-    $this->database = $database;
   }
 
   /**
@@ -284,7 +273,7 @@ class AlshayaApiWrapper {
     // If there is at least one store id.
     if (!empty($store_locator_ids)) {
       // Get orphan store node ids.
-      $orphan_store_nids = $this->getOrphanStores($store_locator_ids);
+      $orphan_store_nids = $this->storeUtility->getOrphanStores($store_locator_ids);
       // Delete orphan stores.
       $this->storeUtility->deleteStores($orphan_store_nids);
     }
@@ -452,31 +441,6 @@ class AlshayaApiWrapper {
     }
 
     return [];
-  }
-
-  /**
-   * Get orphan store nodes from store locator ids.
-   *
-   * @param array $store_locator_ids
-   *   Store locator ids.
-   *
-   * @return array
-   *   Orphan store node ids.
-   */
-  public function getOrphanStores(array $store_locator_ids = []) {
-    // If nothing, no need to process.
-    if (empty($store_locator_ids)) {
-      return [];
-    }
-
-    // Get store nids not having given locator ids.
-    $store_nids = $this->database->select('node__field_store_locator_id', 'n')
-      ->fields('n', ['entity_id'])
-      ->condition('n.bundle', 'store')
-      ->condition('n.field_store_locator_id_value', $store_locator_ids, 'NOT IN')
-      ->execute()->fetchCol();
-
-    return $store_nids;
   }
 
 }

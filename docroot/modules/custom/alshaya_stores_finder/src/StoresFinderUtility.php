@@ -260,4 +260,29 @@ class StoresFinderUtility {
     }
   }
 
+  /**
+   * Get orphan store nodes from store locator ids.
+   *
+   * @param array $store_locator_ids
+   *   Store locator ids.
+   *
+   * @return array
+   *   Orphan store node ids.
+   */
+  public function getOrphanStores(array $store_locator_ids = []) {
+    // If nothing, no need to process.
+    if (empty($store_locator_ids)) {
+      return [];
+    }
+
+    // Get store nids not having given locator ids.
+    $store_nids = $this->database->select('node__field_store_locator_id', 'n')
+      ->fields('n', ['entity_id'])
+      ->condition('n.bundle', 'store')
+      ->condition('n.field_store_locator_id_value', $store_locator_ids, 'NOT IN')
+      ->execute()->fetchCol();
+
+    return $store_nids;
+  }
+
 }
