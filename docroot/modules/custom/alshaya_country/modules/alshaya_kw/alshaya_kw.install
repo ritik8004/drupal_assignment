@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_kw.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_kw_install() {
+  // Set default country Kuwait.
+  \Drupal::configFactory()->getEditable('system.date')
+    ->set('country.default', 'KW')
+    ->save();
+}

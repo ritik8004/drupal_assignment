@@ -33,7 +33,8 @@
   <target name="local:post-install">
     <echo>Allow all modules to run code once post drupal install.</echo>
     <drush command="alshaya-post-drupal-install" assume="yes" alias="${drush.alias}" passthru="false">
-        <option name="brand_module">${drush.brand_module}</option>
+      <option name="brand_module">${drush.brand_module}</option>
+      <option name="country_code">${drush.country_code}</option>
     </drush>
   </target>
 
@@ -67,6 +68,11 @@
         <then><input propertyname="site">Enter site code to reinstall:</input></then>
       </if>
 
+      <if>
+        <not><isset property="country_code" /></not>
+        <then><input propertyname="country_code">Enter country code for the site:</input></then>
+      </if>
+
       <phingcall target="local:reset-local-settings"/>
       <phingcall target="local:setup">
           <property name="drush.uri" value="local.alshaya-${site}.com" />
@@ -76,6 +82,7 @@
       <phingcall target="local:post-install">
           <property name="drush.uri" value="local.alshaya-${site}.com" />
           <property name="drush.brand_module" value="${sites.${site}.module}" />
+          <property name="drush.country_code" value="${country_code}" />
       </phingcall>
 
       <!-- Following commands are required only for transac -->
@@ -102,6 +109,11 @@
         <then><input propertyname="site">Enter site code to reinstall:</input></then>
       </if>
 
+      <if>
+        <not><isset property="country_code" /></not>
+        <then><input propertyname="country_code">Enter country code for the site:</input></then>
+      </if>
+
       <phingcall target="setup:composer:install"/>
       <phingcall target="frontend:build"/>
       <phingcall target="local:reset-local-settings"/>
@@ -114,8 +126,9 @@
       </phingcall>
       <phingcall target="local:reset-settings-file"/>
       <phingcall target="local:post-install">
-          <property name="drush.uri" value="local.alshaya-${site}.com" />
-          <property name="drush.brand_module" value="${sites.${site}.module}" />
+        <property name="drush.uri" value="local.alshaya-${site}.com" />
+        <property name="drush.brand_module" value="${sites.${site}.module}" />
+        <property name="drush.country_code" value="${country_code}" />
       </phingcall>
 
       <!-- Following commands are required only for transac -->

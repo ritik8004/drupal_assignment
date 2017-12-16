@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_ksa.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_sa_install() {
+  // Set default country Saudi Arabia.
+  \Drupal::configFactory()->getEditable('system.date')
+    ->set('country.default', 'SA')
+    ->save();
+}
