@@ -1,0 +1,6 @@
+name: 'Alshaya Performance'
+type: module
+core: 8.x
+package: Alshaya
+description: 'Contains all code related to performance improvement.'
+version: 8.x-1.0

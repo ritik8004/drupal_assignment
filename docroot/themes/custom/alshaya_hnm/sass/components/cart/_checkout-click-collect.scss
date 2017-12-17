@@ -1251,6 +1251,14 @@
     .mobile-number-field {
       > label {
         #{$left}: unset;
+
+        @include breakpoint($only-tablet) {
+          #{$left}: 1rem;
+        }
+
+        @include breakpoint($desktop) {
+          #{$left}: 1.375rem;
+        }
       }
 
       @include breakpoint($desktop) {

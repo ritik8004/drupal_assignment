@@ -329,7 +329,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       elseif ($view_mode == 'full') {
         // Get cross sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
-          $cross_sell_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_CROSSSELL);
+          $cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_CROSSSELL);
 
           if (!empty($cross_sell_skus)) {
             $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
@@ -341,7 +341,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           }
         }
 
-        $up_sell_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_UPSELL);
+        $up_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_UPSELL);
 
         if (!empty($up_sell_skus)) {
           $upsell_items = $skuManager->filterRelatedSkus(array_unique($up_sell_skus));
@@ -353,7 +353,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           }
         }
 
-        $related_skus = $skuManager->getLinkedSkus($sku_entity, LINKED_SKU_TYPE_RELATED);
+        $related_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_RELATED);
 
         if (!empty($related_skus)) {
           $related_items = $skuManager->filterRelatedSkus(array_unique($related_skus));
@@ -827,12 +827,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
 
       if ($first_child instanceof SKU) {
-        $plugin_manager = \Drupal::service('plugin.manager.sku');
-        $plugin_definition = $plugin_manager->pluginFromSKU($sku_entity);
-
-        $class = $plugin_definition['class'];
-        $plugin = new $class();
-
+        $plugin = $sku_entity->getPluginInstance();
         $first_child_root_attr_value = $plugin->getAttributeValue($first_child, $root_attribute_code);
       }
 

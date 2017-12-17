@@ -553,13 +553,9 @@ header {
       @include breakpoint($only-mobile) {
         padding-#{$right}: 0;
         #{$right}: 1.25rem;
-
-        html[lang=ar] & {
-          left: -0.75rem;
-        }
       }
 
-      @include breakpoint($only-tablet) {
+      @include breakpoint($upto-desktop) {
         html[lang=ar] & {
           font-size: 1px;
         }
@@ -634,10 +630,6 @@ header {
 
       &::before {
         margin-#{$right}: 0.3125rem;
-      }
-
-      html[lang=ar] & {
-        left: 1.5rem;
       }
     }
 
@@ -810,7 +802,6 @@ header {
         #{$left}: 0;
         width: 100%;
         z-index: -1;
-        border-top: 0.9375rem solid transparent;
         position: absolute;
         display: block;
         opacity: 0;
@@ -1015,10 +1006,6 @@ header {
   .highlights {
     vertical-align: top;
     display: inline-block;
-
-    div:nth-child(2) {
-      float: $left;
-    }
 
     .highlighted {
       display: inline-block;

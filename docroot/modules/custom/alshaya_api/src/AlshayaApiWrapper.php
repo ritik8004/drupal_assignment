@@ -249,6 +249,8 @@ class AlshayaApiWrapper {
   public function syncStores() {
     $stored_synced = FALSE;
 
+    $store_locator_ids = [];
+
     // Do API call to get stores for each language.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       // Get all stores for particular language.
@@ -259,10 +261,21 @@ class AlshayaApiWrapper {
         foreach ($stores['items'] as $store) {
           $this->storeUtility->updateStore($store, $langcode);
 
+          // Store code will be unique for node/language.
+          $store_locator_ids[] = $store['store_code'];
+
           // If we update even single store, we return TRUE.
           $stored_synced = TRUE;
         }
       }
+    }
+
+    // If there is at least one store id.
+    if (!empty($store_locator_ids)) {
+      // Get orphan store node ids.
+      $orphan_store_nids = $this->storeUtility->getOrphanStores($store_locator_ids);
+      // Delete orphan stores.
+      $this->storeUtility->deleteStores($orphan_store_nids);
     }
 
     return $stored_synced;

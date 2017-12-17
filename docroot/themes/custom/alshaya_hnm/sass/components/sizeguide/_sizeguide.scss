@@ -41,7 +41,7 @@
       padding: 0.625rem;
 
       @include breakpoint($desktop) {
-        padding: 0.5rem;
+        padding: 0.5rem 0.625rem;
       }
     }
   }
@@ -101,6 +101,31 @@
       position: absolute;
       bottom: 4.3125rem;
       #{$right}: 60%;
+    }
+  }
+}
+
+.sizeguide-modal-overlay {
+  position: fixed;
+  height: initial;
+  width: 100%;
+
+  .ui-dialog {
+    @include breakpoint($tablet) {
+      padding: calc((100vh - 34.75rem) / 2) calc((100vw - 33.375rem) / 2);
+    }
+
+    div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
+      max-width: 33.375rem !important;
+      margin: 0 auto;
+      width: 100%;
+      overflow: auto !important;
+    }
+
+    .ui-dialog-titlebar-close {
+      @include breakpoint($only-tablet) {
+        #{$right}: -1.0625rem;
+      }
     }
   }
 }

@@ -90,6 +90,7 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
     ]);
 
     $state_data['payment_id'] = $pipe->getPaymentId();
+    $state_data['amount'] = $totals['grand'];
 
     // We store the data in state here to ensure we can use it back and avoid
     // security issues.

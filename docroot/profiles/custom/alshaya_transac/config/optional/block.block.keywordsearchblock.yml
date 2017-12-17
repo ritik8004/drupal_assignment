@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_search
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: keywordsearchblock
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: header
 weight: -31
 provider: null

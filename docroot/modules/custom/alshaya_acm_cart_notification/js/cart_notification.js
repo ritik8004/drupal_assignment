@@ -111,7 +111,7 @@
             delete product.position;
 
             // Set product quantity to selected quatity.
-            product.quantity = quantity;
+            product.quantity = !isNaN(quantity) ? quantity : 1;
 
             // Set product size to selected size.
             if (product.dimension2 !== 'simple') {

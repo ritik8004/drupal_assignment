@@ -31,7 +31,7 @@ body {
       font-family: $hnm-demibold;
       letter-spacing: 0.8px;
       color: $hnm-black-two;
-      font-size: 1.125rem;
+      font-size: 1.25rem;
       border-bottom: 1px solid $grey4;
       padding-bottom: 1rem;
     }
@@ -381,7 +381,7 @@ html[lang="ar"] {
   }
 }
 
-.alias--confirmation-print {
+.order__print--wrap {
   .block-customer-service-block {
     border-top: 2px solid $hnm-black;
     background-color: $grey1;
@@ -391,6 +391,10 @@ html[lang="ar"] {
     h3,
     p {
       color: $hnm-black-two;
+    }
+
+    .line4 {
+      display: none;
     }
   }
 }

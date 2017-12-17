@@ -7,9 +7,9 @@ dependencies:
     - facets
     - system
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: collection
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: sidebar_first
 weight: -24
 provider: null

@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_performance_node_presave(EntityInterface $entity) {
+  // Allows for clearing of blocks based on node type.
+  // Used for mega menu block.
+  $tags = ['node_type:' . $entity->getType()];
+  Cache::invalidateTags($tags);
+}
