@@ -80,12 +80,12 @@
 .cloudzoom__image {
   .img-wrap {
     @include breakpoint($tablet) {
-      height: 39.09375rem;
+      height: 36em;
       overflow: hidden;
     }
 
     @include breakpoint($desktop) {
-      height: 46.875rem;
+      height: 36em;
       overflow: hidden;
 
       img {
@@ -133,12 +133,12 @@
   z-index: 99;
 
   @include if-rtl {
-    right: 113.5% !important;
+    right: 132.5% !important;
     left: auto !important;
   }
 
   @include if-ltr {
-    left: 113.5% !important;
+    left: 132.5% !important;
     right: auto !important;
   }
 
