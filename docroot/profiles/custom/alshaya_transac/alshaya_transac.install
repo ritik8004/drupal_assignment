@@ -8,6 +8,32 @@
 use Drupal\node\Entity\Node;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Delete all nodes of 'page' type bundle.
+ */
+function alshaya_transac_update_8103() {
+  // Get all nodes of 'page' type bundle.
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type','page')
+    ->execute();
+  $nodes =  Node::loadMultiple($nids);
+  // If there are any nodes.
+  if (!empty($nodes)) {
+    foreach ($nodes as $node) {
+      try {
+        // Delete the node.
+        $node->delete();
+      }
+      catch (\Exception $e) {
+        // If something goes wrong.
+        \Drupal::logger('alshaya_transac')->error('Unable to delete the node with nid @nid', ['@nid' => $node->id()]);
+      }
+    }
+  }
+}
+
+/**
  *  Hook update to disable whitelabel_transac theme and enable alshaya_white_label.
  */
 function alshaya_transac_update_8102() {
@@ -112,31 +138,5 @@ function alshaya_transac_update_8101() {
 
   foreach ($modules as $module) {
     \Drupal::service('module_installer')->install([$module], TRUE);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
- * Delete all nodes of 'page' type bundle.
- */
-function alshaya_transac_update_8102() {
-  // Get all nodes of 'page' type bundle.
-  $nids = \Drupal::entityQuery('node')
-    ->condition('type','page')
-    ->execute();
-  $nodes =  Node::loadMultiple($nids);
-  // If there are any nodes.
-  if (!empty($nodes)) {
-    foreach ($nodes as $node) {
-      try {
-        // Delete the node.
-        $node->delete();
-      }
-      catch (\Exception $e) {
-        // If something goes wrong.
-        \Drupal::logger('alshaya_transac')->error('Unable to delete the node with nid @nid', ['@nid' => $node->id()]);
-      }
-    }
   }
 }
