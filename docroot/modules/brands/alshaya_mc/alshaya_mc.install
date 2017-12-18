@@ -8,6 +8,82 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Hook update to enable alshaya mothercare theme.
+ */
+function alshaya_mc_update_8306() {
+  // Enable and set alshaya_white_label as default theme.
+  \Drupal::service('theme_handler')->install(['alshaya_mothercare'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_mothercare');
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site logo path with default name.
+  $site_logo = $active_theme->getPath() . '/site-logo';
+
+  // Save default site logo.
+  \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '.svg',
+      ],
+    ])
+    ->save();
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'alshaya_mothercare.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+      ],
+    ])
+    ->save();
+
+  // Save default logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
+    ->set('email_logo_path', $site_logo . '.png')
+    ->save();
+  // Save arabic logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
+    ->set('email_logo_path', $site_logo . '-ar.png')
+    ->save();
+
+  // Disable the "Powered by" block.
+  \Drupal::configFactory()->getEditable('block.block.' . $current_theme . '_powered')
+    ->set('region', '-1')
+    ->save();
+
+  // Disable the "Main Navigation" block.
+  \Drupal::configFactory()->getEditable('block.block.' . $current_theme . '_main_menu')
+    ->set('region', -1)
+    ->save();
+
+  $blocks = [
+    $current_theme . '_branding' => 'branding',
+    $current_theme . '_content' => 'content',
+    $current_theme . '_account_menu' => 'account_menu',
+    $current_theme . '_breadcrumbs' => 'breadcrumbs',
+    $current_theme . '_help' => 'help',
+    $current_theme . '_local_actions' => 'local_actions',
+    $current_theme . '_local_tasks' => 'local_tasks',
+    $current_theme . '_messages' => 'messages',
+    $current_theme . '_page_title' => 'page_title',
+  ];
+
+  foreach ($blocks as $old_block_id => $new_block_id) {
+    $old_block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $old_block_id]);
+
+    if (!empty($old_block)) {
+      $old_block = reset($old_block);
+      $new_block = $old_block->createDuplicateBlock($new_block_id);
+      $old_block->delete();
+      $new_block->save();
+    }
+  }
+}
+
+/**
  * Default config for all_products_buyable.
  */
 function alshaya_mc_update_8305() {
@@ -81,8 +157,8 @@ function alshaya_mc_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_mc', 'inc', 'alshaya_mc.content');
 
   // Enable and set alshaya_white_label as default theme.
-  \Drupal::service('theme_handler')->install(['alshaya_white_label'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
+  \Drupal::service('theme_handler')->install(['alshaya_mothercare'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_mothercare');
 
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
@@ -92,7 +168,7 @@ function alshaya_mc_install() {
   $site_logo = $active_theme->getPath() . '/site-logo';
 
   // Save default site logo.
-  \Drupal::configFactory()->getEditable('alshaya_white_label.settings')
+  \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
     ->setData([
       'logo' => [
         'path' => $site_logo . '.svg',
@@ -101,7 +177,7 @@ function alshaya_mc_install() {
     ->save();
   // Save arabic site logo.
   \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'alshaya_white_label.settings')
+    ->getLanguageConfigOverride('ar', 'alshaya_mothercare.settings')
     ->setData([
       'logo' => [
         'path' => $site_logo . '-ar.svg',
@@ -114,17 +190,17 @@ function alshaya_mc_install() {
     ->set('email_logo_path', $site_logo . '.png')
     ->save();
   // Save arabic logo for email.
-  \Drupal::configFactory()->getEditable('alshaya_master.theme.alshaya_white_label.ar')
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.alshaya_mothercare.ar')
     ->set('email_logo_path', $site_logo . '-ar.png')
     ->save();
 
   // Disable the "Powered by" block.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_powered')
+  \Drupal::configFactory()->getEditable('block.block.alshaya_mothercare_powered')
     ->set('region', '-1')
     ->save();
 
   // Disable the "Main Navigation" block.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')
+  \Drupal::configFactory()->getEditable('block.block.alshaya_mothercare_main_menu')
     ->set('region', -1)
     ->save();
 
