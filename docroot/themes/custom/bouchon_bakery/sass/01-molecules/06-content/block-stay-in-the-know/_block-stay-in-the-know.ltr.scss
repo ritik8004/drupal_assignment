@@ -1,0 +1,67 @@
+.field-block-reference .block-stay-in-the-know {
+  padding: 0.8125rem 0.625rem 0.625rem;
+  background-color: transparent;
+  color: $camo-green;
+  margin-top: 0;
+
+  @include breakpoint($above-palm) {
+    margin-top: 0;
+  }
+}
+
+.field-block-reference .stay-in-the-know--description {
+  @include breakpoint($above-palm) {
+    width: 45rem;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 48rem;
+  }
+
+  a {
+    font-family: $beton-bold;
+    color: $camo-green;
+    border-color: $camo-green;
+    border-width: 0.125rem;
+    font-weight: bold;
+    font-size: 0.875rem;
+    margin-top: 1.25rem;
+    text-transform: uppercase;
+
+    html[lang=ar] & {
+      font-family: $gess-bold;
+    }
+  }
+
+  p {
+    font-family: $ideal-sans;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    color: $brownish-grey;
+    letter-spacing: 0;
+    padding: 0;
+    margin: 0.3125rem 0 0;
+
+    html[lang=ar] & {
+      font-family: $ge-dinar-one;
+    }
+  }
+}
+
+.field-block-reference .stay-in-the-know--title {
+  font-family: $beton-bold;
+  font-size: 1.625rem;
+  letter-spacing: 0.09375rem;
+  font-weight: bold;
+  color: $camo-green;
+  padding: 0;
+  margin: 0;
+
+  html[lang=ar] & {
+    font-family: $gess-bold;
+  }
+
+  @include breakpoint($lap) {
+    margin-bottom: 0;
+  }
+}
