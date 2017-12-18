@@ -138,10 +138,18 @@ function drush_alshaya_api_sanity_check() {
       '!skus' => "'" . implode("','", $missing[$type]['all']) . "'",
     ]))) {
       foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
-        // @TODO: Make page size a config. It can be used in multiple places.
-        // @TODO: It seems failing for now. Probably too big.
-        // \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, str_replace("'", '', $missing[$type]['all']), 2);
-        drush_print(dt('TODO: Sync missing !type', ['!type' => $type]));
+        // We split the list of SKUs in small chunk to avoid any issue. This is
+        // only to send the request to Conductor.
+        foreach (array_chunk(str_replace("'", '', $missing[$type]['all']), 5) as $chunk) {
+          // @TODO: Make page size a config. It can be used in multiple places.
+          \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $chunk, 2);
+        }
+
+        drush_print(dt('ProductSync launched for @count @language @type SKUs.', [
+          '@count' => count($missing[$type]['all']),
+          '@language' => $languages[$langcode]->getName(),
+          '@type' => $type,
+        ]));
       }
     }
   }
