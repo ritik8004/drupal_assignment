@@ -5,6 +5,8 @@
  * Provides Drush commands for Acquia Commerce Middleware related activities.
  */
 
+use Drupal\acq_sku\Entity\SKU;
+
 /**
  * Implements hook_drush_command().
  */
@@ -132,20 +134,21 @@ function drush_alshaya_api_sanity_check() {
 
   // Retrieve missing SKUs.
   foreach ($types as $type) {
-    if (!empty($missing[$type]['all']) && drush_confirm(dt('Do you want to launch ProductSync on following @count @type missing SKUs: !skus', [
+    if (!empty($missing[$type]['all']) && drush_confirm(dt('Do you want to sync the @count @type missing SKUs?', [
       '@count' => count($missing[$type]['all']),
       '@type' => $type,
-      '!skus' => "'" . implode("','", $missing[$type]['all']) . "'",
     ]))) {
       foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
         // We split the list of SKUs in small chunk to avoid any issue. This is
         // only to send the request to Conductor.
         foreach (array_chunk(str_replace("'", '', $missing[$type]['all']), 5) as $chunk) {
           // @TODO: Make page size a config. It can be used in multiple places.
+          // @TODO: It seems there is nothing being logged when fullSync is
+          // launched.
           \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $chunk, 2);
         }
 
-        drush_print(dt('ProductSync launched for @count @language @type SKUs.', [
+        drush_print(dt('Sync launched for the @count @language @type SKUs.', [
           '@count' => count($missing[$type]['all']),
           '@language' => $languages[$langcode]->getName(),
           '@type' => $type,
@@ -155,16 +158,65 @@ function drush_alshaya_api_sanity_check() {
   }
 
   // Delete additional SKUs.
+  // @TODO: Some of the code to delete node + sku is duplicate from
+  // ProductSyncResource::post(). We might want a service to do that task and
+  // remove code duplication.
   foreach ($types as $type) {
-    if (!empty($to_be_deleted[$type]['all']) && drush_confirm(dt('Do you want to delete following @count @type additional SKUs: !skus', [
+    if (!empty($to_be_deleted[$type]['all']) && drush_confirm(dt('Do you want to delete the @count @type additional SKUs?', [
       '@count' => count($to_be_deleted[$type]['all']),
       '@type' => $type,
-      '!skus' => "'" . implode("','", $to_be_deleted[$type]['all']) . "'",
     ]))) {
-      // @TODO: Investigate potential issue if SKUs is created in Magento right
-      // after we get the list via API. It may remove newly created SKUs.
-      // $sku_manager = \Drupal::service('entity_type.manager')->getStorage('acq_sku');
-      drush_print(dt('TODO: Delete additional @type', ['@type' => $type]));
+      $lock = \Drupal::lock();
+
+      foreach ($languages as $langcode => $language) {
+        foreach ($to_be_deleted[$type][$langcode] as $sku) {
+          if ($sku_entity = SKU::loadFromSku($sku, $langcode, FALSE, TRUE)) {
+            \Drupal::logger('alshaya_api')->notice('Removing disabled @language @type SKU @sku from the system: @sku.', [
+              '@language' => $languages[$langcode]->getName(),
+              '@type' => $type,
+              '@sku' => $sku,
+            ]);
+
+            $lock_key = 'deleteProduct' . $sku;
+
+            // Acquire lock to ensure parallel processes are executed
+            // sequentially.
+            // @TODO: These 8 lines might be duplicated in multiple places. We
+            // may want to create a utility service in alshaya_performance.
+            do {
+              $lock_acquired = $lock->acquire($lock_key);
+
+              // Sleep for half a second before trying again.
+              // @TODO: Move this 0.5s to a config variable.
+              if (!$lock_acquired) {
+                usleep(500000);
+              }
+            } while (!$lock_acquired);
+
+            // Delete the node if it is linked to this SKU only.
+            try {
+              if ($node = $sku_entity->getPluginInstance()->getDisplayNode($sku_entity, FALSE, FALSE)) {
+                $node->delete();
+              }
+            }
+            catch (\Exception $e) {
+              // Not doing anything, we might not have node for the sku.
+            }
+
+            // Delete the SKU.
+            $sku_entity->delete();
+
+            // Release the lock.
+            $lock->release($lock_key);
+
+            drush_print(dt('Disabled @language @type SKU @sku removed from the system.', [
+              '@language' => $languages[$langcode]->getName(),
+              '@type' => $type,
+              '@sku' => $sku,
+            ]));
+          }
+        }
+      }
     }
   }
 }
