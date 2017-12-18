@@ -254,12 +254,10 @@ class AlshayaApiWrapper {
   public function getSkus($types = ['simple', 'configurable']) {
     $endpoint = 'products?';
 
-    // @TODO: Investigate order by created/update date ASC so if any SKU is
-    // being created/disabled/enabled during the API calls, it will be picked
-    // at the end only.
-
     // Query parameters to get all enabled SKUs. We only want the SKUs.
-    // No need to retrieve the other fields.
+    // No need to retrieve the other fields. We order the result by update date
+    // so if any SKU is updated/created while we do the requests, it will be
+    // returned in the latest results.
     $query = [
       'searchCriteria' => [
         'filterGroups' => [
@@ -275,6 +273,12 @@ class AlshayaApiWrapper {
                 'condition_type' => 'eq',
               ],
             ],
+          ],
+        ],
+        'sortOrders' => [
+          0 => [
+            'field' => 'updated_at',
+            'direction' => 'ASC',
           ],
         ],
         // @TODO: Make page size configurable. Arbitrary value for now.
@@ -294,29 +298,30 @@ class AlshayaApiWrapper {
       $skus = [];
 
       while ($continue) {
+        $continue = FALSE;
         $page += 1;
         $query['searchCriteria']['currentPage'] = $page;
 
         $response = $this->invokeApi($endpoint . http_build_query($query), [], 'GET');
 
-        // @TODO: Handle properly the invalid JSON.
         if ($response && is_string($response)) {
           if ($decode_response = json_decode($response, TRUE)) {
             $current_page_skus = array_column($decode_response['items'], 'sku');
+
+            $skus = array_merge($skus, $current_page_skus);
+
+            // We don't have any way to know we reached the latest page as
+            // Magento keep continue returning the same latest result. For this
+            // we test if there is any SKU in current page which was already
+            // present in previous page. If yes, then we reached the end of
+            // the list.
+            if (empty(array_diff($previous_page_skus, $current_page_skus))) {
+              $continue = TRUE;
+            }
+
+            $previous_page_skus = $current_page_skus;
           }
         }
-
-        $skus = array_merge($skus, $current_page_skus);
-
-        // We don't have any way to know we reached the latest page as Magento
-        // keep continue returning the same latest result. For this we test if
-        // there is any SKU in current page which was already present in
-        // previous page. If yes, then we reached the end of the list.
-        if (!empty(array_diff($previous_page_skus, $current_page_skus))) {
-          $continue = FALSE;
-        }
-
-        $previous_page_skus = $current_page_skus;
       }
 
       $mskus[$type] = $skus;
