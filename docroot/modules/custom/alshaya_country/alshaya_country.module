@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya_country.
+ */
+
+/**
+ * Helper function to set default regional information.
+ *
+ * This function set the default country and timezone for the site, based on
+ * the country selected at installation time.
+ *
+ * @param string $country_code
+ *   The country code.
+ * @param string $default_timezone
+ *   The default timezone of the selected country.
+ */
+function alshaya_country_set_default_regional_info($country_code, $default_timezone) {
+  // Set default country for site.
+  \Drupal::configFactory()->getEditable('system.date')
+    ->set('country.default', $country_code)
+    ->save();
+
+  // Try to get timezone from country code.
+  $timezones = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, $country_code);
+
+  // Use given timezone by default, use first one from the result if found.
+  $timezone = empty($timezones) ? $default_timezone : reset($timezones);
+
+  // Set default timezone from settings.
+  \Drupal::configFactory()->getEditable('system.date')
+    ->set('timezone.default', $timezone)
+    ->save();
+
+  // Re-save store finder view to ensure country code is updated.
+  \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
+}

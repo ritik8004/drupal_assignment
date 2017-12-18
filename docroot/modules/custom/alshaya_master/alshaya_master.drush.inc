@@ -5,6 +5,7 @@
  * Provides Drush commands for alshaya_master.
  */
 
+use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
 use Drupal\locale\Locale;
 
@@ -37,7 +38,7 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
 
   // Determine which country module to install.
   $country_code = drush_get_option('country_code', '');
-  $country_code = empty($country_code) ? 'kw' : strtolower($country_code);
+  $country_code = empty($country_code) ? Settings::get('country_code') : strtolower($country_code);
   $country_module = 'alshaya_' . $country_code;
 
   if (module_load_install($country_module)) {

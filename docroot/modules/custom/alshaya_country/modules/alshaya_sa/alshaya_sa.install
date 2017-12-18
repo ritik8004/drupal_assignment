@@ -9,8 +9,6 @@
  * Implements hook_install().
  */
 function alshaya_sa_install() {
-  // Set default country Saudi Arabia.
-  \Drupal::configFactory()->getEditable('system.date')
-    ->set('country.default', 'SA')
-    ->save();
+  // Country code and timezone for Saudi Arabia.
+  alshaya_country_set_default_regional_info('SA', 'Asia/Riyadh');
 }

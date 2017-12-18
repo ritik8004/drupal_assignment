@@ -47,6 +47,8 @@
     var location_autocomplete_instance = places_autocomplete.googleAutocomplete(field);
     location_autocomplete_instance_clone = Object.create(location_autocomplete_instance);
 
+    console.log(restriction);
+
     // Set restriction for autocomplete.
     if (!$.isEmptyObject(restriction)) {
       location_autocomplete_instance.setComponentRestrictions(restriction);
