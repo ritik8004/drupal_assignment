@@ -1,11 +1,15 @@
 .quote-by {
   text-align: center;
+  padding: 0.9375rem 0;
 
   h2 {
     font-family: $beton-bold;
     font-size: 1.75rem;
+    letter-spacing: 0.09375rem;
     font-weight: bold;
     color: $camo-green;
+    padding: 0;
+    margin: 0;
 
     html[lang=ar] & {
       font-family: $gess-bold;
@@ -15,10 +19,92 @@
   p {
     font-family: $at-sackers-gothic;
     font-size: 1.25rem;
+    line-height: 1.5rem;
+    text-transform: uppercase;
+    color: $brownish-grey;
+    transform: scale(0.7, 0.6);
+    letter-spacing: 0.09375rem;
+    padding: 0;
+    margin: 1.25rem 0 0;
+
+    html[lang=ar] & {
+      font-family: $ge-dinar-one;
+    }
+  }
+
+  p.font-ideal {
+    font-family: $ideal-sans;
+    transform: none;
+    letter-spacing: 0;
+    margin: 0.625rem 0 0;
+
+    html[lang=ar] & {
+      font-family: $ge-dinar-one;
+    }
+  }
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.h2-title {
+  font-size: 1.625rem;
+}
+
+/* inner page style */
+
+.h2-phara-2-col {
+  width: 100%;
+  display: table;
+
+  .nav,
+  .content {
+    display: block;
+    vertical-align: top;
+  }
+
+  h2 {
+    font-family: $beton-bold;
+    font-size: 1.5rem;
+    letter-spacing: 0.09375rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: $camo-green;
+    padding: 0;
+    margin: 0;
+
+    html[lang=ar] & {
+      font-family: $gess-bold;
+    }
+  }
+
+  p {
+    font-family: $ideal-sans;
+    margin: 0 0 1.625rem;
+    padding: 0;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
     color: $brownish-grey;
 
     html[lang=ar] & {
       font-family: $ge-dinar-one;
     }
   }
+
+  @include breakpoint($above-palm) {
+    .nav,
+    .content {
+      display: table-cell;
+    }
+
+    .nav {
+      width: 30%;
+    }
+  }
+}
+
+/* disable file upload field */
+.field-pdf-file-upload {
+  display: none;
 }

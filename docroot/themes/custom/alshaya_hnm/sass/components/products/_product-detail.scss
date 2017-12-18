@@ -1469,7 +1469,7 @@
       }
 
       button[type="submit"] {
-        font-family: $hnm-bold;
+        font-family: $hnm-regular;
         font-size: 0.875rem;
         background: $hnm-black-two;
         border-radius: 0;
@@ -2042,3 +2042,10 @@ html[lang=ar] {
     }
   }
 }
+
+html[lang=ar] {
+  .short-description-wrapper .read-more-description-link {
+    font-family: $hnm-arabic-medium;
+  }
+}
+

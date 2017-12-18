@@ -365,6 +365,15 @@ html[lang="ar"] {
     position: relative;
   }
 
+  &.vat-row {
+    .warm--white {
+      @include breakpoint($only-mobile) {
+        position: relative;
+        #{$left}: 50%;
+      }
+    }
+  }
+
   .warm--white {
     background-color: $white-five;
 
@@ -375,8 +384,8 @@ html[lang="ar"] {
     }
 
     @include breakpoint($only-mobile) {
-      position: relative;
-      #{$left}: 50%;
+      position: absolute;
+      #{$right}: 0;
     }
   }
 }
