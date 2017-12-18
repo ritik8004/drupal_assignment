@@ -229,7 +229,7 @@
       .is-accordion {
         @include arabic-letter-spacing;
 
-        font-family: $hnm-bold;
+        font-family: $hnm-regular;
         text-align: $left;
         color: $white-five;
         text-transform: uppercase;
@@ -352,7 +352,7 @@
   h3 {
     @include arabic-letter-spacing;
 
-    font-family: $hnm-bold;
+    font-family: $hnm-regular;
     font-weight: normal;
     font-size: 0.875rem;
     letter-spacing: 1.2px;
