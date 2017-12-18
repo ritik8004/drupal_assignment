@@ -12,8 +12,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class CartConfigForm.
-*/
+ * Class SyncForm.
+ */
 class SyncForm extends FormBase {
 
 
@@ -28,14 +28,14 @@ class SyncForm extends FormBase {
   /**
    * Conductor product options manager.
    *
-   * @var \Drupal\acq_sku\ProductOptionsManager;
+   * @var \Drupal\acq_sku\ProductOptionsManager
    */
   private $productOptionsManager;
 
   /**
    * Conductor promotions manager.
    *
-   * @var \Drupal\acq_promotion\AcqPromotionsManager;
+   * @var \Drupal\acq_promotion\AcqPromotionsManager
    */
   private $promotionsManager;
 
@@ -57,10 +57,15 @@ class SyncForm extends FormBase {
    * ProductSyncForm constructor.
    *
    * @param \Drupal\acq_sku\CategoryManagerInterface $product_categories_manager
+   *   Category manager interface.
    * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
+   *   Product options manager interface.
    * @param \Drupal\acq_promotion\AcqPromotionsManager $promotions_manager
+   *   Promotions manager interface.
    * @param \Drupal\acq_commerce\Conductor\IngestAPIWrapper $ingest_api
+   *   IngestAPI manager interface.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
+   *   AlshayaAPI manager interface.
    */
   public function __construct(
     CategoryManagerInterface $product_categories_manager,
@@ -95,6 +100,9 @@ class SyncForm extends FormBase {
     return 'alshaya_acm_sync';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     // @TODO: Add validation on FULL sync to be sure at least one language is checked.
   }
@@ -211,24 +219,6 @@ class SyncForm extends FormBase {
         ],
       ],
     ];
-    // @TODO: Add options to only list the diff, only sync the missing SKUs,
-    // only delete the additional SKUs.
-    $form['products_fieldset']['products_diff_fieldset'] = [
-      '#type' => 'fieldset',
-      '#title' => t('Differential'),
-      'products_diff_description' => [
-        '#type' => 'markup',
-        '#markup' => t('This operation will get the list of all enabled SKUs on Magento and will compare these with Drupal ones.')
-          .' ' . t('Missing SKUs will be queued for synchronization, additional SKUs will be deleted.'),
-      ],
-      'products_diff' => [
-        '#type' => 'actions',
-        'product_diff_action' => [
-          '#type' => 'submit',
-          '#value' => t('Synchronize differential'),
-        ],
-      ],
-    ];
     $form['products_fieldset']['products_full_fieldset'] = [
       '#type' => 'fieldset',
       '#title' => t('Full'),
@@ -237,7 +227,7 @@ class SyncForm extends FormBase {
         '#prefix' => '<div class="messages messages--error"><h2 class="visually-hidden">' . t('Warning message') . '</h2>',
         '#suffix' => '</div>',
         '#markup' => t('Full synchronization is a VERY HEAVY asynchronous task. All SKUs will be queued for synchronization.')
-          .' ' . t('Depending on the number of SKUs, it may take up to 12 hours to get all the SKUs synchronized.'),
+        . ' ' . t('Depending on the number of SKUs, it may take up to 12 hours to get all the SKUs synchronized.'),
       ],
       'products_full_validate' => [
         '#type' => 'checkbox',
