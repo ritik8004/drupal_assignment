@@ -12,6 +12,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\BaseCommand;
+use Drupal\Core\Ajax\InsertCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
@@ -206,6 +207,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['products_cross_sell'] = [
+    'variables' => [
+      'data' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -322,7 +329,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           if (!empty($cross_sell_skus)) {
             $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
             if (!empty($crosssell_items)) {
-              $build['cross_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items));
+              // @Todo: Convert other related sections into theme functions as well. See if we can hava a common theme funciton for rendering them.
+              $build['cross_sell'] = [
+                '#theme' => 'products_cross_sell',
+                '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
+              ];
+
               // Weight will have no effect later once template is modified.
               $build['cross_sell']['#weight'] = 11;
             }
@@ -1073,6 +1085,24 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     }
 
     $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
+
+    // Update cross-sell region with products.
+    if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
+      $cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL);
+
+      if (!empty($cross_sell_skus)) {
+        $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+        if (!empty($crosssell_items)) {
+          $cross_sell_markup = [
+            '#theme' => 'products_cross_sell',
+            '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
+          ];
+
+          $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup));
+          $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup));
+        }
+      }
+    }
 
     // React for click & collect if stock is available.
     if (\Drupal::moduleHandler()->moduleExists('alshaya_click_collect') && $quantity) {
