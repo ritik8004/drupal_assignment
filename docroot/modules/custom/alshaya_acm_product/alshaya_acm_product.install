@@ -11,6 +11,15 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add config for pdp gallery pager limit.
+ */
+function alshaya_acm_product_update_8008() {
+  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product', 'install');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change cardinality for article_warning field to 1.
  */
 function alshaya_acm_product_update_8007() {
