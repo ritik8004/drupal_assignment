@@ -707,7 +707,9 @@
 
   #coupon-button {
     &.add {
-      font-family: $hnm-bold;
+      @include arabic-letter-spacing;
+
+      font-family: $hnm-regular;
       text-transform: uppercase;
       display: block;
       margin-bottom: 14px;
@@ -718,6 +720,7 @@
       margin-#{$left}: 1.5rem;
       font-size: 0.8125rem;
       max-width: 6.25rem;
+      letter-spacing: 1px;
     }
 
     &.remove {
