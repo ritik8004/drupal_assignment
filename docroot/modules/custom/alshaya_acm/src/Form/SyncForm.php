@@ -104,7 +104,24 @@ class SyncForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    // @TODO: Add validation on FULL sync to be sure at least one language is checked.
+    $action = $form_state->getUserInput()['op'];
+
+    switch ($action) {
+      case t('Synchronize listed SKUs'):
+        if (empty($form_state->getValue('products_list_text'))) {
+          $form_state->setErrorByName('products_list_text', t('Please list at least one SKU.'));
+        }
+        break;
+
+      case t('Synchronize ALL products'):
+        if (empty(array_filter($form_state->getValue('products_full_languages'), function ($v, $k) {
+          return !empty($v);
+        }, ARRAY_FILTER_USE_BOTH))) {
+          // @TODO: Check why placing the error on checkboxes does not work.
+          $form_state->setErrorByName('products_full_fieldset', t('Please select at least one language.'));
+        }
+        break;
+    }
   }
 
   /**
@@ -124,18 +141,28 @@ class SyncForm extends FormBase {
         drupal_set_message(t('Product options synchronization complete.'), 'status');
         break;
 
+      case 'Synchronize listed SKUs':
+        $skus = array_map('trim', explode(',', $form_state->getValue('products_list_text')));
+
+        foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+          foreach (array_chunk($skus, 5) as $chunk) {
+            // @TODO: Make page size a config. It can be used in multiple places.
+            \Drupal::service('acq_commerce.ingest_api')
+              ->productFullSync($store_id, $langcode, $chunk, 2);
+          }
+        }
+        break;
+
       case t('Synchronize ALL products'):
         $languages = \Drupal::languageManager()->getLanguages();
         $message_addition = [];
 
         foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
-          if (!in_array($langcode, array_keys($form_state->getValue('products_full_languages')))) {
-            continue;
+          if (!empty($form_state->getValue('products_full_languages')[$langcode])) {
+            $this->ingestApi->productFullSync($store_id, $langcode);
+
+            $message_addition[] = $languages[$langcode]->getName();
           }
-
-          $this->ingestApi->productFullSync($store_id, $langcode);
-
-          $message_addition[] = $languages[$langcode]->getName();
         }
 
         $message_addition = $this->formatPlural(
