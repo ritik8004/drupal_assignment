@@ -114,7 +114,7 @@ class CybersourceController implements ContainerInjectionInterface {
 
     // We check if cc type is valid and is allowed.
     if (empty($cc_type) || !in_array($cc_type, $allowed_cc_types)) {
-      throw new \InvalidArgumentException(srpintf('Invalid credit cart type %s or type not allowed.', $type));
+      throw new \InvalidArgumentException(sprintf('Invalid credit cart type %s or type not allowed.', $type));
     }
 
     $cart_id = $this->cartStorage->getCartId(FALSE);

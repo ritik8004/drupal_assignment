@@ -1,0 +1,17 @@
+--- docroot/modules/contrib/facets/js/facets-views-ajax.js	(revision )
++++ docroot/modules/contrib/facets/js/facets-views-ajax.js	(revision )
+@@ -83,6 +83,14 @@
+       views_parameters
+     );
+ 
++    // Kind of custom requirement here so coming from custom patch.
++    // We are using sort from exposed filters which is coming from exposed block.
++    // Facets AJAX is not yet ready and coming from patch.
++    // What we need is to ensure selected sort is sent in AJAX call.
++    if ($('.c-content__region [data-drupal-selector="edit-sort-bef-combine"]').length > 0) {
++      views_settings.sort_bef_combine = $('.c-content__region [data-drupal-selector="edit-sort-bef-combine"]').val();
++    }
++
+     // Update View.
+     var views_ajax_settings = Drupal.views.instances['views_dom_id:' + current_dom_id].element_settings;
+     views_ajax_settings.submit = views_settings;

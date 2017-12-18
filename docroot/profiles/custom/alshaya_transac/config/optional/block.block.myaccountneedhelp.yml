@@ -8,9 +8,9 @@ dependencies:
     - system
     - user
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: myaccountneedhelp
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: content
 weight: -15
 provider: null

@@ -9,6 +9,22 @@ use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Set image setting to use asset type: STILL_LIFE_FRONT_URL.
+ */
+function alshaya_hm_images_update_8001() {
+  \Drupal::configFactory()->getEditable('alshaya_hm_images.settings')
+    ->set('weights.swatch.STILL_LIFE_FRONT_URL', 5)
+    ->set('weights.pdp.STILL_LIFE_FRONT_URL', 8)
+    ->set('weights.plp.STILL_LIFE_FRONT_URL', 5)
+    ->set('weights.plp_hover.STILL_LIFE_FRONT_URL', 5)
+    ->set('weights.teaser.STILL_LIFE_FRONT_URL', 5)
+    ->set('weights.cart.STILL_LIFE_FRONT_URL', 5)
+    ->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_hm_images_install() {

@@ -555,7 +555,7 @@ header {
         #{$right}: 1.25rem;
       }
 
-      @include breakpoint($only-tablet) {
+      @include breakpoint($upto-desktop) {
         html[lang=ar] & {
           font-size: 1px;
         }
@@ -802,7 +802,6 @@ header {
         #{$left}: 0;
         width: 100%;
         z-index: -1;
-        border-top: 0.9375rem solid transparent;
         position: absolute;
         display: block;
         opacity: 0;
@@ -1008,10 +1007,6 @@ header {
     vertical-align: top;
     display: inline-block;
 
-    div:nth-child(2) {
-      float: $left;
-    }
-
     .highlighted {
       display: inline-block;
       max-width: 11.5rem;
@@ -1111,6 +1106,7 @@ header {
   .back--link {
     @extend .menu__list-item;
 
+    font-family: $hnm-bold;
     padding: 1rem 0;
     padding-#{$right}: 0.25rem;
   }

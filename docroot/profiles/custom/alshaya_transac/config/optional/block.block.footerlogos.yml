@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: footerlogos
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: footer_secondary
 weight: -9
 provider: null

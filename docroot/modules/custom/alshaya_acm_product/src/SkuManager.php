@@ -911,15 +911,15 @@ class SkuManager {
   /**
    * Utility function to get linked SKUs.
    *
-   * @param mixed $sku
-   *   SKU text or full entity object.
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU full entity object.
    * @param string $type
    *   Type of Linked SKUs to return related/upsell.
    *
    * @return array
    *   Linked SKUs for requested type.
    */
-  public function getLinkedSkus($sku, $type) {
+  public function getLinkedSkus(SKU $sku, $type) {
     $linked_skus = $this->linkedSkus->getLinkedSKus($sku);
 
     $linked_skus_requested = [];
@@ -936,6 +936,30 @@ class SkuManager {
     }
     catch (\Exception $e) {
       // Do nothing.
+    }
+
+    return $linked_skus_requested;
+  }
+
+  /**
+   * Utility function to get linked SKUs for current and first child too.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU full entity object.
+   * @param string $type
+   *   Type of Linked SKUs to return related/upsell.
+   *
+   * @return array
+   *   Linked SKUs for requested type.
+   */
+  public function getLinkedSkusWithFirstChild(SKU $sku, $type) {
+    $linked_skus_requested = $this->getLinkedSkus($sku, $type);
+
+    $first_child = $this->getChildSkus($sku, TRUE);
+
+    if ($first_child) {
+      $child_linked_skus_requested = $this->getLinkedSkus($first_child, $type);
+      $linked_skus_requested = array_merge($linked_skus_requested, $child_linked_skus_requested);
     }
 
     return $linked_skus_requested;

@@ -21,3 +21,6 @@ sites:
   vskw:
     module: alshaya_vs
     type: alshaya_non_transac
+  bbme:
+    module: alshaya_bb
+    type: alshaya_non_transac

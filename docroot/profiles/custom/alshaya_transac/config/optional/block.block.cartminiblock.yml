@@ -4,9 +4,9 @@ dependencies:
   module:
     - acq_cart
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: cartminiblock
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: header
 weight: 7
 provider: null

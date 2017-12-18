@@ -5,7 +5,7 @@ set -e
 
 docrootDir="$1"
 
-themes=( "debenhams" "whitelabel" "whitelabel_transac" "whitelabel_non_transac" "victoria_secret" "alshaya_white_label" "pottery_barn_non_trans" "alshaya_hnm" "bath_body_works" )
+themes=( "debenhams" "whitelabel" "whitelabel_transac" "whitelabel_non_transac" "victoria_secret" "alshaya_white_label" "pottery_barn_non_trans" "alshaya_hnm" "bath_body_works" "bouchon_bakery" )
 
 for i in "${themes[@]}"
 do

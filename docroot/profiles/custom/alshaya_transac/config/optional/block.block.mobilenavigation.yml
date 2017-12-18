@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: mobilenavigation
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: menu_primary
 weight: -32
 provider: null
