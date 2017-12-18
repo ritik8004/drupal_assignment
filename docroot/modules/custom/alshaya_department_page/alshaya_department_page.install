@@ -18,8 +18,8 @@ function alshaya_department_page_update_8001() {
     foreach ($department_pages as $tid => $nid) {
       /* @var \Drupal\Core\Path\AliasStorage $alias_storage */
       $alias_storage = \Drupal::service('path.alias_storage');
-      // We know that right now we only have 2 languages enabled.
-      $langcodes = ['en', 'ar'];
+      // Get enabled langcodes.
+      $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
       foreach ($langcodes as $langcode) {
         $condition = [
           'source' => '/taxonomy/term/' . $tid,

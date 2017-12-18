@@ -8,6 +8,8 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Core\Url;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\node\Entity\Node;
 
 /**
@@ -34,6 +36,15 @@ function alshaya_department_page_form_node_department_page_form_alter(&$form, Fo
       // Unset the value.
       unset($form['field_product_category']['widget']['#options'][$tid]);
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_department_page_node_presave(EntityInterface $entity) {
+  if ($entity->getType() == 'department_page') {
+    Cache::invalidateTags(['route_match']);
   }
 }
 
