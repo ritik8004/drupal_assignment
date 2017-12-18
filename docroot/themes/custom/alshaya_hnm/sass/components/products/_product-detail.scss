@@ -1784,7 +1784,7 @@ article[gtm-sku-type="simple"] {
   }
 
   span.out-of-stock {
-    background-color: $cherry;
+    background-color: $error;
     font-family: $hnm-bold;
     text-transform: uppercase;
     font-size: 0.75rem;
@@ -1793,7 +1793,7 @@ article[gtm-sku-type="simple"] {
     text-align: center;
     margin: 1rem 0;
     padding: 0.6rem 1.5rem;
-    color: $white;
+    color: $white-five;
 
     @include breakpoint($desktop) {
       display: inline-block;
