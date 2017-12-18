@@ -151,6 +151,8 @@ class SyncForm extends FormBase {
               ->productFullSync($store_id, $langcode, $chunk, 2);
           }
         }
+
+        drupal_set_message(t('Selected products synchronization launched.'), 'status');
         break;
 
       case t('Synchronize ALL products'):
@@ -171,7 +173,7 @@ class SyncForm extends FormBase {
             implode(' and ', $message_addition) . ' languages'
           );
 
-        drupal_set_message(t('Full synchronization launched on @addition.', [
+        drupal_set_message(t('Full product synchronization launched on @addition.', [
           '@addition' => $message_addition,
         ]), 'status');
         break;
@@ -234,7 +236,7 @@ class SyncForm extends FormBase {
       '#type' => 'fieldset',
       '#title' => t('Specific SKUs'),
       'products_list_text' => [
-        '#type' => 'textfield',
+        '#type' => 'textarea',
         '#title' => t('SKUs'),
         '#description' => t('A comma-separated list of SKUs.'),
       ],
