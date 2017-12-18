@@ -304,7 +304,7 @@ class KnetController extends ControllerBase {
   public function error($quote_id) {
     $cart = $this->cartStorage->getCart(FALSE);
 
-    if ($cart->id() != $quote_id) {
+    if (!empty($cart) && ($cart->id() != $quote_id)) {
       $this->logger->warning('KNET error page requested with invalid quote_id: @quote_id. Cart in session: @cart', [
         '@quote_id' => $quote_id,
         '@cart' => json_encode($cart),
