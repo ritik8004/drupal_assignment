@@ -48,39 +48,6 @@ function alshaya_mc_update_8306() {
   \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
     ->set('email_logo_path', $site_logo . '-ar.png')
     ->save();
-
-  // Disable the "Powered by" block.
-  \Drupal::configFactory()->getEditable('block.block.' . $current_theme . '_powered')
-    ->set('region', '-1')
-    ->save();
-
-  // Disable the "Main Navigation" block.
-  \Drupal::configFactory()->getEditable('block.block.' . $current_theme . '_main_menu')
-    ->set('region', -1)
-    ->save();
-
-  $blocks = [
-    $current_theme . '_branding' => 'branding',
-    $current_theme . '_content' => 'content',
-    $current_theme . '_account_menu' => 'account_menu',
-    $current_theme . '_breadcrumbs' => 'breadcrumbs',
-    $current_theme . '_help' => 'help',
-    $current_theme . '_local_actions' => 'local_actions',
-    $current_theme . '_local_tasks' => 'local_tasks',
-    $current_theme . '_messages' => 'messages',
-    $current_theme . '_page_title' => 'page_title',
-  ];
-
-  foreach ($blocks as $old_block_id => $new_block_id) {
-    $old_block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $old_block_id]);
-
-    if (!empty($old_block)) {
-      $old_block = reset($old_block);
-      $new_block = $old_block->createDuplicateBlock($new_block_id);
-      $old_block->delete();
-      $new_block->save();
-    }
-  }
 }
 
 /**
