@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_newsletter
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: alshayanewslettersubscription
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: footer_primary
 weight: -19
 provider: null

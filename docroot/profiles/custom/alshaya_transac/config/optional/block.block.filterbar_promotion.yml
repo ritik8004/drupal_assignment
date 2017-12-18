@@ -7,9 +7,9 @@ dependencies:
     - ctools
     - facets_summary
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: filterbar_promotion
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: content
 weight: -11
 provider: null

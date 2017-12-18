@@ -7,9 +7,9 @@ dependencies:
     - ctools
     - facets
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: promotionpricefacet
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: sidebar_first
 weight: -23
 provider: null

@@ -4,9 +4,9 @@ dependencies:
   module:
     - system
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: content
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: content
 weight: -4
 provider: null

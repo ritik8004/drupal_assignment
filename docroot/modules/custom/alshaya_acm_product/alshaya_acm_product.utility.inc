@@ -262,8 +262,8 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
     return [];
   }
   else {
-    // @TODO: should this be config?
-    $pager_flag = count($thumbnails) > 5 ? 'pager-yes' : 'pager-no';
+    $pdp_gallery_pager_limit = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
+    $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
     $build['gallery'] = [
       '#type' => 'container',

@@ -12,6 +12,39 @@ use Drupal\user\Entity\User;
 use Symfony\Component\Yaml\Yaml;
 
 /**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_acm_update_dependencies() {
+  return [
+    'alshaya_acm' => [
+      8006 => [
+        'acq_commerce' => 8001,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new role for sync user.
+ */
+function alshaya_acm_update_8006() {
+  /** @var \Drupal\user\Entity\User $user */
+  $user = user_load_by_name(Settings::get('alshaya_acm_user_username'));
+
+  if ($user) {
+    // Add new role to sync user.
+    $user->addRole('acq_commerce_sync');
+
+    // Remove admin role from sync user.
+    $user->removeRole('administrator');
+
+    $user->save();
+  }
+}
+
+/**
  * Implements hook_update().
  *
  * Update the C&C STS message, change placeholder to stop forced italic.
@@ -90,8 +123,7 @@ function alshaya_acm_install() {
   $user->setEmail(Settings::get('alshaya_acm_user_email'));
   $user->setUsername(Settings::get('alshaya_acm_user_username'));
   $user->activate();
-  // TODO: Security.
-  $user->addRole('administrator');
+  $user->addRole('acq_commerce_sync');
   $user->save();
 
   // Configure Simple Oauth.

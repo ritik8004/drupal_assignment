@@ -365,6 +365,15 @@ html[lang="ar"] {
     position: relative;
   }
 
+  &.vat-row {
+    .warm--white {
+      @include breakpoint($only-mobile) {
+        position: relative;
+        #{$left}: 50%;
+      }
+    }
+  }
+
   .warm--white {
     background-color: $white-five;
 
@@ -375,13 +384,13 @@ html[lang="ar"] {
     }
 
     @include breakpoint($only-mobile) {
-      position: relative;
-      #{$left}: 50%;
+      position: absolute;
+      #{$right}: 0;
     }
   }
 }
 
-.alias--confirmation-print {
+.order__print--wrap {
   .block-customer-service-block {
     border-top: 2px solid $hnm-black;
     background-color: $grey1;
@@ -391,6 +400,10 @@ html[lang="ar"] {
     h3,
     p {
       color: $hnm-black-two;
+    }
+
+    .line4 {
+      display: none;
     }
   }
 }

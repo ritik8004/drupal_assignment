@@ -739,6 +739,26 @@ class SkuManager {
   }
 
   /**
+   * Helper function to fetch SKUs by langcode and type.
+   *
+   * @param string $langcode
+   *   Language code.
+   * @param string $type
+   *   SKUs type (configurable, simple).
+   *
+   * @return array
+   *   An array of SKUs.
+   */
+  public function getSkus($langcode, $type) {
+    $query = $this->connection->select('acq_sku_field_data', 'asfd')
+      ->fields('asfd', ['sku'])
+      ->condition('type', $type, '=')
+      ->condition('langcode', $langcode, '=');
+
+    return array_keys($query->execute()->fetchAllKeyed(0));
+  }
+
+  /**
    * Helper function to do a cheaper call to fetch skus for a promotion.
    *
    * @param \Drupal\node\Entity\Node $promotion

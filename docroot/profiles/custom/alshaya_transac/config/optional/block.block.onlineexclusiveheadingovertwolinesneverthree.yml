@@ -7,9 +7,9 @@ dependencies:
     - block_content
     - system
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: onlineexclusiveheadingovertwolinesneverthree
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: sidebar_second
 weight: -12
 provider: null
