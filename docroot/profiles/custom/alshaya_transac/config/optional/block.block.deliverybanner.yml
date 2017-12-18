@@ -6,9 +6,9 @@ dependencies:
   module:
     - system
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: deliverybanner
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: hero_content
 weight: -35
 provider: null

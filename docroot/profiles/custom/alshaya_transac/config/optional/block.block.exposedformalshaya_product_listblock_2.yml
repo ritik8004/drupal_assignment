@@ -7,9 +7,9 @@ dependencies:
     - ctools
     - views
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: exposedformalshaya_product_listblock_2
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: content
 weight: -24
 provider: null

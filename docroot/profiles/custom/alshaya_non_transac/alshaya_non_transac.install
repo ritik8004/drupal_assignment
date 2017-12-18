@@ -6,6 +6,18 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update the simple auth public/private key file path.
+ */
+function alshaya_non_transac_update_8103() {
+  $config = \Drupal::configFactory()->getEditable('simple_oauth.settings');
+  $config->set('private_key', '');
+  $config->set('public_key', '');
+  $config->save();
+}
+
+/**
  *  Hook update to disable user registration for visitors.
  */
 function alshaya_non_transac_update_8102() {
@@ -96,6 +108,12 @@ function alshaya_non_transac_install() {
   // Set registration to administrator only.
   $config = \Drupal::configFactory()->getEditable('user.settings');
   $config->set('register', USER_REGISTER_ADMINISTRATORS_ONLY)->save();
+
+  // Un-setting simple auth keys as we don't need them.
+  \Drupal::configFactory()->getEditable('simple_oauth.settings')
+    ->set('private_key', '')
+    ->set('public_key', '')
+    ->save();
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_non_transac', $modules);

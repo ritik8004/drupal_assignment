@@ -11,7 +11,7 @@ dependencies:
   - syslog
 
 themes:
-  - whitelabel_transac
+  - alshaya_white_label
   - bartik
   - seven
 

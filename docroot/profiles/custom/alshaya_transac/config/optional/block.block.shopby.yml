@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_acm_product_category
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: shopby
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: footer_primary
 weight: -25
 provider: null
