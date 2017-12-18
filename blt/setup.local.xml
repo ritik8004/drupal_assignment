@@ -69,8 +69,16 @@
       </if>
 
       <if>
-        <not><isset property="country_code" /></not>
-        <then><input propertyname="country_code">Enter country code for the site:</input></then>
+        <contains string="${sites.${site}.country}" substring="${site}"/>
+        <then>
+          <if>
+            <not><isset property="country_code" /></not>
+            <then><input propertyname="country_code">Enter country code for the site:</input></then>
+          </if>
+        </then>
+        <else>
+          <property name="country_code" value="${sites.${site}.country}" />
+        </else>
       </if>
 
       <phingcall target="local:reset-local-settings"/>
@@ -110,8 +118,16 @@
       </if>
 
       <if>
-        <not><isset property="country_code" /></not>
-        <then><input propertyname="country_code">Enter country code for the site:</input></then>
+        <contains string="${sites.${site}.country}" substring="${site}"/>
+        <then>
+          <if>
+            <not><isset property="country_code" /></not>
+            <then><input propertyname="country_code">Enter country code for the site:</input></then>
+          </if>
+        </then>
+        <else>
+          <property name="country_code" value="${sites.${site}.country}" />
+        </else>
       </if>
 
       <phingcall target="setup:composer:install"/>
