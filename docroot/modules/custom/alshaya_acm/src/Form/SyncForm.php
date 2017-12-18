@@ -244,7 +244,6 @@ class SyncForm extends FormBase {
         'products_full_languages' => [
           '#type' => 'checkboxes',
           '#options' => $options,
-          '#default_value' => array_keys($options),
         ],
         'products_full' => [
           '#type' => 'actions',
