@@ -1,0 +1,12 @@
+/* Slider dots */
+.field__slider .slick-dots {
+  li {
+    color: $camo-green;
+    border: 1px solid $camo-green;
+
+    &.active,
+    &.slick-active {
+      background: $camo-green;
+    }
+  }
+}
