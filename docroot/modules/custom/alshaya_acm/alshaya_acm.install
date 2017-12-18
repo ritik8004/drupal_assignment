@@ -7,6 +7,8 @@
 
 use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\node\Entity\Node;
 use Drupal\simple_oauth\Entity\Oauth2Client;
 use Drupal\user\Entity\User;
 use Symfony\Component\Yaml\Yaml;
@@ -163,4 +165,43 @@ function alshaya_acm_install() {
   $config->set('currency_code', $currency_code);
   $config->set('decimal_points', 3);
   $config->save();
+
+  // Get all nodes of 'page' type bundle.
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'page')
+    ->execute();
+  $nodes = Node::loadMultiple($nids);
+  // If there are any nodes.
+  if (!empty($nodes)) {
+    foreach ($nodes as $node) {
+      try {
+        // Delete the node.
+        $node->delete();
+      }
+      catch (\Exception $e) {
+        // If something goes wrong.
+        \Drupal::logger('alshaya_acm')->error('Unable to delete the node with nid @nid', ['@nid' => $node->id()]);
+      }
+    }
+  }
+
+  // Get menu links with uri 'internal:/store'.
+  $menu_link_ids = \Drupal::entityQuery('menu_link_content')
+    ->condition('link__uri', 'internal:/store')
+    ->execute();
+  $menu_links = MenuLinkContent::loadMultiple($menu_link_ids);
+  // If there any menu links.
+  if ($menu_links) {
+    foreach ($menu_links as $menu_link) {
+      try {
+        // Delete the menu_link.
+        $menu_link->delete();
+      }
+      catch (\Exception $e) {
+        // If something goes wrong.
+        \Drupal::logger('alshaya_acm')->error('Unable to delete the menu link with lid @lid', ['@lid' => $menu_link->id()]);
+      }
+    }
+  }
+
 }
