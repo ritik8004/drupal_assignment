@@ -132,9 +132,9 @@ function drush_alshaya_api_sanity_check() {
 
   // Retrieve missing SKUs.
   foreach ($types as $type) {
-    if (!empty($missing[$type]['all']) && drush_confirm(dt('Do you want to launch ProductSync on following !count !type missing SKUs: !skus', [
-      '!count' => count($missing[$type]['all']),
-      '!type' => $type,
+    if (!empty($missing[$type]['all']) && drush_confirm(dt('Do you want to launch ProductSync on following @count @type missing SKUs: !skus', [
+      '@count' => count($missing[$type]['all']),
+      '@type' => $type,
       '!skus' => "'" . implode("','", $missing[$type]['all']) . "'",
     ]))) {
       foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
@@ -156,15 +156,15 @@ function drush_alshaya_api_sanity_check() {
 
   // Delete additional SKUs.
   foreach ($types as $type) {
-    if (!empty($to_be_deleted[$type]['all']) && drush_confirm(dt('Do you want to delete following !count !type additional SKUs: !skus', [
-      '!count' => count($to_be_deleted[$type]['all']),
-      '!type' => $type,
+    if (!empty($to_be_deleted[$type]['all']) && drush_confirm(dt('Do you want to delete following @count @type additional SKUs: !skus', [
+      '@count' => count($to_be_deleted[$type]['all']),
+      '@type' => $type,
       '!skus' => "'" . implode("','", $to_be_deleted[$type]['all']) . "'",
     ]))) {
       // @TODO: Investigate potential issue if SKUs is created in Magento right
       // after we get the list via API. It may remove newly created SKUs.
       // $sku_manager = \Drupal::service('entity_type.manager')->getStorage('acq_sku');
-      drush_print(dt('TODO: Delete additional !type', ['!type' => $type]));
+      drush_print(dt('TODO: Delete additional @type', ['@type' => $type]));
     }
   }
 }
