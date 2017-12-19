@@ -269,9 +269,10 @@ class SyncForm extends FormBase {
             'input[name="products_full_validate"]' => ['checked' => FALSE],
           ],
         ],
-        // @TODO: Find a way to get the checkbox inline.
         'products_full_languages' => [
           '#type' => 'checkboxes',
+          '#prefix' => '<div class="container-inline clearfix">',
+          '#suffix' => '</div>',
           '#options' => $options,
         ],
         'products_full' => [
@@ -311,6 +312,8 @@ class SyncForm extends FormBase {
         ],
       ],
     ];
+
+    $form['#attached']['library'][] = 'alshaya_acm/alshaya_acm.sync_form';
 
     return $form;
   }
