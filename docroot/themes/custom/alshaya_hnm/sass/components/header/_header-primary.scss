@@ -628,6 +628,10 @@ header {
       font-size: 0;
       padding-top: 0.3125rem;
 
+      html[lang=ar] & {
+        font-size: 1px;
+      }
+
       &::before {
         margin-#{$right}: 0.3125rem;
       }
