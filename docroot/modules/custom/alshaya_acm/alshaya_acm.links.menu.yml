@@ -8,5 +8,6 @@ alshaya_acm.cart_configuration:
 alshaya_acm.synchronize:
   title: 'Synchronize commerce data'
   route_name: 'alshaya_acm.synchronize'
-  parent: 'acq_commerce.commerce'
+  parent: 'acq_commerce.admin_commerce'
   description: 'Launch synchronization of commerce data'
+  weight: 50
