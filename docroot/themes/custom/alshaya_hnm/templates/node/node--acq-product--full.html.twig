@@ -38,13 +38,9 @@ set classes = [
 
     <div class="content__main">
       {{ content.gallery }}
-
-			{% if content.cross_sell %}
-        <div class="horizontal-crossell above-mobile-block">
-          <h3 class="subtitle crossell-title">{{ "Customers also bought"|t }}</h3>
-					{{ content.cross_sell }}
-        </div>
-			{% endif %}
+      <div class="horizontal-crossell above-mobile-block">
+			  {{ content.cross_sell }}
+      </div>
 
       {% if content.up_sell %}
         <div class="horizontal-upell above-mobile-block">
@@ -139,12 +135,9 @@ set classes = [
 
       {% if content.up_sell or content.related or content.cross_sell%}
         <div class="mobile-related-wrapper">
-					{% if content.cross_sell %}
-            <div class="horizontal-crossell mobile-only-block">
-              <h3 class="subtitle crossell-title">{{ "Customers also bought"|t }}</h3>
-							{{ content.cross_sell }}
-            </div>
-					{% endif %}
+          <div class="horizontal-crossell mobile-only-block">
+						{{ content.cross_sell }}
+          </div>
 
           {% if content.up_sell %}
             <div class="horizontal-upell mobile-only-block">

@@ -260,14 +260,17 @@
   }
 
   .order-print-button a {
+    @include arabic-letter-spacing;
+
     display: inline-block;
-    font-family: $hnm-bold;
+    font-family: $hnm-regular;
     text-transform: uppercase;
     color: $hnm-black-two;
     background: $white-five;
     padding: 0.5rem 2.45rem;
     border: 1px solid $hnm-black-two;
     font-size: 0.75rem;
+    letter-spacing: 1px;
   }
 
   tr td {
@@ -662,8 +665,10 @@
 
 .order-confirmation .continue--shopping--mobile a,
 #edit-confirmation-continue-shopping {
+  @include arabic-letter-spacing;
+
   font-size: 0.75rem;
-  font-family: $hnm-bold;
+  font-family: $hnm-regular;
   font-weight: bold;
   border: 1px solid $hnm-black-two;
   color: $hnm-black-two;
@@ -672,6 +677,7 @@
   width: 100%;
   text-align: center;
   text-transform: uppercase;
+  letter-spacing: 1px;
 
   &.expanded-table {
     font-family: $hnm-bold;

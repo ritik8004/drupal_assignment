@@ -12,6 +12,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\BaseCommand;
+use Drupal\Core\Ajax\InsertCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
@@ -47,7 +48,6 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
   foreach ($items as $item_id => $item) {
     $object = $item->getOriginalObject()->getValue();
-
     $type = $object->getEntityType()->id();
     $bundle = $object->bundle();
 
@@ -87,7 +87,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
           // Update final_price based on final_price of children.
           $min_final_price = NULL;
-
+          $child_sku_found = FALSE;
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
             try {
               $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode);
@@ -100,6 +100,9 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
             // Additional check if it returns NULL.
             if (empty($child_sku_entity)) {
               continue;
+            }
+            else {
+              $child_sku_found = TRUE;
             }
 
             // Loop through the indexable fields.
@@ -117,6 +120,12 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
             if ($final_price > 0) {
               $min_final_price = isset($min_final_price) ? min($min_final_price, $final_price) : $final_price;
             }
+          }
+
+          // Do not index the product in case its linked with a configurable
+          // SKU, but the config SKU is missing its children.
+          if (!$child_sku_found) {
+            unset($items[$item_id]);
           }
 
           // Load all item fields, we'll need it to check condition inside loop.
@@ -215,6 +224,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
   $items['product_concept_markup'] = [
     'variables' => [
       'concepts' => NULL,
+    ],
+  ];
+
+  $items['products_cross_sell'] = [
+    'variables' => [
+      'data' => NULL,
     ],
   ];
 
@@ -334,7 +349,12 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           if (!empty($cross_sell_skus)) {
             $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
             if (!empty($crosssell_items)) {
-              $build['cross_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items));
+              // @Todo: Convert other related sections into theme functions as well. See if we can hava a common theme funciton for rendering them.
+              $build['cross_sell'] = [
+                '#theme' => 'products_cross_sell',
+                '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
+              ];
+
               // Weight will have no effect later once template is modified.
               $build['cross_sell']['#weight'] = 11;
             }
@@ -1125,6 +1145,24 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     }
 
     $response->addCommand(new ReplaceCommand('.warning-wrapper', $warning_markup));
+
+    // Update cross-sell region with products.
+    if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
+      $cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL);
+
+      if (!empty($cross_sell_skus)) {
+        $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+        if (!empty($crosssell_items)) {
+          $cross_sell_markup = [
+            '#theme' => 'products_cross_sell',
+            '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
+          ];
+
+          $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup));
+          $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup));
+        }
+      }
+    }
 
     // React for click & collect if stock is available.
     if (\Drupal::moduleHandler()->moduleExists('alshaya_click_collect') && $quantity) {

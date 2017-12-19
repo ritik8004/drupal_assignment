@@ -13,8 +13,15 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Set the config to display specifications to TRUE.
  */
-function alshaya_acm_product_update_8008() {
+function alshaya_acm_product_update_8009() {
   \Drupal::configFactory()->getEditable('alshaya_acm.settings')->set('pdp_show_specifications', TRUE)->save();
+}
+
+/**
+ * Add config for pdp gallery pager limit.
+ */
+function alshaya_acm_product_update_8008() {
+  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product', 'install');
 }
 
 /**
