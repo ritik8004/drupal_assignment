@@ -16,6 +16,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -861,4 +862,28 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
 
   // Add remove link as suffix of quantity.
   $item['quantity']['#suffix'] .= '<div class="inline-stock-error" id="stock-error-' . str_replace(' ', '-', $sku_entity->getSku()) . '">' . $item_stock_error . '</div>';
+}
+
+/**
+ * Delete default store node of type 'page'.
+ */
+function _alshaya_acm_delete_default_store_node() {
+  // Get all nodes of 'page' type bundle.
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'page')
+    ->execute();
+  $nodes = Node::loadMultiple($nids);
+  // If there are any nodes.
+  if (!empty($nodes)) {
+    foreach ($nodes as $node) {
+      try {
+        // Delete the node.
+        $node->delete();
+      }
+      catch (\Exception $e) {
+        // If something goes wrong.
+        \Drupal::logger('alshaya_acm')->error('Unable to delete the node with nid @nid', ['@nid' => $node->id()]);
+      }
+    }
+  }
 }
