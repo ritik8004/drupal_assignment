@@ -9,7 +9,18 @@ use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
 use Drupal\simple_oauth\Entity\Oauth2Client;
 use Drupal\user\Entity\User;
+use Drupal\node\Entity\Node;
 use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Delete all nodes of 'page' type bundle.
+ */
+function alshaya_acm_update_8007() {
+  // Delete default store node.
+  _alshaya_acm_delete_default_store_node();
+}
 
 /**
  * Implements hook_update().
@@ -90,8 +101,7 @@ function alshaya_acm_install() {
   $user->setEmail(Settings::get('alshaya_acm_user_email'));
   $user->setUsername(Settings::get('alshaya_acm_user_username'));
   $user->activate();
-  // TODO: Security.
-  $user->addRole('administrator');
+  $user->addRole('acq_commerce_sync');
   $user->save();
 
   // Configure Simple Oauth.
@@ -131,4 +141,32 @@ function alshaya_acm_install() {
   $config->set('currency_code', $currency_code);
   $config->set('decimal_points', 3);
   $config->save();
+
+  // Delete default store node.
+  _alshaya_acm_delete_default_store_node();
+
+}
+
+/**
+ * Delete default store node of type 'page'.
+ */
+function _alshaya_acm_delete_default_store_node() {
+  // Get all nodes of 'page' type bundle.
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'page')
+    ->execute();
+  $nodes = Node::loadMultiple($nids);
+  // If there are any nodes.
+  if (!empty($nodes)) {
+    foreach ($nodes as $node) {
+      try {
+        // Delete the node.
+        $node->delete();
+      }
+      catch (\Exception $e) {
+        // If something goes wrong.
+        \Drupal::logger('alshaya_acm')->error('Unable to delete the node with nid @nid', ['@nid' => $node->id()]);
+      }
+    }
+  }
 }
