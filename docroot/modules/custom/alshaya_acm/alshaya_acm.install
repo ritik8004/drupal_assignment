@@ -13,19 +13,6 @@ use Drupal\node\Entity\Node;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Implements hook_update_dependencies().
- */
-function alshaya_acm_update_dependencies() {
-  return [
-    'alshaya_acm' => [
-      8006 => [
-        'acq_commerce' => 8001,
-      ],
-    ],
-  ];
-}
-
-/**
  * Implements hook_update_N().
  *
  * Delete all nodes of 'page' type bundle.
@@ -33,26 +20,6 @@ function alshaya_acm_update_dependencies() {
 function alshaya_acm_update_8007() {
   // Delete default store node.
   _alshaya_acm_delete_default_store_node();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add new role for sync user.
- */
-function alshaya_acm_update_8006() {
-  /** @var \Drupal\user\Entity\User $user */
-  $user = user_load_by_name(Settings::get('alshaya_acm_user_username'));
-
-  if ($user) {
-    // Add new role to sync user.
-    $user->addRole('acq_commerce_sync');
-
-    // Remove admin role from sync user.
-    $user->removeRole('administrator');
-
-    $user->save();
-  }
 }
 
 /**
