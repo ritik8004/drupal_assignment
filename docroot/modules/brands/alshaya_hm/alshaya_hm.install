@@ -25,6 +25,7 @@ function alshaya_hm_update_8007() {
  * Install Acquia Purge module on HnM.
  */
 function alshaya_hm_update_8006() {
+  \Drupal::configFactory()->getEditable('purge_queuer_coretags.settings')->delete();
   if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     \Drupal::service('module_installer')->install(['acquia_purge']);
 
