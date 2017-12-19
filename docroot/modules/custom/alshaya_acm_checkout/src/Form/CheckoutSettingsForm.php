@@ -37,6 +37,7 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $config->set('click_collect_method_method_code', $form_state->getValue('click_collect_method_method_code'));
     $config->set('click_collect_method_carrier_code', $form_state->getValue('click_collect_method_carrier_code'));
     $config->set('checkout_display_magento_error', $form_state->getValue('checkout_display_magento_error'));
+    $config->set('checkout_show_tax_info', $form_state->getValue('checkout_show_tax_info'));
 
     $config->save();
 
@@ -114,6 +115,12 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Display error message from magento'),
       '#required' => TRUE,
       '#default_value' => $config->get('checkout_display_magento_error'),
+    ];
+
+    $form['checkout_show_tax_info'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show tax information'),
+      '#default_value' => $config->get('checkout_show_tax_info'),
     ];
 
     return $form;
