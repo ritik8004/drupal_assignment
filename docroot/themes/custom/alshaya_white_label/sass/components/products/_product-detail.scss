@@ -1618,6 +1618,11 @@ article[gtm-sku-type="simple"] {
           margin-top: 2rem;
           height: 2.188rem;
           text-align: center;
+
+          html[lang=ar] & {
+            float: none;
+            margin-top: 0.5rem;
+          }
         }
 
         @include breakpoint($desktop) {
