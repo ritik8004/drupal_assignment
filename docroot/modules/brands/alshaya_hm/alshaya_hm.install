@@ -9,6 +9,18 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Set default config for the tax info show.
+ */
+function alshaya_hm_update_8008() {
+  // Setting tax info show to be false by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings')
+    ->set('checkout_show_tax_info', FALSE)
+    ->save();
+}
+
+/**
  * Implements hook_update().
  *
  * Set visiblity rule for customerservice block.
