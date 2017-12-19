@@ -3,6 +3,7 @@
   position: absolute;
   #{$right}: 0;
   padding-top: 0;
+  outline: transparent;
   font-size: 0.6875rem;
   color: $windows-blue;
   top: -0.25rem;
@@ -104,4 +105,10 @@
   div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
     overflow: scroll;
   }
+}
+
+.sizeguide-modal-overlay {
+  position: fixed;
+  height: initial;
+  width: 100%;
 }
