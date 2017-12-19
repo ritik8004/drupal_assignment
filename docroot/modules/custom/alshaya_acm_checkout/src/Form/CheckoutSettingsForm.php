@@ -119,7 +119,7 @@ class CheckoutSettingsForm extends ConfigFormBase {
 
     $form['checkout_show_tax_info'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Show tax information'),
+      '#title' => $this->t('Show tax information on cart and checkout page'),
       '#default_value' => $config->get('checkout_show_tax_info'),
     ];
 
