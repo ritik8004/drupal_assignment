@@ -417,16 +417,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $description_value .= '</div>';
         }
 
-        $concepts = $sku_entity->get('attr_concept')->getValue();
-        $concepts_markup = [
-          '#theme' => 'product_concept_markup',
-        ];
+        if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
+          $concepts_markup = [
+            '#theme' => 'product_concept_markup',
+            '#concepts' => $concepts,
+          ];
 
-        if (!empty($concepts)) {
-          $concepts_markup['#concepts'] = $concepts;
+          $description_value .= render($concepts_markup);
         }
-
-        $description_value .= render($concepts_markup);
 
         // Render the wrapper div for composition always so that the same can be
         // filled with data on variant selection.
