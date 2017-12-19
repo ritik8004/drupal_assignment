@@ -27,6 +27,16 @@ function alshaya_acm_update_dependencies() {
 /**
  * Implements hook_update_N().
  *
+ * Delete all nodes of 'page' type bundle.
+ */
+function alshaya_acm_update_8007() {
+  // Delete default store node.
+  _alshaya_acm_delete_default_store_node();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new role for sync user.
  */
 function alshaya_acm_update_8006() {
