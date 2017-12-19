@@ -8,20 +8,42 @@ Feature: Test breadcrumbs displayed across the site
     Then the breadcrumb "<breadcrumb>" should be displayed
     Examples:
     |page|breadcrumb|
-    |/baby-clothing|home > baby clothing|
+    |/baby-clothing-0|home > baby clothing|
     |/baby-clothing/baby-newborn-18-months|home > baby clothing > baby (newborn - 18 months)|
-    |/baby-clothing/baby-newborn-18-months/new-baby-clothing|home > baby clothing > baby (newborn - 18 months) > new in: baby clothing|
+    |/baby-clothing/baby-newborn-18-months/bodysuits|home > baby clothing > baby (newborn - 18 months) > bodysuits|
     |/disney-mickey-mouse-t-shirt-and-shorts-set            |home > baby clothing > baby (newborn - 18 months) > baby boys > disney mickey mouse t-shirt and shorts set|
     |/vk-promo-001                                         |home > toys > vk promo 001                                                                      |
     |/cart                                                 |home > basket                                                                                            |
     |/store-finder                                         |home > find stores                                                                                       |
-    |/ar/ملابس-الرضع                                       |الصفحة الرئيسية > ملابس الرضع                                                                            |
-    |/ar/للأطفال-منذ-الولادة-وحتى-18-شهراً/ملابس-الرضع     |الصفحة الرئيسية > ملابس الرضع > للأطفال (منذ الولادة وحتى 18 شهراً)                                      |
-    |/ar/جديدنا-من-ملابس-الأطفال/للأطفال-منذ-الولادة-وحتى-18-شهراً/ملابس-الرضع|الصفحة الرئيسية > ملابس الرضع > للأطفال (منذ الولادة وحتى 18 شهراً) > جديدنا من: ملابس الأطفال|
-    |/ar/طقم-تي-شيرت-برسمة-disney-mickey-mouse-وشورت-جينز                     |الصفحة الرئيسية > ملابس الرضع > للأطفال (منذ الولادة وحتى 18 شهراً) > للأولاد > طقم تي-شيرت برسمة disney mickey mouse وشورت جينز|
-    |/ar/vk-promo-001                                                         |الصفحة الرئيسية > vk promo 001 < toys                                                                                                  |
-    |/ar/cart                                                                 |الرئيسية > حقيبة التسوق                                                                                                         |
-    |/ar/store-finder                                                         |الصفحة الرئيسية > البحث عن المحلات                                                                                              |
+
+  Scenario:  As a guest on Arabic site
+  I should be able to view breadcrumbs across the site
+    Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait for the page to load
+    When I follow "العربية"
+    And I wait for the page to load
+    When I follow "ملابس الرضع"
+    And I wait for the page to load
+    When I follow "صندوق هدية جوارب للأولاد"
+    And I wait for the page to load
+    Then the breadcrumb "الصفحة الرئيسية > ملابس الرضع > الأطفال (منذ الولادة وحتى 18 شهراً) > الجوارب والكولونات > صندوق هدية جوارب للأولاد" should be displayed
+    When I click "الجوارب والكولونات" "link" in the region ".breadcrumb"
+    And I wait for the page to load
+    Then the breadcrumb "الصفحة الرئيسية > ملابس الرضع > الأطفال (منذ الولادة وحتى 18 شهراً) > الجوارب والكولونات" should be displayed
+    When I click "الأطفال (منذ الولادة وحتى 18 شهراً)" "link" in the region ".breadcrumb"
+    And I wait for the page to load
+    Then the breadcrumb "الصفحة الرئيسية > ملابس الرضع > الأطفال (منذ الولادة وحتى 18 شهراً)" should be displayed
+    When I click "ملابس الرضع" "link" in the region ".breadcrumb"
+    And I wait for the page to load
+    Then the breadcrumb "الصفحة الرئيسية > ملابس الرضع" should be displayed
+    When I click the label for ".cart-link"
+    And I wait for the page to load
+    Then the breadcrumb "الرئيسية > سلة التسوق" should be displayed
+    When I follow "البحث عن محلاتنا"
+    And I wait for the page to load
+    Then the breadcrumb "الصفحة الرئيسية > البحث عن المحلات" should be displayed
 
   Scenario: As a Guest
     I should be able to view breadcrumb on store detail page
@@ -34,7 +56,9 @@ Feature: Test breadcrumbs displayed across the site
   @arabic
   Scenario: As a Guest on Arabic site
   I should be able to view breadcrumb on store detail page
-    Given I am on "/ar/store-finder"
+    Given I am on "/store-finder"
+    And I wait for the page to load
+    When I follow "العربية"
     And I wait for the page to load
     When I follow "سوق شرق"
     And I wait for the page to load
@@ -56,9 +80,6 @@ Feature: Test breadcrumbs displayed across the site
     Then the breadcrumb "home > my account > address book" should be displayed
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
     And I wait for the page to load
-    Then the breadcrumb "home > my account > communication preferences" should be displayed
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(6) > a"
-    And I wait for the page to load
     Then the breadcrumb "home > my account > change password" should be displayed
 
   @arabic
@@ -79,8 +100,5 @@ Feature: Test breadcrumbs displayed across the site
     And I wait for the page to load
     Then the breadcrumb "الصفحة الرئيسية > حسابي > سجل العناوين" should be displayed
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
-    And I wait for the page to load
-    Then the breadcrumb "الصفحة الرئيسية > حسابي > تفضيلات التواصل" should be displayed
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(6) > a"
     And I wait for the page to load
     Then the breadcrumb "الصفحة الرئيسية > حسابي > تغيير كلمة السر" should be displayed
