@@ -157,18 +157,8 @@ function alshaya_mc_install() {
     ->set('email_logo_path', $site_logo . '.png')
     ->save();
   // Save arabic logo for email.
-  \Drupal::configFactory()->getEditable('alshaya_master.theme.alshaya_mothercare.ar')
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
     ->set('email_logo_path', $site_logo . '-ar.png')
-    ->save();
-
-  // Disable the "Powered by" block.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_mothercare_powered')
-    ->set('region', '-1')
-    ->save();
-
-  // Disable the "Main Navigation" block.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_mothercare_main_menu')
-    ->set('region', -1)
     ->save();
 
   // Translate store finder block's link title.
