@@ -234,6 +234,27 @@
       }
     }
   }
+
+  .field--name-field-button-link {
+    font-size: 0.8125rem;
+    font-family: $hnm-bold;
+    font-weight: bold;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.56875rem;
+    }
+
+    a,
+    span {
+      padding: 0.75rem 2rem;
+      font: inherit;
+      position: relative;
+
+      @include breakpoint($only-mobile) {
+        padding: 0.53125rem 1.4375rem;
+      }
+    }
+  }
 }
 
 .field--name-field-promo-text-1 {
@@ -260,25 +281,6 @@
 
   @include breakpoint($only-mobile) {
     font-size: 1.8375rem;
-  }
-}
-
-.field--name-field-button-link {
-  font-size: 0.8125rem;
-  font-family: $hnm-bold;
-  font-weight: bold;
-
-  @include breakpoint($only-mobile) {
-    font-size: 0.56875rem;
-  }
-
-  a,
-  span {
-    padding: 0.75rem 2rem;
-
-    @include breakpoint($only-mobile) {
-      padding: 0.53125rem 1.4375rem;
-    }
   }
 }
 

@@ -11,6 +11,25 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add config for pdp gallery pager limit.
+ */
+function alshaya_acm_product_update_8008() {
+  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product', 'install');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change cardinality for article_warning field to 1.
+ */
+function alshaya_acm_product_update_8007() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+  alshaya_acm_product_update_field_cardinality_from_unlimited_to_unique('attr_article_warning', 'article_warning');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Avoid rendering cross-sell by default.
  */
 function alshaya_acm_product_update_8006() {

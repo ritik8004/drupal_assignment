@@ -1106,6 +1106,7 @@ header {
   .back--link {
     @extend .menu__list-item;
 
+    font-family: $hnm-bold;
     padding: 1rem 0;
     padding-#{$right}: 0.25rem;
   }

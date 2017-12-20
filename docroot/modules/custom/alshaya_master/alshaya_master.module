@@ -480,7 +480,6 @@ function _alshaya_master_mobile_number_process(array &$element, FormStateInterfa
 
   // Make mobile number required only for few forms.
   $mobile_number_required_forms = [
-    'webform_submission_alshaya_contact_add_form',
     'profile_address_book_add_form',
     'profile_address_book_edit_form',
     'profile_address_book_form',
@@ -652,64 +651,4 @@ function alshaya_master_webform_submission_presave(EntityInterface $entity) {
   if ($value_changed) {
     $entity->setData($data);
   }
-}
-
-/**
- * Getter function to retrieve a Mobile_Detect() singleton.
- *
- * @return object
- *   Instance of Mobile_Detect(), NULL if failure.
- */
-function alshaya_master_mobile_detect_object() {
-  $mobile_detect = &drupal_static(__FUNCTION__);
-
-  if (!isset($mobile_detect)) {
-    if (class_exists('Mobile_Detect')) {
-      try {
-
-        // Detect platform from headers.
-        $request_headers = \Drupal::requestStack()->getCurrentRequest()->headers->all();
-        $request_ua = \Drupal::requestStack()->getCurrentRequest()->headers->get('HTTP_USER_AGENT');
-        $mobile_detect = new Mobile_Detect($request_headers, $request_ua);
-      }
-      catch (Exception $e) {
-        $mobile_detect = NULL;
-        \Drupal::logger('mobile_detect')->alert('Could not instantiate Mobile_Detect(): %message', ['%message' => $e->getMessage()]);
-      }
-    }
-    else {
-      $mobile_detect = NULL;
-      \Drupal::logger('mobile_detect')->alert('Mobile_Detect() class does not exist');
-    }
-  }
-
-  return $mobile_detect;
-}
-
-/**
- * Detect current device.
- *
- * @return string
- *   Return the current device type (mobile|desktop|tablet).
- */
-function alshaya_master_detect_device() {
-  $mobile_detect = alshaya_master_mobile_detect_object();
-
-  if ($mobile_detect->isMobile()) {
-    return 'mobile';
-  }
-  elseif ($mobile_detect->isTablet()) {
-    return 'tablet';
-  }
-  else {
-    return 'desktop';
-  }
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function alshaya_master_preprocess_html(&$variables) {
-  // Add settings variable for current device type.
-  $variables['#attached']['drupalSettings']['alshaya_master']['device'] = alshaya_master_detect_device();
 }

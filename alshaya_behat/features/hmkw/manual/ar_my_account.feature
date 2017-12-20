@@ -57,6 +57,7 @@ Feature: Test the My account section for authenticated user
     Then I should see the link "سياسية الاسترجاع اونلاين وفي المحلات"
     And I should see the link "معلومات التوصيل"
 
+  @loyalty
   Scenario: As an authenticated user
   I should be prompted to join the privilege club
   if I don't have a privilege account
@@ -76,6 +77,7 @@ Feature: Test the My account section for authenticated user
     Then I should see the link "مزيد من المعلومات"
     And I should not see "رقم بطاقة نادي الامتيازات"
 
+  @loyalty
   Scenario: As an authenticated user
   account details section should display Privilege card number
   along with Email address

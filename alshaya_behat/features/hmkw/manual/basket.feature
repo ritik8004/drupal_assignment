@@ -65,6 +65,7 @@ Feature: Test basket page
     And I wait 2 seconds
     Then I should see "Collect the order in store from 2-3 days"
 
+  @loyalty
   Scenario: As a Guest
     I should be warned about privelege card number mismatch
     When I go to "/cart"
@@ -81,7 +82,9 @@ Feature: Test basket page
   Scenario: As a Guest on arabic site
   I should be able to see the products added to basket
   and the header and footer
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "عربية"
     And I wait for the page to load
     Then I should be able to see the header in Arabic
     Then I should see the link for simple product in Arabic
@@ -117,7 +120,7 @@ Feature: Test basket page
     And I wait 2 seconds
     Then I should see "استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى 2-3 أيام"
 
-  @arabic
+  @arabic @loyalty
   Scenario: As a Guest
   I should be warned about privelege card number mismatch
     When I go to "/cart"

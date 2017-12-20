@@ -17,7 +17,7 @@ Feature: Test privilege card features for Guest
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
@@ -31,7 +31,7 @@ Feature: Test privilege card features for Guest
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should not see text matching "Your PRIVILEGES CLUB card number is:"
     Then I should see "Join the club"
     And I should see "Win exciting prizes"
@@ -58,7 +58,7 @@ Feature: Test privilege card features for Guest
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
@@ -72,7 +72,7 @@ Feature: Test privilege card features for Guest
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     Then I should see text matching "Your PRIVILEGES CLUB card number is: 6362 - 5440 - 1511 - 8942"
 
   @arabic
@@ -92,7 +92,7 @@ Feature: Test privilege card features for Guest
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
@@ -107,7 +107,7 @@ Feature: Test privilege card features for Guest
     And I accept terms and conditions
     When I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should not see text matching "رقم بطاقة نادي الامتيازات:"
     Then I should see "نادي الامتيازات"
     And I should see "اربح جوائز مدهشة"
@@ -135,7 +135,7 @@ Feature: Test privilege card features for Guest
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
@@ -150,5 +150,5 @@ Feature: Test privilege card features for Guest
     And I accept terms and conditions
     When I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Shweta Sharma"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see text matching " رقم بطاقة نادي الامتيازات: 6362 - 5440 - 1511 - 8942"

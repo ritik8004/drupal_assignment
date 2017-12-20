@@ -341,9 +341,9 @@
     }
 
     .light {
-      font-family: $alshaya-bold;
+      font-family: $hnm-regular;
       font-weight: normal;
-      color: $black;
+      color: $hnm-black-two;
       line-height: 1.5;
     }
 
@@ -355,7 +355,7 @@
   h3 {
     @include arabic-letter-spacing;
 
-    font-family: $hnm-bold;
+    font-family: $hnm-regular;
     font-weight: normal;
     color: $white-five;
     font-size: 0.75rem;
