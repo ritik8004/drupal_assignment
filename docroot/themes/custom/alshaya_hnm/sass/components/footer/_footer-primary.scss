@@ -396,18 +396,18 @@
 
   .form-type-email {
     margin-bottom: 0;
-    width: calc(100% - 5.7rem);
+    width: calc(100% - 5.55rem);
     float: $left;
 
     html[lang=ar] & {
-      width: calc(100% - 5.55rem);
+      width: calc(100% - 5.23rem);
     }
 
     @include breakpoint($upto-desktop) {
-      width: calc(100% - 5.45rem);
+      width: calc(100% - 5.3rem);
 
       html[lang=ar] & {
-        width: calc(100% - 5.3rem);
+        width: calc(100% - 5.05rem);
       }
     }
 
@@ -467,7 +467,7 @@
 
     @include arabic-letter-spacing;
 
-    font-family: $hnm-bold;
+    font-family: $hnm-regular;
     background: $white-five;
     color: $hnm-black-two;
     position: absolute;
