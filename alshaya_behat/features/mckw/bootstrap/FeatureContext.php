@@ -95,9 +95,6 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   {
     $this->visitPath($this->config_url);
     $this->iWaitForThePageToLoad();
-    $this->getSession()->getPage()->clickLink($this->config_variant);
-    $this->getSession()
-      ->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
   }
 
   /**
@@ -489,7 +486,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function iSelectAProductInStock()
   {
     $page = $this->getSession()->getPage();
-    $all_products = $page->findById('block-content');
+    $all_products = $page->findById('block-views-block-alshaya-product-list-block-1');
     if ($all_products !== NULL) {
       $all_products = $all_products->findAll('css', '.c-products__item');
       $total_products = count($all_products);
@@ -510,6 +507,21 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       break;
     }
   }
+
+    /**
+     * @When /^I select address$/
+     */
+    public function iSelectAddress()
+    {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('deliver to this address')->isVisible();
+        if($address_button == true){
+            $page->findLink('deliver to this address')->click();
+        }
+        else{
+            echo 'Address is auto selected';
+        }
+    }
 
   /**
    * @Given /^I select a size for the product$/
@@ -554,6 +566,29 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     }
     return FALSE;
   }
+
+    /**
+     * @When /^I select a store$/
+     */
+    public function iSelectAStore()
+    {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('change store');
+        if ($address_button !== null && $address_button->isVisible()) {
+            $this->iSelectAnElementHavingClass('.cc-action');
+        } else {
+            $this->iSelectFirstAutocomplete('Shuwaikh', 'edit-store-location');
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iWaitSeconds('5');
+            $select_store = $page->findLink('select this store');
+            if ($select_store->isVisible()) {
+                $select_store->click();
+            }
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iSelectAnElementHavingClass('.cc-action');
+            $this->iWaitForThePageToLoad();
+        }
+    }
 
   /**
    * @Given /^I select a payment option "([^"]*)"$/
@@ -1082,15 +1117,15 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iShouldSeeAllOrders($arg1)
   {
-    $page = $this->getSession()->getPage();
-    $all_orders = $page->findAll('css', '.order-item');
-    foreach ($all_orders as $order) {
-      $title = $order->find('css', 'a div.second-third.wrapper > div.second > div.dark.order-name')
-        ->getText();
-      if (stripos($title, $arg1) == false) {
-        throw new \Exception('Filter by name is not working on Orders tab in my account section');
+      $page = $this->getSession()->getPage();
+      $all_orders = $page->findAll('css', '.order-item');
+      foreach ($all_orders as $order) {
+          $title = $order->find('css', 'a div.second-third.wrapper > div.second > div.dark.order-name')
+              ->getText();
+          if (stripos($title, $arg1) == false) {
+              throw new Exception('Filter by name is not working on Orders tab in my account section');
+          }
       }
-    }
   }
 
   /**
@@ -1306,21 +1341,6 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   }
 
   /**
-   * @Given /^it should display size$/
-   */
-  public function itShouldDisplaySizeAndQuantity()
-  {
-    $page = $this->getSession()->getPage();
-    $eng_size = $page->find('css', '#configurable_ajax > div > div.select2Option > h4.list-title')
-      ->find('named', array('content', 'Size : '));
-    $arb_size = $page->find('css', '#configurable_ajax > div > div.select2Option > h4.list-title')
-      ->find('named', array('content', 'المقاس :'));
-    if (!($eng_size or $arb_size)) {
-      throw new \Exception('Size is not displayed on PDP');
-    }
-  }
-
-  /**
    * @Then /^I should see buttons for facebook, Twitter and Pinterest$/
    */
   public function iShouldSeeButtonsForFacebookTwitterAndPinterest()
@@ -1337,21 +1357,6 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $pinterest = $page->find('css', '.st_pinterest_custom');
     if (null == $pinterest) {
       throw new \Exception('Pinterest button not displayed on PDP');
-    }
-  }
-
-  /**
-   * @Then /^it should display quantity$/
-   */
-  public function itShouldDisplayQuantity()
-  {
-    $page = $this->getSession()->getPage();
-    $eng_quantity = $page->find('css', '.form-item-quantity > .js-form-required.form-required ')
-      ->find('named', array('content', 'quantity'));
-    $arb_quantity = $page->find('css', '.form-item-quantity > .js-form-required.form-required ')
-      ->find('named', array('content', 'الكمية'));
-    if (!($eng_quantity or $arb_quantity)) {
-      throw new \Exception('Quantity is not displayed on PDP');
     }
   }
 
@@ -1674,4 +1679,17 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     }
   }
 
+    /**
+     * @When /^I click "([^"]*)" "([^"]*)" in the region "([^"]*)"$/
+     */
+    public function iClickInTheRegion($element, $type, $region)
+    {
+        $page = $this->getSession()->getPage();
+        $region = $page->find('css', $region);
+        if ($region !== null) {
+            $region->find('named', array($type, $element))->click();
+        } else {
+            throw new Exception('Breadcrumbs not displayed');
+        }
+    }
 }

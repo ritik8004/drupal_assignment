@@ -2,12 +2,14 @@
 Feature: Test basket page
 
   Background:
-    Given I am on a simple product page
-    And I wait for the page to load
-    When I press "Add to basket"
-    And I wait for AJAX to finish
+#    Given I am on a simple product page
+#    And I wait for the page to load
+#    When I press "Add to basket"
+#    And I wait for AJAX to finish
     When I am on a configurable product
     And I wait for the page to load
+    When I select a size for the product
+    And I wait for AJAX to finish
     When I press "Add to basket"
     And I wait for AJAX to finish
 
@@ -16,7 +18,7 @@ Feature: Test basket page
     and the header and footer
     When I go to "/cart"
     And I wait for the page to load
-    Then I should see the link for simple product
+#    Then I should see the link for simple product
     Then I should be able to see the header
     And I should see the link for configurable product
     Then I should see the button "checkout securely"
@@ -29,7 +31,7 @@ Feature: Test basket page
     Then I should see "Order Total"
     And I should see "(Before Delivery)"
     Then I should see the link "continue shopping" in ".edit-actions.form-actions.js-form-wrapper.form-wrapper" section
-    And I should see "Add a promo code"
+    And I should see "Add a promotional code"
     And I should be able to see the footer
     When I click the label for "#edit-continue-shopping-mobile"
     And I wait for the page to load
@@ -59,29 +61,33 @@ Feature: Test basket page
     And I wait 2 seconds
     Then I should see "Collect the order in store within 2-3 days"
 
-#  Scenario: As a Guest
-#    I should be warned about privelege card number mismatch
-#    When I go to "/cart"
-#    And I wait for the page to load
-#    When I click the label for "#details-privilege-card-wrapper > div"
-#    Then I should see "Earn one draw entry for every KD 5 spent online"
-#    When I fill in "privilege_card_number" with "0-0013-5844"
-#    And I wait for AJAX to finish
-#    And I fill in "privilege_card_number2" with "0-0013-5845"
-#    And I wait for AJAX to finish
-#    Then I should see "Specified PRIVILEGES CLUB card numbers do not match."
+
+  @loyalty
+  Scenario: As a Guest
+    I should be warned about privelege card number mismatch
+    When I go to "/cart"
+    And I wait for the page to load
+    When I click the label for "#details-privilege-card-wrapper > div"
+    Then I should see "Earn one draw entry for every KD 5 spent online"
+    When I fill in "privilege_card_number" with "0-0013-5844"
+    And I wait for AJAX to finish
+    And I fill in "privilege_card_number2" with "0-0013-5845"
+    And I wait for AJAX to finish
+    Then I should see "Specified PRIVILEGES CLUB card numbers do not match."
 
   @arabic
   Scenario: As a Guest on arabic site
   I should be able to see the products added to basket
   and the header and footer
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "العربية"
     And I wait for the page to load
     Then I should be able to see the header in Arabic
-    Then I should see the link for simple product in Arabic
+#    Then I should see the link for simple product in Arabic
     And I should see the link for configurable product in Arabic
     Then I should see the button "إتمام الشراء بأمان"
-    And I should see "حقيبة التسوق ("
+    And I should see "سلة التسوق ("
     Then I should see "المنتج"
     And I should see "الكمية"
     Then I should see "سعر القطعة"
@@ -100,14 +106,16 @@ Feature: Test basket page
   Scenario: As a Guest on arabic site
   I should be able to see tooltips
   for both Home Deliver and Click and Collect
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "العربية"
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see "خدمة التوصيل للمنازل خلال 2 أيام للطلبيات التي تزيد عن 35 د.ك."
+    Then I should see "خدمة التوصيل للمنازل خلال 2-5 أيام فقط بـ 1 دينار"
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
-    Then I should see "استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى 2-3 أيام"
+    Then I should see "إستلم طلبيتك من المحل خلال 2-3 أيام"
 
 #  @arabic
 #  Scenario: As a Guest
