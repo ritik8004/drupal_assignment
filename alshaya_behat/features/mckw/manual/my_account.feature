@@ -6,7 +6,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    When I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
+    When I am logged in as an authenticated user "Test+4@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
 
   Scenario:
@@ -95,7 +95,7 @@ Feature: Test the My account section for authenticated user
 #    Then I should see "Contact details changes have been saved."
 #    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
 #    And I wait for the page to load
-#    Then I should see "shweta+3@axelerant.com"
+#    Then I should see "Test+3@axelerant.com"
 #    Then I should see "6362 - 5440 - 0013 - 5844"
 #    But I should not see "Join the club"
 #    And I should not see "Win exciting prizes"
@@ -149,14 +149,14 @@ Feature: Test the My account section for authenticated user
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
     And I wait for the page to load
     When I fill in "edit-field-first-name-0-value" with "Aadya"
-    When I fill in "edit-field-last-name-0-value" with "Sharma"
+    When I fill in "edit-field-last-name-0-value" with "Test"
     When I fill in "edit-field-mobile-number-0-mobile" with ""
     And I press "Save"
     And I wait for the page to load
     Then I should see "Aadya"
-    And I should not see "Shweta"
-    Then I fill in "edit-field-first-name-0-value" with "Shweta"
-    And I fill in "edit-field-last-name-0-value" with "Sharma"
+    And I should not see "Test"
+    Then I fill in "edit-field-first-name-0-value" with "Test"
+    And I fill in "edit-field-last-name-0-value" with "Test"
     And I press "Save"
     
   Scenario: As an authenticated user
@@ -167,9 +167,9 @@ Feature: Test the My account section for authenticated user
     Then I get the total count of address blocks
     When I follow "Add new Address"
     And I wait for AJAX to finish
-    When I fill in "field_address[0][address][given_name]" with "Shweta"
-    And I fill in "field_address[0][address][family_name]" with "Sharma"
-    When I fill in "field_address[0][address][mobile_number][mobile]" with "97004455"
+    When I fill in "field_address[0][address][given_name]" with "Test"
+    And I fill in "field_address[0][address][family_name]" with "Test"
+    When I fill in "field_address[0][address][mobile_number][mobile]" with "55004455"
     When I select "Abbasiya" from "field_address[0][address][administrative_area]"
     When I fill in "field_address[0][address][locality]" with "Block A"
     When I fill in "field_address[0][address][address_line1]" with "Street B"

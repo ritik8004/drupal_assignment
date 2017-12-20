@@ -2,10 +2,13 @@
 
 namespace Drupal\alshaya_stores_finder;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 
 /**
  * Class StoresFinderUtility.
@@ -27,18 +30,28 @@ class StoresFinderUtility {
   protected $languageManager;
 
   /**
+   * The database connection object.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * Constructs a new StoresFinderUtility object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, Connection $database, LoggerChannelFactoryInterface $logger_factory) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
+    $this->database = $database;
     $this->logger = $logger_factory->get('alshaya_stores_finder');
   }
 
@@ -144,14 +157,20 @@ class StoresFinderUtility {
    *   Language code.
    */
   public function updateStore(array $store, $langcode) {
+    static $user;
+
+    if (empty($user)) {
+      $user = user_load_by_name(Settings::get('alshaya_acm_user_username'));
+    }
+
     if ($node = $this->getStoreFromCode($store['store_code'], FALSE)) {
       if ($node->hasTranslation($langcode)) {
         $node = $node->getTranslation($langcode);
-        $this->logger->info('Updating store @store_code and @langcode', ['@store_code' => $store['store_code'], '@langcode' => $store['langcode']]);
+        $this->logger->info('Updating store @store_code and @langcode', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
       }
       else {
         $node = $node->addTranslation($langcode);
-        $this->logger->info('Adding @langcode translation for store @store_code', ['@store_code' => $store['store_code'], '@langcode' => $store['langcode']]);
+        $this->logger->info('Adding @langcode translation for store @store_code', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
       }
     }
     else {
@@ -163,7 +182,7 @@ class StoresFinderUtility {
 
       $node->get('field_store_locator_id')->setValue($store['store_code']);
 
-      $this->logger->info('Creating store @store_code in @langcode', ['@store_code' => $store['store_code'], '@langcode' => $store['langcode']]);
+      $this->logger->info('Creating store @store_code in @langcode', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
     }
 
     if (!empty($store['store_name'])) {
@@ -207,7 +226,63 @@ class StoresFinderUtility {
     // Set the status.
     $node->setPublished((bool) $store['status']);
 
+    // Set node owner to acm user.
+    $node->setOwner($user);
+
     $node->save();
+  }
+
+  /**
+   * Delete stores with given node ids.
+   *
+   * @param array $nids
+   *   Array of $nids of store bundle.
+   */
+  public function deleteStores(array $nids = []) {
+    // If nothing, no need to process.
+    if (empty($nids)) {
+      return;
+    }
+
+    $nodes = Node::loadMultiple($nids);
+    if (!empty($nodes)) {
+      /* @var \Drupal\node\Entity\Node $node */
+      foreach ($nodes as $node) {
+        try {
+          // Delete the node.
+          $node->delete();
+        }
+        catch (\Exception $e) {
+          // If something goes wrong.
+          $this->logger->error('Unable to delete the @bundle node with id @nid', ['@bundle' => $node->bundle(), '@nid' => $node->id()]);
+        }
+      }
+    }
+  }
+
+  /**
+   * Get orphan store nodes from store locator ids.
+   *
+   * @param array $store_locator_ids
+   *   Store locator ids.
+   *
+   * @return array
+   *   Orphan store node ids.
+   */
+  public function getOrphanStores(array $store_locator_ids = []) {
+    // If nothing, no need to process.
+    if (empty($store_locator_ids)) {
+      return [];
+    }
+
+    // Get store nids not having given locator ids.
+    $store_nids = $this->database->select('node__field_store_locator_id', 'n')
+      ->fields('n', ['entity_id'])
+      ->condition('n.bundle', 'store')
+      ->condition('n.field_store_locator_id_value', $store_locator_ids, 'NOT IN')
+      ->execute()->fetchCol();
+
+    return $store_nids;
   }
 
 }

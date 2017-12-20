@@ -2,7 +2,7 @@
 Feature: Test the PLP page
 
   Background:
-    Given I am on "/hm-home/shop-concept/test"
+    Given I am on "/men/shirts"
     And I wait for the page to load
 
   @eng
@@ -135,5 +135,5 @@ Feature: Test the PLP page
     And I accept terms and conditions
     When I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see "رقم طلبيتك هو"

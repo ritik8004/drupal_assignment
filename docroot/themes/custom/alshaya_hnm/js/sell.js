@@ -11,7 +11,7 @@
   Drupal.behaviors.sell = {
     attach: function (context, settings) {
 
-      var crossSell = $('.horizontal-crossell .owl-carousel');
+      var crossSell = $('.horizontal-related .owl-carousel');
       var upSell = $('.horizontal-upell .owl-carousel');
       var basketHR = $('.block-basket-horizontal-recommendation .owl-carousel');
 

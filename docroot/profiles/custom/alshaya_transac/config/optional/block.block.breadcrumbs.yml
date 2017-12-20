@@ -4,9 +4,9 @@ dependencies:
   module:
     - system
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: breadcrumbs
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: breadcrumb
 weight: -26
 provider: null

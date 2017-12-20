@@ -52,3 +52,27 @@ function _alshaya_contact_alshaya_contact_form_validate(&$form, FormStateInterfa
     }
   }
 }
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_contact_element_info_alter(array &$info) {
+  if (isset($info['mobile_number']['#process'])) {
+    $info['mobile_number']['#process'][] = '_alshaya_contact_mobile_number_process';
+  }
+}
+
+/**
+ * Processor for the mobile number field to disable the country code.
+ */
+function _alshaya_contact_mobile_number_process(array &$element, FormStateInterface $form_state) {
+  if ($form_state->getBuildInfo()['form_id'] == 'webform_submission_alshaya_contact_add_form') {
+    $element['mobile']['#required'] = FALSE;
+    $element['mobile']['#states'] = [
+      'required' => [
+        ['input[name="select_your_preference_of_channel_of_communication"]' => ['value' => 'Mobile']],
+      ],
+    ];
+  }
+  return $element;
+}

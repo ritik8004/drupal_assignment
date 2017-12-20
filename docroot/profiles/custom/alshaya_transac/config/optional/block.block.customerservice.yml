@@ -5,9 +5,9 @@ dependencies:
     - alshaya_acm_checkout
     - system
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: customerservice
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: post_content
 weight: 1
 provider: null

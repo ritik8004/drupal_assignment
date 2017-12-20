@@ -113,18 +113,18 @@ class CheckoutHelper {
       $this->ordersManager->clearOrderCache($email, $current_user_id);
       $this->ordersManager->clearLastOrderRelatedProductsCache();
 
-      // Clear the cart in session.
-      $this->cartStorage->clearCart();
-
       // Add success message in logs.
       $this->logger->info('Placed order. Cart: @cart.', [
-        '@cart' => json_encode($cart),
+        '@cart' => json_encode($cart->getCart()),
       ]);
+
+      // Clear the cart in session.
+      $this->cartStorage->clearCart();
     }
     catch (\Exception $e) {
       // Add message in logs.
       $this->logger->critical('Error occurred while placing order. Cart: @cart. Exception: @message', [
-        '@cart' => json_encode($cart),
+        '@cart' => json_encode($cart->getCart()),
         '@message' => $e->getMessage(),
       ]);
 

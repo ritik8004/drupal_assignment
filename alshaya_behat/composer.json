@@ -9,7 +9,8 @@
     "drupal/drupal-extension": "3.0.*",
     "drupal/drupal-driver": "*",
     "jakoch/phantomjs-installer": "*",
-    "se/selenium-server-standalone": "3.4.0"
+    "se/selenium-server-standalone": "3.4.0",
+    "emuse/behat-html-formatter": "^0.1.0"
   },
   "config": {
     "bin-dir": "bin"

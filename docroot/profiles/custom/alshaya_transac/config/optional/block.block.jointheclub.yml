@@ -4,9 +4,9 @@ dependencies:
   module:
     - system
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: jointheclub
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: sidebar_second
 weight: -11
 provider: null

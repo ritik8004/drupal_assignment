@@ -8,6 +8,7 @@
 
   .ar {
     font-family: $ge-dinar-one;
+    font-size: 0.75rem;
   }
 
   li {
@@ -45,4 +46,8 @@
       }
     }
   }
+}
+
+.device__tablet .menu-language-switcher--desktop {
+  display: none;
 }

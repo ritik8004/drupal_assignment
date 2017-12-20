@@ -11,10 +11,19 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_performance on all sites on all environments.
+ */
+function alshaya_update_8002() {
+  \Drupal::service('module_installer')->install(['alshaya_performance']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable acquia_purge on ACSF environments.
  */
 function alshaya_update_8001() {
-  if (isset($_ENV['AH_SITE_NAME'])) {
+  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     \Drupal::service('module_installer')->install(['acquia_purge']);
 
     // Enable acquia_purge purger.
@@ -94,18 +103,6 @@ function alshaya_install() {
     $_alshaya_modules_installed[] = $module;
   }
 
-  if (isset($_ENV['AH_SITE_NAME'])) {
-    // Enable acquia_purge on ACSF environments.
-    \Drupal::service('module_installer')->install(['acquia_purge']);
-
-    // Enable acquia_purge purger.
-    /** @var \Drupal\purge\Plugin\Purge\Purger\PurgersServiceInterface $purge_purgers */
-    $purge_purgers = \Drupal::service('purge.purgers');
-    $purgers_enabled = $purge_purgers->getPluginsEnabled();
-    $purgers_enabled[$purge_purgers->createId()] = 'acquia_purge';
-    $purge_purgers->setPluginsEnabled($purgers_enabled);
-  }
-
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya', $modules]);
 }
 
@@ -128,13 +125,24 @@ function alshaya_final_common_install_task($profile) {
   // Get the modules to be enabled for this env.
   $additional_modules = Settings::get('additional_modules');
 
-  // Enable shield on ACSF Environments.
-  if (isset($_ENV['AH_SITE_NAME'])) {
+  // Additional modules which are to be enabled are to be done here
+  // as it cant be done in the hook_install.
+  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     $additional_modules[] = 'shield';
+    $additional_modules[] = 'acquia_purge';
   }
 
   foreach ($additional_modules as $module) {
     \Drupal::service('module_installer')->install([$module]);
+  }
+
+  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+    // Enable acquia_purge purger.
+    /** @var \Drupal\purge\Plugin\Purge\Purger\PurgersServiceInterface $purge_purgers */
+    $purge_purgers = \Drupal::service('purge.purgers');
+    $purgers_enabled = $purge_purgers->getPluginsEnabled();
+    $purgers_enabled[$purge_purgers->createId()] = 'acquia_purge';
+    $purge_purgers->setPluginsEnabled($purgers_enabled);
   }
 
   if (\Drupal::moduleHandler()->moduleExists('shield')) {

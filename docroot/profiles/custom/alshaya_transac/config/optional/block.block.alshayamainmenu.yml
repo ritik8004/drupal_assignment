@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_main_menu
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: alshayamainmenu
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: pre_content
 weight: -20
 provider: null
