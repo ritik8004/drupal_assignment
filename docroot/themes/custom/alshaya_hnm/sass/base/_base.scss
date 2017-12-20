@@ -1,6 +1,5 @@
 html {
   box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
 }
 
 *,
@@ -20,4 +19,13 @@ body {
 
 html[lang='ar'] {
   line-height: 1;
+}
+
+html,
+button,
+input,
+select,
+textarea {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
