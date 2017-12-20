@@ -9,6 +9,25 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Implement hook_update_N().
+ *
+ * Disable Brand facets.
+ */
+function alshaya_hm_update_8008() {
+  $block_brand_facets = [
+    'block.block.brand',
+    'block.block.promotionbrandfacet',
+    'block.block.skusskureferencebrand',
+  ];
+
+  foreach ($block_brand_facets as $block_brand_facet) {
+    // Re-save config for the overrides to take effect.
+    \Drupal::configFactory()->getEditable($block_brand_facet)
+      ->save();
+  }
+}
+
+/**
  * Implements hook_update().
  *
  * Set visiblity rule for customerservice block.
