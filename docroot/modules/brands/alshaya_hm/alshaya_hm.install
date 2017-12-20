@@ -9,6 +9,16 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Hook update to enable alshaya mothercare theme.
+ */
+function alshaya_hm_update_8008() {
+  \Drupal::service('theme_handler')->install(['alshaya_white_label'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
+  \Drupal::service('theme_handler')->uninstall(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
+}
+/**
  * Implements hook_update().
  *
  * Set visiblity rule for customerservice block.
