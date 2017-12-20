@@ -408,6 +408,10 @@
   @include breakpoint($tablet) {
     display: none;
   }
+
+  .sell-promotions {
+    display: none;
+  }
 }
 
 .has--special--price {
