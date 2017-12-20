@@ -141,7 +141,7 @@
 
       a {
         font-size: 0.75rem;
-        color: $scarlet-two;
+        color: $cherry;
         display: inline-block;
         margin-#{$left}: 0.125rem;
         margin-#{$right}: 0.125rem;
@@ -438,13 +438,13 @@
 .special--price .price-amount,
 .special--price .price-currency,
 .special--price .price-wrapper {
-  color: $scarlet-two !important;
+  color: $cherry !important;
 }
 
 .price--discount {
   margin-top: 0;
   font-size: 0.625rem;
-  color: $scarlet-two;
+  color: $cherry;
 
   @include breakpoint($tablet) {
     margin-top: 0.75rem;
