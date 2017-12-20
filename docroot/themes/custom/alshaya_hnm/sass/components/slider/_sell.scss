@@ -141,7 +141,7 @@
 
       a {
         font-size: 0.75rem;
-        color: $cherry;
+        color: $scarlet-two;
         display: inline-block;
         margin-#{$left}: 0.125rem;
         margin-#{$right}: 0.125rem;
@@ -408,6 +408,10 @@
   @include breakpoint($tablet) {
     display: none;
   }
+
+  .sell-promotions {
+    display: none;
+  }
 }
 
 .has--special--price {
@@ -434,13 +438,13 @@
 .special--price .price-amount,
 .special--price .price-currency,
 .special--price .price-wrapper {
-  color: $cherry !important;
+  color: $scarlet-two !important;
 }
 
 .price--discount {
   margin-top: 0;
   font-size: 0.625rem;
-  color: $cherry;
+  color: $scarlet-two;
 
   @include breakpoint($tablet) {
     margin-top: 0.75rem;
