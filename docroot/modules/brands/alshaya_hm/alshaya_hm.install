@@ -11,17 +11,6 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update().
  *
- * Set default config for the tax info show.
- */
-function alshaya_hm_update_8008() {
-  // This will save override added in /config/override/alshaya_acm_checkout.settings.
-  \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings')
-    ->save();
-}
-
-/**
- * Implements hook_update().
- *
  * Set visiblity rule for customerservice block.
  */
 function alshaya_hm_update_8007() {
