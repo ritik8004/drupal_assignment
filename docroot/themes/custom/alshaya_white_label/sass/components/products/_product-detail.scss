@@ -1851,3 +1851,17 @@ html[lang=ar] {
     }
   }
 }
+
+.is-filter .apply-fake {
+  max-height: 1.9375rem !important;
+
+  .fake-apply-button.active {
+    width: 4.7rem !important;
+    text-align: center;
+    padding-#{$left}: 0;
+    padding-#{$right}: 0;
+    border-radius: 0 !important;
+    font-size: 0.75rem !important;
+  }
+}
+
