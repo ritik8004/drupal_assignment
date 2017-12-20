@@ -135,13 +135,20 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
  * Implements hook_acq_sku_pdp_gallery_media_alter().
  */
 function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb_images, $sku) {
-  if (empty($main_image)) {
+  if (empty($main_image) && ($sku instanceof SKU)) {
     /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
     $color = \Drupal::request()->query->get('color');
 
+    // If we have color attribute available from query params & the SKU being
+    // rendered is configurable, lookup for a simple SKU with that color.
+    // Fallback for the same in case of not a valid color is the first
+    // child sku.
     if (($color) && ($sku->bundle() === 'configurable')) {
-      $sku = $sku_assets_manager->getChildSkuFromColor($sku, $color);
+      $parent_sku = $sku;
+      if (!($sku = $sku_assets_manager->getChildSkuFromColor($sku, $color)) instanceof SKU) {
+        $sku = \Drupal::service('alshaya_acm_product.skumanager')->getChildSkus($parent_sku, TRUE);
+      }
     }
 
     $thumb_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_thumbnail');
