@@ -2,7 +2,7 @@
 .button-wide {
   background-color: $hnm-black-two;
   color: $white-five;
-  font-family: $hnm-regular;
+  font-family: $hnm-bold;
   text-transform: uppercase;
   display: inline-block;
   font-size: 12px;
@@ -13,15 +13,11 @@
 
 %button-brand,
 .brand-button {
-  @include arabic-letter-spacing;
-
-  border: 2px solid $hnm-black-two;
-  color: $hnm-black-two;
-  font-size: 0.875rem;
+  border: 1px solid $marine-blue-two;
+  color: $marine-blue-two;
+  font-size: 12px;
   font-weight: bold;
   padding: 10px 20px 9px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
 }
 
 .button {
@@ -30,7 +26,7 @@
   &.status-complete,
   &.status-processing,
   &.status-returned {
-    font-family: $hnm-regular;
+    font-family: $hnm-bold;
     font-size: 0.625rem;
     font-weight: normal;
     text-transform: uppercase;
