@@ -21,7 +21,7 @@
             else {
               // Close the menu if it is open.
               if ($('.filter--mobile .c-facet__blocks').is(':visible')) {
-                $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
+                $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu, .c-footer')
                   .toggleClass('show-overlay');
                 $('.filter--mobile .c-facet__blocks').toggle();
                 $('body').toggleClass('filter-open-no-scroll');
@@ -258,7 +258,7 @@
           }
 
           facetLabel.on('click', function () {
-            $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
+            $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu, .c-footer')
               .toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
             $('body').toggleClass('filter-open-no-scroll');
