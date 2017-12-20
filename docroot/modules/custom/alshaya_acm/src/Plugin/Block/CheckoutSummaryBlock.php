@@ -252,7 +252,11 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $totals['subtotal'] = alshaya_acm_price_format($cart_totals['sub']);
 
     // Tax.
-    $totals['tax'] = (float) $cart_totals['tax'] > 0 ? alshaya_acm_price_format($cart_totals['tax']) : NULL;
+    $tax_config = \Drupal::config('alshaya_acm_checkout.settings')->get('checkout_show_tax_info');
+    // Show tax info only if set to true.
+    if ($tax_config) {
+      $totals['tax'] = (float) $cart_totals['tax'] > 0 ? alshaya_acm_price_format($cart_totals['tax']) : NULL;
+    }
 
     // Discount.
     $totals['discount'] = ((float) ($cart_totals['discount'])) != 0 ? alshaya_acm_price_format($cart_totals['discount']) : NULL;

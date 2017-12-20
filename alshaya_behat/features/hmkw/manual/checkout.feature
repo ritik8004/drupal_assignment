@@ -217,7 +217,6 @@ Feature: Test Checkout feature
     Then I should see "Monday"
     And I should see "Tuesday"
     When I click the label for ".hours--label.open"
-    Then I should not see "Monday"
     And I should not see "Tuesday"
 
   @hd @cs

@@ -13,7 +13,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Disable Brand facets.
  */
-function alshaya_hm_update_8008() {
+function alshaya_hm_update_8009() {
   $block_brand_facets = [
     'block.block.brand',
     'block.block.promotionbrandfacet',
@@ -25,6 +25,17 @@ function alshaya_hm_update_8008() {
     \Drupal::configFactory()->getEditable($block_brand_facet)
       ->save();
   }
+}
+
+/**
+ * Hook update to enable alshaya_white_label theme.
+ */
+function alshaya_hm_update_8008() {
+  \Drupal::service('theme_handler')->install(['alshaya_white_label'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
+  \Drupal::service('theme_handler')->uninstall(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
 }
 
 /**

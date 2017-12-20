@@ -113,3 +113,15 @@
     border: none;
   }
 }
+
+.path--user {
+  &.header--fixed {
+    &.modal-overlay::before {
+      z-index: 1000;
+    }
+
+    .ui-dialog {
+      z-index: 1001;
+    }
+  }
+}
