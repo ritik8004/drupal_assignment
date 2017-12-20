@@ -342,8 +342,14 @@
             var facet_id = blockPlugin.replace('facet_block:', '');
             var softLimitSettings = settings.facets.softLimit;
             var softItemsLimit = softLimitSettings[facet_id] - 1;
-            $(this).find('ul li:gt(' + softItemsLimit + ')').hide();
-            softLink.insertAfter($(this).find('ul'));
+            if (!isNaN(parseInt(softItemsLimit))) {
+              // Facets module would hide all instances of list items in the
+              // second instance of the facet block. This is to support same
+              // facet block twice on a page.
+              $(this).find('ul li:lt(' + (parseInt(softItemsLimit) + 1) + ')').show();
+              $(this).find('ul li:gt(' + parseInt(softItemsLimit) + ')').hide();
+              softLink.insertAfter($(this).find('ul'));
+            }
           });
 
           // Function defined in mobile and called here.
