@@ -2058,3 +2058,14 @@ html[lang=ar] {
   }
 }
 
+.pdp-modal-overlay {
+  .ui-dialog {
+    #drupal-modal {
+      overflow-y: auto !important;
+
+      .content__main {
+        min-height: 31.25rem;
+      }
+    }
+  }
+}
