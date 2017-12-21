@@ -281,6 +281,14 @@ class KnetController extends ControllerBase {
         $this->checkoutHelper->placeOrder($cart);
       }
 
+      // Preserve the payment id in a state variable to render it on Order
+      // Confirmation page.
+      \Drupal::state()->set('knet:' . md5($cart->getExtension('real_reserved_order_id')), [
+        'payment_id' => $data['payment_id'],
+        'transaction_id' => $data['transaction_id'],
+        'result_code' => $data['result'],
+      ]);
+
       // Delete the data from DB (state).
       \Drupal::state()->delete($state_key);
     }
@@ -325,8 +333,22 @@ class KnetController extends ControllerBase {
       '@message' => $message,
     ]);
 
+    // Get state data from cart & order id. Use same logic used for generating
+    // the state key while initiating the knet payment.
+    $state_data = [
+      'cart_id' => $cart->id(),
+      'order_id' => $cart->getExtension('real_reserved_order_id'),
+    ];
+
+    $state_key = md5(json_encode($state_data));
+    $data = \Drupal::state()->get($state_key);
+
     // @TODO: Confirm message.
-    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.'), 'error');
+    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
+      '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : $quote_id,
+      '@payment_id' => $data['payment_id'],
+      '@result_code' => $data['result'],
+    ]), 'error');
 
     return $this->redirect('acq_checkout.form', ['step' => 'payment']);
   }
@@ -359,7 +381,11 @@ class KnetController extends ControllerBase {
     // Delete the data from DB.
     \Drupal::state()->delete($state_key);
 
-    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'), 'error');
+    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
+      '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : $data['quote_id'],
+      '@payment_id' => $data['payment_id'],
+      '@result_code' => $data['result'],
+    ]), 'error');
 
     return $this->redirect('acq_checkout.form', ['step' => 'payment']);
   }
