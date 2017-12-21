@@ -193,14 +193,13 @@ function alshaya_department_page_language_switch_links_alter(array &$links, $typ
  *   Department page node id or false.
  */
 function alshaya_department_page_is_department_page($tid) {
-  $cid = DEPARTMENT_PAGE_TERM_CACHE_ID;
   $data = [];
   // Check for cache first.
-  if ($cache = \Drupal::cache('data')->get($cid)) {
+  if ($cache = \Drupal::cache('data')->get(DEPARTMENT_PAGE_TERM_CACHE_ID)) {
     $data = $cache->data;
     // If cache hit.
-    if (!empty($cache->data[$tid])) {
-      return $cache->data[$tid];
+    if (!empty($data[$tid])) {
+      return $data[$tid];
     }
   }
 
@@ -213,7 +212,7 @@ function alshaya_department_page_is_department_page($tid) {
     if ($node = Node::load($nid)) {
       if ($node->isPublished()) {
         $data[$tid] = $nid;
-        \Drupal::cache('data')->set($cid, $data, Cache::PERMANENT, ['node_type:department_page']);
+        \Drupal::cache('data')->set(DEPARTMENT_PAGE_TERM_CACHE_ID, $data, Cache::PERMANENT, ['node_type:department_page']);
         return $nid;
       }
     }
