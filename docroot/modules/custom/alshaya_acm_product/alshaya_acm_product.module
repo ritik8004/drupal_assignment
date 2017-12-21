@@ -832,15 +832,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $selected_configs = $form_state->getUserInput()['configurables'];
       }
 
-      // Sort selected configs in order of the weights configured to lookup
-      // variations correctly based on selection.
-      uksort($selected_configs, function ($a, $b) use ($configurable_weights) {
-        return $configurable_weights[$a] - $configurable_weights[$b];
-      });
-
       if (!empty($selected_configs)) {
-        // Get skus for the selected config.
-        $variations = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), $selected_configs);
+        // Get all variations possible for the selected root attribute to do a
+        // stock check on all child options.
+        $variations = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), [$root_attribute_code => $selected_configs[$root_attribute_code]]);
 
         // Check stock for variations & update options.
         foreach ($variations as $key => $variation) {
