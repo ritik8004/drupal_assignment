@@ -29,13 +29,15 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
     // Field config.
     if (strpos($config, 'field.field.') === 0) {
       if ($field_obj = FieldConfig::loadByName($config_yaml['entity_type'], $config_yaml['bundle'], $config_yaml['field_name'])) {
-        // Update field config.
-        foreach ($config_yaml as $key => $value) {
-          if ($field_obj->get($key)) {
-            $field_obj->set($key, $value);
-          }
-          $field_obj->save();
-        }
+        // Update config using config factory.
+        \Drupal::configFactory()
+          ->getEditable($config)
+          ->setData($config_yaml)
+          ->save();
+
+        // Load field config again and save again.
+        $field_obj = FieldConfig::loadByName($config_yaml['entity_type'], $config_yaml['bundle'], $config_yaml['field_name']);
+        $field_obj->save();
       }
       // Create field config.
       else {

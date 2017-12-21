@@ -9,7 +9,7 @@ field_name: field_mobile_number
 entity_type: user
 type: mobile_number
 settings:
-  unique: '1'
+  unique: '0'
 module: mobile_number
 locked: false
 cardinality: 1

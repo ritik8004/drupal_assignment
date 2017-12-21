@@ -16,10 +16,10 @@ Feature: Test various checkout scenarios for Arabic site
   @hd @cod
   Scenario: As a Guest on Arabic site
     I should be able to checkout using COD
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
@@ -34,17 +34,17 @@ Feature: Test various checkout scenarios for Arabic site
     And I accept terms and conditions
     When I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see "رقم طلبيتك هو"
 
   @hd @knet
   Scenario: As a Guest,
   I should be able to checkout using KNET
   I should be able to checkout using CD
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
@@ -68,7 +68,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I press "إرسال"
     And I press "تأكيد العملية"
     And I wait 10 seconds
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see "رقم طلبيتك هو"
 
   @cc @knet
@@ -82,17 +82,17 @@ Feature: Test various checkout scenarios for Arabic site
     When I wait 5 seconds
     When I follow "اختر هذا المحل"
     And I wait for AJAX to finish
-    When I fill in "edit-cc-firstname" with "شويتا"
-    And I fill in "edit-cc-lastname" with "شارما"
+    When I fill in "edit-cc-firstname" with "Test"
+    And I fill in "edit-cc-lastname" with "Test"
     When I enter a valid Email ID in field "edit-cc-email"
-    And I fill in "edit-cc-mobile-number-mobile" with "97004455"
+    And I fill in "edit-cc-mobile-number-mobile" with "55004455"
     When I select an element having class ".cc-action"
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_knet"
     And I wait for AJAX to finish
-    When I fill in "edit-billing-address-address-billing-given-name" with "شويتا"
-    And I fill in "edit-billing-address-address-billing-family-name" with "شارما"
-    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    When I fill in "edit-billing-address-address-billing-given-name" with "Test"
+    And I fill in "edit-billing-address-address-billing-family-name" with "Test"
+    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "العباسية" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "كتلة A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
@@ -110,17 +110,17 @@ Feature: Test various checkout scenarios for Arabic site
     And I press "إرسال"
     And I press "تأكيد العملية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see "رقم طلبيتك هو"
 
   @knet
   Scenario: As a Guest
   I should be directed to basket page on cancelling a KNET transaction
   and User should be able to place order again
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
@@ -176,10 +176,10 @@ Feature: Test various checkout scenarios for Arabic site
     and Cybersource payment option on Arabic site
     When I follow "خدمة التوصيل للمنزل"
     And I wait for the page to load
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
@@ -197,7 +197,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I accept terms and conditions
     When I press "سجل الطلبية"
     When I wait 10 seconds
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see "رقم طلبيتك هو"
 
   @cc @cs
@@ -211,10 +211,10 @@ Feature: Test various checkout scenarios for Arabic site
     When I wait 10 seconds
     When I follow "اختر هذا المحل"
     And I wait for AJAX to finish
-    When I fill in "edit-cc-firstname" with "شويتا"
-    And I fill in "edit-cc-lastname" with "شارما"
+    When I fill in "edit-cc-firstname" with "Test"
+    And I fill in "edit-cc-lastname" with "Test"
     When I enter a valid Email ID in field "edit-cc-email"
-    And I fill in "edit-cc-mobile-number-mobile" with "97004455"
+    And I fill in "edit-cc-mobile-number-mobile" with "55004455"
     When I select an element having class ".cc-action"
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_cybersource"
@@ -222,9 +222,9 @@ Feature: Test various checkout scenarios for Arabic site
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
-    When I fill in "edit-billing-address-address-billing-given-name" with "شويتا"
-    And I fill in "edit-billing-address-address-billing-family-name" with "شارما"
-    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    When I fill in "edit-billing-address-address-billing-given-name" with "Test"
+    And I fill in "edit-billing-address-address-billing-family-name" with "Test"
+    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "العباسية" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "كتلة A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
@@ -233,7 +233,7 @@ Feature: Test various checkout scenarios for Arabic site
     When I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see "رقم طلبيتك هو"
 
   Scenario: As a Guest user on Arabic site
@@ -255,10 +255,10 @@ Feature: Test various checkout scenarios for Arabic site
   and I should be able to proceed with the transaction on entering correct details
     When I follow "خدمة التوصيل للمنزل"
     And I wait for the page to load
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
@@ -300,10 +300,10 @@ Feature: Test various checkout scenarios for Arabic site
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
     And I wait for the page to load
-    When I fill in "edit-cc-firstname" with "شويتا"
-    And I fill in "edit-cc-lastname" with "شارما"
+    When I fill in "edit-cc-firstname" with "Test"
+    And I fill in "edit-cc-lastname" with "Test"
     When I enter a valid Email ID in field "edit-cc-email"
-    And I fill in "edit-cc-mobile-number-mobile" with "97004455"
+    And I fill in "edit-cc-mobile-number-mobile" with "55004455"
     When I select an element having class ".cc-action"
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_cybersource"
@@ -311,9 +311,9 @@ Feature: Test various checkout scenarios for Arabic site
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
-    When I fill in "edit-billing-address-address-billing-given-name" with "شويتا"
-    And I fill in "edit-billing-address-address-billing-family-name" with "شارما"
-    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    When I fill in "edit-billing-address-address-billing-given-name" with "Test"
+    And I fill in "edit-billing-address-address-billing-family-name" with "Test"
+    When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "العباسية" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "كتلة A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
@@ -322,7 +322,7 @@ Feature: Test various checkout scenarios for Arabic site
     When I wait 10 seconds
     When I press "سجل الطلبية"
     And I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
 
   @cc
   Scenario: As a Guest user

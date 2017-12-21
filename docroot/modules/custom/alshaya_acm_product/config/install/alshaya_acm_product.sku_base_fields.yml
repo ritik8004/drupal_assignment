@@ -286,7 +286,7 @@ fields:
     parent: 'attributes'
     label: 'Article Warning'
     description: 'Article warning attribute for the product.'
-    cardinality: -1
+    cardinality: 1
     type: 'attribute'
     configurable: 0
     visible_view: 0

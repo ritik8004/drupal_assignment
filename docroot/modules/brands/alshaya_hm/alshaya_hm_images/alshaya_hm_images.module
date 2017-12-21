@@ -38,7 +38,7 @@ function _alshaya_hm_images_acq_sku_process_assets($product) {
       }
 
       $asset_type_parts = (!empty($asset['Data']['AssetType'])) ? explode('/', $asset['Data']['AssetType']) : [];
-      $assets[$key]['sortAssetType'] = ($asset['is_old_format']) ? $asset['Type'] : end($asset_type_parts);
+      $assets[$key]['sortAssetType'] = !empty($asset['is_old_format']) ? $asset['Type'] : end($asset_type_parts);
       $face_type = SkuAssetManager::LP_DEFAULT_ANGLE;
 
       if (!empty($asset['Data']['Angle']['Facing']) && !empty($asset['Data']['Angle']['Identifier'])) {
@@ -135,28 +135,26 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
  * Implements hook_acq_sku_pdp_gallery_media_alter().
  */
 function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb_images, $sku) {
-  if (empty($main_image)) {
+  if (empty($main_image) && ($sku instanceof SKU)) {
     /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
     $color = \Drupal::request()->query->get('color');
 
+    // If we have color attribute available from query params & the SKU being
+    // rendered is configurable, lookup for a simple SKU with that color.
+    // Fallback for the same in case of not a valid color is the first
+    // child sku.
     if (($color) && ($sku->bundle() === 'configurable')) {
-      $sku = $sku_assets_manager->getChildSkuFromColor($sku, $color);
+      $parent_sku = $sku;
+      if (!($sku = $sku_assets_manager->getChildSkuFromColor($sku, $color)) instanceof SKU) {
+        $sku = \Drupal::service('alshaya_acm_product.skumanager')->getChildSkus($parent_sku, TRUE);
+      }
     }
 
-    if ($sku->bundle() == 'simple') {
-      $main_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_main');
-      $thumb_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_thumbnail');
-
-      $zoom_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_zoom');
-      $fullscreen_images = $sku_assets_manager->getSkuAsset($sku, 'pdp', 'pdp_fullscreen');
-    }
-    elseif ($sku->bundle() == 'configurable') {
-      $thumb_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_thumbnail');
-      $zoom_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_zoom');
-      $fullscreen_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_fullscreen');
-      $main_images = $sku_assets_manager->getChildSkuAssets($sku, 'pdp', 'pdp_main');
-    }
+    $thumb_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_thumbnail');
+    $zoom_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_zoom');
+    $fullscreen_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_fullscreen');
+    $main_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
 
     foreach ($thumb_images as $key => $thumbnail) {
       $thumb_images[$key]['zoomurl'] = $zoom_images[$key]['url'];
@@ -272,7 +270,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
             $sku_configurable_options_color[$key] = [
               'display_value' => empty($asset) ? $sku_entity->get('attr_rgb_color')->value : '<img src="' . $asset[0]['url']->toString() . '">',
               'display_label' => $sku_entity->get('attr_color_label')->getString(),
-              'swatch_type' => $swatch_type,
+              'swatch_type' => empty($asset) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
             ];
           }
         }

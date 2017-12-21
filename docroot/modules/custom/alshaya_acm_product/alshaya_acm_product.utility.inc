@@ -262,8 +262,8 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
     return [];
   }
   else {
-    // @TODO: should this be config?
-    $pager_flag = count($thumbnails) > 5 ? 'pager-yes' : 'pager-no';
+    $pdp_gallery_pager_limit = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
+    $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
     $build['gallery'] = [
       '#type' => 'container',
@@ -630,5 +630,62 @@ function alshaya_acm_product_update_config_options(array &$form_parts, FormState
     if ($key && !in_array($key, $enabled_options)) {
       $form_parts['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
     }
+  }
+}
+
+/**
+ * Utility function to change cardinality for SKU field.
+ *
+ * @param string $field_name
+ *   Field name prefixed with 'attr'.
+ * @param string $attribute_name
+ *   Attribute name as specified while creating the field via sku_base_fields.
+ */
+function alshaya_acm_product_update_field_cardinality_from_unlimited_to_unique($field_name, $attribute_name) {
+  $entity_type_manager = \Drupal::entityTypeManager();
+
+  // Get data table name for entity.
+  $base_table = $entity_type_manager->getStorage('acq_sku')->getDataTable();
+  $database = \Drupal::database();
+
+  // Get field definitions on the entity.
+  $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('acq_sku', 'configurable');
+  $storage = $entity_type_manager->getStorage('acq_sku');
+
+  // Get table mapping for the field definitions.
+  $table_mapping = $storage->getTableMapping();
+
+  // Field table from which we need to migrate data.
+  $field_table_name = $table_mapping->getFieldTableName($field_name);
+  $field_value_column_name = $table_mapping->getFieldColumnName($field_definitions[$field_name], 'value');
+
+  // Pull the data stored in the field, keyed by the id.
+  $field_table_values = $database->select($field_table_name)
+    ->fields($field_table_name, [
+      'entity_id', 'langcode', $field_value_column_name,
+    ])
+    ->condition('delta', 0)
+    ->execute()
+    ->fetchAll();
+
+  // Truncate the field table data to be able to update the entity definition
+  // for the field. This is necessary else Entity update manager would complain
+  // about existing data in the field.
+  $database->delete($field_table_name)->execute();
+
+  // Update the cardinality of article warning field to single-valued field.
+  $sku_entity_config = \Drupal::configFactory()->getEditable('acq_sku.base_field_additions');
+  $sku_entity_data = $sku_entity_config->getRawData();
+  $sku_entity_data[$attribute_name]['cardinality'] = 1;
+  $sku_entity_config->setData($sku_entity_data)->save();
+  \Drupal::service('entity.definition_update_manager')->applyUpdates();
+
+  // Restore data for warning field.
+  foreach ($field_table_values as $value) {
+    $database->update($base_table)
+      ->fields([$field_name => $value->{$field_value_column_name}])
+      ->condition('id', $value->entity_id)
+      ->condition('langcode', $value->langcode)
+      ->execute();
   }
 }

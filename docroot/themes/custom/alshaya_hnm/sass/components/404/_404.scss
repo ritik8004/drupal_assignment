@@ -58,7 +58,7 @@
     padding-bottom: 2.5rem;
 
     .maintenance-page & {
-      font-family: $hnm-regular-nodir;
+      font-family: $hnm-regular;
     }
 
     h1 {
@@ -71,11 +71,11 @@
       margin-top: 0;
 
       .maintenance-page & {
-        font-family: $hnm-bold-nodir;
+        font-family: $hnm-bold;
       }
 
       &.title--arabic {
-        font-family: $hnm-arabic-regular-nodir;
+        font-family: $hnm-regular;
         font-size: 30px;
         direction: rtl;
         color: $marine-blue;
@@ -86,12 +86,12 @@
       margin-top: 0;
       margin-bottom: 0;
       color: $black;
-      font-family: $hnm-regular;
+      font-family: $hnmpromo-regular;
       font-weight: normal;
       font-size: 1.625rem;
 
       .maintenance-page & {
-        font-family: $hnm-arabic-bold-nodir;
+        font-family: $hnmpromo-regular;
       }
     }
 
@@ -117,7 +117,7 @@
     }
 
     &.arabic {
-      font-family: $hnm-arabic-regular-nodir;
+      font-family: $hnm-regular;
       font-size: 20px;
       direction: rtl;
     }
@@ -183,20 +183,36 @@
   }
 
   .maintenance__logo {
+    margin-top: 3rem;
+
     @include breakpoint($upto-desktop) {
-      text-align: right;
+      text-align: center;
       margin: 2rem 1rem;
     }
 
     @include breakpoint($desktop) {
-      float: right;
-      margin-top: 1rem;
+      text-align: center;
       margin-right: 2rem;
     }
 
     svg,
     img {
       height: 4rem;
+    }
+  }
+}
+
+.maintenance-page {
+  .not-found__body {
+    margin-top: 4%;
+  }
+
+  .not-found {
+    min-height: auto;
+
+    p {
+      color: $black;
+      line-height: 1.32;
     }
   }
 }

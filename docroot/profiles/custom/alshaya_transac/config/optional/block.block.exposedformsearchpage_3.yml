@@ -8,9 +8,9 @@ dependencies:
     - system
     - views
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: exposedformsearchpage_3
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: content
 weight: -23
 provider: null

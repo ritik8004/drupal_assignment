@@ -73,6 +73,23 @@
         });
       });
 
+      $('.view-stores-finder', context).find('a[data-glossary-view]').each(function(){
+        $(this).once('glossary-view').on('click', function (e) {
+          e.preventDefault();
+
+          var nid = $(this).data('glossary-view');
+          Drupal.ajax({
+            url: Drupal.url('store-detail/' + nid + '/glossary'),
+            element: $(this).get(0),
+            base: $(this).attr('id'),
+            progress: {type: 'fullscreen'}
+          }).execute();
+
+          return false;
+        });
+      });
+
+
       $('.current-location').once('location-init').on('click', function () {
         // Start overlay here.
         $('body').addClass('modal-overlay--spinner');

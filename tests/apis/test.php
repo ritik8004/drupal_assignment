@@ -6,6 +6,7 @@
  */
 
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../factory-hooks/environments/conductor.php';
 
 use Acquia\Hmac\Guzzle\HmacAuthMiddleware;
 use Acquia\Hmac\Key;
@@ -25,13 +26,15 @@ use GuzzleHttp\HandlerStack;
  *   Store id.
  */
 function invoke_api($api, $method = 'GET', array $data = [], $store_id = 1) {
-  // $env = 'https://alshaya-uat.eu-west-1.prod.acm.acquia.io/v1/';
-  // $env = 'https://alshaya-test.eu-west-1.prod.acm.acquia.io/v1/';
-  $env = 'https://alshaya-dev.eu-west-1.prod.acm.acquia.io/v1/';
+  // Update this from envs available in conductor.php file.
+  $env = 'hm_dev';
 
-  $endpoint = $env . $api;
+  $conductor_data = alshaya_get_conductor_host_data();
 
-  $key = new Key('uAfqsl!BMf5xd8Z', 'eS#8&0@XyegNUO');
+  $data = $conductor_data[$env];
+  $endpoint = $data['url'] . 'v1/' . $api;
+
+  $key = new Key($data['hmac_id'], base64_encode($data['hmac_secret']));
   $middleware = new HmacAuthMiddleware($key);
 
   // Register the middleware.

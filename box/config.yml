@@ -59,6 +59,7 @@ installed_extras:
   - xhprof
   - tideways
   - varnish
+  - pimpmylog
 
 extra_packages:
   - imagemagick
@@ -141,6 +142,10 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-bbme.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
 mysql_databases:
   - name: drupal_alshaya_mckw
     encoding: utf8mb4
@@ -158,6 +163,10 @@ mysql_databases:
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
+  - name: drupal_alshaya_bbme
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
 mysql_users:
   - name: drupal
     host: "%"
@@ -167,3 +176,12 @@ mysql_users:
 varnish_version: "4.1"
 varnish_listen_port: "81"
 varnish_default_backend_port: "80"
+
+# Pimp my Log settings.
+pimpmylog_install_dir: /usr/share/php/pimpmylog
+pimpmylog_grant_all_privs: true
+
+# MySQL settings.
+mysql_slow_query_log_enabled: true
+mysql_slow_query_time: 1
+mysql_wait_timeout: 300

@@ -6,12 +6,20 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update the /admin/content view.
+ */
+function alshaya_admin_update_8001() {
+  alshaya_config_install_configs(['views.view.content'], 'alshaya_admin');
+}
+
+/**
  * Implements hook_uninstall().
  *
  * Reset config. We need to ensure all the configuration added in the module
  * is deleted to allow the ON/OFF code to work.
  */
 function alshaya_admin_uninstall() {
-  Drupal::configFactory()->getEditable('views.view.content_product.yml')->delete();
-  \Drupal::configFactory()->getEditable('views.view.content.yml')->delete();
+  \Drupal::configFactory()->getEditable('views.view.content')->delete();
 }

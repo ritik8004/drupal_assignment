@@ -1,6 +1,6 @@
 .region-page-header .site__logo {
   display: table;
-  padding: 1.25rem 0 0.3125rem;
+  padding: 2.1875rem 0 1.25rem;
   margin: 0;
   height: auto;
   text-align: center;
@@ -49,10 +49,10 @@ header[role="banner"] {
 
 main[role="main"] {
   @include breakpoint($lap) {
-    margin-top: 10.875rem;
+    margin-top: 12.75rem;
   }
 
   @include breakpoint($desk) {
-    margin-top: 12.125rem;
+    margin-top: 14.0625rem;
   }
 }

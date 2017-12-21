@@ -9,7 +9,7 @@ Feature: Test breadcrumbs displayed across the site
     Examples:
     |page|breadcrumb|
     |/ladies|home > Ladies|
-    |/ladies/new-arrivals|home > Ladies > New Arrivals|
+    |/ladies/dresses|home > Ladies > Dresses|
     |/ladies/new-arrivals/clothes|home > Ladies > New Arrivals > Clothes|
     |/small-shoulder-bag|home > Ladies > Shop By Product > Accessories > Small Shoulder Bag|
     |/cart                                                 |home > Basket                                                                                            |

@@ -286,6 +286,14 @@ class AlshayaGtmManager {
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
     $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
+    \Drupal::moduleHandler()
+      ->invokeAll('gtm_product_attributes_alter',
+        [
+          &$product,
+          &$attributes,
+          &$skuAttributes,
+        ]
+      );
     $attributes = array_merge($attributes, $skuAttributes);
 
     return $attributes;
@@ -862,6 +870,11 @@ class AlshayaGtmManager {
       $customer_type = 'New Customer';
     }
 
+    $privilege_card = $current_user->get('field_privilege_card_number')->getValue();
+    $privilege_customer = 'Regular Customer';
+    if (!empty($privilege_card) && isset($privilege_card[0]['value'])) {
+      $privilege_customer = 'Privilege Customer';
+    }
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
@@ -872,7 +885,7 @@ class AlshayaGtmManager {
       'customerType' => $customer_type,
       'userName' => ($data_layer['userUid'] !== 0) ? $current_user->field_first_name->value . ' ' . $current_user->field_last_name->value : '',
       'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
-      'privilegeCustomer' => !empty($current_user->get('field_privilege_card_number')->getValue()) ? 'Privilege Customer' : 'Regular Customer',
+      'privilegeCustomer' => $privilege_customer,
     ];
 
     return $data_layer_attributes;

@@ -37,6 +37,10 @@ function alshaya_acm_drush_command() {
     ],
   ];
 
+  $commands['alshaya-reset-config'] = [
+    'description' => 'Reset all config from settings.',
+  ];
+
   return $commands;
 }
 
@@ -192,4 +196,15 @@ function drush_alshaya_acm_print_category_menu_tree($langcode) {
       }
     }
   }
+}
+
+/**
+ * Implements drush alshaya-reset-config.
+ */
+function drush_alshaya_acm_alshaya_reset_config() {
+  // Force reset all the settings.
+  \Drupal::service('alshaya_acm.config_check')->checkConfig(TRUE);
+
+  // Reset country specific settings.
+  \Drupal::service('alshaya_acm.config_check')->resetCountrySpecificSettings();
 }

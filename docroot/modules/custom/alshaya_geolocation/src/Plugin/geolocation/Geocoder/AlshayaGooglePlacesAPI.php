@@ -129,6 +129,7 @@ class AlshayaGooglePlacesAPI extends GeocoderBase {
         if (empty($restriction)) {
           continue;
         }
+
         $render_array['geolocation_geocoder_google_places_api'] = array_merge_recursive($render_array['geolocation_geocoder_google_places_api'], [
           '#attached' => [
             'drupalSettings' => [

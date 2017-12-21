@@ -6,9 +6,9 @@ dependencies:
     - system
     - user
   theme:
-    - whitelabel_transac
+    - alshaya_white_label
 id: alshayamyaccountlinks
-theme: whitelabel_transac
+theme: alshaya_white_label
 region: sidebar_first
 weight: 0
 provider: null

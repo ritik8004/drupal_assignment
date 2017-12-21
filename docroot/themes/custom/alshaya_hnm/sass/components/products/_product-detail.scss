@@ -339,6 +339,7 @@
   .care-instructions-wrapper {
     color: $grey7;
     margin-bottom: 0.625rem;
+    margin-top: 0.75rem;
 
     .composition-label,
     .care-instructions-label {
@@ -583,6 +584,7 @@
   .composition-wrapper,
   .care-instructions-wrapper {
     color: $grey7;
+    margin-top: 0.75rem;
 
     .composition-label,
     .care-instructions-label {
@@ -1467,7 +1469,7 @@
       }
 
       button[type="submit"] {
-        font-family: $hnm-bold;
+        font-family: $hnm-regular;
         font-size: 0.875rem;
         background: $hnm-black-two;
         border-radius: 0;
@@ -1782,7 +1784,7 @@ article[gtm-sku-type="simple"] {
   }
 
   span.out-of-stock {
-    background-color: $cherry;
+    background-color: $error;
     font-family: $hnm-bold;
     text-transform: uppercase;
     font-size: 0.75rem;
@@ -1791,7 +1793,7 @@ article[gtm-sku-type="simple"] {
     text-align: center;
     margin: 1rem 0;
     padding: 0.6rem 1.5rem;
-    color: $white;
+    color: $white-five;
 
     @include breakpoint($desktop) {
       display: inline-block;
@@ -2040,3 +2042,10 @@ html[lang=ar] {
     }
   }
 }
+
+html[lang=ar] {
+  .short-description-wrapper .read-more-description-link {
+    font-family: $hnm-arabic-medium;
+  }
+}
+
