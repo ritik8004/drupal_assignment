@@ -929,7 +929,10 @@ class AlshayaGtmManager {
         else {
           $product_media_url = '';
         }
-
+        $oldprice = '';
+        if ((float) $sku_entity->get('price')->getString() != (float) $sku_attributes['gtm-price']) {
+          $oldprice = (float) $sku_entity->get('price')->getString();
+        }
         $page_dl_attributes = [
           'productSKU' => $sku_attributes['gtm-sku-type'] === 'configurable' ? '' : $product_sku,
           'productStyleCode' => $product_sku,
@@ -938,7 +941,7 @@ class AlshayaGtmManager {
           'productBrand' => $sku_attributes['gtm-brand'],
           'productColor' => '',
           'productPrice' => (float) $sku_attributes['gtm-price'],
-          'productOldPrice' => (float) $sku_entity->get('price')->getString() ?: '',
+          'productOldPrice' => $oldprice,
           'productPictureUrl' => $product_media_url,
           'productRating' => '',
           'productReviews' => '',
@@ -948,6 +951,9 @@ class AlshayaGtmManager {
         if ($sku_entity->bundle() == 'configurable') {
           $prices = $this->skuManager->getMinPrices($sku_entity);
           $page_dl_attributes['productOldPrice'] = $prices['price'];
+          if ($prices['price'] == $page_dl_attributes['productPrice']) {
+            $page_dl_attributes['productOldPrice'] = '';
+          }
         }
 
         $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
