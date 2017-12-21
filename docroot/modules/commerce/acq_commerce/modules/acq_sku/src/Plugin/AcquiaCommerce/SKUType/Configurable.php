@@ -50,7 +50,6 @@ class Configurable extends SKUPluginBase {
       $attribute_code = $configurable['code'];
 
       $options = [];
-      $sorted_options = [];
 
       foreach ($configurable['values'] as $value) {
         $options[$value['value_id']] = $value['label'];
@@ -58,25 +57,10 @@ class Configurable extends SKUPluginBase {
 
       // Sort the options.
       if (!empty($options)) {
-        if (in_array($attribute_code, $configurable_form_settings->get('sortable_options'))) {
-          $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
-          $query->fields('ttfd', ['tid', 'weight']);
-          $query->join('taxonomy_term__field_sku_attribute_code', 'ttfsac', 'ttfsac.entity_id = ttfd.tid');
-          $query->join('taxonomy_term__field_sku_option_id', 'ttfsoi', 'ttfsoi.entity_id = ttfd.tid');
-          $query->fields('ttfsoi', ['field_sku_option_id_value']);
-          $query->condition('ttfd.vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
-          $query->condition('ttfsac.field_sku_attribute_code_value', $attribute_code);
-          $query->condition('ttfsoi.field_sku_option_id_value', array_keys($options), 'IN');
-          $query->distinct();
-          $query->orderBy('weight', 'ASC');
-          $tids = $query->execute()->fetchAllAssoc('tid');
+        $sorted_options = $options;
 
-          foreach ($tids as $tid => $values) {
-            $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
-          }
-        }
-        else {
-          $sorted_options = $options;
+        if (in_array($attribute_code, $configurable_form_settings->get('sortable_options'))) {
+          $sorted_options = $this->sortConfigOptions($options, $attribute_code);
         }
 
         $form['ajax']['configurables'][$attribute_code] = [
@@ -137,6 +121,7 @@ class Configurable extends SKUPluginBase {
     $dynamic_parts = &$form['ajax'];
 
     $configurables = $form_state->getValue('configurables');
+    $configurable_form_settings = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings');
     $tree = $form_state->get('tree');
     $tree_pointer = &$tree['options'];
 
@@ -179,7 +164,20 @@ class Configurable extends SKUPluginBase {
           $options[$value['value_id']] = $value['label'];
         }
 
-        $dynamic_parts['configurables'][$key]['#options'] = $options;
+        // Use this in case the attribute is not sortable as per the config.
+        $sorted_options = $options;
+
+        // Sort config options before pushing them to the select list based on
+        // the config.
+        if (in_array($key, $configurable_form_settings->get('sortable_options'))) {
+          // Make sure the first element in the list is the empty option.
+          $sorted_options = [
+            '' => $dynamic_parts['configurables'][$key]['#options'][''],
+          ];
+          $sorted_options += self::sortConfigOptions($options, $key);
+        }
+
+        $dynamic_parts['configurables'][$key]['#options'] = $sorted_options;
       }
     }
 
@@ -559,6 +557,39 @@ class Configurable extends SKUPluginBase {
     $stock[$sku->getSku()] = empty($quantities) ? 0 : max($quantities);
 
     return $stock[$sku->getSku()];
+  }
+
+  /**
+   * Helper function to sort config options based on taxonomy term weight.
+   *
+   * @param array $options
+   *   Option values keyed by option id.
+   * @param string $attribute_code
+   *   Attribute name.
+   *
+   * @return array
+   *   Array of options sorted based on term weight.
+   */
+  public static function sortConfigOptions(&$options, $attribute_code) {
+    $sorted_options = [];
+
+    $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
+    $query->fields('ttfd', ['tid', 'weight']);
+    $query->join('taxonomy_term__field_sku_attribute_code', 'ttfsac', 'ttfsac.entity_id = ttfd.tid');
+    $query->join('taxonomy_term__field_sku_option_id', 'ttfsoi', 'ttfsoi.entity_id = ttfd.tid');
+    $query->fields('ttfsoi', ['field_sku_option_id_value']);
+    $query->condition('ttfd.vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+    $query->condition('ttfsac.field_sku_attribute_code_value', $attribute_code);
+    $query->condition('ttfsoi.field_sku_option_id_value', array_keys($options), 'IN');
+    $query->distinct();
+    $query->orderBy('weight', 'ASC');
+    $tids = $query->execute()->fetchAllAssoc('tid');
+
+    foreach ($tids as $tid => $values) {
+      $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
+    }
+
+    return $sorted_options;
   }
 
 }
