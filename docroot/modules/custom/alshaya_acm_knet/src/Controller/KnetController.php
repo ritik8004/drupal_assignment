@@ -341,12 +341,13 @@ class KnetController extends ControllerBase {
       '@message' => $message,
     ]);
 
+    // Get state data from cart & order id. Use same logic used for generating
+    // the state key while initiating the knet payment.
     $state_data = [
       'cart_id' => $cart->id(),
       'order_id' => $cart->getExtension('real_reserved_order_id'),
     ];
 
-    // This is just to have the key unique for state data.
     $state_key = md5(json_encode($state_data));
     $data = \Drupal::state()->get($state_key);
 
