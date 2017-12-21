@@ -67,6 +67,15 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
     }
 
     $build = alshaya_acm_customer_build_order_detail($order);
+
+    if (!empty($order['payment']) &&
+      ($order['payment']['method_code'] === 'knet')) {
+      $knet_transac_data = \Drupal::state()->get('knet:' . md5($order['increment_id']));
+      $build['#order_details']['transaction_id'] = $knet_transac_data['transaction_id'];
+      $build['#order_details']['payment_id'] = $knet_transac_data['payment_id'];
+      $build['#order_details']['result_code'] = $knet_transac_data['result_code'];
+    }
+
     $build['#account'] = $account;
     $build['#barcode'] = alshaya_acm_customer_get_barcode($order);
     $build['#print_link'] = $print_link;
