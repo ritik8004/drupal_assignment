@@ -263,7 +263,7 @@
     @include arabic-letter-spacing;
 
     display: inline-block;
-    font-family: $hnm-regular;
+    font-family: $hnm-bold;
     text-transform: uppercase;
     color: $hnm-black-two;
     background: $white-five;
@@ -668,7 +668,7 @@
   @include arabic-letter-spacing;
 
   font-size: 0.75rem;
-  font-family: $hnm-regular;
+  font-family: $hnm-bold;
   font-weight: bold;
   border: 1px solid $hnm-black-two;
   color: $hnm-black-two;
