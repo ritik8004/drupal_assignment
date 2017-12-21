@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Implements hook_form_alter().
@@ -41,5 +42,66 @@ function alshaya_hm_preprocess_block(&$variables) {
   $image_path = drupal_get_path('module', 'alshaya_hm') . '/images/alshaya-priv-card.svg';
   if($variables['base_plugin_id'] == 'join_the_club') {
     $variables['content']['image']['#uri'] = $image_path;
+  }
+}
+
+/**
+ * Implements hook_datalayer_alter().
+ */
+function alshaya_hm_datalayer_alter(&$data_layer) {
+  if (!_alshaya_seo_process_gtm()) {
+    return;
+  }
+  try {
+    if (isset($data_layer['cartItemsFlocktory'])) {
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+      $cart = $cart_storage->getCart(FALSE);
+      if ($cart) {
+        $cart_items = $cart->get('items');
+        if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
+          foreach ($cart_items as $key => $item) {
+            $sku = SKU::loadFromSku($item['sku']);
+            $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+            $images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
+            if (isset($images[0]['url'])) {
+              $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
+            }
+          }
+        }
+      }
+    }
+  }
+  catch (Exception $e) {
+    \Drupal::logger('alshaya_seo')->error('Error while fetching GTM attributes: @message', ['@message' => $e->getMessage()]);
+  }
+}
+
+/**
+ * Implemented hook_gtm_product_attributes_alter().
+ */
+function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAttributes) {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
+    $skuId = $product->get('field_skus')->first()->getString();
+    if (isset($skuId)) {
+      $sku = SKU::loadFromSku($skuId);
+      $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+      $images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
+      if (!empty($images)) {
+        // Changes for the image count.
+        $skuAttributes['gtm-dimension4'] = count($images);
+      }
+    }
+  }
+}
+
+/**
+ * Implemented hook_module_implements_alter().
+ */
+function alshaya_hm_module_implements_alter(&$implementations, $hook) {
+  // To call the alshaya_hm_datalayer_alter at the end for HnM specific changes.
+  if ($hook == 'datalayer_alter') {
+    $group = $implementations['alshaya_hm'];
+    unset($implementations['alshaya_hm']);
+    $implementations['alshaya_hm'] = $group;
   }
 }

@@ -20,10 +20,10 @@ Feature: Test Checkout feature
     And I should not see the link "Sign in"
     And I should not see the link "Find Store"
     And I should not see "عربية"
-    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
+    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
@@ -40,17 +40,17 @@ Feature: Test Checkout feature
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @hd @knet
   Scenario: As a Guest,
     I should be able to checkout using KNET
     And I should be able to see the header for checkout
-    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
+    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
@@ -75,7 +75,7 @@ Feature: Test Checkout feature
     And I press "Submit"
     And I press "Confirm"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma"
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
 
   @cc @knet @fail
@@ -90,17 +90,17 @@ Feature: Test Checkout feature
     When I wait 5 seconds
     And I follow "select this store"
     And I wait for AJAX to finish
-    When I fill in "edit-cc-firstname" with "Shweta"
-    And I fill in "edit-cc-lastname" with "Sharma"
+    When I fill in "edit-cc-firstname" with "Test"
+    And I fill in "edit-cc-lastname" with "Test"
     When I enter a valid Email ID in field "edit-cc-email"
-    And I fill in "edit-cc-mobile-number-mobile" with "97004455"
+    And I fill in "edit-cc-mobile-number-mobile" with "55004455"
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_knet"
     And I wait for AJAX to finish
-    When I fill in "edit-billing-address-address-billing-given-name" with "Shweta"
-    And I fill in "edit-billing-address-address-billing-family-name" with "Sharma"
-    And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    When I fill in "edit-billing-address-address-billing-given-name" with "Test"
+    And I fill in "edit-billing-address-address-billing-family-name" with "Test"
+    And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
@@ -116,17 +116,17 @@ Feature: Test Checkout feature
     And I press "Submit"
     And I press "Confirm"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @knet @fail
   Scenario: As a Guest
     I should be displayed a valid message on cancelling a KNET transaction
     And I should be able to see the header for checkout
-    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
+    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
@@ -223,10 +223,10 @@ Feature: Test Checkout feature
   Scenario: As a Guest
     I should be able to checkout on HD
     using Cybersource payment method
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     When I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
@@ -245,7 +245,7 @@ Feature: Test Checkout feature
     When I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @cc @cs
@@ -259,10 +259,10 @@ Feature: Test Checkout feature
     When I wait 5 seconds
     When I follow "select this store"
     And I wait for AJAX to finish
-    When I fill in "edit-cc-firstname" with "Shweta"
-    And I fill in "edit-cc-lastname" with "Sharma"
+    When I fill in "edit-cc-firstname" with "Test"
+    And I fill in "edit-cc-lastname" with "Test"
     When I enter a valid Email ID in field "edit-cc-email"
-    And I fill in "edit-cc-mobile-number-mobile" with "97004455"
+    And I fill in "edit-cc-mobile-number-mobile" with "55004455"
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_cybersource"
@@ -270,9 +270,9 @@ Feature: Test Checkout feature
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
-    When I fill in "edit-billing-address-address-billing-given-name" with "Shweta"
-    And I fill in "edit-billing-address-address-billing-family-name" with "Sharma"
-    And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    When I fill in "edit-billing-address-address-billing-given-name" with "Test"
+    And I fill in "edit-billing-address-address-billing-family-name" with "Test"
+    And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
@@ -280,7 +280,7 @@ Feature: Test Checkout feature
     And I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @hd
@@ -302,10 +302,10 @@ Feature: Test Checkout feature
   and I should be able to proceed with the transaction on entering correct details
     When I follow "Home delivery"
     And I wait for the page to load
-    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
+    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
@@ -346,10 +346,10 @@ Feature: Test Checkout feature
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
     And I wait for the page to load
-    When I fill in "edit-cc-firstname" with "Shweta"
-    And I fill in "edit-cc-lastname" with "Sharma"
+    When I fill in "edit-cc-firstname" with "Test"
+    And I fill in "edit-cc-lastname" with "Test"
     When I enter a valid Email ID in field "edit-cc-email"
-    And I fill in "edit-cc-mobile-number-mobile" with "97004455"
+    And I fill in "edit-cc-mobile-number-mobile" with "55004455"
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
     When I select a payment option "payment_method_title_cybersource"
@@ -357,9 +357,9 @@ Feature: Test Checkout feature
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
-    When I fill in "edit-billing-address-address-billing-given-name" with "Shweta"
-    And I fill in "edit-billing-address-address-billing-family-name" with "Sharma"
-    And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "97004455"
+    When I fill in "edit-billing-address-address-billing-given-name" with "Test"
+    And I fill in "edit-billing-address-address-billing-family-name" with "Test"
+    And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
@@ -367,7 +367,7 @@ Feature: Test Checkout feature
     And I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
 
   @cc
   Scenario: As a Guest user
@@ -393,10 +393,10 @@ Feature: Test Checkout feature
   @checkmo @hd
   Scenario: As a Guest
     I should be able to checkout using HD and Check / Money order
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
@@ -413,5 +413,5 @@ Feature: Test Checkout feature
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "

@@ -217,41 +217,6 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * API to create transaction entry for K-Net.
-   *
-   * @param string $order_id
-   *   Order increment id.
-   * @param string $transaction_id
-   *   K-Net transaction id.
-   * @param string $auth
-   *   K-Net auth.
-   *
-   * @return mixed
-   *   Response of API or NULL.
-   */
-  public function addKnetTransaction($order_id, $transaction_id, $auth) {
-    $endpoint = 'knet/transaction';
-
-    $data = [
-      'orderId' => $order_id,
-      'transactionId' => $transaction_id,
-      'authCode' => $auth,
-    ];
-
-    try {
-      return $this->invokeApi($endpoint, $data, 'JSON');
-    }
-    catch (\Exception $e) {
-      $this->logger->critical('Error occurred while adding transaction for knet order: %info <br> %message', [
-        '%info' => print_r($data, TRUE),
-        '%message' => $e->getMessage(),
-      ]);
-    }
-
-    return NULL;
-  }
-
-  /**
    * Function to get all the stores from the API.
    *
    * @param string $langcode
@@ -276,6 +241,96 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Function to get all the enabled SKUs from the API.
+   *
+   * @param array|string $types
+   *   The SKUs type to get from Magento (simple, configurable).
+   *
+   * @return array
+   *   An array of SKUs indexed by type.
+   *
+   * @TODO: Create appropriate endpoint on conductor and move this to commerce.
+   */
+  public function getSkus($types = ['simple', 'configurable']) {
+    $endpoint = 'products?';
+
+    // Query parameters to get all enabled SKUs. We only want the SKUs.
+    // No need to retrieve the other fields. We order the result by update date
+    // so if any SKU is updated/created while we do the requests, it will be
+    // returned in the latest results.
+    $query = [
+      'searchCriteria' => [
+        'filterGroups' => [
+          0 => [
+            'filters' => [
+              0 => [
+                'field' => 'status',
+                'value' => 1,
+                'condition_type' => 'eq',
+              ],
+              1 => [
+                'field' => 'type_id',
+                'condition_type' => 'eq',
+              ],
+            ],
+          ],
+        ],
+        'sortOrders' => [
+          0 => [
+            'field' => 'updated_at',
+            'direction' => 'ASC',
+          ],
+        ],
+        // @TODO: Make page size configurable. Arbitrary value for now.
+        'pageSize' => 50,
+      ],
+      'fields' => 'items[sku]',
+    ];
+
+    $mskus = [];
+
+    foreach ($types as $type) {
+      $query['searchCriteria']['filterGroups'][0]['filters'][1]['value'] = $type;
+
+      $page = 0;
+      $continue = TRUE;
+      $previous_page_skus = [];
+      $skus = [];
+
+      while ($continue) {
+        $continue = FALSE;
+        $page += 1;
+        $query['searchCriteria']['currentPage'] = $page;
+
+        $response = $this->invokeApi($endpoint . http_build_query($query), [], 'GET');
+
+        if ($response && is_string($response)) {
+          if ($decode_response = json_decode($response, TRUE)) {
+            $current_page_skus = array_column($decode_response['items'], 'sku');
+
+            $skus = array_merge($skus, $current_page_skus);
+
+            // We don't have any way to know we reached the latest page as
+            // Magento keep continue returning the same latest result. For this
+            // we test if there is any SKU in current page which was already
+            // present in previous page. If yes, then we reached the end of
+            // the list.
+            if (empty(array_diff($previous_page_skus, $current_page_skus))) {
+              $continue = TRUE;
+            }
+
+            $previous_page_skus = $current_page_skus;
+          }
+        }
+      }
+
+      $mskus[$type] = $skus;
+    }
+
+    return $mskus;
+  }
+
+  /**
    * Function to sync all stores.
    *
    * @return bool
@@ -283,6 +338,8 @@ class AlshayaApiWrapper {
    */
   public function syncStores() {
     $stored_synced = FALSE;
+
+    $store_locator_ids = [];
 
     // Do API call to get stores for each language.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
@@ -294,10 +351,21 @@ class AlshayaApiWrapper {
         foreach ($stores['items'] as $store) {
           $this->storeUtility->updateStore($store, $langcode);
 
+          // Store code will be unique for node/language.
+          $store_locator_ids[] = $store['store_code'];
+
           // If we update even single store, we return TRUE.
           $stored_synced = TRUE;
         }
       }
+    }
+
+    // If there is at least one store id.
+    if (!empty($store_locator_ids)) {
+      // Get orphan store node ids.
+      $orphan_store_nids = $this->storeUtility->getOrphanStores($store_locator_ids);
+      // Delete orphan stores.
+      $this->storeUtility->deleteStores($orphan_store_nids);
     }
 
     return $stored_synced;

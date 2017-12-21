@@ -33,7 +33,7 @@ Feature: As an authenticated user
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @hd @knet
@@ -62,7 +62,7 @@ Feature: As an authenticated user
       And I press "Submit"
       And I press "Confirm"
       And I wait for the page to load
-      Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+      Then I should see text matching "Thank you for shopping online with us, Test Test "
       And I should see text matching "Your order number is "
 
   @cc @knet
@@ -96,7 +96,7 @@ Feature: As an authenticated user
     And I press "Submit"
     And I press "Confirm"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @hd @cs
@@ -119,7 +119,7 @@ Feature: As an authenticated user
     And I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @cc @cs
@@ -149,7 +149,7 @@ Feature: As an authenticated user
     And I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
   @hd @checkmo
@@ -169,5 +169,5 @@ Feature: As an authenticated user
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "

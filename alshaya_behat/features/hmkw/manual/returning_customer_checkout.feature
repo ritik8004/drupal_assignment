@@ -67,17 +67,11 @@ Feature: Test various checkout scenarios as returning customer
   I should be able to place an order for CC - KNET
     And I follow "Click & Collect"
     And I wait for the page to load
-    And I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
-    And I wait for AJAX to finish
-    When I wait 5 seconds
-    And I follow "select this store"
-    And I wait 10 seconds
-    And I select an element having class ".cc-action"
-    And I wait for AJAX to finish
+    When I select a store
     When I select a payment option "payment_method_title_knet"
     And I wait for AJAX to finish
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
@@ -122,20 +116,14 @@ Feature: Test various checkout scenarios as returning customer
   I should be able to checkout using CC - Cybersource
     When I follow "Click & Collect"
     And I wait for AJAX to finish
-    When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
-    And I wait for AJAX to finish
-    When I wait 5 seconds
-    And I follow "select this store"
-    When I wait 10 seconds
-    And I select an element having class ".cc-action"
-    When I wait for AJAX to finish
+    When I select a store
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"

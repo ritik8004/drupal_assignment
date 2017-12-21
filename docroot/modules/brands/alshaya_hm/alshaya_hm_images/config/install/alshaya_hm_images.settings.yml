@@ -31,12 +31,14 @@ weights:
     DescriptiveDetail: 3
     MODEL_IMAGE: 3
     DETAIL_IMAGE: 4
+    STILL_LIFE_FRONT_URL: 5
   plp_hover:
     DescriptiveStillLife: 1
     Lookbook: 2
     DescriptiveDetail: 3
     MODEL_IMAGE: 3
     DETAIL_IMAGE: 4
+    STILL_LIFE_FRONT_URL: 5
   pdp:
     Lookbook: 1
     Environmental: 2
@@ -44,23 +46,27 @@ weights:
     DescriptiveStillLife: 4
     Pictogram: 5
     DescriptiveDetail: 6
-    MODEL_IMAGE: 1
-    DETAIL_IMAGE: 2
+    MODEL_IMAGE: 7
+    DETAIL_IMAGE: 8
+    STILL_LIFE_FRONT_URL: 8
   teaser:
     Lookbook: 1
     DescriptiveStillLife: 2
     MODEL_IMAGE: 3
     DETAIL_IMAGE: 4
+    STILL_LIFE_FRONT_URL: 5
   swatch:
     Lookbook: 1
     DescriptiveStillLife: 2
     MODEL_IMAGE: 3
     DETAIL_IMAGE: 4
+    STILL_LIFE_FRONT_URL: 5
   cart:
     Lookbook: 1
     DescriptiveStillLife: 2
     MODEL_IMAGE: 3
     DETAIL_IMAGE: 4
+    STILL_LIFE_FRONT_URL: 5
   angle:
     - 1C
     - 1L

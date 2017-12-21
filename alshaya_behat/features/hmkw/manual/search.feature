@@ -10,6 +10,7 @@ Feature: Search feature
     And I wait for the page to load
     When I fill in "edit-keywords" with "bikini bottoms"
     And I press "Search"
+    And I wait for the page to load
     Then I should see Search results page for "bikini bottoms"
 
   @arabic
@@ -21,9 +22,10 @@ Feature: Search feature
     And I wait for the page to load
     And I follow "عربية"
     When I wait for the page to load
-    When I fill in "edit-keywords" with ""
+    When I fill in "edit-keywords" with "بلوزة بدون أ"
     And I press "Search"
-    Then I should see Search results page in Arabic for "بلوزة بحمالات مع قبة على شكل حرف V"
+    And I wait for the page to load
+    Then I should see Search results page in Arabic for "بلوزة بدون أ"
 
   @eng
   Scenario: As an authenticated user
@@ -42,11 +44,11 @@ Feature: Search feature
     And I wait for the page to load
     And I follow "عربية"
     When I wait for the page to load
-    When I fill in "edit-keywords" with "Green تي- شيرت"
+    When I fill in "edit-keywords" with "بلوزة بدون أ"
 #    When I fill in "edit-keywords" with "الرضع"
     And I press "Search"
     And I wait for the page to load
-    Then I should see Search results page for "Green تي- شيرت"
+    Then I should see Search results page for "بلوزة بدون أ"
 #    Then I should see Search results page in Arabic for "الرضع"
 
   @eng
@@ -59,6 +61,7 @@ Feature: Search feature
     And I wait for the page to load
     When I fill in "edit-keywords" with "randomtext"
     And I press "Search"
+    And I wait for the page to load
     Then I should see "Your search did not return any results."
 
   @arabic
@@ -73,6 +76,7 @@ Feature: Search feature
     When I wait for the page to load
     When I fill in "edit-keywords" with "نص عشوائي"
     And I press "Search"
+    And I wait for the page to load
     Then I should see "لا يوجد نتائج لبحثك"
 
   @eng
@@ -85,12 +89,12 @@ Feature: Search feature
     And I wait for the page to load
     When I fill in "edit-keywords" with "bikini bottoms"
     And I press "Search"
-    And I wait for AJAX to finish
+    And I wait for the page to load
     When I select a product in stock
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
-    When I press "Add to basket"
+    When I press "Add to cart"
     And I wait for AJAX to finish
     When I go to "/cart"
     And I wait for the page to load
@@ -102,7 +106,7 @@ Feature: Search feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -127,9 +131,9 @@ Feature: Search feature
     And I wait for the page to load
     And I follow "عربية"
     When I wait for the page to load
-    When I fill in "edit-keywords" with "صندوق هدية جوارب للبنات"
+    When I fill in "edit-keywords" with "بلوزة بدون أ"
     And I press "Search"
-    And I wait for AJAX to finish
+    And I wait for the page to load
     When I select a product in stock
     And I wait for the page to load
     When I select a size for the product
@@ -146,7 +150,7 @@ Feature: Search feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "مدينة الكويت" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
@@ -172,17 +176,17 @@ Feature: Search feature
     When I fill in "edit-keywords" with "bikini bottoms"
     And I press "Search"
     And I wait for the page to load
-    When I select "Name A to Z" from "edit-sort-bef-combine"
-    And I wait 10 seconds
+    When I select "Name A to Z" from the dropdown
+    And I wait for the page to load
     Then I should see results sorted in ascending order
-    When I select "Name Z to A" from "edit-sort-bef-combine"
-    And I wait 10 seconds
+    When I select "Name Z to A" from the dropdown
+    And I wait for the page to load
     Then I should see results sorted in descending order
-    When I select "Price High to Low" from "edit-sort-bef-combine"
-    And I wait 10 seconds
+    When I select "Price High to Low" from the dropdown
+    And I wait for the page to load
     Then I should see results sorted in descending price order
-    When I select "Price Low to High" from "edit-sort-bef-combine"
-    And I wait 10 seconds
+    When I select "Price Low to High" from the dropdown
+    And I wait for the page to load
     Then I should see results sorted in ascending price order
 
   Scenario: As a Guest user
@@ -193,10 +197,11 @@ Feature: Search feature
     When I close the popup
     And I wait for the page to load
 #    When I fill in "edit-keywords" with "بكحتة"
-    When I fill in "edit-keywords" with "تي- شيرت"
+    When I fill in "edit-keywords" with "بلوزة بدون أ"
     And I press "Search"
 #    Then I should see Search results page in Arabic for "بكحتة"
-    Then I should see Search results page in Arabic for "تي- شيرت"
+    And I wait for the page to load
+    Then I should see Search results page in Arabic for "بلوزة بدون أ"
     When I fill in "edit-keywords" with "bikini bottoms"
     And I press "Search"
     When I wait for the page to load

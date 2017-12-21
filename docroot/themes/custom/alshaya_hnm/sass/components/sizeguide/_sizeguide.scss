@@ -106,6 +106,10 @@
 }
 
 .sizeguide-modal-overlay {
+  position: fixed;
+  height: initial;
+  width: 100%;
+
   .ui-dialog {
     @include breakpoint($tablet) {
       padding: calc((100vh - 34.75rem) / 2) calc((100vw - 33.375rem) / 2);

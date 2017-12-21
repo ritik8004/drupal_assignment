@@ -1,5 +1,6 @@
 related_items_size: 12
 list_view_items_per_page: 30
+pdp_gallery_pager_limit: 5
 brand_logo_base_path: 'media/attribute/swatch'
 brand_logo_extension: 'jpg'
 not_buyable_message:

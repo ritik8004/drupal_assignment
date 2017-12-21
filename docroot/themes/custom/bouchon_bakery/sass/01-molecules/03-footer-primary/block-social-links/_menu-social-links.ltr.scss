@@ -11,6 +11,10 @@
 
     @include u-hidden-visually;
 
+    &:hover::before {
+      color: $camo-green;
+    }
+
     &::before {
       font-size: 2rem;
       display: block;

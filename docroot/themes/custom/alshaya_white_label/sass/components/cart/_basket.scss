@@ -740,7 +740,7 @@
   #coupon-button {
     &.add {
       font-family: $alshaya-bold;
-      display: inline-block;
+      display: block;
       margin-bottom: 14px;
       padding: 9px 30px;
       background: $pumpkin-orange;
@@ -748,6 +748,7 @@
       cursor: pointer;
       margin-#{$left}: 1.5rem;
       font-size: 0.75rem;
+      max-width: 6.25rem;
     }
 
     &.remove {

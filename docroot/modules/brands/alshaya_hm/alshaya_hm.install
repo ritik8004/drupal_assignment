@@ -9,6 +9,45 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Hook update to enable alshaya mothercare theme.
+ */
+function alshaya_hm_update_8008() {
+  \Drupal::service('theme_handler')->install(['alshaya_white_label'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
+  \Drupal::service('theme_handler')->uninstall(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
+}
+/**
+ * Implements hook_update().
+ *
+ * Set visiblity rule for customerservice block.
+ */
+function alshaya_hm_update_8007() {
+  // This will save override added in /config/override/block.block.customerservice.
+  \Drupal::configFactory()->getEditable('block.block.customerservice')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install Acquia Purge module on HnM.
+ */
+function alshaya_hm_update_8006() {
+  \Drupal::configFactory()->getEditable('purge_queuer_coretags.settings')->delete();
+  if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+    \Drupal::service('module_installer')->install(['acquia_purge']);
+
+    // Enable acquia_purge purger.
+    $purge_purgers = \Drupal::service('purge.purgers');
+    $purgers_enabled = $purge_purgers->getPluginsEnabled();
+    $purgers_enabled[$purge_purgers->createId()] = 'acquia_purge';
+    $purge_purgers->setPluginsEnabled($purgers_enabled);
+  }
+}
+
+/**
  * Implements hook_update_N().
  *
  * Add translation for concept facet.

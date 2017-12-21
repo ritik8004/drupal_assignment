@@ -5,6 +5,19 @@
  * Custom installation for Alshaya user.
  */
 
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_user_update_8002() {
+  $configs = [
+    'field.storage.user.field_mobile_number',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_user');
+}
+
 /**
  * Implements hook_install().
  */
@@ -92,7 +105,7 @@ function alshaya_user_install() {
     'weight' => 2,
     'type' => 'mobile_number_default',
     'settings' => [
-      'default_country' => 'KW',
+      'default_country' => Settings::get('country_code'),
       'countries' => [],
       'placeholder' => ' ',
     ],

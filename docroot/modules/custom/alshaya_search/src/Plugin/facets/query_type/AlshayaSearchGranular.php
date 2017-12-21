@@ -27,6 +27,50 @@ class AlshayaSearchGranular extends SearchApiGranular {
   /**
    * {@inheritdoc}
    */
+  public function build() {
+    // We display overlapping values in frontend, but internally
+    // we need ranges that are exclusive of each other.
+    // For instance on FE we show 4-6 and 6-8, here if there are products
+    // with price exactly 6 it is shown in 4-6 by facets but for counting
+    // we were displaying it in 6-8.
+    if (!empty($this->results)) {
+      // Get granularity to clean-up based on that.
+      $granularity = $this->getGranularity();
+
+      $filters = [];
+
+      // Result contains quotes as it is stored as string.
+      foreach ($this->results as $key => $result) {
+        $filter = str_replace('"', '', $result['filter']);
+        $filters[$filter] = $key;
+      }
+
+      // Sort them by key, we have int now.
+      ksort($filters);
+
+      foreach ($filters as $filter => $key) {
+        // No checking for cases between 0 and granularity.
+        if ($filter < $granularity) {
+          continue;
+        }
+
+        // Check if the value is edge case (== granularity).
+        if ($filter % $granularity === 0) {
+          // We decrease it by 1 decimal point to ensure it is shown in 4 to 6
+          // instead of 6 to 8 (by making it 5.999).
+          $new_value = $filter - (1 / pow(10, self::getDecimals()));
+          $this->results[$key]['filter'] = '"' . $new_value . '"';
+        }
+      }
+    }
+
+    // Call parent's build now to use the contrib code as is.
+    return parent::build();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function calculateResultFilter($value) {
     $range = $this->getRange(floor($value));
 
@@ -36,7 +80,7 @@ class AlshayaSearchGranular extends SearchApiGranular {
     ];
 
     // If this is the first range, display, "under X".
-    if ($range['start'] == 0) {
+    if (floor($range['start']) == 0) {
       $displayValue = t('under @stop', $t_options)->render();
     }
     else {
@@ -76,6 +120,71 @@ class AlshayaSearchGranular extends SearchApiGranular {
       'start' => $start,
       'stop' => $stop,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function execute() {
+    $query = $this->query;
+
+    // Alter the query here.
+    if (!empty($query)) {
+      $options = &$query->getOptions();
+
+      $operator = $this->facet->getQueryOperator();
+      $field_identifier = $this->facet->getFieldIdentifier();
+      $exclude = $this->facet->getExclude();
+      $options['search_api_facets'][$field_identifier] = [
+        'field' => $field_identifier,
+        'limit' => $this->facet->getHardLimit(),
+        'operator' => $this->facet->getQueryOperator(),
+        'min_count' => $this->facet->getMinCount(),
+        'missing' => FALSE,
+      ];
+
+      // Add the filter to the query if there are active values.
+      $active_items = $this->facet->getActiveItems();
+      $filter = $query->createConditionGroup($operator, ['facet:' . $field_identifier]);
+      if (count($active_items)) {
+        foreach ($active_items as $value) {
+          $range = $this->calculateRange($value);
+
+          $item_filter = $query->createConditionGroup('AND', ['facet:' . $field_identifier]);
+
+          // Below line is the only change from default implementation of
+          // parent::build(). We want to keep the results exclusive in
+          // calculation but overlapping on display (frontend) so we use
+          // GT instead GTEQ in condition below.
+          $item_filter->addCondition($this->facet->getFieldIdentifier(), $range['start'], $exclude ? '<' : '>');
+          $item_filter->addCondition($this->facet->getFieldIdentifier(), $range['stop'], $exclude ? '>' : '<=');
+
+          $filter->addConditionGroup($item_filter);
+        }
+        $query->addConditionGroup($filter);
+      }
+    }
+  }
+
+  /**
+   * Helper function to get decimal points to show.
+   *
+   * @return int
+   *   Decimals point.
+   */
+  private static function getDecimals() {
+    static $decimals;
+
+    if (empty($decimals)) {
+      $decimals = 3;
+
+      if (\Drupal::moduleHandler()->moduleExists('acq_commerce')) {
+        $config = \Drupal::configFactory()->get('acq_commerce.currency');
+        $decimals = (int) $config->get('decimal_points');
+      }
+    }
+
+    return $decimals;
   }
 
 }

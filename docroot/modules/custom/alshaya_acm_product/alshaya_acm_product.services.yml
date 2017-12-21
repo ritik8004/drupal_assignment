@@ -14,6 +14,7 @@ services:
       - '@acq_sku.linked_sku'
       - '@cache.alshaya'
       - '@cache.product_labels'
+      - '@cache.configurable_price'
   cache.alshaya:
     class: Drupal\Core\Cache\CacheInterface
     tags:
@@ -26,3 +27,9 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [product_labels]
+  cache.configurable_price:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [configurable_price]

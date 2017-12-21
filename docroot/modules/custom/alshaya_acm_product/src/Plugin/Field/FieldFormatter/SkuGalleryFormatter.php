@@ -105,6 +105,20 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
 
+    $promotion_page_nid = NULL;
+
+    $current_route_name = $this->currentRouteMatch->getRouteName();
+    $current_node = $this->currentRouteMatch->getParameter('node');
+    if ($current_route_name === 'entity.node.canonical' && $current_node->bundle() === 'acq_promotion') {
+      $promotion_page_nid = $current_node->id();
+    }
+    elseif ($current_route_name === 'views.ajax') {
+      // We use $_REQUEST directly as views remove the value we want to access.
+      if (isset($_REQUEST['view_args']) && $_REQUEST['view_args'] > 0) {
+        $promotion_page_nid = $_REQUEST['view_args'];
+      }
+    }
+
     $elements = [];
     $product_url = $product_label = '';
 
@@ -146,16 +160,12 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         $promotion_types = ['cart'];
         $promotions = $this->skuManager->getPromotionsFromSkuId($sku, FALSE, $promotion_types);
-        $current_route_name = $this->currentRouteMatch->getRouteName();
-        $current_node = $this->currentRouteMatch->getParameter('node');
 
         foreach ($promotions as $key => $promotion) {
           $promotions[$key]['render_link'] = TRUE;
           // Check if current page is promotion page,
           // render current promotion as text.
-          if (($current_route_name === 'entity.node.canonical') &&
-            ($current_node->bundle() === 'acq_promotion') &&
-            ((int) $current_node->id() === $key)) {
+          if ($promotion_page_nid && $promotion_page_nid == $key) {
             $promotions[$key]['render_link'] = FALSE;
           }
           $promotion_cache_tags[] = 'node:' . $key;
