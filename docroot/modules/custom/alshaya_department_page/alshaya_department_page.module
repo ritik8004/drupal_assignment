@@ -13,6 +13,11 @@ use Drupal\Core\Cache\Cache;
 use Drupal\node\Entity\Node;
 
 /**
+ * Cache id to store and fetch department page node id from term id.
+ */
+const DEPARTMENT_PAGE_TERM_CACHE_ID = 'department_page:terms:nodes';
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_department_page_form_node_department_page_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -45,6 +50,10 @@ function alshaya_department_page_form_node_department_page_form_alter(&$form, Fo
 function alshaya_department_page_node_presave(EntityInterface $entity) {
   if ($entity->getType() == 'department_page') {
     Cache::invalidateTags(['route_match']);
+    // Deleting/Clearing cache on department page node save as this will not
+    // happen very often.
+    $cid = DEPARTMENT_PAGE_TERM_CACHE_ID;
+    \Drupal::cache('data')->delete($cid);
   }
 }
 
@@ -175,15 +184,26 @@ function alshaya_department_page_language_switch_links_alter(array &$links, $typ
  * Check for given term, department page exists.
  *
  * Check for given term, department page exists. If department page exists
- * then return that department page node or return false.
+ * then return that department page node id or return false.
  *
  * @param int $tid
  *   The term id.
  *
- * @return \Drupal\node\Entity\Node|bool
- *   Department page node object of false.
+ * @return int|bool
+ *   Department page node id or false.
  */
 function alshaya_department_page_is_department_page($tid) {
+  $cid = DEPARTMENT_PAGE_TERM_CACHE_ID;
+  $data = [];
+  // Check for cache first.
+  if ($cache = \Drupal::cache('data')->get($cid)) {
+    $data = $cache->data;
+    // If cache hit.
+    if (!empty($cache->data[$tid])) {
+      return $cache->data[$tid];
+    }
+  }
+
   // Get all department pages.
   $department_pages = alshaya_department_page_get_pages();
   // If there is department page available for given term.
@@ -192,7 +212,9 @@ function alshaya_department_page_is_department_page($tid) {
     /** @var \Drupal\node\Entity\Node $node */
     if ($node = Node::load($nid)) {
       if ($node->isPublished()) {
-        return $node;
+        $data[$tid] = $nid;
+        \Drupal::cache('data')->set($cid, $data, Cache::PERMANENT, ['node_type:department_page']);
+        return $nid;
       }
     }
   }

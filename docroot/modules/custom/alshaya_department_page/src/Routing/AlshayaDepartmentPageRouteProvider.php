@@ -29,7 +29,7 @@ class AlshayaDepartmentPageRouteProvider extends RouteProvider {
             $route = unserialize($node_route[0]['route']);
             // Setting options to identify the department page later.
             $route->setOption('_department_page_term', $exploded_path[3]);
-            $route->setOption('_department_page_node', $department_node->id());
+            $route->setOption('_department_page_node', $department_node);
             $collection->add($node_route[0]['name'], $route);
           }
         }
