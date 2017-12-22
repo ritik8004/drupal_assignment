@@ -108,7 +108,6 @@ function alshaya_hm_module_implements_alter(&$implementations, $hook) {
   }
 }
 
-
 /**
  * Implements hook_language_switch_links_alter().
  */
@@ -131,15 +130,15 @@ function alshaya_hm_language_switch_links_alter(array &$links, $type, Url $url) 
       if (($langcode != \Drupal::languageManager()->getCurrentLanguage()->getId()) &&
         ($node->hasTranslation($langcode))) {
         $sku = SKU::loadFromSku($node->get('field_skus')->first()->getString());
-        // Get one of the child SKUs whose color label matches the query string.
-        $sku_color = $sku_asset_manager->getChildSkuFromColor($sku, $color_query);
-
-        // If its a valid SKU & has translation in the language for which the
-        // lang-switcher link is being built, fetch the color label translation.
-        if (($sku_color instanceof SKU) &&
-          ($sku_color->hasTranslation($langcode))) {
-          $color_query_translation = $sku_color->getTranslation($langcode)->get('attr_color_label')->value;
-          $links[$langcode]['query']['color'] = $color_query_translation;
+        if ($sku instanceof SKU) {
+          // Get one of the child SKUs whose color label matches the query string.
+          $sku_color = $sku_asset_manager->getChildSkuFromColor($sku, $color_query);
+          // If its a valid SKU & has translation in the language for which the
+          // lang-switcher link is being built, fetch the color label translation.
+          if (($sku_color instanceof SKU) &&
+            ($sku_color->hasTranslation($langcode))) {
+            $links[$langcode]['query']['color'] = $sku_color->getTranslation($langcode)->get('attr_color_label')->value;
+          }
         }
       }
     }
