@@ -1050,6 +1050,10 @@ header {
       transform: translate3d(0, 0, 0);
       background-color: rgba(0, 0, 0, 0.48);
     }
+
+    .branding__menu {
+      border-bottom: 0;
+    }
   }
 
   .main--menu {
