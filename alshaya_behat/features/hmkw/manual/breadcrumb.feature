@@ -8,61 +8,80 @@ Feature: Test breadcrumbs displayed across the site
     Then the breadcrumb "<breadcrumb>" should be displayed
     Examples:
     |page|breadcrumb|
-    |/ladies|home > Ladies|
-    |/ladies/dresses|home > Ladies > Dresses|
-    |/ladies/new-arrivals/clothes|home > Ladies > New Arrivals > Clothes|
-    |/small-shoulder-bag|home > Ladies > Shop By Product > Accessories > Small Shoulder Bag|
-    |/cart                                                 |home > Basket                                                                                            |
-    |/store-finder                                         |home > Find Stores                                                                                       |
-    |/ar/ملابس-الرضع                                       |الصفحة الرئيسية > ملابس الرضع                                                                            |
-    |/ar/للأطفال-منذ-الولادة-وحتى-18-شهراً/ملابس-الرضع     |الصفحة الرئيسية > ملابس الرضع > للأطفال (منذ الولادة وحتى 18 شهراً)                                      |
-    |/ar/جديدنا-من-ملابس-الأطفال/للأطفال-منذ-الولادة-وحتى-18-شهراً/ملابس-الرضع|الصفحة الرئيسية > ملابس الرضع > للأطفال (منذ الولادة وحتى 18 شهراً) > جديدنا من: ملابس الأطفال|
-    |/ar/طقم-تي-شيرت-برسمة-disney-mickey-mouse-وشورت-جينز                     |الصفحة الرئيسية > ملابس الرضع > للأطفال (منذ الولادة وحتى 18 شهراً) > للأولاد > طقم تي-شيرت برسمة disney mickey mouse وشورت جينز|
-    |/ar/vk-promo-001                                                         |الصفحة الرئيسية > vk promo 001 < toys                                                                                                  |
-    |/ar/cart                                                                 |الرئيسية > حقيبة التسوق                                                                                                         |
-    |/ar/store-finder                                                         |الصفحة الرئيسية > البحث عن المحلات                                                                                              |
+    |/ladies|Home > Ladies|
+    |/ladies/new-arrivals/clothes|Home > Ladies > New Arrivals > Clothes|
+    |/small-shoulder-bag|Home > Ladies > Shop By Product > Accessories > Small Shoulder Bag|
+    |/cart                                                 |Home > Basket                                                                                            |
+    |/store-finder                                         |Home > Find Stores                                                                                       |
+
+  @arabic
+  Scenario: As a guest on Arabic site
+    I should be able to view breadcrumbs across the site
+    Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait for the page to load
+    When I follow "عربية"
+    And I wait for the page to load
+    When I follow "للنساء"
+    And I wait for the page to load
+    Then the breadcrumb "الصفحة الرئيسية > للنساء" should be displayed
+    When I follow "الملابس"
+    And I wait for the page to load
+    Then the breadcrumb "الصفحة الرئيسية > للنساء > شسيبلاتنمثقفصض > الملابس" should be displayed
+    When I follow "جاكيت بقبعة"
+    And I wait for the page to load
+    Then the breadcrumb "الصفحة الرئيسية > للنساء > شسيبلاتنمثقفصض > الملابس > جاكيت بقبعة" should be displayed
+    When I click the label for ".cart-link"
+    And I wait for the page to load
+    Then the breadcrumb "الرئيسية > حقيبة التسوق" should be displayed
+    When I follow "البحث عن محلاتنا"
+    And I wait for the page to load
+    Then the breadcrumb "الصفحة الرئيسية > البحث عن المحلات" should be displayed
 
   Scenario: As a Guest
     I should be able to view breadcrumb on store detail page
     Given I am on "/store-finder"
     And I wait for the page to load
-    When I follow "M.H. Alshaya Building"
+    When I follow "Avenues Family"
     And I wait for the page to load
-    Then the breadcrumb "home > find stores > m.h. alshaya building" should be displayed
+    Then the breadcrumb "Home > Find Stores > Avenues Family" should be displayed
     
   @arabic
   Scenario: As a Guest on Arabic site
   I should be able to view breadcrumb on store detail page
-    Given I am on "/ar/store-finder"
+    Given I am on "/store-finder"
     And I wait for the page to load
-    When I follow "سوق شرق"
+    When I follow "عربية"
     And I wait for the page to load
-    Then the breadcrumb "الصفحة الرئيسية > البحث عن المحلات > سوق شرق" should be displayed
+    When I follow "اتش آند ام غراند أفنيوز"
+    And I wait for the page to load
+    Then the breadcrumb "الصفحة الرئيسية > البحث عن المحلات > اتش آند ام غراند أفنيوز" should be displayed
 
   Scenario: As an authenticated user
-    I should be able to view breadcrumbs on My account section
+    I should be able to view breadcrumbs on My Account section
     Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    Then the breadcrumb "home > my account" should be displayed
+    Then the breadcrumb "Home > My Account" should be displayed
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
-    Then the breadcrumb "home > my account > orders" should be displayed
+    Then the breadcrumb "Home > My Account > Orders" should be displayed
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
     And I wait for the page to load
-    Then the breadcrumb "home > my account > contact details" should be displayed
+    Then the breadcrumb "Home > My Account > Contact Details" should be displayed
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
     And I wait for the page to load
-    Then the breadcrumb "home > my account > address book" should be displayed
+    Then the breadcrumb "Home > My Account > Address Book" should be displayed
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
     And I wait for the page to load
-    Then the breadcrumb "home > my account > communication preferences" should be displayed
+    Then the breadcrumb "Home > My Account > Communication Preferences" should be displayed
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(6) > a"
     And I wait for the page to load
-    Then the breadcrumb "home > my account > change password" should be displayed
+    Then the breadcrumb "Home > My Account > Change Password" should be displayed
 
   @arabic
   Scenario: As an authenticated user on Arabic site
-  I should be able to view breadcrumbs on My account section
+  I should be able to view breadcrumbs on My Account section
     Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "عربية"
