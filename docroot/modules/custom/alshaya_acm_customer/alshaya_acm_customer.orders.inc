@@ -338,6 +338,15 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
+  // Add transaction & payment details to confirmation data in case of KNET.
+  if (!empty($order['payment']) &&
+    ($order['payment']['method_code'] === 'knet')) {
+    $knet_transac_data = \Drupal::state()->get('knet:' . md5($order['increment_id']));
+    $orderDetails['transaction_id'] = $knet_transac_data['transaction_id'];
+    $orderDetails['payment_id'] = $knet_transac_data['payment_id'];
+    $orderDetails['result_code'] = $knet_transac_data['result_code'];
+  }
+
   return $orderDetails;
 }
 
