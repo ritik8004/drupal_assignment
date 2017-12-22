@@ -1,9 +1,9 @@
 @import '../../../../sass/config/**/*.scss';
 
-.status-message {
+.status-message,
+.error-message {
   padding: 1rem 1.5rem;
-  color: $brownish-grey;
-  border: 2px solid $black-smoke;
+  color: $grey-smoke;
 
   @include breakpoint($above-palm) {
     max-width: 67.125rem;
@@ -23,4 +23,14 @@
   li {
     margin-bottom: 10px;
   }
+}
+
+.status-message {
+  border: 2px solid $parrot;
+  background-color: $parrot;
+}
+
+.error-message {
+  border: 2px solid $venetian-red;
+  background-color: $venetian-red;
 }
