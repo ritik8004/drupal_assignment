@@ -688,9 +688,18 @@
       font-size: 0.875rem;
       color: $hnm-black-two;
       line-height: 2.5;
+      height: 3.2rem;
       cursor: pointer;
       position: relative;
       text-transform: none;
+
+      @include breakpoint($upto-desktop) {
+        line-height: 2.4;
+
+        &::after {
+          top: 42%;
+        }
+      }
 
       &::after {
         #{$right}: 0.9375rem;
