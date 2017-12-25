@@ -79,6 +79,23 @@
       color: $white-five;
     }
   }
+
+  .user__order--detail {
+    .total-row .dark .price {
+      color: $hnm-black-two;
+      font-family: $hnm-demibold;
+      font-size: 0.875rem;
+    }
+  }
+
+  .c-content {
+    .user__order--detail {
+      .total-row .warm--white {
+        background-color: $whisper-light;
+        padding: 0.5rem 1.375rem;
+      }
+    }
+  }
 }
 
 .user__order--detail {
