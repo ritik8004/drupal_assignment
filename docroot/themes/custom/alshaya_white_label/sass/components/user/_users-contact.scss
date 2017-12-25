@@ -42,7 +42,11 @@
   .field--name-field-last-name {
     display: inline-block;
     max-width: 10.7rem;
-    width: calc(50% - 12px);
+    width: calc(50% - 0.75rem);
+
+    @include breakpoint($only-mobile) {
+      width: calc(50% - 0.875rem);
+    }
 
     input {
       margin-top: 0.5rem;
@@ -61,7 +65,7 @@
       margin-top: -13px;
 
       #edit-account {
-        margin-top: 4.375rem;
+        margin-top: 3.375rem;
       }
 
       .field--name-field-privilege-card-number {
