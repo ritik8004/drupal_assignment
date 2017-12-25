@@ -308,6 +308,12 @@
 
   @include breakpoint($only-tablet) {
     height: 4.5rem;
+
+    &.show-overlay {
+      &::before {
+        bottom: -1px;
+      }
+    }
   }
 }
 
