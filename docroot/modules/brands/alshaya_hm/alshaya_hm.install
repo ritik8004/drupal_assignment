@@ -9,6 +9,36 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Implement hook_update_N().
+ *
+ * Disable Brand facets.
+ */
+function alshaya_hm_update_8009() {
+  $block_brand_facets = [
+    'block.block.brand',
+    'block.block.promotionbrandfacet',
+    'block.block.skusskureferencebrand',
+  ];
+
+  foreach ($block_brand_facets as $block_brand_facet) {
+    // Re-save config for the overrides to take effect.
+    \Drupal::configFactory()->getEditable($block_brand_facet)
+      ->save();
+  }
+}
+
+/**
+ * Hook update to enable alshaya_white_label theme.
+ */
+function alshaya_hm_update_8008() {
+  \Drupal::service('theme_handler')->install(['alshaya_white_label'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
+  \Drupal::service('theme_handler')->uninstall(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
+}
+
+/**
  * Implements hook_update().
  *
  * Set visiblity rule for customerservice block.
@@ -25,6 +55,7 @@ function alshaya_hm_update_8007() {
  * Install Acquia Purge module on HnM.
  */
 function alshaya_hm_update_8006() {
+  \Drupal::configFactory()->getEditable('purge_queuer_coretags.settings')->delete();
   if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     \Drupal::service('module_installer')->install(['acquia_purge']);
 

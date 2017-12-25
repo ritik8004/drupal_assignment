@@ -87,10 +87,12 @@ function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAt
     if (isset($skuId)) {
       $sku = SKU::loadFromSku($skuId);
       $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-      $images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
-      if (!empty($images)) {
-        // Changes for the image count.
-        $skuAttributes['gtm-dimension4'] = count($images);
+      if ($sku instanceof SKU) {
+        $images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
+        if (!empty($images)) {
+          // Changes for the image count.
+          $skuAttributes['gtm-dimension4'] = count($images);
+        }
       }
     }
   }

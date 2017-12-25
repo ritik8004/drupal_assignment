@@ -21,7 +21,7 @@
             else {
               // Close the menu if it is open.
               if ($('.filter--mobile .c-facet__blocks').is(':visible')) {
-                $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
+                $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu, .c-footer')
                   .toggleClass('show-overlay');
                 $('.filter--mobile .c-facet__blocks').toggle();
                 $('body').toggleClass('filter-open-no-scroll');
@@ -258,7 +258,7 @@
           }
 
           facetLabel.on('click', function () {
-            $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu')
+            $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu, .c-footer')
               .toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
             $('body').toggleClass('filter-open-no-scroll');
@@ -342,8 +342,14 @@
             var facet_id = blockPlugin.replace('facet_block:', '');
             var softLimitSettings = settings.facets.softLimit;
             var softItemsLimit = softLimitSettings[facet_id] - 1;
-            $(this).find('ul li:gt(' + softItemsLimit + ')').hide();
-            softLink.insertAfter($(this).find('ul'));
+            if (!isNaN(parseInt(softItemsLimit))) {
+              // Facets module would hide all instances of list items in the
+              // second instance of the facet block. This is to support same
+              // facet block twice on a page.
+              $(this).find('ul li:lt(' + (parseInt(softItemsLimit) + 1) + ')').show();
+              $(this).find('ul li:gt(' + parseInt(softItemsLimit) + ')').hide();
+              softLink.insertAfter($(this).find('ul'));
+            }
           });
 
           // Function defined in mobile and called here.

@@ -6,7 +6,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    When I am logged in as an authenticated user "Test+4@axelerant.com" with password "Alshaya123$"
+    When I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
 
   Scenario:
@@ -61,47 +61,49 @@ Feature: Test the My account section for authenticated user
     And I should see the link "Terms and Conditions of Sale"
     Then I should see the link "Delivery Information"
 
-#  Scenario: As an authenticated user
-#    I should be prompted to join the privilege club
-#    if I don't have a privilege account
-#    When I follow "edit account details"
-#    And I wait for the page to load
-#    When I fill in "edit-field-mobile-number-0-mobile" with ""
-#    When I click the label for "#ui-id-2 > p.title"
-#    When I fill in "edit-privilege-card-number" with ""
-#    And I press "Save"
-#    And I wait for the page to load
-#    Then I should see "Contact details changes have been saved."
-#    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
-#    And I wait for the page to load
-#    Then I should see "Join the club"
-#    And I should see "Win exciting prizes"
-#    Then I should see "Unlock exclusive rewards"
-#    And I should see "Be the first to know"
-#    Then I should see the link "Learn more"
-#    And I should not see "Privilege card number"
+  @loyalty
+  Scenario: As an authenticated user
+    I should be prompted to join the privilege club
+    if I don't have a privilege account
+    When I follow "edit account details"
+    And I wait for the page to load
+    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I click the label for "#ui-id-2 > p.title"
+    When I fill in "edit-privilege-card-number" with ""
+    And I press "Save"
+    And I wait for the page to load
+    Then I should see "Contact details changes have been saved."
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
+    And I wait for the page to load
+    Then I should see "Join the club"
+    And I should see "Win exciting prizes"
+    Then I should see "Unlock exclusive rewards"
+    And I should see "Be the first to know"
+    Then I should see the link "Learn more"
+    And I should not see "Privilege card number"
 
-#  Scenario: As an authenticated user
-#    account details section should display Privilege card number
-#    along with Email address and Contact number
-#    When I follow "edit account details"
-#    And I wait for the page to load
-#    When I fill in "edit-field-mobile-number-0-mobile" with ""
-#    When I click the label for "#ui-id-2 > p.title"
-#    When I fill in "edit-privilege-card-number" with "000135844"
-#    And I fill in "edit-privilege-card-number2" with "000135844"
-#    And I press "Save"
-#    And I wait for the page to load
-#    Then I should see "Contact details changes have been saved."
-#    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
-#    And I wait for the page to load
-#    Then I should see "Test+3@axelerant.com"
-#    Then I should see "6362 - 5440 - 0013 - 5844"
-#    But I should not see "Join the club"
-#    And I should not see "Win exciting prizes"
-#    Then I should not see "Unlock exclusive rewards"
-#    And I should not see "Be the first to know"
-#    Then I should not see the link "Learn more"
+  @loyalty
+  Scenario: As an authenticated user
+    account details section should display Privilege card number
+    along with Email address and Contact number
+    When I follow "edit account details"
+    And I wait for the page to load
+    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I click the label for "#ui-id-2 > p.title"
+    When I fill in "edit-privilege-card-number" with "000135844"
+    And I fill in "edit-privilege-card-number2" with "000135844"
+    And I press "Save"
+    And I wait for the page to load
+    Then I should see "Contact details changes have been saved."
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
+    And I wait for the page to load
+    Then I should see "Test+3@axelerant.com"
+    Then I should see "6362 - 5440 - 0013 - 5844"
+    But I should not see "Join the club"
+    And I should not see "Win exciting prizes"
+    Then I should not see "Unlock exclusive rewards"
+    And I should not see "Be the first to know"
+    Then I should not see the link "Learn more"
 
   Scenario: As an authenticated user
     I should be able to see most recent 10 orders
@@ -119,19 +121,17 @@ Feature: Test the My account section for authenticated user
     by ID, name, SKU in combination with the Status of the order
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
-    When I fill in "edit-search" with "stronglax"
-#    When I fill in "edit-search" with "Mothercare"
+    When I fill in "edit-search" with "graphic tee"
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
     Then I should see at most "10" recent orders listed on orders tab
-    Then I should see all "Stronglax" orders
-#    Then I should see all "Mothercare" orders
-    When I fill in "edit-search" with "MCKWRCE"
+    Then I should see all "graphic tee" orders
+    When I fill in "edit-search" with "MCKWHDE"
     And I wait 2 seconds
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
     Then I should see at most "10" recent orders listed on orders tab
-    And I should see all orders for "MCKWRCE"
+    And I should see all orders for "MCKWHDE"
 
   Scenario: As an authenticated user
     I should be able to filter on all cancelled, dispatched and processing orders

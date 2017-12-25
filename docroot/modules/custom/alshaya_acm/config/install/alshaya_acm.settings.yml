@@ -1,2 +1,3 @@
 api_cache_time: 300
 display_crosssell: FALSE
+pdp_show_specifications: TRUE

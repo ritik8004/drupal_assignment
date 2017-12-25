@@ -1411,13 +1411,17 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     }
 
     /**
-     * @When /^I click "([^"]*)" in the region "([^"]*)"$/
+     * @When /^I click "([^"]*)" "([^"]*)" in the region "([^"]*)"$/
      */
-    public function iClickInTheRegion($element, $region) {
+    public function iClickInTheRegion($element, $type, $region)
+    {
         $page = $this->getSession()->getPage();
-        $object = $page->find('css', $region);
-        var_dump($object);
-        //    $page->clickLink($object);
+        $region = $page->find('css', $region);
+        if ($region !== null) {
+            $region->find('named', array($type, $element))->click();
+        } else {
+            throw new Exception('Breadcrumbs not displayed');
+        }
     }
 
     /**
@@ -1522,16 +1526,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     }
 
     /**
-     * @When /^I subscribe to one of the shows$/
-     */
-    public function iSubscribeToOneOfTheShows() {
-        $page = $this->getSession()->getPage();
-        $page->find('css', '#node-page-10 > div.content.clearfix > div.subscribe-row > div.subscribe-box.p1.monthly > div.subscribe-button > a')
-            ->click();
-
-    }
-
-    /**
      * @When /^I agree on Terms of Use$/
      */
     public function iAgreeOnTermsOfUse() {
@@ -1609,8 +1603,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         $page = $this->getSession()->getPage();
         $page->find('css',$arg1)->mouseOver();
     }
-
-
 
     /**
      * @Then /^the breadcrumb "([^"]*)" should be displayed$/
@@ -1824,17 +1816,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         }
         $current_window = $this->getSession()->getWindowName();
         $this->getSession()->stop($current_window);
-    }
-
-    /**
-     * @Then /^I should see the text "([^"]*)" in region "([^"]*)"$/
-     */
-    public function iShouldSeeTheTextInRegion($text, $region) {
-        $page = $this->getSession()->getPage();
-        $confirm_text = $page->find('css', $region)->find('named', array('content', $text));
-        if(!$confirm_text){
-            throw new Exception($text. ' is not found anywhere on the current page');
-        }
     }
 
     /**
