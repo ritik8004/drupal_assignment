@@ -16,6 +16,7 @@ Feature: Test breadcrumbs displayed across the site
     |/cart                                                 |home > basket                                                                                            |
     |/store-finder                                         |home > find stores                                                                                       |
 
+  @arabic
   Scenario:  As a guest on Arabic site
   I should be able to view breadcrumbs across the site
     Given I am on homepage
