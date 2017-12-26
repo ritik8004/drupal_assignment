@@ -1,0 +1,7 @@
+name: 'Alshaya country (Kuwait)'
+type: module
+description: 'Country related settings for Alshaya kuwait.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_country

@@ -628,6 +628,10 @@ header {
       font-size: 0;
       padding-top: 0.3125rem;
 
+      html[lang=ar] & {
+        font-size: 1px;
+      }
+
       &::before {
         margin-#{$right}: 0.3125rem;
       }
@@ -1045,6 +1049,10 @@ header {
       #{$right}: 0;
       transform: translate3d(0, 0, 0);
       background-color: rgba(0, 0, 0, 0.48);
+    }
+
+    .branding__menu {
+      border-bottom: 0;
     }
   }
 

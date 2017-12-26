@@ -1,0 +1,7 @@
+name: 'Alshaya Country'
+type: module
+description: 'Country related settings for Alshaya.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - system
