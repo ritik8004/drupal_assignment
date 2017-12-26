@@ -5,11 +5,33 @@
 
 // Reset to normalize browser styles.
 @import "reset";
+// Importing base theme css
+// Config file that contains centralized variables.
+@import "../../alshaya_white_label/sass/config/**/*";
+@import "../../alshaya_white_label/sass/utils";
+
+// Utilities for building multilingual websites.
+@import "../../alshaya_white_label/sass/directional";
+
+// These are the default base styles applied to HTML elements.
+@import "../../alshaya_white_label/sass/base/**/*";
+
+// These are the layout rules.
+@import "../../alshaya_white_label/sass/layout/**/*";
+
+// Design components are reusable styling that can be applied using just the CSS
+// class names specified in the component. Also known as design 'modules'.
+@import "../../alshaya_white_label/sass/components/**/*";
+
+// States are variations that are usually applied via js, such as `.is-active`.
+@import "../../alshaya_white_label/sass/state/**/*";
+
+// Importing browser specific hot fixes.
+@import "../../alshaya_white_label/sass/hotfix";
 
 // Config file that contains centralized variables.
 @import "config/**/*";
 @import "utils";
-@import "icons";
 
 // Utilities for building multilingual websites.
 @import "directional";
@@ -17,12 +39,9 @@
 // These are the default base styles applied to HTML elements.
 @import "base/**/*";
 
-// These are the layout rules.
-@import "layout/**/*";
-
 // Design components are reusable styling that can be applied using just the CSS
 // class names specified in the component. Also known as design 'modules'.
 @import "components/**/*";
 
-// States are variations that are usually applied via js, such as `.is-active`.
-@import "state/**/*";
+// Importing browser specific hot fixes.
+@import "hotfix";
