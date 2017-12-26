@@ -101,7 +101,8 @@ function alshaya_acm_install() {
   $user->setEmail(Settings::get('alshaya_acm_user_email'));
   $user->setUsername(Settings::get('alshaya_acm_user_username'));
   $user->activate();
-  $user->addRole('acq_commerce_sync');
+  // TODO: Security.
+  $user->addRole('administrator');
   $user->save();
 
   // Configure Simple Oauth.
