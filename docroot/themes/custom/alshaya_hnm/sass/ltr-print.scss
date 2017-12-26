@@ -42,6 +42,3 @@
 // Design components are reusable styling that can be applied using just the CSS
 // class names specified in the component. Also known as design 'modules'.
 @import "components/**/*";
-
-// Importing browser specific hot fixes.
-@import "hotfix";
