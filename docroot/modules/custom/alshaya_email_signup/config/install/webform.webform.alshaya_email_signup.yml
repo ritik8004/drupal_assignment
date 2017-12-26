@@ -76,7 +76,7 @@ settings:
   results_disabled: false
   results_disabled_ignore: false
   token_update: false
-  ajax: false
+  ajax: true
   form_prepopulate_source_entity_required: false
   form_prepopulate_source_entity_type: ''
   form_reset: false
