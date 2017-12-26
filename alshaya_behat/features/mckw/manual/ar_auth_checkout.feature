@@ -4,14 +4,17 @@ Feature: As an authenticated user
   using various payment options on Arabic site
 
   Background:
-    When I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
+    When I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
-    Given I am on a simple product page
-    And I wait for the page to load
+    Given I am on a configurable product
+    When I select a size for the product
+    And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "العربية"
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load

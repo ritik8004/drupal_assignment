@@ -6,6 +6,18 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add config for show tax info.
+ */
+function alshaya_acm_checkout_update_8001() {
+  // Show tax config to all sites.
+  $configFactory = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $configFactory->set('checkout_show_tax_info', TRUE);
+  $configFactory->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_acm_checkout_install() {

@@ -126,9 +126,6 @@ class AlshayaAcmConfigCheck {
     \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency')
       ->set('currency_code', _alshaya_get_currency_code($country_code, 'ar'))
       ->save();
-
-    // Re-save store finder view to ensure country code is updated.
-    \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
   }
 
 }

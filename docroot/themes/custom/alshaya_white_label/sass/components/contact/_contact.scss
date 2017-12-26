@@ -299,20 +299,22 @@ html[lang=ar] {
   }
 }
 
-.c-user-edit.user-page {
-  .user-form {
-    .field--name-field-first-name,
-    .field--name-field-last-name {
-      margin-top: -1rem;
-    }
+@include breakpoint($desktop) {
+  .c-user-edit.user-page {
+    .user-form {
+      .field--name-field-first-name,
+      .field--name-field-last-name {
+        margin-top: -1rem;
+      }
 
-    .mobile-number-field {
-      margin-top: 1rem;
-    }
+      .mobile-number-field {
+        margin-top: 1rem;
+      }
 
-    .field--type-mobile-number {
-      position: relative;
-      top: 1.3rem;
+      .field--type-mobile-number {
+        position: relative;
+        top: 1.3rem;
+      }
     }
   }
 }
@@ -323,4 +325,3 @@ html[lang=ar] {
     display: inline-block;
   }
 }
-
