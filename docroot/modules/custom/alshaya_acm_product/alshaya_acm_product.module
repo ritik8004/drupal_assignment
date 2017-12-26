@@ -1090,18 +1090,14 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
       $cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL);
 
-      if (!empty($cross_sell_skus)) {
-        $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
-        if (!empty($crosssell_items)) {
-          $cross_sell_markup = [
-            '#theme' => 'products_cross_sell',
-            '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
-          ];
+      $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+      $cross_sell_markup = [
+        '#theme' => 'products_cross_sell',
+        '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
+      ];
 
-          $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup));
-          $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup));
-        }
-      }
+      $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup));
+      $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup));
     }
 
     // React for click & collect if stock is available.
