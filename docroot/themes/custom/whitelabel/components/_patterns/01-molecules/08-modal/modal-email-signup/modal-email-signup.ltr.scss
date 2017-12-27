@@ -78,6 +78,24 @@
   }
 }
 
+.captcha {
+  clear: both;
+
+  + .captcha-inline-error {
+    display: none;
+  }
+}
+
+.captcha-inline-error {
+  color: $venetian-red;
+  font-size: 0.75rem;
+  margin-top: 0.3125rem;
+
+  &.form-item--error-message {
+    margin-bottom: 0;
+  }
+}
+
 .webform-submission-alshaya-email-signup-form {
   .input__container--half {
     @include breakpoint($upto-palm) {
