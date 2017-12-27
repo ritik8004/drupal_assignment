@@ -21,11 +21,7 @@ function alshaya_mc_update_8307() {
 
   // Save default site favicon.
   \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
-    ->setData([
-      'favicon' => [
-        'path' => $site_favicon . '.ico',
-      ],
-    ])
+    ->set('favicon', ['path'=> $site_favicon . '.ico'])
     ->save();
 }
 
