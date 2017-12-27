@@ -150,6 +150,8 @@ function alshaya_mc_install() {
   $current_theme = $active_theme->getName();
   // Default site logo path with default name.
   $site_logo = $active_theme->getPath() . '/site-logo';
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
 
   // Save default site logo.
   \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
@@ -167,6 +169,11 @@ function alshaya_mc_install() {
         'path' => $site_logo . '-ar.svg',
       ],
     ])
+    ->save();
+
+  // Save default site favicon.
+  \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
+    ->set('favicon', ['path'=> $site_favicon . '.ico'])
     ->save();
 
   // Save default logo for email.
