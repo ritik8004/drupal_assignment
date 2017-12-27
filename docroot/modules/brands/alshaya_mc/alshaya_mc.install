@@ -11,7 +11,7 @@ use Drupal\Core\Site\Settings;
  * Hook update to update brand specific favicon.
  */
 
-function alshaya_mc_update_8330() {
+function alshaya_mc_update_8307() {
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
   // Get current theme name.
