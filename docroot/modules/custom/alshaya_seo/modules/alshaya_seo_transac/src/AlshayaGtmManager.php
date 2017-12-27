@@ -44,6 +44,7 @@ class AlshayaGtmManager {
   const ROUTE_GTM_MAPPING = [
     'view.search.page' => 'search result page',
     'alshaya_master.home' => 'home page',
+    'entity.taxonomy_term.canonical' => 'taxonomy term',
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:department_page' => 'department page',

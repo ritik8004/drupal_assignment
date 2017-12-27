@@ -245,10 +245,6 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           }
         }
         break;
-
-      case 'entity.taxonomy_term.canonical':
-        $page_type = $current_route['route_params']['taxonomy_term']->bundle() == 'acq_product_category' ? 'PLP' : 'taxonomy-term';
-        break;
     }
 
     // Generic handling of page type for user pages.
@@ -267,10 +263,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           unset($path_parts[$key]);
         }
       }
-      $page_type = 'myaccount';
-      if (count($path_parts) > 0) {
-        $page_type .= ' ' . implode('', $path_parts);
-      }
+      $page_type = trim('myaccount ' . implode('', $path_parts));
     }
     elseif ($page_type === 'not defined') {
       $page_type = ltrim(implode('-', explode('/', $current_path)), '-');
