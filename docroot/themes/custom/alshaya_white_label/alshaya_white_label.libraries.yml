@@ -129,3 +129,7 @@ cleave:
 plp_search_js:
   js:
     js/plp-search.js: {}
+
+jquery_mobile_touch_swipe:
+  js:
+    vendor/js/jquery.touchSwipe.min.js: {}
