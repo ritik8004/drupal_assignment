@@ -24,3 +24,5 @@ sites:
   bbme:
     module: alshaya_bb
     type: alshaya_non_transac
+vm:
+  enable: true
