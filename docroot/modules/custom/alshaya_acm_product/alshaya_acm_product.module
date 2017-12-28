@@ -334,10 +334,13 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
       // Make product node dependent on all child-skus in case of configurable
       // product.
-      if ($sku_entity->getType() == 'configurable') {
-        $child_skus = $skuManager->getChildSkus($sku_entity);
+      if (!empty($child_skus = $skuManager->getChildrenSkus($sku_entity))) {
         foreach ($child_skus as $child_sku) {
-          $build['#cache']['tags'][] = 'acq_sku:' . $child_sku->id();
+          // Check for disabled simple SKUs on Magento. Make sure the sku entity
+          // is available on Drupal before adding cache tag.
+          if ($sku_entity_id = $skuManager->getEntityIdBySku($child_sku)) {
+            $build['#cache']['tags'][] = 'acq_sku:' . $skuManager->getEntityIdBySku($child_sku);
+          }
         }
       }
 
