@@ -9,6 +9,31 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Hook update to update brand specific favicon and logo.
+ */
+function alshaya_hm_update_8010() {
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site favicon and logo.
+  \Drupal::configFactory()->getEditable('alshaya_hnm.settings')
+    ->setData([
+      'favicon' => [
+        'path' => $site_favicon . '.ico',
+      ],
+      'logo' => [
+        'path' => $active_theme->getPath() . '/logo.svg',
+      ],
+      'name' => 'H&M Kuwait',
+    ])
+    ->save();
+}
+
+/**
  * Implement hook_update_N().
  *
  * Disable Brand facets.
