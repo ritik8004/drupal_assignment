@@ -230,6 +230,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
   $items['products_cross_sell'] = [
     'variables' => [
       'data' => NULL,
+      'title' => NULL,
     ],
   ];
 
@@ -349,10 +350,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           if (!empty($cross_sell_skus)) {
             $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
             if (!empty($crosssell_items)) {
-              // @Todo: Convert other related sections into theme functions as well. See if we can hava a common theme funciton for rendering them.
               $build['cross_sell'] = [
                 '#theme' => 'products_cross_sell',
                 '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
+                '#title' => t('Customers also bought'),
               ];
 
               // Weight will have no effect later once template is modified.
@@ -367,7 +368,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $upsell_items = $skuManager->filterRelatedSkus(array_unique($up_sell_skus));
 
           if (!empty($upsell_items)) {
-            $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $upsell_items));
+            $build['up_sell'] = [
+              '#theme' => 'products_cross_sell',
+              '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $upsell_items)),
+              '#title' => t('You may also like'),
+            ];
             // Weight will have no effect later once template is modified.
             $build['up_sell']['#weight'] = 10;
           }
@@ -379,7 +384,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $related_items = $skuManager->filterRelatedSkus(array_unique($related_skus));
 
           if (!empty($related_items)) {
-            $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $related_items));
+            $build['related'] = [
+              '#theme' => 'products_cross_sell',
+              '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $related_items)),
+              '#title' => t('Related'),
+            ];
             // Weight will have no effect later once template is modified.
             $build['related']['#weight'] = 11;
           }
