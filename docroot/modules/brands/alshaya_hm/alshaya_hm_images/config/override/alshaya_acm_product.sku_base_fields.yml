@@ -1,0 +1,4 @@
+fields:
+  color:
+    label: 'Color'
+    configurable: 1

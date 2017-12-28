@@ -70,3 +70,46 @@ function alshaya_config_delete_configs(array $configs) {
     \Drupal::configFactory()->getEditable($config)->delete();
   }
 }
+
+/**
+ * Scan and return the yml file names inside subdirectory of config of module.
+ *
+ * @param string $module_name
+ *   Module name.
+ * @param string $directory
+ *   Directory name to scan.
+ *
+ * @return array
+ *   Array of yml file names.
+ */
+function _alshaya_config_get_config_yml($module_name, $directory) {
+  $files = [];
+  $directory_path = drupal_get_path('module', $module_name) . '/config/' . $directory;
+  // Get all yml files inside the directory.
+  $ymls = file_scan_directory($directory_path, '/[(.yml)]$/');
+  if (!empty($ymls)) {
+    foreach ($ymls as $yml) {
+      $files[] = $yml->filename;
+    }
+  }
+
+  return $files;
+}
+
+/**
+ * Save the overridden configs of the module.
+ *
+ * @param string $module_name
+ *   Module name.
+ */
+function _alshaya_config_save_overridden_configs($module_name) {
+  // Get all yml files name inside override directory of module and save.
+  $overridden_config_names = _alshaya_config_get_config_yml($module_name, 'override');
+  if (!empty($overridden_config_names)) {
+    foreach ($overridden_config_names as $overridden_config) {
+      if ($config = \Drupal::configFactory()->getEditable($overridden_config)) {
+        $config->save();
+      }
+    }
+  }
+}

@@ -261,15 +261,6 @@ function alshaya_hm_install() {
   // Create default content for the site.
   alshaya_hm_create_default_content();
 
-  // Swap logo and search block placement in header.
-  \Drupal::configFactory()->getEditable('block.block.branding')
-    ->set('weight', '-31')
-    ->save();
-
-  \Drupal::configFactory()->getEditable('block.block.keywordsearchblock')
-    ->set('weight', '-32')
-    ->save();
-
   // Setting all products buyable to be true by default.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('all_products_buyable', 1)
@@ -317,50 +308,6 @@ function alshaya_hm_install() {
   $config->set('sort_options', $sort_options);
   $config->save();
 
-  // Use the customer service block.
-  \Drupal::configFactory()->getEditable('block.block.customerservice')
-    ->set('weight', '-34')
-    ->set('region', 'post_content')
-    ->save();
-
-  // Re use the about branc block for corporate info.
-  \Drupal::configFactory()->getEditable('block.block.aboutbrand')
-    ->set('weight', '-33')
-    ->set('settings.label', "Corporate Info")
-    ->set('region', 'footer_primary')
-    ->save();
-
-  // Edit the block titles.
-  \Drupal::configFactory()->getEditable('block.block.shopby')
-    ->set('settings.label', 'Shop')
-    ->save();
-  \Drupal::configFactory()->getEditable('block.block.alshayanewslettersubscription')
-    ->set('settings.label', 'Newsletter')
-    ->save();
-
-  // Set visiblity for social link block.
-  \Drupal::configFactory()->getEditable('block.block.sociallinks')
-    ->set('visibility.request_path.id', 'request_path')
-    ->set('visibility.request_path.pages', '/cart/checkout' . PHP_EOL . '/cart/checkout/*')
-    ->set('visibility.request_path.negate', TRUE)
-    ->set('weight', '-34')
-    ->set('region', 'footer_secondary')
-    ->save();
-
-  // Set visiblity for copyright block.
-  \Drupal::configFactory()->getEditable('block.block.copyright')
-    ->set('visibility.request_path.id', 'request_path')
-    ->set('visibility.request_path.pages', '/cart/checkout' . PHP_EOL . '/cart/checkout/*')
-    ->set('visibility.request_path.negate', TRUE)
-    ->save();
-
-  // Set visiblity for footerlogos block.
-  \Drupal::configFactory()->getEditable('block.block.footerlogos')
-    ->set('visibility.request_path.id', 'request_path')
-    ->set('visibility.request_path.pages', '/cart/checkout' . PHP_EOL . '/cart/checkout/*')
-    ->set('visibility.request_path.negate', FALSE)
-    ->save();
-
   // Enable "New in" sort options.
   $config = \Drupal::configFactory()->getEditable('alshaya_search.settings');
   $sort_options = $config->get('sort_options');
@@ -368,11 +315,6 @@ function alshaya_hm_install() {
   $sort_options['created'] = 'created';
   $config->set('sort_options', $sort_options);
   $config->save();
-
-  // Changing the register page text to H&M.
-  \Drupal::configFactory()->getEditable('field.field.user.user.field_subscribe_newsletter')
-    ->set('label', 'I would like to receive exclusive deals from H&M')
-    ->save();
 
   // Set email logo.
   // Get current active theme.
@@ -388,11 +330,6 @@ function alshaya_hm_install() {
   // Save arabic logo for email.
   \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
     ->set('email_logo_path', $site_logo . '-ar.png')
-    ->save();
-
-  // Update mobile number max length to 8 as per new fe implementation.
-  \Drupal::configFactory()->getEditable('alshaya_master.mobile_number_settings')
-    ->set('maxlength', 8)
     ->save();
 
   // Disable loyalty.
@@ -416,6 +353,9 @@ function alshaya_hm_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+
+  // Save overridden configs.
+  _alshaya_config_save_overridden_configs('alshaya_hm');
 
   // Override config for configurable product add to cart forms.
   $configs = ['acq_sku.configurable_form_settings'];
