@@ -1074,4 +1074,32 @@ class SkuManager {
     return '';
   }
 
+  /**
+   * Lighter function to fetch Children SKU text.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   Configurable SKU for which the child SKUs need to be fetched.
+   *
+   * @return array
+   *   Array of SKU texts.
+   *
+   * @todo: Rename getChildSkus function to getChildSkuEntities to avoid confusion.
+   */
+  public function getChildrenSkus(SKU $sku_entity) {
+    $child_skus = [];
+
+    if ($sku_entity->getType() == 'configurable') {
+      $result = $this->connection->select('acq_sku__field_configured_skus', 'asfcs')
+        ->fields('asfcs', ['field_configured_skus_value'])
+        ->condition('asfcs.entity_id', $sku_entity->id())
+        ->execute();
+
+      while ($row = $result->fetchAssoc()) {
+        $child_skus[] = $row['field_configured_skus_value'];
+      }
+    }
+
+    return $child_skus;
+  }
+
 }
