@@ -707,3 +707,10 @@
     font-size: 2.125rem;
   }
 }
+
+html[lang=ar] {
+  .user__order--detail .total-row > .right--align {
+    padding: 0 0 0 1.5rem;
+    line-height: 2.3;
+  }
+}
