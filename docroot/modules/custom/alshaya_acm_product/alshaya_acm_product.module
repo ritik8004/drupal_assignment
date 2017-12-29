@@ -227,10 +227,10 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['products_cross_sell'] = [
+  $items['products_horizontal_slider'] = [
     'variables' => [
       'data' => NULL,
-      'title' => NULL,
+      'section_title' => NULL,
     ],
   ];
 
@@ -351,9 +351,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
             if (!empty($crosssell_items)) {
               $build['cross_sell'] = [
-                '#theme' => 'products_cross_sell',
+                '#theme' => 'products_horizontal_slider',
                 '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
-                '#title' => t('Customers also bought'),
+                '#section_title' => t('Customers also bought'),
               ];
 
               // Weight will have no effect later once template is modified.
@@ -369,9 +369,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
           if (!empty($upsell_items)) {
             $build['up_sell'] = [
-              '#theme' => 'products_cross_sell',
+              '#theme' => 'products_horizontal_slider',
               '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $upsell_items)),
-              '#title' => t('You may also like'),
+              '#section_title' => t('You may also like'),
             ];
             // Weight will have no effect later once template is modified.
             $build['up_sell']['#weight'] = 10;
@@ -385,9 +385,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
           if (!empty($related_items)) {
             $build['related'] = [
-              '#theme' => 'products_cross_sell',
+              '#theme' => 'products_horizontal_slider',
               '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $related_items)),
-              '#title' => t('Related'),
+              '#section_title' => t('Related'),
             ];
             // Weight will have no effect later once template is modified.
             $build['related']['#weight'] = 11;
