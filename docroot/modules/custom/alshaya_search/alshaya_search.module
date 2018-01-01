@@ -333,3 +333,37 @@ function _alshaya_search_translate_search_view_config() {
 
   $search_view->save();
 }
+
+/**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_search_alshaya_master_post_drupal_install() {
+  // Disable Acquia Search View if available.
+  $view = \Drupal::configFactory()->getEditable('views.view.acquia_search');
+
+  if ($view->getRawData()) {
+    $view->set('status', FALSE);
+    $view->save();
+  }
+
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    // Enable alshaya_search_acquia_search to ensure config are overridden to
+    // use solr on cloud.
+    \Drupal::service('module_installer')->install(['alshaya_search_acquia_search']);
+  }
+
+  $configs = [
+    'search_api.server.acquia_search_server',
+    'search_api.index.acquia_search_index',
+    'views.view.search',
+    'search_api_autocomplete.search_api_autocomplete.search_api_views_search',
+    'facets.facet.brand',
+    'facets.facet.collection',
+    'facets.facet.color',
+    'facets.facet.final_price',
+    'facets.facet.size',
+    'facets_summary.facets_summary.filter_bar',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_search', 'postinstall');
+}
