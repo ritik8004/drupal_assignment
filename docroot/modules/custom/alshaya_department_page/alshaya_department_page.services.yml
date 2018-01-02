@@ -3,3 +3,9 @@ services:
    class: Drupal\alshaya_department_page\Breadcrumb\AlshayaDepartmentPageBreadcrumbBuilder
    tags:
     - { name: breadcrumb_builder, priority: 100 }
+
+ alshaya_department_page.event_subscriber:
+    class: Drupal\alshaya_department_page\EventSubscriber\AlshayaDepartmentPageEventSubscriber
+    arguments: ['@current_route_match']
+    tags:
+     - { name: event_subscriber }
