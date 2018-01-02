@@ -18,7 +18,7 @@ use Symfony\Component\Yaml\Yaml;
 function alshaya_acm_update_dependencies() {
   return [
     'alshaya_acm' => [
-      8006 => [
+      8008 => [
         'acq_commerce' => 8001,
       ],
     ],
