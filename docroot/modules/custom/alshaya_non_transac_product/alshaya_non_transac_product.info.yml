@@ -3,23 +3,22 @@ type: module
 description: 'Alshaya non transac product content types.'
 package: Alshaya
 core: 8.x
-version: 8.x-1.0
 dependencies:
-  - alshaya_image_styles
-  - content_translation
-  - entity_browser
-  - field
-  - file
-  - image
-  - language
-  - menu_ui
-  - node
-  - panelizer
-  - path
-  - system
-  - taxonomy
-  - text
-  - user
-  - views
-  - views_infinite_scroll
-  - workbench_moderation
+  - alshaya_image_styles:alshaya_image_styles
+  - drupal:content_translation
+  - entity_browser:entity_browser
+  - drupal:field
+  - drupal:file
+  - drupal:image
+  - drupal:language
+  - drupal:menu_ui
+  - drupal:node
+  - panelizer:panelizer
+  - drupal:path
+  - drupal:system
+  - drupal:taxonomy
+  - drupal:text
+  - drupal:user
+  - drupal:views
+  - views_infinite_scroll:views_infinite_scroll
+  - workbench_moderation:workbench_moderation

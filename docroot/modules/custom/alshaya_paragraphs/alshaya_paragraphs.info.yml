@@ -3,30 +3,29 @@ type: module
 core: 8.x
 description: 'All the paragraphs and its fields and field settings.'
 dependencies:
-  - alshaya_config
-  - alshaya_image_styles
-  - alshaya_media
-  - block
-  - block_field
-  - content_translation
-  - entity_reference_revisions
-  - field
-  - file
-  - image
-  - inline_entity_form
-  - language
-  - lightning_core
-  - link
-  - options
-  - media_entity
-  - paragraphs
-  - path
-  - responsive_image
-  - system
-  - text
-  - user
-  - views
-  - viewsreference
-  - workbench_moderation
-version: 8.x-1.0
+  - alshaya_config:alshaya_config
+  - alshaya_image_styles:alshaya_image_styles
+  - alshaya_media:alshaya_media
+  - drupal:block
+  - block_field:block_field
+  - drupal:content_translation
+  - entity_reference_revisions:entity_reference_revisions
+  - drupal:field
+  - drupal:file
+  - drupal:image
+  - inline_entity_form:inline_entity_form
+  - drupal:language
+  - lightning:lightning_core
+  - drupal:link
+  - drupal:options
+  - media_entity:media_entity
+  - paragraphs:paragraphs
+  - drupal:path
+  - drupal:responsive_image
+  - drupal:system
+  - drupal:text
+  - drupal:user
+  - drupal:views
+  - viewsreference:viewsreference
+  - workbench_moderation:workbench_moderation
 package: Alshaya

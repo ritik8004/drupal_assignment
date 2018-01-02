@@ -4,11 +4,10 @@ type: module
 core: 8.x
 package: Alshaya
 dependencies:
-  - block
-  - ctools
-  - language
-  - pathauto
-  - system
-  - taxonomy
-  - views
-version: 8.x-1.0
+  - drupal:block
+  - ctools:ctools
+  - drupal:language
+  - pathauto:pathauto
+  - drupal:system
+  - drupal:taxonomy
+  - drupal:views
