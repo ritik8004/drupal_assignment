@@ -311,7 +311,19 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU) {
-      $build['#cache']['tags'][] = 'sku:' . $sku_entity->getSku();
+      $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
+
+      // Make product node dependent on all child-skus in case of configurable
+      // product.
+      if (!empty($child_skus = $skuManager->getChildrenSkus($sku_entity))) {
+        // Check for disabled simple SKUs on Magento. Make sure the sku entity
+        // is available on Drupal before adding cache tag.
+        if ($sku_entity_ids = $skuManager->getEntityIdsBySku($child_skus)) {
+          foreach ($sku_entity_ids as $sku_entity_id) {
+            $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity_id;
+          }
+        }
+      }
 
       if ($view_mode == 'search_result') {
         $build['labels'] = [
