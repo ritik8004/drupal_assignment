@@ -103,13 +103,9 @@ function _alshaya_config_get_config_yml($module_name, $directory) {
  *   Module name.
  */
 function _alshaya_config_save_overridden_configs($module_name) {
-  // Get all yml files name inside override directory of module and save.
-  $overridden_config_names = _alshaya_config_get_config_yml($module_name, 'override');
-  if (!empty($overridden_config_names)) {
-    foreach ($overridden_config_names as $overridden_config) {
-      if ($config = \Drupal::configFactory()->getEditable($overridden_config)) {
-        $config->save();
-      }
+  foreach (_alshaya_config_get_config_yml($module_name, 'override') as $config_name) {
+    if ($config = \Drupal::configFactory()->getEditable($config_name)) {
+      $config->save();
     }
   }
 }
