@@ -369,41 +369,41 @@ class SkuManager {
   /**
    * Helper function to fetch sku from entity id rather than loading the SKU.
    *
-   * @param int $sku_entity_id
+   * @param array $sku_entity_ids
    *   Entity id of the Sku item.
    *
-   * @return string
-   *   Sku Id of the item.
+   * @return array
+   *   Array of Sku Ids of the item.
    *
    * @throws \Drupal\Core\Database\InvalidQueryException
    */
-  public function getSkuByEntityId($sku_entity_id) {
+  public function getSkusByEntityId(array $sku_entity_ids) {
     $query = $this->connection->select('acq_sku_field_data', 'asfd')
       ->fields('asfd', ['sku'])
-      ->condition('id', $sku_entity_id)
-      ->range(0, 1);
+      ->distinct()
+      ->condition('id', $sku_entity_ids, 'IN');
 
-    return $query->execute()->fetchField();
+    return $query->execute()->fetchAllKeyed(0, 0);
   }
 
   /**
    * Helper function to fetch entity id from sku rather than loading the SKU.
    *
-   * @param string $sku_text
+   * @param array $sku_texts
    *   Sku text of the Sku item.
    *
-   * @return int
-   *   Entity Id of sku item.
+   * @return array
+   *   Array of Entity Ids of sku items.
    *
    * @throws \Drupal\Core\Database\InvalidQueryException
    */
-  public function getEntityIdBySku($sku_text) {
+  public function getEntityIdsBySku(array $sku_texts) {
     $query = $this->connection->select('acq_sku_field_data', 'asfd')
       ->fields('asfd', ['id'])
-      ->condition('sku', $sku_text)
-      ->range(0, 1);
+      ->distinct()
+      ->condition('sku', $sku_texts, 'IN');
 
-    return $query->execute()->fetchField();
+    return $query->execute()->fetchAllKeyed(0, 0);
   }
 
   /**
