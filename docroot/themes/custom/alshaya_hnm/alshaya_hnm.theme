@@ -788,3 +788,10 @@ function alshaya_hnm_preprocess_paragraph(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_js_alter().
+ */
+function alshaya_hnm_js_alter(&$javascript) {
+  unset($javascript['themes/custom/alshaya_white_label/menu.js']);
+}
