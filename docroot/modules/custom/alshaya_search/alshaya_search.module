@@ -335,9 +335,9 @@ function _alshaya_search_translate_search_view_config() {
 }
 
 /**
- * Implements hook_alshaya_master_post_drupal_install().
+ * Implements hook_alshaya_profile_installed_final_task().
  */
-function alshaya_search_alshaya_master_post_drupal_install() {
+function alshaya_search_alshaya_profile_installed_final_task() {
   // Disable Acquia Search View if available.
   $view = \Drupal::configFactory()->getEditable('views.view.acquia_search');
 

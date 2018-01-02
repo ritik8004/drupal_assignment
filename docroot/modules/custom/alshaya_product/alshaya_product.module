@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
@@ -54,6 +55,8 @@ function alshaya_product_views_pre_execute(ViewExecutable $view) {
 function alshaya_product_alshaya_master_post_drupal_install() {
   // @TODO: ACR2-2190 - get promotion_nid created properly during install.
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+  $index = Index::load('product');
+  $index->save();
 }
 
 /**
