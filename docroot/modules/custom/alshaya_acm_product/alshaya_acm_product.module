@@ -1161,8 +1161,9 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
       $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
       $cross_sell_markup = [
-        '#theme' => 'products_cross_sell',
+        '#theme' => 'products_horizontal_slider',
         '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
+        '#section_title' => t('Customers also bought'),
       ];
 
       $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup));
