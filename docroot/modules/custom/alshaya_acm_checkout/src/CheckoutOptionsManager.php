@@ -67,7 +67,12 @@ class CheckoutOptionsManager {
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language Manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, ApiHelper $api_helper, CartStorageInterface $cart_storage, LoggerChannelFactoryInterface $logger_factory, LanguageManagerInterface $languageManager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              ConfigFactoryInterface $config_factory,
+                              ApiHelper $api_helper,
+                              CartStorageInterface $cart_storage,
+                              LoggerChannelFactoryInterface $logger_factory,
+                              LanguageManagerInterface $languageManager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->configFactory = $config_factory;
     $this->apiHelper = $api_helper;
@@ -102,7 +107,7 @@ class CheckoutOptionsManager {
       return;
     }
 
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // Clean the code every-time.
     $code = $this->getCleanShippingMethodCode($code);
@@ -281,7 +286,7 @@ class CheckoutOptionsManager {
       $term = $this->termStorage->load($tid);
 
       if ($current_language) {
-        $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        $langcode = $this->languageManager->getCurrentLanguage()->getId();
         if ($term->hasTranslation($langcode)) {
           $term = $term->getTranslation($langcode);
         }
