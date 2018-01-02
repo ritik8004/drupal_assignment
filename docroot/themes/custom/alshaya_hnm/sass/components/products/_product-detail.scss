@@ -20,12 +20,14 @@
   }
 
   #backtotop {
-    @include breakpoint($only-mobile) {
-      z-index: 5;
-      line-height: 45px;
+    &.backtotop-nofooter {
+      @include breakpoint($only-mobile) {
+        z-index: 5;
+        line-height: 45px;
 
-      &::after {
-        margin-top: -2.4rem;
+        &::after {
+          margin-top: -2.4rem;
+        }
       }
     }
   }

@@ -3,6 +3,7 @@
     #{$right}: 0;
     bottom: 0.25rem;
     line-height: 7.5rem;
+    height: 4.375rem;
   }
 
   @include breakpoint($only-tablet) {
@@ -50,12 +51,6 @@
     position: fixed;
     bottom: 0.25rem;
     top: auto;
-
-    .nodetype--acq_product & {
-      @include breakpoint($only-mobile) {
-        height: 4.375rem;
-      }
-    }
   }
 }
 
@@ -63,7 +58,6 @@
   #backtotop {
     @include breakpoint($only-mobile) {
       bottom: 0.25rem;
-      height: 4.375rem;
     }
   }
 }
