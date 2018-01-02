@@ -6,11 +6,14 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AlshayaStaticPageBreadcrumbBuilder.
  */
 class AlshayaStaticPageBreadcrumbBuilder implements BreadcrumbBuilderInterface {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -27,7 +30,7 @@ class AlshayaStaticPageBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
     $request = \Drupal::request();
     $node = $route_match->getParameter('node');
     $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());

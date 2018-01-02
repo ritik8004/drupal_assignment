@@ -12,6 +12,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Entity\Profile;
 use Drupal\user\Entity\User;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AlshayaAddressBookManager.
@@ -19,6 +20,8 @@ use Drupal\user\Entity\User;
  * @package Drupal\alshaya_addressbook
  */
 class AlshayaAddressBookManager {
+
+  use StringTranslationTrait;
 
   const AREA_VOCAB = 'area_list';
 
@@ -667,9 +670,9 @@ class AlshayaAddressBookManager {
     $mobile_number = $this->mobileUtil->getMobileNumber($mobile['mobile'], $mobile['country-code']);
 
     if (empty($mobile_number)) {
-      $errors['mobile_number][mobile'] = t('The phone number %value provided for %field is not a valid mobile number for country %country.', [
+      $errors['mobile_number][mobile'] = $this->t('The phone number %value provided for %field is not a valid mobile number for country %country.', [
         '%value' => $mobile['mobile'],
-        '%field' => t('Mobile Number'),
+        '%field' => $this->t('Mobile Number'),
         '%country' => $this->mobileUtil->getCountryName($mobile['country-code']),
       ]);
     }
