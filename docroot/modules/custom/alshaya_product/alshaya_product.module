@@ -55,6 +55,13 @@ function alshaya_product_views_pre_execute(ViewExecutable $view) {
 function alshaya_product_alshaya_master_post_drupal_install() {
   // @TODO: ACR2-2190 - get promotion_nid created properly during install.
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+
+  // Execute all pending search_api tasks.
+  \Drupal::service('search_api.task_manager')->executeAllTasks();
+
+  // Reset all caches.
+  drupal_flush_all_caches();
+
   $index = Index::load('product');
   $index->save();
 }

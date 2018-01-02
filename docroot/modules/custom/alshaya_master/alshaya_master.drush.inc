@@ -5,6 +5,7 @@
  * Provides Drush commands for alshaya_master.
  */
 
+use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
 use Drupal\locale\Locale;
@@ -73,6 +74,9 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
         // Install the module.
         \Drupal::service('module_installer')->install([$brand_module]);
 
+        // Clear all caches before next code is executed.
+        drupal_flush_all_caches();
+
         // Update config with installed brand and module names.
         \Drupal::configFactory()->getEditable('alshaya.installed_brand')
           ->set('module', $brand_module)
@@ -92,6 +96,25 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
 
         // Update config translations from string translations.
         Locale::config()->updateConfigTranslations($names, $langcodes);
+
+        $override_path = \Drupal::root() . '/' . drupal_get_path('module', $brand_module) . '/config/override/';
+
+        // Check if the brand module has overrides & install those configs.
+        if (file_exists($override_path)) {
+          $storage = new FileStorage($override_path);
+
+          $overrides = $storage->listAll();
+
+          if ($overrides) {
+            // Re-save configs for which overrides are available.
+            foreach ($overrides as $override) {
+              \Drupal::configFactory()->getEditable($override)->save();
+            }
+
+            // Clear all caches before next code is executed.
+            drupal_flush_all_caches();
+          }
+        }
       }
       else {
         drush_print(dt("Brand module @brand_module can't be enabled because the site is already configured with @existing_brand_module.",
