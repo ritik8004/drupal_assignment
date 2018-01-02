@@ -256,7 +256,6 @@ class SkuManager {
     }
 
     $sku_price = 0;
-
     foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
       try {
         $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $sku_entity->language()->getId());
@@ -280,10 +279,10 @@ class SkuManager {
               $sku_price = $new_sku_price;
               $prices = ['price' => $price, 'final_price' => $final_price];
             }
-            // Is the difference between initial an final bigger?
+            // Check if initial price or final price is bigger.
             elseif (
-              $price != 0 && $final_price != 0 && $prices['price'] != 0 && $prices['final_price'] != 0
-              && ($price - $final_price) > ($prices['price'] - $prices['final_price'])
+              $final_price != 0 && $prices['final_price'] != 0
+              && $final_price < $prices['final_price']
             ) {
               $prices = ['price' => $price, 'final_price' => $final_price];
             }

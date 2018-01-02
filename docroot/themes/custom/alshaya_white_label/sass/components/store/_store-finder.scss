@@ -1352,6 +1352,6 @@
 
 .path--store-finder .store-finder--wrapper .input--wrapper [id^=edit-actions] {
   @include breakpoint($desktop) {
-    right: 0.5rem;
+    #{$right}: 0.5rem;
   }
 }
