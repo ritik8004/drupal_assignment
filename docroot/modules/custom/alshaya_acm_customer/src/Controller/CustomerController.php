@@ -3,15 +3,57 @@
 namespace Drupal\alshaya_acm_customer\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Render\Renderer;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Drupal\block\Entity\Block;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Customer controller to add/override pages for customer.
  */
 class CustomerController extends ControllerBase {
+
+  /**
+   * Renderer service object.
+   *
+   * @var \Drupal\Core\Render\Renderer
+   */
+  protected $renderer;
+
+  /**
+   * Current request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('request_stack')->getCurrentRequest(),
+      $container->get('renderer')
+    );
+  }
+
+  /**
+   * CustomerController constructor.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $current_request
+   *   Current request object.
+   * @param \Drupal\Core\Render\Renderer $renderer
+   *   Renderer service object.
+   */
+  public function __construct(Request $current_request,
+                              Renderer $renderer) {
+    $this->currentRequest = $current_request;
+    $this->renderer = $renderer;
+
+  }
 
   /**
    * Returns the build to the orders list page.
@@ -27,7 +69,7 @@ class CustomerController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     $build = [];
 
@@ -38,7 +80,7 @@ class CustomerController extends ControllerBase {
     $help_block = NULL;
 
     // Get items to show per page from config.
-    $itemsPerPage = \Drupal::config('alshaya_acm_customer.orders_config')->get('items_per_page');
+    $itemsPerPage = $this->config('alshaya_acm_customer.orders_config')->get('items_per_page');
 
     // Build account details array.
     $account = [];
@@ -46,7 +88,7 @@ class CustomerController extends ControllerBase {
     $account['last_name'] = $user->get('field_last_name')->getString();
 
     // Get the search form.
-    $searchForm = \Drupal::formBuilder()->getForm('Drupal\alshaya_acm_customer\Form\OrderSearchForm');
+    $searchForm = $this->formBuilder()->getForm('Drupal\alshaya_acm_customer\Form\OrderSearchForm');
     $searchForm['form_id']['#printed'] = TRUE;
     $searchForm['form_build_id']['#printed'] = TRUE;
 
@@ -56,7 +98,7 @@ class CustomerController extends ControllerBase {
 
       if (empty($orders)) {
         // @TODO: Check the empty result message.
-        if ($search = \Drupal::request()->query->get('search')) {
+        if ($search = $this->currentRequest->query->get('search')) {
           $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('Your search yielded no results, please try different text in search.') . '</div>';
         }
         else {
@@ -66,7 +108,7 @@ class CustomerController extends ControllerBase {
       }
       else {
         // Get current page number.
-        $currentPageNumber = (int) \Drupal::request()->query->get('page');
+        $currentPageNumber = (int) $this->currentRequest->query->get('page');
 
         // Get the offset to start displaying orders from.
         $offset = $currentPageNumber * $itemsPerPage;
@@ -76,7 +118,7 @@ class CustomerController extends ControllerBase {
 
         if (count($orders) > $offset + $itemsPerPage) {
           // Get all the query parameters we currently have.
-          $query = \Drupal::request()->query->all();
+          $query = $this->currentRequest->query->all();
           $query['page'] = $currentPageNumber + 1;
 
           // Prepare the next page url.
@@ -110,7 +152,7 @@ class CustomerController extends ControllerBase {
         // Load my-account-help block for rendering on order list page.
         $help_block_entity = Block::load('myaccountneedhelp');
         if ($help_block_entity) {
-          $help_block = \Drupal::entityTypeManager()->getViewBuilder('block')->view($help_block_entity);
+          $help_block = $this->entityTypeManager()->getViewBuilder('block')->view($help_block_entity);
         }
       }
     }
@@ -154,10 +196,10 @@ class CustomerController extends ControllerBase {
 
     $response['orders_list'] = '';
     foreach ($fullBuild['#order_details'] as $order) {
-      $response['orders_list'] .= '<li>' . \Drupal::service('renderer')->render($order) . '</li>';
+      $response['orders_list'] .= '<li>' . $this->renderer->render($order) . '</li>';
     }
 
-    $response['next_page_button'] = \Drupal::service('renderer')->render($fullBuild['#next_page_button']);
+    $response['next_page_button'] = $this->renderer->render($fullBuild['#next_page_button']);
 
     print json_encode($response);
     exit;
@@ -175,7 +217,7 @@ class CustomerController extends ControllerBase {
    *   Build array.
    */
   public function orderDetail(UserInterface $user, $order_id) {
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     // Get the orders to display for current user and filter applied.
     $orders = alshaya_acm_customer_get_user_orders($user->getEmail());
@@ -198,7 +240,7 @@ class CustomerController extends ControllerBase {
 
     $build['#print_link'] = Url::fromRoute('alshaya_acm_customer.orders_print', ['user' => $user->id(), 'order_id' => $order_id]);
     $build['#account'] = $account;
-    if ($vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text')) {
+    if ($vat_text = $this->config('alshaya_acm_product.settings')->get('vat_text')) {
       $build['#vat_text'] = $vat_text;
     }
     $build['#theme'] = 'user_order_detail';
@@ -219,7 +261,7 @@ class CustomerController extends ControllerBase {
    *   Build array.
    */
   public function orderPrint(UserInterface $user, $order_id) {
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     // Get order details and add more information for print.
     $build = $this->orderDetail($user, $order_id);
@@ -243,7 +285,7 @@ class CustomerController extends ControllerBase {
    *   Build array.
    */
   public function orderPrintLast() {
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     $order = _alshaya_acm_checkout_get_last_order_from_session();
 
@@ -262,7 +304,7 @@ class CustomerController extends ControllerBase {
     ];
     $build['#barcode'] = alshaya_acm_customer_get_barcode($order);
     $build['#account'] = $account;
-    if ($vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text')) {
+    if ($vat_text = $this->config('alshaya_acm_product.settings')->get('vat_text')) {
       $build['#vat_text'] = $vat_text;
     }
     $build['#theme'] = 'user_order_print';
