@@ -7,6 +7,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_form_alter().
@@ -38,9 +39,10 @@ function alshaya_hm_acq_sku_product_node_alter(Drupal\node\Entity\Node &$node, a
  * Implements template_preprocess_block().
  */
 function alshaya_hm_preprocess_block(&$variables) {
+  // @Todo: Figure out which block needs this preprocess & add a test around plugin id to avoid this being called for all blocks.
   // Set alshaya-private-card image path.
   $image_path = drupal_get_path('module', 'alshaya_hm') . '/images/alshaya-priv-card.svg';
-  if($variables['base_plugin_id'] == 'join_the_club') {
+  if ($variables['base_plugin_id'] == 'join_the_club') {
     $variables['content']['image']['#uri'] = $image_path;
   }
 }
@@ -105,5 +107,42 @@ function alshaya_hm_module_implements_alter(&$implementations, $hook) {
     $group = $implementations['alshaya_hm'];
     unset($implementations['alshaya_hm']);
     $implementations['alshaya_hm'] = $group;
+  }
+}
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function alshaya_hm_language_switch_links_alter(array &$links, $type, Url $url) {
+  $color_query = \Drupal::request()->query->get('color');
+  /** @var \Drupal\Core\Routing\CurrentRouteMatch $current_route_matcher */
+  $current_route_matcher = \Drupal::service('current_route_match');
+  $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+
+  // Alter block only if we have color query parameter on a PDP.
+  if (($color_query) &&
+    ($current_route_matcher->getRouteName() == 'entity.node.canonical') &&
+    ($node = $current_route_matcher->getParameter('node')) &&
+    ($node->getType() == 'acq_product')) {
+
+    // Alter the color parameter in the query string.
+    foreach ($links as $langcode => $link) {
+      // Load color translation from the translation of SKU variant with the
+      // color in the query parameter.
+      if (($langcode != \Drupal::languageManager()->getCurrentLanguage()->getId()) &&
+        ($node->hasTranslation($langcode))) {
+        $sku = SKU::loadFromSku($node->get('field_skus')->first()->getString());
+        if ($sku instanceof SKU) {
+          // Get one of the child SKUs whose color label matches the query string.
+          $sku_color = $sku_asset_manager->getChildSkuFromColor($sku, $color_query);
+          // If its a valid SKU & has translation in the language for which the
+          // lang-switcher link is being built, fetch the color label translation.
+          if (($sku_color instanceof SKU) &&
+            ($sku_color->hasTranslation($langcode))) {
+            $links[$langcode]['query']['color'] = $sku_color->getTranslation($langcode)->get('attr_color_label')->value;
+          }
+        }
+      }
+    }
   }
 }
