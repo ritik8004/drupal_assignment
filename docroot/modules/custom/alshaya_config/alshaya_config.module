@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\Core\Config\FileStorage;
 use Drupal\field\Entity\FieldConfig;
 use Symfony\Component\Yaml\Yaml;
 
@@ -154,4 +155,39 @@ function _alshaya_config_set_default_logo_favicon() {
   \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
     ->set('email_logo_path', $site_logo . '-ar.png')
     ->save();
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_config_modules_installed($modules) {
+  foreach ($modules as $module) {
+    $override_path = \Drupal::root() . '/' . drupal_get_path('module', $module) . '/config/override/';
+
+    // Check if the brand module has overrides & install those configs.
+    if (file_exists($override_path)) {
+      $storage = new FileStorage($override_path);
+      $overrides = $storage->listAll();
+
+      if ($overrides) {
+        // Re-save configs for which overrides are available.
+        foreach ($overrides as $override) {
+          try {
+            $config = \Drupal::configFactory()->getEditable($override);
+
+            if ($config && $config->getRawData()) {
+              $config->save();
+            }
+          }
+          catch (\Exception $e) {
+            \Drupal::logger($module)->warning('Error while saving config for override: @override from module @module. Message: @message', [
+              '@override' => $override,
+              '@module' => $module,
+              '@message' => $e->getMessage(),
+            ]);
+          }
+        }
+      }
+    }
+  }
 }
