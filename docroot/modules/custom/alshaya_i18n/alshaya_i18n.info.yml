@@ -4,14 +4,13 @@ core: 8.x
 package: Alshaya
 description: 'All settings and custom code around internationalisation.'
 dependencies:
-  - alshaya_advanced_page
-  - alshaya_custom
-  - block
-  - config_translation
-  - content_translation
-  - language
-  - locale
-  - menu_link_content
-  - system
-  - views
-version: 8.x-1.0
+  - alshaya_advanced_page:alshaya_advanced_page
+  - alshaya_custom:alshaya_custom
+  - drupal:block
+  - drupal:config_translation
+  - drupal:content_translation
+  - drupal:language
+  - drupal:locale
+  - drupal:menu_link_content
+  - drupal:system
+  - drupal:views
