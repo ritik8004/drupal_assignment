@@ -11,6 +11,7 @@ services:
 
   alshaya_acm.subscriber:
     class: Drupal\alshaya_acm\EventSubscriber\AlshayaAcmSubscriber
+    arguments: ['@alshaya_acm.config_check']
     tags:
       - { name: event_subscriber }
 
@@ -30,6 +31,7 @@ services:
 
   alshaya_acm.config_check:
     class: Drupal\alshaya_acm\AlshayaAcmConfigCheck
+    arguments: ['@config.factory', '@module_handler', '@language_manager', '@datetime.time', '@state']
 
   cache.alshaya_api:
     class: Drupal\Core\Cache\CacheBackendInterface
