@@ -34,10 +34,10 @@ class ParagraphsCustomConfigForm extends ConfigFormBase {
 
     $form['promo_block_display'] = [
       '#type' => 'select',
-      '#title' => t('Promo block display'),
+      '#title' => $this->t('Promo block display'),
       '#options' => [
-        1 => t('Image and button is clickable'),
-        2 => t('Only button is clickable'),
+        1 => $this->t('Image and button is clickable'),
+        2 => $this->t('Only button is clickable'),
       ],
       '#default_value' => $config->get('promo_block_display') ? $config->get('promo_block_display') : '',
     ];

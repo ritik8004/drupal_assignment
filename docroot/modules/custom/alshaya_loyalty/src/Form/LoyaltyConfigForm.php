@@ -35,21 +35,21 @@ class LoyaltyConfigForm extends ConfigFormBase {
 
     $form['string_validation'] = [
       '#type' => 'details',
-      '#title' => t('validation'),
+      '#title' => $this->t('validation'),
       '#open' => TRUE,
     ];
     // Choose which length of the string.
     $form['string_validation']['max_length'] = [
       '#type' => 'textfield',
-      '#title' => t('Max. Length'),
-      '#description' => t("Field's value length will not be acceptable longer then the entered value here."),
+      '#title' => $this->t('Max. Length'),
+      '#description' => $this->t("Field's value length will not be acceptable longer then the entered value here."),
       '#default_value' => $config->get('apcn_max_length') ? $config->get('apcn_max_length') : '16',
     ];
     // Add validation for the value.
     $form['string_validation']['value_starts_with'] = [
       '#type' => 'textfield',
-      '#title' => t('Value starts with'),
-      '#description' => t("Enter a specific value that you want this field's value should start with."),
+      '#title' => $this->t('Value starts with'),
+      '#description' => $this->t("Enter a specific value that you want this field's value should start with."),
       '#default_value' => $config->get('apcn_value_starts_with') ? $config->get('apcn_value_starts_with') : '6362544',
     ];
 

@@ -106,7 +106,7 @@ class StoresMigrateUploadForm extends FormBase {
     $migrate_plus_migration_store_config->set('source.path', $initial_filepath);
     $migrate_plus_migration_store_config->save();
 
-    drupal_set_message(t('Stores have been imported.'), 'status');
+    drupal_set_message($this->t('Stores have been imported.'), 'status');
   }
 
 }
