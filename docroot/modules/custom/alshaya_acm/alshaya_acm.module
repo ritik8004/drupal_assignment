@@ -792,11 +792,13 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   else {
     /* @var \Drupal\node\Entity\Node $product_node */
     $product_node = alshaya_acm_product_get_display_node($sku_entity);
-    $name = [
-      '#title' => $product_node->getTitle(),
-      '#type' => 'link',
-      '#url' => Url::fromRoute('entity.node.canonical', ['node' => $product_node->id()]),
-    ];
+    if ($product_node) {
+      $name = [
+        '#title' => $product_node->getTitle(),
+        '#type' => 'link',
+        '#url' => Url::fromRoute('entity.node.canonical', ['node' => $product_node->id()]),
+      ];
+    }
   }
 
   // Load the first image.

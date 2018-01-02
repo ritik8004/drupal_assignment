@@ -393,6 +393,7 @@
 
     .alshaya_search_gallery {
       overflow: hidden;
+      max-height: 20.125rem;
 
       .alshaya_search_mainimage {
         z-index: 5;
@@ -416,14 +417,6 @@
 
       @include breakpoint($desktop) {
         display: block;
-        transform: translateY(-110%);
-        transition: all 0.3s ease-in-out;
-      }
-    }
-
-    .product-plp-detail-wrapper,
-    .stock-placeholder.out-of-stock {
-      @include breakpoint($desktop) {
         transform: translateY(-110%);
         transition: all 0.3s ease-in-out;
       }
@@ -498,6 +491,10 @@
             color: $cerulean-two;
             text-decoration: underline;
           }
+        }
+
+        .alshaya_search_gallery {
+          max-height: none;
         }
       }
     }
