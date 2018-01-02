@@ -374,10 +374,12 @@ class SkuManager {
    *
    * @return array
    *   Array of Sku Ids of the item.
-   *
-   * @throws \Drupal\Core\Database\InvalidQueryException
    */
   public function getSkusByEntityId(array $sku_entity_ids) {
+    if (empty($sku_entity_ids)) {
+      return [];
+    }
+
     $query = $this->connection->select('acq_sku_field_data', 'asfd')
       ->fields('asfd', ['sku'])
       ->distinct()
@@ -398,6 +400,10 @@ class SkuManager {
    * @throws \Drupal\Core\Database\InvalidQueryException
    */
   public function getEntityIdsBySku(array $sku_texts) {
+    if (empty($sku_texts)) {
+      return [];
+    }
+
     $query = $this->connection->select('acq_sku_field_data', 'asfd')
       ->fields('asfd', ['id'])
       ->distinct()
