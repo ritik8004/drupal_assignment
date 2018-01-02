@@ -1,22 +1,21 @@
 name: 'Alshaya Profile'
 type: profile
-version: 8.x-dev
 core: '8.x'
 dependencies:
-  - acsf
-  - alshaya_performance
-  - alshaya_security
-  - color
-  - config_translation
-  - content_translation
-  - components
-  - dynamic_page_cache
-  - features
-  - language
-  - locale
-  - memcache
-  - syslog
-  - twig_tweak
+  - acsf:acsf
+  - alshaya_performance:alshaya_performance
+  - alshaya_security:alshaya_security
+  - drupal:color
+  - drupal:config_translation
+  - drupal:content_translation
+  - components:components
+  - drupal:dynamic_page_cache
+  - features:features
+  - drupal:language
+  - drupal:locale
+  - memcache:memcache
+  - drupal:syslog
+  - twig_tweak:twig_tweak
 
 themes:
   - bartik
