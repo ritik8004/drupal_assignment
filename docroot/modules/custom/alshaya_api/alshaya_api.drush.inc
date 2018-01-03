@@ -138,7 +138,7 @@ function drush_alshaya_api_sanity_check() {
       '@count' => count($missing[$type]['all']),
       '@type' => $type,
     ]))) {
-      foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+      foreach (\Drupal::service('acq_commerce.i18n_helper')->getStoreLanguageMapping() as $langcode => $store_id) {
         // We split the list of SKUs in small chunk to avoid any issue. This is
         // only to send the request to Conductor.
         foreach (array_chunk(str_replace("'", '', $missing[$type]['all']), 5) as $chunk) {
