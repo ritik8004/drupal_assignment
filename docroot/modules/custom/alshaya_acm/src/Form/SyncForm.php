@@ -10,6 +10,7 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -62,6 +63,13 @@ class SyncForm extends FormBase {
   private $i18nHelper;
 
   /**
+   * Language Manager service object.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  private $languageManager;
+
+  /**
    * ProductSyncForm constructor.
    *
    * @param \Drupal\acq_sku\CategoryManagerInterface $product_categories_manager
@@ -76,6 +84,8 @@ class SyncForm extends FormBase {
    *   AlshayaAPI manager interface.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager service object.
    */
   public function __construct(
     CategoryManagerInterface $product_categories_manager,
@@ -83,13 +93,15 @@ class SyncForm extends FormBase {
     AcqPromotionsManager $promotions_manager,
     IngestAPIWrapper $ingest_api,
     AlshayaApiWrapper $alshaya_api,
-    I18nHelper $i18n_helper) {
+    I18nHelper $i18n_helper,
+    LanguageManagerInterface $language_manager) {
     $this->productCategoriesManager = $product_categories_manager;
     $this->productOptionsManager = $product_options_manager;
     $this->promotionsManager = $promotions_manager;
     $this->ingestApi = $ingest_api;
     $this->alshayaApi = $alshaya_api;
     $this->i18nHelper = $i18n_helper;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -102,7 +114,8 @@ class SyncForm extends FormBase {
       $container->get('acq_promotion.promotions_manager'),
       $container->get('acq_commerce.ingest_api'),
       $container->get('alshaya_api.api'),
-      $container->get('acq_commerce.i18n_helper')
+      $container->get('acq_commerce.i18n_helper'),
+      $container->get('language_manager')
     );
   }
 
@@ -160,8 +173,7 @@ class SyncForm extends FormBase {
         foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
           foreach (array_chunk($skus, 5) as $chunk) {
             // @TODO: Make page size a config. It can be used in multiple places.
-            \Drupal::service('acq_commerce.ingest_api')
-              ->productFullSync($store_id, $langcode, $chunk, 2);
+            $this->ingestApi->productFullSync($store_id, $langcode, $chunk, 2);
           }
         }
 
@@ -169,7 +181,7 @@ class SyncForm extends FormBase {
         break;
 
       case $this->t('Synchronize ALL products'):
-        $languages = \Drupal::languageManager()->getLanguages();
+        $languages = $this->languageManager->getLanguages();
         $message_addition = [];
 
         foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
@@ -209,7 +221,7 @@ class SyncForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     drupal_set_message($this->t('Syncing data can have a performance impact. Please use with caution.'), 'warning');
 
-    foreach (\Drupal::languageManager()->getLanguages() as $language) {
+    foreach ($this->languageManager->getLanguages() as $language) {
       $options[$language->getId()] = $language->getName();
     }
 
