@@ -5,6 +5,7 @@ Feature: Test the PLP page
     Given I am on "/baby-clothing-0"
     And I wait for the page to load
 
+  @prod
   Scenario: As a Guest
     I should be able to see the header and the footer
     Then I should be able to see the header
@@ -20,6 +21,7 @@ Feature: Test the PLP page
     And I wait for AJAX to finish
     Then more items should get loaded
 
+  @prod
   Scenario: As a Guest
     I should be able to sort in ascending and descending order the list
     When I select "Name A to Z" from the dropdown
@@ -72,7 +74,7 @@ Feature: Test the PLP page
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
-  @arabic
+  @arabic @prod
   Scenario: As a Guest
   I should be able to see the header and the footer on Arabic site
     When I follow "عربية"
@@ -128,3 +130,74 @@ Feature: Test the PLP page
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see "رقم طلبيتك هو"
+
+  @prod
+  Scenario: As a Guest
+  I should be able to select a product in stock and
+  complete the checkout journey
+    When I select a product in stock
+    And I wait for the page to load
+    When I select a size for the product
+    And I wait for AJAX to finish
+    When I press "Add to basket"
+    And I wait for AJAX to finish
+    When I go to "/cart"
+    And I wait for the page to load
+    And I press "checkout securely"
+    And I wait for the page to load
+    And I follow "checkout as guest"
+    And I wait for the page to load
+    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
+    And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
+    And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
+    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
+    And I press "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
+    And I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_cashondelivery"
+    And I wait for AJAX to finish
+    And I accept terms and conditions
+    Then I should see "I confirm that I have read and accept the"
+
+  @arabic @prod
+  Scenario: As a Guest on Arabic site
+  I should be able to select a product in stock and
+  complete the checkout journey
+    When I follow "عربية"
+    And I wait for the page to load
+    When I select a product in stock
+    And I wait for the page to load
+    When I select a size for the product
+    And I wait for AJAX to finish
+    When I press "أضف إلى سلة التسوق"
+    And I wait for AJAX to finish
+    When I go to "/ar/cart"
+    And I wait for the page to load
+    When I press "إتمام الشراء بأمان"
+    And I wait for the page to load
+    And I follow "إتمام عملية الشراء كزبون زائر"
+    And I wait for the page to load
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
+    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
+    When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
+    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
+    When I fill in "edit-guest-delivery-home-address-shipping-address-line2" with "2"
+    And I press "توصيل إلى هذا العنوان"
+    And I wait for AJAX to finish
+    When I press "تابع للدفع"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_cashondelivery"
+    And I wait for AJAX to finish
+    And I accept terms and conditions
+    Then I should see "أؤكد أنني قرأت وفهمت"

@@ -1553,8 +1553,13 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iFillInAnElementHavingClassWith($class, $value)
   {
-    $page = $this->getSession()->getPage();
-    $page->find('css', $class)->setValue($value);
+      $page = $this->getSession()->getPage();
+      $element = $page->find('css', $class);
+      if ($element !== null) {
+          $element->setValue($value);
+      } else {
+          echo 'Element not found';
+      }
   }
 
   /**
@@ -1562,8 +1567,13 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iSelectFromDropdown($value, $class)
   {
-    $page = $this->getSession()->getPage();
-    $page->find('css', $class)->selectOption($value);
+      $page = $this->getSession()->getPage();
+      $element = $page->find('css', $class);
+      if ($element !== null) {
+          $element->selectOption($value);
+      } else {
+          echo 'Element not found';
+      }
   }
 
   /**

@@ -1,4 +1,4 @@
-@javascript @arabic @store
+@javascript @arabic @store @prod
 Feature: Test Store finder on Arabic site
 
   Background:
