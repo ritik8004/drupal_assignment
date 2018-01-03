@@ -1089,15 +1089,24 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // Update cross-sell region with products.
     if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
       $cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL);
-
       $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+
       $cross_sell_markup = [
-        '#theme' => 'products_cross_sell',
-        '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
+        '#theme' => 'products_horizontal_slider',
+        '#section_title' => t('Customers also bought'),
       ];
 
-      $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup));
-      $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup));
+      if ($crosssell_items) {
+        $cross_sell_markup['#data'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items));
+      }
+
+      // Make sure the wrapper div is present even in case of no cross-sell
+      // items.
+      $cross_sell_markup_desktop = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell above-mobile-block">', '#suffix' => '</div>']);
+      $cross_sell_markup_mobile = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell mobile-only-block">', '#suffix' => '</div>']);
+
+      $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup_mobile));
+      $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup_desktop));
     }
 
     // React for click & collect if stock is available.
