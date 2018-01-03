@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm\Form;
 
 use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\CategoryManagerInterface;
 use Drupal\acq_sku\ProductOptionsManager;
@@ -54,6 +55,13 @@ class SyncForm extends FormBase {
   private $alshayaApi;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
    * ProductSyncForm constructor.
    *
    * @param \Drupal\acq_sku\CategoryManagerInterface $product_categories_manager
@@ -66,18 +74,22 @@ class SyncForm extends FormBase {
    *   IngestAPI manager interface.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
    *   AlshayaAPI manager interface.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    */
   public function __construct(
     CategoryManagerInterface $product_categories_manager,
     ProductOptionsManager $product_options_manager,
     AcqPromotionsManager $promotions_manager,
     IngestAPIWrapper $ingest_api,
-    AlshayaApiWrapper $alshaya_api) {
+    AlshayaApiWrapper $alshaya_api,
+    I18nHelper $i18n_helper) {
     $this->productCategoriesManager = $product_categories_manager;
     $this->productOptionsManager = $product_options_manager;
     $this->promotionsManager = $promotions_manager;
     $this->ingestApi = $ingest_api;
     $this->alshayaApi = $alshaya_api;
+    $this->i18nHelper = $i18n_helper;
   }
 
   /**
@@ -89,7 +101,8 @@ class SyncForm extends FormBase {
       $container->get('acq_sku.product_options_manager'),
       $container->get('acq_promotion.promotions_manager'),
       $container->get('acq_commerce.ingest_api'),
-      $container->get('alshaya_api.api')
+      $container->get('alshaya_api.api'),
+      $container->get('acq_commerce.i18n_helper')
     );
   }
 
@@ -144,7 +157,7 @@ class SyncForm extends FormBase {
       case 'Synchronize listed SKUs':
         $skus = array_map('trim', explode(',', $form_state->getValue('products_list_text')));
 
-        foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+        foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
           foreach (array_chunk($skus, 5) as $chunk) {
             // @TODO: Make page size a config. It can be used in multiple places.
             \Drupal::service('acq_commerce.ingest_api')
@@ -159,7 +172,7 @@ class SyncForm extends FormBase {
         $languages = \Drupal::languageManager()->getLanguages();
         $message_addition = [];
 
-        foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+        foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
           if (!empty($form_state->getValue('products_full_languages')[$langcode])) {
             $this->ingestApi->productFullSync($store_id, $langcode);
 
