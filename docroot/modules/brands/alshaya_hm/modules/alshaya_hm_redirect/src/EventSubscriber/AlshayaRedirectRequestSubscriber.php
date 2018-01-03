@@ -54,7 +54,7 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
    *   Language manager service.
    * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $killSwitch
    *   Page cache kill service.
-   * @param ConfigFactoryInterface $config
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config
    *   Config factory service.
    */
   public function __construct(LanguageManagerInterface $languageManager,
@@ -77,7 +77,7 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
   /**
    * This method is called whenever the kernel.request event is dispatched.
    *
-   * @param GetResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
    *   Response event Object.
    */
   public function onRequest(GetResponseEvent $event) {
@@ -107,7 +107,7 @@ class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
   /**
    * Helper function to resolve language code based on fallbacks.
    *
-   * @param Request $request
+   * @param \Symfony\Component\HttpFoundation\Request $request
    *   Request Object.
    *
    * @return string
