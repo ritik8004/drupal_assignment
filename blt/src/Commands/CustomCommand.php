@@ -6,6 +6,7 @@ use Acquia\Blt\Robo\BltTasks;
 use Acquia\Blt\Robo\Common\RandomString;
 use Acquia\Blt\Robo\Exceptions\BltException;
 use Robo\Contract\VerbosityThresholdInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Defines commands in the "custom" namespace.
@@ -83,20 +84,16 @@ class CustomCommand extends BltTasks {
    * @command local:post-install
    * @description Allow all modules to run code once post drupal install.
    */
-  public function localPostInstall($args = [
-    'uri' => 'https://local.alshaya.com',
-    'brand' => 'mothercare',
-  ]) {
-
-    $arguments = array_intersect_key($args, array_flip(['uri', 'brand']));
+  public function localPostInstall($brand) {
     $this->say('Allow all modules to run code once post drupal install.');
     $dursh_alias = $this->getConfigValue('drush.alias');
+    //print_r($arguments); exit;
     $task = $this->taskDrush()
       ->stopOnFail()
       ->assume(TRUE)
       ->drush('alshaya-post-drupal-install')
       ->alias($dursh_alias)
-      ->options($arguments)
+      ->option('brand_module', $brand)
       ->run();
 
   }
@@ -107,12 +104,7 @@ class CustomCommand extends BltTasks {
    * @command sync:products
    * @description Sync the Product and Categories.
    */
-  public function syncProducts($args = [
-    'uri' => 'https://local.alshaya.com',
-    'limit' => 200,
-  ]) {
-
-    $arguments = array_intersect_key($args, array_flip(['uri', 'limit']));
+  public function syncProducts($uri, $limit = 200) {
     $this->say('Sync the categories, product option and products');
     $dursh_alias = $this->getConfigValue('drush.alias');
     $task = $this->taskDrush()
@@ -122,7 +114,8 @@ class CustomCommand extends BltTasks {
       ->drush('alshaya-acm-offline-categories-sync')
       ->drush('sync-commerce-product-options')
       ->drush('alshaya-acm-offline-products-sync')
-      ->options($arguments)
+      ->option('uri', $uri)
+      ->option('limit', $limit)
       ->run();
   }
 
@@ -132,9 +125,8 @@ class CustomCommand extends BltTasks {
    * @command sync:stores
    * @description Sync the Stores.
    */
-  public function syncStores($args = ['uri' => 'https://local.alshaya.com']) {
+  public function syncStores($uri) {
 
-    $arguments = array_intersect_key($args, array_flip(['uri']));
     $this->say('Sync the stores');
     $dursh_alias = $this->getConfigValue('drush.alias');
     $task = $this->taskDrush()
@@ -142,7 +134,7 @@ class CustomCommand extends BltTasks {
       ->assume(TRUE)
       ->alias($dursh_alias)
       ->drush('alshaya-api-sync-stores')
-      ->options($arguments)
+      ->option('uri', $uri)
       ->run();
 
   }
@@ -153,9 +145,8 @@ class CustomCommand extends BltTasks {
    * @command sync:promotions
    * @description Sync the Promotions.
    */
-  public function syncPromotions($args = ['uri' => 'https://local.alshaya.com']) {
+  public function syncPromotions($uri) {
 
-    $arguments = array_intersect_key($args, array_flip(['uri']));
     $this->say('Sync the promotions');
     $dursh_alias = $this->getConfigValue('drush.alias');
     $task = $this->taskDrush()
@@ -163,7 +154,7 @@ class CustomCommand extends BltTasks {
       ->assume(TRUE)
       ->alias($dursh_alias)
       ->drush('sync-commerce-promotions')
-      ->options($arguments)
+      ->option('uri', $uri)
       ->run();
   }
 
@@ -173,31 +164,35 @@ class CustomCommand extends BltTasks {
    * @command refresh:local
    * @description Setup local dev environment.
    */
-  public function refreshLocal() {
-    $this->invokeCommand('local:reset-local-settings');
-    $this->invokeCommand('local:drupal:install', ['uri' => 'https://local.alshaya.com']);
-    $this->invokeCommand('local:reset-settings-file');
-    $this->invokeCommand('local:post-install', ['brand' => 'mothercare']);
-    $this->invokeCommand('sync:products', ['uri' => 'https://local.alshaya.com']);
-    $this->invokeCommand('sync:promotions', ['uri' => 'https://local.alshaya.com']);
-    $this->invokeCommand('sync:stores', ['uri' => 'https://local.alshaya.com']);
-
-  }
-
-  /**
-   * Setup local dev environment with non-transac profile.
-   *
-   * @command refresh:non-transac-local
-   * @description Setup local dev environment with non-transac profile.
-   */
-  public function refreshNonTransLocal() {
+  public function refreshLocal($site = NULL) {
+    $sites = $this->getConfig()->get('sites');
+    $list = implode(array_keys($sites), ", ");
+    if ($site == NULL) {
+      $site = $this->ask("Enter site code to reinstall, ($list):");
+    }
+    while (!array_key_exists($site, $sites)) {
+      $this->yell('Invalid site code');
+      $site = $this->ask("Enter site code to reinstall, ($list):");
+    }
+    $uri = "local.alshaya-$site.com";
+    $profile_name = $sites[$site]['type'];
+    $brand = $sites[$site]['module'];
     $this->invokeCommand('local:reset-local-settings');
     $this->invokeCommand('local:drupal:install', [
-      'uri' => 'https://local.non-transac.com',
-      'project.profile.name' => 'alshaya_non_transac',
+      'uri' => $uri,
+      'profile' => $profile_name,
     ]);
     $this->invokeCommand('local:reset-settings-file');
-    $this->invokeCommand('local:post-install', ['brand' => 'victoria_secret']);
+    $this->invokeCommand('local:post-install', [
+      'brand' => $brand,
+    ]);
+
+    // Following commands are required only for transac.
+    if ($profile_name == 'alshaya_transac') {
+      $this->invokeCommand('sync:products', ['uri' => $uri]);
+      $this->invokeCommand('sync:promotions', ['uri' => $uri]);
+      $this->invokeCommand('sync:stores', ['uri' => $uri]);
+    }
   }
 
   /**
@@ -206,36 +201,39 @@ class CustomCommand extends BltTasks {
    * @command refresh:local:drupal
    * @description Reinstall local dev environment.
    */
-  public function refreshLocalDrupal() {
-    $this->invokeCommand('setup:composer:install');
-    $this->invokeCommand('frontend:build');
-    $this->invokeCommand('local:reset-local-settings');
-    $this->invokeCommand('local:drupal:install', ['uri' => 'https://local.alshaya.com']);
-    $this->invokeCommand('setup:toggle-modules');
-    $this->invokeCommand('local:reset-settings-file');
-    $this->invokeCommand('local:post-install', ['brand' => 'mothercare']);
-    $this->invokeCommand('sync:products', ['uri' => 'https://local.alshaya.com']);
-    $this->invokeCommand('sync:promotions', ['uri' => 'https://local.alshaya.com']);
-    $this->invokeCommand('sync:stores', ['uri' => 'https://local.alshaya.com']);
-  }
+  public function refreshLocalDrupal($site = NULL) {
+    $sites = $this->getConfig()->get('sites');
+    $list = implode(array_keys($sites), ", ");
+    if ($site == NULL) {
+      $site = $this->ask("Enter site code to reinstall, ($list):");
+    }
+    while (!array_key_exists($site, $sites)) {
+      $this->yell('Invalid site code');
+      $site = $this->ask("Enter site code to reinstall, ($list):");
+    }
+    $uri = "local.alshaya-$site.com";
+    $profile_name = $sites[$site]['type'];
+    $brand = $sites[$site]['module'];
 
-  /**
-   * Reinstall local dev environment with non-transac profile.
-   *
-   * @command refresh:non-transac-local:drupal
-   * @description Reinstall local dev environment with non-transac profile.
-   */
-  public function refreshNonTransLocalDrupal() {
     $this->invokeCommand('setup:composer:install');
     $this->invokeCommand('frontend:build');
     $this->invokeCommand('local:reset-local-settings');
     $this->invokeCommand('local:drupal:install', [
-      'uri' => 'https://local.non-transac.com',
-      'project.profile.name' => 'alshaya_non_transac',
+      'uri' => $uri,
+      'profile' => $profile_name,
     ]);
     $this->invokeCommand('setup:toggle-modules');
     $this->invokeCommand('local:reset-settings-file');
-    $this->invokeCommand('local:post-install', ['brand' => 'victoria_secret']);
+    $this->invokeCommand('local:post-install', [
+      'brand' => $brand,
+    ]);
+
+    // Following commands are required only for transac.
+    if ($profile_name == 'alshaya_transac') {
+      $this->invokeCommand('sync:products', ['uri' => $uri]);
+      $this->invokeCommand('sync:promotions', ['uri' => $uri]);
+      $this->invokeCommand('sync:stores', ['uri' => $uri]);
+    }
   }
 
   /**
@@ -248,12 +246,7 @@ class CustomCommand extends BltTasks {
    * @return \Robo\Result
    *   The `drush site-install` command result.
    */
-  public function localDrupalInstall($args = [
-    'uri' => 'https://local.alshaya.com',
-    'project.profile.name' => 'alshaya_transac',
-  ]) {
-
-    $arguments = array_intersect_key($args, array_flip(['uri']));
+  public function localDrupalInstall($uri, $profile) {
     // Generate a random, valid username.
     // @see \Drupal\user\Plugin\Validation\Constraint\UserNameConstraintValidator
     $username = RandomString::string(10, FALSE,
@@ -266,10 +259,10 @@ class CustomCommand extends BltTasks {
     /** @var \Acquia\Blt\Robo\Tasks\DrushTask $task */
     $task = $this->taskDrush()
       ->drush("site-install")
-      ->arg($args['project.profile.name'])
-      ->options($arguments)
+      ->arg($profile)
       ->rawArg("install_configure_form.update_status_module='array(FALSE,FALSE)'")
       ->rawArg("install_configure_form.enable_update_status_module=NULL")
+      ->rawArg("-l $uri")
       ->option('site-name', $this->getConfigValue('project.human_name'))
       ->option('site-mail', $this->getConfigValue('drupal.account.mail'))
       ->option('account-name', $username, '=')

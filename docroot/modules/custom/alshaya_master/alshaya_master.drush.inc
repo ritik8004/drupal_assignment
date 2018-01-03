@@ -33,6 +33,8 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
 
   // Determine which brand to install.
   $brand_module = drush_get_option('brand_module', '');
+
+ // print_r(drush_get_option()); exit();
   if (!empty($brand_module)) {
     if (module_load_install($brand_module)) {
       if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('module'))) {
