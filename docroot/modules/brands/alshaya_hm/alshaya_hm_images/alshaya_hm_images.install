@@ -5,9 +5,6 @@
  * Contains install, update, uninstall hooks for alshaya_hm_images module.
  */
 
-use Drupal\Core\Config\FileStorage;
-use Drupal\Core\Config\InstallStorage;
-
 /**
  * Implements hook_update_N().
  *

@@ -14,8 +14,6 @@ use Drupal\Core\Site\Settings;
 function alshaya_mc_update_8307() {
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
-  // Get current theme name.
-  $current_theme = $active_theme->getName();
   // Default site favicon path with default name.
   $site_favicon = $active_theme->getPath() . '/favicon';
 

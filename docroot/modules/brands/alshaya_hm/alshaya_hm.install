@@ -14,8 +14,6 @@ use Drupal\search_api\Entity\Index;
 function alshaya_hm_update_8010() {
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
-  // Get current theme name.
-  $current_theme = $active_theme->getName();
   // Default site favicon path with default name.
   $site_favicon = $active_theme->getPath() . '/favicon';
 
@@ -290,8 +288,6 @@ function alshaya_hm_install() {
 
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
-  // Get current theme name.
-  $current_theme = $active_theme->getName();
   // Default site favicon path with default name.
   $site_favicon = $active_theme->getPath() . '/favicon';
 
@@ -374,8 +370,6 @@ function alshaya_hm_install() {
     ->save();
 
   // Set email logo.
-  // Get current active theme.
-  $active_theme = \Drupal::theme()->getActiveTheme();
   // Get current theme name.
   $current_theme = $active_theme->getName();
   // Default site logo path with default name.
