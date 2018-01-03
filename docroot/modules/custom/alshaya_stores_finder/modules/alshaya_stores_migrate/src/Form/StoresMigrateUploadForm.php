@@ -60,10 +60,6 @@ class StoresMigrateUploadForm extends FormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $validators = ['file_validate_extensions' => ['csv']];
 
-    if (!$form_state->getValue('upload')) {
-      $form_state->setErrorByName('upload', $this->t('Please upload a file.'));
-    }
-
     $file = file_save_upload('upload', $validators, FALSE, 0);
     if (isset($file)) {
       if ($file) {
