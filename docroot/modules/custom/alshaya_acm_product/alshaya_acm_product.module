@@ -1282,7 +1282,7 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
  */
 function _alshaya_acm_product_get_size_guide_link() {
   // Check if we have the configuration set.
-  if ($size_guide_link = \Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
+  if (\Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
     $options = [
       'attributes' => [
         'class' => ['size-guide-link', 'use-ajax'],

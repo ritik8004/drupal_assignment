@@ -200,7 +200,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 
   // Create our thumbnails to be rendered for zoom.
   if (!empty($media)) {
-    foreach ($media as $delta => $media_item) {
+    foreach ($media as $media_item) {
       if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
 
         $file_uri = $media_item['file']->getFileUri();

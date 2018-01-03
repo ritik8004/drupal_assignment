@@ -315,7 +315,7 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $current_path_alias = \Drupal::service('path.alias_storage')->load(['source' => $current_path, 'langcode' => $langcode]);
 
     // Get the active link if any!.
-    foreach ($tree as $key => $element) {
+    foreach ($tree as $element) {
       if ($element->inActiveTrail) {
         // @var $link \Drupal\Core\Menu\MenuLinkInterface
         $link = $element->link;

@@ -455,7 +455,7 @@ class CheckoutOptionsManager {
     $site_current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     if ($site_current_langcode !== $site_default_langcode) {
       $shipping_options = $this->getAllShippingTerms();
-      foreach ($shipping_options as $key => $shipping_option) {
+      foreach ($shipping_options as $shipping_option) {
         // Prepare translation for shipping term only if translation exists,
         // else, keep the key & value as the original term itself.
         if ($shipping_option->hasTranslation($site_current_langcode)) {

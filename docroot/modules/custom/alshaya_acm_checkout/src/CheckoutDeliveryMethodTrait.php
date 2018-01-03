@@ -147,7 +147,7 @@ trait CheckoutDeliveryMethodTrait {
 
     if (!empty($items)) {
       // Loop through each cart items to get the status of click and collect.
-      foreach ($items as $index => $line_item) {
+      foreach ($items as $line_item) {
         // Check the status of click and collect for the given sku.
         if (!alshaya_acm_product_available_click_collect($line_item['sku'])) {
           // If click and collect is not available for a product.

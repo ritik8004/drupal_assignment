@@ -26,9 +26,6 @@ class AlshayaStoresKeyValueFormatter extends TextDefaultFormatter {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    // Get the value elements from the TextDefaultFormatter class.
-    $value_elements = parent::viewElements($items, $langcode);
-
     // Buffer the return value.
     $elements = [];
 

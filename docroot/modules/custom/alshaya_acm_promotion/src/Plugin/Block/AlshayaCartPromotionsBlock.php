@@ -121,7 +121,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     $options = [];
 
     if (!empty($promotion_nodes)) {
-      foreach ($promotion_nodes as $key => $promotion_node) {
+      foreach ($promotion_nodes as $promotion_node) {
         // Only allow promotions with value "other".
         if ($promotion_node->get('field_alshaya_promotion_subtype')->getString() == AlshayaPromotionsManager::SUBTYPE_OTHER) {
           $promotion_rule_id = $promotion_node->get('field_acq_promotion_rule_id')->first()->getValue();
@@ -168,7 +168,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     $selected_promotions = $this->configuration['promotions'];
 
     if (!empty($selected_promotions)) {
-      foreach ($selected_promotions as $key => $promotion_rule_id) {
+      foreach ($selected_promotions as $promotion_rule_id) {
         if ($promotion_rule_id) {
           $node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($promotion_rule_id);
 

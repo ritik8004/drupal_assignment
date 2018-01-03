@@ -261,7 +261,7 @@ class ClickCollectController extends ControllerBase {
   public function getProductStores($sku, $lat, $lon, $limit = 3) {
     $all_stores = $top_three = [];
 
-    if ($sku_entity = SKU::loadFromSku($sku)) {
+    if (SKU::loadFromSku($sku)) {
       if ($stores = $this->apiWrapper->getSkuStores($sku, $lat, $lon)) {
         $top_three = [];
         $top_three['#theme'] = 'pdp_click_collect_top_stores';
