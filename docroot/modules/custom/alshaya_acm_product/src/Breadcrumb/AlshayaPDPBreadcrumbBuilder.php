@@ -4,9 +4,17 @@ namespace Drupal\alshaya_acm_product\Breadcrumb;
 
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
+use Drupal\Core\Controller\TitleResolverInterface;
+use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AlshayaPDPBreadcrumbBuilder.
@@ -17,6 +25,100 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * The database service.
+   *
+   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   */
+  protected $connection;
+
+  /**
+   * The language manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * Entity Repository service object.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
+   * Entity Type Manager service object.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Path Validator service object.
+   *
+   * @var \Drupal\Core\Path\PathValidatorInterface
+   */
+  protected $pathValidator;
+
+  /**
+   * The Title Resolver.
+   *
+   * @var \Drupal\Core\Controller\TitleResolverInterface
+   */
+  protected $titleResolver;
+
+  /**
+   * Request stock service object.
+   *
+   * @var null|\Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * AlshayaStaticPageBreadcrumbBuilder constructor.
+   *
+   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   *   Database service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The lnaguage manager service.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity Repository service object.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager service object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
+   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
+   *   Path Validator service object.
+   * @param \Drupal\Core\Controller\TitleResolverInterface $title_resolver
+   *   The Title Resolver.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stock service object.
+   */
+  public function __construct(Connection $connection,
+                              LanguageManagerInterface $language_manager,
+                              EntityRepositoryInterface $entity_repository,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ModuleHandlerInterface $module_handler,
+                              PathValidatorInterface $path_validator,
+                              TitleResolverInterface $title_resolver,
+                              RequestStack $request_stack) {
+    $this->connection = $connection;
+    $this->languageManager = $language_manager;
+    $this->entityRepository = $entity_repository;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->moduleHandler = $module_handler;
+    $this->pathValidator = $path_validator;
+    $this->titleResolver = $title_resolver;
+    $this->currentRequest = $request_stack->getCurrentRequest();
+  }
 
   /**
    * {@inheritdoc}
@@ -32,9 +134,6 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    * {@inheritdoc}
    */
   public function build(RouteMatchInterface $route_match) {
-    /** @var \Drupal\Core\Entity\EntityRepository $entityRepository */
-    $entityRepository = \Drupal::service('entity.repository');
-
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
 
@@ -48,14 +147,14 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       if ($inner_term) {
         $alshaya_department_pages = [];
 
-        if (\Drupal::moduleHandler()->moduleExists('alshaya_department_page')) {
+        if ($this->moduleHandler->moduleExists('alshaya_department_page')) {
           $alshaya_department_pages = alshaya_department_page_get_pages();
         }
 
-        $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($inner_term);
+        $parents = $this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($inner_term);
 
         foreach (array_reverse($parents) as $term) {
-          $term = $entityRepository->getTranslationFromContext($term);
+          $term = $this->entityRepository->getTranslationFromContext($term);
 
           $breadcrumb->addCacheableDependency($term);
 
@@ -65,11 +164,11 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
             // We use department page link instead of PLP link.
             /** @var \Drupal\node\Entity\Node $node */
-            $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+            $node = $this->entityTypeManager->getStorage('node')->load($nid);
 
             if ($node->isPublished()) {
               // Get the translated node.
-              $node = $entityRepository->getTranslationFromContext($node);
+              $node = $this->entityRepository->getTranslationFromContext($node);
 
               // Add department page to breadcrumb.
               $breadcrumb->addLink(Link::createFromRoute(_alshaya_department_page_get_node_title($node), 'entity.node.canonical', ['node' => $node->id()]));
@@ -90,14 +189,14 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       }
     }
 
-    $request = \Drupal::request();
-    $url_object = \Drupal::service('path.validator')->getUrlIfValid($request->getPathInfo());
+    $request = $this->currentRequest;
+    $url_object = $this->pathValidator->getUrlIfValid($request->getPathInfo());
     $route_name = $url_object->getRouteName();
 
     // Don't invoke when this service is requested from a non-PDP page
     // explicitly.
     if ($route_name === 'entity.node.canonical') {
-      $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+      $title = $this->titleResolver->getTitle($request, $route_match->getRouteObject());
       $breadcrumb->addLink(Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]));
     }
 
@@ -144,10 +243,9 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    *   Root parent term id.
    */
   protected function getRootGroup($tid) {
-    $db = \Drupal::database();
     // Recursive call to get parent root parent tid.
     while ($tid > 0) {
-      $query = $db->select('taxonomy_term_hierarchy', 'tth');
+      $query = $this->connection->select('taxonomy_term_hierarchy', 'tth');
       $query->fields('tth', ['parent']);
       $query->condition('tth.tid', $tid);
       $parent = $query->execute()->fetchField();
@@ -169,9 +267,8 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    *   The term id.
    */
   protected function getInnerDepthTerm(array $terms = []) {
-    $db = \Drupal::database();
-    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $depths = $db->select('taxonomy_term_field_data', 'ttfd')
+    $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $depths = $this->connection->select('taxonomy_term_field_data', 'ttfd')
       ->fields('ttfd', ['tid', 'depth_level'])
       ->condition('ttfd.tid', $terms, 'IN')
       ->condition('ttfd.langcode', $current_langcode)

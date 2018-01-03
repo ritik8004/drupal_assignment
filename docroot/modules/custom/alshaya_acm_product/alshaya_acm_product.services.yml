@@ -3,6 +3,15 @@ services:
     class: Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
     tags:
       - { name: breadcrumb_builder, priority: 100 }
+    arguments:
+      - '@database'
+      - '@language_manager'
+      - '@entity.repository'
+      - '@entity_type.manager'
+      - '@module_handler'
+      - '@path.validator'
+      - '@title_resolver'
+      - '@request_stack'
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
     arguments:
