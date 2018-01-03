@@ -9,6 +9,18 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update the the w304 image style to 2x width.
+ */
+function alshaya_hm_update_8011() {
+  // Overriding image style w304 from generic module for H&M.
+  // Added in /config/override/image.style.w304.yml
+  \Drupal::configFactory()->getEditable('image.style.w304')
+    ->save();
+}
+
+/**
  * Hook update to update brand specific favicon and logo.
  */
 function alshaya_hm_update_8010() {
