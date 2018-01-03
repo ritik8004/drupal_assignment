@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_form_alter().
@@ -21,14 +22,14 @@ function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id)
   }
 
   if ($form_id == 'alshaya_newsletter_subscribe') {
-    $form['email']['#prefix']   = '<div class="newsletter-block-label">' . t('Be the first to know about our newest arrivals, special offers and store events near you.') . '</div>';
+    $form['email']['#prefix'] = '<div class="newsletter-block-label">' . t('Be the first to know about our newest arrivals, special offers and store events near you.') . '</div>';
   }
 }
 
 /**
  * Implements hook_acq_sku_product_node_alter().
  */
-function alshaya_hm_acq_sku_product_node_alter(Drupal\node\Entity\Node &$node, array $product) {
+function alshaya_hm_acq_sku_product_node_alter(Node &$node, array $product) {
   // Set product activation date if available.
   if (isset($product['attributes']['product_activation_date'])) {
     $node->created = strtotime($product['attributes']['product_activation_date']);
@@ -64,7 +65,7 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
           foreach ($cart_items as $key => $item) {
             $sku = SKU::loadFromSku($item['sku']);
             $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-            $images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
+            $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_main');
             if (isset($images[0]['url'])) {
               $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
             }
@@ -79,7 +80,7 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
 }
 
 /**
- * Implemented hook_gtm_product_attributes_alter().
+ * Implements hook_gtm_product_attributes_alter().
  */
 function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAttributes) {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
@@ -88,7 +89,7 @@ function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAt
       $sku = SKU::loadFromSku($skuId);
       $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
       if ($sku instanceof SKU) {
-        $images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
+        $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_main');
         if (!empty($images)) {
           // Changes for the image count.
           $skuAttributes['gtm-dimension4'] = count($images);
@@ -99,7 +100,7 @@ function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAt
 }
 
 /**
- * Implemented hook_module_implements_alter().
+ * Implements hook_module_implements_alter().
  */
 function alshaya_hm_module_implements_alter(&$implementations, $hook) {
   // To call the alshaya_hm_datalayer_alter at the end for HnM specific changes.
@@ -133,10 +134,11 @@ function alshaya_hm_language_switch_links_alter(array &$links, $type, Url $url) 
         ($node->hasTranslation($langcode))) {
         $sku = SKU::loadFromSku($node->get('field_skus')->first()->getString());
         if ($sku instanceof SKU) {
-          // Get one of the child SKUs whose color label matches the query string.
+          // Get one child SKU whose color label matches the query string.
           $sku_color = $sku_asset_manager->getChildSkuFromColor($sku, $color_query);
           // If its a valid SKU & has translation in the language for which the
-          // lang-switcher link is being built, fetch the color label translation.
+          // lang-switcher link is being built, fetch the color label
+          // translation.
           if (($sku_color instanceof SKU) &&
             ($sku_color->hasTranslation($langcode))) {
             $links[$langcode]['query']['color'] = $sku_color->getTranslation($langcode)->get('attr_color_label')->value;

@@ -8,9 +8,10 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
  * Hook update to update brand specific favicon.
  */
-
 function alshaya_mc_update_8307() {
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
@@ -21,11 +22,13 @@ function alshaya_mc_update_8307() {
 
   // Save default site favicon.
   \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
-    ->set('favicon', ['path'=> $site_favicon . '.ico'])
+    ->set('favicon', ['path' => $site_favicon . '.ico'])
     ->save();
 }
 
 /**
+ * Implements hook_update_N().
+ *
  * Hook update to enable alshaya mothercare theme.
  */
 function alshaya_mc_update_8306() {
@@ -68,6 +71,8 @@ function alshaya_mc_update_8306() {
 }
 
 /**
+ * Implements hook_update_N().
+ *
  * Default config for all_products_buyable.
  */
 function alshaya_mc_update_8305() {
@@ -173,7 +178,7 @@ function alshaya_mc_install() {
 
   // Save default site favicon.
   \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
-    ->set('favicon', ['path'=> $site_favicon . '.ico'])
+    ->set('favicon', ['path' => $site_favicon . '.ico'])
     ->save();
 
   // Save default logo for email.

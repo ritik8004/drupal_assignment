@@ -27,7 +27,7 @@ function alshaya_hm_images_acq_sku_product_sku_alter(&$sku, $product) {
  * @return string
  *   Serialized & processed assets.
  */
-function _alshaya_hm_images_acq_sku_process_assets($product) {
+function _alshaya_hm_images_acq_sku_process_assets(array $product) {
   $assets = [];
   if (isset($product['extension'], $product['extension']['assets'])) {
     $assets = $product['extension']['assets'];
@@ -150,10 +150,10 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
     }
 
     if ($sku instanceof SKU) {
-      $thumb_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_thumbnail');
-      $zoom_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_zoom');
-      $fullscreen_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_fullscreen');
-      $main_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
+      $thumb_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_thumbnail');
+      $zoom_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_zoom');
+      $fullscreen_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_fullscreen');
+      $main_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_main');
 
       foreach ($thumb_images as $key => $thumbnail) {
         $thumb_images[$key]['zoomurl'] = $zoom_images[$key]['url'];
@@ -164,8 +164,8 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
         $thumb_images[$key]['label'] = $sku->label();
       }
 
-      // Check on main images is sufficient here, since zoom images are variations
-      // of main images.
+      // Check on main images is sufficient here, since zoom images are
+      // variations of main images.
       if ($main_images) {
         $main_image['zoomurl'] = $zoom_images[0]['url'];
         $main_image['mediumurl'] = $main_images[0]['url'];

@@ -65,7 +65,7 @@ class SkuAssetManager {
    *   Current route matcher service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku manager service.
-   * @param SKUPluginManager $skuPluginManager
+   * @param \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager $skuPluginManager
    *   Sku Plugin Manager.
    */
   public function __construct(ConfigFactory $configFactory,
@@ -87,6 +87,8 @@ class SkuAssetManager {
    *   Page on which the asset needs to be rendered.
    * @param string $location_image
    *   Location on page e.g., main image, thumbnails etc.
+   * @param string $style
+   *   Style string.
    *
    * @return array
    *   Array of urls to sku assets.
@@ -103,7 +105,7 @@ class SkuAssetManager {
     $asset_urls = [];
 
     foreach ($assets as $asset) {
-      list($set, $image_location_identifier)  = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
+      list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
 
       // Prepare query options for image url.
       if (isset($set['url'])) {
@@ -159,7 +161,7 @@ class SkuAssetManager {
    * @return array
    *   Array of asset attributes.
    */
-  public function getAssetAttributes(SKU $sku, $asset, $page_type, $location_image) {
+  public function getAssetAttributes(SKU $sku, array $asset, $page_type, $location_image) {
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
@@ -323,7 +325,7 @@ class SkuAssetManager {
    * @return array
    *   Array of assets matching the asset type.
    */
-  public function filterSkuAssetType($assets, $asset_type) {
+  public function filterSkuAssetType(array $assets, $asset_type) {
     $filtered_assets = [];
 
     foreach ($assets as $asset) {
@@ -399,7 +401,7 @@ class SkuAssetManager {
   /**
    * Helper function to fetch list of color options supported by a parent SKU.
    *
-   * @param SKU $sku
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Parent sku.
    *
    * @return array
@@ -439,7 +441,7 @@ class SkuAssetManager {
   /**
    * Helper function to get SKU based on Castor Id.
    *
-   * @param SKU $parent_sku
+   * @param \Drupal\acq_sku\Entity\SKU $parent_sku
    *   Parent Sku.
    * @param int $rgb_color_label
    *   Castor id for which child sku needs to be fetched.
@@ -464,15 +466,17 @@ class SkuAssetManager {
   /**
    * Helper function to get images for a SKU.
    *
-   * @param SKU $parent_sku
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Parent Sku.
+   * @param string $page_type
+   *   Type of page.
    * @param string $image_type
    *   Type of image.
    *
-   * @return array|$images
+   * @return array|images
    *   Array of images for the SKU.
    */
-  public function getImagesForSKU(SKU $sku, $page_type, $image_type) {
+  public function getImagesForSku(SKU $sku, $page_type, $image_type) {
     if ($sku->bundle() == 'simple') {
       $images = $this->getSkuAsset($sku, $page_type, $image_type);
     }

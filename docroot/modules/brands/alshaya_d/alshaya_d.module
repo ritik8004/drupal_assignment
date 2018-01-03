@@ -9,8 +9,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\block\Entity\Block;
 
-
-
 /**
  * Implements hook_module_implements_alter().
  */

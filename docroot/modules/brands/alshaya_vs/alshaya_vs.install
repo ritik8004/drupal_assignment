@@ -69,7 +69,7 @@ function alshaya_vs_install() {
     ],
     "today's offer" => [
       'ar' => "عروض اليوم",
-    ]
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 }
@@ -80,7 +80,8 @@ function alshaya_vs_install() {
  * Update translation of sign up block content.
  */
 function alshaya_vs_update_8101() {
-  $blocks = \Drupal::entityTypeManager()->getStorage('block_content')->loadByProperties(array('uuid' => '54b4369d-fb82-4f9f-9034-fc869dda1007'));
+  $blocks = \Drupal::entityTypeManager()->getStorage('block_content')
+    ->loadByProperties(['uuid' => '54b4369d-fb82-4f9f-9034-fc869dda1007']);
   // Get the first block returned from the database.
   $block_content = reset($blocks);
   $block_content = $block_content->getTranslation('ar');
