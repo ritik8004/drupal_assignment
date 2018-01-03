@@ -6,6 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Block\BlockBase;
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
@@ -34,6 +35,13 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
   protected $skuManager;
 
   /**
+   * Module Handler object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -46,11 +54,19 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
    *   The cart session.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartStorageInterface $cart_storage, SkuManager $sku_manager) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              CartStorageInterface $cart_storage,
+                              SkuManager $sku_manager,
+                              ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->cartStorage = $cart_storage;
     $this->skuManager = $sku_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -62,7 +78,8 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
       $plugin_id,
       $plugin_definition,
       $container->get('acq_cart.cart_storage'),
-      $container->get('alshaya_acm_product.skumanager')
+      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('module_handler')
     );
   }
 
@@ -70,7 +87,7 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
    * {@inheritdoc}
    */
   public function build() {
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
     // Cross sell SKUs.
     $cross_sell_skus = [];
