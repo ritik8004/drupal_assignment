@@ -11,6 +11,15 @@ use Drupal\Core\Config\InstallStorage;
 /**
  * Implements hook_update_N().
  *
+ * Updating the order of season5 images.
+ */
+function alshaya_hm_images_update_8003() {
+  alshaya_config_install_configs(['alshaya_hm_images.settings'], 'alshaya_hm_images', 'install');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set image setting to use asset type: STILL_LIFE_FRONT_URL.
  */
 function alshaya_hm_images_update_8001() {
