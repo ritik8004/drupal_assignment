@@ -6,6 +6,22 @@
  */
 
 /**
+ * Implements hook_update_n().
+ *
+ * Update captcha point with correct form_id and email sign up form for ajax.
+ */
+function alshaya_email_signup_update_8102() {
+  // Delete captcha point with old form id.
+  Drupal::configFactory()->getEditable('captcha.captcha_point.webform_submission_alshaya_email_signup_form')->delete();
+
+  $configs = [
+    'captcha.captcha_point.webform_submission_alshaya_email_signup_add_form',
+    'webform.webform.alshaya_email_signup',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_email_signup');
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_email_signup_install() {
@@ -24,21 +40,5 @@ function alshaya_email_signup_install() {
  */
 function alshaya_email_signup_update_8101() {
   $configs = ['alshaya_email_signup.settings'];
-  alshaya_config_install_configs($configs, 'alshaya_email_signup');
-}
-
-/**
- * Implements hook_update_n().
- *
- * Update captcha point with correct form_id and email sign up form for ajax.
- */
-function alshaya_email_signup_update_8102() {
-  // Delete captcha point with old form id.
-  Drupal::configFactory()->getEditable('captcha.captcha_point.webform_submission_alshaya_email_signup_form')->delete();
-
-  $configs = [
-    'captcha.captcha_point.webform_submission_alshaya_email_signup_add_form',
-    'webform.webform.alshaya_email_signup',
-  ];
   alshaya_config_install_configs($configs, 'alshaya_email_signup');
 }
