@@ -564,7 +564,7 @@ function drush_acq_sku_commerce_products_remove_duplicates() {
       '@skus' => $sku_texts,
     ]));
 
-    foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+    foreach (\Drupal::service('acq_commerce.i18n_helper')->getStoreLanguageMapping() as $langcode => $store_id) {
       // Using very small page size to avoid any issues for skus which already
       // had corrupt data.
       \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, 5);
