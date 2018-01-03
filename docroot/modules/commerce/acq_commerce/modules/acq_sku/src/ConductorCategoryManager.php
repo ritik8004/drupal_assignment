@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -77,6 +78,8 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   Query factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
