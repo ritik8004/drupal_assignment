@@ -134,6 +134,7 @@
 
           $('#product-image-gallery-mob').on('swipe', function (event, slick) {
             var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img');
+            img_scale = 1;
             $('.zoomin').removeClass('disabled');
             $('.zoomout').removeClass('disabled');
             image.parent().siblings().each(function () {
@@ -145,6 +146,10 @@
             var productGallery = $('#product-image-gallery-mob', $(this).closest('.dialog-product-image-gallery-container-mobile'));
             productGallery.slick('unslick');
             $('body').removeClass('pdp-modal-overlay');
+            var image = $('#product-image-gallery-mob').find('.mob-imagegallery__thumbnails__image img');
+            image.parent().siblings().each(function () {
+              $('#product-image-gallery-mob').find('img').css('transform', 'scale(1)');
+            });
           });
 
         }
