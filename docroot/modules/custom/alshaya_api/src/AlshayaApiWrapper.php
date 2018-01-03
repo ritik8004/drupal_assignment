@@ -6,11 +6,14 @@ use Drupal\alshaya_stores_finder\StoresFinderUtility;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AcqPromotionsManager.
  */
 class AlshayaApiWrapper {
+
+  use StringTranslationTrait;
 
   /**
    * Stores the alshaya_api settings config array.
@@ -241,6 +244,96 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Function to get all the enabled SKUs from the API.
+   *
+   * @param array|string $types
+   *   The SKUs type to get from Magento (simple, configurable).
+   *
+   * @return array
+   *   An array of SKUs indexed by type.
+   *
+   * @TODO: Create appropriate endpoint on conductor and move this to commerce.
+   */
+  public function getSkus($types = ['simple', 'configurable']) {
+    $endpoint = 'products?';
+
+    // Query parameters to get all enabled SKUs. We only want the SKUs.
+    // No need to retrieve the other fields. We order the result by update date
+    // so if any SKU is updated/created while we do the requests, it will be
+    // returned in the latest results.
+    $query = [
+      'searchCriteria' => [
+        'filterGroups' => [
+          0 => [
+            'filters' => [
+              0 => [
+                'field' => 'status',
+                'value' => 1,
+                'condition_type' => 'eq',
+              ],
+              1 => [
+                'field' => 'type_id',
+                'condition_type' => 'eq',
+              ],
+            ],
+          ],
+        ],
+        'sortOrders' => [
+          0 => [
+            'field' => 'updated_at',
+            'direction' => 'ASC',
+          ],
+        ],
+        // @TODO: Make page size configurable. Arbitrary value for now.
+        'pageSize' => 50,
+      ],
+      'fields' => 'items[sku]',
+    ];
+
+    $mskus = [];
+
+    foreach ($types as $type) {
+      $query['searchCriteria']['filterGroups'][0]['filters'][1]['value'] = $type;
+
+      $page = 0;
+      $continue = TRUE;
+      $previous_page_skus = [];
+      $skus = [];
+
+      while ($continue) {
+        $continue = FALSE;
+        $page += 1;
+        $query['searchCriteria']['currentPage'] = $page;
+
+        $response = $this->invokeApi($endpoint . http_build_query($query), [], 'GET');
+
+        if ($response && is_string($response)) {
+          if ($decode_response = json_decode($response, TRUE)) {
+            $current_page_skus = array_column($decode_response['items'], 'sku');
+
+            $skus = array_merge($skus, $current_page_skus);
+
+            // We don't have any way to know we reached the latest page as
+            // Magento keep continue returning the same latest result. For this
+            // we test if there is any SKU in current page which was already
+            // present in previous page. If yes, then we reached the end of
+            // the list.
+            if (empty(array_diff($previous_page_skus, $current_page_skus))) {
+              $continue = TRUE;
+            }
+
+            $previous_page_skus = $current_page_skus;
+          }
+        }
+      }
+
+      $mskus[$type] = $skus;
+    }
+
+    return $mskus;
+  }
+
+  /**
    * Function to sync all stores.
    *
    * @return bool
@@ -325,8 +418,8 @@ class AlshayaApiWrapper {
 
       // Display configured value for rnc else sts delivery time.
       $time = $store['rnc_available'] ? ($cc_config) ?: $cc_config->get('click_collect_rnc') : $store['sts_delivery_time_label'];
-      $stores[$index]['delivery_time'] = t('Collect from store in <em>@time</em>', ['@time' => $time]);
-      $stores[$index]['low_stock_text'] = $store['low_stock'] ? t('Low stock') : '';
+      $stores[$index]['delivery_time'] = $this->t('Collect from store in <em>@time</em>', ['@time' => $time]);
+      $stores[$index]['low_stock_text'] = $store['low_stock'] ? $this->t('Low stock') : '';
     }
 
     return $stores;

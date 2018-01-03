@@ -628,6 +628,10 @@ header {
       font-size: 0;
       padding-top: 0.3125rem;
 
+      html[lang=ar] & {
+        font-size: 1px;
+      }
+
       &::before {
         margin-#{$right}: 0.3125rem;
       }
@@ -1046,6 +1050,10 @@ header {
       transform: translate3d(0, 0, 0);
       background-color: rgba(0, 0, 0, 0.48);
     }
+
+    .branding__menu {
+      border-bottom: 0;
+    }
   }
 
   .main--menu {
@@ -1106,6 +1114,7 @@ header {
   .back--link {
     @extend .menu__list-item;
 
+    font-family: $hnm-bold;
     padding: 1rem 0;
     padding-#{$right}: 0.25rem;
   }

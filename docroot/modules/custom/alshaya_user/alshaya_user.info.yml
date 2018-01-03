@@ -3,19 +3,18 @@ type: module
 core: 8.x
 description: 'Stores user field and related settings.'
 dependencies:
-  - alshaya_i18n
-  - alshaya_password_policy
-  - block
-  - block_content
-  - change_pwd_page
-  - datetime
-  - email_registration
-  - field
-  - mobile_number
-  - path
-  - system
-  - user
-  - user_registrationpassword
-  - views
-version: 8.x-1.0
+  - alshaya_i18n:alshaya_i18n
+  - alshaya_password_policy:alshaya_password_policy
+  - drupal:block
+  - drupal:block_content
+  - change_pwd_page:change_pwd_page
+  - drupal:datetime
+  - email_registration:email_registration
+  - drupal:field
+  - mobile_number:mobile_number
+  - drupal:path
+  - drupal:system
+  - drupal:user
+  - user_registrationpassword:user_registrationpassword
+  - drupal:views
 package: Alshaya

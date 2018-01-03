@@ -98,13 +98,7 @@ Feature: As an authenticated user
     and pay by KNET on Arabic site
     When I follow "اختر واستلم"
     And I wait for AJAX to finish
-    When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
-    And I wait for AJAX to finish
-    When I wait 5 seconds
-    When I follow "اختر هذا المحل"
-    And I wait for AJAX to finish
-    When I select an element having class ".cc-action"
-    And I wait for AJAX to finish
+    When I select a store on arabic
     When I select a payment option "payment_method_title_knet"
     And I wait for AJAX to finish
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
@@ -136,13 +130,7 @@ Feature: As an authenticated user
   and pay by Cybersource on Arabic site
     When I follow "اختر واستلم"
     And I wait for AJAX to finish
-    When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
-    And I wait for AJAX to finish
-    When I wait 5 seconds
-    When I follow "اختر هذا المحل"
-    And I wait for AJAX to finish
-    When I select an element having class ".cc-action"
-    And I wait for AJAX to finish
+    When I select a store on arabic
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"

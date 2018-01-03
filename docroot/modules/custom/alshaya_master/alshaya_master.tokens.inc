@@ -37,7 +37,7 @@ function alshaya_master_tokens($type, $tokens, array $data = [], array $options 
     foreach ($tokens as $name => $original) {
       switch ($name) {
         case 'HTTP_REFERER':
-          $replacements[$original] = $_SERVER['HTTP_REFERER'];
+          $replacements[$original] = \Drupal::request()->server->get('HTTP_REFERER');
           if ($sanitize) {
             $replacements[$original] = filter_xss($replacements[$original]);
           }

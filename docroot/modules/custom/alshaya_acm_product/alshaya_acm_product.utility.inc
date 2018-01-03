@@ -262,8 +262,8 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
     return [];
   }
   else {
-    // @TODO: should this be config?
-    $pager_flag = count($thumbnails) > 5 ? 'pager-yes' : 'pager-no';
+    $pdp_gallery_pager_limit = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
+    $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
     $build['gallery'] = [
       '#type' => 'container',
@@ -628,7 +628,7 @@ function alshaya_acm_product_update_config_options(array &$form_parts, FormState
   // Disable options which don't exist for the choosen config.
   foreach ($options as $key => $value) {
     if ($key && !in_array($key, $enabled_options)) {
-      $form_parts['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
+      unset($form_parts['configurables'][$attribute_code]['#options'][$key]);
     }
   }
 }

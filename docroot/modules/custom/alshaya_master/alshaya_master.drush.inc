@@ -5,6 +5,7 @@
  * Provides Drush commands for alshaya_master.
  */
 
+use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
 use Drupal\locale\Locale;
 
@@ -19,6 +20,7 @@ function alshaya_master_drush_command() {
     'aliases' => ['apdi'],
     'options' => [
       'brand_module' => 'The brand module to install.',
+      'country_code' => 'The country code the module.',
     ],
   ];
 
@@ -31,8 +33,38 @@ function alshaya_master_drush_command() {
 function drush_alshaya_master_alshaya_post_drupal_install() {
   $post_install_status = \Drupal::state()->get('alshaya_master_post_drupal_install', 'not done');
 
+  // Determine which country module to install.
+  $country_code = drush_get_option('country_code', '');
+  $country_code = empty($country_code) ? Settings::get('country_code') : strtolower($country_code);
+  $country_module = 'alshaya_' . $country_code;
+
+  if (module_load_install($country_module)) {
+    if (empty(\Drupal::configFactory()->get('alshaya.installed_country')->get('module'))) {
+      drush_print(dt('Enabling the @country_module country module.', ['@country_module' => $country_module]));
+
+      // Install the module.
+      \Drupal::service('module_installer')->install([$country_module]);
+
+      // Update config with installed brand and module names.
+      \Drupal::configFactory()->getEditable('alshaya.installed_country')
+        ->set('module', $country_module)
+        ->save();
+    }
+    else {
+      drush_print(dt("Country module @country_module can't be enabled because the site is already configured with @existing_country_module.",
+        [
+          '@country_module' => $country_module,
+          '@existing_country_module' => \Drupal::configFactory()->get('alshaya.installed_country')->get('module'),
+        ]));
+    }
+  }
+  else {
+    drush_print(dt('Country module @country_module does not exists.', ['@country_module' => $country_module]));
+  }
+
   // Determine which brand to install.
   $brand_module = drush_get_option('brand_module', '');
+
   if (!empty($brand_module)) {
     if (module_load_install($brand_module)) {
       if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('module'))) {

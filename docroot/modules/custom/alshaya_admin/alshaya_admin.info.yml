@@ -4,17 +4,16 @@ type: module
 core: 8.x
 package: Alshaya
 dependencies:
-  - alshaya_image_styles
-  - block
-  - block_content
-  - field
-  - file
-  - image
-  - lightning_workflow
-  - node
-  - system
-  - text
-  - user
-  - views
-  - workbench_moderation
-version: 8.x-1.0
+  - alshaya_image_styles:alshaya_image_styles
+  - drupal:block
+  - drupal:block_content
+  - drupal:field
+  - drupal:file
+  - drupal:image
+  - lightning:lightning_workflow
+  - drupal:node
+  - drupal:system
+  - drupal:text
+  - drupal:user
+  - drupal:views
+  - workbench_moderation:workbench_moderation

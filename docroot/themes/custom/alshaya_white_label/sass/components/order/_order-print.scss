@@ -115,8 +115,6 @@ body {
   }
 
   .mobile-only {
-    display: table-cell;
-
     @include breakpoint($ptablet) {
       display: none;
     }

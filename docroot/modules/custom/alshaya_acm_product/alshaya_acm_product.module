@@ -48,7 +48,6 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
   foreach ($items as $item_id => $item) {
     $object = $item->getOriginalObject()->getValue();
-
     $type = $object->getEntityType()->id();
     $bundle = $object->bundle();
 
@@ -88,7 +87,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
           // Update final_price based on final_price of children.
           $min_final_price = NULL;
-
+          $child_sku_found = FALSE;
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
             try {
               $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode);
@@ -101,6 +100,9 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
             // Additional check if it returns NULL.
             if (empty($child_sku_entity)) {
               continue;
+            }
+            else {
+              $child_sku_found = TRUE;
             }
 
             // Loop through the indexable fields.
@@ -118,6 +120,12 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
             if ($final_price > 0) {
               $min_final_price = isset($min_final_price) ? min($min_final_price, $final_price) : $final_price;
             }
+          }
+
+          // Do not index the product in case its linked with a configurable
+          // SKU, but the config SKU is missing its children.
+          if (!$child_sku_found) {
+            unset($items[$item_id]);
           }
 
           // Load all item fields, we'll need it to check condition inside loop.
@@ -207,9 +215,22 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['products_cross_sell'] = [
+  $items['product_article_warning_markup'] = [
+    'variables' => [
+      'warning' => NULL,
+    ],
+  ];
+
+  $items['product_concept_markup'] = [
+    'variables' => [
+      'concepts' => NULL,
+    ],
+  ];
+
+  $items['products_horizontal_slider'] = [
     'variables' => [
       'data' => NULL,
+      'section_title' => NULL,
     ],
   ];
 
@@ -310,7 +331,19 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU) {
-      $build['#cache']['tags'][] = 'sku:' . $sku_entity->getSku();
+      $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
+
+      // Make product node dependent on all child-skus in case of configurable
+      // product.
+      if (!empty($child_skus = $skuManager->getChildrenSkus($sku_entity))) {
+        // Check for disabled simple SKUs on Magento. Make sure the sku entity
+        // is available on Drupal before adding cache tag.
+        if ($sku_entity_ids = $skuManager->getEntityIdsBySku($child_skus)) {
+          foreach ($sku_entity_ids as $sku_entity_id) {
+            $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity_id;
+          }
+        }
+      }
 
       if ($view_mode == 'search_result') {
         $build['labels'] = [
@@ -329,10 +362,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           if (!empty($cross_sell_skus)) {
             $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
             if (!empty($crosssell_items)) {
-              // @Todo: Convert other related sections into theme functions as well. See if we can hava a common theme funciton for rendering them.
               $build['cross_sell'] = [
-                '#theme' => 'products_cross_sell',
+                '#theme' => 'products_horizontal_slider',
                 '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
+                '#section_title' => t('Customers also bought'),
               ];
 
               // Weight will have no effect later once template is modified.
@@ -347,7 +380,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $upsell_items = $skuManager->filterRelatedSkus(array_unique($up_sell_skus));
 
           if (!empty($upsell_items)) {
-            $build['up_sell'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $upsell_items));
+            $build['up_sell'] = [
+              '#theme' => 'products_horizontal_slider',
+              '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $upsell_items)),
+              '#section_title' => t('You may also like'),
+            ];
             // Weight will have no effect later once template is modified.
             $build['up_sell']['#weight'] = 10;
           }
@@ -359,7 +396,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $related_items = $skuManager->filterRelatedSkus(array_unique($related_skus));
 
           if (!empty($related_items)) {
-            $build['related'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $related_items));
+            $build['related'] = [
+              '#theme' => 'products_horizontal_slider',
+              '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $related_items)),
+              '#section_title' => t('Related'),
+            ];
             // Weight will have no effect later once template is modified.
             $build['related']['#weight'] = 11;
           }
@@ -397,6 +438,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $description_value .= '</div>';
         }
 
+        if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
+          $concepts_markup = [
+            '#theme' => 'product_concept_markup',
+            '#concepts' => $concepts,
+          ];
+
+          $description_value .= render($concepts_markup);
+        }
+
         // Render the wrapper div for composition always so that the same can be
         // filled with data on variant selection.
         $search_direction = $sku_entity->getType == 'configurable' ? 'children' : 'self';
@@ -425,41 +475,56 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $description_value .= '</div>';
         }
 
+        // Render the wrapper div for article warning always so that the same
+        // can be filled with data on variant selection.
+        $warning = $skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
+        $warning_markup = [
+          '#theme' => 'product_article_warning_markup',
+        ];
+
+        if (!empty($warning)) {
+          $warning_markup['#warning']['#markup'] = $warning;
+        }
+
+        $description_value .= render($warning_markup);
+
         $description['value'] = [
           '#markup' => $description_value,
         ];
 
-        $specifications['label'] = [
-          '#markup' => t('Specifications'),
-        ];
+        if (\Drupal::config('alshaya_acm.settings')->get('pdp_show_specifications')) {
+          $specifications['label'] = [
+            '#markup' => t('Specifications'),
+          ];
 
-        $specifications['value'] = [
-          "#theme" => 'item_list',
-          '#items' => [],
-        ];
+          $specifications['value'] = [
+            "#theme" => 'item_list',
+            '#items' => [],
+          ];
 
-        if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
-          $specifications['value']['#items'][] = t('Style Code: @value', [
-            '@value' => $attr_style_code,
-          ]);
-        }
+          if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
+            $specifications['value']['#items'][] = t('Style Code: @value', [
+              '@value' => $attr_style_code,
+            ]);
+          }
 
-        if ($attr_color = $sku_entity->get('attr_color')->getString()) {
-          $specifications['value']['#items'][] = t('Color: @value', [
-            '@value' => $attr_color,
-          ]);
-        }
+          if ($attr_color = $sku_entity->get('attr_color')->getString()) {
+            $specifications['value']['#items'][] = t('Color: @value', [
+              '@value' => $attr_color,
+            ]);
+          }
 
-        if ($attr_season = $sku_entity->get('attr_season')->getString()) {
-          $specifications['value']['#items'][] = t('Season: @value', [
-            '@value' => $attr_season,
-          ]);
-        }
+          if ($attr_season = $sku_entity->get('attr_season')->getString()) {
+            $specifications['value']['#items'][] = t('Season: @value', [
+              '@value' => $attr_season,
+            ]);
+          }
 
-        if ($attr_brand = $sku_entity->get('attr_product_brand')->getString()) {
-          $specifications['value']['#items'][] = t('Product brand: @value', [
-            '@value' => $attr_brand,
-          ]);
+          if ($attr_brand = $sku_entity->get('attr_product_brand')->getString()) {
+            $specifications['value']['#items'][] = t('Product brand: @value', [
+              '@value' => $attr_brand,
+            ]);
+          }
         }
 
         $whats_in_box['label'] = [
@@ -474,7 +539,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // Check comments in MMCPA-218 for sequence requirements.
         $build['description'][] = $at_glance;
         $build['description'][] = $description;
-        $build['description'][] = $specifications;
+        if (!empty($specifications)) {
+          $build['description'][] = $specifications;
+        }
         $build['description'][] = $whats_in_box;
 
         // Initialise home delivery variable.
@@ -825,8 +892,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
 
       if (!empty($selected_configs)) {
-        // Get skus for the selected config.
-        $variations = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), $selected_configs);
+        // Get all child SKUs possible for the selected root attribute to do a
+        // stock check on visible child attributes that belong to the child
+        // SKUs.
+        $variations = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), [$root_attribute_code => $selected_configs[$root_attribute_code]]);
 
         // Check stock for variations & update options.
         foreach ($variations as $key => $variation) {
@@ -1086,6 +1155,18 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
 
+    // Update simple product description attributes.
+    $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
+    $warning_markup = [
+      '#theme' => 'product_article_warning_markup',
+    ];
+
+    if (!empty($warning)) {
+      $warning_markup['#warning']['#markup'] = $warning;
+    }
+
+    $response->addCommand(new ReplaceCommand('.warning-wrapper', $warning_markup));
+
     // Update cross-sell region with products.
     if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
       $cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL);
@@ -1096,7 +1177,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
         '#section_title' => t('Customers also bought'),
       ];
 
-      if ($crosssell_items) {
+      if (!empty($crosssell_items)) {
         $cross_sell_markup['#data'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items));
       }
 

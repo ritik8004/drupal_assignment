@@ -62,7 +62,7 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
 
     $config['alshaya_arabic'] = [
       'type' => 'module',
-      'description' => t('Enable Arabic language for this site'),
+      'description' => $this->t('Enable Arabic language for this site'),
       'default_value' => $this->moduleHandler->moduleExists('alshaya_arabic'),
     ];
 
@@ -71,7 +71,7 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
     // one language.
     $config['alshaya_i18n'] = [
       'type' => 'module',
-      'description' => t('Enable or disable the language switcher on the site'),
+      'description' => $this->t('Enable or disable the language switcher on the site'),
       'default_value' => $this->moduleHandler->moduleExists('alshaya_i18n'),
     ];
 
@@ -89,7 +89,7 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
     if ($this->moduleHandler->moduleExists('alshaya_search')) {
       $config['alshaya_search_and_operator'] = [
         'type' => 'variable',
-        'description' => t('Use AND operator for Search. Defaults to OR.'),
+        'description' => $this->t('Use AND operator for Search. Defaults to OR.'),
         'default_value' => $storedConfig->get('alshaya_search_and_operator'),
       ];
     }

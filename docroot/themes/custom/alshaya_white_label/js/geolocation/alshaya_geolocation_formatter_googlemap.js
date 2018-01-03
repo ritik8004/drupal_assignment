@@ -102,7 +102,8 @@
                 title: location.children('.location-title').text(),
                 infoWindowContent: location.html(),
                 infoWindowSolitary: true,
-                label: (index + 1).toString()
+                label: (index + 1).toString(),
+                zIndex: index + 1
               };
 
               var skipInfoWindow = false;

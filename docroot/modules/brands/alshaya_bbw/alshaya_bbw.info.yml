@@ -4,8 +4,8 @@ description: 'The dedicated module for Bath and body works brand.'
 package: Alshaya
 core: 8.x
 dependencies:
-  - alshaya_block
-  - alshaya_i18n
-  - alshaya_paragraph_block
+  - alshaya_block:alshaya_block
+  - alshaya_i18n:alshaya_i18n
+  - alshaya_block:alshaya_paragraph_block
 themes:
   - bath_body_works

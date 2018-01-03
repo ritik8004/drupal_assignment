@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class CheckoutOptionsManager.
@@ -15,6 +16,8 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
  * @package Drupal\alshaya_acm_checkout
  */
 class CheckoutOptionsManager {
+
+  use StringTranslationTrait;
 
   /**
    * API Helper object.
@@ -67,7 +70,12 @@ class CheckoutOptionsManager {
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language Manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactoryInterface $config_factory, ApiHelper $api_helper, CartStorageInterface $cart_storage, LoggerChannelFactoryInterface $logger_factory, LanguageManagerInterface $languageManager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              ConfigFactoryInterface $config_factory,
+                              ApiHelper $api_helper,
+                              CartStorageInterface $cart_storage,
+                              LoggerChannelFactoryInterface $logger_factory,
+                              LanguageManagerInterface $languageManager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->configFactory = $config_factory;
     $this->apiHelper = $api_helper;
@@ -102,7 +110,7 @@ class CheckoutOptionsManager {
       return;
     }
 
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // Clean the code every-time.
     $code = $this->getCleanShippingMethodCode($code);
@@ -127,7 +135,7 @@ class CheckoutOptionsManager {
       // Following will be used as default, it will be available for
       // configuration in term edit page.
       if (empty($order_description)) {
-        $order_description = t('Your order will be delivered at the following address');
+        $order_description = $this->t('Your order will be delivered at the following address');
       }
 
       $term->get('field_shipping_method_cart_desc')->setValue($description);
@@ -281,7 +289,7 @@ class CheckoutOptionsManager {
       $term = $this->termStorage->load($tid);
 
       if ($current_language) {
-        $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        $langcode = $this->languageManager->getCurrentLanguage()->getId();
         if ($term->hasTranslation($langcode)) {
           $term = $term->getTranslation($langcode);
         }
@@ -359,7 +367,7 @@ class CheckoutOptionsManager {
         $key = $method['carrier_code'] . '_' . $method['method_code'];
 
         $code = $this->getCleanShippingMethodCode($key);
-        $price = !empty($method['amount']) ? alshaya_acm_price_format($method['amount']) : t('FREE');
+        $price = !empty($method['amount']) ? alshaya_acm_price_format($method['amount']) : $this->t('FREE');
 
         $term = $this->loadShippingMethod($code, $method['carrier_title'], $method['method_title'], $method['carrier_code'], $method['method_code']);
 

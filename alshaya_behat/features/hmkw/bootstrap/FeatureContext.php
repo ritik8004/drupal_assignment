@@ -1411,13 +1411,17 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     }
 
     /**
-     * @When /^I click "([^"]*)" in the region "([^"]*)"$/
+     * @When /^I click "([^"]*)" "([^"]*)" in the region "([^"]*)"$/
      */
-    public function iClickInTheRegion($element, $region) {
+    public function iClickInTheRegion($element, $type, $region)
+    {
         $page = $this->getSession()->getPage();
-        $object = $page->find('css', $region);
-        var_dump($object);
-        //    $page->clickLink($object);
+        $region = $page->find('css', $region);
+        if ($region !== null) {
+            $region->find('named', array($type, $element))->click();
+        } else {
+            throw new Exception('Breadcrumbs not displayed');
+        }
     }
 
     /**
@@ -1522,16 +1526,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     }
 
     /**
-     * @When /^I subscribe to one of the shows$/
-     */
-    public function iSubscribeToOneOfTheShows() {
-        $page = $this->getSession()->getPage();
-        $page->find('css', '#node-page-10 > div.content.clearfix > div.subscribe-row > div.subscribe-box.p1.monthly > div.subscribe-button > a')
-            ->click();
-
-    }
-
-    /**
      * @When /^I agree on Terms of Use$/
      */
     public function iAgreeOnTermsOfUse() {
@@ -1609,8 +1603,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         $page = $this->getSession()->getPage();
         $page->find('css',$arg1)->mouseOver();
     }
-
-
 
     /**
      * @Then /^the breadcrumb "([^"]*)" should be displayed$/
@@ -1770,7 +1762,7 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         if($title == NULL){
             throw new Exception('Title is not displayed on category page');
         }
-        if(!(($page->hasContent('items')) or ($page->hasContent('خبرا')))){
+        if(!(($page->hasContent('items')) or ($page->hasContent('أخبار')))){
             throw new Exception('Number of items not displayed on category page');
         }
         $this->item_count = count($page->findAll('css','.field--name-name'));
@@ -1824,17 +1816,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         }
         $current_window = $this->getSession()->getWindowName();
         $this->getSession()->stop($current_window);
-    }
-
-    /**
-     * @Then /^I should see the text "([^"]*)" in region "([^"]*)"$/
-     */
-    public function iShouldSeeTheTextInRegion($text, $region) {
-        $page = $this->getSession()->getPage();
-        $confirm_text = $page->find('css', $region)->find('named', array('content', $text));
-        if(!$confirm_text){
-            throw new Exception($text. ' is not found anywhere on the current page');
-        }
     }
 
     /**
@@ -2151,6 +2132,29 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
             $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
             $this->iWaitSeconds('5');
             $select_store = $page->findLink('select this store');
+            if ($select_store->isVisible()) {
+                $select_store->click();
+            }
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iSelectAnElementHavingClass('.cc-action');
+            $this->iWaitForThePageToLoad();
+        }
+    }
+
+    /**
+     * @When /^I select a store on arabic$/
+     */
+    public function iSelectAStoreOnArabic()
+    {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('تغيير المحل');
+        if ($address_button !== null && $address_button->isVisible()) {
+            $this->iSelectAnElementHavingClass('.cc-action');
+        } else {
+            $this->iSelectFirstAutocomplete('Shuwaikh', 'edit-store-location');
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iWaitSeconds('5');
+            $select_store = $page->findLink('اختر هذا المحل');
             if ($select_store->isVisible()) {
                 $select_store->click();
             }

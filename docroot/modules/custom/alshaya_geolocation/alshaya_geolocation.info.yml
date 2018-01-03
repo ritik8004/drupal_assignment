@@ -4,5 +4,5 @@ description: 'Places api autocomplete and views filter integration with places a
 package: 'Alshaya'
 core: 8.x
 dependencies:
-  - geolocation
-  - views
+  - geolocation:geolocation
+  - drupal:views

@@ -10,6 +10,7 @@ use Drupal\alshaya_block\AlshayaBlockHelper;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Component\Utility\Unicode;
 
 /**
  * Provides a block to display 'Site branding' elements.
@@ -183,12 +184,27 @@ class CustomLogoBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $helper = $this->alshayaBlockHelper->checkCurrentPathInMenu($this->configuration['menu_option']);
     if (!empty($helper)) {
       $element = $helper['element'];
-      $link = $element->link;
-      $attributes = alshaya_menus_get_menu_link_attributes($link);
+      $options = $element->link->getOptions();
+
+      $attributes = isset($options['attributes']) ? $options['attributes'] : [];
+
+      // Class attribute needs special handling because Drupal
+      // may add an "active" class to it.
+      if (isset($attributes['class']) && !is_array($attributes['class'])) {
+        $attributes['class'] = explode(' ', $attributes['class']);
+      }
+
+      // Remove empty attributes by checking their string length.
+      foreach ($attributes as &$attribute) {
+        if (!is_array($attribute) && Unicode::strlen($attribute) === 0) {
+          unset($attribute);
+        }
+      }
+
       return [
         'class' => $attributes['class'],
         'link' => $helper['active_link'],
-        'title' => $link->getTitle(),
+        'title' => $element->link->getTitle(),
       ];
     }
     return NULL;

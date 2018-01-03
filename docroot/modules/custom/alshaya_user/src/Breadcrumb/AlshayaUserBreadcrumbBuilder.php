@@ -6,11 +6,14 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AlshayaUserBreadcrumbBuilder.
  */
 class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -26,9 +29,9 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
     $user_id = \Drupal::currentUser()->id();
-    $breadcrumb->addLink(Link::createFromRoute(t('My Account'), 'entity.user.canonical', ['user' => $user_id]));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('My Account'), 'entity.user.canonical', ['user' => $user_id]));
     if ($route_match->getRouteName() != 'entity.user.canonical') {
       $request = \Drupal::request();
       $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
