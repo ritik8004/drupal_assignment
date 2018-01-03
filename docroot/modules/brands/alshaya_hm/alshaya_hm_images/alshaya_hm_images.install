@@ -41,11 +41,6 @@ function alshaya_hm_images_install() {
   $fields = \Drupal::config('alshaya_hm_images.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
 
-  // Update the above in base field additions config as well.
-  $alshaya_acm_base_field_additions = \Drupal::configFactory()->getEditable('acq_sku.base_field_additions');
-  $alshaya_acm_base_field_additions->set('color_label.configurable', 1)->save();
-  $alshaya_acm_base_field_additions->set('color_label.label', 'Color')->save();
-
   // Save overridden configs.
   _alshaya_config_save_overridden_configs('alshaya_hm_images');
 

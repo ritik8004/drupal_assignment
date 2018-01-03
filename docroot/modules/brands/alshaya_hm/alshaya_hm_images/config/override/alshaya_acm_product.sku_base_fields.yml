@@ -1,4 +1,4 @@
 fields:
-  color:
+  color_label:
     label: 'Color'
     configurable: 1
