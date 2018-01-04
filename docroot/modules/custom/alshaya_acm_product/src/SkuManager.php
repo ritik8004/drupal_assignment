@@ -131,8 +131,6 @@ class SkuManager {
    *   Array of media files.
    */
   public function getSkuMedia($sku, $first_image_only = FALSE) {
-    $media = [];
-
     $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
     if (!($sku_entity instanceof SKU)) {
@@ -572,7 +570,6 @@ class SkuManager {
       }
 
       $image_key = $type . '_image';
-      $image_fid_key = $type . '_image_fid';
       $text_key = $type . '_image_text';
       $position_key = $type . '_position';
 

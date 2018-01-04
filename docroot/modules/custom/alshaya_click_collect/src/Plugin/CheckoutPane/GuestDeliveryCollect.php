@@ -113,7 +113,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       if ($customer = $api_wrapper->getCustomer($cart->customerEmail())) {
         $default_firstname = $customer['firstname'];
         $default_lastname = $customer['lastname'];
-        $default_email = $cart->customerEmail();
+        $default_email = $customer_email;
       }
     }
 
@@ -318,7 +318,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $values = $form_state->getValues($pane_form['#parents']);
 
-    if ($user = user_load_by_mail($values['cc_email'])) {
+    if (user_load_by_mail($values['cc_email'])) {
       $login_link = Link::createFromRoute($this->t('please login'), 'acq_checkout.form', [
         'step' => 'login',
       ],

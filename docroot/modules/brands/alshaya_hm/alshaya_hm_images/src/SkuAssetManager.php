@@ -421,7 +421,7 @@ class SkuAssetManager {
     $class = $plugin_definition['class'];
     $plugin = new $class();
 
-    foreach ($child_skus as $key => $child_sku) {
+    foreach ($child_skus as $child_sku) {
       if ($child_sku instanceof SKU) {
         // Avoid duplicate colors in cases of corrupt data.
         // e.g., color label= '' for rgb_color=#234567 &

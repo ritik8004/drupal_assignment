@@ -5,7 +5,6 @@ global_styles:
   js:
     vendor/js/calc.min.js: {}
     js/back_to_top.js: {}
-    js/custom.js: {}
     js/accordion.js: {}
     js/menu.js: {}
     js/form.js: {}
@@ -19,7 +18,7 @@ global_styles:
     - core/jquery.ui.tabs
     - core/jquery.cookie
     - mobile_number/element
-    - alshaya_hnm/utils
+    - alshaya_white_label/utils
 
 ltr_styles:
   css:
@@ -33,10 +32,6 @@ rtl_styles:
       css/rtl.css: {}
       css/rtl-print.css: {media: print}
 
-unmask_password:
-  js:
-    js/unmask_password.js: {}
-
 slider_banner:
   js:
     js/slider.js: {}
@@ -49,7 +44,7 @@ sell:
     js/sell.js: {}
   dependencies:
     - core/jquery
-    - alshaya_hnm/utils
+    - alshaya_white_label/utils
     - alshaya_white_label/owlcarousel
 
 convert_to_select2:
@@ -63,20 +58,12 @@ sizeguide:
     js/select2Option.js: {}
     js/sizeguide.js: {}
 
-ucfix:
-  js:
-    js/ucfix.js: {}
-
 cloud_zoom:
   version: 1.x
   js:
     js/product_zoom.js: {}
   dependencies:
     - alshaya_white_label/cloud_zoom
-
-utils:
-  js:
-    js/utils.js: {}
 
 plp_search_js:
   js:
