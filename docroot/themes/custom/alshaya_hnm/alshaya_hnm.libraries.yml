@@ -59,12 +59,6 @@ sell:
     - alshaya_hnm/utils
     - alshaya_white_label/owlcarousel
 
-autosize_textarea:
-  js:
-    js/autosize_textarea.js: {}
-  dependencies:
-    - alshaya_white_label/autosize
-
 convert_to_select2:
   js:
     js/convert_to_select2.js: {}
