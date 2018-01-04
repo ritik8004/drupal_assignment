@@ -364,7 +364,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             if (!empty($crosssell_items)) {
               $build['cross_sell'] = [
                 '#theme' => 'products_horizontal_slider',
-                '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
+                '#data' => $crosssell_items,
                 '#section_title' => t('Customers also bought'),
               ];
 
@@ -382,7 +382,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           if (!empty($upsell_items)) {
             $build['up_sell'] = [
               '#theme' => 'products_horizontal_slider',
-              '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $upsell_items)),
+              '#data' => $upsell_items,
               '#section_title' => t('You may also like'),
             ];
             // Weight will have no effect later once template is modified.
@@ -398,7 +398,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           if (!empty($related_items)) {
             $build['related'] = [
               '#theme' => 'products_horizontal_slider',
-              '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $related_items)),
+              '#data' => $related_items,
               '#section_title' => t('Related'),
             ];
             // Weight will have no effect later once template is modified.
@@ -1178,7 +1178,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       ];
 
       if (!empty($crosssell_items)) {
-        $cross_sell_markup['#data'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items));
+        $cross_sell_markup['#data'] = $crosssell_items;
       }
 
       // Make sure the wrapper div is present even in case of no cross-sell
@@ -1320,4 +1320,13 @@ function alshaya_acm_product_is_buyable(SKU $sku_entity) {
   $all_products_buyable = \Drupal::config('alshaya_acm_product.settings')->get('all_products_buyable');
   // For now we have only one condition, we may have more in future.
   return $all_products_buyable || (bool) $sku_entity->get('attr_is_buyable')->getString();
+}
+
+/**
+ * Implements template_preprocess_products_horizontal_slider().
+ */
+function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) {
+  if (isset($variables['data'])) {
+    $variables['data'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $variables['data']));
+  }
 }
