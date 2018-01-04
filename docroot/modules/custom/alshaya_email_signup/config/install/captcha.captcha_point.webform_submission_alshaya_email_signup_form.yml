@@ -2,5 +2,5 @@ langcode: en
 status: true
 dependencies: {  }
 formId: webform_submission_alshaya_email_signup_form
-captchaType: default
+captchaType: recaptcha/reCAPTCHA
 label: webform_submission_alshaya_email_signup_form

@@ -1,0 +1,8 @@
+/**
+ * @file
+ * Styling for Sync form.
+ */
+
+.container-inline label::after {
+  content: none !important;
+}

@@ -1,6 +1,7 @@
 @javascript
 Feature: Test the product detail page
 
+  @simple
   Scenario: As a Guest
   I should be able to see all the various sections
   on a simple product detail page
@@ -8,7 +9,7 @@ Feature: Test the product detail page
     And I wait for the page to load
     Then I should be able to see the header
     Then it should display title, price and item code
-    Then it should display quantity
+    Then I should see "quantity"
     Then I should see the button "Add to basket"
     Then I should see "product description"
     And I should see the link for ".read-more-description-link"
@@ -20,6 +21,7 @@ Feature: Test the product detail page
     And I should see "FREE delivery to stores across Kuwait in 2-3 days"
     Then I should be able to see the footer
 
+  @simple
   Scenario: As a Guest user
   I should be able to expand HD and CC on a simple PDP
     Given I am on a simple product page
@@ -56,6 +58,7 @@ Feature: Test the product detail page
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
+  @config
   Scenario: As a Guest
     I should be able to see all the various sections
     on a configurable product detail page
@@ -63,8 +66,8 @@ Feature: Test the product detail page
     And I wait for the page to load
     Then I should be able to see the header
     Then it should display title, price and item code
-    And it should display size
-    Then it should display quantity
+    Then I should see "Size : "
+    And I should see "quantity"
     Then I should see the button "Add to basket"
     Then I should see "product description"
     And I should see the link for ".read-more-description-link"
@@ -76,10 +79,13 @@ Feature: Test the product detail page
     And I should see "FREE delivery to stores across Kuwait in 2-3 days"
     Then I should be able to see the footer
 
+  @config
   Scenario: As a Guest user
     I should be able to expand HD and CC on a configurable PDP
     Given I am on a configurable product
     And I wait for the page to load
+    When I select a size for the product
+    And I wait for AJAX to finish
     When I click the label for "#ui-id-2"
     Then I should see "to all areas"
     And I should see "(Kuwait)"
@@ -112,7 +118,7 @@ Feature: Test the product detail page
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
-  @media
+  @media @simple
   Scenario Outline:
     As an User
     I should be able to connect via Social media
@@ -126,7 +132,7 @@ Feature: Test the product detail page
     |.st_facebook_custom|Log in to your Facebook account to share.|
     |.st_twitter_custom|Share a link with your followers|
 
-  @media
+  @media @config
   Scenario Outline:
   As an User
   I should be able to connect via Social media
@@ -140,7 +146,7 @@ Feature: Test the product detail page
       |.st_facebook_custom|Log in to your Facebook account to share.|
       |.st_twitter_custom|Share a link with your followers|
 
-  @arabic
+  @arabic @simple
   Scenario: As a Guest on Arabic site
   I should be able to see all the various sections
   on a simple product detail page
@@ -150,7 +156,7 @@ Feature: Test the product detail page
     And I wait for the page to load
     Then I should be able to see the header in Arabic
     Then it should display title, price and item code
-    Then it should display quantity
+    Then I should see "الكمية"
     Then I should see the button "أضف إلى سلة التسوق"
     Then I should see "وصف المنتج"
     And I should see the link for ".read-more-description-link"
@@ -161,7 +167,7 @@ Feature: Test the product detail page
     And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 2 – 3 أيام"
     Then I should be able to see the footer in Arabic
 
-  @arabic
+  @arabic @simple
   Scenario: As a Guest user
   I should be able to expand HD and CC on a simple PDP
     Given I am on a simple product page
@@ -197,7 +203,7 @@ Feature: Test the product detail page
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
-  @arabic @fail
+  @arabic @config
   Scenario: As a Guest on Arabic site
   I should be able to see all the various sections
   on a configurable product detail page
@@ -210,8 +216,8 @@ Feature: Test the product detail page
     And I wait for AJAX to finish
     Then I should be able to see the header in Arabic
     Then it should display title, price and item code
-    And it should display size
-    Then it should display quantity
+    Then I should see "بحجم :"
+    Then I should see "الكمية"
     Then I should see the button "أضف إلى سلة التسوق"
     Then I should see "وصف المنتج"
     And I should see the link for ".read-more-description-link"
@@ -222,7 +228,7 @@ Feature: Test the product detail page
     And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 2 – 3 أيام"
     Then I should be able to see the footer in Arabic
 
-  @arabic @fail
+  @arabic @config
   Scenario: As a Guest user on Arabic site
   I should be able to expand HD and CC on a configurable PDP
     Given I am on a configurable product
@@ -261,7 +267,7 @@ Feature: Test the product detail page
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
-  @media @arabic
+  @media @arabic @simple
   Scenario Outline:
   As an User on Arabic site
   I should be able to connect via Social media
@@ -277,7 +283,7 @@ Feature: Test the product detail page
       |.st_facebook_custom|Log in to your Facebook account to share.|
       |.st_twitter_custom|Share a link with your followers|
 
-  @media @arabic
+  @media @arabic @config
   Scenario Outline:
   As an User on Arabic site
   I should be able to connect via Social media
@@ -286,8 +292,6 @@ Feature: Test the product detail page
     When I scroll to x "0" y "0" coordinates of page
     When I follow "عربية"
     And I wait for the page to load
-    When I follow "3-2‏‏ سنوات"
-    And I wait for AJAX to finish
     When I click the label for "<social_media_link>"
     And I wait 5 seconds
     Then I should be directed to window having "<text>"

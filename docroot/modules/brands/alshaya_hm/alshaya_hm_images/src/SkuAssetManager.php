@@ -408,6 +408,7 @@ class SkuAssetManager {
   public function getColorsForSku(SKU $sku) {
     $child_skus = $this->skuManager->getChildSkus($sku);
     $article_castor_ids = [];
+    $traversed_article_castor_ids = [];
 
     if (empty($child_skus)) {
       return [];
@@ -420,7 +421,13 @@ class SkuAssetManager {
 
     foreach ($child_skus as $key => $child_sku) {
       if ($child_sku instanceof SKU) {
-        if (!isset($article_castor_ids[$plugin->getAttributeValue($child_sku, 'article_castor_id')])) {
+        // Avoid duplicate colors in cases of corrupt data.
+        // e.g., color label= '' for rgb_color=#234567 &
+        // color_label=grey for rgb_color=#234567. Also, return back
+        // color label-code mapping uniquely identified by an article_castor_id.
+        if (!empty($article_castor_id = $plugin->getAttributeValue($child_sku, 'article_castor_id')) &&
+          (!in_array($article_castor_id, $traversed_article_castor_ids))) {
+          $traversed_article_castor_ids[] = $article_castor_id;
           $article_castor_ids[$child_sku->get('attr_color_label')->value] = $child_sku->get('attr_rgb_color')->value;
         }
       }

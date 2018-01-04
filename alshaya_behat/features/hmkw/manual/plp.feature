@@ -2,7 +2,7 @@
 Feature: Test the PLP page
 
   Background:
-    Given I am on "/men/shirts"
+    Given I am on "/ladies/new-arrivals/clothes"
     And I wait for the page to load
 
   @eng

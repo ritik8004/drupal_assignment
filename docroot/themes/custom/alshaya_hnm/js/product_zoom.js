@@ -10,7 +10,7 @@
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
       var slickOptions = {
-        slidesToShow: 5,
+        slidesToShow: 3,
         vertical: true,
         arrows: true,
         focusOnSelect: false,
@@ -99,7 +99,7 @@
           }
 
           var slickModalOptions = {
-            slidesToShow: 4,
+            slidesToShow: 3,
             vertical: true,
             arrows: true,
             centerMode: true,

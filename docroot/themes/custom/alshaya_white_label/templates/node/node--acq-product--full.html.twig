@@ -40,21 +40,18 @@ set classes = [
 
       {% if content.cross_sell %}
         <div class="horizontal-crossell above-mobile-block">
-          <h3 class="subtitle crossell-title">{{ "Customers also bought"|t }}</h3>
 					{{ content.cross_sell }}
         </div>
 			{% endif %}
 
       {% if content.up_sell %}
         <div class="horizontal-upell above-mobile-block">
-          <h3 class="subtitle crossell-title">{{ "You may also like"|t }}</h3>
           {{ content.up_sell }}
         </div>
       {% endif %}
 
       {% if content.related %}
         <div class="horizontal-related above-mobile-block">
-          <h3 class="subtitle crossell-title">{{ "Related"|t }}</h3>
           {{ content.related }}
         </div>
       {% endif %}

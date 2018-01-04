@@ -96,3 +96,23 @@ function alshaya_permissions_update_8007() {
   // Update role permissions from the config.
   _alshaya_permissions_update_role_from_config(['site_builder', 'webmaster']);
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add permission to webmaster role.
+ */
+function alshaya_permissions_update_8008() {
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['webmaster']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Grant access of rich_text format to seo admin.
+ */
+function alshaya_permissions_update_8009() {
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['seo_admin']);
+}
