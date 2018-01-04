@@ -10,3 +10,4 @@ services:
       - '@queue'
       - '@config.factory'
       - '@database'
+      - '@acq_commerce.i18n_helper'

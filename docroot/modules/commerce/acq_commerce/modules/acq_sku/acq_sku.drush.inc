@@ -109,7 +109,7 @@ function acq_sku_drush_command() {
 function drush_acq_sku_sync_commerce_products($langcode, $page_size) {
   $langcode = strtolower($langcode);
 
-  $store_id = acq_commerce_get_store_id_from_langcode($langcode);
+  $store_id = \Drupal::service('acq_commerce.i18n_helper')->getStoreIdFromLangcode($langcode);
 
   if (empty($store_id)) {
     drush_print(dt("Store id not found for provided language code."));
@@ -564,7 +564,7 @@ function drush_acq_sku_commerce_products_remove_duplicates() {
       '@skus' => $sku_texts,
     ]));
 
-    foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+    foreach (\Drupal::service('acq_commerce.i18n_helper')->getStoreLanguageMapping() as $langcode => $store_id) {
       // Using very small page size to avoid any issues for skus which already
       // had corrupt data.
       \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, 5);

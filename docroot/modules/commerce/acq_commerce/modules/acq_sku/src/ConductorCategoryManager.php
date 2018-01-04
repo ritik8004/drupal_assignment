@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -58,6 +59,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   private $queryFactory;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -70,14 +78,17 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   Query factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->clientFactory = $client_factory;
     $this->apiWrapper = $api_wrapper;
     $this->queryFactory = $query_factory;
     $this->logger = $logger_factory->get('acq_sku');
+    $this->i18nHelper = $i18n_helper;
   }
 
   /**
@@ -91,7 +102,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $debug = $config->get('debug');
     $debug_dir = $config->get('debug_dir');
 
-    foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+    foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       if ($store_id) {
         // Load Conductor Category data.
         $categories = [$this->loadCategoryData($store_id)];
@@ -266,7 +277,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         continue;
       }
 
-      $langcode = acq_commerce_get_langcode_from_store_id($category['store_id']);
+      $langcode = $this->i18nHelper->getLangcodeFromStoreId($category['store_id']);
 
       // If lancode is not available, means no mapping of store and language.
       if (!$langcode) {
