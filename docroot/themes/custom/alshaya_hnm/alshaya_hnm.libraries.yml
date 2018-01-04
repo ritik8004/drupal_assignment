@@ -77,14 +77,8 @@ cloud_zoom:
   version: 1.x
   js:
     js/product_zoom.js: {}
-    js/product_mobile_zoom.js: {}
   dependencies:
-    - core/drupal.dialog
-    - core/jquery.ui.draggable
-    - alshaya_product_zoom/cloud_zoom
-    - alshaya_white_label/slick
-    - alshaya_hnm/utils
-    - alshaya_product_zoom/lightslider
+    - alshaya_white_label/cloud_zoom
 
 utils:
   js:
