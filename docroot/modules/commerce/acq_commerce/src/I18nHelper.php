@@ -88,7 +88,7 @@ class I18nHelper {
    * @return string|null
    *   Language code if available or null.
    */
-  function getLangcodeFromStoreId($store_id) {
+  public function getLangcodeFromStoreId($store_id) {
     $mapping = $this->getStoreLanguageMapping();
     $mapping = array_flip($mapping);
 
