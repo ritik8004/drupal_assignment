@@ -22,7 +22,7 @@ regions:
 libraries:
   - alshaya_hnm/global_styles
   - alshaya_hnm/color_styles
-  - alshaya_hnm/ucfix
+  - alshaya_white_label/ucfix
 
 ckeditor_stylesheets:
   - css/ckeditor.css

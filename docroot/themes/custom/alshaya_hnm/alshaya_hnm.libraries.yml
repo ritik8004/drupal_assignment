@@ -68,10 +68,6 @@ sizeguide:
     js/select2Option.js: {}
     js/sizeguide.js: {}
 
-ucfix:
-  js:
-    js/ucfix.js: {}
-
 cloud_zoom:
   version: 1.x
   js:
