@@ -4,4 +4,4 @@ alshaya_paragraphs.paragraphs_custom_config_form:
     _form: '\Drupal\alshaya_paragraphs\Form\ParagraphsCustomConfigForm'
     _title: 'Paragraphs Custom Configuration'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer site configuration'

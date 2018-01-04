@@ -4,6 +4,7 @@ alshaya_master.home:
     _controller: '\Drupal\alshaya_master\Controller\HomeController::home'
     _title: 'Home'
   requirements:
+  # Home page should be accessible without any restriction.
     _access: 'TRUE'
 alshaya_master.404_maintenance_setting:
   path: '/admin/config/404-maintenance-settings'
