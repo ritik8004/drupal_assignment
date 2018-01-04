@@ -37,7 +37,7 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
     // Update order items to have unique records only.
     // For configurable products we get it twice (once for parent and once for
     // selected variant).
-    foreach ($orders as $index => &$order) {
+    foreach ($orders as &$order) {
       $order_items = [];
       foreach ($order['items'] as $item) {
         if (!isset($order_items[$item['sku']])) {
@@ -440,7 +440,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     }
 
     // Check if we can find a parent SKU for this to get proper name.
-    if ($parentSku = alshaya_acm_product_get_parent_sku_by_sku($item['sku'])) {
+    if (alshaya_acm_product_get_parent_sku_by_sku($item['sku'])) {
       // Try to find attributes to display for this product.
       $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
     }

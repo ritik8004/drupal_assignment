@@ -200,8 +200,6 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
-    $shipping_address = (array) $cart->getShipping();
-
     if ($values['same_as_shipping'] == self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
       alshaya_acm_checkout_set_shipping_into_billing($cart);
     }

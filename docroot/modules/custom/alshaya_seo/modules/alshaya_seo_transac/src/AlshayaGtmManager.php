@@ -792,7 +792,7 @@ class AlshayaGtmManager {
 
     $privilege_order = isset($order['extension']['loyalty_card']) ? 'Privilege Customer' : 'Regular Customer';
 
-    foreach ($orderItems as $key => $item) {
+    foreach ($orderItems as $item) {
       $product = $this->fetchSkuAtttributes($item['sku']);
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];

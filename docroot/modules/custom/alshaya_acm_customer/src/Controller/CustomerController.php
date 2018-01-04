@@ -98,7 +98,7 @@ class CustomerController extends ControllerBase {
 
       if (empty($orders)) {
         // @TODO: Check the empty result message.
-        if ($search = $this->currentRequest->query->get('search')) {
+        if ($this->currentRequest->query->get('search')) {
           $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('Your search yielded no results, please try different text in search.') . '</div>';
         }
         else {
