@@ -53,6 +53,8 @@
 
 .form-item--error-message {
   margin-bottom: 1.25rem;
+  color: $venetian-red;
+  font-size: 0.75rem;
 }
 
 .input--textual__container,
@@ -130,6 +132,15 @@ input:active ~ .input__label label {
 
 .input__container--half {
   width: 48%;
+
+  .input--textual__container--errors {
+    color: $venetian-red;
+    font-size: 0.75rem;
+    margin-top: 0.3125rem;
+    position: absolute;
+    bottom: -0.125rem;
+    left: 0;
+  }
 }
 
 .input__container,

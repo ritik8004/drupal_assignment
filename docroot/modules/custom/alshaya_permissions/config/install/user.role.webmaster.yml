@@ -90,3 +90,4 @@ permissions:
   - 'translate store node'
   - 'create content translations'
   - 'migrate alshaya_stores'
+  - 'access site in maintenance mode'

@@ -1189,7 +1189,7 @@ body.alias--cart {
     margin-bottom: 0.75rem;
     min-width: 10.8125rem;
     text-transform: uppercase;
-    font-family: $hnm-regular;
+    font-family: $hnm-bold;
     font-size: 0.875rem;
     letter-spacing: normal;
     padding: 0.625rem 0.25rem;
@@ -1271,7 +1271,7 @@ body.alias--cart {
       background: $hnm-black-two;
       color: $white-five;
       font-size: 0.875rem;
-      font-family: $hnm-regular;
+      font-family: $hnm-bold;
       text-transform: uppercase;
       font-weight: normal;
       width: 10.81rem;
@@ -1324,7 +1324,7 @@ body.alias--cart {
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
     font-size: 0.875rem;
-    font-family: $hnm-regular;
+    font-family: $hnm-bold;
     border: 1px solid $hnm-black-two;
     background: $hnm-black-two;
     padding: 0.53125rem 0;
@@ -1334,11 +1334,28 @@ body.alias--cart {
     position: relative;
     padding-#{$left}: 1.688rem;
 
-    @include icon(shopping-bag, after) {
+    @include icon(shopping-bag, before) {
       font-size: 1.5rem;
       #{$left}: 0.875rem;
       position: absolute;
       top: 0.4375rem;
+    }
+
+    @include breakpoint($upto-tablet) {
+      padding: 0.4rem 0;
+      padding-#{$left}: 1.688rem;
+      padding-#{$right}: 1.75rem;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+
+      &::before {
+        display: inline-block;
+        line-height: 1rem;
+        font-size: 1.25rem;
+        padding-#{$right}: 0.625rem;
+        position: static;
+        vertical-align: bottom;
+      }
     }
 
     @include breakpoint($tablet) {
@@ -1348,8 +1365,8 @@ body.alias--cart {
 }
 
 .empty-cart-message {
-  margin-bottom: 34px;
-  margin-top: 35px;
+  margin-bottom: 2.375rem;
+  margin-top: 2.625rem;
   font-weight: normal;
   color: $black;
   font-family: $hnm-bold;
@@ -1357,12 +1374,13 @@ body.alias--cart {
   font-size: 0.8125rem;
 
   @include breakpoint($tablet) {
-    margin-top: 24px;
+    margin-top: 1.5rem;
+    margin-bottom: 2.125rem;
   }
 
   @include breakpoint($desktop) {
-    margin-bottom: 24px;
-    margin-top: 37px;
+    margin-bottom: 1.5rem;
+    margin-top: 2.25rem;
   }
 }
 
@@ -1463,7 +1481,7 @@ html[lang=ar] {
   .multistep-checkout {
     #edit-actions {
       .form-submit {
-        font-family: $hnm-regular;
+        font-family: $hnm-bold;
         font-weight: normal;
         font-size: 0.875rem;
       }
