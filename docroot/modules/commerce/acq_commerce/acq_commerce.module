@@ -84,20 +84,6 @@ function template_preprocess_acq_commerce_price(array &$variables) {
 }
 
 /**
- * Helper function to get store id from language code.
- *
- * @param string $langcode
- *   Language code to convert to store id.
- *
- * @return string|null
- *   Store id if available as string or null.
- */
-function acq_commerce_get_store_id_from_langcode($langcode) {
-  $mapping = \Drupal::service('acq_commerce.i18n_helper')->getStoreLanguageMapping();
-  return !empty($mapping[$langcode]) ? $mapping[$langcode] : NULL;
-}
-
-/**
  * Helper function to get language code from store id.
  *
  * @param string $store_id
