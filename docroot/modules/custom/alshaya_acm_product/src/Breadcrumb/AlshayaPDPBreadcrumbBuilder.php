@@ -83,7 +83,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   protected $currentRequest;
 
   /**
-   * AlshayaStaticPageBreadcrumbBuilder constructor.
+   * AlshayaPDPBreadcrumbBuilder constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
    *   Database service.
