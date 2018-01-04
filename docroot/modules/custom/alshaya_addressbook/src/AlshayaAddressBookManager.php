@@ -4,14 +4,16 @@ namespace Drupal\alshaya_addressbook;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Entity\Profile;
-use Drupal\user\Entity\User;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -54,6 +56,13 @@ class AlshayaAddressBookManager {
   protected $termStorage;
 
   /**
+   * User storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $userStorage;
+
+  /**
    * Alshaya API Wrapper object.
    *
    * @var \Drupal\alshaya_api\AlshayaApiWrapper
@@ -66,6 +75,27 @@ class AlshayaAddressBookManager {
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
+
+  /**
+   * Config Factory service object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Cache Backend object for "cache.data".
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * AlshayaAddressBookManager constructor.
@@ -84,6 +114,12 @@ class AlshayaAddressBookManager {
    *   Alshaya API Wrapper object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language manager object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend object for "cache.data".
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
@@ -91,15 +127,22 @@ class AlshayaAddressBookManager {
                               MobileNumberUtilInterface $mobile_util,
                               LoggerChannelFactoryInterface $logger_factory,
                               AlshayaApiWrapper $alshayaApiWrapper,
-                              LanguageManagerInterface $languageManager) {
+                              LanguageManagerInterface $languageManager,
+                              ConfigFactoryInterface $config_factory,
+                              CacheBackendInterface $cache,
+                              ModuleHandlerInterface $module_handler) {
     $this->entityRepository = $entity_repository;
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->userStorage = $entity_type_manager->getStorage('user');
     $this->apiWrapper = $api_wrapper;
     $this->mobileUtil = $mobile_util;
     $this->alshayaApiWrapper = $alshayaApiWrapper;
     $this->languageManager = $languageManager;
     $this->logger = $logger_factory->get('alshaya_addressbook');
+    $this->configFactory = $config_factory;
+    $this->cache = $cache;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -175,7 +218,7 @@ class AlshayaAddressBookManager {
     $entity->setDefault(TRUE);
 
     /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
-    $account = User::load($entity->getOwnerId());
+    $account = $this->userStorage->load($entity->getOwnerId());
 
     try {
       $customer = $this->apiWrapper->getCustomer($account->getEmail());
@@ -222,7 +265,7 @@ class AlshayaAddressBookManager {
     try {
       $updated_customer = $this->apiWrapper->updateCustomer($customer);
 
-      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+      $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
       // Update the data in Drupal to match the values in Magento.
       alshaya_acm_customer_update_user_data($account, $updated_customer);
@@ -254,7 +297,7 @@ class AlshayaAddressBookManager {
    */
   public function deleteUserAddressFromApi(Profile $entity) {
     /** @var \Drupal\acq_commerce\Conductor\APIWrapper $apiWrapper */
-    $account = User::load($entity->getOwnerId());
+    $account = $this->userStorage->load($entity->getOwnerId());
 
     $customer = $this->apiWrapper->getCustomer($account->getEmail());
     unset($customer['extension']);
@@ -280,7 +323,7 @@ class AlshayaAddressBookManager {
     try {
       $updated_customer = $this->apiWrapper->updateCustomer($customer);
 
-      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+      $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
       // Update the data in Drupal to match the values in Magento.
       alshaya_acm_customer_update_user_data($account, $updated_customer);
@@ -336,7 +379,7 @@ class AlshayaAddressBookManager {
    *   Drupal address.
    */
   public function getAddressArrayFromMagentoAddress(array $magento_address) {
-    $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
+    $dm_version = $this->configFactory->get('alshaya_addressbook.settings')->get('dm_version');
 
     $address = [];
 
@@ -520,7 +563,7 @@ class AlshayaAddressBookManager {
    */
   private function getLocationTerms(array $conditions = []) {
     $terms = [];
-    $query = \Drupal::entityQuery('taxonomy_term')->condition('vid', self::AREA_VOCAB);
+    $query = $this->termStorage->getQuery()->condition('vid', self::AREA_VOCAB);
     foreach ($conditions as $condition) {
       if (!empty($condition['field']) && !empty($condition['value'])) {
         $condition['operator'] = empty($condition['operator']) ? '=' : $condition['operator'];
@@ -550,7 +593,7 @@ class AlshayaAddressBookManager {
     // City is core attribute in Magento and hard to remove validation.
     $magento_address['city'] = '&#8203;';
 
-    $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
+    $dm_version = $this->configFactory->get('alshaya_addressbook.settings')->get('dm_version');
 
     if ($dm_version == DM_VERSION_2) {
       $mapping = $this->getMagentoFieldMappings();
@@ -773,7 +816,7 @@ class AlshayaAddressBookManager {
 
     // Delete the excess terms that exist.
     if (!empty($termsProcessed)) {
-      $result = \Drupal::entityQuery('taxonomy_term')
+      $result = $this->termStorage->getQuery()
         ->condition('vid', self::AREA_VOCAB)
         ->condition('tid', $termsProcessed, 'NOT IN')
         ->execute();
@@ -796,7 +839,7 @@ class AlshayaAddressBookManager {
     // Cache the form per language.
     $cid = 'magento_customer_address_form_' . $this->languageManager->getCurrentLanguage()->getId();
 
-    $cache = \Drupal::cache()->get($cid);
+    $cache = $this->cache->get($cid);
 
     if ($cache) {
       return $cache->data;
@@ -813,7 +856,7 @@ class AlshayaAddressBookManager {
         return (bool) $form_item['visible'];
       });
 
-      \Drupal::cache()->set($cid, $magento_form);
+      $this->cache->set($cid, $magento_form);
     }
     catch (\Exception $e) {
       $magento_form = [];
@@ -831,7 +874,7 @@ class AlshayaAddressBookManager {
   public function getMagentoFieldMappings() {
     // Fields that can be used in area_parent: governate, city, emirates.
     $mapping_key = 'mapping_' . strtolower(_alshaya_custom_get_site_level_country_code());
-    $mapping = \Drupal::config('alshaya_addressbook.settings')->get($mapping_key);
+    $mapping = $this->configFactory->get('alshaya_addressbook.settings')->get($mapping_key);
     return $mapping;
   }
 
