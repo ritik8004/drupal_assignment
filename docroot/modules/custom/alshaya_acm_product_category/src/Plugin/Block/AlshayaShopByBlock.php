@@ -136,7 +136,7 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     $form['shop_by_voc']['vocabulary'] = [
       '#type' => 'select',
       '#title' => $this->t('Vocabulary'),
-      '#default_value' => $config['vocabulary'],
+      '#default_value' => !empty($config['vocabulary']) ? $config['vocabulary'] : '',
       '#options' => $vocabularies,
       '#description' => $this->t('The Vocabulary that we want to show in shop by links.'),
       '#required' => TRUE,
