@@ -79,4 +79,24 @@ class I18nHelper {
     return !empty($mapping[$langcode]) ? $mapping[$langcode] : NULL;
   }
 
+  /**
+   * Helper method to get language code from store id.
+   *
+   * @param string $store_id
+   *   Store id to convert to language code.
+   *
+   * @return string|null
+   *   Language code if available or null.
+   */
+  function getLangcodeFromStoreId($store_id) {
+    $mapping = $this->getStoreLanguageMapping();
+    $mapping = array_flip($mapping);
+
+    if (empty($store_id)) {
+      return array_shift($mapping);
+    }
+
+    return !empty($mapping[$store_id]) ? $mapping[$store_id] : NULL;
+  }
+
 }
