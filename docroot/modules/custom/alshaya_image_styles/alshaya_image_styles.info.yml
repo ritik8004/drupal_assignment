@@ -3,12 +3,11 @@ type: module
 core: 8.x
 description: 'All the image styles.'
 dependencies:
-  - alshaya_config
-  - block
-  - image
-  - imagemagick
-  - responsive_image
-  - system
-  - views
-version: 8.x-1.0
+  - alshaya_config:alshaya_config
+  - drupal:block
+  - drupal:image
+  - imagemagick:imagemagick
+  - drupal:responsive_image
+  - drupal:system
+  - drupal:views
 package: Alshaya

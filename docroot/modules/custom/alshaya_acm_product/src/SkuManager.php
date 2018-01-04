@@ -16,6 +16,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class SkuManager.
@@ -23,6 +24,8 @@ use Drupal\node\Entity\Node;
  * @package Drupal\alshaya_acm_product
  */
 class SkuManager {
+
+  use StringTranslationTrait;
 
   /**
    * The database service.
@@ -215,7 +218,7 @@ class SkuManager {
         // Get discount if discounted price available.
         $discount = floor((($price - $final_price) * 100) / $price);
         $build['discount'] = [
-          '#markup' => t('Save @discount%', ['@discount' => $discount]),
+          '#markup' => $this->t('Save @discount%', ['@discount' => $discount]),
         ];
       }
     }
@@ -256,6 +259,7 @@ class SkuManager {
     }
 
     $sku_price = 0;
+
     foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
       try {
         $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $sku_entity->language()->getId());
@@ -279,10 +283,10 @@ class SkuManager {
               $sku_price = $new_sku_price;
               $prices = ['price' => $price, 'final_price' => $final_price];
             }
-            // Check if initial price or final price is bigger.
+            // Is the difference between initial an final bigger?
             elseif (
-              $final_price != 0 && $prices['final_price'] != 0
-              && $final_price < $prices['final_price']
+              $price != 0 && $final_price != 0 && $prices['price'] != 0 && $prices['final_price'] != 0
+              && ($price - $final_price) > ($prices['price'] - $prices['final_price'])
             ) {
               $prices = ['price' => $price, 'final_price' => $final_price];
             }
@@ -358,7 +362,7 @@ class SkuManager {
       else {
         $sku_cart_price['final_price'] = number_format($final_price, 3);
         $discount = floor((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
-        $sku_cart_price['discount']['prefix'] = t('Save', [], ['context' => 'discount']);
+        $sku_cart_price['discount']['prefix'] = $this->t('Save', [], ['context' => 'discount']);
         $sku_cart_price['discount']['value'] = $discount . '%';
       }
     }

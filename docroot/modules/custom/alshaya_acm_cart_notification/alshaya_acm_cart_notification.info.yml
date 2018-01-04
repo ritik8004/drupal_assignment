@@ -4,6 +4,6 @@ description: 'Custom install for Alshaya sites for showing the cart notification
 package: 'Custom'
 core: 8.x
 dependencies:
-  - acq_sku
-  - alshaya_acm_product
-  - alshaya_master
+  - acq_commerce:acq_sku
+  - alshaya_acm_product:alshaya_acm_product
+  - alshaya_master:alshaya_master

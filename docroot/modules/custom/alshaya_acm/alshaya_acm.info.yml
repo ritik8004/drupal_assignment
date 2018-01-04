@@ -4,18 +4,18 @@ description: 'Custom work around Acquia Commerce Middleware'
 package: Alshaya
 core: 8.x
 dependencies:
-  - acq_cart
-  - acq_commerce
-  - acq_customer
-  - acq_sku
-  - acq_promotion
-  - block
-  - block_content
-  - ctools
-  - image
-  - language
-  - node
-  - pathauto
-  - system
-  - taxonomy
-  - user
+  - acq_commerce:acq_cart
+  - acq_commerce:acq_commerce
+  - acq_commerce:acq_customer
+  - acq_commerce:acq_sku
+  - acq_commerce:acq_promotion
+  - drupal:block
+  - drupal:block_content
+  - ctools:ctools
+  - drupal:image
+  - drupal:language
+  - drupal:node
+  - drupal:pathauto
+  - drupal:system
+  - drupal:taxonomy
+  - drupal:user

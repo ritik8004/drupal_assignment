@@ -60,10 +60,6 @@ class StoresMigrateUploadForm extends FormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $validators = ['file_validate_extensions' => ['csv']];
 
-    if (!$form_state->getValue('upload')) {
-      $form_state->setErrorByName('upload', $this->t('Please upload a file.'));
-    }
-
     $file = file_save_upload('upload', $validators, FALSE, 0);
     if (isset($file)) {
       if ($file) {
@@ -106,7 +102,7 @@ class StoresMigrateUploadForm extends FormBase {
     $migrate_plus_migration_store_config->set('source.path', $initial_filepath);
     $migrate_plus_migration_store_config->save();
 
-    drupal_set_message(t('Stores have been imported.'), 'status');
+    drupal_set_message($this->t('Stores have been imported.'), 'status');
   }
 
 }

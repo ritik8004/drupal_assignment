@@ -107,18 +107,18 @@ class SyncForm extends FormBase {
     $action = $form_state->getUserInput()['op'];
 
     switch ($action) {
-      case t('Synchronize listed SKUs'):
+      case $this->t('Synchronize listed SKUs'):
         if (empty($form_state->getValue('products_list_text'))) {
-          $form_state->setErrorByName('products_list_text', t('Please list at least one SKU.'));
+          $form_state->setErrorByName('products_list_text', $this->t('Please list at least one SKU.'));
         }
         break;
 
-      case t('Synchronize ALL products'):
+      case $this->t('Synchronize ALL products'):
         if (empty(array_filter($form_state->getValue('products_full_languages'), function ($v, $k) {
           return !empty($v);
         }, ARRAY_FILTER_USE_BOTH))) {
           // @TODO: Check why placing the error on checkboxes does not work.
-          $form_state->setErrorByName('products_full_fieldset', t('Please select at least one language.'));
+          $form_state->setErrorByName('products_full_fieldset', $this->t('Please select at least one language.'));
         }
         break;
     }
@@ -131,14 +131,14 @@ class SyncForm extends FormBase {
     $action = $form_state->getUserInput()['op'];
 
     switch ($action) {
-      case t('Synchronize product categories'):
+      case $this->t('Synchronize product categories'):
         $this->productCategoriesManager->synchronizeTree('acq_product_category');
-        drupal_set_message(t('Product categories synchronization complete.'), 'status');
+        drupal_set_message($this->t('Product categories synchronization complete.'), 'status');
         break;
 
-      case t('Synchronize product options'):
+      case $this->t('Synchronize product options'):
         $this->productOptionsManager->synchronizeProductOptions();
-        drupal_set_message(t('Product options synchronization complete.'), 'status');
+        drupal_set_message($this->t('Product options synchronization complete.'), 'status');
         break;
 
       case 'Synchronize listed SKUs':
@@ -152,10 +152,10 @@ class SyncForm extends FormBase {
           }
         }
 
-        drupal_set_message(t('Selected products synchronization launched.'), 'status');
+        drupal_set_message($this->t('Selected products synchronization launched.'), 'status');
         break;
 
-      case t('Synchronize ALL products'):
+      case $this->t('Synchronize ALL products'):
         $languages = \Drupal::languageManager()->getLanguages();
         $message_addition = [];
 
@@ -173,19 +173,19 @@ class SyncForm extends FormBase {
             implode(' and ', $message_addition) . ' languages'
           );
 
-        drupal_set_message(t('Full product synchronization launched on @addition.', [
+        drupal_set_message($this->t('Full product synchronization launched on @addition.', [
           '@addition' => $message_addition,
         ]), 'status');
         break;
 
-      case t('Synchronize promotions'):
+      case $this->t('Synchronize promotions'):
         $this->promotionsManager->syncPromotions();
-        drupal_set_message(t('Promotions synchronization complete.'), 'status');
+        drupal_set_message($this->t('Promotions synchronization complete.'), 'status');
         break;
 
-      case t('Synchronize stores'):
+      case $this->t('Synchronize stores'):
         $this->alshayaApi->syncStores();
-        drupal_set_message(t('Stores synchronization complete.'), 'status');
+        drupal_set_message($this->t('Stores synchronization complete.'), 'status');
         break;
     }
   }
@@ -194,7 +194,7 @@ class SyncForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    drupal_set_message(t('Syncing data can have a performance impact. Please use with caution.'), 'warning');
+    drupal_set_message($this->t('Syncing data can have a performance impact. Please use with caution.'), 'warning');
 
     foreach (\Drupal::languageManager()->getLanguages() as $language) {
       $options[$language->getId()] = $language->getName();
@@ -203,12 +203,12 @@ class SyncForm extends FormBase {
     // Product categories.
     $form['product_categories_fieldset'] = [
       '#type' => 'fieldset',
-      '#title' => t('Product categories'),
+      '#title' => $this->t('Product categories'),
       'product_categories' => [
         '#type' => 'actions',
         'product_categories_action' => [
           '#type' => 'submit',
-          '#value' => t('Synchronize product categories'),
+          '#value' => $this->t('Synchronize product categories'),
         ],
       ],
     ];
@@ -216,12 +216,12 @@ class SyncForm extends FormBase {
     // Product options.
     $form['product_options_fieldset'] = [
       '#type' => 'fieldset',
-      '#title' => t('Product options'),
+      '#title' => $this->t('Product options'),
       'product_options' => [
         '#type' => 'actions',
         'product_options_action' => [
           '#type' => 'submit',
-          '#value' => t('Synchronize product options'),
+          '#value' => $this->t('Synchronize product options'),
         ],
       ],
     ];
@@ -229,38 +229,38 @@ class SyncForm extends FormBase {
     // Products.
     $form['products_fieldset'] = [
       '#type' => 'fieldset',
-      '#title' => t('Products'),
+      '#title' => $this->t('Products'),
     ];
     // @TODO: Check if it is possible to specify the language.
     $form['products_fieldset']['products_list_fieldset'] = [
       '#type' => 'fieldset',
-      '#title' => t('Specific SKUs'),
+      '#title' => $this->t('Specific SKUs'),
       'products_list_text' => [
         '#type' => 'textarea',
-        '#title' => t('SKUs'),
-        '#description' => t('A comma-separated list of SKUs.'),
+        '#title' => $this->t('SKUs'),
+        '#description' => $this->t('A comma-separated list of SKUs.'),
       ],
       'products_list' => [
         '#type' => 'actions',
         'product_list_action' => [
           '#type' => 'submit',
-          '#value' => t('Synchronize listed SKUs'),
+          '#value' => $this->t('Synchronize listed SKUs'),
         ],
       ],
     ];
     $form['products_fieldset']['products_full_fieldset'] = [
       '#type' => 'fieldset',
-      '#title' => t('Full'),
+      '#title' => $this->t('Full'),
       'products_full_warning' => [
         '#type' => 'markup',
-        '#prefix' => '<div class="messages messages--error"><h2 class="visually-hidden">' . t('Warning message') . '</h2>',
+        '#prefix' => '<div class="messages messages--error"><h2 class="visually-hidden">' . $this->t('Warning message') . '</h2>',
         '#suffix' => '</div>',
-        '#markup' => t('Full synchronization is a VERY HEAVY asynchronous task. All SKUs will be queued for synchronization.')
-        . ' ' . t('Depending on the number of SKUs, it may take up to 12 hours to get all the SKUs synchronized.'),
+        '#markup' => $this->t('Full synchronization is a VERY HEAVY asynchronous task. All SKUs will be queued for synchronization.')
+        . ' ' . $this->t('Depending on the number of SKUs, it may take up to 12 hours to get all the SKUs synchronized.'),
       ],
       'products_full_validate' => [
         '#type' => 'checkbox',
-        '#title' => t('I understand the risk'),
+        '#title' => $this->t('I understand the risk'),
       ],
       'products_full_container' => [
         '#type' => 'container',
@@ -279,7 +279,7 @@ class SyncForm extends FormBase {
           '#type' => 'actions',
           'product_full_full' => [
             '#type' => 'submit',
-            '#value' => t('Synchronize ALL products'),
+            '#value' => $this->t('Synchronize ALL products'),
             '#button_type' => 'primary',
           ],
         ],
@@ -290,12 +290,12 @@ class SyncForm extends FormBase {
     // @TODO: Add checkbox to choose between cart and category promotions.
     $form['promotions_fieldset'] = [
       '#type' => 'fieldset',
-      '#title' => t('Promotions'),
+      '#title' => $this->t('Promotions'),
       'promotions' => [
         '#type' => 'actions',
         'promotions_action' => [
           '#type' => 'submit',
-          '#value' => t('Synchronize promotions'),
+          '#value' => $this->t('Synchronize promotions'),
         ],
       ],
     ];
@@ -303,12 +303,12 @@ class SyncForm extends FormBase {
     // Stores.
     $form['stores_fieldset'] = [
       '#type' => 'fieldset',
-      '#title' => t('Stores'),
+      '#title' => $this->t('Stores'),
       'stores' => [
         '#type' => 'actions',
         'stores_action' => [
           '#type' => 'submit',
-          '#value' => t('Synchronize stores'),
+          '#value' => $this->t('Synchronize stores'),
         ],
       ],
     ];

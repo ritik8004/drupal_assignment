@@ -67,7 +67,7 @@ class UserController extends ControllerBase {
    */
   public function passwordChangedLogout() {
     // Set the message now.
-    drupal_set_message(t('Your password has been changed.'));
+    drupal_set_message($this->t('Your password has been changed.'));
     return $this->redirect('user.login');
   }
 

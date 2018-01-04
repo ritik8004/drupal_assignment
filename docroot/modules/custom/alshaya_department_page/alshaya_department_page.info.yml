@@ -2,26 +2,25 @@ name: 'Department Page'
 type: module
 core: 8.x
 dependencies:
-  - alshaya_advanced_page
-  - alshaya_paragraphs
-  - alshaya_permissions
-  - block
-  - content_translation
-  - ctools
-  - entity_reference_revisions
-  - field
-  - language
-  - menu_ui
-  - node
-  - paragraphs
-  - path
-  - pathauto
-  - system
-  - taxonomy
-  - text
-  - user
-  - views
-  - views_field_view
-  - workbench_moderation
-version: 8.x-1.0
+  - alshaya_advanced_page:alshaya_advanced_page
+  - alshaya_paragraphs:alshaya_paragraphs
+  - alshaya_permissions:alshaya_permissions
+  - drupal:block
+  - drupal:content_translation
+  - ctools:ctools
+  - entity_reference_revisions:entity_reference_revisions
+  - drupal:field
+  - drupal:language
+  - drupal:menu_ui
+  - drupal:node
+  - paragraphs:paragraphs
+  - drupal:path
+  - pathauto:pathauto
+  - drupal:system
+  - drupal:taxonomy
+  - drupal:text
+  - drupal:user
+  - drupal:views
+  - views_field_view:views_field_view
+  - workbench_moderation:workbench_moderation
 package: Alshaya
