@@ -109,7 +109,7 @@ function acq_sku_drush_command() {
 function drush_acq_sku_sync_commerce_products($langcode, $page_size) {
   $langcode = strtolower($langcode);
 
-  $store_id = acq_commerce_get_store_id_from_langcode($langcode);
+  $store_id = \Drupal::service('acq_commerce.i18n_helper')->getStoreIdFromLangcode($langcode);
 
   if (empty($store_id)) {
     drush_print(dt("Store id not found for provided language code."));
