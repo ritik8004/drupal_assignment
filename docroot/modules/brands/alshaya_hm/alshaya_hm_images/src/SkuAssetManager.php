@@ -6,6 +6,7 @@ use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
@@ -57,6 +58,13 @@ class SkuAssetManager {
   protected $skuPluginManager;
 
   /**
+   * Term Storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $termStorage;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -71,11 +79,13 @@ class SkuAssetManager {
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
                               SkuManager $skuManager,
-                              SKUPluginManager $skuPluginManager) {
+                              SKUPluginManager $skuPluginManager,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
     $this->skuPluginManager = $skuPluginManager;
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
   }
 
   /**
@@ -390,7 +400,7 @@ class SkuAssetManager {
       // Use the first term found with an override for
       // location identifier.
       $tid = $terms[0]['target_id'];
-      $term = Term::load($tid);
+      $term = $this->termStorage->load($tid);
       $swatch_type = ($term->get('field_swatch_type')->first()) ? $term->get('field_swatch_type')->getString() : self::LP_SWATCH_DEFAULT;
 
     }
