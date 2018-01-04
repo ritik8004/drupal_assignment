@@ -357,11 +357,11 @@ function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id
       break;
 
     case "user_login_form":
-      $form['#attached']['library'][] = 'alshaya_hnm/unmask_password';
+      $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
     case "change_pwd_form":
-      $form['#attached']['library'][] = 'alshaya_hnm/unmask_password';
+      $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
     case "user_register_form":
@@ -384,7 +384,7 @@ function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id
         }
       }
       if ($form_id == 'user_register_form') {
-        $form['#attached']['library'][] = 'alshaya_hnm/unmask_password';
+        $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       }
       break;
 

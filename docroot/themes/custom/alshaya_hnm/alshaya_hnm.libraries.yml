@@ -32,10 +32,6 @@ rtl_styles:
       css/rtl.css: {}
       css/rtl-print.css: {media: print}
 
-unmask_password:
-  js:
-    js/unmask_password.js: {}
-
 mobile_number:
   js:
     js/mobile_number.js: {}
