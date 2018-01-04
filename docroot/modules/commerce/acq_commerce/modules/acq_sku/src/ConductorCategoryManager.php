@@ -277,7 +277,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         continue;
       }
 
-      $langcode = acq_commerce_get_langcode_from_store_id($category['store_id']);
+      $langcode = $this->i18nHelper->getLangcodeFromStoreId($category['store_id']);
 
       // If lancode is not available, means no mapping of store and language.
       if (!$langcode) {
