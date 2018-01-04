@@ -439,7 +439,6 @@ class E24PaymentPipe {
       $stringbuffer .= ('servlet/');
       $stringbuffer .= ($s1);
       $this->debugMsg .= ('<br>About to create the URL to: ' . $stringbuffer);
-      $url = $stringbuffer;
 
       $this->debugMsg .= ('<br>About to create http connection....');
 
@@ -451,7 +450,8 @@ class E24PaymentPipe {
         curl_setopt($c, CURLOPT_POST, TRUE);
         curl_setopt($c, CURLOPT_POSTFIELDS, $s);
         curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($c, CURLOPT_SSL_VERIFYPEER, FALSE);
+        // @codingStandardsIgnoreLine
+        curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 0);
         $this->debugMsg .= ('<br>about to write DataOutputSteam....');
         curl_setopt($c, CURLOPT_RETURNTRANSFER, CURLOPT_RETURNTRANSFER);
         $this->debugMsg .= ('<br>after DataOutputStream.!!');
@@ -578,8 +578,6 @@ class E24PaymentPipe {
     $s = '';
 
     $filenameInput = $this->resourcePath . 'resource.cgz';
-
-    $i = 0;
 
     $zip = new \ZipArchive();
     if ($zip->open($filenameInput) === TRUE) {
