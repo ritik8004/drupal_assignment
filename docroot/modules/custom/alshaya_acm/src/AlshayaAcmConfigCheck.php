@@ -152,7 +152,7 @@ class AlshayaAcmConfigCheck {
     $config->save();
 
     // Save config again to ensure overrides are taken into consideration.
-    alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search', 'postinstall');
+    alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search');
 
     // We can code here to support more or different languages later when
     // we encounter those scenarios, keeping it simple and static for now.

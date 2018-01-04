@@ -21,14 +21,9 @@ backend_config:
   connector: standard
   connector_config:
     scheme: http
-    host: localhost
-    port: '8983'
-    path: /solr
-    core: ''
     timeout: 5
-    index_timeout: 5
-    optimize_timeout: 10
-    commit_within: 1000
+    index_timeout: 10
+    optimize_timeout: 15
     solr_version: ''
     http_method: AUTO
 dependencies:

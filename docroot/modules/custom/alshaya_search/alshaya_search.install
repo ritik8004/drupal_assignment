@@ -18,6 +18,11 @@ function alshaya_search_update_8010() {
     // use solr on cloud.
     \Drupal::service('module_installer')->install(['alshaya_search_acquia_search']);
   }
+  else {
+    // Enable alshaya_search_local_search to ensure config are overridden to
+    // use solr in local.
+    \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
+  }
 
   $configs = [
     'search_api.server.acquia_search_server',
@@ -25,7 +30,7 @@ function alshaya_search_update_8010() {
     'views.view.search',
   ];
 
-  alshaya_config_install_configs($configs, 'alshaya_search', 'postinstall');
+  alshaya_config_install_configs($configs, 'alshaya_search');
 }
 
 /**
@@ -34,7 +39,7 @@ function alshaya_search_update_8010() {
  * Update search views cache to tag based.
  */
 function alshaya_search_update_8009() {
-  alshaya_config_install_configs(['views.view.search'], 'alshaya_search', 'postinstall');
+  alshaya_config_install_configs(['views.view.search'], 'alshaya_search');
 }
 
 /**
@@ -72,7 +77,7 @@ function alshaya_search_update_8005() {
     'search_api.index.acquia_search_index',
   ];
 
-  alshaya_config_install_configs($configs, 'alshaya_search', 'postinstall');
+  alshaya_config_install_configs($configs, 'alshaya_search');
 
   // Enable sort options on SRP page.
   $sort_options = [
@@ -93,7 +98,7 @@ function alshaya_search_update_8004() {
     'facets.facet.brand',
   ];
 
-  alshaya_config_install_configs($configs, 'alshaya_search', 'postinstall');
+  alshaya_config_install_configs($configs, 'alshaya_search');
 }
 
 /**

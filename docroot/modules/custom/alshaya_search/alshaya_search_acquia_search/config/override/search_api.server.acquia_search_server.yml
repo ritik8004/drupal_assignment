@@ -1,10 +1,3 @@
 name: 'Acquia Search API Solr server'
 backend_config:
   connector: solr_acquia_connector
-  connector_config:
-    scheme: http
-    timeout: 5
-    index_timeout: 10
-    optimize_timeout: 15
-    solr_version: ''
-    http_method: AUTO

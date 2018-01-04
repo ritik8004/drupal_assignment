@@ -351,19 +351,9 @@ function alshaya_search_alshaya_profile_installed_final_task() {
     // use solr on cloud.
     \Drupal::service('module_installer')->install(['alshaya_search_acquia_search']);
   }
-
-  $configs = [
-    'search_api.server.acquia_search_server',
-    'search_api.index.acquia_search_index',
-    'views.view.search',
-    'search_api_autocomplete.search_api_autocomplete.search_api_views_search',
-    'facets.facet.brand',
-    'facets.facet.collection',
-    'facets.facet.color',
-    'facets.facet.final_price',
-    'facets.facet.size',
-    'facets_summary.facets_summary.filter_bar',
-  ];
-
-  alshaya_config_install_configs($configs, 'alshaya_search', 'postinstall');
+  else {
+    // Enable alshaya_search_local_search to ensure config are overridden to
+    // use solr in local.
+    \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
+  }
 }
