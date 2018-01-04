@@ -18,7 +18,7 @@ global_styles:
     - core/jquery.ui.tabs
     - core/jquery.cookie
     - mobile_number/element
-    - alshaya_hnm/utils
+    - alshaya_white_label/utils
 
 ltr_styles:
   css:
@@ -54,7 +54,7 @@ sell:
     js/sell.js: {}
   dependencies:
     - core/jquery
-    - alshaya_hnm/utils
+    - alshaya_white_label/utils
     - alshaya_white_label/owlcarousel
 
 convert_to_select2:
@@ -74,10 +74,6 @@ cloud_zoom:
     js/product_zoom.js: {}
   dependencies:
     - alshaya_white_label/cloud_zoom
-
-utils:
-  js:
-    js/utils.js: {}
 
 plp_search_js:
   js:
