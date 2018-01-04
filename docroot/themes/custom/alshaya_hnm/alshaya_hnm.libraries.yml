@@ -31,12 +31,6 @@ rtl_styles:
       css/rtl.css: {}
       css/rtl-print.css: {media: print}
 
-mobile_number:
-  js:
-    js/mobile_number.js: {}
-  dependencies:
-    - alshaya_white_label/cleave
-
 sell:
   js:
     js/sell.js: {}
