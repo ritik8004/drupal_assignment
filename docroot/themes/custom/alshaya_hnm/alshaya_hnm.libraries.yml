@@ -42,13 +42,6 @@ mobile_number:
   dependencies:
     - alshaya_white_label/cleave
 
-slider_banner:
-  js:
-    js/slider.js: {}
-  dependencies:
-    - core/jquery
-    - alshaya_white_label/slick
-
 sell:
   js:
     js/sell.js: {}
