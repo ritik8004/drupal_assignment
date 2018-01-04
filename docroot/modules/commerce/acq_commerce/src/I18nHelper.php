@@ -64,4 +64,19 @@ class I18nHelper {
 
     return $mapping;
   }
+
+  /**
+   * Helper method to get store id from language code.
+   *
+   * @param string $langcode
+   *   Language code to convert to store id.
+   *
+   * @return string|null
+   *   Store id if available as string or null.
+   */
+  public function getStoreIdFromLangcode($langcode) {
+    $mapping = $this->getStoreLanguageMapping();
+    return !empty($mapping[$langcode]) ? $mapping[$langcode] : NULL;
+  }
+
 }
