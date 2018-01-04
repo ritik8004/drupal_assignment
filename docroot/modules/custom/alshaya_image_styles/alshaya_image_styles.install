@@ -13,10 +13,8 @@ use Symfony\Component\Yaml\Yaml;
  * Update the the w304 image style to 2x width.
  */
 function alshaya_image_styles_update_8103() {
-  // Overriding image style w304 from generic module for H&M.
-  // Added in /config/override/image.style.w304.yml.
-  \Drupal::configFactory()->getEditable('image.style.w304')
-    ->save();
+  // Re-install the config for image style.
+  alshaya_config_install_configs(['image.style.w304'], 'alshaya_image_styles');
 }
 
 /**
