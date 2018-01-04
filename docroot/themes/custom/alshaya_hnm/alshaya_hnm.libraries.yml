@@ -9,7 +9,6 @@ global_styles:
     js/accordion.js: {}
     js/menu.js: {}
     js/form.js: {}
-    js/one_time_language_slider.js: {}
     vendor/js/details-polyfill.js: {}
   dependencies:
     - core/modernizr
