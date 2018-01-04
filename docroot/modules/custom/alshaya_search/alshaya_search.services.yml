@@ -5,6 +5,7 @@ services:
       - { name: breadcrumb_builder, priority: 100 }
   alshaya_plp.breadcrumb:
     class: Drupal\alshaya_search\Breadcrumb\AlshayaPLPBreadcrumbBuilder
+    arguments: ['@entity.repository', '@entity_type.manager']
     tags:
       - { name: breadcrumb_builder, priority: 10001 }
   alshaya_search.route_subscriber:
