@@ -4,3 +4,10 @@ alshaya_acm.cart_configuration:
   parent: 'acq_commerce.configuration'
   description: 'Configure your Acquia Commerce Cart settings.'
   weight: 22
+
+alshaya_acm.synchronize:
+  title: 'Synchronize commerce data'
+  route_name: 'alshaya_acm.synchronize'
+  parent: 'acq_commerce.admin_commerce'
+  description: 'Launch synchronization of commerce data'
+  weight: 50

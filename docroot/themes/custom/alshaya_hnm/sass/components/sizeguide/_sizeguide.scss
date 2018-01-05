@@ -58,7 +58,7 @@
   overflow: hidden;
 
   @include breakpoint($tablet) {
-    padding: calc((100vh - 36rem) / 2) calc((100vw - 45rem) / 2);
+    padding: calc((100vh - 39rem) / 2) calc((100vw - 45rem) / 2);
   }
 
   @include breakpoint($desktop) {
@@ -86,7 +86,7 @@
     height: 100% !important;
 
     @include breakpoint($tablet) {
-      height: 36rem !important;
+      height: 39rem !important;
     }
 
     @include breakpoint($desktop) {

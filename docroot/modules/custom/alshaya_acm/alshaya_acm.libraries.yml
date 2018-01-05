@@ -6,3 +6,10 @@ alshaya.acm.js:
     - core/drupal
     - core/jquery
     - core/jquery.once
+
+alshaya_acm.sync_form:
+  version: 1.x
+  css:
+    theme:
+      css/alshaya_acm.sync_form.css: {}
+

@@ -336,13 +336,17 @@
   }
 
   .composition-wrapper,
-  .care-instructions-wrapper {
+  .care-instructions-wrapper,
+  .concept-wrapper,
+  .warning-wrapper {
     color: $grey7;
     margin-bottom: 0.625rem;
     margin-top: 0.75rem;
 
     .composition-label,
-    .care-instructions-label {
+    .care-instructions-label,
+    .concept-label,
+    .warning-label {
       @include arabic-letter-spacing;
 
       font-family: $hnm-demibold;
@@ -582,12 +586,16 @@
   }
 
   .composition-wrapper,
-  .care-instructions-wrapper {
+  .care-instructions-wrapper,
+  .concept-wrapper,
+  .warning-wrapper {
     color: $grey7;
     margin-top: 0.75rem;
 
     .composition-label,
-    .care-instructions-label {
+    .care-instructions-label,
+    .concept-label,
+    .warning-label {
       @include arabic-letter-spacing;
 
       font-family: $hnm-demibold;
@@ -599,6 +607,7 @@
     ul {
       padding-#{$left}: 0;
       list-style: none;
+      margin: 0;
     }
   }
 }
@@ -679,9 +688,18 @@
       font-size: 0.875rem;
       color: $hnm-black-two;
       line-height: 2.5;
+      height: 3.2rem;
       cursor: pointer;
       position: relative;
       text-transform: none;
+
+      @include breakpoint($upto-desktop) {
+        line-height: 2.4;
+
+        &::after {
+          top: 42%;
+        }
+      }
 
       &::after {
         #{$right}: 0.9375rem;
@@ -1469,7 +1487,7 @@
       }
 
       button[type="submit"] {
-        font-family: $hnm-regular;
+        font-family: $hnm-bold;
         font-size: 0.875rem;
         background: $hnm-black-two;
         border-radius: 0;
@@ -1714,7 +1732,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    margin-top: 0;
+    margin-top: 0.625rem;
     margin-bottom: 0.5rem;
   }
 
@@ -2049,3 +2067,14 @@ html[lang=ar] {
   }
 }
 
+.pdp-modal-overlay {
+  .ui-dialog {
+    #drupal-modal {
+      overflow-y: auto !important;
+
+      .content__main {
+        min-height: 31.25rem;
+      }
+    }
+  }
+}

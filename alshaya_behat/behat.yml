@@ -55,10 +55,10 @@ mckwuat:
               simpleurl: '/baby-boys-socks-gift-box'
               simpletitle: 'Baby Boys Socks Gift Box'
               simpletitlear: 'صندوق هدية جوارب للأولاد'
-              configurl: '/paradise-graphic-tee'
-              configtitle: 'Paradise Graphic Tee'
-              configtitlear: 'تي-شيرت برسمة Paradise'
-              configvariant: '2-3 Years'
+              configurl: '/horse-photographic-t-shirt'
+              configtitle: 'Horse Photographic T-Shirt'
+              configtitlear: 'Horse Photographic T-Shirt'
+              configvariant: '3-4 Years'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
