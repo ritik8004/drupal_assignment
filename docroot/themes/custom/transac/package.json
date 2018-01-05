@@ -1,7 +1,7 @@
 {
-  "name": "alshaya_white_label",
+  "name": "transac",
   "version": "0.1.0",
-  "description": "Front-end build tools for custom Drupal theme.",
+  "description": "Front-end build tools for Alshaya Transac themes.",
   "repository": {
     "type": "git",
     "url": "https://github.com/acquia-pso/cog.git"
@@ -43,10 +43,7 @@
   "//": "The postinstall script is needed to work-around this Drupal core bug: https://www.drupal.org/node/2329453",
   "scripts": {
     "postinstall": "find node_modules/ -name '*.info' -type f -delete",
-    "install-tools": "yarn install --force",
+    "install-tools": "npm install",
     "uninstall-tools": "rm -r node_modules;",
-    "build": "gulp",
-    "build:dev": "gulp build:dev",
-    "watch": "gulp watch"
   }
 }
