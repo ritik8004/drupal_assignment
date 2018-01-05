@@ -13,6 +13,38 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Correct all existing faulty files status attached to paragraphs.
+ */
+function alshaya_paragraphs_update_8105() {
+  // One time job - we directly use db query to get faulty data.
+  // There is some issue with revisions too, for some ar data, it is coming
+  // from old revisions. It works fine when displaying but not coming properly
+  // when loading paragraph entity.
+  // Here we load all paragraph revisions which have a file attached with
+  // status 0. We will add file usage for them and set status to 1.
+  $query = \Drupal::database()->select('paragraph_revision__field_banner', 'prfb');
+  $query->addField('prfb', 'revision_id');
+  $query->addField('prfb', 'entity_id');
+  $query->innerJoin('file_managed', 'fm', 'fm.fid = prfb.field_banner_target_id');
+  $query->condition('fm.status', 0);
+
+  $result = $query->execute()->fetchAllKeyed(0);
+
+  foreach ($result as $revision_id => $entity_id) {
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = \Drupal::entityTypeManager()->getStorage('paragraph')->loadRevision($revision_id);
+    _alshaya_paragraphs_correct_file_status($paragraph);
+
+    if ($paragraph->hasTranslation('ar')) {
+      $paragraph = $paragraph->getTranslation('ar');
+      _alshaya_paragraphs_correct_file_status($paragraph);
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enabling translation on paragraph referenced fields.
  */
 function alshaya_paragraphs_update_8104() {
