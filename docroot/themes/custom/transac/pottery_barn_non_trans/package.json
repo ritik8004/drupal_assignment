@@ -18,7 +18,7 @@
     "gulp-parker": "0.1.4",
     "gulp-plumber": "1.1.0",
     "gulp-rename": "1.2.x",
-    "gulp-sass": "2.3.x",
+    "gulp-sass": "3.1.x",
     "gulp-sass-glob": "1.0.6",
     "gulp-sass-lint": "1.2.0",
     "gulp-size": "2.1.x",
@@ -28,7 +28,7 @@
     "gulp-util": "3.0.7",
     "gulp-watch": "4.3.10",
     "kss": "3.0.0-beta.15",
-    "node-sass": "3.10.x",
+    "node-sass": "4.7.2",
     "node-sass-import-once": "1.2.x",
     "run-sequence": "1.2.x",
     "stylelint": "^7.9.0",
@@ -37,16 +37,15 @@
     "typey": "1.0.x"
   },
   "engines": {
-    "node": ">=6.9.x"
+    "node": ">=6.10.x"
   },
   "private": true,
   "//": "The postinstall script is needed to work-around this Drupal core bug: https://www.drupal.org/node/2329453",
   "scripts": {
     "postinstall": "find node_modules/ -name '*.info' -type f -delete",
-    "install-tools": "yarn install --force",
-    "uninstall-tools": "rm -r node_modules;",
-    "build": "gulp",
-    "build:dev": "gulp build:dev",
-    "watch": "gulp watch"
+    "uninstall-tools": "rm -r node_modules",
+    "build": "../node_modules/gulp/bin/gulp.js",
+    "build:dev": "../node_modules/gulp/bin/gulp.js build:dev",
+    "watch": "../node_modules/gulp/bin/gulp.js watch"
   }
 }
