@@ -44,6 +44,6 @@
   "scripts": {
     "postinstall": "find node_modules/ -name '*.info' -type f -delete",
     "install-tools": "npm install",
-    "uninstall-tools": "rm -r node_modules;",
+    "uninstall-tools": "rm -r node_modules"
   }
 }
