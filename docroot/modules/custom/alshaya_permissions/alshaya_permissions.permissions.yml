@@ -1,3 +1,3 @@
-alshaya create_user:
+alshaya create user:
   title: 'Create User'
   description: 'Allow to create users.'

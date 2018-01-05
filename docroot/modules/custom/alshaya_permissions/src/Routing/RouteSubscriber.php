@@ -19,7 +19,7 @@ class RouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection) {
     // Add permission.
     if ($route = $collection->get('user.admin_create')) {
-      $route->setRequirement('_permission', 'administer users+alshaya create_user');
+      $route->setRequirement('_permission', $route->getRequirement('_permission') . '+alshaya create user');
     }
   }
 
