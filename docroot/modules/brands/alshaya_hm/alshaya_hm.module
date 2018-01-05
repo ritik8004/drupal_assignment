@@ -118,7 +118,6 @@ function alshaya_hm_language_switch_links_alter(array &$links, $type, Url $url) 
   $color_query = \Drupal::request()->query->get('color');
   /** @var \Drupal\Core\Routing\CurrentRouteMatch $current_route_matcher */
   $current_route_matcher = \Drupal::service('current_route_match');
-  $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
 
   // Alter block only if we have color query parameter on a PDP.
   if (($color_query) &&
@@ -126,24 +125,12 @@ function alshaya_hm_language_switch_links_alter(array &$links, $type, Url $url) 
     ($node = $current_route_matcher->getParameter('node')) &&
     ($node->getType() == 'acq_product')) {
 
-    // Alter the color parameter in the query string.
+    // Remove the color parameter in the query string for all except current
+    // language.
     foreach ($links as $langcode => $link) {
-      // Load color translation from the translation of SKU variant with the
-      // color in the query parameter.
       if (($langcode != \Drupal::languageManager()->getCurrentLanguage()->getId()) &&
-        ($node->hasTranslation($langcode))) {
-        $sku = SKU::loadFromSku($node->get('field_skus')->first()->getString());
-        if ($sku instanceof SKU) {
-          // Get one child SKU whose color label matches the query string.
-          $sku_color = $sku_asset_manager->getChildSkuFromColor($sku, $color_query);
-          // If its a valid SKU & has translation in the language for which the
-          // lang-switcher link is being built, fetch the color label
-          // translation.
-          if (($sku_color instanceof SKU) &&
-            ($sku_color->hasTranslation($langcode))) {
-            $links[$langcode]['query']['color'] = $sku_color->getTranslation($langcode)->get('attr_color_label')->value;
-          }
-        }
+        (isset($links[$langcode]['query']['color']))) {
+        unset($links[$langcode]['query']['color']);
       }
     }
   }
