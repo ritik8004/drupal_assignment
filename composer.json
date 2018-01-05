@@ -6,7 +6,7 @@
     "prefer-stable": true,
     "require": {
         "acquia/blt": "^8.9.7",
-        "acquia/lightning": "^2.2.0",
+        "acquia/lightning": "3.0.1",
         "drupal/address": "^1.0-rc4",
         "drupal/acsf": "^1.33.0",
         "drupal/key_value_field": "^1.0-beta1",
@@ -72,7 +72,6 @@
         "drupal/acquia_purge": "^1.0@beta",
         "drupal/video_embed_field": "2.0.0-alpha2",
         "drupal/role_delegation": "^1.0@alpha",
-        "drupal/core": "^8.4.0",
         "geerlingguy/drupal-vm": "~4.3"
     },
     "require-dev": {
@@ -156,8 +155,7 @@
                 "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/add_views_render-2500313-39.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
-                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
-                "Enable GET by default for exposed form AJAX": "patches/ajax_view.patch"
+                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch"
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
