@@ -64,13 +64,11 @@ function alshaya_permissions_form_alter(array &$form, FormStateInterface $form_s
       $form['revision_log']['#access'] = TRUE;
     }
 
-    // If user has 'webmaster' role with administer permission, not show bulk
-    // update actions.
-    if ($user->hasRole('webmaster') && $form_id == 'views_form_user_admin_people_page_1') {
-      // Remove the bulk operations.
-      $form['header']['user_bulk_form']['action']['#access'] = FALSE;
-      $form['header']['user_bulk_form']['actions']['#access'] = FALSE;
-      $form['user_bulk_form']['#access'] = FALSE;
+    // If webmaster and creating a user.
+    if ($user->hasRole('webmaster') && $form_id == 'user_register_form') {
+      // If we don't do this, drupal automatically login with the newly created
+      // user. @see RegisterForm::save().
+      $form['administer_users']['#value'] = TRUE;
     }
   }
 }
