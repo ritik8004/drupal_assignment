@@ -69,6 +69,8 @@ function alshaya_permissions_form_alter(array &$form, FormStateInterface $form_s
       // If we don't do this, drupal automatically login with the newly created
       // user. @see RegisterForm::save().
       $form['administer_users']['#value'] = TRUE;
+      $form['account']['roles']['#access'] = TRUE;
+      unset($form['account']['roles']['#options']['administrator']);
     }
   }
 }
