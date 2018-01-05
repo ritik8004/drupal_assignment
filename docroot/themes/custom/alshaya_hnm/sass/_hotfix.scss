@@ -144,6 +144,14 @@ body.chrome {
   &.alias--cart #table-cart-items td select {
     text-indent: 0.4rem;
   }
+
+  .content__title_wrapper {
+    .has--special--price,
+    .special--price,
+    .price--discount {
+      display: inline-table;
+    }
+  }
 }
 
 /**
