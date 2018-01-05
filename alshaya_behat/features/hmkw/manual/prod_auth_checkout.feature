@@ -1,10 +1,10 @@
-@javascript @checkout @english @eng_checkout @mmcpa-1930 @manual
+@javascript @checkout @english @eng_checkout @mmcpa-1930 @manual @prod
 Feature: As an authenticated user
   I should be able to checkout
   using various payment options
 
   Background:
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
     When I am on a simple product page
@@ -31,10 +31,7 @@ Feature: As an authenticated user
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
     And I accept terms and conditions
-    And I press "place order"
-    And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
-    And I should see text matching "Your order number is "
+    Then I should see "I confirm that I have read and accept the"
 
   @hd @knet
   Scenario: As an authenticated user
@@ -60,10 +57,6 @@ Feature: As an authenticated user
       And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
       And I fill in "Ecom_Payment_Pin_id" with "1234"
       And I press "Submit"
-      And I press "Confirm"
-      And I wait for the page to load
-      Then I should see text matching "Thank you for shopping online with us, Test Test "
-      And I should see text matching "Your order number is "
 
   @hd @cs
     Scenario: As an authenticated user
@@ -83,10 +76,7 @@ Feature: As an authenticated user
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I accept terms and conditions
-    And I press "place order"
-    When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
-    And I should see text matching "Your order number is "
+    Then I should see "I confirm that I have read and accept the"
 
   @cc @knet
   Scenario: As an authenticated user
@@ -111,10 +101,6 @@ Feature: As an authenticated user
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
     And I press "Submit"
-    And I press "Confirm"
-    And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
-    And I should see text matching "Your order number is "
 
   @cc @cs
   Scenario: As an authenticated user
@@ -135,7 +121,4 @@ Feature: As an authenticated user
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     When I fill in "edit-billing-address-address-billing-address-line2" with "1"
     And I accept terms and conditions
-    And I press "place order"
-    When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
-    And I should see text matching "Your order number is "
+    Then I should see "I confirm that I have read and accept the"

@@ -1,24 +1,23 @@
-@manual @mmcpa-2388 @javascript
+@manual @mmcpa-2388 @javascript @prod
 Feature: Test Sign in and Forgot password features
-
   Scenario: As an authenticated user,
   I should be able to sign in after providing valid credentials
     Given I am on homepage
     And I go to "/user/login"
-    When I fill in "edit-name" with "anjali.nikumb@acquia.com"
-    And I fill in "edit-pass" with "password@1"
+    When I fill in "edit-name" with "shweta+3@axelerant.com"
+    And I fill in "edit-pass" with "Alshaya123$"
     And I press "sign in"
     Then I should see the link "My account"
     And I should see the link "Sign out"
     And I should see "recent orders"
 
-  @arabic
+  @arabic 
   Scenario: As an authenticated user,
   I should be able to sign in after providing valid credentials
     Given I go to "/user/login"
     And I follow "عربية"
-    When I fill in "edit-name" with "anjali.nikumb@acquia.com"
-    And I fill in "edit-pass" with "password@1"
+    When I fill in "edit-name" with "shweta+3@axelerant.com"
+    And I fill in "edit-pass" with "Alshaya123$"
     And I press "تسجيل الدخول"
     Then I should see the link "حسابي"
     And I should see the link "تسجيل الخروج"
@@ -33,7 +32,7 @@ Feature: Test Sign in and Forgot password features
     Then I should see "Please enter your Email address."
     And I should see "Please enter your Password."
 
-  @arabic
+  @arabic 
   Scenario: As a Guest user
   I should be prompted with warning messages
   when I try to sign in without submitting any credentials
@@ -43,7 +42,7 @@ Feature: Test Sign in and Forgot password features
     And I wait for AJAX to finish
     Then I should see "يرجى إدخال عنوان البريد الإلكتروني"
     And I should see "يرجى إدخال كلمة السر"
-
+  
   Scenario: As a Guest user
   I should be shown error messages
   when I try to login using invalid email ID and password
@@ -54,7 +53,7 @@ Feature: Test Sign in and Forgot password features
     Then I should see text matching "email address does not contain a valid email."
     And I should see text matching "Please enter your password."
 
-  @arabic
+  @arabic 
   Scenario: As a Guest user
   I should be shown error messages
   when I try to login using invalid email ID and password
@@ -84,7 +83,7 @@ Feature: Test Sign in and Forgot password features
     And I follow "عربية"
     And I follow "هل نسيت كلمة السر؟"
     And the url should match "/user/password"
-    When I fill in "edit-name" with "anjali.nikumb@acquia.com"
+    When I fill in "edit-name" with "shweta+3@axelerant.com"
     And I press "إرسال"
     Then I should see "تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني"
     And the url should match "/user/login"
@@ -99,7 +98,7 @@ Feature: Test Sign in and Forgot password features
     When I wait for the page to load
     Then I should see " is not recognized as a username or an email address."
 
-  @arabic
+  @arabic 
   Scenario: As a Guest user
   An error message should be displayed
   when user tries to reset password for an invalid Email ID

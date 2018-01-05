@@ -1374,9 +1374,9 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
             $strnew = substr_replace($date_text, ' ', '-3', '1');
             $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
             $time_array[] = $date->format('U');
-        }
-        if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
-            throw new Exception('Orders are not displayed in descending order');
+            if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
+                throw new Exception('Orders are not displayed in descending order');
+            }
         }
     }
 
@@ -1389,9 +1389,9 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         foreach ($all_orders as $order) {
             $order_id = $order->find('css', '.dark.order-id')->getText();
             $actual_order_id = substr($order_id, 0, 7);
-        }
-        if ($actual_order_id !== $arg1) {
-            throw new Exception('Filter for Order ID is not working');
+            if ($actual_order_id !== $arg1) {
+                throw new Exception('Filter for Order ID is not working');
+            }
         }
     }
 
@@ -1762,7 +1762,7 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         if($title == NULL){
             throw new Exception('Title is not displayed on category page');
         }
-        if(!(($page->hasContent('items')) or ($page->hasContent('أخبار')))){
+        if(!(($page->hasContent('items')) or ($page->hasContent('قطعة')))){
             throw new Exception('Number of items not displayed on category page');
         }
         $this->item_count = count($page->findAll('css','.field--name-name'));

@@ -1,4 +1,4 @@
-@javascript @checkout @english @eng_checkout @mmcpa-1930 @manual
+@javascript @checkout @english @eng_checkout @mmcpa-1930 @manual @prod
 Feature: Test Checkout feature
   Background:
     Given I am on a simple product page
@@ -40,10 +40,7 @@ Feature: Test Checkout feature
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
     And I accept terms and conditions
-    And I press "place order"
-    And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
-    And I should see text matching "Your order number is "
+    Then I should see "I confirm that I have read and accept the"
 
   @hd @knet
   Scenario: As a Guest,
@@ -75,12 +72,9 @@ Feature: Test Checkout feature
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
     And I press "Submit"
-    And I press "Confirm"
-    And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test"
-    And I should see text matching "Your order number is "
+    Then I should see "I confirm that I have read and accept the"
 
-  @cc @knet @fail
+  @cc @knet
   Scenario: As a Guest
   I should be able to use click and collect option
   and pay by KNET
@@ -116,12 +110,8 @@ Feature: Test Checkout feature
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
     And I press "Submit"
-    And I press "Confirm"
-    And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
-    And I should see text matching "Your order number is "
 
-  @knet @fail
+  @knet
   Scenario: As a Guest
     I should be displayed a valid message on cancelling a KNET transaction
     And I should be able to see the header for checkout
@@ -245,10 +235,7 @@ Feature: Test Checkout feature
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I accept terms and conditions
-    And I press "place order"
-    When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
-    And I should see text matching "Your order number is "
+    Then I should see "I confirm that I have read and accept the"
 
   @cc @cs
   Scenario:  As a Guest
@@ -280,10 +267,7 @@ Feature: Test Checkout feature
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
-    And I press "place order"
-    When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
-    And I should see text matching "Your order number is "
+    Then I should see "I confirm that I have read and accept the"
 
   @hd
   Scenario: As a Guest user
@@ -367,9 +351,7 @@ Feature: Test Checkout feature
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
-    And I press "place order"
-    When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see "I confirm that I have read and accept the"
 
   @cc
   Scenario: As a Guest user

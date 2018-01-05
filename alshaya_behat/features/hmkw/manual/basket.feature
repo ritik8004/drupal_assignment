@@ -1,4 +1,4 @@
-@javascript @manual @mmcpa-2325
+@javascript @manual @mmcpa-2325 @prod
 Feature: Test basket page
 
   Background:
@@ -28,7 +28,7 @@ Feature: Test basket page
     Then I should see "Product"
     And I should see "Quantity"
     Then I should see "Unit Price"
-    And I should see "Sub total"
+    And I should see "Subtotal"
     Then I should see "Available delivery options"
     Then I should see "Order Total"
     And I should see "(Before Delivery)"

@@ -2,11 +2,12 @@
 Feature: Test the My account section for authenticated user
 
   Background:
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load
 
+  @prod
   Scenario:
     As an authenticated user
     I should be able to see all the sections
@@ -24,6 +25,7 @@ Feature: Test the My account section for authenticated user
     Then I should see at most "3" recent orders listed
     And the order status should be visible for all products
 
+  @prod
   Scenario Outline:
   As an authenticated user
   I should be able to view the Need help section
@@ -35,13 +37,11 @@ Feature: Test the My account section for authenticated user
     When I follow "<link>"
     And I wait for the page to load
     Then I should see "<text>"
-    And the url should match "<url>"
-
     Examples:
-      |link|text|url|
-      |خدمة الزبائ|Contact us|/contact|
-      |سياسية الاسترجاع اونلاين وفي المحلات|Contact us|/contact|
-      |معلومات التوصيل|Contact us|/contact|
+      |link|text|
+      |خدمة الزبائ|اتصل بنا|
+      |سياسية الاسترجاع اونلاين وفي المحلات|شروط وأحكام الشراء|
+      |معلومات التوصيل|معلومات التوصيل|
 
   Scenario:
   As an authenticated user
@@ -134,6 +134,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should see all "قيد التنفيذ" orders listed on orders tab
 
+  @prod
   Scenario: As an authenticated user
   I should be able to update my contact details
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
@@ -146,13 +147,12 @@ Feature: Test the My account section for authenticated user
     Then I should see "تم حفظ ببيانات الاتصال"
     Then I should see "علية"
     And I should see "خان"
-    And I should not see "Test"
-    And I should not see "Test"
     Then I fill in "edit-field-first-name-0-value" with "Test"
     And I fill in "edit-field-last-name-0-value" with "Test"
     Then I fill in "edit-field-mobile-number-0-mobile" with "55004455"
     And I press "حفظ"
 
+  @prod
   Scenario: As an authenticated user
   I should be able to add a new address
   to my address book
@@ -175,6 +175,7 @@ Feature: Test the My account section for authenticated user
     Then I should see "تم إضافة العنوان بنجاح"
     And the new address block should be displayed on address book
 
+  @prod
   Scenario: As an authenticated user
   I should be able to perform Cancel action on add/edit address pages
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
@@ -190,6 +191,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should not see the text "الاسم الأول"
 
+  @prod
   Scenario: As an authenticated user
   I should be able to edit an address
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
@@ -201,6 +203,7 @@ Feature: Test the My account section for authenticated user
     When I wait for the page to load
     Then I should see "تم تحديث العنوان بنجاح"
 
+  @prod
   Scenario: As an authenticated user
   I should not be able to delete my primary address
   but I should be able to delete any other address
@@ -219,6 +222,7 @@ Feature: Test the My account section for authenticated user
     Then I should see "تم حذف العنوان بنجاح"
     And the address block should be deleted from address book
 
+  @prod
   Scenario: As an authenticated user
   I should be able to set my communication preferences on Arabic site
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
@@ -228,6 +232,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should see "تم حفظ تفضيلات الاتصال بنجاح."
 
+  @prod
   Scenario: As an authenticated user
   I should see the options to change my password
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(6) > a"

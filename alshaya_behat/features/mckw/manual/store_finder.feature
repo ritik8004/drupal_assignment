@@ -1,4 +1,4 @@
-@javascript @manual @2081 @store
+@javascript @manual @2081 @store @prod
 Feature: Test Store finder page
 
   Background:
