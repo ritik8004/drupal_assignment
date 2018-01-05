@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_paragraphs_paragraph_presave(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() !== 'paragraph') {
+    return;
+  }
+
+  _alshaya_paragraphs_correct_file_status($entity);
+}
+
+/**
+ * Helper function to correct file status for files in paragraphs.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   Paragraph Entity.
+ */
+function _alshaya_paragraphs_correct_file_status(EntityInterface $entity) {
+  /** @var \Drupal\paragraphs\Entity\Paragraph $entity */
+  // Paragraphs is not very good at multiple levels with translation enabled.
+  // We update file status manually for now till it is addressed properly in
+  // module itself. No todo here as this code below is not going to do any harm
+  // even after it is fixed in module or configurations made proper.
+  $logger = \Drupal::logger('alshaya_paragraphs');
+
+  // Need to check this for all file type fields.
+  $file_fields = [
+    'field_banner',
+  ];
+
+  $entity_fields = $entity->getFields();
+
+  foreach ($file_fields as $file_field) {
+    if (isset($entity_fields[$file_field])) {
+      $values = $entity->get($file_field)->getValue();
+
+      foreach ($values as $value) {
+        if (isset($value['target_id'])) {
+          /** @var \Drupal\file\Entity\File $file */
+          $file = \Drupal::entityTypeManager()->getStorage('file')->load($value['target_id']);
+
+          // Do correction only if file status is temporary.
+          if ($file && $file->isTemporary()) {
+            // Add file usage.
+            \Drupal::service('file.usage')->add($file, 'file', $entity->getEntityTypeId(), $entity->id());
+
+            // Make it permanent.
+            $file->setPermanent();
+            $file->save();
+
+            // Add to logs about all manual changes.
+            $logger->info('File status changed to permanent for @fid in paragraph @paragraph_id', [
+              '@fid' => $file->id(),
+              '@paragraph_id' => $entity->id(),
+            ]);
+          }
+        }
+      }
+    }
+  }
+}
