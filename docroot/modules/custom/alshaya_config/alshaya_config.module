@@ -72,7 +72,6 @@ function alshaya_config_delete_configs(array $configs) {
 }
 
 /**
-<<<<<<< HEAD
  * Scan and return the yml file names inside subdirectory of config of module.
  *
  * @param string $module_name

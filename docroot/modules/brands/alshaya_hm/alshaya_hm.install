@@ -9,6 +9,24 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update logo file.
+ */
+function alshaya_hm_update_8011() {
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Save default site logo.
+  \Drupal::configFactory()->getEditable('alshaya_hnm.settings')
+    ->setData([
+      'logo' => [
+        'path' => $active_theme->getPath() . '/site-logo.svg',
+      ],
+    ])
+    ->save();
+}
+
+/**
  * Hook update to update brand specific favicon and logo.
  */
 function alshaya_hm_update_8010() {
