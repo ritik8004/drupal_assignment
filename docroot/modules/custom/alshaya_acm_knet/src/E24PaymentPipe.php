@@ -449,9 +449,6 @@ class E24PaymentPipe {
         curl_setopt($c, CURLOPT_URL, $stringbuffer);
         curl_setopt($c, CURLOPT_POST, TRUE);
         curl_setopt($c, CURLOPT_POSTFIELDS, $s);
-        curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
-        // @codingStandardsIgnoreLine
-        curl_setopt($c, CURLOPT_SSL_VERIFYPEER, 0);
         $this->debugMsg .= ('<br>about to write DataOutputSteam....');
         curl_setopt($c, CURLOPT_RETURNTRANSFER, CURLOPT_RETURNTRANSFER);
         $this->debugMsg .= ('<br>after DataOutputStream.!!');
