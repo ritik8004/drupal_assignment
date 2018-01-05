@@ -19,7 +19,9 @@
   .form-type-textarea {
     textarea {
       resize: none;
-      padding-#{$right}: 1.25rem !important;
+      padding-#{$right}: 1.55rem !important;
+      line-height: 1.8;
+      overflow: hidden;
     }
 
     .field-suffix {

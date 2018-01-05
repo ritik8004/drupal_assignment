@@ -3,6 +3,7 @@
 namespace Drupal\acq_promotion;
 
 use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
@@ -30,6 +31,13 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
   protected $logger;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  protected $i18nHelper;
+
+  /**
    * AcqPromotionAttachQueue constructor.
    *
    * @param array $configuration
@@ -42,15 +50,19 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
    *   IngestAPIWrapper Service object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerFactory
    *   Logger service.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               IngestAPIWrapper $ingestApiWrapper,
-                              LoggerChannelFactory $loggerFactory) {
+                              LoggerChannelFactory $loggerFactory,
+                              I18nHelper $i18n_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->ingestApiWrapper = $ingestApiWrapper;
     $this->logger = $loggerFactory->get('acq_sku');
+    $this->i18nHelper = $i18n_helper;
   }
 
   /**
@@ -74,7 +86,8 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
       $plugin_id,
       $plugin_definition,
       $container->get('acq_commerce.ingest_api'),
-      $container->get('logger.factory')
+      $container->get('logger.factory'),
+      $container->get('acq_commerce.i18n_helper')
     );
   }
 

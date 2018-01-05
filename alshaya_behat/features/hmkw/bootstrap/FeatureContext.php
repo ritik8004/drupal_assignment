@@ -1374,9 +1374,9 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
             $strnew = substr_replace($date_text, ' ', '-3', '1');
             $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
             $time_array[] = $date->format('U');
-        }
-        if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
-            throw new Exception('Orders are not displayed in descending order');
+            if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
+                throw new Exception('Orders are not displayed in descending order');
+            }
         }
     }
 
@@ -1389,9 +1389,9 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         foreach ($all_orders as $order) {
             $order_id = $order->find('css', '.dark.order-id')->getText();
             $actual_order_id = substr($order_id, 0, 7);
-        }
-        if ($actual_order_id !== $arg1) {
-            throw new Exception('Filter for Order ID is not working');
+            if ($actual_order_id !== $arg1) {
+                throw new Exception('Filter for Order ID is not working');
+            }
         }
     }
 
@@ -1762,7 +1762,7 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         if($title == NULL){
             throw new Exception('Title is not displayed on category page');
         }
-        if(!(($page->hasContent('items')) or ($page->hasContent('خبرا')))){
+        if(!(($page->hasContent('items')) or ($page->hasContent('قطعة')))){
             throw new Exception('Number of items not displayed on category page');
         }
         $this->item_count = count($page->findAll('css','.field--name-name'));
@@ -2132,6 +2132,29 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
             $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
             $this->iWaitSeconds('5');
             $select_store = $page->findLink('select this store');
+            if ($select_store->isVisible()) {
+                $select_store->click();
+            }
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iSelectAnElementHavingClass('.cc-action');
+            $this->iWaitForThePageToLoad();
+        }
+    }
+
+    /**
+     * @When /^I select a store on arabic$/
+     */
+    public function iSelectAStoreOnArabic()
+    {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('تغيير المحل');
+        if ($address_button !== null && $address_button->isVisible()) {
+            $this->iSelectAnElementHavingClass('.cc-action');
+        } else {
+            $this->iSelectFirstAutocomplete('Shuwaikh', 'edit-store-location');
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iWaitSeconds('5');
+            $select_store = $page->findLink('اختر هذا المحل');
             if ($select_store->isVisible()) {
                 $select_store->click();
             }

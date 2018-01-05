@@ -6,9 +6,10 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    When I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    When I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
 
+  @prod
   Scenario:
     As an authenticated user
     I should be able to see all the sections
@@ -28,6 +29,7 @@ Feature: Test the My account section for authenticated user
     Then I should see at most "3" recent orders listed
     And the order status should be visible for all products
 
+  @prod
   Scenario Outline:
   As an authenticated user
   I should be able to view the Need help section
@@ -40,7 +42,6 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should see "<text>"
     And the url should match "<url>"
-
     Examples:
       |link|text|url|
       |Contact customer services|Contact us|/contact|
@@ -144,6 +145,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should see all "Processing" orders listed on orders tab
 
+  @prod
   Scenario: As an authenticated user
   I should be able to update my contact details
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
@@ -159,6 +161,7 @@ Feature: Test the My account section for authenticated user
     And I fill in "edit-field-last-name-0-value" with "Test"
     And I press "Save"
     
+  @prod
   Scenario: As an authenticated user
     I should be able to add a new address
     to my address book
@@ -181,6 +184,7 @@ Feature: Test the My account section for authenticated user
     Then I should see "Address is added successfully"
     And the new address block should be displayed on address book
 
+  @prod
   Scenario: As an authenticated user
     I should be able to perform Cancel action on add/edit address pages
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
@@ -196,6 +200,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should not see the text "First Name"
 
+  @prod
   Scenario: As an authenticated user
     I should be able to edit an address
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
@@ -208,6 +213,7 @@ Feature: Test the My account section for authenticated user
     When I wait for the page to load
     Then I should see "Address is updated successfully."
 
+  @prod
   Scenario: As an authenticated user
     I should not be able to delete my primary address
     but I should be able to delete any other address
@@ -226,6 +232,7 @@ Feature: Test the My account section for authenticated user
     Then I should see "Address is deleted successfully."
     And the address block should be deleted from address book
 
+  @prod
   Scenario: As an authenticated user
     I should see the options to change my password
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"

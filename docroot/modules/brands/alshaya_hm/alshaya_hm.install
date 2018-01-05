@@ -9,12 +9,65 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Hook update to update brand specific favicon and logo.
+ */
+function alshaya_hm_update_8010() {
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site favicon and logo.
+  \Drupal::configFactory()->getEditable('alshaya_hnm.settings')
+    ->setData([
+      'favicon' => [
+        'path' => $site_favicon . '.ico',
+      ],
+      'logo' => [
+        'path' => $active_theme->getPath() . '/logo.svg',
+      ],
+      'name' => 'H&M Kuwait',
+    ])
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable Brand facets.
+ */
+function alshaya_hm_update_8009() {
+  $block_brand_facets = [
+    'block.block.brand',
+    'block.block.promotionbrandfacet',
+    'block.block.skusskureferencebrand',
+  ];
+
+  foreach ($block_brand_facets as $block_brand_facet) {
+    // Re-save config for the overrides to take effect.
+    \Drupal::configFactory()->getEditable($block_brand_facet)
+      ->save();
+  }
+}
+
+/**
+ * Hook update to enable alshaya_white_label theme.
+ */
+function alshaya_hm_update_8008() {
+  \Drupal::service('theme_handler')->install(['alshaya_white_label'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
+  \Drupal::service('theme_handler')->uninstall(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
+}
+
+/**
  * Implements hook_update().
  *
- * Set visiblity rule for customerservice block.
+ * Set visibility rule for customer service block.
  */
 function alshaya_hm_update_8007() {
-  // This will save override added in /config/override/block.block.customerservice.
+  // Override located /config/override/block.block.customerservice.
   \Drupal::configFactory()->getEditable('block.block.customerservice')
     ->save();
 }
@@ -22,7 +75,7 @@ function alshaya_hm_update_8007() {
 /**
  * Implements hook_update_N().
  *
- * Install Acquia Purge module on HnM.
+ * Install acquia Purge module on HnM.
  */
 function alshaya_hm_update_8006() {
   \Drupal::configFactory()->getEditable('purge_queuer_coretags.settings')->delete();
@@ -162,6 +215,7 @@ function alshaya_hm_update_8002() {
 }
 
 /**
+ * Implements hook_update_N().
  *
  * Enable alshaya_hm_redirect module.
  */
@@ -205,15 +259,6 @@ function alshaya_hm_install() {
   // Create default content for the site.
   alshaya_hm_create_default_content();
 
-  // Swap logo and search block placement in header.
-  \Drupal::configFactory()->getEditable('block.block.branding')
-    ->set('weight', '-31')
-    ->save();
-
-  \Drupal::configFactory()->getEditable('block.block.keywordsearchblock')
-    ->set('weight', '-32')
-    ->save();
-
   // Setting all products buyable to be true by default.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('all_products_buyable', 1)
@@ -221,34 +266,20 @@ function alshaya_hm_install() {
 
   // Set default marker image for stores finder.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
-    $marker_path = drupal_get_path('module', 'alshaya_hm') . '/images/ic-map-marker.svg';
-    $icon_path = file_url_transform_relative(file_create_url($marker_path));
-    \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
-      ->set('marker.use_default', FALSE)
-      ->set('marker.path', $marker_path)
-      ->set('marker.url', $icon_path)
-      ->save(TRUE);
-    $view_displays = ['attachment_1', 'page_3', 'page_2'];
-    foreach ($view_displays as $view_display) {
-      \Drupal::configFactory()->getEditable('views.view.stores_finder')
-        ->set('display.' . $view_display . '.display_options.style.options.google_map_settings.marker_icon_path', $icon_path)
-        ->save(TRUE);
-    }
+    alshaya_stores_finder_set_default_marker_icon('alshaya_hm');
   }
 
   // Update the customer service text.
   $customer_service_text = '<p class="line1">For Kuwait <span class="light no-direction">+965 123 4567</span></p>'
-    .'<p class="line2">For other regions <span class="light no-direction">8 (800) 123 45 67</span></p>'
-    .'<p class="line3"><span class="light">We are open&nbsp;from 9:30 am – 8:30 pm Monday to Sunday</span></p>'
-    .'<p class="line4"><span class="subtext">H&M&apos;s business concept is to offer fashion and quality at the best price. H&M has since it was founded in 1947 grown into one of the world&apos;s leading fashion companies. The content of this site is copyright-protected and is the property of H&M Hennes & Mauritz AB.</span></p>';
+    . '<p class="line2">For other regions <span class="light no-direction">8 (800) 123 45 67</span></p>'
+    . '<p class="line3"><span class="light">We are open&nbsp;from 9:30 am – 8:30 pm Monday to Sunday</span></p>'
+    . '<p class="line4"><span class="subtext">H&M&apos;s business concept is to offer fashion and quality at the best price. H&M has since it was founded in 1947 grown into one of the world&apos;s leading fashion companies. The content of this site is copyright-protected and is the property of H&M Hennes & Mauritz AB.</span></p>';
   $checkout_customer_service = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
   $checkout_customer_service->set('checkout_customer_service.value', $customer_service_text);
   $checkout_customer_service->save();
 
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
-  // Get current theme name.
-  $current_theme = $active_theme->getName();
   // Default site favicon path with default name.
   $site_favicon = $active_theme->getPath() . '/favicon';
 
@@ -273,50 +304,6 @@ function alshaya_hm_install() {
   $config->set('sort_options', $sort_options);
   $config->save();
 
-  // Use the customer service block.
-  \Drupal::configFactory()->getEditable('block.block.customerservice')
-    ->set('weight', '-34')
-    ->set('region', 'post_content')
-    ->save();
-
-  // Re use the about branc block for corporate info.
-  \Drupal::configFactory()->getEditable('block.block.aboutbrand')
-    ->set('weight', '-33')
-    ->set('settings.label', "Corporate Info")
-    ->set('region', 'footer_primary')
-    ->save();
-
-  // Edit the block titles.
-  \Drupal::configFactory()->getEditable('block.block.shopby')
-    ->set('settings.label', 'Shop')
-    ->save();
-  \Drupal::configFactory()->getEditable('block.block.alshayanewslettersubscription')
-    ->set('settings.label', 'Newsletter')
-    ->save();
-
-  // Set visiblity for social link block.
-  \Drupal::configFactory()->getEditable('block.block.sociallinks')
-    ->set('visibility.request_path.id', 'request_path')
-    ->set('visibility.request_path.pages', '/cart/checkout' . PHP_EOL . '/cart/checkout/*')
-    ->set('visibility.request_path.negate', TRUE)
-    ->set('weight', '-34')
-    ->set('region', 'footer_secondary')
-    ->save();
-
-  // Set visiblity for copyright block.
-  \Drupal::configFactory()->getEditable('block.block.copyright')
-    ->set('visibility.request_path.id', 'request_path')
-    ->set('visibility.request_path.pages', '/cart/checkout' . PHP_EOL . '/cart/checkout/*')
-    ->set('visibility.request_path.negate', TRUE)
-    ->save();
-
-  // Set visiblity for footerlogos block.
-  \Drupal::configFactory()->getEditable('block.block.footerlogos')
-    ->set('visibility.request_path.id', 'request_path')
-    ->set('visibility.request_path.pages', '/cart/checkout' . PHP_EOL . '/cart/checkout/*')
-    ->set('visibility.request_path.negate', FALSE)
-    ->save();
-
   // Enable "New in" sort options.
   $config = \Drupal::configFactory()->getEditable('alshaya_search.settings');
   $sort_options = $config->get('sort_options');
@@ -325,14 +312,7 @@ function alshaya_hm_install() {
   $config->set('sort_options', $sort_options);
   $config->save();
 
-  // Changing the register page text to H&M.
-  \Drupal::configFactory()->getEditable('field.field.user.user.field_subscribe_newsletter')
-    ->set('label', 'I would like to receive exclusive deals from H&M')
-    ->save();
-
   // Set email logo.
-  // Get current active theme.
-  $active_theme = \Drupal::theme()->getActiveTheme();
   // Get current theme name.
   $current_theme = $active_theme->getName();
   // Default site logo path with default name.
@@ -345,11 +325,6 @@ function alshaya_hm_install() {
   \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
     ->set('email_logo_path', $site_logo . '-ar.png')
     ->save();
-
-  // Update mobile number max length to 8 as per new fe implementation.
-  \Drupal::configFactory()->getEditable('alshaya_master.mobile_number_settings')
-  ->set('maxlength', 8)
-  ->save();
 
   // Disable loyalty.
   \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')
@@ -372,6 +347,9 @@ function alshaya_hm_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+
+  // Save overridden configs.
+  _alshaya_config_save_overridden_configs('alshaya_hm');
 
   // Override config for configurable product add to cart forms.
   $configs = ['acq_sku.configurable_form_settings'];

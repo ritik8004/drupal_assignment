@@ -6,6 +6,7 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AlshayaPDPBreadcrumbBuilder.
@@ -14,6 +15,8 @@ use Drupal\Core\Link;
  * here must be checked for similar change required for PLP pages.
  */
 class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -33,7 +36,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $entityRepository = \Drupal::service('entity.repository');
 
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
 
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');

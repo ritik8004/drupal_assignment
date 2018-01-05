@@ -39,7 +39,7 @@ function alshaya_mc_create_copyright_block() {
     'body' => [
       'value' => "<p>حقوق النشر محفوظة لشركة مذركير المحدودة المملكة المتحدة 2017 | مذركير المحدودة المملكة المتحدة</p>\r\n<p>(شركة خاصة محدودة)</p>",
       'format' => 'rich_text',
-    ]
+    ],
   ]);
   $ar_block_content->save();
 }

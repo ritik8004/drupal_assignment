@@ -33,8 +33,6 @@ function _alshaya_seo_process_gtm() {
     'alshaya_acm_product.product_modal',
   ];
 
-  $route_params = \Drupal::routeMatch()->getRawParameters();
-
   // Disable SEO modifications for non-customer users (admins).
   if ($currentUser->isAuthenticated() && function_exists('alshaya_acm_customer_is_customer') && !alshaya_acm_customer_is_customer($currentUser)) {
     $process = FALSE;

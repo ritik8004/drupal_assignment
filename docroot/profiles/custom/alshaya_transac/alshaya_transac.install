@@ -6,12 +6,16 @@
  */
 
 /**
- *  Hook update to disable whitelabel_transac theme and enable alshaya_white_label.
+ * Implements hook_update_n().
+ *
+ * Hook update to disable whitelabel_transac theme and enable
+ * alshaya_white_label.
  */
 function alshaya_transac_update_8102() {
   /* Uninstalling the whitelabel_transac theme. */
   \Drupal::service('theme_installer')->uninstall(['whitelabel_transac']);
 }
+
 /**
  * Implements hook_install().
  */
@@ -39,7 +43,6 @@ function alshaya_transac_install() {
     'alshaya_click_collect',
     'alshaya_config',
     'alshaya_contact',
-    // 'alshaya_default_content',
     'alshaya_default_content_transac',
     'alshaya_department_page',
     'alshaya_i18n',
@@ -89,7 +92,9 @@ function alshaya_transac_install() {
 }
 
 /**
- *  Hook update to enable module.
+ * Implements hook_update_n().
+ *
+ * Hook update to enable module.
  */
 function alshaya_transac_update_8101() {
   $configs = [

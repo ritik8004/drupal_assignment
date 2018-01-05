@@ -16,6 +16,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class SkuManager.
@@ -23,6 +24,8 @@ use Drupal\node\Entity\Node;
  * @package Drupal\alshaya_acm_product
  */
 class SkuManager {
+
+  use StringTranslationTrait;
 
   /**
    * The database service.
@@ -128,8 +131,6 @@ class SkuManager {
    *   Array of media files.
    */
   public function getSkuMedia($sku, $first_image_only = FALSE) {
-    $media = [];
-
     $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
     if (!($sku_entity instanceof SKU)) {
@@ -215,7 +216,7 @@ class SkuManager {
         // Get discount if discounted price available.
         $discount = floor((($price - $final_price) * 100) / $price);
         $build['discount'] = [
-          '#markup' => t('Save @discount%', ['@discount' => $discount]),
+          '#markup' => $this->t('Save @discount%', ['@discount' => $discount]),
         ];
       }
     }
@@ -359,7 +360,7 @@ class SkuManager {
       else {
         $sku_cart_price['final_price'] = number_format($final_price, 3);
         $discount = floor((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
-        $sku_cart_price['discount']['prefix'] = t('Save', [], ['context' => 'discount']);
+        $sku_cart_price['discount']['prefix'] = $this->t('Save', [], ['context' => 'discount']);
         $sku_cart_price['discount']['value'] = $discount . '%';
       }
     }
@@ -370,41 +371,47 @@ class SkuManager {
   /**
    * Helper function to fetch sku from entity id rather than loading the SKU.
    *
-   * @param int $sku_entity_id
+   * @param array $sku_entity_ids
    *   Entity id of the Sku item.
    *
-   * @return string
-   *   Sku Id of the item.
-   *
-   * @throws \Drupal\Core\Database\InvalidQueryException
+   * @return array
+   *   Array of Sku Ids of the item.
    */
-  public function getSkuByEntityId($sku_entity_id) {
+  public function getSkusByEntityId(array $sku_entity_ids) {
+    if (empty($sku_entity_ids)) {
+      return [];
+    }
+
     $query = $this->connection->select('acq_sku_field_data', 'asfd')
       ->fields('asfd', ['sku'])
-      ->condition('id', $sku_entity_id)
-      ->range(0, 1);
+      ->distinct()
+      ->condition('id', $sku_entity_ids, 'IN');
 
-    return $query->execute()->fetchField();
+    return $query->execute()->fetchAllKeyed(0, 0);
   }
 
   /**
    * Helper function to fetch entity id from sku rather than loading the SKU.
    *
-   * @param string $sku_text
+   * @param array $sku_texts
    *   Sku text of the Sku item.
    *
-   * @return int
-   *   Entity Id of sku item.
+   * @return array
+   *   Array of Entity Ids of sku items.
    *
    * @throws \Drupal\Core\Database\InvalidQueryException
    */
-  public function getEntityIdBySku($sku_text) {
+  public function getEntityIdsBySku(array $sku_texts) {
+    if (empty($sku_texts)) {
+      return [];
+    }
+
     $query = $this->connection->select('acq_sku_field_data', 'asfd')
       ->fields('asfd', ['id'])
-      ->condition('sku', $sku_text)
-      ->range(0, 1);
+      ->distinct()
+      ->condition('sku', $sku_texts, 'IN');
 
-    return $query->execute()->fetchField();
+    return $query->execute()->fetchAllKeyed(0, 0);
   }
 
   /**
@@ -563,7 +570,6 @@ class SkuManager {
       }
 
       $image_key = $type . '_image';
-      $image_fid_key = $type . '_image_fid';
       $text_key = $type . '_image_text';
       $position_key = $type . '_position';
 
@@ -1049,29 +1055,63 @@ class SkuManager {
    *   Attribute field name.
    * @param string $search_direction
    *   Direction in which to look for fallback while fetching the attribute.
+   * @param bool $multivalued
+   *   Boolean value indicating if the field we looking for is multi-valued.
    *
-   * @return string
+   * @return array|string
    *   Attribute value.
    */
-  public function fetchProductAttribute(SKU $sku, $attribute_machine_name, $search_direction) {
-    if (($search_direction == 'self') &&
-      ($attribute_value = $sku->get($attribute_machine_name)->getString())) {
-      return $attribute_value;
-    }
-    elseif (($search_direction == 'children') &&
+  public function fetchProductAttribute(SKU $sku, $attribute_machine_name, $search_direction, $multivalued = FALSE) {
+    if (($search_direction == 'children') &&
       ($sku->getType() == 'configurable') &&
-      (($first_child_sku = $this->getChildSkus($sku, TRUE)) instanceof SKU) &&
-      ($attribute_value = $first_child_sku->get($attribute_machine_name)->getString())) {
-      return $attribute_value;
+      ($child_sku = $this->getChildSkus($sku, TRUE))) {
+      $sku = $child_sku;
     }
     elseif (($search_direction == 'parent') &&
-      (($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) instanceof SKU)) {
-      if ($attribute_value = $parent_sku->get($attribute_machine_name)->getString()) {
+      ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku))) {
+      $sku = $parent_sku;
+    }
+
+    if ($sku instanceof SKU) {
+      if (($multivalued) &&
+        ($attribute_value = $sku->get($attribute_machine_name)->getString()) &&
+        (!empty($attribute_value))) {
+        return $attribute_value;
+      }
+      elseif ($attribute_value = $sku->get($attribute_machine_name)->getString()) {
         return $attribute_value;
       }
     }
 
     return '';
+  }
+
+  /**
+   * Lighter function to fetch Children SKU text.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   Configurable SKU for which the child SKUs need to be fetched.
+   *
+   * @return array
+   *   Array of SKU texts.
+   *
+   * @todo: Rename getChildSkus function to getChildSkuEntities to avoid confusion.
+   */
+  public function getChildrenSkus(SKU $sku_entity) {
+    $child_skus = [];
+
+    if ($sku_entity->getType() == 'configurable') {
+      $result = $this->connection->select('acq_sku__field_configured_skus', 'asfcs')
+        ->fields('asfcs', ['field_configured_skus_value'])
+        ->condition('asfcs.entity_id', $sku_entity->id())
+        ->execute();
+
+      while ($row = $result->fetchAssoc()) {
+        $child_skus[] = $row['field_configured_skus_value'];
+      }
+    }
+
+    return $child_skus;
   }
 
 }

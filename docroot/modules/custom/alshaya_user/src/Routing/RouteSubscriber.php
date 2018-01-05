@@ -4,11 +4,14 @@ namespace Drupal\alshaya_user\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Listens to the dynamic route events.
  */
 class RouteSubscriber extends RouteSubscriberBase {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -32,14 +35,14 @@ class RouteSubscriber extends RouteSubscriberBase {
    * Page title for My account page.
    */
   public function myAccountTitle() {
-    return t('My Account');
+    return $this->t('My Account');
   }
 
   /**
    * Page title for user edit page.
    */
   public function editAccountTitle() {
-    return t('Contact Details');
+    return $this->t('Contact Details');
   }
 
 }

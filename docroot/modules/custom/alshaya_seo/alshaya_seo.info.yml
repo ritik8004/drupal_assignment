@@ -4,15 +4,14 @@ type: module
 core: 8.x
 package: Alshaya
 dependencies:
-  - alshaya_i18n
-  - google_tag
-  - metatag
-  - metatag_open_graph
-  - node
-  - robotstxt
-  - simple_sitemap
-  - token
-  - datalayer
-  - alshaya_stores_finder
-  - metatag_verification
-version: 8.x-1.0
+  - alshaya_i18n:alshaya_i18n
+  - google_tag:google_tag
+  - metatag:metatag
+  - metatag:metatag_open_graph
+  - drupal:node
+  - robotstxt:robotstxt
+  - simple_sitemap:simple_sitemap
+  - token:token
+  - datalayer:datalayer
+  - alshaya_stores_finder:alshaya_stores_finder
+  - metatag:metatag_verification

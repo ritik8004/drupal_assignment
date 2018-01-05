@@ -18,10 +18,10 @@ class CheckoutPaneTitles extends ControllerBase {
     $current_step = $route_match->getParameter('step');
 
     if ($current_step == 'login') {
-      return t('Welcome');
+      return $this->t('Welcome');
     }
 
-    return t('secure checkout');
+    return $this->t('secure checkout');
   }
 
 }

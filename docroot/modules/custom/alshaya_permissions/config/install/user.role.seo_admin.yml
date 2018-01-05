@@ -28,3 +28,6 @@ permissions:
   - 'view the administration theme'
   - 'administer redirects'
   - 'administer redirect settings'
+  - 'use text format rich_text'
+  - 'use text format full_text'
+  - 'use text format mail_text'

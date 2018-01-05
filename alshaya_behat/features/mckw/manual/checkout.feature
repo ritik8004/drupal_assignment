@@ -1,7 +1,8 @@
 @javascript @checkout @english @eng_checkout @mmcpa-1930 @manual
 Feature: Test Checkout feature
   Background:
-    Given I am on a configurable product
+    Given I am on a simple product page
+    And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
     When I press "Add to basket"

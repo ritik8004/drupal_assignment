@@ -50,6 +50,11 @@ function alshaya_email_signup_form_webform_submission_alshaya_email_signup_add_f
     ];
   }
 
+  $inputs = $form_state->getUserInput();
+  if (!empty($inputs) && !empty($inputs['http_referer'])) {
+    $form['elements']['http_referer']['#value'] = $inputs['http_referer'];
+  }
+
   // Add terms and conditions suffix.
   $form['elements']['first_name']['#prefix'] = '<div class="form__form-fields"><div class="input__container--half__wrapper">';
   $form['elements']['last_name']['#suffix'] = '</div>';

@@ -357,11 +357,11 @@ function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id
       break;
 
     case "user_login_form":
-      $form['#attached']['library'][] = 'alshaya_hnm/unmask_password';
+      $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
     case "change_pwd_form":
-      $form['#attached']['library'][] = 'alshaya_hnm/unmask_password';
+      $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       break;
 
     case "user_register_form":
@@ -384,12 +384,12 @@ function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id
         }
       }
       if ($form_id == 'user_register_form') {
-        $form['#attached']['library'][] = 'alshaya_hnm/unmask_password';
+        $form['#attached']['library'][] = 'alshaya_white_label/unmask_password';
       }
       break;
 
     case "webform_submission_alshaya_contact_form":
-      $form['#attached']['library'][] = 'alshaya_hnm/autosize_textarea';
+      $form['#attached']['library'][] = 'alshaya_white_label/autosize_textarea';
       $form['elements']['message']['#rows'] = 1;
       $form['elements']['message']['#attributes']['maxlength'] = 220;
       break;
@@ -735,19 +735,6 @@ function alshaya_hnm_preprocess_page__404(&$variables) {
 }
 
 /**
- * Implements hook_preprocess_facets_summary_item_list().
- */
-function alshaya_hnm_preprocess_facets_summary_item_list(&$variables) {
-  // Move clear-all link item to the end of the array & attach clear-all class.
-  if (count($variables['items']) > 0) {
-    $variables['items'][0]['attributes']->addClass('clear-all');
-    $clear_all_item = $variables['items'][0];
-    array_splice($variables['items'], 0, 1);
-    $variables['items'][] = $clear_all_item;
-  }
-}
-
-/**
  * Implements template_preprocess_form().
  */
 function alshaya_hnm_preprocess_form(&$variables) {
@@ -800,4 +787,11 @@ function alshaya_hnm_preprocess_paragraph(&$variables) {
       $variables['button_text']['#markup'] = $variables['elements']['field_button_link'][0]['#title'];
     }
   }
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function alshaya_hnm_js_alter(&$javascript) {
+  unset($javascript['themes/custom/alshaya_white_label/menu.js']);
 }

@@ -67,6 +67,7 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
     }
 
     $build = alshaya_acm_customer_build_order_detail($order);
+
     $build['#account'] = $account;
     $build['#barcode'] = alshaya_acm_customer_get_barcode($order);
     $build['#print_link'] = $print_link;

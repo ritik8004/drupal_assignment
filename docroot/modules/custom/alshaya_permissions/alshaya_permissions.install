@@ -10,6 +10,16 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Grant access of full_text and mail_text format to seo admin.
+ */
+function alshaya_permissions_update_8010() {
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['seo_admin']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Grant translation interface access to webmaster.
  */
 function alshaya_permissions_update_8002() {
@@ -105,4 +115,14 @@ function alshaya_permissions_update_8007() {
 function alshaya_permissions_update_8008() {
   // Update role permissions from the config.
   _alshaya_permissions_update_role_from_config(['webmaster']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Grant access of rich_text format to seo admin.
+ */
+function alshaya_permissions_update_8009() {
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['seo_admin']);
 }

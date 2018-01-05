@@ -5,12 +5,9 @@ global_styles:
   js:
     vendor/js/calc.min.js: {}
     js/back_to_top.js: {}
-    js/custom.js: {}
     js/accordion.js: {}
     js/menu.js: {}
     js/form.js: {}
-    js/address_book.js: {}
-    js/one_time_language_slider.js: {}
     vendor/js/details-polyfill.js: {}
   dependencies:
     - core/modernizr
@@ -20,7 +17,7 @@ global_styles:
     - core/jquery.ui.tabs
     - core/jquery.cookie
     - mobile_number/element
-    - alshaya_hnm/utils
+    - alshaya_white_label/utils
 
 ltr_styles:
   css:
@@ -34,102 +31,32 @@ rtl_styles:
       css/rtl.css: {}
       css/rtl-print.css: {media: print}
 
-unmask_password:
-  js:
-    js/unmask_password.js: {}
-
-mobile_number:
-  js:
-    js/mobile_number.js: {}
-  dependencies:
-    - alshaya_hnm/cleave
-
-slider_banner:
-  js:
-    js/slider.js: {}
-  dependencies:
-    - core/jquery
-    - alshaya_hnm/slick
-
 sell:
   js:
     js/sell.js: {}
   dependencies:
     - core/jquery
-    - alshaya_hnm/utils
-    - alshaya_hnm/owlcarousel
-
-autosize_textarea:
-  js:
-    js/autosize_textarea.js: {}
-  dependencies:
-    - alshaya_hnm/autosize
+    - alshaya_white_label/utils
+    - alshaya_white_label/owlcarousel
 
 convert_to_select2:
   js:
     js/convert_to_select2.js: {}
   dependencies:
-    - alshaya_hnm/select2
-
-slick:
-  css:
-    theme:
-      vendor/css/slick.css: {}
-  js:
-    vendor/js/slick.min.js: {}
-
-owlcarousel:
-  css:
-    theme:
-      vendor/css/owl.carousel.css: {}
-  js:
-    vendor/js/owlcarousel.min.js: {}
-
-select2:
-  css:
-    theme:
-      vendor/css/select2.css: {}
-  js:
-    vendor/js/select2.full.min.js: {}
-
-autosize:
-  js:
-    vendor/js/autosize.min.js: {}
+    - alshaya_white_label/select2
 
 sizeguide:
   js:
     js/select2Option.js: {}
     js/sizeguide.js: {}
 
-ucfix:
-  js:
-    js/ucfix.js: {}
-
 cloud_zoom:
   version: 1.x
   js:
     js/product_zoom.js: {}
-    js/product_mobile_zoom.js: {}
   dependencies:
-    - core/drupal.dialog
-    - core/jquery.ui.draggable
-    - alshaya_product_zoom/cloud_zoom
-    - alshaya_hnm/slick
-    - alshaya_hnm/utils
-    - alshaya_product_zoom/lightslider
-
-utils:
-  js:
-    js/utils.js: {}
-
-cleave:
-  js:
-    vendor/js/cleave.min.js: {}
+    - alshaya_white_label/cloud_zoom
 
 plp_search_js:
   js:
     js/plp-search.js: {}
-
-jquery_mobile_touch_swipe:
-  js:
-    vendor/js/jquery.touchSwipe.min.js: {}

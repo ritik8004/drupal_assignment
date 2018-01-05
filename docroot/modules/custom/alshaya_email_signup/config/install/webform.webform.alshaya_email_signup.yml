@@ -76,7 +76,7 @@ settings:
   results_disabled: false
   results_disabled_ignore: false
   token_update: false
-  ajax: false
+  ajax: true
   form_prepopulate_source_entity_required: false
   form_prepopulate_source_entity_type: ''
   form_reset: false
@@ -88,6 +88,10 @@ settings:
   preview_excluded_elements: {  }
   preview_exclude_empty: true
   draft_multiple: false
+  ajax_scroll_top: form
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
 access:
   create:
     roles:

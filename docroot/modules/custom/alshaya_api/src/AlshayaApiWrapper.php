@@ -3,21 +3,34 @@
 namespace Drupal\alshaya_api;
 
 use Drupal\alshaya_stores_finder\StoresFinderUtility;
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AcqPromotionsManager.
  */
 class AlshayaApiWrapper {
 
+  use StringTranslationTrait;
+
   /**
-   * Stores the alshaya_api settings config array.
+   * Stores the alshaya_api settings config.
    *
-   * @var array
+   * @var \Drupal\Core\Config\ImmutableConfig
    */
   protected $config;
+
+  /**
+   * Stores the click_collect settings config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $clickCollectSettings;
 
   /**
    * Token to access APIs.
@@ -48,20 +61,53 @@ class AlshayaApiWrapper {
   protected $storeUtility;
 
   /**
+   * The date time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $dateTime;
+
+  /**
+   * Cache Backend object for "cache.data".
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\Component\Datetime\TimeInterface $date_time
+   *   The date time service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend object for "cache.data".
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(ConfigFactoryInterface $config_factory,
+                              LanguageManagerInterface $language_manager,
+                              TimeInterface $date_time,
+                              CacheBackendInterface $cache,
+                              ModuleHandlerInterface $module_handler,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->config = $config_factory->get('alshaya_api.settings');
+
+    // Initialise click and collect settings only if module enabled.
+    if ($module_handler->moduleExists('alshaya_click_collect')) {
+      $this->clickCollectSettings = $config_factory->get('alshaya_click_collect.settings');
+    }
+
+    $this->logger = $logger_factory->get('alshaya_api');
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
-    $this->logger = $logger_factory->get('alshaya_api');
+    $this->dateTime = $date_time;
+    $this->cache = $cache;
   }
 
   /**
@@ -94,11 +140,11 @@ class AlshayaApiWrapper {
   private function getMagentoLangPrefix() {
     // For current language, we access the config directly.
     if ($this->langcode == $this->languageManager->getDefaultLanguage()->getId()) {
-      $config = \Drupal::config('alshaya_api.settings');
+      $config = $this->config;
     }
     // We get store id from translated config for other languages.
     else {
-      $config = \Drupal::languageManager()->getLanguageConfigOverride($this->langcode, 'alshaya_api.settings');
+      $config = $this->languageManager->getLanguageConfigOverride($this->langcode, 'alshaya_api.settings');
     }
 
     return $config->get('magento_lang_prefix');
@@ -117,7 +163,7 @@ class AlshayaApiWrapper {
 
     $cid = 'alshaya_api_token';
 
-    if ($cache = \Drupal::cache('data')->get($cid)) {
+    if ($cache = $this->cache->get($cid)) {
       $this->token = $cache->data;
     }
     else {
@@ -140,10 +186,10 @@ class AlshayaApiWrapper {
       $this->token = $token;
 
       // Calculate the timestamp when we want the cache to expire.
-      $expire = \Drupal::time()->getRequestTime() + $this->config->get('token_cache_time');
+      $expire = $this->dateTime->getRequestTime() + $this->config->get('token_cache_time');
 
       // Set the stock in cache.
-      \Drupal::cache('data')->set($cid, $this->token, $expire);
+      $this->cache->set($cid, $this->token, $expire);
     }
 
     return $this->token;
@@ -390,6 +436,9 @@ class AlshayaApiWrapper {
       return [];
     }
 
+    // Start sequence from 1.
+    $index = 1;
+
     // Add missing information to store data.
     array_walk($stores, function (&$store) use (&$index) {
       $store['rnc_available'] = (int) $store['rnc_available'];
@@ -405,18 +454,20 @@ class AlshayaApiWrapper {
     // Sort the stores first by distance and then by name.
     alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
 
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_click_collect')) {
-      $cc_config = \Drupal::config('alshaya_click_collect.settings');
-    }
-
     // Add sequence and proper delivery_time label and low stock text.
     foreach ($stores as $index => $store) {
       $stores[$index]['sequence'] = $index + 1;
 
-      // Display configured value for rnc else sts delivery time.
-      $time = $store['rnc_available'] ? ($cc_config) ?: $cc_config->get('click_collect_rnc') : $store['sts_delivery_time_label'];
-      $stores[$index]['delivery_time'] = t('Collect from store in <em>@time</em>', ['@time' => $time]);
-      $stores[$index]['low_stock_text'] = $store['low_stock'] ? t('Low stock') : '';
+      // Display sts label by default.
+      $time = $store['sts_delivery_time_label'];
+
+      // Display configured value for rnc if available.
+      if ($store['rnc_available'] && $this->clickCollectSettings) {
+        $time = $this->clickCollectSettings->get('click_collect_rnc');
+      }
+
+      $stores[$index]['delivery_time'] = $this->t('Collect from store in <em>@time</em>', ['@time' => $time]);
+      $stores[$index]['low_stock_text'] = $store['low_stock'] ? $this->t('Low stock') : '';
     }
 
     return $stores;
@@ -436,11 +487,6 @@ class AlshayaApiWrapper {
    *   Response from the API.
    */
   public function getProductStores($sku, $lat, $lon) {
-    if (\Drupal::state()->get('store_development_mode', 0)) {
-      $lat = 29;
-      $lon = 48;
-    }
-
     $sku = urlencode($sku);
 
     $endpoint = 'click-and-collect/stores/product/' . $sku . '/lat/' . $lat . '/lon/' . $lon;
@@ -469,11 +515,6 @@ class AlshayaApiWrapper {
    *   Response from the API.
    */
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
-    if (\Drupal::state()->get('store_development_mode', 0)) {
-      $lat = 29;
-      $lon = 48;
-    }
-
     $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
     $response = $this->invokeApi($endpoint, [], 'GET');
 

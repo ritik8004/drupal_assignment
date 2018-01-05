@@ -11,6 +11,13 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Set the config to display specifications to TRUE.
+ */
+function alshaya_acm_product_update_8009() {
+  \Drupal::configFactory()->getEditable('alshaya_acm.settings')->set('pdp_show_specifications', TRUE)->save();
+}
+
+/**
  * Add config for pdp gallery pager limit.
  */
 function alshaya_acm_product_update_8008() {
@@ -91,7 +98,7 @@ function alshaya_acm_product_update_8002() {
   $weight = 0;
   foreach ($option_sets as $options) {
     foreach ($options['options'] as $key => $value) {
-      $result = db_query(
+      db_query(
         'UPDATE {taxonomy_term_field_data} AS ttfd
 INNER JOIN {taxonomy_term__field_sku_attribute_code} ttfsac ON ttfsac.entity_id = ttfd.tid
 INNER JOIN {taxonomy_term__field_sku_option_id} ttfsoi ON ttfsoi.entity_id = ttfd.tid

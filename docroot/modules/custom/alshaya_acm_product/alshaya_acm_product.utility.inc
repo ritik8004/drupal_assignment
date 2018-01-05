@@ -200,7 +200,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 
   // Create our thumbnails to be rendered for zoom.
   if (!empty($media)) {
-    foreach ($media as $delta => $media_item) {
+    foreach ($media as $media_item) {
       if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
 
         $file_uri = $media_item['file']->getFileUri();
@@ -628,7 +628,7 @@ function alshaya_acm_product_update_config_options(array &$form_parts, FormState
   // Disable options which don't exist for the choosen config.
   foreach ($options as $key => $value) {
     if ($key && !in_array($key, $enabled_options)) {
-      $form_parts['configurables'][$attribute_code]['#options_attributes'][$key]['disabled'] = 'disabled';
+      unset($form_parts['configurables'][$attribute_code]['#options'][$key]);
     }
   }
 }

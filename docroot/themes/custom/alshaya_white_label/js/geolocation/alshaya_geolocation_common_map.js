@@ -370,6 +370,7 @@
             infoWindowContent: location.html(),
             infoWindowSolitary: true,
             label: (key + 1).toString(),
+            zIndex: key + 1,
             optimized: false
           };
 

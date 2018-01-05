@@ -15,7 +15,6 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\node\Entity\Node;
 
 /**
  * Provides a generic Menu block.
@@ -137,7 +136,7 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     $form['shop_by_voc']['vocabulary'] = [
       '#type' => 'select',
       '#title' => $this->t('Vocabulary'),
-      '#default_value' => $config['level'],
+      '#default_value' => !empty($config['vocabulary']) ? $config['vocabulary'] : '',
       '#options' => $vocabularies,
       '#description' => $this->t('The Vocabulary that we want to show in shop by links.'),
       '#required' => TRUE,
@@ -148,7 +147,7 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     $form['shop_by_voc']['level'] = [
       '#type' => 'select',
       '#title' => $this->t('Initial visibility level'),
-      '#default_value' => $config['level'],
+      '#default_value' => !empty($config['level']) ? $config['level'] : $defaults['level'],
       '#options' => $options,
       '#required' => TRUE,
     ];
@@ -226,21 +225,10 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
       ];
     }
 
-    // Get all the department pages.
-    $alshaya_department_pages = alshaya_department_page_get_pages();
-
     $data = [];
     foreach ($terms as $term) {
       $data[$term->id()] = $this->processTermTranslations($term);
-      if (isset($alshaya_department_pages[$term->id()])) {
-        $nid = $alshaya_department_pages[$term->id()];
-        $node = Node::load($nid);
-
-        // Use the path of node instead of term path if node is published.
-        if ($node->isPublished()) {
-          $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
-        }
-      }
+      $data[$term->id()]['path'] = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString();
     }
 
     $route_name = $this->routeMatch->getRouteName();

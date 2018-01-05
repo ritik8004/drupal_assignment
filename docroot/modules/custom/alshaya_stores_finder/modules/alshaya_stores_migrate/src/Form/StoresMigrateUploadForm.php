@@ -66,7 +66,7 @@ class StoresMigrateUploadForm extends FormBase {
         $form_state->setValue('upload', $file);
       }
       else {
-        $form_state->setErrorByName('upload', $this->t('The logo could not be uploaded.'));
+        $form_state->setErrorByName('upload', $this->t('The file could not be uploaded.'));
       }
     }
   }
@@ -87,6 +87,10 @@ class StoresMigrateUploadForm extends FormBase {
     $migrate_plus_migration_store_config->set('source.path', $filepath);
     $migrate_plus_migration_store_config->save();
 
+    // Initialize the migration.
+    $manager = \Drupal::service('plugin.manager.config_entity_migration');
+    $manager->createInstances([]);
+
     /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
     $migration = \Drupal::service('plugin.manager.migration')->createInstance('store_' . $language, ['source' => ['path' => $filepath]]);
     // Set the nodes for updating.
@@ -98,7 +102,7 @@ class StoresMigrateUploadForm extends FormBase {
     $migrate_plus_migration_store_config->set('source.path', $initial_filepath);
     $migrate_plus_migration_store_config->save();
 
-    drupal_set_message(t('Stores have been imported.'), 'status');
+    drupal_set_message($this->t('Stores have been imported.'), 'status');
   }
 
 }

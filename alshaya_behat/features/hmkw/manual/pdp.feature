@@ -1,4 +1,4 @@
-@javascript
+@javascript @manual @pdp @prod
 Feature: Test the product detail page
 
   Scenario: As a Guest

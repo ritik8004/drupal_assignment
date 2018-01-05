@@ -3,15 +3,14 @@ description: 'Custom Block content type in which you can create paragraphs.'
 type: module
 core: 8.x
 dependencies:
-  - alshaya_paragraphs
-  - block_content
-  - content_translation
-  - entity_reference_revisions
-  - field
-  - language
-  - machine_name_widget
-  - paragraphs
-  - text
-  - workbench_moderation
-version: 8.x-1.0
+  - alshaya_paragraphs:alshaya_paragraphs
+  - drupal:block_content
+  - drupal:content_translation
+  - entity_reference_revisions:entity_reference_revisions
+  - drupal:field
+  - drupal:language
+  - machine_name_widget:machine_name_widget
+  - paragraphs:paragraphs
+  - drupal:text
+  - workbench_moderation:workbench_moderation
 package: Alshaya

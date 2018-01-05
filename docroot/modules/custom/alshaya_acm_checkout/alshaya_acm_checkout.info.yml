@@ -4,9 +4,9 @@ description: 'All custom code around acq_checkout.'
 package: 'Alshaya'
 core: 8.x
 dependencies:
-  - acq_checkout
-  - acq_cybersource
-  - acq_payment
-  - alshaya_acm
-  - alshaya_acm_customer
-  - alshaya_custom
+  - acq_commerce:acq_checkout
+  - acq_commerce:acq_cybersource
+  - acq_commerce:acq_payment
+  - alshaya_acm:alshaya_acm
+  - alshaya_acm_customer:alshaya_acm_customer
+  - alshaya_custom:alshaya_custom

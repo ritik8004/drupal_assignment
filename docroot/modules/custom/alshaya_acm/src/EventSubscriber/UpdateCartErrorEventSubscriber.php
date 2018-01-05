@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm\EventSubscriber;
 
 use Drupal\acq_commerce\UpdateCartErrorEvent;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -25,6 +26,16 @@ class UpdateCartErrorEventSubscriber implements EventSubscriberInterface {
    * @var int
    */
   public static $code = 0;
+
+  /**
+   * UpdateCartErrorEventSubscriber constructor.
+   *
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   LoggerFactory object.
+   */
+  public function __construct(LoggerChannelFactoryInterface $logger_factory) {
+    $this->logger = $logger_factory->get('alshaya_acm');
+  }
 
   /**
    * {@inheritdoc}
@@ -97,7 +108,7 @@ class UpdateCartErrorEventSubscriber implements EventSubscriberInterface {
     $exception = $event->getEventException();
 
     // Log notice.
-    \Drupal::logger('alshaya_acm')->notice($exception->getMessage());
+    $this->logger->notice($exception->getMessage());
 
     // Set in static variables.
     self::setCode($exception->getCode());

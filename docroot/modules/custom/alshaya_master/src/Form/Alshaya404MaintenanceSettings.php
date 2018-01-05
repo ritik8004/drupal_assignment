@@ -64,14 +64,14 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
     $form['maintenance_container']['maintenance_mode_rich_message'] = [
       '#type' => 'text_format',
       '#format' => 'rich_text',
-      '#title' => t('Message to display when in maintenance mode'),
+      '#title' => $this->t('Message to display when in maintenance mode'),
       '#default_value' => $config->get('maintenance_mode_rich_message.value'),
     ];
 
     $default_maintenanace_file = !empty($config->get('maintenance_mode_image')) ? [$config->get('maintenance_mode_image')] : [];
     $form['maintenance_container']['maintenance_mode_image'] = [
       '#type' => 'managed_file',
-      '#title' => t('Upload image'),
+      '#title' => $this->t('Upload image'),
       '#upload_location' => 'public://maintenance_mode_image/',
       '#default_value' => $default_maintenanace_file,
       '#upload_validators'  => [

@@ -77,7 +77,7 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
     // The skus detached from a catalog promotion are not part of those coming back during promotions sync.
     // So their final_price value does not get updated at that time. We thus need to resync these specific skus.
     if ($promotion_type === 'category' && $sku_texts) {
-      foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+      foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
         $this->ingestApiWrapper->productFullSync($store_id, $langcode, $sku_texts);
       }
     }
