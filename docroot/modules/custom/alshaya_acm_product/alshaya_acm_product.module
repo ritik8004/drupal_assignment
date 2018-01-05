@@ -84,9 +84,9 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
         if ($sku_entity->bundle() == 'configurable') {
           $data = [];
-
-          // Update final_price based on final_price of children.
-          $min_final_price = NULL;
+          $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+          $prices = $skuManager->getMinPrices($sku_entity);
+          $min_final_price = $prices['final_price'];
           $child_sku_found = FALSE;
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
             try {
@@ -114,11 +114,6 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
                 $field_value = $field_data->getString();
                 $data[$key][$field_value] = $field_value;
               }
-            }
-
-            $final_price = (float) $child_sku_entity->get('final_price')->getString();
-            if ($final_price > 0) {
-              $min_final_price = isset($min_final_price) ? min($min_final_price, $final_price) : $final_price;
             }
           }
 
