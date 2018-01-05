@@ -8,7 +8,9 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class CheckoutHelper.
@@ -39,6 +41,20 @@ class CheckoutHelper {
   protected $ordersManager;
 
   /**
+   * Current request object.
+   *
+   * @var null|\Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * The current user making the request.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
    * CheckoutOptionsManager constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
@@ -47,16 +63,24 @@ class CheckoutHelper {
    *   Cart Storage service.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   Orders manager service object.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
   public function __construct(APIWrapper $api_wrapper,
                               CartStorageInterface $cart_storage,
                               OrdersManager $orders_manager,
+                              RequestStack $request_stack,
+                              AccountProxyInterface $current_user,
                               LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
     $this->ordersManager = $orders_manager;
+    $this->currentRequest = $request_stack->getCurrentRequest();
+    $this->currentUser = $current_user;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
   }
 
@@ -83,20 +107,20 @@ class CheckoutHelper {
       // @TODO: Remove the fix when we get the full order details.
       $order_id = str_replace('"', '', $response['order']['id']);
 
-      $session = \Drupal::request()->getSession();
+      $session = $this->currentRequest->getSession();
       $session->set('last_order_id', $order_id);
 
       $current_user_id = 0;
 
       // Clear orders list cache if user is logged in.
-      if (\Drupal::currentUser()->isAnonymous() || !alshaya_acm_customer_is_customer(\Drupal::currentUser())) {
+      if ($this->currentUser->isAnonymous() || !alshaya_acm_customer_is_customer($this->currentUser)) {
         // Store the email address of customer in session.
         $email = $cart->customerEmail();
         $session->set('email_order_' . $order_id, $email);
       }
       else {
-        $email = \Drupal::currentUser()->getEmail();
-        $current_user_id = \Drupal::currentUser()->id();
+        $email = $this->currentUser->getEmail();
+        $current_user_id = $this->currentUser->id();
 
         // Update user's mobile number if empty.
         $account = User::load($current_user_id);

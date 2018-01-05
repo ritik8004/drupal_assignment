@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
@@ -35,6 +36,13 @@ class ProductOptionsManager {
   private $apiWrapper;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -43,11 +51,16 @@ class ProductOptionsManager {
    *   ApiWrapper object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory, I18nHelper $i18n_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_sku');
+    $this->i18nHelper = $i18n_helper;
   }
 
   /**
@@ -159,7 +172,7 @@ class ProductOptionsManager {
    * Synchronize all product options.
    */
   public function synchronizeProductOptions() {
-    foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+    foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       $this->apiWrapper->updateStoreContext($store_id);
       $option_sets = $this->apiWrapper->getProductOptions();
 

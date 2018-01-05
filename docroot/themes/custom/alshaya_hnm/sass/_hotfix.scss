@@ -117,6 +117,10 @@ body.ucbrowser {
       height: 34px;
     }
   }
+
+  .mob-imagegallery__thumbnails__image {
+    height: 27.5rem;
+  }
 }
 
 #text-resize-control {
@@ -139,6 +143,14 @@ body.ucbrowser {
 body.chrome {
   &.alias--cart #table-cart-items td select {
     text-indent: 0.4rem;
+  }
+
+  .content__title_wrapper {
+    .has--special--price,
+    .special--price,
+    .price--discount {
+      display: inline-table;
+    }
   }
 }
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -27,6 +28,13 @@ class APIWrapper {
   protected $storeId;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
    * Constructor.
    *
    * @param ClientFactory $client_factory
@@ -37,16 +45,19 @@ class APIWrapper {
    *   LanguageManagerInterface object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    */
-  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactory $logger_factory) {
+  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper) {
     $this->clientFactory = $client_factory;
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->logger = $logger_factory->get('acq_sku');
+    $this->i18nHelper = $i18n_helper;
 
     // We always use the current language id to get store id. If required
     // function calling the api wrapper will pass different store id to
     // override this one.
-    $this->storeId = acq_commerce_get_store_id_from_langcode($language_manager->getCurrentLanguage()->getId());
+    $this->storeId = $this->i18nHelper->getStoreIdFromLangcode($language_manager->getCurrentLanguage()->getId());
   }
 
   /**

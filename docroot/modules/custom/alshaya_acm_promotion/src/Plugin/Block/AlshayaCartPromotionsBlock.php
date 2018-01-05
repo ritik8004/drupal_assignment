@@ -121,7 +121,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     $options = [];
 
     if (!empty($promotion_nodes)) {
-      foreach ($promotion_nodes as $key => $promotion_node) {
+      foreach ($promotion_nodes as $promotion_node) {
         // Only allow promotions with value "other".
         if ($promotion_node->get('field_alshaya_promotion_subtype')->getString() == AlshayaPromotionsManager::SUBTYPE_OTHER) {
           $promotion_rule_id = $promotion_node->get('field_acq_promotion_rule_id')->first()->getValue();
@@ -168,7 +168,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
     $selected_promotions = $this->configuration['promotions'];
 
     if (!empty($selected_promotions)) {
-      foreach ($selected_promotions as $key => $promotion_rule_id) {
+      foreach ($selected_promotions as $promotion_rule_id) {
         if ($promotion_rule_id) {
           $node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($promotion_rule_id);
 
@@ -271,11 +271,22 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
+  public function getCacheContexts() {
+    // Cart will be different for every session, even guests will have session
+    // as soon as they add something to cart.
+    return Cache::mergeContexts(parent::getCacheContexts(), ['cookies:Drupal_visitor_acq_cart_id']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCacheTags() {
     $cacheTags = [];
 
     // It depends on cart id of the user.
-    $cacheTags[] = 'cart_' . $this->cartStorage->getCart(FALSE)->id();
+    if ($cart = $this->cartStorage->getCart(FALSE)) {
+      $cacheTags[] = 'cart_' . $cart->id();
+    }
 
     // It depends on promotions content.
     $cacheTags[] = 'node_type:acq_promotion';

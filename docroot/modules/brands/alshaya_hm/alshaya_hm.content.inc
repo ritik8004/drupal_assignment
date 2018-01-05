@@ -5,7 +5,7 @@
  * File to create default content for victoria's secret.
  */
 
-use \Drupal\block_content\Entity\BlockContent;
+use Drupal\block_content\Entity\BlockContent;
 
 /**
  * Create default copyright block content.
@@ -41,7 +41,7 @@ H&M has since it was founded in 1947 grown into one of the world's leading fashi
     'body' => [
       'value' => "<p>مفهوم الأعمال لدى H&M هو تقديم أحدث صيحات الموضة والجودة العالية بأفضل الأسعار. ومنذ تأسيس H&M في عام 1947 نمت لتصبح واحدة من شركات الأزياء الرائدة في العالم. حقوق النشر محفوظة لموقع شركة H&M و هو مُلك Hennes H&M & Mauritz AB &copy;</p>",
       'format' => 'rich_text',
-    ]
+    ],
   ]);
   $ar_block_content->save();
 }
@@ -77,7 +77,7 @@ function alshaya_hm_create_footer_logo_block() {
                    </a>
                  </div>",
       'format' => 'rich_text',
-    ]
+    ],
   ]);
   $ar_block_content->save();
 }

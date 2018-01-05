@@ -164,11 +164,11 @@ class ClickCollectController extends ControllerBase {
     // Sort the stores first by distance and then by name.
     alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
 
-    $build['store_list'] = $build['map_info_window'] = '<span class="empty">' . t('Sorry, No store found for your location.') . '</span>';
+    $build['store_list'] = $build['map_info_window'] = '<span class="empty">' . $this->t('Sorry, No store found for your location.') . '</span>';
     if (count($stores) > 0) {
       $build['store_list'] = [
         '#theme' => 'click_collect_stores_list',
-        '#title' => t('Available at @count stores near', ['@count' => count($stores)]),
+        '#title' => $this->t('Available at @count stores near', ['@count' => count($stores)]),
         '#stores' => $stores,
       ];
 
@@ -261,12 +261,12 @@ class ClickCollectController extends ControllerBase {
   public function getProductStores($sku, $lat, $lon, $limit = 3) {
     $all_stores = $top_three = [];
 
-    if ($sku_entity = SKU::loadFromSku($sku)) {
+    if (SKU::loadFromSku($sku)) {
       if ($stores = $this->apiWrapper->getSkuStores($sku, $lat, $lon)) {
         $top_three = [];
         $top_three['#theme'] = 'pdp_click_collect_top_stores';
         $top_three['#stores'] = array_slice($stores, 0, $limit);
-        $top_three['#has_more'] = count($stores) > $limit ? t('Other stores nearby') : '';
+        $top_three['#has_more'] = count($stores) > $limit ? $this->t('Other stores nearby') : '';
         $top_three['#available_at_title'] = $this->t('Available at @count stores near', [
           '@count' => count($stores),
         ]);
@@ -328,7 +328,7 @@ class ClickCollectController extends ControllerBase {
       }
     }
     else {
-      $no_result_html = '<span class="empty-store-list">' . t('Sorry, No store found for your location.') . '</span>';
+      $no_result_html = '<span class="empty-store-list">' . $this->t('Sorry, No store found for your location.') . '</span>';
       $response->addCommand(new InvokeCommand(NULL, 'clickCollectPdpNoStoresFound', [$no_result_html]));
     }
 

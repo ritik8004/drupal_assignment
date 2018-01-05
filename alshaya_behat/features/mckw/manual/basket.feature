@@ -1,11 +1,11 @@
-@javascript @manual @mmcpa-2325
+@javascript @manual @mmcpa-2325 @prod
 Feature: Test basket page
 
   Background:
-#    Given I am on a simple product page
-#    And I wait for the page to load
-#    When I press "Add to basket"
-#    And I wait for AJAX to finish
+    Given I am on a simple product page
+    And I wait for the page to load
+    When I press "Add to basket"
+    And I wait for AJAX to finish
     When I am on a configurable product
     And I wait for the page to load
     When I select a size for the product
@@ -18,7 +18,7 @@ Feature: Test basket page
     and the header and footer
     When I go to "/cart"
     And I wait for the page to load
-#    Then I should see the link for simple product
+    Then I should see the link for simple product
     Then I should be able to see the header
     And I should see the link for configurable product
     Then I should see the button "checkout securely"
@@ -61,7 +61,6 @@ Feature: Test basket page
     And I wait 2 seconds
     Then I should see "Collect the order in store within 2-3 days"
 
-
   @loyalty
   Scenario: As a Guest
     I should be warned about privelege card number mismatch
@@ -84,7 +83,7 @@ Feature: Test basket page
     When I follow "العربية"
     And I wait for the page to load
     Then I should be able to see the header in Arabic
-#    Then I should see the link for simple product in Arabic
+    Then I should see the link for simple product in Arabic
     And I should see the link for configurable product in Arabic
     Then I should see the button "إتمام الشراء بأمان"
     And I should see "سلة التسوق ("
@@ -117,15 +116,15 @@ Feature: Test basket page
     And I wait 2 seconds
     Then I should see "إستلم طلبيتك من المحل خلال 2-3 أيام"
 
-#  @arabic
-#  Scenario: As a Guest
-#  I should be warned about privelege card number mismatch
-#    When I go to "/ar/cart"
-#    And I wait for the page to load
-#    When I click the label for "#details-privilege-card-wrapper > div"
-#    Then I should see "إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني"
-#    When I fill in "privilege_card_number" with "0-0013-5844"
-#    And I wait for AJAX to finish
-#    And I fill in "privilege_card_number2" with "0-0013-5845"
-#    And I wait for AJAX to finish
-#    Then I should see "أرقام نادي الامتيازات التي أدخلتها غير متطابقة."
+  @arabic @loyalty
+  Scenario: As a Guest
+  I should be warned about privelege card number mismatch
+    When I go to "/ar/cart"
+    And I wait for the page to load
+    When I click the label for "#details-privilege-card-wrapper > div"
+    Then I should see "إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني"
+    When I fill in "privilege_card_number" with "0-0013-5844"
+    And I wait for AJAX to finish
+    And I fill in "privilege_card_number2" with "0-0013-5845"
+    And I wait for AJAX to finish
+    Then I should see "أرقام نادي الامتيازات التي أدخلتها غير متطابقة."

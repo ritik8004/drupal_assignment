@@ -2,27 +2,26 @@ name: 'Alshaya product'
 type: module
 core: 8.x
 dependencies:
-  - acq_sku
-  - alshaya_acm_product_position
-  - alshaya_acm_promotion
-  - alshaya_image_styles
-  - alshaya_search
-  - better_exposed_filters
-  - block
-  - facets
-  - file
-  - image
-  - lightning_core
-  - node
-  - responsive_image
-  - search_api
-  - search_api_db
-  - views_block_filter_block
-  - system
-  - taxonomy
-  - user
-  - views
-  - views_infinite_scroll
-  - alshaya_acm_promotion
-version: 8.x-1.0
+  - acq_commerce:acq_sku
+  - alshaya_acm_product_position:alshaya_acm_product_position
+  - alshaya_acm_promotion:alshaya_acm_promotion
+  - alshaya_image_styles:alshaya_image_styles
+  - alshaya_search:alshaya_search
+  - better_exposed_filters:better_exposed_filters
+  - drupal:block
+  - facets:facets
+  - drupal:file
+  - drupal:image
+  - lightning:lightning_core
+  - drupal:node
+  - responsive_image:responsive_image
+  - search_api:search_api
+  - search_api:search_api_db
+  - views_block_filter_block:views_block_filter_block
+  - drupal:system
+  - drupal:taxonomy
+  - drupal:user
+  - drupal:views
+  - views_infinite_scroll:views_infinite_scroll
+  - alshaya_acm_promotion:alshaya_acm_promotion
 package: Alshaya

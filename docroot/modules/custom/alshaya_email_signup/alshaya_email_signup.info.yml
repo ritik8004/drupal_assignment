@@ -3,7 +3,6 @@ type: module
 description: 'Alshaya email sign up.'
 package: 'Alshaya'
 core: 8.x
-version: 8.x-1.0
 dependencies:
-  - alshaya_i18n
-  - block
+  - alshaya_i18n:alshaya_i18n
+  - drupal:block

@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new role for sync user.
+ */
+function acq_commerce_update_8001() {
+  $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', 'acq_commerce') . '/config/install/user.role.acq_commerce_sync.yml'));
+
+  // Add the new role.
+  \Drupal::configFactory()
+    ->getEditable('user.role.acq_commerce_sync')
+    ->setData($config_yaml)
+    ->save();
+}

@@ -84,9 +84,9 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
         if ($sku_entity->bundle() == 'configurable') {
           $data = [];
-
-          // Update final_price based on final_price of children.
-          $min_final_price = NULL;
+          $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+          $prices = $skuManager->getMinPrices($sku_entity);
+          $min_final_price = $prices['final_price'];
           $child_sku_found = FALSE;
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
             try {
@@ -114,11 +114,6 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
                 $field_value = $field_data->getString();
                 $data[$key][$field_value] = $field_value;
               }
-            }
-
-            $final_price = (float) $child_sku_entity->get('final_price')->getString();
-            if ($final_price > 0) {
-              $min_final_price = isset($min_final_price) ? min($min_final_price, $final_price) : $final_price;
             }
           }
 
@@ -356,53 +351,36 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       elseif ($view_mode == 'full') {
         // Get cross sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
-          $cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_CROSSSELL);
+          if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_CROSSSELL))) {
+            $build['cross_sell'] = [
+              '#theme' => 'products_horizontal_slider',
+              '#data' => $skuManager->filterRelatedSkus(array_unique($cross_sell_skus)),
+              '#section_title' => t('Customers also bought'),
+            ];
 
-          if (!empty($cross_sell_skus)) {
-            $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
-            if (!empty($crosssell_items)) {
-              $build['cross_sell'] = [
-                '#theme' => 'products_horizontal_slider',
-                '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
-                '#section_title' => t('Customers also bought'),
-              ];
-
-              // Weight will have no effect later once template is modified.
-              $build['cross_sell']['#weight'] = 11;
-            }
+            // Weight will have no effect later once template is modified.
+            $build['cross_sell']['#weight'] = 11;
           }
         }
 
-        $up_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_UPSELL);
-
-        if (!empty($up_sell_skus)) {
-          $upsell_items = $skuManager->filterRelatedSkus(array_unique($up_sell_skus));
-
-          if (!empty($upsell_items)) {
-            $build['up_sell'] = [
-              '#theme' => 'products_horizontal_slider',
-              '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $upsell_items)),
-              '#section_title' => t('You may also like'),
-            ];
-            // Weight will have no effect later once template is modified.
-            $build['up_sell']['#weight'] = 10;
-          }
+        if (!empty($up_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_UPSELL))) {
+          $build['up_sell'] = [
+            '#theme' => 'products_horizontal_slider',
+            '#data' => $skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
+            '#section_title' => t('You may also like'),
+          ];
+          // Weight will have no effect later once template is modified.
+          $build['up_sell']['#weight'] = 10;
         }
 
-        $related_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_RELATED);
-
-        if (!empty($related_skus)) {
-          $related_items = $skuManager->filterRelatedSkus(array_unique($related_skus));
-
-          if (!empty($related_items)) {
-            $build['related'] = [
-              '#theme' => 'products_horizontal_slider',
-              '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $related_items)),
-              '#section_title' => t('Related'),
-            ];
-            // Weight will have no effect later once template is modified.
-            $build['related']['#weight'] = 11;
-          }
+        if (!empty($related_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_RELATED))) {
+          $build['related'] = [
+            '#theme' => 'products_horizontal_slider',
+            '#data' => $skuManager->filterRelatedSkus(array_unique($related_skus)),
+            '#section_title' => t('Related'),
+          ];
+          // Weight will have no effect later once template is modified.
+          $build['related']['#weight'] = 11;
         }
 
         alshaya_acm_product_get_gallery($build, $sku_entity);
@@ -1168,17 +1146,22 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     // Update cross-sell region with products.
     if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
-      $cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL);
-
-      $crosssell_items = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
       $cross_sell_markup = [
         '#theme' => 'products_horizontal_slider',
-        '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $crosssell_items)),
         '#section_title' => t('Customers also bought'),
       ];
 
-      $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup));
-      $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup));
+      if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL))) {
+        $cross_sell_markup['#data'] = $skuManager->filterRelatedSkus(array_unique($cross_sell_skus));
+      }
+
+      // Make sure the wrapper div is present even in case of no cross-sell
+      // items.
+      $cross_sell_markup_desktop = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell above-mobile-block">', '#suffix' => '</div>']);
+      $cross_sell_markup_mobile = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell mobile-only-block">', '#suffix' => '</div>']);
+
+      $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup_mobile));
+      $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup_desktop));
     }
 
     // React for click & collect if stock is available.
@@ -1282,7 +1265,7 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
  */
 function _alshaya_acm_product_get_size_guide_link() {
   // Check if we have the configuration set.
-  if ($size_guide_link = \Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
+  if (\Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
     $options = [
       'attributes' => [
         'class' => ['size-guide-link', 'use-ajax'],
@@ -1311,4 +1294,13 @@ function alshaya_acm_product_is_buyable(SKU $sku_entity) {
   $all_products_buyable = \Drupal::config('alshaya_acm_product.settings')->get('all_products_buyable');
   // For now we have only one condition, we may have more in future.
   return $all_products_buyable || (bool) $sku_entity->get('attr_is_buyable')->getString();
+}
+
+/**
+ * Implements template_preprocess_products_horizontal_slider().
+ */
+function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) {
+  if (!empty($variables['data'])) {
+    $variables['data'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $variables['data']));
+  }
 }

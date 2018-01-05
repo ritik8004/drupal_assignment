@@ -1,4 +1,4 @@
-@javascript @breadcrumb @manual @mmcpa-2382
+@javascript @breadcrumb @manual @mmcpa-2382 @prod
 Feature: Test breadcrumbs displayed across the site
 
   Scenario Outline: As a guest

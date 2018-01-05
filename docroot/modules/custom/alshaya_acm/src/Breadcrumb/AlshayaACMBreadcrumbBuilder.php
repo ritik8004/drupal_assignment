@@ -6,11 +6,14 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AlshayaACMBreadcrumbBuilder.
  */
 class AlshayaACMBreadcrumbBuilder implements BreadcrumbBuilderInterface {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -25,8 +28,8 @@ class AlshayaACMBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home'), '<front>'));
-    $breadcrumb->addLink(Link::createFromRoute(t('Basket'), 'acq_cart.cart'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Home'), '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Basket'), 'acq_cart.cart'));
     $breadcrumb->addCacheableDependency(['url.path']);
 
     return $breadcrumb;
