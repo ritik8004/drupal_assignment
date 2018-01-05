@@ -60,13 +60,17 @@ class StoresMigrateUploadForm extends FormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $validators = ['file_validate_extensions' => ['csv']];
 
+    if (!$form_state->getValue('upload')) {
+      $form_state->setErrorByName('upload', $this->t('Please upload a file.'));
+    }
+
     $file = file_save_upload('upload', $validators, FALSE, 0);
     if (isset($file)) {
       if ($file) {
         $form_state->setValue('upload', $file);
       }
       else {
-        $form_state->setErrorByName('upload', $this->t('The logo could not be uploaded.'));
+        $form_state->setErrorByName('upload', $this->t('The file could not be uploaded.'));
       }
     }
   }
@@ -86,6 +90,10 @@ class StoresMigrateUploadForm extends FormBase {
     // Configure the migrate source path with the uploaded filepath.
     $migrate_plus_migration_store_config->set('source.path', $filepath);
     $migrate_plus_migration_store_config->save();
+
+    // Initialize the migration.
+    $manager = \Drupal::service('plugin.manager.config_entity_migration');
+    $manager->createInstances([]);
 
     /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
     $migration = \Drupal::service('plugin.manager.migration')->createInstance('store_' . $language, ['source' => ['path' => $filepath]]);

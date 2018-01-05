@@ -64,7 +64,9 @@ Feature: Test various scenarios for promotions
     When I select "2" quantity
     And I press "Add to basket"
     When I wait for AJAX to finish
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "عربية"
     And I wait for the page to load
     When I click the label for "#ui-id-2"
     And I wait 2 seconds

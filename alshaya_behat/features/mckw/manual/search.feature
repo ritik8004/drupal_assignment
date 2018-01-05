@@ -20,11 +20,9 @@ Feature: Search feature
     And I wait 2 seconds
     And I follow "عربية"
     When I wait for the page to load
-    When I fill in "edit-keywords" with "والأزرق"
-#    When I fill in "edit-keywords" with "الرضع"
+    When I fill in "edit-keywords" with "جوارب"
     And I press "Search"
-    Then I should see Search results page in Arabic for "والأزرق"
-#    Then I should see Search results page in Arabic for "الرضع"
+    Then I should see Search results page in Arabic for "جوارب"
 
   Scenario: As an authenticated user
   I should be able to search products
@@ -43,11 +41,9 @@ Feature: Search feature
     And I follow "عربية"
     When I wait for the page to load
     When I fill in "edit-keywords" with "Arb. انت"
-#    When I fill in "edit-keywords" with "الرضع"
     And I press "Search"
     And I wait for the page to load
     Then I should see Search results page for "Arb. انت"
-#    Then I should see Search results page in Arabic for "الرضع"
 
   Scenario: As an user
     I should be prompted with a correct message
@@ -96,10 +92,10 @@ Feature: Search feature
     And I wait for the page to load
     When I follow "checkout as guest"
     And I wait for the page to load
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Shweta"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Sharma"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     When I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
@@ -113,7 +109,7 @@ Feature: Search feature
     When I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Shweta Sharma "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
 
   @arabic
   Scenario: As a Guest
@@ -125,7 +121,7 @@ Feature: Search feature
     And I wait 2 seconds
     And I follow "عربية"
     When I wait for the page to load
-    When I fill in "edit-keywords" with "ملابس "
+    When I fill in "edit-keywords" with "تي-شيرت برسمة Paradise"
     And I press "Search"
     And I wait for AJAX to finish
     When I select a product in stock
@@ -134,16 +130,17 @@ Feature: Search feature
     And I wait for AJAX to finish
     When I press "أضف إلى سلة التسوق"
     And I wait for AJAX to finish
-    When I go to "/ar/cart"
+    When I go to "/cart"
     And I wait for the page to load
+    When I follow "عربية"
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     When I follow "إتمام عملية الشراء كزبون زائر"
     And I wait for the page to load
-    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "شويتا"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "شارما"
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "97004455"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
     When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
@@ -157,7 +154,7 @@ Feature: Search feature
     When I accept terms and conditions
     And I press "سجل الطلبية"
     When I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على"
 
   Scenario: As a Guest user
