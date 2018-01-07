@@ -84,7 +84,7 @@ class CustomCommand extends BltTasks {
    * @command local:post-install
    * @description Allow all modules to run code once post drupal install.
    */
-  public function localPostInstall($brand) {
+  public function localPostInstall($uri, $brand) {
     $this->say('Allow all modules to run code once post drupal install.');
     $dursh_alias = $this->getConfigValue('drush.alias');
     //print_r($arguments); exit;
@@ -94,6 +94,7 @@ class CustomCommand extends BltTasks {
       ->drush('alshaya-post-drupal-install')
       ->alias($dursh_alias)
       ->option('brand_module', $brand)
+      ->uri($uri)
       ->run();
 
   }
@@ -114,7 +115,7 @@ class CustomCommand extends BltTasks {
       ->drush('alshaya-acm-offline-categories-sync')
       ->drush('sync-commerce-product-options')
       ->drush('alshaya-acm-offline-products-sync')
-      ->option('uri', $uri)
+      ->uri($uri)
       ->option('limit', $limit)
       ->run();
   }
@@ -134,7 +135,7 @@ class CustomCommand extends BltTasks {
       ->assume(TRUE)
       ->alias($dursh_alias)
       ->drush('alshaya-api-sync-stores')
-      ->option('uri', $uri)
+      ->uri($uri)
       ->run();
 
   }
@@ -154,7 +155,7 @@ class CustomCommand extends BltTasks {
       ->assume(TRUE)
       ->alias($dursh_alias)
       ->drush('sync-commerce-promotions')
-      ->option('uri', $uri)
+      ->uri($uri)
       ->run();
   }
 
@@ -184,6 +185,7 @@ class CustomCommand extends BltTasks {
     ]);
     $this->invokeCommand('local:reset-settings-file');
     $this->invokeCommand('local:post-install', [
+      'uri' => $uri,
       'brand' => $brand,
     ]);
 
@@ -225,6 +227,7 @@ class CustomCommand extends BltTasks {
     $this->invokeCommand('setup:toggle-modules');
     $this->invokeCommand('local:reset-settings-file');
     $this->invokeCommand('local:post-install', [
+      'uri' => $uri,
       'brand' => $brand,
     ]);
 
@@ -262,7 +265,7 @@ class CustomCommand extends BltTasks {
       ->arg($profile)
       ->rawArg("install_configure_form.update_status_module='array(FALSE,FALSE)'")
       ->rawArg("install_configure_form.enable_update_status_module=NULL")
-      ->rawArg("-l $uri")
+      ->uri($uri)
       ->option('site-name', $this->getConfigValue('project.human_name'))
       ->option('site-mail', $this->getConfigValue('drupal.account.mail'))
       ->option('account-name', $username, '=')

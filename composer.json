@@ -6,7 +6,7 @@
     "prefer-stable": true,
     "require": {
         "acquia/blt": "^8.9.7",
-        "acquia/lightning": "3.0.1",
+        "acquia/lightning": "^2.2.0",
         "drupal/address": "^1.0-rc4",
         "drupal/acsf": "^1.33.0",
         "drupal/key_value_field": "^1.0-beta1",
@@ -195,6 +195,9 @@
             },
             "drupal/paragraphs": {
                 "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
+            },
+            "drupal/media_entity": {
+                "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
             }
         },
         "installer-paths": {

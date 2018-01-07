@@ -2,9 +2,9 @@ langcode: en
 status: true
 dependencies:
   config:
-    - media_entity.bundle.video_embed
+    - media.type.video
 id: media.video_embed
 target_entity_type_id: media
-target_bundle: video_embed
+target_bundle: video
 default_langcode: site_default
 language_alterable: false

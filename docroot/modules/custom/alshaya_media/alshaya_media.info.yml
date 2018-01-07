@@ -5,7 +5,9 @@ description: 'custom media bundles for alshaya and related settings.'
 dependencies:
   - drupal:field
   - drupal:language
+  - drupal:media (>= 8.4)
   - media_entity:media_entity
+  - lightning_media_video:lightning_media_video
   - video_embed_field:video_embed_field
   - video_embed_field:video_embed_media
   - workbench_moderation:workbench_moderation
