@@ -27,3 +27,6 @@ sites:
   bbme:
     module: alshaya_bb
     type: alshaya_non_transac
+  bbwuae:
+    module: alshaya_bbw
+    type: alshaya_non_transac
