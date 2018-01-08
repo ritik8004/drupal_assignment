@@ -72,8 +72,8 @@
     if (!$.isEmptyObject(coords)) {
       // Show progress bar on store-finder page.
       if (!$('[data-drupal-selector="edit-list-view"]').hasClass('hidden')) {
-        var pregress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
-        $('body').after(pregress_element);
+        var progress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
+        $('body').after(progress_element);
       }
       $(field).parents('form').find('input[type="submit"]').click();
     }
