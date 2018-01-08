@@ -11,10 +11,6 @@ use Drupal\Core\Entity\EntityInterface;
  * Implements hook_ENTITY_TYPE_presave().
  */
 function alshaya_paragraphs_paragraph_presave(EntityInterface $entity) {
-  if ($entity->getEntityTypeId() !== 'paragraph') {
-    return;
-  }
-
   _alshaya_paragraphs_correct_file_status($entity);
 }
 
