@@ -17,7 +17,6 @@ Feature: Test the My account section for authenticated user
     Then I should see the link "تفاصيل الاتصال" in ".my-account-nav" section
     And I should see the link "سجل العناوين" in ".my-account-nav" section
     And I should see the link "تغيير كلمة السر" in ".my-account-nav" section
-    And I should see the link "عرض كل الطلبيات"
 
   Scenario:  As an authenticated user
   I should be able to see my most recent three orders
@@ -63,7 +62,7 @@ Feature: Test the My account section for authenticated user
   if I don't have a privilege account
     When I follow "تعديل معلومات الحساب"
     And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with "55004455"
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with ""
     And I press "حفظ"
@@ -83,7 +82,7 @@ Feature: Test the My account section for authenticated user
   along with Email address
     When I follow "تعديل معلومات الحساب"
     And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with "55004455"
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     When I fill in "edit-privilege-card-number2" with "000135844"
@@ -141,7 +140,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I fill in "edit-field-first-name-0-value" with "علية"
     When I fill in "edit-field-last-name-0-value" with "خان"
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with "55004466"
     And I press "حفظ"
     And I wait for the page to load
     Then I should see "تم حفظ ببيانات الاتصال"

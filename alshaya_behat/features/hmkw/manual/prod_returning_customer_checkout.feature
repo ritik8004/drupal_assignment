@@ -2,7 +2,7 @@
 Feature: Test various checkout scenarios as returning customer
 
   Background:
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to cart"
     And I wait for AJAX to finish
@@ -48,7 +48,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "place order"
     And I wait for the page to load
-    Then I select "Knet Test Card [KNET1]" from "bank"
+    Then I select "ABK" from "bank"
     And I fill in "cardN" with "0000000001"
     When I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
@@ -71,7 +71,7 @@ Feature: Test various checkout scenarios as returning customer
     When I accept terms and conditions
     Then I press "place order"
     And I wait for the page to load
-    When I select "Knet Test Card [KNET1]" from "bank"
+    When I select "ABK" from "bank"
     And I fill in "cardN" with "0000000001"
     When I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
