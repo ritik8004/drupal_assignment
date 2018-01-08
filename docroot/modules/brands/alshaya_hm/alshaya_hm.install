@@ -9,6 +9,31 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update logo file.
+ */
+function alshaya_hm_update_8011() {
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site favicon and logo.
+  \Drupal::configFactory()->getEditable('alshaya_hnm.settings')
+    ->setData([
+      'favicon' => [
+        'path' => $site_favicon . '.ico',
+      ],
+      'logo' => [
+        'path' => $active_theme->getPath() . '/site-logo.svg',
+      ],
+      'name' => 'H&M Kuwait',
+    ])
+    ->save();
+}
+
+/**
  * Hook update to update brand specific favicon and logo.
  */
 function alshaya_hm_update_8010() {
@@ -278,24 +303,6 @@ function alshaya_hm_install() {
   $checkout_customer_service->set('checkout_customer_service.value', $customer_service_text);
   $checkout_customer_service->save();
 
-  // Get current active theme.
-  $active_theme = \Drupal::theme()->getActiveTheme();
-  // Default site favicon path with default name.
-  $site_favicon = $active_theme->getPath() . '/favicon';
-
-  // Save default site favicon and logo.
-  \Drupal::configFactory()->getEditable('alshaya_hnm.settings')
-    ->setData([
-      'favicon' => [
-        'path' => $site_favicon . '.ico',
-      ],
-      'logo' => [
-        'path' => $active_theme->getPath() . '/logo.svg',
-      ],
-      'name' => 'H&M Kuwait',
-    ])
-    ->save();
-
   // Enable "Best seller" and "New in" sort options.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
   $sort_options = $config->get('sort_options');
@@ -312,19 +319,8 @@ function alshaya_hm_install() {
   $config->set('sort_options', $sort_options);
   $config->save();
 
-  // Set email logo.
-  // Get current theme name.
-  $current_theme = $active_theme->getName();
-  // Default site logo path with default name.
-  $site_logo = $active_theme->getPath() . '/site-logo';
-  // Save default logo for email.
-  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
-    ->set('email_logo_path', $site_logo . '-en.png')
-    ->save();
-  // Save arabic logo for email.
-  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
-    ->set('email_logo_path', $site_logo . '-ar.png')
-    ->save();
+  // Set site logo and favicon.
+  _alshaya_config_set_default_logo_favicon();
 
   // Disable loyalty.
   \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')
