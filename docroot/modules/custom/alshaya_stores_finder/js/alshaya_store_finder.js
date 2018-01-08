@@ -89,7 +89,6 @@
         });
       });
 
-
       $('.current-location').once('location-init').on('click', function () {
         // Start overlay here.
         $('body').addClass('modal-overlay--spinner');
@@ -200,6 +199,12 @@
         window.scrollTo(0, 0);
       };
 
+      // Avoid form submit on click of enter for stores finder's autocomplete
+      // textfield.
+      $(document).on("keypress", $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form'), function(event) {
+        return event.keyCode != 13;
+      });
+
       // Trigger click on autocomplete selection.
       $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"]').each(function () {
         var storeFinder = $(this);
@@ -209,8 +214,11 @@
         storeFinder.find('form').addClass('store-finder-exposed-form');
         // Trigger form submit on selecting location in autocomplete.
         storeFinder.find('.ui-autocomplete-input').on('autocompleteselect', function (event, ui) {
+          var progress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
+          $('body').after(progress_element);
           setTimeout(function () {
             storeFinder.find('input[id^="edit-submit-stores-finder"]').trigger('click');
+            $(progress_element).remove();
           }, 500);
         });
       });

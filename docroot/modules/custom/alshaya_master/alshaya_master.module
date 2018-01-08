@@ -57,7 +57,7 @@ function alshaya_master_block_build_alter(array &$build, BlockPluginInterface $b
  */
 function alshaya_master_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if (!in_array($form_id, ['customer_cart_form'])) {
-    $form['#error_no_message'] = TRUE;
+    $form['#disable_inline_form_errors_summary'] = TRUE;
   }
 }
 

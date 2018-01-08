@@ -2,11 +2,13 @@
 
 namespace Drupal\alshaya_seo_transac\Form;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
-use Drupal\file\Entity\File;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 use Drupal\redirect\Entity\Redirect;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class AlshayaBulkUploadRedirect.
@@ -26,6 +28,44 @@ class AlshayaBulkUploadRedirect extends FormBase {
    * @var array
    */
   protected $skus = [];
+
+  /**
+   * File Storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
+   * Language Manager service object.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * AlshayaBulkUploadRedirect constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager service object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager service object.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              LanguageManagerInterface $language_manager) {
+    $this->fileStorage = $entity_type_manager->getStorage('file');
+    $this->languageManager = $language_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.manager'),
+      $container->get('language_manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -49,7 +89,7 @@ class AlshayaBulkUploadRedirect extends FormBase {
     ];
 
     $languages = [];
-    $languages_list = \Drupal::languageManager()->getLanguages();
+    $languages_list = $this->languageManager->getLanguages();
     foreach ($languages_list as $language) {
       $languages[$language->getId()] = $language->getName();
     }
@@ -79,7 +119,7 @@ class AlshayaBulkUploadRedirect extends FormBase {
 
     $fid = $form_state->getValue('file')[0];
     // Load file.
-    if ($file = File::load($fid)) {
+    if ($file = $this->fileStorage->load($fid)) {
       $csv_uri = $file->getFileUri();
       if (!empty($csv_uri)) {
         // Open file handler.

@@ -2,14 +2,18 @@
 
 namespace Drupal\alshaya_user\Plugin\Block;
 
+use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides 'my account links' block.
@@ -43,6 +47,34 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
   protected $config;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Alshaya User Info service object.
+   *
+   * @var \Drupal\alshaya_user\AlshayaUserInfo
+   */
+  protected $userInfo;
+
+  /**
+   * The current route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
+   * Current Request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
    * MyAccountLinks constructor.
    *
    * @param array $configuration
@@ -57,12 +89,33 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
    *   The entity repository service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   * @param \Drupal\alshaya_user\AlshayaUserInfo $user_info
+   *   Alshaya User Info service object.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The current route match.
+   * @param \Symfony\Component\HttpFoundation\Request $current_request
+   *   Current Request object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_account, EntityRepositoryInterface $entity_repository, ConfigFactoryInterface $config_factory) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              AccountProxyInterface $current_account,
+                              EntityRepositoryInterface $entity_repository,
+                              ConfigFactoryInterface $config_factory,
+                              ModuleHandlerInterface $module_handler,
+                              AlshayaUserInfo $user_info,
+                              RouteMatchInterface $route_match,
+                              Request $current_request) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_account;
     $this->entityRepository = $entity_repository;
     $this->config = $config_factory->get('alshaya_user.settings');
+    $this->moduleHandler = $module_handler;
+    $this->userInfo = $user_info;
+    $this->routeMatch = $route_match;
+    $this->currentRequest = $current_request;
   }
 
   /**
@@ -75,7 +128,11 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       $plugin_definition,
       $container->get('current_user'),
       $container->get('entity.repository'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('module_handler'),
+      $container->get('alshaya_user.info'),
+      $container->get('current_route_match'),
+      $container->get('request_stack')->getCurrentRequest()
     );
   }
 
@@ -166,13 +223,13 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     $uid = $this->currentUser->id();
 
     // Get user id of user who's profile is currently visit.
-    $account = \Drupal::request()->attributes->get('user');
+    $account = $this->currentRequest->attributes->get('user');
     if (empty($account)) {
       $account = $this->currentUser;
     }
 
     // Check alshaya_acm_customer module status (enabled/disabled).
-    $alshaya_acm_customer_status = \Drupal::moduleHandler()->moduleExists('alshaya_acm_customer');
+    $alshaya_acm_customer_status = $this->moduleHandler->moduleExists('alshaya_acm_customer');
     // Set the variable NULL.
     $is_customer = NULL;
     if ($alshaya_acm_customer_status) {
@@ -180,7 +237,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     }
 
     // Get the current route to set active class.
-    $currentRoute = \Drupal::routeMatch()->getRouteName();
+    $currentRoute = $this->routeMatch->getRouteName();
 
     // Prepare active class options.
     $activeLinkOptions = [
@@ -257,15 +314,13 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     $build = [];
     $build['my_account_title'] = [
       '#markup' => '<h3 class="my-account-title">' . $this->t('Welcome, @name', [
-        '@name' => \Drupal::service('alshaya_user.info')
-          ->getName(),
+        '@name' => $this->userInfo->getName(),
       ]) . '</h3>',
     ];
 
     $build['my_account_mobile_title'] = [
       '#markup' => '<h3 class="my-account-mobile-title1">' . $this->t('my account') . '</h3><h4 class="my-account-mobile-title2">' . $this->t('logged in as @name', [
-        '@name' => \Drupal::service('alshaya_user.info')
-          ->getName(),
+        '@name' => $this->userInfo->getName(),
       ]) . '</h4>',
     ];
 

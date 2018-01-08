@@ -15,6 +15,7 @@ dependencies:
   - drupal:language
   - drupal:menu_ui
   - metatag:metatag
+  - drupal:file
   - drupal:node
   - drupal:path
   - drupal:system

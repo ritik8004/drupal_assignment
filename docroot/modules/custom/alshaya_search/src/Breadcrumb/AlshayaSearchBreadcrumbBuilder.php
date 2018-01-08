@@ -7,6 +7,7 @@ use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AlshayaSearchBreadcrumbBuilder.
@@ -14,6 +15,23 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * Request stock service object.
+   *
+   * @var null|\Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * AlshayaSearchBreadcrumbBuilder constructor.
+   *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stock service object.
+   */
+  public function __construct(RequestStack $request_stack) {
+    $this->currentRequest = $request_stack->getCurrentRequest();
+  }
 
   /**
    * {@inheritdoc}
@@ -35,7 +53,7 @@ class AlshayaSearchBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb->mergeCacheMaxAge(0);
     $breadcrumb->addCacheableDependency(['url.path']);
 
-    $queryString = explode('&', \Drupal::request()->getQueryString());
+    $queryString = explode('&', $this->currentRequest->getQueryString());
 
     // If on search page but no filter.
     if (empty($queryString[0])) {

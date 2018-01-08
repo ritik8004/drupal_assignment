@@ -2,16 +2,75 @@
 
 namespace Drupal\alshaya_master\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\file\Entity\File;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
+use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\image\Entity\ImageStyle;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class Alshaya404MaintenanceSettings.
  */
 class Alshaya404MaintenanceSettings extends ConfigFormBase {
+
+  /**
+   * File Usage service object.
+   *
+   * @var \Drupal\file\FileUsage\FileUsageInterface
+   */
+  protected $fileUsage;
+
+  /**
+   * Language Manager service object.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * File storage manager object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
+   * Alshaya404MaintenanceSettings constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\file\FileUsage\FileUsageInterface $file_usage
+   *   File Usage service object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager service object.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager service object.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory,
+                              FileUsageInterface $file_usage,
+                              LanguageManagerInterface $language_manager,
+                              EntityTypeManagerInterface $entity_type_manager) {
+    parent::__construct($config_factory);
+    $this->fileUsage = $file_usage;
+    $this->languageManager = $language_manager;
+    $this->fileStorage = $entity_type_manager->getStorage('file');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('file.usage'),
+      $container->get('language_manager'),
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -33,7 +92,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
     $config = $this->config('alshaya_master.maintenanace_404_settings');
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $form['404_container'] = [
       '#type' => 'details',
@@ -97,13 +156,13 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
     $values = $form_state->getValues();
     $fid_404 = '';
     if (!empty($values['404_image'])) {
-      $file = File::load($values['404_image'][0]);
+      $file = $this->fileStorage->load($values['404_image'][0]);
       if ($file) {
         $file->setPermanent();
         $file->save();
         $fid_404 = $file->id();
         // Add file usage or file will be gone in next garbage collection.
-        \Drupal::service('file.usage')->add($file, 'alshaya_master', '404_image', 1);
+        $this->fileUsage->add($file, 'alshaya_master', '404_image', 1);
         // Create image style derivative.
         // Create image style derivative.
         $this->createImageStyle('1284x424', $file->getFileUri());
@@ -112,20 +171,20 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
 
     $fid_maintenance = '';
     if (!empty($values['maintenance_mode_image'])) {
-      $file = File::load($values['maintenance_mode_image'][0]);
+      $file = $this->fileStorage->load($values['maintenance_mode_image'][0]);
       if ($file) {
         $file->setPermanent();
         $file->save();
         $fid_maintenance = $file->id();
         // Add file usage or file will be gone in next garbage collection.
-        \Drupal::service('file.usage')->add($file, 'alshaya_master', 'system_maintenance', 1);
+        $this->fileUsage->add($file, 'alshaya_master', 'system_maintenance', 1);
         // Create image style derivative.
         $this->createImageStyle('1284x424', $file->getFileUri());
       }
     }
 
     // Get current langcode.
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $config->set('404_message', $values['404_message']);
     $config->set('404_image.' . $langcode, $fid_404);
     $config->set('maintenance_mode_rich_message', $values['maintenance_mode_rich_message']);

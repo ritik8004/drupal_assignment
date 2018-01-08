@@ -138,7 +138,7 @@ class KnetController extends ControllerBase {
     $response['email'] = $_POST['udf4'];
     $state_key = $_POST['udf5'];
 
-    $state_data = \Drupal::state()->get($state_key);
+    $state_data = $this->state()->get($state_key);
 
     // Check if we have data in state available and it matches data in POST.
     if (empty($state_data)
@@ -169,7 +169,7 @@ class KnetController extends ControllerBase {
     // Store amount in state variable for logs.
     $response['amount'] = $totals['grand'];
 
-    \Drupal::state()->set($state_key, $response);
+    $this->state()->set($state_key, $response);
 
     // On local/dev we don't use https for response url.
     // But for sure we want to use httpd on success url.
@@ -211,7 +211,7 @@ class KnetController extends ControllerBase {
    * Page callback for success state.
    */
   public function success($state_key) {
-    $data = \Drupal::state()->get($state_key);
+    $data = $this->state()->get($state_key);
 
     if (empty($data)) {
       $this->logger->warning('KNET success page requested with invalid state_key: @state_key', [
@@ -283,14 +283,14 @@ class KnetController extends ControllerBase {
 
       // Preserve the payment id in a state variable to render it on Order
       // Confirmation page.
-      \Drupal::state()->set('knet:' . md5($cart->getExtension('real_reserved_order_id')), [
+      $this->state()->set('knet:' . md5($cart->getExtension('real_reserved_order_id')), [
         'payment_id' => $data['payment_id'],
         'transaction_id' => $data['transaction_id'],
         'result_code' => $data['result'],
       ]);
 
       // Delete the data from DB (state).
-      \Drupal::state()->delete($state_key);
+      $this->state()->delete($state_key);
     }
     catch (\Exception $e) {
       drupal_set_message($e->getMessage(), 'error');
@@ -349,7 +349,7 @@ class KnetController extends ControllerBase {
     ];
 
     $state_key = md5(json_encode($state_data));
-    $data = \Drupal::state()->get($state_key);
+    $data = $this->state()->get($state_key);
 
     // @TODO: Confirm message.
     drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
@@ -365,7 +365,7 @@ class KnetController extends ControllerBase {
    * Page callback for failed state.
    */
   public function failed($state_key) {
-    $data = \Drupal::state()->get($state_key);
+    $data = $this->state()->get($state_key);
 
     if (empty($data)) {
       $this->logger->warning('KNET failed page requested with invalid state_key: @state_key', [
@@ -387,7 +387,7 @@ class KnetController extends ControllerBase {
     ]);
 
     // Delete the data from DB.
-    \Drupal::state()->delete($state_key);
+    $this->state()->delete($state_key);
 
     drupal_set_message($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
       '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : $data['quote_id'],

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bef07a6f85bc7b566db3f765db487699",
+    "content-hash": "4d11f73044320e9bb621dddeb4fb64e9",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -3351,7 +3351,7 @@
             "extra": {
                 "patches_applied": {
                     "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
-                    "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch",
+                    "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
                     "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2500313--views-get-paging-support-83x-2.patch",
                     "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                     "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",

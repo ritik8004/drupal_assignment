@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_customer\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
@@ -11,6 +12,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides recent order block for the user.
@@ -51,6 +53,20 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
   protected $dateFormatter;
 
   /**
+   * The current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * The logger instance.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * UserRecentOrders constructor.
    *
    * @param array $configuration
@@ -67,13 +83,27 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    *   The module handler.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   Date time formatter service.
+   * @param \Symfony\Component\HttpFoundation\Request $current_request
+   *   The current request.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger instance.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_account, RouteMatchInterface $route_match, ModuleHandlerInterface $module_handler, DateFormatterInterface $date_formatter) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              AccountProxyInterface $current_account,
+                              RouteMatchInterface $route_match,
+                              ModuleHandlerInterface $module_handler,
+                              DateFormatterInterface $date_formatter,
+                              Request $current_request,
+                              LoggerChannelInterface $logger) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_account;
     $this->routeMatch = $route_match;
     $this->moduleHandler = $module_handler;
     $this->dateFormatter = $date_formatter;
+    $this->currentRequest = $current_request;
+    $this->logger = $logger;
   }
 
   /**
@@ -87,7 +117,9 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       $container->get('current_user'),
       $container->get('current_route_match'),
       $container->get('module_handler'),
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('request_stack')->getCurrentRequest(),
+      $container->get('logger.factory')->get('alshaya_acm_customer')
     );
   }
 
@@ -101,7 +133,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
     $build = [];
 
     // Get user id of user who's profile is currently visit.
-    $account = \Drupal::request()->attributes->get('user');
+    $account = $this->currentRequest->attributes->get('user');
     if (empty($account)) {
       $account = $this->currentUser;
     }
@@ -207,7 +239,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
     }
     catch (\Exception $e) {
       // If any error during api/service calling.
-      \Drupal::logger('alshaya_acm_customer')->error($e->getMessage());
+      $this->logger->error($e->getMessage());
 
       if (acq_commerce_is_exception_api_down_exception($e)) {
         $build['message'] = [
