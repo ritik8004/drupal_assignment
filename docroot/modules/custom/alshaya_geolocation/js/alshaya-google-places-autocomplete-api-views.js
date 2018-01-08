@@ -66,19 +66,13 @@
       stateValue = 1;
     }
 
+
     $("input[name='" + elementId + "-lat']").val(lat);
     $("input[name='" + elementId + "-lng']").val(lng);
     $("input[name='geolocation_geocoder_google_places_api_state']").val(stateValue);
 
     if (!$.isEmptyObject(coords)) {
-      var pregress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
-      $('body').after(pregress_element);
-      setTimeout(function () {
-        $(field).parents('form').find('input[type="submit"]').click();
-        if ($('[data-drupal-selector="edit-list-view"]').hasClass('hidden')) {
-          $(pregress_element).remove();
-        }
-      }, 500);
+      $(field).parents('form').find('input[type="submit"]').click();
     }
   };
 

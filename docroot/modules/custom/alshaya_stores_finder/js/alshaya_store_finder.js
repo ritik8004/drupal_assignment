@@ -201,7 +201,7 @@
 
       // Avoid form submit on click of enter for stores finder's autocomplete
       // textfield.
-      $(document).on("keypress", "form", function(event) {
+      $(document).on("keypress", $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form'), function(event) {
         return event.keyCode != 13;
       });
 
@@ -214,11 +214,11 @@
         storeFinder.find('form').addClass('store-finder-exposed-form');
         // Trigger form submit on selecting location in autocomplete.
         storeFinder.find('.ui-autocomplete-input').on('autocompleteselect', function (event, ui) {
-          var pregress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
-          $('body').after(pregress_element);
+          var progress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
+          $('body').after(progress_element);
           setTimeout(function () {
             storeFinder.find('input[id^="edit-submit-stores-finder"]').trigger('click');
-            $(pregress_element).remove();
+            $(progress_element).remove();
           }, 500);
         });
       });
