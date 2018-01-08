@@ -65,8 +65,7 @@
     if (!$.isEmptyObject(coords)) {
       stateValue = 1;
     }
-
-
+    
     $("input[name='" + elementId + "-lat']").val(lat);
     $("input[name='" + elementId + "-lng']").val(lng);
     $("input[name='geolocation_geocoder_google_places_api_state']").val(stateValue);
