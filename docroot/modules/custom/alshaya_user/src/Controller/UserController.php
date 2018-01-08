@@ -4,13 +4,40 @@ namespace Drupal\alshaya_user\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
-use Drupal\user\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Customer controller to add/override pages for customer.
  */
 class UserController extends ControllerBase {
+
+  /**
+   * Current request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('request_stack')->getCurrentRequest()
+    );
+  }
+
+  /**
+   * UserController constructor.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $current_request
+   *   Current request object.
+   */
+  public function __construct(Request $current_request) {
+    $this->currentRequest = $current_request;
+  }
 
   /**
    * Returns the build to registration completed page.
@@ -20,7 +47,7 @@ class UserController extends ControllerBase {
    */
   public function registerComplete() {
     // Get data from query string.
-    $userDataString = \Drupal::request()->query->get('user');
+    $userDataString = $this->currentRequest->query->get('user');
 
     // Redirect to home if no value in query string.
     if (empty($userDataString)) {
@@ -36,7 +63,7 @@ class UserController extends ControllerBase {
     }
 
     // Load the user.
-    $account = User::load($userData['id']);
+    $account = $this->entityTypeManager()->getStorage('user')->load($userData['id']);
 
     // Check if no user found or user is already active.
     if (empty($account) || $account->isActive()) {
@@ -49,7 +76,7 @@ class UserController extends ControllerBase {
     $build = [];
 
     // Get text from config.
-    $text = \Drupal::config('alshaya_user.settings')->get('user_register_complete.value');
+    $text = $this->config('alshaya_user.settings')->get('user_register_complete.value');
 
     // Use email from session and replace in text.
     $build['#markup'] = str_replace('[email]', $account->getEmail(), $text);

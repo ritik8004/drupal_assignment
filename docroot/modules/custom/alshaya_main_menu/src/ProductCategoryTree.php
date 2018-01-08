@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_main_menu;
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -44,17 +45,29 @@ class ProductCategoryTree {
   protected $languageManager;
 
   /**
+   * Cache Backend service for alshaya.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service for alshaya.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              LanguageManagerInterface $language_manager,
+                              CacheBackendInterface $cache) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
+    $this->cache = $cache;
   }
 
   /**
@@ -68,7 +81,7 @@ class ProductCategoryTree {
 
     $cid = self::CACHE_ID . '_' . $langcode;
 
-    if ($term_data = \Drupal::cache(self::CACHE_BIN)->get($cid)) {
+    if ($term_data = $this->cache->get($cid)) {
       return $term_data->data;
     }
 
@@ -79,7 +92,7 @@ class ProductCategoryTree {
       'node_type:department_page',
     ];
 
-    \Drupal::cache(self::CACHE_BIN)->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
+    $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
 
     return $term_data;
   }

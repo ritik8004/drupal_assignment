@@ -4,9 +4,11 @@ namespace Drupal\alshaya_advanced_page\Breadcrumb;
 
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
+use Drupal\Core\Controller\TitleResolverInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AlshayaStaticPageBreadcrumbBuilder.
@@ -14,6 +16,34 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 class AlshayaStaticPageBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * The Title Resolver.
+   *
+   * @var \Drupal\Core\Controller\TitleResolverInterface
+   */
+  protected $titleResolver;
+
+  /**
+   * Request stock service object.
+   *
+   * @var null|\Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * AlshayaStaticPageBreadcrumbBuilder constructor.
+   *
+   * @param \Drupal\Core\Controller\TitleResolverInterface $title_resolver
+   *   The Title Resolver.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stock service object.
+   */
+  public function __construct(TitleResolverInterface $title_resolver,
+                              RequestStack $request_stack) {
+    $this->titleResolver = $title_resolver;
+    $this->currentRequest = $request_stack->getCurrentRequest();
+  }
 
   /**
    * {@inheritdoc}
@@ -31,9 +61,8 @@ class AlshayaStaticPageBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
-    $request = \Drupal::request();
     $node = $route_match->getParameter('node');
-    $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+    $title = $this->titleResolver->getTitle($this->currentRequest, $route_match->getRouteObject());
     $breadcrumb->addLink(Link::createFromRoute($title, 'entity.node.canonical', ['node' => $node->id()]));
     $breadcrumb->addCacheableDependency(['url.path']);
 

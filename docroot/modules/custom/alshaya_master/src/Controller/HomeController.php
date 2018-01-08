@@ -20,11 +20,11 @@ class HomeController extends ControllerBase {
 
     // Get entity details to show from config.
     // @TODO: Create admin inteface to select the entity for home page.
-    $entityDetails = \Drupal::config('alshaya_master.home')->get('entity');
+    $entityDetails = $this->config('alshaya_master.home')->get('entity');
 
     if (!empty($entityDetails)) {
-      $view_builder = \Drupal::entityTypeManager()->getViewBuilder($entityDetails['entity_type']);
-      $storage = \Drupal::entityTypeManager()->getStorage($entityDetails['entity_type']);
+      $view_builder = $this->entityTypeManager()->getViewBuilder($entityDetails['entity_type']);
+      $storage = $this->entityTypeManager()->getStorage($entityDetails['entity_type']);
       $entity = $storage->load($entityDetails['id']);
       $build = $view_builder->view($entity, $entityDetails['view_mode']);
     }

@@ -7,13 +7,14 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\file\Entity\File;
+use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -77,10 +78,49 @@ class SkuManager {
   protected $configurablePriceCache;
 
   /**
+   * Config Factory service object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Current Route object.
+   *
+   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   */
+  protected $currentRoute;
+
+  /**
+   * Node storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $nodeStorage;
+
+  /**
+   * File storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
+   * SKU storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $skuStorage;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
    *   Database service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
+   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route
+   *   Current Route object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager service.
    * @param \Drupal\Core\Language\LanguageManager $languageManager
@@ -99,6 +139,8 @@ class SkuManager {
    *   Cache Backend service for configurable price info.
    */
   public function __construct(Connection $connection,
+                              ConfigFactoryInterface $config_factory,
+                              CurrentRouteMatch $current_route,
                               EntityTypeManagerInterface $entity_type_manager,
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
@@ -108,8 +150,11 @@ class SkuManager {
                               CacheBackendInterface $product_labels_cache,
                               CacheBackendInterface $configurable_price_cache) {
     $this->connection = $connection;
+    $this->configFactory = $config_factory;
+    $this->currentRoute = $current_route;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
+    $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
@@ -308,18 +353,21 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   SKU Entity.
+   * @param string $view_mode
+   *   The view mode of ACQ product, if the value is teaser, VAT text won't be
+   *   rendered.
    *
    * @return array
    *   Price block build array.
    */
-  public function getPriceBlock(SKU $sku_entity) {
+  public function getPriceBlock(SKU $sku_entity, $view_mode = 'full') {
     $build = [];
     $vat_text = '';
     $this->buildPrice($build, $sku_entity);
     // Adding vat text to product page.
-    $current_route = \Drupal::routeMatch();
-    if ($current_route->getRouteName() == 'entity.node.canonical') {
-      $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text');
+    // Do not pass VAT text part of the price block for teaser modes.
+    if ($this->currentRoute->getRouteName() == 'entity.node.canonical' && $view_mode != 'teaser') {
+      $vat_text = $this->configFactory->get('alshaya_acm_product.settings')->get('vat_text');
     }
     $price_build = [
       '#theme' => 'product_price_block',
@@ -478,7 +526,7 @@ class SkuManager {
     if (!empty($promotion_nids)) {
       $promotion_nids = array_unique($promotion_nids);
 
-      $promotion_nodes = Node::loadMultiple($promotion_nids);
+      $promotion_nodes = $this->nodeStorage->loadMultiple($promotion_nids);
 
       /* @var \Drupal\node\Entity\Node $promotion_node */
       foreach ($promotion_nodes as $promotion_node) {
@@ -612,7 +660,7 @@ class SkuManager {
           $fid = $fid->data;
         }
 
-        $image_file = File::load($fid);
+        $image_file = $this->fileStorage->load($fid);
 
         $image = [
           '#theme' => 'image',
@@ -877,7 +925,7 @@ class SkuManager {
    *   Array containing all parent skus.
    */
   public function getParentSkus(array $simple_skus) {
-    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    $query = $this->connection->select('acq_sku_field_data', 'acq_sku');
     $query->addField('acq_sku', 'id');
     $query->addField('acq_sku', 'sku');
     $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
@@ -1001,8 +1049,8 @@ class SkuManager {
    *   Filtered skus.
    */
   public function filterRelatedSkus(array $skus) {
-    $related_items_size = \Drupal::config('alshaya_acm_product.settings')->get('related_items_size');
-    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+    $related_items_size = $this->configFactory->get('alshaya_acm_product.settings')->get('related_items_size');
+    $stock_mode = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
 
     $related = [];
 

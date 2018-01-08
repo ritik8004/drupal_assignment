@@ -24,7 +24,7 @@ class ProductController extends ControllerBase {
    */
   public function modalView(EntityInterface $node, $js) {
     if ($js === 'ajax') {
-      $view_builder = \Drupal::entityTypeManager()->getViewBuilder($node->getEntityTypeId());
+      $view_builder = $this->entityTypeManager()->getViewBuilder($node->getEntityTypeId());
       $build = $view_builder->view($node, 'modal');
       return $build;
     }
@@ -39,7 +39,7 @@ class ProductController extends ControllerBase {
    * Page callback for size guide modal.
    */
   public function sizeGuideModal() {
-    $product_config = \Drupal::config('alshaya_acm_product.settings');
+    $product_config = $this->config('alshaya_acm_product.settings');
     $size_guide_enabled = $product_config->get('size_guide_link');
     $build = [];
 
