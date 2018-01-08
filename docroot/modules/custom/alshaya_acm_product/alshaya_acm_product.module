@@ -578,8 +578,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
-        // Do not render vat text along with price for teaser.
-        $build['price_block'] = $skuManager->getPriceBlock($sku_entity, FALSE);
+        // Do not render VAT text along with price for teaser.
+        $build['price_block'] = $skuManager->getPriceBlock($sku_entity, $view_mode);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
         $build['labels'] = [

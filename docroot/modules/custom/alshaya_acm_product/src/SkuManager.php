@@ -308,19 +308,21 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   SKU Entity.
-   * @param bool $show_vat_text
-   *   A flag to not render VAT text for a particular view mode.
+   * @param string $view_mode
+   *   The view mode of ACQ product, if the value is teaser, VAT text won't be
+   *   rendered.
    *
    * @return array
    *   Price block build array.
    */
-  public function getPriceBlock(SKU $sku_entity, $show_vat_text = TRUE) {
+  public function getPriceBlock(SKU $sku_entity, $view_mode = 'full') {
     $build = [];
     $vat_text = '';
     $this->buildPrice($build, $sku_entity);
     // Adding vat text to product page.
     $current_route = \Drupal::routeMatch();
-    if ($current_route->getRouteName() == 'entity.node.canonical' && $show_vat_text) {
+    // Do not pass VAT text part of the price block for teaser modes.
+    if ($current_route->getRouteName() == 'entity.node.canonical' && $view_mode != 'teaser') {
       $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text');
     }
     $price_build = [
