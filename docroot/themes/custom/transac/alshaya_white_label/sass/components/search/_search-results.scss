@@ -226,6 +226,10 @@ header,
   @include breakpoint($desktop) {
     font-size: 0.75rem;
   }
+
+  @include breakpoint($upto-desktop) {
+    pointer-events: none;
+  }
 }
 
 .form-autocomplete.ui-autocomplete-loading {
