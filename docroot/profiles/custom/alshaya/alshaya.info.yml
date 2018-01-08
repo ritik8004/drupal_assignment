@@ -5,6 +5,7 @@ dependencies:
   - acsf:acsf
   - alshaya_performance:alshaya_performance
   - alshaya_security:alshaya_security
+  - amp:amp
   - drupal:color
   - drupal:config_translation
   - drupal:content_translation
