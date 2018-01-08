@@ -1,0 +1,418 @@
+/**
+ * This file contains css browser specific hot-fix
+ */
+
+/**
+ * IE - Specific issues and hacks for them.
+ */
+
+body.ie {
+  header {
+    #views-exposed-form-search-page {
+      .form-item-keywords,
+      .form-actions {
+        display: inline;
+      }
+    }
+  }
+
+  // IE 10, 11, not taking line-height from select-wrapper mixin in rems.
+  &.alias--cart #table-cart-items .form-type-select::after {
+    line-height: 34px;
+  }
+
+  // We have added a IE polyfill to make details element work, it converts the summary into <a> tag, so
+  // adding color for it.
+  summary a.details-title {
+    color: $grey-ash;
+  }
+
+  .webform-submission-alshaya-contact-form textarea {
+    // Removes the scrollbar which IE adds by default.
+    overflow: hidden !important;
+  }
+}
+
+/**
+ * Edge Browser - Specific issues and hacks for them.
+ */
+
+body.edge {
+  // We have added a IE polyfill to make details element work, it converts the summary into <a> tag, so
+  // adding color for it.
+  summary a.details-title {
+    color: $grey-ash;
+  }
+}
+
+/**
+  * UC Browser - Specific issues and hacks for them.
+ */
+body.ucbrowser {
+  @include breakpoint($tablet) {
+    #block-mobilenavigation {
+      ul.menu {
+        li:first-child {
+          float: $left;
+          height: 20px;
+        }
+
+        li:last-child {
+          float: $right;
+          height: 20px;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    .c-menu-primary {
+      .store,
+      .mobile--menu,
+      .mobile-search {
+        font-size: 0 !important;
+      }
+    }
+  }
+
+  // Fix for direction attribute support for UC browser.
+  // Select elements for size and quantity.
+  .c-pdp {
+    html[lang=ar] & {
+      .form-item-configurables-size select {
+        padding-left: 42px;
+      }
+
+      .form-item-quantity select {
+        padding-left: 44px;
+      }
+    }
+  }
+
+  .c-plp {
+    html[lang=ar] & {
+      .form-item-sort-bef-combine select {
+        padding-left: 40px;
+      }
+    }
+  }
+
+  .page-standard.user-page.checkout-delivery {
+    #edit-delivery-tabs {
+      @include breakpoint($only-tablet) {
+        .tab {
+          width: 46.81%;
+        }
+
+        .tab-separator {
+          width: 6.2% !important;
+        }
+      }
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+    &::after {
+      height: 34px;
+    }
+  }
+
+  .mob-imagegallery__thumbnails__image {
+    height: 27.5rem;
+  }
+}
+
+#text-resize-control {
+  display: none !important;
+}
+
+.hidden-important {
+  display: none !important;
+}
+
+/**
+ * Opera - Specific issues and hacks for them.
+ */
+
+/**
+ * Chrome - Specific issues and hacks.
+ */
+
+// In Chrome, padding is not applied correctly on select, adding text-indent to roughly center the number.
+body.chrome {
+  &.alias--cart #table-cart-items td select {
+    text-indent: 0.4rem;
+  }
+
+  .content__title_wrapper {
+    .has--special--price,
+    .special--price,
+    .price--discount {
+      display: inline-table;
+    }
+  }
+}
+
+/**
+ * Samsung - Specific issues and hacks.
+ */
+.samsung {
+  &.s-tab2:not(.chrome) {
+    html[lang=en] & {
+      .webform-submission-alshaya-contact-form,
+      form.user-form {
+        .form-item-mobile-number-mobile {
+          top: 0.3rem !important;
+        }
+      }
+    }
+
+    html[lang=ar] & {
+      .webform-submission-alshaya-contact-form,
+      form.user-form {
+        .form-item-mobile-number-mobile {
+          top: 0.1rem !important;
+        }
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  .delivery-options-tooltip-wrapper {
+    @include breakpoint($only-mobile) {
+      right: 8.5rem;
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: -0.2rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: -0.2rem !important;
+    }
+  }
+
+  #table-cart-totals .edit-checkout .ladda-label {
+    font-size: 0.7rem !important;
+  }
+
+  .acq-cart-summary {
+    .price-wrapper {
+      .price-amount {
+        float: right !important;
+        font-family: $hnm-regular-nodir;
+      }
+
+      .price-currency {
+        float: none !important;
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  body.ucbrowser.alias--cart {
+    #table-cart-items td select {
+      padding-left: 40px;
+    }
+  }
+
+  #table-cart-items {
+    margin-top: 1rem;
+
+    tr td.name div.items {
+      width: 42%;
+
+      @include breakpoint($only-mobile) {
+        margin-right: -0.1875rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 53%;
+      }
+
+      @include breakpoint($desktop) {
+        width: 57%;
+      }
+    }
+  }
+
+  #table-cart-totals {
+    .edit-actions {
+      @include breakpoint($only-tablet) {
+        margin-left: -3.6rem;
+      }
+    }
+
+    td:first-child {
+      text-align: left;
+    }
+
+    tr > td:first-child {
+      @include breakpoint($desktop) {
+        padding-right: 0;
+        padding-left: 2.7rem;
+      }
+    }
+
+    td:last-child {
+      @include breakpoint($only-mobile) {
+        width: 48%;
+      }
+    }
+
+    .price-wrapper {
+      .price-amount {
+        left: 0;
+      }
+
+      .price-currency {
+        @include breakpoint($desktop) {
+          float: none !important;
+        }
+      }
+    }
+  }
+
+  #table-cart-items .price-wrapper .price-amount,
+  .price--discount .discount-value {
+    @include breakpoint($only-mobile) {
+      float: right;
+      margin-left: 0.5rem;
+      min-width: 4.2rem;
+    }
+  }
+
+  #table-cart-items .price-wrapper .price-amount {
+    @include breakpoint($only-mobile) {
+      min-width: auto;
+    }
+  }
+}
+
+.ie .address .address--primary span::before,
+.ie .address .address--primary a::before {
+  margin-top: 30px !important;
+}
+
+html[lang="ar"] {
+  .ie {
+    &.path--user .profile-address-book-edit-form .address-book-address .country-code-prefix {
+      margin-top: 1.65rem;
+    }
+  }
+}
+
+html[lang="ar"] {
+  .safari {
+    &.path--user .address-book-address .country-code-prefix {
+      margin-top: 1.65rem;
+    }
+
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month {
+      label {
+        width: 103% !important;
+      }
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+      label {
+        width: 103% !important;
+      }
+    }
+  }
+}
+
+html[lang="ar"] {
+  .ucbrowser {
+    &.path--user .address-book-address .country-code-prefix {
+      margin-top: 1.55rem;
+    }
+
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
+    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+      // Fix for direction attribute support for UC browser.
+      // Select elements for size and quantity.
+      select {
+        padding-left: 40px !important;
+      }
+    }
+
+    #payment_details_wrapper > .form-wrapper .payment-plugin-wrapper-div .payment-method-name {
+      @include breakpoint($tablet) {
+        width: 91.5%;
+      }
+    }
+  }
+}
+
+html[lang="en"] {
+  .ie,
+  .safari {
+    &.path--user .address-book-address .country-code-prefix {
+      margin-top: 1.4rem;
+    }
+  }
+}
+
+.ucbrowser {
+  .form-type-textfield {
+    label {
+      width: 100%;
+    }
+  }
+}
+
+// Fixing delete address modal on IE.
+.ie.path--user {
+  #drupal-modal {
+    padding-top: 10px !important;
+  }
+
+  .ui-dialog .ui-dialog-title {
+    margin-top: 20px !important;
+    float: $left !important;
+    width: 70%;
+  }
+
+  .ui-dialog-titlebar-close {
+    top: 10px !important;
+    #{$right}: 0 !important;
+    #{$left}: auto !important;
+  }
+}
+
+body.path--cart.ucbrowser .ui-dialog,
+body.nodetype--acq_product.ucbrowser .ui-dialog,
+body.ucbrowser.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
+  padding: 10rem 2rem !important;
+}
+
+body.nodetype--acq_product.ucbrowser .dialog-product-image-gallery-container-mobile {
+  padding: 0 !important;
+}
+
+#stcpDiv {
+  display: none;
+}
+
+.ucbrowser .user__address--column {
+  width: 90%;
+}
+
+/**
+ * We always want price to be displayed from ltr.
+ */
+.price {
+  .price-currency {
+    text-transform: none;
+  }
+
+  .price-amount {
+    direction: ltr;
+  }
+}
