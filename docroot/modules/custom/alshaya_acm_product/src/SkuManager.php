@@ -308,17 +308,19 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   SKU Entity.
+   * @param bool $show_vat_text
+   *   A flag to not render VAT text for a particular view mode.
    *
    * @return array
    *   Price block build array.
    */
-  public function getPriceBlock(SKU $sku_entity) {
+  public function getPriceBlock(SKU $sku_entity, $show_vat_text = TRUE) {
     $build = [];
     $vat_text = '';
     $this->buildPrice($build, $sku_entity);
     // Adding vat text to product page.
     $current_route = \Drupal::routeMatch();
-    if ($current_route->getRouteName() == 'entity.node.canonical') {
+    if ($current_route->getRouteName() == 'entity.node.canonical' && $show_vat_text) {
       $vat_text = \Drupal::config('alshaya_acm_product.settings')->get('vat_text');
     }
     $price_build = [
