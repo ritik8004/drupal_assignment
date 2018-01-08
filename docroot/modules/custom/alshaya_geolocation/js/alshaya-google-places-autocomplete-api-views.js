@@ -68,9 +68,13 @@
 
     $("input[name='" + elementId + "-lat']").val(lat);
     $("input[name='" + elementId + "-lng']").val(lng);
+    $("input[name='geolocation_geocoder_google_places_api_state']").val(stateValue);
 
-    $('.geolocation-geocoder-google-places-api-state[data-source-identifier="' + elementId + '"]').val(stateValue);
-    $(field).parents('form').find('input[type="submit"]').click();
+    if (!$.isEmptyObject(coords)) {
+      setTimeout(function () {
+        $(field).parents('form').find('input[type="submit"]').click();
+      }, 500);
+    }
   };
 
 })(jQuery, Drupal);

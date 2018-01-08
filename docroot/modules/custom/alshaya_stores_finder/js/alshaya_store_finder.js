@@ -89,7 +89,6 @@
         });
       });
 
-
       $('.current-location').once('location-init').on('click', function () {
         // Start overlay here.
         $('body').addClass('modal-overlay--spinner');
@@ -199,6 +198,13 @@
       $.fn.storeFinderDetailPageScrollTop = function (data) {
         window.scrollTo(0, 0);
       };
+
+      // Avoid form submit on click of enter for stores finder's autocomplete
+      // textfield.
+      $(document).on("keypress", "form", function(event) {
+        console.log(event.keyCode);
+        return event.keyCode != 13;
+      });
 
       // Trigger click on autocomplete selection.
       $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"]').each(function () {
