@@ -5,12 +5,21 @@ set -e
 
 docrootDir="$1"
 
-themes=( "whitelabel" "debenhams" "whitelabel_non_transac" "victoria_secret" "alshaya_white_label" "pottery_barn_non_trans" "alshaya_hnm" "bath_body_works" "bouchon_bakery" )
+transac=( "alshaya_white_label" "alshaya_hnm" "pottery_barn_non_trans")
+non_transac=( "debenhams" "whitelabel" "whitelabel_non_transac" "victoria_secret" "bath_body_works" "bouchon_bakery" )
 
-for i in "${themes[@]}"
+for i in "${transac[@]}"
 do
   echo -en "travis_fold:start:FE-Build-${i}\r"
-  cd $docrootDir/themes/custom/$i
+  cd $docrootDir/themes/custom/transac/$i
+  npm run build
+  echo -en "travis_fold:end:FE-Build-${i}\r"
+done
+
+for i in "${non_transac[@]}"
+do
+  echo -en "travis_fold:start:FE-Build-${i}\r"
+  cd $docrootDir/themes/custom/non_transac/$i
   npm run build
   echo -en "travis_fold:end:FE-Build-${i}\r"
 done
