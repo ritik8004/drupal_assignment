@@ -28,7 +28,7 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
 
   $cid = 'orders_list_' . $langcode . '_' . $email;
 
-  if ($cache = \Drupal::cache()->get($cid)) {
+  if ($cache = \Drupal::cache('orders')->get($cid)) {
     $orders = $cache->data;
   }
   else {
@@ -60,7 +60,7 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
       $expire = strtotime('+' . $cacheTimeLimit . ' seconds');
 
       // Store in cache.
-      \Drupal::cache()->set($cid, $orders, $expire);
+      \Drupal::cache('orders')->set($cid, $orders, $expire);
     }
   }
 

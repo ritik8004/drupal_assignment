@@ -3,11 +3,11 @@
 namespace Drupal\alshaya_user\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
-use Drupal\user\Entity\User;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -47,6 +47,13 @@ class UserCommunicationPreference extends FormBase {
   protected $config;
 
   /**
+   * Entity Type Manager service object.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * UserCommunicationPreference constructor.
    *
    * @param \Drupal\user\UserDataInterface $user_data
@@ -57,12 +64,19 @@ class UserCommunicationPreference extends FormBase {
    *   The MobileNumber util service object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager service object.
    */
-  public function __construct(UserDataInterface $user_data, AccountInterface $account, MobileNumberUtilInterface $mobile_util, ConfigFactoryInterface $config_factory) {
+  public function __construct(UserDataInterface $user_data,
+                              AccountInterface $account,
+                              MobileNumberUtilInterface $mobile_util,
+                              ConfigFactoryInterface $config_factory,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->userData = $user_data;
     $this->account = $account;
     $this->mobileUtil = $mobile_util;
     $this->config = $config_factory->get('alshaya_user.settings');
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -73,7 +87,8 @@ class UserCommunicationPreference extends FormBase {
       $container->get('user.data'),
       $container->get('current_user'),
       $container->get('mobile_number.util'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -101,7 +116,7 @@ class UserCommunicationPreference extends FormBase {
 
     $this->user_profile = $account = $user;
 
-    $account = User::load($this->user_profile->id());
+    $account = $this->entityTypeManager->getStorage('user')->load($this->user_profile->id());
 
     if (!alshaya_acm_customer_is_customer($account)) {
       throw new AccessDeniedHttpException();

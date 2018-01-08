@@ -2,15 +2,68 @@
 
 namespace Drupal\alshaya_stores_migrate\Form;
 
+use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\migrate\MigrateExecutable;
 use Drupal\migrate\MigrateMessage;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class StoresMigrateUploadForm.
  */
 class StoresMigrateUploadForm extends FormBase {
+
+  /**
+   * Language Manager service object.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * ConfigEntityMigration plugin manager object.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
+  protected $configEntityMigrationPluginManager;
+
+  /**
+   * Migration plugin manager object.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
+  protected $migrationPluginManager;
+
+  /**
+   * Alshaya404MaintenanceSettings constructor.
+   *
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager service object.
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $config_entity_migration_plugin_manager
+   *   ConfigEntityMigration plugin manager object.
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $migration_plugin_manager
+   *   Migration plugin manager object.
+   */
+  public function __construct(LanguageManagerInterface $language_manager,
+                              PluginManagerInterface $config_entity_migration_plugin_manager,
+                              PluginManagerInterface $migration_plugin_manager) {
+    parent::__construct();
+    $this->languageManager = $language_manager;
+    $this->configEntityMigrationPluginManager = $config_entity_migration_plugin_manager;
+    $this->migrationPluginManager = $migration_plugin_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('language_manager'),
+      $container->get('plugin.manager.config_entity_migration'),
+      $container->get('plugin.manager.migration')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -24,10 +77,9 @@ class StoresMigrateUploadForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Set message for users.
-    drupal_set_message('Please import stores in English language first.', 'warning');
+    drupal_set_message($this->t('Please import stores in English language first.'), 'warning');
 
-    $languages = \Drupal::languageManager()->getLanguages();
-    foreach ($languages as $language) {
+    foreach ($this->languageManager->getLanguages() as $language) {
       $langs[$language->getId()] = $language->getName();
     }
 
@@ -78,7 +130,7 @@ class StoresMigrateUploadForm extends FormBase {
     $language = $form_state->getValue('language');
     $filepath = $form_state->getValue('upload')->getFileUri();
 
-    $migrate_plus_migration_store_config = \Drupal::service('config.factory')->getEditable('migrate_plus.migration.store_' . $language);
+    $migrate_plus_migration_store_config = $this->configFactory()->getEditable('migrate_plus.migration.store_' . $language);
 
     // Store the initial migrate configuration.
     $initial_filepath = $migrate_plus_migration_store_config->get('source.path');
@@ -88,11 +140,10 @@ class StoresMigrateUploadForm extends FormBase {
     $migrate_plus_migration_store_config->save();
 
     // Initialize the migration.
-    $manager = \Drupal::service('plugin.manager.config_entity_migration');
-    $manager->createInstances([]);
+    $this->configEntityMigrationPluginManager->createInstances([]);
 
     /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
-    $migration = \Drupal::service('plugin.manager.migration')->createInstance('store_' . $language, ['source' => ['path' => $filepath]]);
+    $migration = $this->migrationPluginManager->createInstance('store_' . $language, ['source' => ['path' => $filepath]]);
     // Set the nodes for updating.
     $migration->getIdMap()->prepareUpdate();
     $executable = new MigrateExecutable($migration, new MigrateMessage());

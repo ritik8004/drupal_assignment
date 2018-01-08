@@ -4,9 +4,12 @@ namespace Drupal\alshaya_user\Breadcrumb;
 
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
+use Drupal\Core\Controller\TitleResolverInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AlshayaUserBreadcrumbBuilder.
@@ -14,6 +17,45 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * The current user service object.
+   *
+   * @var \Drupal\Core\Session\AccountProxy
+   */
+  public $currentUser;
+
+  /**
+   * The Title Resolver.
+   *
+   * @var \Drupal\Core\Controller\TitleResolverInterface
+   */
+  protected $titleResolver;
+
+  /**
+   * Request stock service object.
+   *
+   * @var null|\Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * AlshayaStaticPageBreadcrumbBuilder constructor.
+   *
+   * @param \Drupal\Core\Session\AccountProxy $current_user
+   *   The current account object.
+   * @param \Drupal\Core\Controller\TitleResolverInterface $title_resolver
+   *   The Title Resolver.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stock service object.
+   */
+  public function __construct(AccountProxy $current_user,
+                              TitleResolverInterface $title_resolver,
+                              RequestStack $request_stack) {
+    $this->currentUser = $current_user;
+    $this->titleResolver = $title_resolver;
+    $this->currentRequest = $request_stack->getCurrentRequest();
+  }
 
   /**
    * {@inheritdoc}
@@ -30,11 +72,10 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
-    $user_id = \Drupal::currentUser()->id();
+    $user_id = $this->currentUser->id();
     $breadcrumb->addLink(Link::createFromRoute($this->t('My Account'), 'entity.user.canonical', ['user' => $user_id]));
     if ($route_match->getRouteName() != 'entity.user.canonical') {
-      $request = \Drupal::request();
-      $title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+      $title = $this->titleResolver->getTitle($this->currentRequest, $route_match->getRouteObject());
       $breadcrumb->addLink(Link::createFromRoute($title, $route_match->getRouteName(), $this->myAccountRoutes()[$route_match->getRouteName()]));
     }
     $breadcrumb->addCacheableDependency(['url.path']);
@@ -49,7 +90,7 @@ class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    *   Route array on my account page.
    */
   protected function myAccountRoutes() {
-    $current_user_id = \Drupal::currentUser()->id();
+    $current_user_id = $this->currentUser->id();
     $routes = [
       'entity.user.canonical' => [
         'user' => $current_user_id,

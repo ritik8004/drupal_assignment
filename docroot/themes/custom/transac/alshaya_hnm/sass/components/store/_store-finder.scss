@@ -563,6 +563,11 @@
       padding-bottom: 1.5rem;
       color: $grey7;
 
+      html[lang=ar] & {
+        line-height: 1.2;
+        padding-top: 0.125rem;
+      }
+
       p {
         color: $grey7;
         margin: 0.125rem 0;
@@ -577,10 +582,18 @@
         }
       }
 
+      .field--name-field-store-address {
+        html[lang=ar] & {
+          padding-top: 0.125rem;
+          line-height: 1.2;
+        }
+      }
+
       .field--name-field-store-phone {
         html[lang=ar] & {
           direction: ltr;
           display: inline-block;
+          padding-top: 0.25rem;
           text-align: right;
         }
       }
