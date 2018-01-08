@@ -21,7 +21,6 @@ class CustomCommand extends BltTasks {
    */
   public function localResetSettingsFile() {
     $this->say('Allow editing settings.php file');
-
     $taskFilesystemStack = $this->taskFilesystemStack();
     $multisites = $this->getConfigValue('multisite.name');
     $docroot = $this->getConfigValue('docroot');
@@ -33,7 +32,6 @@ class CustomCommand extends BltTasks {
     }
     $taskFilesystemStack->setVerbosityThreshold(VerbosityThresholdInterface::VERBOSITY_VERBOSE);
     $taskFilesystemStack->run();
-
     foreach ($multisites as $multisite) {
       $settings_file = $docroot . '/sites/' . $multisite . '/settings.php';
       $this->say('Revert ' . $settings_file . ' file to avoid GIT issues.');
@@ -53,7 +51,6 @@ class CustomCommand extends BltTasks {
    */
   public function localResetLocalSettings() {
     $this->say('Resetting local.settings.php file');
-
     $taskFilesystemStack = $this->taskFilesystemStack();
     $multisites = $this->getConfigValue('multisite.name');
     $docroot = $this->getConfigValue('docroot');
@@ -84,31 +81,30 @@ class CustomCommand extends BltTasks {
    * @command local:post-install
    * @description Allow all modules to run code once post drupal install.
    */
-  public function localPostInstall($uri, $brand) {
+  public function localPostInstall($uri, $brand, $country_code) {
     $this->say('Allow all modules to run code once post drupal install.');
     $dursh_alias = $this->getConfigValue('drush.alias');
-    //print_r($arguments); exit;
-    $task = $this->taskDrush()
+    $this->taskDrush()
       ->stopOnFail()
       ->assume(TRUE)
       ->drush('alshaya-post-drupal-install')
       ->alias($dursh_alias)
       ->option('brand_module', $brand)
+      ->option('country_code', $country_code)
       ->uri($uri)
       ->run();
-
   }
 
   /**
-   * Sync the Product and Categories.
+   * Sync the Categories, Product Options and Products.
    *
    * @command sync:products
-   * @description Sync the Product and Categories.
+   * @description Sync the Categories, Product Options and Products.
    */
   public function syncProducts($uri, $limit = 200) {
     $this->say('Sync the categories, product option and products');
     $dursh_alias = $this->getConfigValue('drush.alias');
-    $task = $this->taskDrush()
+    $this->taskDrush()
       ->stopOnFail()
       ->assume(TRUE)
       ->alias($dursh_alias)
@@ -127,10 +123,9 @@ class CustomCommand extends BltTasks {
    * @description Sync the Stores.
    */
   public function syncStores($uri) {
-
     $this->say('Sync the stores');
     $dursh_alias = $this->getConfigValue('drush.alias');
-    $task = $this->taskDrush()
+    $this->taskDrush()
       ->stopOnFail()
       ->assume(TRUE)
       ->alias($dursh_alias)
@@ -147,10 +142,9 @@ class CustomCommand extends BltTasks {
    * @description Sync the Promotions.
    */
   public function syncPromotions($uri) {
-
     $this->say('Sync the promotions');
     $dursh_alias = $this->getConfigValue('drush.alias');
-    $task = $this->taskDrush()
+    $this->taskDrush()
       ->stopOnFail()
       ->assume(TRUE)
       ->alias($dursh_alias)
@@ -175,6 +169,12 @@ class CustomCommand extends BltTasks {
       $this->yell('Invalid site code');
       $site = $this->ask("Enter site code to reinstall, ($list):");
     }
+    if (array_key_exists('country', $sites[$site])) {
+      $country_code = $sites[$site]['country'];
+    }
+    else {
+      $country_code = $this->ask("Enter country code for the site:, ($list):");
+    }
     $uri = "local.alshaya-$site.com";
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
@@ -187,6 +187,7 @@ class CustomCommand extends BltTasks {
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
       'brand' => $brand,
+      'country_code' => $country_code,
     ]);
 
     // Following commands are required only for transac.
@@ -213,6 +214,12 @@ class CustomCommand extends BltTasks {
       $this->yell('Invalid site code');
       $site = $this->ask("Enter site code to reinstall, ($list):");
     }
+    if (array_key_exists('country', $sites[$site])) {
+      $country_code = $sites[$site]['country'];
+    }
+    else {
+      $country_code = $this->ask("Enter country code for the site:, ($list):");
+    }
     $uri = "local.alshaya-$site.com";
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
@@ -229,6 +236,7 @@ class CustomCommand extends BltTasks {
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
       'brand' => $brand,
+      'country_code' => $country_code,
     ]);
 
     // Following commands are required only for transac.
