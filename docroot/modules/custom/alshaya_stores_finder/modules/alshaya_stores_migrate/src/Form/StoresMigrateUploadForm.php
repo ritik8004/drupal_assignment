@@ -77,7 +77,7 @@ class StoresMigrateUploadForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Set message for users.
-    drupal_set_message('Please import stores in English language first.', 'warning');
+    drupal_set_message($this->t('Please import stores in English language first.'), 'warning');
 
     foreach ($this->languageManager->getLanguages() as $language) {
       $langs[$language->getId()] = $language->getName();
