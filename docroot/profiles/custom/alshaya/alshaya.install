@@ -114,6 +114,8 @@ function alshaya_install() {
   }
 
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya', $modules]);
+  \Drupal::service('module_installer')->uninstall(['field_ui']);
+  \Drupal::service('module_installer')->uninstall(['quickedit']);
 }
 
 /**
@@ -145,7 +147,7 @@ function alshaya_final_common_install_task($profile) {
   foreach ($additional_modules as $module) {
     \Drupal::service('module_installer')->install([$module]);
   }
-  
+
   if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
     // Enable acquia_purge purger.
     /** @var \Drupal\purge\Plugin\Purge\Purger\PurgersServiceInterface $purge_purgers */
