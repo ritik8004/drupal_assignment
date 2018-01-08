@@ -871,10 +871,7 @@
           margin: 0.5rem 1.375rem;
 
           .delivery-address-title {
-            width: 77.263%;
-
             @include breakpoint($only-tablet) {
-              width: 54%;
               font-size: 0.875rem;
             }
 
@@ -918,6 +915,7 @@
               width: auto;
               position: absolute;
               #{$right}: 0;
+              top: -0.625rem;
             }
           }
         }
