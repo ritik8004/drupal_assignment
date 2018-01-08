@@ -7,9 +7,9 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -55,8 +55,17 @@ class CheckoutHelper {
   protected $currentUser;
 
   /**
+   * Entity Type Manager service object.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * CheckoutOptionsManager constructor.
    *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager service object.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   ApiWrapper object.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
@@ -70,12 +79,14 @@ class CheckoutHelper {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(APIWrapper $api_wrapper,
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              APIWrapper $api_wrapper,
                               CartStorageInterface $cart_storage,
                               OrdersManager $orders_manager,
                               RequestStack $request_stack,
                               AccountProxyInterface $current_user,
                               LoggerChannelFactoryInterface $logger_factory) {
+    $this->entityTypeManager = $entity_type_manager;
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
     $this->ordersManager = $orders_manager;
@@ -123,7 +134,7 @@ class CheckoutHelper {
         $current_user_id = $this->currentUser->id();
 
         // Update user's mobile number if empty.
-        $account = User::load($current_user_id);
+        $account = $this->entityTypeManager->getStorage('user')->load($current_user_id);
 
         if (empty($account->get('field_mobile_number')->getString())) {
           $billing = (array) $cart->getBilling();

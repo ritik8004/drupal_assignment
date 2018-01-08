@@ -125,7 +125,7 @@ class NewsLetterForm extends FormBase {
     }
 
     // Get the interval we want to show the message for on our ladda button.
-    $interval = \Drupal::config('alshaya_master.settings')->get('ajax_spinner_message_interval');
+    $interval = $this->config('alshaya_master.settings')->get('ajax_spinner_message_interval');
     $data['interval'] = $interval;
 
     // Prepare the ajax Response.

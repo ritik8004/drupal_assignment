@@ -7,7 +7,6 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\taxonomy\Entity\Term;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -126,7 +125,6 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
   public function blockForm($form, FormStateInterface $form_state) {
     $config = $this->configuration;
 
-    $defaults = $this->defaultConfiguration();
     $form['shop_by_voc'] = [
       '#type' => 'details',
       '#title' => $this->t('Shop By Vocabulary'),
@@ -180,7 +178,7 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     $query->orderBy('fd.weight');
     $result = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     if ($result) {
-      return Term::loadMultiple($result);
+      return $this->entityManager->getStorage('taxonomy_term')->loadMultiple($result);
     }
     return NULL;
   }

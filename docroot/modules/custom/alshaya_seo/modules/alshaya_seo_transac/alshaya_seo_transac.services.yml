@@ -7,7 +7,7 @@ services:
       - '@acq_cart.cart_storage'
       - '@current_user'
       - '@request_stack'
-      - '@entity.manager'
+      - '@entity_type.manager'
       - '@alshaya_acm_checkout.options_manager'
       - '@alshaya_stores_finder.utility'
       - '@language_manager'
@@ -15,3 +15,4 @@ services:
       - '@database'
       - '@alshaya_addressbook.manager'
       - '@alshaya_acm_product.skumanager'
+      - '@module_handler'

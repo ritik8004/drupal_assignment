@@ -7,6 +7,10 @@ services:
     class: Drupal\alshaya_user\Breadcrumb\AlshayaUserBreadcrumbBuilder
     tags:
       - { name: breadcrumb_builder, priority: 100 }
+    arguments:
+      - '@current_user'
+      - '@title_resolver'
+      - '@request_stack'
   alshaya_user.info:
     class: Drupal\alshaya_user\AlshayaUserInfo
-    arguments: [ '@current_user', '@entity.repository' ]
+    arguments: [ '@current_user', '@entity.repository', '@entity_type.manager' ]
