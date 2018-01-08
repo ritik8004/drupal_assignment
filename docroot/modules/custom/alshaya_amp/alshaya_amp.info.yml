@@ -4,5 +4,4 @@ description: 'Contains AMP related functionality.'
 package: 'Alshaya'
 core: 8.x
 dependencies:
-  - alshaya_static_html:alshaya_static_html
   - amp:amp
