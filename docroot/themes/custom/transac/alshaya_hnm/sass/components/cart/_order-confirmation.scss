@@ -458,8 +458,12 @@
       &.label {
         padding: 0 1.125rem;
 
-        @include breakpoint($only-tablet) {
+        @include breakpoint($tablet) {
           padding: 0 2.5rem 0 0;
+        }
+
+        @include breakpoint($desktop) {
+          padding: 0 1.125rem 0 0;
         }
       }
     }
