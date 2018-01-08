@@ -11,15 +11,6 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
- * Enable 'amp' module on all sites on all environments.
- */
-function alshaya_update_8003() {
-  \Drupal::service('module_installer')->install(['amp']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable alshaya_performance on all sites on all environments.
  */
 function alshaya_update_8002() {

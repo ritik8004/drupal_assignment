@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_amp module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_amp_install() {
+  // Enable amp theme.
+  \Drupal::service('theme_handler')->install(['amptheme'], TRUE);
+}
