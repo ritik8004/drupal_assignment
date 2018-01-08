@@ -12,13 +12,12 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
-use Drupal\taxonomy\Entity\Term;
-use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Mobile_Detect;
 
@@ -140,11 +139,11 @@ class AlshayaGtmManager {
   protected $requestStack;
 
   /**
-   * The Entity Manager service.
+   * The Entity Type Manager service.
    *
-   * @var \Drupal\Core\Entity\EntityManager
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityManager;
+  protected $entityTypeManager;
 
   /**
    * The checkout options Manager service.
@@ -196,6 +195,13 @@ class AlshayaGtmManager {
   protected $skuManager;
 
   /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -208,7 +214,7 @@ class AlshayaGtmManager {
    *   Current User service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   Request stack service.
-   * @param \Drupal\Core\Entity\EntityManager $entityManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity Manager service.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager
    *   Checkout Options Manager service.
@@ -224,26 +230,29 @@ class AlshayaGtmManager {
    *   Address Book Manager service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku Manager service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
                               CartStorageInterface $cartStorage,
                               AccountProxyInterface $currentUser,
                               RequestStack $requestStack,
-                              EntityManager $entityManager,
+                              EntityTypeManagerInterface $entityTypeManager,
                               CheckoutOptionsManager $checkoutOptionsManager,
                               StoresFinderUtility $storesFinderUtility,
                               LanguageManagerInterface $languageManager,
                               CacheBackendInterface $cache,
                               Connection $database,
                               AlshayaAddressBookManager $addressBookManager,
-                              SkuManager $skuManager) {
+                              SkuManager $skuManager,
+                              ModuleHandlerInterface $module_handler) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
     $this->currentUser = $currentUser;
     $this->requestStack = $requestStack;
-    $this->entityManager = $entityManager;
+    $this->entityTypeManager = $entityTypeManager;
     $this->checkoutOptionsManager = $checkoutOptionsManager;
     $this->storeFinder = $storesFinderUtility;
     $this->languageManager = $languageManager;
@@ -251,6 +260,7 @@ class AlshayaGtmManager {
     $this->database = $database;
     $this->addressBookManager = $addressBookManager;
     $this->skuManager = $skuManager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -287,8 +297,7 @@ class AlshayaGtmManager {
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
     $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
-    \Drupal::moduleHandler()
-      ->invokeAll('gtm_product_attributes_alter',
+    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
         [
           &$product,
           &$attributes,
@@ -312,7 +321,7 @@ class AlshayaGtmManager {
    * @throws \InvalidArgumentException
    */
   public function fetchSkuAtttributes($skuId) {
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $sku = SKU::loadFromSku($skuId);
 
     if (empty($sku)) {
@@ -567,7 +576,7 @@ class AlshayaGtmManager {
     $attributes = [];
 
     // Include product utility file to use helper functions.
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
     if ($cart = $this->cartStorage->getCart(FALSE)) {
       $dimension7 = '';
@@ -660,7 +669,7 @@ class AlshayaGtmManager {
     $taxonomy_parents = [];
 
     if ($inner_term) {
-      $taxonomy_parents = $this->entityManager->getStorage('taxonomy_term')->loadAllParents($inner_term);
+      $taxonomy_parents = $this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($inner_term);
     }
 
     foreach ($taxonomy_parents as $taxonomy_parent) {
@@ -734,9 +743,8 @@ class AlshayaGtmManager {
    *   The term id.
    */
   public function getInnerDepthTerm(array $terms = []) {
-    $db = \Drupal::database();
-    $current_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
-    $depths = $db->select('taxonomy_term_field_data', 'ttfd')
+    $current_langcode = $this->languageManager->getDefaultLanguage()->getId();
+    $depths = $this->database->select('taxonomy_term_field_data', 'ttfd')
       ->fields('ttfd', ['tid', 'depth_level'])
       ->condition('ttfd.tid', $terms, 'IN')
       ->condition('ttfd.langcode', $current_langcode)
@@ -848,8 +856,8 @@ class AlshayaGtmManager {
    * Helper function to fetch general datalayer attributes for a page.
    */
   public function fetchGeneralPageAttributes($data_layer) {
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
-    $current_user = User::load(\Drupal::currentUser()->id());
+    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $current_user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
 
     // Detect platform from headers.
     $request_headers = $this->requestStack->getCurrentRequest()->headers->all();
@@ -962,7 +970,7 @@ class AlshayaGtmManager {
 
       case 'product listing page':
         $taxonomy_term = $current_route['route_params']['taxonomy_term'];
-        $taxonomy_parents = array_reverse($this->entityManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
+        $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
         foreach ($taxonomy_parents as $taxonomy_parent) {
           $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
         }
@@ -972,9 +980,9 @@ class AlshayaGtmManager {
 
       case 'department page':
         $department_node = $current_route['route_params']['node'];
-        $taxonomy_term = Term::load($department_node->get('field_product_category')->target_id);
+        $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($department_node->get('field_product_category')->target_id);
         if (!empty($taxonomy_term)) {
-          $taxonomy_parents = array_reverse($this->entityManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
+          $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
           foreach ($taxonomy_parents as $taxonomy_parent) {
             $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
           }

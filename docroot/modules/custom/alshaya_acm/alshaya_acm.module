@@ -100,7 +100,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     return;
   }
 
-  $form['#error_no_message'] = TRUE;
+  $form['#disable_inline_form_errors_summary'] = TRUE;
 
   // Add sub total price of product.
   $form['cart']['#header'][] = t('Sub total');

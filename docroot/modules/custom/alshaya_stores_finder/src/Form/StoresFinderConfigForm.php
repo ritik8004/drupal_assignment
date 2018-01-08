@@ -107,27 +107,25 @@ class StoresFinderConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    if (\Drupal::moduleHandler()->moduleExists('file')) {
-      // Handle marker image file upload and validation.
-      $validators = ['file_validate_extensions' => ['png gif jpg jpeg apng svg']];
+    // Handle marker image file upload and validation.
+    $validators = ['file_validate_extensions' => ['png gif jpg jpeg apng svg']];
 
-      // Check for a new uploaded file.
-      $file = file_save_upload('marker_upload', $validators, FALSE, 0);
-      if (isset($file)) {
-        // File upload was attempted.
-        if ($file) {
-          // Put the temporary file in form_values so we can save it on submit.
-          $form_state->setValue('marker_upload', $file);
-        }
-        else {
-          // File upload failed.
-          $form_state->setErrorByName('marker_upload', $this->t('The marker icon could not be uploaded.'));
-        }
+    // Check for a new uploaded file.
+    $file = file_save_upload('marker_upload', $validators, FALSE, 0);
+    if (isset($file)) {
+      // File upload was attempted.
+      if ($file) {
+        // Put the temporary file in form_values so we can save it on submit.
+        $form_state->setValue('marker_upload', $file);
       }
-      elseif (!$form_state->getValue('use_default') && empty($form_state->getValue('marker_path'))) {
-        // No files uploaded and marker path is empty.
-        $form_state->setErrorByName('marker_upload', $this->t('Please upload marker icon.'));
+      else {
+        // File upload failed.
+        $form_state->setErrorByName('marker_upload', $this->t('The marker icon could not be uploaded.'));
       }
+    }
+    elseif (!$form_state->getValue('use_default') && empty($form_state->getValue('marker_path'))) {
+      // No files uploaded and marker path is empty.
+      $form_state->setErrorByName('marker_upload', $this->t('Please upload marker icon.'));
     }
   }
 

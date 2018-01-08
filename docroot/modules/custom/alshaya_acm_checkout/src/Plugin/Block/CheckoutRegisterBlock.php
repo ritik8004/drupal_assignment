@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\Block;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -37,6 +38,13 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
   protected $moduleHandler;
 
   /**
+   * User Settings config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
+
+  /**
    * The entity form builder.
    *
    * @var \Drupal\Core\Entity\EntityManagerInterface
@@ -44,7 +52,7 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
   protected $entityFormBuilder;
 
   /**
-   * Constructs a new UserRegisterBlock plugin.
+   * CheckoutRegisterBlock constructor.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -58,12 +66,21 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
    *   The entity form builder.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, EntityFormBuilderInterface $entityFormBuilder, ModuleHandlerInterface $module_handler) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              EntityTypeManagerInterface $entityTypeManager,
+                              EntityFormBuilderInterface $entityFormBuilder,
+                              ModuleHandlerInterface $module_handler,
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entityTypeManager;
     $this->entityFormBuilder = $entityFormBuilder;
     $this->moduleHandler = $module_handler;
+    $this->config = $config_factory->get('user.settings');
   }
 
   /**
@@ -76,7 +93,8 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('entity.form_builder'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('config.factory')
     );
   }
 
@@ -120,7 +138,7 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
       // number in basket.
       if (empty($order['extension']['loyalty_card'])) {
         $block = Block::load('jointheclub');
-        $build['joinclub'] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
+        $build['joinclub'] = $this->entityTypeManager->getViewBuilder('block')->view($block);
         $build['joinclub']['#weight'] = 100;
       }
       else {
@@ -164,9 +182,9 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    return AccessResult::allowedIf($account->isAnonymous() && (\Drupal::config('user.settings')->get('register') != USER_REGISTER_ADMINISTRATORS_ONLY))
+    return AccessResult::allowedIf($account->isAnonymous() && ($this->config->get('register') != USER_REGISTER_ADMINISTRATORS_ONLY))
       ->addCacheContexts(['user.roles'])
-      ->addCacheTags(\Drupal::config('user.settings')->getCacheTags());
+      ->addCacheTags($this->config->getCacheTags());
   }
 
   /**
