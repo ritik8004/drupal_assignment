@@ -1,0 +1,11 @@
+name: Alshaya AMP
+type: theme
+base theme: amptheme
+description: Theme for AMP.
+package: Custom
+core: '8.x'
+
+regions:
+  header: Header
+  content: Content
+  footer: Footer
