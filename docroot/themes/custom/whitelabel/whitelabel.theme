@@ -95,7 +95,7 @@ function whitelabel_preprocess_block(&$variables) {
     $variables['#cache']['contexts'][] = 'session';
   }
 
-  if ($machine_name == 'todaysoffer' && alshaya_master_detect_device() == 'mobile') {
+  if ($machine_name == 'todaysoffer') {
 
     if ($variables['content']) {
       // Make label a link to redirect to today's offer page on mobile.
