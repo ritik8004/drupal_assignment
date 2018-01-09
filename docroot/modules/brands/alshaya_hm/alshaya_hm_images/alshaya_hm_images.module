@@ -86,14 +86,16 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
       $sku = $skus[$delta];
       // Get the assets.
       $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-      $main_image_assets = $sku_assets_manager->getSkuAsset($sku, 'plp', 'plp');
-      $hover_image_assets = $sku_assets_manager->getSkuAsset($sku, 'plp_hover', 'plp');
+      $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
+      $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp']);
 
       // If no assets attached & the sku is configurable, try to use the
       // assets attached with first child sku attached.
-      if ((!$main_image_assets) && (!$hover_image_assets) && ($sku->bundle() === 'configurable')) {
-        $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', 'plp');
-        $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', 'plp');
+      if ((!$main_image_assets) &&
+        (!$hover_image_assets) &&
+        ($sku->bundle() === 'configurable')) {
+        $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', ['plp']);
+        $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', ['plp']);
       }
 
       $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
@@ -150,25 +152,29 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
     }
 
     if ($sku instanceof SKU) {
-      $thumb_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_thumbnail');
-      $zoom_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_zoom');
-      $fullscreen_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_fullscreen');
-      $main_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_main');
+      $pdp_images = $sku_assets_manager->getImagesForSku($sku, 'pdp',
+        [
+          'pdp_thumbnail',
+          'pdp_zoom',
+          'pdp_fullscreen',
+          'pdp_main',
+        ]
+      );
 
-      foreach ($thumb_images as $key => $thumbnail) {
-        $thumb_images[$key]['zoomurl'] = $zoom_images[$key]['url'];
-        $thumb_images[$key]['thumburl'] = $thumb_images[$key]['url'];
-        $thumb_images[$key]['mediumurl'] = $main_images[$key]['url'];
+      foreach ($pdp_images['pdp_thumbnail'] as $key => $thumbnail) {
+        $thumb_images[$key]['zoomurl'] = $pdp_images['pdp_fullscreen'][$key]['url'];
+        $thumb_images[$key]['thumburl'] = $thumbnail['url'];
+        $thumb_images[$key]['mediumurl'] = $pdp_images['pdp_main'][$key]['url'];
         $thumb_images[$key]['type'] = 'image';
-        $thumb_images[$key]['fullurl'] = $fullscreen_images[$key]['url'];
+        $thumb_images[$key]['fullurl'] = $pdp_images['pdp_fullscreen'][$key]['url'];
         $thumb_images[$key]['label'] = $sku->label();
       }
 
       // Check on main images is sufficient here, since zoom images are
       // variations of main images.
-      if ($main_images) {
-        $main_image['zoomurl'] = $zoom_images[0]['url'];
-        $main_image['mediumurl'] = $main_images[0]['url'];
+      if (!empty($pdp_images['pdp_main'])) {
+        $main_image['zoomurl'] = $pdp_images['pdp_fullscreen'][0]['url'];
+        $main_image['mediumurl'] = $pdp_images['pdp_main'][0]['url'];
         $main_image['label'] = $sku->label();
       }
     }
@@ -262,7 +268,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
 
           if ($sku_entity instanceof SKU) {
             if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
-              $asset = $sku_asset_manager->getSkuAsset($sku_entity, 'swatch', 'swatch', $swatch_type);
+              $asset = $sku_asset_manager->getSkuAssets($sku_entity, 'swatch', ['swatch'], $swatch_type);
             }
 
             // If swatch type is not miniature_image or assets were missing from
