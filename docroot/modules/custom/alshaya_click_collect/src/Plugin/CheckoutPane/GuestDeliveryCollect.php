@@ -419,7 +419,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    */
   public function submitGuestDeliveryCollect($form, FormStateInterface $form_state) {
     // Reload page if error in hidden fields.
-    if (static::$formHasError) {
+    if (self::$formHasError) {
       $response = new AjaxResponse();
       $params = ['step' => 'delivery'];
       $options = ['query' => ['method' => 'cc']];

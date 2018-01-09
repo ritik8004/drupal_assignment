@@ -277,7 +277,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     // Secondary check on hidden values.
     if (empty($values['store_code']) || empty($values['shipping_type'])) {
-      static::$formHasError = TRUE;
+      self::$formHasError = TRUE;
       return;
     }
 
@@ -330,7 +330,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    */
   public function submitMemberDeliveryCollect($form, FormStateInterface $form_state) {
     // Reload page if error in hidden fields.
-    if (static::$formHasError) {
+    if (self::$formHasError) {
       $response = new AjaxResponse();
       $params = ['step' => 'delivery'];
       $options = ['query' => ['method' => 'cc']];
