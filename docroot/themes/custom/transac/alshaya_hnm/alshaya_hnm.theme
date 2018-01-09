@@ -284,7 +284,7 @@ function alshaya_hnm_preprocess_node(&$variables) {
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_theme_suggestions_form_alter().
  */
 function alshaya_hnm_theme_suggestions_form_alter(array &$suggestions, array $variables) {
   $route_match = \Drupal::routeMatch();
@@ -556,7 +556,7 @@ function alshaya_hnm_preprocess_menu(&$variables) {
     $current_path = \Drupal::routeMatch()->getRouteObject()->getPath();
     $current_path_Uri = \Drupal::request()->getRequestUri();
     $items = $variables['items'];
-    foreach ($items as $key => $item) {
+    foreach ($items as $item) {
       // If path is current_path, add active class.
       if ($item['url']->getRouteName() == 'user.page') {
         if (substr($current_path, 0, 6) === '/user/' || substr($current_path, 0, 9) === '/profile/') {
