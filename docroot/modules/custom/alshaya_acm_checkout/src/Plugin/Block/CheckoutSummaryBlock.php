@@ -1,19 +1,18 @@
 <?php
 
-namespace Drupal\alshaya_acm\Plugin\Block;
+namespace Drupal\alshaya_acm_checkout\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\address\Repository\CountryRepository;
+use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
+use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
-use Drupal\acq_checkout\CheckoutFlowManager;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
-use Drupal\alshaya_stores_finder\StoresFinderUtility;
-use CommerceGuys\Addressing\Country\CountryRepositoryInterface;
 
 /**
  * Provides a 'CheckoutSummaryBlock' block.
@@ -47,39 +46,39 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $configFactory;
 
   /**
-   * Checkout flow manager.
-   *
-   * @var \Drupal\acq_checkout\CheckoutFlowManager
-   */
-  protected $checkoutFlowmanager;
-
-  /**
-   * The module handler to use to load modules.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * The checkout options Manager service.
+   * Checkout Options Manager service object.
    *
    * @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager
    */
   protected $checkoutOptionsManager;
 
   /**
-   * Store Finder service.
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * ACQ Checkout Flow plugin manager object.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
+  protected $pluginManager;
+
+  /**
+   * Store Finder Utility service object.
    *
    * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
    */
   protected $storesFinderUtility;
 
   /**
-   * The country repository.
+   * Address Country Repository service object.
    *
-   * @var \CommerceGuys\Addressing\Country\CountryRepositoryInterface
+   * @var \Drupal\address\Repository\CountryRepository
    */
-  protected $countryRepository;
+  protected $addressCountryRepository;
 
   /**
    * Constructor.
@@ -96,16 +95,16 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The cart session.
    * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
    *   Address book manager.
-   * @param \Drupal\acq_checkout\CheckoutFlowManager $checkout_flow_manager
-   *   Checkout flow manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager
-   *   The Checkout options manager.
-   * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $storesFinderUtility
-   *   Store Finder service.
-   * @param \CommerceGuys\Addressing\Country\CountryRepositoryInterface $country_repository
-   *   The country repository.
+   *   Checkout Options Manager service object.
+   * @param \Drupal\address\Repository\CountryRepository $address_country_repository
+   *   Address Country Repository service object.
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
+   *   ACQ Checkout Flow plugin manager object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
+   * @param mixed $store_finder_utility
+   *   Store Finder Utility service object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -113,26 +112,34 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
                               ConfigFactoryInterface $config_factory,
                               CartStorageInterface $cart_storage,
                               AlshayaAddressBookManager $address_book_manager,
-                              CheckoutFlowManager $checkout_flow_manager,
-                              ModuleHandlerInterface $module_handler,
                               CheckoutOptionsManager $checkout_options_manager,
-                              StoresFinderUtility $storesFinderUtility,
-                              CountryRepositoryInterface $country_repository) {
+                              CountryRepository $address_country_repository,
+                              PluginManagerInterface $plugin_manager,
+                              ModuleHandlerInterface $module_handler,
+                              $store_finder_utility) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->cartStorage = $cart_storage;
     $this->addressBookManager = $address_book_manager;
-    $this->checkoutFlowmanager = $checkout_flow_manager;
-    $this->moduleHandler = $module_handler;
     $this->checkoutOptionsManager = $checkout_options_manager;
-    $this->storesFinderUtility = $storesFinderUtility;
-    $this->countryRepository = $country_repository;
+    $this->addressCountryRepository = $address_country_repository;
+    $this->pluginManager = $plugin_manager;
+    $this->moduleHandler = $module_handler;
+    $this->storesFinderUtility = $store_finder_utility;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $store_finder_utility = NULL;
+
+    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler */
+    $moduleHandler = $container->get('module_handler');
+    if ($moduleHandler->moduleExists('alshaya_stores_finder')) {
+      $store_finder_utility = $container->get('alshaya_stores_finder.utility');
+    }
+
     return new static(
       $configuration,
       $plugin_id,
@@ -140,11 +147,11 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $container->get('config.factory'),
       $container->get('acq_cart.cart_storage'),
       $container->get('alshaya_addressbook.manager'),
-      $container->get('plugin.manager.acq_checkout_flow'),
-      $container->get('module_handler'),
       $container->get('alshaya_acm_checkout.options_manager'),
-      $container->get('alshaya_stores_finder.utility'),
-      $container->get('address.country_repository')
+      $container->get('address.country_repository'),
+      $container->get('plugin.manager.acq_checkout_flow'),
+      $moduleHandler,
+      $store_finder_utility
     );
   }
 
@@ -155,8 +162,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     // Load the CheckoutFlow plugin.
     $config = $this->configFactory->get('acq_checkout.settings');
     $checkout_flow_plugin = $config->get('checkout_flow_plugin') ?: 'multistep_default';
-    $plugin_manager = $this->checkoutFlowmanager;
-    $checkout_flow = $plugin_manager->createInstance($checkout_flow_plugin, []);
+    $checkout_flow = $this->pluginManager->createInstance($checkout_flow_plugin, []);
 
     // Get the current step.
     $current_step_id = $checkout_flow->getStepId();
@@ -210,16 +216,14 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $delivery = [];
 
     if ($method = $cart->getShippingMethodAsString()) {
-      $checkout_options_manager = $this->checkoutOptionsManager;
-
-      $method = $checkout_options_manager->getCleanShippingMethodCode($method);
+      $method = $this->checkoutOptionsManager->getCleanShippingMethodCode($method);
       $method_query_code = 'hd';
 
-      $term = $checkout_options_manager->loadShippingMethod($method);
+      $term = $this->checkoutOptionsManager->loadShippingMethod($method);
 
       $method_code = $term->get('field_shipping_code')->getString();
 
-      if ($method_code == $checkout_options_manager->getClickandColectShippingMethod()) {
+      if ($this->storesFinderUtility && $method_code == $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
         $method_query_code = 'cc';
         if ($store_code = $cart->getExtension('store_code')) {
           // Not injected here to avoid module dependency.
@@ -289,7 +293,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
             $line2[] = $this->t('@area Area', ['@area' => $shipping_address['administrative_area']]);
           }
 
-          $country_list = $this->countryRepository->getList();
+          $country_list = $this->addressCountryRepository->getList();
           $line3[] = $country_list[$shipping_address['country_code']];
 
           $delivery_address = implode($comma . '<br>', [
@@ -338,7 +342,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $url = Url::fromRoute('acq_cart.cart')->toString();
 
     // Adding vat text to summary block.
-    $vat_text = $this->configFactory->get(('alshaya_acm_product.settings')->get('vat_text');
+    $vat_text = $this->configFactory->get('alshaya_acm_product.settings')->get('vat_text');
 
     $build = [
       '#theme' => 'checkout_summary',

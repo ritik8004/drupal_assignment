@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - alshaya_acm
+    - alshaya_acm_checkout
     - system
   theme:
     - alshaya_white_label
@@ -15,7 +15,7 @@ plugin: checkout_summary_block
 settings:
   id: checkout_summary_block
   label: 'Checkout Summary Block'
-  provider: alshaya_acm
+  provider: alshaya_acm_checkout
   label_display: '0'
 visibility:
   request_path:
