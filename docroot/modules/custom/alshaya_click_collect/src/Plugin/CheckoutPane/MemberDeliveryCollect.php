@@ -12,7 +12,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\geolocation\GoogleMapsDisplayTrait;
 use Drupal\user\Entity\User;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Provides the delivery CnC pane for members.
@@ -30,6 +29,13 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
   // Add trait to get selected delivery method tab.
   use CheckoutDeliveryMethodTrait;
+
+  /**
+   * Flag to validate when responding back in AJAX callback.
+   *
+   * @var bool
+   */
+  protected static $formHasError = FALSE;
 
   /**
    * {@inheritdoc}
@@ -269,15 +275,10 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     $values = $form_state->getValues($pane_form['#parents']);
 
-    // Secondary check on values.
+    // Secondary check on hidden values.
     if (empty($values['store_code']) || empty($values['shipping_type'])) {
-      // If values are empty, we reload the tab as this is either hacking
-      // or temporary issue.
-      $params = ['step' => 'delivery'];
-      $options = ['query' => ['method' => 'cc']];
-      $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', $params, $options)->toString());
-      $response->send();
-      exit;
+      self::$formHasError = TRUE;
+      return;
     }
 
     $extension = [];
@@ -328,6 +329,15 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    *   Ajax response to reload page on successfully adding new address.
    */
   public function submitMemberDeliveryCollect($form, FormStateInterface $form_state) {
+    // Reload page if error in hidden fields.
+    if (self::$formHasError) {
+      $response = new AjaxResponse();
+      $params = ['step' => 'delivery'];
+      $options = ['query' => ['method' => 'cc']];
+      $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', $params, $options)->toString()));
+      return $response;
+    }
+
     if ($form_state->getErrors()) {
       return $form['member_delivery_collect']['selected_store'];
     }

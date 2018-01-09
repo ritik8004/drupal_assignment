@@ -31,6 +31,13 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
   use CheckoutDeliveryMethodTrait;
 
   /**
+   * Flag to validate when responding back in AJAX callback.
+   *
+   * @var bool
+   */
+  protected static $formHasError = FALSE;
+
+  /**
    * {@inheritdoc}
    */
   public function isVisible() {
@@ -284,7 +291,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         'class' => ['cc-action'],
       ],
       '#ajax' => [
-        'callback' => [$this, 'submitMemberDeliveryCollect'],
+        'callback' => [$this, 'submitGuestDeliveryCollect'],
         'wrapper' => 'selected-store-elements-wrapper',
       ],
       // This is required for limit_validation_errors to work.
@@ -317,6 +324,12 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     }
 
     $values = $form_state->getValues($pane_form['#parents']);
+
+    // Secondary check on hidden values.
+    if (empty($values['store_code']) || empty($values['shipping_type'])) {
+      self::$formHasError = TRUE;
+      return;
+    }
 
     if (user_load_by_mail($values['cc_email'])) {
       $login_link = Link::createFromRoute($this->t('please login'), 'acq_checkout.form', [
@@ -394,7 +407,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
   }
 
   /**
-   * Ajax callback to submit member delivery collect.
+   * Ajax callback to submit guest delivery collect.
    *
    * @param mixed|array $form
    *   Form array.
@@ -404,7 +417,16 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   Ajax response to reload page on successfully adding new address.
    */
-  public function submitMemberDeliveryCollect($form, FormStateInterface $form_state) {
+  public function submitGuestDeliveryCollect($form, FormStateInterface $form_state) {
+    // Reload page if error in hidden fields.
+    if (self::$formHasError) {
+      $response = new AjaxResponse();
+      $params = ['step' => 'delivery'];
+      $options = ['query' => ['method' => 'cc']];
+      $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', $params, $options)->toString()));
+      return $response;
+    }
+
     if ($form_state->getErrors()) {
       return $form['guest_delivery_collect']['selected_store']['elements'];
     }
