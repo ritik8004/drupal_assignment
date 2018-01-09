@@ -49,27 +49,77 @@ class CustomCommand extends BltTasks {
    */
   public function localResetLocalSettings() {
     $this->say('Resetting local.settings.php file');
-    $taskFilesystemStack = $this->taskFilesystemStack();
     $multisites = $this->getConfigValue('multisite.name');
     $docroot = $this->getConfigValue('docroot');
+
+    // Default site directory.
+    $default_multisite_dir = $this->getConfigValue('docroot') . "/sites/default";
+    // Default local settings file provided by blt.
+    $blt_local_settings_file = $this->getConfigValue('blt.root') . '/settings/default.local.settings.php';
+
+    // Generate local.settings.php.
+    $default_local_settings_file = "$default_multisite_dir/settings/default.local.settings.php";
+    $local_settings_file = "$default_multisite_dir/settings/local.settings.php";
+
+    // Generate local.drushrc.php.
+    $default_local_drush_file = "$default_multisite_dir/default.local.drushrc.php";
+    $local_drush_file = "$default_multisite_dir/local.drushrc.php";
+
+    // Array of from and destination file paths.
+    $copy_map = [
+      $blt_local_settings_file => $local_settings_file,
+      $default_local_drush_file => $local_drush_file,
+    ];
+
+    // Adding copy command to foreach as we have to generate files for each
+    // forloop.
+    $taskFilesystemStack = $this->taskFilesystemStack();
+    $taskFilesystemStack->stopOnFail()
+      ->setVerbosityThreshold(VerbosityThresholdInterface::VERBOSITY_VERBOSE);
+
+    // Copy files without overwriting.
+    foreach ($copy_map as $from => $to) {
+      if (!file_exists($to)) {
+        $this->say("Generating file $from ==> $to");
+        $taskFilesystemStack->copy($from, $to);
+      }
+    }
+
+    $taskFilesystemStack->run();
+
     foreach ($multisites as $multisite) {
       $multisite_dir = $docroot . '/sites/' . $multisite;
       $settings_file = $multisite_dir . '/settings.php';
-      $taskFilesystemStack->chmod($multisite_dir, 0755);
-      $taskFilesystemStack->chmod($settings_file, 0644);
 
-      $multisite_settings_file = $multisite_dir . '/settings/local.settings.php';
+      // Local settings file for multisite.
+      $project_local_settings_file = "$multisite_dir/settings/local.settings.php";
 
-      if (file_exists($multisite_settings_file)) {
-        $taskFilesystemStack->chmod($multisite_settings_file, 0644);
+      // Local drushrc file for multisite.
+      $project_local_drush_file = "$multisite_dir/local.drushrc.php";
+
+      // Array of from and destination file paths.
+      $copy_map = [
+        $default_local_settings_file => $project_local_settings_file,
+        $local_drush_file => $project_local_drush_file,
+      ];
+
+      // Adding copy command to loop to generate files for each multisite.
+      $taskFilesystemStack = $this->taskFilesystemStack();
+      $taskFilesystemStack->stopOnFail()
+        ->setVerbosityThreshold(VerbosityThresholdInterface::VERBOSITY_VERBOSE)
+        ->chmod($multisite_dir, 0755)
+        ->chmod($settings_file, 0644);
+
+      // Copy files without overwriting.
+      foreach ($copy_map as $from => $to) {
+        if (!file_exists($to)) {
+          $this->say("Generating file $from ==> $to");
+          $taskFilesystemStack->copy($from, $to);
+        }
       }
 
-      $this->say('Generating ' . $multisite_settings_file);
-      $taskFilesystemStack->copy($docroot . '/sites/default/settings/default.local.settings.php', $multisite_dir . '/settings/local.settings.php', TRUE);
+      $taskFilesystemStack->run();
     }
-    $taskFilesystemStack->stopOnFail()
-      ->setVerbosityThreshold(VerbosityThresholdInterface::VERBOSITY_VERBOSE)
-      ->run();
 
   }
 
