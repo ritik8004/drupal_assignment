@@ -35,9 +35,7 @@
     </style>
     {# Only JS from an AMP library is processed in the placeholder. #}
     <js-placeholder token="{{ placeholder_token|raw }}">
-    <script>
-      {{ inline_js }}
-    </script>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
   </head>
   <body{{ attributes }}>
     {% if amp_skip_link %}
