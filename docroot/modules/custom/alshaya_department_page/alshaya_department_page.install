@@ -5,6 +5,64 @@
  * Contains install, update, uninstall hooks for alshaya_department_page module.
  */
 
+use Drupal\paragraphs\Entity\Paragraph;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enabling translation on paragraph referenced fields.
+ */
+function alshaya_department_page_update_8002() {
+  // Paragraph fields in department pages.
+  $fields = [
+    'field_promo_blocks',
+  ];
+
+  // Load all department page content.
+  $pages = \Drupal::entityTypeManager()
+    ->getListBuilder('node')
+    ->getStorage()
+    ->loadByProperties([
+      'type' => 'department_page',
+    ]);
+
+  // Correct file status for all files linked to paragraphs in department pages.
+  /** @var \Drupal\node\Entity\Node $page */
+  foreach ($pages as $page) {
+    // Check if we have AR translation available for the content.
+    // Data correction is required only for AR.
+    if (!$page->hasTranslation('ar')) {
+      continue;
+    }
+
+    // Load the ar translation.
+    /** @var \Drupal\node\Entity\Node $node */
+    $page = $page->getTranslation('ar');
+
+    // Loop through all the paragraph fields which require data correction.
+    foreach ($fields as $field) {
+      // Get existing values.
+      $values = $page->get($field)->getValue();
+
+      // If there is value, correct file status for each of them.
+      if ($values) {
+        foreach ($values as $value) {
+          // Load the paragraph from the target_id in value.
+          /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+          $paragraph = Paragraph::load($value['target_id']);
+          _alshaya_paragraphs_correct_file_status($paragraph);
+
+          // Check if we have arabic translation available, we use translation.
+          if ($paragraph->hasTranslation('ar')) {
+            $paragraph = $paragraph->getTranslation('ar');
+            _alshaya_paragraphs_correct_file_status($paragraph);
+          }
+        }
+      }
+    }
+  }
+}
+
 /**
  * Implements hook_update_N().
  *
