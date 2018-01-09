@@ -63,11 +63,10 @@ modules:
     enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [devel, views_ui]
 behat:
-  launch-selenium: true
-  launch-phantomjs: false
   paths:
     - '${repo.root}/tests/behat'
   tags: '~manual&&~ajax&&~experimental&&~lightningextension&&~example'
+  web-driver: selenium
 multisite:
   name:
     - g

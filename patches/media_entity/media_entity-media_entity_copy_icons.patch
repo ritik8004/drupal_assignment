@@ -1,0 +1,37 @@
+diff --git a/media_entity.module b/media_entity.module
+index 9012a86..8be95c9 100644
+--- a/media_entity.module
++++ b/media_entity.module
+@@ -55,3 +55,32 @@ function media_entity_entity_type_build(array &$entity_types) {
+     ]);
+   }
+ }
++
++/**
++ * Copy the media file icons to files directory for use with image styles.
++ *
++ * @param string $source
++ *   Source folder.
++ * @param string $destination
++ *   Destination folder.
++ *
++ * @throws Exception
++ */
++function media_entity_copy_icons($source, $destination) {
++
++  file_prepare_directory($destination, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
++
++  $files = file_scan_directory($source, '/.*\.(svg|png|jpg|jpeg|gif)$/');
++  foreach ($files as $file) {
++    // When reinstalling the media module we don't want to copy the icons when
++    // they already exist. The icons could be replaced (by a contrib module or
++    // manually), so we don't want to replace the existing files. Removing the
++    // files when we uninstall could also be a problem if the files are
++    // referenced somewhere else. Since showing an error that it was not
++    // possible to copy the files is also confusing, we silently do nothing.
++    if (!file_exists($destination . DIRECTORY_SEPARATOR . $file->filename)) {
++      file_unmanaged_copy($file->uri, $destination, FILE_EXISTS_ERROR);
++    }
++  }
++
++}

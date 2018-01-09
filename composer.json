@@ -5,13 +5,13 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "acquia/blt": "8.8.7",
-        "acquia/lightning": "^2.0.3",
+        "acquia/blt": "^8.9.7",
+        "acquia/lightning": "^2.2.0",
         "drupal/address": "^1.0-rc4",
         "drupal/acsf": "^1.33.0",
         "drupal/key_value_field": "^1.0-beta1",
         "drupal/restui": "^1.13",
-        "drush/drush": "^8.1.8",
+        "drush/drush": "^8.1.15",
         "drupal/menu_admin_per_menu": "^1.0@RC",
         "drupal/menu_link_attributes": "^1.0@beta",
         "drupal/paragraphs": "^1.1",
@@ -53,7 +53,7 @@
         "drupal/views_block_filter_block": "1.x-dev",
         "mobiledetect/mobiledetectlib": "^2.8",
         "acquia/http-hmac-php": "~3.2",
-        "drupal/simple_oauth": "^2.0@RC",
+        "drupal/simple_oauth": "^3.0",
         "drupal/pcb": "^1.0@RC",
         "drupal/components": "^1.0",
         "drupal/twig_tweak": "^1.8",
@@ -70,14 +70,14 @@
         "acquia/acsf-tools": "^8.1",
         "drupal/metatag": "1.2",
         "drupal/acquia_purge": "^1.0@beta",
-        "drupal/video_embed_field": "1.x-dev",
-        "drupal/role_delegation": "^1.0@alpha"
+        "drupal/video_embed_field": "2.0.0-alpha2",
+        "drupal/role_delegation": "^1.0@alpha",
+        "geerlingguy/drupal-vm": "~4.3"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
         "drupal/devel": "^1.0.0-alpha1",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
-        "geerlingguy/drupal-vm": "~4.2",
         "drupal/stage_file_proxy": "^1.0@alpha"
     },
     "repositories": {
@@ -100,6 +100,10 @@
         "nuvoleweb": {
             "type": "git",
             "url": "https://github.com/nuvoleweb/search_api_spellcheck.git"
+        },
+        "asset-packagist": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         }
     },
     "autoload-dev": {
@@ -138,9 +142,7 @@
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
             },
             "drupal/facets": {
-                "Fatal error on first facet being empty": "https://www.drupal.org/files/issues/facets_empty_facet_2877004_3.patch",
-                "Facet summary, Reset facets link text not Translatable": "https://www.drupal.org/files/issues/add-translation-2877322-2.patch",
-                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha11-57.patch",
+                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/ajax_facets_blocks_for-2826449-85.patch",
                 "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
                 "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch"
             },
@@ -149,22 +151,16 @@
             },
             "drupal/core": {
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
-                "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
-                "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2500313--views-get-paging-support-83x-2.patch",
+                "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-3.patch",
+                "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/add_views_render-2500313-39.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
-                "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-8.patch",
-                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
-                "Enable GET by default for exposed form AJAX": "patches/ajax_view.patch",
-                "Database lock backend should normalize the lock name": "https://www.drupal.org/files/issues/2872276-10.patch",
-                "Clearing cache via UI in translated language resets config translation of field labels to default language": "https://www.drupal.org/files/issues/clearing_cache_via_ui-2650434-137.patch"
+                "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
+                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch"
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
                 "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch",
                 "Add alter hook for admin check": "https://www.drupal.org/files/issues/2892237-2.patch"
-            },
-            "drupal/user_registrationpassword": {
-                "Config Translation for email settings": "https://www.drupal.org/files/issues/adding_config_translation-2847989-13.patch"
             },
             "drupal/r4032login": {
                 "Alter/Override options parameter": "https://www.drupal.org/files/issues/2883264-4.patch"
@@ -172,16 +168,16 @@
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch"
             },
-            "drupal/clientside_validation" : {
+            "drupal/clientside_validation": {
                 "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
                 "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
             },
-            "drupal/redirect" : {
-                "Wildcard support for query parameter redirects" : "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch",
-                "Fix - Integrity constraint violation" : "https://www.drupal.org/files/issues/duplicate-entry-fix-2887866-9.patch"
+            "drupal/redirect": {
+                "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch",
+                "Fix - Integrity constraint violation": "https://www.drupal.org/files/issues/duplicate-entry-fix-2887866-9.patch"
             },
-            "drupal/simple_sitemap" : {
-                "MMCPA-2433" : "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
+            "drupal/simple_sitemap": {
+                "MMCPA-2433": "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
             },
             "drupal/password_policy" : {
                 "Code logic will never reset password expiry - update" : "https://www.drupal.org/files/issues/2867089-9.patch",
@@ -191,14 +187,17 @@
             "drupal/change_pwd_page" : {
                 "Integration with password_policy" : "https://www.drupal.org/files/issues/2933747-4.patch"
             },
-            "drupal/sharethis" : {
+            "drupal/sharethis": {
                 "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"
             },
-            "drupal/recaptcha" : {
+            "drupal/recaptcha": {
                 "modal support": "https://www.drupal.org/files/issues/2493183-recaptcha-use-behaviors-76.patch"
             },
-            "drupal/paragraphs" : {
+            "drupal/paragraphs": {
                 "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
+            },
+            "drupal/media_entity": {
+                "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
             }
         },
         "installer-paths": {
@@ -227,7 +226,11 @@
                 "type:drupal-drush"
             ],
             "docroot/libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset",
+                "type:bower-asset",
+                "type:npm-asset"
             ]
         },
         "merge-plugin": {
@@ -242,7 +245,13 @@
             "merge-extra-deep": true,
             "merge-scripts": true,
             "replace": true
-        }
+        },
+        "installer-types": [
+            "bower-asset",
+            "npm-asset",
+            "bower-asset",
+            "npm-asset"
+        ]
     },
     "scripts": {
         "blt-alias": "blt install-alias -Dcreate_alias=true",
@@ -266,5 +275,10 @@
             "rm -rf vendor/bin/phantomjs",
             "PhantomInstaller\\Installer::installPhantomJS"
         ]
+    },
+    "config": {
+        "platform": {
+            "php": "5.6"
+        }
     }
 }
