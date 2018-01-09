@@ -22,6 +22,7 @@
 
 // Design components are reusable styling that can be applied using just the CSS
 // class names specified in the component. Also known as design 'modules'.
+@import "../../alshaya_white_label/sass/components/cart/cart_notification.scss";
 @import "components/**/*";
 
 // States are variations that are usually applied via js, such as `.is-active`.
