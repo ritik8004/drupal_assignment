@@ -11,8 +11,8 @@ dimensions:
     width: 74
     height: 111
   pdp_zoom:
-    width: 786
-    height: 1152
+    width: 1152
+    height: 1728
   pdp_fullscreen:
     width: 758
     height: 1137
