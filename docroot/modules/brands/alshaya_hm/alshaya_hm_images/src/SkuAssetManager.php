@@ -95,7 +95,7 @@ class SkuAssetManager {
    *   SKU text or full entity object.
    * @param string $page_type
    *   Page on which the asset needs to be rendered.
-   * @param string $location_image
+   * @param array $location_images
    *   Location on page e.g., main image, thumbnails etc.
    * @param string $style
    *   Style string.
@@ -103,7 +103,7 @@ class SkuAssetManager {
    * @return array
    *   Array of urls to sku assets.
    */
-  public function getSkuAsset($sku, $page_type, $location_image, $style = "") {
+  public function getSkuAssets($sku, $page_type, $location_images, $style = "") {
     $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
     if (!($sku instanceof SKU)) {
@@ -112,48 +112,66 @@ class SkuAssetManager {
 
     $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
     $assets = $this->sortSkuAssets($sku, $page_type, unserialize($sku->get('attr_assets')->value));
-    $asset_urls = [];
+    $asset_variant_urls = [];
 
-    foreach ($assets as $asset) {
-      list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
+    if (empty($assets)) {
+      return [];
+    }
 
-      // Prepare query options for image url.
-      if (isset($set['url'])) {
-        $url_parts = parse_url(urldecode($set['url']));
-        if (!empty($url_parts['query'])) {
-          parse_str($url_parts['query'], $query_options);
-          // Overwrite the product style coming from season 5 image url with the
-          // one based on context in which the image is being rendered.
-          $query_options['call'] = 'url[' . $image_location_identifier . ']';
+    foreach ($location_images as $location_image) {
+      $asset_urls = [];
+      foreach ($assets as $asset) {
+        // If style is set, it means we looking for a varaint for swatch image.
+        // Avoid processing asset types that don't match the swatch style
+        // requested.
+        if (($style) && ($asset['sortAssetType'] !== $style)) {
+          continue;
+        }
+
+        list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
+
+        // Prepare query options for image url.
+        if (isset($set['url'])) {
+          $url_parts = parse_url(urldecode($set['url']));
+          if (!empty($url_parts['query'])) {
+            parse_str($url_parts['query'], $query_options);
+            // Overwrite the product style coming from season 5 image url with
+            // the one based on context in which the image is being rendered.
+            $query_options['call'] = 'url[' . $image_location_identifier . ']';
+            $options = [
+              'query' => $query_options,
+            ];
+          }
+        }
+        else {
           $options = [
-            'query' => $query_options,
+            'query' => [
+              'set' => implode(',', $set),
+              'call' => 'url[' . $image_location_identifier . ']',
+            ],
           ];
         }
-      }
-      else {
-        $options = [
-          'query' => [
-            'set' => implode(',', $set),
-            'call' => 'url[' . $image_location_identifier . ']',
-          ],
-        ];
-      }
 
-      $asset_urls[] = [
-        'url' => Url::fromUri($base_url, $options),
-        'sortAssetType' => $asset['sortAssetType'],
-        'sortFacingType' => $asset['sortFacingType'],
-      ];
-    }
-    if ($style) {
-      foreach ($asset_urls as $asset) {
-        if ($asset['sortAssetType'] === $style) {
-          return [$asset];
+        $asset_urls[] = [
+          'url' => Url::fromUri($base_url, $options),
+          'sortAssetType' => $asset['sortAssetType'],
+          'sortFacingType' => $asset['sortFacingType'],
+        ];
+
+        if (count($location_images) === 1) {
+          return $asset_urls;
+        }
+
+        if ($style) {
+          return array_shift($asset_urls);
         }
       }
+      if (!empty($asset_urls)) {
+        $asset_variant_urls[$location_image] = $asset_urls;
+      }
     }
 
-    return $asset_urls;
+    return $asset_variant_urls;
   }
 
   /**
@@ -354,7 +372,7 @@ class SkuAssetManager {
    *   Parent sku for which we pulling child assets.
    * @param string $context
    *   Page on which the asset needs to be rendered.
-   * @param string $location
+   * @param array $locations
    *   Location on page e.g., main image, thumbnails etc.
    * @param bool $first_only
    *   Flag to indicate we need the assets of the first child only.
@@ -362,20 +380,18 @@ class SkuAssetManager {
    * @return array
    *   Array of sku child assets.
    */
-  public function getChildSkuAssets(SKU $sku, $context, $location, $first_only = TRUE) {
-    $child_skus = $this->skuManager->getChildSkus($sku);
+  public function getChildSkuAssets(SKU $sku, $context, $locations, $first_only = TRUE) {
+    $child_skus = $this->skuManager->getChildSkus($sku, $first_only);
     $assets = [];
 
-    if ($child_skus) {
+    if (($first_only) && ($child_skus instanceof SKU)) {
+      return $this->getSkuAssets($child_skus, $context, $locations);
+    }
+
+    if (!empty($child_skus)) {
       foreach ($child_skus as $child_sku) {
         if ($child_sku instanceof SKU) {
-          if ($first_only) {
-            $assets = $this->getSkuAsset($child_sku, $context, $location);
-            return $assets;
-          }
-          else {
-            $assets[$sku->getSku()] = $this->getSkuAsset($child_sku, $context, $location);
-          }
+          $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations);
         }
       }
     }
@@ -480,18 +496,19 @@ class SkuAssetManager {
    *   Parent Sku.
    * @param string $page_type
    *   Type of page.
-   * @param string $image_type
+   * @param array $image_types
    *   Type of image.
    *
    * @return array|images
    *   Array of images for the SKU.
    */
-  public function getImagesForSku(SKU $sku, $page_type, $image_type) {
+  public function getImagesForSku(SKU $sku, $page_type, $image_types) {
+    $images = [];
     if ($sku->bundle() == 'simple') {
-      $images = $this->getSkuAsset($sku, $page_type, $image_type);
+      $images = $this->getSkuAssets($sku, $page_type, $image_types);
     }
     elseif ($sku->bundle() == 'configurable') {
-      $images = $this->getChildSkuAssets($sku, $page_type, $image_type);
+      $images = $this->getChildSkuAssets($sku, $page_type, $image_types);
     }
     return $images;
   }

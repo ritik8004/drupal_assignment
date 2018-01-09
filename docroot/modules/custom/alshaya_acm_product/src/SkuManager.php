@@ -485,14 +485,15 @@ class SkuManager {
       $result = $query->execute();
 
       while ($row = $result->fetchAssoc()) {
-        if ($first_only) {
-          return SKU::loadFromSku($row['field_configured_skus_value']);
+        if (($first_only) &&
+          ($child_sku = SKU::loadFromSku($row['field_configured_skus_value']))) {
+          return $child_sku;
         }
         $child_skus[] = SKU::loadFromSku($row['field_configured_skus_value']);
       }
     }
 
-    return $child_skus;
+    return array_filter($child_skus);
   }
 
   /**
