@@ -283,7 +283,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_theme_suggestions_form_alter().
  */
 function alshaya_white_label_theme_suggestions_form_alter(array &$suggestions, array $variables) {
   $route_match = \Drupal::routeMatch();
@@ -346,6 +346,7 @@ function alshaya_white_label_form_node_form_alter(&$form, FormStateInterface $fo
 /**
  * Implements hook_form_alter().
  */
+// @codingStandardsIgnoreLine
 function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   switch ($form_id) {
     case "views_exposed_form":
@@ -554,7 +555,7 @@ function alshaya_white_label_preprocess_menu(&$variables) {
     // Get the current path.
     $current_path = \Drupal::routeMatch()->getRouteObject()->getPath();
     $items = $variables['items'];
-    foreach ($items as $key => $item) {
+    foreach ($items as $item) {
       // If path is current_path, add active class.
       if ($item['url']->getRouteName() == 'user.page') {
         if (substr($current_path, 0, 6) === '/user/' || substr($current_path, 0, 9) === '/profile/') {

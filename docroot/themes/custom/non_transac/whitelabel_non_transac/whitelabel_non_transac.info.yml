@@ -34,4 +34,3 @@ component-libraries:
   pages:
     paths:
       - components/_patterns/04-pages
-

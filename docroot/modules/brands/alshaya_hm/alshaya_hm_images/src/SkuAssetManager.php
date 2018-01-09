@@ -9,7 +9,6 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * SkuAssetManager Class.
@@ -75,6 +74,10 @@ class SkuAssetManager {
    *   Sku manager service.
    * @param \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager $skuPluginManager
    *   Sku Plugin Manager.
+   * @param \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager $skuPluginManager
+   *   Sku Plugin Manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
