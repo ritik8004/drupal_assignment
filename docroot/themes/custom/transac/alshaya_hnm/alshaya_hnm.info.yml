@@ -3,6 +3,7 @@ type: theme
 description: 'Theme for H&M.'
 core: 8.x
 base theme: alshaya_white_label
+alshaya_theme_type: transac
 
 regions:
   menu_primary: 'Menu Primary'

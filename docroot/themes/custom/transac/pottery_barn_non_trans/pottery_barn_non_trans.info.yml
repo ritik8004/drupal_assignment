@@ -3,6 +3,8 @@ type: theme
 description: 'Pottery Barn Non Transactional Site theme.'
 core: 8.x
 base theme: alshaya_white_label
+alshaya_theme_type: non_transac
+
 libraries:
   - pottery_barn_non_trans/global_styles
 
