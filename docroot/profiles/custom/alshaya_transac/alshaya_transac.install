@@ -6,6 +6,15 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Re-save checkout summary block config to use updated module.
+ */
+function alshaya_transac_update_8103() {
+  alshaya_config_install_configs(['block.block.checkoutsummaryblock'], 'alshaya_transac', 'optional');
+}
+
+/**
  * Implements hook_update_n().
  *
  * Hook update to disable whitelabel_transac theme and enable
