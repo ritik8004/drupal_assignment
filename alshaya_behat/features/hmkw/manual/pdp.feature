@@ -1,4 +1,4 @@
-@javascript @manual @pdp @prod
+@javascript @manual @pdp
 Feature: Test the product detail page
 
   Scenario: As a Guest
@@ -55,6 +55,7 @@ Feature: Test the product detail page
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
+  @prod
   Scenario: As a Guest
     I should be able to see all the various sections
     on a configurable product detail page
@@ -75,6 +76,7 @@ Feature: Test the product detail page
     And I should see "Collect the order from store in 99 days"
     Then I should be able to see the footer
 
+  @prod
   Scenario: As a Guest user
     I should be able to expand HD and CC on a configurable PDP
     Given I am on a configurable product
@@ -129,7 +131,7 @@ Feature: Test the product detail page
     |.st_facebook_custom|Log in to your Facebook account to share.|
     |.st_twitter_custom|Share a link with your followers|
 
-  @media
+  @media @prod
   Scenario Outline:
   As an User
   I should be able to connect via Social media
@@ -199,7 +201,7 @@ Feature: Test the product detail page
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
-  @arabic @fail
+  @arabic @prod
   Scenario: As a Guest on Arabic site
   I should be able to see all the various sections
   on a configurable product detail page
@@ -222,7 +224,7 @@ Feature: Test the product detail page
     And I should see "استلم طلبيتك من المحل خلال 99 أيام"
     Then I should be able to see the footer in Arabic
 
-  @arabic @fail
+  @arabic @prod
   Scenario: As a Guest user on Arabic site
   I should be able to expand HD and CC on a configurable PDP
     Given I am on a configurable product
@@ -279,7 +281,7 @@ Feature: Test the product detail page
       |.st_facebook_custom|Log in to your Facebook account to share.|
       |.st_twitter_custom|Share a link with your followers|
 
-  @media @arabic
+  @media @arabic @prod
   Scenario Outline:
   As an User on Arabic site
   I should be able to connect via Social media

@@ -109,7 +109,7 @@ class PasswordRepeat extends PasswordConstraintBase implements ContainerFactoryP
     $form['history_repeats'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Number of old passwords not allowed'),
-      '#description' => 'A value of 0 represents no allowed repeats',
+      '#description' => $this->t('A value of 0 represents no allowed repeats'),
       '#default_value' => $this->getConfiguration()['history_repeats'],
     ];
     return $form;

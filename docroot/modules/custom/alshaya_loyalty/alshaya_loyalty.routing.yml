@@ -4,4 +4,4 @@ alshaya_loyalty.loyalty_settings_form:
     _form: '\Drupal\alshaya_loyalty\Form\LoyaltyConfigForm'
     _title: 'Loyalty settings'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer site configuration'

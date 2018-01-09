@@ -1,7 +1,7 @@
 @javascript @checkout @english @eng_checkout @mmcpa-1930 @manual @prod
 Feature: Test Checkout feature
   Background:
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to cart"
     And I wait for AJAX to finish
@@ -65,7 +65,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I press "place order"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
+    And I select "ABK" from "bank"
     And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
@@ -102,7 +102,7 @@ Feature: Test Checkout feature
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
+    And I select "ABK" from "bank"
     And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
@@ -304,10 +304,10 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I press "place order"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
+    And I select "ABK" from "bank"
     And I fill in "cardN" with "000000001"
     And I select "1" from "Ecom_Payment_Card_ExpDate_Month"
-    And I select "2017" from "Ecom_Payment_Card_ExpDate_Year"
+    And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
     And I press "Submit"
     When I wait 5 seconds

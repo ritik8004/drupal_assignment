@@ -7,7 +7,7 @@ Feature: As an authenticated user
     Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I press "Add to cart"
     And I wait for AJAX to finish
