@@ -6,10 +6,10 @@ Feature: Test basket page
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    Given I am on a simple product page
-    And I wait for the page to load
-    When I press "Add to cart"
-    And I wait for AJAX to finish
+#    Given I am on a simple product page
+#    And I wait for the page to load
+#    When I press "Add to cart"
+#    And I wait for AJAX to finish
     When I am on a configurable product
     And I wait for the page to load
     When I press "Add to cart"
@@ -20,7 +20,7 @@ Feature: Test basket page
     and the header and footer
     When I go to "/cart"
     And I wait for the page to load
-    Then I should see the link for simple product
+#    Then I should see the link for simple product
     Then I should be able to see the header
     And I should see the link for configurable product
     Then I should see the button "checkout securely"
@@ -87,7 +87,7 @@ Feature: Test basket page
     When I follow "عربية"
     And I wait for the page to load
     Then I should be able to see the header in Arabic
-    Then I should see the link for simple product in Arabic
+#    Then I should see the link for simple product in Arabic
     And I should see the link for configurable product in Arabic
     Then I should see the button "إتمام الشراء بأمان"
     And I should see "حقيبة التسوق ("

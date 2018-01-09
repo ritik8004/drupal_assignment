@@ -108,11 +108,6 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     public function iAmOnAConfigurableProduct() {
         $this->visitPath($this->config_url);
         $this->iWaitForThePageToLoad();
-        $color = $this->getSession()->getPage()->find('css','#configurable_ajax > div > div.select2Option > ul > li:nth-child(2) > a');
-        if($color !== null)
-            $color->click();
-        $this->getSession()
-            ->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
         $size = $this->getSession()->getPage()->clickLink($this->config_variant);
         $this->getSession()
             ->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
@@ -675,43 +670,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         }
     }
 
-    public function registerUser() {
-
-        $page = $this->getSession()->getPage();
-        $this->visitPath($this->base_url);
-        $this->iWaitForThePageToLoad();
-        $page->clickLink('Sign in');
-        $page->fillField('edit-name', 'user3+admin@example.com');
-        $page->fillField('edit-pass', 'AlShAyAU1admin');
-        $page->pressButton('sign in');
-
-        $this->visitPath('/admin/people/create');
-        $page->fillField('edit-field-first-name-0-value', 'automation');
-        $page->fillField('edit-field-last-name-0-value', 'user');
-        $page->fillField('edit-mail', 'auto_user@gmail.com');
-        $page->fillField('edit-pass-pass1', 'Autouser123$');
-        $page->fillField('edit-pass-pass2', 'Autouser123$');
-        $page->pressButton('Create an account');
-
-    }
-
-    /**
-     * @Given /^I fill in details on checkout home delivery page$/
-     */
-    public function iFillInDetailsOnCheckoutHomeDeliveryPage() {
-
-        $page = $this->getSession()->getPage();
-        $page->fillField('edit-guest-delivery-home-address-shipping-given-name', 'Shweta');
-        $page->fillField('edit-guest-delivery-home-address-shipping-family-name', 'Sharma');
-        $page->fillField('edit-guest-delivery-home-address-shipping-organization', 'shwetasharma@aol.com');
-        $page->fillField('edit-guest-delivery-home-address-shipping-mobile-number-mobile', '97004455');
-        $page->selectFieldOption('edit-guest-delivery-home-address-shipping-administrative-area', 'Abbasiya');
-        $page->fillField('edit-guest-delivery-home-address-shipping-locality', 'block line A');
-        $page->fillField('edit-guest-delivery-home-address-shipping-address-line1', 'Address line 1');
-        $page->fillField('edit-guest-delivery-home-address-shipping-dependent-locality', 'Kuwait towers');
-        $page->pressButton('deliver to this address');
-    }
-
     /**
      * @Given /^I check the "([^"]*)" radio button with "([^"]*)" value$/
      */
@@ -734,6 +692,9 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         $parent = $this->getSession()->getPage()->findById($payment);
         if($parent !== NULL) {
             $parent->click();
+        }
+        else{
+            throw new Exception('Element not clickable');
         }
     }
 
@@ -933,43 +894,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     }
 
     /**
-     * @Then /^I should see nearby stores listed$/
-     */
-    public function iShouldSeeNearbyStoresListed() {
-        $page = $this->getSession()->getPage();
-
-    }
-
-    /**
-     * @BeforeScenario @authenticated
-     */
-    public function iAmLoggedInAsAnAuthenticatedUser() {
-
-        //    $this->registerUser();
-        $page = $this->getSession()->getPage();
-        $this->visitPath($this->base_url);
-        $this->iWaitForThePageToLoad();
-        $page->clickLink('Sign in');
-        $page->fillField('edit-name', 'user3+admin@example.com');
-        $page->fillField('edit-pass', 'AlShAyAU1admin');
-        $page->pressButton('sign in');
-
-        $this->visitPath('/admin/people/create');
-        $page->fillField('edit-field-first-name-0-value', 'automation');
-        $page->fillField('edit-field-last-name-0-value', 'user');
-        $page->fillField('edit-mail', 'auto_user@gmail.com');
-        $page->fillField('edit-pass-pass1', 'Autouser123$');
-        $page->fillField('edit-pass-pass2', 'Autouser123$');
-        $page->pressButton('Create an account');
-        $this->logout();
-        $page = $this->getSession()->getPage();
-        $page->clickLink('Sign in');
-        $page->fillField('edit-name', 'auto_user@gmail.com');
-        $page->fillField('edit-pass', 'Autouser123$');
-        $page->pressButton('sign in');
-    }
-
-    /**
      * @Then /^I should see the number of stores displayed$/
      */
     public function iShouldSeeTheNumberOfStoresDisplayed() {
@@ -1080,16 +1004,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     }
 
     /**
-     * @Given /^I add it to basket$/
-     */
-    public function iAddItToBasket() {
-        $label = $this->getSession()->getPage()->findById('edit-add-to-cart')
-            ->find('css', '.ladda-label')
-            ->getText();
-        $this->getSession()->getPage()->clickLink($label);
-    }
-
-    /**
      * @Then /^I should see a message for the product being added to cart "([^"]*)"$/
      */
     public function iShouldSeeAMessageForTheProductBeingAddedToCart($arg1) {
@@ -1150,11 +1064,16 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     /**
      * @When /^I click "([^"]*)" in my account section$/
      */
-    public function iClickInMyAccountSection($arg1) {
+    public function iClickInMyAccountSection($arg1)
+    {
         $text = $this->getSession()
             ->getPage()
-            ->find('css', '#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a')
-            ->click();
+            ->find('css', '#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a');
+        if ($text !== null) {
+            $text->click();
+        } else {
+            throw new Exception($arg1 . ' not found');
+        }
     }
 
     /**
@@ -1243,11 +1162,16 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     /**
      * @When /^I click Get directions$/
      */
-    public function iClickGetDirections() {
-        $this->getSession()
+    public function iClickGetDirections()
+    {
+        $element = $this->getSession()
             ->getPage()
-            ->find('css', 'div.get--directions > div > a')
-            ->click();
+            ->find('css', 'div.get--directions > div > a');
+        if ($element !== null) {
+            $element->click();
+        } else {
+            throw new Exception('Element not found');
+        }
     }
 
     /**
@@ -1480,36 +1404,29 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     /**
      * @When /^I confirm deletion of address$/
      */
-    public function iConfirmDeletionOfAddress() {
+    public function iConfirmDeletionOfAddress()
+    {
         $page = $this->getSession()->getPage();
-        $button = $page->find('css', '.ui-dialog-buttonset.form-actions > button > span.ui-button-text')
-            ->click();
+        $button = $page->find('css', '.ui-dialog-buttonset.form-actions > button > span.ui-button-text');
+        if ($button !== null) {
+            $button->click();
+        } else {
+            throw new Exception('Button not found');
+        }
     }
 
     /**
      * @When /^I check the "([^"]*)" checkbox$/
      */
-    public function iCheckTheCheckbox($option) {
+    public function iCheckTheCheckbox($option)
+    {
         $page = $this->getSession()->getPage();
-        $page->find('css', $option)->click();
-    }
-
-    /**
-     * @When /^I select Cancelled from the status dropdown$/
-     */
-    public function iSelectCancelledFromTheStatusDropdown() {
-        $page = $this->getSession()->getPage();
-        $page->find('css', '.select2-selection__arrow')->click();
-        $page->find('css', 'ul.select2-results__options li:nth-child(2)')->click();
-    }
-
-    /**
-     * @When /^I select Dispatched from the status dropdown$/
-     */
-    public function iSelectDispatchedFromTheStatusDropdown() {
-        $page = $this->getSession()->getPage();
-        $page->find('css', '.select2-selection__arrow')->click();
-        $page->find('css', 'ul.select2-results__options li:nth-child(3)')->click();
+        $element = $page->find('css', $option);
+        if ($element !== null) {
+            $element->click();
+        } else {
+            throw new Exception('Element not found');
+        }
     }
 
     /**
@@ -1528,10 +1445,15 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     /**
      * @When /^I agree on Terms of Use$/
      */
-    public function iAgreeOnTermsOfUse() {
+    public function iAgreeOnTermsOfUse()
+    {
         $page = $this->getSession()->getPage();
-        $page->find('css', '#uc_termsofservice_agreement_checkout-pane > legend > span > a')
-            ->click();
+        $element = $page->find('css', '#uc_termsofservice_agreement_checkout-pane > legend > span > a');
+        if ($element !== null) {
+            $element->click();
+        } else {
+            throw new Exception('Element not found');
+        }
     }
 
     /**
@@ -1546,9 +1468,15 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     /**
      * @When /^I follow subscribe button having (.*)$/
      */
-    public function iFollowSubscribeButtonHaving($xpath) {
+    public function iFollowSubscribeButtonHaving($xpath)
+    {
         $page = $this->getSession()->getPage();
-        $page->find('xpath', $xpath)->click();
+        $element = $page->find('xpath', $xpath);
+        if ($element !== null) {
+            $element->click();
+        } else {
+            throw new Exception('Element not found');
+        }
     }
 
     /**
@@ -1581,9 +1509,15 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     /**
      * @When /^I select "([^"]*)" from element having class "([^"]*)"$/
      */
-    public function iSelectFromElementHavingClass($arg1,$arg2) {
+    public function iSelectFromElementHavingClass($arg1, $arg2)
+    {
         $page = $this->getSession()->getPage();
-        $page->find('css',$arg2)->selectOption($arg1);
+        $element = $page->find('css', $arg2);
+        if ($element !== null) {
+            $element->selectOption($arg1);
+        } else {
+            throw new Exception('Element not found');
+        }
     }
 
     /**
@@ -1599,9 +1533,15 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     /**
      * @When /^I hover over tooltip "([^"]*)"$/
      */
-    public function iHoverOverTooltip($arg1) {
+    public function iHoverOverTooltip($arg1)
+    {
         $page = $this->getSession()->getPage();
-        $page->find('css',$arg1)->mouseOver();
+        $element = $page->find('css', $arg1);
+        if ($element !== null) {
+            $element->mouseOver();
+        } else {
+            throw new Exception('Element not found');
+        }
     }
 
     /**
@@ -1876,7 +1816,12 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
      */
     public function iFillInAnElementHavingClassWith($class, $value) {
         $page = $this->getSession()->getPage();
-        $page->find('css', $class)->setValue($value);
+        $element = $page->find('css', $class);
+        if ($element !== null) {
+            $element->setValue($value);
+        } else {
+            throw new Exception('Element not found');
+        }
     }
 
     /**
@@ -1884,7 +1829,12 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
      */
     public function iSelectFromDropdown($value, $class) {
         $page = $this->getSession()->getPage();
-        $page->find('css', $class)->selectOption($value);
+        $element = $page->find('css', $class);
+        if ($element !== null) {
+            $element->selectOption($value);
+        } else {
+            throw new Exception('Element not found');
+        }
     }
 
     /**
@@ -1998,8 +1948,6 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     public function iShouldGetPercentDiscountIfTheCartValueIsGreaterThanKWD($discount, $cart_total)
     {
         $page = $this->getSession()->getPage();
-
-
     }
 
     /**
@@ -2008,13 +1956,12 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     public function iSelectFromTheDropdown($arg1)
     {
         $page = $this->getSession()->getPage();
-        $page->find('css','.select2-selection__arrow')->click();
+        $page->find('css', '.select2-selection__arrow')->click();
         $status = $page->find('named', array('content', $arg1));
-        if($status == true){
+        if ($status !== null) {
             $status->click();
-        }
-        else{
-            echo $arg1. ' is not displayed in the dropdown';
+        } else {
+            echo $arg1 . ' is not displayed in the dropdown';
         }
     }
 
