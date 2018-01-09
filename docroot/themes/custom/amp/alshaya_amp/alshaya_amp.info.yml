@@ -4,6 +4,7 @@ base theme: amptheme
 description: Theme for AMP.
 package: Custom
 core: '8.x'
+alshaya_theme_type: amp
 
 regions:
   header: Header
