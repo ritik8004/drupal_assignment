@@ -24,43 +24,97 @@ function _alshaya_paragraphs_correct_file_status(EntityInterface $entity) {
   /** @var \Drupal\paragraphs\Entity\Paragraph $entity */
   // Paragraphs is not very good at multiple levels with translation enabled.
   // We update file status manually for now till it is addressed properly in
-  // module itself. No todo here as this code below is not going to do any harm
-  // even after it is fixed in module or configurations made proper.
+  // module itself.
+  // @TODO: Remove this code after finding and fixing the root issue.
   $logger = \Drupal::logger('alshaya_paragraphs');
 
   // Need to check this for all file type fields.
-  $file_fields = [
-    'field_banner',
+  $file_field_types = [
+    'image',
+    'managed_file',
+    'file',
   ];
 
   $entity_fields = $entity->getFields();
 
-  foreach ($file_fields as $file_field) {
-    if (isset($entity_fields[$file_field])) {
-      $values = $entity->get($file_field)->getValue();
+  foreach (_alshaya_paragraphs_get_all_fields_mapped_with_types($entity) as $field => $type) {
+    // Field is not set for current entity (for any reason), we just continue
+    // and dont throw 500.
+    if (!isset($entity_fields[$field])) {
+      continue;
+    }
 
-      foreach ($values as $value) {
-        if (isset($value['target_id'])) {
-          /** @var \Drupal\file\Entity\File $file */
-          $file = \Drupal::entityTypeManager()->getStorage('file')->load($value['target_id']);
+    // We are looking for only file fields.
+    if (!in_array($type, $file_field_types)) {
+      continue;
+    }
 
-          // Do correction only if file status is temporary.
-          if ($file && $file->isTemporary()) {
-            // Add file usage.
-            \Drupal::service('file.usage')->add($file, 'file', $entity->getEntityTypeId(), $entity->id());
+    $values = $entity->get($field)->getValue();
 
-            // Make it permanent.
-            $file->setPermanent();
-            $file->save();
+    foreach ($values as $value) {
+      if (isset($value['target_id'])) {
+        /** @var \Drupal\file\Entity\File $file */
+        $file = \Drupal::entityTypeManager()->getStorage('file')->load($value['target_id']);
 
-            // Add to logs about all manual changes.
-            $logger->info('File status changed to permanent for @fid in paragraph @paragraph_id', [
-              '@fid' => $file->id(),
-              '@paragraph_id' => $entity->id(),
-            ]);
-          }
+        // Do correction only if file status is temporary.
+        if ($file && $file->isTemporary()) {
+          // Add file usage.
+          \Drupal::service('file.usage')->add($file, 'file', $entity->getEntityTypeId(), $entity->id());
+
+          // Make it permanent.
+          $file->setPermanent();
+          $file->save();
+
+          // Add to logs about all manual changes.
+          $logger->info('File status changed to permanent for @fid in paragraph @paragraph_id', [
+            '@fid' => $file->id(),
+            '@paragraph_id' => $entity->id(),
+          ]);
         }
       }
     }
   }
+}
+
+/**
+ * Helper function to get array of bundle fields mapped with its type as value.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   Entity for which we want the fields.
+ *
+ * @return array
+ *   Bundle fields array with field name in key and field type in value.
+ */
+function _alshaya_paragraphs_get_all_fields_mapped_with_types(EntityInterface $entity) {
+  $bundle_fields = [];
+
+  $entity_type_id = $entity->getEntityTypeId();
+  $bundle = $entity->bundle();
+
+  // Using the entity type and bundle for cache id to make it dynamic enough.
+  $cid = 'alshaya_paragraphs.field_types.' . $entity_type_id . '.' . $bundle;
+
+  // Load value from cache.
+  $cache = \Drupal::cache()->get($cid);
+
+  // Return from cache if available.
+  if ($cache) {
+    return $cache->data;
+  }
+
+  /** @var \Drupal\Core\Entity\EntityFieldManager $entity_field_manager */
+  $entity_field_manager = \Drupal::service('entity_field.manager');
+
+  $definitions = $entity_field_manager->getFieldDefinitions($entity_type_id, $bundle);
+
+  foreach ($definitions as $field_name => $field_definition) {
+    if (!empty($field_definition->getTargetBundle())) {
+      $bundle_fields[$field_name] = $field_definition->getType();
+    }
+  }
+
+  // Set the mapping into cache.
+  \Drupal::cache()->set($cid, $bundle_fields);
+
+  return $bundle_fields;
 }
