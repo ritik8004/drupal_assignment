@@ -2,7 +2,7 @@
 Feature: Test various checkout scenarios as returning customer
 
   Background:
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to cart"
     And I wait for AJAX to finish

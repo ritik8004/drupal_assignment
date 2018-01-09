@@ -11,4 +11,5 @@ alshaya_seo.sitemap:
     _controller: '\Drupal\alshaya_seo_transac\Controller\AlshayaSeoController::siteMap'
     _title: 'site map'
   requirements:
+  # Sitemap should be accessible without any restriction.
     _access: 'TRUE'

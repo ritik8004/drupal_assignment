@@ -67,6 +67,16 @@ drush $alias $l_argument ssh "sudo service memcached restart"
 echo "Installing database from $env env"
 drush $alias $l_argument sql-cli < $local_archive
 
+# Uninstall cloud only modules
+drush $alias $l_argument pmu -y purge alshaya_search_acquia_search acquia_search acquia_connector
+
+# Install local only modules
+drush $alias $l_argument en -y dblog views_ui features_ui restui alshaya_search_local_search
+
+# Reset indexed data and reindex 5000 for search page to work.
+drush $alias $l_argument search-api-clear acquia_search_index -y
+drush $alias $l_argument search-api-index acquia_search_index 5000 -y
+
 # Update super admin email to local default.
 echo "Update super admin email to no-reply@acquia.com."
 drush $alias $l_argument sqlq "update users_field_data set mail = 'no-reply@acquia.com', name = 'admin' where uid = 1"
@@ -78,8 +88,6 @@ drush $alias $l_argument user-password admin --password="admin"
 # Unblock user 1
 echo "Unblocking super admin user"
 drush $alias $l_argument uublk --name=admin
-
-drush $alias $l_argument en dblog views_ui features_ui restui -y
 
 # Set stage file proxy settings if module available
 if [ -d "$ROOT/docroot/modules/contrib/stage_file_proxy" ]

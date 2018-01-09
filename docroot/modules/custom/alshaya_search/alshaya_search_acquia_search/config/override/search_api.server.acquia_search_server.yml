@@ -1,0 +1,3 @@
+name: 'Acquia Search API Solr server'
+backend_config:
+  connector: solr_acquia_connector

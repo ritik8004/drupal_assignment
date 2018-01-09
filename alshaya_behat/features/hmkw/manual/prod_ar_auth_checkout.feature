@@ -7,7 +7,7 @@ Feature: As an authenticated user
     Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
     When I press "add to cart"
     And I wait for AJAX to finish
@@ -52,7 +52,7 @@ Feature: As an authenticated user
     When I accept terms and conditions
     And I press "سجل الطلبية"
     When I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
+    And I select "ABK" from "bank"
     When I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     When I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
@@ -99,7 +99,7 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
+    And I select "ABK" from "bank"
     And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"

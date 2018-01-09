@@ -151,6 +151,9 @@ class AlshayaAcmConfigCheck {
     $config->set('handlers.email.settings.to_mail', 'no-reply@acquia.com');
     $config->save();
 
+    // Save config again to ensure overrides are taken into consideration.
+    alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search');
+
     // We can code here to support more or different languages later when
     // we encounter those scenarios, keeping it simple and static for now.
     // Reset store id - EN.
