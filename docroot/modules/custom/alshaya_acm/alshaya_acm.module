@@ -658,15 +658,13 @@ function _alshaya_acm_get_cart_quantity_options($max = NULL, $selected = NULL) {
  *
  * @param \Drupal\acq_sku\Entity\SKU $sku_entity
  *   The Sku entity object.
- * @param bool $recheck
- *   Flag to specify if we should recheck.
  * @param bool $reset
  *   Flag to reset cache and get fresh stock.
  *
  * @return int
  *   Return quantity of stock.
  */
-function alshaya_acm_get_product_stock(SKU $sku_entity, $recheck = FALSE, $reset = FALSE) {
+function alshaya_acm_get_product_stock(SKU $sku_entity, $reset = FALSE) {
   static $stock = [];
 
   if (isset($stock[$sku_entity->getSku()])) {
@@ -675,7 +673,7 @@ function alshaya_acm_get_product_stock(SKU $sku_entity, $recheck = FALSE, $reset
 
   /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
   $plugin = $sku_entity->getPluginInstance();
-  $stock[$sku_entity->getSku()] = $plugin->getProcessedStock($sku_entity, $recheck, $reset);
+  $stock[$sku_entity->getSku()] = $plugin->getProcessedStock($sku_entity, $reset);
 
   return $stock[$sku_entity->getSku()];
 }
@@ -839,7 +837,7 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
   $selected_quantity = $item['quantity']['#default_value'];
 
   // If item is not available in stock.
-  if ($quantity = alshaya_acm_get_product_stock($sku_entity, TRUE)) {
+  if ($quantity = alshaya_acm_get_product_stock($sku_entity)) {
     if ($selected_quantity > $quantity) {
       Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
       $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
