@@ -346,6 +346,7 @@ function alshaya_white_label_form_node_form_alter(&$form, FormStateInterface $fo
 /**
  * Implements hook_form_alter().
  */
+// @codingStandardsIgnoreLine
 function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   switch ($form_id) {
     case "views_exposed_form":
