@@ -1,6 +1,6 @@
-# Alshaya AMP Subtheme
+# Alshaya AMP White Label Subtheme
 
-This Alshaya AMP Subtheme serves as a demonstration for how you can provide a
+This Alshaya AMP White Label Subtheme serves as a demonstration for how you can provide a
 subtheme that extends the AMP Base theme to provide custom styles.
 
 Please refer to the README at the root of amptheme for full installation
