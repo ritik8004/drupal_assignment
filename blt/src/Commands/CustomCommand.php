@@ -74,6 +74,38 @@ class CustomCommand extends BltTasks {
   }
 
   /**
+   * Reset admin user in local.
+   *
+   * @command local:reset-admin-user
+   * @description Resets local settings file.
+   */
+  public function localResetAdminUser($uri) {
+    $this->say('Resetting admin user credentials to default values.');
+
+    $dursh_alias = $this->getConfigValue('drush.alias');
+
+    // Update user name and email.
+    $this->taskDrush()
+      ->stopOnFail()
+      ->assume(TRUE)
+      ->alias($dursh_alias)
+      ->drush('sqlq')
+      ->arg('update users_field_data set mail = "no-reply@acquia.com", name = "admin" where uid = 1')
+      ->uri($uri)
+      ->run();
+
+    // Update user pass.
+    $this->taskDrush()
+      ->stopOnFail()
+      ->assume(TRUE)
+      ->alias($dursh_alias)
+      ->drush('user-password')
+      ->option('password', 'admin')
+      ->uri($uri)
+      ->run();
+  }
+
+  /**
    * Allow all modules to run code once post drupal install.
    *
    * @command local:post-install
@@ -181,7 +213,14 @@ class CustomCommand extends BltTasks {
       'uri' => $uri,
       'profile' => $profile_name,
     ]);
+
     $this->invokeCommand('local:reset-settings-file');
+
+    // Reset admin user credentials.
+    $this->invokeCommand('local:reset-admin-user', [
+      'uri' => $uri,
+    ]);
+
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
       'brand' => $brand,
@@ -231,6 +270,12 @@ class CustomCommand extends BltTasks {
     ]);
     $this->invokeCommand('setup:toggle-modules');
     $this->invokeCommand('local:reset-settings-file');
+
+    // Reset admin user credentials.
+    $this->invokeCommand('local:reset-admin-user', [
+      'uri' => $uri,
+    ]);
+
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
       'brand' => $brand,
