@@ -1,7 +1,7 @@
-diff --git a/docroot/modules/commerce/acq_commerce/acq_commerce.module b/docroot/modules/commerce/acq_commerce/acq_commerce.module
+diff --git a/acq_commerce.module b/acq_commerce.module
 index 636c6fc40..ca52f564b 100644
---- a/docroot/modules/commerce/acq_commerce/acq_commerce.module
-+++ b/docroot/modules/commerce/acq_commerce/acq_commerce.module
+--- a/acq_commerce.module
++++ b/acq_commerce.module
 @@ -84,68 +84,6 @@ function template_preprocess_acq_commerce_price(array &$variables) {
  }
  
@@ -71,10 +71,10 @@ index 636c6fc40..ca52f564b 100644
   * Helper function to check if exception is related to API being down.
   *
   * @param \Exception $e
-diff --git a/docroot/modules/commerce/acq_commerce/acq_commerce.services.yml b/docroot/modules/commerce/acq_commerce/acq_commerce.services.yml
+diff --git a/acq_commerce.services.yml b/acq_commerce.services.yml
 index 568693d35..6aee233d3 100644
---- a/docroot/modules/commerce/acq_commerce/acq_commerce.services.yml
-+++ b/docroot/modules/commerce/acq_commerce/acq_commerce.services.yml
+--- a/acq_commerce.services.yml
++++ b/acq_commerce.services.yml
 @@ -5,8 +5,12 @@ services:
  
    acq_commerce.api:
@@ -89,19 +89,19 @@ index 568693d35..6aee233d3 100644
 +  acq_commerce.i18n_helper:
 +    class: Drupal\acq_commerce\I18nHelper
 +    arguments: ['@config.factory', '@language_manager']
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
+diff --git a/modules/acq_promotion/acq_promotion.services.yml b/modules/acq_promotion/acq_promotion.services.yml
 index 3da381be8..e6f920067 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/acq_promotion.services.yml
+--- a/modules/acq_promotion/acq_promotion.services.yml
++++ b/modules/acq_promotion/acq_promotion.services.yml
 @@ -10,3 +10,4 @@ services:
        - '@queue'
        - '@config.factory'
        - '@database'
 +      - '@acq_commerce.i18n_helper'
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionQueueBase.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionQueueBase.php
+diff --git a/modules/acq_promotion/src/AcqPromotionQueueBase.php b/modules/acq_promotion/src/AcqPromotionQueueBase.php
 index ddb0d0ee7..05bddd7f2 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionQueueBase.php
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionQueueBase.php
+--- a/modules/acq_promotion/src/AcqPromotionQueueBase.php
++++ b/modules/acq_promotion/src/AcqPromotionQueueBase.php
 @@ -3,6 +3,7 @@
  namespace Drupal\acq_promotion;
  
@@ -155,10 +155,10 @@ index ddb0d0ee7..05bddd7f2 100644
      );
    }
  
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
+diff --git a/modules/acq_promotion/src/AcqPromotionsManager.php b/modules/acq_promotion/src/AcqPromotionsManager.php
 index 56c920e65..7a6b1d8de 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/AcqPromotionsManager.php
+--- a/modules/acq_promotion/src/AcqPromotionsManager.php
++++ b/modules/acq_promotion/src/AcqPromotionsManager.php
 @@ -3,6 +3,7 @@
  namespace Drupal\acq_promotion;
  
@@ -217,10 +217,10 @@ index 56c920e65..7a6b1d8de 100644
  
        // Magento might have stores that what we don't support.
        if (empty($promotion_label_language)) {
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php
+diff --git a/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php b/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php
 index 0adbe01fe..d515f98dd 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php
+--- a/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php
++++ b/modules/acq_promotion/src/Plugin/QueueWorker/AcqPromotionDetachQueue.php
 @@ -77,7 +77,7 @@ public function processItem($data) {
      // The skus detached from a catalog promotion are not part of those coming back during promotions sync.
      // So their final_price value does not get updated at that time. We thus need to resync these specific skus.
@@ -230,10 +230,10 @@ index 0adbe01fe..d515f98dd 100644
          $this->ingestApiWrapper->productFullSync($store_id, $langcode, $sku_texts);
        }
      }
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
+diff --git a/modules/acq_sku/acq_sku.drush.inc b/modules/acq_sku/acq_sku.drush.inc
 index 51a6718f5..bc9dd7834 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.drush.inc
+--- a/modules/acq_sku/acq_sku.drush.inc
++++ b/modules/acq_sku/acq_sku.drush.inc
 @@ -109,7 +109,7 @@ function acq_sku_drush_command() {
  function drush_acq_sku_sync_commerce_products($langcode, $page_size) {
    $langcode = strtolower($langcode);
@@ -252,10 +252,10 @@ index 51a6718f5..bc9dd7834 100644
        // Using very small page size to avoid any issues for skus which already
        // had corrupt data.
        \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, 5);
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.services.yml b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.services.yml
+diff --git a/modules/acq_sku/acq_sku.services.yml b/modules/acq_sku/acq_sku.services.yml
 index 354cdad8d..5e1eea097 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.services.yml
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.services.yml
+--- a/modules/acq_sku/acq_sku.services.yml
++++ b/modules/acq_sku/acq_sku.services.yml
 @@ -11,6 +11,7 @@ services:
        - '@acq_commerce.api'
        - '@entity.query'
@@ -272,10 +272,10 @@ index 354cdad8d..5e1eea097 100644
  
    acq_sku.category_repo:
      class: Drupal\acq_sku\ConductorCategoryRepository
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ConductorCategoryManager.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ConductorCategoryManager.php
+diff --git a/modules/acq_sku/src/ConductorCategoryManager.php b/modules/acq_sku/src/ConductorCategoryManager.php
 index 24b8ca53a..46163b362 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ConductorCategoryManager.php
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ConductorCategoryManager.php
+--- a/modules/acq_sku/src/ConductorCategoryManager.php
++++ b/modules/acq_sku/src/ConductorCategoryManager.php
 @@ -3,6 +3,7 @@
  namespace Drupal\acq_sku;
  
@@ -335,10 +335,10 @@ index 24b8ca53a..46163b362 100644
  
        // If lancode is not available, means no mapping of store and language.
        if (!$langcode) {
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Form/ProductSyncForm.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Form/ProductSyncForm.php
+diff --git a/modules/acq_sku/src/Form/ProductSyncForm.php b/modules/acq_sku/src/Form/ProductSyncForm.php
 index fdfcce8a9..76e0baf07 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Form/ProductSyncForm.php
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Form/ProductSyncForm.php
+--- a/modules/acq_sku/src/Form/ProductSyncForm.php
++++ b/modules/acq_sku/src/Form/ProductSyncForm.php
 @@ -2,6 +2,7 @@
  
  namespace Drupal\acq_sku\Form;
@@ -394,10 +394,10 @@ index fdfcce8a9..76e0baf07 100644
            $this->ingestApi->productFullSync($store_id, $langcode);
          }
          drupal_set_message('Product Synchronization Processing...', 'status');
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductStockSyncResource.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductStockSyncResource.php
+diff --git a/modules/acq_sku/src/Plugin/rest/resource/ProductStockSyncResource.php b/modules/acq_sku/src/Plugin/rest/resource/ProductStockSyncResource.php
 index 7d318e662..bc5e9d31a 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductStockSyncResource.php
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductStockSyncResource.php
+--- a/modules/acq_sku/src/Plugin/rest/resource/ProductStockSyncResource.php
++++ b/modules/acq_sku/src/Plugin/rest/resource/ProductStockSyncResource.php
 @@ -2,6 +2,7 @@
  
  namespace Drupal\acq_sku\Plugin\rest\resource;
@@ -460,10 +460,10 @@ index 7d318e662..bc5e9d31a 100644
  
        if (empty($langcode)) {
          // It could be for a different store/website, don't do anything.
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+diff --git a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
 index c9a711cc3..a37db7f7e 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
+--- a/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
++++ b/modules/acq_sku/src/Plugin/rest/resource/ProductSyncResource.php
 @@ -2,6 +2,7 @@
  
  namespace Drupal\acq_sku\Plugin\rest\resource;
@@ -524,10 +524,10 @@ index c9a711cc3..a37db7f7e 100644
  
          // Magento might have stores that what we don't support.
          if (empty($langcode)) {
-diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ProductOptionsManager.php b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ProductOptionsManager.php
+diff --git a/modules/acq_sku/src/ProductOptionsManager.php b/modules/acq_sku/src/ProductOptionsManager.php
 index 2955959b0..e70a7420b 100644
---- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ProductOptionsManager.php
-+++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/src/ProductOptionsManager.php
+--- a/modules/acq_sku/src/ProductOptionsManager.php
++++ b/modules/acq_sku/src/ProductOptionsManager.php
 @@ -3,6 +3,7 @@
  namespace Drupal\acq_sku;
  
@@ -577,10 +577,10 @@ index 2955959b0..e70a7420b 100644
        $this->apiWrapper->updateStoreContext($store_id);
        $option_sets = $this->apiWrapper->getProductOptions();
  
-diff --git a/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php b/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php
+diff --git a/src/Conductor/APIWrapper.php b/src/Conductor/APIWrapper.php
 index a47966de6..cf8b12f79 100644
---- a/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php
-+++ b/docroot/modules/commerce/acq_commerce/src/Conductor/APIWrapper.php
+--- a/src/Conductor/APIWrapper.php
++++ b/src/Conductor/APIWrapper.php
 @@ -2,6 +2,7 @@
  
  namespace Drupal\acq_commerce\Conductor;
@@ -625,11 +625,11 @@ index a47966de6..cf8b12f79 100644
    }
  
    /**
-diff --git a/docroot/modules/commerce/acq_commerce/src/I18nHelper.php b/docroot/modules/commerce/acq_commerce/src/I18nHelper.php
+diff --git a/src/I18nHelper.php b/src/I18nHelper.php
 new file mode 100644
 index 000000000..da983b393
 --- /dev/null
-+++ b/docroot/modules/commerce/acq_commerce/src/I18nHelper.php
++++ b/src/I18nHelper.php
 @@ -0,0 +1,102 @@
 +<?php
 +
@@ -734,3 +734,48 @@ index 000000000..da983b393
 +
 +}
 \ No newline at end of file
+diff --git a/modules/acq_cybersource/acq_cybersource.services.yml b/modules/acq_cybersource/acq_cybersource.services.yml
+index 9c4645500..0136cb29f 100644
+--- a/modules/acq_cybersource/acq_cybersource.services.yml
++++ b/modules/acq_cybersource/acq_cybersource.services.yml
+@@ -1,4 +1,9 @@
+ services:
+   acq_cybersource.api:
+     class: Drupal\acq_cybersource\CybersourceAPIWrapper
+-    arguments: ['@acq_commerce.client_factory', '@config.factory', '@language_manager', '@logger.factory']
++    arguments:
++      - '@acq_commerce.client_factory'
++      - '@config.factory'
++      - '@language_manager'
++      - '@logger.factory'
++      - '@acq_commerce.i18n_helper'
+diff --git a/modules/acq_cybersource/src/CybersourceAPIWrapper.php b/modules/acq_cybersource/src/CybersourceAPIWrapper.php
+index c9110a1f5..11c15ec0b 100644
+--- a/modules/acq_cybersource/src/CybersourceAPIWrapper.php
++++ b/modules/acq_cybersource/src/CybersourceAPIWrapper.php
+@@ -5,6 +5,7 @@
+ use Drupal\acq_commerce\Conductor\APIWrapper;
+ use Drupal\acq_commerce\Conductor\ClientFactory;
+ use Drupal\acq_commerce\Conductor\ConductorException;
++use Drupal\acq_commerce\I18nHelper;
+ use Drupal\Core\Config\ConfigFactoryInterface;
+ use Drupal\Core\Language\LanguageManagerInterface;
+ use Drupal\Core\Logger\LoggerChannelFactory;
+@@ -25,9 +26,15 @@ class CybersourceAPIWrapper extends APIWrapper {
+    *   LanguageManagerInterface object.
+    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+    *   LoggerChannelFactory object.
++   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
++   *   I18nHelper object.
+    */
+-  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LanguageManagerInterface $language_manager, LoggerChannelFactory $logger_factory) {
+-    parent::__construct($client_factory, $config_factory, $language_manager, $logger_factory);
++  public function __construct(ClientFactory $client_factory,
++                              ConfigFactoryInterface $config_factory,
++                              LanguageManagerInterface $language_manager,
++                              LoggerChannelFactory $logger_factory,
++                              I18nHelper $i18n_helper) {
++    parent::__construct($client_factory, $config_factory, $language_manager, $logger_factory, $i18n_helper);
+     $this->logger = $logger_factory->get('acq_cybersource');
+   }
+ 
