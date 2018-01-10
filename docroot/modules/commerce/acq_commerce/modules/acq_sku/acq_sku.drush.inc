@@ -30,6 +30,7 @@ function acq_sku_drush_command() {
     'examples'    => [
       'drush acsp en 50' => 'Run a full product synchronization of all available products in store linked to en and page size 50.',
       'drush acsp en 50 --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\'' => 'Synchronize sku data for the skus M-H3495 130 2  FW, M-H3496 130 004FW & M-H3496 130 005FW only in store linked to en and page size 50.',
+      'drush acsp en 50 --category_id=1234' => 'Synchronize sku data for the skus in category with id 1234 only in store linked to en and page size 50.',
     ],
     'arguments'     => [
       'langcode' => 'Language code for which we want to import products.',
@@ -38,6 +39,7 @@ function acq_sku_drush_command() {
     'required-arguments' => TRUE,
     'options'     => [
       'skus' => 'SKUs to import (like query).',
+      'category_id' => 'Magento category id to sync the products for.'
     ],
   ];
 
@@ -125,16 +127,27 @@ function drush_acq_sku_sync_commerce_products($langcode, $page_size) {
 
   $skus = drush_get_option('skus');
 
+  $category_id = drush_get_option('category_id');
+
+  // Apply only one filer at a time.
+  if ($category_id) {
+    $skus = '';
+  }
+
   // Ask for confirmation from user if attempt is to run full sync.
-  if (empty($skus)) {
-    if (!drush_confirm(dt("Are you sure you want to import all products for selected language?"))) {
+  if (empty($skus) && empty($category_id)) {
+    $confirm = dt('Are you sure you want to import all products for @language language?', [
+      '@language' => $langcode,
+    ]);
+
+    if (!drush_confirm($confirm)) {
       return drush_user_abort();
     }
   }
 
   drush_print(dt('Requesting all commerce products for selected language code...'));
   $container = \Drupal::getContainer();
-  $container->get('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $page_size);
+  $container->get('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $category_id, $page_size);
   drush_print(dt('Done.'));
 }
 
@@ -567,7 +580,7 @@ function drush_acq_sku_commerce_products_remove_duplicates() {
     foreach (\Drupal::service('acq_commerce.i18n_helper')->getStoreLanguageMapping() as $langcode => $store_id) {
       // Using very small page size to avoid any issues for skus which already
       // had corrupt data.
-      \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, 5);
+      \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $sku_texts, NULL, 5);
     }
   }
 

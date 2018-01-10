@@ -176,6 +176,9 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   // Fetch media.
   $media = alshaya_acm_product_get_sku_media($sku_entity);
 
+  $main_image = [];
+  $thumbnails = [];
+
   // Avoid notices and warnings in local.
   if (empty($media)) {
     // Check once if there is parent SKU available, use media files of parent.
@@ -188,9 +191,6 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       }
     }
   }
-
-  $main_image = [];
-  $thumbnails = [];
 
   // Fetch settings.
   $settings = alshaya_product_zoom_cloudzoom_default_settings();
