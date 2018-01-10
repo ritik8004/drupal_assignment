@@ -13,7 +13,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Update EN, AR paths for site log and email logo.
  */
-function alshaya_hm_update_8013() {
+function alshaya_hm_update_8014() {
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
   // Get current theme name.
@@ -59,7 +59,7 @@ function alshaya_hm_update_8013() {
 
   // Save default logo for email.
   \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
-    ->set('email_logo_path', $site_logo . '.png')
+    ->set('email_logo_path', $site_logo . '-en.png')
     ->save();
   // Save arabic logo for email.
   \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
