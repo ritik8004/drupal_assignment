@@ -184,6 +184,9 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
 
       array_unshift($form['#validate'], 'alshaya_acm_customer_register_validate');
 
+      // Final step in validate itself, register the user.
+      $form['#validate'][] = 'alshaya_acm_customer_register_validate_final';
+
       $key = array_search('::save', $form['actions']['submit']['#submit']);
       if ($key !== FALSE) {
         $form['actions']['submit']['#submit'][$key] = 'alshaya_acm_customer_register_submit_save';
@@ -499,6 +502,42 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
 }
 
 /**
+ * Validate callback for user registration form to save in Magento.
+ */
+function alshaya_acm_customer_register_validate_final(array &$form, FormStateInterface &$form_state) {
+  if ($form_state->getErrors()) {
+    return;
+  }
+
+  $email = $form_state->getValue('mail');
+  $first_name = $form_state->getValue('field_first_name')[0]['value'];
+  $last_name = $form_state->getValue('field_last_name')[0]['value'];
+  $pass = $form_state->getValue('pass');
+
+  /** @var \Drupal\alshaya_acm_customer\CustomerHelper $customer_helper */
+  $customer_helper = \Drupal::service('alshaya_acm_customer.helper');
+
+  try {
+    $customer = $customer_helper->createCustomer($email, $first_name, $last_name, $pass);
+  }
+  catch (\Exception $e) {
+    // Do nothing except for downtime exception, we will do other validations
+    // after try/catch.
+    if (acq_commerce_is_exception_api_down_exception($e)) {
+      $form_state->setErrorByName('custom', $e->getMessage());
+      drupal_set_message($e->getMessage(), 'error');
+    }
+    else {
+      // Only email address is something where our validations dont match.
+      $form_state->setErrorByName('mail', t('The email address %mail is not valid.', ['%mail' => $email]));
+    }
+    return;
+  }
+
+  $form_state->setTemporaryValue('customer_id', $customer['customer_id']);
+}
+
+/**
  * Submit callback for user registration form to create customer in Magento.
  *
  * Here we set password into separate value in form_state and set strong
@@ -519,12 +558,15 @@ function alshaya_acm_customer_register_submit_save(array &$form, FormStateInterf
   /** @var \Drupal\user\Entity\User $user */
   $user = $storage['user'];
 
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-  $customer = alshaya_acm_customer_update_customer_data($user->getEmail(), $pass);
-
-  // Save acq_customer_id in Drupal for later use.
-  $user->get('acq_customer_id')->setValue($customer['customer_id']);
+  // Save acq_customer_id in Drupal.
+  $user->get('acq_customer_id')->setValue($form_state->getTemporaryValue('customer_id'));
   $user->save();
+
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+
+  // Save customer again to ensure all other fields are pushed.
+  // For instance privilege card number.
+  alshaya_acm_customer_update_customer_data($user->getEmail());
 
   // Add entry into hash table during registration, this is not done by module
   // for us because it checks for confirm_password field and we need a single
