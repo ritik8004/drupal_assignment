@@ -47,11 +47,9 @@ class CustomCommand extends BltTasks {
   public function createDefaultSettingsFiles() {
     // Default site directory.
     $default_multisite_dir = $this->getConfigValue('docroot') . "/sites/default";
-    // Default local settings file provided by blt.
+    // Generate local.settings.php from file provided by blt.
     $blt_local_settings_file = $this->getConfigValue('blt.root') . '/settings/default.local.settings.php';
-
     $local_settings_file = "$default_multisite_dir/settings/local.settings.php";
-
     // Generate local.drushrc.php.
     $default_local_drush_file = "$default_multisite_dir/default.local.drushrc.php";
     $local_drush_file = "$default_multisite_dir/local.drushrc.php";
@@ -62,8 +60,6 @@ class CustomCommand extends BltTasks {
       $default_local_drush_file => $local_drush_file,
     ];
 
-    // Adding copy command to foreach as we have to generate files for each
-    // forloop.
     $taskFilesystemStack = $this->taskFilesystemStack();
     $taskFilesystemStack->stopOnFail()
       ->setVerbosityThreshold(VerbosityThresholdInterface::VERBOSITY_VERBOSE);
