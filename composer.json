@@ -74,7 +74,8 @@
         "drupal/role_delegation": "^1.0@alpha",
         "geerlingguy/drupal-vm": "~4.3",
         "drupal/amp": "^1.0",
-        "drupal/amptheme": "^1.0"
+        "drupal/amptheme": "^1.0",
+        "drupal/media_entity_actions": "1.x-dev"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
