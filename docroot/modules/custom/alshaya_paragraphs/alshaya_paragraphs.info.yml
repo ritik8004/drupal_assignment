@@ -18,7 +18,6 @@ dependencies:
   - lightning:lightning_core
   - drupal:link
   - drupal:options
-  - media_entity:media_entity
   - paragraphs:paragraphs
   - drupal:path
   - drupal:responsive_image
