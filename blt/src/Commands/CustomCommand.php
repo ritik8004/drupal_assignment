@@ -100,6 +100,7 @@ class CustomCommand extends BltTasks {
       ->assume(TRUE)
       ->alias($dursh_alias)
       ->drush('user-password')
+      ->arg('admin')
       ->option('password', 'admin')
       ->uri($uri)
       ->run();
