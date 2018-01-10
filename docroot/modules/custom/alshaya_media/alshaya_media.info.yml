@@ -7,7 +7,5 @@ dependencies:
   - drupal:language
   - drupal:media (>= 8.4)
   - lightning_media_video:lightning_media_video
-  - video_embed_field:video_embed_field
-  - video_embed_field:video_embed_media
   - workbench_moderation:workbench_moderation
 package: Alshaya

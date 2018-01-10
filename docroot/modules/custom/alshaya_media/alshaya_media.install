@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_media.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install lightning_media_video module and remove unnecessary bundle of media.
+ */
+function alshaya_media_update_8101() {
+  if (!\Drupal::service('module_handler')->moduleExists('lightning_media_video')) {
+    \Drupal::service('module_installer')->install(['lightning_media_video']);
+  }
+  // Delete old video_embed bundle of media.
+  $media_type_storage = \Drupal::entityManager()->getStorage('media_type');
+  $entity_type = $media_type_storage->load('video_embed');
+  $entity_type->delete();
+}
