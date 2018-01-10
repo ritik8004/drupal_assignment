@@ -28,4 +28,4 @@ alshaya_stores_finder.configuration:
     _form: '\Drupal\alshaya_stores_finder\Form\StoresFinderConfigForm'
     _title: 'Store finder configuration'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer site configuration'

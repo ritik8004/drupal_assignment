@@ -606,12 +606,12 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iAcceptTermsAndConditions()
   {
-    $checkbox = $this->getSession()
-      ->getPage()
-      ->find('css', '#edit-checkout-terms > div > div > label.option');
-    if ($checkbox == true) {
-      $checkbox->click();
-    }
+      $checkbox = $this->getSession()
+          ->getPage()
+          ->find('css', '#edit-checkout-terms > div > div > label.option');
+      if ($checkbox !== null) {
+          $checkbox->click();
+      }
   }
 
   /**
@@ -969,10 +969,15 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iClickAPointerOnTheMap()
   {
-    $this->getSession()
-      ->getPage()
-      ->find('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img')
-      ->click();
+      $element = $this->getSession()
+          ->getPage()
+          ->find('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img');
+      if ($element !== null) {
+          $element->click();
+      } else {
+          throw new Exception('Pointer is not clickable');
+      }
+
   }
 
   /**
@@ -1021,10 +1026,14 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iClickGetDirections()
   {
-    $this->getSession()
-      ->getPage()
-      ->find('css', 'div.get--directions > div > a')
-      ->click();
+      $element = $this->getSession()
+          ->getPage()
+          ->find('css', 'div.get--directions > div > a');
+      if ($element !== null) {
+          $element->click();
+      } else {
+          throw new Exception('Element not clickable');
+      }
   }
 
   /**
@@ -1246,9 +1255,14 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iConfirmDeletionOfAddress()
   {
-    $page = $this->getSession()->getPage();
-    $button = $page->find('css', '.ui-dialog-buttonset.form-actions > button > span.ui-button-text')
-      ->click();
+      $page = $this->getSession()->getPage();
+      $button = $page->find('css', '.ui-dialog-buttonset.form-actions > button > span.ui-button-text');
+      if ($button !== null) {
+          $button->click();
+      } else {
+          throw new Exception('Element not clickable');
+      }
+
   }
 
   /**
@@ -1295,8 +1309,13 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iHoverOverTooltip($arg1)
   {
-    $page = $this->getSession()->getPage();
-    $page->find('css', $arg1)->mouseOver();
+      $page = $this->getSession()->getPage();
+      $element = $page->find('css', $arg1);
+      if ($element !== null) {
+          $element->mouseOver();
+      } else {
+          throw new Exception('Element not visible');
+      }
   }
 
 
@@ -1553,8 +1572,13 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iFillInAnElementHavingClassWith($class, $value)
   {
-    $page = $this->getSession()->getPage();
-    $page->find('css', $class)->setValue($value);
+      $page = $this->getSession()->getPage();
+      $element = $page->find('css', $class);
+      if ($element !== null) {
+          $element->setValue($value);
+      } else {
+          echo 'Element not found';
+      }
   }
 
   /**
@@ -1562,8 +1586,13 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iSelectFromDropdown($value, $class)
   {
-    $page = $this->getSession()->getPage();
-    $page->find('css', $class)->selectOption($value);
+      $page = $this->getSession()->getPage();
+      $element = $page->find('css', $class);
+      if ($element !== null) {
+          $element->selectOption($value);
+      } else {
+          echo 'Element not found';
+      }
   }
 
   /**
@@ -1669,14 +1698,14 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iSelectFromTheDropdown($arg1)
   {
-    $page = $this->getSession()->getPage();
-    $page->find('css', '.select2-selection__arrow')->click();
-    $status = $page->find('named', array('content', $arg1));
-    if ($status == true) {
-      $status->click();
-    } else {
-      echo $arg1 . ' is not displayed in the dropdown';
-    }
+      $page = $this->getSession()->getPage();
+      $page->find('css', '.select2-selection__arrow')->click();
+      $status = $page->find('named', array('content', $arg1));
+      if ($status !== null) {
+          $status->click();
+      } else {
+          echo $arg1 . ' is not displayed in the dropdown';
+      }
   }
 
     /**

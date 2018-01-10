@@ -6,11 +6,14 @@ use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AlshayaSiteMapBreadcrumb.
  */
 class AlshayaSiteMapBreadcrumb implements BreadcrumbBuilderInterface {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -24,8 +27,8 @@ class AlshayaSiteMapBreadcrumb implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
-    $breadcrumb->addLink(Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>'));
-    $breadcrumb->addLink(Link::createFromRoute(t('Site map'), 'alshaya_seo.sitemap'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
+    $breadcrumb->addLink(Link::createFromRoute($this->t('Site map'), 'alshaya_seo.sitemap'));
     $breadcrumb->addCacheableDependency(['url.path']);
     return $breadcrumb;
   }

@@ -6,6 +6,7 @@ use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
@@ -57,6 +58,13 @@ class SkuAssetManager {
   protected $skuPluginManager;
 
   /**
+   * Term Storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $termStorage;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -65,17 +73,19 @@ class SkuAssetManager {
    *   Current route matcher service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku manager service.
-   * @param SKUPluginManager $skuPluginManager
+   * @param \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager $skuPluginManager
    *   Sku Plugin Manager.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
                               SkuManager $skuManager,
-                              SKUPluginManager $skuPluginManager) {
+                              SKUPluginManager $skuPluginManager,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
     $this->skuPluginManager = $skuPluginManager;
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
   }
 
   /**
@@ -87,6 +97,8 @@ class SkuAssetManager {
    *   Page on which the asset needs to be rendered.
    * @param string $location_image
    *   Location on page e.g., main image, thumbnails etc.
+   * @param string $style
+   *   Style string.
    *
    * @return array
    *   Array of urls to sku assets.
@@ -103,7 +115,7 @@ class SkuAssetManager {
     $asset_urls = [];
 
     foreach ($assets as $asset) {
-      list($set, $image_location_identifier)  = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
+      list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
 
       // Prepare query options for image url.
       if (isset($set['url'])) {
@@ -159,7 +171,7 @@ class SkuAssetManager {
    * @return array
    *   Array of asset attributes.
    */
-  public function getAssetAttributes(SKU $sku, $asset, $page_type, $location_image) {
+  public function getAssetAttributes(SKU $sku, array $asset, $page_type, $location_image) {
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
@@ -323,7 +335,7 @@ class SkuAssetManager {
    * @return array
    *   Array of assets matching the asset type.
    */
-  public function filterSkuAssetType($assets, $asset_type) {
+  public function filterSkuAssetType(array $assets, $asset_type) {
     $filtered_assets = [];
 
     foreach ($assets as $asset) {
@@ -388,7 +400,7 @@ class SkuAssetManager {
       // Use the first term found with an override for
       // location identifier.
       $tid = $terms[0]['target_id'];
-      $term = Term::load($tid);
+      $term = $this->termStorage->load($tid);
       $swatch_type = ($term->get('field_swatch_type')->first()) ? $term->get('field_swatch_type')->getString() : self::LP_SWATCH_DEFAULT;
 
     }
@@ -399,7 +411,7 @@ class SkuAssetManager {
   /**
    * Helper function to fetch list of color options supported by a parent SKU.
    *
-   * @param SKU $sku
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Parent sku.
    *
    * @return array
@@ -419,7 +431,7 @@ class SkuAssetManager {
     $class = $plugin_definition['class'];
     $plugin = new $class();
 
-    foreach ($child_skus as $key => $child_sku) {
+    foreach ($child_skus as $child_sku) {
       if ($child_sku instanceof SKU) {
         // Avoid duplicate colors in cases of corrupt data.
         // e.g., color label= '' for rgb_color=#234567 &
@@ -439,7 +451,7 @@ class SkuAssetManager {
   /**
    * Helper function to get SKU based on Castor Id.
    *
-   * @param SKU $parent_sku
+   * @param \Drupal\acq_sku\Entity\SKU $parent_sku
    *   Parent Sku.
    * @param int $rgb_color_label
    *   Castor id for which child sku needs to be fetched.
@@ -464,15 +476,17 @@ class SkuAssetManager {
   /**
    * Helper function to get images for a SKU.
    *
-   * @param SKU $parent_sku
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Parent Sku.
+   * @param string $page_type
+   *   Type of page.
    * @param string $image_type
    *   Type of image.
    *
-   * @return array|$images
+   * @return array|images
    *   Array of images for the SKU.
    */
-  public function getImagesForSKU(SKU $sku, $page_type, $image_type) {
+  public function getImagesForSku(SKU $sku, $page_type, $image_type) {
     if ($sku->bundle() == 'simple') {
       $images = $this->getSkuAsset($sku, $page_type, $image_type);
     }

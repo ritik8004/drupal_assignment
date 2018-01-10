@@ -2,14 +2,41 @@
 
 namespace Drupal\alshaya_user\Form;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\file\Entity\File;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class CartConfigForm.
  */
 class JoinClubConfigForm extends ConfigFormBase {
+
+  /**
+   * Entity Type Manager service object.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * JoinClubConfigForm constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager service object.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -33,9 +60,12 @@ class JoinClubConfigForm extends ConfigFormBase {
 
     $image = $form_state->getValue('image');
     $image = $image ? reset($image) : '';
-    if (isset($image[0]) && $file = File::load($image[0])) {
-      $file->setPermanent();
-      $file->save();
+    if (isset($image[0])) {
+      $file = $this->entityTypeManager->getStorage('file')->load($image[0]);
+      if ($file) {
+        $file->setPermanent();
+        $file->save();
+      }
     }
     $config->set('join_club_image.fid', $image);
     $config->set('join_club_description', $form_state->getValue('description'));

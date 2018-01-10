@@ -1,8 +1,10 @@
-@javascript @arabic @store
+@javascript @arabic @store @prod
 Feature: Test Store finder on Arabic site
 
   Background:
-    Given I am on "ar/store-finder"
+    Given I am on "/store-finder"
+    And I wait for the page to load
+    When I follow "العربية"
     And I wait for the page to load
 
   Scenario: As a Guest user,

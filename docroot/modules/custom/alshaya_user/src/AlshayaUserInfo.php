@@ -2,9 +2,9 @@
 
 namespace Drupal\alshaya_user;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\Entity\EntityRepository;
-use Drupal\user\Entity\User;
 
 /**
  * Class AlshayaUserInfo.
@@ -21,13 +21,6 @@ class AlshayaUserInfo {
   public $currentUser;
 
   /**
-   * The Entity Repository service object.
-   *
-   * @var \Drupal\Core\Entity\EntityRepository
-   */
-  public $entityRepository;
-
-  /**
    * The translated current user object.
    *
    * @var \Drupal\user\Entity\User
@@ -37,15 +30,19 @@ class AlshayaUserInfo {
   /**
    * AlshayaUserInfo constructor.
    *
-   * @param \Drupal\Core\Session\AccountProxy $currentUser
+   * @param \Drupal\Core\Session\AccountProxy $current_user
    *   The current account object.
-   * @param \Drupal\Core\Entity\EntityRepository $entityRepository
+   * @param \Drupal\Core\Entity\EntityRepository $entity_repository
    *   The entity repository service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager service object.
    */
-  public function __construct(AccountProxy $currentUser, EntityRepository $entityRepository) {
-    $this->currentUser = $currentUser;
-    $this->entityRepository = $entityRepository;
-    $this->userObject = $this->entityRepository->getTranslationFromContext(User::load($this->currentUser->id()));
+  public function __construct(AccountProxy $current_user,
+                              EntityRepository $entity_repository,
+                              EntityTypeManagerInterface $entity_type_manager) {
+    $this->currentUser = $current_user;
+    $account = $entity_type_manager->getStorage('user')->load($this->currentUser->id());
+    $this->userObject = $entity_repository->getTranslationFromContext($account);
   }
 
   /**

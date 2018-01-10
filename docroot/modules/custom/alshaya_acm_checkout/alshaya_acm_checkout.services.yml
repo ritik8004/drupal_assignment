@@ -5,7 +5,20 @@ services:
       - { name: event_subscriber }
   alshaya_acm_checkout.options_manager:
     class: Drupal\alshaya_acm_checkout\CheckoutOptionsManager
-    arguments: [ '@entity_type.manager', '@config.factory', '@alshaya_acm.api_helper', '@acq_cart.cart_storage', '@logger.factory', '@language_manager' ]
+    arguments:
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@alshaya_acm.api_helper'
+      - '@acq_cart.cart_storage'
+      - '@logger.factory'
+      - '@language_manager'
   alshaya_acm_checkout.checkout_helper:
     class: Drupal\alshaya_acm_checkout\CheckoutHelper
-    arguments: [ '@acq_commerce.api', '@acq_cart.cart_storage', '@alshaya_acm_customer.orders_manager', '@logger.factory' ]
+    arguments:
+      - '@entity_type.manager'
+      - '@acq_commerce.api'
+      - '@acq_cart.cart_storage'
+      - '@alshaya_acm_customer.orders_manager'
+      - '@request_stack'
+      - '@current_user'
+      - '@logger.factory'

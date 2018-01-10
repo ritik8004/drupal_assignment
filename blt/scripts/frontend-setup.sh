@@ -1,3 +1,4 @@
+
 #!/bin/bash
 # This file runs during the frontend setup.
 
@@ -5,13 +6,14 @@ set -e
 
 docrootDir="$1"
 
-themes=( "debenhams" "whitelabel" "whitelabel_transac" "whitelabel_non_transac" "victoria_secret" "alshaya_white_label" "pottery_barn_non_trans" "alshaya_hnm" "bath_body_works" "bouchon_bakery" )
+echo -en "travis_fold:start:FE-Setup"
+printf "Start - Installing npm for transac themes"
+cd $docrootDir/themes/custom/transac
+npm run install-tools
+printf "End - Installing npm for transac themes"
 
-for i in "${themes[@]}"
-do
-  echo -en "travis_fold:start:FE-Setup-${i}\r"
-  cd $docrootDir/themes/custom/$i
-  printf "Installing npm in $docrootDir/themes/custom/$i"
-  npm run install-tools
-  echo -en "travis_fold:end:FE-Setup-${i}\r"
-done
+printf "Start - Installing npm for non-transac themes"
+cd $docrootDir/themes/custom/non_transac
+npm run install-tools
+printf "Start - Installing npm for non-transac themes"
+echo -en "travis_fold:end:FE-Setup"

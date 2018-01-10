@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_config\Form;
 
+use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -20,13 +21,24 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
   protected $moduleHandler;
 
   /**
+   * The module installer service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleInstallerInterface
+   */
+  protected $moduleInstaller;
+
+  /**
    * Constructs a \Drupal\alshaya_config\FeaturesForm object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
+   *   The module installer service object.
    */
-  public function __construct(ModuleHandlerInterface $module_handler) {
+  public function __construct(ModuleHandlerInterface $module_handler,
+                              ModuleInstallerInterface $module_installer) {
     $this->moduleHandler = $module_handler;
+    $this->moduleInstaller = $module_installer;
   }
 
   /**
@@ -34,7 +46,8 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('module_installer')
     );
   }
 
@@ -56,13 +69,13 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   protected function getCurrentConfig() {
-    $storedConfig = \Drupal::config('alshaya_config.settings');
+    $storedConfig = $this->config('alshaya_config.settings');
 
     $config = [];
 
     $config['alshaya_arabic'] = [
       'type' => 'module',
-      'description' => t('Enable Arabic language for this site'),
+      'description' => $this->t('Enable Arabic language for this site'),
       'default_value' => $this->moduleHandler->moduleExists('alshaya_arabic'),
     ];
 
@@ -71,7 +84,7 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
     // one language.
     $config['alshaya_i18n'] = [
       'type' => 'module',
-      'description' => t('Enable or disable the language switcher on the site'),
+      'description' => $this->t('Enable or disable the language switcher on the site'),
       'default_value' => $this->moduleHandler->moduleExists('alshaya_i18n'),
     ];
 
@@ -89,7 +102,7 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
     if ($this->moduleHandler->moduleExists('alshaya_search')) {
       $config['alshaya_search_and_operator'] = [
         'type' => 'variable',
-        'description' => t('Use AND operator for Search. Defaults to OR.'),
+        'description' => $this->t('Use AND operator for Search. Defaults to OR.'),
         'default_value' => $storedConfig->get('alshaya_search_and_operator'),
       ];
     }
@@ -120,7 +133,7 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Get the configFactory object to update variables.
-    $storedConfig = \Drupal::configFactory()->getEditable('alshaya_config.settings');
+    $storedConfig = $this->configFactory()->getEditable('alshaya_config.settings');
 
     // Initialise update flags to false.
     $updatedModules = FALSE;
@@ -137,10 +150,10 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
           case 'module':
             $updatedModules = TRUE;
             if ($newStatus) {
-              \Drupal::service('module_installer')->install([$configKey]);
+              $this->moduleInstaller->install([$configKey]);
             }
             else {
-              \Drupal::service('module_installer')->uninstall([$configKey]);
+              $this->moduleInstaller->uninstall([$configKey]);
             }
             break;
 

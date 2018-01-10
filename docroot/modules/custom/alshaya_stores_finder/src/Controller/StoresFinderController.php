@@ -146,7 +146,7 @@ class StoresFinderController extends ControllerBase {
   public function storeDetail(EntityInterface $node, $type = 'glossary') {
     // Get the correct translated version of node.
     $node = $this->entityRepository->getTranslationFromContext($node);
-    $build = \Drupal::entityTypeManager()->getViewBuilder('node')->view($node);
+    $build = $this->entityTypeManager()->getViewBuilder('node')->view($node);
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('.view-stores-finder:first', $build));
     $response->addCommand(new InvokeCommand('.body', 'removeClass', ['store-finder-view']));

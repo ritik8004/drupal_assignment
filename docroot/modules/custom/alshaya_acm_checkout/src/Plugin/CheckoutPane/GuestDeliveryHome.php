@@ -302,7 +302,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       return;
     }
 
-    if ($user = user_load_by_mail($email)) {
+    if (user_load_by_mail($email)) {
       $login_link = Link::createFromRoute($this->t('please login'), 'acq_checkout.form', [
         'step' => 'login',
       ],

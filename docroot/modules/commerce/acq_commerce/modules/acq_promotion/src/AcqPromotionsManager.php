@@ -3,6 +3,7 @@
 namespace Drupal\acq_promotion;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -75,6 +76,13 @@ class AcqPromotionsManager {
   protected $connection;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
    * Constructs a new AcqPromotionsManager object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -93,6 +101,8 @@ class AcqPromotionsManager {
    *   Config factory service.
    * @param Connection $connection
    *   Database connection service.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               APIWrapper $api_wrapper,
@@ -101,7 +111,8 @@ class AcqPromotionsManager {
                               EntityRepositoryInterface $entityRepository,
                               QueueFactory $queue,
                               ConfigFactory $configFactory,
-                              Connection $connection) {
+                              Connection $connection,
+                              I18nHelper $i18n_helper) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->apiWrapper = $api_wrapper;
@@ -111,6 +122,7 @@ class AcqPromotionsManager {
     $this->queue = $queue;
     $this->configFactory = $configFactory;
     $this->connection = $connection;
+    $this->i18nHelper = $i18n_helper;
   }
 
   /**
@@ -276,7 +288,7 @@ class AcqPromotionsManager {
     $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
 
     foreach ($promotions_labels as $promotion_label) {
-      $promotion_label_language = acq_commerce_get_langcode_from_store_id($promotion_label['store_id']);
+      $promotion_label_language = $this->i18nHelper->getLangcodeFromStoreId($promotion_label['store_id']);
 
       // Magento might have stores that what we don't support.
       if (empty($promotion_label_language)) {
