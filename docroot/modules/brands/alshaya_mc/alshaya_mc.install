@@ -10,30 +10,40 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Hook update to update brand specific favicon and sitelogo.
+ * Update EN, AR paths for site log and email logo.
  */
-function alshaya_mc_update_8308() {
+function alshaya_mc_update_8309() {
+  // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
   $current_theme = $active_theme->getName();
+  // Default site logo path with default name.
   $site_logo = $active_theme->getPath() . '/site-logo';
   // Default site favicon path with default name.
   $site_favicon = $active_theme->getPath() . '/favicon';
 
-  // Save default site favicon.
-  \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
-    ->set('favicon', ['path' => $site_favicon . '.ico'])
-    ->save();
-
-  \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
+  // Save default site logo.
+  \Drupal::configFactory()->getEditable($current_theme . '.settings')
     ->setData([
       'logo' => [
         'path' => $site_logo . '.svg',
       ],
     ])
     ->save();
+
+  // Save english site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('en', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '.svg',
+      ],
+    ])
+    ->save();
+
   // Save arabic site logo.
   \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'alshaya_mothercare.settings')
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
     ->setData([
       'logo' => [
         'path' => $site_logo . '-ar.svg',
@@ -41,10 +51,16 @@ function alshaya_mc_update_8308() {
     ])
     ->save();
 
+  // Save default site favicon.
+  \Drupal::configFactory()->getEditable($current_theme . '.settings')
+    ->set('favicon', ['path' => $site_favicon . '.ico'])
+    ->save();
+
   // Save default logo for email.
   \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
     ->set('email_logo_path', $site_logo . '.png')
     ->save();
+
   // Save arabic logo for email.
   \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
     ->set('email_logo_path', $site_logo . '-ar.png')
