@@ -34,7 +34,10 @@ function alshaya_block_themes_installed($theme_list) {
       if (!empty($theme_info[$theme]->info['alshaya_theme_type'])) {
         $source_theme = _alshaya_get_theme_by_theme_type($theme_info[$theme]->info['alshaya_theme_type'], [$theme]);
       }
-      alshaya_block_move_blocks_theme_to_theme($theme, $source_theme);
+
+      if (!is_null($source_theme)) {
+        alshaya_block_move_blocks_theme_to_theme($theme, $source_theme);
+      }
     }
   }
 }
