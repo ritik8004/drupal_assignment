@@ -43,7 +43,7 @@
   "//": "The postinstall script is needed to work-around this Drupal core bug: https://www.drupal.org/node/2329453",
   "scripts": {
     "postinstall": "find node_modules/ -name '*.info' -type f -delete",
-    "install-tools": "npm install",
+    "install-tools": "npm install && npm rebuild node-sass",
     "uninstall-tools": "rm -r node_modules"
   }
 }
