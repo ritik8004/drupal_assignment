@@ -23,21 +23,18 @@ function alshaya_block_module_implements_alter(&$implementations, $hook) {
  */
 function alshaya_block_themes_installed($theme_list) {
   $theme_info = \Drupal::service('theme_handler')->listInfo();
+  // For each newly enabled theme, we check if there is already a theme of this
+  // type (amp/non_transac/transac) enabled. If so, we move the blocks from
+  // this already installed theme to the newly installed one.
   foreach ($theme_list as $theme) {
     // We only move blocks for custom themes.
     if (isset($theme_info[$theme])
       && strpos($theme_info[$theme]->getPathname(), '/custom/')
       && \Drupal::service('theme_handler')->hasUi($theme)
+      && !empty($theme_info[$theme]->info['alshaya_theme_type'])
+      && !empty($source_theme = _alshaya_get_theme_by_theme_type($theme_info[$theme]->info['alshaya_theme_type'], [$theme]))
     ) {
-      $source_theme = NULL;
-      // If key is set in theme.
-      if (!empty($theme_info[$theme]->info['alshaya_theme_type'])) {
-        $source_theme = _alshaya_get_theme_by_theme_type($theme_info[$theme]->info['alshaya_theme_type'], [$theme]);
-      }
-
-      if (!is_null($source_theme)) {
-        alshaya_block_move_blocks_theme_to_theme($theme, $source_theme);
-      }
+      alshaya_block_move_blocks_theme_to_theme($theme, $source_theme);
     }
   }
 }
@@ -58,26 +55,20 @@ function alshaya_block_themes_installed($theme_list) {
  *   Theme name.
  */
 function _alshaya_get_theme_by_theme_type($theme_type = '', array $skip_themes = []) {
-  $theme_name = NULL;
   if (!empty($theme_type)) {
-    /* @var \Drupal\Core\Extension\ThemeHandlerInterface $theme_info */
-    $theme_info = \Drupal::service('theme_handler')->listInfo();
-    foreach ($theme_info as $theme) {
-      // If key is set and matches value.
-      if (!empty($theme->info['alshaya_theme_type']) && $theme->info['alshaya_theme_type'] == $theme_type) {
-        // If we need to skip for the themes.
-        if (in_array($theme->getName(), $skip_themes)) {
-          continue;
-        }
-        else {
-          $theme_name = $theme->getName();
-          break;
-        }
+    foreach (\Drupal::service('theme_handler')->listInfo() as $theme) {
+      // If the key matches the expected type and the theme has not been
+      // flagged to be ignored.
+      if (!empty($theme->info['alshaya_theme_type'])
+        && $theme->info['alshaya_theme_type'] == $theme_type
+        && !in_array($theme->getName(), $skip_themes)
+      ) {
+        return $theme->getName();
       }
     }
   }
 
-  return $theme_name;
+  return NULL;
 }
 
 /**
