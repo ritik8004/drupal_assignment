@@ -4,12 +4,39 @@ namespace Drupal\alshaya_acm_product\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\node\entity\Node;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Entity\EntityManager;
 
 /**
  * Class SizeGuideSettingsForm.
  */
 class SizeGuideSettingsForm extends ConfigFormBase {
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityManager
+   */
+  protected $entityManager;
+
+  /**
+   * Constructs a EntityManager object.
+   *
+   * @param \Drupal\Core\Entity\EntityManager $entity_manager
+   *   A list of entity definition objects.
+   */
+  public function __construct(EntityManager $entity_manager) {
+    $this->entityManager = $entity_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -46,24 +73,25 @@ class SizeGuideSettingsForm extends ConfigFormBase {
     $target_bundles = ['static_html', 'advanced_page'];
     $node = NULL;
     if ($config->get('size_guide_modal_content_node')) {
-      $node = Node::load($config->get('size_guide_modal_content_node'));
+      $node_storage = $this->entityManager->getStorage('node');
+      $node = $node_storage->load($config->get('size_guide_modal_content_node'));
     }
     $form['size_guide_enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable Size Guide'),
-      '#required' => TRUE,
+      '#required' => FALSE,
       '#default_value' => $config->get('size_guide_enabled'),
     ];
 
     $form['size_guide_modal_content_node'] = [
       '#type' => 'entity_autocomplete',
-      '#title' => t('Size guide modal content node.'),
+      '#title' => $this->t('Size guide modal content node.'),
       '#target_type' => 'node',
       '#selection_setttings' => ['target_bundles' => $target_bundles],
       '#default_value' => $node,
       '#size' => '60',
       '#maxlength' => '60',
-      '#description' => t('Please select the node which will be rendered as size guide modal.'),
+      '#description' => $this->t('Please select the node which will be rendered as size guide modal.'),
       '#states' => [
         'visible' => [
           'input[name="size_guide_enabled"]' => ['checked' => TRUE],

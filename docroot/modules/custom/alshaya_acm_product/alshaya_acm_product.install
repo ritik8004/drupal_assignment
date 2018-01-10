@@ -12,28 +12,43 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
- * Moving the config to size guide.
+ * Moving size guide config to node.
  */
 function alshaya_acm_product_update_8010() {
-  alshaya_config_install_configs(['alshaya_acm_promotion.size_guide'], 'alshaya_acm_promotion');
+  // Import the new config for size guide.
+  alshaya_config_install_configs(['alshaya_acm_product.size_guide'], 'alshaya_acm_product');
+  // Fetch the old config for size guide.
   $config = \Drupal::config('alshaya_acm_product.settings');
   if ($config->get('size_guide_link') == TRUE) {
-    // Create node object with attached file.
+    // Create a new node with the size guide content.
     $node = Node::create([
       'type'  => 'static_html',
       'title' => 'Size guide content',
       'body'  => [
         'value' => $config->get('size_guide_modal_content.value'),
-        'format' => 'basic_html',
+        'format' => 'mail_text',
       ],
     ]);
     $node->save();
+    $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_acm_product.settings');
+    if ($config->get('size_guide_modal_content.value')) {
+      // Create a translation of the size guide node.
+      $node_ar = $node->addTranslation('ar');
+      $node_ar->title = 'Size guide content Arabic';
+      $node_ar->body->value = $config->get('size_guide_modal_content.value');
+      $node_ar->body->format = 'mail_text';
+      $node_ar->save();
+    }
+
+    // Save the size guide node to the config.
     \Drupal::configFactory()->getEditable('alshaya_acm_product.size_guide')
       ->set('size_guide_enabled', TRUE)
       ->set('size_guide_modal_content_node', $node->id())
       ->save();
   }
-  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_promotion');
+
+  // Update the old config.
+  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product');
 }
 
 /**

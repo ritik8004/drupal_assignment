@@ -17,9 +17,8 @@ alshaya_acm_product.product_home_delivery_settings_form:
   weight: 11
   route_name: alshaya_acm_product.product_home_delivery_settings_form
 alshaya_acm_product.size_guide_settings_form:
-  title: 'Size Guide Settings'
+  title: 'Size guide settings'
   parent: acq_commerce.configuration
-  description: 'Size Guide Settings.'
+  description: 'Size guide settings.'
   weight: 12
   route_name: alshaya_acm_product.size_guide_settings_form
-

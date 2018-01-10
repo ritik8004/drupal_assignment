@@ -6,7 +6,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Drupal\node\entity\Node;
 
 /**
  * Class ProductController.
@@ -40,7 +39,7 @@ class ProductController extends ControllerBase {
    * Page callback for size guide modal.
    */
   public function sizeGuideModal() {
-    $config = \Drupal::config('alshaya_acm_product.size_guide');
+    $config = $this->config('alshaya_acm_product.size_guide');
     $size_guide_enabled = $config->get('size_guide_enabled');
     $build = [];
 
@@ -49,8 +48,9 @@ class ProductController extends ControllerBase {
       $size_guide_content_nid = $config->get('size_guide_modal_content_node');
       $size_guide_content = '';
       if (!empty($size_guide_content_nid)) {
-        $size_guide_content = Node::load($size_guide_content_nid);
-        $size_guide_content = \Drupal::entityTypeManager()->getViewBuilder('node')->view($size_guide_content, 'full');
+        $size_guide_content = $this->entityTypeManager()->getStorage('node')->load($size_guide_content_nid);
+        $size_guide_content->setTitle('');
+        $size_guide_content = render($this->entityTypeManager()->getViewBuilder('node')->view($size_guide_content, 'full'));
       }
 
       $build = [

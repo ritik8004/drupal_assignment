@@ -35,5 +35,3 @@ permissions:
   - 'assign webmaster role'
   - 'view any webform submission'
   - 'migrate alshaya_stores'
-  - 'access size guide settings'
-

@@ -1266,7 +1266,7 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
  */
 function _alshaya_acm_product_check_size_guide_enabled() {
   // Check if we have the configuration set.
-  if ($size_guide_enabled = \Drupal::config('alshaya_acm_product.size_guide')->get('size_guide_enabled')) {
+  if (\Drupal::config('alshaya_acm_product.size_guide')->get('size_guide_enabled')) {
     $options = [
       'attributes' => [
         'class' => ['size-guide-link', 'use-ajax'],
