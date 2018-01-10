@@ -5,12 +5,18 @@
  * Install file for alshaya_media.
  */
 
+use Drupal\field\Entity\FieldStorageConfig;
+
 /**
  * Implements hook_update_N().
  *
  * Install lightning_media_video module and remove unnecessary bundle of media.
  */
 function alshaya_media_update_8101() {
+  // Delete existing already exists field_media_video_embed_field. so, that
+  // lightning_media_video module can install it.
+  FieldStorageConfig::load('media.field_media_video_embed_field')->delete();
+
   if (!\Drupal::service('module_handler')->moduleExists('lightning_media_video')) {
     \Drupal::service('module_installer')->install(['lightning_media_video']);
   }
