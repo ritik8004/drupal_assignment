@@ -54,7 +54,7 @@ function alshaya_block_themes_installed($theme_list) {
  * @return mixed|string
  *   Theme name.
  */
-function _alshaya_get_theme_by_theme_type($theme_type = '', $skip_themes = []) {
+function _alshaya_get_theme_by_theme_type($theme_type = '', array $skip_themes = []) {
   $theme_name = NULL;
   if (!empty($theme_type)) {
     /* @var \Drupal\Core\Extension\ThemeHandlerInterface $theme_info */
