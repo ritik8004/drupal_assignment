@@ -9,6 +9,7 @@
  * Implements hook_install().
  */
 function alshaya_amp_install() {
-  // Enable amp theme.
-  \Drupal::service('theme_handler')->install(['amptheme'], TRUE);
+  // Enable and set default amp theme.
+  \Drupal::service('theme_handler')->install(['alshaya_amp_white_label'], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_white_label')->save();
 }

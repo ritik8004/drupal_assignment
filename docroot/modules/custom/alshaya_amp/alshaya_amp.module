@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_amp_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['alshaya_amp_menu'] = [
+    'template' => 'alshaya-amp-menu',
+    'variables' => [
+      'data' => NULL,
+    ],
+  ];
+
+  return $items;
+}

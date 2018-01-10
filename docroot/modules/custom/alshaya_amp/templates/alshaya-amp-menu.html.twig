@@ -1,0 +1,9 @@
+<div>
+    {% if data %}
+        <ul>
+        {% for term in data %}
+            <li><a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': term.tid}) }}">{{ term.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>
