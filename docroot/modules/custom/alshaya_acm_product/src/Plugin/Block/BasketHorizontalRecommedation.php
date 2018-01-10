@@ -128,7 +128,8 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
       if (!empty($view_skus)) {
         return [
           '#theme' => 'products_horizontal_slider',
-          '#data' => views_embed_view('product_slider', 'block_product_slider', implode(',', $view_skus)),
+          '#data' => $view_skus,
+          '#section_title' => '',
         ];
       }
     }
