@@ -74,6 +74,39 @@ class CustomCommand extends BltTasks {
   }
 
   /**
+   * Reset admin user in local.
+   *
+   * @command local:reset-admin-user
+   * @description Resets local settings file.
+   */
+  public function localResetAdminUser($uri) {
+    $this->say('Resetting admin user credentials to default values.');
+
+    $drush_alias = $this->getConfigValue('drush.alias');
+
+    // Update user name and email.
+    $this->taskDrush()
+      ->stopOnFail()
+      ->assume(TRUE)
+      ->alias($drush_alias)
+      ->drush('sqlq')
+      ->arg('update users_field_data set mail = "no-reply@acquia.com", name = "admin" where uid = 1')
+      ->uri($uri)
+      ->run();
+
+    // Update user pass.
+    $this->taskDrush()
+      ->stopOnFail()
+      ->assume(TRUE)
+      ->alias($drush_alias)
+      ->drush('user-password')
+      ->arg('admin')
+      ->option('password', 'admin')
+      ->uri($uri)
+      ->run();
+  }
+
+  /**
    * Allow all modules to run code once post drupal install.
    *
    * @command local:post-install
@@ -81,12 +114,12 @@ class CustomCommand extends BltTasks {
    */
   public function localPostInstall($uri, $brand, $country_code) {
     $this->say('Allow all modules to run code once post drupal install.');
-    $dursh_alias = $this->getConfigValue('drush.alias');
+    $drush_alias = $this->getConfigValue('drush.alias');
     $this->taskDrush()
       ->stopOnFail()
       ->assume(TRUE)
       ->drush('alshaya-post-drupal-install')
-      ->alias($dursh_alias)
+      ->alias($drush_alias)
       ->option('brand_module', $brand)
       ->option('country_code', $country_code)
       ->uri($uri)
@@ -101,11 +134,11 @@ class CustomCommand extends BltTasks {
    */
   public function syncProducts($uri, $limit = 200) {
     $this->say('Sync the categories, product option and products');
-    $dursh_alias = $this->getConfigValue('drush.alias');
+    $drush_alias = $this->getConfigValue('drush.alias');
     $this->taskDrush()
       ->stopOnFail()
       ->assume(TRUE)
-      ->alias($dursh_alias)
+      ->alias($drush_alias)
       ->drush('alshaya-acm-offline-categories-sync')
       ->drush('sync-commerce-product-options')
       ->drush('alshaya-acm-offline-products-sync')
@@ -122,11 +155,11 @@ class CustomCommand extends BltTasks {
    */
   public function syncStores($uri) {
     $this->say('Sync the stores');
-    $dursh_alias = $this->getConfigValue('drush.alias');
+    $drush_alias = $this->getConfigValue('drush.alias');
     $this->taskDrush()
       ->stopOnFail()
       ->assume(TRUE)
-      ->alias($dursh_alias)
+      ->alias($drush_alias)
       ->drush('alshaya-api-sync-stores')
       ->uri($uri)
       ->run();
@@ -141,11 +174,11 @@ class CustomCommand extends BltTasks {
    */
   public function syncPromotions($uri) {
     $this->say('Sync the promotions');
-    $dursh_alias = $this->getConfigValue('drush.alias');
+    $drush_alias = $this->getConfigValue('drush.alias');
     $this->taskDrush()
       ->stopOnFail()
       ->assume(TRUE)
-      ->alias($dursh_alias)
+      ->alias($drush_alias)
       ->drush('sync-commerce-promotions')
       ->uri($uri)
       ->run();
@@ -181,7 +214,14 @@ class CustomCommand extends BltTasks {
       'uri' => $uri,
       'profile' => $profile_name,
     ]);
+
     $this->invokeCommand('local:reset-settings-file');
+
+    // Reset admin user credentials.
+    $this->invokeCommand('local:reset-admin-user', [
+      'uri' => $uri,
+    ]);
+
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
       'brand' => $brand,
@@ -231,6 +271,12 @@ class CustomCommand extends BltTasks {
     ]);
     $this->invokeCommand('setup:toggle-modules');
     $this->invokeCommand('local:reset-settings-file');
+
+    // Reset admin user credentials.
+    $this->invokeCommand('local:reset-admin-user', [
+      'uri' => $uri,
+    ]);
+
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
       'brand' => $brand,
