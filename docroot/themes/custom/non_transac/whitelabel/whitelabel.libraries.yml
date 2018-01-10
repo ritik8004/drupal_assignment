@@ -230,7 +230,7 @@ node-product-item:
 slick:
   css:
     theme:
-      node_modules/slick-carousel/slick/slick.css: {}
+      ../node_modules/slick-carousel/slick/slick.css: {}
   js:
     libraries/slick/slick.min.js: {}
   dependencies:
