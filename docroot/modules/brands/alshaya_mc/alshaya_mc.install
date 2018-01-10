@@ -70,50 +70,6 @@ function alshaya_mc_update_8309() {
 /**
  * Implements hook_update_N().
  *
- * Hook update to update brand specific favicon and sitelogo.
- */
-function alshaya_mc_update_8308() {
-  $active_theme = \Drupal::theme()->getActiveTheme();
-  $current_theme = $active_theme->getName();
-  $site_logo = $active_theme->getPath() . '/site-logo';
-  // Default site favicon path with default name.
-  $site_favicon = $active_theme->getPath() . '/favicon';
-
-  // Save default site favicon.
-  \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
-    ->set('favicon', ['path' => $site_favicon . '.ico'])
-    ->save();
-
-  \Drupal::configFactory()->getEditable('alshaya_mothercare.settings')
-    ->setData([
-      'logo' => [
-        'path' => $site_logo . '.svg',
-      ],
-    ])
-    ->save();
-  // Save arabic site logo.
-  \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'alshaya_mothercare.settings')
-    ->setData([
-      'logo' => [
-        'path' => $site_logo . '-ar.svg',
-      ],
-    ])
-    ->save();
-
-  // Save default logo for email.
-  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
-    ->set('email_logo_path', $site_logo . '.png')
-    ->save();
-  // Save arabic logo for email.
-  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
-    ->set('email_logo_path', $site_logo . '-ar.png')
-    ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Hook update to update brand specific favicon.
  */
 function alshaya_mc_update_8307() {
