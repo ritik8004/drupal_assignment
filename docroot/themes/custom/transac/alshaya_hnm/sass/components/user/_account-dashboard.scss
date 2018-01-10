@@ -1,12 +1,10 @@
-.account--dashboard {
-  margin-bottom: 57px;
-  font-family: $hnm-regular;
-  line-height: 1;
+@import "../../alshaya_white_label/sass/components/user/_account-dashboard.scss";
 
+.account--dashboard {
   .subtitle {
-    border-bottom: 1px solid $white;
-    font-size: 1rem;
+    color: $hnm-black-two;
     font-family: $hnm-demibold;
+    font-weight: normal;
 
     @include breakpoint($tablet) {
       font-size: 1rem;
@@ -19,153 +17,32 @@
     }
   }
 
-  ul {
-    font-size: 0;
-    list-style: none;
-    margin: 0;
-    padding-#{$left}: 0;
-  }
-
-  li {
-    font-size: 0.875rem;
-    margin-bottom: 2rem;
-
-    @include breakpoint($desktop) {
-      display: inline-block;
-      margin-bottom: 0;
-      width: 33%;
-    }
-
-    div {
-      @include breakpoint($tablet) {
-        font-size: 0.75rem !important;
-      }
-
-      @include breakpoint($desktop) {
-        font-size: 0.875rem !important;
-      }
-    }
-  }
-
-  .contact--number {
-    @include breakpoint($desktop) {
-      padding-left: 50px;
-    }
-  }
-
   .card--number {
-    @include breakpoint($desktop) {
-      padding-left: 35px;
-    }
-
     .black {
       color: $hnm-black-two;
     }
   }
 
   .label {
-    margin-bottom: 4px;
+    font-weight: normal;
     font-family: $hnm-demibold;
   }
 
-  .account-content-wrapper {
-    float: $left;
-    width: 50%;
-
-    li {
-      line-height: 1.36;
-    }
-
-    .light {
-      color: $grey-ash;
-    }
-  }
-
   .joinclub {
-    float: $right;
-    width: 42.5%;
-
-    @include breakpoint($desktop) {
-      width: 48%;
-    }
-
     #block-jointheclub {
       h3 {
         font-family: $hnm-demibold;
-        font-size: 0.875rem;
         color: $hnm-black-two;
-        margin-top: 0;
       }
 
       p {
         font-family: $hnm-regular;
-        font-size: 0.75rem;
-        color: $grey-ash;
-        margin: 0.4rem 0;
-        text-transform: none;
-        padding-#{$left}: 0.5rem;
-
-        @include breakpoint($tablet) {
-          margin: 0.5rem 0;
-          line-height: 1.2;
-          padding-#{$left}: 0;
-
-          span {
-            vertical-align: middle;
-          }
-
-          .icon-reward {
-            top: -0.125rem;
-          }
-        }
-
-        @include breakpoint($only-tablet) {
-          text-transform: lowercase;
-        }
       }
 
       a {
         font-family: $hnm-regular;
-      }
-
-      img {
-        width: 80%;
-        max-width: 15.5rem;
-
-        @include breakpoint($tablet) {
-          margin-#{$left}: -2rem;
-          width: 100%;
-          min-width: 14.5rem;
-        }
-
-        @include breakpoint($desktop) {
-          float: $right;
-          width: 58%;
-          margin-#{$left}: 0;
-          min-width: 0;
-        }
-      }
-
-      a {
-        display: inline-block;
-
-        @include breakpoint($only-tablet) {
-          margin-top: 0.4rem;
-        }
-
-        @include breakpoint($desktop) {
-          margin-top: 0.2rem;
-        }
+        font-weight: normal;
       }
     }
   }
-}
-
-.label.dark {
-  color: #000;
-  font-size: 14px;
-}
-
-.label.black {
-  color: $black;
 }
