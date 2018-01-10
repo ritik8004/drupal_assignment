@@ -4,26 +4,25 @@ core: 8.x
 package: Alshaya
 description: 'Master module for updating the core settings.'
 dependencies:
-  - alshaya_permissions
-  - alshaya_admin
-  - alshaya_custom
-  - alshaya_i18n
-  - back_to_top
-  - block
-  - block_content
-  - clientside_validation_jquery
-  - default_content
-  - filter
-  - inline_form_errors
-  - mailsystem
-  - mimemail
-  - mobile_number
-  - redirect
-  - rest
-  - r4032login
-  - sharethis
-  - system
-  - views
-  - workbench_moderation
-  - alshaya_contact
-version: 8.x-1.0
+  - alshaya_permissions:alshaya_permissions
+  - alshaya_admin:alshaya_admin
+  - alshaya_custom:alshaya_custom
+  - alshaya_i18n:alshaya_i18n
+  - back_to_top:back_to_top
+  - drupal:block
+  - drupal:block_content
+  - clientside_validation:clientside_validation_jquery
+  - default_content:default_content
+  - drupal:filter
+  - drupal:inline_form_errors
+  - mailsystem:mailsystem
+  - mimemail:mimemail
+  - mobile_number:mobile_number
+  - redirect:redirect
+  - drupal:rest
+  - r4032login:r4032login
+  - sharethis:sharethis
+  - drupal:system
+  - drupal:views
+  - workbench_moderation:workbench_moderation
+  - alshaya_contact:alshaya_contact

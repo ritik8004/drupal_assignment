@@ -5,6 +5,7 @@ Feature: Test the My account section for authenticated user
     Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
 
+  @prod
   Scenario:
     As an authenticated user
     I should be able to see all the sections
@@ -15,7 +16,6 @@ Feature: Test the My account section for authenticated user
     And I should see the link "address book" in ".my-account-nav" section
     And I should see the link "change password" in ".my-account-nav" section
     Then the "my account" tab should be selected
-    And I should see the link "View all orders"
 
   Scenario:
     As an authenticated user
@@ -24,6 +24,7 @@ Feature: Test the My account section for authenticated user
     Then I should see at most "3" recent orders listed
     And the order status should be visible for all products
 
+  @prod
   Scenario Outline:
   As an authenticated user
   I should be able to view the Need help section
@@ -36,12 +37,11 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should see "<text>"
     And the url should match "<url>"
-
     Examples:
       |link|text|url|
       |Contact customer services|Contact us|/contact|
-      |Online and in-store return policy|Contact us|/contact|
-      |Delivery Information             |Contact us|/contact|
+      |Online and in-store return policy|Terms and Conditions of Sale|/terms-and-conditions-sale|
+      |Delivery Information             |Delivery Information|/delivery-information|
 
   Scenario:
     As an authenticated user
@@ -63,7 +63,7 @@ Feature: Test the My account section for authenticated user
     if I don't have a privilege account
     When I follow "edit account details"
     And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with "55004455"
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with ""
     And I press "Save"
@@ -83,7 +83,7 @@ Feature: Test the My account section for authenticated user
     along with Email address and Contact number
     When I follow "edit account details"
     And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with "55004455"
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     And I fill in "edit-privilege-card-number2" with "000135844"
@@ -135,21 +135,25 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should see all "Processing" orders listed on orders tab
 
+  @prod
   Scenario: As an authenticated user
   I should be able to update my contact details
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
     And I wait for the page to load
     When I fill in "edit-field-first-name-0-value" with "Aadya"
     When I fill in "edit-field-last-name-0-value" with "Sharma"
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with "55004466"
     And I press "Save"
     And I wait for the page to load
     Then I should see "Aadya"
-    And I should not see "Test"
+    And I should not see "55004455"
+    And I should see "Contact details changes have been saved."
     Then I fill in "edit-field-first-name-0-value" with "Test"
     And I fill in "edit-field-last-name-0-value" with "Test"
+    When I fill in "edit-field-mobile-number-0-mobile" with "55004466"
     And I press "Save"
     
+  @prod
   Scenario: As an authenticated user
     I should be able to add a new address
     to my address book
@@ -172,6 +176,7 @@ Feature: Test the My account section for authenticated user
     Then I should see "Address is added successfully"
     And the new address block should be displayed on address book
 
+  @prod
   Scenario: As an authenticated user
     I should be able to perform Cancel action on add/edit address pages
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
@@ -187,6 +192,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should not see the text "First Name"
 
+  @prod
   Scenario: As an authenticated user
     I should be able to edit an address
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
@@ -199,6 +205,7 @@ Feature: Test the My account section for authenticated user
     When I wait for the page to load
     Then I should see "Address is updated successfully."
 
+  @prod
   Scenario: As an authenticated user
     I should not be able to delete my primary address
     but I should be able to delete any other address
@@ -217,6 +224,7 @@ Feature: Test the My account section for authenticated user
     Then I should see "Address is deleted successfully."
     And the address block should be deleted from address book
 
+  @prod
   Scenario: As an authenticated user
     I should be able to set my communication preferences
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
@@ -226,6 +234,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should see "Your communication preference saved successfully."
 
+  @prod
   Scenario: As an authenticated user
     I should see the options to change my password
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(6) > a"

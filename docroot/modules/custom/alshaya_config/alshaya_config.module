@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\Core\Config\FileStorage;
 use Drupal\field\Entity\FieldConfig;
 use Symfony\Component\Yaml\Yaml;
 
@@ -68,5 +69,125 @@ function alshaya_config_delete_configs(array $configs) {
 
   foreach ($configs as $config) {
     \Drupal::configFactory()->getEditable($config)->delete();
+  }
+}
+
+/**
+ * Scan and return the yml file names inside subdirectory of config of module.
+ *
+ * @param string $module_name
+ *   Module name.
+ * @param string $directory
+ *   Directory name to scan.
+ *
+ * @return array
+ *   Array of yml file names.
+ */
+function _alshaya_config_get_config_yml($module_name, $directory) {
+  $files = [];
+  $directory_path = drupal_get_path('module', $module_name) . '/config/' . $directory;
+  // Get all yml files inside the directory.
+  $ymls = file_scan_directory($directory_path, '/[(.yml)]$/');
+  if (!empty($ymls)) {
+    foreach ($ymls as $yml) {
+      $files[] = $yml->filename;
+    }
+  }
+
+  return $files;
+}
+
+/**
+ * Save the overridden configs of the module.
+ *
+ * @param string $module_name
+ *   Module name.
+ */
+function _alshaya_config_save_overridden_configs($module_name) {
+  foreach (_alshaya_config_get_config_yml($module_name, 'override') as $config_name) {
+    if ($config = \Drupal::configFactory()->getEditable($config_name)) {
+      $config->save();
+    }
+  }
+}
+
+/**
+ * Set the site logo and favicon icon.
+ */
+function _alshaya_config_set_default_logo_favicon() {
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site logo path with default name.
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site logo.
+  \Drupal::configFactory()->getEditable($current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '.svg',
+      ],
+    ])
+    ->save();
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+      ],
+    ])
+    ->save();
+
+  // Save default site favicon.
+  \Drupal::configFactory()->getEditable($current_theme . '.settings')
+    ->set('favicon', ['path' => $site_favicon . '.ico'])
+    ->save();
+
+  // Save default logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
+    ->set('email_logo_path', $site_logo . '.png')
+    ->save();
+  // Save arabic logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
+    ->set('email_logo_path', $site_logo . '-ar.png')
+    ->save();
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_config_modules_installed($modules) {
+  foreach ($modules as $module) {
+    $override_path = \Drupal::root() . '/' . drupal_get_path('module', $module) . '/config/override/';
+
+    // Check if the module has overrides & install those configs.
+    if (file_exists($override_path)) {
+      $storage = new FileStorage($override_path);
+      $overrides = $storage->listAll();
+
+      if ($overrides) {
+        // Re-save configs for which overrides are available.
+        foreach ($overrides as $override) {
+          try {
+            $config = \Drupal::configFactory()->getEditable($override);
+
+            if ($config && $config->getRawData()) {
+              $config->save();
+            }
+          }
+          catch (\Exception $e) {
+            \Drupal::logger($module)->warning('Error while saving config for override: @override from module @module. Message: @message', [
+              '@override' => $override,
+              '@module' => $module,
+              '@message' => $e->getMessage(),
+            ]);
+          }
+        }
+      }
+    }
   }
 }

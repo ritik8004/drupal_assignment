@@ -5,7 +5,7 @@
  * File to create default content for bouchon bakery.
  */
 
-use \Drupal\block_content\Entity\BlockContent;
+use Drupal\block_content\Entity\BlockContent;
 
 /**
  * Create default copyright block content.
@@ -40,7 +40,7 @@ function alshaya_bb_create_copyright_block_content() {
     'body' => [
       'value' => "<p>فيكتوريا سيكريت. كل الحقوق محفوظة. &copy;</p>",
       'format' => 'rich_text',
-    ]
+    ],
   ]);
   $ar_block_content->save();
 }
@@ -49,7 +49,7 @@ function alshaya_bb_create_copyright_block_content() {
  * Create default copyright block content.
  */
 function alshaya_bb_create_email_signup_form_incentive_text_block_content() {
-// Create email signup form incentive text block content.
+  // Create email signup form incentive text block content.
   $block_content = BlockContent::create([
     'uuid' => '19207aad-0e43-4d3a-96d7-c74141f75bb1',
     'info' => 'Sign up to get the latest from Bouchon Bakery, like:',
@@ -78,7 +78,7 @@ function alshaya_bb_create_email_signup_form_incentive_text_block_content() {
                     <li><p>News &amp; offers from Bouchon Bakery and its sister brands</p></li>
                   </ul>",
       'format' => 'rich_text',
-    ]
+    ],
   ]);
   $ar_block_content->save();
 }

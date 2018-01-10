@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_sku\Form;
 
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\CategoryManagerInterface;
 use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
 use Drupal\Core\Form\FormBase;
@@ -32,16 +33,26 @@ class ProductSyncForm extends FormBase {
   private $ingestApi;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
    * ProductSyncForm constructor.
    *
    * @param \Drupal\acq_sku\CategoryManagerInterface $cat_manager
    *   CategoryManagerInterface instance.
    * @param \Drupal\acq_commerce\Conductor\IngestAPIWrapper $api
    *   IngestAPIWrapper object.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    */
-  public function __construct(CategoryManagerInterface $cat_manager, IngestAPIWrapper $api) {
+  public function __construct(CategoryManagerInterface $cat_manager, IngestAPIWrapper $api, I18nHelper $i18n_helper) {
     $this->catManager = $cat_manager;
     $this->ingestApi = $api;
+    $this->i18nHelper = $i18n_helper;
   }
 
   /**
@@ -50,7 +61,8 @@ class ProductSyncForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acq_sku.category_manager'),
-      $container->get('acq_commerce.ingest_api')
+      $container->get('acq_commerce.ingest_api'),
+      $container->get('acq_commerce.i18n_helper')
     );
   }
 
@@ -110,7 +122,7 @@ class ProductSyncForm extends FormBase {
         break;
 
       case 'Synchronize Products':
-        foreach (acq_commerce_get_store_language_mapping() as $langcode => $store_id) {
+        foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
           $this->ingestApi->productFullSync($store_id, $langcode);
         }
         drupal_set_message('Product Synchronization Processing...', 'status');

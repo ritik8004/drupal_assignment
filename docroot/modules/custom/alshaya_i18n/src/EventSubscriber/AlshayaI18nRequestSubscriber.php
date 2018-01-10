@@ -4,6 +4,7 @@ namespace Drupal\alshaya_i18n\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -40,6 +41,13 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
   protected $config;
 
   /**
+   * Page cache kill service.
+   *
+   * @var \Drupal\Core\PageCache\ResponsePolicy\KillSwitch
+   */
+  protected $killSwitch;
+
+  /**
    * Constructs a AlshayaI18nRequestSubscriber object.
    *
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
@@ -48,13 +56,17 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
    *   The language manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config
    *   The config.
+   * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $kill_switch
+   *   Page cache kill service.
    */
   public function __construct(UrlGeneratorInterface $url_generator,
                               LanguageManagerInterface $language_manager,
-                              ConfigFactoryInterface $config) {
+                              ConfigFactoryInterface $config,
+                              KillSwitch $kill_switch) {
     $this->urlGenerator = $url_generator;
     $this->languageManager = $language_manager;
     $this->config = $config->get('alshaya_i18n.settings');
+    $this->killSwitch = $kill_switch;
   }
 
   /**
@@ -90,7 +102,7 @@ class AlshayaI18nRequestSubscriber implements EventSubscriberInterface {
       $event->setResponse($response);
 
       // Disable page cache, we want to change the redirect based on cookie.
-      \Drupal::service('page_cache_kill_switch')->trigger();
+      $this->killSwitch->trigger();
     }
   }
 

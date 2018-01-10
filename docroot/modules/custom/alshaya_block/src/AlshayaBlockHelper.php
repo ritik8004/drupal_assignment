@@ -86,7 +86,7 @@ class AlshayaBlockHelper {
     $current_path_alias = $this->aliasStorage->load(['source' => $current_path, 'langcode' => $langcode]);
 
     // Get the active link if any!.
-    foreach ($tree as $key => $element) {
+    foreach ($tree as $element) {
       if ($element->inActiveTrail) {
         // @var $link \Drupal\Core\Menu\MenuLinkInterface
         $link = $element->link;

@@ -188,7 +188,10 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
           e.preventDefault();
           if (e.handled !== true) {
             // Taking keyword input and suggestion from e.target, which is more reliable than class.
-            var input = $(e.target.firstElementChild).html() + $(e.target.lastElementChild).html();
+            var target = $(e.target);
+            // target is either a or li, use jQuery to find span inside.
+            var input = target.find('.autocomplete-suggestion-user-input').html()
+              + target.find('.autocomplete-suggestion-suggestion-suffix').html();
             $('#edit-keywords').val(input);
             $('#views-exposed-form-search-page').submit();
           }

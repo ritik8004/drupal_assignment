@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\CategoryRepositoryInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductOptionsManager;
@@ -67,6 +68,13 @@ class ProductSyncResource extends ResourceBase {
   private $queryFactory;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
    * Construct.
    *
    * @param array $configuration
@@ -89,14 +97,17 @@ class ProductSyncResource extends ResourceBase {
    *   Category Repository instance.
    * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
    *   Product Options Manager service instance.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo, ProductOptionsManager $product_options_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo, ProductOptionsManager $product_options_manager, I18nHelper $i18n_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->queryFactory = $query_factory;
     $this->categoryRepo = $cat_repo;
     $this->productOptionsManager = $product_options_manager;
+    $this->i18nHelper = $i18n_helper;
   }
 
   /**
@@ -113,7 +124,8 @@ class ProductSyncResource extends ResourceBase {
       $container->get('config.factory'),
       $container->get('entity.query'),
       $container->get('acq_sku.category_repo'),
-      $container->get('acq_sku.product_options_manager')
+      $container->get('acq_sku.product_options_manager'),
+      $container->get('acq_commerce.i18n_helper')
     );
   }
 
@@ -144,7 +156,7 @@ class ProductSyncResource extends ResourceBase {
 
     foreach ($products as $product) {
       try {
-        $langcode = acq_commerce_get_langcode_from_store_id($product['store_id']);
+        $langcode = $this->i18nHelper->getLangcodeFromStoreId($product['store_id']);
 
         // Magento might have stores that what we don't support.
         if (empty($langcode)) {

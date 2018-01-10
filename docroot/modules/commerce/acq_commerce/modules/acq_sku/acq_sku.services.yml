@@ -11,6 +11,7 @@ services:
       - '@acq_commerce.api'
       - '@entity.query'
       - '@logger.factory'
+      - '@acq_commerce.i18n_helper'
 
   acq_sku.product_options_manager:
     class: Drupal\acq_sku\ProductOptionsManager
@@ -18,6 +19,7 @@ services:
       - '@entity_type.manager'
       - '@acq_commerce.api'
       - '@logger.factory'
+      - '@acq_commerce.i18n_helper'
 
   acq_sku.category_repo:
     class: Drupal\acq_sku\ConductorCategoryRepository

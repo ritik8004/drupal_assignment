@@ -2,19 +2,18 @@ name: 'Alshaya Addressbook'
 type: module
 core: 8.x
 dependencies:
-  - address
-  - alshaya_acm
-  - alshaya_api
-  - alshaya_config
-  - block
-  - content_translation
-  - field
-  - language
-  - mobile_number
-  - profile
-  - system
-  - taxonomy
-  - telephone
-  - views
-  - workbench_moderation
-version: 8.x-1.0
+  - address:address
+  - alshaya_acm:alshaya_acm
+  - alshaya_api:alshaya_api
+  - alshaya_config:alshaya_config
+  - drupal:block
+  - drupal:content_translation
+  - drupal:field
+  - drupal:language
+  - mobile_number:mobile_number
+  - profile:profile
+  - drupal:system
+  - drupal:taxonomy
+  - telephone:telephone
+  - drupal:views
+  - workbench_moderation:workbench_moderation

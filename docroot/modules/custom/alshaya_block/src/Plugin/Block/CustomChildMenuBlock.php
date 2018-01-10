@@ -6,8 +6,11 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Menu\MenuLinkTree;
 use Drupal\alshaya_block\AlshayaBlockHelper;
+use Drupal\Core\Path\AliasStorage;
+use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -43,6 +46,27 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $alshayaBlockHelper;
 
   /**
+   * The Language Manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
+   * The current path.
+   *
+   * @var \Drupal\Core\Path\CurrentPathStack
+   */
+  protected $currentPath;
+
+  /**
+   * The alias storage.
+   *
+   * @var \Drupal\Core\Path\AliasStorage
+   */
+  protected $aliasStorage;
+
+  /**
    * Creates a CustomLogoBlock instance.
    *
    * @param array $configuration
@@ -57,12 +81,29 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The language manager.
    * @param \Drupal\alshaya_block\AlshayaBlockHelper $alshaya_block_helper
    *   The alias storage service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager service object.
+   * @param \Drupal\Core\Path\CurrentPathStack $current_path
+   *   The current path stack.
+   * @param \Drupal\Core\Path\AliasStorage $alias_storage
+   *   The alias storage service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTree $menu_tree, AlshayaBlockHelper $alshaya_block_helper) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              ConfigFactoryInterface $config_factory,
+                              MenuLinkTree $menu_tree,
+                              AlshayaBlockHelper $alshaya_block_helper,
+                              LanguageManagerInterface $language_manager,
+                              CurrentPathStack $current_path,
+                              AliasStorage $alias_storage) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->menuTree = $menu_tree;
     $this->alshayaBlockHelper = $alshaya_block_helper;
+    $this->languageManager = $language_manager;
+    $this->currentPath = $current_path;
+    $this->aliasStorage = $alias_storage;
   }
 
   /**
@@ -75,7 +116,10 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('menu.link_tree'),
-      $container->get('alshaya_block.helper')
+      $container->get('alshaya_block.helper'),
+      $container->get('language_manager'),
+      $container->get('path.current'),
+      $container->get('path.alias_storage')
     );
   }
 
@@ -302,7 +346,7 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   protected function getCheckCurrentPathBelongsToMenu() {
     // Get current language code.
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // @todo: Make the menu name "main" dynamic.
     // Get the main menu tree to get the current active path.
     $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters('main');
@@ -310,12 +354,13 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $tree = $this->menuTree->load('main', $parameters);
 
     // Retrieve an array which contains the path pieces.
-    $current_path = \Drupal::service('path.current')->getPath();
+    $current_path = $this->currentPath->getPath();
+
     // Get current path alias.
-    $current_path_alias = \Drupal::service('path.alias_storage')->load(['source' => $current_path, 'langcode' => $langcode]);
+    $current_path_alias = $this->aliasStorage->load(['source' => $current_path, 'langcode' => $langcode]);
 
     // Get the active link if any!.
-    foreach ($tree as $key => $element) {
+    foreach ($tree as $element) {
       if ($element->inActiveTrail) {
         // @var $link \Drupal\Core\Menu\MenuLinkInterface
         $link = $element->link;

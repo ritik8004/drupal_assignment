@@ -4,11 +4,14 @@ namespace Drupal\alshaya_addressbook\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Listens to the dynamic route events.
  */
 class RouteSubscriber extends RouteSubscriberBase {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -25,7 +28,7 @@ class RouteSubscriber extends RouteSubscriberBase {
    * Page title for address_book page.
    */
   public function addressBookPageTitle() {
-    return t('Address book');
+    return $this->t('Address book');
   }
 
 }

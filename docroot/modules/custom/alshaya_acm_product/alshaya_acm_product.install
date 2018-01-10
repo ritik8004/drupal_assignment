@@ -98,7 +98,7 @@ function alshaya_acm_product_update_8002() {
   $weight = 0;
   foreach ($option_sets as $options) {
     foreach ($options['options'] as $key => $value) {
-      $result = db_query(
+      db_query(
         'UPDATE {taxonomy_term_field_data} AS ttfd
 INNER JOIN {taxonomy_term__field_sku_attribute_code} ttfsac ON ttfsac.entity_id = ttfd.tid
 INNER JOIN {taxonomy_term__field_sku_option_id} ttfsoi ON ttfsoi.entity_id = ttfd.tid
