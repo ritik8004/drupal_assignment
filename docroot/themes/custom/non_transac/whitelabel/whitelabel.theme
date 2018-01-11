@@ -419,7 +419,7 @@ function whitelabel_preprocess_html(&$variables) {
  * Implements hook_js_alter().
  */
 function whitelabel_js_alter(&$javascript) {
-  $jquery_widget = 'themes/custom/whitelabel/libraries/jquery-ui/1.11.0/widget.js';
+  $jquery_widget = 'themes/custom/non_transac/whitelabel/libraries/jquery-ui/1.11.0/widget.js';
 
   // Alter jquery.ui widget-min.js v1.11.4 with v1.11.0
   // to enable support for Internet Explorer 10.
