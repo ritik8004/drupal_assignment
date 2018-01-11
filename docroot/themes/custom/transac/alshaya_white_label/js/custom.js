@@ -6,7 +6,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  $(window).bind('pageshow', function (event) {
+  $(window).on('pageshow', function (event) {
     if (event.originalEvent.persisted) {
       window.location.reload();
     }
@@ -44,7 +44,7 @@
       var mobileStickyHeaderHeight = $('.branding__menu').height();
 
       function stopScrollEvents($el) {
-        $($el).bind('scroll mousedown DOMMouseScroll mousewheel keyup', function () {
+        $($el).on('scroll mousedown DOMMouseScroll mousewheel keyup', function () {
           $($el).stop();
         });
       }
