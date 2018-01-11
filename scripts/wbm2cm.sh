@@ -18,7 +18,7 @@ drush $alias $site updb -y
 
 # Enable wbm2cm to switch from workbench_moderation to content_moderation.
 echo "==== Enable wbm2cm module ===="
-drush $alias $site en -y wbm2cm
+drush $alias $site en -y wbm2cm field_ui
 
 # Run drush cmd available from wbm2cm to migrate workbench_moderation content.
 echo "==== Running wbm2cm-migrate as the command is available. ===="

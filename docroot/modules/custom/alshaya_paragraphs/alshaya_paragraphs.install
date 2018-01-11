@@ -13,6 +13,29 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Revert moderation_state field in paragraphs.
+ */
+function alshaya_paragraphs_update_8107() {
+  /** @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info */
+  $entity_type_bundle_info = \Drupal::service('entity_type.bundle.info');
+
+  /* @var \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager */
+  $entityFieldManager = \Drupal::service('entity_field.manager');
+
+  foreach ($entity_type_bundle_info->getBundleInfo('paragraph') as $bundle_name => $bundle_info) {
+    $fields = $entityFieldManager->getFieldDefinitions('paragraph', $bundle_name);
+
+    if (isset($fields['moderation_state'])) {
+      if (method_exists($fields['moderation_state'], 'delete')) {
+        $fields['moderation_state']->delete();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update Video field settings as the media module included in Drupal-8.4.
  */
 function alshaya_paragraphs_update_8106() {
