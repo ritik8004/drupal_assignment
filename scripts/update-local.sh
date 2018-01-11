@@ -67,11 +67,18 @@ drush $alias $l_argument ssh "sudo service memcached restart"
 echo "Installing database from $env env"
 drush $alias $l_argument sql-cli < $local_archive
 
+# Install local only modules
+drush $alias $l_argument en -y dblog views_ui features_ui restui alshaya_search_local_search
+
 # Uninstall cloud only modules
 drush $alias $l_argument pmu -y purge alshaya_search_acquia_search acquia_search acquia_connector
 
-# Install local only modules
-drush $alias $l_argument en -y dblog views_ui features_ui restui alshaya_search_local_search
+# Clear memcache to avoid cache issues during update.
+echo "Clearing memcache"
+drush $alias $l_argument ssh "sudo service memcached restart"
+
+# Save server config again.
+drush $alias $l_argument php-eval "alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search');"
 
 # Reset indexed data and reindex 5000 for search page to work.
 drush $alias $l_argument search-api-clear acquia_search_index -y
