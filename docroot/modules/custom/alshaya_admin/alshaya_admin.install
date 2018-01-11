@@ -8,17 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Enable wbm2cm module to upgrade to content_moderation.
- */
-function alshaya_admin_update_8002() {
-  if (!\Drupal::service('module_handler')->moduleExists('wbm2cm')) {
-    \Drupal::service('module_installer')->install(['wbm2cm']);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update the /admin/content view.
  */
 function alshaya_admin_update_8001() {
