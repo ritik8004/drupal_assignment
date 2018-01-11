@@ -1,4 +1,4 @@
-<div>
+<amp-sidebar id="sidebar-right" layout="nodisplay" side="right">
     {% if data %}
         <ul>
         {% for term in data %}
@@ -6,4 +6,6 @@
         {% endfor %}
         </ul>
     {% endif %}
-</div>
+</amp-sidebar>
+<div role="button" on="tap:sidebar-right.toggle" tabindex="0" class="ampstart-navbar-trigger md-hide lg-hide pr2">☰</div>
+<div id="target-element-right"></div>

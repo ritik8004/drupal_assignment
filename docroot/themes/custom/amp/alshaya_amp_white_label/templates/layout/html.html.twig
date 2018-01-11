@@ -36,11 +36,10 @@
     {# Only JS from an AMP library is processed in the placeholder. #}
     <js-placeholder token="{{ placeholder_token|raw }}">
     <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
+    <script> {{ inline_css }} </script>
   </head>
   <body{{ attributes }}>
-    {% if amp_skip_link %}
-      {{ amp_skip_link }}
-    {% endif %}
     {{ page_top }}
     {{ page }}
     {{ page_bottom }}
