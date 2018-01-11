@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_customer;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
@@ -26,6 +27,13 @@ class OrdersManager {
   protected $apiWrapper;
 
   /**
+   * Cache Backend service for orders.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * The language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -37,13 +45,19 @@ class OrdersManager {
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   ApiWrapper object.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service for orders.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(APIWrapper $api_wrapper, LanguageManagerInterface $language_manager, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(APIWrapper $api_wrapper,
+                              CacheBackendInterface $cache,
+                              LanguageManagerInterface $language_manager,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->apiWrapper = $api_wrapper;
+    $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->logger = $logger_factory->get('alshaya_acm_customer');
   }
@@ -61,13 +75,13 @@ class OrdersManager {
       $cid = 'orders_list_' . $langcode . '_' . $email;
 
       // Clear user's order cache.
-      \Drupal::cache()->invalidate($cid);
+      $this->cache->invalidate($cid);
     }
 
     if ($uid) {
       // Invalidate the cache tag when order is placed to reflect on the
       // user's recent orders.
-      Cache::invalidateTags(['user:' . \Drupal::currentUser()->id() . ':orders']);
+      Cache::invalidateTags(['user:' . $uid . ':orders']);
     }
   }
 

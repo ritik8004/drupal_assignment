@@ -1,0 +1,76 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_department_page module.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating and reverting the department page alias to term alias.
+ */
+function alshaya_department_page_update_8001() {
+  // Get all department pages.
+  $department_pages = alshaya_department_page_get_pages();
+  // If there are any department pages available.
+  if (!empty($department_pages)) {
+    foreach ($department_pages as $tid => $nid) {
+      /* @var \Drupal\Core\Path\AliasStorage $alias_storage */
+      $alias_storage = \Drupal::service('path.alias_storage');
+      // Get enabled langcodes.
+      $langcodes = array_keys(\Drupal::languageManager()->getLanguages());
+      foreach ($langcodes as $langcode) {
+        $condition = [
+          'source' => '/taxonomy/term/' . $tid,
+          'langcode' => $langcode,
+        ];
+
+        // If alias not exists for the given term, means we need to check and
+        // fetch the alias from the node. If alias already exists on term, we
+        // don't need to do anything.
+        if (!$alias_storage->load($condition)) {
+          $condition['source'] = '/node/' . $nid;
+          // Get department page node alias.
+          $node_alias = $alias_storage->load($condition);
+          // If department node alias exists, only then we need to process.
+          if ($node_alias) {
+            try {
+              // Delete the alias from the department node page.
+              $alias_storage->delete(['pid' => $node_alias['pid']]);
+              // Create alias for the term page from the department node page.
+              $alias_storage->save('/taxonomy/term/' . $tid, $node_alias['alias'], $langcode);
+
+              // We need to delete the alias as well as causing redirect loop
+              // when we switch from english to arabic.
+              if ($langcode == 'en') {
+                _alshaya_department_page_delete_alias(substr($node_alias['alias'], 1));
+              }
+            }
+            catch (\Exception $e) {
+              // If something goes wrong.
+              \Drupal::logger('alshaya_department_page')->error('Unable to process the alias @alias', ['@alias' => $node_alias['alias']]);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Delete the redirects from the 'redirect' table.
+ *
+ * @param string $source_path
+ *   Source path.
+ */
+function _alshaya_department_page_delete_alias($source_path) {
+  /* @var \Drupal\redirect\RedirectRepository $redirect_repository */
+  $redirect_repository = \Drupal::service('redirect.repository');
+  $redirects = $redirect_repository->findBySourcePath($source_path);
+  if ($redirects) {
+    foreach ($redirects as $redirect) {
+      $redirect->delete();
+    }
+  }
+}

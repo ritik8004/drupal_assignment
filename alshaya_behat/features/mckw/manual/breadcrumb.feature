@@ -1,6 +1,7 @@
 @javascript @breadcrumb @manual @mmcpa-2382
 Feature: Test breadcrumbs displayed across the site
 
+  @prod
   Scenario Outline: As a guest
     I should be able to view breadcrumbs across the site
     Given I am on "<page>"
@@ -16,7 +17,7 @@ Feature: Test breadcrumbs displayed across the site
     |/cart                                                 |home > basket                                                                                            |
     |/store-finder                                         |home > find stores                                                                                       |
 
-  @arabic
+  @arabic @prod
   Scenario:  As a guest on Arabic site
   I should be able to view breadcrumbs across the site
     Given I am on homepage
@@ -46,6 +47,7 @@ Feature: Test breadcrumbs displayed across the site
     And I wait for the page to load
     Then the breadcrumb "الصفحة الرئيسية > البحث عن المحلات" should be displayed
 
+  @prod
   Scenario: As a Guest
     I should be able to view breadcrumb on store detail page
     Given I am on "/store-finder"
@@ -54,7 +56,7 @@ Feature: Test breadcrumbs displayed across the site
     And I wait for the page to load
     Then the breadcrumb "home > find stores > m.h. alshaya building" should be displayed
     
-  @arabic
+  @arabic @prod
   Scenario: As a Guest on Arabic site
   I should be able to view breadcrumb on store detail page
     Given I am on "/store-finder"

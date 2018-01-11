@@ -66,13 +66,13 @@ class StoresFinderConfigForm extends ConfigFormBase {
 
     $form['marker'] = [
       '#type' => 'details',
-      '#title' => t('Marker settings'),
+      '#title' => $this->t('Marker settings'),
       '#open' => TRUE,
     ];
 
     $form['marker']['use_default'] = [
       '#type' => 'checkbox',
-      '#title' => t('Use the default marker icon supplied by the module.'),
+      '#title' => $this->t('Use the default marker icon supplied by the module.'),
       '#default_value' => $config->get('marker.use_default'),
       '#tree' => FALSE,
     ];
@@ -89,15 +89,15 @@ class StoresFinderConfigForm extends ConfigFormBase {
 
     $form['marker']['settings']['marker_path'] = [
       '#type' => 'textfield',
-      '#title' => t('Path to custom marker icon'),
+      '#title' => $this->t('Path to custom marker icon'),
       '#default_value' => $config->get('marker.use_default') ? '' : $config->get('marker.path'),
     ];
 
     $form['marker']['settings']['marker_upload'] = [
       '#type' => 'file',
-      '#title' => t('Upload marker icon'),
+      '#title' => $this->t('Upload marker icon'),
       '#maxlength' => 40,
-      '#description' => t("If you don't have direct file access to the server, use this field to upload your marker."),
+      '#description' => $this->t("If you don't have direct file access to the server, use this field to upload your marker."),
     ];
 
     return $form;
@@ -107,27 +107,25 @@ class StoresFinderConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    if (\Drupal::moduleHandler()->moduleExists('file')) {
-      // Handle marker image file upload and validation.
-      $validators = ['file_validate_extensions' => ['png gif jpg jpeg apng svg']];
+    // Handle marker image file upload and validation.
+    $validators = ['file_validate_extensions' => ['png gif jpg jpeg apng svg']];
 
-      // Check for a new uploaded file.
-      $file = file_save_upload('marker_upload', $validators, FALSE, 0);
-      if (isset($file)) {
-        // File upload was attempted.
-        if ($file) {
-          // Put the temporary file in form_values so we can save it on submit.
-          $form_state->setValue('marker_upload', $file);
-        }
-        else {
-          // File upload failed.
-          $form_state->setErrorByName('marker_upload', t('The marker icon could not be uploaded.'));
-        }
+    // Check for a new uploaded file.
+    $file = file_save_upload('marker_upload', $validators, FALSE, 0);
+    if (isset($file)) {
+      // File upload was attempted.
+      if ($file) {
+        // Put the temporary file in form_values so we can save it on submit.
+        $form_state->setValue('marker_upload', $file);
       }
-      elseif (!$form_state->getValue('use_default') && empty($form_state->getValue('marker_path'))) {
-        // No files uploaded and marker path is empty.
-        $form_state->setErrorByName('marker_upload', t('Please upload marker icon.'));
+      else {
+        // File upload failed.
+        $form_state->setErrorByName('marker_upload', $this->t('The marker icon could not be uploaded.'));
       }
+    }
+    elseif (!$form_state->getValue('use_default') && empty($form_state->getValue('marker_path'))) {
+      // No files uploaded and marker path is empty.
+      $form_state->setErrorByName('marker_upload', $this->t('Please upload marker icon.'));
     }
   }
 

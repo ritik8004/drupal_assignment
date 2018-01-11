@@ -18,6 +18,15 @@ function acq_sku_theme($existing, $type, $theme, $path) {
     'acq_sku' => [
       'render element' => 'elements',
     ],
+    'sku_add_list' => [
+      'variables' => ['content' => NULL],
+    ],
+    'acq_sku_price' => [
+      'variables' => [
+        'price' => NULL,
+        'sku' => NULL,
+      ],
+    ],
   ];
 }
 
@@ -84,6 +93,25 @@ function acq_sku_add_base_fields(array $fields) {
 
   // Apply entity updates.
   \Drupal::service("entity.definition_update_manager")->applyUpdates();
+}
+
+/**
+ * Prepares variables for list of available sku type templates.
+ *
+ * Default template: sku-add-list.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - content: An array of content types.
+ */
+function template_preprocess_sku_add_list(array &$variables) {
+  if (!empty($variables['content'])) {
+    /** @var \Drupal\acq_sku\Entity\SKUTypeInterface $type */
+    foreach ($variables['content'] as $type) {
+      $variables['types'][$type->id()]['label'] = $type->label();
+      $variables['types'][$type->id()]['url'] = \Drupal::url('acq_sku.sku_add', ['acq_sku_type' => $type->id()]);
+    }
+  }
 }
 
 /**

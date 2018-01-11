@@ -7,7 +7,6 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\node\Entity\Node;
 
 /**
  * Class AlshayaPromotionsManager.
@@ -127,7 +126,7 @@ class AlshayaPromotionsManager {
 
     $nids = $query->execute();
     if (!empty($nids)) {
-      $nodes = Node::loadMultiple($nids);
+      $nodes = $this->nodeStorage->loadMultiple($nids);
     }
 
     return $nodes;

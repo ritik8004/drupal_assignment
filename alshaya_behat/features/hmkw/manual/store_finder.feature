@@ -1,4 +1,4 @@
-@javascript @manual @2081 @store
+@javascript @manual @2081 @store @prod
 Feature: Test Store finder page
 
   Background:
@@ -15,7 +15,7 @@ Feature: Test Store finder page
     When I follow "Avenues Family"
     And I wait for the page to load
     Then I should see "Avenues Family"
-    And I should see text matching "Al-Rai- 5th Ring Road Sheikh Zayed Bin Sultan Al Nahyan Road"
+    And I should see text matching "Al-Rai 5th Ring Road Sheikh Zayed Bin Sultan Al Nahyan Road"
     And I should see "+965 2228 3334"
     And I should see "Opening Hours"
     And I should see the link "Get directions"

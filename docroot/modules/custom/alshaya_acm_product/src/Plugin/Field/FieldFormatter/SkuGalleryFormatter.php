@@ -139,8 +139,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $skus[$delta] = $sku;
       if ($sku instanceof SKU) {
         $promotion_cache_tags = [];
-        // Get the image.
-        $build['image_url'] = [];
+
         $sku_media = $this->skuManager->getSkuMedia($sku);
         $search_main_image = $thumbnails = [];
 

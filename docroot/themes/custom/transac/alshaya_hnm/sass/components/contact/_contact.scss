@@ -1,0 +1,326 @@
+.c-contact {
+  &.l-one--w {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 6.438rem;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    padding-#{$left}: 1.5rem;
+  }
+
+  .c-page-title {
+    border-bottom: 1px solid $white;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .form-type-textarea {
+    textarea {
+      resize: none;
+      padding-#{$right}: 1.55rem !important;
+      line-height: 1.8;
+      overflow: hidden;
+    }
+
+    .field-suffix {
+      position: absolute;
+      top: 0.125rem;
+      #{$right}: 0;
+      font-size: 0.8125rem;
+      color: $greyish;
+      font-weight: normal;
+      z-index: 3;
+    }
+
+    #edit-message_counter {
+      @include u-visibility(none);
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .form-item-first-name,
+    .form-item-last-name {
+      width: 48% !important;
+    }
+
+    .form-item-first-name {
+      margin-right: 0 !important;
+    }
+
+    .form-item-last-name {
+      float: right !important;
+    }
+  }
+}
+
+.address-book-address,
+.contact-form,
+.user-communication-preference {
+  max-width: 24.75rem;
+  margin-top: 0;
+
+  legend {
+    font-family: $hnm-demibold;
+    font-size: 0.875rem;
+    padding-bottom: 1.5rem;
+  }
+
+  input[type="text"],
+  input,
+  textarea {
+    border: 1px solid $grey-ash;
+    border-width: 0 0 1px;
+    width: 100%;
+    height: 1.563rem;
+    outline: rgba(0, 0, 0, 0);
+    font-size: 16px;
+    border-bottom: 1px solid $grey-ash;
+  }
+
+  label.error {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    display: block;
+    color: $red-error;
+    top: 0;
+    padding-top: 0;
+  }
+
+  .form-item--error {
+    input.error {
+      color: $black;
+    }
+  }
+
+  .form-item.form-type-tel,
+  .form-item.form-type-email,
+  .form-item.form-type-textfield,
+  .form-item.form-type-textarea {
+    label:last-of-type {
+      font-size: 1rem;
+      color: $greyish;
+      position: absolute;
+      #{$left}: 0;
+      top: -0.125rem;
+      transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+      pointer-events: none;
+    }
+
+    input[type="text"]:focus ~ label:last-of-type,
+    textarea:focus ~ label:last-of-type,
+    input:focus ~ label:last-of-type,
+    textarea:focus ~ label:last-of-type,
+    .active-label:last-of-type,
+    input:visited ~ label:last-of-type,
+    input:not(:focus):valid ~ label:not(.error),
+    input:not(:active):valid ~ label:not(.error) {
+      top: -1.375rem;
+      bottom: 0;
+      #{$left}: 0;
+      opacity: 1;
+      font-size: 0.75rem;
+    }
+  }
+
+  .country-field-wrapper {
+    @include clearfix;
+
+    position: relative;
+    height: 3rem;
+    margin-bottom: 1rem;
+
+    .country-label {
+      font-size: 0.75rem;
+      color: $greyish;
+      transition: 0.2s ease all;
+    }
+
+    .country-name {
+      font-size: 1rem;
+      color: $black;
+      transition: 0.2s ease all;
+    }
+  }
+
+  .form-type-email {
+    .description {
+      padding-top: 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .form-type-email {
+    .description {
+      padding-top: 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .form-item {
+    position: relative;
+  }
+
+  fieldset {
+    margin-top: 1rem;
+    margin-bottom: 2.875rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 2.875rem;
+    }
+  }
+
+  .form-item-first-name {
+    margin-right: 1.5rem;
+  }
+
+  .form-item-first-name,
+  .form-item-last-name {
+    float: left;
+    max-width: 11.625rem;
+    width: calc(50% - 0.75rem);
+  }
+
+  .field--type-telephone,
+  .field--type-email {
+    clear: both;
+    padding-top: 3rem;
+  }
+
+  .field--type-string-long {
+    margin-top: 3rem;
+  }
+
+  .form-submit {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    width: 5.875rem;
+    height: 2.1875rem;
+    text-transform: uppercase;
+    font-size: 0.8125rem;
+    color: $white-five;
+    background: $hnm-black-two;
+    font-family: $hnm-bold;
+    margin-bottom: 7.1875rem;
+    border: none;
+    margin-top: 3rem;
+    line-height: 1;
+    float: $left;
+  }
+}
+
+.webform-submission-alshaya-contact-form {
+  @extend .contact-form;
+
+  .form-item {
+    margin-bottom: 2.5rem;
+    display: inline-block;
+
+    &.mobile-number-field {
+      margin-bottom: 3.5rem;
+    }
+  }
+
+  fieldset {
+    margin-top: 1em;
+  }
+
+  .form-type-radio {
+    margin-bottom: 0;
+
+    label::before {
+      margin-top: -0.25rem;
+    }
+  }
+
+  legend {
+    color: $hnm-black-two;
+    font-family: $hnm-demibold;
+    text-transform: uppercase;
+  }
+}
+
+.c-user-edit .user-form {
+  #edit-account {
+    margin-top: 2.813rem;
+  }
+
+  .form-wrapper,
+  .form-item {
+    margin-top: 1.975rem;
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1.25rem;
+    }
+  }
+
+  .field--type-mobile-number {
+    clear: both;
+
+    .mobile-number-field {
+      display: inline-block;
+      margin-top: 1.313rem;
+
+      .form-type-select {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .form-actions {
+    @include breakpoint($desktop) {
+      margin-top: 2rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1rem;
+    }
+
+    input {
+      margin-top: 0;
+    }
+  }
+
+  .form-item-field-subscribe-newsletter-value {
+    label {
+      padding-#{$left}: 1.875rem;
+      text-indent: -2rem;
+      display: block;
+    }
+  }
+}
+
+html[lang=ar] {
+  form.user-form {
+    .form-type-email {
+      input[type=email] {
+        margin-top: 0.3125rem;
+
+        & ~ label {
+          background: transparent !important;
+        }
+      }
+    }
+
+    .field--name-field-first-name,
+    .field--name-field-last-name {
+      input[type=text] {
+        font-family: $arial-nodir;
+      }
+    }
+  }
+}
+
+.path--user .c-address-book {
+  .address-book-address {
+    .country-field-wrapper {
+      height: 3rem;
+      line-height: 1.43;
+    }
+  }
+}

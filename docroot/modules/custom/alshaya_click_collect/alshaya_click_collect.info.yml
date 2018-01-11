@@ -4,7 +4,7 @@ description: 'click and collect functionality for pdp and checkout.'
 package: 'Alshaya'
 core: 8.x
 dependencies:
-  - alshaya_acm_checkout
-  - alshaya_acm_product
-  - alshaya_geolocation
-  - mobile_number
+  - alshaya_acm_checkout:alshaya_acm_checkout
+  - alshaya_acm_product:alshaya_acm_product
+  - alshaya_geolocation:alshaya_geolocation
+  - mobile_number:mobile_number

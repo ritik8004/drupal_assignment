@@ -1,0 +1,716 @@
+.order-detail {
+  &.l-two--sf {
+    padding-top: 0;
+  }
+
+  .item-list {
+    @include breakpoint($only-tablet) {
+      margin-top: 1rem;
+    }
+  }
+
+  .c-page-title {
+    margin-top: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ddd;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 2.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 1.8rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-bottom: 1rem;
+      margin-bottom: 2.625rem;
+    }
+  }
+
+  .region__content {
+    position: relative;
+  }
+
+  .order-transaction + td .dark {
+    @include breakpoint($tablet) {
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 7.1rem;
+      text-overflow: ellipsis;
+
+      html[lang=ar] & {
+        position: relative;
+        display: inline-block;
+        text-overflow: inherit;
+
+        &::after {
+          content: "...";
+          background: $white-smoke;
+          position: absolute;
+          left: 0;
+          padding-right: 1px;
+          width: 0.75rem;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 10.375rem;
+    }
+  }
+
+  .print--button {
+    display: none;
+    position: absolute;
+    #{$right}: 0;
+    top: -1rem;
+
+    @include breakpoint($tablet) {
+      display: block;
+    }
+
+    @include breakpoint($desktop) {
+      top: -0.5rem;
+      min-width: 11.5625rem;
+    }
+
+    &:hover {
+      color: $white-five;
+    }
+  }
+
+  .user__order--detail {
+    .total-row .dark .price {
+      color: $black;
+      font-family: $hnm-demibold;
+      font-size: 0.875rem;
+    }
+  }
+
+  .c-content {
+    .user__order--detail {
+      .total-row .warm--white {
+        background-color: $whisper-light;
+        padding: 0.5rem 1.375rem;
+      }
+    }
+  }
+}
+
+.user__order--detail {
+  font-family: $hnm-regular;
+  line-height: 1;
+  border-top: 1px solid $white;
+  width: 100%;
+  font-size: 0.75rem;
+  margin-bottom: 5.5rem;
+
+  @include breakpoint($desktop) {
+    font-size: 0.875rem;
+  }
+
+  .light {
+    color: $greyish;
+  }
+
+  .dark {
+    color: $black-two;
+    font-weight: 700;
+  }
+
+  .font-small {
+    font-size: 0.75rem;
+  }
+
+  .order-transaction {
+    @include breakpoint($tablet) {
+      width: 23%;
+    }
+  }
+
+  .empty--cell {
+    width: 2.1825rem;
+
+    @include breakpoint($desktop) {
+      width: 133px;
+    }
+  }
+
+  .sub-total-row,
+  .delivery-charge-row,
+  .total-row {
+    background: $white-five;
+
+    td {
+      padding: 0.625rem 1.375rem;
+
+      @include breakpoint($only-tablet) {
+        padding: 0.625rem 0.125rem 0.625rem 0.75rem;
+      }
+    }
+  }
+
+  .discount-row {
+    td {
+      padding: 0.625rem 1.375rem;
+
+      @include breakpoint($only-tablet) {
+        padding: 0.625rem 0.125rem 0.625rem 0.75rem;
+      }
+    }
+  }
+
+  .discount-row {
+    td {
+      &:nth-child(3) {
+        background: $white-five;
+      }
+
+      &:nth-child(4) {
+        background: $white-four;
+      }
+    }
+  }
+
+  .total-row {
+    color: $black-two;
+    font-weight: normal;
+    font-family: $hnm-demibold;
+  }
+
+  .delivery-details-row {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    border-top: 1px solid $white-five;
+    border-bottom: 1px solid $white-five;
+
+    @include breakpoint($desktop) {
+      font-size: 0.9375rem;
+    }
+
+    td {
+      background: $info;
+      padding: 1.25rem 1rem;
+      padding-#{$left}: 56px;
+      text-indent: -2.5rem;
+      vertical-align: middle;
+
+      .icon-ic_info {
+        font-size: 1.9375rem;
+        font-weight: 700;
+        margin-#{$right}: 0.7rem;
+        vertical-align: middle;
+      }
+
+      @include breakpoint($tablet) {
+        padding: 1.125rem 1.375rem;
+        padding-#{$left}: 56px;
+        text-indent: -2.125rem;
+      }
+
+      &.blend {
+        @include breakpoint($only-tablet) {
+          padding-left: 0;
+        }
+      }
+    }
+
+    .blend {
+      @include breakpoint($desktop) {
+        background: $info-two;
+      }
+    }
+  }
+
+  .delivery-details-row td {
+    font-family: $hnm-bold;
+    font-weight: normal;
+  }
+
+  .delivery-details-row {
+    color: $white-five;
+  }
+
+  .delivery-charge-row,
+  .sub-total-row,
+  .order-item-row {
+    .blend {
+      background: $white-four;
+
+      @include breakpoint($tablet) {
+        background: $white-smoke-light;
+      }
+    }
+  }
+
+  .order-item-row {
+    border-bottom: 1px solid $white;
+    background: $white-four-70;
+
+    .order__product--image {
+      @include breakpoint($only-tablet) {
+        padding-#{$right}: 0.125rem;
+      }
+    }
+
+    img {
+      min-width: 8rem;
+
+      @include breakpoint($tablet) {
+        min-width: 7.5rem;
+      }
+
+      @include breakpoint($desktop) {
+        min-width: 8.5625rem;
+      }
+    }
+
+    .dark {
+      margin-bottom: 6px;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 3px;
+      }
+    }
+
+    .blend {
+      @include breakpoint($upto-tablet) {
+        vertical-align: bottom;
+      }
+    }
+
+    .order__unit--price {
+      @include breakpoint($desktop) {
+        min-width: 9rem;
+      }
+    }
+
+    .mobile-only {
+      margin-top: 29px;
+    }
+
+    .tablet-only {
+      margin-top: 45px;
+    }
+  }
+
+  .label {
+    margin-bottom: 3px;
+  }
+
+  .contact {
+    margin-top: 19px;
+
+    @include breakpoint($tablet) {
+      margin-top: 39px;
+    }
+  }
+
+  .order-summary-row {
+    td {
+      background: $whisper-light-59;
+      padding: 1.313rem 1rem;
+
+      @include breakpoint($tablet) {
+        padding: 1.375rem 1.5rem;
+      }
+
+      @include breakpoint($desktop) {
+        vertical-align: middle;
+      }
+    }
+
+    .mobile-only {
+      margin-top: 19px;
+    }
+
+    .tablet-only {
+      margin-top: 15px;
+    }
+
+    .blend {
+      background: $whisper;
+
+      @include breakpoint($tablet) {
+        width: 17.4%;
+      }
+    }
+  }
+
+  .right--align {
+    text-align: $right;
+  }
+
+  .order__summary--status {
+    @include breakpoint($tablet) {
+      width: 19.8%;
+    }
+  }
+
+  .order-details-row {
+    background: $info-19;
+    color: $grey8;
+
+    .label {
+      color: $hnm-black-two;
+      font-family: $hnm-bold;
+      font-weight: normal;
+    }
+
+    .address--name {
+      color: $black-two !important;
+    }
+
+    .blend {
+      background: $info-30;
+
+      @include breakpoint($tablet) {
+        padding-#{$right}: 0.625rem;
+      }
+    }
+
+    .mobile-only {
+      margin-top: 19px;
+
+      &.delivery--method {
+        margin-top: 34px;
+      }
+    }
+
+    .tablet-only {
+      margin-top: 29px;
+    }
+
+    .tablet-blend {
+      @include breakpoint($tablet) {
+        background: $solitude;
+      }
+
+      @include breakpoint($desktop) {
+        background: $pale-grey;
+      }
+    }
+
+    .dark {
+      font-weight: normal;
+      color: $grey8;
+    }
+  }
+
+  .warm--white {
+    background-color: $white-three;
+  }
+
+  td {
+    padding: 22px 16px;
+    vertical-align: top;
+
+    div {
+      margin-bottom: 0.3125rem;
+
+      &.button {
+        margin-bottom: 0;
+      }
+    }
+
+    @include breakpoint($upto-tablet) {
+      width: 50%;
+    }
+
+    @include breakpoint($tablet) {
+      padding: 1.375rem 1.5rem;
+
+      &.above-mobile.blend {
+        padding: 1.375rem 1.25rem !important;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      &.above-mobile.blend {
+        width: 21%;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .order-confirmation & {
+        &.order__user--info {
+          width: 24%;
+        }
+
+        &.desktop-only {
+          width: 25%;
+        }
+
+        &.order__delivery-details {
+          width: 19.5%;
+        }
+      }
+
+      &.order__delivery-details .open--hours > div {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .address {
+    margin-top: 0;
+  }
+
+  .currency-code {
+    padding-#{$right}: 38px;
+
+    @include breakpoint($tablet) {
+      padding-#{$right}: 9px;
+    }
+  }
+
+  .desktop-only {
+    display: none;
+
+    @include breakpoint($desktop) {
+      display: table-cell;
+    }
+  }
+
+  .tablet-only {
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: block;
+    }
+
+    @include breakpoint($desktop) {
+      display: none;
+    }
+  }
+
+  .above-mobile {
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: table-cell;
+    }
+  }
+
+  .mobile-only {
+    @include breakpoint($tablet) {
+      display: none;
+    }
+  }
+
+  .store-open-hours {
+    .open--hours {
+      .key-value-key {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 2px;
+
+        @include breakpoint($only-tablet) {
+          width: 50%;
+        }
+      }
+    }
+  }
+
+  .order-details-row {
+    .delivery-method {
+      margin-top: 1.875rem;
+    }
+  }
+
+  .store-name-and-address {
+    .store-address {
+      p {
+        margin: 0;
+      }
+    }
+
+    .store-map-link {
+      margin-top: 0.875rem;
+
+      a {
+        color: $cerulean-two;
+        font-size: 0.75rem;
+
+        @include icon(map, before) {
+          color: $cerulean-two;
+          vertical-align: middle;
+          font-size: 1.5rem;
+          line-height: 1;
+          display: inline-block;
+          padding-#{$right}: 0.375rem;
+        }
+      }
+    }
+  }
+}
+
+#block-userrecentorders {
+  @include breakpoint($only-tablet) {
+    margin-top: -1.5em;
+  }
+
+  h2.subtitle {
+    margin-top: 2.7rem;
+    border-bottom: none;
+    font-family: $hnm-demibold;
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.5rem;
+    }
+
+    .path--user & {
+      padding-bottom: 0.5625rem;
+      border-bottom: 1px solid $white;
+    }
+  }
+
+  .order-summary-row td:first-child .light {
+    font-size: 0.75rem;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.625rem;
+    }
+
+    &.order--date--time {
+      @include breakpoint($only-tablet) {
+        font-size: 0.75rem;
+        margin-top: 0.875rem;
+      }
+    }
+  }
+}
+
+.user-page.checkout-login.order-confirmation {
+  margin: 0.38em auto 0.8em;
+
+  #edit-field-subscribe-newsletter-wrapper {
+    .form-item-field-subscribe-newsletter-value {
+      label {
+        top: 0 !important;
+        color: $grey-ash;
+        font-size: 0.875rem;
+        padding-#{$left}: 1.6875rem;
+      }
+    }
+  }
+
+  .user__order--detail {
+    tr.delivery-charge-row.collapse-row td {
+      padding: 0.625rem 1.375rem;
+
+      @include breakpoint($only-tablet) {
+        padding: 0.625rem 0.125rem 0.625rem 0.75rem;
+      }
+    }
+
+    .delivery-charge-row {
+      td {
+        padding: 0.625rem 1.375rem;
+
+        @include breakpoint($only-tablet) {
+          padding: 0.625rem 0.125rem 0.625rem 0.75rem;
+        }
+      }
+    }
+
+    .sub-total-row,
+    .delivery-charge-row,
+    .total-row {
+      td.right--align {
+        padding-#{$right}: 2.5rem !important;
+        padding-#{$left}: 0 !important;
+      }
+    }
+  }
+}
+
+.order-detail {
+  .user__order--detail {
+    tr.order-item-row,
+    tr.order-details-row,
+    tr.order-summary-row {
+      td {
+        @include breakpoint($only-tablet) {
+          padding: 1.375rem 0.5rem 3.438rem 1rem !important;
+          min-width: 7rem;
+
+          &.empty--cell {
+            min-width: 3rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+#block-content .order-items li {
+  .second-third .second .dark {
+    @include breakpoint($tablet) {
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 9.825rem;
+      text-overflow: ellipsis;
+
+      html[lang=ar] & {
+        position: relative;
+        display: inline-block;
+        text-overflow: inherit;
+
+        &::after {
+          content: "...";
+          background: $white-five;
+          position: absolute;
+          left: 0;
+          padding-right: 1px;
+          width: 0.75rem;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      max-width: 10.825rem;
+    }
+  }
+
+  &:hover .second-third .second .dark::after {
+    html[lang=ar] & {
+      background-color: $white-smoke;
+    }
+  }
+}
+
+.user__order--detail .total-row:not(.price-row) .warm--white {
+  background: $white-five;
+
+  .dark {
+    font-size: 0.75rem;
+    color: $light-greyish;
+    line-height: 1.125rem;
+    font-weight: normal;
+    font-family: $hnm-regular;
+  }
+}
+
+.alias--cart-checkout-confirmation .block-alshaya-acm-checkout .form-type-checkbox .option::before {
+  position: relative;
+  top: 0.6rem;
+  #{$left}: -0.1875rem;
+  font-size: 2rem;
+
+  @include breakpoint($tablet) {
+    font-size: 2.125rem;
+  }
+}
+
+html[lang=ar] {
+  .user__order--detail .total-row > .right--align {
+    padding: 0 0 0 1.5rem;
+    line-height: 2.3;
+  }
+}

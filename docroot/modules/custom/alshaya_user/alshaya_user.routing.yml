@@ -4,7 +4,7 @@ alshaya_user.user_settings_form:
     _form: '\Drupal\alshaya_user\Form\UserConfigForm'
     _title: 'Custom account settings'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer site configuration'
 
 alshaya_user.user_register_complete:
   path: '/user/register/complete'
@@ -37,4 +37,4 @@ alshaya_user.join_club_form:
     _form: '\Drupal\alshaya_user\Form\JoinClubConfigForm'
     _title: 'Join Club content'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer site configuration'

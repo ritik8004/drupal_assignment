@@ -1,4 +1,4 @@
-@javascript
+@javascript @prod
 Feature: Test the product detail page
 
   @simple

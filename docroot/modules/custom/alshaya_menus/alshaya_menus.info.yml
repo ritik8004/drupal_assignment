@@ -3,14 +3,13 @@ type: module
 core: 8.x
 description: 'Footer and Header menus and related code.'
 dependencies:
-  - block
-  - language
-  - menu_admin_per_menu
-  - menu_link_attributes
-  - system
-  - taxonomy
-  - taxonomy_term_depth
-  - user
-  - views
-version: 8.x-1.0
+  - drupal:block
+  - drupal:language
+  - menu_admin_per_menu:menu_admin_per_menu
+  - menu_link_attributes:menu_link_attributes
+  - drupal:system
+  - drupal:taxonomy
+  - taxonomy_term_depth:taxonomy_term_depth
+  - drupal:user
+  - drupal:views
 package: Alshaya

@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies: {  }
+id: acq_commerce_sync
+label: ACQ Commerce Sync
+weight: 15
+is_admin: null
+permissions:
+  - 'restful post acq_categorysync'
+  - 'restful post acq_customer_delete'
+  - 'restful post acq_productstocksync'
+  - 'restful post acq_productsync'

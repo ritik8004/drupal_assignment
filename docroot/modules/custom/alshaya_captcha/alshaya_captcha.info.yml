@@ -4,9 +4,8 @@ core: 8.x
 package: Alshaya
 description: 'Alshaya captcha.'
 dependencies:
-  - block
-  - captcha
-  - recaptcha
-  - system
-  - views
-version: 8.x-1.0
+  - drupal:block
+  - captcha:captcha
+  - recaptcha:recaptcha
+  - drupal:system
+  - drupal:views

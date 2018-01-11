@@ -57,11 +57,10 @@ class AlshayaSearchGalleryFormatter extends ResponsiveImageFormatter {
       $cache_tags = Cache::mergeTags($cache_tags, $image_style->getCacheTags());
     }
 
-    foreach ($files as $delta => $file) {
+    foreach ($files as $file) {
       // Extract field item attributes for the theme function, and unset them
       // from the $item so that the field template does not re-render them.
       $item = $file->_referringItem;
-      $item_attributes = $item->_attributes;
       unset($item->_attributes);
 
       $thumbImg = ImageStyle::load(self::THUMB_IMG_STYLE)->buildUrl($file->getFileUri());

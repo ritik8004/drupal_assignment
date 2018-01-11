@@ -3,11 +3,10 @@ type: module
 description: 'Alshaya newsletter module.'
 package: 'Alshaya'
 core: 8.x
-version: 8.x-1.0
 dependencies:
-  - acq_commerce
-  - block
-  - system
-  - views
-  - alshaya_master
-  - alshaya_user
+  - acq_commerce:acq_commerce
+  - drupal:block
+  - drupal:system
+  - drupal:views
+  - alshaya_master:alshaya_master
+  - alshaya_user:alshaya_user

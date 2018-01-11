@@ -45,7 +45,7 @@ function alshaya_i18n_save_translations($strings) {
 
       // Look for existing translation sources.
       $data = $locale_storage->getTranslations($conditions, $options);
-      foreach ($data as $key => $value) {
+      foreach ($data as $value) {
         if (isset($value->source) && $value->source == $source) {
           // Save translation.
           $params = [
