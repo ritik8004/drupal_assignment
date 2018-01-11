@@ -1422,11 +1422,6 @@ function alshaya_master_install() {
     ->set('defaults.formatter', 'mime_mail')
     ->save();
 
-  // Change needs review label to 'Pending review'.
-  \Drupal::configFactory()->getEditable('workbench_moderation.moderation_state.needs_review')
-    ->set('label', 'Pending review')
-    ->save();
-
   // Set the access-denied page to '/user'.
   \Drupal::configFactory()->getEditable('system.site')
     ->set('page.403', '/user')
