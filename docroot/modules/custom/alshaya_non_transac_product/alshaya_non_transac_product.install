@@ -5,6 +5,8 @@
  * Install file for alshaya_non_transac_product module.
  */
 
+use Drupal\workflows\Entity\Workflow;
+
 /**
  * Implements hook_install().
  */
@@ -14,4 +16,9 @@ function alshaya_non_transac_product_install() {
   // https://www.drupal.org/node/2599228#comment-11224143.
   // Ensure the translation fields are created in the database.
   \Drupal::service('entity.definition_update_manager')->applyUpdates();
+
+  // Enable content_moderation for product content type.
+  $workflow = Workflow::load('alshaya_workflow');
+  $workflow->getTypePlugin()->addEntityTypeAndBundle('node', 'product');
+  $workflow->save();
 }

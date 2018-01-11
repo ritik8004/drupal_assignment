@@ -8,14 +8,6 @@ third_party_settings:
     available_menus:
       - main
     parent: 'main:'
-  workbench_moderation:
-    enabled: true
-    allowed_moderation_states:
-      - published
-      - approved
-      - draft
-      - needs_review
-    default_moderation_state: draft
 name: 'Advanced Page'
 type: advanced_page
 description: ''
