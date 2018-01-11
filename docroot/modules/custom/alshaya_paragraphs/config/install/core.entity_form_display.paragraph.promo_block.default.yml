@@ -11,7 +11,6 @@ dependencies:
     - image
     - link
     - paragraphs
-    - content_moderation
 id: paragraph.promo_block.default
 targetEntityType: paragraph
 bundle: promo_block

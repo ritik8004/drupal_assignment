@@ -9,7 +9,6 @@ dependencies:
   module:
     - image
     - link
-    - content_moderation
 id: paragraph.main_menu_highlight.default
 targetEntityType: paragraph
 bundle: main_menu_highlight

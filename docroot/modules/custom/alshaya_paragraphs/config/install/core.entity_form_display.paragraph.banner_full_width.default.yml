@@ -7,7 +7,6 @@ dependencies:
     - paragraphs.paragraphs_type.banner_full_width
   module:
     - image
-    - content_moderation
 id: paragraph.banner_full_width.default
 targetEntityType: paragraph
 bundle: banner_full_width

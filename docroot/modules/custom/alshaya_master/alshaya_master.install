@@ -10,17 +10,6 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
- * Enable wbm2cm module to upgrade to content_moderation.
- */
-function alshaya_master_update_8009() {
-  if (!\Drupal::service('module_handler')->moduleExists('wbm2cm')) {
-    \Drupal::service('module_installer')->install(['wbm2cm']);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add string translation for - address related strings.
  */
 function alshaya_master_update_8008() {

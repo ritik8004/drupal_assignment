@@ -6,7 +6,6 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_3_col_dept
   module:
     - paragraphs
-    - content_moderation
 id: paragraph.1_row_3_col_dept.default
 targetEntityType: paragraph
 bundle: 1_row_3_col_dept

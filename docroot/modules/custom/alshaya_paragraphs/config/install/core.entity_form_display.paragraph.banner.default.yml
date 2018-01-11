@@ -11,7 +11,6 @@ dependencies:
     - image
     - inline_entity_form
     - link
-    - content_moderation
 id: paragraph.banner.default
 targetEntityType: paragraph
 bundle: banner

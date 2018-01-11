@@ -10,7 +10,6 @@ dependencies:
     - paragraphs.paragraphs_type.promo_block_button
   module:
     - link
-    - content_moderation
 id: paragraph.promo_block_button.default
 targetEntityType: paragraph
 bundle: promo_block_button

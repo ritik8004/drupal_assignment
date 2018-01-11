@@ -24,5 +24,4 @@ dependencies:
   - sharethis:sharethis
   - drupal:system
   - drupal:views
-  - content_moderation:content_moderation
   - alshaya_contact:alshaya_contact
