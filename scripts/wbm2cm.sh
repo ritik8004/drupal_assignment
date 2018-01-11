@@ -14,8 +14,5 @@ drush $alias $site cr
 echo "Running updb on: $site"
 drush $alias $site updb -y
 
-echo "Enable wbm2cm module"
-drush $alias $site en -y wbm2cm
-
 echo "Running wbm2cm-migrate as the command is available."
 drush $alias $site wbm2cm-migrate
