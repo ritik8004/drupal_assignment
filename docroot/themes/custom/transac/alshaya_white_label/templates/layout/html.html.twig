@@ -28,9 +28,13 @@
 <js-bottom-placeholder token="{{ placeholder_token|raw }}">
 </body>
 {% if inline_css %}
+  <style>
     {{ inline_css }}
+  </style>
 {% endif %}
 {% if inline_js %}
+  <script>
     {{ inline_js }}
+  </script>
 {% endif %}
 </html>

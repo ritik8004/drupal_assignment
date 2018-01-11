@@ -16,7 +16,9 @@
     <css-placeholder token="{{ placeholder_token|raw }}">
     <js-placeholder token="{{ placeholder_token|raw }}">
 {% if inline_css %}
+  <style>
     {{ inline_css }}
+  </style>
 {% endif %}
 </head>
 <body{{ attributes }}>
@@ -31,6 +33,8 @@
 <js-bottom-placeholder token="{{ placeholder_token|raw }}">
 </body>
 {% if inline_js %}
+  <script>
     {{ inline_js }}
+  </script>
 {% endif %}
 </html>
