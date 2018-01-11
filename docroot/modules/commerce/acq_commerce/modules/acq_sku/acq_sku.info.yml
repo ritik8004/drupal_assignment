@@ -13,4 +13,3 @@ dependencies:
   - pcb:pcb
   - drupal:rest
   - drupal:taxonomy
-  - content_moderation:content_moderation
