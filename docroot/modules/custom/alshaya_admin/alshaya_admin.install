@@ -8,17 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Install dependent module added with new version of lightning_workflow.
- */
-function alshaya_admin_update_8002() {
-  if (!\Drupal::service('module_handler')->moduleExists('content_moderation')) {
-    \Drupal::service('module_installer')->install(['content_moderation']);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update the /admin/content view.
  */
 function alshaya_admin_update_8001() {
