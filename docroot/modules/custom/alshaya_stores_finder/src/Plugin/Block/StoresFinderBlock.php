@@ -6,6 +6,9 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides stores finder block.
@@ -15,7 +18,46 @@ use Drupal\Core\Cache\Cache;
  *   admin_label = @Translation("Alshaya stores finder")
  * )
  */
-class StoresFinderBlock extends BlockBase {
+class StoresFinderBlock extends BlockBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The current route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
+   * Constructor.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param string $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The current route match.
+   */
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              RouteMatchInterface $route_match) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->routeMatch = $route_match;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('current_route_match')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -53,7 +95,7 @@ class StoresFinderBlock extends BlockBase {
   public function build() {
     $is_active = '';
     // Current route name.
-    $current_route = \Drupal::routeMatch()->getRouteName();
+    $current_route = $this->routeMatch->getRouteName();
     // If current page, add class.
     if ($current_route == 'view.stores_finder.page_2') {
       $is_active = 'is-active';

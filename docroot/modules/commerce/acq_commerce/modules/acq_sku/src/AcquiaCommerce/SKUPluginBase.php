@@ -2,8 +2,6 @@
 
 namespace Drupal\acq_sku\AcquiaCommerce;
 
-use Drupal\acq_commerce\Conductor\ConductorException;
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -255,7 +253,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
         // Get the stock.
         $stock_info = $api_wrapper->skuStockCheck($sku->getSku());
       }
-      catch (ConductorException $e) {
+      catch (\Exception $e) {
         // Log the stock error, do not throw error if stock info is missing.
         \Drupal::logger('acq_sku')->warning('Unable to get the stock for @sku : @message', [
           '@sku' => $sku->getSku(),

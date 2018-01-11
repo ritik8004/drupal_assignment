@@ -100,7 +100,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     return;
   }
 
-  $form['#error_no_message'] = TRUE;
+  $form['#disable_inline_form_errors_summary'] = TRUE;
 
   // Add sub total price of product.
   $form['cart']['#header'][] = t('Sub total');
@@ -173,8 +173,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
       $cart_rules = $cart->getCart()->cart_rules;
       $item['name'] = _alshaya_acm_update_product_name($sku_entity, $item, $cart_item[$id], $is_item_free, $cart_rules);
 
-      // Load the first image.
-      $sku_image = alshaya_acm_get_product_display_image($id, '137x144');
       $item['quantity']['#type'] = 'select';
       $item['quantity']['#attributes']['gtm-type'] = 'gtm-quantity';
       // Add ajax callback to update cart's total on quantity change.
@@ -499,7 +497,7 @@ function alshaya_acm_get_cart_items_by_sku() {
   $cart = $cartStorage->getCart();
   $items = $cart->items();
   if (!empty($items)) {
-    foreach ($items as $index => $line_item) {
+    foreach ($items as $line_item) {
       $skus[$line_item['sku']] = $line_item;
     }
   }

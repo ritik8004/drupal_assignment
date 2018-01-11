@@ -2,11 +2,12 @@
 Feature: Test the My account section for authenticated user
 
   Background:
-    Given I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load
 
+  @prod
   Scenario:
     As an authenticated user
     I should be able to see all the sections
@@ -16,8 +17,8 @@ Feature: Test the My account section for authenticated user
     Then I should see the link "تفاصيل الاتصال" in ".my-account-nav" section
     And I should see the link "سجل العناوين" in ".my-account-nav" section
     And I should see the link "تغيير كلمة السر" in ".my-account-nav" section
-    And I should see the link "عرض كل الطلبيات"
 
+  @prod
   Scenario Outline:
   As an authenticated user
   I should be able to view the Need help section
@@ -56,7 +57,7 @@ Feature: Test the My account section for authenticated user
   if I don't have a privilege account
     When I follow "تعديل معلومات الحساب"
     And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with "55004455"
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with ""
     And I press "حفظ"
@@ -77,7 +78,7 @@ Feature: Test the My account section for authenticated user
   along with Email address
     When I follow "تعديل معلومات الحساب"
     And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with "55004455"
     When I click the label for "#ui-id-2 > p.title"
     When I fill in "edit-privilege-card-number" with "000135844"
     When I fill in "edit-privilege-card-number2" with "000135844"
@@ -119,13 +120,14 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should see all "قيد التنفيذ" orders listed on orders tab
 
+  @prod
   Scenario: As an authenticated user
   I should be able to update my contact details
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
     And I wait for the page to load
     When I fill in "edit-field-first-name-0-value" with "علية"
     When I fill in "edit-field-last-name-0-value" with "خان"
-    When I fill in "edit-field-mobile-number-0-mobile" with ""
+    When I fill in "edit-field-mobile-number-0-mobile" with "55004466"
     And I press "حفظ"
     And I wait for the page to load
     Then I should see "تم حفظ ببيانات الاتصال"
@@ -138,6 +140,7 @@ Feature: Test the My account section for authenticated user
     Then I fill in "edit-field-mobile-number-0-mobile" with "55004455"
     And I press "حفظ"
 
+  @prod
   Scenario: As an authenticated user
   I should be able to add a new address
   to my address book
@@ -160,6 +163,7 @@ Feature: Test the My account section for authenticated user
     Then I should see "تم إضافة العنوان بنجاح"
     And the new address block should be displayed on address book
 
+  @prod
   Scenario: As an authenticated user
   I should be able to perform Cancel action on add/edit address pages
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
@@ -175,6 +179,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should not see the text "الاسم الأول"
 
+  @prod
   Scenario: As an authenticated user
   I should be able to edit an address
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
@@ -186,6 +191,7 @@ Feature: Test the My account section for authenticated user
     When I wait for the page to load
     Then I should see "تم تحديث العنوان بنجاح"
 
+  @prod
   Scenario: As an authenticated user
   I should not be able to delete my primary address
   but I should be able to delete any other address
@@ -204,6 +210,7 @@ Feature: Test the My account section for authenticated user
     Then I should see "تم حذف العنوان بنجاح"
     And the address block should be deleted from address book
 
+  @prod
   Scenario: As an authenticated user
   I should see the options to change my password
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"

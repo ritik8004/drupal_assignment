@@ -27,7 +27,7 @@ function alshaya_hm_images_acq_sku_product_sku_alter(&$sku, $product) {
  * @return string
  *   Serialized & processed assets.
  */
-function _alshaya_hm_images_acq_sku_process_assets($product) {
+function _alshaya_hm_images_acq_sku_process_assets(array $product) {
   $assets = [];
   if (isset($product['extension'], $product['extension']['assets'])) {
     $assets = $product['extension']['assets'];
@@ -142,35 +142,35 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
 
     // If we have color attribute available from query params & the SKU being
     // rendered is configurable, lookup for a simple SKU with that color.
-    // Fallback for the same in case of not a valid color is the first
-    // child sku.
-    if (($color) && ($sku->bundle() === 'configurable')) {
-      $parent_sku = $sku;
-      if (!($sku = $sku_assets_manager->getChildSkuFromColor($sku, $color)) instanceof SKU) {
-        $sku = \Drupal::service('alshaya_acm_product.skumanager')->getChildSkus($parent_sku, TRUE);
+    // Fallback for the same in case of not a valid color is the parent SKU.
+    if (($color) &&
+      ($sku->bundle() === 'configurable') &&
+      (($sku_color = $sku_assets_manager->getChildSkuFromColor($sku, $color)) instanceof SKU)) {
+      $sku = $sku_color;
+    }
+
+    if ($sku instanceof SKU) {
+      $thumb_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_thumbnail');
+      $zoom_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_zoom');
+      $fullscreen_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_fullscreen');
+      $main_images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_main');
+
+      foreach ($thumb_images as $key => $thumbnail) {
+        $thumb_images[$key]['zoomurl'] = $zoom_images[$key]['url'];
+        $thumb_images[$key]['thumburl'] = $thumb_images[$key]['url'];
+        $thumb_images[$key]['mediumurl'] = $main_images[$key]['url'];
+        $thumb_images[$key]['type'] = 'image';
+        $thumb_images[$key]['fullurl'] = $fullscreen_images[$key]['url'];
+        $thumb_images[$key]['label'] = $sku->label();
       }
-    }
 
-    $thumb_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_thumbnail');
-    $zoom_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_zoom');
-    $fullscreen_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_fullscreen');
-    $main_images = $sku_assets_manager->getImagesForSKU($sku, 'pdp', 'pdp_main');
-
-    foreach ($thumb_images as $key => $thumbnail) {
-      $thumb_images[$key]['zoomurl'] = $zoom_images[$key]['url'];
-      $thumb_images[$key]['thumburl'] = $thumb_images[$key]['url'];
-      $thumb_images[$key]['mediumurl'] = $main_images[$key]['url'];
-      $thumb_images[$key]['type'] = 'image';
-      $thumb_images[$key]['fullurl'] = $fullscreen_images[$key]['url'];
-      $thumb_images[$key]['label'] = $sku->label();
-    }
-
-    // Check on main images is sufficient here, since zoom images are variations
-    // of main images.
-    if ($main_images) {
-      $main_image['zoomurl'] = $zoom_images[0]['url'];
-      $main_image['mediumurl'] = $main_images[0]['url'];
-      $main_image['label'] = $sku->label();
+      // Check on main images is sufficient here, since zoom images are
+      // variations of main images.
+      if ($main_images) {
+        $main_image['zoomurl'] = $zoom_images[0]['url'];
+        $main_image['mediumurl'] = $main_images[0]['url'];
+        $main_image['label'] = $sku->label();
+      }
     }
   }
 }

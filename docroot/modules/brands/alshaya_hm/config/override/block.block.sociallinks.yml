@@ -1,0 +1,7 @@
+region: footer_secondary
+weight: -34
+visibility:
+  request_path:
+    id: request_path
+    pages: "/cart/checkout\r\n/cart/checkout/*"
+    negate: true

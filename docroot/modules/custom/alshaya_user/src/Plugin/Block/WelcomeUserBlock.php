@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_user\Plugin\Block;
 
+use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -26,6 +27,13 @@ class WelcomeUserBlock extends BlockBase implements ContainerFactoryPluginInterf
   protected $currentUser;
 
   /**
+   * Alshaya User Info service object.
+   *
+   * @var \Drupal\alshaya_user\AlshayaUserInfo
+   */
+  protected $userInfo;
+
+  /**
    * WelcomeUserBlock constructor.
    *
    * @param array $configuration
@@ -33,13 +41,20 @@ class WelcomeUserBlock extends BlockBase implements ContainerFactoryPluginInterf
    * @param string $plugin_id
    *   Plugin id.
    * @param mixed $plugin_definition
-   *   Plugin defination.
+   *   Plugin definition.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_account
    *   The current account object.
+   * @param \Drupal\alshaya_user\AlshayaUserInfo $user_info
+   *   Alshaya User Info service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_account) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              AccountProxyInterface $current_account,
+                              AlshayaUserInfo $user_info) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_account;
+    $this->userInfo = $user_info;
   }
 
   /**
@@ -50,7 +65,8 @@ class WelcomeUserBlock extends BlockBase implements ContainerFactoryPluginInterf
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('alshaya_user.info')
     );
   }
 
@@ -60,8 +76,7 @@ class WelcomeUserBlock extends BlockBase implements ContainerFactoryPluginInterf
   public function build() {
     return [
       '#markup' => '<h3 class="my-account-title">' . $this->t('Welcome, @name', [
-        '@name' => \Drupal::service('alshaya_user.info')
-          ->getName(),
+        '@name' => $this->userInfo->getName(),
       ]) . '</h3>',
     ];
   }

@@ -65,12 +65,18 @@
     if (!$.isEmptyObject(coords)) {
       stateValue = 1;
     }
-
     $("input[name='" + elementId + "-lat']").val(lat);
     $("input[name='" + elementId + "-lng']").val(lng);
+    $("input[name='geolocation_geocoder_google_places_api_state']").val(stateValue);
 
-    $('.geolocation-geocoder-google-places-api-state[data-source-identifier="' + elementId + '"]').val(stateValue);
-    $(field).parents('form').find('input[type="submit"]').click();
+    if (!$.isEmptyObject(coords)) {
+      // Show progress bar on store-finder page.
+      if (!$('[data-drupal-selector="edit-list-view"]').hasClass('hidden')) {
+        var progress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
+        $('body').after(progress_element);
+      }
+      $(field).parents('form').find('input[type="submit"]').click();
+    }
   };
 
 })(jQuery, Drupal);

@@ -5,8 +5,57 @@
  * Custom installation for Alshaya Search.
  */
 
-use Drupal\lightning_core\ConfigHelper;
 use Drupal\search_api\Entity\Index;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updated facets config.
+ */
+function alshaya_search_update_8011() {
+  $configs = [
+    'facets.facet.size',
+    'facets.facet.collection',
+    'facets_summary.facets_summary.filter_bar',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_search');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Refactor search and facets config.
+ */
+function alshaya_search_update_8010() {
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    // Enable alshaya_search_acquia_search to ensure config are overridden to
+    // use solr on cloud.
+    \Drupal::service('module_installer')->install(['alshaya_search_acquia_search']);
+  }
+  else {
+    // Enable alshaya_search_local_search to ensure config are overridden to
+    // use solr in local.
+    \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
+  }
+
+  $configs = [
+    'search_api.server.acquia_search_server',
+    'search_api.index.acquia_search_index',
+    'views.view.search',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_search');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update search views cache to tag based.
+ */
+function alshaya_search_update_8009() {
+  alshaya_config_install_configs(['views.view.search'], 'alshaya_search');
+}
 
 /**
  * Implements hook_update_N().
@@ -39,28 +88,18 @@ function alshaya_search_update_8006() {
  * Implements hook_update_N().
  */
 function alshaya_search_update_8005() {
-  // We can't have hook_update() in dedicated alshaya_search_*_search module
-  // because despite the configuration being set during site-install, the
-  // modules are not identified as "enabled" at the end of the process so any
-  // hook implemented in these modules are not invoked.
-  // Update search index field.
   $configs = [
     'search_api.index.acquia_search_index',
   ];
-  if (!isset($_ENV['AH_SITE_NAME'])) {
-    alshaya_config_install_configs($configs, 'alshaya_search_local_search');
-  }
-  else {
-    alshaya_config_install_configs($configs, 'alshaya_search_acquia_search', 'optional');
-  }
+
+  alshaya_config_install_configs($configs, 'alshaya_search');
 
   // Enable sort options on SRP page.
   $sort_options = [
     'name_1',
     'final_price',
   ];
-  $config = \Drupal::configFactory()
-    ->getEditable('alshaya_search.settings');
+  $config = \Drupal::configFactory()->getEditable('alshaya_search.settings');
   $config->set('sort_options', $sort_options)->save();
 }
 
@@ -74,7 +113,7 @@ function alshaya_search_update_8004() {
     'facets.facet.brand',
   ];
 
-  alshaya_config_install_configs($configs, 'alshaya_search', 'optional');
+  alshaya_config_install_configs($configs, 'alshaya_search');
 }
 
 /**
@@ -140,29 +179,6 @@ function alshaya_search_update_8001() {
  * Implements hook_install().
  */
 function alshaya_search_install() {
-  if (!isset($_ENV['AH_SITE_NAME'])) {
-    \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
-  }
-  else {
-    \Drupal::service('module_installer')->install(['alshaya_search_acquia_search']);
-  }
-
-  $search_view = \Drupal::configFactory()->getEditable('views.view.search');
-
-  if ($search_view->getRawData()) {
-    $search_view->delete();
-  }
-
-  ConfigHelper::forModule('alshaya_search')
-    ->optional()
-    ->getEntity('view', 'search')
-    ->save();
-
-  ConfigHelper::forModule('alshaya_search')
-    ->optional()
-    ->getEntity('facets_summary', 'filter_bar')
-    ->save();
-
   // Allow anonymous and authenticated users to use autocomplete.
   user_role_grant_permissions('anonymous', ['use search_api_autocomplete for search_api_views_search']);
   user_role_grant_permissions('authenticated', ['use search_api_autocomplete for search_api_views_search']);

@@ -8,8 +8,8 @@ mckwqa:
       contexts:
         - FeatureContext:
             parameters:
-              simpleurl: '/mothercare-three-position-baby-carrier-test-black'
-              simpletitle: 'Mothercare Three Position Baby Carrier test - Black'
+              simpleurl: '/stronglax'
+              simpletitle: 'Stronglax'
               simpletitlear: 'Mothercare Three Position Baby Carrier test - Black'
               configurl: '/grey-navy-and-yellow-jersey-shorts-3-pack'
               configtitle: 'Grey, Navy and Yellow Jersey Shorts - 3 Pack'
@@ -87,6 +87,50 @@ mckwuat:
           print_args: true
           print_outp: true
           loop_break: true
+mckwprod:
+  autoload:
+    '': %paths.base%/features/mckw/bootstrap
+  suites:
+    default:
+      paths: [ %paths.base%/features/mckw/manual ]
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: 'lights-and-sounds-musical-buggy-bar'
+              simpletitle: 'Lights And Sounds Musical Buggy Bar'
+              simpletitlear: 'لوحة الموسيقى لعربة الأطفال Lights and Sounds'
+              configurl: '/animal-bodysuit-2-pack'
+              configtitle: 'Animal Bodysuit - 2 Pack'
+              configtitlear: 'لباس عادي برسمة الحيوانات - عبوة من قطعتين'
+              configvariant: '0-3 Months'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  formatters:
+      html:
+        output_path: %paths.base%/features/mckw/reports/html/behat
+  extensions:
+    Behat\MinkExtension:
+      browser_name: chrome
+      goutte:
+        guzzle_parameters:
+          verify: false
+      javascript_session: selenium2
+      selenium2:
+        wd_host: http://127.0.0.1:4444/wd/hub
+        browser: chrome
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
+      base_url: 'https://www.mothercare.com.kw/en'
+      files_path: "%paths.base%/media"
+    Drupal\DrupalExtension:
+      blackbox: ~
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true
 hmuat:
   autoload:
     '': %paths.base%/features/hmkw/bootstrap
@@ -99,7 +143,7 @@ hmuat:
               simpleurl: '/knitted-jumper'
               simpletitle: 'Knitted jumper'
               simpletitlear: 'Knitted jumper'
-              configurl: '/bikini-bottoms-3'
+              configurl: '/bikini-bottoms-0'
               configtitle: 'Bikini bottoms'
               configtitlear: 'سروال سباحة'
               configvariant: '8'
@@ -141,13 +185,13 @@ hmqa:
       contexts:
         - FeatureContext:
             parameters:
-              simpleurl: '/test-products-demo'
-              simpletitle: 'Test Products on Demo'
-              simpletitlear: 'Test Products on Demo'
-              configurl: '/2-pack-long-sleeved-bodysuits'
-              configtitle: '2-pack long-sleeved bodysuits'
-              configtitlear: '2-pack long-sleeved bodysuits'
-              configvariant: '50'
+              simpleurl: '/aq-product1'
+              simpletitle: '[AQ]-Product_1'
+              simpletitlear: '[AQ]-Product_1'
+              configurl: '/lyocell-top-0'
+              configtitle: 'Lyocell top'
+              configtitlear: 'Lyocell top'
+              configvariant: 'L'
               base_url: 'https://hmkw-test.factory.alshaya.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
@@ -167,6 +211,51 @@ hmqa:
         browser: chrome
         capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://hmkw-test.factory.alshaya.com/en'
+      files_path: "%paths.base%/media"
+    Drupal\DrupalExtension:
+      blackbox: ~
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true
+hmprod:
+  autoload:
+    '': %paths.base%/features/hmkw/bootstrap
+  suites:
+    default:
+      paths: [ %paths.base%/features/hmkw/manual ]
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/aq-product1'
+              simpletitle: '[AQ]-Product_1'
+              simpletitlear: '[AQ]-Product_1'
+              configurl: '/porcelain-mug-print-motif'
+              configtitle: 'Porcelain mug with print motif'
+              configtitlear: 'Porcelain mug with print motif'
+              configvariant: 'No Size'
+              base_url: 'https://kw.hm.com/en'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  formatters:
+      html:
+        output_path: %paths.base%/features/hmkw/reports/html/behat
+  extensions:
+    Behat\MinkExtension:
+      browser_name: chrome
+      goutte:
+        guzzle_parameters:
+          verify: false
+      javascript_session: selenium2
+      selenium2:
+        wd_host: http://127.0.0.1:4444/wd/hub
+        browser: chrome
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
+      base_url: 'https://kw.hm.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~

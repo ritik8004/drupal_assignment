@@ -94,7 +94,7 @@ function drush_alshaya_seo_bulk_redirect_import($file) {
   elseif (!drush_confirm(dt("Are you sure you want to import the URL Redirects? Please make sure the csv doesn't have a header."))) {
     return drush_user_abort();
   }
-  global $base_url;
+
   $redirect_repository = \Drupal::service('redirect.repository');
   $redirects_created_count = 0;
   drush_print('Importing Redirects...');

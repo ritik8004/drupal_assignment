@@ -44,9 +44,7 @@ function alshaya_seo_token_info() {
  * Implements hook_tokens().
  */
 function alshaya_seo_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
-  $url_options = ['absolute' => TRUE];
   if (isset($options['langcode'])) {
-    $url_options['language'] = \Drupal::languageManager()->getLanguage($options['langcode']);
     $langcode = $options['langcode'];
   }
   else {

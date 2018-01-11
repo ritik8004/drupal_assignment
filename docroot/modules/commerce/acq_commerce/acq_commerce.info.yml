@@ -4,8 +4,8 @@ description: This module lays the foundation to use the Acquia Commerce Connecto
 core: 8.x
 package: Commerce
 dependencies:
-  - rest
-  - simple_oauth
-  - simple_oauth_extras
-  - language
-  - content_translation
+  - drupal:rest
+  - simple_oauth:simple_oauth
+  - simple_oauth:simple_oauth_extras
+  - drupal:language
+  - drupal:content_translation

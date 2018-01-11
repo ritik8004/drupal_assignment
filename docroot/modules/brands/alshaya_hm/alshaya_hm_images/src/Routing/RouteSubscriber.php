@@ -20,4 +20,5 @@ class RouteSubscriber extends RouteSubscriberBase {
       $route->setDefault('_form', '\Drupal\alshaya_hm_images\Form\HmProductSettingsForm');
     }
   }
+
 }

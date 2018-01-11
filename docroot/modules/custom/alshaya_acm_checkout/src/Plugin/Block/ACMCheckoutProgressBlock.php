@@ -3,7 +3,9 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
@@ -35,6 +37,20 @@ class ACMCheckoutProgressBlock extends BlockBase implements ContainerFactoryPlug
   protected $cartStorage;
 
   /**
+   * Checkout settings config object.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $config;
+
+  /**
+   * ACQ Checkout Flow plugin manager object.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
+  protected $pluginManager;
+
+  /**
    * Constructs a new CheckoutProgressBlock.
    *
    * @param array $configuration
@@ -47,12 +63,24 @@ class ACMCheckoutProgressBlock extends BlockBase implements ContainerFactoryPlug
    *   The current route match.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart session.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory object.
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
+   *   ACQ Checkout Flow plugin manager object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, CartStorageInterface $cart_storage) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              RouteMatchInterface $route_match,
+                              CartStorageInterface $cart_storage,
+                              ConfigFactoryInterface $config_factory,
+                              PluginManagerInterface $plugin_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->routeMatch = $route_match;
     $this->cartStorage = $cart_storage;
+    $this->config = $config_factory->get('acq_checkout.settings');
+    $this->pluginManager = $plugin_manager;
   }
 
   /**
@@ -64,7 +92,9 @@ class ACMCheckoutProgressBlock extends BlockBase implements ContainerFactoryPlug
       $plugin_id,
       $plugin_definition,
       $container->get('current_route_match'),
-      $container->get('acq_cart.cart_storage')
+      $container->get('acq_cart.cart_storage'),
+      $container->get('config.factory'),
+      $container->get('plugin.manager.acq_checkout_flow')
     );
   }
 
@@ -81,10 +111,8 @@ class ACMCheckoutProgressBlock extends BlockBase implements ContainerFactoryPlug
     }
 
     // Load the CheckoutFlow plugin.
-    $config = \Drupal::config('acq_checkout.settings');
-    $checkout_flow_plugin = $config->get('checkout_flow_plugin') ?: 'multistep_default';
-    $plugin_manager = \Drupal::service('plugin.manager.acq_checkout_flow');
-    $checkout_flow = $plugin_manager->createInstance($checkout_flow_plugin, []);
+    $checkout_flow_plugin = $this->config->get('checkout_flow_plugin') ?: 'multistep_default';
+    $checkout_flow = $this->pluginManager->createInstance($checkout_flow_plugin, []);
 
     $current_step_id = $checkout_flow->getStepId();
 

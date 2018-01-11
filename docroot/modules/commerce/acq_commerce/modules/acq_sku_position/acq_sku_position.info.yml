@@ -4,7 +4,7 @@ description: This module provides functionality to store the sku product positio
 core: 8.x
 package: Commerce
 dependencies:
-  - acq_commerce
-  - acq_sku
-  - node
-  - taxonomy
+  - acq_commerce:acq_commerce
+  - acq_commerce:acq_sku
+  - drupal:node
+  - drupal:taxonomy

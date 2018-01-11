@@ -3,24 +3,23 @@ type: module
 core: 8.x
 description: 'Advanced Page CT and related settings.'
 dependencies:
-  - alshaya_paragraphs
-  - block
-  - block_field
-  - captcha
-  - content_translation
-  - entity_reference_revisions
-  - field
-  - field_group
-  - language
-  - menu_ui
-  - metatag
-  - node
-  - paragraphs
-  - path
-  - system
-  - text
-  - user
-  - views
-  - workbench_moderation
-version: 8.x-1.0
+  - alshaya_paragraphs:alshaya_paragraphs
+  - drupal:block
+  - block_field:block_field
+  - captcha:captcha
+  - drupal:content_translation
+  - entity_reference_revisions:entity_reference_revisions
+  - drupal:field
+  - field_group:field_group
+  - drupal:language
+  - drupal:menu_ui
+  - metatag:metatag
+  - drupal:node
+  - paragraphs:paragraphs
+  - drupal:path
+  - drupal:system
+  - drupal:text
+  - drupal:user
+  - drupal:views
+  - workbench_moderation:workbench_moderation
 package: Alshaya

@@ -4,8 +4,8 @@ description: 'Custom install for Alshaya sites'
 package: 'Alshaya'
 core: 8.x
 dependencies:
-  - block
-  - search_api_solr
-  - system
-  - views
-  - pathauto
+  - drupal:block
+  - search_api_solr:search_api_solr
+  - drupal:system
+  - drupal:views
+  - pathauto:pathauto
