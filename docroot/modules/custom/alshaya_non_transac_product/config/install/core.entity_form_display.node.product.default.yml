@@ -13,7 +13,7 @@ dependencies:
     - entity_browser
     - path
     - text
-    - workbench_moderation
+    - content_moderation
 id: node.product.default
 targetEntityType: node
 bundle: product

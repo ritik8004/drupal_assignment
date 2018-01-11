@@ -6,7 +6,7 @@ dependencies:
     - paragraphs.paragraphs_type.video
   module:
     - inline_entity_form
-    - workbench_moderation
+    - content_moderation
 id: paragraph.video.default
 targetEntityType: paragraph
 bundle: video

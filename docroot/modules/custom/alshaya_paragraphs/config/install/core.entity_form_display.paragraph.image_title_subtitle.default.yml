@@ -11,7 +11,7 @@ dependencies:
   module:
     - image
     - link
-    - workbench_moderation
+    - content_moderation
 id: paragraph.image_title_subtitle.default
 targetEntityType: paragraph
 bundle: image_title_subtitle

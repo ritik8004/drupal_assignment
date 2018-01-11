@@ -13,4 +13,4 @@ dependencies:
   - pcb:pcb
   - drupal:rest
   - drupal:taxonomy
-  - workbench_moderation:workbench_moderation
+  - content_moderation:content_moderation

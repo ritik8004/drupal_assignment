@@ -16,4 +16,4 @@ dependencies:
   - drupal:taxonomy
   - telephone:telephone
   - drupal:views
-  - workbench_moderation:workbench_moderation
+  - content_moderation:content_moderation

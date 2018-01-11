@@ -9,7 +9,7 @@ dependencies:
   module:
     - image
     - link
-    - workbench_moderation
+    - content_moderation
 id: paragraph.main_menu_highlight.default
 targetEntityType: paragraph
 bundle: main_menu_highlight

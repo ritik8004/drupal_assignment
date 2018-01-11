@@ -12,5 +12,5 @@ dependencies:
   - machine_name_widget:machine_name_widget
   - paragraphs:paragraphs
   - drupal:text
-  - workbench_moderation:workbench_moderation
+  - content_moderation:content_moderation
 package: Alshaya

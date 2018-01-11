@@ -7,5 +7,5 @@ dependencies:
   - drupal:language
   - drupal:media (>= 8.4)
   - lightning_media_video:lightning_media_video
-  - workbench_moderation:workbench_moderation
+  - content_moderation:content_moderation
 package: Alshaya

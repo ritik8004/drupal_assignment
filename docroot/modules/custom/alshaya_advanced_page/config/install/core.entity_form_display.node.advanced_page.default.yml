@@ -17,7 +17,6 @@ dependencies:
     - paragraphs
     - path
     - text
-    - workbench_moderation
 third_party_settings:
   field_group:
     group_views_reference:
@@ -151,7 +150,7 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 15
+    weight: 110
     settings: {  }
     third_party_settings: {  }
     type: metatag_firehose

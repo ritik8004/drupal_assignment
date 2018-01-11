@@ -12,7 +12,7 @@ dependencies:
   module:
     - image
     - link
-    - workbench_moderation
+    - content_moderation
 id: paragraph.offers_bordered.default
 targetEntityType: paragraph
 bundle: offers_bordered

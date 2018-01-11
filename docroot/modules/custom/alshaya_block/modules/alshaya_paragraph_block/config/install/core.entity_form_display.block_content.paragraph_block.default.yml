@@ -9,7 +9,7 @@ dependencies:
     - machine_name_widget
     - paragraphs
     - text
-    - workbench_moderation
+    - content_moderation
 id: block_content.paragraph_block.default
 targetEntityType: block_content
 bundle: paragraph_block

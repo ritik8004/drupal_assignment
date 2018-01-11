@@ -7,7 +7,7 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_1st_col_2_row_2nd_col
   module:
     - paragraphs
-    - workbench_moderation
+    - content_moderation
 id: paragraph.1_row_1st_col_2_row_2nd_col.default
 targetEntityType: paragraph
 bundle: 1_row_1st_col_2_row_2nd_col

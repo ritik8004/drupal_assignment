@@ -11,7 +11,7 @@ dependencies:
     - inline_entity_form
     - path
     - text
-    - workbench_moderation
+    - content_moderation
 _core:
   default_config_hash: EpI0LUeWRqN-jLmKWfpU92KDQ7iIKe0ZCOcszgthEH8
 id: node.acq_product.default
