@@ -10,6 +10,21 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Updated facets config.
+ */
+function alshaya_search_update_8011() {
+  $configs = [
+    'facets.facet.size',
+    'facets.facet.collection',
+    'facets_summary.facets_summary.filter_bar',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_search');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Refactor search and facets config.
  */
 function alshaya_search_update_8010() {

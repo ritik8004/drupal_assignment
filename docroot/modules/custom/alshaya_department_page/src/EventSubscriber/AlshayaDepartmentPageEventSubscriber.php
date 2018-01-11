@@ -36,7 +36,21 @@ class AlshayaDepartmentPageEventSubscriber implements EventSubscriberInterface {
    *   The event to process.
    */
   public function onRequest(GetResponseEvent $event) {
+    // Lets not do anything for AJAX requests. We are facing issues because
+    // route object gets added in static cache in route match when doing here.
+    // We are not able to override request_stack in container if we use
+    // \Drupal::getContainer()->set('request_stack') in code later during
+    // execution it works fine if code below is not executed. Specifically
+    // $this->routeMatch->getRouteObject(). Example:
+    // Drupal\facets\Controller\FacetBlockAjaxController::ajaxFacetBlockView.
+    $request = $event->getRequest();
+
+    if (strpos(strtolower($request->getRequestUri()), 'ajax') > -1) {
+      return;
+    }
+
     $route = $this->routeMatch->getRouteObject();
+
     if ($route && $route->hasOption('_department_page_node')) {
       // This is to stop/override the redirect.
       // @see RouteNormalizerRequestSubscriber::onKernelRequestRedirect().
