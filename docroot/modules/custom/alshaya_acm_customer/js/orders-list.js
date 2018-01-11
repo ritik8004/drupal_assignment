@@ -19,7 +19,7 @@
       });
 
       $('.alshaya-acm-customer-order-list-search').once('orders-list-search').each(function () {
-        $('.alshaya-acm-customer-order-list-search .form-select[data-drupal-selector="edit-filter"]').bind('change', function () {
+        $('.alshaya-acm-customer-order-list-search .form-select[data-drupal-selector="edit-filter"]').on('change', function () {
           $('.alshaya-acm-customer-order-list-search .form-submit[data-drupal-selector="edit-submit-orders"]').trigger('click');
         });
 

@@ -187,14 +187,14 @@
             });
             //////////////////////////////////////////////////////////////////////
             /* Do as little as possible in mousemove event to prevent slowdown. */
-            $mouseTrap.bind('mousemove', this, function (event) {
+            $mouseTrap.on('mousemove', this, function (event) {
                 // Just update the mouse position
                 mx = event.pageX;
                 my = event.pageY;
 
             });
             //////////////////////////////////////////////////////////////////////
-            $mouseTrap.bind('mouseleave', this, function (event) {
+            $mouseTrap.on('mouseleave', this, function (event) {
                 clearTimeout(controlTimer);
                 //event.data.removeBits();
                 if(lens) {
@@ -212,7 +212,7 @@
                 return false;
             });
             //////////////////////////////////////////////////////////////////////
-            $mouseTrap.bind('mouseenter', this, function (event) {
+            $mouseTrap.on('mouseenter', this, function (event) {
                 mx = event.pageX;
                 my = event.pageY;
                 zw = event.data;
@@ -383,7 +383,7 @@
             } else if ($(this).is('.cloud-zoom-gallery')) {
                 opts = $.extend({}, relOpts, options);
                 $(this).data('relOpts', opts);
-                $(this).bind('click', $(this), function (event) {
+                $(this).on('click', $(this), function (event) {
                     var data = event.data.data('relOpts');
                     // Destroy the previous zoom
                     $('#' + data.useZoom).data('zoom').destroy();
