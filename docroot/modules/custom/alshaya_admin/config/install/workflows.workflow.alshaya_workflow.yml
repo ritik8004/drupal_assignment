@@ -113,4 +113,3 @@ type_settings:
   entity_types:
     node:
       - advanced_page
-      - department_page
