@@ -3,7 +3,6 @@
 namespace Acquia\Blt\Custom\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
-use Acquia\Blt\Robo\Common\RandomString;
 use Robo\Contract\VerbosityThresholdInterface;
 
 /**
@@ -140,39 +139,6 @@ class CustomCommand extends BltTasks {
   }
 
   /**
-   * Reset admin user in local.
-   *
-   * @command local:reset-admin-user
-   * @description Resets local settings file.
-   */
-  public function localResetAdminUser($uri) {
-    $this->say('Resetting admin user credentials to default values.');
-
-    $drush_alias = $this->getConfigValue('drush.alias');
-
-    // Update user name and email.
-    $this->taskDrush()
-      ->stopOnFail()
-      ->assume(TRUE)
-      ->alias($drush_alias)
-      ->drush('sqlq')
-      ->arg('update users_field_data set mail = "no-reply@acquia.com", name = "admin" where uid = 1')
-      ->uri($uri)
-      ->run();
-
-    // Update user pass.
-    $this->taskDrush()
-      ->stopOnFail()
-      ->assume(TRUE)
-      ->alias($drush_alias)
-      ->drush('user-password')
-      ->arg('admin')
-      ->option('password', 'admin')
-      ->uri($uri)
-      ->run();
-  }
-
-  /**
    * Allow all modules to run code once post drupal install.
    *
    * @command local:post-install
@@ -283,11 +249,6 @@ class CustomCommand extends BltTasks {
 
     $this->invokeCommand('local:reset-settings-file');
 
-    // Reset admin user credentials.
-    $this->invokeCommand('local:reset-admin-user', [
-      'uri' => $uri,
-    ]);
-
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
       'brand' => $brand,
@@ -338,11 +299,6 @@ class CustomCommand extends BltTasks {
     $this->invokeCommand('setup:toggle-modules');
     $this->invokeCommand('local:reset-settings-file');
 
-    // Reset admin user credentials.
-    $this->invokeCommand('local:reset-admin-user', [
-      'uri' => $uri,
-    ]);
-
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
       'brand' => $brand,
@@ -368,15 +324,6 @@ class CustomCommand extends BltTasks {
    *   The `drush site-install` command result.
    */
   public function localDrupalInstall($uri, $profile) {
-    // Generate a random, valid username.
-    // @see \Drupal\user\Plugin\Validation\Constraint\UserNameConstraintValidator
-    $username = RandomString::string(10, FALSE,
-      function ($string) {
-        return !preg_match('/[^\x{80}-\x{F7} a-z0-9@+_.\'-]/i', $string);
-      },
-      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#%^&*()_?/.,+=><'
-    );
-
     /** @var \Acquia\Blt\Robo\Tasks\DrushTask $task */
     $task = $this->taskDrush()
       ->drush("site-install")
@@ -386,7 +333,8 @@ class CustomCommand extends BltTasks {
       ->uri($uri)
       ->option('site-name', $this->getConfigValue('project.human_name'))
       ->option('site-mail', $this->getConfigValue('drupal.account.mail'))
-      ->option('account-name', $username, '=')
+      ->option('account-name', 'admin', '=')
+      ->option('account-pass', 'admin', '=')
       ->option('account-mail', $this->getConfigValue('drupal.account.mail'))
       ->option('locale', $this->getConfigValue('drupal.locale'))
       ->assume(TRUE)
