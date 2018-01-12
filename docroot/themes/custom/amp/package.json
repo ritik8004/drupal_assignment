@@ -1,7 +1,7 @@
 {
-  "name": "transac",
+  "name": "amp",
   "version": "0.1.0",
-  "description": "Front-end build tools for Alshaya Transac themes.",
+  "description": "Front-end build tools for Alshaya AMP themes.",
   "repository": {
     "type": "git",
     "url": "https://github.com/acquia-pso/cog.git"

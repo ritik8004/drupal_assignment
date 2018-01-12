@@ -426,7 +426,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // Render the wrapper div for composition always so that the same can be
         // filled with data on variant selection.
-        $search_direction = $sku_entity->getType == 'configurable' ? 'children' : 'self';
+        $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
         $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
         $composition_markup = [
           '#theme' => 'product_composition_markup',

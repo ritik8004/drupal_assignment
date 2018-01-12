@@ -1,13 +1,12 @@
---- a/js/soft-limit.js
-+++ b/js/soft-limit.js
-@@ -43,11 +43,11 @@
+--- js/soft-limit.js    (revision )
++++ js/soft-limit.js    (revision )
+@@ -32,10 +32,10 @@
+     var facetsList = $('ul[data-drupal-facet-id="' + facet + '"]');
 
      // Hide facets over the limit.
-     facetsList.each(function() {
--      $(this).children('li:gt(' + zero_based_limit + ')').once().hide();
-+      $(this).children('li:gt(' + zero_based_limit + ')').once('apply-soft-limit').hide();
-     });
- 
+-    facetsList.children('li:gt(' + zero_based_limit + ')').once().hide();
++    facetsList.children('li:gt(' + zero_based_limit + ')').once('apply-soft-limit').hide();
+
      // Add "Show more" / "Show less" links.
 -    facetsList.once().filter(function () {
 +    facetsList.once('apply-soft-limit').filter(function () {

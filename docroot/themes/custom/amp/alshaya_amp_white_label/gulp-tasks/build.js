@@ -15,8 +15,9 @@ module.exports = function (gulp, plugins, options) {
   });
 
   gulp.task('build:dev', [
-    'compile:sass'
-  ], function (cb) {
+    'compile:sass',
+    // 'compile:styleguide'
+  ], function (cb) {cd
     // Run linting last, otherwise its output gets lost.
     plugins.runSequence(['lint:js', 'lint:css'], cb);
   });
