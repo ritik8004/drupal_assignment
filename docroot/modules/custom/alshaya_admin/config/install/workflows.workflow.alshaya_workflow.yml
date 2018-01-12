@@ -1,9 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - node.type.advanced_page
-    - node.type.department_page
   module:
     - content_moderation
 id: alshaya_workflow
@@ -110,7 +107,3 @@ type_settings:
         - published
       to: published
       weight: 13
-  entity_types:
-    node:
-      - advanced_page
-      - department_page
