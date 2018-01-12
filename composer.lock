@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "417ed2fd91959204ef9632fd70aa413d",
+    "content-hash": "863ec64f722e09bb027f3efd4efca3f1",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -9443,6 +9443,9 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
+                },
+                "patches_applied": {
+                    "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
