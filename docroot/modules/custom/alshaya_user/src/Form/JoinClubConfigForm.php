@@ -58,16 +58,16 @@ class JoinClubConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_user.join_club');
 
-    $image = $form_state->getValue('image');
-    $image = $image ? reset($image) : '';
-    if (isset($image[0])) {
-      $file = $this->entityTypeManager->getStorage('file')->load($image[0]);
+    $fid = $form_state->getValue('image');
+    $fid = $fid ? reset($fid) : '';
+    if (isset($fid)) {
+      $file = $this->entityTypeManager->getStorage('file')->load($fid);
       if ($file) {
-        $file->setPermanent();
+        $file->status = FILE_STATUS_PERMANENT;
         $file->save();
       }
     }
-    $config->set('join_club_image.fid', $image);
+    $config->set('join_club_image.fid', $fid);
     $config->set('join_club_description', $form_state->getValue('description'));
 
     $config->save();
