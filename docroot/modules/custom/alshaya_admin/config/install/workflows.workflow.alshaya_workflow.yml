@@ -3,7 +3,6 @@ status: true
 dependencies:
   config:
     - node.type.advanced_page
-    - node.type.department_page
   module:
     - content_moderation
 id: alshaya_workflow
