@@ -131,7 +131,14 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
    */
   public function getCacheTags() {
     $nid = $this->routeMatch->getParameter('node')->id();
-    return Cache::mergeTags(parent::getCacheTags(), ['term_list', 'node:' . $nid]);
+    return Cache::mergeTags(parent::getCacheTags(), ['taxonomy_term_list', 'node:' . $nid]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return parent::getCacheContexts(parent::getCacheContexts(), ['url.path']);
   }
 
 }
