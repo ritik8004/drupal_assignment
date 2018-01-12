@@ -1123,11 +1123,11 @@ class SkuManager {
 
     if ($sku instanceof SKU) {
       if (($multivalued) &&
-        ($attribute_value = $sku->get($attribute_machine_name)->getString()) &&
-        (!empty($attribute_value))) {
+        (!empty($first_index = $sku->get($attribute_machine_name)->first())) &&
+        (!empty($attribute_value = $first_index->getString()))) {
         return $attribute_value;
       }
-      elseif ($attribute_value = $sku->get($attribute_machine_name)->getString()) {
+      elseif (!empty($attribute_value = $sku->get($attribute_machine_name)->getString())) {
         return $attribute_value;
       }
     }
