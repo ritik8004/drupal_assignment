@@ -406,7 +406,7 @@ function drush_acq_sku_sync_stock() {
 
       /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
       $plugin = $sku_entity->getPluginInstance();
-      $plugin->getProcessedStock($sku_entity, FALSE, TRUE);
+      $plugin->getProcessedStock($sku_entity, TRUE);
 
       // Reset static caches to release memory.
       drupal_static_reset();

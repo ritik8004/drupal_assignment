@@ -11,6 +11,15 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Enable 'alshaya_amp' module on all sites on all environments.
+ */
+function alshaya_update_8004() {
+  \Drupal::service('module_installer')->install(['alshaya_amp']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Disable admin modules.
  */
 function alshaya_update_8003() {

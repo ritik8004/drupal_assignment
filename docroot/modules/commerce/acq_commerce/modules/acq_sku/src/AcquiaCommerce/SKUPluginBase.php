@@ -200,15 +200,16 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
   /**
    * {@inheritdoc}
    */
-  public function getProcessedStock(SKU $sku, $recheck = FALSE, $reset = FALSE) {
-    $stock = (int) $this->getStock($sku, $reset);
+  public function getProcessedStock(SKU $sku, $reset = FALSE) {
+    $stock = &drupal_static('stock_static_cache', []);
 
-    // We reset and check again once if reset is false and recheck is true.
-    if (empty($stock) && $recheck && !$reset) {
-      $stock = (int) $this->getStock($sku, TRUE);
+    if (!$reset && isset($stock[$sku->getSku()])) {
+      return $stock[$sku->getSku()];
     }
 
-    return $stock;
+    $stock[$sku->getSku()] = (int) $this->getStock($sku, $reset);
+
+    return $stock[$sku->getSku()];
   }
 
   /**
@@ -225,70 +226,75 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
   protected function getStock(SKU $sku, $reset = FALSE) {
     $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
 
-    if ($stock_mode == 'push') {
-      $stock = $sku->get('stock')->getString();
+    if (!$reset) {
+      // Return from Entity field in push mode.
+      if ($stock_mode == 'push') {
+        $stock = $sku->get('stock')->getString();
 
-      // Fallback to pull mode if no value available for the SKU.
-      if (!($stock === '' || $stock === NULL)) {
-        return (int) $stock;
-      }
-    }
-
-    $stock = NULL;
-
-    // Cache id.
-    $cid = 'stock:' . $sku->getSku();
-
-    $cache = \Drupal::cache('stock')->get($cid);
-
-    // If information is cached.
-    if (!$reset && !empty($cache)) {
-      $stock = $cache->data;
-    }
-    else {
-      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-      $api_wrapper = \Drupal::service('acq_commerce.api');
-
-      try {
-        // Get the stock.
-        $stock_info = $api_wrapper->skuStockCheck($sku->getSku());
-      }
-      catch (\Exception $e) {
-        // Log the stock error, do not throw error if stock info is missing.
-        \Drupal::logger('acq_sku')->warning('Unable to get the stock for @sku : @message', [
-          '@sku' => $sku->getSku(),
-          '@message' => $e->getMessage(),
-        ]);
-
-        // We will cache this also for sometime to reduce load.
-        $stock_info['is_in_stock'] = FALSE;
-      }
-
-      // Magento uses additional flag as well for out of stock.
-      if (isset($stock_info['is_in_stock']) && empty($stock_info['is_in_stock'])) {
-        $stock_info['quantity'] = 0;
-      }
-
-      $stock = (int) $stock_info['quantity'];
-
-      // If cache multiplier is zero we don't cache the stock.
-      if ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
-        $default_cache_lifetime = $stock ? $stock * $cache_multiplier : $cache_multiplier;
-        $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
-
-        // Calculate the timestamp when we want the cache to expire.
-        $stock_cache_lifetime = min($default_cache_lifetime, $max_cache_lifetime);
-        $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
-
-        // Set the stock in cache.
-        \Drupal::cache('stock')->set($cid, $stock, $expire);
-
-        // Save the value in SKU if we came here as fallback of push mode.
-        if ($stock_mode == 'push') {
-          $sku->get('stock')->setValue($stock);
-          $sku->save();
+        // Fallback to pull mode if no value available for the SKU.
+        if (!($stock === '' || $stock === NULL)) {
+          return (int) $stock;
         }
       }
+      // Return from Cache in Pull mode.
+      else {
+        // Cache id.
+        $cid = 'stock:' . $sku->getSku();
+
+        $cache = \Drupal::cache('stock')->get($cid);
+
+        if (!empty($cache)) {
+          return (int) $cache->data;
+        }
+      }
+    }
+
+    // Either reset is requested or we dont have value in attribute or we dont
+    // have value in cache, we will use the API to get fresh value now.
+    $stock = NULL;
+
+    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+    $api_wrapper = \Drupal::service('acq_commerce.api');
+
+    try {
+      // Get the stock.
+      $stock_info = $api_wrapper->skuStockCheck($sku->getSku());
+    }
+    catch (\Exception $e) {
+      // Log the stock error, do not throw error if stock info is missing.
+      \Drupal::logger('acq_sku')->warning('Unable to get the stock for @sku : @message', [
+        '@sku' => $sku->getSku(),
+        '@message' => $e->getMessage(),
+      ]);
+
+      // We will cache this also for sometime to reduce load.
+      $stock_info['is_in_stock'] = FALSE;
+    }
+
+    // Magento uses additional flag as well for out of stock.
+    if (isset($stock_info['is_in_stock']) && empty($stock_info['is_in_stock'])) {
+      $stock_info['quantity'] = 0;
+    }
+
+    $stock = (int) $stock_info['quantity'];
+
+    // Save the value in SKU if we came here as fallback of push mode.
+    if ($stock_mode == 'push') {
+      $sku->get('stock')->setValue($stock);
+      $sku->save();
+    }
+    // Save the value in cache if we are in pull mode.
+    // If cache multiplier is zero we don't cache the stock.
+    elseif ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
+      $default_cache_lifetime = $stock ? $stock * $cache_multiplier : $cache_multiplier;
+      $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
+
+      // Calculate the timestamp when we want the cache to expire.
+      $stock_cache_lifetime = min($default_cache_lifetime, $max_cache_lifetime);
+      $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
+
+      // Set the stock in cache.
+      \Drupal::cache('stock')->set($cid, $stock, $expire);
     }
 
     return $stock;
