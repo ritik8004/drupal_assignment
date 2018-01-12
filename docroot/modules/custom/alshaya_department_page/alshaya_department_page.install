@@ -6,18 +6,6 @@
  */
 
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\workflows\Entity\Workflow;
-
-/**
- * Implements hook_update_N().
- *
- * Enable content_moderation for department_page content type.
- */
-function alshaya_department_page_update_8004() {
-  $workflow = Workflow::load('alshaya_workflow');
-  $workflow->getTypePlugin()->addEntityTypeAndBundle('node', 'department_page');
-  $workflow->save();
-}
 
 /**
  * Implements hook_update_N().
