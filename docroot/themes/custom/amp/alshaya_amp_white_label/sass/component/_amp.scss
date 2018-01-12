@@ -36,13 +36,15 @@ a {
   position: absolute;
   right: 0;
   padding: 0.625rem 1.25rem;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 2.1875rem;
 }
 
 .site-branding {
-	width: 3.375rem;
-	height: auto;
-	padding: 0.625rem;
+  width: 3.375rem;
+  height: auto;
+  padding: 0.625rem;
 }
 
 .amp-main,
@@ -58,4 +60,8 @@ a {
     color: $light-grey;
     font-size: 0.75rem;
   }
+}
+
+.menu-icon {
+  background: url('/themes/custom/transac/alshaya_hnm/imgs/icons/mobile-menu.svg') center center no-repeat;
 }
