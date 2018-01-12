@@ -6,7 +6,7 @@
 module.exports = function (gulp, plugins, options) {
   'use strict';
 
-  gulp.task('watch', ['watch:sass', 'watch:styleguide', 'watch:js']);
+  gulp.task('watch', ['watch:sass', 'watch:js']);
 
   gulp.task('watch:js', function () {
     return gulp.watch([
@@ -18,11 +18,5 @@ module.exports = function (gulp, plugins, options) {
     return gulp.watch([
       options.sass.files
     ], ['compile:sass-dev', 'minify:css']);
-  });
-
-  gulp.task('watch:styleguide', function () {
-    return gulp.watch([
-      options.sass.files
-    ], ['compile:styleguide']);
   });
 };
