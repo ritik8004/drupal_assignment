@@ -121,7 +121,7 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  function access(AccountInterface $account, $return_as_object = FALSE) {
+  public function access(AccountInterface $account, $return_as_object = FALSE) {
     /* @var \Drupal\node\Entity\Node $node */
     $node = $this->routeMatch->getParameter('node');
     return AccessResult::allowedIf($node
