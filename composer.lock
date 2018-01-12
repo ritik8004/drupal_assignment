@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "863ec64f722e09bb027f3efd4efca3f1",
+    "content-hash": "c262bff79c56d5f852bf31b4a66cd6df",
     "packages": [
         {
             "name": "acquia/acsf-tools",
