@@ -524,10 +524,10 @@ class Configurable extends SKUPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getProcessedStock(SKU $sku, $recheck = FALSE, $reset = FALSE) {
-    static $stock = [];
+  public function getProcessedStock(SKU $sku, $reset = FALSE) {
+    $stock = &drupal_static('stock_static_cache', []);
 
-    if (!$recheck && !$reset && isset($stock[$sku->getSku()])) {
+    if (!$reset && isset($stock[$sku->getSku()])) {
       return $stock[$sku->getSku()];
     }
 
@@ -539,11 +539,6 @@ class Configurable extends SKUPluginBase {
 
         if ($child_sku_entity instanceof SKU) {
           $child_stock = (int) $this->getStock($child_sku_entity, $reset);
-
-          // We reset & check again once if reset is false and recheck is true.
-          if (empty($child_stock) && $recheck && !$reset) {
-            $child_stock = (int) $this->getStock($child_sku_entity, TRUE);
-          }
 
           $quantities[$child_sku_entity->getSku()] = $child_stock;
         }

@@ -653,17 +653,22 @@ class SKU extends ContentEntityBase implements SKUInterface {
   public function clearStockCache() {
     $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
 
-    if ($stock_mode == 'push') {
-      return;
-    }
-
-    $stock_cid = 'stock:' . $this->getSku();
-
-    // Clear stock cache.
-    \Drupal::cache('stock')->invalidate($stock_cid);
-
     // Clear product and forms related to sku.
     Cache::invalidateTags(['acq_sku:' . $this->id()]);
+
+    if ($stock_mode == 'push') {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $this->getPluginInstance();
+
+      // Reset the stock value.
+      $plugin->getProcessedStock($this, TRUE);
+    }
+    else {
+      $stock_cid = 'stock:' . $this->getSku();
+
+      // Clear stock cache.
+      \Drupal::cache('stock')->invalidate($stock_cid);
+    }
   }
 
 }
