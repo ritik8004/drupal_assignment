@@ -2,3 +2,50 @@
  * @file
  * Theme specific scss file.
  */
+
+amp-sidebar[side][open] {
+	background-color: #000;
+	max-width: none !important;
+  width: 100%;
+  opacity: 0.8;
+
+  ul {
+    text-align: center;
+    padding-left: 0;
+    padding-top: 4rem;
+    margin-top: 0;
+  }
+
+  li {
+    padding: 0.625rem;
+  }
+}
+
+a {
+	text-decoration: none;
+	color: #fff;
+}
+
+.menu-icon,
+.close-icon {
+  position: absolute;
+  right: 0;
+  padding: 0.625rem 1.25rem;
+  font-size: 1.25rem;
+}
+
+.site-branding {
+	width: 53px;
+	height: auto;
+	padding: 0.625rem;
+}
+
+.amp-main,
+.amp-footer {
+  border-top: 1px solid #ddd;
+  margin: 0 0.625rem;
+}
+
+.amp-footer__content {
+	text-align: center;
+}
