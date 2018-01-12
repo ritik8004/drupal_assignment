@@ -3,9 +3,13 @@
  * Theme specific scss file.
  */
 
+body {
+  max-width: 80rem;
+  margin: 0 auto !important;
+}
 amp-sidebar[side][open] {
-	background-color: #000;
-	max-width: none !important;
+  background-color: #000;
+  max-width: none !important;
   width: 100%;
   opacity: 0.8;
 
@@ -22,8 +26,8 @@ amp-sidebar[side][open] {
 }
 
 a {
-	text-decoration: none;
-	color: #fff;
+  text-decoration: none;
+  color: #fff;
 }
 
 .menu-icon,
@@ -47,5 +51,5 @@ a {
 }
 
 .amp-footer__content {
-	text-align: center;
+  text-align: center;
 }
