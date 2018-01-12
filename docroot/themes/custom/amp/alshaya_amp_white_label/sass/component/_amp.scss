@@ -6,6 +6,7 @@
 body {
   max-width: 80rem;
   margin: 0 auto !important;
+  font-family: $alshaya-thin;
 }
 amp-sidebar[side][open] {
   background-color: $black;
@@ -52,4 +53,9 @@ a {
 
 .amp-footer__content {
   text-align: center;
+
+  p {
+    color: $light-grey;
+    font-size: 0.75rem;
+  }
 }
