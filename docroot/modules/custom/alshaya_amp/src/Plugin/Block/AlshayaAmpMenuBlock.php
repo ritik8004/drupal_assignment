@@ -8,6 +8,8 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -91,16 +93,6 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
   public function build() {
     $data = [];
 
-    /* @var \Drupal\node\Entity\Node $node */
-    $node = $this->routeMatch->getParameter('node');
-    if ($node) {
-      $display_amp_menu = $node->get('field_display_amp_menu')->getValue();
-      // If not show the amp menu on node.
-      if (!empty($display_amp_menu) && $display_amp_menu[0]['value'] == 0) {
-        return [];
-      }
-    }
-
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name']);
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid=tfd.tid');
@@ -124,6 +116,18 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
       '#theme' => 'alshaya_amp_menu',
       '#data' => $data,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  function access(AccountInterface $account, $return_as_object = FALSE) {
+    /* @var \Drupal\node\Entity\Node $node */
+    $node = $this->routeMatch->getParameter('node');
+    return AccessResult::allowedIf($node
+      && (empty($node->get('field_display_amp_menu')->getValue())
+      || $node->get('field_display_amp_menu')->getValue()[0]['value'] == 1
+    ));
   }
 
   /**
