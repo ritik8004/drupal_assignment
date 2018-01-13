@@ -8,7 +8,9 @@ dependencies:
     - system.menu.admin
     - user.role.administrator
     - user.role.reviewer
+    - workflows.workflow.alshaya_workflow
   module:
+    - content_moderation
     - node
     - user
 id: content_needs_review
@@ -564,55 +566,6 @@ display:
           destination: true
           entity_type: node
           plugin_id: entity_operations
-        revision_id:
-          id: revision_id
-          table: workbench_revision_tracker
-          field: revision_id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          plugin_id: standard
       filters:
         type:
           id: type
@@ -659,13 +612,14 @@ display:
           plugin_id: bundle
         moderation_state:
           id: moderation_state
-          table: node_field_revision
+          table: node_field_data
           field: moderation_state
-          relationship: latest_revision__node
+          relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
-          value: needs_review
+          operator: in
+          value:
+            alshaya_workflow-needs_review: alshaya_workflow-needs_review
           group: 1
           exposed: false
           expose:
@@ -680,6 +634,7 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -693,8 +648,7 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           entity_type: node
-          entity_field: moderation_state
-          plugin_id: string
+          plugin_id: moderation_state_filter
       sorts:
         created:
           id: created
@@ -728,16 +682,6 @@ display:
             value: 'Nothing is available for review.'
             format: mail_text
           plugin_id: text
-      relationships:
-        latest_revision__node:
-          id: latest_revision__node
-          table: workbench_revision_tracker
-          field: latest_revision__node
-          relationship: none
-          group_type: group
-          admin_label: 'Content latest revision'
-          required: false
-          plugin_id: standard
       arguments: {  }
       display_extenders: {  }
     cache_metadata:
@@ -748,7 +692,8 @@ display:
         - url.query_args
         - 'user.node_grants:view'
         - user.roles
-      tags: {  }
+      tags:
+        - 'config:workflow_list'
   page_1:
     display_plugin: page
     id: page_1
@@ -779,4 +724,5 @@ display:
         - url.query_args
         - 'user.node_grants:view'
         - user.roles
-      tags: {  }
+      tags:
+        - 'config:workflow_list'
