@@ -75,7 +75,9 @@
       min-width: 11.5625rem;
     }
 
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus {
       color: $white-five;
     }
   }
