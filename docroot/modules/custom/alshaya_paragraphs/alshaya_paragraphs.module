@@ -8,9 +8,9 @@
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Implements hook_ENTITY_TYPE_presave().
+ * Implements hook_ENTITY_TYPE_inserts().
  */
-function alshaya_paragraphs_paragraph_presave(EntityInterface $entity) {
+function alshaya_paragraphs_paragraph_insert(EntityInterface $entity) {
   _alshaya_paragraphs_correct_file_status($entity);
 }
 
