@@ -8,23 +8,6 @@ body {
   margin: 0 auto !important;
   font-family: $alshaya-thin;
 }
-amp-sidebar[side][open] {
-  background-color: $black;
-  max-width: none !important;
-  width: 100%;
-  opacity: 0.8;
-
-  ul {
-    text-align: center;
-    padding-left: 0;
-    padding-top: 4rem;
-    margin-top: 0;
-  }
-
-  li {
-    padding: 0.625rem;
-  }
-}
 
 a {
   text-decoration: none;
@@ -35,7 +18,7 @@ a {
 .close-icon {
   position: absolute;
   right: 0;
-  padding: 0.625rem 1.25rem;
+  padding: 20px 0.625rem 1.25rem;
   font-size: 1.5rem;
   width: 1.5rem;
   height: 2.1875rem;
@@ -47,9 +30,12 @@ a {
 }
 
 .site-branding {
-  width: 3.375rem;
+  width: 18%;
   height: auto;
   padding: 0.625rem;
+  display: table-cell;
+  vertical-align: middle;
+  padding-bottom: 0;
 }
 
 .amp-main,
