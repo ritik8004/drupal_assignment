@@ -8,6 +8,51 @@
 /**
  * Implements hook_update_N().
  *
+ * Process migration of workbench moderation to content moderation.
+ */
+function alshaya_admin_update_8002() {
+  $wbm2cm_status = \Drupal::state()->get('alshaya_wbm2cm', 'not done');
+
+  if ($wbm2cm_status == 'not done') {
+    drush_print(dt('Executing workbench_moderation to content moderation, please wait...'));
+
+    \Drupal::service('module_installer')->install(['workflows', 'wbm2cm']);
+
+    // Invoke a drush command to execute migration.
+    drush_invoke_process('@self', 'wbm2cm-migrate');
+
+    $workflow_storage = \Drupal::service("entity_type.manager")->getStorage("workflow");
+    $workflow = $workflow_storage->loadMultiple();
+    unset($workflow["editorial"]);
+    $id = key($workflow);
+    alshaya_config_install_configs(["workflows.workflow.alshaya_workflow"], "alshaya_admin");
+    \Drupal::configFactory()->getEditable("workflows.workflow." . $id)->delete();
+
+    \Drupal::service("database")->update("content_moderation_state_field_data")
+      ->fields(["workflow" => "alshaya_workflow"])
+      ->condition("workflow", $id)
+      ->execute();
+
+    \Drupal::service("database")->update("content_moderation_state_field_revision")
+      ->fields(["workflow" => "alshaya_workflow"])
+      ->condition("workflow", $id)
+      ->execute();
+
+    \Drupal::service('module_installer')->uninstall(['wbm2cm']);
+
+    // Set the state variable to done to avoid redoing it.
+    \Drupal::state()->set('alshaya_wbm2cm', 'done');
+
+    drush_print(dt('Done.'));
+  }
+  else {
+    drush_print(dt('Already migrated from workbench_moderation to content moderation, not doing again.'));
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the /admin/content view.
  */
 function alshaya_admin_update_8001() {
