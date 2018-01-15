@@ -16,4 +16,3 @@ dependencies:
   - drupal:taxonomy
   - telephone:telephone
   - drupal:views
-  - workbench_moderation:workbench_moderation

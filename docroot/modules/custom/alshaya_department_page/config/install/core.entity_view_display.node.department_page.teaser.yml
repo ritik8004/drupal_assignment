@@ -24,4 +24,4 @@ hidden:
   field_promo_blocks: true
   langcode: true
   sharethis: true
-  workbench_moderation_control: true
+  content_moderation_control: true

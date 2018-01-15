@@ -16,4 +16,11 @@ settings:
   label: 'Alshaya AMP Menu'
   provider: alshaya_amp
   label_display: '0'
-visibility: {  }
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      static_html: static_html
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

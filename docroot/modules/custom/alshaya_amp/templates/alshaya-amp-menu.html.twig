@@ -1,9 +1,14 @@
-<div>
+<amp-sidebar id="sidebar-right" layout="nodisplay" side="right">
     {% if data %}
+      <div>
+        <a href="#" on="tap:sidebar-right.toggle" class="ampstart-navbar-trigger close-icon">✕</a>
         <ul>
         {% for term in data %}
             <li><a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': term.tid}) }}">{{ term.name }}</a></li>
         {% endfor %}
         </ul>
+       </div>
     {% endif %}
-</div>
+</amp-sidebar>
+<div role="button" on="tap:sidebar-right.toggle" tabindex="0" class="ampstart-navbar-trigger md-hide lg-hide pr2 menu-icon"></div>
+<div id="target-element-right"></div>

@@ -16,7 +16,6 @@ dependencies:
     - key_value_field
     - metatag
     - path
-    - workbench_moderation
 id: node.store.default
 targetEntityType: node
 bundle: store

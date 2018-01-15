@@ -5,6 +5,7 @@ namespace Drupal\alshaya_stores_migrate\Form;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\migrate\MigrateExecutable;
 use Drupal\migrate\MigrateMessage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -48,7 +49,6 @@ class StoresMigrateUploadForm extends FormBase {
   public function __construct(LanguageManagerInterface $language_manager,
                               PluginManagerInterface $config_entity_migration_plugin_manager,
                               PluginManagerInterface $migration_plugin_manager) {
-    parent::__construct();
     $this->languageManager = $language_manager;
     $this->configEntityMigrationPluginManager = $config_entity_migration_plugin_manager;
     $this->migrationPluginManager = $migration_plugin_manager;

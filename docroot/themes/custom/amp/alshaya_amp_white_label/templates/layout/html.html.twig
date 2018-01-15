@@ -33,16 +33,14 @@
     <style amp-boilerplate>{% spaceless %}{% include '@amptheme/amp-css/amp-boilerplate-styles-noscript-min.html.twig' %}{% endspaceless %}</style></noscript>
     <style amp-custom>
       {{ inline_css }}
-      {% include directory ~ '/../alshaya_amp_white_label/css/styles.min.css' %}
+      {% include directory ~ '/../alshaya_amp_white_label/css/styles.css' %}
     </style>
     {# Only JS from an AMP library is processed in the placeholder. #}
     <js-placeholder token="{{ placeholder_token|raw }}">
     <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
   </head>
   <body{{ attributes }}>
-    {% if amp_skip_link %}
-      {{ amp_skip_link }}
-    {% endif %}
     {{ page_top }}
     {{ page }}
     {{ page_bottom }}

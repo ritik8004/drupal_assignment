@@ -1,0 +1,58 @@
+/**
+ * @file
+ * Theme specific scss file.
+ */
+
+body {
+  max-width: 80rem;
+  margin: 0 auto !important;
+  font-family: $alshaya-thin;
+}
+
+a {
+  text-decoration: none;
+  color: $white;
+}
+
+.menu-icon,
+.close-icon {
+  position: absolute;
+  right: 0;
+  padding: 20px 0.625rem 1.25rem;
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 2.1875rem;
+
+  html[lang=ar] & {
+    left: 0;
+    right: auto;
+  }
+}
+
+.site-branding {
+  width: 18%;
+  height: auto;
+  padding: 0.625rem;
+  display: table-cell;
+  vertical-align: middle;
+  padding-bottom: 0;
+}
+
+.amp-main,
+.amp-footer {
+  border-top: 1px solid $grey;
+  margin: 0 0.625rem;
+}
+
+.amp-footer__content {
+  text-align: center;
+
+  p {
+    color: $light-grey;
+    font-size: 0.75rem;
+  }
+}
+
+.menu-icon {
+  background: url('/themes/custom/transac/alshaya_hnm/imgs/icons/mobile-menu.svg') center center no-repeat;
+}
