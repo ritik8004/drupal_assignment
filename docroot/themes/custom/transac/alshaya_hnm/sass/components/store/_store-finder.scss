@@ -13,7 +13,6 @@
 
   .view-display-id-page_2 {
     .view-header {
-
       @include breakpoint($desktop) {
         font-family: $hnm-demibold;
         color: $hnm-black-two;
@@ -38,7 +37,6 @@
   .back-link,
   .mobile-only-back-to-glossary {
     a {
-
       @include icon(chevron#{$left}, after) {
         color: $hnm-black-two;
       }
@@ -51,7 +49,6 @@
   }
 
   .input--wrapper {
-
     .icon-search[id^=edit-actions] {
       border-color: $hnm-black-two;
 
@@ -96,7 +93,6 @@
 
   .current-location {
     @include breakpoint($only-tablet) {
-
       &::before {
         #{$left}: 1.5rem;
       }
@@ -133,7 +129,6 @@
   }
 
   .map-view-link {
-
     @include icon(map, before) {
       color: $hnm-black-two;
 
@@ -175,7 +170,6 @@
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
   .form-item-geolocation-geocoder-google-places-api {
     [id^=edit-geolocation-geocoder-google-places-api] {
-
       @include breakpoint($only-mobile) {
         border: 1px solid $hnm-black-two;
       }
@@ -187,7 +181,6 @@
   }
 
   .by--alphabet {
-
     @include breakpoint($only-tablet) {
       margin-#{$left}: -0.25rem;
     }
@@ -215,7 +208,6 @@
       }
 
       @include breakpoint($only-mobile) {
-
         a {
           color: $hnm-black-two !important;
 
@@ -261,7 +253,6 @@
     }
 
     .views-field-field-store-open-hours {
-
       .hours--wrapper .open--hours {
         padding-top: 0.75rem;
         padding-bottom: 0.75rem;
@@ -271,7 +262,6 @@
   }
 
   @include breakpoint($only-mobile) {
-
     .current-location {
       font-size: 0.75rem;
       border: 1px solid $scarlet-three;
@@ -295,7 +285,6 @@
     }
 
     .store-finder--wrapper {
-
       html[lang=ar] & {
         width: 49%;
       }
@@ -330,7 +319,6 @@
     }
 
     .label--location {
-
       html[lang=ar] & {
         &::before {
           top: 0.75rem;
@@ -368,7 +356,6 @@
   .current-location,
   .label--location {
     @include breakpoint($tablet) {
-
       html[lang=ar] & {
         margin-bottom: 0.2rem;
       }
@@ -419,7 +406,6 @@
   .store-finder--wrapper {
     .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
     .form-item-geolocation-geocoder-google-places-api {
-
       @include breakpoint($desktop) {
         width: 62.5%;
         padding-right: 0;
@@ -438,7 +424,6 @@
     font-size: 0.875rem;
 
     .hours--label {
-
       &::after {
         width: 1.0625rem;
         height: 0.4375rem;
@@ -451,7 +436,6 @@
 
 //Individual store theming
 .individual--store {
-
   .list-view-locator {
     background-color: $white-five;
   }
@@ -545,7 +529,6 @@
   }
 
   .open--hours {
-
     .key-value-key,
     .key-value-value {
       color: $grey7;
@@ -558,7 +541,6 @@
 }
 
 .geolocation-common-map-container {
-
   .views-field-title {
     span {
       font-family: $hnm-demibold;
@@ -576,7 +558,6 @@
   }
 
   .scroll-fix {
-
     .location-title {
       margin-top: 0.375rem;
       margin-bottom: 0;
@@ -590,14 +571,12 @@
   }
 
   .hours--label {
-
     @include icon(dropdown-expand, after);
 
     color: $hnm-black-two;
   }
 
   .hours--label.open {
-
     @include icon(dropdown-collapse, after);
 
     color: $hnm-black-two;
