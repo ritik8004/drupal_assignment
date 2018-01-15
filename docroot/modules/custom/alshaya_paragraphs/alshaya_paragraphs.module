@@ -8,7 +8,7 @@
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Implements hook_ENTITY_TYPE_inserts().
+ * Implements hook_ENTITY_TYPE_insert().
  */
 function alshaya_paragraphs_paragraph_insert(EntityInterface $entity) {
   _alshaya_paragraphs_correct_file_status($entity);
