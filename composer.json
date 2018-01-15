@@ -202,6 +202,9 @@
             },
             "drupal/media_entity": {
                 "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
+            },
+            "drupal/amptheme": {
+                "Add svg file with defined viewbox height and width": "https://www.drupal.org/files/issues/amptheme-do_not_use_the_network_for_loading_logo_information-2753089-7.patch"
             }
         },
         "installer-paths": {
