@@ -15,7 +15,7 @@ content:
     weight: 0
     label: above
     settings:
-      view_mode: w501
+      view_mode: default
       link: ''
     third_party_settings: {  }
     type: entity_reference_revisions_entity_view
