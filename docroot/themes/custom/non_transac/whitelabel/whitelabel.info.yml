@@ -3,7 +3,7 @@ description: Base theme for Alshaya brands.
 type: theme
 core: 8.x
 base theme: kashmir
-alshaya_theme_type: non_transac
+alshaya_theme_type: non_transac_whitelabel
 
 regions:
   header: Header
