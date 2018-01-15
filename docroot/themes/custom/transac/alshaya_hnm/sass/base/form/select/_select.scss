@@ -1,11 +1,4 @@
-select::-ms-expand {
-  display: none;
-}
-
-select:focus::-ms-value {
-  background: transparent;
-  color: $black;
-}
+@import "../../alshaya_white_label/sass/base/form/select/_select.scss";
 
 @mixin select-style($select-width) {
   appearance: none;
@@ -129,44 +122,16 @@ select:focus::-ms-value {
 
 .select2-dropdown {
   border-color: $hnm-black-two;
-  margin-top: -1px;
-
-  .select2-search__field {
-    outline: none;
-  }
 
   ul.select2-results__options {
-    border-radius: 4px;
-
     li.select2-results__option {
       @include arabic-letter-spacing;
 
       color: $hnm-black-two;
       font-size: 0.75rem;
-      padding: 0.625rem;
-      border-bottom: 1px solid $white;
       text-transform: uppercase;
       font-family: $hnm-regular;
       letter-spacing: 1px;
-
-      &:first-child {
-        border-top: 1px solid $white;
-      }
-
-      &.select2-results__option--highlighted,
-      &[aria-selected=true] {
-        background-color: $white-five;
-      }
-
-      &[aria-disabled=true],
-      &:hover {
-        color: $grey-ash;
-        background: $white-four;
-      }
-
-      &[aria-disabled=true] {
-        color: $greyish;
-      }
     }
   }
 }
