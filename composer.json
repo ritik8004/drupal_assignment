@@ -27,7 +27,7 @@
         "drupal/clientside_validation": "1.x-dev",
         "drupal/facets": "1.0-alpha11",
         "drupal/profile": "^1.0@alpha",
-        "drupal/field_group": "1.0.0-rc4",
+        "drupal/field_group": "^3.0@beta",
         "drupal/webform": "^5.0@beta",
         "drupal/back_to_top": "^1.0@beta",
         "drupal/change_pwd_page": "^1.0@beta",
@@ -159,7 +159,8 @@
                 "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/add_views_render-2500313-39.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
-                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch"
+                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
+                "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch"
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
@@ -199,6 +200,9 @@
             },
             "drupal/paragraphs": {
                 "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
+            },
+            "drupal/wbm2cm": {
+                "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
             },
             "drupal/media_entity": {
                 "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"

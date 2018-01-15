@@ -91,3 +91,4 @@ permissions:
   - 'create content translations'
   - 'migrate alshaya_stores'
   - 'access site in maintenance mode'
+  - 'administer size guide settings'

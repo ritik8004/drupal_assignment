@@ -10,7 +10,6 @@ dependencies:
     - metatag
     - paragraphs
     - path
-    - workbench_moderation
 id: node.department_page.default
 targetEntityType: node
 bundle: department_page
