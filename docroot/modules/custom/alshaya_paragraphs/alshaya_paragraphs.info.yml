@@ -26,5 +26,4 @@ dependencies:
   - drupal:user
   - drupal:views
   - viewsreference:viewsreference
-  - workbench_moderation:workbench_moderation
 package: Alshaya

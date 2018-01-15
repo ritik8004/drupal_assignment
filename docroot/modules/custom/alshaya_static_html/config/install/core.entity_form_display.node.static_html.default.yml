@@ -15,7 +15,6 @@ dependencies:
     - metatag
     - path
     - text
-    - workbench_moderation
 id: node.static_html.default
 targetEntityType: node
 bundle: static_html

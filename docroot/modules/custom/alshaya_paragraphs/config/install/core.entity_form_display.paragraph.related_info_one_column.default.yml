@@ -9,7 +9,6 @@ dependencies:
     - paragraphs.paragraphs_type.related_info_one_column
   module:
     - image
-    - workbench_moderation
 id: paragraph.related_info_one_column.default
 targetEntityType: paragraph
 bundle: related_info_one_column
