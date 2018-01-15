@@ -8,12 +8,12 @@
 /**
  * Implements hook_update_N().
  */
-function alshaya_store_migrate_8301() {
+function alshaya_stores_migrate_update_8301() {
   // Install new configs.
   alshaya_config_install_configs([
     'migrate_plus.migration.store.ar',
     'migrate_plus.migration.store.en',
-  ], 'alshaya_store_migrate');
+  ], 'alshaya_stores_migrate');
 
   // Remove the old configs.
   // @todo: Use generic method alshaya_config_delete_configs, when available.
