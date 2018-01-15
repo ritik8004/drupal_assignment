@@ -8,7 +8,6 @@ dependencies:
     - system.menu.admin
     - user.role.administrator
     - user.role.reviewer
-    - workflows.workflow.alshaya_workflow
   module:
     - content_moderation
     - node
