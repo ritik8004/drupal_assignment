@@ -1,27 +1,18 @@
+@import "../../alshaya_white_label/sass/components/store/_store-finder.scss";
+
 .path--store-finder,
 .nodetype--store {
   .view-header {
     font-size: 0.875rem;
     color: $hnm-black-two;
-    margin-bottom: 1.563rem;
 
     @include breakpoint($only-tablet) {
       margin-bottom: 2.5rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      margin-top: 1.1rem;
-      margin-bottom: 1.4rem;
     }
   }
 
   .view-display-id-page_2 {
     .view-header {
-      font-weight: bold;
-
-      @include breakpoint($only-mobile) {
-        display: none;
-      }
 
       @include breakpoint($desktop) {
         font-family: $hnm-demibold;
@@ -31,187 +22,60 @@
 
     .view-display-id-page_3 .view-header,
     .view-display-id-page_1 .view-header {
-      color: $black;
-      display: block;
       font-family: $hnm-regular;
-      font-weight: normal;
     }
   }
 
   .view-empty {
-    color: $black;
-    display: block;
     font-family: $hnm-regular;
-    font-weight: bold;
-  }
-
-  .c-side-1 {
-    @include breakpoint($only-mobile) {
-      border-top: 1px solid $white;
-      margin-top: 1.1rem;
-    }
-  }
-
-  .geolocation-common-map-container,
-  .geolocation-google-map {
-    height: 39rem !important;
-
-    @include breakpoint($desktop) {
-      height: 51rem !important;
-    }
-  }
-
-  .pager__item {
-    list-style: none;
-  }
-
-  .ui-autocomplete {
-    font-size: 0.75rem;
-
-    @include breakpoint($only-mobile) {
-      width: calc(100% - 1rem) !important;
-    }
   }
 
   main {
     overflow: hidden;
-  }
-
-  .list-view-link {
-    @include breakpoint($desktop) {
-      text-indent: -0.4rem;
-    }
+    margin-bottom: 0;
   }
 
   .back-link,
   .mobile-only-back-to-glossary {
     a {
-      display: block;
-      width: inherit;
-      overflow: hidden;
-      font-size: 0.5rem;
-      height: 0;
 
       @include icon(chevron#{$left}, after) {
-        position: absolute;
-        display: inline-block;
         color: $hnm-black-two;
-        font-size: 1.875rem;
-        top: 0.125rem;
-        padding: 0.5rem;
-        #{$left}: 0.125rem;
       }
     }
   }
 
   .back-to-glossary {
-    font-size: 0.75rem;
     color: $hnm-red;
     font-family: $hnm-regular;
-    width: 30%;
-    display: block;
-    text-align: center;
-    float: $right;
-    margin: 0.8rem 0;
-
-    &.hidden {
-      display: none;
-    }
-
-    @include breakpoint($desktop) {
-      margin: 1.625rem 0;
-      font-size: 0.875rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      display: none !important;
-    }
-  }
-
-  @include breakpoint($tablet) {
-    .mobile-only-back-to-glossary,
-    .view-on--map {
-      display: none;
-    }
   }
 
   .input--wrapper {
-    position: relative;
 
-    [id^=edit-actions] {
-      position: absolute;
-      #{$right}: 0;
-      top: 0;
-      height: 2.1875rem;
-      padding-#{$right}: 1.1rem;
-      padding-top: 0.425rem;
-      border: 1px solid $hnm-black-two;
-      border-#{$left}: 0;
-      z-index: 1;
-      background-color: $white-five;
+    .icon-search[id^=edit-actions] {
+      border-color: $hnm-black-two;
 
       @include breakpoint($tablet) {
-        border: 1px solid $white;
-        border-#{$left}: 0;
-        padding: 0.375rem;
+        border-color: $white;
         #{$right}: 1.75rem;
-        top: 0.3rem;
       }
 
       @include breakpoint($desktop) {
         #{$right}: 0;
         height: 2.125rem;
-        top: 1.125rem;
         border-bottom: none;
       }
-    }
-  }
-
-  .c-content__region,
-  .view-stores-finder {
-    max-width: 80.25rem;
-    margin: auto;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-
-    @include breakpoint($tablet) {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-
-    .region__content {
-      margin: 0;
-
-      @include breakpoint($only-mobile) {
-        margin-top: 1rem;
-      }
-    }
-
-    .c-content__region {
-      margin-bottom: 0;
-    }
-
-    .view-stores-finder {
-      padding-left: 0;
-      padding-right: 0;
     }
   }
 
   .view-stores-finder {
     .view-header p {
       @include arabic-letter-spacing;
-
-      color: $marine-blue;
-      letter-spacing: 0.00625rem;
     }
   }
 
-  .c-page-title {
-    font-weight: normal;
-  }
-
   .label--location {
-    color: $hnm-black-two;
+    color: $hnm-black-two !important;
   }
 
   input {
@@ -220,47 +84,21 @@
     }
 
     &[id^=edit-submit-stores-finder] {
-      background: url('../imgs/icons/store-search.svg') no-repeat;
-      border: none;
-      background-repeat: no-repeat;
-      text-indent: -9999px;
+      background-image: url('../imgs/icons/store-search.svg');
       width: 1.25rem;
       height: 1.5625rem;
-      padding: 0;
-      background-size: contain;
 
       @include breakpoint($only-mobile) {
-        background: url('../imgs/assets/ic-search.svg') no-repeat;
+        background-image: url('../imgs/assets/ic-search.svg');
       }
-    }
-  }
-
-  .current-location,
-  .list-view-link,
-  .map-view-link,
-  .label--location {
-    &::before {
-      content: '';
-      display: inline-block;
-      vertical-align: middle;
-      margin-#{$right}: 0.6875rem;
     }
   }
 
   .current-location {
     @include breakpoint($only-tablet) {
-      #{$left}: 0;
-      padding-#{$left}: 2.125rem !important;
 
       &::before {
-        position: absolute;
         #{$left}: 1.5rem;
-      }
-    }
-
-    @include breakpoint($tablet) {
-      html[lang=ar] & {
-        padding-top: 0.5rem;
       }
     }
   }
@@ -275,43 +113,17 @@
     background: url('../imgs/assets/ic-search.svg') no-repeat;
     width: 1.625rem;
     height: 1.625rem;
-    margin-#{$right}: 0.4rem;
-
-    @include breakpoint($tablet) {
-      html[lang=ar] & {
-        position: relative;
-        top: 0.4rem;
-      }
-    }
 
     @include breakpoint($only-tablet) {
       margin-top: 0.125rem;
       margin-#{$right}: 0.125rem;
-    }
-
-    @include breakpoint($desktop) {
-      margin-#{$right}: 0.3875rem;
     }
   }
 
   .list-view-link {
     @include icon(list, before) {
       color: $hnm-black-two;
-      width: 1.625rem;
-      height: 0.8rem;
-      vertical-align: top;
-      font-size: 2rem;
       line-height: 0.6;
-
-      @include breakpoint($only-tablet) {
-        margin-#{$right}: 1.1rem;
-        margin-#{$left}: -0.45rem;
-      }
-
-      @include breakpoint($desktop) {
-        margin-#{$left}: 0.5rem;
-        margin-#{$right}: 0.8rem;
-      }
     }
 
     &:hover::before,
@@ -321,15 +133,9 @@
   }
 
   .map-view-link {
-    margin-#{$left}: -1px;
 
     @include icon(map, before) {
       color: $hnm-black-two;
-      margin-#{$right}: 0.4rem;
-      margin-#{$left}: 0.3125rem;
-      vertical-align: middle;
-      font-size: 1.8rem;
-      line-height: 1;
 
       @include breakpoint($only-tablet) {
         display: inline-table;
@@ -337,7 +143,6 @@
 
       @include breakpoint($desktop) {
         line-height: 0.6;
-        margin-#{$left}: 0.1875rem;
       }
     }
 
@@ -348,22 +153,15 @@
   }
 
   .label--location {
-    padding-#{$left}: 3.5rem;
-    padding-#{$right}: 1rem;
-    text-indent: -2rem;
-    width: 52%;
     line-height: 1.2;
 
     @include breakpoint($desktop) {
-      padding-#{$left}: 3.4rem;
-      padding-#{$right}: 0;
       width: 35.653%;
     }
   }
 
   .list-view-link,
   .map-view-link {
-    text-align: center;
     text-transform: uppercase;
 
     &:hover,
@@ -371,84 +169,24 @@
       border: 1px solid $hnm-black-two;
       color: $white-five;
       background-color: $hnm-black-two;
-
-      @include breakpoint($only-tablet) {
-        font-family: $alshaya-thin;
-      }
     }
-  }
-
-  .list-view-link {
-    padding: 0.85rem 0;
-
-    @include breakpoint($desktop) {
-      padding: 1.595rem 0;
-    }
-  }
-
-  .map-view-link {
-    padding: 0.675rem 0;
-
-    @include breakpoint($desktop) {
-      padding: 1.47rem 0;
-    }
-  }
-
-  .active {
-    color: $marine-blue-two;
-  }
-
-  .block-views-exposed-filter-blockstores-finder-page-3,
-  .attachment-after,
-  .ajax-progress {
-    display: none;
   }
 
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
   .form-item-geolocation-geocoder-google-places-api {
     [id^=edit-geolocation-geocoder-google-places-api] {
-      background: none;
-      border: 1px solid $greyish;
-      padding: 0.6rem;
-      padding-#{$right}: 2rem;
-      font-size: 0.75rem;
-      color: $grey-ash;
-      width: 100%;
-      height: 2.1875rem;
 
       @include breakpoint($only-mobile) {
-        padding-#{$left}: 1.25rem;
-        padding-top: 0;
-        padding-bottom: 0;
-        line-height: 2.1875rem;
         border: 1px solid $hnm-black-two;
       }
 
       &.ui-autocomplete-loading {
         background-size: 1.875rem;
       }
-
-      @include breakpoint($tablet) {
-        max-width: 26.125rem;
-        border: 1px solid $white !important;
-      }
     }
-
-    .form-item--error-message {
-      display: none;
-    }
-  }
-
-  .current-location,
-  .form-type-textfield,
-  .c-content__region .form-actions,
-  .list-view-link,
-  .map-view-link {
-    color: $cerulean-two;
   }
 
   .by--alphabet {
-    @include clearfix;
 
     @include breakpoint($only-tablet) {
       margin-#{$left}: -0.25rem;
@@ -458,38 +196,18 @@
       padding-bottom: 3rem;
     }
 
-    position: relative;
-
-    h3,
-    .rows {
-      display: inline-block;
-      vertical-align: top;
-    }
-
     h3 {
-      font-size: 1.625rem;
       font-family: $hnm-demibold;
       color: $hnm-black-two;
-      line-height: 1.6;
-      margin: 0;
-      text-transform: uppercase;
-      float: $left;
       width: 9.836%;
-
-      @include breakpoint($only-mobile) {
-        display: none !important;
-      }
     }
 
     .rows {
       font-size: 0.875rem;
       line-height: 2.29;
-      margin-#{$left}: 1.7rem;
 
       @include breakpoint($tablet) {
         width: 83.164%;
-        margin: 0;
-        float: $right;
       }
 
       @include breakpoint($desktop) {
@@ -497,25 +215,12 @@
       }
 
       @include breakpoint($only-mobile) {
-        width: 100%;
-        margin-#{$left}: 0;
 
         a {
           color: $hnm-black-two !important;
-          display: block;
-          width: 100%;
-          padding: 1rem 0;
-          border-bottom: 1px solid $white;
-          line-height: 1;
-          position: relative;
 
           @include icon(chevron#{$right}, after) {
-            position: absolute;
-            display: inline-block;
             color: $hnm-black-two;
-            font-size: 1.875rem;
-            top: 0.5rem;
-            #{$right}: 0.4rem;
           }
         }
       }
@@ -525,7 +230,6 @@
 
         &:hover {
           color: $link-hover;
-          text-decoration: underline;
         }
       }
     }
@@ -533,13 +237,8 @@
 
   .list-view-locator {
     font-size: 0.875rem;
-    background: $white-five;
-    padding: 1rem 0;
-    padding-bottom: 0;
-    margin-bottom: 1.625rem;
-    border-top: 1px solid $white;
-    border-bottom: 1px solid $white;
-    position: relative;
+    border-left: none;
+    border-right: none;
     cursor: pointer;
 
     &:hover,
@@ -548,140 +247,40 @@
     }
 
     .row-title {
-      display: block;
       color: $hnm-black-two;
-      padding: 0 3.5rem;
       font-family: $hnm-demibold;
-
-      @include breakpoint($tablet) {
-        padding: 0 3.25rem;
-      }
     }
 
     .views-field-field-store-address {
-      border-bottom: 1px solid $white;
-      padding-bottom: 1.5rem;
       color: $grey7;
-
-      html[lang=ar] & {
-        line-height: 1.2;
-        padding-top: 0.125rem;
-      }
 
       p {
         color: $grey7;
         margin: 0.125rem 0;
       }
-
-      .field-content {
-        padding: 0 3.5rem;
-
-        @include breakpoint($tablet) {
-          padding: 0 3.25rem;
-          padding-#{$right}: 2.5rem;
-        }
-      }
-
-      .field--name-field-store-address {
-        html[lang=ar] & {
-          padding-top: 0.125rem;
-          line-height: 1.2;
-        }
-      }
-
-      .field--name-field-store-phone {
-        html[lang=ar] & {
-          direction: ltr;
-          display: inline-block;
-          padding-top: 0.25rem;
-          text-align: right;
-        }
-      }
-    }
-
-    .open--hours {
-      div {
-        margin-bottom: 0.0625rem;
-      }
     }
 
     .views-field-field-store-open-hours {
-      .hours--wrapper .hours--label,
-      .hours--wrapper .open--hours,
-      .view-on--map a,
-      .get--directions a {
-        border-bottom: 1px solid $white;
-        padding: 1rem;
-        padding-#{$left}: 3.5rem;
-
-        @include breakpoint($tablet) {
-          padding-#{$left}: 3.25rem;
-        }
-      }
 
       .hours--wrapper .open--hours {
         padding-top: 0.75rem;
         padding-bottom: 0.75rem;
         color: $grey7;
       }
-
-      .get--directions a,
-      .view-on--map a {
-        border-bottom: 0;
-      }
-
-      a {
-        display: block;
-        z-index: 1;
-        position: relative;
-      }
-    }
-
-    .lat-lng {
-      display: none;
-    }
-  }
-
-  .view-display-id-page_1,
-  .view-display-id-page_2 {
-    @include breakpoint($tablet) {
-      margin-top: 1.5rem;
     }
   }
 
   @include breakpoint($only-mobile) {
-    .get--directions {
-      display: none;
-    }
-
-    .c-page-title {
-      margin-bottom: 0.6875rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid $white;
-    }
 
     .current-location {
-      display: block;
       font-size: 0.75rem;
-      text-align: center;
       border: 1px solid $scarlet-three;
-      padding: 0.3125rem 0;
-      margin-bottom: 1rem;
       color: $scarlet-three;
-    }
-
-    .label--location,
-    .list-view-link,
-    .map-view-link {
-      display: none;
     }
   }
 
   @include breakpoint($only-tablet) {
     .form--inline .current-location {
-      width: 17%;
-      padding-#{$left}: 1.25rem;
-      padding-#{$right}: 0;
       margin-#{$left}: 1.5rem;
       line-height: 2;
 
@@ -696,8 +295,6 @@
     }
 
     .store-finder--wrapper {
-      width: 46%;
-      margin-#{$right}: 1.5%;
 
       html[lang=ar] & {
         width: 49%;
@@ -709,95 +306,33 @@
         padding-#{$right}: 1.75rem;
       }
     }
-
-    .list-view-link,
-    .map-view-link {
-      width: 17.6%;
-    }
-  }
-
-  .view-display-id-page_2 > .view-content {
-    @include breakpoint($tablet) {
-      padding: 0 1.6rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding: 0.7rem 1.6rem;
-    }
-  }
-
-  .store-row--counter {
-    @include breakpoint($only-mobile) {
-      display: none;
-    }
   }
 
   @include breakpoint($tablet) {
     .store-row--counter {
-      position: absolute;
-      #{$left}: 1rem;
-      width: 1.25rem;
       background: $hnm-red;
-      height: 1.25rem;
-      vertical-align: middle;
-      text-align: center;
-      color: $white-five;
-      border-radius: 50%;
       padding-top: 0.125rem;
       line-height: 1.2;
+
+      html[lang=ar] & {
+        line-height: 1.2;
+      }
     }
 
     .c-page-title {
       margin-top: 1.5625rem;
-      margin-bottom: 0.79rem;
-    }
-
-    .c-side {
-      width: 50%;
-      float: $left;
-    }
-
-    .c-side:nth-child(odd) {
-      border-#{$right}: 1px solid $white;
-      clear: both;
-    }
-
-    .view-content .c-side.c-side-3,
-    .c-side:nth-child(even) {
-      padding-#{$left}: 1.5625rem;
-      border-#{$left}: 1px solid $white;
-      border-#{$right}: 0;
-      margin-#{$left}: -1px;
-      clear: none;
-    }
-
-    .attachment-after {
-      display: none;
-    }
-
-    .block-views-exposed-filter-blockstores-finder-page-3,
-    .attachment-after {
-      display: none;
     }
 
     .c-content__region .views-exposed-form {
-      width: 100%;
-      border-top: 1px solid $white;
-      border-bottom: 1px solid $white;
       padding-bottom: 0.75rem;
       padding-top: 0.75rem;
-      position: relative;
-      overflow: hidden;
       font-family: $hnm-regular;
     }
 
     .label--location {
-      max-width: 100%;
-      float: $left;
 
       html[lang=ar] & {
         &::before {
-          transform: scaleX(-1);
           top: 0.75rem;
 
           @include breakpoint($desktop) {
@@ -808,7 +343,6 @@
 
       @include breakpoint($only-tablet) {
         html[lang=ar] & {
-          width: 45%;
           padding-right: 2.5rem;
         }
 
@@ -818,82 +352,24 @@
 
       @include breakpoint($desktop) {
         html[lang=ar] & {
-          width: 37.6%;
-          margin-bottom: 1rem;
+          padding-top: 0;
+          padding-bottom: 0;
+          border-right: none;
         }
       }
     }
 
     .current-location {
-      padding: 0 1.5rem;
       width: 19.75%;
       color: $hnm-red;
-    }
-
-    .list-view-link,
-    .map-view-link {
-      width: 17.5%;
-    }
-
-    .view-display-id-page_1 {
-      .attachment-after {
-        float: $left;
-        display: inline-block;
-      }
-    }
-
-    .attachment-after {
-      width: 72.5%;
-      vertical-align: top;
-
-      @include breakpoint($only-tablet) {
-        width: 61.5%;
-      }
-    }
-
-    .view-display-id-page_1 > .view-content {
-      display: inline-block;
-      max-height: 39rem;
-      overflow-y: scroll;
-      transform: translate3d(0, 0, 0);
-      vertical-align: top;
-      max-width: 26.5%;
-      margin-#{$right}: 1%;
-      float: $left;
-      width: 100%;
-
-      @include breakpoint($desktop) {
-        max-height: 51rem;
-        padding-#{$right}: 1%;
-      }
-
-      @include breakpoint($only-tablet) {
-        max-width: 35.8%;
-        margin-#{$right}: 2.7%;
-      }
-    }
-  }
-
-  .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
-  .form-item-geolocation-geocoder-google-places-api {
-    position: relative;
-
-    @include breakpoint($tablet) {
-      margin: 0.3rem 0;
-    }
-
-    @include breakpoint($desktop) {
-      margin: 1.125rem 0;
     }
   }
 
   .current-location,
   .label--location {
     @include breakpoint($tablet) {
-      margin: 0.8rem 0;
 
       html[lang=ar] & {
-        margin-top: 0.2rem;
         margin-bottom: 0.2rem;
       }
 
@@ -911,44 +387,13 @@
     }
   }
 
-  .current-location {
-    @include breakpoint($desktop) {
-      html[lang=ar] & {
-        padding-top: 0;
-        padding-right: 3.4rem;
-        text-indent: -2.5rem;
-      }
-    }
-  }
-
-  .current-location,
-  .store-finder--wrapper,
-  .list-view-link,
-  .map-view-link {
-    font-size: 0.75rem;
-
-    @include breakpoint($tablet) {
-      float: $left;
-    }
-
-    @include breakpoint($desktop) {
-      font-size: 0.875rem;
-    }
-  }
-
   .list-view-link,
   .map-view-link {
     line-height: 1.4;
     color: $hnm-black-two;
 
     @include breakpoint($tablet) {
-      height: 2.9375rem;
-      border: 1px solid transparent;
       margin-#{$left}: 1px;
-    }
-
-    @include breakpoint($desktop) {
-      height: 4.5rem;
     }
   }
 
@@ -967,60 +412,22 @@
 
   @include breakpoint($desktop) {
     .store-finder--wrapper {
-      width: 49.7%;
       padding-#{$right}: 1.5625rem;
-      max-width: 38.4375rem;
-    }
-
-    .c-side {
-      width: 49%;
-    }
-
-    .view-content .c-side.c-side-3,
-    .c-side:nth-child(even) {
-      padding-#{$left}: 4.5625rem;
-    }
-
-    .view-header {
-      margin-top: 1.5rem;
-    }
-
-    .c-content__region {
-      margin-bottom: 0;
     }
   }
 
   .store-finder--wrapper {
     .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
     .form-item-geolocation-geocoder-google-places-api {
-      float: $right;
-
-      @include breakpoint($tablet) {
-        width: 63.2%;
-      }
 
       @include breakpoint($desktop) {
         width: 62.5%;
+        padding-right: 0;
+        padding-left: 0;
 
         html[lang=ar] & {
-          width: 62.4%;
           padding-right: 1rem;
         }
-      }
-
-      @include breakpoint($only-mobile) {
-        width: 100%;
-      }
-    }
-  }
-
-  .pac-container {
-    min-width: 0;
-    z-index: 3;
-
-    div {
-      html[lang=ar] & {
-        text-align: right;
       }
     }
   }
@@ -1028,122 +435,22 @@
 
 .node--type-store {
   .content > .store--wrapper {
-    max-width: 27%;
-    display: inline-block;
-    max-height: 19.69rem;
-    overflow-y: scroll;
-    vertical-align: top;
-    float: $left;
     font-size: 0.875rem;
-    background: $white-four;
-    padding: 1rem 0;
-    padding-bottom: 0;
-    margin-bottom: 1.625rem;
-
-    @include breakpoint($only-mobile) {
-      max-width: 100%;
-      width: 100%;
-    }
-
-    .field__item {
-      border-bottom: 1px solid $white;
-      padding-right: 3.438rem;
-      padding-left: 3.438rem;
-      padding-bottom: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .field__label {
-      display: none;
-    }
-
-    .hours--label,
-    .open--hours {
-      padding-right: 3.438rem;
-      padding-left: 3.438rem;
-    }
 
     .hours--label {
-      position: relative;
-      color: $cerulean-two;
-      padding-bottom: 1.5rem;
 
       &::after {
-        position: absolute;
-        content: '';
-        background: url('../imgs/icons/store--down.svg');
-        display: inline-block;
         width: 1.0625rem;
         height: 0.4375rem;
         top: 0.3125rem;
         #{$right}: 3.4375rem;
-        transform: rotate(270deg);
-      }
-
-      &.open {
-        border-bottom: 0;
-
-        &::after {
-          transform: scaleY(-1);
-        }
       }
     }
-
-    .open--hours {
-      display: none;
-      line-height: 1.57;
-      margin-top: -0.5rem;
-      margin-bottom: 1.25rem;
-    }
-  }
-
-  .field--name-field-latitude-longitude {
-    width: 71%;
-    display: inline-block;
-    border-#{$left}: 1px solid $white;
-    padding-#{$left}: 0.6875rem;
-    margin-#{$left}: 0.6875rem;
-
-    @include breakpoint($only-mobile) {
-      display: none;
-    }
-  }
-
-  .field--name-field-store-locator-id,
-  .field--name-field-store-number {
-    display: none;
   }
 }
 
 //Individual store theming
 .individual--store {
-  .view-content {
-    display: inline-block;
-    overflow-y: scroll;
-    vertical-align: top;
-    width: 26.5%;
-    margin-#{$right}: 1%;
-    float: $left;
-
-    @include breakpoint($desktop) {
-      padding-right: 1%;
-    }
-
-    @include breakpoint($only-tablet) {
-      width: 35.8%;
-      margin-#{$right}: 2.7%;
-    }
-
-    @include breakpoint($only-mobile) {
-      border-#{$right}: 0;
-      margin-#{$right}: 0;
-      padding-#{$right}: 0;
-      float: none;
-      max-width: 100%;
-      width: 100%;
-      height: auto;
-    }
-  }
 
   .list-view-locator {
     background-color: $white-five;
@@ -1158,20 +465,6 @@
       }
     }
   }
-
-  .map--store {
-    float: $left;
-    width: 61.5%;
-    vertical-align: top;
-
-    @include breakpoint($desktop) {
-      width: 72.5%;
-    }
-
-    @include breakpoint($only-mobile) {
-      display: none;
-    }
-  }
 }
 
 .path--store-finder,
@@ -1182,16 +475,6 @@
         color: $hnm-black-two;
         font-size: 2rem;
       }
-
-      &::after {
-        transform: none;
-      }
-    }
-  }
-
-  .hours--label.open {
-    + .open--hours {
-      display: block;
     }
   }
 
@@ -1200,9 +483,7 @@
   .view-on--map {
     @include arabic-letter-spacing;
 
-    position: relative;
     color: $hnm-black-two;
-    cursor: pointer;
     letter-spacing: 0.5px;
 
     a {
@@ -1210,23 +491,6 @@
 
       color: $hnm-black-two;
       letter-spacing: 0.5px;
-    }
-
-    &::after {
-      position: absolute;
-      background-repeat: no-repeat;
-      content: '';
-      display: inline-block;
-      top: 0;
-      #{$right}: 0;
-    }
-
-    &.open {
-      border-bottom: 0;
-
-      &::after {
-        transform: rotate(90deg);
-      }
     }
   }
 
@@ -1239,22 +503,6 @@
 
   .get--directions div a {
     letter-spacing: normal;
-
-    &.device__tablet {
-      display: none;
-
-      @include breakpoint($only-tablet) {
-        display: block;
-      }
-    }
-
-    &.device__desktop {
-      display: none;
-
-      @include breakpoint($desktop) {
-        display: block;
-      }
-    }
   }
 
   .hours--label {
@@ -1276,12 +524,11 @@
   .view-on--map {
     @include icon(map, after) {
       color: $hnm-black-two;
-      vertical-align: middle;
-      font-size: 1.8rem;
-      line-height: 1;
-      top: 0.8rem;
-      #{$right}: 0.8rem;
     }
+  }
+
+  .get--directions a::after {
+    display: none;
   }
 
   .get--directions div {
@@ -1298,81 +545,29 @@
   }
 
   .open--hours {
-    display: none;
-    line-height: 1.57;
-
-    div {
-      display: table;
-      width: 100%;
-    }
 
     .key-value-key,
     .key-value-value {
-      display: table-cell;
       color: $grey7;
-    }
-
-    .key-value-value {
-      text-align: $right;
     }
   }
 
   + .ajax-progress-fullscreen {
     background-image: url("../imgs/icons/ic-loader.svg");
-    background-size: 2rem;
-  }
-
-  #views-exposed-form-stores-finder-page-1 {
-    @include breakpoint($only-mobile) {
-      margin-bottom: 1rem;
-    }
-  }
-
-  .view-display-id-page_1 {
-    .store-mobile {
-      &:first-child {
-        border-top: 1px solid $white;
-      }
-
-      @include breakpoint($tablet) {
-        display: none;
-      }
-    }
-
-    .individual--store .list-view-locator {
-      display: block;
-    }
-  }
-
-  .view-display-id-page_2 .view-display-id-page_1 {
-    .store-mobile {
-      display: none;
-    }
-
-    .list-view-locator {
-      display: block;
-    }
   }
 }
 
 .geolocation-common-map-container {
-  .hours--wrapper {
-    position: relative;
-  }
 
   .views-field-title {
     span {
       font-family: $hnm-demibold;
-      font-size: 0.875rem;
       color: $hnm-black-two;
     }
   }
 
   .views-field-field-store-address {
     font-family: $hnm-regular;
-    font-size: 0.875rem;
-    margin-top: 0.1875rem;
-    margin-bottom: 0.5rem;
     color: $grey7;
 
     p {
@@ -1381,7 +576,6 @@
   }
 
   .scroll-fix {
-    min-width: 12rem;
 
     .location-title {
       margin-top: 0.375rem;
@@ -1396,54 +590,28 @@
   }
 
   .hours--label {
+
     @include icon(dropdown-expand, after);
 
     color: $hnm-black-two;
   }
 
   .hours--label.open {
-    font-weight: bold;
 
     @include icon(dropdown-collapse, after);
 
     color: $hnm-black-two;
   }
 
-  .view-on--map,
-  .get--directions {
-    color: $cerulean-two;
-    cursor: pointer;
-    font-weight: 700;
-    padding-bottom: 0.4rem;
-  }
-
   .get--directions div::after {
     top: 0.25rem;
-  }
-
-  .hours--wrapper .hours--label,
-  .hours--wrapper .open--hours,
-  .view-on--map a,
-  .get--directions a {
-    padding: 0.5rem;
-    padding-#{$left}: 0;
-    padding-top: 0.5rem;
-  }
-
-  .open--hours {
-    line-height: 1.57;
-    margin-top: 0;
-    padding-top: 0;
   }
 }
 
 .scroll-fix {
-  overflow: hidden;
-  white-space: nowrap;
   font-family: $hnm-regular;
 
   .location-content {
-    white-space: normal;
     margin-left: 0.3125rem;
   }
 }

@@ -4892,17 +4892,17 @@
         },
         {
             "name": "drupal/field_group",
-            "version": "1.0.0-rc4",
+            "version": "3.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/field_group",
-                "reference": "8.x-1.0-rc4"
+                "reference": "8.x-3.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/field_group-8.x-1.0-rc4.zip",
-                "reference": "8.x-1.0-rc4",
-                "shasum": "085ce08ad15e68837e8f8017f81eb3f7b33cb324"
+                "url": "https://ftp.drupal.org/files/projects/field_group-8.x-3.0-beta1.zip",
+                "reference": "8.x-3.0-beta1",
+                "shasum": "a5dfb66385be7a1b3db232e49779d5bc530a048e"
             },
             "require": {
                 "drupal/core": "*"
@@ -4910,14 +4910,14 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-1.x": "1.x-dev"
+                    "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc4",
-                    "datestamp": "1480288380",
+                    "version": "8.x-3.0-beta1",
+                    "datestamp": "1510352338",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "RC releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -9402,7 +9402,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/wbm2cm",
-                "reference": "e155a0b2c9984358c30582df91dd058925ed4d14"
+                "reference": "6300a3237055a5851946bfca2b2768e5f8eed8f7"
             },
             "require": {
                 "drupal/core": "~8.4"
@@ -9425,8 +9425,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-alpha3+2-dev",
-                    "datestamp": "1512406084",
+                    "version": "8.x-2.0-alpha3+3-dev",
+                    "datestamp": "1512407284",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -9491,7 +9491,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/wbm2cm"
             },
-            "time": "2017-12-04T17:05:27+00:00"
+            "time": "2018-01-10T00:31:21+00:00"
         },
         {
             "name": "drupal/webform",
@@ -16963,6 +16963,7 @@
         "drupal/recaptcha": 20,
         "drupal/clientside_validation": 20,
         "drupal/profile": 15,
+        "drupal/field_group": 10,
         "drupal/webform": 10,
         "drupal/back_to_top": 10,
         "drupal/change_pwd_page": 10,
