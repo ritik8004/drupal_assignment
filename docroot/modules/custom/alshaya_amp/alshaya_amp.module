@@ -44,18 +44,23 @@ function alshaya_amp_element_info_alter(array &$info) {
 function _alshaya_amp_body_prerender(array $element) {
   if (isset($element['#markup'])) {
     $markup = str_ireplace(
-      ['<img','<video','/video>','<audio','/audio>'],
-      ['<amp-img','<amp-video','/amp-video>','<amp-audio','/amp-audio>'],
+      ['<img', '<video', '/video>', '<audio', '/audio>'],
+      ['<amp-img', '<amp-video', '/amp-video>', '<amp-audio', '/amp-audio>'],
       $element['#markup']
     );
 
     // Adding height, width and layout parameter as required by the AMP.
-    $markup = preg_replace('/<amp-img(.*?)>/', '<amp-img$1 height="1" width="1" layout="responsive"></amp-img>', $markup);
+    $element['#markup'] = preg_replace('/<amp-img(.*?)>/', '<amp-img$1 height="1" width="1" layout="responsive"></amp-img>', $markup);
+
+    // Adding allowed tag otherwise amp tags will be stripped off.
+    // @see \Drupal\Core\Render\Renderer::ensureMarkupIsSafe().
+    $element['#allowed_tags'] = array_merge(Xss::getAdminTagList(), [
+      'amp-img',
+      'amp-video',
+      'amp-audio',
+      'amp-iframe',
+    ]);
   }
 
-  $element['#markup'] = $markup;
-  // Adding allowed tag otherwise amp tags will be stripped off.
-  // @see \Drupal\Core\Render\Renderer::ensureMarkupIsSafe().
-  $element['#allowed_tags'] = array_merge(Xss::getAdminTagList(), ['amp-img', 'amp-video', 'amp-audio', 'amp-iframe']);
   return $element;
 }
