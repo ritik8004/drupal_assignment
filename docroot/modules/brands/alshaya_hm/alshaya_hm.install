@@ -11,12 +11,30 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * Enable brand AMP theme.
+ * Enable brand AMP theme and set logo and favicon.
  */
 function alshaya_hm_update_8015() {
   // Enable and set default amp theme.
   \Drupal::service('theme_handler')->install(['alshaya_amp_hnm'], TRUE);
   \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_hnm')->save();
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site favicon and logo.
+  \Drupal::configFactory()->getEditable('alshaya_amp_hnm.settings')
+    ->setData([
+      'favicon' => [
+        'path' => $site_favicon . '.ico',
+      ],
+      'logo' => [
+        'path' => $active_theme->getPath() . '/site-logo.svg',
+      ],
+      'name' => 'H&M Kuwait',
+    ])
+    ->save();
 }
 
 /**
