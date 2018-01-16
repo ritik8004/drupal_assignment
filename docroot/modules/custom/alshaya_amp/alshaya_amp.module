@@ -5,6 +5,8 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\Component\Utility\Xss;
+
 /**
  * Implements hook_theme().
  */
@@ -19,4 +21,46 @@ function alshaya_amp_theme($existing, $type, $theme, $path) {
   ];
 
   return $items;
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_amp_element_info_alter(array &$info) {
+  if (isset($info['amp_processed_text']['#pre_render'])) {
+    $info['amp_processed_text']['#pre_render'][] = '_alshaya_amp_body_prerender';
+  }
+}
+
+/**
+ * Adds a custom pre-render to 'amp_processed_text' element.
+ *
+ * @param array $element
+ *   Element array.
+ *
+ * @return array
+ *   Element to render.
+ */
+function _alshaya_amp_body_prerender(array $element) {
+  if (isset($element['#markup'])) {
+    $markup = str_ireplace(
+      ['<img', '<video', '/video>', '<audio', '/audio>'],
+      ['<amp-img', '<amp-video', '/amp-video>', '<amp-audio', '/amp-audio>'],
+      $element['#markup']
+    );
+
+    // Adding height, width and layout parameter as required by the AMP.
+    $element['#markup'] = preg_replace('/<amp-img(.*?)>/', '<amp-img$1 height="1" width="1" layout="responsive"></amp-img>', $markup);
+
+    // Adding allowed tag otherwise amp tags will be stripped off.
+    // @see \Drupal\Core\Render\Renderer::ensureMarkupIsSafe().
+    $element['#allowed_tags'] = array_merge(Xss::getAdminTagList(), [
+      'amp-img',
+      'amp-video',
+      'amp-audio',
+      'amp-iframe',
+    ]);
+  }
+
+  return $element;
 }
