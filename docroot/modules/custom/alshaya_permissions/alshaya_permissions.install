@@ -10,6 +10,16 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Add sitemap permission for webmaster.
+ */
+function alshaya_permissions_update_8012() {
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['webmaster']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add permission to site builder and webmaster role.
  */
 function alshaya_permissions_update_8011() {
