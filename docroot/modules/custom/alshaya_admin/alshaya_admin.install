@@ -14,7 +14,7 @@ use Drupal\search_api\Entity\Index;
  */
 function alshaya_admin_update_8002() {
 
-  if (\Drupal::service('module_handler')->moduleExists('content_moderation')) {
+  if (!\Drupal::service('module_handler')->moduleExists('content_moderation')) {
 
     \Drupal::service('module_installer')->install(['workflows', 'wbm2cm']);
 
