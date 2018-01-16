@@ -9,6 +9,24 @@ body {
   font-family: $alshaya-thin;
 }
 
+amp-sidebar[side][open] {
+  background-color: $black;
+  max-width: none !important;
+  width: 100%;
+  opacity: 0.8;
+
+  ul {
+    text-align: center;
+    padding-left: 0;
+    padding-top: 4rem;
+    margin-top: 0;
+  }
+
+  li {
+    padding: 0.625rem;
+  }
+}
+
 a {
   text-decoration: none;
   color: $white;
