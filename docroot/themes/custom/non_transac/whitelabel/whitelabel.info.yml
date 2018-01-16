@@ -34,6 +34,11 @@ libraries-override:
       theme:
         assets/vendor/jquery.ui/themes/base/theme.css: false
 
+  kashmir/ltr:
+    css:
+      theme:
+        css/ltr.css: false
+  
 component-libraries:
   atoms:
     paths:
