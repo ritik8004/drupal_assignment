@@ -9,6 +9,19 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_hm_update_dependencies() {
+  return [
+    'alshaya_hm' => [
+      8015 => [
+        'alshaya' => 8004,
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_update_N().
  *
  * Update EN, AR paths for site log and email logo.
