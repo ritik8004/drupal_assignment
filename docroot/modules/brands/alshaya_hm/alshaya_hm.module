@@ -89,7 +89,7 @@ function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAt
       $sku = SKU::loadFromSku($skuId);
       $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
       if ($sku instanceof SKU) {
-        $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', 'pdp_main');
+        $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main']);
         if (!empty($images)) {
           // Changes for the image count.
           $skuAttributes['gtm-dimension4'] = count($images);
