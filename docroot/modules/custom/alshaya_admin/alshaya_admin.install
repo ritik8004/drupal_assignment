@@ -5,18 +5,22 @@
  * Contains install, update, uninstall hooks for alshaya_admin module.
  */
 
+use Drupal\search_api\Entity\Index;
+
 /**
  * Implements hook_update_N().
  *
  * Process migration of workbench moderation to content moderation.
  */
 function alshaya_admin_update_8002() {
-  $wbm2cm_status = \Drupal::state()->get('alshaya_wbm2cm', 'not done');
 
-  if ($wbm2cm_status == 'not done') {
-    drush_print(dt('Executing workbench_moderation to content moderation, please wait...'));
+  if (\Drupal::service('module_handler')->moduleExists('content_moderation')) {
 
     \Drupal::service('module_installer')->install(['workflows', 'wbm2cm']);
+
+    $index = Index::load('product');
+    $index->setOption('index_directly', FALSE);
+    $index->save();
 
     // Invoke a drush command to execute migration.
     drush_invoke_process('@self', 'wbm2cm-migrate');
@@ -40,13 +44,12 @@ function alshaya_admin_update_8002() {
 
     \Drupal::service('module_installer')->uninstall(['wbm2cm']);
 
-    // Set the state variable to done to avoid redoing it.
-    \Drupal::state()->set('alshaya_wbm2cm', 'done');
-
-    drush_print(dt('Done.'));
+    $index = Index::load('product');
+    $index->setOption('index_directly', TRUE);
+    $index->save();
   }
   else {
-    drush_print(dt('Already migrated from workbench_moderation to content moderation, not doing again.'));
+    return t('Already migrated from workbench_moderation to content moderation, not doing again.');
   }
 }
 
