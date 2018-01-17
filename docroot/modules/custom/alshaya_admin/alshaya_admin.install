@@ -13,9 +13,10 @@ use Drupal\search_api\Entity\Index;
  * Process migration of workbench moderation to content moderation.
  */
 function alshaya_admin_update_8002() {
-
-  if (!\Drupal::service('module_handler')->moduleExists('content_moderation')) {
-
+  if (\Drupal::service('module_handler')->moduleExists('content_moderation')) {
+    return t('Already migrated from workbench_moderation to content moderation, not doing again.');
+  }
+  else {
     \Drupal::service('module_installer')->install(['workflows', 'wbm2cm']);
 
     $index = Index::load('product');
@@ -25,21 +26,21 @@ function alshaya_admin_update_8002() {
     // Invoke a drush command to execute migration.
     drush_invoke_process('@self', 'wbm2cm-migrate');
 
-    $workflow_storage = \Drupal::service("entity_type.manager")->getStorage("workflow");
+    $workflow_storage = \Drupal::service('entity_type.manager')->getStorage('workflow');
     $workflow = $workflow_storage->loadMultiple();
-    unset($workflow["editorial"]);
+    unset($workflow['editorial']);
     $id = key($workflow);
-    alshaya_config_install_configs(["workflows.workflow.alshaya_workflow"], "alshaya_admin");
-    \Drupal::configFactory()->getEditable("workflows.workflow." . $id)->delete();
+    alshaya_config_install_configs(['workflows.workflow.alshaya_workflow'], 'alshaya_admin');
+    \Drupal::configFactory()->getEditable('workflows.workflow.' . $id)->delete();
 
-    \Drupal::service("database")->update("content_moderation_state_field_data")
-      ->fields(["workflow" => "alshaya_workflow"])
-      ->condition("workflow", $id)
+    \Drupal::service('database')->update('content_moderation_state_field_data')
+      ->fields(['workflow' => 'alshaya_workflow'])
+      ->condition('workflow', $id)
       ->execute();
 
-    \Drupal::service("database")->update("content_moderation_state_field_revision")
-      ->fields(["workflow" => "alshaya_workflow"])
-      ->condition("workflow", $id)
+    \Drupal::service('database')->update('content_moderation_state_field_revision')
+      ->fields(['workflow' => 'alshaya_workflow'])
+      ->condition('workflow', $id)
       ->execute();
 
     \Drupal::service('module_installer')->uninstall(['wbm2cm']);
@@ -47,9 +48,6 @@ function alshaya_admin_update_8002() {
     $index = Index::load('product');
     $index->setOption('index_directly', TRUE);
     $index->save();
-  }
-  else {
-    return t('Already migrated from workbench_moderation to content moderation, not doing again.');
   }
 }
 
