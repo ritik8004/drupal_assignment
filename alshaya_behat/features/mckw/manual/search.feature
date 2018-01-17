@@ -172,16 +172,16 @@ Feature: Search feature
     And I press "Search"
     And I wait for the page to load
     When I select "Name A to Z" from the dropdown
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     Then I should see results sorted in ascending order
     When I select "Name Z to A" from the dropdown
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     Then I should see results sorted in descending order
     When I select "Price High to Low" from the dropdown
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     Then I should see results sorted in descending price order
     When I select "Price Low to High" from the dropdown
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     Then I should see results sorted in ascending price order
 
   @prod

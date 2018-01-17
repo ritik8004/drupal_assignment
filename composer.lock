@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cad03e2c771c569122ae2bcf0c1c291b",
+    "content-hash": "dc3b042c33c11a0d986adfb94ab17599",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -2521,6 +2521,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Add svg file with defined viewbox height and width": "https://www.drupal.org/files/issues/amptheme-do_not_use_the_network_for_loading_logo_information-2753089-7.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

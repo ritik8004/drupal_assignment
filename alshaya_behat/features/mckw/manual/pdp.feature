@@ -31,14 +31,15 @@ Feature: Test the product detail page
     And I should see "(Kuwait)"
     When I click the label for "#ui-id-2"
     When I click the label for "#ui-id-4"
+    And I wait for AJAX to finish
     Then I should see "This service is "
     And I should see "FREE"
     Then I should see " of charge."
     And I should see "Check in-store availability"
-    When I select the first autocomplete option for "shuwaikh" on the "edit-location" field
+    When I enter a location in "store-location"
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then I should see "Shuwaikh Industrial 1, Shuwaikh Industrial, Kuwait"
+    Then I should see text matching "Shuwaikh Industrial 1, Shuwaikh Industrial, Kuwait"
     And I should see the link for ".change-location-link"
     Then I should see "Other stores nearby"
     When I click the label for ".change-location-link"
@@ -77,6 +78,12 @@ Feature: Test the product detail page
     And I should see "Delivered in 2-5 days for just KWD 1"
     Then I should see "click and collect"
     And I should see "FREE delivery to stores across Kuwait in 2-3 days"
+    When I click the label for "#ui-id-4"
+    Then I should see "This service is "
+    And I should see "FREE"
+    Then I should see " of charge."
+    And I should see "Select a size"
+    And I should see " to check stock availability near to you"
     Then I should be able to see the footer
 
   @config
@@ -91,14 +98,10 @@ Feature: Test the product detail page
     And I should see "(Kuwait)"
     When I click the label for "#ui-id-2"
     When I click the label for "#ui-id-4"
-    Then I should see "This service is "
-    And I should see "FREE"
-    Then I should see " of charge."
-    And I should see "Check in-store availability"
-    When I select the first autocomplete option for "shuwaikh" on the "edit-location" field
     And I wait for AJAX to finish
-    And I wait 10 seconds
-    Then I should see "Shuwaikh Industrial 1, Shuwaikh Industrial, Kuwait"
+    When I enter a location in "store-location"
+    And I wait for AJAX to finish
+    Then I should see text matching "Shuwaikh Industrial 1, Shuwaikh Industrial, Kuwait"
     And I should see the link for ".change-location-link"
     Then I should see "Other stores nearby"
     When I click the label for ".change-location-link"
@@ -179,9 +182,9 @@ Feature: Test the product detail page
     And I should see "(الكويت)"
     When I click the label for "#ui-id-2"
     When I click the label for "#ui-id-4"
+    And I wait for AJAX to finish
     Then I should see "استلم من المحل مجاناً"
-    And I should see "تحقق من توفر الكمية في المحلات"
-    When I select the first autocomplete option for "الشويخ" on the "edit-location" field
+    When I enter a location in "store-location"
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I should see the link for ".change-location-link"
@@ -216,7 +219,7 @@ Feature: Test the product detail page
     And I wait for AJAX to finish
     Then I should be able to see the header in Arabic
     Then it should display title, price and item code
-    Then I should see "بحجم :"
+    Then I should see "المقاس : "
     Then I should see "الكمية"
     Then I should see the button "أضف إلى سلة التسوق"
     Then I should see "وصف المنتج"
@@ -243,13 +246,12 @@ Feature: Test the product detail page
     And I should see "(الكويت)"
     When I click the label for "#ui-id-2"
     When I click the label for "#ui-id-4"
-    Then I should see "استلم من المحل مجاناً"
-    And I should see "تحقق من توفر الكمية في المحلات"
-    When I select the first autocomplete option for "الشويخ" on the "edit-location" field
     And I wait for AJAX to finish
-    And I wait 10 seconds
+    Then I should see "استلم من المحل مجاناً"
+    When I enter a location in "store-location"
+    And I wait for AJAX to finish
     And I should see the link for ".change-location-link"
-    Then I should see "محلات أخرى قريبة إليك"
+    Then I should see text matching "محلات أخرى قريبة إليك"
     When I click the label for ".change-location-link"
     Then I select the first autocomplete option for "الكويت" on the "store-location" field
     And I wait for AJAX to finish

@@ -75,7 +75,7 @@ function _alshaya_permissions_update_role_from_config(array $roles = NULL) {
   foreach ($roles as $rid => $role) {
     $path = $module_handler->getModule('alshaya_permissions')->getPath() . '/config/install/user.role.' . $rid . '.yml';
     if (file_exists($path)) {
-      $ymldata = Yaml::parse($path);
+      $ymldata = Yaml::parse(file_get_contents($path));
       foreach ($ymldata['permissions'] as $permission) {
         $role->grantPermission($permission);
       }

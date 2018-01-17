@@ -9,6 +9,24 @@ body {
   font-family: $alshaya-thin;
 }
 
+amp-sidebar[side][open] {
+  background-color: $black;
+  max-width: none !important;
+  width: 100%;
+  opacity: 0.8;
+
+  ul {
+    text-align: center;
+    padding-left: 0;
+    padding-top: 4rem;
+    margin-top: 0;
+  }
+
+  li {
+    padding: 0.625rem;
+  }
+}
+
 a {
   text-decoration: none;
   color: $white;
@@ -18,7 +36,7 @@ a {
 .close-icon {
   position: absolute;
   right: 0;
-  padding: 20px 0.625rem 1.25rem;
+  padding: 1.5rem 1.25rem;
   font-size: 1.5rem;
   width: 1.5rem;
   height: 2.1875rem;
@@ -30,12 +48,17 @@ a {
 }
 
 .site-branding {
-  width: 18%;
+  width: 54%;
   height: auto;
-  padding: 0.625rem;
-  display: table-cell;
-  vertical-align: middle;
-  padding-bottom: 0;
+  padding: 0.5rem 0.625rem;
+  display: block;
+  margin: 0 auto;
+}
+
+#sidebar-right {
+  ~ .site-branding {
+    margin: 0;
+  }
 }
 
 .amp-main,

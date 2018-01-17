@@ -274,6 +274,12 @@
       }
     }
 
+    ul {
+      @include breakpoint($desktop) {
+        width: 65%;
+      }
+    }
+
     a {
       color: $white-five;
       font-family: $hnm-regular;
