@@ -18,8 +18,7 @@ amp-sidebar[side][open] {
 
   ul {
     text-align: center;
-    padding-left: 0;
-    padding-top: 4rem;
+    padding: 3rem 0 1rem;
     margin-top: 0;
   }
 
@@ -39,7 +38,6 @@ a {
   padding: 1.5rem 1.25rem;
   font-size: 1.5rem;
   width: 1.5rem;
-  height: 2.1875rem;
 
   html[lang=ar] & {
     left: 0;
@@ -48,16 +46,27 @@ a {
 }
 
 .site-branding {
-  width: 54%;
-  height: auto;
-  padding: 0.5rem 0.625rem;
+  padding: 0.5rem 0;
   display: block;
-  margin: 0 auto;
+  height: auto;
+  width: calc(100% - 1.125rem);
+  margin: 0 0.5625rem;
+  z-index: 99;
+  background: $white;
+  position: fixed;
+  border-bottom: 1px solid $grey;
+
+  amp-img {
+    width: 60%;
+    margin: 0 auto;
+  }
 }
 
 #sidebar-right {
   ~ .site-branding {
-    margin: 0;
+    amp-img {
+      margin: 0;
+    }
   }
 
   a {
@@ -66,15 +75,15 @@ a {
   }
 }
 
-.amp-main,
-.amp-footer {
-  border-top: 1px solid $grey;
+.amp-main {
+  border-bottom: 1px solid $grey;
   margin: 0 0.625rem;
+  padding-top: 5rem;
 }
 
 .amp-footer__content {
   text-align: center;
-  padding: 0.625rem 0;
+  padding: 0.625rem;
 
   p {
     color: $light-grey;
@@ -84,4 +93,7 @@ a {
 
 .menu-icon {
   background: url('/themes/custom/transac/alshaya_hnm/imgs/icons/mobile-menu.svg') center center no-repeat;
+  z-index: 999;
+  position: fixed;
+  padding: 2.5rem 1.25rem;
 }
