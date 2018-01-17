@@ -280,7 +280,10 @@
 }
 
 #edit-acm-payment-methods-payment-options--wrapper {
+  height: auto;
+
   legend {
+    display: block;
     padding-bottom: 1rem;
 
     @include breakpoint($tablet) {
@@ -311,6 +314,14 @@
     padding-#{$right}: 1.375rem;
   }
 
+  #payment_method_knet {
+    border-top: none;
+
+    .payment-plugin-wrapper-div {
+      border-top: 1px solid $grey4;
+    }
+  }
+
   > .form-wrapper {
     cursor: pointer;
     margin-top: 0;
@@ -335,10 +346,12 @@
 
         .method-knet {
           background: url('../imgs/cards/knet-active.png') no-repeat;
+          background-size: 100%;
         }
 
         @include icon(radio-filled, before) {
           top: 0.9375rem;
+          border: none;
         }
       }
 
@@ -355,6 +368,8 @@
         font-size: 2.438rem;
         position: absolute;
         top: 22%;
+        background: none;
+        border: none;
 
         @include breakpoint($only-tablet) {
           #{$left}: 2%;
