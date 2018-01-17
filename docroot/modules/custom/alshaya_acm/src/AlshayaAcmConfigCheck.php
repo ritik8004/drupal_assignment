@@ -141,6 +141,12 @@ class AlshayaAcmConfigCheck {
       $config->save();
     }
 
+    // Re-configure Simple Oauth.
+    $config = $this->configFactory->getEditable('simple_oauth.settings');
+    $config->set('public_key', Settings::get('alshaya_acm_soauth_public_key'));
+    $config->set('private_key', Settings::get('alshaya_acm_soauth_private_key'));
+    $config->save();
+
     // Always set GTM id to null on all envs (except prod) first time.
     $config = $this->configFactory->getEditable('google_tag.settings');
     $config->set('container_id', '');
