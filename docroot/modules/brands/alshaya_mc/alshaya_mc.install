@@ -19,44 +19,11 @@ function alshaya_mc_update_8310() {
 
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
-  // Default site logo path with default name.
-  $site_logo = $active_theme->getPath() . '/site-logo';
-  // Default site favicon path with default name.
-  $site_favicon = $active_theme->getPath() . '/favicon';
 
-  // Save default site logo.
-  \Drupal::configFactory()->getEditable('alshaya_amp_mothercare.settings')
-    ->setData([
-      'logo' => [
-        'path' => $site_logo . '.svg',
-      ],
-    ])
-    ->save();
-
-  // Save english site logo.
-  \Drupal::languageManager()
-    ->getLanguageConfigOverride('en', 'alshaya_amp_mothercare.settings')
-    ->setData([
-      'logo' => [
-        'path' => $site_logo . '.svg',
-      ],
-    ])
-    ->save();
-
-  // Save arabic site logo.
-  \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'alshaya_amp_mothercare.settings')
-    ->setData([
-      'logo' => [
-        'path' => $site_logo . '-ar.svg',
-      ],
-    ])
-    ->save();
-
-  // Save default site favicon.
-  \Drupal::configFactory()->getEditable('alshaya_amp_mothercare.settings')
-    ->set('favicon', ['path' => $site_favicon . '.ico'])
-    ->save();
+  // Get the current theme settings.
+  $config = \Drupal::configFactory()->get($active_theme->getName() . '.settings')->get();
+  // Set same to installed AMP theme.
+  \Drupal::configFactory()->getEditable('alshaya_amp_mothercare.settings')->setData($config)->save();
 }
 
 /**

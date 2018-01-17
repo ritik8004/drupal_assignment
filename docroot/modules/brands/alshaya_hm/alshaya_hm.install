@@ -20,21 +20,11 @@ function alshaya_hm_update_8015() {
 
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
-  // Default site favicon path with default name.
-  $site_favicon = $active_theme->getPath() . '/favicon';
 
-  // Save default site favicon and logo.
-  \Drupal::configFactory()->getEditable('alshaya_amp_hnm.settings')
-    ->setData([
-      'favicon' => [
-        'path' => $site_favicon . '.ico',
-      ],
-      'logo' => [
-        'path' => $active_theme->getPath() . '/site-logo.svg',
-      ],
-      'name' => 'H&M Kuwait',
-    ])
-    ->save();
+  // Get the current theme settings.
+  $config = \Drupal::configFactory()->get($active_theme->getName() . '.settings')->get();
+  // Set same to installed AMP theme.
+  \Drupal::configFactory()->getEditable('alshaya_amp_hnm.settings')->setData($config)->save();
 }
 
 /**
