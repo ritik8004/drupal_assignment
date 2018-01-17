@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac;
 
+use Behat\Gherkin\Node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
@@ -1098,7 +1099,10 @@ class AlshayaGtmManager {
         foreach ($orderItems as $orderItem) {
           $productSKU[] = $orderItem['sku'];
           $product_node = alshaya_acm_product_get_display_node($orderItem['sku']);
-          $productStyleCode[] = $product_node->get('field_skus')->getString();
+
+          if ($product_node instanceof NodeInterface) {
+            $productStyleCode[] = $product_node->get('field_skus')->getString();
+          }
         }
 
         $page_dl_attributes = [
