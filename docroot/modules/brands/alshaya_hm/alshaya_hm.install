@@ -10,6 +10,8 @@ use Drupal\search_api\Entity\Index;
 
 /**
  * Implements hook_update_dependencies().
+ *
+ *  Install alshaya_amp module before saving configuration.
  */
 function alshaya_hm_update_dependencies() {
   return [
