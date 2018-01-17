@@ -163,7 +163,6 @@ Feature: Search feature
     When I accept terms and conditions
     And I press "سجل الطلبية"
     When I wait for the page to load
-    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، شويتا شارما"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد Test Test"
 
   @prod
