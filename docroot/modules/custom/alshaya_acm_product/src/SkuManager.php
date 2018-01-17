@@ -18,6 +18,7 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\node\NodeInterface;
 
 /**
  * Class SkuManager.
@@ -949,13 +950,29 @@ class SkuManager {
     $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
 
     if (empty($sku_entity)) {
+      $this->logger->warning('SKU entity not found for @sku with langcode: @langcode. (@function)', [
+        '@sku' => $sku,
+        '@langcode' => $langcode,
+        '@function' => 'SkuManager::getDisplayNode()',
+      ]);
+
       return NULL;
     }
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
 
-    return $plugin->getDisplayNode($sku_entity);
+    $node = $plugin->getDisplayNode($sku_entity);
+
+    if (!($node instanceof NodeInterface)) {
+      $this->logger->warning('SKU entity available but no display node found for @sku with langcode: @langcode. SkuManager::getDisplayNode().', [
+        '@sku' => $sku_entity->getSku(),
+      ]);
+
+      return NULL;
+    }
+
+    return $node;
   }
 
   /**
