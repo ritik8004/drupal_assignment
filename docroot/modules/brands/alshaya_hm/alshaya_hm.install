@@ -11,7 +11,7 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_dependencies().
  *
- *  Install alshaya_amp module before saving configuration.
+ *  Install alshaya_amp module before saving configuration related to amp theme.
  */
 function alshaya_hm_update_dependencies() {
   return [
