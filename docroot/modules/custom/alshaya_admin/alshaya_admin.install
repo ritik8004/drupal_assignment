@@ -56,6 +56,10 @@ function alshaya_admin_update_8002() {
   $index = Index::load('product');
   $index->setOption('index_directly', TRUE);
   $index->save();
+
+  drupal_static_reset();
+  print "Flushing cache.";
+  drupal_flush_all_caches();
 }
 
 /**
@@ -75,4 +79,17 @@ function alshaya_admin_update_8001() {
  */
 function alshaya_admin_uninstall() {
   \Drupal::configFactory()->getEditable('views.view.content')->delete();
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_admin_update_dependencies() {
+  return [
+    'alshaya_admin' => [
+      '8002' => [
+        'alshaya_acm_product' => '8010',
+      ],
+    ],
+  ];
 }
