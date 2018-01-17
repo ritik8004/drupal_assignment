@@ -7,6 +7,7 @@ body {
   max-width: 80rem;
   margin: 0 auto !important;
   font-family: $alshaya-thin;
+  color: $light-grey;
 }
 
 amp-sidebar[side][open] {
@@ -28,8 +29,7 @@ amp-sidebar[side][open] {
 }
 
 a {
-  text-decoration: none;
-  color: $white;
+  color: inherit;
 }
 
 .menu-icon,
@@ -59,6 +59,11 @@ a {
   ~ .site-branding {
     margin: 0;
   }
+
+  a {
+    text-decoration: none;
+    color: $white;
+  }
 }
 
 .amp-main,
@@ -69,6 +74,7 @@ a {
 
 .amp-footer__content {
   text-align: center;
+  padding: 0.625rem 0;
 
   p {
     color: $light-grey;
