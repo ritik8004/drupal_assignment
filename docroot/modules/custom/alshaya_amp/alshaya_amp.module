@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_theme().
@@ -21,6 +22,53 @@ function alshaya_amp_theme($existing, $type, $theme, $path) {
   ];
 
   return $items;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_amp_form_system_theme_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $config = \Drupal::configFactory()->getEditable('alshaya_amp.settings');
+  $build_info = $form_state->getBuildInfo();
+  if (isset($build_info['args'][0]) && ($theme = $build_info['args'][0])) {
+    $form['amp_setting'] = [
+      '#type' => 'details',
+      '#title' => t('AMP Settings'),
+      '#open' => TRUE,
+    ];
+    $form['amp_setting']['settings']['image_height_ratio'] = [
+      '#type' => 'textfield',
+      '#title' => t('Image height ratio'),
+      '#description' => t('Enter the height for the image ratio.'),
+      '#default_value' => $config->get('image_height_ratio'),
+    ];
+    $form['amp_setting']['settings']['image_width_ratio'] = [
+      '#type' => 'textfield',
+      '#title' => t('Image width ratio'),
+      '#description' => t('Enter the width for the image ratio.'),
+      '#default_value' => $config->get('image_width_ratio'),
+    ];
+
+    // Register submit handler.
+    array_unshift($form['#submit'], 'alshaya_amp_save_system_theme_settings');
+  }
+}
+
+/**
+ * Submit handler for amp theme settings.
+ *
+ * @param array $form
+ *   Form array.
+ * @param FormStateInterface $form_state
+ *   Form state object.
+ */
+function alshaya_amp_save_system_theme_settings(&$form, FormStateInterface $form_state) {
+  $height_ratio = $form_state->getValue('image_height_ratio');
+  $width_ratio = $form_state->getValue('image_width_ratio');
+  $config = \Drupal::configFactory()->getEditable('alshaya_amp.settings');
+  $config->set('image_height_ratio', $height_ratio);
+  $config->set('image_width_ratio', $width_ratio);
+  $config->save();
 }
 
 /**
@@ -50,7 +98,9 @@ function _alshaya_amp_body_prerender(array $element) {
     );
 
     // Adding height, width and layout parameter as required by the AMP.
-    $element['#markup'] = preg_replace('/<amp-img(.*?)>/', '<amp-img$1 height="1" width="1.33" layout="responsive"></amp-img>', $markup);
+    $height = \Drupal::config('alshaya_amp.settings')->get('image_height_ratio');
+    $width = \Drupal::config('alshaya_amp.settings')->get('image_width_ratio');
+    $element['#markup'] = preg_replace('/<amp-img(.*?)>/', '<amp-img$1 height="' . $height . '" width="' . $width . '" layout="responsive"></amp-img>', $markup);
 
     // Adding allowed tag otherwise amp tags will be stripped off.
     // @see \Drupal\Core\Render\Renderer::ensureMarkupIsSafe().
