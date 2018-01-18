@@ -115,6 +115,7 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
     return [
       '#theme' => 'alshaya_amp_menu',
       '#data' => $data,
+      '#slide' => $this->languageManager->getCurrentLanguage()->getDirection(),
     ];
   }
 
@@ -142,7 +143,7 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return parent::getCacheContexts(parent::getCacheContexts(), ['url.path']);
+    return parent::getCacheContexts(parent::getCacheContexts(), ['url.path', 'languages']);
   }
 
 }

@@ -17,6 +17,7 @@ function alshaya_amp_theme($existing, $type, $theme, $path) {
     'template' => 'alshaya-amp-menu',
     'variables' => [
       'data' => NULL,
+      'slide' => NULL,
     ],
   ];
 

@@ -1,7 +1,11 @@
-<amp-sidebar id="sidebar-right" layout="nodisplay" side="right">
+{% if slide == "rtl" %}
+<amp-sidebar id="sidebar" layout="nodisplay" side="left">
+{% else %}
+<amp-sidebar id="sidebar" layout="nodisplay" side="right">
+{% endif %}
     {% if data %}
       <div>
-        <a href="#" on="tap:sidebar-right.toggle" class="ampstart-navbar-trigger close-icon">✕</a>
+        <a href="#" on="tap:sidebar.toggle" class="ampstart-navbar-trigger close-icon">✕</a>
         <ul>
         {% for term in data %}
             <li><a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': term.tid}) }}">{{ term.name }}</a></li>
@@ -10,5 +14,5 @@
        </div>
     {% endif %}
 </amp-sidebar>
-<div role="button" on="tap:sidebar-right.toggle" tabindex="0" class="ampstart-navbar-trigger md-hide lg-hide pr2 menu-icon"></div>
+<div role="button" on="tap:sidebar.toggle" tabindex="0" class="ampstart-navbar-trigger md-hide lg-hide pr2 menu-icon"></div>
 <div id="target-element-right"></div>
