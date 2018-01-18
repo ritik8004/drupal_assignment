@@ -13,7 +13,6 @@ dependencies:
     - inline_entity_form
     - link
     - paragraphs
-    - workbench_moderation
 id: paragraph.banner.default
 targetEntityType: paragraph
 bundle: banner
