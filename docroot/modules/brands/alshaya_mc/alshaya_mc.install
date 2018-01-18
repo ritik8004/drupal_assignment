@@ -261,3 +261,18 @@ function alshaya_mc_install() {
   \Drupal::service('theme_handler')->install(['alshaya_amp_mothercare'], TRUE);
   \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_mothercare')->save();
 }
+
+/**
+ * Implements hook_update_dependencies().
+ *
+ *  Install alshaya_amp module before saving configuration related to amp theme.
+ */
+function alshaya_mc_update_dependencies() {
+  return [
+    'alshaya_mc' => [
+      '8310' => [
+        'alshaya' => '8004',
+      ],
+    ],
+  ];
+}
