@@ -5,6 +5,21 @@
 
 /* global debounce */
 
+/* eslint-disable */
+function isRTL() {
+  /* eslint-enable */
+  'use strict';
+
+  var html = jQuery('html');
+  var dir = html.attr('dir');
+  if (typeof dir === 'undefined' || dir === 'ltr') {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
 (function ($, Drupal) {
   'use strict';
 
@@ -29,7 +44,15 @@
       }
 
       if ($('.field-slider-items-wrapper').find('.paragraph-t-banner').children().length > 0) {
-        $('.field-slider-items-wrapper').once('initiate-slick').slick(options);
+        if (isRTL()) {
+          $('.field-slider-items-wrapper').attr('dir', 'rtl');
+          $('.field-slider-items-wrapper').once('initiate-slick').slick(
+            $.extend({}, options, {rtl: true})
+          );
+        }
+        else {
+          $('.field-slider-items-wrapper').once('initiate-slick').slick(options);
+        }
       }
 
       // eslint-disable-next-line.
