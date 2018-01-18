@@ -22,7 +22,7 @@ mode: amp
 content:
   body:
     label: hidden
-    type: amp_text
+    type: text_default
     weight: 2
     settings: {  }
     third_party_settings: {  }
