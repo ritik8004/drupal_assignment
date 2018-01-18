@@ -211,7 +211,8 @@
     max-width: 26.25rem;
   }
 
-  &.theme-dark {
+  &.theme-black-amperserif,
+  &.theme-black-ampersand-bold {
     color: $hnm-black-two;
 
     .field--name-field-button-link {
@@ -223,7 +224,8 @@
     }
   }
 
-  &.theme-light {
+  &.theme-white-amperserif,
+  &.theme-white-ampersand-bold {
     color: $white-five;
 
     .field--name-field-button-link {
@@ -356,5 +358,12 @@
         font-size: 1.275rem;
       }
     }
+  }
+}
+
+.theme-white-ampersand-bold,
+.theme-black-ampersand-bold {
+  .field--name-field-promo-text-2 {
+    font-family: $hnm-bold;
   }
 }
