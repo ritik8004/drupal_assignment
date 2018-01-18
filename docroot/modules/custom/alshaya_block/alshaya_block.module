@@ -62,6 +62,7 @@ function _alshaya_get_theme_by_theme_type($theme_type = '', array $skip_themes =
       if (!empty($theme->info['alshaya_theme_type'])
         && $theme->info['alshaya_theme_type'] == $theme_type
         && !in_array($theme->getName(), $skip_themes)
+        && !empty(\Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['theme' => $theme->getName()]))
       ) {
         return $theme->getName();
       }
