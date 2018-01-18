@@ -50,14 +50,14 @@ function alshaya_amp_form_system_theme_settings_alter(&$form, FormStateInterface
     ];
 
     // Register submit handler.
-    array_unshift($form['#submit'], 'alshaya_amp_save_system_theme_settings');
+    array_unshift($form['#submit'], 'alshaya_amp_form_system_theme_settings_submit');
   }
 }
 
 /**
  * Save amp settings for the theme.
  */
-function alshaya_amp_save_system_theme_settings(&$form, FormStateInterface $form_state) {
+function alshaya_amp_form_system_theme_settings_submit(&$form, FormStateInterface $form_state) {
   $build_info = $form_state->getBuildInfo();
   if (isset($build_info['args'][0])) {
     $theme = $build_info['args'][0];
