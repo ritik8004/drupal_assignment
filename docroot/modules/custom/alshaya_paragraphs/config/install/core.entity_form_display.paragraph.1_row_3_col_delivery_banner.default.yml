@@ -8,7 +8,6 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_3_col_delivery_banner
   module:
     - link
-    - workbench_moderation
 id: paragraph.1_row_3_col_delivery_banner.default
 targetEntityType: paragraph
 bundle: 1_row_3_col_delivery_banner

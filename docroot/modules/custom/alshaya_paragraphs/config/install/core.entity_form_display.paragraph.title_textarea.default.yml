@@ -7,7 +7,6 @@ dependencies:
     - paragraphs.paragraphs_type.title_textarea
   module:
     - text
-    - workbench_moderation
 id: paragraph.title_textarea.default
 targetEntityType: paragraph
 bundle: title_textarea

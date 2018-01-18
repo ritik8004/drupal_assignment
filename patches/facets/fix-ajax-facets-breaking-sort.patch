@@ -1,5 +1,5 @@
---- docroot/modules/contrib/facets/js/facets-views-ajax.js	(revision )
-+++ docroot/modules/contrib/facets/js/facets-views-ajax.js	(revision )
+--- docroot/modules/contrib/facets/js/facets-views-ajax.js      (revision )
++++ docroot/modules/contrib/facets/js/facets-views-ajax.js      (revision )
 @@ -83,6 +83,14 @@
        views_parameters
      );

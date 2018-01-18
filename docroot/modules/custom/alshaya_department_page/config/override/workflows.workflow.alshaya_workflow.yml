@@ -1,0 +1,7 @@
+dependencies:
+  config:
+    - node.type.department_page
+type_settings:
+  entity_types:
+    node:
+      - department_page

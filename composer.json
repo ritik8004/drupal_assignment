@@ -25,9 +25,9 @@
         "drupal/views_field_view": "1.0-beta2",
         "drupal/user_registrationpassword": "^1.0",
         "drupal/clientside_validation": "1.x-dev",
-        "drupal/facets": "^1.0@alpha",
+        "drupal/facets": "1.0-alpha11",
         "drupal/profile": "^1.0@alpha",
-        "drupal/field_group": "1.0.0-rc4",
+        "drupal/field_group": "^3.0@beta",
         "drupal/webform": "^5.0@beta",
         "drupal/back_to_top": "^1.0@beta",
         "drupal/change_pwd_page": "^1.0@beta",
@@ -145,9 +145,10 @@
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
             },
             "drupal/facets": {
-                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/ajax_facets_blocks_for-2826449-85.patch",
-                "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
-                "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch"
+              "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
+              "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha11-57.patch",
+              "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
+              "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
@@ -158,7 +159,8 @@
                 "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/add_views_render-2500313-39.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
-                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch"
+                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
+                "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch"
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
@@ -199,8 +201,14 @@
             "drupal/paragraphs": {
                 "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
             },
+            "drupal/wbm2cm": {
+                "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
+            },
             "drupal/media_entity": {
                 "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
+            },
+            "drupal/amptheme": {
+                "Add svg file with defined viewbox height and width": "https://www.drupal.org/files/issues/amptheme-do_not_use_the_network_for_loading_logo_information-2753089-7.patch"
             }
         },
         "installer-paths": {

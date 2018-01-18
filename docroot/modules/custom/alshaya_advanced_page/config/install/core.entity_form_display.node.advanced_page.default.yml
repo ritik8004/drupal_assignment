@@ -17,7 +17,6 @@ dependencies:
     - paragraphs
     - path
     - text
-    - workbench_moderation
 third_party_settings:
   field_group:
     group_views_reference:
@@ -44,6 +43,7 @@ third_party_settings:
         required_fields: true
         classes: ''
         id: ''
+      region: content
     group_related:
       children:
         - field_related_info
@@ -63,6 +63,7 @@ third_party_settings:
         classes: ''
         open: false
         required_fields: true
+      region: content
     group_promo_banner_full_width:
       children:
         - field_promo_banner_full_width
@@ -81,6 +82,7 @@ third_party_settings:
         id: ''
         required_fields: true
         open: false
+      region: content
     group_promo_blocks:
       children:
         - field_promo_blocks
@@ -94,6 +96,7 @@ third_party_settings:
         id: ''
         classes: ''
         open: false
+      region: content
     group_block_reference:
       children:
         - field_block
@@ -106,6 +109,7 @@ third_party_settings:
         required_fields: true
         classes: ''
         id: ''
+      region: content
 id: node.advanced_page.default
 targetEntityType: node
 bundle: advanced_page

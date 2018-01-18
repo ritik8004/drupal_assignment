@@ -426,7 +426,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // Render the wrapper div for composition always so that the same can be
         // filled with data on variant selection.
-        $search_direction = $sku_entity->getType == 'configurable' ? 'children' : 'self';
+        $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
         $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
         $composition_markup = [
           '#theme' => 'product_composition_markup',
@@ -813,8 +813,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $form['ajax']['configurables']['size']['#required_error'] = t('Please select a size.');
 
       // We show the size guide link if available as prefix.
-      if ($size_guide_link = _alshaya_acm_product_get_size_guide_link()) {
-        $form['ajax']['configurables']['size']['#prefix'] = $size_guide_link;
+      if ($size_guide_enabled = _alshaya_acm_product_check_size_guide_enabled()) {
+        $form['ajax']['configurables']['size']['#prefix'] = $size_guide_enabled;
       }
 
       // @TODO: This looks like related to GTM, also for now only limited to
@@ -1291,9 +1291,9 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
  * @return string
  *   Link html as string or empty if not available.
  */
-function _alshaya_acm_product_get_size_guide_link() {
+function _alshaya_acm_product_check_size_guide_enabled() {
   // Check if we have the configuration set.
-  if (\Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
+  if (\Drupal::config('alshaya_acm_product.size_guide')->get('size_guide_enabled')) {
     $options = [
       'attributes' => [
         'class' => ['size-guide-link', 'use-ajax'],

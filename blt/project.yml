@@ -37,6 +37,8 @@ target-hooks:
     dir: '${docroot}'
     command: 'echo ''No post-deploy build configured.'''
 import: '${repo.root}/blt/setup.local.xml'
+deploy:
+  gitignore_file: ${repo.root}/blt/config/.gitignore
 modules:
   local:
     enable: [dblog, devel, seckit, views_ui]

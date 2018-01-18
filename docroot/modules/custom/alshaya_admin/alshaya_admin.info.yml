@@ -16,4 +16,4 @@ dependencies:
   - drupal:text
   - drupal:user
   - drupal:views
-  - workbench_moderation:workbench_moderation
+  - drupal:content_moderation

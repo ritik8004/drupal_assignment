@@ -55,10 +55,10 @@ mckwuat:
               simpleurl: '/baby-boys-socks-gift-box'
               simpletitle: 'Baby Boys Socks Gift Box'
               simpletitlear: 'صندوق هدية جوارب للأولاد'
-              configurl: '/horse-photographic-t-shirt'
-              configtitle: 'Horse Photographic T-Shirt'
-              configtitlear: 'Horse Photographic T-Shirt'
-              configvariant: '3-4 Years'
+              configurl: '/paradise-graphic-tee'
+              configtitle: 'Paradise Graphic Tee'
+              configtitlear: 'تي-شيرت برسمة Paradise'
+              configvariant: '6-7 Years'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -77,7 +77,7 @@ mckwuat:
         browser: chrome
         capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://mckw-uat.factory.alshaya.com/en'
-      files_path: "%paths.base%/media"
+      files_path: "%paths.base%/features/mckw/media"
     Drupal\DrupalExtension:
       blackbox: ~
     emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:

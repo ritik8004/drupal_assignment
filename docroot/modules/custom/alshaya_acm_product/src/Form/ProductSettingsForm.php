@@ -36,8 +36,6 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('all_products_buyable', $form_state->getValue('all_products_buyable'));
     $config->set('not_buyable_message', $form_state->getValue('not_buyable_message'));
     $config->set('not_buyable_help_text', $form_state->getValue('not_buyable_help_text'));
-    $config->set('size_guide_link', $form_state->getValue('size_guide_link'));
-    $config->set('size_guide_modal_content', $form_state->getValue('size_guide_modal_content'));
     $config->set('vat_text', $form_state->getValue('vat_text'));
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
     $config->save();
@@ -103,21 +101,6 @@ class ProductSettingsForm extends ConfigFormBase {
       '#format' => $config->get('not_buyable_help_text.format'),
       '#title' => $this->t('Not-buyable product help text'),
       '#default_value' => $config->get('not_buyable_help_text.value'),
-    ];
-
-    $form['size_guide_link'] = [
-      '#type' => 'radios',
-      '#title' => $this->t('Enable Size Guide link'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('size_guide_link'),
-      '#options' => [0 => $this->t('Disable'), 1 => $this->t('Enable')],
-    ];
-
-    $form['size_guide_modal_content'] = [
-      '#type' => 'text_format',
-      '#format' => $config->get('size_guide_modal_content.format'),
-      '#title' => $this->t('Size guide content'),
-      '#default_value' => $config->get('size_guide_modal_content.value'),
     ];
 
     $form['vat_text'] = [

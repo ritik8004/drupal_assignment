@@ -7,5 +7,13 @@ $dir: rtl;
 @import '../node_modules/breakpoint-sass/stylesheets/breakpoint';
 
 // Reset to normalize browser styles.
+@import "reset";
 
+// Config file that contains centralized variables.
+@import "config/**/*";
+
+// Utilities for building multilingual websites.
+@import "directional";
+
+// custom styles.
 @import "component/**/*";
