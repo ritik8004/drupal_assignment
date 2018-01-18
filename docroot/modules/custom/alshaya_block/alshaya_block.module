@@ -62,7 +62,7 @@ function _alshaya_get_theme_by_theme_type($theme_type = '', array $skip_themes =
       if (!empty($theme->info['alshaya_theme_type'])
         && $theme->info['alshaya_theme_type'] == $theme_type
         && !in_array($theme->getName(), $skip_themes)
-        && _alshaya_block_theme_has_blocks($theme->getName())
+        && !empty(\Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['theme' => $theme->getName()]))
       ) {
         return $theme->getName();
       }
@@ -70,26 +70,6 @@ function _alshaya_get_theme_by_theme_type($theme_type = '', array $skip_themes =
   }
 
   return NULL;
-}
-
-/**
- * Determine if the given theme has any block or not.
- *
- * @param string $theme
- *   Theme name.
- *
- * @return bool
- *   Theme has block or not.
- */
-function _alshaya_block_theme_has_blocks($theme = '') {
-  if (!empty($theme)) {
-    $theme_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['theme' => $theme]);
-    if (!empty($theme_blocks)) {
-      return TRUE;
-    }
-  }
-
-  return FALSE;
 }
 
 /**
