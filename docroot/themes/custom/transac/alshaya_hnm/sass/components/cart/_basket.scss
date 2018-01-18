@@ -217,6 +217,8 @@
 
   .price-currency {
     float: left !important;
+    padding: inherit;
+    padding-top: 1px;
 
     html[lang=ar] & {
       padding: 0;
