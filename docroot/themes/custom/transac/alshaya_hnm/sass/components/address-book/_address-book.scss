@@ -1,58 +1,8 @@
+@import "../../alshaya_white_label/sass/components/address-book/_address-book.scss";
+
 .user__address--column {
   border: 0.0625rem solid $grey4;
   font-family: $hnm-regular;
-  font-size: 0.75rem;
-  margin-bottom: 1.5rem;
-
-  @include breakpoint($tablet) {
-    float: $left;
-    width: calc(50% - 0.75rem);
-
-    &:nth-of-type(odd) {
-      margin-#{$right}: 1.5rem;
-    }
-
-    &:last-child {
-      margin-bottom: 1.375rem;
-    }
-  }
-
-  @include breakpoint($desktop) {
-    margin-bottom: 3rem;
-    width: calc(50% - 1.5rem);
-
-    &:nth-of-type(odd) {
-      margin-#{$right}: 3rem;
-    }
-  }
-
-  @include breakpoint($only-mobile) {
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
-
-#edit-member-delivery-home .user__address--column {
-  @include breakpoint($tablet) {
-    float: none;
-    width: 100%;
-    max-width: 100%;
-
-    &:nth-of-type(odd) {
-      margin-#{$right}: auto;
-    }
-  }
-
-  @include breakpoint($desktop) {
-    float: $left;
-    margin-bottom: 3rem;
-    width: calc(50% - 1.5rem);
-
-    &:nth-of-type(odd) {
-      margin-#{$right}: 3rem;
-    }
-  }
 }
 
 .view-address-book {
@@ -68,34 +18,10 @@
 }
 
 .address {
-  .address--data {
-    overflow: hidden;
-    padding: 1rem;
-
-    @include breakpoint($tablet) {
-      min-height: 12rem;
-      padding: 1rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding: 1.5rem;
-      min-height: 12rem;
-    }
-  }
-
-  .address--contact {
-    margin-top: 1.375rem;
-  }
-
   .address--content {
     color: $hnm-black-two;
     font-family: $hnm-demibold;
-    direction: ltr;
     font-weight: normal;
-
-    html[lang=ar] & {
-      text-align: right;
-    }
 
     @include breakpoint($desktop) {
       font-size: 0.75rem;
@@ -103,98 +29,24 @@
   }
 
   .address--label {
-    margin-bottom: 0.1875rem;
     font-family: $hnm-regular;
     color: $grey-ash;
-  }
-
-  .address--userinfo {
-    float: $left;
-    padding-#{$right}: 1rem;
-    vertical-align: top;
-    width: 55%;
-
-    @include breakpoint($tablet) {
-      width: 51%;
-    }
-
-    @include breakpoint($desktop) {
-      padding-#{$right}: 1.5rem;
-      width: 59%;
-    }
-  }
-
-  .address--delivery {
-    float: $left;
-    width: 44%;
-
-    @include breakpoint($tablet) {
-      width: 48%;
-    }
-
-    @include breakpoint($desktop) {
-      width: 41%;
-    }
-  }
-
-  .address--options {
-    border-top: 0.0625rem solid $white;
-    clear: both;
-    display: table;
-    width: 100%;
-
-    @include breakpoint($desktop) {
-      padding: 1.25rem 1.5rem;
-    }
-
-    a {
-      color: $black-two;
-    }
-  }
-
-  .address--controls {
-    border-#{$right}: 0.0625rem solid $white;
-    display: table-cell;
-    min-height: 3.0625rem;
-    padding: 0.9375rem;
-    vertical-align: middle;
-    position: relative;
-
-    @include breakpoint($tablet) {
-      padding: 1.375rem 0.875rem;
-      min-height: 4.563rem;
-      text-align: center;
-    }
-
-    @include breakpoint($desktop) {
-      border: none;
-      min-height: none;
-      padding: 0;
-      padding-#{$right}: 1.25rem;
-    }
   }
 
   .address--primary {
     @include arabic-letter-spacing;
 
-    width: 9.438rem;
-    position: relative;
-    padding-#{$right}: 0.5625rem;
-    padding-#{$left}: 2.5rem;
-    text-align: left;
-    letter-spacing: 0.5px;
-
-    @include breakpoint($tablet) {
-      width: 6.625rem;
-      padding-#{$left}: 2.4rem;
-    }
-
     @include breakpoint($desktop) {
       padding-#{$right}: 2rem;
-      width: auto;
       padding-#{$left}: 1.625rem;
-      text-indent: 0;
       font-size: 0.875rem;
+    }
+
+    span::before,
+    a::before,
+    a:hover::before {
+      transform: translateY(0);
+      border: none;
     }
 
     span {
@@ -247,38 +99,7 @@
   .address--edit,
   .address--delete {
     a {
-      display: block;
-      text-transform: uppercase;
       font-size: 0.875rem;
-
-      @include breakpoint($tablet) {
-        text-align: center;
-      }
-
-      @include breakpoint($desktop) {
-        border: 0.0625rem solid $black-two;
-        display: inline-block;
-        font-weight: 700;
-        padding: 0.625rem 1.5rem;
-        min-width: 5.9375rem;
-      }
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-
-  .address--edit {
-    text-align: center;
-  }
-
-  .address--delete {
-    border-#{$right}: none;
-    padding-#{$right}: 0;
-
-    @include breakpoint($only-tablet) {
-      padding-#{$right}: 0.9375rem;
     }
   }
 
@@ -297,68 +118,27 @@
       letter-spacing: 0;
       font-size: 0.875rem;
     }
-
-    .address--controls:last-child {
-      border-#{$right}: none;
-
-      @include breakpoint($desktop) {
-        padding-right: 0;
-      }
-    }
   }
 }
 
 #edit-member-delivery-home-addresses {
   .address {
     &--edit {
-      text-align: $right;
-
-      @include breakpoint($desktop) {
-        width: 45%;
-      }
-
       a {
-        border: none;
         font-family: $hnm-demibold;
         font-weight: normal;
         text-decoration: underline;
-        padding: 0;
-        min-width: auto;
         color: $hnm-black-two;
-        text-transform: capitalize;
-        text-align: center;
       }
     }
 
     &--deliver-to-this-address {
-      padding: 0;
-      min-height: auto;
-      border: none;
-
-      @include breakpoint($desktop) {
-        width: 53.53%;
-      }
-
       a {
-        min-height: 2.0625rem;
-        display: block;
-        padding: 1rem;
-        margin: 0;
         color: $hnm-black-two;
-        text-align: center;
         border: 0.0625rem solid $hnm-black-two;
         font-family: $hnm-bold;
         font-weight: normal;
         text-transform: uppercase;
-
-        @include breakpoint($tablet) {
-          padding: 0.625rem;
-          margin: 0.5rem 1rem;
-        }
-
-        @include breakpoint($desktop) {
-          margin: 0;
-        }
       }
     }
 
@@ -370,7 +150,6 @@
 
       .address--deliver-to-this-address {
         a {
-          color: $white-five;
           border: 1px solid $hnm-black-two;
           background-color: $hnm-black-two;
           font-family: $hnm-bold;
@@ -399,20 +178,10 @@
 }
 
 .c-address-book {
-  .region__content {
-    position: relative;
-  }
-
-  .view-profiles .view-content {
-    position: relative;
-    top: -1.25rem;
-  }
-
   .block-system > a {
     @extend %button-wide;
+    text-transform: uppercase;
 
-    display: block;
-    margin-top: 1.25rem;
     font-size: 0.875rem;
 
     @include breakpoint($tablet) {
@@ -421,41 +190,13 @@
       top: -1rem;
       #{$right}: 0;
       min-width: 10.2rem;
-      margin-top: 1.75rem;
       margin-bottom: 0;
     }
 
     @include breakpoint($desktop) {
       top: -0.625rem;
-      min-width: 11.75rem;
-      margin-top: 0;
       margin-bottom: 0.625rem;
-    }
-
-    + .form-item {
-      overflow: hidden;
-    }
-  }
-}
-
-.l-two--sf {
-  &.c-address-book {
-    .c-sidebar-first {
-      @include breakpoint($only-tablet) {
-        display: block;
-        float: $left;
-        max-width: 16.8125rem;
-        width: 23%;
-        padding-top: 1em;
-      }
-    }
-
-    main {
-      @include breakpoint($only-tablet) {
-        width: 74%;
-        max-width: 57.5625rem;
-        float: right;
-      }
+      min-width: 11.75rem
     }
   }
 }
@@ -465,68 +206,7 @@
 .webform-submission-alshaya-contact-form,
 #selected-store-wrapper {
   .mobile-number-field {
-    max-width: 24.75rem;
-    margin-bottom: 1.5rem;
-
-    label {
-      opacity: 1;
-      font-size: 0.75rem !important;
-      color: $greyish;
-    }
-
-    .form-type-textfield {
-      margin-top: 0 !important;
-      padding-bottom: 0 !important;
-    }
-
-    .form-type-select {
-      &.form-item-guest-delivery-home-address-shipping-mobile-number-country-code,
-      &.form-item-billing-address-address-billing-mobile-number-country-code,
-      &.form-item-member-delivery-home-address-form-form-mobile-number-country-code,
-      &.form-item-field-address-0-address-mobile-number-country-code {
-        padding-bottom: 0;
-        margin-top: 0 !important;
-
-        &::after {
-          display: none;
-        }
-      }
-    }
-
-    .country-select {
-      border: none;
-
-      .mobile-number-flag {
-        display: none;
-      }
-
-      .arrow {
-        display: none;
-      }
-
-      select.country {
-        display: none;
-      }
-    }
-
     .mobile-input--wrapper {
-      display: flex;
-      align-items: flex-end;
-      border-bottom: 1px solid $black;
-      position: relative;
-      direction: ltr;
-
-      .form-item.verified {
-        #edit-billing-address & {
-          display: none;
-        }
-      }
-
-      > .form-type-select {
-        min-width: 2.688rem;
-        width: auto;
-      }
-
       .prefix {
         font-size: 1rem;
         line-height: 2.25;
@@ -541,23 +221,13 @@
       .form-item-mobile-number-mobile,
       .form-item-cc-mobile-number-mobile {
         position: static !important;
-
-        .c-input__bar {
-          position: static;
-
-          &::before,
-          &::after {
-            bottom: -1px;
-          }
-        }
+        width: auto;
       }
 
       #edit-field-address-0-address-mobile-number-mobile-error,
       #edit-mobile-number-mobile-error,
       label.error {
-        position: absolute;
         top: 2rem;
-        #{$left}: 0;
         // Show red border for mobile number error.
         border-top: 2px solid $red-error;
         padding-top: 0.4375rem;
@@ -571,8 +241,6 @@
       }
 
       .form-item--error-message {
-        position: absolute;
-        #{$left}: 0;
         border-top: 2px solid $red-error;
         padding-top: 0.4375rem;
         margin-top: 0;
@@ -582,67 +250,20 @@
     }
 
     input {
-      border: none !important;
-
-      &:-ms-input-placeholder {
-        /* Internet Explorer 10+ */
-        color: $white-five !important;
-      }
-
-      &::placeholder {
-        color: transparent;
-      }
-
       html[lang=ar] & {
-        direction: ltr;
         font-family: $hnm-regular-nodir;
       }
-    }
-  }
-
-  #edit-field-address-0-address-administrative-area {
-    width: 100%;
-  }
-}
-
-#edit-billing-address {
-  .address-book-address {
-    .mobile-number-field .js-form-type-select {
-      padding-bottom: 0;
     }
   }
 }
 
 .address-book-address .form-type-select {
-  @include select-wrapper(100%);
-
-  label {
-    top: -1.1375rem;
-    font-size: 0.75rem;
-
-    &.error {
-      top: 2rem;
-    }
-  }
-
-  select.select2-select.form-select {
-    font-size: 1rem;
-    box-sizing: border-box;
-
-    @include select-style(100%);
-  }
-
   .select2-selection {
     @include arabic-letter-spacing;
 
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    font-size: 1rem;
-    padding: 0.25rem 0.5rem;
-    width: 100%;
-    border-radius: 0;
-    height: 2.188rem !important;
     border-color: $hnm-black-two;
   }
 
@@ -663,15 +284,9 @@
     }
   }
 
-  .select2-container {
-    width: 100% !important;
-  }
-
   .select2-selection__rendered {
     font-family: $hnm-regular;
-    line-height: 1.188rem !important;
     color: $hnm-black-two;
-    padding: 0.25rem !important;
   }
 }
 
@@ -687,22 +302,13 @@
       width: 2.063rem;
       height: 2.063rem;
     }
-
-    b {
-      display: none;
-    }
   }
 }
 
 .profile-address-book-edit-form,
 #address-book-form-open {
   .form-actions {
-    position: relative;
     margin-bottom: 1.5rem;
-
-    input[disabled] {
-      color: transparent !important;
-    }
   }
 }
 
@@ -714,85 +320,6 @@
       background-position: $right center !important;
       background-repeat: no-repeat !important;
       background-size: 1.5rem;
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
-    }
-  }
-}
-
-#address_wrapper .address-book-address,
-#address-book-form-open .address-book-address,
-.address_wrapper .address-book-address {
-  .country-label {
-    font-size: 0.75rem;
-    margin-bottom: 0.125rem;
-  }
-
-  .country-name {
-    font-size: 1rem;
-    color: $greyish;
-  }
-
-  .select2-container {
-    max-width: 100%;
-  }
-}
-
-.address-book-address {
-  .form-item.form-type-textfield {
-    label:last-of-type {
-      font-size: 1rem;
-      color: $greyish;
-      position: absolute;
-      #{$left}: 0;
-      top: -0.125rem;
-      transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
-      pointer-events: none;
-    }
-
-    input:focus ~ label:last-of-type,
-    label.active-label:not(.error) {
-      top: -1.25em;
-      bottom: 0;
-      #{$left}: 0;
-      opacity: 1;
-      font-size: 0.75rem;
-    }
-  }
-
-  .form-item-guest-delivery-home-address-shipping-address-line2,
-  .form-item-billing-address-address-billing-address-line2,
-  .form-item-field-address-0-address-address-line2,
-  .form-item-member-delivery-home-address-form-form-address-line2 {
-    input[type=text] ~ label:not(.active-label) {
-      font-size: 1rem !important;
-      color: $greyish !important;
-      position: absolute !important;
-      #{$left}: 0 !important;
-      top: -0.125rem !important;
-      transition: 0.2s ease all !important;
-    }
-
-    input[type=text]:focus ~ label {
-      top: -1.25em !important;
-      bottom: 0 !important;
-      #{$left}: 0 !important;
-      opacity: 1 !important;
-      font-size: 0.75rem !important;
-    }
-  }
-
-  .form-item.form-type-select {
-    padding-bottom: 1rem;
-    margin-top: 2.75rem !important;
-
-    label {
-      top: -1.375rem;
-      font-size: 0.75rem;
-
-      &.error {
-        top: 2rem;
-      }
     }
   }
 }
