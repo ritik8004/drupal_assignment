@@ -426,7 +426,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // Render the wrapper div for composition always so that the same can be
         // filled with data on variant selection.
-        $search_direction = $sku_entity->getType == 'configurable' ? 'children' : 'self';
+        $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
         $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
         $composition_markup = [
           '#theme' => 'product_composition_markup',
@@ -782,33 +782,60 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['quantity']['#suffix'] = '</span>';
 
   if (isset($form['ajax']) && isset($form['ajax']['configurables'])) {
+    // Prepare array of just the configurable options.
+    $configurables = [];
+    foreach ($form['ajax']['configurables'] as $configurable_key => $configurable) {
+      if (is_array($configurable) && !empty($configurable['#options'])) {
+        $configurables[$configurable_key] = $configurable;
+      }
+    }
+
+    // If there are no options to display, we show the product as not
+    // available.
+    if (empty($configurables)) {
+      $form['ajax']['configurables'] = [
+        '#markup' => '',
+      ];
+      $form['quantity'] = [
+        '#title' => '',
+        '#markup' => '',
+      ];
+      $form['add_to_cart'] = [
+        '#markup' => '<span class="out-of-stock">' . t('not available') . '</span>',
+      ];
+
+      return;
+    }
+
     // Attach size guide link to size attribute. This is statically attached to
     // size, we don't want it for any other attributes.
     if (isset($form['ajax']['configurables']['size'])) {
       $form['ajax']['configurables']['size']['#required_error'] = t('Please select a size.');
 
       // We show the size guide link if available as prefix.
-      if ($size_guide_link = _alshaya_acm_product_get_size_guide_link()) {
-        $form['ajax']['configurables']['size']['#prefix'] = $size_guide_link;
+      if ($size_guide_enabled = _alshaya_acm_product_check_size_guide_enabled()) {
+        $form['ajax']['configurables']['size']['#prefix'] = $size_guide_enabled;
       }
-    }
 
-    $site_default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
-    $configurable_sizes = $form['ajax']['configurables']['size'];
-    if (\Drupal::languageManager()->getCurrentLanguage()->getId() !== $site_default_langcode) {
-      $options = [];
+      // @TODO: This looks like related to GTM, also for now only limited to
+      // size attribute and not checking for other attributes.
+      $site_default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+      $configurable_sizes = $form['ajax']['configurables']['size'];
+      if (\Drupal::languageManager()->getCurrentLanguage()->getId() !== $site_default_langcode) {
+        $options = [];
 
-      foreach ($configurable_sizes['#options'] as $key => $option) {
-        $product_options_manager = \Drupal::service('acq_sku.product_options_manager');
+        foreach ($configurable_sizes['#options'] as $key => $option) {
+          $product_options_manager = \Drupal::service('acq_sku.product_options_manager');
 
-        // Fetch taxonomy_term from option Id.
-        $default_language_option = $product_options_manager->loadProductOptionByOptionId('size', $key, $site_default_langcode);
-        if ($default_language_option) {
-          $options[$option] = $default_language_option->getName();
+          // Fetch taxonomy_term from option Id.
+          $default_language_option = $product_options_manager->loadProductOptionByOptionId('size', $key, $site_default_langcode);
+          if ($default_language_option) {
+            $options[$option] = $default_language_option->getName();
+          }
         }
-      }
 
-      $form['#attached']['drupalSettings']['alshaya_product_size_config'] = $options;
+        $form['#attached']['drupalSettings']['alshaya_product_size_config'] = $options;
+      }
     }
 
     // In case of multiple config attributes, make sure the first one is
@@ -1264,9 +1291,9 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
  * @return string
  *   Link html as string or empty if not available.
  */
-function _alshaya_acm_product_get_size_guide_link() {
+function _alshaya_acm_product_check_size_guide_enabled() {
   // Check if we have the configuration set.
-  if (\Drupal::config('alshaya_acm_product.settings')->get('size_guide_link')) {
+  if (\Drupal::config('alshaya_acm_product.size_guide')->get('size_guide_enabled')) {
     $options = [
       'attributes' => [
         'class' => ['size-guide-link', 'use-ajax'],

@@ -24,11 +24,11 @@
 
   Drupal.behaviors.slideOutMenu = {
     attach: function (context, settings) {
-      const menuButton = $('.burger');
-      const closeButton = $('.menu-close');
-      const menuContent = $('.navigation__sub-menu');
-      const menuLogos = $('.menu-logo-navigation');
-      const overlayContent = $('.empty-overlay');
+      var menuButton = $('.burger');
+      var closeButton = $('.menu-close');
+      var menuContent = $('.navigation__sub-menu');
+      var menuLogos = $('.menu-logo-navigation');
+      var overlayContent = $('.empty-overlay');
 
       function toggleMenu() {
         menuButton.toggleClass('is-hidden');

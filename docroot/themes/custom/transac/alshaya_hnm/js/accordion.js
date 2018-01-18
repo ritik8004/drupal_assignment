@@ -10,7 +10,7 @@
     attach: function (context, settings) {
       var applyCoupon = $('#coupon-button');
       if (context === document) {
-        applyCoupon.prev().andSelf().wrapAll('<div class="card__content">');
+        applyCoupon.prev().addBack().wrapAll('<div class="card__content">');
       }
       $('.coupon-code-wrapper, .alias--cart #details-privilege-card-wrapper').each(function () {
         if (context === document) {

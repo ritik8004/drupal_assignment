@@ -3,13 +3,19 @@
 ACSF D8 commerce project with Magento integration done via Acquia Conductor.
 Multi brands and multi countries solution for selling Alshaya products online.
 
+## Build status for main branches:
+* Develop: <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=develop" alt="develop build status" />
+* Test (QA): <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=qa" alt="qa build status" />
+* UAT: <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=uat" alt="uat build status" />
+* Master: <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=master" alt="master build status" />
+
 ## BLT
 
 Please see the [BLT documentation](http://blt.readthedocs.io/en/latest/) for information on build, testing, and deployment processes.
 
 ## Resources
 
-* <a href="http://jira.alshaya.com:8080/secure/RapidBoard.jspa?projectKey=MMCP&rapidView=184&view=planning.nodetail">JIRA</a> - VPN Connection required.
+* <a href="http://jira.alshaya.com:8080/secure/RapidBoard.jspa?rapidView=284">JIRA</a> - VPN Connection required.
 * <a href="https://github.com/acquia-pso/alshaya">GitHub</a>
 * <a href="https://cloud.acquia.com/app/develop/applications/5ce588f5-ce9b-4a46-9b5b-a0c74e47feb2">Acquia Cloud subscription</a>
 * <a href="https://travis-ci.com/acquia-pso/alshaya">TravisCI</a>

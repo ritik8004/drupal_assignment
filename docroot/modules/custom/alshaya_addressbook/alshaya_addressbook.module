@@ -15,12 +15,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\user\Entity\User;
-use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
-
-/**
- * Delivery Matrix version 2.
- */
-const DM_VERSION_2 = '2';
+use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -87,7 +82,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   $magento_form = NULL;
 
-  if ($dm_version == DM_VERSION_2) {
+  if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
@@ -189,7 +184,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $area_parent = 0;
 
   // Change the fields if dm version is 2 and magento form has data.
-  if ($dm_version == DM_VERSION_2 && !empty($magento_form)) {
+  if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2 && !empty($magento_form)) {
     $fields_mapped = [];
     $mapping = $address_book_manager->getMagentoFieldMappings();
     $mapping = array_flip($mapping);
@@ -516,7 +511,7 @@ function _alshaya_addressbook_governate_list() {
   /** @var \Drupal\taxonomy\TermStorage $term_storage */
   $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
-  $term_tree = $term_storage->loadTree(AlshayaAddressBookManager::AREA_VOCAB, 0, 1, TRUE);
+  $term_tree = $term_storage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, 0, 1, TRUE);
 
   $term_list = [];
 
@@ -548,7 +543,7 @@ function _alshaya_addressbook_governate_list() {
 function _alshaya_addressbook_area_list($parent = NULL) {
   $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
 
-  if (empty($parent) &&  $dm_version == DM_VERSION_2) {
+  if (empty($parent) &&  $dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
     // Parent is required in DM_VERSION_2, not throwing error though.
     return [];
   }
@@ -556,7 +551,7 @@ function _alshaya_addressbook_area_list($parent = NULL) {
   /** @var \Drupal\taxonomy\TermStorage $term_storage */
   $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
-  $term_tree = $term_storage->loadTree(AlshayaAddressBookManager::AREA_VOCAB, $parent, 1, TRUE);
+  $term_tree = $term_storage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, $parent, 1, TRUE);
 
   $term_list = [];
 
@@ -568,7 +563,7 @@ function _alshaya_addressbook_area_list($parent = NULL) {
       /* \Drupal\taxonomy\Entity\Term $term */
       $term = $entity_repository->getTranslationFromContext($term);
 
-      if ($dm_version == DM_VERSION_2) {
+      if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
         $term_list[$term->id()] = $term->label();
       }
       else {
@@ -676,7 +671,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
 
     $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
 
-    if ($dm_version == DM_VERSION_2) {
+    if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       $variables['delivery_address']['administrative_area'] = _alshaya_addressbook_get_area_from_id($values[0]['administrative_area']);
 
       // Get full mapping to see if we need to display parent.
@@ -832,7 +827,7 @@ function _alshaya_addressbook_get_area_from_id($tid) {
   $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
 
   // Return as is for older version.
-  if ($dm_version != DM_VERSION_2) {
+  if ($dm_version != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
     return $tid;
   }
 

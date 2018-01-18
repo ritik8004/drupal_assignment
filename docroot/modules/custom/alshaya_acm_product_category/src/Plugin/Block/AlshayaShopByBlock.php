@@ -145,7 +145,7 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     $form['shop_by_voc']['level'] = [
       '#type' => 'select',
       '#title' => $this->t('Initial visibility level'),
-      '#default_value' => !empty($config['level']) ? $config['level'] : $defaults['level'],
+      '#default_value' => !empty($config['level']) ? $config['level'] : reset($options),
       '#options' => $options,
       '#required' => TRUE,
     ];

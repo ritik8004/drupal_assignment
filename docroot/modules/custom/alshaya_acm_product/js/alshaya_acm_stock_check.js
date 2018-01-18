@@ -72,7 +72,7 @@
 
       // Check stock for mobile & load add cart form if stock-check successful.
       if ($(window).width() < 768) {
-        $(window).load(function () {
+        $(window).on('load', function () {
           // Load cart form only for active carousel items on page load on PDP & Basket.
           $('.owl-item.active').each(function () {
             var activeItem = $(this);

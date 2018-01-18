@@ -3,8 +3,8 @@ type: module
 core: 8.x
 dependencies:
   - address:address
-  - alshaya_acm:alshaya_acm
   - alshaya_api:alshaya_api
+  - alshaya_acm:alshaya_acm
   - alshaya_config:alshaya_config
   - drupal:block
   - drupal:content_translation
@@ -16,4 +16,3 @@ dependencies:
   - drupal:taxonomy
   - telephone:telephone
   - drupal:views
-  - workbench_moderation:workbench_moderation

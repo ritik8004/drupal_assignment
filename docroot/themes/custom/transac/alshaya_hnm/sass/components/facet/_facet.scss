@@ -1,28 +1,20 @@
+@import "../../alshaya_white_label/sass/components/facet/_facet.scss";
+
 .c-facet {
   a {
     font-family: $hnm-regular;
-    margin-top: 0.75rem;
-    display: inline-block;
-    text-transform: lowercase;
-    font-size: 0.75rem;
     line-height: 1.83;
     color: $black-three;
+    font-weight: normal;
   }
 
   ul {
-    @extend %list-clear;
-
     @include breakpoint($desktop) {
       padding-top: 0.625rem;
     }
 
     input[type="text"] {
-      border: 1px solid $white;
       font-family: $hnm-regular;
-      font-size: 0.75rem;
-      padding: 0.25rem 0.5rem;
-      width: 13rem;
-      margin-bottom: 1.313rem;
 
       &::placeholder {
         color: $hnm-black-two;
@@ -31,34 +23,16 @@
     }
 
     li {
-      margin-#{$left}: -1px;
       margin-bottom: 1px;
       min-height: 2.125rem;
     }
   }
 
   label {
-    font-size: 0.875rem;
-    color: $grey-ash;
-    position: relative;
-    top: -1px;
-  }
-
-  .item-list {
-    padding: 1.5rem 0.5rem 1rem;
-    line-height: 1.6;
-    height: auto !important;
-  }
-
-  label {
-    font-size: 0;
-
     .facet-item__value {
       margin-#{$left}: 0.5rem;
 
       div {
-        display: inline;
-
         @include breakpoint($only-mobile) {
           display: inline-block;
         }
@@ -67,7 +41,6 @@
 
     .facet-item__count,
     .facet-item__value {
-      font-size: 0.875rem;
       text-transform: capitalize;
       line-height: 1.57;
       vertical-align: middle;
@@ -80,7 +53,6 @@
     }
 
     .facet-item__count {
-      margin-#{$left}: 0.125rem;
       font-family: $hnm-regular-nodir;
     }
   }
@@ -89,7 +61,6 @@
 .c-facet__label {
   @include arabic-letter-spacing;
 
-  font-size: 0.875rem;
   margin: 0 0.5rem 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -100,15 +71,3 @@
     font-weight: normal;
   }
 }
-
-.c-facet__blocks {
-  .item-list__checkbox {
-    max-height: 228px;
-    overflow: auto;
-  }
-
-  .facets-soft-limit-link {
-    display: none;
-  }
-}
-

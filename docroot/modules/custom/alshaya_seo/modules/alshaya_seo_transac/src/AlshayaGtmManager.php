@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac;
 
+use Behat\Gherkin\Node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
@@ -879,9 +880,8 @@ class AlshayaGtmManager {
       $customer_type = 'New Customer';
     }
 
-    $privilege_card = $current_user->get('field_privilege_card_number')->getValue();
     $privilege_customer = 'Regular Customer';
-    if (!empty($privilege_card) && isset($privilege_card[0]['value'])) {
+    if (!empty($current_user->get('field_privilege_card_number')->getString())) {
       $privilege_customer = 'Privilege Customer';
     }
     $data_layer_attributes = [
@@ -1099,7 +1099,10 @@ class AlshayaGtmManager {
         foreach ($orderItems as $orderItem) {
           $productSKU[] = $orderItem['sku'];
           $product_node = alshaya_acm_product_get_display_node($orderItem['sku']);
-          $productStyleCode[] = $product_node->get('field_skus')->getString();
+
+          if ($product_node instanceof NodeInterface) {
+            $productStyleCode[] = $product_node->get('field_skus')->getString();
+          }
         }
 
         $page_dl_attributes = [

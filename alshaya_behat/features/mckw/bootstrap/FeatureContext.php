@@ -481,12 +481,12 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   }
 
   /**
-   * @Given /^I select a product in stock$/
+   * @Given /^I select a product in stock on "([^"]*)"$/
    */
-  public function iSelectAProductInStock()
+  public function iSelectAProductInStockOn($css)
   {
     $page = $this->getSession()->getPage();
-    $all_products = $page->findById('block-views-block-alshaya-product-list-block-1');
+    $all_products = $page->find('css', $css);
     if ($all_products !== NULL) {
       $all_products = $all_products->findAll('css', '.c-products__item');
       $total_products = count($all_products);
@@ -967,18 +967,32 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   /**
    * @When /^I click a pointer on the map$/
    */
-  public function iClickAPointerOnTheMap()
-  {
-      $element = $this->getSession()
-          ->getPage()
-          ->find('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img');
-      if ($element !== null) {
-          $element->click();
-      } else {
-          throw new Exception('Pointer is not clickable');
-      }
+    public function iClickAPointerOnTheMap()
+    {
+        $element = $this->getSession()
+            ->getPage()
+            ->find('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img');
+        if ($element !== null) {
+            $element->click();
+        } else {
+            throw new Exception('Pointer is not clickable');
+        }
 
-  }
+    }
+
+    /**
+     * Scrolls an element into the viewport.
+     *
+     * @param string $selector
+     *   The element's CSS selector.
+     *
+     * @When I scroll to the :selector element
+     */
+    public function scrollToElement($selector)
+    {
+        $this->getSession()
+            ->executeScript('document.querySelector("' . addslashes($selector) . '").scrollIntoView()');
+    }
 
   /**
    * @Then /^the "([^"]*)" tab should be highlighted$/
@@ -1131,7 +1145,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       foreach ($all_orders as $order) {
           $title = $order->find('css', 'a div.second-third.wrapper > div.second > div.dark.order-name')
               ->getText();
-          if (stripos($title, $arg1) == false) {
+          if (stripos($title, $arg1) === false) {
               throw new Exception('Filter by name is not working on Orders tab in my account section');
           }
       }
@@ -1154,9 +1168,9 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       $strnew = substr_replace($date_text, ' ', '-3', '1');
       $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
       $time_array[] = $date->format('U');
-    }
-    if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
-      throw new \Exception('Orders are not displayed in descending order');
+        if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
+            throw new \Exception('Orders are not displayed in descending order');
+        }
     }
   }
 
@@ -1165,15 +1179,15 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iShouldSeeAllOrdersFor($arg1)
   {
-    $page = $this->getSession()->getPage();
-    $all_orders = $page->findAll('css', '.order-item');
-    foreach ($all_orders as $order) {
-      $order_id = $order->find('css', '.dark.order-id')->getText();
-      $actual_order_id = substr($order_id, 0, 7);
-    }
-    if ($actual_order_id !== $arg1) {
-      throw new \Exception('Filter for Order ID is not working');
-    }
+      $page = $this->getSession()->getPage();
+      $all_orders = $page->findAll('css', '.order-item');
+      foreach ($all_orders as $order) {
+          $order_id = $order->find('css', '.dark.order-id')->getText();
+          $actual_order_id = substr($order_id, 0, 7);
+          if (stripos($actual_order_id, $arg1) === false) {
+              throw new \Exception('Filter for Order ID is not working');
+          }
+      }
   }
 
   /**
@@ -1720,5 +1734,19 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         } else {
             throw new Exception('Breadcrumbs not displayed');
         }
+    }
+
+    /**
+     * @When /^I enter a location in "([^"]*)"$/
+     */
+    public function iEnterALocationIn($css_location)
+    {
+        $page = $this->getSession()->getPage();
+        $change_link = $page->find('css', '.change-location-link');
+        if ($change_link !== null && $change_link->isVisible()) {
+            $change_link->click();
+
+        }
+        $this->iSelectFirstAutocomplete('shuwaikh', $css_location);
     }
 }

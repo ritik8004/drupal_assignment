@@ -39,16 +39,23 @@ class ProductController extends ControllerBase {
    * Page callback for size guide modal.
    */
   public function sizeGuideModal() {
-    $product_config = $this->config('alshaya_acm_product.settings');
-    $size_guide_enabled = $product_config->get('size_guide_link');
+    $config = $this->config('alshaya_acm_product.size_guide');
+    $size_guide_enabled = $config->get('size_guide_enabled');
     $build = [];
 
     // If size guide is enabled on site.
     if ($size_guide_enabled) {
-      $size_guide_content = $product_config->get('size_guide_modal_content.value');
+      $size_guide_content_nid = $config->get('size_guide_modal_content_node');
+      $size_guide_content = '';
+      if (!empty($size_guide_content_nid)) {
+        $size_guide_content = $this->entityTypeManager()->getStorage('node')->load($size_guide_content_nid);
+        $size_guide_content->setTitle('');
+        $size_guide_content = render($this->entityTypeManager()->getViewBuilder('node')->view($size_guide_content, 'full'));
+      }
+
       $build = [
         '#type' => 'inline_template',
-        '#template' => '<div class="size-guide-content">{{ size_guide_content | raw }}</div>',
+        '#template' => '<div class="size-guide-content">{{ size_guide_content }}</div>',
         '#context' => [
           'size_guide_content' => $size_guide_content,
         ],

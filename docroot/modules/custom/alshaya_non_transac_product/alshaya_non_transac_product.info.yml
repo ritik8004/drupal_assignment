@@ -21,4 +21,3 @@ dependencies:
   - drupal:user
   - drupal:views
   - views_infinite_scroll:views_infinite_scroll
-  - workbench_moderation:workbench_moderation

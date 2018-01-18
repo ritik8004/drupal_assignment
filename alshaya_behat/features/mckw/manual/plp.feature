@@ -2,7 +2,7 @@
 Feature: Test the PLP page
 
   Background:
-    Given I am on "/baby-clothing-0"
+    Given I am on "/baby-clothing/baby-newborn-18m/bodysuits"
     And I wait for the page to load
 
   @prod
@@ -40,7 +40,7 @@ Feature: Test the PLP page
   Scenario: As a Guest
     I should be able to select a product in stock and
     complete the checkout journey
-    When I select a product in stock
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
@@ -98,7 +98,7 @@ Feature: Test the PLP page
   complete the checkout journey
     When I follow "عربية"
     And I wait for the page to load
-    When I select a product in stock
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
@@ -135,7 +135,7 @@ Feature: Test the PLP page
   Scenario: As a Guest
   I should be able to select a product in stock and
   complete the checkout journey
-    When I select a product in stock
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
@@ -172,7 +172,7 @@ Feature: Test the PLP page
   complete the checkout journey
     When I follow "عربية"
     And I wait for the page to load
-    When I select a product in stock
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish

@@ -8,7 +8,6 @@ dependencies:
   module:
     - text
     - viewsreference
-    - workbench_moderation
 id: paragraph.views_reference.default
 targetEntityType: paragraph
 bundle: views_reference

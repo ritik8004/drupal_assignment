@@ -29,7 +29,7 @@ function alshaya_static_html_preprocess_html(&$variables) {
     '#type' => 'inline_template',
     '#template' => '{{ inline_css | raw }}',
     '#context' => [
-      'inline_css' => '<style>' . $css . '</style>',
+      'inline_css' => $css,
     ],
   ];
 
@@ -38,7 +38,7 @@ function alshaya_static_html_preprocess_html(&$variables) {
     '#type' => 'inline_template',
     '#template' => '{{ inline_js | raw }}',
     '#context' => [
-      'inline_js' => '<script>' . $js . '</script>',
+      'inline_js' => $js,
     ],
   ];
 

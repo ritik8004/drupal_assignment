@@ -20,12 +20,6 @@ alshaya_acm_product.settings:
     not_buyable_help_text:
       type: text_format
       label: 'Not-buyable product help text'
-    size_guide_link:
-      type: integer
-      label: 'Enable Size Guide link'
-    size_guide_modal_content:
-      type: text_format
-      label: 'Size guide content'
     vat_text:
       type: label
       label: 'VAT Inclusion text'
