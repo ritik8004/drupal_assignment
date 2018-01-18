@@ -20,13 +20,13 @@ function alshaya_static_html_update_8001() {
   $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.field_display_amp_menu.yml'));
   if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
     FieldStorageConfig::create($yml)->save();
-  }
 
-  $configs = [
-    'field.field.node.static_html.field_display_amp_menu',
-    'core.entity_form_display.node.static_html.default',
-    'core.entity_view_display.node.static_html.default',
-  ];
-  // Create field.
-  alshaya_config_install_configs($configs, 'alshaya_static_html');
+    $configs = [
+      'field.field.node.static_html.field_display_amp_menu',
+      'core.entity_form_display.node.static_html.default',
+      'core.entity_view_display.node.static_html.default',
+    ];
+    // Create field.
+    alshaya_config_install_configs($configs, 'alshaya_static_html');
+  }
 }
