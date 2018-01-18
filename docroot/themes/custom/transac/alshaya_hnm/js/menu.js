@@ -125,7 +125,7 @@
         $('.menu--one__list').find('.menu__list--active').removeClass('.menu__list--active');
       });
 
-      $('.main--menu .has-child .menu--one__link').hover(function () {
+      $('.main--menu .has-child .menu--one__link, .main--menu .has-child .menu--two__list').hover(function () {
         $('body').addClass('overlay');
       }, function () {
         $('body').removeClass('overlay');

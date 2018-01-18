@@ -40,6 +40,19 @@ function alshaya_acm_update_8009() {
   // Load the user which we want to bind to the consumer.
   $user = user_load_by_name(Settings::get('alshaya_acm_user_username'));
 
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $repository */
+  $repository = \Drupal::service('entity.repository');
+  $consumer = $repository->loadEntityByUuid('consumer', Settings::get('alshaya_acm_soauth_client_uuid'));
+
+  if ($consumer instanceof Consumer) {
+    // Consumer is already created. Log message and return.
+    \Drupal::logger('alshaya_acm')->warning('Consumer already created for uuid @uuid.', [
+      '@uuid' => Settings::get('alshaya_acm_soauth_client_uuid'),
+    ]);
+
+    return;
+  }
+
   // Add Simple Oauth - Consumer client.
   $client = Consumer::create([]);
   $client->set('label', 'Alshaya ACM');

@@ -92,3 +92,4 @@ permissions:
   - 'migrate alshaya_stores'
   - 'access site in maintenance mode'
   - 'administer size guide settings'
+  - 'administer sitemap settings'

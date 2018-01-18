@@ -359,15 +359,17 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
     '#markup' => alshaya_acm_price_format($totals['sub']),
   ];
 
+  if ((float) $totals['tax'] > 0) {
+    $form['totals']['tax']['value'] = [
+      '#markup' => alshaya_acm_price_format($totals['tax']),
+    ];
+  }
+
   // Check tax config.
   $tax_config = \Drupal::config('alshaya_acm_checkout.settings')->get('checkout_show_tax_info');
-  // Show tax info only if set to true.
-  if ($tax_config) {
-    if ((float) $totals['tax'] > 0) {
-      $form['totals']['tax']['value'] = [
-        '#markup' => alshaya_acm_price_format($totals['tax']),
-      ];
-    }
+  // If not showing the tax config.
+  if (!$tax_config && isset($form['totals']['tax'])) {
+    unset($form['totals']['tax']);
   }
 
   if ((float) $totals['discount'] != 0) {
