@@ -5,9 +5,12 @@ dependencies:
     - core.entity_view_mode.paragraph.w1920
     - field.field.paragraph.banner.field_banner
     - field.field.paragraph.banner.field_link
+    - field.field.paragraph.banner.field_promo_block_button
+    - field.field.paragraph.banner.field_video
     - paragraphs.paragraphs_type.banner
     - responsive_image.styles.w1920
   module:
+    - entity_reference_revisions
     - link
     - responsive_image
 id: paragraph.banner.w1920
@@ -36,4 +39,14 @@ content:
     third_party_settings: {  }
     type: link
     region: content
-hidden: {  }
+  field_promo_block_button:
+    type: entity_reference_revisions_entity_view
+    weight: 2
+    region: content
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+hidden:
+  field_video: true

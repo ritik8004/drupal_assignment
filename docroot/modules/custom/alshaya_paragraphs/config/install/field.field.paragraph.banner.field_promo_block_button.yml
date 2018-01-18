@@ -1,0 +1,99 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_promo_block_button
+    - paragraphs.paragraphs_type.banner
+    - paragraphs.paragraphs_type.promo_block_button
+  module:
+    - entity_reference_revisions
+id: paragraph.banner.field_promo_block_button
+field_name: field_promo_block_button
+entity_type: paragraph
+bundle: banner
+label: 'Promo Block Button'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    negate: 0
+    target_bundles:
+      promo_block_button: promo_block_button
+    target_bundles_drag_drop:
+      1_row_1st_col_2_row_2nd_col:
+        weight: 25
+        enabled: false
+      1_row_1_col:
+        weight: 26
+        enabled: false
+      1_row_1_col_dept:
+        weight: 27
+        enabled: false
+      1_row_2_col:
+        weight: 28
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 29
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 30
+        enabled: false
+      1_row_2_col_dept:
+        weight: 31
+        enabled: false
+      1_row_3_col:
+        weight: 32
+        enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 33
+        enabled: false
+      1_row_3_col_dept:
+        weight: 34
+        enabled: false
+      1_row_3_col_text:
+        weight: 35
+        enabled: false
+      banner:
+        weight: 36
+        enabled: false
+      banner_full_width:
+        weight: 37
+        enabled: false
+      block_reference:
+        weight: 38
+        enabled: false
+      image_title_subtitle:
+        weight: 39
+        enabled: false
+      main_menu_highlight:
+        weight: 40
+        enabled: false
+      offers_bordered:
+        weight: 41
+        enabled: false
+      promo_block:
+        weight: 42
+        enabled: false
+      promo_block_button:
+        enabled: true
+        weight: 43
+      promo_block_text:
+        weight: 44
+        enabled: false
+      related_info_one_column:
+        weight: 45
+        enabled: false
+      title_textarea:
+        weight: 46
+        enabled: false
+      video:
+        weight: 47
+        enabled: false
+      views_reference:
+        weight: 48
+        enabled: false
+field_type: entity_reference_revisions

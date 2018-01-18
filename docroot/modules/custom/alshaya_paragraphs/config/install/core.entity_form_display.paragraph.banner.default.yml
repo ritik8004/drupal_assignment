@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.paragraph.banner.field_banner
     - field.field.paragraph.banner.field_link
+    - field.field.paragraph.banner.field_promo_block_button
     - field.field.paragraph.banner.field_video
     - image.style.thumbnail
     - paragraphs.paragraphs_type.banner
@@ -11,6 +12,8 @@ dependencies:
     - image
     - inline_entity_form
     - link
+    - paragraphs
+    - workbench_moderation
 id: paragraph.banner.default
 targetEntityType: paragraph
 bundle: banner
@@ -31,6 +34,18 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
+    region: content
+  field_promo_block_button:
+    weight: 12
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: _none
+    third_party_settings: {  }
+    type: entity_reference_paragraphs
     region: content
   field_video:
     type: inline_entity_form_complex
