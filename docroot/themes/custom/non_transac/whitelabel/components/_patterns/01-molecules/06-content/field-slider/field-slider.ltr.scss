@@ -75,6 +75,7 @@
 
 .slick-prev {
   @include icon(chevronleft) {
+    line-height: 1.12;
     padding-#{direction(right)}: 0.1875rem;
   }
 
@@ -83,7 +84,9 @@
 
 .slick-next {
   @include icon(chevronright) {
-    padding-#{direction(right)}: 0.1875rem;
+    line-height: 1.12;
+    padding-left: 0.1875rem;
+    padding-right: 0.1875rem;
   }
 
   right: 1rem;
