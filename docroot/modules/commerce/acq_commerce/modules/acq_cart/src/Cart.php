@@ -135,7 +135,7 @@ class Cart implements CartInterface {
 
     $items = $this->cart->items;
 
-    foreach ($items as &$item) {
+    foreach ($items as $key => &$item) {
       if (!isset($item['sku'])) {
         continue;
       }
@@ -145,13 +145,13 @@ class Cart implements CartInterface {
       if (!($sku instanceof SKU)) {
         // We may have some products in cart which are now deleted in Drupal.
         // This can happen when an item is blocked or deleted in Magento.
-        $this->logger->warning('Invalid SKU @sku found in Cart id: @cart_id.', [
+        \Drupal::logger('acq_cart')->warning('Invalid SKU @sku found in Cart id: @cart_id.', [
           '@sku' => $item['sku'],
           '@cart_id' => $this->id(),
         ]);
 
         // Remove the item from cart in session.
-        $this->removeItemFromCart($item['sku']);
+        unset($items[$key]);
 
         // Continue to next item, this item is removed in call above.
         continue;
