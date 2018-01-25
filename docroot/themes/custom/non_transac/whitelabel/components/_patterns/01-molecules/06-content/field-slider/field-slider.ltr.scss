@@ -14,10 +14,6 @@
   img {
     width: 100%;
     vertical-align: middle;
-
-    @include breakpoint($above-palm) {
-      min-height: 16.625rem;
-    }
   }
 }
 
@@ -136,3 +132,41 @@
     }
   }
 }
+
+/* image slider min-height issue */
+.slick-slider {
+  overflow: hidden;
+
+  .slick-list {
+    width: 47.5rem;
+    #{$left}: calc((100vw - 47.5rem) / 2);
+    min-height: 10.5rem;
+
+    @include breakpoint($lap) {
+      width: 71.875rem;
+      min-height: 15.875rem;
+      #{$left}: calc((100vw - 71.875rem) / 2);
+    }
+
+    .ucbrowser & {
+      @include breakpoint(orientation portrait) {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      html[lang=ar] & {
+        left: -50%;
+        right: auto;
+        transform: translateX(50%);
+      }
+    }
+
+    @include breakpoint($desk) {
+      width: 120rem;
+      min-height: 26.5rem;
+      #{$left}: calc((100vw - 120rem) / 2);
+    }
+  }
+}
+
+/* image slider min-height issue */
