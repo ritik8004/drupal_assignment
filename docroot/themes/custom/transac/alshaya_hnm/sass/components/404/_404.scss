@@ -1,10 +1,7 @@
+@import "../../alshaya_white_label/sass/components/404/_404.scss";
 // 404 and Maintenance.
+
 .not-found {
-  position: relative;
-  min-height: 26.5rem;
-  padding-top: 1.5rem;
-  max-width: 76.375rem;
-  margin: 0 auto 2rem;
   margin-bottom: 4.5rem;
 
   @include breakpoint($upto-desktop) {
@@ -13,34 +10,6 @@
 
   @include breakpoint($desktop) {
     margin-bottom: 6.5rem;
-  }
-
-  html[lang=ar] & {
-    line-height: 1.125;
-  }
-
-  .maintenance-page & {
-    line-height: normal;
-
-    html[lang=ar] & {
-      direction: ltr;
-    }
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 20%;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    background: $faun;
-    z-index: -1;
-    border: solid 1px $white-two;
-  }
-
-  .not-found__image {
-    direction: ltr;
   }
 
   .not-found__body__container {
@@ -56,19 +25,22 @@
     margin-top: 10%;
     color: $matterhorn;
     padding-bottom: 2.5rem;
+    position: relative;
+    right: unset;
+    bottom: unset;
+    height: auto;
+    display: block;
+
+    a {
+      color: $black;
+    }
 
     .maintenance-page & {
       font-family: $hnm-regular;
     }
 
     h1 {
-      line-height: 1;
-      font-size: 2.25rem;
       font-family: $hnm-bold;
-      font-weight: normal;
-      color: $marine-blue;
-      margin-bottom: 5px;
-      margin-top: 0;
 
       .maintenance-page & {
         font-family: $hnm-bold;
@@ -76,18 +48,12 @@
 
       &.title--arabic {
         font-family: $hnm-regular;
-        font-size: 30px;
-        direction: rtl;
-        color: $marine-blue;
       }
     }
 
     h2 {
-      margin-top: 0;
-      margin-bottom: 0;
       color: $black;
       font-family: $hnmpromo-regular;
-      font-weight: normal;
       font-size: 1.625rem;
 
       .maintenance-page & {
@@ -101,13 +67,7 @@
     }
   }
 
-  img {
-    vertical-align: middle;
-  }
-
   p {
-    margin-top: 0;
-    margin-bottom: 0;
     color: $grey-ash;
     font-family: $hnm-regular;
 
@@ -118,8 +78,6 @@
 
     &.arabic {
       font-family: $hnm-regular;
-      font-size: 20px;
-      direction: rtl;
     }
   }
 }
@@ -170,18 +128,6 @@
 }
 
 .maintenance-page {
-  border-top: 24px solid $white-four;
-  margin-top: 0;
-
-  html[lang=ar] & {
-    margin-top: 0;
-  }
-
-  .maintenance__logo--wrapper {
-    max-width: 76.375rem;
-    margin: auto;
-  }
-
   .maintenance__logo {
     margin-top: 3rem;
 
@@ -193,11 +139,6 @@
     @include breakpoint($desktop) {
       text-align: center;
       margin-right: 2rem;
-    }
-
-    svg,
-    img {
-      height: 4rem;
     }
   }
 }
