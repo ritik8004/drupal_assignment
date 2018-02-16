@@ -451,22 +451,23 @@
 
   .change-location {
     display: inline-block;
+
     @include clearfix;
   }
 }
 
 // Google Places Autocomplete results.
 .pac-container {
-    .pac-item,
-    .pac-not-found {
-      padding: 0.125rem 0.6rem;
-      font-family: $hnm-regular;
+  .pac-item,
+  .pac-not-found {
+    padding: 0.125rem 0.6rem;
+    font-family: $hnm-regular;
 
-      &:first-child {
-        border-top: none;
-      }
+    &:first-child {
+      border-top: none;
     }
   }
+}
 
 .click-collect-top-stores {
   .ajax-progress-throbber {
@@ -498,59 +499,59 @@
 .click-collect-all-stores {
   &.inline-modal-wrapper {
     @include breakpoint($tablet) {
-     border: 1px solid $black;
+      border: 1px solid $black;
     }
 
     @include breakpoint($only-mobile) {
-     .stores-list-all {
-       ul {
-         li {
-           .store-name {
-             color: $hnm-black-two;
-           }
-         }
-       }
-     }
+      .stores-list-all {
+        ul {
+          li {
+            .store-name {
+              color: $hnm-black-two;
+            }
+          }
+        }
+      }
     }
 
     .close-inline-modal {
-     background-color: $hnm-black-two;
+      background-color: $hnm-black-two;
     }
 
     .all-stores-info {
-     h3 {
-       color: $hnm-black-two;
-     }
+      h3 {
+        color: $hnm-black-two;
+      }
     }
 
     ul {
-     li {
-       .store {
-         &-name {
-           color: $hnm-black-two;
-         }
+      li {
+        .store {
+          &-name {
+            color: $hnm-black-two;
+          }
 
-         &-low-stock {
-           font-family: $hnm-regular;
-         }
-       }
-     }
+          &-low-stock {
+            font-family: $hnm-regular;
+          }
+        }
+      }
     }
 
     .form-item-location {
-     margin-bottom: 0.5rem;
-     float: $left;
+      margin-bottom: 0.5rem;
+      float: $left;
     }
 
     .stores-list-all {
-     .ajax-progress-throbber {
-       .throbber {
-         background-image: url(../imgs/icons/ic-loader.svg) !important;
-         background-position: $right center !important;
-         background-repeat: no-repeat !important;
-         background-size: 1.5rem;
-       }
-     }
+      .ajax-progress-throbber {
+        .throbber {
+          background-image: url(../imgs/icons/ic-loader.svg) !important;
+          background-position: $right center !important;
+          background-repeat: no-repeat !important;
+          background-size: 1.5rem;
+        }
+      }
     }
   }
 }
