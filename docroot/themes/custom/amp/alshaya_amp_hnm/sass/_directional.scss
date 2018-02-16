@@ -93,9 +93,4 @@ $last-child: if-ltr(":last-child", ":first-child");
   }
 }
 
-$hnm-bold: if-ltr($hnm-bold, $hnm-arabic-bold);
-$hnm-arabic-bold: if-ltr($hnm-arabic-bold, $hnm-bold);
-$hnm-demibold: if-ltr($hnm-demibold, $hnm-arabic-medium);
-$hnm-arabic-medium: if-ltr($hnm-arabic-medium, $hnm-demibold);
 $hnm-regular: if-ltr($hnm-regular, $hnm-arabic-regular);
-$hnm-arabic-regular: if-ltr($hnm-arabic-regular, $hnm-regular);
