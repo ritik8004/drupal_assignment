@@ -180,8 +180,8 @@
 .c-address-book {
   .block-system > a {
     @extend %button-wide;
-    text-transform: uppercase;
 
+    text-transform: uppercase;
     font-size: 0.875rem;
 
     @include breakpoint($tablet) {
@@ -196,7 +196,7 @@
     @include breakpoint($desktop) {
       top: -0.625rem;
       margin-bottom: 0.625rem;
-      min-width: 11.75rem
+      min-width: 11.75rem;
     }
   }
 }
