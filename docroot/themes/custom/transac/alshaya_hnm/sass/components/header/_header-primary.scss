@@ -165,6 +165,7 @@ header {
       position: relative;
       margin-bottom: -2px;
       vertical-align: middle;
+      background: none;
     }
 
     .cart-link-total {
@@ -556,6 +557,7 @@ header {
         display: block;
         height: 2.75rem;
         border-top: 2px solid transparent;
+        border-bottom: none;
         position: relative;
         z-index: 100;
         margin-top: -1px;
@@ -565,8 +567,11 @@ header {
         letter-spacing: 1px;
       }
 
+      &:hover,
       &.active {
         a.menu--one__link {
+          border-top: none;
+
           &::after {
             content: '';
             height: 2px;
@@ -1394,6 +1399,8 @@ header {
 .c-pre-content__region {
   @include breakpoint($desktop) {
     height: 2.75rem;
+    border-top: none;
+    border-bottom: none;
   }
 }
 
