@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc3b042c33c11a0d986adfb94ab17599",
+    "content-hash": "1414059c0729ecf0b084a039fe9ad3d0",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -91,7 +91,10 @@
             ],
             "type": "composer-plugin",
             "extra": {
-                "class": "Acquia\\Blt\\Composer\\Plugin"
+                "class": "Acquia\\Blt\\Composer\\Plugin",
+                "patches_applied": {
+                    "ACR2-2704 css linting sniff": "./patches/blt/css_lint_sniff_ACR2-2704.patch"
+                }
             },
             "autoload": {
                 "psr-4": {
