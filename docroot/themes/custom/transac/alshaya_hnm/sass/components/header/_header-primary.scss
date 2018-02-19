@@ -574,8 +574,6 @@ header {
       &:hover,
       &.active {
         a.menu--one__link {
-          border-top: none;
-
           &::after {
             content: '';
             height: 2px;
@@ -1370,6 +1368,19 @@ header {
   }
 }
 
+html[lang=ar] {
+  .block-system-branding-block {
+    .site-brand-home {
+      img {
+        width: auto;
+        height: auto;
+        margin-top: 0;
+        max-width: 100%;
+      }
+    }
+  }
+}
+
 .html--overlay {
   @include breakpoint($upto-desktop) {
     overflow: hidden;
@@ -1508,6 +1519,19 @@ html {
             &.menu--one__link {
               border: none;
               color: $black;
+              border-top: 2px solid transparent;
+            }
+          }
+        }
+      }
+    }
+
+    &:hover {
+      li {
+        &.menu--one__list-item {
+          a {
+            &.menu--one__link {
+              border-bottom: none;
             }
           }
         }
