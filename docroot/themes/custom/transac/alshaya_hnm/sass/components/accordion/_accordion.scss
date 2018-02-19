@@ -1,7 +1,6 @@
-.c-accordion {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+@import "../../alshaya_white_label/sass/components/accordion/_accordion.scss";
 
+.c-accordion {
   &:last-child {
     border-bottom: 1px solid $white;
   }
@@ -10,19 +9,9 @@
 .c-accordion__title {
   @include arabic-letter-spacing;
 
-  position: relative;
-  border-top: 1px solid $white;
   color: $hnm-black-two;
-  font-size: 0.875rem;
-  font-weight: normal;
-  height: 2.9375rem;
-  line-height: 2.9375rem;
-  margin-bottom: 0;
-  margin-top: 0;
   text-transform: uppercase;
   letter-spacing: 1px;
-  outline: none;
-  cursor: pointer;
 
   @include icon(dropdown-expand, after) {
     position: absolute;
@@ -36,7 +25,5 @@
 
   &.ui-state-active {
     @include icon(dropdown-collapse, after);
-
-    border-bottom: 1px solid $white;
   }
 }
