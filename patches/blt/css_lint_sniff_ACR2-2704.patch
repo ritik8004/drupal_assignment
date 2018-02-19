@@ -1,16 +1,3 @@
-diff --git a/scripts/travis/.travis.yml b/scripts/travis/.travis.yml
-index 851c8a664..860789c74 100644
---- a/scripts/travis/.travis.yml
-+++ b/scripts/travis/.travis.yml
-@@ -27,7 +27,7 @@ cache:
-   - "$HOME/.npm"
-   - "$HOME/.nvm"
-   - "vendor"
--  # Cache front end dependecies to dramatically improve build time.
-+  # Cache front end dependencies to dramatically improve build time.
-   # - "docroot/themes/custom/mytheme/node_modules"
-   # - "docroot/themes/custom/mytheme/bower_components"
-
 diff --git a/scripts/travis/tick-tock.sh b/scripts/travis/tick-tock.sh
 index a77976ef1..8c56291fe 100755
 --- a/scripts/travis/tick-tock.sh
@@ -21,11 +8,3 @@ index a77976ef1..8c56291fe 100755
  done
 +
 +exit $?
-diff --git a/travis.php.ini b/travis.php.ini
-index 802ff0911..7999e9615 100644
---- a/travis.php.ini
-+++ b/travis.php.ini
-@@ -1 +1 @@
--memory_limit = 2G
-\ No newline at end of file
-+memory_limit = -1
