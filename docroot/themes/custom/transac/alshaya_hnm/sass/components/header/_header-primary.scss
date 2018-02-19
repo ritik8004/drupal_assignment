@@ -83,6 +83,8 @@ header {
     @include breakpoint($only-tablet) {
       #{$right}: 6.5625rem;
       margin-top: -3px;
+      bottom: auto;
+      #{$left}: auto;
     }
 
     input[type="text"] {
@@ -165,6 +167,7 @@ header {
       position: relative;
       margin-bottom: -2px;
       vertical-align: middle;
+      background: none;
     }
 
     .cart-link-total {
@@ -229,6 +232,7 @@ header {
     li {
       list-style: none;
       z-index: 4;
+      position: static;
 
       .notification--on & {
         z-index: 3;
@@ -354,6 +358,7 @@ header {
       #{$right}: 0.375rem;
       font-size: 0;
       padding-top: 0.3125rem;
+      margin-top: 0;
 
       @include icon(mappin) {
         color: $hnm-black-two;
@@ -556,6 +561,7 @@ header {
         display: block;
         height: 2.75rem;
         border-top: 2px solid transparent;
+        border-bottom: none;
         position: relative;
         z-index: 100;
         margin-top: -1px;
@@ -565,6 +571,7 @@ header {
         letter-spacing: 1px;
       }
 
+      &:hover,
       &.active {
         a.menu--one__link {
           &::after {
@@ -1361,6 +1368,19 @@ header {
   }
 }
 
+html[lang=ar] {
+  .block-system-branding-block {
+    .site-brand-home {
+      img {
+        width: auto;
+        height: auto;
+        margin-top: 0;
+        max-width: 100%;
+      }
+    }
+  }
+}
+
 .html--overlay {
   @include breakpoint($upto-desktop) {
     overflow: hidden;
@@ -1394,6 +1414,8 @@ header {
 .c-pre-content__region {
   @include breakpoint($desktop) {
     height: 2.75rem;
+    border-top: none;
+    border-bottom: none;
   }
 }
 
@@ -1482,6 +1504,36 @@ html {
       input[type="text"] {
         &::placeholder {
           color: transparent;
+        }
+      }
+    }
+  }
+}
+
+.block-alshaya-main-menu {
+  .active--menu--links {
+    li {
+      &.menu--one__list-item {
+        &:hover {
+          a {
+            &.menu--one__link {
+              border: none;
+              color: $black;
+              border-top: 2px solid transparent;
+            }
+          }
+        }
+      }
+    }
+
+    &:hover {
+      li {
+        &.menu--one__list-item {
+          a {
+            &.menu--one__link {
+              border-bottom: none;
+            }
+          }
         }
       }
     }

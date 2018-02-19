@@ -1,28 +1,4 @@
-.acq-content-product {
-  .gallery-wrapper {
-    @include breakpoint($only-tablet) {
-      padding-bottom: 2rem;
-    }
-  }
-
-  .special--price .price {
-    color: $special-price;
-  }
-
-  .form-item-configurables-size .selected-text {
-    color: $black;
-  }
-
-  .content__title_wrapper {
-    html[lang=ar] & {
-      line-height: 1.5;
-    }
-  }
-
-  .cloudzoom__thumbnails__image {
-    outline: transparent;
-  }
-}
+@import '../../alshaya_white_label/sass/components/products/_product-backer.scss';
 
 article[gtm-sku-type="simple"] {
   .acq-content-product-modal {
@@ -30,11 +6,6 @@ article[gtm-sku-type="simple"] {
       .field--name-field-skus {
         .form-item.form-type-select.form-item-quantity {
           float: $left;
-        }
-
-        button.edit-add-to-cart {
-          float: $left;
-          margin-top: 1rem;
         }
       }
     }

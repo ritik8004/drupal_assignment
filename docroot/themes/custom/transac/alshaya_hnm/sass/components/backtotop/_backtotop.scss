@@ -1,3 +1,5 @@
+@import "../../alshaya_white_label/sass/components/backtotop/_backtotop.scss";
+
 #backtotop {
   @include breakpoint($only-mobile) {
     #{$right}: 0;
@@ -26,21 +28,7 @@
     }
   }
 
-  &:hover {
-    opacity: 0.75 !important;
-  }
-
-  text-indent: 0;
-  bottom: 1px;
-  opacity: 1 !important;
-  cursor: pointer;
-  position: fixed;
-  font-size: 0.5rem;
   font-family: $hnm-regular;
-  z-index: 5;
-  display: block;
-  background: none;
-  text-align: center;
   color: $grey-ash;
   width: 4.375rem;
   line-height: 0.9375rem;
