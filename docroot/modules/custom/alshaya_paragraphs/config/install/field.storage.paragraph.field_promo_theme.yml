@@ -12,10 +12,10 @@ settings:
   allowed_values:
     -
       value: dark
-      label: 'Dark'
+      label: Dark
     -
       value: light
-      label: 'Light'
+      label: Light
   allowed_values_function: ''
 module: options
 locked: false
