@@ -1,8 +1,14 @@
 @import '../../alshaya_white_label/sass/components/imagegallery/_imagegallery.scss';
 
 .ui-dialog .ui-dialog-titlebar-close {
+  @include icon(close) {
+    font-size: 1.875rem;
+  }
+
   color: $white-five;
   background-color: $hnm-black-two;
+  font-size: 0;
+  text-indent: inherit;
 }
 
 #product-image-gallery-container {
