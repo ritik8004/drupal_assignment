@@ -1,14 +1,11 @@
+@import '../../alshaya_white_label/sass/base/form/button/_button.scss';
+
 %button-wide,
 .button-wide {
   background-color: $hnm-black-two;
   color: $white-five;
   font-family: $hnm-bold;
   text-transform: uppercase;
-  display: inline-block;
-  font-size: 12px;
-  min-width: 162px;
-  padding: 11px;
-  text-align: center;
 }
 
 %button-brand,
@@ -64,19 +61,6 @@
 }
 
 .load-more-button {
-  clear: both;
-  display: block;
-
-  @include breakpoint($tablet) {
-    padding-top: 1rem;
-    max-width: 35.8%;
-  }
-
-  @include breakpoint($desktop) {
-    max-width: 26.5%;
-    padding-#{$right}: 1%;
-  }
-
   a {
     color: $hnm-black-two;
     display: block;

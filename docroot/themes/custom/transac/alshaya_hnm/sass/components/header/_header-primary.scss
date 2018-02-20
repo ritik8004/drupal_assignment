@@ -1011,6 +1011,7 @@ header {
     margin-#{$right}: 0.4rem;
     margin-#{$left}: 0.375rem;
     vertical-align: middle;
+    background: transparent;
 
     @include icon(chevron#{$left}, after) {
       color: $hnm-black-two;
@@ -1172,7 +1173,7 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      width: 59%;
+      width: 68%;
 
       .logged-out & {
         padding: 0.9rem 0.25rem;
@@ -1186,7 +1187,7 @@ header {
         }
 
         &.account {
-          width: 67%;
+          width: 68%;
         }
       }
     }

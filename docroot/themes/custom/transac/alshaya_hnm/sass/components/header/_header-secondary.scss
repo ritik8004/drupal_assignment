@@ -36,6 +36,7 @@
       vertical-align: middle;
       letter-spacing: 0.8px;
       text-transform: uppercase;
+      padding: 0.375rem 0.75rem;
 
       &:hover,
       &.is-active {
@@ -49,11 +50,18 @@
 
         html[lang='ar'] & {
           letter-spacing: 0.8px;
+          font-family: $hnm-regular;
         }
       }
     }
 
     line-height: 1;
+
+    &:hover,
+    &.is-active {
+      background-color: $white-five;
+      color: $hnm-black-four;
+    }
   }
 
   .menu--account {
@@ -77,7 +85,8 @@
 
 .c-my-account-nav {
   @include breakpoint($only-tablet) {
-    width: 20rem;
+    width: 20rem !important;
+    max-width: 84.375%;
   }
 
   h3 {
@@ -177,6 +186,41 @@ body {
     .region__menu-secondary {
       text-align: center;
     }
+
+    .block-language-blocklanguage-interface {
+      .ar,
+      .en {
+        a {
+          &::before {
+            content: unset;
+          }
+
+          &::after {
+            content: unset;
+          }
+        }
+      }
+    }
+
+    .menu--account {
+      li {
+        &:last-child,
+        &:first-child,
+        &:nth-child(2) {
+          a {
+            &::before {
+              content: unset;
+            }
+          }
+        }
+      }
+    }
+
+    .stores-finder {
+      &::before {
+        content: unset;
+      }
+    }
   }
 }
 
@@ -184,6 +228,22 @@ html[lang='ar'] {
   .c-menu-secondary {
     a {
       font-family: $hnm-arabic-regular;
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  #block-account-menu {
+    ul {
+      background-color: $white-five;
+    }
+  }
+
+  .c-menu-primary {
+    .store {
+      &:hover {
+        background-color: $hnm-black-two;
+      }
     }
   }
 }
