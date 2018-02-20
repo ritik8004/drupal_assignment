@@ -1956,7 +1956,12 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     public function iSelectFromTheDropdown($arg1)
     {
         $page = $this->getSession()->getPage();
-        $page->find('css', '.select2-selection__arrow')->click();
+        $dropdown = $page->find('css', '.select2-selection__arrow');
+        if ($dropdown !== null) {
+            $dropdown->click();
+        } else {
+            throw new Exception('Dropdown not displayed on page');
+        }
         $status = $page->find('named', array('content', $arg1));
         if ($status !== null) {
             $status->click();

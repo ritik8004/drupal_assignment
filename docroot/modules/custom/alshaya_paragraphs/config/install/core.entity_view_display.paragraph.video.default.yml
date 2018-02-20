@@ -13,9 +13,10 @@ content:
     weight: 0
     label: hidden
     settings:
-      link: true
-      view_mode: default
+      view_mode: embedded
+      link: false
     third_party_settings: {  }
     type: entity_reference_entity_view
     region: content
-hidden: {  }
+hidden:
+  scheduled_publication: true

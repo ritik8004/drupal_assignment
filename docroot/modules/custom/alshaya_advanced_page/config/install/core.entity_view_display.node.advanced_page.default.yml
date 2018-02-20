@@ -99,10 +99,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  workbench_moderation_control:
-    weight: 0
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
+  content_moderation_control: true
   langcode: true

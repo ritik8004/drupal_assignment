@@ -1,157 +1,5 @@
-/*
-.c-footer-secondary {
-  background: $hnm-black;
-  font-size: 0.6875rem;
-  position: relative;
-  z-index: 4;
+@import '../../alshaya_white_label/sass/components/footer/_footer-secondary.scss';
 
-  @include breakpoint($tablet) {
-    padding: 0 1.5em;
-  }
-
-  @include breakpoint($only-mobile) {
-    text-align: center;
-  }
-
-  .l-container {
-    @include container(64.35rem);
-  }
-}
-
-.c-footer-secondary__region {
-  @include breakpoint($tablet) {
-    float: $left;
-    width: 100%;
-  }
-}
-
-.c-footer__logos {
-  line-height: 4.375rem;
-
-  @include breakpoint($tablet) {
-    float: $left;
-    padding-#{$right}: 1.5rem;
-    margin-#{$right}: 1.5rem;
-  }
-
-  @include breakpoint($only-mobile) {
-    background: white;
-  }
-
-  @include breakpoint($desktop) {
-    float: $left;
-    margin-#{$right}: 0;
-  }
-
-  @include breakpoint($only-tablet) {
-    margin-#{$right}: 0;
-
-    ul {
-      margin-top: 4px;
-    }
-  }
-
-  ul {
-    @extend %list-clear;
-    @extend %list--horizontal;
-  }
-
-  li:not(:last-child) {
-    margin-#{$right}: 1.5rem;
-
-    @include breakpoint($tablet) {
-      margin-#{$right}: 1.8rem;
-    }
-
-    @include breakpoint($desktop) {
-      margin-#{$right}: 1.6rem;
-    }
-  }
-}
-
-[class^="c-footer__logo--"] {
-  @include u-image-replacement;
-
-  display: inline-block;
-  vertical-align: middle;
-  pointer-events: none;
-}
-
-.c-footer__logo--verisign {
-  background-image: url("../imgs/cards/card-verisign.png");
-  height: 34px;
-  width: 68px;
-}
-
-.c-footer__logo--visa {
-  background-image: url("../imgs/cards/card-visa.png");
-  height: 25px;
-  width: 60px;
-}
-
-.c-footer__logo--mastercard {
-  background-image: url("../imgs/cards/card-mastercard.png");
-  height: 24px;
-  width: 66px;
-}
-
-.c-footer__copy {
-  color: $black-two;
-  line-height: 1.5;
-
-  @include breakpoint($only-tablet) {
-    max-width: 59%;
-    width: 59%;
-
-    .field--name-body {
-      p {
-        font-size: 0.625rem;
-        margin-top: 1rem;
-      }
-    }
-  }
-
-  @include breakpoint($tablet) {
-    height: 4.375rem;
-    display: table;
-    float: $right;
-    margin-#{$right}: 1rem;
-  }
-
-  @include breakpoint($only-mobile) {
-    padding: 2rem 1.25rem;
-    line-height: 1.5;
-  }
-
-  .field--name-body p {
-    margin-top: 0;
-    color: $grey-ash;
-    font-size: 0.75rem;
-    margin-bottom: 0;
-
-    @include breakpoint($only-mobile) {
-      line-height: 19px;
-    }
-
-    @include breakpoint($tablet) {
-      color: $black;
-      font-size: 0.6875rem;
-    }
-  }
-
-  .field--name-body {
-    @include breakpoint($tablet) {
-      display: table-cell;
-      vertical-align: middle;
-    }
-  }
-
-  @include breakpoint($desktop) {
-    width: 67%;
-    margin-#{$right}: 3rem;
-  }
-}
-*/
 .region__footer-secondary {
   padding: 2.5rem 0.5rem 2.625rem;
   background-color: $hnm-black;
@@ -168,30 +16,38 @@
 .c-footer__copy {
   width: 100%;
   margin: 0 auto;
-  padding-top: 0.5rem;
-  padding-bottom: 1.125rem;
+  padding: 0.5rem 0 1.125rem;
 
   @include breakpoint($tablet) {
     width: 35.4375rem;
     padding-top: 0.75rem;
+    max-width: none;
+    float: none;
   }
 
-  p {
-    font-family: $hnm-regular;
-    font-size: 0.5625rem;
-    line-height: 1.44;
-    text-align: center;
-    color: $grey5;
-    margin: 0;
+  .field--name-body {
+    p {
+      font-family: $hnm-regular;
+      font-size: 0.5625rem;
+      line-height: 1.44;
+      text-align: center;
+      color: $grey5;
+      margin: 0;
+    }
   }
 }
 
 .c-footer__logos {
+  float: none;
+  background-color: $hnm-black;
+  line-height: 1;
+
   .menu {
     @extend %list-clear;
     @extend %list--horizontal;
 
     text-align: center;
+    float: none;
 
     @include breakpoint($tablet) {
       padding-bottom: 1.375rem;
@@ -245,5 +101,13 @@
     text-align: center;
     margin: 0;
     border-bottom: none;
+  }
+}
+
+.c-footer-secondary {
+  padding: 0;
+
+  .l-container {
+    max-width: none;
   }
 }

@@ -1,24 +1,7 @@
-html {
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-html,
-body {
-  height: 100%;
-}
+@import '../../alshaya_white_label/sass/base/_base.scss';
 
 body {
   font-family: $hnm-regular;
-}
-
-html[lang='ar'] {
-  line-height: 1;
 }
 
 html,

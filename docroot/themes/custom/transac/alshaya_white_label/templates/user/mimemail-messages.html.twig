@@ -33,7 +33,7 @@
     <div class="footer" style="border-top: 2px solid #003971; text-align: center;">
       <div style="padding-top: 30px; padding-bottom: 50px;">
         {% for name, link in links %}
-          <a href="{{ link }}" target="_blank">
+          <a href="{{ link }}" target="_blank" style="text-decoration: none;">
             <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/../alshaya_white_label/imgs/social-icons/{{ name }}-icon.png" alt="{{ name|t }}" width="24.3px" title="{{ name|t }}" />
           </a>
         {% endfor %}

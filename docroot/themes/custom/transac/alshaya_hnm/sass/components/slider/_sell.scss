@@ -1,34 +1,16 @@
+@import '../../alshaya_white_label/sass/components/slider/_sell.scss';
+
 .horizontal-upell,
 .horizontal-related,
 .horizontal-crossell {
   .view-product-slider {
-    text-align: center;
-    margin: auto;
-    margin-bottom: 2.4rem;
-
     .views-row {
-      position: relative;
-
       .ajax-progress-throbber {
-        position: absolute;
-        #{$left}: 40%;
-
-        .message {
-          display: none;
-        }
-
         .throbber {
           background-image: url(../imgs/icons/ic-loader.svg) !important;
           background-position: $right center !important;
           background-repeat: no-repeat !important;
           background-size: 1.5rem;
-          padding-left: 0.625rem;
-          padding-right: 0.625rem;
-        }
-
-        @include breakpoint($only-mobile) {
-          bottom: -2rem;
-          #{$left}: 40%;
         }
       }
     }
@@ -36,156 +18,13 @@
 }
 
 .view-product-slider {
-  text-align: center;
-  margin: auto;
-  margin-bottom: 2.4rem;
-
-  .js-form-wrapper {
-    @include breakpoint($only-mobile) {
-      position: relative;
-    }
-
-    .size-guide-link {
-      padding-top: 1.2rem;
-    }
-  }
-
-  @include breakpoint($tablet) {
-    padding: 0 2.75rem;
-    margin-#{$left}: 0;
-    margin-bottom: 1.5rem;
-  }
-
   .c-products__item__label {
     font-size: 0.875rem;
     font-family: $hnm-regular;
     color: $hnm-black-two;
-    font-weight: normal;
-    max-width: 10rem;
-    margin: 0.625rem auto;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .quantity.out-of-stock {
-    @include breakpoint($only-mobile) {
-      margin-bottom: 0.75rem;
-      padding: 0;
-      position: relative;
-      padding-bottom: 0;
-      float: $right;
-      margin-top: 0.875rem;
-      color: $black;
-      text-align: $left;
-    }
-  }
-
-  .add-to-cart.out-of-stock {
-    @include breakpoint($only-mobile) {
-      width: 100%;
-    }
-  }
-
-  .owl-dots {
-    position: relative;
-    margin-top: 0.625rem;
-    display: table;
-    width: 100%;
-
-    @include breakpoint($tablet) {
-      display: none;
-    }
-
-    .owl-dot {
-      width: 2.8125rem;
-      height: 0.3125rem;
-      border: 0;
-      border-radius: 0.25rem;
-      color: $greyish;
-      display: table-cell;
-      margin: 0;
-      position: relative;
-      z-index: 1;
-      top: 0;
-    }
-
-    &::before {
-      content: "";
-      background: $whisper-light;
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 2px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-  }
-
-  .views-row {
-    @include breakpoint($only-tablet) {
-      .price {
-        max-width: 100% !important;
-      }
-
-      padding: 0 0.5rem;
-    }
-
-    .use-ajax {
-      outline: transparent;
-    }
-
-    .promotions {
-      margin-top: 0.25rem;
-
-      a {
-        font-size: 0.75rem;
-        color: $cherry;
-        display: inline-block;
-        margin-#{$left}: 0.125rem;
-        margin-#{$right}: 0.125rem;
-      }
-    }
-  }
-
-  .price-wrapper {
-    color: $black;
-    display: block;
-    font-size: 0.875rem;
-    margin-bottom: 0.187rem;
-  }
-
-  .owl-prev {
-    @include breakpoint($tablet) {
-      left: -2.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      left: -1.875rem;
-    }
-  }
-
-  .owl-next {
-    @include breakpoint($tablet) {
-      right: -2.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      right: -2rem;
-    }
-  }
-
-  .owl-prev::before,
-  .owl-next::before {
-    font-size: 2rem;
   }
 
   .owl-carousel .owl-item img {
-    width: 100%;
-    margin: auto;
-    max-width: 11.625rem;
-
     @include breakpoint($only-tablet) {
       object-fit: cover;
     }
@@ -200,22 +39,6 @@
     @include breakpoint($tablet) {
       top: 32%;
     }
-  }
-}
-
-.horizontal-crossell {
-  margin-top: 2.125rem;
-
-  @include breakpoint($tablet) {
-    margin-top: 1.5rem;
-  }
-}
-
-.horizontal-related,
-.horizontal-crossell,
-.horizontal-upell {
-  @include breakpoint($tablet) {
-    margin-bottom: 3.75rem;
   }
 }
 
@@ -234,72 +57,18 @@
   }
 }
 
-.sell--image,
-.sell-description {
-  width: 50%;
-  vertical-align: middle;
-  position: relative;
-}
-
-.sell-description {
-  @include breakpoint($upto-tablet) {
-    vertical-align: top;
-    padding-top: 1.4375rem;
-  }
-}
-
-.sell--image img {
-  max-height: 10rem;
-}
-
 .mobile--only--sell .sell-sku {
-  clear: both;
-
-  .field--name-name,
-  .field--name-sku,
-  .field--name-attr-special-price {
-    display: none;
-  }
-
   .sku-base-form {
     .js-form-submit {
-      display: block;
-      float: none;
-      width: 100%;
-      clear: both;
-      font-size: 0.875rem;
       text-transform: uppercase;
-      color: $white-five;
       background: $hnm-black-two;
-      border: none;
-      padding: 0.656rem;
       margin-top: 1rem;
-
-      @include breakpoint($only-mobile) {
-        max-width: 100%;
-      }
-    }
-
-    label {
-      display: block;
-      position: absolute;
-      top: -1.5625rem;
-      font-size: 0.75rem;
-      padding: 0.3125rem 0;
-      padding-#{$right}: 1.25rem;
-      #{$left}: 0;
     }
 
     .js-form-wrapper {
       float: $left;
 
       .form-type-select {
-        @include select-wrapper(12.375rem);
-
-        direction: $dir;
-        padding: 0;
-        position: relative;
-        padding-bottom: 3rem;
         margin-top: 1rem;
         background: $white-five;
 
@@ -317,10 +86,6 @@
               }
             }
           }
-        }
-
-        .ajax-progress {
-          display: none;
         }
 
         &.form-item-configurables-size {
@@ -347,39 +112,6 @@
         @include select-style(12.375rem);
 
         width: 100%;
-      }
-    }
-
-    .select2-container {
-      @include select2-style(100%);
-
-      float: $left;
-    }
-
-    .form-item-configurables-size {
-      select {
-        display: block !important;
-        direction: $dir;
-      }
-
-      .select2Option {
-        display: none;
-      }
-    }
-
-    .form-item-quantity {
-      @include select-wrapper(4.375rem);
-
-      float: $right;
-      padding: 0;
-      margin-bottom: 1.5rem;
-      margin-top: 2.1875rem;
-      background: $white-five;
-
-      select {
-        @include select-style(4.375rem);
-
-        direction: $dir;
       }
     }
   }
@@ -414,26 +146,6 @@
   }
 }
 
-.has--special--price {
-  .price-amount,
-  .price-currency {
-    text-decoration: line-through;
-  }
-}
-
-.node--view-mode-search-result {
-  .has--special--price,
-  .special--price {
-    display: inline-block;
-  }
-
-  .has--special--price {
-    @include breakpoint($only-mobile) {
-      display: block;
-    }
-  }
-}
-
 .price--discount span,
 .special--price .price-amount,
 .special--price .price-currency,
@@ -445,19 +157,6 @@
   margin-top: 0;
   font-size: 0.625rem;
   color: $cherry;
-
-  @include breakpoint($tablet) {
-    margin-top: 0.75rem;
-    font-size: 0.75rem;
-
-    td.price & {
-      margin-top: 0.245rem;
-    }
-  }
-
-  @include breakpoint($desktop) {
-    margin-top: 0.375rem;
-  }
 }
 
 .no-carousel {

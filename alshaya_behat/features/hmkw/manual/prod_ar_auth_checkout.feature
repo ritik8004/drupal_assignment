@@ -1,4 +1,4 @@
-@javascript @checkout @arabic @manual @ar_checkout @mmcpa-1930 @prod
+@javascript @arabic @manual @mmcpa-1930 @prod @prod_checkout
 Feature: As an authenticated user
   I should be able to checkout
   using various payment options on Arabic site

@@ -48,4 +48,4 @@ drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_detach_queue
 # Save the dump for later use and use in local.
 timestamp=$(date +%s)
 db_prefix=${uri//[-._]/}
-drush8 @$site.$target_env --uri=$uri sql-dump | gzip > ~/$target_env/post_db_copy_$db_prefix_$timestamp.sql.gz
+drush8 @$site.$target_env --uri=$uri sql-dump | gzip > ~/$target_env/post_db_copy_${db_prefix}_${timestamp}.sql.gz

@@ -53,4 +53,4 @@ hidden:
   field_product_category: true
   langcode: true
   links: true
-  workbench_moderation_control: true
+  content_moderation_control: true

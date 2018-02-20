@@ -1,74 +1,9 @@
+@import '../../alshaya_white_label/sass/components/cloudzoom/_cloudzoom.scss';
+
 .cloudzoom {
-  @include clearfix;
-
-  max-width: 100%;
-
   .cloudzoom__herocontainer {
-    position: relative;
-
     .product-labels {
       height: auto;
-      width: 5rem;
-      z-index: 4;
-
-      img {
-        width: 100%;
-        height: auto;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      width: 100%;
-      float: none;
-    }
-
-    @include breakpoint($desktop) {
-      width: calc(100% - (5.75rem + 1rem));
-      float: $right;
-    }
-
-    #yt-vi-container {
-      overflow: hidden;
-    }
-  }
-
-  #cloud-zoom-wrap {
-    text-align: center;
-
-    #wrap {
-      display: inline-block !important;
-      z-index: 4 !important;
-
-      @include breakpoint($only-tablet) {
-        z-index: 3 !important;
-      }
-    }
-
-    img {
-      height: 100%;
-      width: auto;
-    }
-  }
-
-  .cloudzoom__thumbnails {
-    @include breakpoint($only-tablet) {
-      width: 100%;
-      float: none;
-      margin-#{$right}: 0;
-      position: relative;
-    }
-
-    @include breakpoint($desktop) {
-      width: 5.625rem;
-      margin-#{$right}: 1rem;
-      float: $left;
-      position: static;
-
-      #lightSlider {
-        .slick-list {
-          padding: 0 !important;
-        }
-      }
     }
   }
 }
@@ -77,230 +12,33 @@
   .img-wrap {
     @include breakpoint($tablet) {
       height: 36em;
-      overflow: hidden;
     }
-
-    @include breakpoint($desktop) {
-      overflow: hidden;
-
-      img {
-        height: 100%;
-        width: auto;
-      }
-    }
-  }
-
-  .mobile-hover-text {
-    @include breakpoint($only-tablet) {
-      @include u-visibility(block);
-    }
-
-    @include breakpoint($desktop) {
-      @include u-visibility(none);
-    }
-
-    width: 100%;
-    padding: 1rem;
-    font-size: 0.75rem;
-    text-align: center;
-    color: $brownish-grey;
   }
 
   .hover-text {
-    @include breakpoint($only-tablet) {
-      @include u-visibility(none);
-    }
-
-    @include breakpoint($desktop) {
-      @include u-visibility(block);
-    }
-
-    width: 100%;
-    padding: 1.5rem;
-    font-size: 0.75rem;
-    text-align: center;
     color: $hnm-black-two;
   }
 }
 
 #cloud-zoom-big {
   top: 5.92rem !important;
-  z-index: 99;
 
   @include if-rtl {
     right: 132.5% !important;
-    left: auto !important;
   }
 
   @include if-ltr {
     left: 132.5% !important;
-    right: auto !important;
-  }
-
-  border: 1px solid $white;
-
-  @include breakpoint($only-tablet) {
-    @include u-visibility(none, true);
-  }
-}
-
-.cloud-zoom-lens {
-  @include breakpoint($only-tablet) {
-    @include u-visibility(none, true);
-  }
-}
-
-#product-image-gallery {
-  .slick-list {
-    padding: 0 !important;
-  }
-}
-
-.cloudzoom .cloud-zoom-lens {
-  cursor: zoom-in;
-}
-
-.mobilegallery {
-  padding-bottom: 1.75rem;
-  position: relative;
-
-  .subtext {
-    width: 100%;
-    padding: 1rem;
-    font-size: 0.75rem;
-    text-align: center;
-    color: $white-five;
-    line-height: 1;
-    background: $black-two;
-    margin-top: 0;
-    opacity: 0.62;
-    position: absolute;
-    bottom: 3.125rem;
-
-    p {
-      margin: 0.1875rem;
-    }
-  }
-
-  .lSAction {
-    & > a {
-      height: 2.188rem;
-      width: 2.188rem;
-      z-index: 2;
-    }
-
-    .lSPrev {
-      @include icon(chevronleft);
-
-      background: $white-five;
-      border-radius: 2.188rem;
-      font-size: 2.188rem;
-      text-align: center;
-      color: $black;
-    }
-
-    .lSNext {
-      @include icon(chevronright);
-
-      background: $white-five;
-      border-radius: 2.188rem;
-      font-size: 2.188rem;
-      text-align: center;
-      color: $black;
-    }
-  }
-
-  & > .lSSlideOuter {
-    & > .lSPager {
-      position: absolute;
-      width: 100%;
-      bottom: 1.25rem;
-      z-index: 0;
-
-      &.lSpg > li {
-        a {
-          background-color: $white-five;
-          border: 1px solid $marine-blue-two;
-        }
-
-        &.active {
-          a {
-            background-color: $marine-blue-two;
-          }
-        }
-      }
-    }
   }
 }
 
 @include breakpoint($only-tablet) {
-  #lightSlider {
-    max-width: 27rem;
-
-    &.pager-yes {
-      padding: 0 3rem;
-    }
-  }
-
   #product-image-gallery,
   #lightSlider {
-    position: relative;
     height: 9.875rem;
-    margin: 0 auto;
-    padding-#{$left}: 0;
-
-    .slick-list {
-      padding: 0 !important;
-    }
-
-    .slick {
-      &-arrow {
-        height: 100%;
-        background: $white-five;
-        top: 0;
-
-        &:focus {
-          outline: none;
-        }
-      }
-
-      &-prev {
-        left: 0;
-        right: auto;
-      }
-
-      &-next {
-        left: auto;
-        right: 0;
-      }
-
-      &-current {
-        border: 1px solid $black !important;
-      }
-    }
 
     .slick-slide {
       height: 9.875rem !important;
-      padding: 0.125rem;
-      border: 1px solid transparent;
-
-      img {
-        width: auto;
-        height: 100%;
-        margin: 0 auto;
-      }
-    }
-  }
-
-  #product-image-gallery {
-    margin-top: 1rem;
-
-    &.pager-yes {
-      padding: 0 2.5rem;
-    }
-
-    .slick-slide {
-      margin-#{$right}: 0.4375rem;
     }
   }
 }
@@ -309,77 +47,16 @@
   #product-image-gallery,
   #lightSlider {
     height: 30.75rem;
-    margin: 0 0.625rem 0 0;
-    width: 100%;
-    position: relative;
-    padding-#{$left}: 0;
-
-    &.pager-yes {
-      padding: 2rem 0;
-    }
-
-    .slick {
-      &-arrow {
-        position: absolute;
-        height: 2rem;
-        width: 100%;
-        #{$right}: 0;
-        #{$left}: 0;
-        background: $white-five;
-
-        &:focus {
-          outline: none;
-        }
-      }
-
-      &-prev {
-        top: 0;
-        bottom: auto;
-
-        @include icon(chevronup) {
-          margin: 0 auto;
-        }
-      }
-
-      &-next {
-        bottom: 0;
-        top: auto;
-
-        @include icon(chevrondown) {
-          margin: 0 auto;
-        }
-      }
-
-      &-current {
-        border: 1px solid $black;
-      }
-    }
 
     .slick-slide {
-      width: 5.625rem !important;
       height: 8.1875rem !important;
-      margin: 0.3125rem 0;
-      padding: 2px;
-
-      img {
-        width: auto;
-        height: 100%;
-        margin: 0 auto;
-      }
     }
   }
 }
 
 .cloud-zoom-loading {
-  font-size: 0;
-  text-indent: 9999em;
-  color: transparent;
   background: transparent url(../imgs/icons/ic-loader.svg) center no-repeat;
   background-size: 2rem 2rem;
-  border: none;
-  width: 2rem !important;
-  left: 48% !important;
-  height: 2rem !important;
 }
 
 @include breakpoint($only-tablet) {

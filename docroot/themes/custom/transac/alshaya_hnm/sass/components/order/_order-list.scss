@@ -1,69 +1,22 @@
+@import "../../alshaya_white_label/sass/components/order/_order-list.scss";
+
 .c-order-list {
   .subtitle {
-    border-bottom: 1px solid $white;
-    margin-top: 1.25rem;
-    font-size: 0.875rem;
     font-family: $hnm-demibold;
-
-    @include breakpoint($desktop) {
-      margin-top: 2.625rem;
-      font-size: 1rem;
-    }
-  }
-
-  .block-local-tasks-block {
-    display: none;
-  }
-
-  .region__content {
-    position: relative;
-  }
-
-  .no--orders {
-    margin-bottom: 3.1rem;
   }
 
   .order-search-form {
-    border-bottom: 1px solid $whisper-dark;
-    margin-top: 12px;
-    padding-bottom: 12px;
-
     @include breakpoint($tablet) {
-      border: 0;
-      margin-top: 0;
-      padding-bottom: 0;
-      position: absolute;
       top: 0.4rem;
-      #{$right}: 0;
-      #{$left}: auto;
     }
 
     @include breakpoint($desktop) {
       top: -0.25rem;
     }
-
-    .form-item {
-      @include breakpoint($only-tablet) {
-        position: relative;
-        text-align: $left;
-      }
-    }
   }
 }
 
 .alshaya-acm-customer-order-list-search {
-  text-align: $right;
-  font-size: 12px;
-
-  .form-actions,
-  .form-item {
-    display: inline-block;
-  }
-
-  .c-input__bar {
-    display: none;
-  }
-
   .form-item {
     input,
     select {
@@ -91,85 +44,22 @@
 
       @include breakpoint($tablet) {
         display: block;
-        pointer-events: none;
-        position: absolute;
-        top: -27px;
-        #{$left}: 2px;
-        #{$right}: auto;
-        min-width: 10.0625rem;
       }
-
-      @include breakpoint($desktop) {
-        position: static;
-        min-width: 0;
-      }
-    }
-  }
-
-  .form-type-select {
-    position: relative;
-    vertical-align: top;
-
-    @include select-wrapper(9.375rem);
-
-    select {
-      @include select-style(9.375rem);
-    }
-
-    @include breakpoint($desktop) {
-      @include select-wrapper(14.63rem);
-
-      .select2-container {
-        @include select2-style(11.63rem);
-      }
-
-      margin-#{$left}: 23px;
     }
   }
 
   .form-text {
     border: 1px solid $hnm-black-two;
     border-#{$right}: none;
-    padding-top: 0.3125rem;
-    padding-bottom: 0.25rem;
-    padding-#{$left}: 1rem;
-    padding-#{$right}: 0.8rem;
-    width: 7.8125rem;
-
-    @include breakpoint($tablet) {
-      width: 7.9375rem;
-      padding-#{$left}: 0.75rem;
-    }
-
-    @include breakpoint($desktop) {
-      margin-#{$left}: 0.75rem;
-      padding-#{$left}: 1rem;
-      width: 9.4375rem;
-    }
   }
 
   .form-actions {
-    position: relative;
-
-    @include breakpoint($desktop) {
-      margin-#{$right}: 0.3125rem;
-    }
-
     @include icon(search, after) {
       background-color: $white-five;
       border: 1px solid $hnm-black-two;
       border-#{$left}: none;
       color: $hnm-black-two;
       line-height: 0.93;
-      font-size: 1.625rem;
-      pointer-events: none;
-      position: absolute;
-      text-align: center;
-      #{$right}: 0.25rem;
-      display: block;
-      height: 2.1875rem;
-      width: 2.1875rem;
-      padding: 0.3125rem 0;
     }
   }
 
@@ -177,89 +67,16 @@
     font-size: 0;
     height: 2.1875rem;
     width: 2.1875rem;
-    position: relative;
-    float: left;
-    #{$left}: -5px;
-    z-index: 1;
-    opacity: 0;
-
-    html[lang=ar] & {
-      width: 2.125rem;
-    }
-  }
-}
-
-.c-order-list .orders-list-pager-wrapper {
-  margin-bottom: 24px;
-  padding-top: 8px;
-  text-align: center;
-
-  button {
-    @extend %button-brand;
-
-    width: 19rem;
-
-    @include breakpoint($tablet) {
-      width: 6.625rem;
-    }
-
-    @include breakpoint($desktop) {
-      width: 21.375rem;
-    }
-  }
-}
-
-.block-alshaya-user-recent-orders + .c-order-help {
-  @include breakpoint($tablet) {
-    border-top: 1px solid $white;
   }
 }
 
 .recent__orders--list {
-  margin-bottom: 0;
-  border: none;
-  border-collapse: separate;
-  border-spacing: 0;
-
-  .order-summary-row:hover td {
-    background: $white-four;
-  }
-
-  @include breakpoint($desktop) {
-    table-layout: fixed;
-    height: 5.9rem;
-  }
-
-  .recent__orders--body td {
-    border-top: 1px solid $white;
-  }
-
-  &:nth-of-type(1) {
-    td {
-      border-top: none;
-    }
-  }
-
   &.user__order--detail .order-summary-row td {
-    padding: 1.2rem 1.5rem 0.675rem;
-
-    @include breakpoint($desktop) {
-      padding: 1.313rem 1.5rem;
-    }
-
     &.above-mobile {
       @include breakpoint($only-tablet) {
         padding-right: 1rem;
         vertical-align: middle;
       }
-
-      @include breakpoint($desktop) {
-        width: 22.9%;
-      }
-    }
-
-    &.destop-only {
-      width: 6.875rem;
     }
 
     &.toggle--icon {
@@ -267,74 +84,6 @@
         width: 28.7%;
       }
     }
-
-    &.order-transaction {
-      width: 13.75rem;
-
-      @include breakpoint($only-tablet) {
-        min-width: 10.1rem;
-        width: 10.1rem;
-        padding-#{$right}: 0;
-      }
-
-      @include breakpoint($desktop) {
-        width: 20.8%;
-      }
-
-      &:nth-child(3) {
-        font-size: 0.725rem;
-      }
-    }
-  }
-
-  td {
-    @include breakpoint($tablet) {
-      width: 11.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      width: 18.3%;
-    }
-  }
-
-  .order__details--description {
-    @include breakpoint($only-tablet) {
-      padding-#{$right}: 0;
-    }
-  }
-
-  .order-item-row td {
-    padding: 1.313rem 1.5rem 1.8rem;
-
-    &:first-child {
-      @include breakpoint($only-tablet) {
-        padding-#{$right}: 0;
-        padding-bottom: 0.375rem;
-      }
-    }
-  }
-
-  .order-item-row .order__details--summary {
-    @include breakpoint($desktop) {
-      padding-top: 1.75rem;
-    }
-  }
-
-  .currency-code.prefix {
-    display: block;
-  }
-
-  .order-summary-row {
-    cursor: pointer;
-    position: relative;
-
-    .tablet-only {
-      margin-top: 0.5rem;
-    }
-  }
-
-  .toggle--icon {
-    position: relative;
   }
 
   .toggle--icon .icon-ic_dropdown-expand {
@@ -355,82 +104,8 @@
   }
 
   .order__detail--link {
-    text-align: $right;
-    font-size: 12px;
-
-    td {
-      background-color: $whisper-light;
-      padding: 16px 24px;
-    }
-
     a {
       color: $hnm-black-two;
-    }
-  }
-
-  .order--items {
-    @include breakpoint($tablet) {
-      white-space: nowrap;
-      overflow: hidden;
-      max-width: 9.2rem;
-      text-overflow: ellipsis;
-
-      html[lang=ar] & {
-        position: relative;
-        display: inline-block;
-        text-overflow: inherit;
-
-        &::after {
-          content: "...";
-          background: $white-five;
-          position: absolute;
-          left: 0;
-          padding-right: 1px;
-          width: 0.75rem;
-        }
-      }
-    }
-
-    @include breakpoint($desktop) {
-      max-width: 10.2rem;
-    }
-  }
-
-  .order-summary-row td {
-    background-color: $white-five;
-    line-height: 1.2;
-  }
-
-  .order-item-row {
-    display: none;
-  }
-
-  .total--price {
-    @include breakpoint($only-tablet) {
-      vertical-align: bottom;
-    }
-  }
-
-  .order-item-row {
-    td .tablet-only {
-      margin-top: 1.875rem;
-    }
-
-    .dark {
-      @include breakpoint($only-tablet) {
-        margin-bottom: 0.1875rem;
-        margin-top: 0.3125rem;
-      }
-    }
-  }
-
-  .order__detail--link {
-    td.tablet-only {
-      @include breakpoint($only-tablet) {
-        margin-top: 0;
-        width: 100%;
-        display: table-cell;
-      }
     }
   }
 }
@@ -458,66 +133,13 @@
   }
 }
 
-.no--orders {
-  color: $black;
-  padding-top: 1rem;
-  font-size: 14px;
-  font-weight: bold;
-
-  @include breakpoint($tablet) {
-    text-align: center;
-  }
-}
-
 .block-alshaya-acm-customer > .no--orders + a {
-  @extend %button-wide;
-
-  display: block;
-  max-width: 19rem;
-  margin: auto;
-  margin-top: 1.75rem;
-  position: static;
-}
-
-.block-alshaya-user-recent-orders {
-  .no--orders {
-    @include breakpoint($tablet) {
-      text-align: $left;
-      font-weight: normal;
-      color: $brownish-grey;
-      padding-top: 1.7rem;
-
-      & + a {
-        margin-top: 1.5rem;
-        margin-bottom: 2.675rem;
-      }
-    }
-
-    @include breakpoint($desktop) {
-      margin-top: 1.4rem;
-      padding-top: 0;
-
-      & + a {
-        margin-top: 1.375rem;
-        margin-bottom: 3rem;
-      }
-    }
-  }
+  text-transform: uppercase;
 }
 
 .open--accordion {
   .order-summary-row td {
     background-color: $whisper-light-59;
-  }
-
-  .order--items {
-    html[lang=ar] & {
-      @include breakpoint($tablet) {
-        &::after {
-          background-color: $whisper-light;
-        }
-      }
-    }
   }
 
   .toggle--icon {
@@ -536,42 +158,13 @@
   top: -5.7rem;
   font-size: 0.875rem;
   height: 2.1875rem;
-
-  @include breakpoint($desktop) {
-    min-width: 11.625rem;
-  }
-
-  @include breakpoint($only-tablet) {
-    top: -4.2rem;
-  }
 }
 
 .alshaya-acm-customer-order-list-search {
   @include breakpoint($upto-tablet) {
-    text-align: $left;
-    position: relative;
     height: 2.1875rem;
 
     .form-item-search {
-      width: 47.5%;
-      margin-#{$right}: 2.5%;
-      height: 2.1875rem;
-
-      input {
-        -webkit-animation: fadeEffect 2s;
-        animation: fadeEffect 2s;
-        display: none;
-        position: absolute;
-        width: 105%;
-        top: 2.875rem;
-        #{$left}: 0;
-        margin-#{$left}: -2.5%;
-        #{$right}: -2.5%;
-        border: 0.5625rem solid $white;
-        padding: 1rem 0.5rem 0.9375rem 1rem;
-        background: $white-five;
-      }
-
       label {
         display: block;
         background-color: $white-five;
@@ -586,43 +179,7 @@
         overflow: hidden;
 
         @include icon(search, before) {
-          pointer-events: none;
-          line-height: 1.1;
-          text-align: center;
-          font-size: 1.875rem;
-          margin-#{$right}: 0.3125rem;
-          display: inline-block;
-          vertical-align: middle;
-          padding: 0;
           font-weight: bold;
-        }
-      }
-    }
-
-    .form-type-select {
-      width: 48%;
-
-      select {
-        height: 2.1875rem;
-        width: 100%;
-        direction: $dir;
-      }
-    }
-
-    .form-actions {
-      display: none;
-    }
-
-    &.active--search {
-      margin-bottom: 4.3125rem;
-
-      .form-item-search {
-        label {
-          background-color: transparent;
-        }
-
-        input {
-          display: block;
         }
       }
     }

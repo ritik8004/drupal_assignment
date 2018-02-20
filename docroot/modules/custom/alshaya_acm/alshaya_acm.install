@@ -5,11 +5,11 @@
  * Contains install, update, uninstall hooks for alshaya_acm module.
  */
 
+use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
-use Drupal\simple_oauth\Entity\Oauth2Client;
-use Drupal\user\Entity\User;
 use Drupal\node\Entity\Node;
+use Drupal\user\Entity\User;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -23,6 +23,44 @@ function alshaya_acm_update_dependencies() {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable consumers module and configure client.
+ */
+function alshaya_acm_update_8009() {
+  // @TODO: Move module dependency to acq_commerce module after discussion.
+  // We have to create consumer in custom code only so nothing blocking us
+  // from using it in our custom module for now.
+  // Enable consumers module.
+  \Drupal::service('module_installer')->install(['consumers']);
+
+  // Load the user which we want to bind to the consumer.
+  $user = user_load_by_name(Settings::get('alshaya_acm_user_username'));
+
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $repository */
+  $repository = \Drupal::service('entity.repository');
+  $consumer = $repository->loadEntityByUuid('consumer', Settings::get('alshaya_acm_soauth_client_uuid'));
+
+  if ($consumer instanceof Consumer) {
+    // Consumer is already created. Log message and return.
+    \Drupal::logger('alshaya_acm')->warning('Consumer already created for uuid @uuid.', [
+      '@uuid' => Settings::get('alshaya_acm_soauth_client_uuid'),
+    ]);
+
+    return;
+  }
+
+  // Add Simple Oauth - Consumer client.
+  $client = Consumer::create([]);
+  $client->set('label', 'Alshaya ACM');
+  $client->set('user_id', $user->id());
+  $client->set('secret', Settings::get('alshaya_acm_soauth_client_secret'));
+  $client->set('roles', ['administrator']);
+  $client->set('uuid', Settings::get('alshaya_acm_soauth_client_uuid'));
+  $client->save();
 }
 
 /**
@@ -143,11 +181,11 @@ function alshaya_acm_install() {
   $config->set('private_key', Settings::get('alshaya_acm_soauth_private_key'));
   $config->save();
 
-  // Add Simple Oauth client.
-  $client = Oauth2Client::create();
+  // Add Simple Oauth - Consumer client.
+  $client = Consumer::create([]);
   $client->set('label', 'Alshaya ACM');
-  $client->setDefaultUser($user);
-  $client->setSecret(Settings::get('alshaya_acm_soauth_client_secret'));
+  $client->set('user_id', $user->id());
+  $client->set('secret', Settings::get('alshaya_acm_soauth_client_secret'));
   $client->set('roles', ['administrator']);
   $client->set('uuid', Settings::get('alshaya_acm_soauth_client_uuid'));
   $client->save();

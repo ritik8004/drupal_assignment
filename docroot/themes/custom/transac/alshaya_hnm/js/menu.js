@@ -79,7 +79,7 @@
       });
 
       // Hide mobile search box, when clicked anywhere else.
-      $(window).bind('click touchstart', function (e) {
+      $(window).on('click touchstart', function (e) {
         if (!$(e.target).is('.c-menu-primary .mobile--search')) {
           // Check if element is Visible.
           if ($('.c-menu-primary #block-exposedformsearchpage').is(':visible')) {
@@ -90,7 +90,7 @@
       });
 
       // Stop event from inside container to propogate out.
-      $('.c-menu-primary #block-exposedformsearchpage').bind('click touchstart', function (event) {
+      $('.c-menu-primary #block-exposedformsearchpage').on('click touchstart', function (event) {
         event.stopPropagation();
       });
 
@@ -125,7 +125,7 @@
         $('.menu--one__list').find('.menu__list--active').removeClass('.menu__list--active');
       });
 
-      $('.main--menu .has-child .menu--one__link').hover(function () {
+      $('.main--menu .has-child .menu--one__link, .main--menu .has-child .menu--two__list').hover(function () {
         $('body').addClass('overlay');
       }, function () {
         $('body').removeClass('overlay');

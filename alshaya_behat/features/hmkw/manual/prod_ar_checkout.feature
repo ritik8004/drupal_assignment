@@ -1,4 +1,4 @@
-@javascript @checkout @arabic @ar_checkout @mmcpa-1930 @manual
+@javascript @arabic @mmcpa-1930 @manual @prod_checkout @prod
 Feature: Test various checkout scenarios for Arabic site
 
   Background:
