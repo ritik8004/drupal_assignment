@@ -18,6 +18,7 @@
     &:hover {
       &::before {
         color: $grey5;
+        background: none;
       }
     }
   }
