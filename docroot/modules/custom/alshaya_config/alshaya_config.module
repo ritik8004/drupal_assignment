@@ -41,12 +41,11 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
         $field_obj = FieldConfig::loadByName($config_yaml['entity_type'], $config_yaml['bundle'], $config_yaml['field_name']);
         $field_obj->save();
       }
+      // Create field config.
       else {
-        // Create field config.
         FieldConfig::create($config_yaml)->save();
       }
 
-      // Continue the loop.
       continue;
     }
     // If field storage.
@@ -62,7 +61,6 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
         FieldStorageConfig::create($config_yaml)->save();
       }
 
-      // Continue the loop.
       continue;
     }
 
