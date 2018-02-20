@@ -1,4 +1,4 @@
-@javascript @checkout @english @eng_checkout @mmcpa-1930 @manual @prod
+@javascript @english @mmcpa-1930 @manual @prod @prod_checkout
 Feature: Test various checkout scenarios as returning customer
 
   Background:

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_stores_migrate\Form;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\migrate\MigrateExecutable;
 use Drupal\migrate\MigrateMessage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -48,7 +49,6 @@ class StoresMigrateUploadForm extends FormBase {
   public function __construct(LanguageManagerInterface $language_manager,
                               PluginManagerInterface $config_entity_migration_plugin_manager,
                               PluginManagerInterface $migration_plugin_manager) {
-    parent::__construct();
     $this->languageManager = $language_manager;
     $this->configEntityMigrationPluginManager = $config_entity_migration_plugin_manager;
     $this->migrationPluginManager = $migration_plugin_manager;
@@ -130,7 +130,7 @@ class StoresMigrateUploadForm extends FormBase {
     $language = $form_state->getValue('language');
     $filepath = $form_state->getValue('upload')->getFileUri();
 
-    $migrate_plus_migration_store_config = $this->configFactory()->getEditable('migrate_plus.migration.store_' . $language);
+    $migrate_plus_migration_store_config = $this->configFactory()->getEditable('migrate_plus.migration.store.' . $language);
 
     // Store the initial migrate configuration.
     $initial_filepath = $migrate_plus_migration_store_config->get('source.path');
@@ -139,11 +139,14 @@ class StoresMigrateUploadForm extends FormBase {
     $migrate_plus_migration_store_config->set('source.path', $filepath);
     $migrate_plus_migration_store_config->save();
 
+    // Get migration yml config data.
+    $config_data = $migrate_plus_migration_store_config->getRawData();
+
     // Initialize the migration.
     $this->configEntityMigrationPluginManager->createInstances([]);
 
     /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
-    $migration = $this->migrationPluginManager->createInstance('store_' . $language, ['source' => ['path' => $filepath]]);
+    $migration = $this->migrationPluginManager->createInstance('store_' . $language, $config_data);
     // Set the nodes for updating.
     $migration->getIdMap()->prepareUpdate();
     $executable = new MigrateExecutable($migration, new MigrateMessage());

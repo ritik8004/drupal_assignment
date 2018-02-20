@@ -3,6 +3,7 @@ description: Theme for Bath and Body Works.
 type: theme
 core: 8.x
 base theme: whitelabel_non_transac
+alshaya_theme_type: non_transac
 
 regions:
   header_primary: 'Header Primary'

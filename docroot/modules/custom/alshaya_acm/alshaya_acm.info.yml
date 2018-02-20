@@ -9,6 +9,7 @@ dependencies:
   - acq_commerce:acq_customer
   - acq_commerce:acq_sku
   - acq_commerce:acq_promotion
+  - consumers:consumers
   - drupal:block
   - drupal:block_content
   - ctools:ctools

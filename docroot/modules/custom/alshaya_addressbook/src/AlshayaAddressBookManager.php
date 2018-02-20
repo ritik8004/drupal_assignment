@@ -21,11 +21,9 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *
  * @package Drupal\alshaya_addressbook
  */
-class AlshayaAddressBookManager {
+class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
   use StringTranslationTrait;
-
-  const AREA_VOCAB = 'area_list';
 
   /**
    * Entity Repository object.
@@ -383,7 +381,7 @@ class AlshayaAddressBookManager {
 
     $address = [];
 
-    if ($dm_version == DM_VERSION_2) {
+    if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       $mapping = $this->getMagentoFieldMappings();
 
       // Flip the mapping to make it easy below.
@@ -563,7 +561,7 @@ class AlshayaAddressBookManager {
    */
   private function getLocationTerms(array $conditions = []) {
     $terms = [];
-    $query = $this->termStorage->getQuery()->condition('vid', self::AREA_VOCAB);
+    $query = $this->termStorage->getQuery()->condition('vid', AlshayaAddressBookManagerInterface::AREA_VOCAB);
     foreach ($conditions as $condition) {
       if (!empty($condition['field']) && !empty($condition['value'])) {
         $condition['operator'] = empty($condition['operator']) ? '=' : $condition['operator'];
@@ -595,7 +593,7 @@ class AlshayaAddressBookManager {
 
     $dm_version = $this->configFactory->get('alshaya_addressbook.settings')->get('dm_version');
 
-    if ($dm_version == DM_VERSION_2) {
+    if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       $mapping = $this->getMagentoFieldMappings();
       $custom_fields = $this->getMagentoCustomFields();
 
@@ -754,7 +752,7 @@ class AlshayaAddressBookManager {
       }
     }
     else {
-      $termData['vid'] = self::AREA_VOCAB;
+      $termData['vid'] = AlshayaAddressBookManagerInterface::AREA_VOCAB;
       $termData['langcode'] = $langcode;
       $term = $this->termStorage->create($termData);
     }
@@ -817,7 +815,7 @@ class AlshayaAddressBookManager {
     // Delete the excess terms that exist.
     if (!empty($termsProcessed)) {
       $result = $this->termStorage->getQuery()
-        ->condition('vid', self::AREA_VOCAB)
+        ->condition('vid', AlshayaAddressBookManagerInterface::AREA_VOCAB)
         ->condition('tid', $termsProcessed, 'NOT IN')
         ->execute();
 

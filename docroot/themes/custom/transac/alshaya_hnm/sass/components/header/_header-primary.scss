@@ -1,66 +1,14 @@
-@include breakpoint($desktop) {
-  .no--desktop,
-  .toggle--sign.no--desktop {
-    display: none;
-  }
-
-  .header--wrapper {
-    position: relative;
-    background: $white-five;
-    z-index: 5;
-  }
-
-  .first--child_open {
-    > .menu-two__link-wrapper {
-      background-color: $marine-blue-two;
-
-      &::after {
-        background: url('../imgs/icons/icon-chevron-next--hover.svg') no-repeat !important;
-      }
-
-      a,
-      p {
-        color: $white-five !important;
-      }
-    }
-
-    .menu--three__list {
-      display: block !important;
-    }
-  }
-}
-
-@include breakpoint($only-mobile) {
-  .acq-mini-cart {
-    .total {
-      display: none !important;
-    }
-  }
-}
-
-.block--display {
-  display: block !important;
-}
+@import '../../alshaya_white_label/sass/components/header/_header-primary.scss';
 
 /*
 	SITE HEADER - BRANDING
 */
 
 header {
-  position: relative;
-
   .c-header__region {
-    margin: 1.3625rem auto;
-    margin-bottom: 0;
-    padding-bottom: 1.15rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-
     @include breakpoint($desktop) {
       padding-bottom: 0.25rem;
       padding-top: 0.75rem;
-      background: $white-five;
-      margin-top: 0;
     }
 
     @include breakpoint($only-tablet) {
@@ -68,29 +16,14 @@ header {
       padding-bottom: 1.125rem;
     }
 
-    @include container(1284px);
-
     @include breakpoint($only-mobile) {
       margin: 0.625rem 0;
-      padding-bottom: 0;
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
       height: 2.25rem;
     }
   }
 
-  .facets-hidden-container {
-    display: none;
-  }
-
   .region__header {
-    display: table;
-    width: 100%;
-
     > div {
-      display: table-cell;
-      vertical-align: middle;
-
       @include breakpoint($desktop) {
         width: 33.33%;
       }
@@ -104,11 +37,7 @@ header {
 
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
-        position: absolute;
         top: 3rem;
-        display: none;
-        width: 100%;
-        left: 0;
       }
     }
 
@@ -134,10 +63,6 @@ header {
         input[type="text"] {
           width: 7.5rem;
           font-size: 0.875rem;
-
-          &::placeholder {
-            font-size: 0.875rem;
-          }
         }
       }
     }
@@ -148,53 +73,18 @@ header {
           width: 7.5rem;
           background-color: transparent;
           font-size: 0.875rem;
-
-          &::placeholder {
-            font-size: 0.875rem;
-          }
         }
       }
-    }
-
-    @include breakpoint($only-mobile) {
-      .block-system-branding-block {
-        width: 53%;
-      }
-    }
-  }
-
-  form,
-  .block-cart-mini-block {
-    @include breakpoint($only-mobile) {
-      margin-top: 0;
     }
   }
 
   #block-alshaya-white-label-search,
   .block-views-exposed-filter-blocksearch-page {
     @include breakpoint($only-tablet) {
-      position: absolute;
-      text-align: center;
       #{$right}: 6.5625rem;
       margin-top: -3px;
-      background: white;
-      display: table-cell !important;
-
-      .form-item-keywords {
-        float: none !important;
-      }
-    }
-
-    @include breakpoint($only-mobile) {
-      display: none;
-    }
-
-    @include breakpoint($upto-desktop) {
-      .form-item-keywords,
-      .form-actions {
-        display: inline-block;
-        float: none !important;
-      }
+      bottom: auto;
+      #{$left}: auto;
     }
 
     input[type="text"] {
@@ -204,8 +94,6 @@ header {
       padding: 0.4375rem;
       padding-#{$left}: 0;
       padding-bottom: 0;
-      vertical-align: bottom;
-      text-transform: lowercase;
       max-width: 17.5rem;
       border: none;
       border-bottom: 1px solid $white-smoke-border;
@@ -227,10 +115,6 @@ header {
         letter-spacing: 0.5px;
       }
 
-      @include breakpoint($tablet) {
-        height: 2.375rem;
-      }
-
       &::placeholder {
         font-size: 0.875rem;
         color: $grey6;
@@ -241,28 +125,12 @@ header {
     #edit-submit-search,
     #edit-submit-search--2 {
       background: url('../imgs/assets/ic-search.svg') 15px 10px no-repeat;
-      border: none;
-      text-indent: -9999px;
-      width: 2.625rem;
-      height: 2.375rem;
-      text-align: center;
-      margin-#{$left}: 0;
-      vertical-align: bottom;
-      display: inline-block;
       border-bottom: 1px solid $white-smoke-border;
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: -0.3125rem;
         background-position-y: 0.4375rem;
       }
-    }
-
-    label {
-      display: none;
-    }
-
-    .form-item--error-message {
-      @include u-visibility(none);
     }
   }
 
@@ -282,20 +150,7 @@ header {
     }
 
     .total {
-      display: inline-block;
       margin-#{$right}: 1.25rem;
-
-      span {
-        &:first-child {
-          margin-#{$right}: 0.4375rem;
-        }
-      }
-
-      .prefix {
-        font-weight: normal;
-        display: inline-block;
-        vertical-align: bottom;
-      }
     }
 
     .cart-link {
@@ -312,12 +167,7 @@ header {
       position: relative;
       margin-bottom: -2px;
       vertical-align: middle;
-
-      @include breakpoint($only-mobile) {
-        background-size: 1.375rem;
-        width: 1.4375rem;
-        height: 1.25rem;
-      }
+      background: none;
     }
 
     .cart-link-total {
@@ -326,42 +176,14 @@ header {
       margin-top: 0.3125rem;
       margin-#{$right}: 0.125rem;
       padding-#{$right}: 1rem;
-
-      @include breakpoint($only-mobile) {
-        display: none;
-      }
-
-      .price-currency.prefix {
-        padding-right: 0.45em;
-      }
-    }
-
-    @include breakpoint($desktop) {
-      .acq-mini-cart {
-        float: $right;
-      }
     }
 
     .quantity {
       font-size: 0.75rem;
       font-family: $hnm-regular-nodir;
-      position: absolute;
       background: $hnm-red;
-      color: $white-five;
-      text-align: center;
       bottom: -0.625rem;
-      #{$left}: -0.5rem;
-      border-radius: 50%;
-      padding: 0;
       line-height: 1.25rem;
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-  }
-
-  @include breakpoint($desktop) {
-    #mini-cart-wrapper {
-      min-width: 10.44rem;
     }
   }
 
@@ -372,10 +194,6 @@ header {
 
       .cart-link-total {
         display: none;
-
-        .prefix {
-          margin-#{$right}: 0.5625rem;
-        }
       }
     }
   }
@@ -414,6 +232,7 @@ header {
     li {
       list-style: none;
       z-index: 4;
+      position: static;
 
       .notification--on & {
         z-index: 3;
@@ -539,6 +358,7 @@ header {
       #{$right}: 0.375rem;
       font-size: 0;
       padding-top: 0.3125rem;
+      margin-top: 0;
 
       @include icon(mappin) {
         color: $hnm-black-two;
@@ -658,7 +478,7 @@ header {
           color: $white-five;
 
           &::before {
-            background: url('../imgs/assets/ic-active-search.svg') no-repeat;
+            background: url('../imgs/assets/ic-active-search.svg') no-repeat !important;
           }
         }
       }
@@ -740,7 +560,8 @@ header {
         padding-bottom: 0.6rem;
         display: block;
         height: 2.75rem;
-        border-top: 2px solid transparent;
+        border-top: 2px solid transparent !important;
+        border-bottom: none;
         position: relative;
         z-index: 100;
         margin-top: -1px;
@@ -750,6 +571,7 @@ header {
         letter-spacing: 1px;
       }
 
+      &:hover,
       &.active {
         a.menu--one__link {
           &::after {
@@ -773,6 +595,7 @@ header {
           opacity: 1;
           z-index: 1;
           border-bottom: 2px solid $black;
+          border-top: 2rem solid transparent;
 
           &::after {
             content: '';
@@ -1189,6 +1012,7 @@ header {
     margin-#{$right}: 0.4rem;
     margin-#{$left}: 0.375rem;
     vertical-align: middle;
+    background: transparent;
 
     @include icon(chevron#{$left}, after) {
       color: $hnm-black-two;
@@ -1350,7 +1174,7 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      width: 59%;
+      width: 68%;
 
       .logged-out & {
         padding: 0.9rem 0.25rem;
@@ -1364,7 +1188,7 @@ header {
         }
 
         &.account {
-          width: 67%;
+          width: 68%;
         }
       }
     }
@@ -1546,6 +1370,19 @@ header {
   }
 }
 
+html[lang=ar] {
+  .block-system-branding-block {
+    .site-brand-home {
+      img {
+        width: auto;
+        height: auto;
+        margin-top: 0;
+        max-width: 100%;
+      }
+    }
+  }
+}
+
 .html--overlay {
   @include breakpoint($upto-desktop) {
     overflow: hidden;
@@ -1579,6 +1416,8 @@ header {
 .c-pre-content__region {
   @include breakpoint($desktop) {
     height: 2.75rem;
+    border-top: none;
+    border-bottom: none;
   }
 }
 
@@ -1667,6 +1506,36 @@ html {
       input[type="text"] {
         &::placeholder {
           color: transparent;
+        }
+      }
+    }
+  }
+}
+
+.block-alshaya-main-menu {
+  .active--menu--links {
+    li {
+      &.menu--one__list-item {
+        &:hover {
+          a {
+            &.menu--one__link {
+              border: none;
+              color: $black;
+              border-top: 2px solid transparent;
+            }
+          }
+        }
+      }
+    }
+
+    &:hover {
+      li {
+        &.menu--one__list-item {
+          a {
+            &.menu--one__link {
+              border-bottom: none;
+            }
+          }
         }
       }
     }

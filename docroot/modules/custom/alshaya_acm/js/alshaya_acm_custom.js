@@ -42,7 +42,7 @@
         $(this).data('applied-coupon', $('[data-drupal-selector="edit-coupon"]').val().trim());
       });
 
-      $('[data-drupal-selector="edit-coupon"]').bind('bind-events').on('keyup', function () {
+      $('[data-drupal-selector="edit-coupon"]').on('bind-events').on('keyup', function () {
         var applied_coupon = $('#coupon-button').data('applied-coupon');
         var new_value = $(this).val().trim();
 

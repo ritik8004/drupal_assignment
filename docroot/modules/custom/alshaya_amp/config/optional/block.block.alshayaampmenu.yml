@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_amp
+  theme:
+    - alshaya_amp_white_label
+id: alshayaampmenu
+theme: alshaya_amp_white_label
+region: header
+weight: -34
+provider: null
+plugin: alshaya_amp_menu
+settings:
+  id: alshaya_amp_menu
+  label: 'Alshaya AMP Menu'
+  provider: alshaya_amp
+  label_display: '0'
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      static_html: static_html
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

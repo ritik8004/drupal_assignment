@@ -11,6 +11,16 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Disable admin modules.
+ */
+function alshaya_update_8003() {
+  \Drupal::service('module_installer')->uninstall(['field_ui']);
+  \Drupal::service('module_installer')->uninstall(['quickedit']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_performance on all sites on all environments.
  */
 function alshaya_update_8002() {
@@ -104,6 +114,8 @@ function alshaya_install() {
   }
 
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya', $modules]);
+  \Drupal::service('module_installer')->uninstall(['field_ui']);
+  \Drupal::service('module_installer')->uninstall(['quickedit']);
 }
 
 /**

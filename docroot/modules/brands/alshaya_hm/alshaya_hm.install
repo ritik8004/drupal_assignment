@@ -385,4 +385,8 @@ function alshaya_hm_install() {
   $configs = ['acq_sku.configurable_form_settings'];
 
   alshaya_config_install_configs($configs, 'alshaya_hm', 'optional');
+
+  // Enable and set default amp theme.
+  \Drupal::service('theme_handler')->install(['alshaya_amp_hnm'], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_hnm')->save();
 }
