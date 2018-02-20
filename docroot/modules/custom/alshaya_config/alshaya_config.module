@@ -30,9 +30,13 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
 
     // Field config.
     if (strpos($config, 'field.field.') === 0) {
-      $field_obj = FieldConfig::loadByName($config_yaml['entity_type'], $config_yaml['bundle'], $config_yaml['field_name']);
-      if ($field_obj) {
-        \Drupal::configFactory()->getEditable($config)->setData($config_yaml)->save();
+      if ($field_obj = FieldConfig::loadByName($config_yaml['entity_type'], $config_yaml['bundle'], $config_yaml['field_name'])) {
+        // Update config using config factory.
+        \Drupal::configFactory()
+          ->getEditable($config)
+          ->setData($config_yaml)
+          ->save();
+
         // Load field config again and save again.
         $field_obj = FieldConfig::loadByName($config_yaml['entity_type'], $config_yaml['bundle'], $config_yaml['field_name']);
         $field_obj->save();
@@ -47,8 +51,7 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
     }
     // If field storage.
     elseif (strpos($config, 'field.storage.') === 0) {
-      $field_obj = FieldStorageConfig::loadByName($config_yaml['entity_type'], $config_yaml['field_name']);
-      if ($field_obj) {
+      if ($field_obj = FieldStorageConfig::loadByName($config_yaml['entity_type'], $config_yaml['field_name'])) {
         \Drupal::configFactory()->getEditable($config)->setData($config_yaml)->save();
         // Load field config again and save again.
         $field_obj = FieldStorageConfig::loadByName($config_yaml['entity_type'], $config_yaml['field_name']);
