@@ -46,10 +46,10 @@
       }
 
       .form-actions {
-        background: $hnm-grey;
+        background: $white-five;
 
-        @include breakpoint($mobile) {
-          background: $white-five;
+        @include breakpoint($tablet) {
+          background: $hnm-grey;
         }
 
         a {

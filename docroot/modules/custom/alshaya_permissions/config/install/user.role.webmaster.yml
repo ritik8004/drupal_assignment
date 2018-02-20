@@ -93,3 +93,6 @@ permissions:
   - 'access site in maintenance mode'
   - 'administer size guide settings'
   - 'administer sitemap settings'
+  - 'edit terms in area_list'
+  - 'alshaya create user'
+  - 'bypass password policies'
