@@ -13,6 +13,18 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add new live text style to 'field_promo_theme' paragraph field.
+ */
+function alshaya_paragraphs_update_8107() {
+  $configs = [
+    'field.storage.paragraph.field_promo_theme',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update Video field settings as the media module included in Drupal-8.4.
  */
 function alshaya_paragraphs_update_8106() {
