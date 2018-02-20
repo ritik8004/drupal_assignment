@@ -3,8 +3,11 @@ services:
     class: Drupal\alshaya_search\Breadcrumb\AlshayaSearchBreadcrumbBuilder
     tags:
       - { name: breadcrumb_builder, priority: 100 }
+    arguments:
+      - '@request_stack'
   alshaya_plp.breadcrumb:
     class: Drupal\alshaya_search\Breadcrumb\AlshayaPLPBreadcrumbBuilder
+    arguments: ['@entity.repository', '@entity_type.manager']
     tags:
       - { name: breadcrumb_builder, priority: 10001 }
   alshaya_search.route_subscriber:
@@ -21,4 +24,3 @@ services:
     arguments: ['@request_stack']
     tags:
       - { name: cache.context }
-

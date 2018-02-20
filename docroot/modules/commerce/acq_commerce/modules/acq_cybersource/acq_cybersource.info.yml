@@ -4,5 +4,5 @@ description: This module provides Cybersource payment method.
 core: 8.x
 package: Commerce
 dependencies:
-  - acq_payment
-  - clientside_validation_jquery
+  - acq_commerce:acq_payment
+  - clientside_validation:clientside_validation_jquery

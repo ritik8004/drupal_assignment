@@ -5,7 +5,7 @@
  * File to create default content for bouchon bakery.
  */
 
-use \Drupal\block_content\Entity\BlockContent;
+use Drupal\block_content\Entity\BlockContent;
 
 /**
  * Create default copyright block content.
@@ -14,7 +14,6 @@ function alshaya_non_transac_create_default_content() {
   // Create email sign up cta block.
   alshaya_non_transac_create_email_signup_cta_block_content();
 }
-
 
 /**
  * Create email sign up cta block..
@@ -39,7 +38,7 @@ function alshaya_non_transac_create_email_signup_cta_block_content() {
     'body' => [
       'value' => "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/ar/email-sign-up\" class=\"use-ajax\" data-dialog-type=\"modal\">تسجيل مستخدم جديد</a></p>",
       'format' => 'full_text',
-    ]
+    ],
   ]);
   $ar_block_content->save();
 }

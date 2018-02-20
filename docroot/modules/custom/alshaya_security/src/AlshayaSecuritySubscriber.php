@@ -36,7 +36,7 @@ class AlshayaSecuritySubscriber implements EventSubscriberInterface {
    *   The event to process.
    */
   public function onRespond(FilterResponseEvent $event) {
-    $request = \Drupal::request();
+    $request = $event->getRequest();
 
     // Add HSTS if on secure page.
     if ($request->isSecure()) {

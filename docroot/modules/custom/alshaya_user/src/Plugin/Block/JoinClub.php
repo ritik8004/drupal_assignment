@@ -5,10 +5,11 @@ namespace Drupal\alshaya_user\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\file\Entity\File;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -43,6 +44,20 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
   protected $configFactory;
 
   /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Entity Type Manager service object.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * WelcomeUserBlock constructor.
    *
    * @param array $configuration
@@ -57,12 +72,25 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
    *   The current route match service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxyInterface $current_account, CurrentRouteMatch $current_route, ConfigFactoryInterface $config_factory) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              AccountProxyInterface $current_account,
+                              CurrentRouteMatch $current_route,
+                              ConfigFactoryInterface $config_factory,
+                              ModuleHandlerInterface $module_handler,
+                              EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_account;
     $this->currentRoute = $current_route;
     $this->configFactory = $config_factory;
+    $this->moduleHandler = $module_handler;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -75,7 +103,9 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
       $plugin_definition,
       $container->get('current_user'),
       $container->get('current_route_match'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('module_handler'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -86,7 +116,7 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
     $build = [];
 
     // If loyalty enabled on site.
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
+    if ($this->moduleHandler->moduleExists('alshaya_loyalty')) {
       $loyalty_settings = alshaya_loyalty_get_validation_settings();
 
       if (!($loyalty_settings['enable_disable_loyalty'])) {
@@ -99,7 +129,7 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
 
     $join_club_content = $this->configFactory->get('alshaya_user.join_club');
     if ($image_fid = $join_club_content->get('join_club_image.fid')) {
-      if ($image_file = File::load($image_fid)) {
+      if ($image_file = $this->entityTypeManager->getStorage('file')->load($image_fid)) {
         $image_path = $image_file->getFileUri();
       }
     }

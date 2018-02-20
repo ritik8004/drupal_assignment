@@ -91,8 +91,6 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     // Get the current step.
     $current_step_id = $checkout_flow->getStepId();
 
-    $checkout_config = $this->configFactory->get('alshaya_acm_checkout.settings');
-
     if ($current_step_id == 'login' || $current_step_id == 'confirmation') {
       return [];
     }

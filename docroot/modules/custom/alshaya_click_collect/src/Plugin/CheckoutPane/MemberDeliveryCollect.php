@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\geolocation\GoogleMapsDisplayTrait;
 use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Provides the delivery CnC pane for members.
@@ -267,6 +268,17 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     }
 
     $values = $form_state->getValues($pane_form['#parents']);
+
+    // Secondary check on values.
+    if (empty($values['store_code']) || empty($values['shipping_type'])) {
+      // If values are empty, we reload the tab as this is either hacking
+      // or temporary issue.
+      $params = ['step' => 'delivery'];
+      $options = ['query' => ['method' => 'cc']];
+      $response = new RedirectResponse(Url::fromRoute('acq_checkout.form', $params, $options)->toString());
+      $response->send();
+      exit;
+    }
 
     $extension = [];
 

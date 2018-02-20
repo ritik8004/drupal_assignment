@@ -17,3 +17,6 @@ services:
       - '@logger.factory'
       - '@alshaya_api.api'
       - '@language_manager'
+      - '@config.factory'
+      - '@cache.data'
+      - '@module_handler'

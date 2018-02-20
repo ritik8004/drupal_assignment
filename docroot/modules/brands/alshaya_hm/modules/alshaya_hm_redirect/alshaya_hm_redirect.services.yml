@@ -4,4 +4,3 @@ services:
     arguments: [ '@language_manager' , '@page_cache_kill_switch', '@config.factory' ]
     tags:
       - { name: event_subscriber }
-

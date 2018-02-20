@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -36,6 +37,13 @@ class ProductStockSyncResource extends ResourceBase {
   private $configFactory;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
    * Construct.
    *
    * @param array $configuration
@@ -50,15 +58,19 @@ class ProductStockSyncResource extends ResourceBase {
    *   The config factory.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               array $serializer_formats,
                               ConfigFactoryInterface $config_factory,
-                              LoggerInterface $logger) {
+                              LoggerInterface $logger,
+                              I18nHelper $i18n_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->configFactory = $config_factory;
+    $this->i18nHelper = $i18n_helper;
   }
 
   /**
@@ -71,7 +83,8 @@ class ProductStockSyncResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('config.factory'),
-      $container->get('logger.factory')->get('acq_commerce')
+      $container->get('logger.factory')->get('acq_commerce'),
+      $container->get('acq_commerce.i18n_helper')
     );
   }
 
@@ -115,7 +128,7 @@ class ProductStockSyncResource extends ResourceBase {
     $langcode = NULL;
 
     if (isset($stock['store_id'])) {
-      $langcode = acq_commerce_get_langcode_from_store_id($stock['store_id']);
+      $langcode = $this->i18nHelper->getLangcodeFromStoreId($stock['store_id']);
 
       if (empty($langcode)) {
         // It could be for a different store/website, don't do anything.

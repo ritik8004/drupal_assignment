@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_main_menu;
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -44,17 +45,29 @@ class ProductCategoryTree {
   protected $languageManager;
 
   /**
+   * Cache Backend service for alshaya.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service for alshaya.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              LanguageManagerInterface $language_manager,
+                              CacheBackendInterface $cache) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
+    $this->cache = $cache;
   }
 
   /**
@@ -68,7 +81,7 @@ class ProductCategoryTree {
 
     $cid = self::CACHE_ID . '_' . $langcode;
 
-    if ($term_data = \Drupal::cache(self::CACHE_BIN)->get($cid)) {
+    if ($term_data = $this->cache->get($cid)) {
       return $term_data->data;
     }
 
@@ -79,7 +92,7 @@ class ProductCategoryTree {
       'node_type:department_page',
     ];
 
-    \Drupal::cache(self::CACHE_BIN)->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
+    $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
 
     return $term_data;
   }
@@ -104,9 +117,6 @@ class ProductCategoryTree {
     if (empty($terms)) {
       return [];
     }
-
-    // Get all the department pages.
-    $alshaya_department_pages = alshaya_department_page_get_pages();
 
     foreach ($terms as $term) {
       // We don't show the term in menu if translation not available.
@@ -137,20 +147,6 @@ class ProductCategoryTree {
       ];
 
       $data[$term->id()]['highlight_image'] = $this->getHighlightImage($term);
-
-      // Check if there is a department page available for this term.
-      if (isset($alshaya_department_pages[$term->id()])) {
-        $nid = $alshaya_department_pages[$term->id()];
-
-        /** @var \Drupal\node\Entity\Node $node */
-        $node = $this->nodeStorage->load($nid);
-
-        // Use the path of node instead of term path if node is published.
-        if ($node->isPublished()) {
-          $data[$term->id()]['path'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
-        }
-      }
-
       $data[$term->id()]['child'] = $this->getCategoryTree($langcode, $term->id());
     }
 

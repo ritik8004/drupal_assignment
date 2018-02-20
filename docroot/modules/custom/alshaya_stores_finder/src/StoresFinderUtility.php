@@ -8,7 +8,6 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
-use Drupal\node\Entity\Node;
 
 /**
  * Class StoresFinderUtility.
@@ -244,7 +243,7 @@ class StoresFinderUtility {
       return;
     }
 
-    $nodes = Node::loadMultiple($nids);
+    $nodes = $this->nodeStorage->loadMultiple($nids);
     if (!empty($nodes)) {
       /* @var \Drupal\node\Entity\Node $node */
       foreach ($nodes as $node) {

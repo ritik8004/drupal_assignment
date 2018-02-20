@@ -88,6 +88,10 @@ settings:
   preview_excluded_elements: {  }
   preview_exclude_empty: true
   draft_multiple: false
+  ajax_scroll_top: form
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
 access:
   create:
     roles:
