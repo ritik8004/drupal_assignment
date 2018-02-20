@@ -1,23 +1,17 @@
+@import '../../alshaya_white_label/sass/base/form/tooltip/_tooltip.scss';
+
 %tooltip-before-after {
-  bottom: 100%;
   border: 1px solid $grey1;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
 }
 
 %tooltip-after {
   border-color: rgba(240, 246, 252, 0);
   border-bottom-color: $grey1;
   border-width: 5px;
-  margin-#{$left}: -5px;
 }
 
 %tooltip-before {
   border-color: rgba(0, 132, 204, 0);
   border-bottom-color: $hnm-black-two;
   border-width: 6px;
-  margin-#{$left}: -6px;
 }
