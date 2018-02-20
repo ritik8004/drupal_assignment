@@ -5,6 +5,7 @@
   &.out-of-stock {
     span::before {
       color: $hnm-grey;
+      background: none;
     }
 
     + .delivery-options-wrapper {
@@ -30,30 +31,44 @@
   }
 
   .st_facebook_custom {
+    @include icon(facebook);
+
     &:hover::before {
       color: $hnm-black-two;
+      background: none;
     }
   }
 
   .st_twitter_custom {
+    @include icon(twitter);
+
     &:hover::before {
       color: $hnm-black-two;
+      background: none;
     }
   }
 
   .st_pinterest_custom {
+    @include icon(pinterest);
+
     &:hover::before {
       color: $hnm-black-two;
+      background: none;
     }
   }
 
   .st_instagram_custom {
+    @include icon(instagram);
+
     &:hover::before {
       color: $hnm-black-two;
+      background: none;
     }
   }
 
   .st_youtube_custom {
+    @include icon(youtube);
+
     &:hover::before {
       color: $hnm-black-two;
     }
