@@ -407,7 +407,8 @@
   }
 
   form {
-    overflow: hidden;
+    overflow: visible;
+    float: $left;
   }
 
   .newsletter-block-label {
@@ -443,27 +444,6 @@
 
       html[lang=ar] & {
         width: calc(100% - 5.3rem);
-      }
-    }
-
-    #edit-email-error {
-      line-height: 1.36;
-      display: inline-block;
-      width: 100%;
-      position: absolute;
-      #{$right}: 0;
-      top: 100%;
-      color: $red-error;
-      padding: 0.3125rem 0;
-      z-index: 9;
-      font-size: 0.75rem;
-      margin-top: 0.1875rem;
-      text-align: $left;
-      background-color: $hnm-black;
-
-      @include breakpoint($upto-tablet) {
-        #{$right}: 0.5rem;
-        #{$left}: 0.5rem;
       }
     }
   }
@@ -527,6 +507,30 @@
 
     &:focus {
       position: absolute;
+    }
+  }
+}
+
+.alshaya-newsletter-subscribe .form-item,
+.block-alshaya-newsletter .form-type-email {
+  label#edit-email-error {
+    line-height: 1.36;
+    display: inline-block;
+    width: 100%;
+    position: absolute;
+    #{$right}: 0;
+    top: 100%;
+    color: $red-error;
+    padding: 0.3125rem 0;
+    z-index: 9;
+    font-size: 0.75rem;
+    margin-top: 0.1875rem;
+    text-align: $left;
+    background-color: $hnm-black;
+
+    @include breakpoint($upto-tablet) {
+      #{$right}: 0.5rem;
+      #{$left}: 0.5rem;
     }
   }
 }
@@ -596,6 +600,10 @@
       padding: 0.3125rem 0.875rem;
       margin-top: 0.1875rem;
       display: block;
+    }
+
+    .error {
+      margin-top: 0;
     }
   }
 
