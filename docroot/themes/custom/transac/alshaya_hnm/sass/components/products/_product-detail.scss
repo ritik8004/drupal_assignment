@@ -927,3 +927,13 @@ html[lang=ar] {
     }
   }
 }
+
+.field--name-field-skus {
+  .sku-base-form {
+    button[type="submit"] {
+      @include breakpoint($tablet) {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+}
