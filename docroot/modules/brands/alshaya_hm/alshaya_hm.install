@@ -5,12 +5,15 @@
  * Install, uninstall and update for alshaya_hm.
  */
 
+use Drupal\Core\Site\Settings;
+use Drupal\search_api\Entity\Index;
+
 /**
  * Implements hook_update_N().
  *
  * Re-order the PLP sort config by re-saving config.
  */
-function alshaya_hm_update_8015() {
+function alshaya_hm_update_8016() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
     ->setData([
       'sort_options' => [
@@ -22,9 +25,6 @@ function alshaya_hm_update_8015() {
     ])
     ->save();
 }
-
-use Drupal\Core\Site\Settings;
-use Drupal\search_api\Entity\Index;
 
 /**
  * Implements hook_update_N().
