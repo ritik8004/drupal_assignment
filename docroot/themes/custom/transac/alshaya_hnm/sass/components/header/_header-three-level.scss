@@ -3,8 +3,8 @@
 .has--three-levels {
   @include breakpoint($desktop) {
     .menu--two__list {
-      column-count: 5;
-      padding-#{$right}: 22%;
+      column-count: 7;
+      padding-#{$right}: 0%;
       padding-#{$left}: 6.1rem;
       padding-bottom: 2.5rem;
       padding-top: 2.5rem;
