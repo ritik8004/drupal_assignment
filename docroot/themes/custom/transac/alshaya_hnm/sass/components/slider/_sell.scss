@@ -144,6 +144,24 @@
   .sell-promotions {
     display: none;
   }
+
+  .sell-sku {
+    .field__items {
+      @include breakpoint($only-mobile) {
+        padding: 0;
+      }
+    }
+
+    .sku-base-form {
+      .js-form-wrapper {
+        max-width: none;
+      }
+
+      .js-form-submit {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
 }
 
 .price--discount span,

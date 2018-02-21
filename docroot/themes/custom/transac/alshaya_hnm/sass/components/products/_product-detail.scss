@@ -558,6 +558,10 @@
 
 .field--name {
   &-field-skus {
+    .c-pdp & {
+      border-bottom: none;
+    }
+
     @include breakpoint($only-mobile) {
       .basic-details-wrapper & {
         height: auto;
