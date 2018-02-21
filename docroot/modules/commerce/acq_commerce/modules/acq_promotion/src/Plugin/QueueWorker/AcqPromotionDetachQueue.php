@@ -97,7 +97,7 @@ class AcqPromotionDetachQueue extends AcqPromotionQueueBase {
     // Log unprocessed SKUs while detatching from Promotion.
     if (!empty($unprocessed_skus)) {
       $this->logger->info('SKUs @skus not found while detatching from promotion: @promo',
-        ['@promo' => $promotion_nid, '@skus' => implode($unprocessed_skus)]);
+        ['@promo' => $promotion_nid, '@skus' => implode(',', $unprocessed_skus)]);
     }
   }
 
