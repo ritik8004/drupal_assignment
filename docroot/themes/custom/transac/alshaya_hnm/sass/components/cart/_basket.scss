@@ -3,7 +3,7 @@
 .path--cart {
   @include breakpoint($only-tablet) {
     .price-wrapper .price {
-      max-width: none;
+      max-width: none !important;
     }
   }
 
@@ -28,6 +28,7 @@
   .customer-cart-form {
     .price-currency.prefix,
     .price-currency.suffix {
+      font-family: $hnm-regular;
       padding-top: 1px;
     }
 
