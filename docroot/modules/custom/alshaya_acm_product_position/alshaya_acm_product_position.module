@@ -144,12 +144,47 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
         }
       }
 
-      // Re-set default value if sort option no longer available.
-      if (!isset($form['sort_bef_combine']['#options'][$form['sort_bef_combine']['#default_value']])) {
-        $form['sort_bef_combine']['#default_value'] = key($form['sort_bef_combine']['#options']);
-      }
+      // Re-order select options based on the config position.
+      $form['sort_bef_combine']['#options'] = _alshaya_acm_product_position_sorted_options($form['sort_bef_combine']['#options']);
+
+      // Set the first option as the default value.
+      $form['sort_bef_combine']['#default_value'] = key($form['sort_bef_combine']['#options']);
     }
   }
+}
+
+/**
+ * Re-order the plp sort options based on the config values position.
+ *
+ * @param array $options
+ *   Options to re-order.
+ *
+ * @return array
+ *   Re-ordered options of the sort.
+ */
+function _alshaya_acm_product_position_sorted_options(array $options) {
+  $config_sort_options = _alshaya_acm_product_position_get_config();
+  // If there are atleast any sort option enabled.
+  if (!empty($config_sort_options)) {
+    $new_sort_options = [];
+
+    // Iterate over config sort options to prepare new sorted array for form
+    // value option.
+    foreach ($config_sort_options as $sort_options) {
+      if (isset($options[$sort_options . ' ASC'])) {
+        $new_sort_options[$sort_options . ' ASC'] = $options[$sort_options . ' ASC'];
+      }
+      if (isset($options[$sort_options . ' DESC'])) {
+        $new_sort_options[$sort_options . ' DESC'] = $options[$sort_options . ' DESC'];
+      }
+    }
+
+    if (!empty($new_sort_options)) {
+      return $new_sort_options;
+    }
+  }
+
+  return $options;
 }
 
 /**
