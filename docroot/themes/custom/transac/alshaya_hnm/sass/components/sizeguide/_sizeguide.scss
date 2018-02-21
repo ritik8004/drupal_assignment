@@ -6,6 +6,9 @@
   float: $right;
   margin-top: -0.1875rem;
   outline: none !important;
+  position: relative;
+  top: 0;
+  z-index: 9;
 
   @include breakpoint($tablet) {
     margin-top: 0.5rem;
@@ -15,10 +18,15 @@
     margin-top: 0;
   }
 
+  @include breakpoint($only-mobile) {
+    margin-bottom: 0.25rem;
+  }
+
   + .ajax-progress-throbber {
     display: block !important;
     float: $right;
     margin-top: -0.5rem;
+    position: static;
 
     @include breakpoint($tablet) {
       margin-top: 0;

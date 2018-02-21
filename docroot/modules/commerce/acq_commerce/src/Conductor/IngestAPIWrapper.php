@@ -76,6 +76,9 @@ class IngestAPIWrapper {
 
       $opt['query']['store_id'] = $store_id;
 
+      // To allow hmac sign to be verified properly we need them in asc order.
+      ksort($opt['query']);
+
       return $client->post($endpoint, $opt);
     };
 
