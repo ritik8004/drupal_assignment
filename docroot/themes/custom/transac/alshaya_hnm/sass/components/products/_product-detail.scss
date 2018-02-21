@@ -94,12 +94,12 @@
       min-height: 2.188rem;
 
       &::after {
-        top: 0.5rem;
+        top: 0.25rem;
         z-index: 1;
       }
 
       label {
-        @include u-visibility(block);
+        @include u-visibility(none);
 
         position: absolute;
         top: -1rem;
@@ -129,10 +129,11 @@
       &::after {
         top: 0.5rem;
         z-index: 1;
+        display: none;
       }
 
       label {
-        @include u-visibility(block);
+        @include u-visibility(none);
 
         position: absolute;
         top: -1rem;
@@ -613,7 +614,7 @@
     @include u-visibility(block);
   }
 
-  @include breakpoint($desktop) {
+  @include breakpoint($tablet) {
     @include u-visibility(block);
   }
 
@@ -923,6 +924,16 @@ html[lang=ar] {
 
       .content__main {
         min-height: 31.25rem;
+      }
+    }
+  }
+}
+
+.field--name-field-skus {
+  .sku-base-form {
+    button[type="submit"] {
+      @include breakpoint($tablet) {
+        margin-#{$left}: 0;
       }
     }
   }
