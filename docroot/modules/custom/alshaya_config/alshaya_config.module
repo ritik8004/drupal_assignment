@@ -48,25 +48,19 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
 
       continue;
     }
-    // If field storage.
-    elseif (strpos($config, 'field.storage.') === 0) {
-      \Drupal::configFactory()
-        ->getEditable($config)
-        ->setData($config_yaml)
-        ->save();
-
-      // Load field config again and save again.
-      $field_obj = FieldStorageConfig::loadByName($config_yaml['entity_type'], $config_yaml['field_name']);
-      $field_obj->save();
-
-      continue;
-    }
 
     // Update config using config factory.
     \Drupal::configFactory()
       ->getEditable($config)
       ->setData($config_yaml)
       ->save();
+
+    // If field storage.
+    if (strpos($config, 'field.storage.') === 0) {
+      // Load field config again and save again.
+      $field_obj = FieldStorageConfig::loadByName($config_yaml['entity_type'], $config_yaml['field_name']);
+      $field_obj->save();
+    }
   }
 }
 
