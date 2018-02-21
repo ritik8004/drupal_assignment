@@ -13,7 +13,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Fixing footer logo image path.
  */
-function alshaya_hm_update_8016() {
+function alshaya_hm_update_8015() {
   // Footer logo path.
   $logo_path = '/' . drupal_get_path('theme', 'alshaya_hnm') . '/h-m-logo-bw.svg';
   $block_content_en = "<div class='footer-brand-home'>
