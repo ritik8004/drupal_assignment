@@ -9,6 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Query\QueryInterface;
+use Drupal\views\Views;
 use Drupal\Views\ViewExecutable;
 
 /**
@@ -17,6 +18,22 @@ use Drupal\Views\ViewExecutable;
 function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface &$db_query, QueryInterface $query) {
   if ($query->hasTag('views_alshaya_product_list')) {
     $sorts =& $query->getSorts();
+
+    // Get the default sort which is always the first config value.
+    $default_sort = current(_alshaya_acm_product_position_get_config());
+    // This to check if user has selected sort from drop down or the page load.
+    $exposed_input = !empty($_POST['sort_bef_combine']) ? $_POST['sort_bef_combine'] : NULL;
+    // If position(nid) is set as the default sort.
+    if ($default_sort != 'nid' && empty($exposed_input)) {
+      // Removing the nid default sort as coming from views config.
+      unset($sorts['nid']);
+      // Get and set sort order from the views config.
+      $views_storage = Views::getView('alshaya_product_list')->storage;
+      $views_sort = $views_storage->getDisplay('block_1')['display_options']['sorts'];
+
+      $sorts[$default_sort] = $views_sort[$default_sort]['order'];
+      return;
+    }
 
     // Check if nid is there in sorts, we are using it for position.
     if (!isset($sorts['nid'])) {
@@ -144,16 +161,54 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
         }
       }
 
-      // Re-set default value if sort option no longer available.
-      if (!isset($form['sort_bef_combine']['#options'][$form['sort_bef_combine']['#default_value']])) {
-        $form['sort_bef_combine']['#default_value'] = key($form['sort_bef_combine']['#options']);
-      }
+      // Re-order select options based on the config position.
+      $form['sort_bef_combine']['#options'] = _alshaya_acm_product_position_sorted_options($form['sort_bef_combine']['#options']);
+
+      // Set the first option as the default value.
+      $form['sort_bef_combine']['#default_value'] = key($form['sort_bef_combine']['#options']);
     }
   }
 }
 
 /**
+ * Re-order the plp sort options based on the config values position.
+ *
+ * @param array $options
+ *   Options to re-order.
+ *
+ * @return array
+ *   Re-ordered options of the sort.
+ */
+function _alshaya_acm_product_position_sorted_options(array $options) {
+  $config_sort_options = array_keys(array_filter(_alshaya_acm_product_position_get_config()));
+  // If there are at least any sort option enabled.
+  if (!empty($config_sort_options)) {
+    $new_sort_options = [];
+
+    // Iterate over config sort options to prepare new sorted array for form
+    // value option.
+    foreach ($config_sort_options as $sort_options) {
+      if (isset($options[$sort_options . ' ASC'])) {
+        $new_sort_options[$sort_options . ' ASC'] = $options[$sort_options . ' ASC'];
+      }
+      if (isset($options[$sort_options . ' DESC'])) {
+        $new_sort_options[$sort_options . ' DESC'] = $options[$sort_options . ' DESC'];
+      }
+    }
+
+    if (!empty($new_sort_options)) {
+      return $new_sort_options;
+    }
+  }
+
+  return $options;
+}
+
+/**
  * Function to get sort options config.
+ *
+ * @return array
+ *   Array of enabled options.
  */
 function _alshaya_acm_product_position_get_config() {
   return \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
