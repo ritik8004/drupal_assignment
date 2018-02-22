@@ -2,8 +2,10 @@
 
 .path--cart {
   @include breakpoint($only-tablet) {
-    .price-wrapper .price {
-      max-width: none;
+    .price-wrapper {
+      .price {
+        max-width: none !important;
+      }
     }
   }
 
