@@ -9,6 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Query\QueryInterface;
+use Drupal\views\Views;
 use Drupal\Views\ViewExecutable;
 
 /**
@@ -19,14 +20,18 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     $sorts =& $query->getSorts();
 
     // Get the default sort which is always the first config value.
-    $default_sort = _alshaya_acm_product_position_get_config();
+    $default_sort = current(_alshaya_acm_product_position_get_config());
     // This to check if user has selected sort from drop down or the page load.
     $exposed_input = !empty($_POST['sort_bef_combine']) ? $_POST['sort_bef_combine'] : NULL;
     // If position(nid) is set as the default sort.
-    if (key($default_sort) != 'nid' && empty($exposed_input)) {
+    if ($default_sort != 'nid' && empty($exposed_input)) {
       // Removing the nid default sort as coming from views config.
       unset($sorts['nid']);
-      $sorts[key($default_sort)] = current($default_sort);
+      // Get and set sort order from the views config.
+      $views_storage = Views::getView('alshaya_product_list')->storage;
+      $views_sort = $views_storage->getDisplay('block_1')['display_options']['sorts'];
+
+      $sorts[$default_sort] = $views_sort[$default_sort]['order'];
       return;
     }
 
@@ -141,7 +146,7 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
     }
 
     // Disable sort options if not enabled.
-    $enabled_sorts = array_keys(_alshaya_acm_product_position_get_config());
+    $enabled_sorts = _alshaya_acm_product_position_get_config();
     if (!$enabled_sorts) {
       $form['#access'] = FALSE;
     }
@@ -175,7 +180,7 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
  *   Re-ordered options of the sort.
  */
 function _alshaya_acm_product_position_sorted_options(array $options) {
-  $config_sort_options = array_keys(_alshaya_acm_product_position_get_config());
+  $config_sort_options = array_keys(array_filter(_alshaya_acm_product_position_get_config()));
   // If there are at least any sort option enabled.
   if (!empty($config_sort_options)) {
     $new_sort_options = [];
