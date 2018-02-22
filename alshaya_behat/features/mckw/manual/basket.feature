@@ -2,10 +2,10 @@
 Feature: Test basket page
 
   Background:
-    Given I am on a simple product page
-    And I wait for the page to load
-    When I press "Add to basket"
-    And I wait for AJAX to finish
+#    Given I am on a simple product page
+#    And I wait for the page to load
+#    When I press "Add to basket"
+#    And I wait for AJAX to finish
     When I am on a configurable product
     And I wait for the page to load
     When I select a size for the product
@@ -18,7 +18,7 @@ Feature: Test basket page
     and the header and footer
     When I go to "/cart"
     And I wait for the page to load
-    Then I should see the link for simple product
+#    Then I should see the link for simple product
     Then I should be able to see the header
     And I should see the link for configurable product
     Then I should see the button "checkout securely"
@@ -83,7 +83,7 @@ Feature: Test basket page
     When I follow "العربية"
     And I wait for the page to load
     Then I should be able to see the header in Arabic
-    Then I should see the link for simple product in Arabic
+#    Then I should see the link for simple product in Arabic
     And I should see the link for configurable product in Arabic
     Then I should see the button "إتمام الشراء بأمان"
     And I should see "سلة التسوق ("
@@ -119,7 +119,9 @@ Feature: Test basket page
   @arabic @loyalty
   Scenario: As a Guest
   I should be warned about privelege card number mismatch
-    When I go to "/ar/cart"
+    When I go to "/cart"
+    And I wait for the page to load
+    When I follow "العربية"
     And I wait for the page to load
     When I click the label for "#details-privilege-card-wrapper > div"
     Then I should see "إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني"
