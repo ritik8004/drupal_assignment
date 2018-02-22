@@ -222,7 +222,7 @@
   }
 
   @include breakpoint($tablet) {
-    margin-#{$right}: 1.5rem;
+    margin-#{$right}: 1.5rem !important;
     transition: margin 0.25s ease-in-out;
     width: 9.875rem;
     min-width: 11.625rem;
@@ -280,6 +280,14 @@
           display: block;
         }
       }
+    }
+  }
+}
+
+.order-confirmation {
+  .order-print-button {
+    @include breakpoint($tablet) {
+      text-align: $right;
     }
   }
 }

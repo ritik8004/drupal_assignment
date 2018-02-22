@@ -1,7 +1,7 @@
 @import '../../alshaya_white_label/sass/components/header/_header-secondary.scss';
 
 .c-menu-secondary {
-  background: none;
+  background: $white-five;
 
   @include breakpoint($only-tablet) {
     width: 20rem;
