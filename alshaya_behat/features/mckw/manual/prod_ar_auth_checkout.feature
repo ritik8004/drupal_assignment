@@ -4,7 +4,7 @@ Feature: As an authenticated user
   using various payment options on Arabic site
 
   Background:
-    When I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    When I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
     Given I am on a configurable product
@@ -25,13 +25,14 @@ Feature: As an authenticated user
   and pay by Cash-on-delivery on Arabic site
     When I follow "خدمة التوصيل للمنزل"
     And I wait for AJAX to finish
-    When I follow "توصيل إلى هذا العنوان"
-    And I wait for AJAX to finish
+    When I select address for Arabic
+    And I wait for the page to load
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for the page to load
     When I press "تابع للدفع"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
-    When I accept terms and conditions
     Then I should see "أؤكد أنني قرأت وفهمت"
 
   @hd @knet
@@ -39,9 +40,11 @@ Feature: As an authenticated user
     I should be able to checkout using Home delivery
     and pay by KNET on Arabic site
     When I follow "خدمة التوصيل للمنزل"
-    And I wait for AJAX to finish
-    When I follow "توصيل إلى هذا العنوان"
-    And I wait for AJAX to finish
+    And I wait for the page to load
+    When I select address for Arabic
+    And I wait for the page to load
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for the page to load
     When I press "تابع للدفع"
     And I wait for the page to load
     When I select a payment option "payment_method_title_knet"
@@ -49,7 +52,12 @@ Feature: As an authenticated user
     When I accept terms and conditions
     And I press "سجل الطلبية"
     When I wait for the page to load
-    Then I should see "معلومات الفاتورة"
+    And I select "ABK" from "bank"
+    When I fill in "cardN" with "0000000001"
+    And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
+    When I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
+    And I fill in "Ecom_Payment_Pin_id" with "1234"
+    And I press "إرسال"
 
   @hd @cs
   Scenario: As an authenticated user
@@ -66,7 +74,6 @@ Feature: As an authenticated user
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
-    When I accept terms and conditions
     Then I should see "أؤكد أنني قرأت وفهمت"
 
   @cc @knet
@@ -127,5 +134,4 @@ Feature: As an authenticated user
     When I fill in "edit-billing-address-address-billing-locality" with "كتلة A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "بناء C"
-    When I accept terms and conditions
     Then I should see "أؤكد أنني قرأت وفهمت"
