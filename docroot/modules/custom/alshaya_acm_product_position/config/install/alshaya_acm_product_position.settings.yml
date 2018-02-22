@@ -1,7 +1,3 @@
 sort_options:
-  name_1:
-    status: 1
-    default_sort: 'ASC'
-  final_price:
-    status: 1
-    default_sort: 'ASC'
+  name_1: name_1
+  final_price: final_price
