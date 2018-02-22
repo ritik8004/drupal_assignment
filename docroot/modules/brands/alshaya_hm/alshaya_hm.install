@@ -13,7 +13,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Re-order the PLP sort config by re-saving config.
  */
-function alshaya_hm_update_8016() {
+function alshaya_hm_update_8017() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
     ->setData([
       'sort_options' => [
