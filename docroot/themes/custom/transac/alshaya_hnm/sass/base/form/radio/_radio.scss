@@ -8,10 +8,13 @@
       color: $hnm-black-two;
       font-size: 2.438rem;
       vertical-align: middle;
+      border: none;
     }
   }
 
   input[type=radio]:checked ~ label {
-    @include icon(radio-filled, before);
+    @include icon(radio-filled, before) {
+      border: none;
+    }
   }
 }
