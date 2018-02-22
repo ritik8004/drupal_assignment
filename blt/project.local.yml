@@ -30,5 +30,8 @@ sites:
   bbwuae:
     module: alshaya_bbw
     type: alshaya_non_transac
+  dhuae:
+    module: alshaya_d
+    type: alshaya_non_transac
 vm:
   enable: true
