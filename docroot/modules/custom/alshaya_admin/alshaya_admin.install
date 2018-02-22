@@ -12,7 +12,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Process migration of workbench moderation to content moderation.
  */
-function alshaya_admin_update_8002() {
+function alshaya_admin_update_8003() {
   if (\Drupal::service('module_handler')->moduleExists('content_moderation')) {
     return t('Already migrated from workbench_moderation to content moderation, not doing again.');
   }
