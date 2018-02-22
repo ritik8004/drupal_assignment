@@ -206,13 +206,5 @@ function _alshaya_acm_product_position_sorted_options(array $options) {
  *   Array of enabled options.
  */
 function _alshaya_acm_product_position_get_config() {
-  $sorts = \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
-  $result = [];
-  foreach ($sorts as $key => $sort) {
-    if ($sort['status']) {
-      $result[$key] = $sort['default_sort'];
-    }
-  }
-
-  return $result;
+  return \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
 }

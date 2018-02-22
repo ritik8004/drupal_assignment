@@ -28,20 +28,8 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Get config.
     $config = $this->config('alshaya_acm_product_position.settings');
-    $sort_options = [];
-
-    // Iterate over value to prepare array to store config. Mostly this is to
-    // set the status value for sort option.
-    foreach ($form_state->getValue('sort_options') as $key => $value) {
-      $sort_options[$key] = [
-        'status' => (bool) $value,
-        'default_sort' => $config->get('sort_options.' . $key)['default_sort'],
-      ];
-    }
-
-    $config->set('sort_options', $sort_options);
+    $config->set('sort_options', $form_state->getValue('sort_options'));
     $config->save();
     return parent::submitForm($form, $form_state);
   }
@@ -51,6 +39,7 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
+    $config = $this->config('alshaya_acm_product_position.settings');
     $form['sort_options'] = [
       '#type' => 'checkboxes',
       '#options' => [
@@ -61,7 +50,7 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       ],
       '#title' => $this->t('Sort options'),
       '#description' => $this->t('Enabled sort options will show on PLP page.'),
-      '#default_value' => array_keys(_alshaya_acm_product_position_get_config()),
+      '#default_value' => $config->get('sort_options'),
     ];
     return $form;
   }
