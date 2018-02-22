@@ -9,6 +9,30 @@ use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_update_N().
+ */
+function alshaya_mc_update_8310() {
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
+    ->setData([
+      'sort_options' => [
+        'nid' => [
+          'status' => 1,
+          'default_sort' => 'ASC',
+        ],
+        'name_1' => [
+          'status' => 1,
+          'default_sort' => 'ASC',
+        ],
+        'final_price' => [
+          'status' => 1,
+          'default_sort' => 'ASC',
+        ],
+      ],
+    ])
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
  *
  * Update EN, AR paths for site log and email logo.
  */

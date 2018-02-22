@@ -17,10 +17,22 @@ function alshaya_hm_update_8016() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
     ->setData([
       'sort_options' => [
-        'created' => 'created',
-        'nid' => 'nid',
-        'name_1' => 'name_1',
-        'final_price' => 'final_price',
+        'created' => [
+          'status' => 1,
+          'default_sort' => 'DESC',
+        ],
+        'nid' => [
+          'status' => 1,
+          'default_sort' => 'ASC',
+        ],
+        'name_1' => [
+          'status' => 1,
+          'default_sort' => 'ASC',
+        ],
+        'final_price' => [
+          'status' => 1,
+          'default_sort' => 'ASC',
+        ],
       ],
     ])
     ->save();
