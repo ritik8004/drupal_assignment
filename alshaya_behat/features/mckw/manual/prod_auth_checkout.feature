@@ -4,7 +4,7 @@ Feature: As an authenticated user
   using various payment options
 
   Background:
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
     When I am on a simple product page
@@ -53,7 +53,7 @@ Feature: As an authenticated user
       And I wait for the page to load
       And I press "place order"
       And I wait for the page to load
-      And I select "Knet Test Card [KNET1]" from "bank"
+      And I select "ABK" from "bank"
       And I fill in "cardN" with "0000000001"
       And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
       And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
@@ -78,7 +78,7 @@ Feature: As an authenticated user
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
+    And I select "ABK" from "bank"
     And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
