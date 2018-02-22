@@ -147,10 +147,15 @@ body.path--confirmation.alias--confirmation-print {
       color: $light-greyish;
       font-weight: normal;
     }
+  }
+}
 
-    @include breakpoint($only-mobile) {
-      position: absolute;
-      #{$right}: 0;
+.user__order--detail {
+  .total-row {
+    .warm--white {
+      @include breakpoint($only-mobile) {
+        position: static;
+      }
     }
   }
 }
