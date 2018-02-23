@@ -4,10 +4,10 @@ Feature: As an authenticated user
   using various payment options
 
   Background:
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
@@ -78,7 +78,7 @@ Feature: As an authenticated user
     When I select a payment option "payment_method_title_knet"
     And I wait for AJAX to finish
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Sharq" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
@@ -133,7 +133,7 @@ Feature: As an authenticated user
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Sharq" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"

@@ -1,7 +1,7 @@
 @import '../../alshaya_white_label/sass/components/header/_header-secondary.scss';
 
 .c-menu-secondary {
-  background: none;
+  background: $white-five;
 
   @include breakpoint($only-tablet) {
     width: 20rem;
@@ -155,10 +155,10 @@
 
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 3.625rem;
+    margin-top: 3.625rem !important;
 
     &.logged-in.toolbar-vertical {
-      margin-top: 5.9375rem;
+      margin-top: 5.9375rem !important;
       padding-top: 0 !important;
     }
 
@@ -168,10 +168,10 @@ body {
   }
 
   @include breakpoint($only-tablet) {
-    margin-top: 4.5rem;
+    margin-top: 4.5rem !important;
 
     &.logged-in.toolbar-vertical {
-      margin-top: 7rem;
+      margin-top: 7rem !important;
       padding-top: 0 !important;
     }
 

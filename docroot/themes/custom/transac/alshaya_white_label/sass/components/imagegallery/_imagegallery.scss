@@ -27,7 +27,9 @@
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
-  @include icon(close);
+  @include icon(close) {
+    font-size: 1.875rem;
+  }
 
   position: absolute;
   #{$right}: 0;
@@ -38,11 +40,12 @@
   height: 1.875rem;
   border: none;
   z-index: 9;
-  font-size: 1.875rem;
+  font-size: 0;
   color: $white-two;
   background-color: $marine-blue;
   border-radius: 0;
   outline: solid transparent;
+  text-indent: inherit;
 
   &::before {
     position: absolute;

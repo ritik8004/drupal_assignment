@@ -12,7 +12,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Process migration of workbench moderation to content moderation.
  */
-function alshaya_admin_update_8002() {
+function alshaya_admin_update_8003() {
   if (\Drupal::service('module_handler')->moduleExists('content_moderation')) {
     return t('Already migrated from workbench_moderation to content moderation, not doing again.');
   }
@@ -22,8 +22,11 @@ function alshaya_admin_update_8002() {
   // Disable immediate indexing for product while we run migrate. To avoid
   // unnecessary sql queries of index.
   $index = Index::load('product');
-  $index->setOption('index_directly', FALSE);
-  $index->save();
+
+  if ($index instanceof Index) {
+    $index->setOption('index_directly', FALSE);
+    $index->save();
+  }
 
   // Invoke a drush command to execute migration.
   drush_invoke_process('@self', 'wbm2cm-migrate');
@@ -54,8 +57,10 @@ function alshaya_admin_update_8002() {
 
   // Enable immediate indexing after migration finished.
   $index = Index::load('product');
-  $index->setOption('index_directly', TRUE);
-  $index->save();
+  if ($index instanceof Index) {
+    $index->setOption('index_directly', TRUE);
+    $index->save();
+  }
 
   drupal_static_reset();
   print "Flushing cache.";

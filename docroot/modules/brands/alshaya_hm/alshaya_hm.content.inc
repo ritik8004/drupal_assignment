@@ -50,6 +50,8 @@ H&M has since it was founded in 1947 grown into one of the world's leading fashi
  * Create Footer logo block content for HnM.
  */
 function alshaya_hm_create_footer_logo_block() {
+  // Footer logo path.
+  $logo_path = '/' . drupal_get_path('theme', 'alshaya_hnm') . '/h-m-logo-bw.svg';
   // Create footer logo block content.
   $block_content = BlockContent::create([
     'info' => 'Footer HnM logo',
@@ -58,7 +60,7 @@ function alshaya_hm_create_footer_logo_block() {
     'body' => [
       'value' => "<div class='footer-brand-home'>
                    <a href='/en' title='footer-brand-logo' rel='home' class='logo'>
-                     <img src='/themes/custom/alshaya_hnm/h-m-logo-bw.svg' alt='HnM Logo'>
+                     <img src='" . $logo_path . "' alt='HnM Logo'>
                    </a>
                  </div>",
       'format' => 'rich_text',
@@ -73,7 +75,7 @@ function alshaya_hm_create_footer_logo_block() {
     'body' => [
       'value' => "<div class='footer-brand-home'>
                    <a href='/ar' title='footer-brand-logo' rel='home' class='logo'>
-                     <img src='/themes/custom/alshaya_hnm/h-m-logo-bw.svg' alt='HnM Logo'>
+                     <img src='" . $logo_path . "' alt='HnM Logo'>
                    </a>
                  </div>",
       'format' => 'rich_text',

@@ -5,13 +5,13 @@
   .content {
     &__main {
       @include breakpoint($desktop) {
-        width: 70%;
+        width: 60%;
       }
     }
 
     &__sidebar {
       @include breakpoint($desktop) {
-        width: 30%;
+        width: 38%;
       }
     }
   }
@@ -30,6 +30,7 @@
     font-family: $hnm-bold;
     line-height: 1;
     margin-top: 2rem;
+    padding-#{$left}: 2.938rem;
   }
 
   .sku-base-form .ajax-progress-throbber {
