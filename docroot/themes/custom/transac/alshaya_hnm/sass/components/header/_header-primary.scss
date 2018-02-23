@@ -636,6 +636,8 @@ header {
         visibility: hidden;
         overflow: hidden;
         transition: all 0.4s ease 0.075s;
+        transform: none;
+        border-top: none;
       }
     }
 
