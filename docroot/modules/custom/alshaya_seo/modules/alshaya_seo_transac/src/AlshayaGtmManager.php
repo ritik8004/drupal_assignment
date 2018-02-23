@@ -353,7 +353,7 @@ class AlshayaGtmManager {
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
     $attributes['gtm-dimension1'] = $sku->get('attribute_set')->getString();
-    $attributes['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available';
+    $attributes['gtm-dimension4'] = $product_node ? (count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available') : 'image not available';
     $attributes['gtm-dimension5'] = $sku->get('attr_product_collection')->getString();
     $attributes['gtm-dimension6'] = $sku->get('attr_size')->getString();
 

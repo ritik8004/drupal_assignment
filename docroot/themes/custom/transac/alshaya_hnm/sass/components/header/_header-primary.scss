@@ -1169,12 +1169,14 @@ header {
   .one {
     @include arabic-letter-spacing;
 
+    font-family: inherit;
+
     @include breakpoint($only-tablet) {
       color: $hnm-black-three;
     }
 
     @include breakpoint($only-mobile) {
-      width: 68%;
+      width: 59%;
 
       .logged-out & {
         padding: 0.9rem 0.25rem;
@@ -1187,7 +1189,8 @@ header {
           width: 30%;
         }
 
-        &.account {
+        &.account,
+        &.account--logged_in {
           width: 68%;
         }
       }
@@ -1278,6 +1281,10 @@ header {
     @include breakpoint($only-mobile) {
       .my-account-nav a {
         padding: 0;
+      }
+
+      .hamburger--menu {
+        padding: 0.625rem 0.5rem;
       }
     }
   }

@@ -11,6 +11,24 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Re-order the PLP sort config by re-saving config.
+ */
+function alshaya_hm_update_8017() {
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
+    ->setData([
+      'sort_options' => [
+        'created' => 'created',
+        'nid' => 'nid',
+        'name_1' => 'name_1',
+        'final_price' => 'final_price',
+      ],
+    ])
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new live text style to 'field_promo_theme' paragraph field.
  */
 function alshaya_hm_update_8016() {
