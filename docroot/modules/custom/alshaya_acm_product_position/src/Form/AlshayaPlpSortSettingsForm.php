@@ -28,8 +28,18 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    // Get form values.
+    $sort_options = $form_state->getValue('sort_options');
+    // Sort the options based on weight.
+    uasort($sort_options, [$this, 'weightArraySort']);
+    $result = [];
+    // Prepare sort option array for save.
+    foreach ($sort_options as $key => $sort_option) {
+      $result[$key] = $sort_option['enable'] ? $key : 0;
+    }
+
     $config = $this->config('alshaya_acm_product_position.settings');
-    $config->set('sort_options', $form_state->getValue('sort_options'));
+    $config->set('sort_options', $result);
     $config->save();
     return parent::submitForm($form, $form_state);
   }
@@ -56,55 +66,44 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       ],
     ];
 
-    // Sort options.
+    // Sort options from config.
     $sort_options = $this->config('alshaya_acm_product_position.settings')->get('sort_options');
+
+    // Sort options.
     $options = [
-      'created' => [
-        'weight' => $sort_options['created']['weight'],
-        'label' => $this->t('New IN'),
-        'enable' => (bool) $sort_options['created']['enable'],
-      ],
-      'nid' => [
-        'weight' => $sort_options['nid']['weight'],
-        'label' => $this->t('Position'),
-        'enable' => (bool) $sort_options['nid']['enable'],
-      ],
-      'name_1' => [
-        'weight' => $sort_options['name_1']['weight'],
-        'label' => $this->t('Name'),
-        'enable' => (bool) $sort_options['name_1']['enable'],
-      ],
-      'final_price' => [
-        'weight' => $sort_options['final_price']['weight'],
-        'label' => $this->t('Final Price'),
-        'enable' => (bool) $sort_options['final_price']['enable'],
-      ],
+      'nid' => $this->t('Position'),
+      'created' => $this->t('New IN'),
+      'name_1' => $this->t('Name'),
+      'final_price' => $this->t('Final Price'),
     ];
 
-    // Sort the dataset based on weight.
-    uasort($options, [$this, 'weightArraySort']);
-
-    foreach ($options as $id => $option) {
+    // Variable to set the weight.
+    $weight = 0;
+    foreach ($sort_options as $id => $option) {
       $form['sort_options'][$id]['#attributes']['class'][] = 'draggable';
-      $form['sort_options'][$id]['#weight'] = $option['weight'];
+      $form['sort_options'][$id]['#weight'] = $weight;
 
       $form['sort_options'][$id]['enable'] = [
         '#type' => 'checkbox',
-        '#default_value' => $option['enable'],
+        '#default_value' => (bool) $option,
       ];
 
       $form['sort_options'][$id]['label'] = [
-        '#plain_text' => $option['label'],
+        '#plain_text' => $options[$id],
       ];
 
       $form['sort_options'][$id]['weight'] = [
         '#type' => 'weight',
-        '#title' => $this->t('Weight for @title', ['@title' => $option['label']]),
+        '#title' => $this->t('Weight for @title', ['@title' => $options[$id]]),
         '#title_display' => 'invisible',
-        '#default_value' => $option['weight'],
+        '#default_value' => $weight,
         '#attributes' => ['class' => ['plp_sort_options-order-weight']],
       ];
+
+      // Increase the weight.
+      $weight++;
     }
+
     return $form;
   }
 
