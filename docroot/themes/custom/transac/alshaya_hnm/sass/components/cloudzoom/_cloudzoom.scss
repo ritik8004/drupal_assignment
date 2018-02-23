@@ -4,6 +4,7 @@
   .cloudzoom__herocontainer {
     .product-labels {
       height: auto;
+      position: unset;
     }
   }
 }
@@ -70,6 +71,14 @@
           height: 6.375rem !important;
         }
       }
+    }
+  }
+}
+
+#lightSlider {
+  .slick-slide {
+    @include breakpoint($only-tablet) {
+      width: 6rem !important;
     }
   }
 }
