@@ -1,3 +1,7 @@
 sort_options:
-  name_1: name_1
-  final_price: final_price
+  name_1:
+    weight: 1
+    enable: 1
+  final_price:
+    weight: 2
+    enable: 1
