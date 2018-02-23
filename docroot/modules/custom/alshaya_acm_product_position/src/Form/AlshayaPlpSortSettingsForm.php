@@ -33,7 +33,7 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     // Sort the options based on weight.
     uasort($sort_options, [$this, 'weightArraySort']);
     $result = [];
-    // Prepare sort option array for save.
+    // Prepare sort option array for saving in config.
     foreach ($sort_options as $key => $sort_option) {
       $result[$key] = $sort_option['enable'] ? $key : 0;
     }
