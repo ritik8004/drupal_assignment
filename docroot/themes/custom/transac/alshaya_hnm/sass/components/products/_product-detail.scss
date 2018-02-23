@@ -815,6 +815,12 @@ article[gtm-sku-type="simple"] {
   }
 }
 
+.ui-dialog {
+  .form-item-configurables-color {
+    display: none;
+  }
+}
+
 .fake-apply-button {
   font-family: $hnm-bold;
   display: inline-block;
@@ -935,6 +941,14 @@ html[lang=ar] {
       @include breakpoint($tablet) {
         margin-#{$left}: 0;
       }
+    }
+  }
+}
+
+.acq-content-product-modal {
+  .content__main {
+    @include breakpoint($desktop) {
+      min-height: 31.25rem;
     }
   }
 }
