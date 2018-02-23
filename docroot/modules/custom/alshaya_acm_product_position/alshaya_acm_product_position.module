@@ -172,7 +172,8 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
       // passes 'nid' in #value. So if user has not selected any sort option,
       // means its page load, then the first option will be used for #value,
       // otherwise the user selected value will be used.
-      $form['sort_bef_combine']['#value'] = !empty($applied_sort_option['sort_bef_combine']) && isset($form['sort_bef_combine']['#options'][$applied_sort_option['sort_bef_combine']]) ? $applied_sort_option['sort_bef_combine'] : $default_sort_option;
+      $sort_bef_combine = !empty($applied_sort_option['sort_bef_combine']) ? $applied_sort_option['sort_bef_combine'] : NULL;
+      $form['sort_bef_combine']['#value'] = !empty($sort_bef_combine) && isset($form['sort_bef_combine']['#options'][$sort_bef_combine]) ? $sort_bef_combine : $default_sort_option;
 
     }
   }

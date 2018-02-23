@@ -77,7 +77,7 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       'final_price' => $this->t('Final Price'),
     ];
 
-    // Variable to set the weight.
+    // Maintaining the weight.
     $weight = 0;
     foreach ($sort_options as $id => $option) {
       $form['sort_options'][$id]['#attributes']['class'][] = 'draggable';
