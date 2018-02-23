@@ -10,6 +10,19 @@ use Symfony\Component\Yaml\Yaml;
 use Drupal\node\Entity\Node;
 
 /**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_acm_product_update_dependencies() {
+  return [
+    'alshaya_admin' => [
+      '8002' => [
+        'alshaya_acm_product' => '8010',
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_update_N().
  *
  * Moving size guide config to node.
