@@ -117,7 +117,7 @@ body.path--confirmation.alias--confirmation-print {
   }
 
   .price-currency {
-    @include breakpoint($only-tablet) {
+    @include breakpoint($only-ptablet) {
       margin-#{$right}: 0.4375rem;
     }
   }
