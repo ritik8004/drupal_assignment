@@ -6,13 +6,21 @@ $dir: rtl;
 @import '../node_modules/susy/sass/susy';
 @import '../node_modules/breakpoint-sass/stylesheets/breakpoint';
 
-// Reset to normalize browser styles.
-@import "reset";
+// Imported from alshaya_white_label.
+@import "../../alshaya_white_label/sass/reset";
+@import "../../alshaya_white_label/sass/config/**/*";
+@import "../../alshaya_white_label/sass/utils";
+@import "../../alshaya_white_label/sass/icons";
+@import "../../alshaya_white_label/sass/directional";
+@import "../../alshaya_white_label/sass/base/**/*";
+@import "../../alshaya_white_label/sass/layout/**/*";
+@import "../../alshaya_white_label/sass/components/**/*";
+@import "../../alshaya_white_label/sass/state/**/*";
+@import "../../alshaya_white_label/sass/hotfix";
 
 // Config file that contains centralized variables.
 @import "config/**/*";
 @import "utils";
-@import "icons";
 
 // Utilities for building multilingual websites.
 @import "directional";
@@ -20,15 +28,9 @@ $dir: rtl;
 // These are the default base styles applied to HTML elements.
 @import "base/**/*";
 
-// These are the layout rules.
-@import "layout/**/*";
-
 // Design components are reusable styling that can be applied using just the CSS
 // class names specified in the component. Also known as design 'modules'.
 @import "components/**/*";
-
-// States are variations that are usually applied via js, such as `.is-active`.
-@import "state/**/*";
 
 // Importing browser specific hot fixes.
 @import "hotfix";

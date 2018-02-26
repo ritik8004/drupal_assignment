@@ -1,5 +1,3 @@
-@import "../../alshaya_white_label/sass/components/backtotop/_backtotop.scss";
-
 #backtotop {
   @include breakpoint($only-mobile) {
     #{$right}: 0;

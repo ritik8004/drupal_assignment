@@ -1,5 +1,3 @@
-@import "../../alshaya_white_label/sass/components/order/_order-print.scss";
-
 .c-order-print {
   .delivery-details {
     border: 1px solid $hnm-black-two;
@@ -119,7 +117,7 @@ body.path--confirmation.alias--confirmation-print {
   }
 
   .price-currency {
-    @include breakpoint($only-ptablet) {
+    @include breakpoint($only-tablet) {
       margin-#{$right}: 0.4375rem;
     }
   }
