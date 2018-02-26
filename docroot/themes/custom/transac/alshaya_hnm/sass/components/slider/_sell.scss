@@ -190,7 +190,10 @@
       width: 33%;
       float: $left;
       max-width: 12rem;
-      margin: 0 1rem;
+
+      @include breakpoint($desktop) {
+        margin: 0 1rem;
+      }
     }
   }
 }
