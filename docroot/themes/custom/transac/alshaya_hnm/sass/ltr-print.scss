@@ -14,13 +14,9 @@
 @import "../../alshaya_white_label/sass/components/**/*";
 @import "../../alshaya_white_label/sass/state/**/*";
 
-// Reset to normalize browser styles.
-//@import "reset";
-
 // Config file that contains centralized variables.
 @import "config/**/*";
 @import "utils";
-//@import "icons";
 
 // Utilities for building multilingual websites.
 @import "directional";
