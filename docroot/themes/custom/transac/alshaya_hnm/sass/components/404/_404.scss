@@ -128,6 +128,8 @@
 }
 
 .maintenance-page {
+  border-top: none;
+
   .maintenance__logo {
     margin-top: 3rem;
 
@@ -137,6 +139,7 @@
     }
 
     @include breakpoint($desktop) {
+      float: none;
       text-align: center;
       margin-right: 2rem;
     }
