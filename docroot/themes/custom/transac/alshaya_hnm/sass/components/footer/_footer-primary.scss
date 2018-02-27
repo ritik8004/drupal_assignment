@@ -218,7 +218,6 @@
 
   .footer--menu {
     float: none;
-    overflow: auto;
 
     @include breakpoint($desktop) {
       padding: 0 1rem;
