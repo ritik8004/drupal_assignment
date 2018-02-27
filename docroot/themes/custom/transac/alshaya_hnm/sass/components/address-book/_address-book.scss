@@ -230,6 +230,10 @@
       .form-item-cc-mobile-number-mobile {
         position: static !important;
         width: auto;
+
+        .ie & {
+          width: 9.37rem;
+        }
       }
 
       #edit-field-address-0-address-mobile-number-mobile-error,
