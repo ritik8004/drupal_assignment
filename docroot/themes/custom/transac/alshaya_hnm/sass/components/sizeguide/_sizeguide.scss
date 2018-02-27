@@ -87,10 +87,13 @@
     }
 
     div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
-      max-width: 33.375rem !important;
       margin: 0 auto;
       width: 100%;
       overflow: auto !important;
+      
+      @include breakpoint($tablet) {
+        max-width: 33.375rem !important;
+      }
     }
 
     .ui-dialog-titlebar-close {
