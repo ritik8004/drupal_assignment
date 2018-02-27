@@ -1,60 +1,17 @@
-.c-delivery-menu {
-  margin: 2em auto;
-  padding: 0;
+@import '../../alshaya_white_label/sass/components/menus/delivery-menu/_delivery-menu.scss';
 
-  @include breakpoint($only-mobile) {
-    margin: 0 auto 1em;
-  }
+.c-delivery-menu {
+  text-transform: none;
 }
 
 .c-delivery-menu__tab {
-  text-align: center;
-  list-style: none;
   padding: 0.6875rem 0;
-  margin-#{$left}: auto;
-  margin-#{$right}: auto;
-  width: 100%;
   border: 2px solid $link-hover;
-  position: relative;
-  line-height: normal;
-
-  @include breakpoint($only-mobile) {
-    max-width: 100%;
-
-    &:nth-child(n + 2) {
-      display: none;
-    }
-  }
-
-  @include breakpoint($tablet) {
-    width: 32%;
-    margin-#{$right}: 2%;
-    float: $left;
-  }
-
-  &:last-child {
-    margin-#{$right}: 0;
-  }
-
-  @include breakpoint($only-tablet) {
-    width: 48.6%;
-    margin-#{$right}: 3%;
-
-    &:nth-child(2) {
-      margin-#{$right}: 0;
-      width: 48.4%;
-    }
-
-    &:last-child {
-      @include u-visibility(none);
-    }
-  }
+  box-shadow: none;
 
   .field--name-field-title {
     @include arabic-letter-spacing;
 
-    display: block;
-    text-decoration: none;
     font-size: 1.125rem;
     font-family: $hnm-demibold;
     font-weight: normal;
@@ -70,11 +27,6 @@
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
     color: $link-hover;
-  }
-
-  .field--name-field-link a {
-    @include u-image-replacement;
-    @include u-overlay-content;
   }
 
   .c-delivery-menu__title {
@@ -101,11 +53,6 @@
       letter-spacing: 0.5px;
       text-transform: capitalize;
       font-size: 0.75rem;
-      margin-top: -1px;
-
-      @include breakpoint($only-mobile) {
-        font-size: 0.625rem;
-      }
     }
   }
 }

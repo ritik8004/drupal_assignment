@@ -1,0 +1,5 @@
+services:
+  alshaya_permissions.route_subscriber:
+    class: Drupal\alshaya_permissions\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

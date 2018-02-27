@@ -15,7 +15,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Adding existing field 'field_promo_block_button' field to Banner paragraph.
  */
-function alshaya_paragraphs_update_8107() {
+function alshaya_paragraphs_update_8109() {
   $configs = [
     'field.field.paragraph.banner.field_promo_block_button',
     'core.entity_form_display.paragraph.banner.default',
@@ -25,6 +25,39 @@ function alshaya_paragraphs_update_8107() {
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove view modes for promo_block paragraph type & update the same
+ * in advanced_page.
+ */
+function alshaya_paragraphs_update_8108() {
+  // Delete configs since the client wants to use original images instead of
+  // responsive images.
+  $promo_block_view_modes_delete = [
+    'core.entity_view_display.paragraph.image_title_subtitle.w326',
+    'core.entity_view_display.paragraph.promo_block.w1026',
+    'core.entity_view_display.paragraph.promo_block.w291',
+    'core.entity_view_display.paragraph.promo_block.w326',
+    'core.entity_view_display.paragraph.promo_block.w449',
+    'core.entity_view_display.paragraph.promo_block.w501',
+    'core.entity_view_display.paragraph.promo_block.w606',
+    'core.entity_view_display.paragraph.promo_block.w921',
+  ];
+
+  alshaya_config_delete_configs($promo_block_view_modes_delete);
+
+  // Update config for fields using promo_block to use default view mode.
+  $entity_view_displays = [
+    'core.entity_view_display.paragraph.1_row_1_col.default',
+    'core.entity_view_display.paragraph.1_row_1st_col_2_row_2nd_col.default',
+    'core.entity_view_display.paragraph.1_row_2_col.default',
+    'core.entity_view_display.paragraph.1_row_3_col.default',
+  ];
+
+  alshaya_config_install_configs($entity_view_displays, 'alshaya_paragraphs');
 }
 
 /**

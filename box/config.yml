@@ -16,6 +16,7 @@ vagrant_synced_folders:
     # Set the destination to the Acquia Cloud subscription machine name.
     destination: /var/www/alshaya
     type: nfs
+    mount_options: ['actimeo=2']
 
 drupal_build_composer_project: false
 # Toggling this to `true` would invoke `composer install` with the
@@ -150,6 +151,10 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-dhuae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
 mysql_databases:
   - name: drupal
     encoding: utf8mb4
@@ -176,6 +181,10 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_bbwuae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_dhuae
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 

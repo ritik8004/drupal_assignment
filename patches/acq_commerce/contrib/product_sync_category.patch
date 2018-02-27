@@ -175,3 +175,17 @@ index 0076ac608..f47d6f150 100644
      if ($this->debug && !empty($this->debugDir)) {
        // Export product data into file.
        $filename = $this->debugDir . '/products_' . $langcode . '.data';
+diff --git a/src/Conductor/IngestAPIWrapper.php b/src/Conductor/IngestAPIWrapper.php
+index f47d6f150c..e7181049ef 100644
+--- a/src/Conductor/IngestAPIWrapper.php
++++ b/src/Conductor/IngestAPIWrapper.php
+@@ -76,6 +76,9 @@ public function productFullSync($store_id, $langcode, $skus = '', $category_id =
+ 
+       $opt['query']['store_id'] = $store_id;
+ 
++      // To allow hmac sign to be verified properly we need them in asc order.
++      ksort($opt['query']);
++
+       return $client->post($endpoint, $opt);
+     };
+ 

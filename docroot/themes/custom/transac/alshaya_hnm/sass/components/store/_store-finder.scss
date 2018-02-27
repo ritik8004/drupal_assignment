@@ -612,3 +612,10 @@
     }
   }
 }
+
+.path--store-finder,
+.nodetype--store {
+  .active {
+    color: $hnm-black-two;
+  }
+}

@@ -1,40 +1,6 @@
+@import "../../alshaya_white_label/sass/config/_fonts.scss";
+
 // Define Fonts
-@font-face {
-  font-family: 'Mothercare';
-  src: url('../fonts/alshaya-bold.woff2') format('woff2'), url('../fonts/alshaya-bold.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'MothercareThin';
-  src: url('../fonts/alshaya-thin.woff2') format('woff2'), url('../fonts/alshaya-thin.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Cairo-300';
-  src: url('../fonts/alshaya-arabic-thin.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-thin.woff') format('woff'), url('../fonts/alshaya-arabic-thin.ttf')  format('truetype'), url('../fonts/alshaya-arabic-thin.svg#NotoKufiArabic-Bold') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Cairo-bold';
-  src: url('../fonts/alshaya-arabic-bold.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-bold.woff') format('woff'), url('../fonts/alshaya-arabic-bold.ttf')  format('truetype'), url('../fonts/alshaya-arabic-bold.svg#NotoKufiArabic-Bold') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'alshaya-icons';
-  src: url('../fonts/alshaya-icons.eot?2pxs5l');
-  src: url('../fonts/alshaya-icons.eot?2pxs5l#iefix') format('embedded-opentype'), url('../fonts/alshaya-icons.ttf?2pxs5l') format('truetype'), url('../fonts/alshaya-icons.woff?2pxs5l') format('woff'), url('../fonts/alshaya-icons.svg?2pxs5l#alshaya-icons') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
 @font-face {
   font-family: 'Ampersand_bold';
   src: url('../fonts/HMAmpersand-Bold.eot');
@@ -184,23 +150,6 @@ $hnmpromo-arabic-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium';
 
 $hnm-icons: 'hnm-icons';
 $body_font: $hnm-regular;
-
-// Mothercare font Family.
-$alshaya-bold: 'Mothercare';
-$alshaya-bold-nodir: 'Mothercare';
-
-$alshaya-thin: 'MothercareThin';
-$alshaya-thin-nodir: 'MothercareThin';
-
-$alshaya-arabic-bold: 'Cairo-bold', 'Mothercare';
-$alshaya-arabic-bold-nodir: 'Cairo-bold', 'Mothercare';
-
-$alshaya-arabic-thin: 'Cairo-300', 'MothercareThin';
-$alshaya-arabic-thin-nodir: 'Cairo-300', 'MothercareThin';
-
-$alshaya-icons: 'alshaya-icons';
-$arial: 'arialmt', arial, sans-serif;
-$arial-nodir: 'arialmt', arial, sans-serif;
 
 // Icon Fonts
 $icons: (

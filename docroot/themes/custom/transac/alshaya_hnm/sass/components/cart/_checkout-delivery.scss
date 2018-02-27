@@ -46,10 +46,10 @@
       }
 
       .form-actions {
-        background: $hnm-grey;
+        background: $white-five;
 
-        @include breakpoint($mobile) {
-          background: $white-five;
+        @include breakpoint($tablet) {
+          background: $hnm-grey;
         }
 
         a {
@@ -275,6 +275,7 @@
   .ajax-progress-throbber {
     .throbber {
       background: url(../imgs/icons/ic-loader.svg) center no-repeat !important;
+      background-size: 5.5rem !important;
     }
   }
 }
@@ -482,7 +483,7 @@
             top: -0.3125rem;
 
             @include breakpoint($only-mobile) {
-              text-align: $left;
+              text-align: center;
             }
 
             @include breakpoint($only-tablet) {
@@ -490,9 +491,14 @@
             }
           }
 
-          @include breakpoint($tablet) {
-            #add-address-button {
+          #add-address-button {
+            @include breakpoint($tablet) {
               top: -0.625rem;
+              width: 40%;
+            }
+
+            @include breakpoint($desktop) {
+              width: 20%;
             }
           }
         }
