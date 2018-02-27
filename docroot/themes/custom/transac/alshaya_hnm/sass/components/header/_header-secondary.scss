@@ -40,17 +40,17 @@
 
       &:hover,
       &.is-active {
-        background-color: $grey1;
-        color: $grey8;
+        background-color: $grey1 !important;
+        color: $grey8 !important;
       }
 
       &.language-link {
-        font-family: $hnm-arabic-medium;
+        font-family: $hnm-arabic-medium !important;
         letter-spacing: normal;
 
         html[lang='ar'] & {
           letter-spacing: 0.8px;
-          font-family: $hnm-regular;
+          font-family: $hnm-regular !important;
         }
       }
     }

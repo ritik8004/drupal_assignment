@@ -116,7 +116,7 @@ header {
       }
 
       &::placeholder {
-        font-size: 0.875rem;
+        font-size: 0.875rem !important;
         color: $grey6;
         text-transform: capitalize;
       }
@@ -1489,6 +1489,7 @@ html[lang='ar'] {
   @include breakpoint($desktop) {
     position: relative;
     top: -0.125rem;
+    left: 0;
 
     html[lang=ar] & {
       right: 10px;
