@@ -18,6 +18,9 @@ drush:
     ci: self
   default_alias: '${drush.aliases.local}'
 target-hooks:
+  frontend-validate:
+    dir: '${repo.root}/blt/scripts'
+    command: 'bash frontend-validate.sh ${docroot}'
   frontend-setup:
     dir: '${repo.root}/blt/scripts'
     command: 'bash frontend-setup.sh ${docroot}'

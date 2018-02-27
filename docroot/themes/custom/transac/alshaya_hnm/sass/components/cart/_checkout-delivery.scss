@@ -178,11 +178,19 @@
       font-size: 0.875rem;
 
       @include breakpoint($tablet) {
-        width: 6.2%;
+        width: 5.9%;
+
+        html[lang=ar] & {
+          width: 6.2%;
+        }
       }
 
       @include breakpoint($desktop) {
         width: 5.225%;
+
+        html[lang=ar] & {
+          width: 6.1%;
+        }
       }
     }
 
