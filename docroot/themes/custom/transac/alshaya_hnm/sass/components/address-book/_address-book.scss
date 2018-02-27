@@ -215,6 +215,10 @@
         font-size: 1rem;
         line-height: 2.25;
         color: $greyish;
+
+        html[lang=ar] .ie & {
+          line-height: 2.25;
+        }
       }
 
       .form-item-field-address-0-address-mobile-number-mobile,
