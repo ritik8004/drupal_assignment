@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "52cde4ebdb35365c8261b55897c24264",
+    "content-hash": "fed23f1c363acbf92ad00e614a5bd447",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -95,7 +95,7 @@
                 "patches_applied": {
                     "ACR2-2704 css linting sniff": "./patches/blt/css_lint_sniff_ACR2-2704.patch",
                     "Allow validation of frontend files": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2571.patch",
-                    "Travis marked as success despite error after core update": "./patches/blt/travis_failed_but_success_ACR2-2680.patch"
+                    "Travis marked as success despite error after core update": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2578.patch"
                 }
             },
             "autoload": {
