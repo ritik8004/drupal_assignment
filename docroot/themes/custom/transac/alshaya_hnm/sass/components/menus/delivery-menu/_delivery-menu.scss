@@ -56,3 +56,9 @@
     }
   }
 }
+
+.c-delivery-menu {
+  @include breakpoint($only-mobile) {
+    margin: 1rem auto;
+  }
+}

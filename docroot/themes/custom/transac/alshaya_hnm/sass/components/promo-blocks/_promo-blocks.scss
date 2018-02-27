@@ -113,7 +113,7 @@
   width: 100%;
 
   @include breakpoint($tablet) {
-    max-width: 20rem;
+    max-width: 22rem;
   }
 
   @include breakpoint($desktop) {
@@ -274,5 +274,16 @@
 .theme-black-ampersand-bold {
   .field--name-field-promo-text-2 {
     font-family: $hnm-bold;
+  }
+}
+
+.c-content__slider {
+  .promo-block__position {
+    .field--name-field-button-link {
+      position: absolute;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
   }
 }
