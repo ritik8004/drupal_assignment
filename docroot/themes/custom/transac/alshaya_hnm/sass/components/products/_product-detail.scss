@@ -884,23 +884,25 @@ html[lang=ar] {
     .labels-container {
       .label {
         &.top {
+          top: 0.625rem;
+
           &-left {
             @include breakpoint($only-tablet) {
-              #{$left}: 1.3rem;
+              left: 1.3rem;
             }
 
             @include breakpoint($desktop) {
-              #{$left}: 5.3rem;
+              left: 5.3rem;
             }
           }
 
           &-right {
             @include breakpoint($only-tablet) {
-              #{$right}: 1.3rem;
+              right: 1.3rem;
             }
 
             @include breakpoint($desktop) {
-              #{$right}: 5.3rem;
+              right: 5.3rem;
             }
           }
         }
@@ -908,11 +910,21 @@ html[lang=ar] {
         &.bottom {
           &-right {
             @include breakpoint($only-tablet) {
-              #{$right}: 1.3rem;
+              right: 1.3rem;
             }
 
             @include breakpoint($desktop) {
-              #{$right}: 5.3rem;
+              right: 5.3rem;
+            }
+          }
+
+          &-left {
+            @include breakpoint($only-tablet) {
+              left: 1.3rem;
+            }
+
+            @include breakpoint($desktop) {
+              left: 5.3rem;
             }
           }
         }

@@ -83,3 +83,9 @@ body {
     }
   }
 }
+
+.ie .address .address--primary span::before,
+.ie .address .address--primary a::before {
+  // Adding px for IE, top not working as expected.
+  margin-top: 15px !important;
+}
