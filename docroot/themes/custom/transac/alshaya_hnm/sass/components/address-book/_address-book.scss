@@ -96,6 +96,14 @@
     }
   }
 
+  .address--controls {
+    .ie & {
+      @include breakpoint($tablet) {
+        min-height: 6rem;
+      }
+    }
+  }
+
   .address--edit,
   .address--delete {
     a {
@@ -218,6 +226,10 @@
 
         html[lang=ar] .ie & {
           line-height: 2.25;
+        }
+
+        html[lang=ar] .firefox & {
+          line-height: 2.1875rem;
         }
       }
 
