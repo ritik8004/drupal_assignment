@@ -13,6 +13,43 @@ Feature: Search feature
     And I wait for the page to load
     Then I should see Search results page for "bikini bottoms"
 
+  @eng @prod
+  Scenario: As a Guest user
+  I should be able to view filters and load more items
+    Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait for the page to load
+    When I fill in "edit-keywords" with "sweatshirt"
+    And I press "Search"
+    And I wait for the page to load
+    When I follow "Load More"
+    And I wait for AJAX to finish
+    Then more items should get loaded
+    Then I should see "Size"
+    And I should see "Colour"
+    Then I should see "Price"
+
+  @arabic @prod
+  Scenario: As a Guest user on Arabic site
+    I should be able to view filters and load more items
+    Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I wait for the page to load
+    When I follow "العربية"
+    And I wait for the page to load
+    When I fill in "edit-keywords" with "سروال سباحة "
+    And I press "Search"
+    And I wait for the page to load
+    When I click the label for "#block-content > div > div > ul > li > a"
+    And I wait for AJAX to finish
+    Then more items should get loaded
+    Then I should see "حدّد اختيارك"
+    Then I should see "اللون"
+    And I should see "السعر"
+    Then I should see "المقاس"
+
   @arabic @prod
   Scenario: As a Guest user on Arabic site
   I should be able to search products
@@ -87,14 +124,14 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I fill in "edit-keywords" with "bikini bottoms"
+    When I fill in "edit-keywords" with "sweatshirt"
     And I press "Search"
     And I wait for the page to load
     When I select a product in stock
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
-    When I press "Add to cart"
+    When I press "add to basket"
     And I wait for AJAX to finish
     When I go to "/cart"
     And I wait for the page to load
@@ -119,7 +156,7 @@ Feature: Search feature
     When I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
 
   @arabic
   Scenario: As a Guest
@@ -163,7 +200,7 @@ Feature: Search feature
     When I accept terms and conditions
     And I press "سجل الطلبية"
     When I wait for the page to load
-    And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد Test Test"
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
 
   @prod
   Scenario: As a Guest user
@@ -173,7 +210,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I fill in "edit-keywords" with "bikini bottoms"
+    When I fill in "edit-keywords" with "sweatshirt"
     And I press "Search"
     And I wait for the page to load
     When I select "Name A to Z" from the dropdown
@@ -216,14 +253,14 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I fill in "edit-keywords" with "bikini bottoms"
+    When I fill in "edit-keywords" with "sweatshirt"
     And I press "Search"
     And I wait for the page to load
     When I select a product in stock
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
-    When I press "Add to cart"
+    When I press "add to basket"
     And I wait for AJAX to finish
     When I go to "/cart"
     And I wait for the page to load

@@ -2,14 +2,11 @@
 Feature: Test various checkout scenarios as returning customer
 
   Background:
-    Given I am on a configurable product
-    When I select a size for the product
-    And I wait for AJAX to finish
+    Given I am on a simple product page
+    When I wait for the page to load
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
-    And I wait for the page to load
-    When I follow "العربية"
+    When I go to "/ar/cart"
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
