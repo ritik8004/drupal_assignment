@@ -2,7 +2,7 @@
 Feature: Test the My account section for authenticated user
 
   Background:
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load
