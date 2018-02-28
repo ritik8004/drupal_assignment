@@ -4,6 +4,10 @@
   .label {
     z-index: 4;
 
+    img {
+      width: auto !important;
+    }
+
     &.top {
       &-left {
         #{$left}: 0.5rem;
