@@ -166,7 +166,7 @@
 
             // Place the cloned bar before other facets in the region content's sidebar first.
             $(blockFilterBar)
-              .insertBefore('.region__content .c-facet__blocks .region__sidebar-first div:first-child');
+              .insertBefore('.region__content .c-facet__blocks .region__sidebar-first > div:first-child');
 
             placeFilterCount();
           }
