@@ -151,6 +151,10 @@
   @include breakpoint($desktop) {
     margin-top: 7.125rem;
   }
+
+  .branding__menu {
+    box-shadow: none;
+  }
 }
 
 body {
