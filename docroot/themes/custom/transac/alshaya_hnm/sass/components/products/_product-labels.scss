@@ -5,9 +5,10 @@
     z-index: 4;
 
     &.top {
+      top: 0.625rem;
+
       &-left {
         left: 0.5rem;
-        top: 0.625rem;
 
         @include breakpoint($only-tablet) {
           left: 0.9375rem;
