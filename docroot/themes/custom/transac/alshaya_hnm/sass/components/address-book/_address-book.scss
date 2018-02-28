@@ -227,6 +227,10 @@
         html[lang=ar] .ie & {
           line-height: 2.25;
         }
+
+        html[lang=ar] .firefox & {
+          line-height: 2.1875rem;
+        }
       }
 
       .form-item-field-address-0-address-mobile-number-mobile,
