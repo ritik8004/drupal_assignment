@@ -17,7 +17,6 @@ dependencies:
     - image
     - path
     - text
-    - workbench_moderation
 id: node.acq_promotion.default
 targetEntityType: node
 bundle: acq_promotion

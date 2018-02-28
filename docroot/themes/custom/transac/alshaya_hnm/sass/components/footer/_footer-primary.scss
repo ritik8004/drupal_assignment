@@ -1,3 +1,5 @@
+@import '../../alshaya_white_label/sass/components/footer/_footer-primary.scss';
+
 .language--switcher {
   @include breakpoint($tablet) {
     margin-top: 0.75rem;
@@ -9,10 +11,6 @@
 }
 
 .region__footer-primary {
-  @include breakpoint($tablet) {
-    // padding-left: 0.312rem;
-  }
-
   @include breakpoint($only-tablet) {
     max-width: 21.94rem;
   }
@@ -22,7 +20,7 @@
   text-transform: lowercase;
 }
 
-.c-footer .language-switcher-language-url,
+.c-footer-primary .language-switcher-language-url,
 .only-first-time .language-switcher-language-url {
   position: relative;
   clear: both;
@@ -72,6 +70,10 @@
             margin-#{$right}: 0.6875rem;
           }
         }
+
+        &::after {
+          content: unset;
+        }
       }
 
       &:last-child {
@@ -101,11 +103,11 @@
       }
 
       &.ar a {
-        font-family: $hnm-arabic-regular-nodir;
+        font-family: $hnm-arabic-regular-nodir !important;
       }
 
       &.en a {
-        font-family: $hnm-regular;
+        font-family: $hnm-regular !important;
 
         @include breakpoint($only-tablet) {
           margin: 0 1.125rem 0 0;
@@ -187,6 +189,12 @@
   @include clearfix;
 
   background-color: $hnm-black;
+  border-top: none;
+  padding: 0;
+
+  .c-footer-is-accordion {
+    margin-top: 0;
+  }
 
   &__region {
     @include clearfix;
@@ -209,8 +217,15 @@
   }
 
   .footer--menu {
+    float: none;
+
     @include breakpoint($desktop) {
       padding: 0 1rem;
+      width: 100%;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: 0;
     }
   }
 
@@ -223,6 +238,7 @@
         width: 100%;
         text-align: center;
         border-bottom: 1px solid $white-smoke-border;
+        border-top: none;
       }
 
       .is-accordion {
@@ -278,6 +294,7 @@
         text-align: $left;
         color: $grey5;
         text-transform: capitalize;
+        font-family: $hnm-regular;
 
         @include breakpoint($upto-tablet) {
           text-align: center;
@@ -306,6 +323,9 @@
         @include breakpoint($tablet) {
           padding-#{$left}: 0.834%;
           padding-#{$right}: 2%;
+          width: auto !important;
+          margin-#{$left}: 0 !important;
+          float: none;
         }
 
         @include breakpoint($desktop) {
@@ -325,6 +345,18 @@
           }
         }
       }
+
+      &--help {
+        @include breakpoint($desktop) {
+          float: none;
+          width: auto !important;
+          margin: 0;
+        }
+
+        @include breakpoint($only-mobile) {
+          margin-bottom: 0;
+        }
+      }
     }
   }
 }
@@ -338,10 +370,12 @@
   width: 100%;
   padding: 1.25rem 0 0;
   background-color: $hnm-black;
+  margin: 0;
 
   @include breakpoint($tablet) {
     width: 14.875rem;
     padding: 0;
+    min-width: auto;
   }
 
   @include breakpoint($desktop) {
@@ -372,7 +406,8 @@
   }
 
   form {
-    overflow: auto;
+    overflow: visible;
+    float: $left;
   }
 
   .newsletter-block-label {
@@ -381,6 +416,7 @@
     line-height: 1.5;
     text-align: $left;
     color: $grey5;
+    padding: 0;
 
     @include breakpoint($tablet) {
       width: 11.875rem;
@@ -407,27 +443,6 @@
 
       html[lang=ar] & {
         width: calc(100% - 5.3rem);
-      }
-    }
-
-    #edit-email-error {
-      line-height: 1.36;
-      display: inline-block;
-      width: 100%;
-      position: absolute;
-      #{$right}: 0;
-      top: 100%;
-      color: $red-error;
-      padding: 0.3125rem 0;
-      z-index: 9;
-      font-size: 0.75rem;
-      margin-top: 0.1875rem;
-      text-align: $left;
-      background-color: $hnm-black;
-
-      @include breakpoint($upto-tablet) {
-        #{$right}: 0.5rem;
-        #{$left}: 0.5rem;
       }
     }
   }
@@ -491,6 +506,30 @@
 
     &:focus {
       position: absolute;
+    }
+  }
+}
+
+.alshaya-newsletter-subscribe .form-item,
+.block-alshaya-newsletter .form-type-email {
+  label#edit-email-error {
+    line-height: 1.36;
+    display: inline-block;
+    width: 100%;
+    position: absolute;
+    #{$right}: 0;
+    top: 100%;
+    color: $red-error;
+    padding: 0.3125rem 0;
+    z-index: 9;
+    font-size: 0.75rem;
+    margin-top: 0.1875rem;
+    text-align: $left;
+    background-color: $hnm-black;
+
+    @include breakpoint($upto-tablet) {
+      #{$right}: 0.5rem;
+      #{$left}: 0.5rem;
     }
   }
 }
@@ -561,6 +600,10 @@
       margin-top: 0.1875rem;
       display: block;
     }
+
+    .error {
+      margin-top: 0;
+    }
   }
 
   .edit-newsletter[data-style=zoom-in][data-loading] {
@@ -584,8 +627,8 @@
   float: $right;
   position: relative;
   width: 100%;
-  padding: 1.25rem 0.5rem 0;
   background-color: $hnm-black;
+  padding: 1.25rem 0.5rem 0;
 
   @include breakpoint($tablet) {
     width: 14.875rem;
@@ -594,5 +637,29 @@
 
   @include breakpoint($desktop) {
     width: 15.9375rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    overflow: hidden;
+  }
+}
+
+#alshaya-newsletter-subscribe {
+  #edit-email {
+    padding-#{$right}: 0;
+
+    html[lang=ar] & {
+      padding-left: 0;
+    }
+  }
+}
+
+.cols-6 {
+  .c-footer-menu {
+    &:last-child {
+      @include breakpoint($desktop) {
+        padding-#{$left}: 0;
+      }
+    }
   }
 }

@@ -11,7 +11,7 @@
   // Based on https://gist.github.com/asgeo1/1652946
   $.fn.doubletap = $.fn.doubletap || function (handler, delay) {
     delay = delay == null ? 300 : delay;
-    this.bind('touchend', function (event) {
+    this.on('touchend', function (event) {
       var now = new Date().getTime();
       // The first time this will make delta a negative number.
       var lastTouch = $(this).data('lastTouch') || now + 1;

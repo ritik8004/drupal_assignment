@@ -2,8 +2,9 @@
 Feature: Test various checkout scenarios for Arabic site
 
   Background:
-    Given I am on a simple product page
-    And I wait for the page to load
+    Given I am on a configurable product
+    When I select a size for the product
+    And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
     When I go to "/cart"
@@ -22,7 +23,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "الشرق" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
@@ -33,7 +34,6 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
-    And I accept terms and conditions
     Then I should see "أؤكد أنني قرأت وفهمت"
 
   @hd @knet
@@ -44,7 +44,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "الشرق" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
@@ -59,7 +59,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
+    And I select "ABK" from "bank"
     And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
@@ -88,7 +88,7 @@ Feature: Test various checkout scenarios for Arabic site
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "العباسية" from "edit-billing-address-address-billing-administrative-area"
+    And I select "الشرق" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "كتلة A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "بناء C"
@@ -97,7 +97,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
+    And I select "ABK" from "bank"
     And I fill in "cardN" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
@@ -112,7 +112,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "الشرق" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
@@ -170,7 +170,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "الشرق" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
@@ -184,7 +184,6 @@ Feature: Test various checkout scenarios for Arabic site
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
-    And I accept terms and conditions
     Then I should see "أؤكد أنني قرأت وفهمت"
 
   @cc @cs
@@ -212,11 +211,10 @@ Feature: Test various checkout scenarios for Arabic site
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "العباسية" from "edit-billing-address-address-billing-administrative-area"
+    And I select "الشرق" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "كتلة A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "بناء C"
-    When I accept terms and conditions
     Then I should see "أؤكد أنني قرأت وفهمت"
 
   Scenario: As a Guest user on Arabic site
@@ -242,7 +240,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "الشرق" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
@@ -257,7 +255,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
+    And I select "ABK" from "bank"
     And I fill in "cardN" with "000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
@@ -278,7 +276,7 @@ Feature: Test various checkout scenarios for Arabic site
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
     When I wait 5 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
@@ -297,11 +295,10 @@ Feature: Test various checkout scenarios for Arabic site
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "العباسية" from "edit-billing-address-address-billing-administrative-area"
+    And I select "الشرق" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "كتلة A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "الشارع ب"
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "بناء C"
-    When I accept terms and conditions
     Then I should see "أؤكد أنني قرأت وفهمت"
 
   @cc
@@ -315,7 +312,7 @@ Feature: Test various checkout scenarios for Arabic site
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
     When I wait 5 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait 2 seconds

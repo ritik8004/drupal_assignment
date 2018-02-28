@@ -5,6 +5,68 @@
  * Contains install, update, uninstall hooks for alshaya_admin module.
  */
 
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Process migration of workbench moderation to content moderation.
+ */
+function alshaya_admin_update_8002() {
+  if (\Drupal::service('module_handler')->moduleExists('content_moderation')) {
+    return t('Already migrated from workbench_moderation to content moderation, not doing again.');
+  }
+
+  \Drupal::service('module_installer')->install(['workflows', 'wbm2cm']);
+
+  // Disable immediate indexing for product while we run migrate. To avoid
+  // unnecessary sql queries of index.
+  $index = Index::load('product');
+
+  if ($index instanceof Index) {
+    $index->setOption('index_directly', FALSE);
+    $index->save();
+  }
+
+  // Invoke a drush command to execute migration.
+  drush_invoke_process('@self', 'wbm2cm-migrate');
+
+  // Wbm2cm has created a workflow with random machine name during migration.
+  // Delete that and use the one that we have created for site installation to
+  // have the proper machine name.
+  $workflow_storage = \Drupal::service('entity_type.manager')->getStorage('workflow');
+  $workflow = $workflow_storage->loadMultiple();
+  unset($workflow['editorial']);
+  $id = key($workflow);
+  alshaya_config_install_configs(['workflows.workflow.alshaya_workflow'], 'alshaya_admin');
+  \Drupal::configFactory()->getEditable('workflows.workflow.' . $id)->delete();
+
+  // Update table to replace random machine name with 'alshaya_workflow'.
+  \Drupal::service('database')->update('content_moderation_state_field_data')
+    ->fields(['workflow' => 'alshaya_workflow'])
+    ->condition('workflow', $id)
+    ->execute();
+
+  // Update table to replace random machine name with 'alshaya_workflow'.
+  \Drupal::service('database')->update('content_moderation_state_field_revision')
+    ->fields(['workflow' => 'alshaya_workflow'])
+    ->condition('workflow', $id)
+    ->execute();
+
+  \Drupal::service('module_installer')->uninstall(['wbm2cm']);
+
+  // Enable immediate indexing after migration finished.
+  $index = Index::load('product');
+  if ($index instanceof Index) {
+    $index->setOption('index_directly', TRUE);
+    $index->save();
+  }
+
+  drupal_static_reset();
+  print "Flushing cache.";
+  drupal_flush_all_caches();
+}
+
 /**
  * Implements hook_update_N().
  *

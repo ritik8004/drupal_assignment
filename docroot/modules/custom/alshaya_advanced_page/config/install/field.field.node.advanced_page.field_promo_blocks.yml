@@ -33,7 +33,7 @@ settings:
       1_row_2_col: 1_row_2_col
       1_row_3_col: 1_row_3_col
       1_row_3_col_text: 1_row_3_col_text
-      1_row_3_col_text: 1_row_2_col_dept
+      1_row_2_col_dept: 1_row_2_col_dept
       block_reference: block_reference
       views_reference: views_reference
     target_bundles_drag_drop:

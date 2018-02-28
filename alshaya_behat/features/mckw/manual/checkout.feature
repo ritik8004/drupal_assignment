@@ -1,7 +1,7 @@
 @javascript @checkout @english @eng_checkout @mmcpa-1930 @manual
 Feature: Test Checkout feature
   Background:
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
@@ -26,7 +26,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -53,7 +53,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -103,7 +103,7 @@ Feature: Test Checkout feature
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Sharq" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
@@ -129,7 +129,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -229,7 +229,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -275,7 +275,7 @@ Feature: Test Checkout feature
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Sharq" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
@@ -308,7 +308,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -342,9 +342,8 @@ Feature: Test Checkout feature
     Then the "Map view" tab should be selected
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
-    When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -362,7 +361,7 @@ Feature: Test Checkout feature
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Sharq" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
@@ -382,7 +381,7 @@ Feature: Test Checkout feature
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > img"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
     When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
     And I wait 2 seconds

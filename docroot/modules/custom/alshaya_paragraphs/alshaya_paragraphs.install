@@ -13,6 +13,87 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Update Video field settings as the media module included in Drupal-8.4.
+ */
+function alshaya_paragraphs_update_8106() {
+  $module_path = drupal_get_path('module', 'alshaya_paragraphs');
+
+  $field_storages = [
+    'field.storage.paragraph.field_video',
+  ];
+
+  foreach ($field_storages as $field_config) {
+    $yml = Yaml::parse(file_get_contents($module_path . '/config/install/' . $field_config . '.yml'));
+    if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
+      FieldStorageConfig::create($yml)->save();
+    }
+  }
+
+  $fields = [
+    'field.field.paragraph.banner.field_video',
+    'field.field.paragraph.video.field_video',
+  ];
+
+  foreach ($fields as $field) {
+    $info = explode('.', $field);
+    try {
+      $field_config = FieldConfig::loadByName($info[2], $info[3], $info[4]);
+
+      if ($field_config) {
+        alshaya_config_install_configs([$field], 'alshaya_paragraphs');
+      }
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_paragraphs')->error('Failed updating field setting for @field - $message', [
+        '@field' => $field,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+  }
+
+  $configs = [
+    'core.entity_view_display.paragraph.banner.default',
+    'core.entity_view_display.paragraph.video.default',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Correct all existing faulty files status attached to paragraphs.
+ */
+function alshaya_paragraphs_update_8105() {
+  // One time job - we directly use db query to get faulty data.
+  // There is some issue with revisions too, for some ar data, it is coming
+  // from old revisions. It works fine when displaying but not coming properly
+  // when loading paragraph entity.
+  // Here we load all paragraph revisions which have a file attached with
+  // status 0. We will add file usage for them and set status to 1.
+  $query = \Drupal::database()->select('paragraph_revision__field_banner', 'prfb');
+  $query->addField('prfb', 'revision_id');
+  $query->addField('prfb', 'entity_id');
+  $query->innerJoin('file_managed', 'fm', 'fm.fid = prfb.field_banner_target_id');
+  $query->condition('fm.status', 0);
+
+  $result = $query->execute()->fetchAllKeyed(0);
+
+  foreach ($result as $revision_id => $entity_id) {
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = \Drupal::entityTypeManager()->getStorage('paragraph')->loadRevision($revision_id);
+    _alshaya_paragraphs_correct_file_status($paragraph);
+
+    if ($paragraph->hasTranslation('ar')) {
+      $paragraph = $paragraph->getTranslation('ar');
+      _alshaya_paragraphs_correct_file_status($paragraph);
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enabling translation on paragraph referenced fields.
  */
 function alshaya_paragraphs_update_8104() {

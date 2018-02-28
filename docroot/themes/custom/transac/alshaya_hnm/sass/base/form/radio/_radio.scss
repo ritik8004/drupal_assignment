@@ -1,32 +1,20 @@
+@import '../../alshaya_white_label/sass/base/form/radio/_radio.scss';
+
 .form-type-radio {
-  display: inline-block;
-
-  &:first-child {
-    margin-#{$right}: 3.5rem;
-  }
-
-  label {
-    position: relative;
-    font-size: 0.875rem;
-    color: $grey-ash;
-  }
-
-  input[type=radio] {
-    display: none;
-  }
-
   input[type=radio] ~ label {
     @include icon(radio-empty, before) {
-      display: inline-block;
       margin-#{$right}: 1rem;
       position: relative;
       color: $hnm-black-two;
       font-size: 2.438rem;
       vertical-align: middle;
+      border: none;
     }
   }
 
   input[type=radio]:checked ~ label {
-    @include icon(radio-filled, before);
+    @include icon(radio-filled, before) {
+      border: none;
+    }
   }
 }

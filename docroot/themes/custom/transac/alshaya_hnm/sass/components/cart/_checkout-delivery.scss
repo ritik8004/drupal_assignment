@@ -1,8 +1,10 @@
+@import "../../alshaya_white_label/sass/components/cart/_checkout-delivery.scss";
+
 .page-standard.user-page.checkout-delivery {
   margin: 0.5rem auto 1.2rem;
 
-  .country-name {
-    color: #999 !important;
+  @include breakpoint($tablet) {
+    margin: 0.5rem auto 1.2rem;
   }
 
   &.l-two--sf {
@@ -12,40 +14,8 @@
     }
   }
 
-  .block-page-title-block {
-    position: relative;
-  }
-
-  h1.c-page-title {
-    @include breakpoint($only-mobile) {
-      padding-left: 1em;
-      font-size: 1.115rem;
-    }
-  }
-
-  .fieldsets-separator {
-    font-size: 0.75rem;
-    text-align: center;
-    padding: 0.5rem;
-
-    @include breakpoint($mobile) {
-      display: none;
-    }
-  }
-
-  .block .multistep-checkout {
-    border-top: 0;
-  }
-
   main {
     form {
-      input,
-      select {
-        &::placeholder {
-          color: transparent;
-        }
-      }
-
       .mobile-number-field .form-item.form-type-select {
         padding-bottom: 0;
         margin-top: 0.9375rem !important;
@@ -60,53 +30,10 @@
           padding-bottom: 0;
           margin-top: 0.875rem !important;
         }
-
-        label {
-          top: -1.375rem;
-          font-size: 0.75rem;
-
-          &.error {
-            top: 2rem;
-          }
-        }
-      }
-
-      .form-item-guest-delivery-home-address-street2,
-      .form-item-billing-address-address-street2 {
-        label {
-          display: none;
-        }
-      }
-
-      .form-item-guest-delivery-home-address-first-name {
-        margin-#{$right}: 1.25rem;
-      }
-
-      .form-item-guest-delivery-home-address-first-name,
-      .form-item-guest-delivery-home-address-last-name {
-        display: inline-block;
-        max-width: 11.7rem;
-        width: calc(50% - 12px);
       }
 
       .tab,
       .fieldset-legend {
-        cursor: pointer;
-
-        h2,
-        p {
-          margin: 0;
-        }
-
-        p,
-        &.tab-separator {
-          font-size: 0.625rem;
-
-          @include breakpoint($desktop) {
-            font-size: 0.75rem;
-          }
-        }
-
         h2 {
           @include arabic-letter-spacing;
 
@@ -115,125 +42,33 @@
           text-transform: uppercase;
           font-family: $hnm-bold;
           letter-spacing: 1px;
-
-          @include breakpoint($desktop) {
-            font-size: 0.875rem;
-          }
         }
       }
 
       .form-actions {
-        background: $hnm-grey;
-        display: inline-block;
-        width: 100%;
-        vertical-align: middle;
-        padding: 1em;
-        line-height: 2.8;
-        margin-top: -2px;
+        background: $white-five;
 
-        @include breakpoint($only-tablet) {
-          padding: 1rem 1.375rem;
-        }
-
-        @include breakpoint($desktop) {
-          padding: 1.375rem;
-        }
-
-        @include breakpoint($only-mobile) {
-          text-align: center;
-          line-height: 3.8;
-          background: white;
-          margin-top: 1rem;
-          padding: 0;
-          margin-bottom: 1rem;
-        }
-
-        .form-submit {
-          float: $right;
-          margin: 0;
-          margin-#{$right}: 0.75em;
-
-          @include breakpoint($tablet) {
-            margin-#{$right}: 0;
-          }
-
-          @include breakpoint($only-mobile) {
-            float: none;
-          }
+        @include breakpoint($tablet) {
+          background: $hnm-grey;
         }
 
         a {
           font-family: $hnm-demibold;
           color: $hnm-black-two;
           font-size: 0.75rem;
-
-          &.back-to-basket {
-            @include breakpoint($desktop) {
-              padding: 0.625rem 0;
-            }
-          }
-        }
-      }
-    }
-
-    .tabs--content {
-      #edit-member-delivery-collect,
-      #edit-guest-delivery-collect {
-        // TODO: Remove this when click and collect is themed for the mobile.
-        @include breakpoint($only-mobile) {
-          display: none;
-        }
-      }
-
-      .fieldset-wrapper .form-item .form-item.form-item-billing-address-address-phone-country-code,
-      .form-item-guest-delivery-home-address-phone-country-code {
-        display: inline-block;
-        width: auto;
-
-        &::after {
-          content: none;
-        }
-      }
-
-      .fieldset-wrapper .form-item .form-item.form-item-billing-address-address-phone-mobile,
-      .form-item-guest-delivery-home-address-phone-mobile {
-        display: inline-block;
-        width: 9.4rem;
-        margin-#{$left}: -0.3125rem;
-
-        input {
-          position: relative;
-          width: 11.4rem;
-          padding-bottom: 0.5rem;
-          margin-top: 0.5rem;
-
-          @include breakpoint($tablet) {
-            width: 7rem;
-          }
         }
       }
     }
   }
 
   #edit-delivery-tabs {
-    color: $black;
-    font-size: 0;
-    position: relative;
-
     @include breakpoint($upto-tablet) {
-      hr {
-        display: none;
-      }
-
       .tab {
-        display: none;
-
         &.active--tab--head {
           display: block;
           background-color: $hnm-grey;
           border-width: 1px;
           border-color: $hnm-black-two;
-          padding: 5px;
         }
       }
     }
@@ -247,37 +82,11 @@
     }
 
     .tab {
-      text-align: center;
-      font-size: 0.75rem;
-      vertical-align: middle;
-      border: 1px solid $light-greyish;
-      background: $white-five;
       font-family: $hnm-regular;
-      font-weight: normal;
-
-      h2 {
-        font-weight: normal;
-
-        @include breakpoint($only-mobile) {
-          font-size: 0.875rem;
-        }
-      }
 
       p {
         color: $grey-ash;
         font-family: $hnm-regular;
-
-        @include breakpoint($only-mobile) {
-          font-size: 0.75rem;
-        }
-      }
-
-      @include breakpoint($tablet) {
-        border-bottom: 0;
-        display: inline-block;
-        padding: 0.5rem 0;
-        width: 46.81%;
-        width: calc(50% - 14px);
       }
 
       @include breakpoint($only-tablet) {
@@ -291,12 +100,6 @@
 
         html[lang=ar] & {
           width: 46.983%;
-        }
-
-        &.tab-home-delivery {
-          &:not(.active--tab--head) {
-            margin-#{$left}: -2px;
-          }
         }
 
         &.tab-click-collect {
@@ -314,10 +117,10 @@
 
       @include breakpoint($only-tablet) {
         &.tab-click-collect {
-          margin-#{$left}: 2px;
+          margin-#{$left}: 1px;
 
           &.active--tab--head {
-            margin-#{$left}: 3px;
+            margin-#{$left}: 1px;
           }
         }
       }
@@ -332,7 +135,7 @@
         }
 
         &.tab-home-delivery {
-          margin-#{$left}: -3px;
+          margin-#{$left}: -1px;
 
           &.active--tab--head {
             margin-#{$left}: 0;
@@ -352,11 +155,6 @@
 
       &.disabled--tab--head {
         border-color: $light-greyish !important;
-
-        h2,
-        p {
-          color: $light-greyish;
-        }
       }
 
       &.active--tab--head {
@@ -370,14 +168,21 @@
       }
     }
 
+    .tab-home-delivery.active--tab--head::after,
+    .tab-click-collect.active--tab--head::before {
+      display: none;
+    }
+
     .tab-separator {
-      border: none;
-      pointer-events: none;
       color: $hnm-black-two;
       font-size: 0.875rem;
 
       @include breakpoint($tablet) {
-        width: 6.2%;
+        width: 5.9%;
+
+        html[lang=ar] & {
+          width: 6.2%;
+        }
       }
 
       @include breakpoint($desktop) {
@@ -385,7 +190,6 @@
 
         html[lang=ar] & {
           width: 6.1%;
-          margin-left: 1px;
         }
       }
     }
@@ -413,18 +217,9 @@
 #edit-guest-delivery-home-address-shipping-methods--wrapper,
 #edit-member-delivery-home-address-shipping-methods--wrapper,
 .shipping-methods-container {
-  border: none !important;
-
   legend {
-    display: block !important;
-    width: 100%;
-
     .fieldset-legend {
-      display: block;
-      width: 100%;
-      padding: 0.5rem 0;
       border-bottom: 1px solid $hnm-black-two;
-      font-size: 1rem;
 
       @include breakpoint($upto-desktop) {
         font-size: 0.875rem;
@@ -433,42 +228,21 @@
   }
 
   .form-type-radio {
-    width: 100%;
-    margin: 0;
-    height: 4.063rem;
-    margin-top: 0.5rem;
-    padding: 1.125rem 0;
-    border-bottom: 1px solid $white;
-
-    &:first-child {
-      border-top: 1px solid $white;
-    }
-
-    @include breakpoint($tablet) {
-      height: 70px;
-      margin-top: 1.875rem;
-      padding: 1.125rem 1.5rem;
-    }
-
     @include breakpoint($only-mobile) {
-      padding: 1.125rem 1rem;
-      height: auto;
       border-left: 1px solid $white;
       border-right: 1px solid $white;
     }
 
+    &:nth-child(odd) {
+      background-color: $white-five;
+    }
+
     &.selected {
-      background-color: $hnm-grey;
+      background-color: $hnm-grey !important;
     }
 
     label {
       &.option {
-        @include clearfix;
-
-        .ucbrowser & {
-          top: 0;
-        }
-
         &::before {
           display: block;
           float: $left;
@@ -490,131 +264,35 @@
             }
           }
 
-          &-title,
-          &-description {
-            @include breakpoint($only-mobile) {
-              width: 68%;
-            }
-          }
-
           &-title {
             font-size: 0.875rem;
             font-family: $hnm-demibold;
             color: $hnm-black-two;
           }
-
-          &-price {
-            float: $right;
-            margin-top: -10px;
-
-            @include breakpoint($only-mobile) {
-              font-weight: bold;
-            }
-
-            @include breakpoint($desktop) {
-              font-size: 0.875rem;
-            }
-          }
-
-          &-description {
-            font-size: 0.75rem;
-          }
         }
       }
     }
-  }
-
-  #edit-guest-delivery-home-address-shipping-methods,
-  #edit-member-delivery-home-address-shipping-methods,
-  .fieldset-wrapper > div {
-    font-size: 0;
-
-    .form-type-radio {
-      margin-top: 0;
-
-      &:first-child {
-        margin-top: 1.875rem;
-
-        @include breakpoint($only-tablet) {
-          margin-top: 1.188rem;
-        }
-
-        @include breakpoint($desktop) {
-          margin-top: 1.438rem;
-        }
-      }
-    }
-  }
-}
-
-#shipping_methods_wrapper {
-  @include breakpoint($only-mobile) {
-    margin-top: 1.5rem;
-  }
-}
-
-#edit-guest-delivery-home-address-shipping-methods--wrapper,
-#shipping_methods_wrapper fieldset.shipping-methods-container {
-  display: block;
-
-  @include breakpoint($tablet) {
-    margin-bottom: 2.6rem;
-  }
-
-  > legend {
-    padding-bottom: 0 !important;
   }
 }
 
 // Adding throbber overlay for any ajax call on payment and checkout delivery page.
 .page-standard.c-address-book,
+.page-standard.checkout-login,
 .page-standard.user-page.checkout-payment,
 .page-standard.user-page.c-delivery-checkout {
   .ajax-progress-throbber {
-    position: fixed !important;
-    width: 100% !important;
-    height: 100%;
-    top: 0 !important;
-    #{$left}: 0 !important;
-    background: rgba(255, 255, 255, 0.7);
-    z-index: 9999;
-    visibility: visible;
-
-    .message {
-      display: none;
-    }
-
     .throbber {
-      bottom: 0;
-      #{$left}: 0;
-      margin: auto;
-      position: fixed;
-      #{$right}: 0;
-      top: 0;
-      z-index: 100;
       background: url(../imgs/icons/ic-loader.svg) center no-repeat !important;
       background-size: 5.5rem !important;
-      padding-#{$left}: 0.625rem;
-      padding-#{$right}: 0.625rem;
-      width: 100%;
-      height: auto;
-    }
-  }
-
-  .cybersource-ajax-progress-throbber {
-    #{$left}: 0;
-
-    .cybersource-throbber {
-      #{$left}: 0;
-      #{$right}: 0;
-      padding-#{$left}: 0.625rem;
-      padding-#{$right}: 0.625rem;
     }
   }
 }
 
 #edit-acm-payment-methods-payment-options--wrapper {
+  height: auto;
+
   legend {
+    display: block;
     padding-bottom: 1rem;
 
     @include breakpoint($tablet) {
@@ -645,6 +323,14 @@
     padding-#{$right}: 1.375rem;
   }
 
+  #payment_method_knet {
+    border-top: none;
+
+    .payment-plugin-wrapper-div {
+      border-top: 1px solid $grey4;
+    }
+  }
+
   > .form-wrapper {
     cursor: pointer;
     margin-top: 0;
@@ -667,10 +353,6 @@
       &.plugin-selected {
         background-color: $hnm-grey;
 
-        .method-description {
-          display: block;
-        }
-
         .method-knet {
           background: url('../imgs/cards/knet-active.png') no-repeat;
           background-size: 100%;
@@ -678,6 +360,7 @@
 
         @include icon(radio-filled, before) {
           top: 0.9375rem;
+          border: none;
         }
       }
 
@@ -694,6 +377,8 @@
         font-size: 2.438rem;
         position: absolute;
         top: 22%;
+        background: none;
+        border: none;
 
         @include breakpoint($only-tablet) {
           #{$left}: 2%;
@@ -718,17 +403,6 @@
 
       .payment-method {
         &-name {
-          float: $right;
-          width: 86%;
-
-          @include breakpoint($tablet) {
-            width: 92.5%;
-
-            .ucbrowser & {
-              width: 92%;
-            }
-          }
-
           @include breakpoint($desktop) {
             width: 92.5%;
           }
@@ -746,42 +420,6 @@
             font-size: 0.75rem;
           }
         }
-
-        &-side-info {
-          float: $right;
-          height: 2rem;
-          width: 3rem;
-          background: $white;
-          margin-top: -1.25rem;
-        }
-
-        &-knet {
-          background: url('../imgs/cards/knet-inactive.png') no-repeat;
-          background-size: 100%;
-          position: absolute;
-          #{$right}: 0.8rem;
-          top: 54%;
-
-          @include breakpoint($tablet) {
-            #{$right}: 18px;
-          }
-        }
-
-        &-cashondelivery,
-        &-checkmo,
-        &-cybersource {
-          display: none;
-        }
-
-        &-description {
-          display: none;
-          font-size: 0.75rem;
-          color: $grey-ash;
-
-          @include breakpoint($upto-desktop) {
-            width: 80%;
-          }
-        }
       }
     }
   }
@@ -791,48 +429,8 @@
 .user-page.c-delivery-checkout {
   main {
     form {
-      #edit-guest-delivery-home {
-        .title {
-          margin: 1.375rem !important;
-
-          @include breakpoint($only-mobile) {
-            margin: 1.375rem 0 !important;
-          }
-        }
-
-        .address-book-address {
-          @include breakpoint($mobile) {
-            margin: 0.5rem 0;
-          }
-
-          @include breakpoint($tablet) {
-            margin: 1.75rem 1.375rem 0;
-          }
-        }
-      }
-
       #edit-guest-delivery-home,
       fieldset {
-        -webkit-animation: fadeEffect 2s;
-        animation: fadeEffect 2s;
-        width: 100%;
-        padding: 0;
-        margin: auto;
-        margin-top: 0;
-
-        @include breakpoint($tablet) {
-          border: 1px solid $light-greyish;
-          display: none;
-        }
-
-        &.active--tab--content {
-          display: block;
-        }
-
-        input {
-          color: $black;
-        }
-
         @include breakpoint($tablet) {
           margin: 0;
 
@@ -848,8 +446,6 @@
 
         #address-book-form-wrapper,
         #selected-address-wrapper {
-          margin: 1.75rem 1.375rem;
-
           #cancel-address-add-edit {
             background: transparent;
             margin-top: 0;
@@ -895,7 +491,7 @@
             top: -0.3125rem;
 
             @include breakpoint($only-mobile) {
-              text-align: $left;
+              text-align: center;
             }
 
             @include breakpoint($only-tablet) {
@@ -903,70 +499,19 @@
             }
           }
 
-          @include breakpoint($desktop) {
-            margin-bottom: 0;
-          }
-
-          @include breakpoint($tablet) {
-            position: relative;
-
-            #add-address-button {
-              display: inline;
-              width: auto;
-              position: absolute;
-              #{$right}: 0;
+          #add-address-button {
+            @include breakpoint($tablet) {
               top: -0.625rem;
+              width: 40%;
+            }
+
+            @include breakpoint($desktop) {
+              width: 20%;
             }
           }
         }
 
-        .form-wrapper,
-        .form-item {
-          margin-top: 1.5rem;
-        }
-
-        .form-wrapper {
-          @include breakpoint($only-mobile) {
-            margin-top: 0;
-          }
-        }
-
-        #edit-member-delivery-home-addresses {
-          margin: 0.75rem 0;
-
-          @include breakpoint($tablet) {
-            margin: 0.75rem 1.375rem;
-          }
-        }
-
-        #address_wrapper {
-          padding: 0;
-          margin-top: 0;
-
-          @include breakpoint($desktop) {
-            margin-top: 1.2rem;
-          }
-
-          .form-item--error + .form-item {
-            margin-top: 1.6rem;
-          }
-        }
-
-        .delivery--notice {
-          display: none;
-        }
-
         legend {
-          margin-bottom: 0;
-
-          @include breakpoint($tablet) {
-            padding: 0.5rem 1.375rem;
-          }
-
-          @include breakpoint($tablet) {
-            display: none;
-          }
-
           span {
             color: $hnm-black-two;
           }
@@ -992,28 +537,6 @@
             border-bottom: 1px solid $hnm-black-two;
           }
         }
-
-        .fieldset-wrapper {
-          @include breakpoint($upto-tablet) {
-            border: none;
-            padding: 0;
-            border-top: 0;
-
-            #addresses-header,
-            #address-book-form-wrapper,
-            #selected-address-wrapper {
-              margin: 0;
-            }
-
-            #addresses-header {
-              margin-top: 1rem;
-            }
-          }
-
-          @include breakpoint($tablet) {
-            display: block !important;
-          }
-        }
       }
     }
 
@@ -1030,73 +553,18 @@
 #selected-address-wrapper {
   border: 1px solid $grey4;
   font-family: $hnm-regular;
-  font-size: 0.75rem;
-  margin-bottom: 1.5rem;
-
-  @include breakpoint($desktop) {
-    max-width: 26.25rem;
-    width: calc(50% - 1.5rem);
-    margin-bottom: 0 !important;
-
-    &:nth-of-type(odd) {
-      margin-#{$right}: 3rem;
-    }
-  }
 
   .address--data {
     background: $hnm-grey;
   }
 
   .address--controls {
-    text-align: $left;
-
     #change-address {
       font-size: 0.75rem;
       font-family: $hnm-demibold;
       color: $hnm-black-two;
       text-decoration: underline;
-      background: none;
-      margin-top: 0;
-      padding: 0.5rem 0;
-      text-transform: capitalize;
     }
-  }
-}
-
-#address_wrapper,
-#selected-address-wrapper,
-#address-book-form-wrapper {
-  .address--deliver-to-this-address {
-    border: 1px solid $marine-blue-two;
-
-    a {
-      color: $marine-blue-two;
-    }
-  }
-
-  .active .address--deliver-to-this-address {
-    background-color: $pumpkin-orange;
-    border: none;
-
-    a {
-      color: $white-five;
-    }
-  }
-
-  .address--edit {
-    text-align: $right;
-
-    a {
-      color: $cerulean-two;
-      border: none;
-      text-transform: capitalize;
-    }
-  }
-}
-
-#edit-member-delivery-home-address-book-wrapper {
-  @include breakpoint($tablet) {
-    margin-left: 1.5rem;
   }
 }
 
@@ -1113,17 +581,6 @@
 
 .show-only-buttons {
   @include breakpoint($only-mobile) {
-    #edit-delivery-tabs {
-      margin-bottom: 3rem;
-    }
-
-    .tab-separator {
-      font-size: 0.75rem;
-      color: $grey-ash;
-      margin: 0.5rem 0;
-      display: block !important;
-    }
-
     .tab-click-collect,
     .tab-home-delivery {
       border-color: $hnm-black-two !important;
@@ -1131,27 +588,11 @@
       padding: 0.5rem 0 !important;
       display: block !important;
 
-      a p {
-        color: $grey-ash;
-      }
-
       &.active--tab--head {
         h2 {
           color: $hnm-black-two !important;
         }
       }
-    }
-
-    #edit-guest-delivery-home,
-    #edit-member-delivery-home,
-    #edit-guest-delivery-collect,
-    #edit-member-delivery-collect,
-    #edit-actions {
-      display: none !important;
-    }
-
-    .select-transaction-type {
-      display: block;
     }
   }
 }
@@ -1171,69 +612,6 @@
     #edit-delivery-tabs {
       .active--tab--head {
         background-color: $hnm-grey !important;
-      }
-    }
-  }
-}
-
-.show-form {
-  @include breakpoint($only-mobile) {
-    .tabs--content fieldset.active--tab--content {
-      display: block !important;
-    }
-  }
-}
-
-.shipping-method-options-count-1 {
-  .form-type-radio {
-    label {
-      &::before {
-        display: none !important;
-      }
-
-      .shipping-method-name {
-        width: 100% !important;
-      }
-    }
-  }
-}
-
-html[lang=ar] {
-  .page-standard.user-page.checkout-delivery {
-    h1.c-page-title {
-      @include breakpoint($only-mobile) {
-        padding-right: 1em;
-
-        @include icon(chevronright, before) {
-          right: -0.6875rem;
-        }
-      }
-    }
-  }
-}
-
-.alias--cart-checkout-delivery,
-.alias--cart-checkout-payment {
-  h1 {
-    z-index: -1;
-  }
-
-  .back-link {
-    display: none;
-    z-index: 1;
-
-    @include breakpoint($only-mobile) {
-      display: block;
-      position: absolute;
-      width: 1.063rem;
-      height: 1.375rem;
-
-      @include icon(chevronleft, before) {
-        position: absolute;
-        #{$left}: -0.6875rem;
-        top: 0;
-        color: $black;
-        font-size: 1.563rem;
       }
     }
   }

@@ -223,11 +223,11 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
   $form_state->unsetValue('logo_upload');
 
   // Save email logo.
-  $settings = ['email_logo_upload', 'email_logo_path'];
-  foreach ($settings as $setting_name) {
-    ${$setting_name} = $form_state->getValue($setting_name);
-    $form_state->unsetValue($setting_name);
-  }
+  $email_logo_upload = $form_state->getValue('email_logo_upload');
+  $form_state->unsetValue('email_logo_upload');
+
+  $email_logo_path = $form_state->getValue('email_logo_path');
+  $form_state->unsetValue('email_logo_path');
 
   // If the user uploaded a new logo or favicon, save it to a permanent location
   // and use it in place of the default theme-provided file.

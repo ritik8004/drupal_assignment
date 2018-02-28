@@ -46,19 +46,16 @@ function alshaya_get_additional_settings($site, $env) {
         'store_id' => [
           'ar' => 2,
         ],
-      ],
-      '01pprod' => [
         'magento_lang_prefix' => [
           'en' => 'default',
-          'ar' => 'kwt_ar',
         ],
       ],
       '01live' => [
-        'magento_lang_prefix' => [
-          'en' => 'default',
-        ],
         'store_id' => [
           'ar' => 5,
+        ],
+        'alshaya_acm_knet.settings' => [
+          'alias' => 'hm',
         ],
       ]
     ],
@@ -71,6 +68,9 @@ function alshaya_get_additional_settings($site, $env) {
         'magento_lang_prefix' => [
           'en' => 'kwt_en',
           'ar' => 'kwt_ar',
+        ],
+        'alshaya_acm_knet.settings' => [
+          'alias' => 'alshaya',
         ],
       ],
     ],

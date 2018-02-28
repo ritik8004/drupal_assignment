@@ -121,17 +121,17 @@ Feature: Test the My account section for authenticated user
     by ID, name, SKU in combination with the Status of the order
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
     And I wait for the page to load
-    When I fill in "edit-search" with "graphic tee"
+    When I fill in "edit-search" with "green"
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
     Then I should see at most "10" recent orders listed on orders tab
-    Then I should see all "graphic tee" orders
-    When I fill in "edit-search" with "MCKWHDE"
+    Then I should see all "green" orders
+    When I fill in "edit-search" with "MCKW"
     And I wait 2 seconds
     When I click the label for "#edit-submit-orders"
     And I wait for the page to load
     Then I should see at most "10" recent orders listed on orders tab
-    And I should see all orders for "MCKWHDE"
+    And I should see all orders for "MCKW"
 
   Scenario: As an authenticated user
     I should be able to filter on all cancelled, dispatched and processing orders
@@ -155,7 +155,6 @@ Feature: Test the My account section for authenticated user
     And I press "Save"
     And I wait for the page to load
     Then I should see "Aadya"
-    And I should not see "Test"
     Then I should not see "55004455"
     Then I fill in "edit-field-first-name-0-value" with "Test"
     And I fill in "edit-field-last-name-0-value" with "Test"
@@ -174,7 +173,7 @@ Feature: Test the My account section for authenticated user
     When I fill in "field_address[0][address][given_name]" with "Test"
     And I fill in "field_address[0][address][family_name]" with "Test"
     When I fill in "field_address[0][address][mobile_number][mobile]" with "55004455"
-    When I select "Abbasiya" from "field_address[0][address][administrative_area]"
+    When I select "Sharq" from "field_address[0][address][administrative_area]"
     When I fill in "field_address[0][address][locality]" with "Block A"
     When I fill in "field_address[0][address][address_line1]" with "Street B"
     When I fill in "field_address[0][address][dependent_locality]" with "Sanyogita Apartment"
@@ -208,7 +207,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I click Edit Address
     And I wait for AJAX to finish
-    When I select "Abbasiya" from "field_address[0][address][administrative_area]"
+    When I select "Sharq" from "field_address[0][address][administrative_area]"
     When I fill in "field_address[0][address][address_line2]" with "2"
     And I press "Save"
     When I wait for the page to load

@@ -139,10 +139,10 @@ class CybersourceController implements ContainerInjectionInterface {
     // Set the payment method.
     $cart->setPaymentMethod('cybersource');
 
-    // Update the cart.
-    $this->cartStorage->updateCart(FALSE);
-
     try {
+      // Update the cart.
+      $this->cartStorage->updateCart(FALSE);
+
       $token_info = $this->apiWrapper->cybersourceTokenRequest($cart_id, $cc_type);
 
       // Do some cleaning.

@@ -1,6 +1,6 @@
 project:
   machine_name: alshaya
-  prefix: (MMCPA|ACR2)
+  prefix: (MMCPA|ACR2|CORE)
   human_name: Alshaya
   profile:
     name: alshaya_transac
@@ -18,6 +18,9 @@ drush:
     ci: self
   default_alias: '${drush.aliases.local}'
 target-hooks:
+  frontend-validate:
+    dir: '${repo.root}/blt/scripts'
+    command: 'bash frontend-validate.sh ${docroot}'
   frontend-setup:
     dir: '${repo.root}/blt/scripts'
     command: 'bash frontend-setup.sh ${docroot}'
@@ -37,6 +40,8 @@ target-hooks:
     dir: '${docroot}'
     command: 'echo ''No post-deploy build configured.'''
 import: '${repo.root}/blt/setup.local.xml'
+deploy:
+  gitignore_file: ${repo.root}/blt/config/.gitignore
 modules:
   local:
     enable: [dblog, devel, seckit, views_ui]
@@ -63,11 +68,10 @@ modules:
     enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [devel, views_ui]
 behat:
-  launch-selenium: true
-  launch-phantomjs: false
   paths:
     - '${repo.root}/tests/behat'
   tags: '~manual&&~ajax&&~experimental&&~lightningextension&&~example'
+  web-driver: selenium
 multisite:
   name:
     - g

@@ -26,4 +26,4 @@ require_once __DIR__ . '/../test.php';
 
 $api = 'agent/cart/' . $cart_id . '/estimate';
 
-invoke_api($api, 'JSON', $opt);
+invoke_api($api, 'JSON', $json);

@@ -36,7 +36,7 @@
       // Initialize lightSliders.
       var items = $('.acq-content-product .cloud-zoom:not(cloud-zoom-processed), .acq-content-product .cloudzoom__thumbnails__image:not(cloud-zoom-processed)');
       if (items.length) {
-        items.addClass('cloud-zoom-processed', context).once('bind-events').CloudZoom();
+        items.addClass('cloud-zoom-processed').once('bind-events').CloudZoom();
       }
 
       function applyRtl(ocObject, options) {

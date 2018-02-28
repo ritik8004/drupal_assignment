@@ -1,42 +1,13 @@
+@import "../../alshaya_white_label/sass/components/user/_users-contact.scss";
+
 .c-user-edit {
   .user-form {
     @include breakpoint($desktop) {
       margin-top: -0.125rem;
-      margin-bottom: 6.25rem;
     }
-
-    input:disabled {
-      color: #adadad;
-    }
-
-    input:not(:focus):valid ~ label,
-    input:not(:active):valid ~ label {
-      font-size: 0.75rem;
-      top: -0.125rem;
-    }
-
-    input:focus:valid ~ label,
-    input:active:valid ~ label,
-    .form-item input ~ label.active-label {
-      bottom: 0;
-      font-size: 0.75rem;
-      left: 0;
-      opacity: 1;
-      top: -1.25em;
-    }
-
-    #edit-account {
-      padding-top: 0;
-    }
-  }
-
-  .c-content .messages--error {
-    margin-top: 1.25rem;
   }
 
   .field--name-field-first-name {
-    margin-#{$right}: 1.5rem;
-
     @include breakpoint($only-mobile) {
       margin-#{$right}: 1rem;
     }
@@ -44,8 +15,6 @@
 
   .field--name-field-first-name,
   .field--name-field-last-name {
-    display: inline-block;
-    max-width: 10.7rem;
     width: calc(50% - 12px);
 
     input {
@@ -54,22 +23,9 @@
   }
 
   #user-form {
-    @include breakpoint($tablet) {
-      #edit-submit {
-        width: 5.688rem;
-      }
-    }
-
     @include breakpoint($only-tablet) {
-      max-width: 25rem;
-      margin-top: -13px;
-
       #edit-account {
         margin-top: 2.875rem;
-      }
-
-      .field--name-field-privilege-card-number {
-        margin-top: 3rem;
       }
     }
 

@@ -152,7 +152,7 @@ Feature: Test the My account section for authenticated user
     When I fill in "field_address[0][address][given_name]" with "Test"
     And I fill in "field_address[0][address][family_name]" with "Test"
     When I fill in "field_address[0][address][mobile_number][mobile]" with "55004455"
-    When I select "العبدلي" from the dropdown
+    When I select "الشرق" from the dropdown
     When I fill in "field_address[0][address][locality]" with "بلوك A"
     When I fill in "field_address[0][address][address_line1]" with "شارع B"
     When I fill in "field_address[0][address][dependent_locality]" with "شقة سانيوجيتا"
@@ -186,6 +186,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I click Edit Address
     And I wait for AJAX to finish
+    When I select "الشرق" from the dropdown
     When I fill in "field_address[0][address][address_line2]" with "2"
     And I press "حفظ"
     When I wait for the page to load

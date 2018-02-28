@@ -12,10 +12,16 @@ settings:
   allowed_values:
     -
       value: dark
-      label: Dark
+      label: 'Black amperserif'
     -
       value: light
-      label: Light
+      label: 'White amperserif'
+    -
+      value: dark_bold
+      label: 'Black ampersand bold'
+    -
+      value: light_bold
+      label: 'White ampersand bold'
   allowed_values_function: ''
 module: options
 locked: false

@@ -38,12 +38,6 @@ unmask_password:
   js:
     js/unmask_password.js: {}
 
-mobile_number:
-  js:
-    js/mobile_number.js: {}
-  dependencies:
-    - alshaya_white_label/cleave
-
 slider_banner:
   js:
     js/slider.js: {}
@@ -105,10 +99,9 @@ ucfix:
   js:
     js/ucfix.js: {}
 
-cloud_zoom:
+cloud_zoom_common:
   version: 1.x
   js:
-    js/product_zoom.js: {}
     js/product_mobile_zoom.js: {}
   dependencies:
     - core/drupal.dialog
@@ -117,6 +110,13 @@ cloud_zoom:
     - alshaya_white_label/slick
     - alshaya_white_label/utils
     - alshaya_product_zoom/lightslider
+
+cloud_zoom:
+  version: 1.x
+  js:
+    js/product_zoom.js: {}
+  dependencies:
+    - alshaya_white_label/cloud_zoom_common
 
 utils:
   js:

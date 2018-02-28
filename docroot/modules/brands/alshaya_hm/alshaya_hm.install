@@ -11,6 +11,67 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Re-order the PLP sort config by re-saving config.
+ */
+function alshaya_hm_update_8017() {
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
+    ->setData([
+      'sort_options' => [
+        'created' => 'created',
+        'nid' => 'nid',
+        'name_1' => 'name_1',
+        'final_price' => 'final_price',
+      ],
+    ])
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new live text style to 'field_promo_theme' paragraph field.
+ */
+function alshaya_hm_update_8016() {
+  $configs = [
+    'field.storage.paragraph.field_promo_theme',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Fixing footer logo image path.
+ */
+function alshaya_hm_update_8015() {
+  // Footer logo path.
+  $logo_path = '/' . drupal_get_path('theme', 'alshaya_hnm') . '/h-m-logo-bw.svg';
+  $block_content_en = "<div class='footer-brand-home'>
+                   <a href='/en' title='footer-brand-logo' rel='home' class='logo'>
+                     <img src='" . $logo_path . "' alt='HnM Logo'>
+                   </a>
+                 </div>";
+  $block_content_ar = "<div class='footer-brand-home'>
+                   <a href='/ar' title='footer-brand-logo' rel='home' class='logo'>
+                     <img src='" . $logo_path . "' alt='HnM Logo'>
+                   </a>
+                 </div>";
+
+  /* @var \Drupal\block_content\Entity\BlockContent $footer_logo_block */
+  $footer_logo_block = \Drupal::service('entity.repository')
+    ->loadEntityByUuid('block_content', '6a8aca33-da8d-4c88-953c-0ffbdcc63447');
+  $footer_logo_block->set('body', ['value' => $block_content_en, 'format' => 'rich_text']);
+  $footer_logo_block->save();
+
+  // Updating translated version.
+  $footer_logo_block_ar = $footer_logo_block->getTranslation('ar');
+  $footer_logo_block_ar->set('body', ['value' => $block_content_ar, 'format' => 'rich_text']);
+  $footer_logo_block_ar->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update EN, AR paths for site log and email logo.
  */
 function alshaya_hm_update_8014() {
@@ -385,4 +446,8 @@ function alshaya_hm_install() {
   $configs = ['acq_sku.configurable_form_settings'];
 
   alshaya_config_install_configs($configs, 'alshaya_hm', 'optional');
+
+  // Enable and set default amp theme.
+  \Drupal::service('theme_handler')->install(['alshaya_amp_hnm'], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_hnm')->save();
 }

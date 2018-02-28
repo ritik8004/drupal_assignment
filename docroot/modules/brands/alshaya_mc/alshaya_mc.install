@@ -245,4 +245,8 @@ function alshaya_mc_install() {
 
   // Create default content for mothercare.
   alshaya_mc_create_default_content();
+
+  // Enable and set default amp theme.
+  \Drupal::service('theme_handler')->install(['alshaya_amp_mothercare'], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_mothercare')->save();
 }

@@ -1,0 +1,53 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.amp
+    - field.field.node.static_html.body
+    - field.field.node.static_html.field_css
+    - field.field.node.static_html.field_display_amp_menu
+    - field.field.node.static_html.field_javascript
+    - field.field.node.static_html.field_meta_tags
+    - field.field.node.static_html.field_static_html_images
+    - node.type.static_html
+  module:
+    - amp
+    - metatag
+    - text
+    - user
+id: node.static_html.amp
+targetEntityType: node
+bundle: static_html
+mode: amp
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_meta_tags:
+    weight: 3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_empty_formatter
+    region: content
+  links:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  sharethis:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_css: true
+  field_display_amp_menu: true
+  field_javascript: true
+  field_static_html_images: true
+  langcode: true
+  scheduled_publication: true
