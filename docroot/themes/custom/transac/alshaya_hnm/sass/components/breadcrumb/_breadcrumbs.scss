@@ -35,7 +35,7 @@
       font-family: $hnm-regular-nodir;
 
       @include breakpoint($only-tablet) {
-        padding-top: 2px;
+        padding-top: 0.125rem;
       }
     }
   }
