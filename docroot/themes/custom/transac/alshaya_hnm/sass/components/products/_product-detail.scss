@@ -968,3 +968,22 @@ html[lang=ar] {
     }
   }
 }
+
+.ie.nodetype--acq_product {
+  .gallery-wrapper {
+    .labels-container {
+      .label {
+        &.top,
+        &.bottom {
+          &-left {
+            left: 1rem;
+          }
+
+          &-right {
+            right: 1rem;
+          }
+        }
+      }
+    }
+  }
+}
