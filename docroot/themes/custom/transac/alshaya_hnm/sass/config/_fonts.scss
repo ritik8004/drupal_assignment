@@ -151,6 +151,13 @@ $hnmpromo-arabic-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium';
 $hnm-icons: 'hnm-icons';
 $body_font: $hnm-regular;
 
+// Override font variables coming from MC, without this we get a 404 as font files are no longer present in H&M theme.
+$arial: $hnm-regular;
+$alshaya-bold: $hnm-bold;
+$alshaya-arabic-bold: $hnm-arabic-bold;
+$alshaya-thin: $hnm-regular;
+$alshaya-arabic-thin: $hnm-arabic-regular;
+
 // Icon Fonts
 $icons: (
   login: "\e929",
