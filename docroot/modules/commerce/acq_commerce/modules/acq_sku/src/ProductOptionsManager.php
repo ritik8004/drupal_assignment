@@ -132,6 +132,11 @@ class ProductOptionsManager {
     if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, NULL, FALSE)) {
       $save_term = FALSE;
 
+      // Save term even if weight changes.
+      if ($term->getWeight() != $weight) {
+        $save_term = TRUE;
+      }
+
       if ($term->hasTranslation($langcode)) {
         $term = $term->getTranslation($langcode);
 

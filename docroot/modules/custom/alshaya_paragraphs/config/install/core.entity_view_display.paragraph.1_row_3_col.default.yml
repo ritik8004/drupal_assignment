@@ -16,7 +16,7 @@ content:
     weight: 0
     label: hidden
     settings:
-      view_mode: w326
+      view_mode: default
       link: ''
     third_party_settings: {  }
     region: content

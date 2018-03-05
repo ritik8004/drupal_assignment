@@ -100,9 +100,9 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   // Validation for first and last name.
   $element['given_name']['#element_validate'][] = '_alshaya_addressbook_firstname_validate';
-  $element['given_name']['#maxlength'] = 255;
+  $element['given_name']['#maxlength'] = 50;
   $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
-  $element['family_name']['#maxlength'] = 255;
+  $element['family_name']['#maxlength'] = 50;
 
   // This is required for guest checkout pages.
   if (isset($element['#require_email']) && $element['#require_email']) {
@@ -129,8 +129,11 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['family_name']['#title'] = t('Last Name', [], ['context' => 'Address label']);
   $element['address_line1']['#title'] = t('Street Name / No.', [], ['context' => 'Address label']);
   $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);
+  $element['dependent_locality']['#maxlength'] = 89;
   $element['locality']['#title'] = t('Block', [], ['context' => 'Address label']);
+  $element['locality']['#maxlength'] = 92;
   $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
+  $element['address_line2']['#maxlength'] = 92;
 
   // Special handling for non-required floor field.
   $element['address_line2']['#attributes']['class'][] = 'form-item-field-address-floor';

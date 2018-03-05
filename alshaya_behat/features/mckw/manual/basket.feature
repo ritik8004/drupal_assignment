@@ -56,10 +56,10 @@ Feature: Test basket page
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see "Home delivery in 2-5 days for just KWD 1"
+    Then I should see "Home delivery in 1-3 days for just KWD 1"
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
-    Then I should see "Collect the order in store within 2-3 days"
+    Then I should see "Collect the order in store within 1-3 days"
 
   @loyalty
   Scenario: As a Guest
@@ -111,10 +111,10 @@ Feature: Test basket page
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see "خدمة التوصيل للمنازل خلال 2-5 أيام فقط بـ 1 دينار"
+    Then I should see "خدمة التوصيل للمنازل خلال 1-3 أيام فقط بـ 1 دينار"
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
-    Then I should see "إستلم طلبيتك من المحل خلال 2-3 أيام"
+    Then I should see "إستلم طلبيتك من المحل خلال 1-3 أيام"
 
   @arabic @loyalty
   Scenario: As a Guest

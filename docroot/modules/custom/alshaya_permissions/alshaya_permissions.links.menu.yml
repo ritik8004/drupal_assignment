@@ -1,0 +1,5 @@
+alshaya_permissions.user.admin_create:
+  title: 'Create user'
+  parent: user.admin_index
+  description: 'Create the users.'
+  route_name: user.admin_create

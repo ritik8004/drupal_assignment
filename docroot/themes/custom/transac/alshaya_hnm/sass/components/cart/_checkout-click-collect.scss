@@ -200,6 +200,10 @@
               text-transform: uppercase;
               letter-spacing: 1px;
 
+              html[lang=ar] & {
+                letter-spacing: normal;
+              }
+
               &:hover {
                 background-color: $hnm-black-two;
                 color: $white-five;
@@ -465,6 +469,10 @@
           text-transform: uppercase;
           letter-spacing: 1px;
 
+          html[lang=ar] & {
+            letter-spacing: normal;
+          }
+
           &.ajax-ladda-spinner {
             background: $white-five url(../imgs/icons/ic-loader.svg) center center no-repeat !important;
             background-size: 1.95rem !important;
@@ -541,6 +549,10 @@
           font-family: $hnm-regular;
           text-transform: uppercase;
           letter-spacing: 1px;
+
+          html[lang=ar] & {
+            letter-spacing: normal;
+          }
 
           &:hover {
             background-color: $hnm-black-two;
@@ -668,11 +680,13 @@
       @include breakpoint($desktop) {
         padding-#{$left}: 1.375rem;
         padding-#{$right}: 1.313rem;
+        margin-#{$left}: 0;
       }
 
       @include breakpoint($only-tablet) {
         padding-#{$left}: 0.9375rem;
         padding-#{$right}: 0.9375rem;
+        margin-#{$left}: 0;
       }
     }
   }

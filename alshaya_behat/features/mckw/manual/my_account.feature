@@ -6,7 +6,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    When I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    When I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
     And I wait for the page to load
 
   @prod
@@ -173,7 +173,7 @@ Feature: Test the My account section for authenticated user
     When I fill in "field_address[0][address][given_name]" with "Test"
     And I fill in "field_address[0][address][family_name]" with "Test"
     When I fill in "field_address[0][address][mobile_number][mobile]" with "55004455"
-    When I select "Abbasiya" from "field_address[0][address][administrative_area]"
+    When I select "Sharq" from "field_address[0][address][administrative_area]"
     When I fill in "field_address[0][address][locality]" with "Block A"
     When I fill in "field_address[0][address][address_line1]" with "Street B"
     When I fill in "field_address[0][address][dependent_locality]" with "Sanyogita Apartment"
@@ -207,7 +207,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I click Edit Address
     And I wait for AJAX to finish
-    When I select "Abbasiya" from "field_address[0][address][administrative_area]"
+    When I select "Sharq" from "field_address[0][address][administrative_area]"
     When I fill in "field_address[0][address][address_line2]" with "2"
     And I press "Save"
     When I wait for the page to load

@@ -16,9 +16,9 @@ Feature: Test the product detail page
     Then I should see buttons for facebook, Twitter and Pinterest
     And I should see "delivery options"
     Then I should see "Home Delivery"
-    And I should see "Delivered in 2-5 days for just KWD 1"
+    And I should see "Delivered in 1-3 days for just KWD 1"
     Then I should see "click and collect"
-    And I should see "FREE delivery to stores across Kuwait in 2-3 days"
+    And I should see "FREE delivery to stores across Kuwait in 1-3 days"
     Then I should be able to see the footer
 
   @simple
@@ -75,9 +75,9 @@ Feature: Test the product detail page
     Then I should see buttons for facebook, Twitter and Pinterest
     And I should see "delivery options"
     Then I should see "Home Delivery"
-    And I should see "Delivered in 2-5 days for just KWD 1"
+    And I should see "Delivered in 1-3 days for just KWD 1"
     Then I should see "click and collect"
-    And I should see "FREE delivery to stores across Kuwait in 2-3 days"
+    And I should see "FREE delivery to stores across Kuwait in 1-3 days"
     When I click the label for "#ui-id-4"
     Then I should see "This service is "
     And I should see "FREE"
@@ -167,7 +167,7 @@ Feature: Test the product detail page
     And I should see "خيارات التوصيل"
     Then I should see "خدمة التوصيل للمنزل"
     Then I should see "اختر واستلم"
-    And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 2 – 3 أيام"
+    And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 1 – 3 أيام"
     Then I should be able to see the footer in Arabic
 
   @arabic @simple
@@ -228,7 +228,7 @@ Feature: Test the product detail page
     And I should see "خيارات التوصيل"
     Then I should see "خدمة التوصيل للمنزل"
     Then I should see "اختر واستلم"
-    And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 2 – 3 أيام"
+    And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 1 – 3 أيام"
     Then I should be able to see the footer in Arabic
 
   @arabic @config

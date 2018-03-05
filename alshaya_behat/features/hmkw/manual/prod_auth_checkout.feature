@@ -9,7 +9,7 @@ Feature: As an authenticated user
     Then I should see the link "My account"
     When I am on a configurable product
     And I wait for the page to load
-    When I press "Add to cart"
+    When I press "add to basket"
     And I wait for AJAX to finish
     When I go to "/cart"
     And I wait for the page to load

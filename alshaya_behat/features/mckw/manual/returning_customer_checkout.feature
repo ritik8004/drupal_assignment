@@ -12,8 +12,8 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "shweta+2@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    Then I fill in "edit-checkout-login-name" with "anjali.nikumb@acquia.com"
+    And I fill in "edit-checkout-login-pass" with "password@1"
     When I press "sign in"
     And I wait for the page to load
 

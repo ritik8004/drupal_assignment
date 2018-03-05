@@ -14,13 +14,13 @@ index 39e36684a..00f13b469 100644
 +      if (!($sku instanceof SKU)) {
 +        // We may have some products in cart which are now deleted in Drupal.
 +        // This can happen when an item is blocked or deleted in Magento.
-+        $this->logger->warning('Invalid SKU @sku found in Cart id: @cart_id.', [
++        \Drupal::logger('acq_cart')->warning('Invalid SKU @sku found in Cart id: @cart_id.', [
 +          '@sku' => $item['sku'],
 +          '@cart_id' => $this->id(),
 +        ]);
 +
 +        // Remove the item from cart in session.
-+        $this->removeItemFromCart($item['sku']);
++        unset($items[$key]);
 +
 +        // Continue to next item, this item is removed in call above.
          continue;
@@ -32,3 +32,16 @@ index 39e36684a..00f13b469 100644
        $item['name'] = $plugin->cartName($sku, $item);
      }
  
+diff --git a/modules/acq_cart/src/Cart.php b/modules/acq_cart/src/Cart.php
+index 5582c778a..d94e3184f 100644
+--- a/modules/acq_cart/src/Cart.php
++++ b/modules/acq_cart/src/Cart.php
+@@ -135,7 +135,7 @@ public function items() {
+ 
+     $items = $this->cart->items;
+ 
+-    foreach ($items as &$item) {
++    foreach ($items as $key => &$item) {
+       if (!isset($item['sku'])) {
+         continue;
+       }

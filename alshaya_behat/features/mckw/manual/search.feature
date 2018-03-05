@@ -28,7 +28,7 @@ Feature: Search feature
   @prod
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "socks"
     And I press "Search"
@@ -38,7 +38,7 @@ Feature: Search feature
   @arabic @prod
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
     And I wait for the page to load
     And I follow "عربية"
     When I wait for the page to load
@@ -112,7 +112,7 @@ Feature: Search feature
     When I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
 
   @arabic
   Scenario: As a Guest

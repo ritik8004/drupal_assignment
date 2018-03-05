@@ -1,11 +1,10 @@
+@import '../../alshaya_white_label/sass/base/heading/_heading.scss';
+
 %page-title {
   font-family: $hnm-demibold;
   font-weight: normal;
   color: $hnm-black-two;
   letter-spacing: 0.8px;
-  line-height: 1;
-  margin-top: 0;
-  margin-bottom: 0;
   text-transform: uppercase;
 
   @include breakpoint($mobile) {
@@ -15,10 +14,6 @@
   @include breakpoint($tablet) {
     font-size: 1.25rem;
   }
-}
-
-.c-page-title {
-  @extend %page-title;
 }
 
 .subtitle {

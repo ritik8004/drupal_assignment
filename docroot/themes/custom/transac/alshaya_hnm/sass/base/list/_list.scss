@@ -1,12 +1,1 @@
-%list-clear {
-  padding-#{$left}: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-  list-style: none;
-}
-
-%list--horizontal {
-  li {
-    display: inline-block;
-  }
-}
+@import '../../alshaya_white_label/sass/base/list/_list.scss';

@@ -1,3 +1,5 @@
+@import "../../alshaya_white_label/sass/components/department/_department.scss";
+
 .c-department {
   margin-top: 1.875rem;
 
@@ -13,16 +15,6 @@
     color: $hnm-black-two;
   }
 
-  .c-page-title__description {
-    display: none;
-  }
-
-  .content {
-    .c-promo__items--department img {
-      width: 100%;
-    }
-  }
-
   .c-sidebar-first .block:first-child {
     margin-top: 0;
   }
@@ -30,14 +22,6 @@
 
 .nodetype--department_page {
   @include breakpoint($only-mobile) {
-    .c-hero-content__region {
-      margin-top: 1rem;
-    }
-
-    .c-department {
-      margin-top: 0.875rem;
-    }
-
     .field--name-field-1-row-2-col {
       .c-promo-1-1--eq__item {
         width: 100%;
