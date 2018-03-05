@@ -1137,6 +1137,7 @@ class AlshayaGtmManager {
         $orderItems = $order['items'];
         $productSKU = [];
         $productStyleCode = [];
+        $store_code = '';
         $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
         $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
@@ -1171,7 +1172,7 @@ class AlshayaGtmManager {
 
         // We should always have store but a sanity check. Additional check to
         // ensure the variable is not in list of disabled vars.
-        if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
+        if ($store_code && ($store = $this->storeFinder->getStoreFromCode($store_code))) {
           $page_dl_attributes['storeLocation'] = $store->label();
           $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
         }

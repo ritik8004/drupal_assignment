@@ -54,6 +54,8 @@ function alshaya_seo_install() {
 
 /**
  * Implements hook_update_N().
+ *
+ * Add config variable to disable specific variables from GTM.
  */
 function alshaya_seo_update_8002() {
   $configs = [
