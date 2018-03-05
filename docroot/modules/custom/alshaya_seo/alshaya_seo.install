@@ -51,3 +51,16 @@ function alshaya_seo_install() {
   $config_factory->set('skip_untranslated', TRUE);
   $config_factory->save();
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add config variable to disable specific variables from GTM.
+ */
+function alshaya_seo_update_8002() {
+  $configs = [
+    'alshaya_seo.disabled_gtm_vars',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_seo');
+}

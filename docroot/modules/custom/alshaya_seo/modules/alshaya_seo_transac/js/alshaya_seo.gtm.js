@@ -331,7 +331,9 @@
           product.quantity = Math.abs(diffQty);
 
           // Set item's size as dimension6.
-          product.dimension6 = cartItem.attr('gtm-size');
+          if (cartItem.attr('gtm-size')) {
+            product.dimension6 = cartItem.attr('gtm-size');
+          }
 
           // Remove product position: Not needed while updating item in cart.
           delete product.position;
@@ -385,7 +387,9 @@
           product.quantity = $(this).closest('tr').find('td.quantity select').val();
 
           // Set selected size as dimension6.
-          product.dimension6 = removeItem.attr('gtm-size');
+          if (removeItem.attr('gtm-size')) {
+            product.dimension6 = removeItem.attr('gtm-size');
+          }
 
           // Remove product position: Not needed while removing item from cart.
           delete product.position;
@@ -669,17 +673,25 @@
       name: product.attr('gtm-name'),
       id: product.attr('gtm-main-sku'),
       price: parseFloat(product.attr('gtm-price')),
-      brand: product.attr('gtm-brand'),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
       position: 1,
-      dimension1: product.attr('gtm-dimension1'),
       dimension2: product.attr('gtm-sku-type'),
       dimension3: product.attr('gtm-dimension3'),
-      dimension4: mediaCount,
-      dimension5: product.attr('gtm-dimension5'),
-      dimension6: ''
+      dimension4: mediaCount
     };
+
+    if (product.attr('gtm-brand')) {
+      productData.brand = product.attr('gtm-brand');
+    }
+
+    if (product.attr('gtm-dimension1')) {
+      productData.dimension1 = product.attr('gtm-dimension1');
+    }
+
+    if (product.attr('gtm-dimension5')) {
+      productData.dimension5 = product.attr('gtm-dimension5');
+    }
 
     return productData;
   };

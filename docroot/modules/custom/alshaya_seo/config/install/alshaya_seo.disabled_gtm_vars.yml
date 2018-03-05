@@ -1,0 +1,9 @@
+disabled_vars:
+  - 'cartItemsFlocktory'
+  - 'cartItemsRR'
+  - 'dimension1'
+  - 'dimension5'
+  - 'dimension6'
+  - 'dimension7'
+  - 'dimension8'
+  - 'brand'
