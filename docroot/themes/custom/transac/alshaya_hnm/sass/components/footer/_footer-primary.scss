@@ -218,7 +218,6 @@
 
   .footer--menu {
     float: none;
-    overflow: auto;
 
     @include breakpoint($desktop) {
       padding: 0 1rem;
@@ -638,6 +637,10 @@
 
   @include breakpoint($desktop) {
     width: 15.9375rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    overflow: hidden;
   }
 }
 

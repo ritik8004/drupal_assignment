@@ -15,7 +15,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Adding existing field 'field_promo_block_button' field to Banner paragraph.
  */
-function alshaya_paragraphs_update_8109() {
+function alshaya_paragraphs_update_8110() {
   $configs = [
     'field.field.paragraph.banner.field_promo_block_button',
     'core.entity_form_display.paragraph.banner.default',
@@ -24,6 +24,21 @@ function alshaya_paragraphs_update_8109() {
     'core.entity_view_display.paragraph.banner.w1920',
   ];
 
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable 'Image+Title+Subtitle' paragraph on '1 row 2 col dept' paragraph's
+ * 'field_1_row_2_col' field.
+ */
+function alshaya_paragraphs_update_8109() {
+  $configs = [
+    'field.field.paragraph.1_row_2_col_dept.field_1_row_2_col',
+  ];
+
+  // Update config.
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
 }
 

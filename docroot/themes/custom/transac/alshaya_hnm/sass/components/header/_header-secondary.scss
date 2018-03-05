@@ -151,6 +151,10 @@
   @include breakpoint($desktop) {
     margin-top: 7.125rem;
   }
+
+  .branding__menu {
+    box-shadow: none;
+  }
 }
 
 body {
@@ -209,7 +213,7 @@ body {
         &:nth-child(2) {
           a {
             &::before {
-              content: unset;
+              content: unset !important;
             }
           }
         }

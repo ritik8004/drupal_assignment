@@ -9,11 +9,11 @@ Feature: Test breadcrumbs displayed across the site
     Then the breadcrumb "<breadcrumb>" should be displayed
     Examples:
     |page|breadcrumb|
-    |/baby-clothing-0|home > baby clothing|
+    |/baby-clothing|home > baby clothing|
     |/baby-clothing/baby-newborn-18-months|home > baby clothing > baby (newborn - 18 months)|
     |/baby-clothing/baby-newborn-18-months/bodysuits|home > baby clothing > baby (newborn - 18 months) > bodysuits|
-    |/disney-mickey-mouse-t-shirt-and-shorts-set            |home > baby clothing > baby (newborn - 18 months) > baby boys > disney mickey mouse t-shirt and shorts set|
-    |/vk-promo-001                                         |home > toys > vk promo 001                                                                      |
+#    |/disney-mickey-mouse-t-shirt-and-shorts-set            |home > baby clothing > baby (newborn - 18 months) > baby boys > disney mickey mouse t-shirt and shorts set|
+#    |/vk-promo-001                                         |home > toys > vk promo 001                                                                      |
     |/cart                                                 |home > basket                                                                                            |
     |/store-finder                                         |home > find stores                                                                                       |
 

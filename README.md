@@ -66,6 +66,7 @@ To prepare your local env:
 * Install Yarn `npm i -g yarn`.
 * Install Ansible: `brew install ansible`
 * Run:
+  * `composer clear-cache`
   * `composer install`
   * `composer blt-alias`
   * `blt vm`

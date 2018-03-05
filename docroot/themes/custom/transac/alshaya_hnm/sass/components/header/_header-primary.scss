@@ -204,6 +204,10 @@ header {
 */
 
 .c-menu-primary {
+  @include breakpoint($only-tablet) {
+    height: 0;
+  }
+
   .region__menu-primary {
     margin-top: 0.9375rem;
     margin-bottom: 0.9375rem;
@@ -1376,6 +1380,10 @@ header {
       text-align: center;
       width: 6.063rem;
       height: 3.375rem;
+    }
+
+    .ie & {
+      display: block;
     }
   }
 }
