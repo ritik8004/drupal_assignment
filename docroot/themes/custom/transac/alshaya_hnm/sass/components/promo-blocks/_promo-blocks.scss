@@ -285,5 +285,51 @@
       -ms-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%);
     }
+
+    &.position-bottom-left,
+    &.position-center-left,
+    &.position-top-left {
+      right: calc((100vw + 45%) / 2);
+      left: auto;
+
+      @include breakpoint($tablet) {
+        right: calc((100vw + 35%) / 2);
+      }
+
+      @include breakpoint($desktop) {
+        right: calc((100vw + 53%) / 2);
+      }
+    }
+
+    &.position-bottom-right,
+    &.position-center-right,
+    &.position-top-right {
+      left: calc((100vw + 45%) / 2);
+
+      @include breakpoint($tablet) {
+        left: calc((100vw + 35%) / 2);
+      }
+
+      @include breakpoint($desktop) {
+        left: calc((100vw + 53%) / 2);
+      }
+    }
+
+    &.position-bottom-center {
+      @include breakpoint($tablet) {
+        bottom: 5rem;
+      }
+    }
+
+    &.position-bottom-left,
+    &.position-bottom-right,
+    &.position-center-left,
+    &.position-center-right,
+    &.position-top-left,
+    &.position-top-right {
+      @include breakpoint($only-mobile) {
+        max-width: 12.9375rem;
+      }
+    }
   }
 }
