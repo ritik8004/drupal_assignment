@@ -22,8 +22,11 @@ function alshaya_admin_update_8002() {
   // Disable immediate indexing for product while we run migrate. To avoid
   // unnecessary sql queries of index.
   $index = Index::load('product');
-  $index->setOption('index_directly', FALSE);
-  $index->save();
+
+  if ($index instanceof Index) {
+    $index->setOption('index_directly', FALSE);
+    $index->save();
+  }
 
   // Invoke a drush command to execute migration.
   drush_invoke_process('@self', 'wbm2cm-migrate');
@@ -54,8 +57,10 @@ function alshaya_admin_update_8002() {
 
   // Enable immediate indexing after migration finished.
   $index = Index::load('product');
-  $index->setOption('index_directly', TRUE);
-  $index->save();
+  if ($index instanceof Index) {
+    $index->setOption('index_directly', TRUE);
+    $index->save();
+  }
 
   drupal_static_reset();
   print "Flushing cache.";
@@ -79,17 +84,4 @@ function alshaya_admin_update_8001() {
  */
 function alshaya_admin_uninstall() {
   \Drupal::configFactory()->getEditable('views.view.content')->delete();
-}
-
-/**
- * Implements hook_update_dependencies().
- */
-function alshaya_admin_update_dependencies() {
-  return [
-    'alshaya_admin' => [
-      '8002' => [
-        'alshaya_acm_product' => '8010',
-      ],
-    ],
-  ];
 }

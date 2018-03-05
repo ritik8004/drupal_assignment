@@ -101,13 +101,19 @@ function alshaya_get_env_keys($site, $env) {
     'mcuae' => [],
     // H&M Kuwait.
     'hmkw' => [
+      '01dev2' => [
+        // DVM2.
+        'magento' => 'hm_vat',
+        'conductor' => 'mcksa_uat',
+      ],
       '01test' => [
         'magento' => 'hm_qa',
         'conductor' => 'hm_test',
       ],
       '01qa2' => [
-        'magento' => 'hm_qa',
-        'conductor' => 'hm_test',
+        // DVM2.
+        'magento' => 'hm_dmv2',
+        'conductor' => 'mcksa_pprod',
       ],
       '01uat' => [
         'magento' => 'hm_uat',

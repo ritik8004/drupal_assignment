@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac;
 
-use Behat\Gherkin\Node\NodeInterface;
+use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
@@ -353,7 +353,7 @@ class AlshayaGtmManager {
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
     $attributes['gtm-dimension1'] = $sku->get('attribute_set')->getString();
-    $attributes['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available';
+    $attributes['gtm-dimension4'] = $product_node ? (count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available') : 'image not available';
     $attributes['gtm-dimension5'] = $sku->get('attr_product_collection')->getString();
     $attributes['gtm-dimension6'] = $sku->get('attr_size')->getString();
 
@@ -1005,7 +1005,9 @@ class AlshayaGtmManager {
           foreach ($cart_items as $item) {
             $productSKU[] = $item['sku'];
             $product_node = alshaya_acm_product_get_display_node($item['sku']);
-            $productStyleCode[] = $product_node->get('field_skus')->getString();
+            if ($product_node instanceof NodeInterface) {
+              $productStyleCode[] = $product_node->get('field_skus')->getString();
+            }
           }
 
           $page_dl_attributes = [

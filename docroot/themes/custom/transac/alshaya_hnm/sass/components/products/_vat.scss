@@ -1,16 +1,4 @@
-.vat-text,
-.vat-text-footer {
-  font-size: 0.75rem;
-  color: $light-greyish;
-
-  .c-pdp & {
-    margin: 0.5rem 0;
-  }
-
-  .checkout & {
-    margin: 1rem 0;
-  }
-}
+@import '../../alshaya_white_label/sass/components/products/_vat.scss';
 
 .vat-text-footer {
   font-style: italic;

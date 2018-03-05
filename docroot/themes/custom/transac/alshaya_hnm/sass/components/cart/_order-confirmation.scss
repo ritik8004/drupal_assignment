@@ -34,6 +34,10 @@
       .order__delivery-details {
         @include breakpoint($tablet) {
           min-width: 13rem;
+
+          html[lang=ar] & {
+            min-width: 12rem;
+          }
         }
 
         @include breakpoint($desktop) {
@@ -135,14 +139,18 @@
   .total-row {
     .right--align {
       &.label {
-        padding: 0 1.125rem;
+        padding: 0;
 
         @include breakpoint($tablet) {
-          padding: 0 2.5rem 0 0;
+          html[lang=ar] & {
+            padding-left: 0.75rem;
+          }
         }
 
         @include breakpoint($desktop) {
-          padding: 0 1.125rem 0 0;
+          html[lang=ar] & {
+            padding: 0;
+          }
         }
       }
     }
@@ -222,7 +230,7 @@
   }
 
   @include breakpoint($tablet) {
-    margin-#{$right}: 1.5rem;
+    margin-#{$right}: 1.5rem !important;
     transition: margin 0.25s ease-in-out;
     width: 9.875rem;
     min-width: 11.625rem;
@@ -234,7 +242,7 @@
     }
 
     @include breakpoint($only-tablet) {
-      margin-right: 3.8rem;
+      margin-#{$right}: 1.5rem;
 
       html[lang=ar] & {
         margin-left: 1.2rem;
@@ -280,6 +288,28 @@
           display: block;
         }
       }
+    }
+  }
+}
+
+.order-confirmation {
+  .user__order--detail {
+    .total-row {
+      &.vat-row {
+        td {
+          &:nth-child(3) {
+            @include breakpoint($only-tablet) {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .order-print-button {
+    @include breakpoint($tablet) {
+      text-align: $right;
     }
   }
 }

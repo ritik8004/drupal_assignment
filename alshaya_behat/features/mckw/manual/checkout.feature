@@ -42,7 +42,7 @@ Feature: Test Checkout feature
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
 
   @hd @knet
@@ -118,7 +118,7 @@ Feature: Test Checkout feature
     And I press "Submit"
     And I press "Confirm"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
 
   @knet @fail
@@ -323,9 +323,9 @@ Feature: Test Checkout feature
     And I press "place order"
     And I wait for the page to load
     And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "000000001"
+    And I fill in "cardN" with "000000011"
     And I select "1" from "Ecom_Payment_Card_ExpDate_Month"
-    And I select "2017" from "Ecom_Payment_Card_ExpDate_Year"
+    And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
     And I press "Submit"
     When I wait 5 seconds

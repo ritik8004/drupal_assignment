@@ -882,7 +882,7 @@
   margin-bottom: 1.3rem;
 }
 
-#block-basketpromotionmessage {
+.cart-promotions-wrapper {
   background: $rosy-pink;
   color: $white-four;
   padding: 0.85rem 1rem;
@@ -1131,7 +1131,7 @@ html[lang=ar] {
 
   .promo-continue-shopping-wrapper summary,
   .alias--cart #table-cart-totals td:first-child,
-  #block-basketpromotionmessage p,
+  .cart-promotions-wrapper p,
   .alias--cart #table-cart-items tr th {
     font-size: 0.75rem;
   }
@@ -1167,7 +1167,7 @@ html[lang=ar] {
     }
   }
 
-  #block-basketpromotionmessage {
+  .cart-promotions-wrapper {
     @include breakpoint($only-tablet) {
       margin-top: -0.4rem;
     }

@@ -1,131 +1,16 @@
-.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
-  height: 100vh !important;
-  width: 100vw !important;
-  top: 0 !important;
-  left: 0 !important;
-  background: rgba(0, 0, 0, 0.5);
-
-  @include breakpoint($tablet) {
-    padding: calc((100vh - 40.5rem) / 2) calc((100vw - 45rem) / 2);
-  }
-
-  @include breakpoint($desktop) {
-    padding: calc((100vh - 34.5rem) / 2) calc((100vw - 49.5625rem) / 2);
-  }
-
-  .ui-dialog-titlebar {
-    padding: 0;
-
-    @include breakpoint($only-tablet) {
-      margin: 0 auto;
-    }
-  }
-
-  #product-image-gallery-container {
-    background: $white-five;
-  }
-}
+@import '../../alshaya_white_label/sass/components/imagegallery/_imagegallery.scss';
 
 .ui-dialog .ui-dialog-titlebar-close {
-  @include icon(close);
-
-  position: absolute;
-  #{$right}: 0;
-  #{$left}: auto;
-  top: 50%;
-  width: 1.875rem;
-  margin: 0;
-  height: 1.875rem;
-  border: none;
-  z-index: 9;
-  font-size: 1.875rem;
   color: $white-five;
   background-color: $hnm-black-two;
-  border-radius: 0;
-  outline: solid transparent;
-
-  &::before {
-    position: absolute;
-    #{$right}: 0;
-    top: 0;
-  }
-
-  @include breakpoint($only-tablet) {
-    #{$right}: -1.4rem;
-  }
-}
-
-#product-image-gallery {
-  &.pager-no {
-    .slick-track {
-      transform: none !important;
-    }
-  }
-}
-
-#lightSlider {
-  @include breakpoint($only-tablet) {
-    padding-#{$left}: 3rem;
-    padding-#{$right}: 3rem;
-  }
 }
 
 #product-image-gallery-container {
-  @include breakpoint($tablet) {
-    height: 40.5rem !important;
-    margin: 0 auto;
-    padding: 1.5em;
-  }
-
   @include breakpoint($desktop) {
     height: 38.5rem !important;
-    padding: 1.5em;
-    overflow: hidden;
-  }
-
-  .imagegallery__wrapper {
-    #product-image-gallery {
-      position: relative;
-
-      @include breakpoint($desktop) {
-        width: 5.625rem;
-        float: $left;
-      }
-    }
-
-    & > .imagegallery__full {
-      text-align: center;
-
-      @include breakpoint($tablet) {
-        height: 30rem !important;
-      }
-
-      @include breakpoint($desktop) {
-        height: 31.5rem !important;
-        float: $right;
-        width: calc(100% - (6.75rem)) !important;
-        padding-right: 2.1875rem;
-      }
-
-      .imagegallery__full__image {
-        height: 100%;
-      }
-    }
   }
 
   .button__wrapper {
-    @include breakpoint($tablet) {
-      position: absolute;
-      bottom: 9.375rem;
-      #{$left}: 44%;
-    }
-
-    @include breakpoint($desktop) {
-      position: absolute;
-      bottom: 2.5rem;
-      #{$left}: 50%;
-    }
-
     .zoomout,
     .zoomin {
       background: $white-five-20;
@@ -160,35 +45,6 @@
       &::before {
         content: '+';
       }
-    }
-  }
-}
-
-.mobilegallery {
-  #product-image-gallery-mobile {
-    padding: 0;
-
-    li.slick-slide {
-      width: 100%;
-      height: 276px;
-      display: flex;
-      justify-content: center;
-
-      img {
-        height: 100%;
-        width: auto;
-      }
-    }
-
-    ul.slick-dots {
-      position: absolute;
-      width: 100%;
-      #{$left}: 0;
-      text-align: center;
-    }
-
-    button.slick-arrow {
-      top: 40%;
     }
   }
 }

@@ -146,7 +146,7 @@
             },
             "drupal/facets": {
               "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
-              "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha11-57.patch",
+              "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha11-123.patch",
               "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
               "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch"
             },
@@ -160,7 +160,8 @@
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
                 "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
-                "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch"
+                "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
+                "Fixing extra div insert on ajax requests": "https://www.drupal.org/files/issues/736066-324.patch"
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
@@ -209,6 +210,11 @@
             },
             "drupal/amptheme": {
                 "Add svg file with defined viewbox height and width": "https://www.drupal.org/files/issues/amptheme-do_not_use_the_network_for_loading_logo_information-2753089-7.patch"
+            },
+            "acquia/blt": {
+                "ACR2-2704 css linting sniff": "./patches/blt/css_lint_sniff_ACR2-2704.patch",
+                "Allow validation of frontend files": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2571.patch",
+                "Travis marked as success despite error after core update": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2578.patch"
             }
         },
         "installer-paths": {

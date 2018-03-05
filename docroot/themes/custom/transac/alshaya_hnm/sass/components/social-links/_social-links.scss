@@ -1,22 +1,8 @@
+@import '../../alshaya_white_label/sass/components/social-links/_social-links.scss';
+
 .c-social-links {
-  ul {
-    font-size: 0;
-
-    @extend %list-clear;
-
-    @include breakpoint($upto-tablet) {
-      text-align: center;
-    }
-  }
-
   li {
-    display: inline-block;
     vertical-align: middle;
-
-    @include breakpoint($only-tablet) {
-      margin-#{$right}: 0.95rem;
-      max-width: 1.938rem;
-    }
 
     &:not(:last-child) {
       margin-#{$right}: 1.5rem;
@@ -24,10 +10,6 @@
   }
 
   [class^="c-social-links--"] {
-    @include u-image-replacement;
-
-    display: block;
-
     &::before {
       color: $white-five;
       font-size: 1.75rem;
@@ -36,20 +18,9 @@
     &:hover {
       &::before {
         color: $grey5;
+        background: none;
       }
     }
-  }
-
-  .c-social-links--facebook {
-    @include icon(facebook);
-  }
-
-  .c-social-links--instagram {
-    @include icon(instagram);
-  }
-
-  .c-social-links--youtube {
-    @include icon(youtube);
   }
 
   .c-social-links--google-plus {
@@ -57,14 +28,6 @@
       font-size: 1.875rem;
       padding-#{$left}: 0.4375rem;
     }
-  }
-
-  .c-social-links--twitter {
-    @include icon(twitter);
-  }
-
-  .c-social-links--pinterest {
-    @include icon(pinterest);
   }
 }
 
