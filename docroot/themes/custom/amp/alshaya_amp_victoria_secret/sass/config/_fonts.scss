@@ -1,13 +1,21 @@
 @font-face {
   font-family: 'Cairo';
-  src: url("/themes/custom/transac/alshaya_hnm/fonts/alshaya-cairo-regular.eot?#iefix") format("embedded-opentype"), url("/themes/custom/transac/alshaya_hnm/fonts/alshaya-cairo-regular.woff") format("woff"), url("/themes/custom/transac/alshaya_hnm/fonts/alshaya-cairo-regular.ttf") format("truetype"), url("/themes/custom/transac/alshaya_hnm/fonts/alshaya-cairo-regular.svg#NotoKufiArabic-Bold") format("svg");
+  src:
+    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-regular.eot?#iefix") format("embedded-opentype"),
+    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-regular.woff") format("woff"),
+    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-regular.ttf") format("truetype"),
+    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-regular.svg#NotoKufiArabic-Bold") format("svg");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Cairo-bold';
-  src: url("/themes/custom/transac/alshaya_hnm/fonts/alshaya-cairo-bold.eot?#iefix") format("embedded-opentype"), url("/themes/custom/transac/alshaya_hnm/fonts/alshaya-cairo-bold.woff") format("woff"), url("/themes/custom/transac/alshaya_hnm/fonts/alshaya-cairo-bold.ttf") format("truetype"), url("/themes/custom/transac/alshaya_hnm/fonts/alshaya-cairo-bold.svg#NotoKufiArabic-Bold") format("svg");
+  src:
+    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-bold.eot?#iefix") format("embedded-opentype"),
+    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-bold.woff") format("woff"),
+    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-bold.ttf") format("truetype"),
+    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-bold.svg#NotoKufiArabic-Bold") format("svg");
   font-weight: normal;
   font-style: normal;
 }
