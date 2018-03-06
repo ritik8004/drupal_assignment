@@ -74,24 +74,24 @@ function alshaya_white_label_preprocess_html(&$variables) {
   // Get current direction.
   $direction = $language->getDirection();
 
-  // If ltr languages and current theme is not alshaya_mothercare.
-  if ($direction == "ltr" && $current_theme != "alshaya_mothercare") {
-    $variables['#attached']['library'][] = $current_theme . '/ltr_styles';
+  if ($direction == "ltr") {
+    // If current theme is not alshaya_mothercare.
+    if ($current_theme != "alshaya_mothercare") {
+      $variables['#attached']['library'][] = $current_theme . '/ltr_styles';
+    }
+    else {
+      $variables['#attached']['library'][] = 'alshaya_white_label/ltr_styles';
+    }
   }
 
-  // If rtl languages and current theme is not alshaya_mothercare.
-  if ($direction == "rtl" && $current_theme != "alshaya_mothercare") {
-    $variables['#attached']['library'][] = $current_theme . '/rtl_styles';
-  }
-
-  // If ltr languages and current theme is alshaya_mothercare.
-  if ($direction == "ltr" && $current_theme == "alshaya_mothercare") {
-    $variables['#attached']['library'][] = 'alshaya_white_label/ltr_styles';
-  }
-
-  // If rtl languages and current theme is alshaya_mothercare.
-  if ($direction == "rtl" && $current_theme == "alshaya_mothercare") {
-    $variables['#attached']['library'][] = 'alshaya_white_label/rtl_styles';
+  if ($direction == "rtl") {
+    // If current theme is not alshaya_mothercare.
+    if ($current_theme != "alshaya_mothercare") {
+      $variables['#attached']['library'][] = $current_theme . '/rtl_styles';
+    }
+    else {
+      $variables['#attached']['library'][] = 'alshaya_white_label/rtl_styles';
+    }
   }
 }
 
