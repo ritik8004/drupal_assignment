@@ -14,6 +14,7 @@ function alshaya_amp_white_label_preprocess_html(&$variables) {
   // Get current theme name.
   $current_theme = $active_theme->getName();
 
+  // If current theme is not alshaya_amp_mothercare.
   if ($current_theme != 'alshaya_amp_mothercare') {
     $variables['current_theme'] = $current_theme;
   }

@@ -68,9 +68,30 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $active_theme = \Drupal::theme()->getActiveTheme();
   // Get current theme name.
   $current_theme = $active_theme->getName();
+  $language_manager = \Drupal::service('language_manager');
+  // Get current language.
+  $language = $language_manager->getCurrentLanguage();
+  // Get current direction.
+  $direction = $language->getDirection();
 
-  if ($current_theme != 'alshaya_amp_mothercare') {
-    $variables['current_theme'] = $current_theme;
+  // If ltr languages and current theme is not alshaya_mothercare.
+  if ($direction == "ltr" && $current_theme != "alshaya_mothercare") {
+    $variables['#attached']['library'][] = $current_theme . '/ltr_styles';
+  }
+
+  // If rtl languages and current theme is not alshaya_mothercare.
+  if ($direction == "rtl" && $current_theme != "alshaya_mothercare") {
+    $variables['#attached']['library'][] = $current_theme . '/rtl_styles';
+  }
+
+  // If ltr languages and current theme is alshaya_mothercare.
+  if ($direction == "ltr" && $current_theme == "alshaya_mothercare") {
+    $variables['#attached']['library'][] = 'alshaya_white_label/ltr_styles';
+  }
+
+  // If rtl languages and current theme is alshaya_mothercare.
+  if ($direction == "rtl" && $current_theme == "alshaya_mothercare") {
+    $variables['#attached']['library'][] = 'alshaya_white_label/rtl_styles';
   }
 }
 
