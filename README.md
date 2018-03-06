@@ -73,9 +73,6 @@ To prepare your local env:
   * `blt refresh:local`
   * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local -Dsite=mckw`)
   * `drush @alshaya.local uli`
-* Load commerce content (already included in refresh:local and refresh:local:drupal):
-  * `drush @alshaya.local -l [alias] alshaya-acm-offline-categories-sync`
-  * `drush @alshaya.local -l [alias] alshaya-acm-offline-products-sync`
 * Access site through Varnish in local
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
   * Access the site on port 81
