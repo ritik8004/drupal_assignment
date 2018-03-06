@@ -2,14 +2,14 @@ module.exports = {
   rtl: true,
   styles: {
     source: [
-      // 'sass/**/*.scss',
+      'sass/**/*.scss',
       'components/**/*.scss'
     ],
     directionalSource: [
       'sass/**/*.ltr.scss',
       'components/**/*.ltr.scss'
     ],
-    destination: 'components/dist/css/',
+    destination: 'dist/css/',
     options: {
       outputStyle: 'expanded',
       includePaths: [
@@ -22,10 +22,11 @@ module.exports = {
   },
   scripts: {
     source: [
+      'js/**/*.js',
       'components/js/**/*.js',
       'components/_patterns/**/*.js'
     ],
-    destination: 'components/dist/js/'
+    destination: 'dist/js/'
   },
   svg: {
     source: 'images/icons/svg/**/*.svg',
