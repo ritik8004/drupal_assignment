@@ -34,7 +34,7 @@
     <style amp-custom>
       {{ inline_css }}
       {% include directory ~ '/../alshaya_amp_white_label/css/styles.css' %}
-      {% if current_theme %}
+      {% if current_theme and current_theme != 'alshaya_amp_mothercare' %}
         {% include directory ~ '/../' ~ current_theme ~ '/css/styles.css' %}
       {% endif %}
     </style>
