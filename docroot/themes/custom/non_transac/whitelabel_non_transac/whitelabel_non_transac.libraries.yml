@@ -1,7 +1,0 @@
-disable_mobile_modal:
-  version: 1.x
-  js:
-    js/disable-mobile-modal.js: {}
-  dependencies:
-    - core/jquery
-    - core/drupal
