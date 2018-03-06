@@ -13,11 +13,49 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Adding existing field 'field_promo_block_button' field to Banner paragraph.
+ * Ensure all paragraphs are available on all sites.
  */
-function alshaya_paragraphs_update_8110() {
+function alshaya_paragraphs_update_8111() {
   $configs = [
+    'paragraphs.paragraphs_type.1_row_2_col',
+    'paragraphs.paragraphs_type.promo_block',
+    'paragraphs.paragraphs_type.promo_block_button',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  $configs = [
+    'field.storage.paragraph.field_1_row_2_col',
+    'field.storage.paragraph.field_promo_block_button',
+    'field.storage.paragraph.field_button_link',
+    'field.storage.paragraph.field_button_position',
+    'field.storage.paragraph.field_promo_text_1',
+    'field.storage.paragraph.field_promo_text_2',
+    'field.storage.paragraph.field_promo_theme',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  $configs = [
+    'field.field.paragraph.1_row_2_col.field_1_row_2_col',
+    'field.field.paragraph.promo_block.field_promo_block_button',
+    'field.field.paragraph.promo_block_button.field_button_link',
+    'field.field.paragraph.promo_block_button.field_button_position',
+    'field.field.paragraph.promo_block_button.field_promo_text_1',
+    'field.field.paragraph.promo_block_button.field_promo_text_2',
+    'field.field.paragraph.promo_block_button.field_promo_theme',
     'field.field.paragraph.banner.field_promo_block_button',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  $configs = [
+    'core.entity_form_display.paragraph.1_row_2_col.default',
+    'core.entity_view_display.paragraph.1_row_2_col.default',
+    'core.entity_form_display.paragraph.promo_block.default',
+    'core.entity_view_display.paragraph.promo_block.default',
+    'core.entity_form_display.paragraph.promo_block_button.default',
+    'core.entity_view_display.paragraph.promo_block_button.default',
     'core.entity_form_display.paragraph.banner.default',
     'core.entity_view_display.paragraph.banner.default',
     'core.entity_view_display.paragraph.banner.w1026',
@@ -25,6 +63,24 @@ function alshaya_paragraphs_update_8110() {
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  // @TODO: Language settings config missing completely for promo_block_button.
+  $configs = [
+    'language.content_settings.paragraph.1_row_1_col',
+    'language.content_settings.paragraph.promo_block',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding existing field 'field_promo_block_button' field to Banner paragraph.
+ */
+function alshaya_paragraphs_update_8110() {
+  // Moved to alshaya_paragraphs_update_8111().
+  // This field was not available on MCKW.
 }
 
 /**
