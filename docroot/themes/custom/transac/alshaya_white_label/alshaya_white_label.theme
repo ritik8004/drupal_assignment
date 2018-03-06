@@ -63,6 +63,14 @@ function alshaya_white_label_preprocess_html(&$variables) {
       $variables['attributes']['class'][] = 'plp-page-only';
     }
   }
+
+  $current_theme = \Drupal::theme()->getActiveTheme()->getName();
+  $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
+
+  // Mothercare theme inherit everything from alshaya_white_label.
+  $current_theme = $current_theme == 'alshaya_mothercare' ? 'alshaya_white_label' : $current_theme;
+
+  $variables['#attached']['library'][] = $current_theme . '/' . $direction . '_styles';
 }
 
 /**
