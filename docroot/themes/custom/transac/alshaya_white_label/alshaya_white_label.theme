@@ -63,6 +63,15 @@ function alshaya_white_label_preprocess_html(&$variables) {
       $variables['attributes']['class'][] = 'plp-page-only';
     }
   }
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+
+  if ($current_theme != 'alshaya_amp_mothercare') {
+    $variables['current_theme'] = $current_theme;
+  }
 }
 
 /**

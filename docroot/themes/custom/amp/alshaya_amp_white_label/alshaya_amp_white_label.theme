@@ -4,3 +4,17 @@
  * @file
  * Theme specific functionality.
  */
+
+/**
+ * Implements hook_preprocess_html() for HTML document templates.
+ */
+function alshaya_amp_white_label_preprocess_html(&$variables) {
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+
+  if ($current_theme != 'alshaya_amp_mothercare') {
+    $variables['current_theme'] = $current_theme;
+  }
+}

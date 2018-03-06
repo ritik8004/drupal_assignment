@@ -34,6 +34,9 @@
     <style amp-custom>
       {{ inline_css }}
       {% include directory ~ '/../alshaya_amp_white_label/css/styles.css' %}
+      {% if current_theme %}
+        {% include directory ~ '/../' ~ current_theme ~ '/css/styles.css' %}
+      {% endif %}
     </style>
     {# Only JS from an AMP library is processed in the placeholder. #}
     <js-placeholder token="{{ placeholder_token|raw }}">
