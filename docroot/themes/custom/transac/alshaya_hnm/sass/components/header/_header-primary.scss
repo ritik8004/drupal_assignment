@@ -323,7 +323,7 @@ header {
 
     input {
       color: $grey-ash;
-      font-family: $alshaya-thin;
+      font-family: $hnm-regular;
 
       @include breakpoint($only-mobile) {
         padding: 0.6875rem !important;
@@ -590,7 +590,7 @@ header {
       }
 
       a {
-        font-family: $alshaya-thin;
+        font-family: $hnm-regular;
       }
 
       &:hover {
@@ -690,7 +690,7 @@ header {
       max-width: 13.13rem;
 
       > .menu-two__link-wrapper {
-        font-family: $alshaya-bold;
+        font-family: $hnm-bold;
         font-weight: normal;
         display: inline-block;
         padding: 1.5rem 1.563rem;
@@ -830,7 +830,7 @@ header {
     margin-bottom: 1.5rem;
 
     > .menu-two__link-wrapper a {
-      font-family: $alshaya-bold !important;
+      font-family: $hnm-bold !important;
       font-size: 0.875rem !important;
       color: $marine-blue !important;
       margin-bottom: 0.5rem;

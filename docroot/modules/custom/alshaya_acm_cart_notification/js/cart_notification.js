@@ -119,7 +119,9 @@
               if ((currentLangCode !== 'en') && (typeof size !== 'undefined')) {
                 size = drupalSettings.alshaya_product_size_config[size];
               }
-              product.dimension6 = size;
+              if (product.hasOwnProperty('dimension6') && product.dimension6) {
+                product.dimension6 = size;
+              }
             }
 
             // Set product variant to the selected variant.

@@ -5,6 +5,8 @@
  * Provides Drush commands for Acquia Commerce Middleware related activities.
  */
 
+use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
+
 /**
  * Implements hook_drush_command().
  */
@@ -23,7 +25,7 @@ function alshaya_addressbook_drush_command() {
  * Implements drush areas sync command.
  */
 function drush_alshaya_addressbook_sync_areas() {
-  if (\Drupal::config('alshaya_addressbook.settings')->get('dm_version') == DM_VERSION_2) {
+  if (\Drupal::config('alshaya_addressbook.settings')->get('dm_version') == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
     // Update the area list.
     drush_print(dt('Synchronizing all areas, please wait...'));
     // Import DM data.

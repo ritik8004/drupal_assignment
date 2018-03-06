@@ -12,7 +12,7 @@ Feature: Test basket page
 #    And I wait for AJAX to finish
     When I am on a configurable product
     And I wait for the page to load
-    When I press "Add to cart"
+    When I press "add to basket"
     And I wait for AJAX to finish
 
   Scenario:  As a Guest
@@ -60,7 +60,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see "Home delivery in 2 days on orders over KWD 35"
+    Then I should see "Home delivery in 1-3 days on orders over KWD 25"
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
     Then I should see "Collect the order in store from 2-3 days"
