@@ -11,6 +11,25 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Enable brand AMP theme and set logo and favicon.
+ */
+function alshaya_hm_update_8018() {
+  // Enable and set default amp theme.
+  \Drupal::service('theme_handler')->install(['alshaya_amp_hnm'], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_hnm')->save();
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+
+  // Get the current theme settings.
+  $config = \Drupal::configFactory()->get($active_theme->getName() . '.settings')->get();
+  // Set same to installed AMP theme.
+  \Drupal::configFactory()->getEditable('alshaya_amp_hnm.settings')->setData($config)->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-order the PLP sort config by re-saving config.
  */
 function alshaya_hm_update_8017() {
@@ -450,4 +469,19 @@ function alshaya_hm_install() {
   // Enable and set default amp theme.
   \Drupal::service('theme_handler')->install(['alshaya_amp_hnm'], TRUE);
   \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_hnm')->save();
+}
+
+/**
+ * Implements hook_update_dependencies().
+ *
+ *  Install alshaya_amp module before saving configuration related to amp theme.
+ */
+function alshaya_hm_update_dependencies() {
+  return [
+    'alshaya_hm' => [
+      '8018' => [
+        'alshaya' => '8004',
+      ],
+    ],
+  ];
 }

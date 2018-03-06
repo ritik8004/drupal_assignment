@@ -4,10 +4,12 @@ dependencies:
   config:
     - field.field.paragraph.banner.field_banner
     - field.field.paragraph.banner.field_link
+    - field.field.paragraph.banner.field_promo_block_button
     - field.field.paragraph.banner.field_video
     - paragraphs.paragraphs_type.banner
     - responsive_image.styles.w1284
   module:
+    - entity_reference_revisions
     - link
     - responsive_image
 id: paragraph.banner.default
@@ -35,6 +37,15 @@ content:
       target: '0'
     third_party_settings: {  }
     type: link
+    region: content
+  field_promo_block_button:
+    weight: 3
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    type: entity_reference_revisions_entity_view
     region: content
   field_video:
     weight: 2

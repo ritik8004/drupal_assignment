@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac;
 
-use Behat\Gherkin\Node\NodeInterface;
+use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
@@ -338,6 +338,7 @@ class AlshayaGtmManager {
     $product_node = alshaya_acm_product_get_display_node($sku);
     $original_price = (float) $sku->get('price')->getString();
     $final_price = (float) $sku->get('final_price')->getString();
+    $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     if ($sku->bundle() == 'configurable') {
       $prices = $this->skuManager->getMinPrices($sku);
@@ -352,13 +353,23 @@ class AlshayaGtmManager {
 
     // Dimension1 & 2 correspond to size & color.
     // Should stay blank unless added to cart.
-    $attributes['gtm-dimension1'] = $sku->get('attribute_set')->getString();
+    if (!in_array('dimension1', $gtm_disabled_vars)) {
+      $attributes['gtm-dimension1'] = $sku->get('attribute_set')->getString();
+    }
+
+    if (!in_array('dimension5', $gtm_disabled_vars)) {
+      $attributes['gtm-dimension5'] = $sku->get('attr_product_collection')->getString();
+    }
+
+    if (!in_array('dimension6', $gtm_disabled_vars)) {
+      $attributes['gtm-dimension6'] = $sku->get('attr_size')->getString();
+    }
+
+    if (!in_array('brand', $gtm_disabled_vars)) {
+      $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
+    }
+
     $attributes['gtm-dimension4'] = $product_node ? (count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available') : 'image not available';
-    $attributes['gtm-dimension5'] = $sku->get('attr_product_collection')->getString();
-    $attributes['gtm-dimension6'] = $sku->get('attr_size')->getString();
-
-    $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
-
     $attributes['gtm-price'] = (float) number_format((float) $final_price, 3, '.', '');
 
     if ($final_price
@@ -376,8 +387,13 @@ class AlshayaGtmManager {
     // Override values from parent if parent sku available.
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($skuId)) {
       $attributes['gtm-sku-type'] = $parent_sku->bundle();
-      $attributes['gtm-brand'] = $parent_sku->get('attr_product_brand')->getString() ?: $attributes['gtm-brand'];
-      $attributes['gtm-dimension5'] = $parent_sku->get('attr_product_collection')->getString();
+      if (!in_array('brand', $gtm_disabled_vars)) {
+        $attributes['gtm-brand'] = $parent_sku->get('attr_product_brand')->getString() ?: $attributes['gtm-brand'];
+      }
+
+      if (!in_array('dimension5', $gtm_disabled_vars)) {
+        $attributes['gtm-dimension5'] = $parent_sku->get('attr_product_collection')->getString();
+      }
     }
 
     return $attributes;
@@ -539,9 +555,13 @@ class AlshayaGtmManager {
   public function processAttributesForPdp(array $attributes) {
     $processed_attributes['ecommerce'] = [];
     $processed_attributes['ecommerce']['currencyCode'] = $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
+    $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     // Set dimension1 & 2 to empty until product added to cart.
-    $attributes['gtm-dimension6'] = '';
+    if (!in_array('dimension6', $gtm_disabled_vars)) {
+      $attributes['gtm-dimension6'] = '';
+    }
+
     $attributes['gtm-product-sku'] = '';
     $processed_attributes['ecommerce']['detail']['products'][] = $this->convertHtmlAttributesToDatalayer($attributes);
     return $processed_attributes;
@@ -578,6 +598,7 @@ class AlshayaGtmManager {
 
     // Include product utility file to use helper functions.
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     if ($cart = $this->cartStorage->getCart(FALSE)) {
       $dimension7 = '';
@@ -605,9 +626,17 @@ class AlshayaGtmManager {
           // Get store code from cart extension.
           $store_code = $cart->getExtension('store_code');
 
-          // We should always have store but a sanity check.
-          if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
+          // We should always have store but a sanity check. Additional check to
+          // ensure the variable is not in list of disabled vars.
+          if ((!in_array('dimension7', $gtm_disabled_vars)) &&
+            ($store = $this->storeFinder->getStoreFromCode($store_code))) {
             $dimension7 = $store->label();
+          }
+
+          // We should always have store but a sanity check. Additional check to
+          // ensure the variable is not in list of disabled vars.
+          if ((!in_array('dimension8', $gtm_disabled_vars)) &&
+            ($store = $this->storeFinder->getStoreFromCode($store_code))) {
             $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
           }
         }
@@ -781,6 +810,7 @@ class AlshayaGtmManager {
     $dimension8 = '';
 
     $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
+    $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     $deliveryOption = 'Home Delivery';
     $deliveryType = $shipping_method->getName();
@@ -793,8 +823,18 @@ class AlshayaGtmManager {
       $deliveryType = $shipping_assignment['shipping']['extension_attributes']['click_and_collect_type'];
 
       $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
-      if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
+
+      // We should always have store but a sanity check. Additional check to
+      // ensure the variable is not in list of disabled vars.
+      if ((!in_array('dimension7', $gtm_disabled_vars)) &&
+        ($store = $this->storeFinder->getStoreFromCode($store_code))) {
         $dimension7 = $store->label();
+      }
+
+      // We should always have store but a sanity check. Additional check to
+      // ensure the variable is not in list of disabled vars.
+      if ((!in_array('dimension8', $gtm_disabled_vars)) &&
+        ($store = $this->storeFinder->getStoreFromCode($store_code))) {
         $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
       }
     }
@@ -811,9 +851,17 @@ class AlshayaGtmManager {
       $product['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
       $productExtras = [
         'quantity' => $item['ordered'],
-        'dimension7' => $dimension7,
-        'dimension8' => $dimension8,
       ];
+
+      // Avoid empty valued in GTM.
+      if ($dimension7) {
+        $productExtras['dimension7'] = $dimension7;
+      }
+
+      // Avoid empty valued in GTM.
+      if ($dimension8) {
+        $productExtras['dimension8'] = $dimension8;
+      }
 
       $products[] = array_merge($this->convertHtmlAttributesToDatalayer($product), $productExtras);
     }
@@ -947,7 +995,7 @@ class AlshayaGtmManager {
           'productStyleCode' => $product_sku,
           'stockStatus' => $stock_status,
           'productName' => $node->getTitle(),
-          'productBrand' => $sku_attributes['gtm-brand'],
+          'productBrand' => !empty($sku_attributes['gtm-brand']) ? $sku_attributes['gtm-brand'] : $sku_entity->get('attr_product_brand')->getString(),
           'productColor' => '',
           'productPrice' => (float) $sku_attributes['gtm-price'],
           'productOldPrice' => $oldprice,
@@ -996,6 +1044,8 @@ class AlshayaGtmManager {
       case 'checkout delivery page':
       case 'checkout payment page':
         $cart = $this->cartStorage->getCart(FALSE);
+        $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
+
         if ($cart) {
           $cart_totals = $cart->totals();
           $cart_items = $cart->get('items');
@@ -1005,7 +1055,9 @@ class AlshayaGtmManager {
           foreach ($cart_items as $item) {
             $productSKU[] = $item['sku'];
             $product_node = alshaya_acm_product_get_display_node($item['sku']);
-            $productStyleCode[] = $product_node->get('field_skus')->getString();
+            if ($product_node instanceof NodeInterface) {
+              $productStyleCode[] = $product_node->get('field_skus')->getString();
+            }
           }
 
           $page_dl_attributes = [
@@ -1013,9 +1065,19 @@ class AlshayaGtmManager {
             'productStyleCode' => $productStyleCode,
             'cartTotalValue' => (float) $cart_totals['grand'],
             'cartItemsCount' => count($cart_items),
-            'cartItemsRR' => $this->formatCartRr($cart_items),
-            'cartItemsFlocktory' => $this->formatCartFlocktory($cart_items),
           ];
+
+          // Add cartItemsRR variable only when its not in the list of disabled
+          // vars.
+          if (!in_array('cartItemsRR', $gtm_disabled_vars)) {
+            $page_dl_attributes['cartItemsRR'] = $this->formatCartRr($cart_items);
+          }
+
+          // Add cartItemsFlocktory variable only when its not in the list of
+          // disabled vars.
+          if (!in_array('cartItemsFlocktory', $gtm_disabled_vars)) {
+            $page_dl_attributes['cartItemsFlocktory'] = $this->formatCartFlocktory($cart_items);
+          }
 
           if (($page_type === 'checkout delivery page') || ($page_type === 'checkout payment page')) {
             if ($shipping = $cart->getShippingMethodAsString()) {
@@ -1073,20 +1135,16 @@ class AlshayaGtmManager {
         }
 
         $orderItems = $order['items'];
-        $dimension7 = '';
-        $dimension8 = '';
         $productSKU = [];
         $productStyleCode = [];
+        $store_code = '';
+        $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
         $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
         $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
         if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
-          if ($store = $this->storeFinder->getStoreFromCode($store_code)) {
-            $dimension7 = $store->label();
-            $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
-          }
 
           $billing_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
           $deliveryArea = $billing_address['administrative_area'];
@@ -1110,11 +1168,26 @@ class AlshayaGtmManager {
           'productStyleCode' => $productStyleCode,
           'cartTotalValue' => (float) $order['totals']['grand'],
           'cartItemsCount' => count($orderItems),
-          'cartItemsRR' => $this->formatCartRr($orderItems),
-          'cartItemsFlocktory' => $this->formatCartFlocktory($orderItems),
-          'storeLocation' => $dimension7,
-          'storeAddress' => $dimension8,
         ];
+
+        // We should always have store but a sanity check. Additional check to
+        // ensure the variable is not in list of disabled vars.
+        if ($store_code && ($store = $this->storeFinder->getStoreFromCode($store_code))) {
+          $page_dl_attributes['storeLocation'] = $store->label();
+          $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+        }
+
+        // Add cartItemsRR variable only when its not in the list of disabled
+        // vars.
+        if (!in_array('cartItemsRR', $gtm_disabled_vars)) {
+          $page_dl_attributes['cartItemsRR'] = $this->formatCartRr($orderItems);
+        }
+
+        // Add cartItemsFlocktory variable only when its not in the list of
+        // disabled vars.
+        if (!in_array('cartItemsFlocktory', $gtm_disabled_vars)) {
+          $page_dl_attributes['cartItemsFlocktory'] = $this->formatCartFlocktory($orderItems);
+        }
 
         if ($deliveryArea) {
           $page_dl_attributes['deliveryArea'] = $deliveryArea;

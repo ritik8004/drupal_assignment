@@ -15,7 +15,7 @@ Feature: Test the product detail page
     And I should see the link for ".read-more-description-link"
     Then I should see buttons for facebook, Twitter and Pinterest
     And I should see "delivery options"
-    Then I should see "home delivery"
+    Then I should see "Home Delivery"
     And I should see "Delivered in 1-3 days for just KWD 1"
     Then I should see "click and collect"
     And I should see "FREE delivery to stores across Kuwait in 1-3 days"
@@ -36,16 +36,16 @@ Feature: Test the product detail page
     And I should see "FREE"
     Then I should see " of charge."
     And I should see "Check in-store availability"
-    When I enter a location in "edit-location"
+    When I enter a location in "store-location"
     And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait 5 seconds
     Then I should see text matching "Shuwaikh Industrial 1, Shuwaikh Industrial, Kuwait"
     And I should see the link for ".change-location-link"
     Then I should see "Other stores nearby"
     When I click the label for ".change-location-link"
     Then I select the first autocomplete option for "kuwait" on the "store-location" field
     And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait 5 seconds
     Then I should see "Sharq, Kuwait City, Kuwait"
     When I click the label for ".other-stores-link"
     And I wait for AJAX to finish
@@ -74,7 +74,7 @@ Feature: Test the product detail page
     And I should see the link for ".read-more-description-link"
     Then I should see buttons for facebook, Twitter and Pinterest
     And I should see "delivery options"
-    Then I should see "home delivery"
+    Then I should see "Home Delivery"
     And I should see "Delivered in 1-3 days for just KWD 1"
     Then I should see "click and collect"
     And I should see "FREE delivery to stores across Kuwait in 1-3 days"
@@ -99,8 +99,7 @@ Feature: Test the product detail page
     When I click the label for "#ui-id-2"
     When I click the label for "#ui-id-4"
     And I wait for AJAX to finish
-    When I scroll to the ".change-location" element
-    When I enter a location in ".change-store-location"
+    When I enter a location in "store-location"
     And I wait for AJAX to finish
     Then I should see text matching "Shuwaikh Industrial 1, Shuwaikh Industrial, Kuwait"
     And I should see the link for ".change-location-link"
@@ -168,7 +167,7 @@ Feature: Test the product detail page
     And I should see "خيارات التوصيل"
     Then I should see "خدمة التوصيل للمنزل"
     Then I should see "اختر واستلم"
-    And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 1-3 أيام"
+    And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 1 – 3 أيام"
     Then I should be able to see the footer in Arabic
 
   @arabic @simple
@@ -185,7 +184,7 @@ Feature: Test the product detail page
     When I click the label for "#ui-id-4"
     And I wait for AJAX to finish
     Then I should see "استلم من المحل مجاناً"
-    When I enter a location in "edit-location"
+    When I enter a location in "store-location"
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I should see the link for ".change-location-link"
@@ -229,7 +228,7 @@ Feature: Test the product detail page
     And I should see "خيارات التوصيل"
     Then I should see "خدمة التوصيل للمنزل"
     Then I should see "اختر واستلم"
-    And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 1-3 أيام"
+    And I should see "خدمة التوصيل المجاني للمحلات داخل الكويت من 1 – 3 أيام"
     Then I should be able to see the footer in Arabic
 
   @arabic @config
@@ -249,7 +248,7 @@ Feature: Test the product detail page
     When I click the label for "#ui-id-4"
     And I wait for AJAX to finish
     Then I should see "استلم من المحل مجاناً"
-    When I enter a location in "edit-location"
+    When I enter a location in "store-location"
     And I wait for AJAX to finish
     And I should see the link for ".change-location-link"
     Then I should see text matching "محلات أخرى قريبة إليك"
@@ -302,29 +301,3 @@ Feature: Test the product detail page
       |social_media_link|text|
       |.st_facebook_custom|Log in to your Facebook account to share.|
       |.st_twitter_custom|Share a link with your followers|
-
-  @config
-  Scenario: As an user
-    I should be able to view the size guide on a configurable PDP
-    Given I am on a configurable product
-    And I wait for the page to load
-    When I follow "Size Guide"
-    And I wait for AJAX to finish
-    Then I should see "Please select the category you require"
-    When I press "Close"
-    Then I should not see "Please select the category you require"
-    And I should see the link "Size Guide"
-
-  @config @arabic
-  Scenario: As an user on Arabic site
-    I should be able to view the size guide on a configurable PDP
-    Given I am on a configurable product
-    And I wait for the page to load
-    When I follow "العربية"
-    And I wait for the page to load
-    When I follow "دليل المقاسات"
-    And I wait for AJAX to finish
-    Then I should see "يرجى اختيار القسم المطلوب"
-    When I press "Close"
-    Then I should not see "يرجى اختيار القسم المطلوب"
-    And I should see the link "دليل المقاسات"
