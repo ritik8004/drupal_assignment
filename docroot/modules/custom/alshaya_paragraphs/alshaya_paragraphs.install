@@ -13,9 +13,10 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Ensure all paragraphs are available on all sites.
+ * Adding existing field 'field_promo_block_button' field to Banner paragraph.
+ * Also add re-add paragraphs and fields missing in MCKW.
  */
-function alshaya_paragraphs_update_8111() {
+function alshaya_paragraphs_update_8110() {
   $configs = [
     'paragraphs.paragraphs_type.1_row_2_col',
     'paragraphs.paragraphs_type.promo_block',
@@ -71,16 +72,6 @@ function alshaya_paragraphs_update_8111() {
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Adding existing field 'field_promo_block_button' field to Banner paragraph.
- */
-function alshaya_paragraphs_update_8110() {
-  // Moved to alshaya_paragraphs_update_8111().
-  // This field was not available on MCKW.
 }
 
 /**
