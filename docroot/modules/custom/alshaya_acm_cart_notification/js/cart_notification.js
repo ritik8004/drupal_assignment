@@ -92,7 +92,7 @@
           var selectedVariant = '';
 
           if (addedProduct.attr('gtm-sku-type') === 'configurable') {
-            selectedVariant = addedProduct.find('.selected-variant-sku-' + addedProduct.attr('gtm-product-sku').toLowerCase()).val();
+            selectedVariant = addedProduct.find('.selected-variant-sku-' + addedProduct.attr('gtm-product-sku-class-identifier').toLowerCase()).val();
           }
 
           if ($('.ui-dialog').length > 0) {
