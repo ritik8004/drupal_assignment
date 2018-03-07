@@ -10,12 +10,6 @@ module.exports = function (gulp, plugins, options) {
     return gulp.src([
       options.sass.files
     ])
-      .pipe(plugins.plumber({
-        errorHandler: function(e) {
-          console.log(e.messageFormatted);
-          this.emit('end');
-        }
-      }))
       .pipe(plugins.sassGlob())
       .pipe(plugins.sass({
         errLogToConsole: true,
