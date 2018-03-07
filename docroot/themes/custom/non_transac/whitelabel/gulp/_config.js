@@ -9,7 +9,7 @@ module.exports = {
       'sass/**/*.ltr.scss',
       'components/**/*.ltr.scss'
     ],
-    destination: 'dist/css/',
+    destination: 'components/dist/css/',
     options: {
       outputStyle: 'expanded',
       includePaths: [
@@ -26,7 +26,7 @@ module.exports = {
       'components/js/**/*.js',
       'components/_patterns/**/*.js'
     ],
-    destination: 'dist/js/'
+    destination: 'components/dist/js/'
   },
   svg: {
     source: 'images/icons/svg/**/*.svg',
