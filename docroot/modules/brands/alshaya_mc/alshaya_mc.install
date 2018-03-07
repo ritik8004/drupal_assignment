@@ -10,6 +10,25 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Enable brand AMP theme and set logo and favicon.
+ */
+function alshaya_mc_update_8310() {
+  // Enable and set default amp theme.
+  \Drupal::service('theme_handler')->install(['alshaya_amp_mothercare'], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_mothercare')->save();
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+
+  // Get the current theme settings.
+  $config = \Drupal::configFactory()->get($active_theme->getName() . '.settings')->get();
+  // Set same to installed AMP theme.
+  \Drupal::configFactory()->getEditable('alshaya_amp_mothercare.settings')->setData($config)->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update EN, AR paths for site log and email logo.
  */
 function alshaya_mc_update_8309() {
@@ -249,4 +268,19 @@ function alshaya_mc_install() {
   // Enable and set default amp theme.
   \Drupal::service('theme_handler')->install(['alshaya_amp_mothercare'], TRUE);
   \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_mothercare')->save();
+}
+
+/**
+ * Implements hook_update_dependencies().
+ *
+ *  Install alshaya_amp module before saving configuration related to amp theme.
+ */
+function alshaya_mc_update_dependencies() {
+  return [
+    'alshaya_mc' => [
+      '8310' => [
+        'alshaya' => '8004',
+      ],
+    ],
+  ];
 }

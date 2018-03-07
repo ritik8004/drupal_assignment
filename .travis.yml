@@ -29,11 +29,9 @@ cache:
   - "$HOME/.npm"
   - "$HOME/.nvm"
   - "vendor"
-  - "docroot/themes/custom/whitelabel/node_modules"
-  - "docroot/themes/custom/whitelabel_transac/node_modules"
-  - "docroot/themes/custom/whitelabel_non_transac/node_modules"
-  - "docroot/themes/custom/alshaya_white_label/node_modules"
-  - "docroot/themes/custom/victoria_secret/node_modules"
+  - "docroot/themes/custom/transac/node_modules"
+  - "docroot/themes/custom/non_transac/node_modules"
+  - "docroot/themes/custom/amp/node_modules"
 
 addons:
   ssh_known_hosts:
