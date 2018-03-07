@@ -75,6 +75,13 @@ function alshaya_d_install() {
 }
 
 /**
+ * Disable whitelabel_non_transac theme.
+ */
+function alshaya_d_update_8102() {
+  \Drupal::service('theme_handler')->uninstall(['whitelabel_non_transac'], TRUE);
+}
+
+/**
  * Implements hook_update_n().
  *
  * Update translation of sign up block content.
