@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac;
 
+use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -349,6 +350,7 @@ class AlshayaGtmManager {
 
     $attributes['gtm-name'] = trim($sku->label());
     $attributes['gtm-product-sku'] = $sku->getSku();
+    $attributes['gtm-product-sku-class-identifier'] = strtolower(Html::cleanCssIdentifier($sku->getSku()));
     $attributes['gtm-sku-type'] = $sku->bundle();
 
     // Dimension1 & 2 correspond to size & color.
