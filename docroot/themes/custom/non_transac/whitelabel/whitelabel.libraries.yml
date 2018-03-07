@@ -355,3 +355,11 @@ status-message:
   css:
     theme:
       components/dist/css/_patterns/01-molecules/06-content/status-message/status-message.ltr.css: {}
+
+disable_mobile_modal:
+  version: 1.x
+  js:
+    js/disable-mobile-modal.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
