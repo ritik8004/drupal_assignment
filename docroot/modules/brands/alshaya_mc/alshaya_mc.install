@@ -10,6 +10,24 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Re-order the PLP sort config by re-saving config.
+ */
+function alshaya_mc_update_8311() {
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
+    ->setData([
+      'sort_options' => [
+        'nid' => 'nid',
+        'name_1' => 'name_1',
+        'final_price' => 'final_price',
+        'created' => 0,
+      ],
+    ])
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable brand AMP theme and set logo and favicon.
  */
 function alshaya_mc_update_8310() {
