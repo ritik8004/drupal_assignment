@@ -764,33 +764,6 @@ function alshaya_hnm_preprocess_page_title(&$variables) {
 }
 
 /**
- * Implements hook_preprocess_paragraph().
- */
-function alshaya_hnm_preprocess_paragraph(&$variables) {
-  if ($variables['elements']['#paragraph']->getType() == 'promo_block') {
-    // Get the promo block display config for twig file.
-    $para_config = \Drupal::config('alshaya_paragraphs.paragraphs_custom_config');
-    $variables['promo_link'] = $para_config->get('promo_block_display');
-    if ($variables['promo_link'] == 1) {
-      // Set variable to make whole promo block clickable.
-      if ($variables['elements']['field_promo_block_button'][0]['#paragraph']) {
-        $button_link = $variables['elements']['field_promo_block_button'][0]['#paragraph']->get('field_button_link')->getValue();
-        $variables['button_link'] = Url::fromUri($button_link[0]['uri'])->toString();
-      }
-    }
-  }
-  elseif ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {
-    // Get the promo block display config for twig file.
-    $para_config = \Drupal::config('alshaya_paragraphs.paragraphs_custom_config');
-    $variables['promo_link'] = $para_config->get('promo_block_display');
-    if ($variables['promo_link'] == 1) {
-      // Get button text and set as markup.
-      $variables['button_text']['#markup'] = $variables['elements']['field_button_link'][0]['#title'];
-    }
-  }
-}
-
-/**
  * Implements hook_js_alter().
  */
 function alshaya_hnm_js_alter(&$javascript) {
