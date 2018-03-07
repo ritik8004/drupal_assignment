@@ -6,6 +6,40 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Enable brand AMP theme and set logo and favicon.
+ */
+function alshaya_vs_update_8102() {
+  // Enable and set default amp theme.
+  \Drupal::service('theme_handler')->install(['alshaya_amp_victoria_secret'], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_victoria_secret')->save();
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+
+  // Get the current theme settings.
+  $config = \Drupal::configFactory()->get($active_theme->getName() . '.settings')->get();
+  // Set same to installed AMP theme.
+  \Drupal::configFactory()->getEditable('alshaya_amp_victoria_secret.settings')->setData($config)->save();
+}
+
+/**
+ * Implements hook_update_n().
+ *
+ * Update translation of sign up block content.
+ */
+function alshaya_vs_update_8101() {
+  $blocks = \Drupal::entityTypeManager()->getStorage('block_content')
+    ->loadByProperties(['uuid' => '54b4369d-fb82-4f9f-9034-fc869dda1007']);
+  // Get the first block returned from the database.
+  $block_content = reset($blocks);
+  $block_content = $block_content->getTranslation('ar');
+  $block_content->__set('body', "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/ar/email-sign-up\" class=\"use-ajax\" data-dialog-type=\"modal\">تسجيل مستخدم جديد</a></p>");
+  $block_content->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_vs_install() {
@@ -72,26 +106,22 @@ function alshaya_vs_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+
+  \Drupal::service('theme_handler')->install(['alshaya_amp_victoria_secret'], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_victoria_secret')->save();
 }
 
 /**
- * Disable whitelabel_non_transac theme.
- */
-function alshaya_vs_update_8102() {
-  \Drupal::service('theme_handler')->uninstall(['whitelabel_non_transac'], TRUE);
-}
-
-/**
- * Implements hook_update_n().
+ * Implements hook_update_dependencies().
  *
- * Update translation of sign up block content.
+ *  Install alshaya_amp module before saving configuration related to amp theme.
  */
-function alshaya_vs_update_8101() {
-  $blocks = \Drupal::entityTypeManager()->getStorage('block_content')
-    ->loadByProperties(['uuid' => '54b4369d-fb82-4f9f-9034-fc869dda1007']);
-  // Get the first block returned from the database.
-  $block_content = reset($blocks);
-  $block_content = $block_content->getTranslation('ar');
-  $block_content->__set('body', "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/ar/email-sign-up\" class=\"use-ajax\" data-dialog-type=\"modal\">تسجيل مستخدم جديد</a></p>");
-  $block_content->save();
+function alshaya_vs_update_dependencies() {
+  return [
+    'alshaya_vs' => [
+      '8102' => [
+        'alshaya' => '8004',
+      ],
+    ],
+  ];
 }
