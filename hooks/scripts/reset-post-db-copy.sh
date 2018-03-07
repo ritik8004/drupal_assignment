@@ -23,6 +23,8 @@ drush8 @$site.$target_env --uri=$uri en -y dblog views_ui features_ui restui
 
 # Now clean all data.
 drush8 @$site.$target_env --uri=$uri clean-synced-data -y
+# Clear all search indexes.
+drush8 @$site.$target_env --uri=$uri sapi-c
 drush8 @$site.$target_env --uri=$uri sync-commerce-cats
 drush8 @$site.$target_env --uri=$uri sync-commerce-product-options
 drush8 @$site.$target_env --uri=$uri sync-commerce-products en 30 -y
@@ -42,6 +44,8 @@ do
 done
 
 drush8 @$site.$target_env --uri=$uri sync-commerce-promotions
+# Re-index all indexes.
+drush8 @$site.$target_env --uri=$uri sapi-i
 drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_attach_queue
 drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_detach_queue
 
