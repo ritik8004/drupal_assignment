@@ -615,13 +615,12 @@ class SkuManager {
 
     $static_labels_cache[$sku][$type] = [];
 
-    if ($labels = $sku_entity->get('attr_labels')->getString()) {
-      $labels_data = unserialize($labels);
+    $labels_data = $this->getSkuLabel($sku_entity);
 
-      if (empty($labels_data)) {
-        return [];
-      }
-
+    if (empty($labels_data)) {
+      return [];
+    }
+    else {
       $image_key = $type . '_image';
       $text_key = $type . '_image_text';
       $position_key = $type . '_position';
@@ -687,6 +686,38 @@ class SkuManager {
     }
 
     return $static_labels_cache[$sku][$type];
+  }
+
+  /**
+   * Function to get the product label for given SKU.
+   *
+   * First try to get the product label from SKU and then Check for
+   * parent SKU if given SKU return empty file.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   SKU entity object.
+   * @param bool $parent
+   *   True if current sku is parent SKU, default to FALSE.
+   *
+   * @return array
+   *   Return array of labels data.
+   */
+  protected function getSkuLabel(SKU $sku_entity, $parent = FALSE) {
+    if ($labels = $sku_entity->get('attr_labels')->getString()) {
+      $labels_data = unserialize($labels);
+      if (!empty($labels_data)) {
+        return $labels_data;
+      }
+      // Process only when current sku is not parent SKU.
+      elseif (!$parent) {
+        // Get parent sku of the sku.
+        $parent_sku = $this->getParentSkuBySku($sku_entity);
+        if (!empty($parent_sku)) {
+          return $this->getSkuLabel($parent_sku, TRUE);
+        }
+      }
+    }
+    return [];
   }
 
   /**
