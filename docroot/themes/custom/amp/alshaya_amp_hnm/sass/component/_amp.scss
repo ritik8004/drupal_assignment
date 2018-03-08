@@ -8,6 +8,7 @@ body {
 }
 
 .site-branding {
+  a,
   amp-img {
     height: 2.25rem;
     width: 2.5rem;
@@ -38,7 +39,7 @@ body {
 
 #sidebar {
   ~ .site-branding {
-    amp-img {
+    a {
       margin-left: 0.625rem;
 
       html[lang=ar] & {
