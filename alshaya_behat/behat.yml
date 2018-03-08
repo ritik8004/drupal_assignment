@@ -32,7 +32,7 @@ mckwqa:
         wd_host: http://127.0.0.1:4444/wd/hub
         browser: chrome
         capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
-      base_url: 'https://alshaya_shield:AS_S@vskw.factory.alshaya.com/en'
+      base_url: 'https://mckw-test.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~
