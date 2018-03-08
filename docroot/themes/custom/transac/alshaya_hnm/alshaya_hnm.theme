@@ -116,9 +116,6 @@ function alshaya_hnm_preprocess_page(&$variables) {
   // Make site name and logo available to all templates.
   $variables['site_logo'] = theme_get_setting('logo.url');
   $variables['site_name'] = theme_get_setting('name');
-
-  // Adding vat text to page footer.
-  $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
 }
 
 /**
