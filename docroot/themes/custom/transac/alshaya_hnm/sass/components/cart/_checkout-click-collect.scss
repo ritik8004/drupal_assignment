@@ -30,6 +30,8 @@
 
     .stores-list-view,
     .stores-map-view {
+      @include arabic-letter-spacing;
+
       max-height: 2.188rem;
       vertical-align: middle;
       color: $hnm-black-two;
