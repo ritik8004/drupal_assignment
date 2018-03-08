@@ -32,7 +32,7 @@ mckwqa:
         wd_host: http://127.0.0.1:4444/wd/hub
         browser: chrome
         capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
-      base_url: 'https://mckw-test.factory.alshaya.com/en'
+      base_url: 'https://alshaya_shield:AS_S@vskw.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~
@@ -233,10 +233,10 @@ hmprod:
               simpleurl: '/aq-product1'
               simpletitle: '[AQ]-Product_1'
               simpletitlear: '[AQ]-Product_1'
-              configurl: '/porcelain-mug-print-motif'
-              configtitle: 'Porcelain mug with print motif'
-              configtitlear: 'Porcelain mug with print motif'
-              configvariant: 'No Size'
+              configurl: '/bodycon-dress-4'
+              configtitle: 'Bodycon dress'
+              configtitlear: 'فستان باديكون'
+              configvariant: '6'
               base_url: 'https://kw.hm.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
@@ -256,6 +256,50 @@ hmprod:
         browser: chrome
         capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://kw.hm.com/en'
+      files_path: "%paths.base%/media"
+    Drupal\DrupalExtension:
+      blackbox: ~
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true
+vsqa:
+  autoload:
+    '': %paths.base%/features/vskw/bootstrap
+  suites:
+    default:
+      paths: [ %paths.base%/features/vskw/manual ]
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/stronglax'
+              simpletitle: 'Stronglax'
+              simpletitlear: 'Mothercare Three Position Baby Carrier test - Black'
+              configurl: '/grey-navy-and-yellow-jersey-shorts-3-pack'
+              configtitle: 'Grey, Navy and Yellow Jersey Shorts - 3 Pack'
+              configtitlear: 'Grey, Navy and Yellow Jersey Shorts - 3 Pack'
+              configvariant: '2-3 Years'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  formatters:
+      html:
+        output_path: %paths.base%/features/vskw/reports/html/behat
+  extensions:
+    Behat\MinkExtension:
+      browser_name: chrome
+      goutte:
+        guzzle_parameters:
+          verify: false
+      javascript_session: selenium2
+      selenium2:
+        wd_host: http://127.0.0.1:4444/wd/hub
+        browser: chrome
+        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
+      base_url: 'https://alshaya_shield:AS_S@vskw.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
     Drupal\DrupalExtension:
       blackbox: ~
