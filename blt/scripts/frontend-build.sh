@@ -7,7 +7,7 @@ docrootDir="$1"
 
 transac=( "alshaya_white_label" "alshaya_hnm" "pottery_barn_non_trans" )
 non_transac=( "debenhams" "whitelabel" "whitelabel_non_transac" "victoria_secret" "bath_body_works" "bouchon_bakery" )
-amp=( "alshaya_amp_white_label" "alshaya_amp_hnm" )
+amp=( "alshaya_amp_white_label" "alshaya_amp_hnm" "alshaya_amp_victoria_secret")
 
 for i in "${transac[@]}"
 do
