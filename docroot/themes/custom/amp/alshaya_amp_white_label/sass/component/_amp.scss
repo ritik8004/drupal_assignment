@@ -56,15 +56,18 @@ a {
   position: fixed;
   border-bottom: 1px solid $grey;
 
+  a,
   amp-img {
-    width: 60%;
+    width: 11.25rem;
     margin: 0 auto;
+    display: block;
   }
 }
 
 #sidebar {
   ~ .site-branding {
-    amp-img {
+    amp-img,
+    a {
       margin: 0;
     }
   }
