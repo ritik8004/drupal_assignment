@@ -1075,9 +1075,8 @@ class AlshayaGtmManager {
             $page_dl_attributes['cartItemsRR'] = $this->formatCartRr($cart_items);
           }
 
-          // Add cartItemsFlocktory variable only when its not in the list of
-          // disabled vars.
-          if (!in_array('cartItemsFlocktory', $gtm_disabled_vars)) {
+          // Add cartItemsFlocktory only for cart page.
+          if ($page_type == 'cart page') {
             $page_dl_attributes['cartItemsFlocktory'] = $this->formatCartFlocktory($cart_items);
           }
 
