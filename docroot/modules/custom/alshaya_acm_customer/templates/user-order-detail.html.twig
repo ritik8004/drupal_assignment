@@ -13,6 +13,9 @@
 #}
 {% set count = order.quantity %}
 <div>
+  <a href="{{ download_link }}" class="download-invoice">{{ "download"|t }}</a>
+</div>
+<div>
   <a href="{{ print_link }}" target="_blank" class="button-wide print--button">{{ "print"|t }}</a>
 </div>
 <div{{ attributes }}>
