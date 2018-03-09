@@ -10,6 +10,30 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update AR paths for AMP site log.
+ */
+function alshaya_mc_update_8312() {
+  \Drupal::service('theme_handler')->install(['alshaya_amp_mothercare'], TRUE);
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Default site logo path with default name.
+  $site_logo = $active_theme->getPath() . '/site-logo';
+
+  // Save arabic site logo for amp theme.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'alshaya_amp_mothercare.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+      ],
+    ])
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-order the PLP sort config by re-saving config.
  */
 function alshaya_mc_update_8311() {
