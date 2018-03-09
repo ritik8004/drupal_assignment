@@ -13,17 +13,12 @@ use Drupal\Core\Site\Settings;
  * Update AR paths for AMP site log.
  */
 function alshaya_mc_update_8312() {
-  // Get current active theme.
-  $active_theme = \Drupal::theme()->getActiveTheme();
-  // Default site logo path with default name.
-  $site_logo = $active_theme->getPath() . '/site-logo';
-
   // Save arabic site logo for amp theme.
   \Drupal::languageManager()
     ->getLanguageConfigOverride('ar', 'alshaya_amp_mothercare.settings')
     ->setData([
       'logo' => [
-        'path' => $site_logo . '-ar.svg',
+        'path' => \Drupal::theme()->getActiveTheme()->getPath() . '/site-logo-ar.svg',
       ],
     ])
     ->save();
