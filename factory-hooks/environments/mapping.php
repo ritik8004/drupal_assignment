@@ -133,6 +133,13 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'hm_dev',
       ],
     ],
+    // H&M SA.
+    'hmsa' => [
+      'default' => [
+        'magento' => 'hmsa_dev',
+        'conductor' => 'hmsa_dev',
+      ],
+    ],
   ];
 
   // Get the keys following this fallback (from the more specific to the more
