@@ -57,6 +57,13 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '3844f45d61d7467d9a671f3e1cf4bea8',
       'hmac_secret' => 'ngRQUE3QBP9zL-0-TC9XhQ',
     ],
+    // H&M SA.
+    'hmsa_test' => [
+      'url' => 'https://alshaya-mcksa-test.eu-west-1.prod.acm.acquia.io/v1/',
+      'hmac_id' => 'b4d60c5665624a21b1d03f75060f52cb',
+      'hmac_secret' => 'HMWH2Yc8AlWujYegPP96jA',
+    ],
+    // Mothercare SA.
     'mcksa_dev' => [
       'url' => 'https://alshaya-mcksa-dev.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '9575450fa913452ba46526463ad56edb',
@@ -84,4 +91,3 @@ function alshaya_get_conductor_host_data() {
     ],
   ];
 }
-
