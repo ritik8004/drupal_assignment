@@ -16,6 +16,7 @@ sites:
   mcsa:
     module: alshaya_mc
     type: alshaya_transac
+    country: sa
   hmkw:
     module: alshaya_hm
     type: alshaya_transac
