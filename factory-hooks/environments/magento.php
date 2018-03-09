@@ -19,7 +19,7 @@ function alshaya_get_magento_host_data() {
     'hm_uat' => 'https://hm-uat.store.alshaya.com',
     'hm_prod' => 'http://hm.store.alshaya.com.c.zbrr3sobrsb3o.ent.magento.cloud',
     // H&M SA.
-    'hmsa_dev' => 'http://develop-sr3snxi-zbrr3sobrsb3o.eu.magentosite.cloud/',
+    'hmsa_dev' => 'http://develop-sr3snxi-zbrr3sobrsb3o.eu.magentosite.cloud',
     // MC KSA.
     'mcksa_dev' => 'https://acr2-27-o7wcoxy-zbrr3sobrsb3o.eu.magentosite.cloud',
     'mcksa_qa' => 'https://acr2-27-o7wcoxy-zbrr3sobrsb3o.eu.magentosite.cloud',

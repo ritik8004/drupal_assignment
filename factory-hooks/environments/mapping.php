@@ -135,13 +135,9 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // H&M SA.
     'hmsa' => [
-      '01dev3' => [
-        'magento' => 'hmsa_dev',
-        'conductor' => 'hmsa_test',
-      ],
       'default' => [
         'magento' => 'hmsa_dev',
-        'conductor' => 'hmsa_test',
+        'conductor' => 'hmsa_dev',
       ],
     ],
   ];
