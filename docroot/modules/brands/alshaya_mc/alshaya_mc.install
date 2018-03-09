@@ -13,8 +13,6 @@ use Drupal\Core\Site\Settings;
  * Update AR paths for AMP site log.
  */
 function alshaya_mc_update_8312() {
-  \Drupal::service('theme_handler')->install(['alshaya_amp_mothercare'], TRUE);
-
   // Get current active theme.
   $active_theme = \Drupal::theme()->getActiveTheme();
   // Default site logo path with default name.
