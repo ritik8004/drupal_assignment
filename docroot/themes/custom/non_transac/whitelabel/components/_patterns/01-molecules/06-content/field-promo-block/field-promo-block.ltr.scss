@@ -32,3 +32,252 @@
     }
   }
 }
+
+.paragraph--type--promo-block {
+  position: relative;
+}
+
+.field-promo-block-button {
+  > div {
+    &:first-child {
+      display: none;
+    }
+  }
+
+  .field-promo-text-1,
+  .field-promo-text-2,
+  .field-button-link {
+    > div {
+      &:first-child {
+        display: none;
+      }
+    }
+  }
+}
+
+.promo-block__position {
+  position: absolute;
+  text-transform: uppercase;
+  text-align: center;
+  max-width: 19.375rem;
+  width: 100%;
+
+  @include breakpoint($above-palm) {
+    max-width: 22rem;
+  }
+
+  @include breakpoint($desk) {
+    max-width: 26.25rem;
+  }
+
+  &.theme-black-amperserif,
+  &.theme-black-ampersand-bold {
+    color: $black;
+
+    .field-button-link {
+      a,
+      span {
+        color: $white;
+        background-color: $black;
+        text-decoration: none;
+      }
+    }
+  }
+
+  &.theme-white-amperserif,
+  &.theme-white-ampersand-bold {
+    color: $white;
+
+    .field-button-link {
+      a,
+      span {
+        color: $black;
+        background-color: $white;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .field-button-link {
+    font-size: 0.8125rem;
+    font-family: $cairo;
+    font-weight: bold;
+
+    @include breakpoint($upto-palm) {
+      font-size: 0.56875rem;
+    }
+
+    a,
+    span {
+      padding: 0.75rem 2rem;
+      font: inherit;
+      position: relative;
+
+      @include breakpoint($upto-palm) {
+        padding: 0.53125rem 1.4375rem;
+      }
+    }
+  }
+}
+
+.field-promo-text-1 {
+  font-size: 0.9375rem;
+  font-family: $cairo-bold;
+  font-weight: 600;
+  line-height: 1.27;
+  margin-bottom: 0.375rem;
+
+  @include breakpoint($upto-palm) {
+    font-size: 0.65625rem;
+  }
+}
+
+.field-promo-text-2 {
+  font-size: 2.625rem;
+  font-family: $cairo;
+  line-height: 1.14;
+  margin-bottom: 1.875rem;
+
+  @include breakpoint($upto-palm) {
+    font-size: 1.8375rem;
+  }
+}
+
+[class*='position-bottom-'] {
+  padding-bottom: 0.75rem;
+  bottom: 1.5625rem;
+}
+
+[class*='position-top-'] {
+  top: 1.5625rem;
+}
+
+.position-bottom-center {
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.position-bottom-left,
+.position-top-left {
+  left: 1.875rem;
+
+  @include breakpoint($upto-palm) {
+    left: 0;
+  }
+}
+
+.position-bottom-right,
+.position-top-right {
+  right: 1.875rem;
+
+  @include breakpoint($upto-palm) {
+    right: 0;
+  }
+}
+
+.position-center-left {
+  top: 50%;
+  transform: translate(0%, -50%);
+}
+
+.position-center-right {
+  top: 50%;
+  right: 0;
+  transform: translate(0%, -50%);
+}
+
+.position-center-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.position-top-center {
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+@include breakpoint($upto-palm) {
+  .promo-block__position {
+    &.position-bottom-left,
+    &.position-bottom-right,
+    &.position-center-left,
+    &.position-center-right,
+    &.position-top-left,
+    &.position-top-right {
+      max-width: 10.9375rem;
+
+      .field-promo-text-1 {
+        font-size: 0.55625rem;
+      }
+
+      .field-promo-text-2 {
+        font-size: 1.275rem;
+      }
+    }
+  }
+}
+
+.theme-white-ampersand-bold,
+.theme-black-ampersand-bold {
+  .field-promo-text-2 {
+    font-family: $cairo-bold;
+  }
+}
+
+.field-slider {
+  .promo-block__position {
+    .field-button-link {
+      position: absolute;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+    &.position-bottom-left,
+    &.position-center-left,
+    &.position-top-left {
+      right: calc((100vw + 45%) / 2);
+      left: auto;
+
+      @include breakpoint($above-palm) {
+        right: calc((100vw + 35%) / 2);
+      }
+
+      @include breakpoint($desk) {
+        right: calc((100vw + 53%) / 2);
+      }
+    }
+
+    &.position-bottom-right,
+    &.position-center-right,
+    &.position-top-right {
+      left: calc((100vw + 45%) / 2);
+
+      @include breakpoint($above-palm) {
+        left: calc((100vw + 35%) / 2);
+      }
+
+      @include breakpoint($desk) {
+        left: calc((100vw + 53%) / 2);
+      }
+    }
+
+    &.position-bottom-center {
+      @include breakpoint($above-palm) {
+        bottom: 5rem;
+      }
+    }
+
+    &.position-bottom-left,
+    &.position-bottom-right,
+    &.position-center-left,
+    &.position-center-right,
+    &.position-top-left,
+    &.position-top-right {
+      @include breakpoint($upto-palm) {
+        max-width: 12.9375rem;
+      }
+    }
+  }
+}
