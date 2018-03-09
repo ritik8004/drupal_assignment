@@ -31,6 +31,7 @@ if (empty($site_name) && $settings['env'] == 'local') {
 }
 
 // Calculate country code for current site name.
+// Country code is based on ISO 3166-1 alpha-2.
 $settings['country_code'] = strtoupper(substr($site_name, -2));
 
 // We merge the entire settings with the specific ones.
