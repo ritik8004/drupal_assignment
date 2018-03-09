@@ -13,13 +13,17 @@ sites:
     module: alshaya_mc
     type: alshaya_transac
     country: kw
-  mcksa:
+  mcsa:
     module: alshaya_mc
     type: alshaya_transac
   hmkw:
     module: alshaya_hm
     type: alshaya_transac
     country: kw
+  hmsa:
+    module: alshaya_hm
+    type: alshaya_transac
+    country: sa
   vskw:
     module: alshaya_vs
     type: alshaya_non_transac
