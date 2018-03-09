@@ -1,6 +1,6 @@
 project:
   machine_name: alshaya
-  prefix: (MMCPA|ACR2|CORE)
+  prefix: (MMCPA|ACR2|CORE|AAVS)
   human_name: Alshaya
   profile:
     name: alshaya_transac

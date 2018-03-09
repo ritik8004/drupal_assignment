@@ -20,6 +20,9 @@ sites:
     module: alshaya_hm
     type: alshaya_transac
     country: kw
+  hmksa:
+    module: alshaya_hm
+    type: alshaya_transac
   vskw:
     module: alshaya_vs
     type: alshaya_non_transac
