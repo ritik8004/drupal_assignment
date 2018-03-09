@@ -70,31 +70,31 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'mc_dev'
       ],
     ],
-    // Mothercare KSA.
-    'mcksa' => [
+    // Mothercare SA.
+    'mcsa' => [
       '01test' => [
-        'magento' => 'mcksa_qa',
-        'conductor' => 'mcksa_test',
+        'magento' => 'mcsa_qa',
+        'conductor' => 'mcsa_test',
       ],
       '01uat' => [
-        'magento' => 'mcksa_uat',
-        'conductor' => 'mcksa_uat',
+        'magento' => 'mcsa_uat',
+        'conductor' => 'mcsa_uat',
       ],
       '01pprod' => [
-        'magento' => 'mcksa_uat',
-        'conductor' => 'mcksa_pprod',
+        'magento' => 'mcsa_uat',
+        'conductor' => 'mcsa_pprod',
       ],
       '01live' => [
-        'magento' => 'mcksa_prod',
-        'conductor' => 'mcksa_prod',
+        'magento' => 'mcsa_prod',
+        'conductor' => 'mcsa_prod',
       ],
       '01update' => [
-        'magento' => 'mcksa_prod',
-        'conductor' => 'mcksa_prod',
+        'magento' => 'mcsa_prod',
+        'conductor' => 'mcsa_prod',
       ],
       'default' => [
-        'magento' => 'mcksa_dev',
-        'conductor' => 'mcksa_dev',
+        'magento' => 'mcsa_dev',
+        'conductor' => 'mcsa_dev',
       ],
     ],
     // Mothercare UAE.
@@ -104,7 +104,7 @@ function alshaya_get_env_keys($site, $env) {
       '01dev2' => [
         // DVM2.
         'magento' => 'hm_vat',
-        'conductor' => 'mcksa_uat',
+        'conductor' => 'mcsa_uat',
       ],
       '01test' => [
         'magento' => 'hm_qa',
@@ -113,7 +113,7 @@ function alshaya_get_env_keys($site, $env) {
       '01qa2' => [
         // DVM2.
         'magento' => 'hm_dmv2',
-        'conductor' => 'mcksa_pprod',
+        'conductor' => 'mcsa_pprod',
       ],
       '01uat' => [
         'magento' => 'hm_uat',

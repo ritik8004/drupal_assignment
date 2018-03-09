@@ -29,7 +29,7 @@ function alshaya_get_additional_settings($site, $env) {
         ],
       ]
     ],
-    'mcksa' => [
+    'mcsa' => [
       'default' => [
         'store_id' => [
           'en' => 3,
