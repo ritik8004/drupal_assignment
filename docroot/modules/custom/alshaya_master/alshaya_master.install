@@ -10,6 +10,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for 'Download'.
+ */
+function alshaya_master_update_8009() {
+  $strings = [
+    'Download' => [
+      'ar' => 'تحميل',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - address related strings.
  */
 function alshaya_master_update_8008() {
@@ -1301,6 +1316,9 @@ function alshaya_master_install() {
     ],
     'Your order qualifies for free delivery.' => [
       'ar' => 'طلبيتك جاهزة للتوصيل المجاني',
+    ],
+    'Download' => [
+      'ar' => 'تحميل',
     ],
   ];
 
