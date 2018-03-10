@@ -8,9 +8,9 @@ use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\block\Entity\Block;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -36,13 +36,6 @@ class CustomerController extends ControllerBase {
   protected $currentRequest;
 
   /**
-   * The current user service.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
    * Api wrapper.
    *
    * @var \\Drupal\alshaya_api\AlshayaApiWrapper
@@ -56,7 +49,6 @@ class CustomerController extends ControllerBase {
     return new static(
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('renderer'),
-      $container->get('current_user'),
       $container->get('alshaya_api.api')
     );
   }
@@ -68,18 +60,14 @@ class CustomerController extends ControllerBase {
    *   Current request object.
    * @param \Drupal\Core\Render\Renderer $renderer
    *   Renderer service object.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   Current user.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Api wrapper.
    */
   public function __construct(Request $current_request,
                               Renderer $renderer,
-                              AccountInterface $current_user,
                               AlshayaApiWrapper $api_wrapper) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
-    $this->currentUser = $current_user;
     $this->apiWrapper = $api_wrapper;
 
   }
@@ -358,53 +346,57 @@ class CustomerController extends ControllerBase {
    * @param string $order_id
    *   Order to download.
    *
-   * @return \Symfony\Component\HttpFoundation\RedirectResponse
-   *   Response object.
+   * @return mixed
+   *   The order invoice or exception.
    */
   public function orderDownload(UserInterface $user, $order_id) {
-    $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $endpoint = 'order-manager/invoice/' . $order_id;
+    // Request from magento to get invoice.
+    $invoice_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
+    // If json_decode is not successful, means we have actual file response.
+    // Otherwise we have error message which can be decoded by json.
+    if (!json_decode($invoice_response)) {
+      $response = new Response($invoice_response);
+      $disposition = $response->headers->makeDisposition(
+        ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+        'Invoice_' . $order_id
+      );
+      $response->headers->set('Content-Disposition', $disposition);
+      return $response;
+    }
+
+    // Invoice not found.
+    throw new NotFoundHttpException();
+  }
+
+  /**
+   * Checks if user can download the invoice.
+   */
+  public function checkInvoiceAccess(AccountInterface $account, $user, $order_id) {
+    if (empty($user) || empty($order_id)) {
+      return AccessResult::forbidden();
+    }
+
+    // Only logged in users will be able to download invoice.
+    if ($account->isAnonymous()) {
+      return AccessResult::forbidden();
+    }
+
     $download_invoice = FALSE;
-    $error_message = $this->t('You do not have access to this invoice.');
+
+    $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
     // Get all orders of the current user.
-    $user_orders = alshaya_acm_customer_get_user_orders($this->currentUser->getEmail());
+    $user_orders = alshaya_acm_customer_get_user_orders($account->getEmail());
     foreach ($user_orders as $order) {
-      // If order id matches.
-      // @todo check for the extension attribute as well.
-      if ($order['increment_id'] == $order_id && $order['email']) {
+      // @todo check for the attribute as well.
+      // If order belongs to the current user.
+      if ($order['increment_id'] == $order_id && $order['email'] == $account->getEmail()) {
         $download_invoice = TRUE;
         break;
       }
     }
 
-    // If user can download invoice.
-    if ($download_invoice) {
-      // @todo Need this url from order itself.
-      $endpoint = 'order-manager/invoice/' . $order_id;
-      // Request from magento to get invoice.
-      $invoice_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
-      // If json_decode is not successful, means we have actual file response.
-      // Otherwise we have error message which can be decoded by json.
-      if (!json_decode($invoice_response)) {
-        $response = new Response($invoice_response);
-        $disposition = $response->headers->makeDisposition(
-          ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-          'Invoice_' . $order_id
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        return $response;
-      }
-
-      // If unable to download the invoice or error.
-      $error_message = $this->t('Invoice is not found.');
-
-    }
-
-    // @todo need to discuss if we throw excption or this message as excption
-    // will only log in logger and take user to user/uid page.
-    drupal_set_message($error_message, 'error');
-    // Redirect to order detail page.
-    $url = Url::fromRoute('alshaya_acm_customer.orders_detail', ['user' => $this->currentUser->id(), 'order_id' => $order_id]);
-    return new RedirectResponse($url->toString());
+    return AccessResult::allowedIf($download_invoice);
   }
 
 }
