@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
@@ -20,6 +21,13 @@ class AlshayaAcmConfigCheck {
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
+
+  /**
+   * The module installer.
+   *
+   * @var \Drupal\Core\Extension\ModuleInstallerInterface
+   */
+  protected $moduleInstaller;
 
   /**
    * The module handler.
@@ -54,6 +62,8 @@ class AlshayaAcmConfigCheck {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
+   *   The module installer.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
@@ -64,11 +74,13 @@ class AlshayaAcmConfigCheck {
    *   The state factory.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
+                              ModuleInstallerInterface $module_installer,
                               ModuleHandlerInterface $module_handler,
                               LanguageManagerInterface $language_manager,
                               TimeInterface $date_time,
                               StateInterface $state) {
     $this->configFactory = $config_factory;
+    $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
     $this->languageManager = $language_manager;
     $this->dateTime = $date_time;
@@ -189,17 +201,27 @@ class AlshayaAcmConfigCheck {
   public function resetCountrySpecificSettings() {
     $this->moduleHandler->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
 
-    // Get country code for current site.
-    $country_code = _alshaya_custom_get_site_level_country_code();
+    // Get the expected country code cloned for.
+    $expected_country_code = strtolower(Settings::get('country_code'));
+    // Get the actual country code cloned from.
+    $actual_country_code = strtolower(_alshaya_custom_get_site_level_country_code());
+
+    // Enable the expected country specific module only.
+    if ($expected_country_code != $actual_country_code) {
+      if ($this->moduleHandler->moduleExists('alshaya_' . $actual_country_code)) {
+        $this->moduleInstaller->uninstall(['alshaya_' . $actual_country_code]);
+        $this->moduleInstaller->install(['alshaya_' . $expected_country_code]);
+      }
+    }
 
     // Reset currency code - EN.
     $this->configFactory->getEditable('acq_commerce.currency')
-      ->set('currency_code', _alshaya_get_currency_code($country_code, 'en'))
+      ->set('currency_code', _alshaya_get_currency_code($expected_country_code, 'en'))
       ->save();
 
     // Reset currency code - AR.
     $this->languageManager->getLanguageConfigOverride('ar', 'acq_commerce.currency')
-      ->set('currency_code', _alshaya_get_currency_code($country_code, 'ar'))
+      ->set('currency_code', _alshaya_get_currency_code($expected_country_code, 'ar'))
       ->save();
   }
 
