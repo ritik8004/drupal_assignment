@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -202,14 +203,16 @@ class AlshayaAcmConfigCheck {
     $this->moduleHandler->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
 
     // Get the expected country code cloned for.
-    $expected_country_code = strtolower(Settings::get('country_code'));
+    $expected_country_code = Unicode::strtolower(Settings::get('country_code'));
     // Get the actual country code cloned from.
-    $actual_country_code = strtolower(_alshaya_custom_get_site_level_country_code());
+    $actual_country_code = Unicode::strtolower(_alshaya_custom_get_site_level_country_code());
 
     // Enable the expected country specific module only.
     if ($expected_country_code != $actual_country_code) {
       if ($this->moduleHandler->moduleExists('alshaya_' . $actual_country_code)) {
         $this->moduleInstaller->uninstall(['alshaya_' . $actual_country_code]);
+      }
+      if (!$this->moduleHandler->moduleExists('alshaya_' . $expected_country_code)) {
         $this->moduleInstaller->install(['alshaya_' . $expected_country_code]);
       }
     }
