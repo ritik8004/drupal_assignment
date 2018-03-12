@@ -5,6 +5,8 @@ namespace Drupal\alshaya_acm_customer\Controller;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Renderer;
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
@@ -43,13 +45,29 @@ class CustomerController extends ControllerBase {
   protected $apiWrapper;
 
   /**
+   * Current time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $currentTime;
+
+  /**
+   * Date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('renderer'),
-      $container->get('alshaya_api.api')
+      $container->get('alshaya_api.api'),
+      $container->get('datetime.time'),
+      $container->get('date.formatter')
     );
   }
 
@@ -62,13 +80,21 @@ class CustomerController extends ControllerBase {
    *   Renderer service object.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Api wrapper.
+   * @param \Drupal\Component\Datetime\TimeInterface $current_time
+   *   Current time service.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   Date formatter service.
    */
   public function __construct(Request $current_request,
                               Renderer $renderer,
-                              AlshayaApiWrapper $api_wrapper) {
+                              AlshayaApiWrapper $api_wrapper,
+                              TimeInterface $current_time,
+                              DateFormatterInterface $date_formatter) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
     $this->apiWrapper = $api_wrapper;
+    $this->currentTime = $current_time;
+    $this->dateFormatter = $date_formatter;
 
   }
 
@@ -355,9 +381,11 @@ class CustomerController extends ControllerBase {
     // Otherwise we have error message which can be decoded by json.
     if (!json_decode($invoice_response)) {
       $response = new Response($invoice_response);
+      // Get time format in 'YYYYMMDDHHMM'.
+      $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymdhi');
       $disposition = $response->headers->makeDisposition(
         ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-        'Invoice_' . $order_id
+        'Invoice_' . $time_format
       );
       $response->headers->set('Content-Disposition', $disposition);
       return $response;
@@ -388,11 +416,8 @@ class CustomerController extends ControllerBase {
     foreach ($user_orders as $order) {
       // If order belongs to the current user and invoice is available for
       // download.
-      if ($order['increment_id'] == $order_id
-        && $order['email'] == $account->getEmail()
-        && !empty($order['extension']['invoice_path'])
-      ) {
-        $download_invoice = TRUE;
+      if ($order['increment_id'] == $order_id) {
+        $download_invoice = !empty($order['extension']['invoice_path']);
         break;
       }
     }
