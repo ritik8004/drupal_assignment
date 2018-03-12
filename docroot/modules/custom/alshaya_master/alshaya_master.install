@@ -14,8 +14,8 @@ use Drupal\Core\Config\FileStorage;
  */
 function alshaya_master_update_8009() {
   $strings = [
-    'Download' => [
-      'ar' => 'تحميل',
+    'Download Invoice' => [
+      'ar' => 'تحميل فاتورة',
     ],
   ];
 
@@ -1317,8 +1317,8 @@ function alshaya_master_install() {
     'Your order qualifies for free delivery.' => [
       'ar' => 'طلبيتك جاهزة للتوصيل المجاني',
     ],
-    'Download' => [
-      'ar' => 'تحميل',
+    'Download Invoice' => [
+      'ar' => 'تحميل فاتورة',
     ],
   ];
 
