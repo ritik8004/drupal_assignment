@@ -102,3 +102,32 @@
     }
   }
 }
+
+.nodetype--advanced_page {
+  .node--type-advanced-page {
+    @include breakpoint($desktop) {
+      .l-container {
+        &.l-column--one {
+          max-width: 77.25rem;
+        }
+      }
+
+      .c-content__container {
+        max-width: 77.25rem;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+    }
+
+    .c-content__primary {
+      max-width: 45rem;
+      margin: 0 auto;
+
+      @include breakpoint($desktop) {
+        max-width: 64.125rem;
+      }
+    }
+  }
+}
