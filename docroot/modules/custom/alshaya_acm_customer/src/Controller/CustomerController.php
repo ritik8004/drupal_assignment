@@ -255,10 +255,8 @@ class CustomerController extends ControllerBase {
     $account['first_name'] = $user->get('field_first_name')->getString();
     $account['last_name'] = $user->get('field_last_name')->getString();
 
-    // If order is delivered.
-    // @todo need to show the link only if attribute is present.
-    $order_status_delivered = explode(',', $this->config('alshaya_acm_customer.orders_config')->get('order_status_delivered'));
-    if (!in_array($order['status'], $order_status_delivered)) {
+    // If order invoice is available for download.
+    if (!empty($order['extension']['invoice_path'])) {
       // Download invoice link.
       $build['#download_link'] = Url::fromRoute('alshaya_acm_customer.invoice_download', ['user' => $user->id(), 'order_id' => $order_id]);
     }
@@ -350,6 +348,7 @@ class CustomerController extends ControllerBase {
    *   The order invoice or exception.
    */
   public function orderDownload(UserInterface $user, $order_id) {
+    // @todo to ask - Should we use this endpoint or from the order attributes.
     $endpoint = 'order-manager/invoice/' . $order_id;
     // Request from magento to get invoice.
     $invoice_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
@@ -388,9 +387,12 @@ class CustomerController extends ControllerBase {
     // Get all orders of the current user.
     $user_orders = alshaya_acm_customer_get_user_orders($account->getEmail());
     foreach ($user_orders as $order) {
-      // @todo check for the attribute as well.
-      // If order belongs to the current user.
-      if ($order['increment_id'] == $order_id && $order['email'] == $account->getEmail()) {
+      // If order belongs to the current user and invoice is available for
+      // download.
+      if ($order['increment_id'] == $order_id
+        && $order['email'] == $account->getEmail()
+        && !empty($order['extension']['invoice_path'])
+      ) {
         $download_invoice = TRUE;
         break;
       }
