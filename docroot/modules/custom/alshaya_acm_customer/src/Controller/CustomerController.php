@@ -38,7 +38,7 @@ class CustomerController extends ControllerBase {
   /**
    * Api wrapper.
    *
-   * @var \\Drupal\alshaya_api\AlshayaApiWrapper
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
   protected $apiWrapper;
 
@@ -348,7 +348,6 @@ class CustomerController extends ControllerBase {
    *   The order invoice or exception.
    */
   public function orderDownload(UserInterface $user, $order_id) {
-    // @todo to ask - Should we use this endpoint or from the order attributes.
     $endpoint = 'order-manager/invoice/' . $order_id;
     // Request from magento to get invoice.
     $invoice_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
