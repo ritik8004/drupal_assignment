@@ -135,11 +135,6 @@
   .c-post-content .l-container {
     max-width: 80.25rem;
     margin: auto;
-    margin-top: 1rem;
-
-    @include breakpoint($desktop) {
-      margin-top: 2.4rem;
-    }
   }
 }
 

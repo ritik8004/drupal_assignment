@@ -120,9 +120,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   }
 
   // Adding vat text footer to the page.
-  if ($routmatch->getRouteName() == 'acq_cart.cart') {
-    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
-  }
+  $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
+
   // Attach the plp search js library to the promotion product listing page.
   if ($node_bundle === 'acq_promotion') {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
@@ -131,21 +130,6 @@ function alshaya_white_label_preprocess_page(&$variables) {
   // Make site_name and site_logo available to all TWIG templates.
   $variables['site_name'] = \Drupal::config('system.site')->get('name');
   $variables['site_logo'] = theme_get_setting('logo.url');
-
-  // Adding vat text footer to order detials page.
-  if ($routmatch->getRouteName() == 'alshaya_acm_customer.orders_detail') {
-    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
-  }
-
-  // Adding vat text footer to checkout page.
-  if ($routmatch->getRouteName() == 'acq_checkout.form') {
-    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
-  }
-
-  // Adding vat text footer to order print page.
-  if ($routmatch->getRouteName() == 'alshaya_acm_customer.print_last_order') {
-    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
-  }
 }
 
 /**
