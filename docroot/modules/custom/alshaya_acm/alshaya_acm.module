@@ -867,3 +867,15 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
   // Add remove link as suffix of quantity.
   $item['quantity']['#suffix'] .= '<div class="inline-stock-error" id="stock-error-' . str_replace(' ', '-', $sku_entity->getSku()) . '">' . $item_stock_error . '</div>';
 }
+
+/**
+ * Alters the list of admin roles of users to preserve.
+ *
+ * @param array $admin_roles
+ *   A numeric array of admin roles of users to preserve.
+ *
+ * @see \Acquia\Acsf\AcsfDuplicationScrubUserHandler::getOpenIdAdmins()
+ */
+function alshaya_acm_acsf_duplication_scrub_admin_roles_alter(array &$admin_roles) {
+  $admin_roles[] = 'acq_commerce_sync';
+}

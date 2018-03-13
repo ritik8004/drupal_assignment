@@ -57,31 +57,37 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '3844f45d61d7467d9a671f3e1cf4bea8',
       'hmac_secret' => 'ngRQUE3QBP9zL-0-TC9XhQ',
     ],
-    'mcksa_dev' => [
-      'url' => 'https://alshaya-mcksa-dev.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '9575450fa913452ba46526463ad56edb',
-      'hmac_secret' => '5pUmey7AhYgFhowkWpzEHA',
-    ],
-    'mcksa_test' => [
+    // H&M SA.
+    'hmsa_dev' => [
       'url' => 'https://alshaya-mcksa-test.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'b4d60c5665624a21b1d03f75060f52cb',
       'hmac_secret' => 'HMWH2Yc8AlWujYegPP96jA',
     ],
-    'mcksa_uat' => [
+    // Mothercare SA.
+    'mcsa_dev' => [
+      'url' => 'https://alshaya-mcksa-dev.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '9575450fa913452ba46526463ad56edb',
+      'hmac_secret' => '5pUmey7AhYgFhowkWpzEHA',
+    ],
+    'mcsa_test' => [
+      'url' => 'https://alshaya-mcksa-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'b4d60c5665624a21b1d03f75060f52cb',
+      'hmac_secret' => 'HMWH2Yc8AlWujYegPP96jA',
+    ],
+    'mcsa_uat' => [
       'url' => 'https://alshaya-mcksa-uat.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '6686b9362f9c48789c08782dc0f85b59',
       'hmac_secret' => 'QIMU6nVtVUVJ3NtSErE5PA',
     ],
-    'mcksa_pprod' => [
+    'mcsa_pprod' => [
       'url' => 'https://alshaya-mcksa-pprod.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '08bf3c91aeba4b18b78354b38e0ef566',
       'hmac_secret' => 'FY6YF9sOQzj2sTBS9hWFKA',
     ],
-    'mcksa_prod' => [
+    'mcsa_prod' => [
       'url' => 'https://alshaya-mcksa-prod.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'd6b5bf8e0ea74347aaeb10dd5548c827',
       'hmac_secret' => 'nSAHBiZvuTiiJa-HC9xdnw',
     ],
   ];
 }
-
