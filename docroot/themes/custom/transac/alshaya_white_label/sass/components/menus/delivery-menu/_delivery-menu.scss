@@ -102,3 +102,31 @@
     }
   }
 }
+
+.nodetype--advanced_page {
+  .node--type-advanced-page {
+    @include breakpoint($desktop) {
+      .l-container {
+        &.l-column--one {
+          @include container(77.25rem);
+        }
+      }
+
+      .c-content__container {
+        @include container(77.25rem);
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+    }
+
+    .c-content__primary {
+      @include container(45rem);
+
+      @include breakpoint($desktop) {
+        @include container(64.125rem);
+      }
+    }
+  }
+}

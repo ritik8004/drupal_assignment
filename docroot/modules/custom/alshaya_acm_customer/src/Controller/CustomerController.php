@@ -2,13 +2,20 @@
 
 namespace Drupal\alshaya_acm_customer\Controller;
 
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Renderer;
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\block\Entity\Block;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -31,12 +38,36 @@ class CustomerController extends ControllerBase {
   protected $currentRequest;
 
   /**
+   * Api wrapper.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $apiWrapper;
+
+  /**
+   * Current time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $currentTime;
+
+  /**
+   * Date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('request_stack')->getCurrentRequest(),
-      $container->get('renderer')
+      $container->get('renderer'),
+      $container->get('alshaya_api.api'),
+      $container->get('datetime.time'),
+      $container->get('date.formatter')
     );
   }
 
@@ -47,11 +78,23 @@ class CustomerController extends ControllerBase {
    *   Current request object.
    * @param \Drupal\Core\Render\Renderer $renderer
    *   Renderer service object.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   Api wrapper.
+   * @param \Drupal\Component\Datetime\TimeInterface $current_time
+   *   Current time service.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   Date formatter service.
    */
   public function __construct(Request $current_request,
-                              Renderer $renderer) {
+                              Renderer $renderer,
+                              AlshayaApiWrapper $api_wrapper,
+                              TimeInterface $current_time,
+                              DateFormatterInterface $date_formatter) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
+    $this->apiWrapper = $api_wrapper;
+    $this->currentTime = $current_time;
+    $this->dateFormatter = $date_formatter;
 
   }
 
@@ -238,6 +281,12 @@ class CustomerController extends ControllerBase {
     $account['first_name'] = $user->get('field_first_name')->getString();
     $account['last_name'] = $user->get('field_last_name')->getString();
 
+    // If order invoice is available for download.
+    if (!empty($order['extension']['invoice_path'])) {
+      // Download invoice link.
+      $build['#download_link'] = Url::fromRoute('alshaya_acm_customer.invoice_download', ['user' => $user->id(), 'order_id' => $order_id]);
+    }
+
     $build['#print_link'] = Url::fromRoute('alshaya_acm_customer.orders_print', ['user' => $user->id(), 'order_id' => $order_id]);
     $build['#account'] = $account;
     if ($vat_text = $this->config('alshaya_acm_product.settings')->get('vat_text')) {
@@ -311,6 +360,69 @@ class CustomerController extends ControllerBase {
     $build['#attached']['library'][] = 'alshaya_acm_customer/order_print';
 
     return $build;
+  }
+
+  /**
+   * Controller function for order download.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   User object for which the orders detail page is being viewed.
+   * @param string $order_id
+   *   Order to download.
+   *
+   * @return mixed
+   *   The order invoice or exception.
+   */
+  public function orderDownload(UserInterface $user, $order_id) {
+    $endpoint = 'order-manager/invoice/' . $order_id;
+    // Request from magento to get invoice.
+    $invoice_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
+    // If json_decode is not successful, means we have actual file response.
+    // Otherwise we have error message which can be decoded by json.
+    if (!json_decode($invoice_response)) {
+      $response = new Response($invoice_response);
+      // Get time format in 'YYYYMMDDHHMM'.
+      $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymdhi');
+      $disposition = $response->headers->makeDisposition(
+        ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+        'Invoice_' . $time_format
+      );
+      $response->headers->set('Content-Disposition', $disposition);
+      return $response;
+    }
+
+    // Invoice not found.
+    throw new NotFoundHttpException();
+  }
+
+  /**
+   * Checks if user can download the invoice.
+   */
+  public function checkInvoiceAccess(AccountInterface $account, $user, $order_id) {
+    if (empty($user) || empty($order_id)) {
+      return AccessResult::forbidden();
+    }
+
+    // Only logged in users will be able to download invoice.
+    if ($account->isAnonymous()) {
+      return AccessResult::forbidden();
+    }
+
+    $download_invoice = FALSE;
+
+    $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    // Get all orders of the current user.
+    $user_orders = alshaya_acm_customer_get_user_orders($account->getEmail());
+    foreach ($user_orders as $order) {
+      // If order belongs to the current user and invoice is available for
+      // download.
+      if ($order['increment_id'] == $order_id) {
+        $download_invoice = !empty($order['extension']['invoice_path']);
+        break;
+      }
+    }
+
+    return AccessResult::allowedIf($download_invoice);
   }
 
 }

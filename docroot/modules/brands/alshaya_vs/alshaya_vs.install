@@ -8,20 +8,12 @@
 /**
  * Implements hook_update_N().
  *
- * Enable brand AMP theme and set logo and favicon.
+ * Enable brand AMP theme.
  */
 function alshaya_vs_update_8102() {
   // Enable and set default amp theme.
   \Drupal::service('theme_handler')->install(['alshaya_amp_victoria_secret'], TRUE);
   \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_victoria_secret')->save();
-
-  // Get current active theme.
-  $active_theme = \Drupal::theme()->getActiveTheme();
-
-  // Get the current theme settings.
-  $config = \Drupal::configFactory()->get($active_theme->getName() . '.settings')->get();
-  // Set same to installed AMP theme.
-  \Drupal::configFactory()->getEditable('alshaya_amp_victoria_secret.settings')->setData($config)->save();
 }
 
 /**
