@@ -6,14 +6,20 @@ base theme: kashmir
 alshaya_theme_type: non_transac
 
 regions:
+  header_primary: 'Header Primary'
+  header_secondary: 'Header Secondary'
   header: Header
+  admin_content: 'Admin Content'
   content: Content
   sidebar: Sidebar
   footer: Footer
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
 
 libraries:
   - whitelabel/reset
   - whitelabel/global
+  - whitelabel/disable_mobile_modal
 
 libraries-override:
   geolocation/geolocation.commonmap:

@@ -26,7 +26,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -42,7 +42,7 @@ Feature: Test Checkout feature
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
 
   @hd @knet
@@ -53,7 +53,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -103,7 +103,7 @@ Feature: Test Checkout feature
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Sharq" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
@@ -118,7 +118,7 @@ Feature: Test Checkout feature
     And I press "Submit"
     And I press "Confirm"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
 
   @knet @fail
@@ -129,7 +129,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -229,7 +229,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -275,7 +275,7 @@ Feature: Test Checkout feature
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Sharq" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
@@ -308,7 +308,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -323,9 +323,9 @@ Feature: Test Checkout feature
     And I press "place order"
     And I wait for the page to load
     And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "000000001"
+    And I fill in "cardN" with "000000011"
     And I select "1" from "Ecom_Payment_Card_ExpDate_Month"
-    And I select "2017" from "Ecom_Payment_Card_ExpDate_Year"
+    And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
     And I press "Submit"
     When I wait 5 seconds
@@ -361,7 +361,7 @@ Feature: Test Checkout feature
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Sharq" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"

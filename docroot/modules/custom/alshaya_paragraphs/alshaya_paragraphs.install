@@ -13,6 +13,118 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Adding existing field 'field_promo_block_button' field to Banner paragraph.
+ * Also add re-add paragraphs and fields missing in MCKW.
+ */
+function alshaya_paragraphs_update_8110() {
+  $configs = [
+    'paragraphs.paragraphs_type.1_row_2_col',
+    'paragraphs.paragraphs_type.promo_block',
+    'paragraphs.paragraphs_type.promo_block_button',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  $configs = [
+    'field.storage.paragraph.field_1_row_2_col',
+    'field.storage.paragraph.field_promo_block_button',
+    'field.storage.paragraph.field_button_link',
+    'field.storage.paragraph.field_button_position',
+    'field.storage.paragraph.field_promo_text_1',
+    'field.storage.paragraph.field_promo_text_2',
+    'field.storage.paragraph.field_promo_theme',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  $configs = [
+    'field.field.paragraph.1_row_2_col.field_1_row_2_col',
+    'field.field.paragraph.promo_block.field_promo_block_button',
+    'field.field.paragraph.promo_block_button.field_button_link',
+    'field.field.paragraph.promo_block_button.field_button_position',
+    'field.field.paragraph.promo_block_button.field_promo_text_1',
+    'field.field.paragraph.promo_block_button.field_promo_text_2',
+    'field.field.paragraph.promo_block_button.field_promo_theme',
+    'field.field.paragraph.banner.field_promo_block_button',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  $configs = [
+    'core.entity_form_display.paragraph.1_row_2_col.default',
+    'core.entity_view_display.paragraph.1_row_2_col.default',
+    'core.entity_form_display.paragraph.promo_block.default',
+    'core.entity_view_display.paragraph.promo_block.default',
+    'core.entity_form_display.paragraph.promo_block_button.default',
+    'core.entity_view_display.paragraph.promo_block_button.default',
+    'core.entity_form_display.paragraph.banner.default',
+    'core.entity_view_display.paragraph.banner.default',
+    'core.entity_view_display.paragraph.banner.w1026',
+    'core.entity_view_display.paragraph.banner.w1920',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  // @TODO: Language settings config missing completely for promo_block_button.
+  $configs = [
+    'language.content_settings.paragraph.1_row_1_col',
+    'language.content_settings.paragraph.promo_block',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable 'Image+Title+Subtitle' paragraph on '1 row 2 col dept' paragraph's
+ * 'field_1_row_2_col' field.
+ */
+function alshaya_paragraphs_update_8109() {
+  $configs = [
+    'field.field.paragraph.1_row_2_col_dept.field_1_row_2_col',
+  ];
+
+  // Update config.
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove view modes for promo_block paragraph type & update the same
+ * in advanced_page.
+ */
+function alshaya_paragraphs_update_8108() {
+  // Delete configs since the client wants to use original images instead of
+  // responsive images.
+  $promo_block_view_modes_delete = [
+    'core.entity_view_display.paragraph.image_title_subtitle.w326',
+    'core.entity_view_display.paragraph.promo_block.w1026',
+    'core.entity_view_display.paragraph.promo_block.w291',
+    'core.entity_view_display.paragraph.promo_block.w326',
+    'core.entity_view_display.paragraph.promo_block.w449',
+    'core.entity_view_display.paragraph.promo_block.w501',
+    'core.entity_view_display.paragraph.promo_block.w606',
+    'core.entity_view_display.paragraph.promo_block.w921',
+  ];
+
+  alshaya_config_delete_configs($promo_block_view_modes_delete);
+
+  // Update config for fields using promo_block to use default view mode.
+  $entity_view_displays = [
+    'core.entity_view_display.paragraph.1_row_1_col.default',
+    'core.entity_view_display.paragraph.1_row_1st_col_2_row_2nd_col.default',
+    'core.entity_view_display.paragraph.1_row_2_col.default',
+    'core.entity_view_display.paragraph.1_row_3_col.default',
+  ];
+
+  alshaya_config_install_configs($entity_view_displays, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update Video field settings as the media module included in Drupal-8.4.
  */
 function alshaya_paragraphs_update_8106() {

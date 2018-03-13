@@ -22,7 +22,11 @@
       {% endif %}
 
       <div class="c-content__container clearfix">
-        <div class="c-content__primary">
+          {% if content.field_delivery_banner %}
+            {{ content.field_delivery_banner }}
+          {% endif %}
+
+          <div class="c-content__primary">
           {% if title_prefix or title_suffix or display_submitted or unpublished or page is empty and label %}
             {% if not is_front %}
             <header>

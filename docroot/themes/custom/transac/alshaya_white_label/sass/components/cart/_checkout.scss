@@ -1382,3 +1382,19 @@ html[lang=ar] {
     }
   }
 }
+
+// Sticky submit buttons in checkout.
+.path--cart {
+  &.alias--cart .edit-update,
+  &.alias--cart .edit-checkout,
+  &.alias--cart-checkout-delivery main form .form-actions .form-submit,
+  &.alias--cart-checkout-payment main form .form-actions .form-submit {
+    @include breakpoint($only-mobile) {
+      position: fixed;
+      bottom: 0;
+      #{$left}: 0;
+      z-index: 5;
+      margin-bottom: 0;
+    }
+  }
+}

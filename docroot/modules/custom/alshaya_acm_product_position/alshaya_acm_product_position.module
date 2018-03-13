@@ -165,7 +165,16 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
       $form['sort_bef_combine']['#options'] = _alshaya_acm_product_position_sorted_options($form['sort_bef_combine']['#options']);
 
       // Set the first option as the default value.
-      $form['sort_bef_combine']['#default_value'] = key($form['sort_bef_combine']['#options']);
+      $default_sort_option = key($form['sort_bef_combine']['#options']);
+      $form['sort_bef_combine']['#default_value'] = $default_sort_option;
+      $applied_sort_option = $form_state->getUserInput();
+      // This to avoid illegal choice if we disable 'position' option as view
+      // passes 'nid' in #value. So if user has not selected any sort option,
+      // means its page load, then the first option will be used for #value,
+      // otherwise the user selected value will be used.
+      $sort_bef_combine = !empty($applied_sort_option['sort_bef_combine']) ? $applied_sort_option['sort_bef_combine'] : NULL;
+      $form['sort_bef_combine']['#value'] = !empty($sort_bef_combine) && isset($form['sort_bef_combine']['#options'][$sort_bef_combine]) ? $sort_bef_combine : $default_sort_option;
+
     }
   }
 }

@@ -2,7 +2,7 @@ module.exports = {
   rtl: true,
   styles: {
     source: [
-      // 'sass/**/*.scss',
+      'sass/**/*.scss',
       'components/**/*.scss'
     ],
     directionalSource: [
@@ -22,6 +22,7 @@ module.exports = {
   },
   scripts: {
     source: [
+      'js/**/*.js',
       'components/js/**/*.js',
       'components/_patterns/**/*.js'
     ],

@@ -2,7 +2,7 @@
 Feature: Test the PLP page
 
   Background:
-    Given I am on "/baby-clothing/baby-newborn-18m/bodysuits"
+    Given I am on "/baby-clothing/baby-newborn-18-months/bodysuits"
     And I wait for the page to load
 
   @prod
@@ -71,7 +71,7 @@ Feature: Test the PLP page
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
 
   @arabic @prod
@@ -114,7 +114,7 @@ Feature: Test the PLP page
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "الشرق" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
@@ -151,7 +151,7 @@ Feature: Test the PLP page
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -188,7 +188,7 @@ Feature: Test the PLP page
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "الشرق" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"

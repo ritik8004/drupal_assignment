@@ -1,4 +1,4 @@
-cache_time_limit: '900'
+cache_time_limit: '300'
 items_per_page: '10'
 order_status_returned: 'auto_canceled,canceled,cancelled_failed_delivery,cancelled_stock_short,failed_delivery,fraud,complete_refund,complete_return,customer_canceled,customer_cancellation_complete,order_expired,settlement_failed'
 order_status_failed: 'customer_cancellation_complete,settlement_failed'

@@ -4,7 +4,7 @@
   @include breakpoint($desktop) {
     .menu--two__list {
       column-count: 6;
-      padding-#{$right}: 4%;
+      padding-#{$right}: 7%;
       padding-#{$left}: 6.1rem;
       padding-bottom: 2.5rem;
       padding-top: 2.5rem;
