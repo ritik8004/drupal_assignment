@@ -42,6 +42,15 @@ function alshaya_mc_update_8310() {
   $config = \Drupal::configFactory()->get($active_theme->getName() . '.settings')->get();
   // Set same to installed AMP theme.
   \Drupal::configFactory()->getEditable('alshaya_amp_mothercare.settings')->setData($config)->save();
+
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'alshaya_amp_mothercare.settings')
+    ->setData([
+      'logo' => [
+        'path' => \Drupal::theme()->getActiveTheme()->getPath() . '/site-logo-ar.svg',
+      ],
+    ])
+    ->save();
 }
 
 /**
