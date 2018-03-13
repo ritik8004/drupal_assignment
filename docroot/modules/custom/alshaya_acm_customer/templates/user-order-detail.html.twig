@@ -82,12 +82,16 @@
 
       {% if delivery_detail_notice %}
       <tr class="delivery-details-row">
-        <td colspan="3" class="above-mobile">
-          <span class="icon-ic_infomation"></span>{{ delivery_detail_notice }}
-        </td>
-        <td colspan="2" class="mobile-only">
-          <span class="icon-ic_infomation"></span>{{ delivery_detail_notice }}
-        </td>
+        {% block deliveryInformationIcon %}
+          {% set informationIcon = "icon-ic_infomation" %}
+          <td colspan="3" class="above-mobile">
+              <span class={{ informationIcon }}></span>
+            {{ delivery_detail_notice }}
+          </td>
+          <td colspan="2" class="mobile-only">
+            <span class={{ informationIcon }}></span>{{ delivery_detail_notice }}
+          </td>
+        {% endblock %}
         <td class="above-mobile blend">&nbsp;</td>
         <td class="desktop-only empty--cell">&nbsp;</td>
       </tr>
@@ -262,7 +266,7 @@
       </tr>
 
       {% if vat_text %}
-        <tr class="total-row collapse-row">
+        <tr class="total-row vat-row collapse-row">
           <td class="above-mobile">&nbsp;</td>
           <td class="above-mobile">&nbsp;</td>
           <td class="above-mobile">&nbsp;</td>
