@@ -128,21 +128,4 @@
     }
   };
 
-  Drupal.behaviors.checkoutScroll = {
-    attach: function (context, settings) {
-      $(document).ajaxComplete(function (event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) &&
-            (settings.extraData._triggering_element_name === 'op')) {
-          localStorage.setItem('address_save_scroll', 'Y');
-        }
-      });
-      if (localStorage.getItem('address_save_scroll') === 'Y') {
-        $('html,body').animate({
-          scrollTop: $('#edit-guest-delivery-home-address-shipping-methods').offset().top
-        }, 'slow');
-        localStorage.removeItem('address_save_scroll');
-      }
-    }
-  };
-
 })(jQuery, Drupal);
