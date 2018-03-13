@@ -149,7 +149,7 @@ class KnetController extends ControllerBase {
       $this->logger->error('KNET response data dont match data in state variable.<br>POST: @message<br>Cart: @cart<br>State: @state', [
         '@message' => json_encode($_POST),
         '@state' => json_encode($state_data),
-        '@cart' => json_encode($cart->getCart()),
+        '@cart' => json_encode($cart),
       ]);
 
       throw new NotFoundHttpException();
