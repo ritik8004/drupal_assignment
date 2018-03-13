@@ -56,6 +56,20 @@
       }
     }
   }
+
+  .vat-text-footer {
+    margin-bottom: 1.5rem;
+  }
+
+  .user__order--detail .total-row:not(.price-row) {
+    &.vat-row {
+      .warm--white {
+        @include breakpoint($only-mobile) {
+          #{$left}: 0;
+        }
+      }
+    }
+  }
 }
 
 .order--print {

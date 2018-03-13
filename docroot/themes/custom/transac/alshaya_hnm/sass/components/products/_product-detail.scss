@@ -627,7 +627,7 @@
   }
 
   .selected-text {
-    font-family: $hnm-bold-nodir;
+    font-family: $hnm-bold;
     color: $hnm-black-two;
     display: inline-block;
   }
@@ -647,7 +647,7 @@
         padding: 0.596rem;
         min-width: 2.375rem;
         max-height: 2.375rem;
-        font-family: $hnm-regular-nodir;
+        font-family: $hnm-regular;
         font-size: 0.875rem;
         color: $hnm-black-two;
 
@@ -881,23 +881,25 @@ html[lang=ar] {
     .labels-container {
       .label {
         &.top {
+          top: 0.625rem;
+
           &-left {
             @include breakpoint($only-tablet) {
-              #{$left}: 1.3rem;
+              left: 1.3rem;
             }
 
             @include breakpoint($desktop) {
-              #{$left}: 5.3rem;
+              left: 5.3rem;
             }
           }
 
           &-right {
             @include breakpoint($only-tablet) {
-              #{$right}: 1.3rem;
+              right: 1.3rem;
             }
 
             @include breakpoint($desktop) {
-              #{$right}: 5.3rem;
+              right: 5.3rem;
             }
           }
         }
@@ -905,11 +907,21 @@ html[lang=ar] {
         &.bottom {
           &-right {
             @include breakpoint($only-tablet) {
-              #{$right}: 1.3rem;
+              right: 1.3rem;
             }
 
             @include breakpoint($desktop) {
-              #{$right}: 5.3rem;
+              right: 5.3rem;
+            }
+          }
+
+          &-left {
+            @include breakpoint($only-tablet) {
+              left: 1.3rem;
+            }
+
+            @include breakpoint($desktop) {
+              left: 5.3rem;
             }
           }
         }
@@ -950,6 +962,25 @@ html[lang=ar] {
   .content__main {
     @include breakpoint($desktop) {
       min-height: 31.25rem;
+    }
+  }
+}
+
+.ie.nodetype--acq_product {
+  .gallery-wrapper {
+    .labels-container {
+      .label {
+        &.top,
+        &.bottom {
+          &-left {
+            left: 1rem;
+          }
+
+          &-right {
+            right: 1rem;
+          }
+        }
+      }
     }
   }
 }

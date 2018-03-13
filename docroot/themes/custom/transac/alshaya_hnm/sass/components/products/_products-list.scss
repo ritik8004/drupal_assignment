@@ -391,6 +391,10 @@
       letter-spacing: 1px;
     }
 
+    .select2-container .select2-selection .select2-selection__rendered {
+      @include arabic-letter-spacing;
+    }
+
     .select2-container--open {
       .select2-selection__arrow {
         @include icon(dropdown-collapse, after);

@@ -92,7 +92,7 @@
           var selectedVariant = '';
 
           if (addedProduct.attr('gtm-sku-type') === 'configurable') {
-            selectedVariant = addedProduct.find('.selected-variant-sku-' + addedProduct.attr('gtm-product-sku').toLowerCase()).val();
+            selectedVariant = addedProduct.find('.selected-variant-sku-' + addedProduct.attr('gtm-product-sku-class-identifier').toLowerCase()).val();
           }
 
           if ($('.ui-dialog').length > 0) {
@@ -119,7 +119,9 @@
               if ((currentLangCode !== 'en') && (typeof size !== 'undefined')) {
                 size = drupalSettings.alshaya_product_size_config[size];
               }
-              product.dimension6 = size;
+              if (product.hasOwnProperty('dimension6') && product.dimension6) {
+                product.dimension6 = size;
+              }
             }
 
             // Set product variant to the selected variant.

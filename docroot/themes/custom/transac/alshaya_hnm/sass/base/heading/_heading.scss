@@ -1,4 +1,6 @@
 %page-title {
+  @include arabic-letter-spacing;
+
   font-family: $hnm-demibold;
   font-weight: normal;
   color: $hnm-black-two;

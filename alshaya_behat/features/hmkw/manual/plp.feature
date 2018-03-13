@@ -2,7 +2,7 @@
 Feature: Test the PLP page
 
   Background:
-    Given I am on "/ladies/shop-product/accessories"
+    Given I am on "/ladies"
     And I wait for the page to load
 
   @eng @prod
@@ -10,16 +10,14 @@ Feature: Test the PLP page
     I should be able to see the header and the footer
     Then I should be able to see the header
     And I should see the title and count of items
-    Then I should see "Filter"
-    And I should see "Collection"
-    Then I should see "Colour"
-    And I should see "Price"
-    Then I should see "Size"
-    And I should see "Brand"
     Then I should be able to see the footer
     When I follow "Load More"
     And I wait for AJAX to finish
     Then more items should get loaded
+    Then I should see "Filter"
+    Then I should see "Colour"
+    And I should see "Price"
+    Then I should see "Size"
     
   @eng @prod
   Scenario: As a Guest
@@ -47,7 +45,7 @@ Feature: Test the PLP page
     And I wait for AJAX to finish
     When I select a size for the product
     And I wait for AJAX to finish
-    When I press "Add to cart"
+    When I press "add to basket"
     And I wait for AJAX to finish
     When I go to "/cart"
     And I wait for the page to load
@@ -74,7 +72,7 @@ Feature: Test the PLP page
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
 
   @arabic @prod
@@ -84,16 +82,14 @@ Feature: Test the PLP page
     And I wait for the page to load
     Then I should be able to see the header in Arabic
     And I should see the title and count of items
-    Then I should see "حدّد اختيارك"
-    And I should see "المجموعة"
-    Then I should see "اللون"
-    And I should see "السعر"
-    Then I should see "المقاس"
-    And I should see "العلامة التجارية"
     Then I should be able to see the footer in Arabic
     When I click the label for "#block-views-block-alshaya-product-list-block-1 > div > div > ul > li > a"
     And I wait for AJAX to finish
     Then more items should get loaded
+    Then I should see "حدّد اختيارك"
+    Then I should see "اللون"
+    And I should see "السعر"
+    Then I should see "المقاس"
 
   @arabic
   Scenario: As a Guest on Arabic site
@@ -148,7 +144,7 @@ Feature: Test the PLP page
     And I wait for AJAX to finish
     When I select a size for the product
     And I wait for AJAX to finish
-    When I press "Add to cart"
+    When I press "add to basket"
     And I wait for AJAX to finish
     When I go to "/cart"
     And I wait for the page to load

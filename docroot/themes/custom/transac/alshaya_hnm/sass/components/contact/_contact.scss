@@ -47,11 +47,17 @@
     &.mobile-number-field {
       margin-bottom: 3.5rem;
     }
+
+    &.js-webform-radios-fieldset {
+      margin-bottom: 0;
+    }
   }
 
   .form-type-radio {
     label::before {
       margin-top: -0.25rem;
+      top: -0.75rem !important;
+      padding-#{$right}: 1.5rem;
     }
   }
 
@@ -99,6 +105,14 @@
         position: relative;
         top: auto;
       }
+    }
+  }
+}
+
+.form-composite {
+  &.webform-fieldset--title-inline {
+    legend {
+      float: $left;
     }
   }
 }

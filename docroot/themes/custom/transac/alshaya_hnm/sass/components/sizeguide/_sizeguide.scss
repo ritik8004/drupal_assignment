@@ -14,6 +14,7 @@
 
   @include breakpoint($desktop) {
     margin-top: 0;
+    z-index: 1;
   }
 
   @include breakpoint($only-mobile) {
@@ -73,7 +74,7 @@
       position: absolute;
       bottom: 4.3125rem;
       #{$right}: 60%;
-      top: unset;
+      top: initial;
     }
   }
 }
@@ -85,10 +86,13 @@
     }
 
     div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
-      max-width: 33.375rem !important;
       margin: 0 auto;
       width: 100%;
       overflow: auto !important;
+
+      @include breakpoint($tablet) {
+        max-width: 33.375rem !important;
+      }
     }
 
     .ui-dialog-titlebar-close {

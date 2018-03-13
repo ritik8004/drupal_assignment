@@ -151,6 +151,14 @@
 
   <!-- ______________________ FOOTER PRIMARY _______________________ -->
   <footer class="c-footer">
+    {% if vat_text_footer %}
+      <div class="vat-container">
+        <div class = 'vat-text-footer'>
+          {{ vat_text_footer }}
+        </div>
+      </div>
+    {% endif %}
+
     {% if page.footer_primary %}
         {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
       <!-- /footer-primary -->

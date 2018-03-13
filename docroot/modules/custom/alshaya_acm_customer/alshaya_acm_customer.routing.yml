@@ -35,3 +35,12 @@ alshaya_acm_customer.print_last_order:
     _title: 'Order Print'
   requirements:
     _user_is_logged_in: 'FALSE'
+
+alshaya_acm_customer.invoice_download:
+  path: '/user/{user}/order/{order_id}/invoice'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_customer\Controller\CustomerController::orderDownload'
+  requirements:
+    _custom_access: '\Drupal\alshaya_acm_customer\Controller\CustomerController::checkInvoiceAccess'
+  options:
+    user: \d+

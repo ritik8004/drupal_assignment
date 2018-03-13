@@ -36,7 +36,7 @@
 
   .c-footer-primary {
     @include breakpoint($only-mobile) {
-      margin-top: 5.5rem;
+      margin-top: 1.5rem;
     }
   }
 }
@@ -1432,7 +1432,8 @@
 
         @include breakpoint($only-mobile) {
           &.hide-button {
-            display: none;
+            display: block;
+            position: unset !important;
           }
         }
 
@@ -1864,4 +1865,3 @@ html[lang=ar] {
     font-size: 0.75rem !important;
   }
 }
-

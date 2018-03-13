@@ -21,9 +21,11 @@
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
 
-    &:hover {
-      text-decoration: underline;
-      color: $link-hover;
+    .c-department & {
+      &:hover {
+        text-decoration: underline;
+        color: $link-hover;
+      }
     }
   }
 }

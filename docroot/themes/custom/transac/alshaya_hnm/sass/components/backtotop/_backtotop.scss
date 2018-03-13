@@ -32,6 +32,7 @@
   line-height: 0.9375rem;
   #{$right}: 3.125rem;
   text-transform: uppercase;
+  height: auto;
 
   &.backtotop-nofooter {
     position: fixed;

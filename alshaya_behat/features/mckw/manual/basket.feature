@@ -2,10 +2,10 @@
 Feature: Test basket page
 
   Background:
-#    Given I am on a simple product page
-#    And I wait for the page to load
-#    When I press "Add to basket"
-#    And I wait for AJAX to finish
+    Given I am on a simple product page
+    And I wait for the page to load
+    When I press "Add to basket"
+    And I wait for AJAX to finish
     When I am on a configurable product
     And I wait for the page to load
     When I select a size for the product
@@ -18,7 +18,7 @@ Feature: Test basket page
     and the header and footer
     When I go to "/cart"
     And I wait for the page to load
-#    Then I should see the link for simple product
+    Then I should see the link for simple product
     Then I should be able to see the header
     And I should see the link for configurable product
     Then I should see the button "checkout securely"
@@ -56,10 +56,10 @@ Feature: Test basket page
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see "Home delivery in 2-5 days for just KWD 1"
+    Then I should see "Home delivery in 1-3 days for just KWD 1"
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
-    Then I should see "Collect the order in store within 2-3 days"
+    Then I should see "Collect the order in store within 1-3 days"
 
   @loyalty
   Scenario: As a Guest
@@ -83,7 +83,7 @@ Feature: Test basket page
     When I follow "العربية"
     And I wait for the page to load
     Then I should be able to see the header in Arabic
-#    Then I should see the link for simple product in Arabic
+    Then I should see the link for simple product in Arabic
     And I should see the link for configurable product in Arabic
     Then I should see the button "إتمام الشراء بأمان"
     And I should see "سلة التسوق ("
@@ -111,17 +111,15 @@ Feature: Test basket page
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see "خدمة التوصيل للمنازل خلال 2-5 أيام فقط بـ 1 دينار"
+    Then I should see "خدمة التوصيل للمنازل خلال 1-3 أيام فقط بـ 1 دينار"
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
-    Then I should see "إستلم طلبيتك من المحل خلال 2-3 أيام"
+    Then I should see "إستلم طلبيتك من المحل خلال 1-3 أيام"
 
   @arabic @loyalty
   Scenario: As a Guest
   I should be warned about privelege card number mismatch
-    When I go to "/cart"
-    And I wait for the page to load
-    When I follow "العربية"
+    When I go to "/ar/cart"
     And I wait for the page to load
     When I click the label for "#details-privilege-card-wrapper > div"
     Then I should see "إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني"

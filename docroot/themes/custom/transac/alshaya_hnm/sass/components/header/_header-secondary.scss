@@ -38,17 +38,17 @@
 
       &:hover,
       &.is-active {
-        background-color: $grey1;
-        color: $grey8;
+        background-color: $grey1 !important;
+        color: $grey8 !important;
       }
 
       &.language-link {
-        font-family: $hnm-arabic-medium;
+        font-family: $hnm-arabic-medium !important;
         letter-spacing: normal;
 
         html[lang='ar'] & {
           letter-spacing: 0.8px;
-          font-family: $hnm-regular;
+          font-family: $hnm-regular !important;
         }
       }
     }
@@ -149,6 +149,10 @@
   @include breakpoint($desktop) {
     margin-top: 7.125rem;
   }
+
+  .branding__menu {
+    box-shadow: none;
+  }
 }
 
 body {
@@ -207,7 +211,7 @@ body {
         &:nth-child(2) {
           a {
             &::before {
-              content: unset;
+              content: unset !important;
             }
           }
         }

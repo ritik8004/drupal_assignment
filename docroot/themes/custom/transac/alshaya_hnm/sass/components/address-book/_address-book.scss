@@ -53,8 +53,13 @@
         font-size: 2.625rem;
         display: inline-block;
         position: absolute;
-        top: -7%;
+        top: 0;
         #{$left}: -0.9375rem;
+        background: none;
+
+        .firefox & {
+          top: -2px;
+        }
 
         @include breakpoint($only-mobile) {
           top: 5%;
@@ -74,8 +79,13 @@
         font-size: 2.625rem;
         display: inline-block;
         position: absolute;
-        top: -7%;
+        top: 0;
         #{$left}: -0.9375rem;
+        background: none;
+
+        .firefox & {
+          top: -2px;
+        }
 
         @include breakpoint($only-mobile) {
           top: 5%;
@@ -213,6 +223,14 @@
         font-size: 1rem;
         line-height: 2.25;
         color: $greyish;
+
+        html[lang=ar] .ie & {
+          line-height: 2.25;
+        }
+
+        html[lang=ar] .firefox & {
+          line-height: 2.1875rem;
+        }
       }
 
       .form-item-field-address-0-address-mobile-number-mobile,
@@ -224,6 +242,10 @@
       .form-item-cc-mobile-number-mobile {
         position: static !important;
         width: auto;
+
+        .ie & {
+          width: 9.37rem;
+        }
       }
 
       #edit-field-address-0-address-mobile-number-mobile-error,
