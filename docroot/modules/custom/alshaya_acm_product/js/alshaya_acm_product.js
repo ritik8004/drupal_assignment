@@ -49,9 +49,9 @@
           // Button top.
           var button = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart');
           // This is the wrapper that holds delivery options.
-          var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper');
+          var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
           // Delivery options bottom.
-          var mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + 56;
+          var mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height();
           // Screen scroll offset.
           var windowBottom = $(window).scrollTop() + $(window).height();
           // Hide button when we are below delivery wrapper.
