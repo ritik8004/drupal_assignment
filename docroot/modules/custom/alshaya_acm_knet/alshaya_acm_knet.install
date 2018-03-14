@@ -8,6 +8,17 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Adding prefix for the knet 'udf5'.
+ */
+function alshaya_acm_knet_update_8401() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_knet.settings');
+  $config->set('knet_udf5_prefix', 'ptlf');
+  $config->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_acm_knet_install() {
