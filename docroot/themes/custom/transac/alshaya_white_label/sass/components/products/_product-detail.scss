@@ -1434,6 +1434,12 @@
           &.hide-button {
             display: block;
             position: unset !important;
+
+            .ladda-label {
+              html[lang=ar] & {
+                position: unset !important;
+              }
+            }
           }
         }
 
