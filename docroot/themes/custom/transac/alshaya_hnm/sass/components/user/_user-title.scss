@@ -32,7 +32,7 @@
 }
 
 .order-detail .block-page-title-block {
-  padding: 0;
+  padding: 0.45rem 0 0.3rem;
 
   @include breakpoint($only-mobile) {
     .back-link {
@@ -52,7 +52,8 @@
 .c-user-edit .block-page-title-block,
 .c-order-list .block-page-title-block,
 .c-user--node .block-page-title-block,
-.c-address-book .block-page-title-block {
+.c-address-book .block-page-title-block,
+.order-detail .block-page-title-block {
   .back-link {
     @include breakpoint($only-mobile) {
       font-size: 0;

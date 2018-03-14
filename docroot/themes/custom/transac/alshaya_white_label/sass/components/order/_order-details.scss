@@ -87,6 +87,34 @@
       color: $white-five;
     }
   }
+
+  .download-invoice-wrapper {
+    position: absolute;
+    top: 2.375rem;
+    #{$right}: 11rem;
+    text-transform: lowercase;
+
+    @include breakpoint($desktop) {
+      #{$right}: 13rem;
+      top: 0.5rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      position: relative;
+      text-align: right;
+      margin: 0.5rem 0;
+      top: 0;
+      #{$right}: 0;
+    }
+
+    .download-invoice {
+      color: $cerulean-two;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
 .user__order--detail {
