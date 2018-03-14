@@ -591,7 +591,10 @@
         @include breakpoint($only-mobile) {
           padding-#{$left}: 1.3701rem;
 
-          &.hide-button,
+          &.hide-button {
+            display: block;
+          }
+
           &::before {
             display: none;
           }
