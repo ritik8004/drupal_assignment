@@ -903,3 +903,28 @@ html[lang=ar] {
     }
   }
 }
+
+.term-description-mobile-only.c-page-title__description {
+  @include u-visibility(none);
+
+  @include breakpoint($only-mobile) {
+    display: block;
+    width: 100%;
+
+    .c-page-title {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0.5rem;
+
+      .c-department & {
+        border-top: 1px solid $white;
+        padding-top: 0.5rem;
+      }
+    }
+
+    p {
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+  }
+}
