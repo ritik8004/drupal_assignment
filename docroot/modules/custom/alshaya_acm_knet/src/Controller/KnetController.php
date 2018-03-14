@@ -138,6 +138,13 @@ class KnetController extends ControllerBase {
     $response['email'] = $_POST['udf4'];
     $state_key = $_POST['udf5'];
 
+    // Prepare state_key.
+    $state_data = [
+      'cart_id' => $response['quote_id'],
+      'order_id' => $cart['extension']['real_reserved_order_id'],
+    ];
+    $state_key = md5(json_encode($state_data));
+
     $state_data = $this->state()->get($state_key);
 
     // Check if we have data in state available and it matches data in POST.
