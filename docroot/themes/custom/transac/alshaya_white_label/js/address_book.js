@@ -42,25 +42,4 @@
     }
   };
 
-  Drupal.behaviors.checkoutScroll = {
-    attach: function (context, settings) {
-      $(document).ajaxComplete(function (event, xhr, settings) {
-        if ((settings.hasOwnProperty('extraData')) &&
-            (settings.extraData._triggering_element_name === 'op')) {
-          localStorage.setItem('address_save_scroll', 'Y');
-        }
-      });
-
-      var guestDiv = $('#edit-guest-delivery-home-address-shipping-methods');
-      var memberDiv = $('#edit-member-delivery-home-address-shipping-methods');
-      var scrollHeight = (memberDiv.length > 0) ? memberDiv.offset().top : guestDiv.offset().top;
-      if (localStorage.getItem('address_save_scroll') === 'Y') {
-        $('html,body').animate({
-          scrollTop: scrollHeight
-        }, 'slow');
-        localStorage.removeItem('address_save_scroll');
-      }
-    }
-  };
-
 })(jQuery, Drupal);

@@ -133,3 +133,7 @@ plp_search_js:
 jquery_mobile_touch_swipe:
   js:
     vendor/js/jquery.touchSwipe.min.js: {}
+
+checkout_scroll:
+  js:
+    js/checkout_scroll.js: {}
