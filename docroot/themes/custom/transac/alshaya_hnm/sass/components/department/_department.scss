@@ -18,6 +18,12 @@
   .c-sidebar-first .block:first-child {
     margin-top: 0;
   }
+
+  .c-promo-block-seo-title {
+    font-family: $hnm-demibold;
+    text-transform: uppercase;
+    color: $hnm-black-two;
+  }
 }
 
 .nodetype--department_page {
