@@ -5,11 +5,14 @@ dependencies:
     - field.field.paragraph.promo_block.field_banner
     - field.field.paragraph.promo_block.field_link
     - field.field.paragraph.promo_block.field_promo_block_button
+    - field.field.paragraph.promo_block.field_promo_block_seo_text
+    - field.field.paragraph.promo_block.field_promo_block_seo_title
     - paragraphs.paragraphs_type.promo_block
   module:
     - entity_reference_revisions
     - image
     - link
+    - text
 id: paragraph.promo_block.default
 targetEntityType: paragraph
 bundle: promo_block
@@ -45,4 +48,18 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
+  field_promo_block_seo_text:
+    weight: 4
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_promo_block_seo_title:
+    weight: 3
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
 hidden: {  }

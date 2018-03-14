@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_promo_block_seo_text
+    - paragraphs.paragraphs_type.promo_block
+  module:
+    - text
+id: paragraph.promo_block.field_promo_block_seo_text
+field_name: field_promo_block_seo_text
+entity_type: paragraph
+bundle: promo_block
+label: 'Promo block SEO text'
+description: 'This field allows adding text under promo block images. This text is for SEO only purposes and will be visible only on mobile resolutions.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
