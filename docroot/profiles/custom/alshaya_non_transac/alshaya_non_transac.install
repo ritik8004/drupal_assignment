@@ -12,7 +12,9 @@
  * Disable whitelabel_non_transac theme.
  */
 function alshaya_non_transac_update_8104() {
-  \Drupal::service('theme_handler')->uninstall(['whitelabel_non_transac'], TRUE);
+  if (\Drupal::service('theme_handler')->themeExists('whitelabel_non_transac')) {
+    \Drupal::service('theme_handler')->uninstall(['whitelabel_non_transac'], TRUE);
+  }
 }
 
 /**
