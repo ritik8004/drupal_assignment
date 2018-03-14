@@ -896,6 +896,13 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $selected_configs = $form_state->getUserInput()['configurables'];
       }
 
+      // If we selected more than one attribute and we clicked on the root
+      // attribute, then reset all child/leaf attributes.
+      if (count($selected_configs) > 1 && $user_input_configurables['_triggering_element_name'] == 'configurables[' . $root_attribute_code . ']') {
+        $selected_configs = [$root_attribute_code => $selected_configs[$root_attribute_code]];
+        $form_state->setValue('configurables', [$root_attribute_code => $selected_configs[$root_attribute_code]]);
+      }
+
       if (!empty($selected_configs)) {
         // Get all child SKUs possible for the selected root attribute to do a
         // stock check on visible child attributes that belong to the child
@@ -1052,7 +1059,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
  *   Build array.
  */
 function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormStateInterface $form_state) {
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   // Product attributes that can possibly change whith selected attribute values
   // & hence need to be re-rendered in the AJAX callback.
   $dynamic_parts = call_user_func_array($form_state->prepareCallback('::configurableAjaxCallback'), [&$form, &$form_state]);
