@@ -72,7 +72,7 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
   // This is just to have the key unique for state data.
   $state_key = md5(json_encode($state_data));
 
-  $pipe->setUdf5($state_key);
+  $pipe->setUdf5('ptlf ' . $state_key);
 
   try {
     $pipe->performPaymentInitialization();
