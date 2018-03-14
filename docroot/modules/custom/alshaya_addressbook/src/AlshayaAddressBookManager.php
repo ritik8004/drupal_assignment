@@ -387,6 +387,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       // Flip the mapping to make it easy below.
       $mapping = array_flip($mapping);
 
+      $magento_form = $this->getMagentoFormFields();
+
       // Initialise with NULL for all fields to avoid notices.
       foreach ($mapping as $field_code) {
         $address[$field_code] = NULL;
@@ -397,7 +399,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
           continue;
         }
 
-        if (!isset($mapping[$attribute_code])) {
+        if (!isset($mapping[$attribute_code]) || !isset($magento_form[$attribute_code])) {
           continue;
         }
 
@@ -416,7 +418,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
       if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
         foreach ($magento_address['extension'] as $attribute_code => $value) {
-          if (!isset($mapping[$attribute_code])) {
+          if (!isset($mapping[$attribute_code]) || !isset($magento_form[$attribute_code])) {
             continue;
           }
 
@@ -889,13 +891,16 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         return (bool) $form_item['visible'] && $form_item['status'];
       });
 
-      array_walk($magento_form, function (&$form_item) {
+      foreach ($magento_form as $index => $form_item) {
         if (isset($form_item['attribute'])) {
           // Copy values from attribute to main array.
           $form_item = array_merge($form_item, $form_item['attribute']);
           unset($form_item['attribute']);
         }
-      });
+
+        $magento_form[$form_item['attribute_code']] = $form_item;
+        unset($magento_form[$index]);
+      }
 
       $this->cache->set($cid, $magento_form);
     }
