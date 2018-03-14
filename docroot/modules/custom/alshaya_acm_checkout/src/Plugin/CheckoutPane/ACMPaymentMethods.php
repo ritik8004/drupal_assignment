@@ -169,7 +169,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $pane_form['payment_options'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Payment Options'),
+      '#title' => $this->t('Payment Methods'),
       '#options' => $payment_options,
       '#default_value' => $selected_plugin_id,
       '#ajax' => [
