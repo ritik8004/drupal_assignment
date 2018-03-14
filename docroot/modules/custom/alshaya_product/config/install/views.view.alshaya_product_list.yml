@@ -1,10 +1,10 @@
+uuid: null
 langcode: en
 status: true
 dependencies:
   config:
     - search_api.index.product
   module:
-    - alshaya_acm_product_position
     - better_exposed_filters
     - search_api
     - user
@@ -559,6 +559,18 @@ display:
         sorts: false
       exposed_block: true
       sorts:
+        created_1:
+          id: created_1
+          table: search_api_index_product
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
         nid:
           id: nid
           table: search_api_index_product

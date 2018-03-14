@@ -37,6 +37,16 @@ function alshaya_hm_acq_sku_product_node_alter(Node &$node, array $product) {
 }
 
 /**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_hm_acq_sku_product_sku_alter(&$sku, $product) {
+// Set product activation date if available.
+  if (isset($product['attributes']['product_activation_date'])) {
+    $sku->created = strtotime($product['attributes']['product_activation_date']);
+  }
+}
+
+/**
  * Implements template_preprocess_block().
  */
 function alshaya_hm_preprocess_block(&$variables) {
