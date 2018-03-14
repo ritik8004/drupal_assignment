@@ -1,10 +1,10 @@
-uuid: null
 langcode: en
 status: true
 dependencies:
   config:
     - search_api.index.product
   module:
+    - alshaya_acm_product_position
     - better_exposed_filters
     - search_api
     - user
