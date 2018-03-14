@@ -34,7 +34,7 @@
 
   .ui-button-icon-only {
     position: absolute;
-    top: -1.95rem !important;
+    top: -1.875rem !important;
     right: 0;
     border: 0;
     border-radius: 0;
@@ -75,23 +75,34 @@
   }
 }
 
-.ui-state-default .ui-icon {
-  position: relative;
-  display: inline;
-  top: 0 !important;
-  left: 48% !important;
+.ui-state-default,
+.ui-dialog-titlebar-close {
+  font-size: 0;
+  text-indent: inherit;
 
-  @include icon(close, before) {
-    font-size: 1.75rem;
-    right: 0.7rem;
+  html[lang=ar] & {
+    right: auto;
+    left: -1.5rem;
+  }
+
+  .ui-icon {
     position: relative;
+    display: inline;
+    top: -0.0625rem !important;
+    left: 48% !important;
 
-    @include breakpoint($lap) {
-      color: $white;
-    }
+    @include icon(close, before) {
+      font-size: 1.875rem;
+      right: 0.7rem;
+      position: relative;
 
-    @include breakpoint($desk) {
-      color: $black-smoke;
+      @include breakpoint($lap) {
+        color: $white;
+      }
+
+      @include breakpoint($desk) {
+        color: $black-smoke;
+      }
     }
   }
 }
