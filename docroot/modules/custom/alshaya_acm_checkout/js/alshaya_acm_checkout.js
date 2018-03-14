@@ -109,7 +109,7 @@
           $('#edit-member-delivery-home-addresses').slideDown();
           $('.address-book-address').slideDown();
           $('.delivery-address-title').html(Drupal.t('choose delivery address'));
-          $('.active--tab--content .fieldset-wrapper .title').html(Drupal.t('Delivery Information'));
+          $('.active--tab--content .fieldset-wrapper .title').html(Drupal.t('delivery information'));
           $('#edit-member-delivery-home-header-add-profile').show();
         });
       });
