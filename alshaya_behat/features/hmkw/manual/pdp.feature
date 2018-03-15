@@ -301,3 +301,29 @@ Feature: Test the product detail page
       |social_media_link|text|
       |.st_facebook_custom|Log in to your Facebook account to share.|
       |.st_twitter_custom|Share a link with your followers|
+
+  @config @prod
+  Scenario: As an user
+  I should be able to view the size guide on a configurable PDP
+    Given I am on a configurable product
+    And I wait for the page to load
+    When I follow "Size Guide"
+    And I wait for AJAX to finish
+    Then I should see "Please select the category you require"
+    When I press "Close"
+    Then I should not see "Please select the category you require"
+    And I should see the link "Size Guide"
+
+  @config @arabic @prod
+  Scenario: As an user on Arabic site
+  I should be able to view the size guide on a configurable PDP
+    Given I am on a configurable product
+    And I wait for the page to load
+    When I follow "العربية"
+    And I wait for the page to load
+    When I follow "دليل المقاسات"
+    And I wait for AJAX to finish
+    Then I should see "يرجى اختيار القسم المطلوب"
+    When I press "Close"
+    Then I should not see "يرجى اختيار القسم المطلوب"
+    And I should see the link "دليل المقاسات"

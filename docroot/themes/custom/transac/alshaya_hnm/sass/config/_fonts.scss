@@ -121,21 +121,23 @@
   font-style: normal;
 }
 
-// hnm specific font family
+// H&M specific font family
 // English fonts.
-$hnm-bold: 'Ampersand_bold';
-$hnm-bold-nodir: 'Ampersand_bold';
+// Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
+$hnm-bold: 'Ampersand_bold', 'GESSTwoBold-Bold';
+$hnm-bold-nodir: 'Ampersand_bold', 'GESSTwoBold-Bold';
 
-$hnm-demibold: 'Ampersand_demibold';
-$hnm-demibold-nodir: 'Ampersand_demibold';
+$hnm-demibold: 'Ampersand_demibold', 'GESSTwoMedium-Medium';
+$hnm-demibold-nodir: 'Ampersand_demibold', 'GESSTwoMedium-Medium';
 
-$hnm-regular: 'Ampersand_regular';
-$hnm-regular-nodir: 'Ampersand_regular';
+$hnm-regular: 'Ampersand_regular', 'GESSTwoLight-Light';
+$hnm-regular-nodir: 'Ampersand_regular', 'GESSTwoLight-Light';
 
-$hnmpromo-regular: 'Amperserif_regular';
-$hnmpromo-regular-nodir: 'Amperserif_regular';
+$hnmpromo-regular: 'Amperserif_regular', 'GEDinarTwo-Medium';
+$hnmpromo-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium';
 
 // Arabic fonts.
+// Adding En fonts so browser prints English characters & numbers correctly in arabic.
 $hnm-arabic-bold: 'Ampersand_bold', 'GESSTwoBold-Bold';
 $hnm-arabic-bold-nodir: 'Ampersand_bold', 'GESSTwoBold-Bold';
 
@@ -150,6 +152,13 @@ $hnmpromo-arabic-regular-nodir: 'Amperserif_regular', 'GEDinarTwo-Medium';
 
 $hnm-icons: 'hnm-icons';
 $body_font: $hnm-regular;
+
+// Override font variables coming from MC, without this we get a 404 as font files are no longer present in H&M theme.
+$arial: $hnm-regular;
+$alshaya-bold: $hnm-bold;
+$alshaya-arabic-bold: $hnm-arabic-bold;
+$alshaya-thin: $hnm-regular;
+$alshaya-arabic-thin: $hnm-arabic-regular;
 
 // Icon Fonts
 $icons: (

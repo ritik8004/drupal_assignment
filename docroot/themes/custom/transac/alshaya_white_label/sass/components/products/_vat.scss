@@ -11,3 +11,19 @@
     margin: 1rem 0;
   }
 }
+
+.vat-container {
+  @extend %l-container--center;
+
+  .vat-text-footer {
+    @include breakpoint($tablet) {
+      text-align: $right;
+      padding: 0.3125rem;
+    }
+
+    @include breakpoint($desktop) {
+      text-align: $right;
+      padding: 0.3125rem 0;
+    }
+  }
+}

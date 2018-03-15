@@ -28,7 +28,7 @@ Feature: Search feature
   @prod
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "socks"
     And I press "Search"
@@ -38,7 +38,7 @@ Feature: Search feature
   @arabic @prod
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "shweta+4@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
     And I wait for the page to load
     And I follow "عربية"
     When I wait for the page to load
@@ -80,7 +80,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    When I fill in "edit-keywords" with "socks"
+    When I fill in "edit-keywords" with "green t shirt"
     And I press "Search"
     And I wait for AJAX to finish
     When I select a product in stock
@@ -99,7 +99,7 @@ Feature: Search feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -112,7 +112,7 @@ Feature: Search feature
     When I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
 
   @arabic
   Scenario: As a Guest
@@ -144,7 +144,7 @@ Feature: Search feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "الشرق" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
@@ -229,7 +229,7 @@ Feature: Search feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "Sharq" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -269,7 +269,7 @@ Feature: Search feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "الشرق" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
