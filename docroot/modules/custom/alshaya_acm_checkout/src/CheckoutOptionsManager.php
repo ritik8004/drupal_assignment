@@ -169,27 +169,27 @@ class CheckoutOptionsManager {
         // Checkout Summary block, Order Detail page.
         $save_term = FALSE;
 
-        if ($name) {
+        if ($name && $name != $term->getName()) {
           $term->setName($name);
           $save_term = TRUE;
         }
 
-        if ($description) {
+        if ($description && $description != $term->get('field_shipping_method_cart_desc')->getString()) {
           $term->get('field_shipping_method_cart_desc')->setValue($description);
           $save_term = TRUE;
         }
 
-        if ($order_description) {
+        if ($order_description && $order_description != $term->get('field_shipping_method_desc')->getString()) {
           $term->get('field_shipping_method_desc')->setValue($order_description);
           $save_term = TRUE;
         }
 
-        if ($carrier_code) {
+        if ($carrier_code && $carrier_code != $term->get('field_shipping_carrier_code')->getString()) {
           $term->get('field_shipping_carrier_code')->setValue($carrier_code);
           $save_term = TRUE;
         }
 
-        if ($method_code) {
+        if ($method_code && $method_code != $term->get('field_shipping_method_code')->getString()) {
           $term->get('field_shipping_method_code')->setValue($method_code);
           $save_term = TRUE;
         }
