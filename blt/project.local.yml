@@ -28,6 +28,7 @@ sites:
   hmae:
     module: alshaya_hm
     type: alshaya_transac
+    country: ae
   vskw:
     module: alshaya_vs
     type: alshaya_non_transac
