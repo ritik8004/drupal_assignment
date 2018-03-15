@@ -1352,7 +1352,7 @@
 
     @include breakpoint($only-mobile) {
       .basic-details-wrapper & {
-        height: 8rem;
+        height: auto;
       }
     }
 
@@ -1433,11 +1433,11 @@
         @include breakpoint($only-mobile) {
           &.hide-button {
             display: block;
-            position: unset !important;
+            position: relative !important;
 
             .ladda-label {
               html[lang=ar] & {
-                position: unset !important;
+                position: static !important;
               }
             }
           }
