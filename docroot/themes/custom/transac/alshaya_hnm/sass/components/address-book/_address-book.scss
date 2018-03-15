@@ -224,6 +224,7 @@
         line-height: 2.25;
         color: $greyish;
 
+        html[lang=ar] .safari &,
         html[lang=ar] .ie & {
           line-height: 2.25;
         }
