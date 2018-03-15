@@ -10,18 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Remove/hide tax info for MCKW.
- */
-function alshaya_mc_update_8312() {
-  // Remove/hide tax config.
-  $configFactory = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
-  $configFactory->set('checkout_show_tax_info', FALSE);
-  $configFactory->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Re-order the PLP sort config by re-saving config.
  */
 function alshaya_mc_update_8311() {
