@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Utility\Unicode;
+use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -188,7 +189,7 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
   $item = reset($order['items']);
 
   $product_node = alshaya_acm_product_get_display_node($item['sku']);
-  if (!empty($product_node)) {
+  if ($product_node instanceof NodeInterface) {
     $item['name'] = $product_node->getTitle();
   }
 
@@ -432,7 +433,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     $product['attributes'] = [];
 
     $product_node = alshaya_acm_product_get_display_node($item['sku']);
-    if (!empty($product_node)) {
+    if ($product_node instanceof NodeInterface) {
       $product['name'] = $product_node->getTitle();
     }
     else {
