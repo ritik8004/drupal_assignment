@@ -247,6 +247,10 @@
       @include breakpoint($desk) {
         right: calc((100vw + 53%) / 2);
       }
+
+      @include breakpoint($wide-desk) {
+        right: 78%;
+      }
     }
 
     &.position-bottom-right,
@@ -260,6 +264,10 @@
 
       @include breakpoint($desk) {
         left: calc((100vw + 53%) / 2);
+      }
+
+      @include breakpoint($wide-desk) {
+        left: 78%;
       }
     }
 
