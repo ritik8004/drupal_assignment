@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -302,8 +303,11 @@ function alshaya_seo_transac_preprocess_alshaya_cart_product_name(&$variables) {
   // Fetch product for this sku to get the category.
   $product_node = alshaya_acm_product_get_display_node($variables['item_code']);
 
-  $sku_attributes['gtm-category'] = implode('/', $gtm_manager->fetchProductCategories($product_node));
-  $sku_attributes['gtm-main-sku'] = $product_node->get('field_skus')->first()->getString();
+  if ($product_node instanceof NodeInterface) {
+    $sku_attributes['gtm-category'] = implode('/', $gtm_manager->fetchProductCategories($product_node));
+    $sku_attributes['gtm-main-sku'] = $product_node->get('field_skus')->first()->getString();
+  }
+
   $sku_attributes['gtm-type'] = 'gtm-remove-cart-wrapper';
   $sku_attributes['gtm-size'] = isset($variables['sku_attributes'], $variables['sku_attributes']['attr_size']) ? $variables['sku_attributes']['attr_size']['value'] : '';
 
