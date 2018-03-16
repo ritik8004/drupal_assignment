@@ -152,7 +152,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     if ($shipping_methods) {
       // If shipping method available, we need to update/change the title.
       $pane_form['guest_delivery_home']['title'] = [
-        '#markup' => '<div class="title">' . $this->t('delivery to') . '</div>',
+        '#markup' => '<div class="title">' . $this->t('deliver to') . '</div>',
       ];
 
       $drupal_address = $address_book_manager->getAddressArrayFromMagentoAddress($address);

@@ -10,6 +10,30 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation.
+ */
+function alshaya_master_update_8010() {
+  $strings = [
+    'deliver to' => [
+      'ar' => 'التوصيل إلى',
+    ],
+    'Payment Methods' => [
+      'ar' => 'طرق الدفع',
+    ],
+    'delivery by' => [
+      'ar' => 'التوصيل خلال',
+    ],
+    'Where do you want to collect from?' => [
+      'ar' => 'يرجى اختيار المحل الذي ترغب في الاستلام منه',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for 'Download'.
  */
 function alshaya_master_update_8009() {
@@ -1319,6 +1343,18 @@ function alshaya_master_install() {
     ],
     'Download Invoice' => [
       'ar' => 'تحميل الفاتورة',
+    ],
+    'deliver to' => [
+      'ar' => 'التوصيل إلى',
+    ],
+    'Payment Methods' => [
+      'ar' => 'طرق الدفع',
+    ],
+    'delivery by' => [
+      'ar' => 'التوصيل خلال',
+    ],
+    'Where do you want to collect from?' => [
+      'ar' => 'يرجى اختيار المحل الذي ترغب في الاستلام منه',
     ],
   ];
 
