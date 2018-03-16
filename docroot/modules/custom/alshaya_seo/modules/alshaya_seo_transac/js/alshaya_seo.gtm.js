@@ -331,7 +331,7 @@
           product.quantity = Math.abs(diffQty);
 
           // Set item's size as dimension6.
-          if (cartItem.attr('gtm-size')) {
+          if ($.inArray('dimension6', settings.gtm.disabled_vars) && cartItem.attr('gtm-size')) {
             product.dimension6 = cartItem.attr('gtm-size');
           }
 
@@ -387,7 +387,7 @@
           product.quantity = $(this).closest('tr').find('td.quantity select').val();
 
           // Set selected size as dimension6.
-          if (removeItem.attr('gtm-size')) {
+          if ($.inArray('dimension6', settings.gtm.disabled_vars) && removeItem.attr('gtm-size')) {
             product.dimension6 = removeItem.attr('gtm-size');
           }
 

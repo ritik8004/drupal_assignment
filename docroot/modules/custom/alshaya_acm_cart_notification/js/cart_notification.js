@@ -114,7 +114,7 @@
             product.quantity = !isNaN(quantity) ? quantity : 1;
 
             // Set product size to selected size.
-            if (product.dimension2 !== 'simple') {
+            if ($.inArray('dimension6', settings.gtm.disabled_vars) && product.dimension2 !== 'simple') {
               var currentLangCode = drupalSettings.path.currentLanguage;
               if ((currentLangCode !== 'en') && (typeof size !== 'undefined')) {
                 size = drupalSettings.alshaya_product_size_config[size];
