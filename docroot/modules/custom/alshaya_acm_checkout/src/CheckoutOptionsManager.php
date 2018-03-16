@@ -160,6 +160,44 @@ class CheckoutOptionsManager {
 
       if ($term->hasTranslation($langcode)) {
         $term = $term->getTranslation($langcode);
+
+        // Temp fix, check CORE-781 and related tickets.
+        // We don't get all the values all the time, we mainly get it while
+        // we try to get shipping estimates during checkout.
+        // We add conditions for each field here to ensure we don't delete
+        // existing data when we try to invoke on other places, for instance
+        // Checkout Summary block, Order Detail page.
+        $save_term = FALSE;
+
+        if ($name && $name != $term->getName()) {
+          $term->setName($name);
+          $save_term = TRUE;
+        }
+
+        if ($description && $description != $term->get('field_shipping_method_cart_desc')->getString()) {
+          $term->get('field_shipping_method_cart_desc')->setValue($description);
+          $save_term = TRUE;
+        }
+
+        if ($order_description && $order_description != $term->get('field_shipping_method_desc')->getString()) {
+          $term->get('field_shipping_method_desc')->setValue($order_description);
+          $save_term = TRUE;
+        }
+
+        if ($carrier_code && $carrier_code != $term->get('field_shipping_carrier_code')->getString()) {
+          $term->get('field_shipping_carrier_code')->setValue($carrier_code);
+          $save_term = TRUE;
+        }
+
+        if ($method_code && $method_code != $term->get('field_shipping_method_code')->getString()) {
+          $term->get('field_shipping_method_code')->setValue($method_code);
+          $save_term = TRUE;
+        }
+
+        // Save the term only if there is some change done.
+        if ($save_term) {
+          $term->save();
+        }
       }
       // If we don't have translation and values available, we create it.
       elseif (!empty($name)) {
