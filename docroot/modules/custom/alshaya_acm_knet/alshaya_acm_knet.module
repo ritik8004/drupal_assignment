@@ -59,7 +59,6 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
   $pipe->setUdf1(\Drupal::currentUser()->id());
   $pipe->setUdf2($cart->customerId());
   $pipe->setUdf3($cart->id());
-  $pipe->setUdf4($cart->customerEmail());
 
   // We store the cart id as cart id here and change it to quote id in response
   // so noone can directly use the state key from URL in error and use it for
@@ -71,8 +70,10 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
 
   // This is just to have the key unique for state data.
   $state_key = md5(json_encode($state_data));
+  $pipe->setUdf4($state_key);
 
-  $pipe->setUdf5($state_key);
+  $udf5_prefix = $knet_settings->get('knet_udf5_prefix');
+  $pipe->setUdf5($udf5_prefix . ' ' . $order_id);
 
   try {
     $pipe->performPaymentInitialization();

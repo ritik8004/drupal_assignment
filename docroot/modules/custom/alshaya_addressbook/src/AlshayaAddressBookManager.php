@@ -387,6 +387,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       // Flip the mapping to make it easy below.
       $mapping = array_flip($mapping);
 
+      $magento_form = $this->getMagentoFormFields();
+
       // Initialise with NULL for all fields to avoid notices.
       foreach ($mapping as $field_code) {
         $address[$field_code] = NULL;
@@ -397,7 +399,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
           continue;
         }
 
-        if (!isset($mapping[$attribute_code])) {
+        if (!isset($mapping[$attribute_code]) || !isset($magento_form[$attribute_code])) {
           continue;
         }
 
@@ -416,7 +418,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
       if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
         foreach ($magento_address['extension'] as $attribute_code => $value) {
-          if (!isset($mapping[$attribute_code])) {
+          if (!isset($mapping[$attribute_code]) || !isset($magento_form[$attribute_code])) {
             continue;
           }
 
@@ -628,6 +630,17 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
             }
         }
       }
+
+      // Add parent id for area if blank and we are using DMV2.
+      // This is exceptional case for Kuwait where we do not show the
+      // governate but Magento needs it.
+      if (isset($mapping, $mapping['area_parent'])
+        && (empty($address['area_parent']) || $address['area_parent'] === '&#8203;')) {
+        $parent = $this->getLocationParentTerm($address['administrative_area']);
+        if ($parent) {
+          $magento_address['extension'][$mapping['area_parent']] = $parent->get('field_location_id')->getString();
+        }
+      }
     }
     else {
       $magento_address['firstname'] = (string) $address['given_name'];
@@ -663,6 +676,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $magento_address['extension']['address_block_segment'] = '&#8203;';
     $magento_address['extension']['area'] = '&#8203;';
     $magento_address['extension']['governate'] = '&#8203;';
+    $magento_address['extension']['address_city_segment'] = '&#8203;';
     $magento_address['country_id'] = _alshaya_custom_get_site_level_country_code();
     $magento_address['city'] = '&#8203;';
 
@@ -772,6 +786,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    * Function to sync areas for delivery matrix.
    */
   public function syncAreas() {
+    $mapping = $this->getMagentoFieldMappings();
+
     $termsProcessed = [];
 
     $languages = $this->languageManager->getLanguages();
@@ -779,34 +795,55 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     foreach ($languages as $langcode => $language) {
       $this->alshayaApiWrapper->updateStoreContext($langcode);
 
-      $governates = $this->alshayaApiWrapper->getLocations('attribute_id', 'governate');
+      if (isset($mapping['area_parent'])) {
+        // Use the magento field name from mapping.
+        $governates = $this->alshayaApiWrapper->getLocations('attribute_id', $mapping['area_parent']);
 
-      if (!empty($governates['items'])) {
-        foreach ($governates['items'] as $governate) {
-          // Assuming Parent ID is 0, for Governates.
-          $governateData = [
-            'name' => $governate['label'],
-            'field_location_id' => $governate['location_id'],
-            'parent' => 0,
-          ];
+        if (!empty($governates['items'])) {
+          foreach ($governates['items'] as $governate) {
+            // Assuming Parent ID is 0, for Governates.
+            $governateData = [
+              'name' => $governate['label'],
+              'field_location_id' => $governate['location_id'],
+              'parent' => 0,
+            ];
 
-          $governateTerm = $this->updateLocation($governateData, $langcode);
-          $termsProcessed[$governateTerm->id()] = $governateTerm->id();
+            $governateTerm = $this->updateLocation($governateData, $langcode);
+            $termsProcessed[$governateTerm->id()] = $governateTerm->id();
 
-          // Fetch area's under this governate.
-          $areas = $this->alshayaApiWrapper->getLocations('parent_id', $governate['location_id']);
+            // Fetch area's under this governate.
+            $areas = $this->alshayaApiWrapper->getLocations('parent_id', $governate['location_id']);
 
-          if (!empty($areas['items'])) {
-            foreach ($areas['items'] as $area) {
-              $areaData = [
-                'name' => $area['label'],
-                'field_location_id' => $area['location_id'],
-                'parent' => $governateTerm->id(),
-              ];
+            if (!empty($areas['items'])) {
+              foreach ($areas['items'] as $area) {
+                $areaData = [
+                  'name' => $area['label'],
+                  'field_location_id' => $area['location_id'],
+                  'parent' => $governateTerm->id(),
+                ];
 
-              $areaTerm = $this->updateLocation($areaData, $langcode);
-              $termsProcessed[$areaTerm->id()] = $areaTerm->id();
+                $areaTerm = $this->updateLocation($areaData, $langcode);
+                $termsProcessed[$areaTerm->id()] = $areaTerm->id();
+              }
             }
+          }
+        }
+      }
+      else {
+        // Sync directly the areas.
+        // Use the magento field name from mapping.
+        $areas = $this->alshayaApiWrapper->getLocations('attribute_id', $mapping['administrative_area']);
+
+        if (!empty($areas['items'])) {
+          foreach ($areas['items'] as $area) {
+            $data = [
+              'name' => $area['label'],
+              'field_location_id' => $area['location_id'],
+              'parent' => 0,
+            ];
+
+            $term = $this->updateLocation($data, $langcode);
+            $termsProcessed[$term->id()] = $term->id();
           }
         }
       }
@@ -851,8 +888,19 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       }
 
       $magento_form = array_filter($magento_form, function ($form_item) {
-        return (bool) $form_item['visible'];
+        return (bool) $form_item['visible'] && $form_item['status'];
       });
+
+      foreach ($magento_form as $index => $form_item) {
+        if (isset($form_item['attribute'])) {
+          // Copy values from attribute to main array.
+          $form_item = array_merge($form_item, $form_item['attribute']);
+          unset($form_item['attribute']);
+        }
+
+        $magento_form[$form_item['attribute_code']] = $form_item;
+        unset($magento_form[$index]);
+      }
 
       $this->cache->set($cid, $magento_form);
     }

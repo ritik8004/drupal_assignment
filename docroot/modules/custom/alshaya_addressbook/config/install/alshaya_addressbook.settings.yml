@@ -20,4 +20,4 @@ mapping_sa:
   locality: 'address_block_segment'
   dependent_locality: 'address_building_segment'
   administrative_area: 'area'
-  area_parent: 'city'
+  area_parent: 'address_city_segment'

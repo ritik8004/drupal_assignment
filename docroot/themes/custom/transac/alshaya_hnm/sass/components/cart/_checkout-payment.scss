@@ -125,6 +125,15 @@
       background: $white url(../imgs/cards/back-card.png) no-repeat;
       background-size: 100%;
     }
+
+    @include breakpoint($tablet) {
+      #{$left}: 49%;
+    }
+
+    @include breakpoint($desktop) {
+      top: 43%;
+      #{$left}: 25%;
+    }
   }
 }
 

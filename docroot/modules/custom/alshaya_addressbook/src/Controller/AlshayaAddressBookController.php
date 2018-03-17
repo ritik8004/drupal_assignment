@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_addressbook\Controller;
 
+use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
@@ -13,6 +14,7 @@ use Drupal\profile\Entity\ProfileInterface;
 use Drupal\user\UserInterface;
 use Drupal\profile\Entity\ProfileTypeInterface;
 use Drupal\Core\Link;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -21,6 +23,32 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * AlshayaAddressBookController class.
  */
 class AlshayaAddressBookController extends ProfileController {
+
+  /**
+   * AddressBook Areas Terms helper service.
+   *
+   * @var \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper
+   */
+  protected $areasTermsHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('alshaya_addressbook.area_terms_helper')
+    );
+  }
+
+  /**
+   * AlshayaAddressBookController constructor.
+   *
+   * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_terms_helper
+   *   AddressBook Areas Terms helper service.
+   */
+  public function __construct(AddressBookAreasTermsHelper $areas_terms_helper) {
+    $this->areasTermsHelper = $areas_terms_helper;
+  }
 
   /**
    * AJAX callback to get list of areas for a governate.
@@ -48,7 +76,7 @@ class AlshayaAddressBookController extends ProfileController {
       throw new NotFoundHttpException();
     }
 
-    $areas = _alshaya_addressbook_area_list($governate);
+    $areas = $this->areasTermsHelper->getAllAreasWithParent($governate);
 
     $response = new AjaxResponse();
     $response->addCommand(new InvokeCommand(NULL, 'updateAreaList', [$areas]));
