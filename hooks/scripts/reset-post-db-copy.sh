@@ -1,6 +1,5 @@
-#!/usr/bin/screen -d -m -S resetData /bin/bash
-#
 # Usage: reset-post-db-copy.sh site target-env uri
+# Example: /var/www/html/alshaya.01test/hooks/scripts/reset-post-db-copy.sh alshaya 01test mckw-test.factory.alshaya.com
 
 site="$1"
 target_env="$2"
@@ -22,22 +21,41 @@ drush8 @$site.$target_env --uri=$uri cr
 drush8 @$site.$target_env --uri=$uri en -y dblog views_ui features_ui restui
 
 # Now clean all data.
+while :
+do
+  drush8 @$site.$target_env --uri=$uri clean-synced-data -y
+  to_clean=$(drush8 @$site.$target_env --uri=$uri sqlq "select count(*) from (select nid from node where type in ('acq_product', 'acq_promotion', 'store') union select id from acq_sku union select tid from taxonomy_term_data where vid='acq_product_category') as tmp")
+  echo "$to_clean items to clean"
+
+  if [ $to_clean == "0" ]
+  then
+    break
+  fi
+done
+
 drush8 @$site.$target_env --uri=$uri clean-synced-data -y
-# Clear all search indexes.
 drush8 @$site.$target_env --uri=$uri sapi-c
+
 drush8 @$site.$target_env --uri=$uri sync-commerce-cats
 drush8 @$site.$target_env --uri=$uri sync-commerce-product-options
-drush8 @$site.$target_env --uri=$uri sync-commerce-products en 30 -y
-drush8 @$site.$target_env --uri=$uri sync-commerce-products ar 15 -y
+
+# Disable shield for product push to work.
+drush8 @$site.$target_env --uri=$uri pm-uninstall -y shield
+
+drush8 @$site.$target_env --uri=$uri sync-commerce-products en 10 -y
+drush8 @$site.$target_env --uri=$uri sync-commerce-products ar 5 -y
 drush8 @$site.$target_env --uri=$uri alshaya-api-sync-stores
 
 # Now wait for SKUs to be loaded.
+new_count="0"
 while :
 do
   sleep 60
-  SKUCOUNT=$(drush8 @$site.$target_env --uri=$uri sqlq "select count(*) from acq_sku_field_data")
+  old_count=$new_count
+  new_count=$(drush8 @$site.$target_env --uri=$uri sqlq "select count(*) from acq_sku")
+  echo "Before sleep $old_count - after sleep $new_count"
 
-  if [ $SKUCOUNT -gt 20000 ]
+  if [ $old_count != "0" -a $old_count == $new_count ]
   then
     break
   fi
