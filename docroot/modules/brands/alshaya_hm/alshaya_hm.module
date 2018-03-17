@@ -19,6 +19,7 @@ function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id)
     if (isset($form['sort_bef_combine']['#options']['nid ASC']) && $form['sort_bef_combine']['#options']['nid ASC']) {
       $form['sort_bef_combine']['#options']['nid ASC'] = t('Best Seller');
     }
+
   }
 
   if ($form_id == 'alshaya_newsletter_subscribe') {
@@ -27,12 +28,12 @@ function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id)
 }
 
 /**
- * Implements hook_acq_sku_product_node_alter().
+ * Implements hook_acq_sku_product_sku_alter().
  */
-function alshaya_hm_acq_sku_product_node_alter(Node &$node, array $product) {
-  // Set product activation date if available.
+function alshaya_hm_acq_sku_product_sku_alter(&$sku, $product) {
+  // Set sku activation date if product activation date available.
   if (isset($product['attributes']['product_activation_date'])) {
-    $node->created = strtotime($product['attributes']['product_activation_date']);
+    $sku->created = strtotime($product['attributes']['product_activation_date']);
   }
 }
 

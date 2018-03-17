@@ -388,6 +388,10 @@
       @include breakpoint($desktop) {
         right: calc((100vw + 53%) / 2);
       }
+
+      @include breakpoint($desktop-large) {
+        right: 78%;
+      }
     }
 
     &.position-bottom-right,
@@ -401,6 +405,10 @@
 
       @include breakpoint($desktop) {
         left: calc((100vw + 53%) / 2);
+      }
+
+      @include breakpoint($desktop-large) {
+        left: 78%;
       }
     }
 

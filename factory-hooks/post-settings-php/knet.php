@@ -26,3 +26,6 @@ $settings['alshaya_acm_knet.settings']['use_secure_response_url'] = 1;
 
 // KWD is 414.
 $settings['alshaya_acm_knet.settings']['knet_currency_code'] = '414';
+
+// Knet udf5 prefix.
+$settings['alshaya_acm_knet.settings']['knet_udf5_prefix'] = 'ptlf';

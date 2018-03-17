@@ -8,6 +8,18 @@
 /**
  * Implements hook_update_N().
  *
+ * Remove/hide tax info for MCKW (all trans sites).
+ */
+function alshaya_acm_checkout_update_8002() {
+  // Remove/hide tax config.
+  $configFactory = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $configFactory->set('checkout_show_tax_info', FALSE);
+  $configFactory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add config for show tax info.
  */
 function alshaya_acm_checkout_update_8001() {
