@@ -32,7 +32,7 @@ function alshaya_get_additional_settings($site, $env) {
     'mcsa' => [
       'default' => [
         'store_id' => [
-          'en' => 3,
+          'en' => 5,
           'ar' => 4,
         ],
         'magento_lang_prefix' => [
