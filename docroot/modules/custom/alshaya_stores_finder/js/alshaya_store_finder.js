@@ -201,7 +201,7 @@
 
       // Avoid form submit on click of enter for stores finder's autocomplete
       // textfield.
-      $(document).on("keypress", $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form'), function(event) {
+      $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form').on('keypress', function(event) {
         return event.keyCode != 13;
       });
 

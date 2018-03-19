@@ -272,7 +272,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   }
   else {
     // Populate area terms from level 1.
-    $area_options = $area_terms_helper->getAllAreasWithParent();
+    $area_options = $area_terms_helper->getAllAreasWithParent(0);
   }
 
   $element['administrative_area']['#options'] = ['' => t('Select Area')] + $area_options;
