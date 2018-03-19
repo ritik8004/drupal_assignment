@@ -20,9 +20,6 @@ function alshaya_master_update_8010() {
     'Payment Methods' => [
       'ar' => 'طرق الدفع',
     ],
-    'delivery by' => [
-      'ar' => 'التوصيل خلال',
-    ],
     'delivery information' => [
       'ar' => 'معلومات التوصيل',
     ],
@@ -1352,9 +1349,6 @@ function alshaya_master_install() {
     ],
     'Payment Methods' => [
       'ar' => 'طرق الدفع',
-    ],
-    'delivery by' => [
-      'ar' => 'التوصيل خلال',
     ],
     'delivery information' => [
       'ar' => 'معلومات التوصيل',
