@@ -119,7 +119,8 @@
 					{% endif %}
 
         </td>
-        <td class="order__delivery-details">
+        {% if order_details.payment_method_code != 'cashondelivery' %}
+          <td class="order__delivery-details">
           {% if order_details.type == 'cc' %}
             <div class="label font-small">{{ 'Collection times'|t }}</div>
             <div>
@@ -146,6 +147,7 @@
             <div class="dark">{{ order_details.delivery_method }}</div>
           </div>
         </td>
+        {% endif %}
         <td class="desktop-only">
           {% if order_details.type == 'cc' %}
             <div class="label font-small">{{ "Billing details"|t }}</div>
