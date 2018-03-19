@@ -236,6 +236,10 @@ header {
       z-index: 4;
       position: static;
 
+      @include breakpoint($only-mobile) {
+        background: none;
+      }
+
       .notification--on & {
         z-index: 3;
       }
