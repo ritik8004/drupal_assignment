@@ -334,7 +334,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code']);
   $orderDetails['payment_method'] = $payment_method_term->getName();
-
+  $orderDetails['payment_method_code'] = $order['payment']['method_code'];
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
   $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);

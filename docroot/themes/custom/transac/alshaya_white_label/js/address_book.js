@@ -41,10 +41,10 @@
       });
 
       if ($('#payment_method_title_cashondelivery').hasClass('plugin-selected')) {
-        $('#edit-billing-address').hide();
+        $('#edit-billing-address').addClass('cod-enabled');
       }
       else {
-        $('#edit-billing-address').show();
+        $('#edit-billing-address').removeClass('cod-enabled');
       }
     }
   };
