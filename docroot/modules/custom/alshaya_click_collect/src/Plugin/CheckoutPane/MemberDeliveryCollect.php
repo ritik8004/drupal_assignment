@@ -115,6 +115,10 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       '#attributes' => ($store_code) ? ['style' => 'display:none;'] : [],
     ];
 
+    $pane_form['store_finder']['cnc_collect_from'] = [
+      '#markup' => '<div class="cnc-collect-from">' . $this->t('Where do you want to collect from?') . '</div>',
+    ];
+
     $pane_form['store_finder']['store_location'] = [
       '#type' => 'textfield',
       '#title' => $this->t('find your closest collection point'),
