@@ -85,9 +85,9 @@ function alshaya_get_conductor_host_data() {
     ],
     // H&M SA.
     'hmsa_dev' => [
-      'url' => 'https://alshaya-mcksa-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => 'b4d60c5665624a21b1d03f75060f52cb',
-      'hmac_secret' => 'HMWH2Yc8AlWujYegPP96jA',
+      'url' => 'https://alshaya-mcksa-uat.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '6686b9362f9c48789c08782dc0f85b59',
+      'hmac_secret' => 'QIMU6nVtVUVJ3NtSErE5PA',
     ],
     // H&M AE.
     'hmae_test' => [
