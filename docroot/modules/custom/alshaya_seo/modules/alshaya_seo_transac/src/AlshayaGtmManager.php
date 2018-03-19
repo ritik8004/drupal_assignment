@@ -1093,11 +1093,6 @@ class AlshayaGtmManager {
 
               $shipping_method_name = $shipping_method->get('field_shipping_code')->getString();
 
-              $shipping_obj = (array) $cart->getShipping();
-
-              if (isset($shipping_obj['extension']['address_area_segment'])) {
-                $page_dl_attributes['deliveryArea'] = $shipping_obj['extension']['address_area_segment'];
-              }
               // Check if selected shipping method is click and collect.
               if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
                 $page_dl_attributes['deliveryOption'] = 'Click and Collect';
@@ -1105,13 +1100,15 @@ class AlshayaGtmManager {
 
                 if ($store = $this->storeFinder->getStoreFromCode($cart->getExtension('store_code'))) {
                   $page_dl_attributes['storeLocation'] = $store->label();
+                  // @TODO: Update this during CORE-748.
                   $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
                 }
+              }
+              else {
+                $delivery_area = $this->addressBookManager->getCartShippingAreaValue($cart);
 
-                // Unset deliveryArea if shipping method is C&C. We use delivery
-                // area taken from billing address in case of C&C.
-                if (isset($page_dl_attributes['deliveryArea'])) {
-                  unset($page_dl_attributes['deliveryArea']);
+                if ($delivery_area) {
+                  $page_dl_attributes['deliveryArea'] = $delivery_area;
                 }
               }
 
