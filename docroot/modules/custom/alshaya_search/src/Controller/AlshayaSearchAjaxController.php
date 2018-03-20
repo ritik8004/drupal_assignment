@@ -174,46 +174,61 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       // If mater request is term page.
       if ($master_route === 'entity.taxonomy_term.canonical') {
         $term = $master_request->attributes->get('taxonomy_term');
-        $vocabId = $term->getVocabularyId();
-        if ($vocabId === 'acq_product_category') {
-          $is_plp_page = TRUE;
-          return;
-        }
+        $is_plp_page = $this->checkPageType($master_route, $term);
       }
       elseif ($master_route === 'entity.node.canonical') {
-        $node = $this->currentRouteMatch->getParameter('node');
-        $bundle = $node->bundle();
-        if ($bundle === 'acq_promotion') {
-          $is_promo_page = TRUE;
-          return;
-        }
+        $node = $master_request->attributes->get('node');
+        $is_promo_page = $this->checkPageType($master_route, $node);
       }
       elseif ($master_route === 'view.search.page') {
         $is_search_page = TRUE;
-        return;
       }
+
+      return;
     }
 
     if ($current_route_name === 'entity.taxonomy_term.canonical') {
       $term = $this->currentRouteMatch->getParameter('taxonomy_term');
-      $vocabId = $term->getVocabularyId();
-      if ($vocabId === 'acq_product_category') {
-        $is_plp_page = TRUE;
-        return;
-      }
+      $is_plp_page = $this->checkPageType($current_route_name, $term);
     }
     elseif ($current_route_name === 'entity.node.canonical') {
       $node = $this->currentRouteMatch->getParameter('node');
-      $bundle = $node->bundle();
-      if ($bundle === 'acq_promotion') {
-        $is_promo_page = TRUE;
-        return;
-      }
+      $is_promo_page = $this->checkPageType($current_route_name, $node);
     }
     elseif ($current_route_name === 'view.search.page') {
       $is_search_page = TRUE;
-      return;
     }
+  }
+
+  /**
+   * Check if the given route and parameter matches.
+   *
+   * @param string $route_name
+   *   Route name.
+   * @param mixed $parameter
+   *   Parameter for the route (Node/Term).
+   *
+   * @return bool
+   *   TRUE/FALSE.
+   */
+  protected function checkPageType($route_name, $parameter) {
+    if ($route_name === 'entity.taxonomy_term.canonical') {
+      $vocabId = $parameter->getVocabularyId();
+      if ($vocabId === 'acq_product_category') {
+        return TRUE;
+      }
+    }
+    elseif ($route_name === 'entity.node.canonical') {
+      $bundle = $parameter->bundle();
+      if ($bundle === 'acq_promotion') {
+        return TRUE;
+      }
+    }
+    elseif ($route_name === 'view.search.page') {
+      return TRUE;
+    }
+
+    return FALSE;
   }
 
 }
