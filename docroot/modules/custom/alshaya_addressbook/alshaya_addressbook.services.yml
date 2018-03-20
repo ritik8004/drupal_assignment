@@ -20,6 +20,7 @@ services:
       - '@config.factory'
       - '@cache.data'
       - '@module_handler'
+      - '@alshaya_addressbook.area_terms_helper'
   alshaya_addressbook.area_terms_helper:
     class: Drupal\alshaya_addressbook\AddressBookAreasTermsHelper
     arguments:

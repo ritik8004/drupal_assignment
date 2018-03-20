@@ -322,19 +322,22 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $orderDetails['delivery_address'] = render($delivery_address);
   }
 
-  $billing_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($order['billing']);
-  $billing_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($billing_address_array['mobile_number']['value']);
+  // Don't show Billing Address for CoD payment method.
+  if ($order['payment']['method_code'] !== 'cashondelivery') {
+    $billing_address_array = $address_book_manager->getAddressArrayFromMagentoAddress($order['billing']);
+    $billing_address_array['telephone'] = $mobile_number_util->getFormattedMobileNumber($billing_address_array['mobile_number']['value']);
 
-  $billing_address = [
-    '#theme' => 'alshaya_address',
-    '#address' => $billing_address_array,
-  ];
+    $billing_address = [
+      '#theme' => 'alshaya_address',
+      '#address' => $billing_address_array,
+    ];
 
-  $orderDetails['billing_address'] = render($billing_address);
+    $orderDetails['billing_address'] = render($billing_address);
+  }
 
   $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code']);
   $orderDetails['payment_method'] = $payment_method_term->getName();
-
+  $orderDetails['payment_method_code'] = $order['payment']['method_code'];
   $orderDetails['sub_total'] = alshaya_acm_price_format($order['totals']['sub']);
   $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
