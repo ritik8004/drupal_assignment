@@ -15,6 +15,7 @@ use Drupal\Core\PathProcessor\PathProcessorManager;
 use Drupal\Core\Render\RendererInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Override facets AJAX controller to add selected filters as hidden fields.
@@ -36,6 +37,13 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
   protected $currentRouteMatch;
 
   /**
+   * Request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * Constructs a FacetBlockAjaxController object.
    *
    * @param \Drupal\Core\Entity\EntityManager $entityManager
@@ -54,6 +62,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *   The Block manager service.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   The current route matcher service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    */
   public function __construct(EntityManager $entityManager,
                               RendererInterface $renderer,
@@ -62,10 +72,12 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
                               PathProcessorManager $pathProcessor,
                               LoggerChannelFactoryInterface $logger,
                               BlockManager $blockManager,
-                              CurrentRouteMatch $currentRouteMatch) {
+                              CurrentRouteMatch $currentRouteMatch,
+                              RequestStack $request_stack) {
     parent::__construct($entityManager, $renderer, $currentPath, $router, $pathProcessor, $logger);
     $this->blockManager = $blockManager;
     $this->currentRouteMatch = $currentRouteMatch;
+    $this->requestStack = $request_stack;
   }
 
   /**
@@ -80,7 +92,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $container->get('path_processor_manager'),
       $container->get('logger.factory'),
       $container->get('plugin.manager.block'),
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('request_stack')
     );
   }
 
@@ -152,16 +165,43 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    */
   protected function setPageType(&$is_plp_page, &$is_promo_page, &$is_search_page) {
     $current_route_name = $this->currentRouteMatch->getRouteName();
+
+    // If facet ajax request.
+    if ($current_route_name === 'facets.block.ajax') {
+      // Get master/original request and route.
+      $master_request = $this->requestStack->getMasterRequest();
+      $master_route = $master_request->attributes->get('_route');
+      // If mater request is term page, update route name.
+      if ($master_route === 'entity.taxonomy_term.canonical') {
+        $current_route_name = 'entity.taxonomy_term.canonical';
+        $term = $master_request->attributes->get('taxonomy_term');
+      }
+      // If mater request is node page, update route name.
+      elseif ($master_route === 'entity.node.canonical') {
+        $current_route_name = 'entity.node.canonical';
+        $node = $master_request->attributes->get('node');
+      }
+      elseif ($master_route === 'view.search.page') {
+        $current_route_name = 'view.search.page';
+      }
+    }
+
     if ($current_route_name === 'entity.taxonomy_term.canonical') {
-      $term = $this->currentRouteMatch->getParameter('taxonomy_term');
+      // If already not set by master request.
+      if (!isset($term)) {
+        $term = $this->currentRouteMatch->getParameter('taxonomy_term');
+      }
       $vocabId = $term->getVocabularyId();
       if ($vocabId === 'acq_product_category') {
         $is_plp_page = TRUE;
         return;
       }
     }
+    // If already not set by master request.
     elseif ($current_route_name === 'entity.node.canonical') {
-      $node = $this->currentRouteMatch->getParameter('node');
+      if (!isset($node)) {
+        $node = $this->currentRouteMatch->getParameter('node');
+      }
       $bundle = $node->bundle();
       if ($bundle === 'acq_promotion') {
         $is_promo_page = TRUE;
