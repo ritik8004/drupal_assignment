@@ -4,9 +4,6 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
@@ -178,7 +175,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#default_value' => $selected_plugin_id,
       '#ajax' => [
         'wrapper' => 'payment_details_wrapper',
-        'callback' => [$this, 'rebuildPaymentDetails'],
+        'url' => Url::fromRoute('alshaya_acm_checkout.select_payment_method'),
       ],
       '#attributes' => [
         'gtm-type' => 'cart-checkout-payment',
@@ -235,27 +232,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     }
 
     return $pane_form;
-  }
-
-  /**
-   * Ajax Callback to rebuild payment details after selecting payment method.
-   *
-   * @param array $form
-   *   Full form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   Loaded FormState object.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   AjaxResponse to show loader and reload the page.
-   */
-  public static function rebuildPaymentDetails(array $form, FormStateInterface $form_state) {
-    $response = new AjaxResponse();
-
-    $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment']);
-    $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
-    $response->addCommand(new RedirectCommand($url->toString()));
-
-    return $response;
   }
 
   /**
