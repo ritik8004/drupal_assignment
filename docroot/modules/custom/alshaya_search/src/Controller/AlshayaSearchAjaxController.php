@@ -15,6 +15,7 @@ use Drupal\Core\PathProcessor\PathProcessorManager;
 use Drupal\Core\Render\RendererInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Override facets AJAX controller to add selected filters as hidden fields.
@@ -36,6 +37,13 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
   protected $currentRouteMatch;
 
   /**
+   * Request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * Constructs a FacetBlockAjaxController object.
    *
    * @param \Drupal\Core\Entity\EntityManager $entityManager
@@ -54,6 +62,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    *   The Block manager service.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   The current route matcher service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    */
   public function __construct(EntityManager $entityManager,
                               RendererInterface $renderer,
@@ -62,10 +72,12 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
                               PathProcessorManager $pathProcessor,
                               LoggerChannelFactoryInterface $logger,
                               BlockManager $blockManager,
-                              CurrentRouteMatch $currentRouteMatch) {
+                              CurrentRouteMatch $currentRouteMatch,
+                              RequestStack $request_stack) {
     parent::__construct($entityManager, $renderer, $currentPath, $router, $pathProcessor, $logger);
     $this->blockManager = $blockManager;
     $this->currentRouteMatch = $currentRouteMatch;
+    $this->requestStack = $request_stack;
   }
 
   /**
@@ -80,7 +92,8 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       $container->get('path_processor_manager'),
       $container->get('logger.factory'),
       $container->get('plugin.manager.block'),
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('request_stack')
     );
   }
 
@@ -156,7 +169,7 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     // If facet ajax request.
     if ($current_route_name === 'facets.block.ajax') {
       // Get master/original request and route.
-      $master_request = \Drupal::requestStack()->getMasterRequest();
+      $master_request = $this->requestStack->getMasterRequest();
       $master_route = $master_request->attributes->get('_route');
       // If mater request is term page.
       if ($master_route === 'entity.taxonomy_term.canonical') {
