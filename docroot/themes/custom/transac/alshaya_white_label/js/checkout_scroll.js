@@ -15,6 +15,14 @@
         }
       });
 
+      $('.store-actions .select-store').on('click', function () {
+        $(document).ajaxComplete(function () {
+          $('html,body').animate({
+            scrollTop: $('#selected-store-wrapper').offset().top
+          }, 'slow');
+        });
+      });
+
       var guestDiv = $('#edit-guest-delivery-home');
       var memberDiv = $('#edit-member-delivery-home');
       var scrollHeight;
