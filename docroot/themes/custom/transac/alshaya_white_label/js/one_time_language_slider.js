@@ -24,16 +24,19 @@
         var tablet = window.matchMedia('(max-width: 1024px)').matches;
         if (mobile || tablet) {
           languge_switcher.show();
+          footer.addClass('language-switcher-enabled');
         }
         else {
           // Desktop.
           languge_switcher.hide();
+          footer.addClass('language-switcher-disabled');
         }
 
         // Close the block when clicked on close button.
         languge_switcher_close.on('click', function () {
           // Hide the slider.
           languge_switcher.hide();
+          footer.addClass('language-switcher-disabled');
         });
       }
     }

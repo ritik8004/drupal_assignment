@@ -1452,7 +1452,14 @@
             z-index: 4;
             margin: 0;
             #{$left}: 0;
-            height: 2.5rem;
+            height: 3rem;
+            border: 0.5rem solid $white-five;
+            border-top: none;
+
+            &.hide-button {
+              border: none;
+              height: 2.5rem;
+            }
 
             .ladda-label {
               html[lang="ar"] & {
@@ -1697,7 +1704,9 @@ article[gtm-sku-type="simple"] {
         font-size: 0.875rem;
         z-index: 6;
         height: 3rem;
-        line-height: 2;
+        line-height: 1.5;
+        border: 0.5rem solid $white-five;
+        border-top: none;
       }
 
       @include breakpoint($desktop) {
