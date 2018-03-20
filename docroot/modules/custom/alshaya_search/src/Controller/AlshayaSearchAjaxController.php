@@ -152,6 +152,35 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
    */
   protected function setPageType(&$is_plp_page, &$is_promo_page, &$is_search_page) {
     $current_route_name = $this->currentRouteMatch->getRouteName();
+
+    // If facet ajax request.
+    if ($current_route_name === 'facets.block.ajax') {
+      // Get master/original request and route.
+      $master_request = \Drupal::requestStack()->getMasterRequest();
+      $master_route = $master_request->attributes->get('_route');
+      // If mater request is term page.
+      if ($master_route === 'entity.taxonomy_term.canonical') {
+        $term = $master_request->attributes->get('taxonomy_term');
+        $vocabId = $term->getVocabularyId();
+        if ($vocabId === 'acq_product_category') {
+          $is_plp_page = TRUE;
+          return;
+        }
+      }
+      elseif ($master_route === 'entity.node.canonical') {
+        $node = $this->currentRouteMatch->getParameter('node');
+        $bundle = $node->bundle();
+        if ($bundle === 'acq_promotion') {
+          $is_promo_page = TRUE;
+          return;
+        }
+      }
+      elseif ($master_route === 'view.search.page') {
+        $is_search_page = TRUE;
+        return;
+      }
+    }
+
     if ($current_route_name === 'entity.taxonomy_term.canonical') {
       $term = $this->currentRouteMatch->getParameter('taxonomy_term');
       $vocabId = $term->getVocabularyId();
