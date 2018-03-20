@@ -202,10 +202,15 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
       if (!isset($node)) {
         $node = $this->currentRouteMatch->getParameter('node');
       }
-      $is_promo_page = $this->checkPageType($current_route_name, $node);
+      $bundle = $node->bundle();
+      if ($bundle === 'acq_promotion') {
+        $is_promo_page = TRUE;
+        return;
+      }
     }
     elseif ($current_route_name === 'view.search.page') {
       $is_search_page = TRUE;
+      return;
     }
   }
 
