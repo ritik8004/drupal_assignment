@@ -15,8 +15,8 @@
         }
       });
 
-      var guestDiv = $('#edit-guest-delivery-home-address-shipping-methods');
-      var memberDiv = $('#edit-member-delivery-home-address-shipping-methods');
+      var guestDiv = $('#edit-guest-delivery-home');
+      var memberDiv = $('#edit-member-delivery-home');
       var scrollHeight;
       if ((memberDiv.length > 0) || (guestDiv.length > 0)) {
         scrollHeight = (memberDiv.length > 0) ? memberDiv.offset().top : guestDiv.offset().top;
