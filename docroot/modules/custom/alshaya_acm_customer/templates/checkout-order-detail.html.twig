@@ -119,7 +119,8 @@
           {% endif %}
 
         </td>
-        <td class="order__delivery-details">
+        {% if order_details.payment_method_code != 'cashondelivery' %}
+          <td class="order__delivery-details">
           {% if order_details.type == 'cc' %}
             <div class="label font-small">{{ 'Collection times'|t }}</div>
             <div>
@@ -146,6 +147,7 @@
             <div class="dark">{{ order_details.delivery_method }}</div>
           </div>
         </td>
+        {% endif %}
         <td class="desktop-only">
           {% if order_details.type == 'cc' %}
             <div class="label font-small">{{ "Billing details"|t }}</div>
@@ -239,6 +241,7 @@
         </tr>
       {% endfor %}
 
+      {% block subTotalRow %}
       <tr class="sub-total-row collapse-row">
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
@@ -248,7 +251,9 @@
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
+      {% endblock %}
 
+      {% block discountRow %}
       {% if order_details.discount is not empty %}
         <tr class="discount-row collapse-row">
           <td class="above-mobile">&nbsp;</td>
@@ -260,7 +265,9 @@
           <td class="above-mobile empty--cell">&nbsp;</td>
         </tr>
       {% endif %}
+      {% endblock %}
 
+      {% block deliveryChargeRow %}
       <tr class="delivery-charge-row collapse-row">
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
@@ -270,7 +277,9 @@
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
+      {% endblock %}
 
+      {% block totalRow %}
       <tr class="total-row collapse-row">
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
@@ -284,7 +293,9 @@
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
+      {% endblock %}
 
+      {% block vatRow %}
       {% if vat_text %}
         <tr class="total-row collapse-row">
           <td class="above-mobile">&nbsp;</td>
@@ -298,6 +309,7 @@
           <td class="above-mobile empty--cell">&nbsp;</td>
         </tr>
       {% endif %}
+      {% endblock %}
     </tbody>
   </table>
 </div>
