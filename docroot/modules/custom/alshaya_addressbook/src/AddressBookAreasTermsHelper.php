@@ -177,4 +177,98 @@ class AddressBookAreasTermsHelper {
     return $term_list;
   }
 
+  /**
+   * Helper method to fetch TID from area vocab, from the param provided.
+   *
+   * @param array $conditions
+   *   An array of associative array containing conditions, to be used in query,
+   *   with following elements:
+   *   - 'field': Name of the field being queried.
+   *   - 'value': The value for field.
+   *   - 'operator': Possible values like '=', '<>', '>', '>=', '<', '<='.
+   *
+   * @return array
+   *   Array of term objects.
+   */
+  private function getLocationTerms(array $conditions = []) {
+    $terms = [];
+
+    $query = $this->termStorage->getQuery()->condition(
+      'vid',
+      AlshayaAddressBookManagerInterface::AREA_VOCAB
+    );
+
+    foreach ($conditions as $condition) {
+      if (!empty($condition['field']) && !empty($condition['value'])) {
+        $condition['operator'] = empty($condition['operator']) ? '=' : $condition['operator'];
+        $query->condition($condition['field'], $condition['value'], $condition['operator']);
+      }
+    }
+
+    $tids = $query->execute();
+
+    if (!empty($tids)) {
+      $terms = $this->termStorage->loadMultiple($tids);
+    }
+
+    return $terms;
+  }
+
+  /**
+   * Get location term from location id.
+   *
+   * @param mixed $location_id
+   *   Location id.
+   *
+   * @return \Drupal\taxonomy\Entity\Term|null
+   *   Term if found or null.
+   */
+  public function getLocationTermFromLocationId($location_id) {
+    if (empty($location_id)) {
+      return NULL;
+    }
+
+    $terms = $this->getLocationTerms([
+      [
+        'field' => 'field_location_id',
+        'value' => $location_id,
+      ],
+    ]);
+
+    if (!empty($terms)) {
+      return reset($terms);
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get Shipping Area label for value based on DM Version.
+   *
+   * Used mainly for SEO / GTM, where we always want the English label.
+   *
+   * @param mixed $value
+   *   Value received in shipping object.
+   * @param string $langcode
+   *   Language code in which we want the value to be returned.
+   *
+   * @return mixed|null|string
+   *   String value for the area.
+   */
+  public function getShippingAreaLabel($value, $langcode = 'en') {
+    // For DM V2, we will have it id instead of string.
+    if ($this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+      $term = $this->getLocationTermFromLocationId($value);
+
+      // We always want labels in English for GTM.
+      if ($term->language()->getId() != $langcode && $term->hasTranslation($langcode)) {
+        $term = $term->getTranslation($langcode);
+      }
+
+      return $term->label();
+    }
+
+    return $value;
+  }
+
 }

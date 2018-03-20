@@ -385,7 +385,7 @@ class CustomerController extends ControllerBase {
       $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymdhi');
       $disposition = $response->headers->makeDisposition(
         ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-        'Invoice_' . $time_format
+        'Invoice_' . $time_format . '.pdf'
       );
       $response->headers->set('Content-Disposition', $disposition);
       return $response;

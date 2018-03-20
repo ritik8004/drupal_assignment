@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_addressbook;
 
+use Drupal\acq_cart\CartInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -96,6 +97,13 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   protected $moduleHandler;
 
   /**
+   * AddressBook Areas Terms helper service.
+   *
+   * @var \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper
+   */
+  protected $areasTermsHelper;
+
+  /**
    * AlshayaAddressBookManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -118,6 +126,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Cache Backend object for "cache.data".
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
+   * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_terms_helper
+   *   AddressBook Areas Terms helper service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
@@ -128,7 +138,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
                               LanguageManagerInterface $languageManager,
                               ConfigFactoryInterface $config_factory,
                               CacheBackendInterface $cache,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              AddressBookAreasTermsHelper $areas_terms_helper) {
     $this->entityRepository = $entity_repository;
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
@@ -141,6 +152,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $this->configFactory = $config_factory;
     $this->cache = $cache;
     $this->moduleHandler = $module_handler;
+    $this->areasTermsHelper = $areas_terms_helper;
   }
 
   /**
@@ -425,7 +437,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
           switch ($mapping[$attribute_code]) {
             case 'administrative_area':
             case 'area_parent':
-              $term = $this->getLocationTermFromLocationId($value);
+              $term = $this->areasTermsHelper->getLocationTermFromLocationId($value);
 
               if ($term) {
                 $term = $this->entityRepository->getTranslationFromContext($term);
@@ -518,64 +530,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     return NULL;
-  }
-
-  /**
-   * Get location term from location id.
-   *
-   * @param mixed $location_id
-   *   Location id.
-   *
-   * @return \Drupal\taxonomy\Entity\Term|null
-   *   Term if found or null.
-   */
-  public function getLocationTermFromLocationId($location_id) {
-    if (empty($location_id)) {
-      return NULL;
-    }
-
-    $terms = $this->getLocationTerms([
-      [
-        'field' => 'field_location_id',
-        'value' => $location_id,
-      ],
-    ]);
-
-    if (!empty($terms)) {
-      return reset($terms);
-    }
-
-    return NULL;
-  }
-
-  /**
-   * Helper method to fetch TID from area vocab, from the param provided.
-   *
-   * @param array $conditions
-   *   An array of associative array containing conditions, to be used in query,
-   *   with following elements:
-   *   - 'field': Name of the field being queried.
-   *   - 'value': The value for field.
-   *   - 'operator': Possible values like '=', '<>', '>', '>=', '<', '<='.
-   *
-   * @return array
-   *   Array of term objects.
-   */
-  private function getLocationTerms(array $conditions = []) {
-    $terms = [];
-    $query = $this->termStorage->getQuery()->condition('vid', AlshayaAddressBookManagerInterface::AREA_VOCAB);
-    foreach ($conditions as $condition) {
-      if (!empty($condition['field']) && !empty($condition['value'])) {
-        $condition['operator'] = empty($condition['operator']) ? '=' : $condition['operator'];
-        $query->condition($condition['field'], $condition['value'], $condition['operator']);
-      }
-    }
-    $tids = $query->execute();
-    if (!empty($tids)) {
-      $terms = $this->termStorage->loadMultiple($tids);
-    }
-
-    return $terms;
   }
 
   /**
@@ -751,7 +705,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       return NULL;
     }
 
-    $term = $this->getLocationTermFromLocationId($termData['field_location_id']);
+    $term = $this->areasTermsHelper->getLocationTermFromLocationId($termData['field_location_id']);
 
     if ($term && $term->hasTranslation($langcode)) {
       $term = $term->getTranslation($langcode);
@@ -946,6 +900,38 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     return $custom_fields;
+  }
+
+  /**
+   * Get Area label for Shipping Address from Cart.
+   *
+   * This function takes care of DM V1/V2.
+   *
+   * @param \Drupal\acq_cart\CartInterface $cart
+   *   Cart object.
+   *
+   * @return string|null
+   *   String value for the area or NULL if shipping value not available.
+   */
+  public function getCartShippingAreaValue(CartInterface $cart) {
+    if (!$cart->getShippingMethodAsString()) {
+      return '';
+    }
+
+    $shipping = (array) $cart->getShipping();
+    $field = 'address_area_segment';
+
+    $dm_version = $this->configFactory->get('alshaya_addressbook.settings')->get('dm_version');
+    if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+      $mappings = $this->getMagentoFieldMappings();
+      $field = $mappings['administrative_area'];
+    }
+
+    $value = isset($shipping['extension'], $shipping['extension'][$field])
+      ? $shipping['extension'][$field]
+      : '';
+
+    return $this->areasTermsHelper->getShippingAreaLabel($value);
   }
 
 }
