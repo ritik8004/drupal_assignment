@@ -50,6 +50,12 @@ elif [ $mode = "download" ]
 then
   echo "Downloading latest database from $env"
   drush $remote_alias $remote_l_argument sql-dump > $local_archive
+elif [ $mode = "download_only" ]
+then
+  echo "Downloading latest database from $env"
+  drush $remote_alias $remote_l_argument sql-dump > $local_archive
+  echo "Download complete, restart script with reuse"
+  exit 0
 else
   echo "Please provide valid argument to download or reuse db."
   exit 0
