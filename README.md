@@ -71,7 +71,7 @@ To prepare your local env:
   * `composer blt-alias`
   * `blt vm`
   * `blt refresh:local`
-  * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local -Dsite=mckw`)
+  * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
   * `drush @alshaya.local uli`
 * Access site through Varnish in local
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
