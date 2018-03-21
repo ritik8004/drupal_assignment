@@ -27,7 +27,10 @@ remote_l_argument="-l $remote_url"
 origin_dir="sites/g/files/$remote_db_role/files/"
 origin="https://$remote_url"
 
-local_archive="/tmp/alshaya_${site}_${env}.sql"
+local_archive="../tmp/alshaya_${site}_${env}.sql"
+
+# Create the directory every-time, not heavy call.
+mkdir -p "../tmp"
 
 echo "Local archive: $local_archive"
 
