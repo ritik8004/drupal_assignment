@@ -29,14 +29,14 @@
         else {
           // Desktop.
           languge_switcher.hide();
-          footer.addClass('language-switcher-disabled');
+          footer.removeClass('language-switcher-enabled');
         }
 
         // Close the block when clicked on close button.
         languge_switcher_close.on('click', function () {
           // Hide the slider.
           languge_switcher.hide();
-          footer.addClass('language-switcher-disabled');
+          footer.removeClass('language-switcher-enabled');
         });
       }
     }

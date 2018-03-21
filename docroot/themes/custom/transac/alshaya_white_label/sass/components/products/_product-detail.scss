@@ -1445,16 +1445,13 @@
 
         @include breakpoint($only-mobile) {
           .basic-details-wrapper & {
+            @include stickyButton();
+
+            border-color: $white-five;
             float: none;
-            position: fixed;
-            bottom: 0;
             width: 100%;
-            z-index: 4;
             margin: 0;
-            #{$left}: 0;
-            height: 3rem;
-            border: 0.5rem solid $white-five;
-            border-top: none;
+            height: 3.5rem;
 
             &.hide-button {
               border: none;
@@ -1696,17 +1693,13 @@ article[gtm-sku-type="simple"] {
   .basic-details-wrapper {
     span.out-of-stock {
       @include breakpoint($only-mobile) {
-        position: fixed;
-        bottom: 0;
+        @include stickyButton();
+
         width: 100%;
-        #{$left}: 0;
         margin: 0;
         font-size: 0.875rem;
-        z-index: 6;
-        height: 3rem;
+        height: 3.5rem;
         line-height: 1.5;
-        border: 0.5rem solid $white-five;
-        border-top: none;
       }
 
       @include breakpoint($desktop) {
