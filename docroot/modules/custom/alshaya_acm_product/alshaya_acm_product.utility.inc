@@ -632,22 +632,22 @@ function alshaya_acm_product_update_config_options(array &$form_parts, FormState
 
   $options = $form_parts['configurables'][$attribute_code]['#options'];
 
-  // If leaf attribute only contains 1 option, mark this option as selected.
-  if (count($options) == 1) {
-    $configurables[$attribute_code] = key($options);
-    $form_state->setValue('configurables', $configurables);
-    $user_input = $form_state->getUserInput();
-    $user_input['configurables'] = $configurables;
-    $form_state->setUserInput($user_input);
-    // Setting value for the element.
-    $form_parts['configurables'][$attribute_code]['#value'] = key($options);
-  }
-
   // Disable options which don't exist for the choosen config.
   foreach ($options as $key => $value) {
     if ($key && !in_array($key, $enabled_options)) {
       unset($form_parts['configurables'][$attribute_code]['#options'][$key]);
     }
+  }
+
+  // If leaf attribute only contains 1 option, mark this option as selected.
+  if (count($form_parts['configurables'][$attribute_code]['#options']) == 1) {
+    $configurables[$attribute_code] = key($form_parts['configurables'][$attribute_code]['#options']);
+    $form_state->setValue('configurables', $configurables);
+    $user_input = $form_state->getUserInput();
+    $user_input['configurables'] = $configurables;
+    $form_state->setUserInput($user_input);
+    // Setting value for the element.
+    $form_parts['configurables'][$attribute_code]['#value'] = key($form_parts['configurables'][$attribute_code]['#options']);
   }
 }
 
