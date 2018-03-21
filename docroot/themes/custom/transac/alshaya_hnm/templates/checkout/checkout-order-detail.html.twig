@@ -1,52 +1,72 @@
-{#
-/**
- * @file
- *
- * Default user order detail template.
- *
- * Available variables:
- * - attributes: HTML attributes for the wrapper.
- * - order: Array containing all order details.
- *
- * @ingroup themeable
- */
-#}
-<div{{ attributes }}>
+{% extends "@alshaya_acm_customer/checkout-order-detail.html.twig" %}
 
-  <div class="barcode--wrapper">
-    {% if order_error %}
-      <div class="inner--wrap">
-        <div class="messages error">
-          {{ order_error }}
-        </div>
+{% block subTotalRow %}
+  <tr class="sub-total-row price-row collapse-row">
+    <td class="above-mobile">&nbsp;</td>
+    <td class="above-mobile">&nbsp;</td>
+    <td class="right--align label">{{ "Sub total"|t }}</td>
+    <td class="blend">
+      {{ order_details.sub_total }}
+    </td>
+    <td class="above-mobile empty--cell">&nbsp;</td>
+  </tr>
+{% endblock %}
+
+{% block discountRow %}
+  {% if order_details.discount is not empty %}
+    <tr class="discount-row price-row collapse-row">
+      <td class="above-mobile">&nbsp;</td>
+      <td class="above-mobile">&nbsp;</td>
+      <td class="right--align label">{{ "Discount"|t }}</td>
+      <td class="blend">
+        {{ order_details.discount }}
+      </td>
+      <td class="above-mobile empty--cell">&nbsp;</td>
+    </tr>
+  {% endif %}
+{% endblock %}
+
+{% block deliveryChargeRow %}
+  <tr class="delivery-charge-row price-row collapse-row">
+    <td class="above-mobile">&nbsp;</td>
+    <td class="above-mobile">&nbsp;</td>
+    <td class="right--align label">{{ "Delivery charge"|t }}</td>
+    <td class="blend">
+      {{ order_details.delivery_charge }}
+    </td>
+    <td class="above-mobile empty--cell">&nbsp;</td>
+  </tr>
+{% endblock %}
+
+{% block totalRow %}
+  <tr class="price-row total-row collapse-row">
+    <td class="above-mobile">&nbsp;</td>
+    <td class="above-mobile">&nbsp;</td>
+    <td>
+      <div class="right--align label">{{ "Order Total"|t }}</div>
+    </td>
+    <td class="warm--white">
+      <div class="dark bold">
+        {{ order_details.order_total }}
       </div>
-    {% else %}
-      <div class="inner--wrap">
-        <div>
-          {% trans %}
-          <p>Thank you for shopping online with us, <strong class="dark--text">{{ account.first_name }} {{ account.last_name }}</strong></p>
-          {% endtrans %}
+    </td>
+    <td class="above-mobile empty--cell">&nbsp;</td>
+  </tr>
+{% endblock %}
+
+{% block vatRow %}
+  {% if vat_text %}
+    <tr class="total-row vat-row collapse-row">
+      <td class="above-mobile">&nbsp;</td>
+      <td class="above-mobile">&nbsp;</td>
+      <td class="above-mobile">&nbsp;</td>
+      <td class="warm--white">
+        <div class="dark">
+          {{ vat_text }}
         </div>
-
-        <div>
-          {% trans %}
-          <p>You’ll receive an email addressed to <strong class="dark--text">{{ account.mail }}</strong> conﬁrming your order</p>
-          {% endtrans %}
-        </div>
-
-        {% if order.loyaltyCard %}
-          <div>
-            {% trans %}
-            <p>Your PRIVILEGES CLUB card number is: <strong class="dark--text">{{ order.loyaltyCard }}</strong></p>
-            {% endtrans %}
-          </div>
-        {% endif %}
-      </div>
-
-      <div class="above-mobile print--barcode">
-        {{ barcode|raw }}
-      </div>
-    </div>
+      </td>
+      <td class="above-mobile empty--cell">&nbsp;</td>
+    </tr>
   {% endif %}
 
   <div class="order-summary">
@@ -299,3 +319,4 @@
     </tbody>
   </table>
 </div>
+{% endblock %}

@@ -1208,13 +1208,20 @@ html[lang=ar] {
 }
 
 .cnc-collect-from {
-  color: $black;
+  color: $marine-blue-two;
   font-size: 1rem;
   font-family: $alshaya-bold;
   letter-spacing: 1px;
-  text-transform: uppercase;
   font-weight: normal;
   padding-bottom: 0.4375rem;
-  border-bottom: 1px solid $black;
-  margin: 2rem 2rem 1rem;
+  border-bottom: 1px solid $marine-blue-two;
+  margin: 1rem 0;
+
+  @include breakpoint($tablet) {
+    margin: 1rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin: 2rem 2rem 1rem;
+  }
 }

@@ -127,13 +127,15 @@ class ProductCategoryTree {
       // Load translation for requested langcode.
       $term = $term->getTranslation($langcode);
 
-      // Get value of boolean field which will decide if we show/hide this
-      // term and child terms in the menu.
-      $include_in_menu = $term->get('field_category_include_menu')->getValue();
+      if ($term->hasField('field_category_include_menu')) {
+        // Get value of boolean field which will decide if we show/hide this
+        // term and child terms in the menu.
+        $include_in_menu = $term->get('field_category_include_menu')->getValue();
 
-      // Hide the menu if there is a value in the field and it is FALSE.
-      if (!empty($include_in_menu) && !($include_in_menu[0]['value'])) {
-        continue;
+        // Hide the menu if there is a value in the field and it is FALSE.
+        if (!empty($include_in_menu) && !($include_in_menu[0]['value'])) {
+          continue;
+        }
       }
 
       $data[$term->id()] = [

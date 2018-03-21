@@ -4,6 +4,7 @@ namespace Drupal\alshaya_amp\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -50,6 +51,8 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
    */
   protected $routeMatch;
 
+  protected $configFactory;
+
   /**
    * AlshayaMegaMenuBlock constructor.
    *
@@ -61,14 +64,23 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
    *   Plugin defination.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language
    *   The Language manager.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The route matcher.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $connection, LanguageManagerInterface $language, RouteMatchInterface $route_match) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              Connection $connection,
+                              ConfigFactoryInterface $config_factory,
+                              LanguageManagerInterface $language,
+                              RouteMatchInterface $route_match) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->connection = $connection;
+    $this->configFactory = $config_factory;
     $this->languageManager = $language;
     $this->routeMatch = $route_match;
   }
@@ -82,6 +94,7 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
       $plugin_id,
       $plugin_definition,
       $container->get('database'),
+      $container->get('config.factory'),
       $container->get('language_manager'),
       $container->get('current_route_match')
     );
@@ -96,9 +109,17 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name']);
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid=tfd.tid');
-    $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttrm', 'ttrm.entity_id=tfd.tid');
-    $query->condition('ttrm.field_category_include_menu_value', 1);
-    $query->condition('ttrm.langcode', $this->languageManager->getCurrentLanguage()->getId());
+
+    // @TODO: Make this condition more cleaner.
+    // We don't have include_in_menu flag in all profiles.
+    $include_in_menu_exists = $this->configFactory->get('field.field.taxonomy_term.acq_product_category.field_category_include_menu');
+
+    if ($include_in_menu_exists && $include_in_menu_exists->getRawData()) {
+      $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttrm', 'ttrm.entity_id=tfd.tid');
+      $query->condition('ttrm.field_category_include_menu_value', 1);
+      $query->condition('ttrm.langcode', $this->languageManager->getCurrentLanguage()->getId());
+    }
+
     $query->condition('tth.parent', 0);
     $query->condition('tfd.vid', $this->vid);
     $query->condition('tfd.langcode', $this->languageManager->getCurrentLanguage()->getId());

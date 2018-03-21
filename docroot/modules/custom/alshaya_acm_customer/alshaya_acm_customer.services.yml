@@ -8,6 +8,11 @@ services:
     class: Drupal\alshaya_acm_customer\OrdersManager
     arguments: [ '@acq_commerce.api', '@cache.orders', '@language_manager', '@logger.factory' ]
 
+  alshaya_acm_customer.helper:
+    class: Drupal\alshaya_acm_customer\CustomerHelper
+    arguments:
+      - '@acq_commerce.api'
+
   cache.orders:
     class: Drupal\Core\Cache\CacheInterface
     tags:

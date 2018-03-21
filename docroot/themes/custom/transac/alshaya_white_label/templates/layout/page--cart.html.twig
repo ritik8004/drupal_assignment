@@ -175,10 +175,12 @@
             </div>
         {% endif %}
 
-        {% if page.footer_primary %}
-            {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
-            <!-- /footer-primary -->
-        {% endif %}
+        {% block footerPrimaryPartial %}
+          {% if page.footer_primary %}
+              {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
+              <!-- /footer-primary -->
+          {% endif %}
+        {% endblock %}
 
         <!-- ______________________ FOOTER SECONDARY _______________________ -->
 

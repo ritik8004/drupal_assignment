@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Controller;
 
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
@@ -13,6 +14,8 @@ use Drupal\Core\Url;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\profile\Entity\Profile;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Provides additional urls for checkout pages.
@@ -129,6 +132,44 @@ class CheckoutController implements ContainerInjectionInterface {
     $response->addCommand(new InvokeCommand('#edit-member-delivery-home-addresses', 'hide', []));
     $response->addCommand(new InvokeCommand('#addresses-header', 'hide', []));
     $response->addCommand(new InvokeCommand(NULL, 'correctFloorFieldLabel', []));
+    return $response;
+  }
+
+  /**
+   * AJAX callback to select payment method.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   AJAX Response.
+   */
+  public function selectPaymentMethod(Request $request) {
+    $element = $request->request->get('_triggering_element_name');
+
+    // Confirm it is a POST request and contains form data.
+    if (empty($element)) {
+      throw new NotFoundHttpException();
+    }
+
+    // Get governate value dynamically to ensure it doesn't depend on form
+    // structure.
+    $selected_payment_method = NestedArray::getValue($request->request->all(), explode('[', str_replace(']', '', $element)));
+
+    // Check if we have value available for payment method.
+    if (empty($selected_payment_method)) {
+      throw new NotFoundHttpException();
+    }
+
+    $cart = $this->cartStorage->getCart(FALSE);
+    $cart->setPaymentMethod($selected_payment_method);
+
+    $response = new AjaxResponse();
+
+    $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment']);
+    $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
+    $response->addCommand(new RedirectCommand($url->toString()));
+
     return $response;
   }
 
