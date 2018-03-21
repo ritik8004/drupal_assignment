@@ -41,13 +41,6 @@
   }
 }
 
-.language-switcher-enabled {
-  .backtotop-nofooter,
-  .backtotop-withfooter {
-    bottom: 2.95rem;
-  }
-}
-
 .nodetype--acq_product {
   #backtotop {
     @include breakpoint($only-mobile) {
