@@ -62,8 +62,18 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
     drush_print(dt('Country module @country_module does not exists.', ['@country_module' => $country_module]));
   }
 
+  $extension = \Drupal::service('config.storage')->read('core.extension');
+  $brand_ext = strpos($extension['profile'], 'transac') !== FALSE ? str_replace('alshaya_', '_', $extension['profile']) : '';
+
   // Determine which brand to install.
   $brand_module = drush_get_option('brand_module', '');
+
+  // Try to look for transac and non transac specific module for brand before
+  // brand installing brand module. i.e. alshaya_vs_transac.
+  $module_info = system_get_info('module', $brand_module . $brand_ext);
+  if (!empty($module_info)) {
+    $brand_module = $brand_module . $brand_ext;
+  }
 
   if (!empty($brand_module)) {
     if (module_load_install($brand_module)) {
