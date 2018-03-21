@@ -286,14 +286,12 @@
       </tr>
 
       {% if vat_text %}
-        <tr class="total-row vat-row collapse-row">
+        <tr class="total-row collapse-row vat-container">
           <td class="above-mobile">&nbsp;</td>
           <td class="above-mobile">&nbsp;</td>
           <td class="above-mobile">&nbsp;</td>
           <td class="warm--white">
-            <div class="dark">
-              {{ vat_text }}
-            </div>
+            <span class="vat-text">{{ vat_text }}</span>
           </td>
           <td class="above-mobile empty--cell">&nbsp;</td>
         </tr>
