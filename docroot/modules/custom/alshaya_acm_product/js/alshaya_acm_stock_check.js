@@ -155,7 +155,16 @@
 	 * @param element
 	 */
   Drupal.reAttachAddCartAndConfigSizeAjax = function (element) {
-    var postUrl = $(element).find('form').attr('action') + '?ajax_form=1';
+    var postUrl = $(element).find('form').attr('action');
+
+    // If url already contains '?', then append by '&'.
+    if (postUrl.indexOf('?') !== -1) {
+      postUrl = postUrl + '&ajax_form=1';
+    }
+    else {
+      postUrl = postUrl + '?ajax_form=1';
+    }
+
     var editCartElementSettings = {
       callback: 'alshaya_acm_cart_notification_form_submit',
       dialogType: 'ajax',
