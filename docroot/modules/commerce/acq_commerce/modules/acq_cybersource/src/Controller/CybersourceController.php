@@ -117,15 +117,12 @@ class CybersourceController implements ContainerInjectionInterface {
       throw new \InvalidArgumentException(sprintf('Invalid credit cart type %s or type not allowed.', $type));
     }
 
-    $cart_id = $this->cartStorage->getCartId(FALSE);
-
-    // We must have a valid cart in session.
-    if (empty($cart_id)) {
-      throw new AccessDeniedHttpException('No cart available to get token');
-    }
-
     // Get the cart object.
     $cart = $this->cartStorage->getCart(FALSE);
+
+    if (empty($cart)) {
+      throw new AccessDeniedHttpException('No cart available to get token');
+    }
 
     // Allow all modules to validate and update cart data before doing getToken.
     $errors = [];
@@ -143,7 +140,7 @@ class CybersourceController implements ContainerInjectionInterface {
       // Update the cart.
       $this->cartStorage->updateCart(FALSE);
 
-      $token_info = $this->apiWrapper->cybersourceTokenRequest($cart_id, $cc_type);
+      $token_info = $this->apiWrapper->cybersourceTokenRequest($cart->id(), $cc_type);
 
       // Do some cleaning.
       foreach ($token_info as &$info) {
@@ -167,7 +164,7 @@ class CybersourceController implements ContainerInjectionInterface {
     catch (\Exception $e) {
       $this->logger->info('Error while getting Cybersource token: %message <br> Cart id: %cart_id and Card type: %card_type', [
         '%message' => $e->getMessage(),
-        '%cart_id' => $cart_id,
+        '%cart_id' => $cart->id(),
         '%card_type' => $cc_type,
       ]);
 
