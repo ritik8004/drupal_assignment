@@ -13,17 +13,17 @@
 {% endblock %}
 
 {% block discountRow %}
-    {% if order_details.discount is not empty %}
-      <tr class="discount-row price-row collapse-row">
-        <td class="above-mobile">&nbsp;</td>
-        <td class="above-mobile">&nbsp;</td>
-        <td class="right--align label">{{ "Discount"|t }}</td>
-        <td class="blend">
-            {{ order_details.discount }}
-        </td>
-        <td class="above-mobile empty--cell">&nbsp;</td>
-      </tr>
-    {% endif %}
+  {% if order_details.discount is not empty %}
+    <tr class="discount-row price-row collapse-row">
+      <td class="above-mobile">&nbsp;</td>
+      <td class="above-mobile">&nbsp;</td>
+      <td class="right--align label">{{ "Discount"|t }}</td>
+      <td class="blend">
+          {{ order_details.discount }}
+      </td>
+      <td class="above-mobile empty--cell">&nbsp;</td>
+    </tr>
+  {% endif %}
 {% endblock %}
 
 {% block deliveryChargeRow %}
@@ -32,7 +32,7 @@
     <td class="above-mobile">&nbsp;</td>
     <td class="right--align label">{{ "Delivery charge"|t }}</td>
     <td class="blend">
-        {{ order_details.delivery_charge }}
+      {{ order_details.delivery_charge }}
     </td>
     <td class="above-mobile empty--cell">&nbsp;</td>
   </tr>
@@ -47,7 +47,7 @@
     </td>
     <td class="warm--white">
       <div class="dark bold">
-          {{ order_details.order_total }}
+        {{ order_details.order_total }}
       </div>
     </td>
     <td class="above-mobile empty--cell">&nbsp;</td>
@@ -55,15 +55,15 @@
 {% endblock %}
 
 {% block vatRow %}
-    {% if vat_text %}
-      <tr class="total-row collapse-row vat-container">
-        <td class="above-mobile">&nbsp;</td>
-        <td class="above-mobile">&nbsp;</td>
-        <td class="above-mobile">&nbsp;</td>
-        <td class="warm--white">
-          <span class="vat-text">{{ vat_text }}</span>
-        </td>
-        <td class="above-mobile empty--cell">&nbsp;</td>
-      </tr>
-    {% endif %}
+  {% if vat_text %}
+    <tr class="total-row collapse-row vat-container">
+      <td class="above-mobile">&nbsp;</td>
+      <td class="above-mobile">&nbsp;</td>
+      <td class="above-mobile">&nbsp;</td>
+      <td class="warm--white">
+        <span class="vat-text">{{ vat_text }}</span>
+      </td>
+      <td class="above-mobile empty--cell">&nbsp;</td>
+    </tr>
+  {% endif %}
 {% endblock %}
