@@ -122,7 +122,7 @@
         var stockCheckProcessed = 'stock-check-processed';
         if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
           $.ajax({
-            url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
+            url: Drupal.url('get-cart-form/acq_sku/' + skuId + '/modal') + '?' + query_params,
             type: 'GET',
             dataType: 'json',
             async: true,

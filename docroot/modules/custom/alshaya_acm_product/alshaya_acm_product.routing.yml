@@ -69,3 +69,15 @@ alshaya_acm_product.get_cart_form:
     parameters:
       entity:
         type: entity:{entity_type}
+
+alshaya_acm_product.get_cart_form.modal:
+  path: '/get-cart-form/{entity_type}/{entity}/modal'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductStockController::getModalCartForm'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      entity:
+        type: entity:{entity_type}

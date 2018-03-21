@@ -144,6 +144,19 @@ class ProductStockController extends ControllerBase {
   }
 
   /**
+   * Controller to get for cart form for product/sku on modal.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity related to SKU for which we checking the stock.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse|\Drupal\Core\Cache\CacheableJsonResponse
+   *   Response object returning cart form or out of stock message.
+   */
+  public function getModalCartForm(EntityInterface $entity) {
+    return $this->getCartForm($entity);
+  }
+
+  /**
    * Controller to get for cart form for product/sku.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity

@@ -1195,8 +1195,12 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $cross_sell_markup_desktop = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell above-mobile-block">', '#suffix' => '</div>']);
       $cross_sell_markup_mobile = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell mobile-only-block">', '#suffix' => '</div>']);
 
-      $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup_mobile));
-      $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup_desktop));
+      $route_name = \Drupal::routeMatch()->getRouteName();
+      // If not modal form, only then we process crosssell/upsell.
+      if ($route_name !== 'alshaya_acm_product.get_cart_form.modal') {
+        $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup_mobile));
+        $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup_desktop));
+      }
     }
 
     // React for click & collect if stock is available.
