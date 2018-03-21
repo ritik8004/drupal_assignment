@@ -15,8 +15,16 @@
         }
       });
 
-      var guestDiv = $('#edit-guest-delivery-home-address-shipping-methods');
-      var memberDiv = $('#edit-member-delivery-home-address-shipping-methods');
+      $('.store-actions .select-store').on('click', function () {
+        $(document).ajaxComplete(function () {
+          $('html,body').animate({
+            scrollTop: $('#selected-store-wrapper').offset().top
+          }, 'slow');
+        });
+      });
+
+      var guestDiv = $('#edit-guest-delivery-home');
+      var memberDiv = $('#edit-member-delivery-home');
       var scrollHeight;
       if ((memberDiv.length > 0) || (guestDiv.length > 0)) {
         scrollHeight = (memberDiv.length > 0) ? memberDiv.offset().top : guestDiv.offset().top;

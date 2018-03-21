@@ -21,3 +21,11 @@ alshaya_acm_checkout.edit_delivery_address:
     _title: ''
   requirements:
     _custom_access: '\Drupal\acq_checkout\Controller\CheckoutController::checkAccess'
+
+alshaya_acm_checkout.select_payment_method:
+  path: 'checkout-payment/select-payment-method'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_checkout\Controller\CheckoutController::selectPaymentMethod'
+    _title: ''
+  requirements:
+    _custom_access: '\Drupal\acq_checkout\Controller\CheckoutController::checkAccess'

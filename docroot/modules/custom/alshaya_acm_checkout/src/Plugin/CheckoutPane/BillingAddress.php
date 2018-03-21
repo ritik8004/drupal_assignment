@@ -154,6 +154,15 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       ];
     }
 
+    // We don't show this form completely when we use CoD.
+    $selected_payment_method = $cart->getPaymentMethod(FALSE);
+    if ($selected_payment_method === 'cashondelivery') {
+      $pane_form['#access'] = FALSE;
+
+      // We still need to copy from Shipping for Magento.
+      $pane_form['same_as_shipping']['#value'] = self::BILLING_ADDR_CASE_SAME_AS_SHIPPING;
+    }
+
     return $pane_form;
   }
 

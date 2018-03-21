@@ -252,6 +252,16 @@
     margin-top: 0;
   }
 
+  #edit-billing-address {
+    &.cod-enabled {
+      display: none;
+
+      + #edit-checkout-terms {
+        margin-top: 1.375rem;
+      }
+    }
+  }
+
   #edit-checkout-terms {
     margin-top: 3em;
 
