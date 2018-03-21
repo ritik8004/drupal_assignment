@@ -1196,7 +1196,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $cross_sell_markup_mobile = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell mobile-only-block">', '#suffix' => '</div>']);
 
       $cross_sell_processing = \Drupal::requestStack()->getCurrentRequest()->get('skip_crosssell_processing');
-      // If not modal form, only then we process crosssell/upsell.
+      // For modal/mobile crosssell form, not processing the crosssell section.
       if (!$cross_sell_processing) {
         $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup_mobile));
         $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup_desktop));

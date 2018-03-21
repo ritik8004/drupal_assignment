@@ -121,6 +121,7 @@
         var skuId = $wrapper.attr('data-skuid');
         var stockCheckProcessed = 'stock-check-processed';
         if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
+          // For modal view, no need to process/refresh upsell crosssell.
           query_params = query_params.length > 0 ? query_params + '&skip_crosssell_processing=1' : 'skip_crosssell_processing=1';
           $.ajax({
             url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
