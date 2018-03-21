@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_vs_transac.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_vs_transac_install() {
+// Set store id - EN.
+  \Drupal::configFactory()->getEditable('acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['en'])
+    ->save();
+
+  // Translate store id in config.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['ar'])
+    ->save();
+
+  // Save language prefix - EN.
+  \Drupal::configFactory()->getEditable('alshaya_api.settings')
+    ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['en'])
+    ->save();
+
+  // Save language prefix - AR.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
+    ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
+    ->save();
+}
