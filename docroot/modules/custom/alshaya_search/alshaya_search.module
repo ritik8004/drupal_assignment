@@ -7,12 +7,12 @@
 
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\views\ViewExecutable;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
-use Solarium\Core\Query\QueryInterface;
-use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\Core\Url;
+use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
+use Drupal\views\ViewExecutable;
+use Solarium\Core\Query\QueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**

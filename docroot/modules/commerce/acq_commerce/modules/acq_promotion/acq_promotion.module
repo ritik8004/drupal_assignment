@@ -16,7 +16,10 @@ function acq_promotion_acq_sku_clean_synced_data_alter(&$context) {
   $query->addTag('node');
   $query->condition('type', 'acq_promotion');
   $entities = $query->execute();
-  foreach ($entities as $entity) {
-    $context['sandbox']['results'][] = [$entity, 'node'];
+  foreach ($entities as $entity_id) {
+    $context['sandbox']['results'][] = [
+      'type' => 'node',
+      'entity_id' => $entity_id,
+    ];
   }
 }
