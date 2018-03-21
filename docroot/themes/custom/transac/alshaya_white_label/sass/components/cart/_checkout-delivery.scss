@@ -1217,6 +1217,10 @@ html[lang=ar] {
   border-bottom: 1px solid $marine-blue-two;
   margin: 1rem 0;
 
+  @include breakpoint($tablet) {
+    margin: 1rem;
+  }
+
   @include breakpoint($desktop) {
     margin: 2rem 2rem 1rem;
   }
