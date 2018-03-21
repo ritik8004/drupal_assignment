@@ -19,20 +19,9 @@ remote_info=$(drush $remote_alias acsf-tools-list --fields=name,domains)
 remote_db_role=$(echo "$remote_info" | php scripts/get-acsf-info.php $site db_role)
 remote_url=$(echo "$remote_info" | php scripts/get-acsf-info.php $site url)
 
-echo "Remote URL: $remote_url"
-
-remote_l_argument="-l $remote_url"
-
 # Below stuff is used for stage file proxy.
 origin_dir="sites/g/files/$remote_db_role/files/"
 origin="https://$remote_url"
-
-local_archive="../tmp/alshaya_${site}_${env}.sql"
-
-# Create the directory every-time, not heavy call.
-mkdir -p "../tmp"
-
-echo "Local archive: $local_archive"
 
 ROOT=$(git rev-parse --show-toplevel 2> /dev/null)
 path=$(dirname $0)
@@ -43,6 +32,11 @@ l_argument="-l local.alshaya-$site.com"
 # Check if we have an existing archive if we want to reuse existing one.
 if [ $mode = "reuse" ]
 then
+  echo "Remote URL: $remote_url"
+
+  local_archive="../tmp/alshaya_${site}_${env}.sql"
+  echo "Local archive: $local_archive"
+
   if [ ! -f $local_archive ]
   then
     echo "No existing archive found for $env"
@@ -51,14 +45,13 @@ then
   echo "Re-using downloaded database."
 elif [ $mode = "download" ]
 then
-  echo "Downloading latest database from $env"
-  drush $remote_alias $remote_l_argument sql-dump > $local_archive
-elif [ $mode = "download_only" ]
-then
-  echo "Downloading latest database from $env"
-  drush $remote_alias $remote_l_argument sql-dump > $local_archive
-  echo "Download complete, restart script with reuse"
-  exit 0
+  sh "$path/download-db.sh" "$site" "$env"
+
+  if [ ! -f $local_archive ]
+  then
+    echo "Downloading database failed, please check for log messages above."
+    exit 0
+  fi
 else
   echo "Please provide valid argument to download or reuse db."
   exit 0
