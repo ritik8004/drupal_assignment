@@ -1,5 +1,3 @@
-@import "../../alshaya_white_label/sass/components/department/_department.scss";
-
 .c-department {
   margin-top: 1.875rem;
 
@@ -17,6 +15,12 @@
 
   .c-sidebar-first .block:first-child {
     margin-top: 0;
+  }
+
+  .c-promo-block-seo-title {
+    font-family: $hnm-demibold;
+    text-transform: uppercase;
+    color: $hnm-black-two;
   }
 }
 

@@ -1,5 +1,3 @@
-@import "../../alshaya_white_label/sass/components/cart/_checkout-payment.scss";
-
 .user-page.checkout-delivery.checkout-payment {
   .multistep-checkout {
     @include breakpoint($tablet) {
@@ -126,6 +124,15 @@
     &::before {
       background: $white url(../imgs/cards/back-card.png) no-repeat;
       background-size: 100%;
+    }
+
+    @include breakpoint($tablet) {
+      #{$left}: 49%;
+    }
+
+    @include breakpoint($desktop) {
+      top: 43%;
+      #{$left}: 25%;
     }
   }
 }

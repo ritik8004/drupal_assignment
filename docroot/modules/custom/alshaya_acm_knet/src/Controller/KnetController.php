@@ -135,8 +135,7 @@ class KnetController extends ControllerBase {
     $response['user_id'] = $_POST['udf1'];
     $response['customer_id'] = $_POST['udf2'];
     $response['quote_id'] = $_POST['udf3'];
-    $response['email'] = $_POST['udf4'];
-    $state_key = $_POST['udf5'];
+    $state_key = $_POST['udf4'];
 
     $state_data = $this->state()->get($state_key);
 

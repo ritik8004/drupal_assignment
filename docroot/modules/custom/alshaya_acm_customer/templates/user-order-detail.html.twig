@@ -126,6 +126,7 @@
             <div class="dark">{{ order_details.payment_method }}</div>
           </div>
         </td>
+
         <td class="order__delivery-details">
           {% if order_details.type == 'cc' %}
             <div class="label font-small">{{ 'Collection times'|t }}</div>
@@ -143,7 +144,7 @@
                 </div>
               </div>
             </div>
-          {% else %}
+          {% elseif order_details.billing_address %}
             <div class="label font-small">{{ "Billing details"|t }}</div>
             <div>{{ order_details.billing_address }}</div>
           {% endif %}
@@ -153,8 +154,9 @@
             <div class="dark">{{ order_details.delivery_method }}</div>
           </div>
         </td>
+
         <td class="desktop-only">
-          {% if order_details.type == 'cc' %}
+          {% if order_details.type == 'cc' and order_details.billing_address %}
             <div class="label font-small">{{ "Billing details"|t }}</div>
             <div>{{ order_details.billing_address }}</div>
           {% endif %}

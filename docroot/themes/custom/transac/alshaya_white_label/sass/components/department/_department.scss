@@ -25,6 +25,29 @@
       }
     }
   }
+
+  .c-promo-block-seo-text,
+  .c-promo-block-seo-title {
+    @include breakpoint($only-mobile) {
+      @include u-visibility(block);
+    }
+
+    p {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .c-promo-block-seo-title {
+    font-family: $alshaya-bold;
+    text-transform: lowercase;
+    color: $marine-blue;
+  }
+}
+
+.c-promo-block-seo-text,
+.c-promo-block-seo-title {
+  @include u-visibility(none);
 }
 
 .nodetype--department_page {

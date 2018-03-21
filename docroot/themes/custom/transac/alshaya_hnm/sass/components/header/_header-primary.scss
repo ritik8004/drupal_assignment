@@ -1,5 +1,3 @@
-@import '../../alshaya_white_label/sass/components/header/_header-primary.scss';
-
 /*
 	SITE HEADER - BRANDING
 */
@@ -237,6 +235,10 @@ header {
       list-style: none;
       z-index: 4;
       position: static;
+
+      @include breakpoint($only-mobile) {
+        background: none;
+      }
 
       .notification--on & {
         z-index: 3;
@@ -723,7 +725,7 @@ header {
         }
 
         &:hover {
-          background-color: $marine-blue;
+          background: transparent;
 
           a,
           p {

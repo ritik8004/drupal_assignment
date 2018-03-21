@@ -3,4 +3,5 @@ use_secure_response_url: 1
 alias: ''
 knet_language_code: 'ENG'
 knet_currency_code: ''
+knet_udf5_prefix: 'ptlf'
 langcode: en

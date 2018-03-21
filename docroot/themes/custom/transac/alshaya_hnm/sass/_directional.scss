@@ -1,5 +1,3 @@
-@import '../../alshaya_white_label/sass/_directional.scss';
-
 $hnm-bold: if-ltr($hnm-bold, $hnm-arabic-bold);
 $hnm-arabic-bold: if-ltr($hnm-arabic-bold, $hnm-bold);
 $hnm-demibold: if-ltr($hnm-demibold, $hnm-arabic-medium);

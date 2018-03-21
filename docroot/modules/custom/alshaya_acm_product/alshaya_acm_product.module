@@ -896,6 +896,13 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $selected_configs = $form_state->getUserInput()['configurables'];
       }
 
+      // If we selected more than one attribute and we clicked on the root
+      // attribute, then reset all child/leaf attributes.
+      if (count($selected_configs) > 1 && $user_input_configurables['_triggering_element_name'] == 'configurables[' . $root_attribute_code . ']') {
+        $selected_configs = [$root_attribute_code => $selected_configs[$root_attribute_code]];
+        $form_state->setValue('configurables', [$root_attribute_code => $selected_configs[$root_attribute_code]]);
+      }
+
       if (!empty($selected_configs)) {
         // Get all child SKUs possible for the selected root attribute to do a
         // stock check on visible child attributes that belong to the child

@@ -34,6 +34,7 @@ class KnetSettingsForm extends ConfigFormBase {
       ->set('alias', $form_state->getValue('alias'))
       ->set('knet_language_code', $form_state->getValue('knet_language_code'))
       ->set('knet_currency_code', $form_state->getValue('knet_currency_code'))
+      ->set('knet_udf5_prefix', $form_state->getValue('knet_udf5_prefix'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -84,6 +85,13 @@ class KnetSettingsForm extends ConfigFormBase {
       '#title' => $this->t('K-Net Currency code'),
       '#required' => TRUE,
       '#default_value' => $config->get('knet_currency_code'),
+    ];
+
+    $form['knet_udf5_prefix'] = [
+      '#type' => 'textfield',
+      '#description' => $this->t('Prefix for the UDF5.'),
+      '#title' => $this->t('UDF5 prefix'),
+      '#default_value' => $config->get('knet_udf5_prefix'),
     ];
 
     return parent::buildForm($form, $form_state);

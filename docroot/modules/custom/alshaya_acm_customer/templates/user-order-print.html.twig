@@ -14,7 +14,7 @@
 <div class="site--brand">
   {{ site_logo }}
 </div>
-
+{% block headerPreContent %}{% endblock %}
 <div class="barcode--wrapper">
   <div class="inner--wrap">
     <div>
@@ -44,7 +44,10 @@
 </div>
 
 <div class="delivery-details">
-  <span class="icon-ic_infomation"></span> {% trans %}Your order number is <strong>{{ order.orderId }}</strong>{% endtrans %}
+  {% block informationIcon %}
+    <span class="icon-ic_infomation"></span>
+  {% endblock %}
+  {% trans %}Your order number is <strong>{{ order.orderId }}</strong>{% endtrans %}
 </div>
 
 <h2 class="subtitle">{{ "order details"|t }}</h2>
@@ -100,6 +103,7 @@
         {% endif %}
 
       </td>
+
       <td class="order__delivery-details">
         {% if order_details.type == 'cc' %}
           <div class="label font-small">{{ 'Collection times'|t }}</div>
@@ -117,7 +121,7 @@
               </div>
             </div>
           </div>
-        {% else %}
+        {% elseif order_details.billing_address %}
           <div class="label font-small">{{ "Billing details"|t }}</div>
           <div>{{ order_details.billing_address }}</div>
         {% endif %}
@@ -127,8 +131,9 @@
           <div class="dark">{{ order_details.delivery_method }}</div>
         </div>
       </td>
+
       <td class="desktop-only">
-        {% if order_details.type == 'cc' %}
+        {% if order_details.type == 'cc' and order_details.billing_address %}
           <div class="label font-small">{{ "Billing details"|t }}</div>
           <div>{{ order_details.billing_address }}</div>
         {% endif %}
@@ -255,7 +260,7 @@
     </tr>
 
     {% if vat_text %}
-      <tr class="total-row">
+      <tr class="total-row vat-row">
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td> </td>

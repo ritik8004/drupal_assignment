@@ -1,5 +1,3 @@
-@import "../../alshaya_white_label/sass/components/store/_store-finder.scss";
-
 .path--store-finder,
 .nodetype--store {
   .view-header {
@@ -537,6 +535,7 @@
 
   + .ajax-progress-fullscreen {
     background-image: url("../imgs/icons/ic-loader.svg");
+    background-size: 4.5rem;
   }
 }
 
