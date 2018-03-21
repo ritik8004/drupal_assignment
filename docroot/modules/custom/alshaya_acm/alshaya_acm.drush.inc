@@ -4,6 +4,7 @@
  * @file
  * Provides Drush commands for Acquia Commerce Middleware related activities.
  */
+
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Site\Settings;
 
@@ -78,7 +79,7 @@ function drush_alshaya_acm_offline_products_sync() {
   global $_alshaya_acm_products;
   foreach (\Drupal::languageManager()->getLanguages() as $langcode => $language) {
     // We check if the data file exists for this language.
-      if (!file_exists($path . '/data/products_' . $country_code . '_' . $langcode . '.data')) {
+    if (!file_exists($path . '/data/products_' . $country_code . '_' . $langcode . '.data')) {
       continue;
     }
 
@@ -97,7 +98,7 @@ function drush_alshaya_acm_offline_products_sync() {
     }
 
     if (empty($_alshaya_acm_products)) {
-        drush_print(dt('No @language products in @filename', ['@language' => strtolower($language->getName()), '@filename' => $path . '/data/products_' . $country_code . '_' . $langcode . '.data']));
+      drush_print(dt('No @language products in @filename', ['@language' => strtolower($language->getName()), '@filename' => $path . '/data/products_' . $country_code . '_' . $langcode . '.data']));
       continue;
     }
 
@@ -113,7 +114,7 @@ function drush_alshaya_acm_offline_products_sync() {
           '@i' => $i + 1,
           '@total' => count($product_chunks),
           '@language' => strtolower($language->getName()),
-            '@filename' => $path . '/data/products_' . $country_code . '_' . $langcode . '.data',
+          '@filename' => $path . '/data/products_' . $country_code . '_' . $langcode . '.data',
         ]
       ));
 
