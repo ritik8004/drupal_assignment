@@ -5,6 +5,8 @@
  * Install, uninstall, update function for alshaya_vs_transac.
  */
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_install().
  */
