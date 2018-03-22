@@ -123,7 +123,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   public function defaultConfiguration() {
     return [
       'top_level_category' => 0,
-      'follow_category_item' => 0,
+      'follow_category_term' => 0,
     ];
   }
 
@@ -139,10 +139,10 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       '#default_value' => $this->configuration['top_level_category'] ? $this->configuration['top_level_category'] : $defaults['top_level_category'],
     ];
 
-    $form['follow_category_item'] = [
+    $form['follow_category_term'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display second level menu item as per current path.'),
-      '#default_value' => $this->configuration['follow_category_item'] ? $this->configuration['follow_category_item'] : $defaults['follow_category_item'],
+      '#default_value' => $this->configuration['follow_category_term'] ? $this->configuration['follow_category_term'] : $defaults['follow_category_term'],
     ];
 
     return $form;
@@ -163,7 +163,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['top_level_category'] = (int) $form_state->getValue('top_level_category');
-    $this->configuration['follow_category_item'] = (int) $form_state->getValue('follow_category_item');
+    $this->configuration['follow_category_term'] = (int) $form_state->getValue('follow_category_term');
   }
 
   /**
@@ -189,7 +189,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     if ($this->configuration['top_level_category']) {
       $term_data = $this->productCateoryTree->getTopLevelCategory();
     }
-    elseif ($this->configuration['follow_category_item']) {
+    elseif ($this->configuration['follow_category_term']) {
       $parents = taxonomy_term_depth_get_parents($term->id());
       $parent_id = empty($parents) ? $term->id() : end($parents);
       $term_data = $this->productCateoryTree->getCategoryTreeCached($parent_id);
