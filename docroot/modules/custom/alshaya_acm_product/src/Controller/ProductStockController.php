@@ -151,7 +151,7 @@ class ProductStockController extends ControllerBase {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   Entity related to SKU for which we checking the stock.
    *
-   * @return CacheableJsonResponse|JsonResponse
+   * @return \Drupal\Core\Cache\CacheableJsonResponse|\Symfony\Component\HttpFoundation\JsonResponse
    *   Response object returning cart form or out of stock message.
    */
   public function getCartForm($view_mode, EntityInterface $entity) {
