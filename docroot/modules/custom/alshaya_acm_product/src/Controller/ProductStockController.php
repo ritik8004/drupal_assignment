@@ -152,7 +152,7 @@ class ProductStockController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\JsonResponse|\Drupal\Core\Cache\CacheableJsonResponse
    *   Response object returning cart form or out of stock message.
    */
-  public function getCartForm(EntityInterface $entity) {
+  public function getCartForm($view_mode, EntityInterface $entity) {
     if ($entity instanceof Node) {
       $sku = $entity->get('field_skus')->first()->getString();
       $sku_entity = SKU::loadFromSku($sku);
@@ -190,7 +190,7 @@ class ProductStockController extends ControllerBase {
     elseif ($max_quantity = alshaya_acm_get_product_stock($sku_entity)) {
       $build['max_quantity'] = $max_quantity;
 
-      $form = $this->fetchAddCartForm($sku_entity);
+      $form = $this->fetchAddCartForm($sku_entity, $view_mode);
       $rendered_form = $this->renderer->renderRoot($form);
 
       // Get the data from BubbleMetaData.
@@ -245,11 +245,13 @@ class ProductStockController extends ControllerBase {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   Sku Entity for which we building the form.
+   * @param string $view_mode
+   *   View mode of the SKU entity for which the form is being pulled up.
    *
    * @return mixed
    *   Add to cart form for the sku.
    */
-  protected function fetchAddCartForm(SKU $sku_entity) {
+  protected function fetchAddCartForm(SKU $sku_entity, $view_mode) {
     $plugin_definition = $this->pluginManager->pluginFromSKU($sku_entity);
 
     $class = $plugin_definition['class'];
@@ -257,6 +259,13 @@ class ProductStockController extends ControllerBase {
 
     $form['add_to_cart'] = $this->skuFormBuilder->getForm($plugin, $sku_entity);
     $form['add_to_cart']['#weight'] = 50;
+    $form['add_to_cart']['sku_view_mode'] = [
+      '#type' => 'hidden',
+      '#value' => $view_mode,
+      '#attributes' => [
+        'name' => 'sku_view_mode',
+      ],
+    ];
 
     return $form;
   }
