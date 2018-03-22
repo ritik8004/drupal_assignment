@@ -65,6 +65,15 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
   // Determine which brand to install.
   $brand_module = drush_get_option('brand_module', '');
 
+  // Get the current installed profile.
+  $profile = str_replace('alshaya_', '_', \Drupal::service('config.storage')->read('core.extension')['profile']);
+
+  // Try to look for transac and non transac specific module for brand before
+  // brand installing brand module. i.e. alshaya_vs_transac.
+  if (module_load_install($brand_module . $profile)) {
+    $brand_module = $brand_module . $profile;
+  }
+
   if (!empty($brand_module)) {
     if (module_load_install($brand_module)) {
       if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('module'))) {
