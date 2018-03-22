@@ -581,6 +581,12 @@
       if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
         Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
       }
+
+      // Tracking promotion image view inside body field.
+      if ($('.field--name-body').length > 0 && (context === document)) {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.field--name-body'), gtmPageType, 'promotionImpression');
+      }
+
       // Tracking of homepage banner.
       $('.c-content__slider .field--name-field-banner').each(function () {
         $(this).once('js-event').on('click', function () {
@@ -788,6 +794,9 @@
       }
       else if(gtmPageType === 'home page') {
         creative = Drupal.url($(highlight).find('picture img').attr('src'));
+        if (creative) {
+          creative = Drupal.url($(highlight).find('img').attr('src'));
+        }
         position = parseInt($('.slick-track').index($(highlight).parent('c-slider-promo__item'))) + 1;
       }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
