@@ -136,6 +136,8 @@
         var skuId = $wrapper.attr('data-skuid');
         var stockCheckProcessed = 'stock-check-processed';
         if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
+          // For modal view, no need to process/refresh upsell crosssell.
+          query_params = query_params.length > 0 ? query_params + '&skip_crosssell_processing=1' : 'skip_crosssell_processing=1';
           $.ajax({
             url: Drupal.url('get-cart-form/acq_sku/modal/' + skuId) + '?' + query_params,
             type: 'GET',
@@ -170,7 +172,16 @@
 	 * @param element
 	 */
   Drupal.reAttachAddCartAndConfigSizeAjax = function (element) {
-    var postUrl = $(element).find('form').attr('action') + '?ajax_form=1';
+    var postUrl = $(element).find('form').attr('action');
+
+    // If url already contains '?', then append by '&'.
+    if (postUrl.indexOf('?') !== -1) {
+      postUrl = postUrl + '&ajax_form=1';
+    }
+    else {
+      postUrl = postUrl + '?ajax_form=1';
+    }
+
     var editCartElementSettings = {
       callback: 'alshaya_acm_cart_notification_form_submit',
       dialogType: 'ajax',
@@ -265,6 +276,10 @@
       var skuId = skuArticle.attr('data-skuid');
       if (!(skuArticle.hasClass('stock-check-processed')) && (typeof skuId !== 'undefined')) {
         var $wrapper = skuArticle;
+
+        // For mobile crosssell form, we dont need processing.
+        query_params = query_params.length > 0 ? query_params + '&skip_crosssell_processing=1' : 'skip_crosssell_processing=1';
+
         $.ajax({
           url: Drupal.url('get-cart-form/acq_sku/teaser/' + skuId) + '?' + query_params,
           type: 'GET',

@@ -179,3 +179,13 @@
     display: none;
   }
 }
+
+.c-slider-promo__items {
+  .slick-dots {
+    display: none;
+
+    @include breakpoint($tablet) {
+      display: block;
+    }
+  }
+}

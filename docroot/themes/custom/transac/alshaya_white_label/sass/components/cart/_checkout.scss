@@ -1390,11 +1390,9 @@ html[lang=ar] {
   &.alias--cart-checkout-delivery main form .form-actions .form-submit,
   &.alias--cart-checkout-payment main form .form-actions .form-submit {
     @include breakpoint($only-mobile) {
-      position: fixed;
-      bottom: 0;
-      #{$left}: 0;
-      z-index: 5;
-      margin-bottom: 0;
+      @include stickyButton();
+
+      height: 3.5rem;
     }
   }
 }

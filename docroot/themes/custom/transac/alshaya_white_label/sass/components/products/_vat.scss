@@ -2,6 +2,7 @@
 .vat-text-footer {
   font-size: 0.75rem;
   color: $light-greyish;
+  font-weight: normal;
 
   .c-pdp & {
     margin: 0.5rem 0;
@@ -25,5 +26,9 @@
       text-align: $right;
       padding: 1rem 0;
     }
+  }
+
+  .warm--white {
+    background-color: $whisper-light;
   }
 }

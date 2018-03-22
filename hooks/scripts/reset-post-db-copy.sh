@@ -11,14 +11,17 @@ then
   exit
 fi
 
-# Check status once so hook_drush_command_alter is triggered.
+# Check status once so hook_drush8_command_alter is triggered.
 drush8 @$site.$target_env --uri=$uri status
 
-# Clear cache, we want to avoid fatals because of updated services.
+# Clear cache, we want to avoid fatal errors because of updated services.
 drush8 @$site.$target_env --uri=$uri cr
 
 # Enable developer modules, we are going to use this script only on non-prod envs.
 drush8 @$site.$target_env --uri=$uri en -y dblog views_ui features_ui restui
+
+echo "Disabling all search api indexes."
+drush8 @$site.$target_env --uri=$uri search-api-disable-all
 
 # Now clean all data.
 while :
@@ -33,8 +36,11 @@ do
   fi
 done
 
-drush8 @$site.$target_env --uri=$uri clean-synced-data -y
-drush8 @$site.$target_env --uri=$uri sapi-c
+echo "Enable the search api indexes again."
+drush8 @$site.$target_env --uri=$uri search-api-enable-all
+
+echo "Clearing all indexed data."
+drush8 @$site.$target_env --uri=$uri search-api-clear
 
 drush8 @$site.$target_env --uri=$uri sync-commerce-cats
 drush8 @$site.$target_env --uri=$uri sync-commerce-product-options
