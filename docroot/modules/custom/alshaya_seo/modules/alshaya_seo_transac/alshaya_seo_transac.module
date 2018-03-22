@@ -14,10 +14,7 @@ use Drupal\node\NodeInterface;
 function alshaya_seo_transac_preprocess_html(&$variables) {
   // We are doing this here because alshaya_amp executes first and no hook for
   // altering this data available.
-  $is_amp_page = \Drupal::moduleHandler()->moduleExists('amp')
-    && \Drupal::service('router.amp_context')->isAmpRoute() ? TRUE : FALSE;
-
-  if (_alshaya_seo_process_gtm() && !$is_amp_page) {
+  if (_alshaya_seo_process_gtm() && !_alshaya_custom_is_amp_route()) {
     /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $variables['attributes']['gtm-currency'] = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
