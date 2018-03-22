@@ -4,6 +4,7 @@ namespace Drupal\alshaya_main_menu\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
@@ -119,14 +120,56 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+    return [
+      'top_level_category' => 0,
+      'follow_category_item' => 0,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+    $defaults = $this->defaultConfiguration();
+
+    $form['top_level_category'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display only top level category items'),
+      '#default_value' => $this->configuration['top_level_category'] ? $this->configuration['top_level_category'] : $defaults['top_level_category'],
+    ];
+
+    $form['follow_category_item'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display second level menu item as per current path.'),
+      '#default_value' => $this->configuration['follow_category_item'] ? $this->configuration['follow_category_item'] : $defaults['follow_category_item'],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * Form API callback: Processes the menu_levels field element.
+   *
+   * Adjusts the #parents of menu_levels to save its children at the top level.
+   */
+  public static function processMenuLevelParents(&$element, FormStateInterface $form_state, &$complete_form) {
+    array_pop($element['#parents']);
+    return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    $this->configuration['top_level_category'] = (int) $form_state->getValue('top_level_category');
+    $this->configuration['follow_category_item'] = (int) $form_state->getValue('follow_category_item');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function build() {
-    $term_data = $this->productCateoryTree->getCategoryTreeCached();
-
-    // If no data, no need to render the block.
-    if (empty($term_data)) {
-      return [];
-    }
-
     $route_name = $this->routeMatch->getRouteName();
     $term = NULL;
     // If /taxonomy/term/tid page.
@@ -143,6 +186,23 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       }
     }
 
+    if ($this->configuration['top_level_category']) {
+      $term_data = $this->productCateoryTree->getTopLevelCategory();
+    }
+    elseif ($this->configuration['follow_category_item']) {
+      $parents = taxonomy_term_depth_get_parents($term->id());
+      $parent_id = empty($parents) ? $term->id() : end($parents);
+      $term_data = $this->productCateoryTree->getCategoryTreeCached($parent_id);
+    }
+    else {
+      $term_data = $this->productCateoryTree->getCategoryTreeCached();
+    }
+
+    // If no data, no need to render the block.
+    if (empty($term_data)) {
+      return [];
+    }
+
     // If term is of 'acq_product_category' vocabulary.
     if (is_object($term) && $term->getVocabularyId() == 'acq_product_category') {
       // Get all parents of the given term.
@@ -150,17 +210,26 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
 
       if (!empty($parents)) {
         /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
-        $root_parent_term = end($parents);
-        if (isset($term_data[$root_parent_term->id()])) {
-          $term_data[$root_parent_term->id()]['class'] = 'active';
+        foreach ($parents as $parent) {
+          if (isset($term_data[$parent->id()])) {
+            $term_data[$parent->id()]['class'] = 'active';
+          }
         }
       }
     }
 
-    return [
-      '#theme' => 'alshaya_main_menu_level1',
-      '#term_tree' => $term_data,
-    ];
+    if ($this->configuration['top_level_category']) {
+      return [
+        '#theme' => 'alshaya_main_menu_top_level',
+        '#term_tree' => $term_data,
+      ];
+    }
+    else {
+      return [
+        '#theme' => 'alshaya_main_menu_level1',
+        '#term_tree' => $term_data,
+      ];
+    }
   }
 
   /**

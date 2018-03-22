@@ -71,12 +71,12 @@ class ProductCategoryTree {
   }
 
   /**
-   * Get the term tree for 'product_category' vocabulary from cache or fresh.
+   * Get top level category items.
    *
    * @return array
-   *   Processed term data from cache if available or fresh.
+   *   Processed term data.
    */
-  public function getCategoryTreeCached() {
+  public function getTopLevelCategory() {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $cid = self::CACHE_ID . '_' . $langcode;
@@ -85,11 +85,40 @@ class ProductCategoryTree {
       return $term_data->data;
     }
 
-    $term_data = $this->getCategoryTree($langcode);
+    /* @var \Drupal\taxonomy\TermInterface[] $terms */
+    $terms = $this->termStorage->loadTree(self::VOCABULARY_ID, 0, 1, TRUE);
+    $term_data = $this->getCategoryTermData($langcode, $terms, FALSE, FALSE);
+
+    $cache_tags = [
+      self::CACHE_TAG,
+      self::VOCABULARY_ID,
+    ];
+
+    $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
+    return $term_data;
+  }
+
+  /**
+   * Get the term tree for 'product_category' vocabulary from cache or fresh.
+   *
+   * @return array
+   *   Processed term data from cache if available or fresh.
+   */
+  public function getCategoryTreeCached($parent_id = 0) {
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    $cid = self::CACHE_ID . '_' . $langcode . '_' . $parent_id;
+
+    if ($term_data = $this->cache->get($cid)) {
+      return $term_data->data;
+    }
+
+    $term_data = $this->getCategoryTree($langcode, $parent_id);
 
     $cache_tags = [
       self::CACHE_TAG,
       'node_type:department_page',
+      self::VOCABULARY_ID . '_' . $langcode . '_' . $parent_id,
     ];
 
     $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
@@ -109,15 +138,32 @@ class ProductCategoryTree {
    *   Processed term data.
    */
   public function getCategoryTree($langcode, $parent_tid = 0) {
-    $data = [];
-
     /* @var \Drupal\taxonomy\TermInterface[] $terms */
     $terms = $this->termStorage->loadTree(self::VOCABULARY_ID, $parent_tid, 1, TRUE);
 
     if (empty($terms)) {
       return [];
     }
+    return $this->getCategoryTermData($langcode, $terms);
+  }
 
+  /**
+   * Create terms array of menu items with highlight images and child.
+   *
+   * @param string $langcode
+   *   Language code in which we need term to be displayed.
+   * @param array $terms
+   *   The array of terms to load.
+   * @param bool $highlight_image
+   *   True if include highlight image else false.
+   * @param bool $child
+   *   True if include child else false.
+   *
+   * @return array
+   *   Processed term data.
+   */
+  public function getCategoryTermData($langcode, array $terms, $highlight_image = TRUE, $child = TRUE) {
+    $data = [];
     foreach ($terms as $term) {
       // We don't show the term in menu if translation not available.
       if (!$term->hasTranslation($langcode)) {
@@ -148,10 +194,14 @@ class ProductCategoryTree {
         'active_class' => '',
       ];
 
-      $data[$term->id()]['highlight_image'] = $this->getHighlightImage($term);
-      $data[$term->id()]['child'] = $this->getCategoryTree($langcode, $term->id());
-    }
+      if ($highlight_image) {
+        $data[$term->id()]['highlight_image'] = $this->getHighlightImage($term);
+      }
 
+      if ($child) {
+        $data[$term->id()]['child'] = $this->getCategoryTree($langcode, $term->id());
+      }
+    }
     return $data;
   }
 
