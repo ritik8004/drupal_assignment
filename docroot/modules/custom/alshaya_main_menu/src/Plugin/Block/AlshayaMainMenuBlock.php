@@ -124,6 +124,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     return [
       'top_level_category' => 0,
       'follow_category_term' => 0,
+      'default_parent' => NULL,
     ];
   }
 
@@ -133,27 +134,61 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   public function blockForm($form, FormStateInterface $form_state) {
     $defaults = $this->defaultConfiguration();
 
-    $form['top_level_category'] = [
+    $form['menu_config'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Menu Config'),
+      // Open if not set to defaults.
+      '#open' => $defaults['top_level_category'] !== $this->configuration['top_level_category'] || $defaults['follow_category_term'] !== $this->configuration['follow_category_term'],
+      '#process' => [[get_class(), 'processMenuConfigParents']],
+    ];
+
+    $form['menu_config']['top_level_category'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display only top level category items'),
       '#default_value' => $this->configuration['top_level_category'] ? $this->configuration['top_level_category'] : $defaults['top_level_category'],
     ];
 
-    $form['follow_category_term'] = [
+    $form['menu_config']['follow_category_term'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display second level menu item as per current path.'),
       '#default_value' => $this->configuration['follow_category_term'] ? $this->configuration['follow_category_term'] : $defaults['follow_category_term'],
+    ];
+
+    $form['menu_config']['default_parent'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Default Parent.'),
+      '#options' => $this->getSelectListTopCategoryTerms(),
+      '#default_value' => empty($this->configuration['default_parent']) ?: $this->configuration['default_parent'],
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[follow_category_term]"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     return $form;
   }
 
   /**
-   * Form API callback: Processes the menu_levels field element.
+   * Create option array of top level category for select list.
    *
-   * Adjusts the #parents of menu_levels to save its children at the top level.
+   * @return array
+   *   Return array of top level category terms.
    */
-  public static function processMenuLevelParents(&$element, FormStateInterface $form_state, &$complete_form) {
+  private function getSelectListTopCategoryTerms() {
+    $options = ['' => $this->t('-Select-')];
+    $terms = $this->productCateoryTree->getTopLevelCategory();
+
+    foreach ($terms as $term => $term_data) {
+      $options[$term] = $term_data['label'];
+    }
+    return $options;
+  }
+
+  /**
+   * Adjusts the #parents of menu_config to save its children at the top level.
+   */
+  public static function processMenuConfigParents(&$element, FormStateInterface $form_state, &$complete_form) {
     array_pop($element['#parents']);
     return $element;
   }
@@ -164,6 +199,9 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['top_level_category'] = (int) $form_state->getValue('top_level_category');
     $this->configuration['follow_category_term'] = (int) $form_state->getValue('follow_category_term');
+    if ($form_state->getValue('default_parent')) {
+      $this->configuration['default_parent'] = (int) $form_state->getValue('default_parent');
+    }
   }
 
   /**
@@ -189,9 +227,15 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     if ($this->configuration['top_level_category']) {
       $term_data = $this->productCateoryTree->getTopLevelCategory();
     }
-    elseif ($this->configuration['follow_category_term']) {
-      $parents = taxonomy_term_depth_get_parents($term->id());
-      $parent_id = empty($parents) ? $term->id() : end($parents);
+    elseif ($this->configuration['follow_category_term'] && !empty($this->configuration['default_parent'])) {
+      // If term is of 'acq_product_category' vocabulary.
+      if (is_object($term) && $term->getVocabularyId() == 'acq_product_category') {
+        $parents = taxonomy_term_depth_get_parents($term->id());
+        $parent_id = empty($parents) ? $term->id() : end($parents);
+      }
+      else {
+        $parent_id = $this->configuration['default_parent'];
+      }
       $term_data = $this->productCateoryTree->getCategoryTreeCached($parent_id);
     }
     else {
