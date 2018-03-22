@@ -7,7 +7,7 @@ function alshaya_get_conductor_host_data() {
   return [
     // Mothercare KW.
     'mc_v2' => [
-      'url' => 'https://canary.us-east-1.dev.acm.acquia.io/',
+      'url' => 'https://davylamp.us-east-1.dev.acm.acquia.io/',
       'hmac_id' => '2d045a6b604c4f9b8493ffcff4733907',
       'hmac_secret' => 'MzMwNzJlYzYtYWMzYy00',
     ],
