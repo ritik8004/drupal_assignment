@@ -67,7 +67,7 @@ function alshaya_get_env_keys($site, $env) {
       // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
       'default' => [
         'magento' => 'mc_dev',
-        'conductor' => 'mc_dev'
+        'conductor' => 'mc_v2'
       ],
     ],
     // Mothercare SA.
