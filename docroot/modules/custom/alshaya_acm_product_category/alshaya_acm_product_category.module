@@ -47,6 +47,7 @@ function alshaya_acm_product_category_block_access(Block $block, $operation, Acc
     /* @var \Drupal\taxonomy\Entity\Term $term */
     if ($term = \Drupal::routeMatch()->getParameter('taxonomy_term')) {
       $mobile_detect = new Mobile_Detect();
+      // Deny if mobile device and not enabled for mobile.
       return AccessResult::forbiddenIf($mobile_detect->isMobile()
         && !_alshaya_acm_product_category_plp_banner_for_mobile($term));
     }
@@ -67,9 +68,8 @@ function alshaya_acm_product_category_block_access(Block $block, $operation, Acc
  */
 function _alshaya_acm_product_category_plp_banner_for_mobile(Term $term) {
   if ($mobile_banner = $term->get('field_promo_banner_for_mobile')) {
-    $value = $mobile_banner->getValue()[0];
-    return (bool) $value['value'];
+    return $mobile_banner->getValue() ? (bool) $mobile_banner->getValue()[0]['value'] : TRUE;
   }
 
-  return TRUE;
+  return FALSE;
 }
