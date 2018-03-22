@@ -136,6 +136,21 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div class="cnc-collect-from">' . $this->t('Where do you want to collect from?') . '</div>',
     ];
 
+    // Near Me.
+    $pane_form['store_finder']['near_me'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Near me'),
+      '#prefix' => '<div>',
+      '#url' => Url::fromRoute('<none>', [], [
+        'fragment' => 'edit-near-me',
+        'attributes' => [
+          'class' => [
+            'cc-near-me',
+          ],
+        ],
+      ]),
+    ];
+
     $pane_form['store_finder']['store_location'] = [
       '#type' => 'textfield',
       '#title' => $this->t('find your closest collection point'),
@@ -152,6 +167,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $pane_form['store_finder']['toggle_map_view'] = [
       '#markup' => '<a href="#" class="stores-map-view">' . $this->t('Map view') . '</a>',
+      '#suffix' => '</div>',
     ];
 
     $pane_form['store_finder']['list_view'] = [
