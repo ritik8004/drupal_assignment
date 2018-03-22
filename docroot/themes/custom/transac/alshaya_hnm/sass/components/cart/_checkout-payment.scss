@@ -30,9 +30,15 @@
   }
 
   .fieldset-wrapper {
-    padding: 1.375rem;
-    color: $hnm-black-two;
-    font-size: 0.875rem;
+    @include breakpoint($tablet) {
+      padding: 1.375rem;
+      color: $hnm-black-two;
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 0;
+    }
   }
 
   .js-form-type-radio {
