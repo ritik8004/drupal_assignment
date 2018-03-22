@@ -629,11 +629,11 @@
 }
 
 .language--switcher.only-first-time {
-  position: fixed;
-  bottom: 0;
+  @include stickyButton();
+
+  border-color: $white-five;
   width: 100%;
   background-color: $marine-blue-two;
-  z-index: 9;
 
   .links {
     @include breakpoint($only-tablet) {
@@ -642,7 +642,7 @@
   }
 
   ul {
-    height: 2.188rem;
+    height: 2.5rem;
 
     li {
       padding: 0.375rem;

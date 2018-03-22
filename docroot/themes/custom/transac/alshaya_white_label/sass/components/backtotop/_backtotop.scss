@@ -37,3 +37,14 @@
   width: 4.375rem;
   line-height: 120px;
 }
+
+.language-switcher-enabled {
+  #backtotop {
+    &.backtotop-nofooter,
+    &.backtotop-withfooter {
+      @include breakpoint($only-mobile) {
+        bottom: 3.25rem;
+      }
+    }
+  }
+}

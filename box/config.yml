@@ -147,6 +147,10 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-bbwae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
   - servername: "local.alshaya-vskw.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
@@ -156,10 +160,6 @@ apache_vhosts:
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
   - servername: "local.alshaya-bbme.com"
-    documentroot: "{{ drupal_core_path }}"
-    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
-
-  - servername: "local.alshaya-bbwuae.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
@@ -192,6 +192,10 @@ mysql_databases:
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
+  - name: drupal_alshaya_bbwae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
   - name: drupal_alshaya_vskw
     encoding: utf8mb4
     collation: utf8mb4_general_ci
@@ -201,10 +205,6 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_bbme
-    encoding: utf8mb4
-    collation: utf8mb4_general_ci
-
-  - name: drupal_alshaya_bbwuae
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
