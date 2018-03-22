@@ -560,7 +560,9 @@ class AlshayaApiWrapper {
    *   The Form array from API response OR empty array.
    */
   public function getCustomerAddressForm() {
-    $endpoint = 'attributeMetadata/customerAddress';
+    $country_code = strtoupper(_alshaya_custom_get_site_level_country_code());
+    $endpoint = 'deliverymatrix/address-structure/country/' . $country_code;
+
     $response = $this->invokeApi($endpoint, [], 'GET');
 
     if ($response && is_string($response)) {

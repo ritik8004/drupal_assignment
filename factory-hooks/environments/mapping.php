@@ -136,8 +136,15 @@ function alshaya_get_env_keys($site, $env) {
     // H&M SA.
     'hmsa' => [
       'default' => [
-        'magento' => 'hmsa_dev',
+        'magento' => 'hm_qa',
         'conductor' => 'hmsa_dev',
+      ],
+    ],
+    // H&M AE.
+    'hmae' => [
+      'default' => [
+        'magento' => 'hm_qa',
+        'conductor' => 'hmae_test',
       ],
     ],
   ];

@@ -20,3 +20,6 @@ alshaya_acm_knet.settings:
     langcode:
       type: string
       label: 'Language code'
+    knet_udf5_prefix:
+      type: string
+      label: 'UDF5 prefix'

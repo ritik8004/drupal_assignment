@@ -1,5 +1,3 @@
-@import "../../alshaya_white_label/sass/components/cart/_checkout-delivery.scss";
-
 .page-standard.user-page.checkout-delivery {
   margin: 0.5rem auto 1.2rem;
 
@@ -9,7 +7,6 @@
 
   &.l-two--sf {
     @include breakpoint($upto-tablet) {
-      max-width: 19rem;
       padding-top: 0;
     }
   }
@@ -369,6 +366,14 @@
         @include breakpoint($tablet) {
           padding: 0.9375rem 1.375rem;
         }
+
+        &::before {
+          top: 0.5625rem;
+
+          @include breakpoint($only-mobile) {
+            top: 0.9375rem;
+          }
+        }
       }
 
       @include icon(radio-empty, before) {
@@ -616,4 +621,10 @@
       }
     }
   }
+}
+
+.cnc-collect-from {
+  color: $black;
+  text-transform: uppercase;
+  border-bottom: 1px solid $black;
 }

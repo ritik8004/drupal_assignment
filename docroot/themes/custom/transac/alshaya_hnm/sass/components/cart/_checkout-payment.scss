@@ -1,5 +1,3 @@
-@import "../../alshaya_white_label/sass/components/cart/_checkout-payment.scss";
-
 .user-page.checkout-delivery.checkout-payment {
   .multistep-checkout {
     @include breakpoint($tablet) {
@@ -32,9 +30,15 @@
   }
 
   .fieldset-wrapper {
-    padding: 1.375rem;
-    color: $hnm-black-two;
-    font-size: 0.875rem;
+    @include breakpoint($tablet) {
+      padding: 1.375rem;
+      color: $hnm-black-two;
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 0;
+    }
   }
 
   .js-form-type-radio {
@@ -126,6 +130,15 @@
     &::before {
       background: $white url(../imgs/cards/back-card.png) no-repeat;
       background-size: 100%;
+    }
+
+    @include breakpoint($tablet) {
+      #{$left}: 49%;
+    }
+
+    @include breakpoint($desktop) {
+      top: 43%;
+      #{$left}: 25%;
     }
   }
 }

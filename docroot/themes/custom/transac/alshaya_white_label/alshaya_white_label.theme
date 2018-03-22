@@ -78,7 +78,8 @@ function alshaya_white_label_preprocess_html(&$variables) {
  */
 function alshaya_white_label_preprocess_page(&$variables) {
   // Check if page is panel pages.
-  $route_options = \Drupal::routeMatch()->getRouteObject()->getOptions();
+  $routematch = \Drupal::routeMatch();
+  $route_options = $routematch->getRouteObject()->getOptions();
   if (isset($route_options['parameters']['page_manager_page'])) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('page-panel');
   }
@@ -86,7 +87,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('page-standard');
   }
 
-  if (\Drupal::routeMatch()->getRouteName() === "acq_customer.orders" || \Drupal::routeMatch()->getRouteName() === 'acq_cart.cart') {
+  if ($routematch->getRouteName() === "acq_customer.orders" || $routematch->getRouteName() === 'acq_cart.cart') {
     $variables['#attached']['library'][] = 'alshaya_white_label/convert_to_select2';
   }
 
@@ -105,17 +106,35 @@ function alshaya_white_label_preprocess_page(&$variables) {
     '#markup' => \Drupal::config('alshaya_master.settings')->get('js_disable_message'),
   ];
 
-  $routmatch = \Drupal::routeMatch();
   // Attach the plp search js library to PLP page.
-  if ($routmatch->getRouteName() == 'entity.taxonomy_term.canonical') {
-    $term = $routmatch->getParameter('taxonomy_term');
+  if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $routematch->getParameter('taxonomy_term');
     if ($term->bundle() == 'acq_product_category') {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+
+      // Add term description in variables to be printed in page--plp.
+      $description = $term->getDescription();
+      if (isset($description)) {
+        $variables['category_term_name'] = $term->getName();
+        $variables['category_term_description'] = $description;
+      }
+    }
+  }
+
+  if ($node_bundle == 'department_page') {
+    $term_id = $variables['node']->get('field_product_category')->first()->target_id;
+    // Load the term object.
+    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term_id);
+    // Add term description in variables to be printed in page--department.
+    $description = $term->getDescription();
+    if (isset($description)) {
+      $variables['category_term_name'] = $term->getName();
+      $variables['category_term_description'] = $description;
     }
   }
 
   // Attach the plp search js library to Search page.
-  if ($routmatch->getRouteName() == 'view.search.page') {
+  if ($routematch->getRouteName() == 'view.search.page') {
     $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
   }
 

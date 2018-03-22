@@ -1,5 +1,3 @@
-@import '../../alshaya_white_label/sass/components/header/_header-secondary.scss';
-
 .c-menu-secondary {
   background: $white-five;
 
@@ -256,6 +254,18 @@ html[lang='ar'] {
   li.menu--one__list-item ul.menu--two__list {
     @include breakpoint($desktop) {
       transition: all ease 0s;
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .my-account-nav {
+    li {
+      a {
+        &::before {
+          content: unset;
+        }
+      }
     }
   }
 }
