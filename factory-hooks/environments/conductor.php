@@ -10,6 +10,7 @@ function alshaya_get_conductor_host_data() {
       'url' => 'https://davylamp.us-east-1.dev.acm.acquia.io/',
       'hmac_id' => '2d045a6b604c4f9b8493ffcff4733907',
       'hmac_secret' => 'MzMwNzJlYzYtYWMzYy00',
+      'api_version' => 'v2',
     ],
     'mc_dev' => [
       'url' => 'https://alshaya-mckw-dev.eu-west-1.prod.acm.acquia.io/',
