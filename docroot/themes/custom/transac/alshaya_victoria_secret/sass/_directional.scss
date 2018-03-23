@@ -1,0 +1,4 @@
+$vs-bold: if-ltr($vs-bold, $vs-arabic-bold);
+$vs-arabic-bold: if-ltr($vs-arabic-bold, $vs-bold);
+$vs-regular: if-ltr($vs-regular, $vs-arabic-regular);
+$vs-arabic-regular: if-ltr($vs-arabic-regular, $vs-regular);
