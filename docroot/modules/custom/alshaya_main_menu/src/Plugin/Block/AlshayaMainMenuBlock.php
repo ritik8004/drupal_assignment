@@ -208,7 +208,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build() {
-    $term = $this->getTermFromRoute();
+    $term = $this->productCateoryTree->getTermFromRoute();
 
     // If the block is configured to display only top level terms.
     if ($this->configuration['top_level_category']) {
@@ -218,7 +218,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     // second level child terms.
     elseif ($this->configuration['follow_category_term'] && !empty($this->configuration['default_parent'])) {
       // If term is of 'acq_product_category' vocabulary.
-      if (is_object($term) && $parents = $this->getParentsFromTerm($term)) {
+      if (is_object($term) && $parents = $this->productCateoryTree->getParentsFromTerm($term)) {
         // Get the top level parent id if parent exists.
         $parent_id = empty($parents) ? $term->id() : end(array_keys($parents));
       }
@@ -240,13 +240,15 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     }
 
     // Get all parents of the given term.
-    $parents = $this->getParentsFromTerm($term);
+    if (is_object($term)) {
+      $parents = $this->productCateoryTree->getParentsFromTerm($term);
 
-    if (!empty($parents)) {
-      /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
-      foreach ($parents as $parent) {
-        if (isset($term_data[$parent->id()])) {
-          $term_data[$parent->id()]['class'] = 'active';
+      if (!empty($parents)) {
+        /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
+        foreach ($parents as $parent) {
+          if (isset($term_data[$parent->id()])) {
+            $term_data[$parent->id()]['class'] = 'active';
+          }
         }
       }
     }
@@ -264,50 +266,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
         '#term_tree' => $term_data,
       ];
     }
-  }
-
-  /**
-   * Get the term object from current route.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface|mixed|null
-   *   Return the taxonomy term object if found else NULL.
-   */
-  public function getTermFromRoute() {
-    $route_name = $this->routeMatch->getRouteName();
-    $term = NULL;
-    // If /taxonomy/term/tid page.
-    if ($route_name == 'entity.taxonomy_term.canonical') {
-      /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
-      $term = $this->routeMatch->getParameter('taxonomy_term');
-    }
-    // If it's a department page.
-    elseif ($route_name == 'entity.node.canonical') {
-      $node = $this->routeMatch->getParameter('node');
-      if ($node->bundle() == 'department_page') {
-        $terms = $node->get('field_product_category')->getValue();
-        $term = $this->termStorage->load($terms[0]['target_id']);
-      }
-    }
-    return $term;
-  }
-
-  /**
-   * Get all the parents from given term object.
-   *
-   * @param object $term
-   *   The term object.
-   *
-   * @return array|\Drupal\taxonomy\TermInterface[]
-   *   Returns the array of all parents.
-   */
-  public function getParentsFromTerm($term) {
-    $parents = [];
-    // If term is of 'acq_product_category' vocabulary.
-    if (is_object($term) && $term->getVocabularyId() == 'acq_product_category') {
-      // Get all parents of the given term.
-      $parents = $this->termStorage->loadAllParents($term->id());
-    }
-    return $parents;
   }
 
   /**

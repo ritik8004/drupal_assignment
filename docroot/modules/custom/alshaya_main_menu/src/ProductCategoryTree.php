@@ -9,6 +9,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Class ProductCategoryTree.
@@ -52,6 +53,13 @@ class ProductCategoryTree {
   protected $cache;
 
   /**
+   * Route match service.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -60,14 +68,18 @@ class ProductCategoryTree {
    *   Language manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for alshaya.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   Route match service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LanguageManagerInterface $language_manager,
-                              CacheBackendInterface $cache) {
+                              CacheBackendInterface $cache,
+                              RouteMatchInterface $route_match) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->cache = $cache;
+    $this->routeMatch = $route_match;
   }
 
   /**
@@ -255,6 +267,56 @@ class ProductCategoryTree {
     }
 
     return $highlight_images;
+  }
+
+  /**
+   * Get the term object from current route.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|mixed|null
+   *   Return the taxonomy term object if found else NULL.
+   */
+  public function getTermFromRoute() {
+    $route_name = $this->routeMatch->getRouteName();
+    $term = NULL;
+    // If /taxonomy/term/tid page.
+    if ($route_name == 'entity.taxonomy_term.canonical') {
+      /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
+      $term = $this->routeMatch->getParameter('taxonomy_term');
+    }
+    // If it's a department page.
+    elseif ($route_name == 'entity.node.canonical') {
+      $node = $this->routeMatch->getParameter('node');
+      if ($node->bundle() == 'department_page') {
+        $terms = $node->get('field_product_category')->getValue();
+        $term = $this->termStorage->load($terms[0]['target_id']);
+      }
+    }
+
+    // If term is of 'acq_product_category' vocabulary.
+    if (is_object($term) && $term->getVocabularyId() == self::VOCABULARY_ID) {
+      return $term;
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get all the parents from given term object.
+   *
+   * @param object $term
+   *   The term object.
+   *
+   * @return array|\Drupal\taxonomy\TermInterface[]
+   *   Returns the array of all parents.
+   */
+  public function getParentsFromTerm($term) {
+    $parents = [];
+    // If term is of 'acq_product_category' vocabulary.
+    if (is_object($term) && $term->getVocabularyId() == self::VOCABULARY_ID) {
+      // Get all parents of the given term.
+      $parents = $this->termStorage->loadAllParents($term->id());
+    }
+    return $parents;
   }
 
 }
