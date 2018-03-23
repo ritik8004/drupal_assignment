@@ -2,7 +2,8 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
-use Drupal\Core\Config\ConfigFactory;
+use Drupal\acq_commerce\I18nHelper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Http\ClientFactory as DrupalClientFactory;
 use Acquia\Hmac\Guzzle\HmacAuthMiddleware;
 use Acquia\Hmac\Key;
@@ -27,22 +28,32 @@ final class ClientFactory {
   /**
    * Drupal Config Factory.
    *
-   * @var \Drupal\Core\Config\ConfigFactory
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   private $configFactory;
+
+  /**
+   * I18nHelper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
 
   /**
    * Constructor.
    *
    * @param \Drupal\Core\Http\ClientFactory $clientFactory
    *   ClientFactory object.
-   * @param \Drupal\Core\Config\ConfigFactory $configFactory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   ConfigFactory object.
+   * @param \Drupal\acq_commerce\I18nHelper $i18nHelper
+   *   I18nHelper object.
    */
-  public function __construct(DrupalClientFactory $clientFactory, ConfigFactory $configFactory) {
+  public function __construct(DrupalClientFactory $clientFactory, ConfigFactoryInterface $configFactory, I18nHelper $i18nHelper) {
 
     $this->clientFactory = $clientFactory;
     $this->configFactory = $configFactory;
+    $this->i18nHelper = $i18nHelper;
   }
 
   /**
@@ -110,7 +121,7 @@ final class ClientFactory {
    *
    * @throws \InvalidArgumentException
    */
-  public function createClient() {
+  public function createClient($acm_uuid = "") {
 
     $config = $this->configFactory->get('acq_commerce.conductor');
     if (!strlen($config->get('url'))) {
@@ -124,11 +135,18 @@ final class ClientFactory {
     $stack = HandlerStack::create();
     $stack->push($middleware);
 
+    if (!$acm_uuid) {
+      $acm_uuid = $this->i18nHelper->getStoreIdFromLangcode();
+    }
+
     $clientConfig = [
       'base_uri' => $config->get('url'),
       'timeout'  => (int) $config->get('timeout'),
       'verify'   => (bool) $config->get('verify_ssl'),
       'handler'  => $stack,
+      'headers' => [
+        'X-ACM-UUID' => $acm_uuid,
+      ],
     ];
 
     return $this->clientFactory->fromOptions($clientConfig);

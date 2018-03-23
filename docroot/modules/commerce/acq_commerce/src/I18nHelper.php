@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_commerce;
 
+use CommerceGuys\Intl\Formatter\NumberFormatter;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
@@ -11,11 +12,11 @@ use Drupal\Core\Language\LanguageManagerInterface;
 class I18nHelper {
 
   /**
-   * Stores the alshaya_api settings config array.
+   * Config factory.
    *
-   * @var array
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $config;
+  protected $configFactory;
 
   /**
    * The language manager.
@@ -74,7 +75,10 @@ class I18nHelper {
    * @return string|null
    *   Store id if available as string or null.
    */
-  public function getStoreIdFromLangcode($langcode) {
+  public function getStoreIdFromLangcode($langcode = '') {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
     $mapping = $this->getStoreLanguageMapping();
     return !empty($mapping[$langcode]) ? $mapping[$langcode] : NULL;
   }
@@ -97,6 +101,28 @@ class I18nHelper {
     }
 
     return !empty($mapping[$store_id]) ? $mapping[$store_id] : NULL;
+  }
+
+  /**
+   * Helper function to format price string.
+   *
+   * @param string $price
+   *   Price vaue we want to format.
+   *
+   * @return string
+   *   Formatted price string.
+   */
+  public function formatPrice($price) {
+    // Fetch the config.
+    $config = $this->configFactory->get('acq_commerce.currency');
+
+    // Get currency with the correct locale.
+    $locale = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $currency = \Drupal::service('repository.currency')->get($config->get('currency_code'), $locale, 'en');
+    $numberFormat = \Drupal::service('repository.number_format')->get($locale);
+    $currencyFormatter = new NumberFormatter($numberFormat, NumberFormatter::CURRENCY);
+
+    return $currencyFormatter->formatCurrency($price, $currency);
   }
 
 }

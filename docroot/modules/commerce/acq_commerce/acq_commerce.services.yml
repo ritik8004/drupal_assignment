@@ -1,7 +1,7 @@
 services:
   acq_commerce.client_factory:
     class: Drupal\acq_commerce\Conductor\ClientFactory
-    arguments: ['@http_client_factory', '@config.factory']
+    arguments: ['@http_client_factory', '@config.factory', '@acq_commerce.i18n_helper']
 
   acq_commerce.api:
     class: Drupal\acq_commerce\Conductor\APIWrapper
