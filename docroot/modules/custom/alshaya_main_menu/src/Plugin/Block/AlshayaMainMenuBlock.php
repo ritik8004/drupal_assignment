@@ -224,20 +224,27 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       }
     }
 
+    // If the block is configured to display only top level terms.
     if ($this->configuration['top_level_category']) {
       $term_data = $this->productCateoryTree->getTopLevelCategory();
     }
+    // Get the term id from the current path, and display only the related
+    // second level child terms.
     elseif ($this->configuration['follow_category_term'] && !empty($this->configuration['default_parent'])) {
       // If term is of 'acq_product_category' vocabulary.
       if (is_object($term) && $term->getVocabularyId() == 'acq_product_category') {
         $parents = taxonomy_term_depth_get_parents($term->id());
+        // Get the top level parent id if parent exists.
         $parent_id = empty($parents) ? $term->id() : end($parents);
       }
+      // Set the default parent term to display menu on other pages.
       else {
         $parent_id = $this->configuration['default_parent'];
       }
+      // Child terms of given parent term id.
       $term_data = $this->productCateoryTree->getCategoryTreeCached($parent_id);
     }
+    // Default category terms.
     else {
       $term_data = $this->productCateoryTree->getCategoryTreeCached();
     }
@@ -262,6 +269,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       }
     }
 
+    // Use different template for top level menu item.
     if ($this->configuration['top_level_category']) {
       return [
         '#theme' => 'alshaya_main_menu_top_level',
