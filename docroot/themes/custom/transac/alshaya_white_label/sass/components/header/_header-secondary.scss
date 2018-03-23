@@ -342,23 +342,23 @@
 
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 6.875rem;
+    margin-top: 3.8125rem;
 
     html[lang=ar] & {
-      margin-top: 6.9375rem;
+      margin-top: 4.0625rem;
     }
 
     &.logged-in.toolbar-vertical {
-      margin-top: 10.125rem;
+      margin-top: 6.25rem;
       padding-top: 0 !important;
 
-      html[lang=ar] {
-        margin-top: 9.375rem;
+      html[lang=ar] & {
+        margin-top: 6.5rem;
       }
     }
 
     &.logged-in.toolbar-vertical .branding__menu {
-      top: 3.8125rem;
+      top: 2.4375rem;
     }
   }
 
