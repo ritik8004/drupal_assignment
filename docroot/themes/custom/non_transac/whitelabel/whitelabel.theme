@@ -364,16 +364,19 @@ function whitelabel_preprocess_form_element(array &$variables) {
   }
 
   // Remove generic input if form elements hidden.
-  $classes = $variables['element']['#attributes']['class'];
-  if (isset($classes)) {
-    foreach ($classes as $class) {
-      if (strpos($class, 'hidden') !== FALSE) {
-        $variables['is_default_form'] = TRUE;
+  if (!empty($variables['element']['#attributes'])) {
+    $classes = $variables['element']['#attributes']['class'];
+    if (isset($classes)) {
+      foreach ($classes as $class) {
+        if (strpos($class, 'hidden') !== FALSE) {
+          $variables['is_default_form'] = TRUE;
+        }
       }
     }
   }
+
   // Remove generic input styles on the following form elements.
-  if ($variables['element']['#attributes']['id'] === 'edit-geolocation-geocoder-google-places-api') {
+  if (!empty($variables['element']['#attributes']['id']) && $variables['element']['#attributes']['id'] === 'edit-geolocation-geocoder-google-places-api') {
     $variables['is_default_form'] = TRUE;
   }
 }
