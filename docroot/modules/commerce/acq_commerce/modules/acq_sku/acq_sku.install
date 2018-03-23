@@ -14,7 +14,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Configure view mode for product teaser & SKU entity teaser.
  */
-function acq_sku_update_8006() {
+function acq_sku_update_8005() {
   // Re-install acq product teaser view mode to use sku teaser view mode.
   $install_configs = [
     'core.entity_view_display.node.acq_product.teaser',
