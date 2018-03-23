@@ -220,7 +220,8 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       // If term is of 'acq_product_category' vocabulary.
       if (is_object($term) && $parents = $this->productCateoryTree->getParentsFromTerm($term)) {
         // Get the top level parent id if parent exists.
-        $parent_id = empty($parents) ? $term->id() : end(array_keys($parents));
+        $parents = array_keys($parents);
+        $parent_id = empty($parents) ? $term->id() : end($parents);
       }
       // Set the default parent term to display menu on other pages.
       else {
