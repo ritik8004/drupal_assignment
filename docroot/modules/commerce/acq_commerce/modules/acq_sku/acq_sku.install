@@ -12,6 +12,29 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Configure view mode for product teaser & SKU entity teaser.
+ */
+function acq_sku_update_8006() {
+  // Re-install acq product teaser view mode to use sku teaser view mode.
+  $install_configs = [
+    'core.entity_view_display.node.acq_product.teaser',
+  ];
+
+  alshaya_config_install_configs($install_configs, 'acq_sku');
+
+  // Re-install SKU simple/configurable view mode configs to hide display price
+  // field. We using Product's price field to render the price everywhere.
+  $optional_configs = [
+    'core.entity_view_display.acq_sku.simple.teaser',
+    'core.entity_view_display.acq_sku.configurable.teaser',
+  ];
+
+  alshaya_config_install_configs($optional_configs, 'acq_sku', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add additional indexes to improve performance.
  */
 function acq_sku_update_8004() {
