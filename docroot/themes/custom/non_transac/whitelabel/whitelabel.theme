@@ -373,11 +373,11 @@ function whitelabel_preprocess_form_element(array &$variables) {
         }
       }
     }
-  }
 
-  // Remove generic input styles on the following form elements.
-  if (!empty($variables['element']['#attributes']['id']) && $variables['element']['#attributes']['id'] === 'edit-geolocation-geocoder-google-places-api') {
-    $variables['is_default_form'] = TRUE;
+    // Remove generic input styles on the following form elements.
+    if (!empty($variables['element']['#attributes']['id']) && $variables['element']['#attributes']['id'] === 'edit-geolocation-geocoder-google-places-api') {
+      $variables['is_default_form'] = TRUE;
+    }
   }
 }
 
