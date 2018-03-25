@@ -143,11 +143,14 @@ $primary_tr_hover: rgba(247, 247, 247, 0.72);
 $primary_table_border: $white;
 
 // Dropdown.
-$primary_dropdown_bg:$white-five;
+$primary_dropdown_bg: $white-five;
 $primary_dropdown_arrow_bg: $whisper-dark;
 $primary_dropdown_text: $brownish-grey;
 $primary_dropdown_border: $whisper-dark;
 $primary_dropdown_option_hover: $white-four;
+$primary_dropdown_option_border: $white;
+$primary_dropdown_option_disbled: $greyish;
+$primary_dropdown_ie_focus: $black;
 
 /* ------- 3. Secondary color  ----- */
 // Global elements.

@@ -4,14 +4,14 @@ select::-ms-expand {
 
 select:focus::-ms-value {
   background: transparent;
-  color: $black;
+  color: $primary_dropdown_ie_focus;
 }
 
 @mixin select-style($select-width) {
   appearance: none;
-  border: 1px solid $white-two;
+  border: 1px solid $primary_dropdown_border;
   border-radius: 0;
-  background-color: $white-five;
+  background-color: $primary_dropdown_bg;
   padding: 0.5rem;
   padding-#{$left}: 0.35rem;
   padding-#{$right}: 1.5rem;
@@ -46,7 +46,7 @@ select:focus::-ms-value {
     #{$right}: 0;
     top: 0;
     text-align: center;
-    background-color: $white-two;
+    background-color: $primary_dropdown_arrow_bg;
     width: 2.1875rem;
     height: 35px;
     height: 2.1875rem;
@@ -78,12 +78,12 @@ select:focus::-ms-value {
     padding: 0.25rem 0.2rem;
     text-align: $left;
     width: $select-width;
-    border: 1px solid $white-two;
+    border: 1px solid $primary_dropdown_border;
     border-radius: 0;
     outline: none;
 
     .select2-selection__rendered {
-      color: $grey-ash;
+      color: $primary_dropdown_text;
     }
   }
 
@@ -98,7 +98,7 @@ select:focus::-ms-value {
     #{$right}: 0;
     width: 2.1875rem;
     height: 2.1875rem;
-    background: $white-two;
+    background: $primary_dropdown_arrow_bg;
 
     &::after {
       // IE10 needs this in px.
@@ -111,7 +111,7 @@ select:focus::-ms-value {
       #{$right}: 0;
       text-align: center;
       display: inline-block;
-      background: $white-two;
+      background: $primary_dropdown_arrow_bg;
     }
   }
 }
@@ -126,29 +126,29 @@ select:focus::-ms-value {
 
   ul.select2-results__options {
     li.select2-results__option {
-      color: $grey-ash;
+      color: $primary_dropdown_text;
       font-size: 0.875rem;
       padding: 0.625rem;
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $primary_dropdown_option_border;
       text-transform: lowercase;
 
       &:first-child {
-        border-top: 1px solid $white;
+        border-top: 1px solid $primary_dropdown_option_border;
       }
 
       &.select2-results__option--highlighted,
       &[aria-selected=true] {
-        background-color: $white-five;
+        background-color: $primary_dropdown_bg;
       }
 
       &[aria-disabled=true],
       &:hover {
-        color: $grey-ash;
-        background: $white-four;
+        color: $primary_dropdown_text;
+        background: $primary_dropdown_option_hover;
       }
 
       &[aria-disabled=true] {
-        color: $greyish;
+        color: $primary_dropdown_option_disbled;
       }
     }
   }
