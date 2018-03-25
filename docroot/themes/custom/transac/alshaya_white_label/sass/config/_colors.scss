@@ -94,6 +94,7 @@ $message-info: #ffee9c;
 $special-price: #b70025;
 $ladda-disabled: #999;
 $mothercare-black: #000;
+$sticky-btn: rgba(0, 0, 0, 0.07);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -102,7 +103,8 @@ $body_bg: $primary_bg;
 $content_pagetitle: $marine-blue;
 $primary_text: $brownish-grey;
 $primary_link: $marine-blue-two;
-$primary_link-hover: $cerulean-two;
+$primary_link-hover: $marine-blue-two;
+$primary_link-active: $marine-blue-two;
 $primary_border: $white;
 
 // Form elements.
