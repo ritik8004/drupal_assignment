@@ -100,7 +100,7 @@ $sticky-btn: rgba(0, 0, 0, 0.07);
 // Global elements.
 $primary_bg: $white-five;
 $body_bg: $primary_bg;
-$content_pagetitle: $marine-blue;
+$content_page_title: $marine-blue;
 $primary_text: $brownish-grey;
 $primary_link: $marine-blue-two;
 $primary_link-hover: $marine-blue-two;
@@ -119,6 +119,11 @@ $primary_btn_bg: $pumpkin-orange;
 $primary_btn_text: $white-five;
 $primary_empty_btn: $black-two;
 $primary_empty_btn_border: $black-two;
+$primary_brand_button: $marine-blue-two;
+$primary_brand_button_text: $marine-blue-two;
+$pending_btn_bg: $tomato;
+$returned_btn_bg: $grey-ash;
+$complete_btn_bg: $medium-green;
 
 // Checkbox & Radio.
 $primary_checkbox_empty: $brownish-grey;
