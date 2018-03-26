@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_main_menu\ProductCategoryTree;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -171,7 +172,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     // second level child terms.
     if ($this->configuration['follow_category_term'] && !empty($this->configuration['default_parent'])) {
       // If term is of 'acq_product_category' vocabulary.
-      if (is_object($term) && $parents = $this->productCateoryTree->getParentsFromTerm($term)) {
+      if ($term instanceof TermInterface && $parents = $this->productCateoryTree->getParentsFromTerm($term)) {
         // Get the top level parent id if parent exists.
         $parents = array_keys($parents);
         $parent_id = empty($parents) ? $term->id() : end($parents);
@@ -194,7 +195,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     }
 
     // Get all parents of the given term.
-    if (is_object($term)) {
+    if ($term instanceof TermInterface) {
       $parents = $this->productCateoryTree->getParentsFromTerm($term);
 
       if (!empty($parents)) {
@@ -223,7 +224,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->cacheTags[] = 'node_type:department_page';
 
     // Discard cache for the block once a term gets updated.
-    $this->cacheTags[] = ProductCategoryTree::VOCABULARY_ID . '_list';
+    $this->cacheTags[] = ProductCategoryTree::VOCABULARY_ID;
 
     return Cache::mergeTags(
       parent::getCacheTags(),
