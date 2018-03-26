@@ -89,6 +89,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $term = $this->productCateoryTree->getCategoryTermFromRoute();
 
     // @todo: set default parent_id for second level category menu.
+    $parent_id = 0;
     // Get the term id from the current path, and display only the related
     // second level child terms.
     if ($term instanceof TermInterface && $parents = $this->productCateoryTree->getCategoryTermParents($term)) {
@@ -97,14 +98,8 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $parent_id = empty($parents) ? $term->id() : end($parents);
     }
 
-    if (!empty($parent_id)) {
-      // Child terms of given parent term id.
-      $term_data = $this->productCateoryTree->getCategoryTreeCached($parent_id);
-    }
-    // Default category terms.
-    else {
-      $term_data = $this->productCateoryTree->getCategoryTreeCached();
-    }
+    // Child terms of given parent term id.
+    $term_data = $this->productCateoryTree->getCategoryTreeCached($parent_id);
 
     // If no data, no need to render the block.
     if (empty($term_data)) {
