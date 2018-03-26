@@ -29,15 +29,20 @@ sites:
     module: alshaya_hm
     type: alshaya_transac
     country: ae
+  bbwae:
+    module: alshaya_bbw
+    type: alshaya_transac
+    country: ae
   vskw:
     module: alshaya_vs
     type: alshaya_non_transac
     country: kw
+  vsae:
+    module: alshaya_vs
+    type: alshaya_transac
+    country: ae
   bbme:
     module: alshaya_bb
-    type: alshaya_non_transac
-  bbwuae:
-    module: alshaya_bbw
     type: alshaya_non_transac
   dhuae:
     module: alshaya_d
