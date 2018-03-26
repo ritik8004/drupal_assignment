@@ -275,7 +275,7 @@ class ProductCategoryTree {
    * @return \Drupal\Core\Entity\EntityInterface|mixed|null
    *   Return the taxonomy term object if found else NULL.
    */
-  public function getTermFromRoute() {
+  public function getCategoryTermFromRoute() {
     $route_name = $this->routeMatch->getRouteName();
     $term = NULL;
     // If /taxonomy/term/tid page.
@@ -293,7 +293,7 @@ class ProductCategoryTree {
     }
 
     // If term is of 'acq_product_category' vocabulary.
-    if (is_object($term) && $term->getVocabularyId() == self::VOCABULARY_ID) {
+    if ($term instanceof TermInterface && $term->getVocabularyId() == self::VOCABULARY_ID) {
       return $term;
     }
 
@@ -312,7 +312,7 @@ class ProductCategoryTree {
   public function getParentsFromTerm($term) {
     $parents = [];
     // If term is of 'acq_product_category' vocabulary.
-    if (is_object($term) && $term->getVocabularyId() == self::VOCABULARY_ID) {
+    if ($term instanceof TermInterface && $term->getVocabularyId() == self::VOCABULARY_ID) {
       // Get all parents of the given term.
       $parents = $this->termStorage->loadAllParents($term->id());
     }
