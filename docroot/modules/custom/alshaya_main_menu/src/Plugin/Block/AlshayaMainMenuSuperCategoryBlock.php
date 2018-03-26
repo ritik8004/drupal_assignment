@@ -65,8 +65,6 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    * {@inheritdoc}
    */
   public function build() {
-    $term = $this->productCateoryTree->getTermFromRoute();
-
     $term_data = $this->productCateoryTree->getTopLevelCategory();
 
     // If no data, no need to render the block.
@@ -74,6 +72,8 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
       return [];
     }
 
+    // Get current term from route.
+    $term = $this->productCateoryTree->getTermFromRoute();
     // Get all parents of the given term.
     if (is_object($term)) {
       $parents = $this->productCateoryTree->getParentsFromTerm($term);
