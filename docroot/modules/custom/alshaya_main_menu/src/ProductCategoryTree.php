@@ -88,7 +88,7 @@ class ProductCategoryTree {
    * @return array
    *   Processed term data.
    */
-  public function getTopLevelCategory() {
+  public function getCategoryRootTerms() {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $cid = self::CACHE_ID . '_' . $langcode;
@@ -309,7 +309,7 @@ class ProductCategoryTree {
    * @return array|\Drupal\taxonomy\TermInterface[]
    *   Returns the array of all parents.
    */
-  public function getParentsFromTerm($term) {
+  public function getCategoryTermParents($term) {
     $parents = [];
     // If term is of 'acq_product_category' vocabulary.
     if ($term instanceof TermInterface && $term->getVocabularyId() == self::VOCABULARY_ID) {
