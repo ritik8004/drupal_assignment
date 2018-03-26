@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_main_menu\ProductCategoryTree;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -75,9 +76,10 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
     // Get current term from route.
     $term = $this->productCateoryTree->getTermFromRoute();
     // Get all parents of the given term.
-    if (is_object($term)) {
+    if ($term instanceof TermInterface) {
       $parents = $this->productCateoryTree->getParentsFromTerm($term);
 
+      // @todo: Deal with default case.
       if (!empty($parents)) {
         /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
         foreach ($parents as $parent) {
@@ -99,7 +101,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    */
   public function getCacheTags() {
     // Discard cache for the block once a term gets updated.
-    $this->cacheTags[] = ProductCategoryTree::VOCABULARY_ID . ':top_level';
+    $this->cacheTags[] = ProductCategoryTree::VOCABULARY_ID;
 
     return Cache::mergeTags(
       parent::getCacheTags(),
