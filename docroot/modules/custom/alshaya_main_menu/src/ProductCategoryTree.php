@@ -9,7 +9,6 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Class ProductCategoryTree.
@@ -53,13 +52,6 @@ class ProductCategoryTree {
   protected $cache;
 
   /**
-   * Route match service.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected $routeMatch;
-
-  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -68,46 +60,14 @@ class ProductCategoryTree {
    *   Language manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for alshaya.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
-   *   Route match service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LanguageManagerInterface $language_manager,
-                              CacheBackendInterface $cache,
-                              RouteMatchInterface $route_match) {
+                              CacheBackendInterface $cache) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->cache = $cache;
-    $this->routeMatch = $route_match;
-  }
-
-  /**
-   * Get top level category items.
-   *
-   * @return array
-   *   Processed term data.
-   */
-  public function getTopLevelCategory() {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-
-    $cid = self::CACHE_ID . '_' . $langcode;
-
-    if ($term_data = $this->cache->get($cid)) {
-      return $term_data->data;
-    }
-
-    /* @var \Drupal\taxonomy\TermInterface[] $terms */
-    $terms = $this->termStorage->loadTree(self::VOCABULARY_ID, 0, 1, TRUE);
-    $term_data = $this->getCategoryTermData($langcode, $terms, FALSE, FALSE);
-
-    $cache_tags = [
-      self::CACHE_TAG,
-      self::VOCABULARY_ID,
-    ];
-
-    $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
-    return $term_data;
   }
 
   /**
@@ -116,21 +76,20 @@ class ProductCategoryTree {
    * @return array
    *   Processed term data from cache if available or fresh.
    */
-  public function getCategoryTreeCached($parent_id = 0) {
+  public function getCategoryTreeCached() {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
-    $cid = self::CACHE_ID . '_' . $langcode . '_' . $parent_id;
+    $cid = self::CACHE_ID . '_' . $langcode;
 
     if ($term_data = $this->cache->get($cid)) {
       return $term_data->data;
     }
 
-    $term_data = $this->getCategoryTree($langcode, $parent_id);
+    $term_data = $this->getCategoryTree($langcode);
 
     $cache_tags = [
       self::CACHE_TAG,
       'node_type:department_page',
-      self::VOCABULARY_ID . '_' . $langcode . '_' . $parent_id,
     ];
 
     $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
@@ -150,32 +109,15 @@ class ProductCategoryTree {
    *   Processed term data.
    */
   public function getCategoryTree($langcode, $parent_tid = 0) {
+    $data = [];
+
     /* @var \Drupal\taxonomy\TermInterface[] $terms */
     $terms = $this->termStorage->loadTree(self::VOCABULARY_ID, $parent_tid, 1, TRUE);
 
     if (empty($terms)) {
       return [];
     }
-    return $this->getCategoryTermData($langcode, $terms);
-  }
 
-  /**
-   * Create terms array of menu items with highlight images and child.
-   *
-   * @param string $langcode
-   *   Language code in which we need term to be displayed.
-   * @param array $terms
-   *   The array of terms to load.
-   * @param bool $highlight_image
-   *   True if include highlight image else false.
-   * @param bool $child
-   *   True if include child else false.
-   *
-   * @return array
-   *   Processed term data.
-   */
-  public function getCategoryTermData($langcode, array $terms, $highlight_image = TRUE, $child = TRUE) {
-    $data = [];
     foreach ($terms as $term) {
       // We don't show the term in menu if translation not available.
       if (!$term->hasTranslation($langcode)) {
@@ -206,14 +148,10 @@ class ProductCategoryTree {
         'active_class' => '',
       ];
 
-      if ($highlight_image) {
-        $data[$term->id()]['highlight_image'] = $this->getHighlightImage($term);
-      }
-
-      if ($child) {
-        $data[$term->id()]['child'] = $this->getCategoryTree($langcode, $term->id());
-      }
+      $data[$term->id()]['highlight_image'] = $this->getHighlightImage($term);
+      $data[$term->id()]['child'] = $this->getCategoryTree($langcode, $term->id());
     }
+
     return $data;
   }
 
@@ -267,56 +205,6 @@ class ProductCategoryTree {
     }
 
     return $highlight_images;
-  }
-
-  /**
-   * Get the term object from current route.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface|mixed|null
-   *   Return the taxonomy term object if found else NULL.
-   */
-  public function getTermFromRoute() {
-    $route_name = $this->routeMatch->getRouteName();
-    $term = NULL;
-    // If /taxonomy/term/tid page.
-    if ($route_name == 'entity.taxonomy_term.canonical') {
-      /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
-      $term = $this->routeMatch->getParameter('taxonomy_term');
-    }
-    // If it's a department page.
-    elseif ($route_name == 'entity.node.canonical') {
-      $node = $this->routeMatch->getParameter('node');
-      if ($node->bundle() == 'department_page') {
-        $terms = $node->get('field_product_category')->getValue();
-        $term = $this->termStorage->load($terms[0]['target_id']);
-      }
-    }
-
-    // If term is of 'acq_product_category' vocabulary.
-    if (is_object($term) && $term->getVocabularyId() == self::VOCABULARY_ID) {
-      return $term;
-    }
-
-    return NULL;
-  }
-
-  /**
-   * Get all the parents from given term object.
-   *
-   * @param object $term
-   *   The term object.
-   *
-   * @return array|\Drupal\taxonomy\TermInterface[]
-   *   Returns the array of all parents.
-   */
-  public function getParentsFromTerm($term) {
-    $parents = [];
-    // If term is of 'acq_product_category' vocabulary.
-    if (is_object($term) && $term->getVocabularyId() == self::VOCABULARY_ID) {
-      // Get all parents of the given term.
-      $parents = $this->termStorage->loadAllParents($term->id());
-    }
-    return $parents;
   }
 
 }
