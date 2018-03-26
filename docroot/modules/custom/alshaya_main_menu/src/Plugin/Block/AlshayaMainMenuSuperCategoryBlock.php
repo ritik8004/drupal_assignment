@@ -10,7 +10,7 @@ use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides alshaya main menu block.
+ * Provides alshaya main menu super category block.
  *
  * @Block(
  *   id = "alshaya_main_menu_super_category",
@@ -34,7 +34,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
   protected $productCateoryTree;
 
   /**
-   * AlshayaMegaMenuBlock constructor.
+   * AlshayaMainMenuSuperCategoryBlock constructor.
    *
    * @param array $configuration
    *   The configuration.
@@ -66,7 +66,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    * {@inheritdoc}
    */
   public function build() {
-    $term_data = $this->productCateoryTree->getTopLevelCategory();
+    $term_data = $this->productCateoryTree->getCategoryRootTerms();
 
     // If no data, no need to render the block.
     if (empty($term_data)) {
@@ -74,10 +74,10 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
     }
 
     // Get current term from route.
-    $term = $this->productCateoryTree->getTermFromRoute();
+    $term = $this->productCateoryTree->getCategoryTermFromRoute();
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {
-      $parents = $this->productCateoryTree->getParentsFromTerm($term);
+      $parents = $this->productCateoryTree->getCategoryTermParents($term);
 
       // @todo: Deal with default case.
       if (!empty($parents)) {
