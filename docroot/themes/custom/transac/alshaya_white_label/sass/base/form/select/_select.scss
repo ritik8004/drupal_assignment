@@ -4,7 +4,7 @@ select::-ms-expand {
 
 select:focus::-ms-value {
   background: transparent;
-  color: $primary_dropdown_ie_focus;
+  color: $primary_dropdown_focus;
 }
 
 @mixin select-style($select-width) {
