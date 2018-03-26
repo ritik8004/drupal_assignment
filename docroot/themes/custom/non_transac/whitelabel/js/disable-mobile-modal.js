@@ -20,4 +20,23 @@
     }
   }
 
+  Drupal.behaviors.signupModal = {
+    attach: function (context, settings) {
+      function modalOverlay(button, className) {
+        $(button).click(function () {
+          $('body').removeClass(className);
+        });
+      }
+
+      $('#block-alshaya-email-signup-link a').click(function () {
+        $('body').addClass('signup-modal-overlay');
+        modalOverlay('.ui-dialog-titlebar-close', 'signup-modal-overlay');
+
+        $(document).ajaxComplete(function () {
+          modalOverlay('.ui-dialog-titlebar-close', 'signup-modal-overlay');
+        });
+      });
+    }
+  };
+
 })(jQuery, Drupal);

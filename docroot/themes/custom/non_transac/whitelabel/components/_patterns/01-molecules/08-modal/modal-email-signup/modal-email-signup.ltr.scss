@@ -113,3 +113,9 @@
     }
   }
 }
+
+body {
+  &.signup-modal-overlay {
+    overflow: hidden;
+  }
+}
