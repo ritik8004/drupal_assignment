@@ -179,6 +179,7 @@
   .view-product-slider {
     .owl-carousel .owl-item img {
       max-width: 11.625rem;
+      max-height: unset;
     }
 
     .owl-dots .owl-dot {

@@ -841,7 +841,6 @@ article[gtm-sku-type="simple"] {
 }
 
 .filter-menu-label {
-  .fake-apply-button.inactive,
   .clear-all-fake.inactive {
     font-family: $hnm-bold;
     margin-#{$right}: 0;
@@ -850,16 +849,6 @@ article[gtm-sku-type="simple"] {
 }
 
 html[lang=ar] {
-  .fake-apply-button {
-    padding: 6.5px 1rem;
-    margin-right: 0.625rem !important;
-
-    &.inactive {
-      margin-left: 0;
-      width: 3.5rem;
-    }
-  }
-
   .clear-all-fake {
     &.inactive {
       margin-right: 0;
