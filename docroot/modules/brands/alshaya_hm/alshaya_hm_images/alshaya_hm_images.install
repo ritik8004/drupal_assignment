@@ -59,3 +59,16 @@ function alshaya_hm_images_install() {
 
   alshaya_config_install_configs($configs, 'alshaya_hm_images', 'optional');
 }
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_hm_images_update_dependencies() {
+  return [
+    'alshaya_hm_images' => [
+      8003 => [
+        'alshaya_acm_product_category' => 8002,
+      ],
+    ],
+  ];
+}
