@@ -63,10 +63,6 @@
         var countFilters = $(mobileFilterBarSelector + ' ul li').length;
         if (countFilters === 0 && $.trim($(mobileFilterBarSelector)
           .html()).length === 0) {
-          $(mobileFilterBarSelector)
-            .once()
-            .append('<h3 class="applied-filter-count c-accordion__title">' + Drupal.t('applied filters')
-              + ' (' + countFilters + ')</h3>');
           $(mobileFilterBarSelector).addClass('empty');
         }
         else {
@@ -81,6 +77,17 @@
               .insertBefore(mobileFilterBarSelector + ' ul');
           }
         }
+      }
+
+      /**
+       * Close the mobile filter view screen.
+       */
+      function closeFilterView() {
+        $('body').toggleClass('filter-open-no-scroll');
+        $('.c-facet__blocks__wrapper--mobile .c-facet__blocks').hide();
+        $('.show-overlay').each(function () {
+          $(this).removeClass('show-overlay');
+        });
       }
 
       function mobileFilterMenu() {
@@ -102,34 +109,21 @@
           // Enable & disable apply filter button on mobile.
           $(document).ajaxComplete(function () {
             var facetBlocks = $('.c-facet__blocks__wrapper--mobile .c-facet__blocks');
-            var clearAllMobileButton = $('.c-facet__blocks__wrapper--mobile .clear-all');
-            var clearAllFake = $('.clear-all-fake');
-            if (clearAllMobileButton.length !== 0) {
-              clearAllFake.removeClass('inactive');
-              if (!clearAllFake.hasClass('active')) {
-                clearAllFake.addClass('active');
-              }
-            }
-            else if (clearAllMobileButton.length === 0) {
-              if (!clearAllFake.hasClass('inactive')) {
-                clearAllFake.addClass('inactive');
-              }
-            }
 
             if (facetBlocks.length !== 0) {
               var selectedFiterCount = facetBlocks.find('input:checked').length;
               var fakeApplyButton = $('.fake-apply-button');
               if (selectedFiterCount > 0) {
-                fakeApplyButton.removeClass('inactive');
+                fakeApplyButton.parent().removeClass('inactive');
                 fakeApplyButton.removeAttr('disabled');
-                if (!fakeApplyButton.hasClass('active')) {
-                  fakeApplyButton.addClass('active');
+                if (!fakeApplyButton.parent().hasClass('active')) {
+                  fakeApplyButton.parent().addClass('active');
                 }
               }
               else {
                 fakeApplyButton.attr('disabled', 'disabled');
-                if (!fakeApplyButton.hasClass('inactive')) {
-                  fakeApplyButton.addClass('inactive');
+                if (!fakeApplyButton.parent().hasClass('inactive')) {
+                  fakeApplyButton.parent().addClass('inactive');
                 }
               }
             }
@@ -145,15 +139,11 @@
           }
           else {
             // If we dont have one, create it, this is first time load.
-            $('<div class="filter-menu-label"><span class="label">' + Drupal.t('filter') + '</span><li class="apply-fake"><input type="button" class="fake-apply-button inactive" disabled value="' + Drupal.t('apply') + '"></li><li class="clear-all-fake inactive"><span>' + Drupal.t('clear all') + '</span></li></div>')
+            $('<div class="filter-menu-label"><span class="label">' + Drupal.t('filter') + '</span><li class="apply-fake"><input type="button" class="fake-apply-button inactive" disabled value="' + Drupal.t('apply') + '"></li><span class="filter-close"></span></div>')
               .insertBefore('.region__content .c-facet__blocks .region__sidebar-first ');
 
             $('.fake-apply-button').click(function () {
-              $('body').toggleClass('filter-open-no-scroll');
-              $('.c-facet__blocks__wrapper--mobile .c-facet__blocks').hide();
-              $('.show-overlay').each(function () {
-                $(this).removeClass('show-overlay');
-              });
+              closeFilterView();
             });
           }
 
@@ -325,11 +315,9 @@
         }
       });
 
-      // Click event for fake clear all link on mobile filter.
-      var mobileFilterBarSelector = getFilterBarSelector();
-      $('.clear-all-fake', context).stop().on('click', function () {
-        $(mobileFilterBarSelector + ' .clear-all').trigger('click');
-        return false;
+      // Close button to close the mobile filter view.
+      $('span.filter-close', context).stop().on('click', function () {
+        closeFilterView();
       });
 
       // Poll the DOM to check if the show more/less link is available, before placing it inside the ul.

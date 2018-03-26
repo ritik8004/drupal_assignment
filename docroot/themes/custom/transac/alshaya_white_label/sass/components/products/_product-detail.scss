@@ -1789,12 +1789,6 @@ article.product-out-of-stock {
   }
 }
 
-.apply-fake {
-  list-style: none;
-  display: inline;
-  float: $right;
-}
-
 .fake-apply-button {
   font-family: $alshaya-bold;
   display: inline-block;
@@ -1809,7 +1803,6 @@ article.product-out-of-stock {
 }
 
 .filter-menu-label {
-  .fake-apply-button.inactive,
   .clear-all-fake.inactive {
     border: 1px solid $whisper-dark !important;
     text-align: center;
@@ -1862,14 +1855,25 @@ html[lang=ar] {
 }
 
 .is-filter .apply-fake {
-  max-height: 1.9375rem !important;
+  @include stickyButton();
 
-  .fake-apply-button.active {
-    width: 4.7rem !important;
+  list-style: none;
+  border-color: $white-five;
+  width: 100%;
+  display: none;
+
+  &.active {
+    display: block;
+  }
+
+  .fake-apply-button {
+    width: 100%;
     text-align: center;
     padding-#{$left}: 0;
     padding-#{$right}: 0;
     border-radius: 0 !important;
-    font-size: 0.75rem !important;
+    font-size: 0.875rem !important;
+    margin: 0;
+    height: 2.5rem;
   }
 }
