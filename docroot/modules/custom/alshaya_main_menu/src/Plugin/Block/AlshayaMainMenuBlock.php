@@ -166,13 +166,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function build() {
     // Get the term object from current route.
-    $term = $this->productCateoryTree->getTermFromRoute();
+    $term = $this->productCateoryTree->getCategoryTermFromRoute();
 
     // Get the term id from the current path, and display only the related
     // second level child terms.
     if ($this->configuration['follow_category_term'] && !empty($this->configuration['default_parent'])) {
       // If term is of 'acq_product_category' vocabulary.
-      if ($term instanceof TermInterface && $parents = $this->productCateoryTree->getParentsFromTerm($term)) {
+      if ($term instanceof TermInterface && $parents = $this->productCateoryTree->getCategoryTermParents($term)) {
         // Get the top level parent id if parent exists.
         $parents = array_keys($parents);
         $parent_id = empty($parents) ? $term->id() : end($parents);
@@ -196,7 +196,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
 
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {
-      $parents = $this->productCateoryTree->getParentsFromTerm($term);
+      $parents = $this->productCateoryTree->getCategoryTermParents($term);
 
       if (!empty($parents)) {
         /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
