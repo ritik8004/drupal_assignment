@@ -7,7 +7,6 @@
 
   &.l-two--sf {
     @include breakpoint($upto-tablet) {
-      max-width: 19rem;
       padding-top: 0;
     }
   }
@@ -367,6 +366,14 @@
         @include breakpoint($tablet) {
           padding: 0.9375rem 1.375rem;
         }
+
+        &::before {
+          top: 0.5625rem;
+
+          @include breakpoint($only-mobile) {
+            top: 0.9375rem;
+          }
+        }
       }
 
       @include icon(radio-empty, before) {
@@ -613,5 +620,18 @@
         background-color: $hnm-grey !important;
       }
     }
+  }
+}
+
+.cnc-collect-from {
+  color: $hnm-black-two;
+  text-transform: uppercase;
+  border-bottom: 1px solid $hnm-black-two;
+  font-family: $hnm-demibold;
+  letter-spacing: normal;
+  font-size: 0.875rem;
+
+  @include breakpoint($desktop) {
+    font-size: 1rem;
   }
 }

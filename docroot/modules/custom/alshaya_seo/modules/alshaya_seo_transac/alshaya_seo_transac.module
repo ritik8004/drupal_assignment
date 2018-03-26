@@ -255,20 +255,34 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
     // General logic to calculate page-type in case of my account pages &
     // undefined pages.
-    if ((strpos($current_path, '/user') === 0) &&
-      (\Drupal::currentUser()->id() !== 0)) {
-      $path_parts = explode('/', $current_path);
+    $path_parts = explode('/', $current_path);
 
-      foreach ($path_parts as $key => $part) {
-        if (is_numeric($part) ||
-          (in_array($part, ['user', '', '{user}', '{order_id}']))) {
-          unset($path_parts[$key]);
-        }
+    // Remove characters not suitable for page type.
+    $blacklisted_user_url_parts = [
+      'user',
+      '',
+      '{user}',
+      '{order_id}',
+      '{uid}',
+      '{timestamp}',
+      '{hash}',
+      'new',
+      '{profile_type}',
+      '{webform}',
+    ];
+
+    foreach ($path_parts as $key => $part) {
+      if (is_numeric($part) ||
+        (in_array($part, $blacklisted_user_url_parts))) {
+        unset($path_parts[$key]);
       }
+    }
+
+    if (strpos($current_path, '/user') === 0) {
       $page_type = trim('myaccount ' . implode('', $path_parts));
     }
     elseif ($page_type === 'not defined') {
-      $page_type = ltrim(implode('-', explode('/', $current_path)), '-');
+      $page_type = ltrim(implode('-', $path_parts), '-');
     }
 
     $data_layer['pageType'] = $page_type;

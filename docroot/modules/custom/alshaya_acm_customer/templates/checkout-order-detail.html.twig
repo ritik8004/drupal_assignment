@@ -136,7 +136,7 @@
                 </div>
               </div>
             </div>
-          {% else %}
+          {% elseif order_details.billing_address %}
             <div class="label font-small">{{ "Billing details"|t }}</div>
             <div>{{ order_details.billing_address }}</div>
           {% endif %}
@@ -147,7 +147,7 @@
           </div>
         </td>
         <td class="desktop-only">
-          {% if order_details.type == 'cc' %}
+          {% if order_details.type == 'cc' and order_details.billing_address %}
             <div class="label font-small">{{ "Billing details"|t }}</div>
             <div>{{ order_details.billing_address }}</div>
           {% endif %}
@@ -239,6 +239,7 @@
         </tr>
       {% endfor %}
 
+      {% block subTotalRow %}
       <tr class="sub-total-row collapse-row">
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
@@ -248,7 +249,9 @@
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
+      {% endblock %}
 
+      {% block discountRow %}
       {% if order_details.discount is not empty %}
         <tr class="discount-row collapse-row">
           <td class="above-mobile">&nbsp;</td>
@@ -260,7 +263,9 @@
           <td class="above-mobile empty--cell">&nbsp;</td>
         </tr>
       {% endif %}
+      {% endblock %}
 
+      {% block deliveryChargeRow %}
       <tr class="delivery-charge-row collapse-row">
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
@@ -270,7 +275,9 @@
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
+      {% endblock %}
 
+      {% block totalRow %}
       <tr class="total-row collapse-row">
         <td class="above-mobile">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>
@@ -284,20 +291,21 @@
         </td>
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
+      {% endblock %}
 
+      {% block vatRow %}
       {% if vat_text %}
-        <tr class="total-row collapse-row">
+        <tr class="total-row collapse-row vat-container">
           <td class="above-mobile">&nbsp;</td>
           <td class="above-mobile">&nbsp;</td>
           <td class="above-mobile">&nbsp;</td>
           <td class="warm--white">
-            <div class="dark">
-              {{ vat_text }}
-            </div>
+            <span class="vat-text">{{ vat_text }}</span>
           </td>
           <td class="above-mobile empty--cell">&nbsp;</td>
         </tr>
       {% endif %}
+      {% endblock %}
     </tbody>
   </table>
 </div>

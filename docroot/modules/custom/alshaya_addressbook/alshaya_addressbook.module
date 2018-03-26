@@ -82,6 +82,9 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   $magento_form = NULL;
 
+  /** @var \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $area_terms_helper */
+  $area_terms_helper = \Drupal::service('alshaya_addressbook.area_terms_helper');
+
   if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
@@ -184,8 +187,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     ],
   ];
 
-  $area_parent = 0;
-
   // Change the fields if dm version is 2 and magento form has data.
   if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2 && !empty($magento_form)) {
     $fields_mapped = [];
@@ -229,7 +230,14 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       $element['area_parent']['#access'] = TRUE;
       $element['area_parent']['#multiple'] = FALSE;
       $element['area_parent']['#default_value'] = $area_parent;
-      $element['area_parent']['#options'] = ['' => t('Select @label', ['@label' => $element['area_parent']['#title']])] + _alshaya_addressbook_governate_list();
+
+      $empty_option = [
+        '' => t('Select @label', [
+          '@label' => $element['area_parent']['#title'],
+        ]),
+      ];
+
+      $element['area_parent']['#options'] = $empty_option + $area_terms_helper->getAllGovernates();
       $element['area_parent']['#attributes'] = [
         'class' => ['select2-select'],
       ];
@@ -242,6 +250,15 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
         'url' => Url::fromRoute('alshaya_addressbook.get_areas_from_governate'),
         'wrapper' => 'alshaya-addressbook-area',
       ];
+
+      // Populate all area terms from level 2, we don't use parent field
+      // but we are using DMV2.
+      $area_options = $area_terms_helper->getAllAreasWithParent($area_parent);
+    }
+    else {
+      // Populate all area terms from level 2, we don't use parent field
+      // but we are using DMV2.
+      $area_options = $area_terms_helper->getAllAreas();
     }
 
     // Disable the fields which we couldn't map.
@@ -253,9 +270,12 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       $element[$field_code]['#default_value'] = '&#8203;';
     }
   }
+  else {
+    // Populate area terms from level 1.
+    $area_options = $area_terms_helper->getAllAreasWithParent(0);
+  }
 
-  // Set options for area.
-  $element['administrative_area']['#options'] = ['' => t('Select Area')] + _alshaya_addressbook_area_list($area_parent);
+  $element['administrative_area']['#options'] = ['' => t('Select Area')] + $area_options;
 
   // Adding country.
   $country_list = \Drupal::service('address.country_repository')->getList();
@@ -505,82 +525,6 @@ function alshaya_addressbook_alshaya_i18n_onetime_translation_add() {
 }
 
 /**
- * Returns list of governates for a given country.
- *
- * @return array
- *   List or areas.
- */
-function _alshaya_addressbook_governate_list() {
-  /** @var \Drupal\taxonomy\TermStorage $term_storage */
-  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-
-  $term_tree = $term_storage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, 0, 1, TRUE);
-
-  $term_list = [];
-
-  if (!empty($term_tree)) {
-    /** @var \Drupal\Core\Entity\EntityRepository $entity_repository */
-    $entity_repository = \Drupal::service('entity.repository');
-
-    foreach ($term_tree as $term) {
-      /* \Drupal\taxonomy\Entity\Term $term */
-      $term = $entity_repository->getTranslationFromContext($term);
-      $term_list[$term->id()] = $term->getName();
-    }
-  }
-
-  asort($term_list);
-
-  return $term_list;
-}
-
-/**
- * Returns list of areas for a given governate.
- *
- * @param int $parent
- *   Parent TID for which terms are to be fetched.
- *
- * @return array
- *   List or areas.
- */
-function _alshaya_addressbook_area_list($parent = NULL) {
-  $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
-
-  if (empty($parent) &&  $dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-    // Parent is required in DM_VERSION_2, not throwing error though.
-    return [];
-  }
-
-  /** @var \Drupal\taxonomy\TermStorage $term_storage */
-  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-
-  $term_tree = $term_storage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, $parent, 1, TRUE);
-
-  $term_list = [];
-
-  if (!empty($term_tree)) {
-    /** @var \Drupal\Core\Entity\EntityRepository $entity_repository */
-    $entity_repository = \Drupal::service('entity.repository');
-
-    foreach ($term_tree as $term) {
-      /* \Drupal\taxonomy\Entity\Term $term */
-      $term = $entity_repository->getTranslationFromContext($term);
-
-      if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-        $term_list[$term->id()] = $term->label();
-      }
-      else {
-        $term_list[$term->label()] = $term->label();
-      }
-    }
-  }
-
-  asort($term_list);
-
-  return $term_list;
-}
-
-/**
  * Insert an array into another array before/after a certain key.
  *
  * @param array $array
@@ -666,11 +610,17 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       'address_line1' => $values[0]['address_line1'],
       'address_line2' => $values[0]['address_line2'],
       'postal_code' => $values[0]['postal_code'],
-      'sorting_code' => $values[0]['sorting_code'],
       'dependent_locality' => $values[0]['dependent_locality'],
-      'locality' => $values[0]['locality'],
       'administrative_area' => $values[0]['administrative_area'],
     ];
+
+    if (isset($values[0]['locality']) && !empty($values[0]['locality'])) {
+      $variables['delivery_address']['locality'] = $values[0]['locality'];
+    }
+
+    if (isset($values[0]['sorting_code']) && !empty($values[0]['sorting_code'])) {
+      $variables['delivery_address']['sorting_code'] = $values[0]['sorting_code'];
+    }
 
     $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
 
@@ -681,8 +631,9 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
       $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
       $mapping = $address_book_manager->getMagentoFieldMappings();
+      $form_fields = $address_book_manager->getMagentoFormFields();
 
-      if ($mapping['area_parent']) {
+      if ($mapping['area_parent'] && isset($form_fields[$mapping['area_parent']])) {
         $parent = $address_book_manager->getLocationParentTerm($values[0]['administrative_area']);
 
         if ($parent) {

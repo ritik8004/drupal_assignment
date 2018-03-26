@@ -39,13 +39,6 @@
           });
         }
       });
-
-      if ($('#payment_method_title_cashondelivery').hasClass('plugin-selected')) {
-        $('#edit-billing-address').hide();
-      }
-      else {
-        $('#edit-billing-address').show();
-      }
     }
   };
 

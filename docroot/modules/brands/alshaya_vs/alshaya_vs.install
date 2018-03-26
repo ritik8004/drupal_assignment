@@ -8,6 +8,33 @@
 /**
  * Implements hook_update_N().
  *
+ * Enable transac/non-transac specific brand module.
+ */
+function alshaya_vs_update_8103() {
+  // Get the current installed profile.
+  $profile = str_replace('alshaya_', '_', \Drupal::service('config.storage')->read('core.extension')['profile']);
+
+  // Current brand module.
+  $brand_module = 'alshaya_vs';
+
+  // Try to look for transac and non transac specific module for brand before
+  // brand installing brand module. i.e. alshaya_vs_transac.
+  if (module_load_install($brand_module . $profile)) {
+    $brand_module = $brand_module . $profile;
+
+    // Install the module.
+    \Drupal::service('module_installer')->install([$brand_module]);
+
+    // Update config with installed brand and module names.
+    \Drupal::configFactory()->getEditable('alshaya.installed_brand')
+      ->set('module', $brand_module)
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable brand AMP theme.
  */
 function alshaya_vs_update_8102() {
@@ -41,47 +68,12 @@ function alshaya_vs_install() {
   \Drupal::service('theme_handler')->install(['victoria_secret'], TRUE);
   \Drupal::service('theme_handler')->setDefault('victoria_secret');
 
-  // Disable some default blocks provided by whitelabel_non_transac that we
-  // don't want on victoria_secret.
-  alshaya_block_delete_blocks(['branding']);
-
   // Change region for main navigation block.
   alshaya_block_move_blocks(['main_navigation' => 'header_primary']);
 
   // Set default marker image for stores finder.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     alshaya_stores_finder_set_default_marker_icon('alshaya_vs');
-  }
-
-  // Override join the club default value.
-  $join_the_club_body = "<div class=\"block-join-the-club__title-wrapper\"><h2 class=\"block-join-the-club__title\">Join the club</h2><p class=\"block-join-the-club__title-link\"><a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></p></div><div class=\"block-join-the-club__list\"><p><span class=\"icon-prize\"></span>Win exciting prizes</p><p><span class=\"icon-rewards\"></span>Unlock exclusive rewards</p><p><span class=\"icon-newsletter\"></span>Be the first to know</p><a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></div>";
-  $join_the_club_desc = ['value' => $join_the_club_body, 'format' => 'full_text'];
-
-  \Drupal::configFactory()->getEditable('alshaya_user.join_club')
-    ->set('join_club_description', $join_the_club_desc)
-    ->save();
-
-  // Translate join the club.
-  $join_the_club_desc['value'] = "<div class=\"block-join-the-club__title-wrapper\"><h2 class=\"block-join-the-club__title\">إنضم لنادي الإمتيازات</h2><p class=\"block-join-the-club__title-link\"><a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a></p></div><div class=\"block-join-the-club__list\"><p><span class=\"icon-prize\"></span>اربح جوائز مدهشة</p><p><span class=\"icon-rewards\"></span>احصل على مكافآت حصرية</p><p><span class=\"icon-newsletter\"></span>كُن أول من يعلم</p><a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a></div>";
-  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_user.join_club')
-    ->set('join_club_description', $join_the_club_desc)
-    ->save();
-
-  // Translate store finder footer block's link title.
-  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder_footer')
-    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
-    ->save();
-
-  // Configure for which content type ShareThis widget should appear.
-  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
-    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-    // Enable share this for non transac Product CT.
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_non_transac_product')) {
-      $configFactory->set('node_types.product', 'product');
-    }
-    // Set the option to use large image style button for sharethis.
-    $configFactory->set('button_option', 'stbc_large');
-    $configFactory->save();
   }
 
   // Create default content for the site.
@@ -97,10 +89,8 @@ function alshaya_vs_install() {
       'ar' => "عروض اليوم",
     ],
   ];
-  alshaya_i18n_save_translations($strings);
 
-  \Drupal::service('theme_handler')->install(['alshaya_amp_victoria_secret'], TRUE);
-  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_victoria_secret')->save();
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

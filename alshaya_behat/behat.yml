@@ -1,4 +1,37 @@
 #behat.yml
+default:
+  suites:
+    default:
+     contexts:
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  extensions:
+    Behat\MinkExtension:
+      browser_name: chrome
+      goutte:
+        guzzle_parameters:
+          verify: false
+      javascript_session: selenium2
+      selenium2:
+        wd_host: http://127.0.0.1:4444/wd/hub
+        capabilities:
+          chrome:
+            switches:
+               - "--headless"
+               - "--disable-gpu"
+               - "--window-size=1920,1080"
+               - "--no-sandbox"
+    Drupal\DrupalExtension:
+      blackbox: ~
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true
+
 mckwqa:
   autoload:
     '': %paths.base%/features/mckw/bootstrap
@@ -23,26 +56,9 @@ mckwqa:
         output_path: %paths.base%/features/mckw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      browser_name: chrome
-      goutte:
-        guzzle_parameters:
-          verify: false
-      javascript_session: selenium2
-      selenium2:
-        wd_host: http://127.0.0.1:4444/wd/hub
-        browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://mckw-test.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
-    Drupal\DrupalExtension:
-      blackbox: ~
-    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
-          name: html
-          renderer: Twig,Behat2
-          file_name: index
-          print_args: true
-          print_outp: true
-          loop_break: true
+
 mckwuat:
   autoload:
     '': %paths.base%/features/mckw/bootstrap
@@ -67,26 +83,9 @@ mckwuat:
         output_path: %paths.base%/features/mckw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      browser_name: chrome
-      goutte:
-        guzzle_parameters:
-          verify: false
-      javascript_session: selenium2
-      selenium2:
-        wd_host: http://127.0.0.1:4444/wd/hub
-        browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://mckw-uat.factory.alshaya.com/en'
       files_path: "%paths.base%/features/mckw/media"
-    Drupal\DrupalExtension:
-      blackbox: ~
-    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
-          name: html
-          renderer: Twig,Behat2
-          file_name: index
-          print_args: true
-          print_outp: true
-          loop_break: true
+
 mckwprod:
   autoload:
     '': %paths.base%/features/mckw/bootstrap
@@ -111,26 +110,9 @@ mckwprod:
         output_path: %paths.base%/features/mckw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      browser_name: chrome
-      goutte:
-        guzzle_parameters:
-          verify: false
-      javascript_session: selenium2
-      selenium2:
-        wd_host: http://127.0.0.1:4444/wd/hub
-        browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://www.mothercare.com.kw/en'
       files_path: "%paths.base%/media"
-    Drupal\DrupalExtension:
-      blackbox: ~
-    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
-          name: html
-          renderer: Twig,Behat2
-          file_name: index
-          print_args: true
-          print_outp: true
-          loop_break: true
+
 hmuat:
   autoload:
     '': %paths.base%/features/hmkw/bootstrap
@@ -156,26 +138,9 @@ hmuat:
         output_path: %paths.base%/features/hmkw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      browser_name: chrome
-      goutte:
-        guzzle_parameters:
-          verify: false
-      javascript_session: selenium2
-      selenium2:
-        wd_host: http://127.0.0.1:4444/wd/hub
-        browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://hmkw-uat.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
-    Drupal\DrupalExtension:
-      blackbox: ~
-    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
-          name: html
-          renderer: Twig,Behat2
-          file_name: index
-          print_args: true
-          print_outp: true
-          loop_break: true
+
 hmqa:
   autoload:
     '': %paths.base%/features/hmkw/bootstrap
@@ -201,26 +166,9 @@ hmqa:
         output_path: %paths.base%/features/hmkw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      browser_name: chrome
-      goutte:
-        guzzle_parameters:
-          verify: false
-      javascript_session: selenium2
-      selenium2:
-        wd_host: http://127.0.0.1:4444/wd/hub
-        browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://hmkw-test.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
-    Drupal\DrupalExtension:
-      blackbox: ~
-    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
-          name: html
-          renderer: Twig,Behat2
-          file_name: index
-          print_args: true
-          print_outp: true
-          loop_break: true
+
 hmprod:
   autoload:
     '': %paths.base%/features/hmkw/bootstrap
@@ -246,26 +194,9 @@ hmprod:
         output_path: %paths.base%/features/hmkw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      browser_name: chrome
-      goutte:
-        guzzle_parameters:
-          verify: false
-      javascript_session: selenium2
-      selenium2:
-        wd_host: http://127.0.0.1:4444/wd/hub
-        browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://kw.hm.com/en'
       files_path: "%paths.base%/media"
-    Drupal\DrupalExtension:
-      blackbox: ~
-    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
-          name: html
-          renderer: Twig,Behat2
-          file_name: index
-          print_args: true
-          print_outp: true
-          loop_break: true
+
 vsqa:
   autoload:
     '': %paths.base%/features/vskw/bootstrap
@@ -290,23 +221,6 @@ vsqa:
         output_path: %paths.base%/features/vskw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      browser_name: chrome
-      goutte:
-        guzzle_parameters:
-          verify: false
-      javascript_session: selenium2
-      selenium2:
-        wd_host: http://127.0.0.1:4444/wd/hub
-        browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
       base_url: 'https://alshaya_shield:AS_S@vskw.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
-    Drupal\DrupalExtension:
-      blackbox: ~
-    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
-          name: html
-          renderer: Twig,Behat2
-          file_name: index
-          print_args: true
-          print_outp: true
-          loop_break: true
+

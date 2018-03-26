@@ -16,11 +16,7 @@ use Drupal\user\RoleInterface;
  * config when we move to V2.
  */
 function alshaya_addressbook_update_8302() {
-  $configs = [
-    'alshaya_addressbook.settings',
-  ];
-
-  alshaya_config_install_configs($configs, 'alshaya_addressbook');
+  alshaya_config_install_configs(['alshaya_addressbook.settings'], 'alshaya_addressbook');
 }
 
 /**

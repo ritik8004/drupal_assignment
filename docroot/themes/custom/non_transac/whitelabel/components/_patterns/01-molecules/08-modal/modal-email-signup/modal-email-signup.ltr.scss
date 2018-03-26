@@ -80,10 +80,6 @@
 
 .captcha {
   clear: both;
-
-  + .captcha-inline-error {
-    display: none;
-  }
 }
 
 .captcha-inline-error {
@@ -115,5 +111,11 @@
       font-weight: bold;
       color: $light-pink;
     }
+  }
+}
+
+body {
+  &.signup-modal-overlay {
+    overflow: hidden;
   }
 }

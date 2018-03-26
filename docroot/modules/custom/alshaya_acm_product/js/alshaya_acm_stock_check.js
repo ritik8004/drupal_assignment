@@ -47,7 +47,7 @@
         var skuId = $wrapper.attr('data-skuid');
         if (typeof skuId !== 'undefined') {
           $.ajax({
-            url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
+            url: Drupal.url('get-cart-form/acq_sku/full/' + skuId) + '?' + query_params,
             type: 'GET',
             dataType: 'json',
             async: true,
@@ -113,6 +113,21 @@
             }
           });
         });
+
+        // Load cart form for items which are not in the carousel on PDP & Basket on AJAX update.
+        // We need to check classes on context here since the response from configurable_ajax_callback
+        // returns the horizontal cross/up-sell wrapper.
+        if ($(context).is('.horizontal-crossell.mobile-only-block') || $(context).is('.horizontal-upell.mobile-only-block')) {
+          var viewRowCount = $(context).find('.views-row').length;
+          if ((viewRowCount > 0) && (viewRowCount <= 3)) {
+            $(context).find('.views-row').each(function () {
+              var mobileItem = $(context).find('.mobile--only--sell');
+              if (mobileItem.length !== 0) {
+                Drupal.loadTeaserCartForm($(context));
+              }
+            });
+          }
+        }
       }
 
       // Check stock for modal & load add cart form if stock-check successful.
@@ -121,8 +136,10 @@
         var skuId = $wrapper.attr('data-skuid');
         var stockCheckProcessed = 'stock-check-processed';
         if ((skuId !== undefined) && (!$(this).closest('article[data-vmode="modal"]').hasClass(stockCheckProcessed))) {
+          // For modal view, no need to process/refresh upsell crosssell.
+          query_params = query_params.length > 0 ? query_params + '&skip_crosssell_processing=1' : 'skip_crosssell_processing=1';
           $.ajax({
-            url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
+            url: Drupal.url('get-cart-form/acq_sku/modal/' + skuId) + '?' + query_params,
             type: 'GET',
             dataType: 'json',
             async: true,
@@ -155,7 +172,16 @@
 	 * @param element
 	 */
   Drupal.reAttachAddCartAndConfigSizeAjax = function (element) {
-    var postUrl = $(element).find('form').attr('action') + '?ajax_form=1';
+    var postUrl = $(element).find('form').attr('action');
+
+    // If url already contains '?', then append by '&'.
+    if (postUrl.indexOf('?') !== -1) {
+      postUrl = postUrl + '&ajax_form=1';
+    }
+    else {
+      postUrl = postUrl + '?ajax_form=1';
+    }
+
     var editCartElementSettings = {
       callback: 'alshaya_acm_cart_notification_form_submit',
       dialogType: 'ajax',
@@ -250,8 +276,12 @@
       var skuId = skuArticle.attr('data-skuid');
       if (!(skuArticle.hasClass('stock-check-processed')) && (typeof skuId !== 'undefined')) {
         var $wrapper = skuArticle;
+
+        // For mobile crosssell form, we dont need processing.
+        query_params = query_params.length > 0 ? query_params + '&skip_crosssell_processing=1' : 'skip_crosssell_processing=1';
+
         $.ajax({
-          url: Drupal.url('get-cart-form/acq_sku/' + skuId) + '?' + query_params,
+          url: Drupal.url('get-cart-form/acq_sku/teaser/' + skuId) + '?' + query_params,
           type: 'GET',
           dataType: 'json',
           async: true,
@@ -259,7 +289,6 @@
             $wrapper.html(result.html);
             skuArticle.addClass('stock-check-processed');
             Drupal.attachBehaviors($wrapper[0]);
-            Drupal.reAttachAddCartAndConfigSizeAjax($wrapper[0]);
           }
         });
       }

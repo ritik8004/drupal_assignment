@@ -236,6 +236,10 @@ header {
       z-index: 4;
       position: static;
 
+      @include breakpoint($only-mobile) {
+        background: none;
+      }
+
       .notification--on & {
         z-index: 3;
       }
@@ -466,11 +470,6 @@ header {
     }
 
     li {
-      display: table-cell;
-      text-align: center;
-      padding: 0;
-      border: 1px solid transparent;
-
       &:hover {
         background: none;
       }
@@ -721,7 +720,7 @@ header {
         }
 
         &:hover {
-          background-color: $marine-blue;
+          background: transparent;
 
           a,
           p {

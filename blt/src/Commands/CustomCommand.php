@@ -171,7 +171,7 @@ class CustomCommand extends BltTasks {
       ->stopOnFail()
       ->assume(TRUE)
       ->alias($drush_alias)
-      ->drush('alshaya-acm-offline-categories-sync')
+      ->drush('sync-commerce-cats')
       ->drush('sync-commerce-product-options')
       ->drush('alshaya-acm-offline-products-sync')
       ->uri($uri)

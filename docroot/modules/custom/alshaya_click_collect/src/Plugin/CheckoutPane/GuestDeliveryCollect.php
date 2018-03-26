@@ -132,6 +132,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#attributes' => ($store_code) ? ['style' => 'display:none;'] : [],
     ];
 
+    $pane_form['store_finder']['cnc_collect_from'] = [
+      '#markup' => '<div class="cnc-collect-from">' . $this->t('Select your preferred pickup store') . '</div>',
+    ];
+
     $pane_form['store_finder']['store_location'] = [
       '#type' => 'textfield',
       '#title' => $this->t('find your closest collection point'),

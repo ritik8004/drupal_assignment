@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides the contact information pane.
@@ -169,12 +170,12 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     $pane_form['payment_options'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Payment Options'),
+      '#title' => $this->t('Payment Methods'),
       '#options' => $payment_options,
       '#default_value' => $selected_plugin_id,
       '#ajax' => [
         'wrapper' => 'payment_details_wrapper',
-        'callback' => [$this, 'rebuildPaymentDetails'],
+        'url' => Url::fromRoute('alshaya_acm_checkout.select_payment_method'),
       ],
       '#attributes' => [
         'gtm-type' => 'cart-checkout-payment',
@@ -231,13 +232,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     }
 
     return $pane_form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function rebuildPaymentDetails(array $pane_form, FormStateInterface $form_state) {
-    return $pane_form['acm_payment_methods']['payment_details_wrapper'];
   }
 
   /**

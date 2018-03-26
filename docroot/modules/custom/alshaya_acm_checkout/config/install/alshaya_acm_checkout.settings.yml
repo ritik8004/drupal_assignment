@@ -16,5 +16,5 @@ checkout_customer_service:
 click_collect_method_method_code: 'click_and_collect'
 click_collect_method_carrier_code: 'click_and_collect'
 checkout_display_magento_error: 1
-checkout_show_tax_info: true
+checkout_show_tax_info: false
 langcode: en
