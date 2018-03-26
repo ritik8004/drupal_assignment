@@ -98,11 +98,11 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   protected function processStepId($requested_step_id) {
     $cart = $this->cartStorage->getCart(FALSE);
 
+    $session = \Drupal::request()->getSession();
+
     // We need to show confirmation step even after cart is cleared.
     if (empty($cart) && $requested_step_id == 'confirmation') {
       $step_id = $requested_step_id;
-
-      $session = \Drupal::request()->getSession();
 
       if (!empty($session->get('last_order_id'))) {
         return $step_id;

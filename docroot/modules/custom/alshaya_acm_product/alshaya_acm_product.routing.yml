@@ -59,7 +59,7 @@ alshaya_acm_product.stock_check_ajax:
         type: entity:{entity_type}
 
 alshaya_acm_product.get_cart_form:
-  path: '/get-cart-form/{entity_type}/{entity}'
+  path: '/get-cart-form/{entity_type}/{view_mode}/{entity}'
   defaults:
     _controller: '\Drupal\alshaya_acm_product\Controller\ProductStockController::getCartForm'
     _title: ''

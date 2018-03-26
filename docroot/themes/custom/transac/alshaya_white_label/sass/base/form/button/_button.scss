@@ -7,6 +7,10 @@
   min-width: 162px;
   padding: 11px;
   text-align: center;
+
+  &:hover {
+    opacity: 0.75;
+  }
 }
 
 %button-brand,
@@ -16,9 +20,17 @@
   font-size: 12px;
   font-weight: bold;
   padding: 10px 20px 9px;
+
+  &:hover {
+    opacity: 0.75;
+  }
 }
 
 .button {
+  &:hover {
+    opacity: 0.75;
+  }
+
   &.status-pending,
   &.status-delivered,
   &.status-complete,
@@ -59,6 +71,10 @@
   clear: both;
   display: block;
 
+  &:hover {
+    opacity: 0.75;
+  }
+
   @include breakpoint($tablet) {
     padding-top: 1rem;
     max-width: 35.8%;
@@ -77,5 +93,11 @@
     border: 1px solid $primary_brand_button;
     padding: 0.563rem 4.12rem;
     font-family: $arial;
+  }
+}
+
+button[type="submit"] {
+  &:hover {
+    opacity: 0.75;
   }
 }

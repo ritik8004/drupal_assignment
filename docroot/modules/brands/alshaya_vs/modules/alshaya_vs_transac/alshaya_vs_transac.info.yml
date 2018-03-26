@@ -1,0 +1,9 @@
+name: 'Alshaya Victoria Secret (Transac)'
+type: module
+description: 'The dedicated module for transac Victoria Secret brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_vs:alshaya_vs
+themes:
+  - victoria_secret

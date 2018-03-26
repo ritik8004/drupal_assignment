@@ -116,7 +116,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     ];
 
     $pane_form['store_finder']['cnc_collect_from'] = [
-      '#markup' => '<div class="cnc-collect-from">' . $this->t('Where do you want to collect from?') . '</div>',
+      '#markup' => '<div class="cnc-collect-from">' . $this->t('Select your preferred pickup store') . '</div>',
     ];
 
     $pane_form['store_finder']['store_location'] = [
