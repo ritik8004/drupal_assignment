@@ -4,7 +4,6 @@ namespace Drupal\alshaya_main_menu\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_main_menu\ProductCategoryTree;
@@ -85,102 +84,20 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
-    return [
-      'follow_category_term' => 0,
-      'default_parent' => NULL,
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function blockForm($form, FormStateInterface $form_state) {
-    $defaults = $this->defaultConfiguration();
-
-    $form['menu_config'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Menu Config'),
-      // Open if not set to defaults.
-      '#open' => $defaults['top_level_category'] !== $this->configuration['top_level_category'] || $defaults['follow_category_term'] !== $this->configuration['follow_category_term'],
-      '#process' => [[get_class(), 'processMenuConfigParents']],
-    ];
-
-    $form['menu_config']['follow_category_term'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Display second level menu item as per current path.'),
-      '#default_value' => $this->configuration['follow_category_term'] ? $this->configuration['follow_category_term'] : $defaults['follow_category_term'],
-    ];
-
-    $form['menu_config']['default_parent'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Default Parent.'),
-      '#options' => $this->getSelectListTopCategoryTerms(),
-      '#default_value' => empty($this->configuration['default_parent']) ?: $this->configuration['default_parent'],
-      '#states' => [
-        'visible' => [
-          ':input[name="settings[follow_category_term]"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
-
-    return $form;
-  }
-
-  /**
-   * Create option array of top level category for select list.
-   *
-   * @return array
-   *   Return array of top level category terms.
-   */
-  private function getSelectListTopCategoryTerms() {
-    $options = ['' => $this->t('-Select-')];
-    $terms = $this->productCateoryTree->getTopLevelCategory();
-
-    foreach ($terms as $term => $term_data) {
-      $options[$term] = $term_data['label'];
-    }
-    return $options;
-  }
-
-  /**
-   * Adjusts the #parents of menu_config to save its children at the top level.
-   */
-  public static function processMenuConfigParents(&$element, FormStateInterface $form_state, &$complete_form) {
-    array_pop($element['#parents']);
-    return $element;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['follow_category_term'] = (int) $form_state->getValue('follow_category_term');
-    if ($form_state->getValue('default_parent')) {
-      $this->configuration['default_parent'] = (int) $form_state->getValue('default_parent');
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function build() {
     // Get the term object from current route.
     $term = $this->productCateoryTree->getCategoryTermFromRoute();
 
+    // @todo: set default parent_id for second level category menu.
     // Get the term id from the current path, and display only the related
     // second level child terms.
-    if ($this->configuration['follow_category_term'] && !empty($this->configuration['default_parent'])) {
-      // If term is of 'acq_product_category' vocabulary.
-      if ($term instanceof TermInterface && $parents = $this->productCateoryTree->getCategoryTermParents($term)) {
-        // Get the top level parent id if parent exists.
-        $parents = array_keys($parents);
-        $parent_id = empty($parents) ? $term->id() : end($parents);
-      }
-      // Set the default parent term to display menu on other pages.
-      else {
-        $parent_id = $this->configuration['default_parent'];
-      }
+    if ($term instanceof TermInterface && $parents = $this->productCateoryTree->getCategoryTermParents($term)) {
+      // Get the top level parent id if parent exists.
+      $parents = array_keys($parents);
+      $parent_id = empty($parents) ? $term->id() : end($parents);
+    }
+
+    if (!empty($parent_id)) {
       // Child terms of given parent term id.
       $term_data = $this->productCateoryTree->getCategoryTreeCached($parent_id);
     }
