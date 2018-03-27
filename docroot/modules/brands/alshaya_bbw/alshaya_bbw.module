@@ -5,6 +5,9 @@
  * The Module file.
  */
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_module_implements_alter().
  */
