@@ -331,7 +331,7 @@
           product.quantity = Math.abs(diffQty);
 
           // Set item's size as dimension6.
-          if (cartItem.attr('gtm-size')) {
+          if (!$.inArray('dimension6', settings.gtm.disabled_vars) && cartItem.attr('gtm-size')) {
             product.dimension6 = cartItem.attr('gtm-size');
           }
 
@@ -387,7 +387,7 @@
           product.quantity = $(this).closest('tr').find('td.quantity select').val();
 
           // Set selected size as dimension6.
-          if (removeItem.attr('gtm-size')) {
+          if (!$.inArray('dimension6', settings.gtm.disabled_vars) && removeItem.attr('gtm-size')) {
             product.dimension6 = removeItem.attr('gtm-size');
           }
 
@@ -594,6 +594,13 @@
         });
       });
 
+      // Tracking view of homepage banner in body.
+      $('.field--name-body').each(function () {
+        $(this).once('js-event').on('click', function () {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
+        });
+      });
+
       // Tracking view of promotions.
       $('.paragraph--type--promo-block').each(function () {
         $(this).once('js-event').on('click', function () {
@@ -793,11 +800,14 @@
         position = 1;
       }
       else if(gtmPageType === 'home page') {
-        creative = Drupal.url($(highlight).find('picture img').attr('src'));
-        if (creative) {
-          creative = Drupal.url($(highlight).find('img').attr('src'));
+        var imgSrc = $(highlight).find('picture img').attr('src');
+        if (typeof imgSrc !== 'undefined') {
+          position = parseInt($('.slick-track').index($(highlight).parent('c-slider-promo__item'))) + 1;
         }
-        position = parseInt($('.slick-track').index($(highlight).parent('c-slider-promo__item'))) + 1;
+        else {
+          imgSrc = $(highlight).find('img').attr('src');
+        }
+        creative = Drupal.url(imgSrc);
       }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
