@@ -5,7 +5,7 @@ namespace Drupal\alshaya_main_menu\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
-use Drupal\alshaya_main_menu\ProductCategoryTree;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -42,7 +42,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    *   Plugin id.
    * @param mixed $plugin_definition
    *   Plugin defination.
-   * @param \Drupal\alshaya_main_menu\ProductCategoryTree $product_category_tree
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree) {
@@ -58,7 +58,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya_main_menu.product_category_tree')
+      $container->get('alshaya_acm_product_category.product_category_tree')
     );
   }
 
