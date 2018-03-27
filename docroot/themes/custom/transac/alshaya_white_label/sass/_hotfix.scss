@@ -120,6 +120,17 @@ body.ucbrowser {
       height: 34px;
     }
   }
+
+  @include breakpoint($only-mobile) {
+    .c-menu-primary {
+      .mobile--search,
+      .store {
+        html[lang=ar] & {
+          font-size: 0;
+        }
+      }
+    }
+  }
 }
 
 #text-resize-control {
