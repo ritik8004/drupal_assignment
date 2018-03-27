@@ -59,6 +59,13 @@ class ProductCategoryTree {
   protected $connection;
 
   /**
+   * Highlight image paragraph ids for all terms.
+   *
+   * @var array
+   */
+  protected $highlighImages = [];
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -163,17 +170,25 @@ class ProductCategoryTree {
   protected function getHighlightImage($tid, $langcode, $vid) {
     $highlight_images = [];
 
-    $highlight_field = $this->getHighLightImages($langcode, $vid, $tid);
+    // We fetch this from first request and shouldn't be empty. If empty,
+    // assuming its first request and prepare data.
+    if (empty($this->highlighImages)) {
+      $this->getHighLightImages($vid);
+    }
 
     // If no data in paragraph referenced field.
-    if (empty($highlight_field)) {
+    if (empty($this->highlighImages[$tid])) {
       return $highlight_images;
     }
 
-    foreach ($highlight_field as $paragraph_id) {
-      $paragraph_id = $paragraph_id->field_main_menu_highlight_target_id;
+    foreach ($this->highlighImages[$tid] as $paragraph_id) {
       // Load paragraph entity.
       $paragraph = Paragraph::load($paragraph_id);
+
+      // If unable to load paragraph object.
+      if (!$paragraph) {
+        continue;
+      }
 
       // Get the translation of the paragraph if exists.
       if ($paragraph->hasTranslation($langcode)) {
@@ -226,25 +241,21 @@ class ProductCategoryTree {
   }
 
   /**
-   * Get highlight image paragraphs id for a given term.
+   * Get highlight image paragraphs id for all terms.
    *
-   * @param string $langcode
-   *   Language code.
    * @param string $vid
    *   Vocabulary id.
-   * @param int $tid
-   *   Term id.
-   *
-   * @return array
-   *   Highlight image ids.
    */
-  protected function getHighLightImages($langcode, $vid, $tid) {
+  protected function getHighLightImages($vid) {
     $query = $this->connection->select('taxonomy_term__field_main_menu_highlight', 'tmmh');
-    $query->fields('tmmh', ['field_main_menu_highlight_target_id']);
-    $query->condition('tmmh.langcode', $langcode);
-    $query->condition('tmmh.entity_id', $tid);
+    $query->fields('tmmh', ['entity_id', 'field_main_menu_highlight_target_id']);
     $query->condition('tmmh.bundle', $vid);
-    return $query->execute()->fetchAll();
+    $highlight_images = $query->execute()->fetchAll();
+    if (!empty($highlight_images)) {
+      foreach ($highlight_images as $highlight_image) {
+        $this->highlighImages[$highlight_image->entity_id][] = $highlight_image->field_main_menu_highlight_target_id;
+      }
+    }
   }
 
 }
