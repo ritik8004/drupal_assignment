@@ -193,9 +193,11 @@ $block_title: $marine-blue;
 $title: $marine-blue;
 $sub_title: $marine-blue;
 
-// Error
+// Messages and Errors
 $default_msg_text: $white-five;
 $default_msg_bg: $tealish;
+$default_msg_info_bg: $message-info;
+$default_msg_info_text: $black;
 $content_error_msg_bg: $cherry;
 $content_error_msg_txt: $cherry;
 $content_error_input_border: $cherry;
