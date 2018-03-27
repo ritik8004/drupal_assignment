@@ -130,6 +130,7 @@ $primary_empty_btn: $black;
 $primary_empty_btn_border: $black;
 $primary_brand_button: $marine-blue-two;
 $primary_brand_button_text: $marine-blue-two;
+$primary_button_disabled: $ladda-disabled;
 $pending_btn_bg: $tomato;
 $returned_btn_bg: $grey-ash;
 $complete_btn_bg: $medium-green;
@@ -145,6 +146,7 @@ $primary_radiobtn_filled: $cerulean-two;
 $primary_th_bg: $white-three;
 $primary_th_bg_highlight: $whisper-dark;
 $primary_td_highlight2: $white-three; // used on order total (basket).
+$primary_td_highlight3: $white-four; // used on blend class.
 $primary_th_bg_order_highlight: $pale-grey;
 $primary_td_bg_highlight: $white-smoke-light;
 $primary_td_bg: $white-five;
@@ -164,6 +166,14 @@ $primary_dropdown_focus: $black;
 // Text Area
 $primary_textarea_suffix: $greyish;
 $primary_textarea_border: $grey-ash;
+
+// Totals.
+$total_bg: $white-three;
+$total_td_2nd_child_bg: $white-four;
+$total_order_total_txt: $black;
+$total_order_total_row_td_2nd_child: $whisper-light;
+$total_discount_total: $scarlet;
+$total_discount_total_td_2nd_child_bg: $white-five;
 
 /* ------- 3. Secondary color  ----- */
 // Global elements.
@@ -412,13 +422,27 @@ $store_finder_search_results_tile_hover_bg: $white-four;
 $store_finder_search_results_tile_link: $cerulean-two;
 $store_finder_search_results_tile_icon: $cerulean-two;
 
-// Checkout Pages.
+// Checkout Pages & order summary block.
 $order_summary_border: $greyish;
+$order_summary_title: $black;
+$order_summary_dropdown_icon: $black;
+$order_summary_section_border: $white;
+$order_summary_product_title: $black;
+$order_summary_product_price: $black;
+// Color for attributes and qty.
+$order_summary_sec_text: $greyish;
+
 $checkout_footer_bg: $white-five;
 $checkout_footer_border-top: $marine-blue-two;
 $checkout_pri_txt: $grey-ash;
-$checkout_sec_text: $windows-blue;
 $checkout_section_border: $greyish;
+
+// @todo Variables used in outdated markup, avoid using elsewhere.
+$checkout_out_sec_text: $windows-blue;
+$checkout_out_acc_header: $white-four;
+$checkout_out_fieldset_legend: $peacock-blue;
+$checkout_out_fieldset_legend_bottom_border: $greyish;
+$checkout_out_btn: $white-four;
 
 //  Checkout Confirmation.
 $checkout_confirmation_delivery_details: $white-smoke-light;
@@ -449,12 +473,15 @@ $address_pp_delete_closebtn: $white;
 $address_pp_delete_closebtn_icon: $black;
 
 // Basket
+$basket_page_title: $marine-blue-two;
 $basket_sku_promo_link: $scarlet;
 $basket_oos_tr_bg: $white-four;
 $basket_oos_inline_txt: $cherry;
 $basket_oos_inline_qty_border: $cherry;
 $basket_img_border: $white;
 $basket_img_bg: $white-five;
+$basket_th_4th_child: $white-two;
+$basket_continue_shopping_btn_border: $marine-blue-two;
 // Pri text is product title, price, etc.
 $basket_td_pri_txt: $black;
 // Sec text is Size, color, item code attributes.
