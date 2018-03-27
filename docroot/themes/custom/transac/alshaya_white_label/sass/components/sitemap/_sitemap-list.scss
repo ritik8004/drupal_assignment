@@ -14,7 +14,7 @@
   .c-page-title {
     padding-bottom: 0.75rem;
     margin-bottom: 1.25rem;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $primary_border;
   }
 
   .sitemap {
@@ -30,7 +30,7 @@
     }
 
     @include breakpoint($only-mobile) {
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $primary_border;
     }
 
     @include breakpoint($tablet) {
@@ -84,14 +84,14 @@
     display: block;
     font-size: 0.75rem;
     line-height: 1.75;
-    color: $grey-ash;
+    color: $primary_text;
 
     @include breakpoint($desktop) {
       line-height: 2.5;
     }
 
     &:hover {
-      color: $cerulean-two;
+      color: $content_link_color;
       text-decoration: underline;
     }
   }

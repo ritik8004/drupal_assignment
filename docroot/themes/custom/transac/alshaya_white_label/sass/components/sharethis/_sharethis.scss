@@ -3,7 +3,7 @@
   text-align: center;
 
   &.out-of-stock {
-    background: $white-five;
+    background: $oos_btn_text;
     position: relative;
 
     &::before {
@@ -31,7 +31,7 @@
 
     &::before {
       font-size: 1.938rem;
-      color: $marine-blue-two;
+      color: $sharethis_icon;
     }
 
     &:hover::before {
