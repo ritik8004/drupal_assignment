@@ -101,7 +101,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    */
   public function getCacheTags() {
     // Discard cache for the block once a term gets updated.
-    $this->cacheTags[] = ProductCategoryTree::VOCABULARY_ID;
+    $this->cacheTags[] = ProductCategoryTree::CACHE_TAG;
 
     return Cache::mergeTags(
       parent::getCacheTags(),
