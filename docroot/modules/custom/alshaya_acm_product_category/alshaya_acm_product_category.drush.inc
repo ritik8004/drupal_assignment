@@ -28,14 +28,15 @@ function alshaya_acm_product_category_drush_command() {
 function drush_alshaya_acm_product_category_alshaya_category_top_menu($status = NULL) {
   $args = func_get_args();
 
+  $action = 'enable';
   $status = TRUE;
-  $msg = 'Successfully enabled top level category menu block.';
   if (!empty($args) && $args[0] == 'dis') {
-    if (!drush_confirm(dt('Are you sure you want to disable super category menu?'))) {
-      return drush_user_abort();
-    }
+    $action = 'disable';
     $status = FALSE;
-    $msg = 'Successfully disabled top level category menu block.';
+  }
+
+  if (!drush_confirm(dt('Are you sure you want to !action super category menu?', ['!action' => $action]))) {
+    return drush_user_abort();
   }
 
   // Determine which default parent to use for main menu.
@@ -57,5 +58,5 @@ function drush_alshaya_acm_product_category_alshaya_category_top_menu($status = 
   $block->setStatus($status);
   $block->save();
 
-  drush_print(dt($msg));
+  drush_print(dt('Successfully !action top level category menu block.', ['!action' => $action . 'd']));
 }
