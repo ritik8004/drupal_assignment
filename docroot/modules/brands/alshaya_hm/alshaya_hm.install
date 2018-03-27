@@ -11,7 +11,7 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * Create top level super category block.
+ * Create top level super category block from alshaya_white_label theme.
  */
 function alshaya_hm_update_8019() {
   $default_theme = \Drupal::service('theme_handler')->getDefault();
@@ -500,6 +500,9 @@ function alshaya_hm_update_dependencies() {
     'alshaya_hm' => [
       '8018' => [
         'alshaya' => '8004',
+      ],
+      '8019' => [
+        'alshaya_transac' => '8103',
       ],
     ],
   ];

@@ -10,7 +10,7 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Create top level super category block.
+ * Create top level super category block from alshaya_white_label theme.
  */
 function alshaya_mc_update_8312() {
   $default_theme = \Drupal::service('theme_handler')->getDefault();
@@ -324,6 +324,9 @@ function alshaya_mc_update_dependencies() {
     'alshaya_mc' => [
       '8310' => [
         'alshaya' => '8004',
+      ],
+      '8312' => [
+        'alshaya_transac' => '8103',
       ],
     ],
   ];
