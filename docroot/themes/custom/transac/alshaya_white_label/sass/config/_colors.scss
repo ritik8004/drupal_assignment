@@ -20,6 +20,7 @@
 /* ------- 1. Brand Colors ------- */
 // Colors from Zeplin pallete for the site.
 // $black: #000;
+// @todo remove variable $black-two, use $black instead, declared below.
 $black-two: #333;
 $brownish-grey: #666;
 $white-three: #ebebeb;
@@ -107,11 +108,12 @@ $primary_link: $marine-blue-two;
 $primary_link-hover: $marine-blue-two;
 $primary_link-active: $marine-blue-two;
 $primary_border: $white;
+$content_link_color: $cerulean-two;
 
 // Form elements.
 $primary_form_selector_border: $black;
 $primary_form_selector: $black;
-$primary_input: $black-two;
+$primary_input: $black;
 $primary_input_label: $greyish;
 $primary_input_border: $brownish-grey;
 $primary_input_focus_border: $windows-blue;
@@ -124,8 +126,8 @@ $formitem_input: $black;
 //Buttons.
 $primary_btn_bg: $pumpkin-orange;
 $primary_btn_text: $white-five;
-$primary_empty_btn: $black-two;
-$primary_empty_btn_border: $black-two;
+$primary_empty_btn: $black;
+$primary_empty_btn_border: $black;
 $primary_brand_button: $marine-blue-two;
 $primary_brand_button_text: $marine-blue-two;
 $pending_btn_bg: $tomato;
@@ -165,10 +167,10 @@ $primary_textarea_border: $grey-ash;
 
 /* ------- 3. Secondary color  ----- */
 // Global elements.
-$secondary_text: $black-two;
+$secondary_text: $black;
 $secondary_btn_text: $marine-blue;
 $secondary_btn_border: $marine-blue;
-$secondary_border: $black-two;
+$secondary_border: $black;
 $secondary_link: $marine-blue;
 
 /* ------- 4. Tertiary Colors ------- */
@@ -195,6 +197,8 @@ $sub_title: $marine-blue;
 $default_msg_text: $white-five;
 $default_msg_bg: $tealish;
 $content_error_msg_bg: $cherry;
+$content_error_msg_txt: $cherry;
+$content_error_input_border: $cherry;
 $content_error_msg_text: $white-five;
 $formitem_error: $black;
 $formitem_error_label: $red-error;
@@ -205,8 +209,14 @@ $oos_btn_text: $white-five;
 
 // Tooltip
 $tooltip_bg: $alice-blue;
-$tooltip_text: $cerulean-two;
+// $tooltip_bg + opacity 0.
+$tooltip_bg_opacity_0: rgba(240, 246, 252, 0);
+$tooltip_text: $windows-blue;
 $tooltip_border: $cerulean-two;
+// Second color for arrow of tooltip.
+$tooltip_border_2: $alice-blue;
+// $tooltip_border + opacity 0.
+$tooltip_border_opacity_0: rgba(0, 132, 204, 0);
 
 // Back to top
 $btt_bg: $white-three;
@@ -234,7 +244,7 @@ $cloudzoom_hovertext: $brownish-grey;
 $cloudzoom_zoombox_border: $white;
 
 // Mobile Gallery
-$gallery_subtext_bg: $black-two;
+$gallery_subtext_bg: $black;
 $gallery_subtext: $white-five;
 $gallery_arrows_bg: $white-five;
 $gallery_arrows: $black;
@@ -259,7 +269,7 @@ $primary_search_border: $white;
 $primary_search_result_hover: $white-smoke-light;
 
 //  Mini Cart.
-$primary_minicart_text: $black-two;
+$primary_minicart_text: $black;
 $primary_minicart_quantity_text: $white-five;
 $primary_minicart_quantity_bg: $pumpkin-orange;
 
@@ -273,7 +283,7 @@ $minicart_notification_btn_bg: $pumpkin-orange;
 $minicart_notification_btn_text: $white-five;
 
 // Mega menu.
-$mm_l1_link: $black-two;
+$mm_l1_link: $black;
 $mm_l1_link_hover: $marine-blue;
 $mm_l1_link_active_border: $marine-blue;
 $mm_l2_link: $marine-blue;
@@ -296,7 +306,7 @@ $footer_link_hover: $cerulean-two;
 
 //1. Copyright
 $copyright_footer_bg: $white-four;
-$copyright_footer_text: $black-two;
+$copyright_footer_text: $black;
 
 //7. Newsletter-signup
 $newsletter_title_h3: $marine-blue-two;
@@ -311,15 +321,15 @@ $checkout_seperator: $greyish;
 $checkout_progress_complete: $cerulean-two;
 $checkout_progress_complete_text: $cerulean-two;
 $checkout_progress_text: $greyish;
-$checkout_progress_current_text: $black-two;
+$checkout_progress_current_text: $black;
 // @todo: My account priv card content block.
 
 /* ------- 7. Pages ----- */
 // Product listing page and search page.
 $plp_category_desc: $cerulean-two;
-$plp_search_count: $black-two;
+$plp_search_count: $black;
 $plp_sort_by_label: $brownish-grey;
-$plp_facet_filter_label: $black-two;
+$plp_facet_filter_label: $black;
 $plp_facet_title: $brownish-grey;
 $plp_facet_border: $white;
 
@@ -333,7 +343,7 @@ $plp_filterbar_clearall_text: $cerulean-two;
 // PLP Product tile.
 $plp_tile_product_title: $brownish-grey;
 $plp_tile_product_title_hover: $cerulean-two;
-$plp_tile_product_price: $black-two;
+$plp_tile_product_price: $black;
 $plp_tile_product_special_price: $scarlet;
 $plp_tile_product_discount_label: $scarlet;
 $plp_tile_product_hover_border: $greyish;
@@ -346,7 +356,7 @@ $plp_tile_hover_slider_nav_hover: $brownish-grey;
 
 // Product detail page.
 $pdp_product_title: $brownish-grey;
-$pdp_product_price: $black-two;
+$pdp_product_price: $black;
 $pdp_product_special_price: $scarlet;
 $pdp_product_discount_text: $scarlet;
 $pdp_product_itemcode: $brownish-grey;
@@ -355,7 +365,7 @@ $pdp_title_section_border: $white;
 // Product Add to cart form.
 $pdp_sizeguide_link: $windows-blue;
 $pdp_form_item_label: $windows-blue;
-$pdp_size_selected_text: $black-two;
+$pdp_size_selected_text: $black;
 $pdp_size_option_bg: $marine-blue;
 $pdp_size_option_border: $marine-blue;
 $pdp_size_option_text: $marine-blue;
@@ -388,7 +398,7 @@ $store_finder_glossary_alphabet: $marine-blue;
 $store_finder_glossary_text: $brownish-grey;
 $store_finder_glossary_link: $marine-blue;
 // Store finder search results.
-$store_finder_search_results_label: $black-two;
+$store_finder_search_results_label: $black;
 $store_finder_search_results_counter_bg: $cerulean-two;
 $store_finder_search_results_counter_text: $white-five;
 $store_finder_search_results_tile_bg: $white-five;
@@ -422,12 +432,37 @@ $joinclubblock_link: $cerulean-two;
 $address_tile_bg: $white-five;
 $address_tile_selected_bg: $white-four;
 $address_tile_label: $brownish-grey;
-$address_tile_content: $black-two;
-$address_tile_radio_label: $black-two;
+$address_tile_content: $black;
+$address_tile_radio_label: $black;
 $address_tile_selected_radio_label: $brownish-grey;
 $address_pp_delete_title: $marine-blue;
 $address_pp_delete_closebtn: $white;
-$address_pp_delete_closebtn_icon: $black-two;
+$address_pp_delete_closebtn_icon: $black;
+
+// Basket
+$basket_sku_promo_link: $scarlet;
+$basket_oos_tr_bg: $white-four;
+$basket_oos_inline_txt: $cherry;
+$basket_oos_inline_qty_border: $cherry;
+$basket_img_border: $white;
+$basket_img_bg: $white-five;
+// Pri text is product title, price, etc.
+$basket_td_pri_txt: $black;
+// Sec text is Size, color, item code attributes.
+$basket_td_sec_txt: $greyish;
+$basket_item_bundle: $cerulean-two;
+$basket_tooltip_not_available: $white;
+$basket_promotion_input_border: $white;
+$basket_remove_link: $cerulean-two;
+$basket_horizontal_recommendation_slider_dots: $marine-blue-two;
+// Basket top promotions.
+$basket_header_promo_bg: $rosy-pink;
+$basket_header_promo_txt: $white-four;
+// Basket top OOS.
+$basket_header_oos_bg: $cherry;
+$basket_header_oos_txt: $white-four;
+// Privilege card earn text only for the basket page.
+$privilege_earn_txt: $grey-ash;
 
 // Contact Page
 $webform_contact_legend: $marine-blue-two;
