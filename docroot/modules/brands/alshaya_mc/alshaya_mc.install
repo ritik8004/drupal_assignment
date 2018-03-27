@@ -10,6 +10,23 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Create top level super category block.
+ */
+function alshaya_mc_update_8312() {
+  $default_theme = \Drupal::service('theme_handler')->getDefault();
+  $default_theme_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['theme' => 'alshaya_white_label', 'id' => 'supercategorymenu']);
+  foreach ($default_theme_blocks as $default_theme_block_id => $default_theme_block) {
+    $block = $default_theme_block->createDuplicateBlock($default_theme_block_id, $default_theme);
+    // We delete the block from the previous theme.
+    $default_theme_block->delete();
+    // We save the block on the new theme.
+    $block->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-order the PLP sort config by re-saving config.
  */
 function alshaya_mc_update_8311() {
