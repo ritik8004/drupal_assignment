@@ -1,7 +1,7 @@
 %button-wide,
 .button-wide {
-  background-color: #ff6d22;
-  color: #fff;
+  background-color: $primary_btn_bg;
+  color: $primary_btn_text;
   display: inline-block;
   font-size: 12px;
   min-width: 162px;
@@ -15,8 +15,8 @@
 
 %button-brand,
 .brand-button {
-  border: 1px solid $marine-blue-two;
-  color: $marine-blue-two;
+  border: 1px solid $primary_brand_button;
+  color: $primary_brand_button_text;
   font-size: 12px;
   font-weight: bold;
   padding: 10px 20px 9px;
@@ -40,7 +40,7 @@
     font-size: 10px;
     font-weight: bold;
     text-align: center;
-    color: $white-five;
+    color: $primary_btn_text;
     height: 23px;
     line-height: 23px;
     width: 106px;
@@ -54,16 +54,16 @@
 
   &.status-processing,
   &.status-pending {
-    background-color: $tomato;
+    background-color: $pending_btn_bg;
   }
 
   &.status-returned {
-    background-color: $grey-ash;
+    background-color: $returned_btn_bg;
   }
 
   &.status-delivered,
   &.status-complete {
-    background-color: $medium-green;
+    background-color: $complete_btn_bg;
   }
 }
 
@@ -86,11 +86,11 @@
   }
 
   a {
-    color: $marine-blue-two;
+    color: $primary_brand_button_text;
     display: block;
     font-size: 0.813rem;
     text-align: center;
-    border: 1px solid $marine-blue-two;
+    border: 1px solid $primary_brand_button;
     padding: 0.563rem 4.12rem;
     font-family: $arial;
   }

@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_bbw_non_transac.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_bbw_non_transac_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_bbw_non_transac', 'inc', 'alshaya_bbw_non_transac.content');
+
+  // Enable and set bath_body_works as default theme.
+  \Drupal::service('theme_handler')->install(['bath_body_works'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('bath_body_works');
+
+  // Disable some default blocks provided by whitelabel_non_transac that we
+  // don't want on bath_body_works.
+  alshaya_block_delete_blocks(['branding']);
+  
+  // Override join the club default value.
+  $join_the_club_body = "<div class=\"block-join-the-club__title-wrapper\"><h2 class=\"block-join-the-club__title\">Join the club</h2><p class=\"block-join-the-club__title-link\"><a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></p></div><div class=\"block-join-the-club__list\"><p><span class=\"icon-prize\"></span>Win exciting prizes</p><p><span class=\"icon-rewards\"></span>Unlock exclusive rewards</p><p><span class=\"icon-newsletter\"></span>Be the first to know</p><a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></div>";
+  $join_the_club_desc = ['value' => $join_the_club_body, 'format' => 'full_text'];
+
+  \Drupal::configFactory()->getEditable('alshaya_user.join_club')
+    ->set('join_club_description', $join_the_club_desc)
+    ->save();
+
+  // Translate join the club.
+  $join_the_club_desc['value'] = "<div class=\"block-join-the-club__title-wrapper\"><h2 class=\"block-join-the-club__title\">إنضم لنادي الإمتيازات</h2><p class=\"block-join-the-club__title-link\"><a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a></p></div><div class=\"block-join-the-club__list\"><p><span class=\"icon-prize\"></span>اربح جوائز مدهشة</p><p><span class=\"icon-rewards\"></span>احصل على مكافآت حصرية</p><p><span class=\"icon-newsletter\"></span>كُن أول من يعلم</p><a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">مزيد من المعلومات</a></div>";
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_user.join_club')
+    ->set('join_club_description', $join_the_club_desc)
+    ->save();
+
+  // Translate store finder footer block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder_footer')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
+
+  // Configure for which content type ShareThis widget should appear.
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+    // Enable share this for non transac Product CT.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_non_transac_product')) {
+      $configFactory->set('node_types.product', 'product');
+    }
+    // Set the option to use large image style button for sharethis.
+    $configFactory->set('button_option', 'stbc_large');
+    $configFactory->save();
+  }
+
+  \Drupal::service('theme_handler')->install(['alshaya_amp_bath_body_works'], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_bath_body_works')->save();
+}

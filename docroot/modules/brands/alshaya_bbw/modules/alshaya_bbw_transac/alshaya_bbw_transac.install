@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_bbw_transac.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_bbw_transac_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_bbw_transac', 'inc', 'alshaya_bbw_transac.content');
+
+  // Enable and set bath_body_works as default theme.
+  \Drupal::service('theme_handler')->install(['alshaya_bathbodyworks'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_bathbodyworks');
+
+  // Set store id - EN.
+  \Drupal::configFactory()->getEditable('acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['en'])
+    ->save();
+
+  // Translate store id in config.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['ar'])
+    ->save();
+
+  // Save language prefix - EN.
+  \Drupal::configFactory()->getEditable('alshaya_api.settings')
+    ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['en'])
+    ->save();
+
+  // Save language prefix - AR.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
+    ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
+    ->save();
+}

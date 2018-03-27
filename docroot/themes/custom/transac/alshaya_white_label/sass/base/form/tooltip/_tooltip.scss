@@ -10,14 +10,14 @@
 
 %tooltip-after {
   border-color: rgba(240, 246, 252, 0);
-  border-bottom-color: $alice-blue;
+  border-bottom-color: $tooltip_bg;
   border-width: 5px;
   margin-#{$left}: -5px;
 }
 
 %tooltip-before {
   border-color: rgba(0, 132, 204, 0);
-  border-bottom-color: $cerulean-two;
+  border-bottom-color: $tooltip_border;
   border-width: 6px;
   margin-#{$left}: -6px;
 }

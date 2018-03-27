@@ -14,7 +14,7 @@
     }
 
     a {
-      color: $grey-ash;
+      color: $primary_text;
       display: block;
       line-height: 1.9;
       text-transform: lowercase;
@@ -25,12 +25,12 @@
       }
 
       &.active {
-        color: $marine-blue;
+        color: $secondary_link;
         font-weight: bold;
       }
 
       &:hover {
-        color: $cerulean-two;
+        color: $content_link_color;
         text-decoration: underline;
       }
     }
@@ -50,7 +50,7 @@
         }
 
         a {
-          color: $grey-ash;
+          color: $primary_text;
           pointer-events: none;
         }
       }
@@ -88,7 +88,7 @@
     }
 
     h3 {
-      color: $dark-sand;
+      color: $joinclubblock_title;
       font-size: 14px;
       font-family: "alshaya-bold";
       text-transform: lowercase;

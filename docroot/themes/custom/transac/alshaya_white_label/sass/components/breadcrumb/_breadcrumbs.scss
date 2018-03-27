@@ -1,5 +1,5 @@
 .c-breadcrumb {
-  background: $white-four;
+  background: $breadcrumb_bg;
 
   ol {
     max-width: 80.25rem;
@@ -21,14 +21,14 @@
 
     &:last-of-type a {
       font-weight: bold;
-      color: $breadcrumb-active;
+      color: $breadcrumb_link_active;
       pointer-events: none;
       cursor: default;
     }
 
     a {
       font-weight: normal;
-      color: $greyish;
+      color: $breadcrumb_link;
 
       &:hover {
         text-decoration: underline;
@@ -37,7 +37,7 @@
 
     &::after {
       content: '>';
-      color: $greyish;
+      color: $breadcrumb_link_hover;
       vertical-align: middle;
       padding-right: 0.3125rem;
       padding-left: 0.3125rem;
