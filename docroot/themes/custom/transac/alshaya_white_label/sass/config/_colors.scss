@@ -100,7 +100,8 @@ $sticky-btn: rgba(0, 0, 0, 0.07);
 // Global elements.
 $primary_bg: $white-five;
 $body_bg: $primary_bg;
-$content_page_title: $marine-blue;
+$content_pagetitle: $marine-blue;
+$content_pagetitle_border: $white;
 $primary_text: $brownish-grey;
 $primary_link: $marine-blue-two;
 $primary_link-hover: $marine-blue-two;
@@ -115,6 +116,10 @@ $primary_input_label: $greyish;
 $primary_input_border: $brownish-grey;
 $primary_input_focus_border: $windows-blue;
 $primary_input_inline_error: $scarlet-two;
+
+// Form Items
+$formitem_label: $greyish;
+$formitem_input: $black;
 
 //Buttons.
 $primary_btn_bg: $pumpkin-orange;
@@ -154,6 +159,10 @@ $primary_dropdown_option_border: $white;
 $primary_dropdown_option_disbled: $greyish;
 $primary_dropdown_focus: $black;
 
+// Text Area
+$primary_textarea_suffix: $greyish;
+$primary_textarea_border: $grey-ash;
+
 /* ------- 3. Secondary color  ----- */
 // Global elements.
 $secondary_text: $black-two;
@@ -187,6 +196,8 @@ $default_msg_text: $white-five;
 $default_msg_bg: $tealish;
 $content_error_msg_bg: $cherry;
 $content_error_msg_text: $white-five;
+$formitem_error: $black;
+$formitem_error_label: $red-error;
 
 // Out of stock button.
 $oos_btn_bg: $cherry;
@@ -414,3 +425,6 @@ $address_tile_selected_radio_label: $brownish-grey;
 $address_pp_delete_title: $marine-blue;
 $address_pp_delete_closebtn: $white;
 $address_pp_delete_closebtn_icon: $black-two;
+
+// Contact Page
+$webform_contact_legend: $marine-blue-two;
