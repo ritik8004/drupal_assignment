@@ -501,6 +501,8 @@ function alshaya_hm_update_dependencies() {
       '8018' => [
         'alshaya' => '8004',
       ],
+      // Create super category block in alshaya_white_label theme so, that can
+      // be cloned by H&M.
       '8019' => [
         'alshaya_transac' => '8103',
       ],
