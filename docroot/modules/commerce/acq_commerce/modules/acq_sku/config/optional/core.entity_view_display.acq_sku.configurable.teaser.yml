@@ -5,7 +5,6 @@ dependencies:
   config:
     - acq_sku.type.configurable
     - core.entity_view_mode.acq_sku.teaser
-    - field.field.acq_sku.configurable.field_acq_sku_promotions
     - field.field.acq_sku.configurable.field_configurable_attributes
     - field.field.acq_sku.configurable.field_configured_skus
   module:
@@ -22,7 +21,6 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    region: content
   image:
     label: hidden
     type: image
@@ -31,7 +29,6 @@ content:
       image_style: ''
       image_link: ''
     third_party_settings: {  }
-    region: content
   name:
     label: hidden
     type: string
@@ -39,7 +36,13 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    region: content
+  price:
+    label: above
+    type: string
+    weight: 3
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
   sku:
     label: above
     type: string
@@ -47,51 +50,11 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    region: content
 hidden:
-  attr_article_fragrance_description: true
-  attr_article_license_company: true
-  attr_article_license_item: true
-  attr_article_pattern: true
-  attr_article_visual_description: true
-  attr_article_warning: true
-  attr_assets: true
-  attr_at_glance: true
-  attr_brand_logo: true
-  attr_bullet_points: true
-  attr_collection: true
   attr_color: true
-  attr_color_label: true
-  attr_composition: true
-  attr_concept: true
-  attr_dry_cleaning_instructions: true
-  attr_is_buyable: true
-  attr_labels: true
-  attr_product_brand: true
-  attr_product_collection: true
-  attr_product_designer_collection: true
-  attr_product_environment: true
-  attr_product_feature: true
-  attr_product_quality: true
-  attr_reserve_and_collect: true
-  attr_rgb_color: true
-  attr_season: true
-  attr_ship_to_store: true
   attr_size: true
-  attr_style: true
-  attr_washing_instructions: true
-  attr_whats_in_the_box: true
-  attribute_set: true
   attributes: true
   crosssell: true
-  field_acq_sku_promotions: true
   field_configurable_attributes: true
   field_configured_skus: true
-  final_price: true
-  langcode: true
-  media: true
-  price: true
-  product_id: true
-  special_price: true
-  stock: true
   upsell: true
