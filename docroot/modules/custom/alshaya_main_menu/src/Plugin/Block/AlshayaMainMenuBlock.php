@@ -143,7 +143,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->cacheTags[] = 'node_type:department_page';
 
     // Discard cache for the block once a term gets updated.
-    $this->cacheTags[] = ProductCategoryTree::VOCABULARY_ID;
+    $this->cacheTags[] = ProductCategoryTree::CACHE_TAG;
 
     return Cache::mergeTags(
       parent::getCacheTags(),
