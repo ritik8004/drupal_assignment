@@ -24,17 +24,17 @@
       $('.edit-add-to-cart').attr('data-style', 'zoom-in');
       var l = $('.edit-add-to-cart').ladda();
 
-      $('.edit-add-to-cart', context).once().on('click', function () {
+      $('.edit-add-to-cart', context).on('click', function () {
         // Start loading
         $(this).ladda('start');
       });
 
-      $('.edit-add-to-cart', context).once().on('mousedown', function () {
+      $('.edit-add-to-cart', context).on('mousedown', function () {
         // Start loading
         $(this).ladda('start');
       });
 
-      $('.edit-add-to-cart', context).once().on('keydown', function (event) {
+      $('.edit-add-to-cart', context).on('keydown', function (event) {
         if (event.keyCode === 13 || event.keyCode === 32) {
           // Start loading
           $(this).ladda('start');

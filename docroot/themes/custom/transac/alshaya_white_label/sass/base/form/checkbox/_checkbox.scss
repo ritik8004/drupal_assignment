@@ -14,7 +14,7 @@ input[type=checkbox]:checked ~ label {
   @include icon(checkboxfull);
 
   &::before {
-    color: $windows-blue;
+    color: $primary_checkbox_filled;
   }
 }
 

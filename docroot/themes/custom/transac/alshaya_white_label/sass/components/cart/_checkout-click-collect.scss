@@ -91,6 +91,10 @@
         border: 1px solid $marine-blue-two;
         font-weight: bold;
         color: $marine-blue-two;
+
+        &:hover {
+          opacity: 0.75;
+        }
       }
 
       @include breakpoint($desktop) {
