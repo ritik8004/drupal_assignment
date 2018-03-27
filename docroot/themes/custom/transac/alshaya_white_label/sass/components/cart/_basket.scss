@@ -757,6 +757,10 @@
       max-width: 6.25rem;
     }
 
+    &:hover {
+      opacity: 0.75;
+    }
+
     &.remove {
       margin-#{$left}: 1.5rem;
       text-decoration: underline;

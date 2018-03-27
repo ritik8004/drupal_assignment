@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Default theme implementation for a branding block.
+ * Theme override to display branding block.
  *
  * Each branding element variable (logo, name, slogan) is only available if
  * enabled in the block configuration.
@@ -15,10 +15,12 @@
  */
 #}
 {{ attach_library("whitelabel/block-site-logo") }}
+{% set sitename_tag = is_front ? 'h1' : 'div' %}
+
 {% if site_logo %}
-  <h1 class="site__logo">
-    <a href="{{ path('<front>') }}" title="{{ site_logo_title }}" rel="home">
-      <img src="{{ site_logo }}" alt="{{ site_logo_title }}" />
+  <{{ sitename_tag }} class="site__logo">
+    <a href="{{ path('<front>') }}" title="{{ site_name }}" rel="home">
+      <img src="{{ site_logo }}" alt="{{ site_name }}" />
     </a>
-  </h1>
+  </{{ sitename_tag }}>
 {% endif %}
