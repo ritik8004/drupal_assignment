@@ -10,13 +10,29 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Fix user register mail arabic translation.
+ * Fix user register mail arabic translation and remove extra config.
  */
 function alshaya_user_update_8004() {
   $signup_arabic_mail = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'user_registrationpassword.mail');
   $signup_arabic_mail->set('register_confirmation_with_pass.subject', $signup_arabic_mail->get('register_withpassword.subject'));
   $signup_arabic_mail->set('register_confirmation_with_pass.body', $signup_arabic_mail->get('register_withpassword.body'));
   $signup_arabic_mail->save();
+
+  // Remove extra config.
+  $config = \Drupal::configFactory()->getEditable('user_registrationpassword.mail');
+  // Get all data.
+  $data = $config->get();
+  unset($data['register_withpassword']);
+  $config->setData($data);
+  $config->save();
+
+  // Remove extra arabic config.
+  $arabic_config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'user_registrationpassword.mail');
+  // Get all data.
+  $data = $arabic_config->get();
+  unset($data['register_withpassword']);
+  $arabic_config->setData($data);
+  $arabic_config->save();
 }
 
 /**
