@@ -930,6 +930,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $process_stock = FALSE;
     }
 
+    // If only one configurable option there, select first value as default.
+    if (count($configurables) == 1) {
+      $options = $form['ajax']['configurables'][key($configurables)]['#options'];
+      if (count($options) == 1) {
+        $form['ajax']['configurables'][key($configurables)]['#value'] = key($options);
+        $user_input = $form_state->getUserInput();
+        $user_input['configurables'] = [key($configurables) => key($options)];
+        $form_state->setUserInput($user_input);
+      }
+    }
+
     foreach ($form['ajax']['configurables'] as $configurable_key => &$configurable) {
       if (is_array($configurable)) {
         $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
