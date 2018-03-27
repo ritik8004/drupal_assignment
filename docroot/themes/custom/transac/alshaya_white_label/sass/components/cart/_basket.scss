@@ -78,7 +78,7 @@
             #{$left}: -6px;
             top: 37%;
             border-bottom-width: 6px;
-            border-#{$right}-color: $cerulean-two;
+            border-#{$right}-color: $tooltip_border;
             border-bottom-color: $tooltip_border_opacity_0;
           }
 
