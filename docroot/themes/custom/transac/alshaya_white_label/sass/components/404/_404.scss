@@ -28,7 +28,7 @@
     right: 0;
     background: $faun;
     z-index: -1;
-    border: solid 1px $white-two;
+    border: solid 1px $maintenance_container_border;
   }
 
   .not-found__image {
@@ -44,12 +44,12 @@
     text-align: center;
     font-size: 1.5625rem;
     font-family: $alshaya-thin;
-    color: $matterhorn;
+    color: $maintenance_body_bg;
     display: table;
     height: 25.875rem;
 
     a {
-      color: #0084cc;
+      color: $maintenance_link;
     }
 
     .maintenance-page & {
@@ -66,7 +66,7 @@
       font-size: 2.25rem;
       font-family: $alshaya-bold;
       font-weight: normal;
-      color: $marine-blue;
+      color: $content_pagetitle;
       margin-bottom: 5px;
       margin-top: 0;
 
@@ -78,7 +78,7 @@
         font-family: $alshaya-arabic-thin-nodir;
         font-size: 30px;
         direction: rtl;
-        color: $marine-blue;
+        color: $content_pagetitle;
       }
     }
 
@@ -86,7 +86,7 @@
       margin-top: 0;
       margin-bottom: 0;
       font-size: 1.5625rem;
-      color: $marine-blue;
+      color: $content_pagetitle;
       font-family: $alshaya-bold;
       font-weight: normal;
 
@@ -130,7 +130,7 @@
       right: 0;
       background: $faun;
       z-index: -1;
-      border: solid 1px $white-two;
+      border: solid 1px $maintenance_container_border;
     }
 
     .not-found__body {
@@ -158,7 +158,7 @@
 }
 
 .maintenance-page {
-  border-top: 24px solid $white-four;
+  border-top: 24px solid $maintenance_container_border_top;
   margin-top: 0;
 
   html[lang=ar] & {
