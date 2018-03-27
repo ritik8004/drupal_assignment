@@ -142,6 +142,16 @@ function whitelabel_preprocess_block(&$variables) {
       }
     }
   }
+
+  // Check if the page is front or not.
+  try {
+    $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+  }
+  catch (Exception $e) {
+    $variables['is_front'] = FALSE;
+  }
+  // Ensure the cache varies correctly (new in Drupal 8.3).
+  $variables['#cache']['contexts'][] = 'url.path.is_front';
 }
 
 /**
@@ -168,7 +178,6 @@ function whitelabel_preprocess_links__language_block(&$variables) {
 function whitelabel_preprocess_page(&$variables) {
   $route = \Drupal::routeMatch();
   $route_name = $route->getRouteName();
-  $path = \Drupal::service('path.matcher');
 
   switch ($route_name) {
     case 'alshaya_master.home':
@@ -184,16 +193,6 @@ function whitelabel_preprocess_page(&$variables) {
     $node_bundle = $node->bundle();
     $variables['attributes']['class'][] = str_replace('_', '-', 'node-' . $node_bundle);
   }
-
-  // Check whether frontpage or not.
-  try {
-    $variables['is_front'] = $path->isFrontPage();
-  }
-  catch (Exception $e) {
-    $variables['is_front'] = FALSE;
-  }
-  // Ensure the cache varies correctly (new in Drupal 8.3).
-  $variables['#cache']['contexts'][] = 'url.path.is_front';
 }
 
 /**
