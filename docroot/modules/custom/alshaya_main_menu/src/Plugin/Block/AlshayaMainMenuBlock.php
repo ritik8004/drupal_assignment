@@ -6,7 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
-use Drupal\alshaya_main_menu\ProductCategoryTree;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -59,7 +59,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Plugin defination.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   The entity type manager.
-   * @param \Drupal\alshaya_main_menu\ProductCategoryTree $product_category_tree
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, ProductCategoryTree $product_category_tree) {
@@ -77,7 +77,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('alshaya_main_menu.product_category_tree')
+      $container->get('alshaya_acm_product_category.product_category_tree')
     );
   }
 
