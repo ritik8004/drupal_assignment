@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_main_menu\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_main_menu\ProductCategoryTree;
@@ -21,13 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Term storage object.
-   *
-   * @var \Drupal\taxonomy\TermStorageInterface
-   */
-  protected $termStorage;
-
-  /**
    * Vocabulary processed data.
    *
    * @var array
@@ -40,6 +33,13 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * @var array
    */
   protected $cacheTags = [];
+
+  /**
+   * Stores the configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
 
   /**
    * Product category tree.
@@ -57,14 +57,14 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Plugin id.
    * @param mixed $plugin_definition
    *   Plugin defination.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
-   *   The entity type manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    * @param \Drupal\alshaya_main_menu\ProductCategoryTree $product_category_tree
    *   Product category tree.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, ProductCategoryTree $product_category_tree) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ProductCategoryTree $product_category_tree) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->termStorage = $entity_manager->getStorage('taxonomy_term');
+    $this->configFactory = $config_factory;
     $this->productCateoryTree = $product_category_tree;
   }
 
@@ -76,7 +76,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager'),
+      $container->get('config.factory'),
       $container->get('alshaya_main_menu.product_category_tree')
     );
   }
@@ -88,14 +88,21 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     // Get the term object from current route.
     $term = $this->productCateoryTree->getCategoryTermFromRoute();
 
-    // @todo: set default parent_id for second level category menu.
+    // Set default parent_id 0 to load first level category terms.
     $parent_id = 0;
-    // Get the term id from the current path, and display only the related
-    // second level child terms.
-    if ($term instanceof TermInterface && $parents = $this->productCateoryTree->getCategoryTermParents($term)) {
-      // Get the top level parent id if parent exists.
-      $parents = array_keys($parents);
-      $parent_id = empty($parents) ? $term->id() : end($parents);
+
+    // Load category top level menu settings.
+    $config = $this->configFactory->get('alshaya_acm_product_category.category_menu.settings');
+    if ($config->get('category_menu_top_level')) {
+      // Set the default parent from settings.
+      $parent_id = $config->get('category_default_parent');
+      // Get the term id from the current path, and display only the related
+      // second level child terms.
+      if ($term instanceof TermInterface && $parents = $this->productCateoryTree->getCategoryTermParents($term)) {
+        // Get the top level parent id if parent exists.
+        $parents = array_keys($parents);
+        $parent_id = empty($parents) ? $term->id() : end($parents);
+      }
     }
 
     // Child terms of given parent term id.
