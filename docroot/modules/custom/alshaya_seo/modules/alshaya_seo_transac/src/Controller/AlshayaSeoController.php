@@ -14,7 +14,7 @@ class AlshayaSeoController extends ControllerBase {
   /**
    * Product Category Tree service object.
    *
-   * @var \Drupal\alshaya_main_menu\ProductCategoryTree
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
    */
   protected $productCategoryTree;
 

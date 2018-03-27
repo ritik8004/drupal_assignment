@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_acm_product_category\Plugin\Block;
 
-use Drupal\alshaya_main_menu\ProductCategoryTree;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;

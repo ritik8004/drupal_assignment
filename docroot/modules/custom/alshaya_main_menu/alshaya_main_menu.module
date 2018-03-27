@@ -6,7 +6,7 @@
  */
 
 use Drupal\Core\Cache\Cache;
-use Drupal\alshaya_main_menu\ProductCategoryTree;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\taxonomy\TermInterface;
 
 /**
