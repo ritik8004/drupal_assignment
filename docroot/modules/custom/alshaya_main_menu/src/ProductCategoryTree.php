@@ -63,7 +63,7 @@ class ProductCategoryTree {
    *
    * @var array
    */
-  protected $highlighImages = [];
+  protected $highlightImages = [];
 
   /**
    * ProductCategoryTree constructor.
@@ -172,16 +172,16 @@ class ProductCategoryTree {
 
     // We fetch this from first request and shouldn't be empty. If empty,
     // assuming its first request and prepare data.
-    if (empty($this->highlighImages)) {
+    if (empty($this->highlightImages)) {
       $this->getHighLightImages($vid);
     }
 
     // If no data in paragraph referenced field.
-    if (empty($this->highlighImages[$tid])) {
+    if (empty($this->highlightImages[$tid])) {
       return $highlight_images;
     }
 
-    foreach ($this->highlighImages[$tid] as $paragraph_id) {
+    foreach ($this->highlightImages[$tid] as $paragraph_id) {
       // Load paragraph entity.
       $paragraph = Paragraph::load($paragraph_id);
 
@@ -253,7 +253,7 @@ class ProductCategoryTree {
     $highlight_images = $query->execute()->fetchAll();
     if (!empty($highlight_images)) {
       foreach ($highlight_images as $highlight_image) {
-        $this->highlighImages[$highlight_image->entity_id][] = $highlight_image->field_main_menu_highlight_target_id;
+        $this->highlightImages[$highlight_image->entity_id][] = $highlight_image->field_main_menu_highlight_target_id;
       }
     }
   }
