@@ -25,14 +25,26 @@ function alshaya_acm_product_category_drush_command() {
 /**
  * Implements drush command alshaya-category-top-menu.
  */
-function drush_alshaya_acm_product_category_alshaya_category_top_menu() {
+function drush_alshaya_acm_product_category_alshaya_category_top_menu($status = NULL) {
+  $args = func_get_args();
+
+  $status = TRUE;
+  $msg = 'Successfully enabled top level category menu block.';
+  if (!empty($args) && $args[0] == 'dis') {
+    if (!drush_confirm(dt('Are you sure you want to disable super category menu?'))) {
+      return drush_user_abort();
+    }
+    $status = FALSE;
+    $msg = 'Successfully disabled top level category menu block.';
+  }
+
   // Determine which default parent to use for main menu.
-  $default_parent = drush_get_option('default_parent', '');
+  $default_parent = $status ? drush_get_option('default_parent', '') : '';
 
   // Update settings for category_menu.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.category_menu.settings');
-  $config->set('category_menu_top_level', TRUE);
-  if (empty($default_parent)) {
+  $config->set('category_menu_top_level', $status);
+  if (empty($default_parent) && $status) {
     $terms = \Drupal::service('alshaya_main_menu.product_category_tree')->getCategoryRootTerms();
     $default_parent = key($terms);
   }
@@ -42,8 +54,8 @@ function drush_alshaya_acm_product_category_alshaya_category_top_menu() {
   // Load super category menu block and set active.
   $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => 'supercategorymenu']);
   $block = reset($blocks);
-  $block->setStatus(TRUE);
+  $block->setStatus($status);
   $block->save();
 
-  drush_print(dt('Enabled top level category menu block.'));
+  drush_print(dt($msg));
 }
