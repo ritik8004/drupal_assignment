@@ -11,11 +11,11 @@
 function alshaya_acm_product_category_drush_command() {
   $commands = [];
 
-  $commands['alshaya-category-top-menu'] = [
-    'description' => 'Enable top level category module.',
-    'aliases' => ['actm'],
+  $commands['alshaya-super-category-switch'] = [
+    'description' => 'Enable or disable super category feature.',
+    'aliases' => ['ascs'],
     'options' => [
-      'default_parent' => 'Default parent for main menu',
+      'default_parent' => 'Default parent term id to render main menu',
     ],
   ];
 
@@ -23,17 +23,14 @@ function alshaya_acm_product_category_drush_command() {
 }
 
 /**
- * Implements drush command alshaya-category-top-menu.
+ * Implements drush command alshaya-super-category-switch.
  */
-function drush_alshaya_acm_product_category_alshaya_category_top_menu($status = NULL) {
-  $args = func_get_args();
+function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
+  // Get editable category_menu settings.
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.category_menu.settings');
 
-  $action = 'enable';
-  $status = TRUE;
-  if (!empty($args) && $args[0] == 'dis') {
-    $action = 'disable';
-    $status = FALSE;
-  }
+  $status = $config->get('category_menu_top_level') ? FALSE : TRUE;
+  $action = $status ? 'enable' : 'disabled';
 
   if (!drush_confirm(dt('Are you sure you want to !action super category menu?', ['!action' => $action]))) {
     return drush_user_abort();
@@ -58,5 +55,5 @@ function drush_alshaya_acm_product_category_alshaya_category_top_menu($status = 
   $block->setStatus($status);
   $block->save();
 
-  drush_print(dt('Successfully !action top level category menu block.', ['!action' => $action . 'd']));
+  drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));
 }
