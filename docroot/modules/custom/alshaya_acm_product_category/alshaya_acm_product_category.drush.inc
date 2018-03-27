@@ -32,7 +32,7 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
   $status = $config->get('category_menu_top_level') ? FALSE : TRUE;
   $action = $status ? 'enable' : 'disabled';
 
-  if (!drush_confirm(dt('Are you sure you want to !action super category menu?', ['!action' => $action]))) {
+  if (!drush_confirm(dt('Are you sure you want to !action super category feature?', ['!action' => $action]))) {
     return drush_user_abort();
   }
 
