@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_main_menu;
+namespace Drupal\alshaya_acm_product_category;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
