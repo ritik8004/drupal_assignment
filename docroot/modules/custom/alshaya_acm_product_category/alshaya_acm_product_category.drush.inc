@@ -43,7 +43,7 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.category_menu.settings');
   $config->set('category_menu_top_level', $status);
   if (empty($default_parent) && $status) {
-    $terms = \Drupal::service('alshaya_main_menu.product_category_tree')->getCategoryRootTerms();
+    $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
     $default_parent = key($terms);
   }
   $config->set('category_default_parent', $default_parent);

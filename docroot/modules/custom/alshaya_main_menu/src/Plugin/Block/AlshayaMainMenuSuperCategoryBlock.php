@@ -29,7 +29,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
   /**
    * Product category tree.
    *
-   * @var \Drupal\alshaya_main_menu\ProductCategoryTree
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
    */
   protected $productCateoryTree;
 
