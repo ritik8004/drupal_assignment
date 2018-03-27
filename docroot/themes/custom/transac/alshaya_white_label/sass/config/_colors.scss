@@ -117,6 +117,10 @@ $primary_input_border: $brownish-grey;
 $primary_input_focus_border: $windows-blue;
 $primary_input_inline_error: $scarlet-two;
 
+// Form Items
+$formitem_label: $greyish;
+$formitem_input: $black;
+
 //Buttons.
 $primary_btn_bg: $pumpkin-orange;
 $primary_btn_text: $white-five;
@@ -157,6 +161,7 @@ $primary_dropdown_focus: $black;
 
 // Text Area
 $primary_textarea_suffix: $greyish;
+$primary_textarea_border: $grey-ash;
 
 /* ------- 3. Secondary color  ----- */
 // Global elements.
@@ -191,6 +196,8 @@ $default_msg_text: $white-five;
 $default_msg_bg: $tealish;
 $content_error_msg_bg: $cherry;
 $content_error_msg_text: $white-five;
+$formitem_error: $black;
+$formitem_error_label: $red-error;
 
 // Out of stock button.
 $oos_btn_bg: $cherry;
@@ -418,3 +425,6 @@ $address_tile_selected_radio_label: $brownish-grey;
 $address_pp_delete_title: $marine-blue;
 $address_pp_delete_closebtn: $white;
 $address_pp_delete_closebtn_icon: $black-two;
+
+// Contact Page
+$webform_contact_legend: $marine-blue-two;
