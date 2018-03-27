@@ -11,23 +11,6 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * Create top level super category block from alshaya_white_label theme.
- */
-function alshaya_hm_update_8019() {
-  $default_theme = \Drupal::service('theme_handler')->getDefault();
-  $default_theme_blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['theme' => 'alshaya_white_label', 'id' => 'supercategorymenu']);
-  foreach ($default_theme_blocks as $default_theme_block_id => $default_theme_block) {
-    $block = $default_theme_block->createDuplicateBlock($default_theme_block_id, $default_theme);
-    // We delete the block from the previous theme.
-    $default_theme_block->delete();
-    // We save the block on the new theme.
-    $block->save();
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable brand AMP theme and set logo and favicon.
  */
 function alshaya_hm_update_8018() {
@@ -500,11 +483,6 @@ function alshaya_hm_update_dependencies() {
     'alshaya_hm' => [
       '8018' => [
         'alshaya' => '8004',
-      ],
-      // Create super category block in alshaya_white_label theme so, that can
-      // be cloned by H&M.
-      '8019' => [
-        'alshaya_transac' => '8103',
       ],
     ],
   ];
