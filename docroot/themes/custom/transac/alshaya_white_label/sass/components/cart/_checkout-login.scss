@@ -294,6 +294,10 @@
       margin-bottom: 2rem;
       padding: 0.625rem 1.5rem;
 
+      &:hover {
+        opacity: 0.75;
+      }
+
       @include breakpoint($desktop) {
         margin: 0.5em 0;
         margin-bottom: 2rem;
