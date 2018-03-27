@@ -10,7 +10,7 @@
   }
 
   .c-page-title {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $content_pagetitle_border;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
     margin-top: 1rem;
@@ -31,7 +31,7 @@
       top: 0.125rem;
       #{$right}: 0;
       font-size: 0.8125rem;
-      color: $greyish;
+      color: $primary_textarea_suffix;
       font-weight: normal;
       z-index: 3;
     }
