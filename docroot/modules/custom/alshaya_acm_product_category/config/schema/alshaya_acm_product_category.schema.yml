@@ -16,9 +16,6 @@ alshaya_acm_product_category.category_menu.settings:
     category_menu_top_level:
       type: boolean
       label: 'Enable top level category menu'
-    category_dependent_main_menu:
-      type: boolean
-      label: 'Render main menu based on top level category term.'
     category_default_parent:
       type: integer
       label: 'Default parent for main menu'
