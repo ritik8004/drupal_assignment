@@ -26,9 +26,6 @@ function alshaya_acm_product_category_drush_command() {
  * Implements drush command alshaya-category-top-menu.
  */
 function drush_alshaya_acm_product_category_alshaya_category_top_menu() {
-  // Get default theme.
-  \Drupal::service('theme.manager')->getActiveTheme();
-
   // Determine which default parent to use for main menu.
   $default_parent = drush_get_option('default_parent', '');
 
