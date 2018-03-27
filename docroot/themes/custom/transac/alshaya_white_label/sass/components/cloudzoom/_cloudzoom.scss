@@ -108,7 +108,7 @@
     padding: 1rem;
     font-size: 0.75rem;
     text-align: center;
-    color: $brownish-grey;
+    color: $cloudzoom_hovertext;
   }
 
   .hover-text {
@@ -124,7 +124,7 @@
     padding: 1.5rem;
     font-size: 0.75rem;
     text-align: center;
-    color: $brownish-grey;
+    color: $cloudzoom_hovertext;
   }
 }
 
@@ -142,7 +142,7 @@
     right: auto !important;
   }
 
-  border: 1px solid $white;
+  border: 1px solid $cloudzoom_zoombox_border;
 
   @include breakpoint($only-tablet) {
     @include u-visibility(none, true);
@@ -174,9 +174,9 @@
     padding: 1rem;
     font-size: 0.75rem;
     text-align: center;
-    color: $white-five;
+    color: $gallery_subtext;
     line-height: 1;
-    background: $black-two;
+    background: $gallery_subtext_bg;
     margin-top: 0;
     opacity: 0.62;
     position: absolute;
@@ -197,21 +197,21 @@
     .lSPrev {
       @include icon(chevronleft);
 
-      background: $white-five;
+      background: $gallery_arrows_bg;
       border-radius: 2.188rem;
       font-size: 2.188rem;
       text-align: center;
-      color: $black;
+      color: $gallery_arrows;
     }
 
     .lSNext {
       @include icon(chevronright);
 
-      background: $white-five;
+      background: $gallery_arrows_bg;
       border-radius: 2.188rem;
       font-size: 2.188rem;
       text-align: center;
-      color: $black;
+      color: $gallery_arrows;
     }
   }
 
@@ -224,13 +224,13 @@
 
       &.lSpg > li {
         a {
-          background-color: $white-five;
-          border: 1px solid $marine-blue-two;
+          background-color: $gallery_arrows_bg;
+          border: 1px solid $gallery_pager_border;
         }
 
         &.active {
           a {
-            background-color: $marine-blue-two;
+            background-color: $gallery_pager_active_bg;
           }
         }
       }
@@ -261,7 +261,7 @@
     .slick {
       &-arrow {
         height: 100%;
-        background: $white-five;
+        background: $gallery_arrows_bg;
         top: 0;
 
         &:focus {
@@ -280,7 +280,7 @@
       }
 
       &-current {
-        border: 1px solid $black !important;
+        border: 1px solid $gallery_arrows_border !important;
       }
     }
 
@@ -324,7 +324,7 @@
 }
 
 .slick-disabled::before {
-  color: $white !important;
+  color: $gallery_arrows_disabled !important;
 }
 
 @include breakpoint($desktop) {
@@ -347,7 +347,7 @@
         width: 100%;
         #{$right}: 0;
         #{$left}: 0;
-        background: $white-five;
+        background: $gallery_arrows_bg;
 
         &:focus {
           outline: none;
@@ -373,7 +373,7 @@
       }
 
       &-current {
-        border: 1px solid $black;
+        border: 1px solid $gallery_arrows_border;
       }
     }
 

@@ -4,7 +4,7 @@
 
   &:last-child {
     @include breakpoint($desktop) {
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $accordion_border;
     }
   }
 }
@@ -13,8 +13,8 @@
   @include icon(chevrondown, after);
 
   position: relative;
-  border-top: 1px solid $white;
-  color: $grey-ash;
+  border-top: 1px solid $accordion_border;
+  color: $accordion_border;
   font-size: 0.875rem;
   font-weight: normal;
   height: 2.9375rem;
@@ -35,6 +35,6 @@
   &.ui-state-active {
     @include icon(chevronup, after);
 
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $accordion_border;
   }
 }

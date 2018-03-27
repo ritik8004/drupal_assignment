@@ -10,13 +10,13 @@
   @include icon(arrowup, after) {
     width: 2.3125rem;
     height: 2.3125rem;
-    background: $whisper-light;
+    background: $btt_bg;
     font-size: 2.125rem;
     position: absolute;
     top: 0.75rem;
     right: 0.875rem;
     border-radius: 100%;
-    color: $black;
+    color: $btt_text;
   }
 
   &:hover {
@@ -36,7 +36,7 @@
   background: none;
   text-transform: lowercase;
   text-align: center;
-  color: $grey-ash;
+  color: $btt_hover_text;
   height: 4.375rem;
   width: 4.375rem;
   line-height: 120px;
