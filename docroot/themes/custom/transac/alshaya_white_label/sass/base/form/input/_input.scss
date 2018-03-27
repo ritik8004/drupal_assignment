@@ -31,7 +31,7 @@ textarea {
     width: 0;
     bottom: 0;
     position: absolute;
-    background: $windows-blue;
+    background: $primary_input_focus_border;
     transition: 0.5s ease all;
     z-index: 3;
   }
@@ -52,7 +52,7 @@ textarea {
     textarea {
       width: 100%;
       border: none;
-      border-bottom: 1px solid $grey-ash;
+      border-bottom: 1px solid $primary_input_border;
       padding: 0;
       color: $black;
 

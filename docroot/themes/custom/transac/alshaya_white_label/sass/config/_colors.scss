@@ -94,18 +94,22 @@ $message-info: #ffee9c;
 $special-price: #b70025;
 $ladda-disabled: #999;
 $mothercare-black: #000;
+$sticky-btn: rgba(0, 0, 0, 0.07);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
 $primary_bg: $white-five;
 $body_bg: $primary_bg;
-$content_pagetitle: $marine-blue;
+$content_page_title: $marine-blue;
 $primary_text: $brownish-grey;
 $primary_link: $marine-blue-two;
-$primary_link-hover: $cerulean-two;
+$primary_link-hover: $marine-blue-two;
+$primary_link-active: $marine-blue-two;
 $primary_border: $white;
 
 // Form elements.
+$primary_form_selector_border: $black;
+$primary_form_selector: $black;
 $primary_input: $black-two;
 $primary_input_label: $greyish;
 $primary_input_border: $brownish-grey;
@@ -117,10 +121,16 @@ $primary_btn_bg: $pumpkin-orange;
 $primary_btn_text: $white-five;
 $primary_empty_btn: $black-two;
 $primary_empty_btn_border: $black-two;
+$primary_brand_button: $marine-blue-two;
+$primary_brand_button_text: $marine-blue-two;
+$pending_btn_bg: $tomato;
+$returned_btn_bg: $grey-ash;
+$complete_btn_bg: $medium-green;
 
 // Checkbox & Radio.
 $primary_checkbox_empty: $brownish-grey;
 $primary_checkbox_filled: $windows-blue;
+$primary_radiobtn_label: $grey-ash;
 $primary_radiobtn_empty: $greyish;
 $primary_radiobtn_filled: $cerulean-two;
 
@@ -135,11 +145,14 @@ $primary_tr_hover: rgba(247, 247, 247, 0.72);
 $primary_table_border: $white;
 
 // Dropdown.
-$primary_dropdown_bg:$white-five;
+$primary_dropdown_bg: $white-five;
 $primary_dropdown_arrow_bg: $whisper-dark;
 $primary_dropdown_text: $brownish-grey;
 $primary_dropdown_border: $whisper-dark;
 $primary_dropdown_option_hover: $white-four;
+$primary_dropdown_option_border: $white;
+$primary_dropdown_option_disbled: $greyish;
+$primary_dropdown_focus: $black;
 
 /* ------- 3. Secondary color  ----- */
 // Global elements.
@@ -164,10 +177,14 @@ $tertiary_counter_text: $white-five;
 $tertiary_counter_border: $greyish;
 
 // Titles.
-$pag_title: $marine-blue;
+$page_title: $marine-blue;
 $block_title: $marine-blue;
+$title: $marine-blue;
+$sub_title: $marine-blue;
 
 // Error
+$default_msg_text: $white-five;
+$default_msg_bg: $tealish;
 $content_error_msg_bg: $cherry;
 $content_error_msg_text: $white-five;
 
