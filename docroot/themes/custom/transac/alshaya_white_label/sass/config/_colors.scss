@@ -101,7 +101,8 @@ $sticky-btn: rgba(0, 0, 0, 0.07);
 // Global elements.
 $primary_bg: $white-five;
 $body_bg: $primary_bg;
-$content_page_title: $marine-blue;
+$content_pagetitle: $marine-blue;
+$content_pagetitle_border: $white;
 $primary_text: $brownish-grey;
 $primary_link: $marine-blue-two;
 $primary_link-hover: $marine-blue-two;
@@ -117,6 +118,10 @@ $primary_input_label: $greyish;
 $primary_input_border: $brownish-grey;
 $primary_input_focus_border: $windows-blue;
 $primary_input_inline_error: $scarlet-two;
+
+// Form Items
+$formitem_label: $greyish;
+$formitem_input: $black;
 
 //Buttons.
 $primary_btn_bg: $pumpkin-orange;
@@ -156,6 +161,10 @@ $primary_dropdown_option_border: $white;
 $primary_dropdown_option_disbled: $greyish;
 $primary_dropdown_focus: $black;
 
+// Text Area
+$primary_textarea_suffix: $greyish;
+$primary_textarea_border: $grey-ash;
+
 /* ------- 3. Secondary color  ----- */
 // Global elements.
 $secondary_text: $black;
@@ -191,6 +200,8 @@ $content_error_msg_bg: $cherry;
 $content_error_msg_txt: $cherry;
 $content_error_input_border: $cherry;
 $content_error_msg_text: $white-five;
+$formitem_error: $black;
+$formitem_error_label: $red-error;
 
 // Out of stock button.
 $oos_btn_bg: $cherry;
@@ -217,6 +228,12 @@ $breadcrumb_bg: $white-four;
 $breadcrumb_link: $greyish;
 $breadcrumb_link_hover: $greyish;
 $breadcrumb_link_active: $breadcrumb-active;
+
+// 404
+$maintenance_container_border: $white-two;
+$maintenance_container_border_top: $white-four;
+$maintenance_body_bg: $matterhorn;
+$maintenance_link: $cerulean-two;
 
 // Accordion
 $accordion_border: $white;
@@ -357,6 +374,9 @@ $pdp_size_option_selected_bg: $marine-blue;
 $pdp_size_option_text_hover : $white-five;
 $pdp_size_option_bg_hover: $marine-blue;
 
+// Department page
+$department_category_list_hover: $cerulean-two;
+
 // Store finder page.
 // Store finder header form.
 $store_finder_nearme_icon: $cerulean-two;
@@ -443,3 +463,6 @@ $basket_header_oos_bg: $cherry;
 $basket_header_oos_txt: $white-four;
 // Privilege card earn text only for the basket page.
 $privilege_earn_txt: $grey-ash;
+
+// Contact Page
+$webform_contact_legend: $marine-blue-two;

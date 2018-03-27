@@ -284,8 +284,8 @@ function alshaya_user_alshaya_i18n_onetime_translation_add() {
   // Set signup mail translation.
   $signup_mail = \Drupal::languageManager()
     ->getLanguageConfigOverride('ar', 'user_registrationpassword.mail');
-  $signup_mail->set('register_withpassword.subject', 'على موقع [site:name] [user:field_first_name:value] تفاصيل حساب');
-  $signup_mail->set('register_withpassword.body', '<h1>،[user:field_first_name:value] مرحباً</h1>
+  $signup_mail->set('register_confirmation_with_pass.subject', 'على موقع [site:name] [user:field_first_name:value] تفاصيل حساب');
+  $signup_mail->set('register_confirmation_with_pass.body', '<h1>،[user:field_first_name:value] مرحباً</h1>
 
 .أهلاً بك في موقع [site:name] و شكراً على الانضمام إلينا
 <br/><br/>
