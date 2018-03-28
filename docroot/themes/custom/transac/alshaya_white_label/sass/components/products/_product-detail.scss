@@ -1186,14 +1186,14 @@
       width: 2.188rem;
       font-size: 30px;
       text-align: center;
-      color: $white-two;
-      background-color: $marine-blue;
+      color: $pdp_all_stores_modal_close_icon;
+      background-color: $pdp_all_stores_modal_close_bg;
       cursor: pointer;
     }
 
     .text {
       font-size: 0.75rem;
-      color: $grey-ash;
+      color: $pdp_all_stores_modal_text;
       line-height: 1.5;
 
       .available-store-text {
@@ -1222,7 +1222,7 @@
         font-family: $arial;
         font-size: 0.75rem;
         line-height: 1.5;
-        color: $brownish-grey;
+        color: $pdp_all_stores_modal_text;
       }
 
       strong {
@@ -1233,7 +1233,7 @@
       h3 {
         font-family: $arial;
         font-weight: bold;
-        color: $marine-blue;
+        color: $pdp_sidebar_label;
         margin-top: 0;
         margin-bottom: 0.5625rem;
         font-size: 0.875rem;
@@ -1251,10 +1251,10 @@
         font-family: $arial;
         font-size: 0.75rem;
         line-height: 1.5;
-        color: $grey-ash;
+        color: $pdp_all_stores_modal_text;
         list-style: none;
         padding: 0.9375rem 0;
-        border-top: 1px solid $white;
+        border-top: 1px solid $primary_border;
 
         p {
           margin: 0;
@@ -1270,7 +1270,7 @@
 
         .store {
           &-sequence {
-            border: 1px solid $black;
+            border: 1px solid $pdp_all_stores_modal_list_border;
             height: 1.063rem;
             width: 1.063rem;
             border-radius: 1.063rem;
@@ -1286,7 +1286,7 @@
 
           &-name {
             font-weight: bold;
-            color: $blue-three;
+            color: $pdp_all_stores_modal_list_name;
           }
 
           &-delivery-time {
@@ -1294,7 +1294,7 @@
 
             em {
               font-weight: bold;
-              color: $black;
+              color: $pdp_all_stores_modal_list_time;
             }
           }
 
@@ -1302,7 +1302,7 @@
             font-family: $arial;
             font-size: 0.75rem;
             font-weight: bold;
-            color: $pumpkin-orange;
+            color: $primary_btn_bg;
             float: $right;
             padding-#{$right}: 0.75rem;
           }
@@ -1343,7 +1343,7 @@
 .field--name {
   &-field-skus {
     .c-pdp & {
-      border-bottom: 1px solid $whisper-dark;
+      border-bottom: 1px solid $pdp_skus_border;
     }
 
     .acq-content-product-modal & {
@@ -1419,9 +1419,9 @@
       button[type="submit"] {
         font-family: $alshaya-bold;
         font-size: 0.875rem;
-        background: $pumpkin-orange;
+        background: $primary_btn_bg;
         border-radius: 0;
-        color: $white-five;
+        color: $primary_btn_text;
         border: 0;
         text-transform: lowercase;
         padding: 0.5rem 1.3701rem;
@@ -1447,7 +1447,7 @@
           .basic-details-wrapper & {
             @include stickyButton();
 
-            border-color: $white-five;
+            border-color: $pdp_basic_wrapper_border;
             float: none;
             width: 100%;
             margin: 0;
@@ -1543,16 +1543,16 @@
         margin-bottom: 0.3125rem;
         margin-#{$right}: 0.5rem;
         margin-#{$left}: 0;
-        border: 1px solid $marine-blue;
+        border: 1px solid $pdp_size_option_border;
         text-align: center;
         padding: 0.75rem;
         font-size: 0.875rem;
-        color: $marine-blue;
+        color: $pdp_size_option_text;
 
         &.picked {
-          color: $white-five;
+          color: $pdp_size_option_selected_text;
           font-weight: bold;
-          background: $marine-blue;
+          background: $pdp_size_option_selected_bg;
 
           html[lang=ar] .safari & {
             font-weight: normal;
@@ -1589,9 +1589,9 @@
   }
 
   .error {
-    background: $cherry;
+    background: $primary_input_inline_error;
     padding: 0.625rem;
-    color: $white-four;
+    color: $pdp_error_text;
     position: relative;
     padding-#{$left}: 2.313rem;
 
@@ -1672,14 +1672,14 @@ article[gtm-sku-type="simple"] {
   }
 
   span.out-of-stock {
-    background-color: $cherry;
+    background-color: $oos_btn_bg;
     font-family: $alshaya-bold;
     font-size: 0.75rem;
     display: block;
     vertical-align: middle;
     text-align: center;
     padding: 0.6rem 1.5rem;
-    color: $white;
+    color: $oos_pdp_text;
 
     @include breakpoint($desktop) {
       display: inline-block;
@@ -1772,7 +1772,7 @@ article[gtm-sku-type="simple"] {
         }
 
         &:nth-child(2) {
-          border-top: 1px solid $white;
+          border-top: 1px solid $primary_border;
         }
       }
     }
@@ -1794,8 +1794,8 @@ article.product-out-of-stock {
   display: inline-block;
   margin-bottom: 0.875rem;
   padding: 0.3625rem 1.875rem 0.5625rem;
-  background: $pumpkin-orange;
-  color: $white-four !important;
+  background: $primary_btn_bg;
+  color: $fake_apply_btn !important;
   cursor: pointer;
   margin-#{$left}: 1rem;
   font-size: 0.75rem;
@@ -1804,7 +1804,7 @@ article.product-out-of-stock {
 
 .filter-menu-label {
   .clear-all-fake.inactive {
-    border: 1px solid $whisper-dark !important;
+    border: 1px solid $clear_btn_border !important;
     text-align: center;
     padding: 0;
     background: none;
@@ -1815,10 +1815,10 @@ article.product-out-of-stock {
     font-family: $alshaya-thin !important;
     margin-right: 0;
     margin-left: 1rem;
-    color: $whisper-dark !important;
+    color: $clear_btn_text !important;
 
     span {
-      color: $whisper-dark !important;
+      color: $clear_btn_text !important;
     }
   }
 }
@@ -1840,7 +1840,7 @@ html[lang=ar] {
     font-weight: bold;
     font-size: 0.75rem;
     line-height: 1.5;
-    color: $marine-blue;
+    color: $not_buyable_msg;
   }
 
   &-help-text {
@@ -1849,7 +1849,7 @@ html[lang=ar] {
 
     a {
       font-weight: bold;
-      color: $cerulean-two;
+      color: $not_buyable_help;
     }
   }
 }
@@ -1858,7 +1858,7 @@ html[lang=ar] {
   @include stickyButton();
 
   list-style: none;
-  border-color: $white-five;
+  border-color: $fake_apply_btn_border;
   width: 100%;
   display: none;
 
