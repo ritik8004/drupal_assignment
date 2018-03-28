@@ -166,6 +166,10 @@ $total_discount_total_td_2nd_child_bg: $white-five;
 
 // Modal
 $modal_bg: $white-five;
+$modal_subtext: $white-five;
+$modal_subtext_bg: $black;
+$modal_close_bg: $marine-blue;
+$modal_close_icon: $white-two;
 
 /* ------- 3. Secondary color  ----- */
 // Global elements.
@@ -248,6 +252,7 @@ $cloudzoom_hovertext: $grey-ash;
 $cloudzoom_zoombox_border: $white;
 
 // Mobile Gallery
+$gallery_bg: $white-five;
 $gallery_subtext_bg: $black;
 $gallery_subtext: $white-five;
 $gallery_arrows_bg: $white-five;
@@ -257,6 +262,8 @@ $gallery_arrows_disabled: $white;
 $gallery_pager_border: $marine-blue-two;
 $gallery_pager_bg: $white-five;
 $gallery_pager_active_bg: $marine-blue-two;
+$gallery_zoombtn_bg: $white;
+$gallery_zoombtn_disabled: $light-ash;
 
 // Sharethis
 $sharethis_icon: $marine-blue-two;
