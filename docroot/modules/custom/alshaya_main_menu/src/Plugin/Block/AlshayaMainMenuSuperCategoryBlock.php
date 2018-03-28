@@ -106,7 +106,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
       // Create a link class based on taxonomy term name.
       $transliterated = $this->transliteration->transliterate($term_info['label'], $langcode, '_');
       $transliterated = Unicode::strtolower($transliterated);
-      $term_info['link_class'] = preg_replace('@[^a-z0-9_]+@', '-', $transliterated);
+      $term_info['class'] .= ' brand-' . preg_replace('@[^a-z0-9_]+@', '-', $transliterated);
     }
 
     // Get current term from route.
@@ -120,7 +120,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
         /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
         foreach ($parents as $parent) {
           if (isset($term_data[$parent->id()])) {
-            $term_data[$parent->id()]['class'] = 'active';
+            $term_data[$parent->id()]['class'] .= ' active';
           }
         }
       }
