@@ -117,7 +117,7 @@ class ProductCategoryTree {
     }
 
     // Get all child terms for the given parent.
-    $term_data = $this->getCategoryTree($langcode, 0 , FALSE, FALSE);
+    $term_data = $this->getCategoryTree($langcode, 0, FALSE, FALSE);
 
     $cache_tags = [
       self::CACHE_TAG,
@@ -157,7 +157,8 @@ class ProductCategoryTree {
 
   /**
    * Get the term tree for 'product_category' vocabulary.
-   * With highlight images and child.
+   *
+   * Optionally with highlight images and child.
    *
    * @param string $langcode
    *   Language code in which we need term to be displayed.
@@ -176,7 +177,6 @@ class ProductCategoryTree {
 
     // Get all child terms for the given parent.
     $terms = $this->allChildTerms($langcode, self::VOCABULARY_ID, $parent_tid);
-
 
     if (empty($terms)) {
       return [];
