@@ -1226,6 +1226,7 @@ html[lang=ar] {
   padding-bottom: 0.4375rem;
   border-bottom: 1px solid $marine-blue-two;
   margin: 1rem 0;
+  text-transform: lowercase;
 
   @include breakpoint($tablet) {
     margin: 1rem;
