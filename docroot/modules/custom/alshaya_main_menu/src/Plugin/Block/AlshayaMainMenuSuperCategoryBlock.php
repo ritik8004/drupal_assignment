@@ -91,20 +91,20 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    * {@inheritdoc}
    */
   public function build() {
-    // Get current lang code.
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get all the parents of product category.
     $term_data = $this->productCateoryTree->getCategoryRootTerms();
-
     // If no data, no need to render the block.
     if (empty($term_data)) {
       return [];
     }
+    // Load english term data to set the css class based on term name.
+    $term_data_en = $this->productCateoryTree->getCategoryRootTerms('en');
 
     // Add class for all terms.
-    foreach ($term_data as &$term_info) {
+    foreach ($term_data as $term_id => &$term_info) {
+      $term_info_en = $term_data_en[$term_id];
       // Create a link class based on taxonomy term name.
-      $transliterated = $this->transliteration->transliterate($term_info['label'], $langcode, '_');
+      $transliterated = $this->transliteration->transliterate($term_info_en['label'], 'en', '_');
       $transliterated = Unicode::strtolower($transliterated);
       $term_info['class'] .= ' brand-' . preg_replace('@[^a-z0-9_]+@', '-', $transliterated);
     }
