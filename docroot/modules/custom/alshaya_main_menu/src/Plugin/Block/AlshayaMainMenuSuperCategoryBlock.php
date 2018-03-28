@@ -66,7 +66,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    * {@inheritdoc}
    */
   public function build() {
-    $term_data = $this->productCateoryTree->getCategoryRootTerms();
+    $term_data = $this->productCateoryTree->getCategoryRootTerms(TRUE);
 
     // If no data, no need to render the block.
     if (empty($term_data)) {
