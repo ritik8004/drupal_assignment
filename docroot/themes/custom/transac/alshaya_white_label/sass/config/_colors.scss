@@ -225,6 +225,7 @@ $tooltip_border: $cerulean-two;
 $tooltip_border_2: $alice-blue;
 // $tooltip_border + opacity 0.
 $tooltip_border_opacity_0: rgba(0, 132, 204, 0);
+$tooltip_icon: $cerulean-two;
 
 // Back to top
 $btt_bg: $whisper-light;
@@ -561,6 +562,7 @@ $checkout_payment_method_title: $brownish-grey;
 $checkout_payment_method_icon_bg: $white;
 $checkout_payment_method_desc: $grey-ash;
 $checkout_transaction_type_color: $marine-blue-two;
+$checkout_payment_CVV_tooltip_image_bg: $white;
 
 // Checkout Home delivery.
 $checkout_hd_selected_add_wrapper_border: $white;
