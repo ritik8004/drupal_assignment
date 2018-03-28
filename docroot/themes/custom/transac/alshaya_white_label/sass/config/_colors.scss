@@ -426,10 +426,12 @@ $order_summary_product_price: $black;
 // Color for attributes and qty.
 $order_summary_sec_text: $greyish;
 
+// Checkout Global.
 $checkout_footer_bg: $white-five;
 $checkout_footer_border-top: $marine-blue-two;
 $checkout_pri_txt: $grey-ash;
 $checkout_section_border: $greyish;
+$checkout_section_titles: $marine-blue-two;
 
 // @todo Variables used in outdated markup, avoid using elsewhere.
 $checkout_out_sec_text: $windows-blue;
@@ -472,6 +474,11 @@ $checkout_cc_selected_store_content_bg: $white-four;
 $checkout_cc_help_text: $black;
 $checkout_cc_help_text_content: $grey-ash;
 $checkout_cc_empty_store_error: $scarlet;
+
+// Checkout Home delivery.
+
+// Address form.
+$address_form_country_disabled: $ladda-disabled;
 
 //My Account pages
 //block-myaccountneedhelp
