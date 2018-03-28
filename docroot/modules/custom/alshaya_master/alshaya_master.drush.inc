@@ -69,13 +69,17 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
   $profile = str_replace('alshaya_', '_', \Drupal::service('config.storage')->read('core.extension')['profile']);
 
   // Try to look for transac and non transac specific module for brand before
-  // brand installing brand module. i.e. alshaya_vs_transac.
-  if (module_load_install($brand_module . $profile)) {
+  // brand installing brand module. i.e. alshaya_vs_transac. We avoid warning
+  // when file does not exist as it is the purpose of this call to know if the
+  // file exists.
+  if (@module_load_install($brand_module . $profile)) {
     $brand_module = $brand_module . $profile;
   }
 
   if (!empty($brand_module)) {
-    if (module_load_install($brand_module)) {
+    // We avoid warning when file does not exist as it is the purpose of this
+    // call to know if the file exists.
+    if (@module_load_install($brand_module)) {
       if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('module'))) {
         drush_print(dt('Enabling the @brand_module brand module.', ['@brand_module' => $brand_module]));
 
