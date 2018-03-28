@@ -246,6 +246,7 @@
       var is_modal_product = $(this).closest('#drupal-modal');
       var sku_id = $(this).siblings('input[name="sku_id"]').val();
       if (((is_mobile_only_sell.length > 0) || (is_modal_product.length > 0)) && (!$(this).hasClass('reattached-size-ajax'))) {
+        $(this).off();
         $(this).addClass('reattached-size-ajax');
         var configSizeBase = 'edit-configurables-size_mobile--only--sell--' + sku_id;
         Drupal.ajax[configSizeBase] = new Drupal.Ajax(configSizeBase, this, editConfigSizeElementSettings);
@@ -257,6 +258,7 @@
       var is_modal_product = $(this).closest('#drupal-modal');
       var sku_id = $(this).siblings('input[name="sku_id"]').val();
       if (((is_mobile_only_sell.length > 0) || (is_modal_product.length > 0)) && (!$(this).hasClass('reattached-castorid-ajax'))) {
+        $(this).off();
         $(this).addClass('reattached-castorid-ajax');
         var configCastorIdBase = 'edit-configurables-castorid_mobile--only--sell--' + sku_id;
         Drupal.ajax[configCastorIdBase] = new Drupal.Ajax(configCastorIdBase, this, editConfigCastorIdElementSettings);
@@ -289,6 +291,7 @@
             $wrapper.html(result.html);
             skuArticle.addClass('stock-check-processed');
             Drupal.attachBehaviors($wrapper[0]);
+            Drupal.reAttachAddCartAndConfigSizeAjax($wrapper[0]);
           }
         });
       }
