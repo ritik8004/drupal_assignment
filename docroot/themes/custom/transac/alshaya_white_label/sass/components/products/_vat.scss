@@ -1,7 +1,7 @@
 .vat-text,
 .vat-text-footer {
   font-size: 0.75rem;
-  color: $light-greyish;
+  color: $vat;
   font-weight: normal;
 
   .c-pdp & {
@@ -29,6 +29,6 @@
   }
 
   .warm--white {
-    background-color: $whisper-light;
+    background-color: $vat_dark;
   }
 }
