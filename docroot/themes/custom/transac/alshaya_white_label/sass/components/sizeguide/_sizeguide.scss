@@ -5,7 +5,7 @@
   padding-top: 0;
   outline: transparent;
   font-size: 0.6875rem;
-  color: $windows-blue;
+  color: $pdp_sizeguide_link;
   top: -0.25rem;
 
   @include breakpoint($desktop) {
@@ -88,7 +88,7 @@
 
   #drupal-modal,
   div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
-    background: $white-five;
+    background: $modal_bg;
     padding: 1.5em;
     overflow: hidden;
     height: 100% !important;

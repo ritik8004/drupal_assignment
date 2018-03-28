@@ -230,14 +230,21 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     if ($method = $cart->getShippingMethodAsString()) {
       $method = $this->checkoutOptionsManager->getCleanShippingMethodCode($method);
-      $method_query_code = 'hd';
 
       $term = $this->checkoutOptionsManager->loadShippingMethod($method);
 
       $method_code = $term->get('field_shipping_code')->getString();
 
-      if ($this->storesFinderUtility && $method_code == $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
-        $method_query_code = 'cc';
+      $method_query_code = ($this->storesFinderUtility && $method_code == $this->checkoutOptionsManager->getClickandColectShippingMethod()) ? 'cc' : 'hd';
+
+      // If we have shipping method in cart different than what currently we
+      // have selected from checkout page, then remove the delivery info from
+      // the display/block as causing confusion for the user.
+      $shipping_method_from_url = $this->requestStack->getCurrentRequest()->get('method');
+      if ($shipping_method_from_url && ($shipping_method_from_url !== $method_query_code)) {
+        $delivery = [];
+      }
+      elseif ($method_query_code == 'cc') {
         if ($store_code = $cart->getExtension('store_code')) {
           // Not injected here to avoid module dependency.
           $store = $this->storesFinderUtility->getTranslatedStoreFromCode($store_code);
@@ -320,19 +327,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
         }
       }
 
-      // URL to change delivery address or shipping method.
-      $options = ['absolute' => TRUE];
-      $delivery['change_url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
-      $edit_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options);
-      $edit_url->setRouteParameter('method', $method_query_code);
-      $delivery['edit_url'] = $edit_url->toString();
-
-      // If we have shipping method in cart different than what currently we
-      // have selected from checkout page, then remove the delivery info from
-      // the display/block as causing confusion for the user.
-      $shipping_method_from_url = $this->requestStack->getCurrentRequest()->get('method');
-      if ($shipping_method_from_url && ($shipping_method_from_url !== $method_query_code)) {
-        $delivery = [];
+      if (!empty($delivery)) {
+        // URL to change delivery address or shipping method.
+        $options = ['absolute' => TRUE];
+        $delivery['change_url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
+        $edit_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options);
+        $edit_url->setRouteParameter('method', $method_query_code);
+        $delivery['edit_url'] = $edit_url->toString();
       }
     }
 

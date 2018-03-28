@@ -6,6 +6,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -60,6 +61,20 @@ class ProductCategoryTree {
   protected $routeMatch;
 
   /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $connection;
+
+  /**
+   * Highlight image paragraph ids for all terms.
+   *
+   * @var array
+   */
+  protected $highlightImages = [];
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -70,16 +85,20 @@ class ProductCategoryTree {
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   Route match service.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database connection.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
     CacheBackendInterface $cache,
-    RouteMatchInterface $route_match) {
+    RouteMatchInterface $route_match,
+    Connection $connection) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->routeMatch = $route_match;
+    $this->connection = $connection;
   }
 
   /**
@@ -97,9 +116,8 @@ class ProductCategoryTree {
       return $term_data->data;
     }
 
-    /* @var \Drupal\taxonomy\TermInterface[] $terms */
-    $terms = $this->termStorage->loadTree(self::VOCABULARY_ID, 0, 1, TRUE);
-    $term_data = $this->getCategoryTermData($langcode, $terms, FALSE, FALSE);
+    // Get all child terms for the given parent.
+    $term_data = $this->getCategoryTree($langcode, 0, FALSE, FALSE);
 
     $cache_tags = [
       self::CACHE_TAG,
@@ -130,7 +148,6 @@ class ProductCategoryTree {
     $cache_tags = [
       self::CACHE_TAG,
       'node_type:department_page',
-      self::VOCABULARY_ID . '_' . $langcode . '_' . $parent_id,
     ];
 
     $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
@@ -141,31 +158,12 @@ class ProductCategoryTree {
   /**
    * Get the term tree for 'product_category' vocabulary.
    *
+   * Optionally with highlight images and child.
+   *
    * @param string $langcode
    *   Language code in which we need term to be displayed.
    * @param int $parent_tid
    *   Parent term id.
-   *
-   * @return array
-   *   Processed term data.
-   */
-  public function getCategoryTree($langcode, $parent_tid = 0) {
-    /* @var \Drupal\taxonomy\TermInterface[] $terms */
-    $terms = $this->termStorage->loadTree(self::VOCABULARY_ID, $parent_tid, 1, TRUE);
-
-    if (empty($terms)) {
-      return [];
-    }
-    return $this->getCategoryTermData($langcode, $terms);
-  }
-
-  /**
-   * Create terms array of menu items with highlight images and child.
-   *
-   * @param string $langcode
-   *   Language code in which we need term to be displayed.
-   * @param array $terms
-   *   The array of terms to load.
    * @param bool $highlight_image
    *   True if include highlight image else false.
    * @param bool $child
@@ -174,94 +172,92 @@ class ProductCategoryTree {
    * @return array
    *   Processed term data.
    */
-  public function getCategoryTermData($langcode, array $terms, $highlight_image = TRUE, $child = TRUE) {
+  public function getCategoryTree($langcode, $parent_tid = 0, $highlight_image = TRUE, $child = TRUE) {
     $data = [];
+
+    // Get all child terms for the given parent.
+    $terms = $this->allChildTerms($langcode, self::VOCABULARY_ID, $parent_tid);
+
+    if (empty($terms)) {
+      return [];
+    }
+
     foreach ($terms as $term) {
-      // We don't show the term in menu if translation not available.
-      if (!$term->hasTranslation($langcode)) {
-        continue;
-      }
-
-      // Load translation for requested langcode.
-      $term = $term->getTranslation($langcode);
-
-      if ($term->hasField('field_category_include_menu')) {
-        // Get value of boolean field which will decide if we show/hide this
-        // term and child terms in the menu.
-        $include_in_menu = $term->get('field_category_include_menu')->getValue();
-
-        // Hide the menu if there is a value in the field and it is FALSE.
-        if (!empty($include_in_menu) && !($include_in_menu[0]['value'])) {
-          continue;
-        }
-      }
-
-      $data[$term->id()] = [
-        'label' => $term->label(),
+      $data[$term->tid] = [
+        'label' => $term->name,
         'description' => [
-          '#markup' => $term->getDescription(),
+          '#markup' => $term->description__value,
         ],
-        'id' => $term->id(),
-        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString(),
+        'id' => $term->tid,
+        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
       ];
 
       if ($highlight_image) {
-        $data[$term->id()]['highlight_image'] = $this->getHighlightImage($term);
+        $data[$term->tid]['highlight_image'] = $this->getHighlightImage($term->tid, $langcode, self::VOCABULARY_ID);
       }
 
       if ($child) {
-        $data[$term->id()]['child'] = $this->getCategoryTree($langcode, $term->id());
+        $data[$term->tid]['child'] = $this->getCategoryTree($langcode, $term->tid);
       }
+
     }
+
     return $data;
   }
 
   /**
-   * Get highlight image for a 'product_category' term.
+   * Get highlight image for a term.
    *
-   * @param \Drupal\taxonomy\TermInterface $term
-   *   Term object.
+   * @param int $tid
+   *   Term id.
+   * @param string $langcode
+   *   Language code.
+   * @param string $vid
+   *   Vocabulary id.
    *
    * @return array
    *   Highlight image array.
    */
-  protected function getHighlightImage(TermInterface $term) {
-    // Get the current language code.
-    $language = $this->languageManager->getCurrentLanguage()->getId();
-
+  protected function getHighlightImage($tid, $langcode, $vid) {
     $highlight_images = [];
 
-    if ($highlight_field = $term->get('field_main_menu_highlight')) {
+    // We fetch this from first request and shouldn't be empty. If empty,
+    // assuming its first request and prepare data.
+    if (empty($this->highlightImages)) {
+      $this->getHighLightImages($vid);
+    }
 
-      // If no data in paragraph referenced field.
-      if (empty($highlight_field->getValue())) {
-        return $highlight_images;
+    // If no data in paragraph referenced field.
+    if (empty($this->highlightImages[$tid])) {
+      return $highlight_images;
+    }
+
+    foreach ($this->highlightImages[$tid] as $paragraph_id) {
+      // Load paragraph entity.
+      $paragraph = Paragraph::load($paragraph_id);
+
+      // If unable to load paragraph object.
+      if (!$paragraph) {
+        continue;
       }
 
-      foreach ($highlight_field->getValue() as $paragraph_id) {
-        $paragraph_id = $paragraph_id['target_id'];
+      // Get the translation of the paragraph if exists.
+      if ($paragraph->hasTranslation($langcode)) {
+        // Replace the current paragraph with translated one.
+        $paragraph = $paragraph->getTranslation($langcode);
+      }
 
-        // Load paragraph entity.
-        $paragraph = Paragraph::load($paragraph_id);
-
-        // Get the translation of the paragraph if exists.
-        if ($paragraph->hasTranslation($language)) {
-          // Replace the current paragraph with translated one.
-          $paragraph = $paragraph->getTranslation($language);
-        }
-
-        if ($paragraph && !empty($paragraph->get('field_highlight_image'))) {
-          $image = $paragraph->get('field_highlight_image')->getValue();
-          $image_link = $paragraph->get('field_highlight_link')->getValue();
-          $renderable_image = $paragraph->get('field_highlight_image')->view('default');
-          if (!empty($image)) {
-            $url = Url::fromUri($image_link[0]['uri']);
-            $highlight_images[] = [
-              'image_link' => $url->toString(),
-              'img' => $renderable_image,
-            ];
-          }
+      if ($paragraph && !empty($paragraph->get('field_highlight_image'))) {
+        $image = $paragraph->get('field_highlight_image')->getValue();
+        $image_link = $paragraph->get('field_highlight_link')->getValue();
+        $renderable_image = $paragraph->get('field_highlight_image')->view('default');
+        if (!empty($image)) {
+          $url = Url::fromUri($image_link[0]['uri']);
+          $highlight_images[] = [
+            'image_link' => $url->toString(),
+            'img' => $renderable_image,
+          ];
         }
       }
     }
@@ -317,6 +313,50 @@ class ProductCategoryTree {
       $parents = $this->termStorage->loadAllParents($term->id());
     }
     return $parents;
+  }
+
+  /**
+   * Get all child terms of a given term in a language.
+   *
+   * @param string $langcode
+   *   Language code.
+   * @param string $vid
+   *   Vocabulary id.
+   * @param int $parent_tid
+   *   Parent term id.
+   *
+   * @return array
+   *   Child term array.
+   */
+  protected function allChildTerms($langcode, $vid, $parent_tid) {
+    $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
+    $query->fields('tfd', ['tid', 'name', 'description__value']);
+    $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
+    $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
+    $query->condition('ttim.field_category_include_menu_value', 1);
+    $query->condition('tth.parent', $parent_tid);
+    $query->condition('tfd.langcode', $langcode);
+    $query->condition('tfd.vid', $vid);
+    $query->orderBy('tfd.weight', 'ASC');
+    return $query->execute()->fetchAll();
+  }
+
+  /**
+   * Get highlight image paragraphs id for all terms.
+   *
+   * @param string $vid
+   *   Vocabulary id.
+   */
+  protected function getHighLightImages($vid) {
+    $query = $this->connection->select('taxonomy_term__field_main_menu_highlight', 'tmmh');
+    $query->fields('tmmh', ['entity_id', 'field_main_menu_highlight_target_id']);
+    $query->condition('tmmh.bundle', $vid);
+    $highlight_images = $query->execute()->fetchAll();
+    if (!empty($highlight_images)) {
+      foreach ($highlight_images as $highlight_image) {
+        $this->highlightImages[$highlight_image->entity_id][] = $highlight_image->field_main_menu_highlight_target_id;
+      }
+    }
   }
 
 }
