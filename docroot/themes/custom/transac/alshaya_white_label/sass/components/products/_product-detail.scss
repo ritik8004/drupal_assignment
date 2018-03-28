@@ -75,7 +75,7 @@
       .mobile-related-wrapper {
         position: relative;
         z-index: 4;
-        background: $white-five;
+        background: $pdp_mobile_wrapper;
         padding: 0 0.5rem;
       }
     }
@@ -107,7 +107,7 @@
       width: 35%;
       float: $right;
       margin: 0 1rem;
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $pdp_title_section_border;
     }
 
     @include breakpoint($desktop) {
