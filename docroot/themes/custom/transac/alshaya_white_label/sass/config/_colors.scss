@@ -448,10 +448,15 @@ $order_summary_product_title: $black;
 $order_summary_product_price: $black;
 // Color for attributes and qty.
 $order_summary_sec_text: $greyish;
+// Color for delivery method and address.
+$order_summary_ter_text: $grey-ash;
 
 // Checkout Global.
 $checkout_footer_bg: $white-five;
 $checkout_footer_border-top: $marine-blue-two;
+$checkout_footer_txt: $black;
+$checkout_footer_light_txt: $grey-ash;
+$checkout_header_border-bottom: $white-three;
 $checkout_pri_txt: $grey-ash;
 $checkout_section_border: $greyish;
 $checkout_section_titles: $marine-blue-two;
@@ -463,6 +468,12 @@ $checkout_out_acc_header: $white-four;
 $checkout_out_fieldset_legend: $peacock-blue;
 $checkout_out_fieldset_legend_bottom_border: $greyish;
 $checkout_out_btn: $white-four;
+
+// Checkout securely block.
+$checkout_securely_txt: $marine-blue;
+$checkout_securely_icon_bg: $pumpkin-orange;
+$checkout_securely_icon_mobile_txt: $black;
+$checkout_securely_icon_txt: $white-five;
 
 //  Checkout Confirmation.
 $checkout_confirmation_delivery_details: $white-smoke-light;
