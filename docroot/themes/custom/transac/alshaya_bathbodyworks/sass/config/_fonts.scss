@@ -1,0 +1,42 @@
+// Define Fonts
+@font-face {
+  font-family: "BBWTradeGothicLTStd_Bold";
+  src: url("../fonts/BBWTradeGothicLTStd-Bd2.eot");
+  src:
+    url("../fonts/BBWTradeGothicLTStd-Bd2.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/BBWTradeGothicLTStd-Bd2.otf") format("opentype"),
+    url("../fonts/BBWTradeGothicLTStd-Bd2.svg") format("svg"),
+    url("../fonts/BBWTradeGothicLTStd-Bd2.ttf") format("truetype"),
+    url("../fonts/BBWTradeGothicLTStd-Bd2.woff") format("woff"),
+    url("../fonts/BBWTradeGothicLTStd-Bd2.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BBWTradeGothicLTStd";
+  src: url("../fonts/BBWTradeGothicLTStd.eot");
+  src:
+    url("../fonts/BBWTradeGothicLTStd.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/BBWTradeGothicLTStd.otf") format("opentype"),
+    url("../fonts/BBWTradeGothicLTStd.svg") format("svg"),
+    url("../fonts/BBWTradeGothicLTStd.ttf") format("truetype"),
+    url("../fonts/BBWTradeGothicLTStd.woff") format("woff"),
+    url("../fonts/BBWTradeGothicLTStd.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+// bbw specific font family
+// English fonts.
+$bbw-bold: 'BBWTradeGothicLTStd_Bold';
+$bbw-bold-nodir: 'BBWTradeGothicLTStd_Bold';
+
+$bbw-regular: 'BBWTradeGothicLTStd';
+$bbw-regular-nodir: 'BBWTradeGothicLTStd';
+
+// Arabic fonts
+
+$bbw-arabic-bold: 'BBWTradeGothicLTStd_Bold', 'GESSTwoBold-Bold';
+
+$bbw-arabic-regular: 'Ampersand_regular', 'GESSTwoLight-Light';
