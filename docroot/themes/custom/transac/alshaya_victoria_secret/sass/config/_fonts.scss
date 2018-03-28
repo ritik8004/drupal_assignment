@@ -16,15 +16,27 @@
 }
 
 @font-face {
-  font-family: "GESSTwoBold-Bold";
-  src: url("../fonts/GESSTwoBold.eot");
+  font-family: "DroidArabicKufi-Light";
+  src: url("../fonts/droidkufi-regular.eot");
   src:
-    url("../fonts/GESSTwoBold.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/GESSTwoBold.otf") format("opentype"),
-    url("../fonts/GESSTwoBold.svg") format("svg"),
-    url("../fonts/GESSTwoBold.ttf") format("truetype"),
-    url("../fonts/GESSTwoBold.woff") format("woff"),
-    url("../fonts/GESSTwoBold.woff2") format("woff2");
+    url("../fonts/droidkufi-regular.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/droidkufi-regular.svg") format("svg"),
+    url("../fonts/droidkufi-regular.ttf") format("truetype"),
+    url("../fonts/droidkufi-regular.woff") format("woff"),
+    url("../fonts/droidkufi-regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi-Bold";
+  src: url("../fonts/droidkufi-bold.eot");
+  src:
+    url("../fonts/droidkufi-bold.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/droidkufi-bold.svg") format("svg"),
+    url("../fonts/droidkufi-bold.ttf") format("truetype"),
+    url("../fonts/droidkufi-bold.woff") format("woff"),
+    url("../fonts/droidkufi-bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
@@ -72,13 +84,15 @@
 // VS specific font family
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
-$vs-bold: 'BentonSans-Medium', 'GESSTwoBold-Bold';
-$vs-regular: 'BentonSans-Regular', 'GESSTwoLight-Light';
+$vs-bold: 'BentonSans-Medium', 'DroidArabicKufi-Bold';
+$vs-regular: 'BentonSans-Regular', 'DroidArabicKufi-Light';
+$vspromo-regular: 'BentonSans-Regular', 'GESSTwoLight-Light';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$vs-arabic-bold: 'BentonSans-Medium', 'GESSTwoBold-Bold';
-$vs-arabic-regular: 'BentonSans-Regular', 'GESSTwoLight-Light';
+$vs-arabic-bold: 'BentonSans-Medium', 'DroidArabicKufi-Bold';
+$vs-arabic-regular: 'BentonSans-Regular', 'DroidArabicKufi-Light';
+$vspromo-arabic-regular: 'BentonSans-Regular', 'GESSTwoLight-Light';
 
 $vs-icons: 'font-icons';
 $body_font: $vs-regular;
