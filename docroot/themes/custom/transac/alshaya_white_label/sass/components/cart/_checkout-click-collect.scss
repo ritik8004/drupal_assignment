@@ -39,9 +39,9 @@
 
       input[type=text] {
         height: 2.188rem;
-        border: 1px solid $white;
+        border: 1px solid $primary_search_border;
         font-size: 0.75rem;
-        color: $grey-ash;
+        color: $primary_search_input;
         padding: 0.375rem;
 
         @include breakpoint($only-tablet) {
@@ -53,7 +53,7 @@
         }
 
         &::placeholder {
-          color: $grey-ash;
+          color: $primary_search_input_placeholder;
         }
 
         @include breakpoint($only-mobile) {
@@ -70,7 +70,7 @@
       text-align: center;
       padding: 0.9375rem 0;
       max-height: 3rem;
-      color: $cerulean-two;
+      color: $checkout_cc_list_map_link_default;
       font-size: 0.875rem;
       position: relative;
       cursor: pointer;
@@ -80,17 +80,17 @@
       -moz-osx-font-smoothing: grayscale;
 
       &:hover {
-        color: $marine-blue-two;
+        color: $checkout_cc_list_map_link_active;
 
         &::before {
-          color: $marine-blue-two;
+          color: $checkout_cc_list_map_link_active;
         }
       }
 
       &.active {
-        border: 1px solid $marine-blue-two;
+        border: 1px solid $checkout_cc_list_map_link_active;
         font-weight: bold;
-        color: $marine-blue-two;
+        color: $checkout_cc_list_map_link_active;
 
         &:hover {
           opacity: 0.75;
@@ -126,7 +126,7 @@
 
     .stores-list-view {
       @include icon(list, before) {
-        color: $cerulean-two;
+        color: $checkout_cc_list_map_link_default;
         vertical-align: top;
         font-size: 2.75rem;
         line-height: 0.37;
@@ -143,14 +143,14 @@
 
       &.active {
         &::before {
-          color: $marine-blue-two;
+          color: $checkout_cc_list_map_link_active;
         }
       }
     }
 
     .stores-map-view {
       @include icon(map, before) {
-        color: $cerulean-two;
+        color: $checkout_cc_list_map_link_default;
         margin-#{$right}: 0.6875rem;
         vertical-align: -8px;
         font-size: 1.938rem;
@@ -167,7 +167,7 @@
 
       &.active {
         &::before {
-          color: $marine-blue-two;
+          color: $checkout_cc_list_map_link_active;
         }
       }
     }
@@ -175,7 +175,6 @@
     .label-store-location {
       font-family: $arial;
       font-size: 0.75rem;
-      color: $black;
       display: inline-block;
       position: relative;
       margin-top: 0.875rem;
@@ -183,7 +182,7 @@
       text-transform: lowercase;
 
       @include breakpoint($only-mobile) {
-        color: $marine-blue-two;
+        color: $checkout_cc_store_location_input_label_mobile_color;
 
         &::before {
           display: none;
@@ -193,7 +192,7 @@
       @include breakpoint($desktop) {
         margin-#{$left}: 1.375rem;
         font-size: 0.8125rem;
-        color: $grey-ash;
+        color: $checkout_cc_store_location_input_label;
         margin-top: 0;
         font-weight: normal;
         vertical-align: middle;
@@ -203,7 +202,7 @@
 
       @include breakpoint($only-tablet) {
         width: 86%;
-        color: $grey-ash;
+        color: $checkout_cc_store_location_input_label;
         margin-#{$left}: 0.9375rem;
         margin-top: 0;
         font-weight: normal;
@@ -238,9 +237,9 @@
         display: block;
         margin-top: 1rem;
         padding-top: 1rem;
-        border-top: 1px solid $greyish;
+        border-top: 1px solid $checkout_cc_location_empty_txt_border;
         text-align: center;
-        color: $grey-ash;
+        color: $checkout_cc_location_empty_txt;
       }
 
       .all-stores-info {
@@ -269,7 +268,7 @@
           font-weight: bold;
         }
 
-        color: $black;
+        color: $checkout_cc_location_result_label;
       }
 
       ul {
@@ -279,8 +278,8 @@
         margin-bottom: 0;
 
         li {
-          background-color: $white-five;
-          border-bottom: 1px solid $white-two;
+          background-color: $checkout_cc_list_bg;
+          border-bottom: 1px solid $checkout_cc_list_border;
           padding-#{$left}: 1.375rem;
           padding-#{$right}: 1.313rem;
           padding-top: 1.438rem;
@@ -311,7 +310,7 @@
           }
 
           @include breakpoint($only-mobile) {
-            border: 1px solid $white-two;
+            border: 1px solid $checkout_cc_list_border;
             padding-top: 1.5rem;
             padding-#{$left}: 0;
             padding-#{$right}: 0;
@@ -348,27 +347,27 @@
               .view-on-map {
                 display: table-cell !important;
                 vertical-align: middle;
-                border: 1px solid $white-two;
+                border: 1px solid $checkout_cc_list_border;
               }
 
               .select-store {
-                border: 1px solid $cobalt-blue;
-                color: $cobalt-blue;
+                border: 1px solid $checkout_cc_list_map_link_active;
+                color: $checkout_cc_list_map_link_active;
               }
 
               .store-on-map,
               .select-store {
-                background: $white-five;
+                background: $checkout_cc_list_select_store_btn_bg;
               }
             }
           }
 
           &:first-child {
-            border-top: 1px solid $white-two;
+            border-top: 1px solid $checkout_cc_list_border;
           }
 
           &:hover {
-            background-color: $white-four;
+            background-color: $checkout_cc_list_bg_hover;
           }
 
           .store-name-and-address,
@@ -403,13 +402,13 @@
             }
 
             .store-name {
-              color: $black;
+              color: $checkout_cc_store_name;
               font-weight: bold;
               display: block;
             }
 
             .store-address {
-              color: $greyish;
+              color: $checkout_cc_store_address;
 
               p {
                 margin: 0;
@@ -420,7 +419,7 @@
           .label--delivery-time {
             font-size: 0.75rem;
             font-weight: bold;
-            color: $black;
+            color: $checkout_cc_list_delivery_time;
 
             @include breakpoint($desktop) {
               font-size: 0.875rem;
@@ -429,7 +428,7 @@
 
           .delivery--time--value {
             display: block;
-            color: $black;
+            color: $checkout_cc_list_delivery_time;
 
             @include breakpoint($desktop) {
               font-size: 0.875rem;
@@ -437,7 +436,7 @@
             }
 
             @include breakpoint($only-tablet) {
-              color: $marine-blue-two;
+              color: $checkout_cc_list_delivery_time_tablet;
             }
           }
 
@@ -449,26 +448,26 @@
               vertical-align: middle;
               cursor: pointer;
               display: table-cell;
-              color: $marine-blue-two;
-              border: 1px solid $marine-blue-two;
+              color: $checkout_cc_list_select_store_btn_txt;
+              border: 1px solid $checkout_cc_list_select_store_btn_border;
               font-family: $alshaya-bold;
               font-size: 0.75rem;
               min-width: 10.13rem;
-              background: $white-five;
+              background: $checkout_cc_list_select_store_btn_bg;
               padding: 0;
               border-radius: 0;
 
               &:hover {
-                background-color: $pumpkin-orange;
-                color: $white-five;
-                border-color: $pumpkin-orange;
+                background-color: $primary_btn_bg;
+                color: $primary_btn_text;
+                border-color: $primary_btn_bg;
               }
 
               &.ajax-ladda-spinner {
                 background: $white-five url(../imgs/icons/MC-loader.svg) center center no-repeat !important;
                 background-size: 1.95rem !important;
                 color: rgba(0, 0, 0, 0) !important;
-                border-color: $marine-blue-two !important;
+                border-color: $checkout_cc_list_select_store_btn_border !important;
               }
 
               @include breakpoint($only-mobile) {
@@ -480,7 +479,7 @@
 
             .store-on-map,
             .view-on-map {
-              color: $cerulean-two;
+              color: $checkout_cc_list_map_link_default;
               font-size: 0.75rem;
               display: inline-block;
               text-align: center;
@@ -491,7 +490,7 @@
               -moz-osx-font-smoothing: grayscale;
 
               @include icon(map, before) {
-                color: $cerulean-two;
+                color: $checkout_cc_list_map_link_default;
                 margin-#{$right}: 0.4rem;
                 vertical-align: middle;
                 font-size: 1.5rem;
@@ -506,7 +505,7 @@
               @include breakpoint($only-mobile) {
                 width: 2%;
                 height: 3.063rem;
-                background: $white-five;
+                background: $checkout_cc_list_select_store_btn_bg;
               }
             }
 
@@ -523,20 +522,20 @@
             }
 
             .hours--label {
-              color: $black;
+              color: $checkout_cc_list_hours_label;
               font-size: 0.75rem;
               font-weight: bold;
               position: relative;
               cursor: pointer;
 
               @include breakpoint($tablet) {
-                color: $grey-ash;
+                color: $checkout_cc_list_hours_label_icon;
                 font-size: 0.875rem;
                 margin-bottom: 0.875rem;
                 font-weight: normal;
 
                 @include icon(chevrondown, after) {
-                  color: $grey-ash;
+                  color: $checkout_cc_list_hours_label_icon;
                   font-size: 1.938rem;
                   position: absolute;
                   top: -0.375rem;
@@ -548,7 +547,7 @@
                   font-weight: bold;
 
                   @include icon(chevronup, after) {
-                    color: $grey-ash;
+                    color: $checkout_cc_list_hours_label_icon;
                     font-size: 1.938rem;
                     position: absolute;
                     top: -0.375rem;
@@ -563,13 +562,13 @@
               }
 
               @include breakpoint($only-mobile) {
-                color: $black;
+                color: $checkout_cc_list_hours_label;
                 font-weight: normal;
                 font-size: 0.75rem;
                 margin-bottom: 0.3125rem;
 
                 @include icon(chevrondown, after) {
-                  color: $grey-ash;
+                  color: $checkout_cc_list_hours_label_icon;
                   font-size: 1.438rem;
                   position: absolute;
                   top: -0.3125rem;
@@ -578,7 +577,7 @@
 
                 &.open {
                   @include icon(chevronup, after) {
-                    color: $grey-ash;
+                    color: $checkout_cc_list_hours_label_icon;
                     font-size: 1.438rem;
                     position: absolute;
                     top: -0.3125rem;
@@ -594,13 +593,13 @@
 
             .open--hours {
               display: block;
-              color: $greyish;
+              color: $checkout_cc_list_hours_content;
               font-size: 0.75rem;
               line-height: 1.57;
 
               @include breakpoint($tablet) {
                 display: none;
-                color: $grey-ash;
+                color: $checkout_cc_list_hours_content_tablet;
                 font-size: 0.875rem;
                 line-height: 1.57;
 
@@ -616,7 +615,7 @@
 
               @include breakpoint($only-mobile) {
                 display: none;
-                color: $grey-ash;
+                color: $checkout_cc_list_hours_content_tablet;
                 font-size: 0.75rem;
                 line-height: 1.83;
 
@@ -638,7 +637,7 @@
         .store-name {
           font-size: 0.875rem;
           font-weight: bold;
-          color: $black;
+          color: $checkout_cc_map_store_name;
 
           @include breakpoint($only-tablet) {
             font-size: 0.625rem;
@@ -646,7 +645,7 @@
         }
 
         .store-address {
-          color: $greyish;
+          color: $checkout_cc_store_address;
           display: block;
           margin-top: 0.375rem;
           font-size: 0.875rem;
@@ -665,7 +664,7 @@
 
       .store-delivery-time {
         margin-top: 1.563rem;
-        color: $black;
+        color: $checkout_cc_list_delivery_time;
         font-size: 0.875rem;
 
         @include breakpoint($only-tablet) {
@@ -686,7 +685,7 @@
 
       .store-open-hours {
         .hours--label {
-          color: $grey-ash;
+          color: $checkout_cc_map_hours;
           font-size: 0.875rem;
           position: relative;
           cursor: pointer;
@@ -696,7 +695,7 @@
             padding-top: 0.95rem;
 
             @include icon(chevrondown, after) {
-              color: $grey-ash;
+              color: $checkout_cc_map_hours;
               font-size: 1.938rem;
               position: absolute;
               top: 0.5rem;
@@ -708,7 +707,7 @@
               padding-bottom: 0.5rem;
 
               @include icon(chevronup, after) {
-                color: $grey-ash;
+                color: $checkout_cc_map_hours;
                 font-size: 1.938rem;
                 position: absolute;
                 top: 0.5rem;
@@ -724,7 +723,7 @@
 
           @include breakpoint($only-tablet) {
             font-size: 0.625rem;
-            color: $black;
+            color: $checkout_cc_map_hours_label;
             font-weight: bold;
             padding-bottom: 0;
 
@@ -737,7 +736,7 @@
         .open--hours {
           @include breakpoint($desktop) {
             display: none;
-            color: $grey-ash;
+            color: $checkout_cc_map_hours;
             font-size: 0.875rem;
             line-height: 1.57;
 
@@ -752,7 +751,7 @@
           }
 
           @include breakpoint($only-tablet) {
-            color: $greyish;
+            color: $checkout_cc_map_hours_tablet;
             font-size: 0.625rem;
             padding-top: 0.25rem;
           }
@@ -774,26 +773,26 @@
           vertical-align: middle;
           cursor: pointer;
           display: table-cell;
-          color: $marine-blue-two;
-          border: 1px solid $marine-blue-two;
+          color: $checkout_cc_list_select_store_btn_txt;
+          border: 1px solid $checkout_cc_list_select_store_btn_border;
           font-family: $alshaya-bold;
           font-size: 0.75rem;
           min-width: 10.13rem;
-          background: $white-five;
+          background: $checkout_cc_list_select_store_btn_bg;
           padding: 0;
           border-radius: 0;
 
           &.ajax-ladda-spinner {
-            background: $white-five url(../imgs/icons/MC-loader.svg) center center no-repeat !important;
+            background: $checkout_cc_list_select_store_btn_bg url(../imgs/icons/MC-loader.svg) center center no-repeat !important;
             background-size: 1.95rem !important;
             color: rgba(0, 0, 0, 0) !important;
-            border-color: $marine-blue-two !important;
+            border-color: $checkout_cc_list_select_store_btn_border !important;
           }
 
           &:hover {
-            background-color: $pumpkin-orange;
-            color: $white-five;
-            border-color: $pumpkin-orange;
+            background-color: $primary_btn_bg;
+            color: $primary_btn_text;
+            border-color: $primary_btn_bg;
           }
         }
       }
@@ -823,13 +822,13 @@
     }
 
     .selected-store-content {
-      border-bottom: 1px solid $white-two;
-      border-top: 1px solid $white-two;
+      border-bottom: 1px solid $checkout_cc_selected_store_content_border;
+      border-top: 1px solid $checkout_cc_selected_store_content_border;
       padding-#{$left}: 1.375rem;
       padding-#{$right}: 1.313rem;
       padding-top: 1.438rem;
       padding-bottom: 1.188rem;
-      background: $white-four;
+      background: $checkout_cc_selected_store_content_bg;
 
       .store-name-and-address,
       .store-open-hours,
@@ -842,7 +841,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        border: 1px solid $white-two;
+        border: 1px solid $checkout_cc_selected_store_content_border;
         padding-top: 1.5rem;
         padding-#{$left}: 0;
         padding-#{$right}: 0;
@@ -870,17 +869,17 @@
           .view-on-map {
             display: table-cell !important;
             vertical-align: middle;
-            border: 1px solid $white-two;
+            border: 1px solid $checkout_cc_selected_store_content_border;
           }
 
           .change-store {
-            border: 1px solid $cobalt-blue;
-            color: $cobalt-blue;
+            border: 1px solid $checkout_cc_list_select_store_btn_border;
+            color: $checkout_cc_list_select_store_btn_txt;
           }
 
           .store-on-map,
           .change-store {
-            background: $white-five;
+            background: $checkout_cc_list_select_store_btn_bg;
           }
         }
       }
@@ -932,13 +931,13 @@
         }
 
         .store-name {
-          color: $black;
+          color: $checkout_cc_store_name;
           font-weight: bold;
           display: block;
         }
 
         .store-address {
-          color: $greyish;
+          color: $checkout_cc_store_address;
 
           p {
             margin: 0;
@@ -949,7 +948,7 @@
       .label--delivery-time {
         font-size: 0.75rem;
         font-weight: bold;
-        color: $black;
+        color: $checkout_cc_list_delivery_time;
 
         @include breakpoint($desktop) {
           font-size: 0.875rem;
@@ -958,7 +957,7 @@
 
       .delivery--time--value {
         display: block;
-        color: $black;
+        color: $checkout_cc_list_delivery_time;
 
         @include breakpoint($desktop) {
           font-size: 0.875rem;
@@ -980,17 +979,17 @@
           vertical-align: middle;
           cursor: pointer;
           display: table-cell;
-          color: $marine-blue-two;
-          border: 1px solid $marine-blue-two;
+          color: $checkout_cc_list_select_store_btn_txt;
+          border: 1px solid $checkout_cc_list_select_store_btn_border;
           font-family: $alshaya-bold;
           font-size: 0.75rem;
           min-width: 10.13rem;
-          background: $white-five;
+          background: $checkout_cc_list_select_store_btn_bg;
 
           &:hover {
-            background-color: $pumpkin-orange;
-            color: $white-five;
-            border-color: $pumpkin-orange;
+            background-color: $primary_btn_bg;
+            color: $primary_btn_text;
+            border-color: $primary_btn_bg;
           }
 
           @include breakpoint($only-mobile) {
@@ -1001,7 +1000,7 @@
 
         .store-on-map,
         .view-on-map {
-          color: $cerulean-two;
+          color: $checkout_cc_list_map_link_default;
           font-size: 0.75rem;
           display: inline-block;
           text-align: center;
@@ -1009,7 +1008,7 @@
           margin-top: 0.9375rem;
 
           @include icon(map, before) {
-            color: $cerulean-two;
+            color: $checkout_cc_list_map_link_default;
             margin-#{$right}: 0.4rem;
             vertical-align: middle;
             font-size: 1.5rem;
@@ -1038,18 +1037,18 @@
 
     .store-open-hours {
       .hours--label {
-        color: $grey-ash;
+        color: $checkout_cc_list_hours_label_icon;
         font-size: 0.875rem;
         position: relative;
         cursor: pointer;
 
         @include breakpoint($desktop) {
           padding-bottom: 0;
-          color: $black;
+          color: $checkout_cc_list_hours_label;
           margin-bottom: 0.875rem;
 
           @include icon(chevrondown, after) {
-            color: $black;
+            color: $checkout_cc_list_hours_label;
             font-size: 1.938rem;
             position: absolute;
             top: -0.375rem;
@@ -1061,7 +1060,7 @@
             font-weight: bold;
 
             @include icon(chevronup, after) {
-              color: $black;
+              color: $checkout_cc_list_hours_label;
               font-size: 1.938rem;
               position: absolute;
               top: -0.375rem;
@@ -1077,19 +1076,19 @@
 
         @include breakpoint($only-tablet) {
           font-size: 0.75rem;
-          color: $black;
+          color: $checkout_cc_list_hours_label;
           font-weight: bold;
           padding-bottom: 0;
         }
 
         @include breakpoint($only-mobile) {
-          color: $black;
+          color: $checkout_cc_list_hours_label;
           font-weight: normal;
           font-size: 0.75rem;
           margin-bottom: 0.3125rem;
 
           @include icon(chevrondown, after) {
-            color: $grey-ash;
+            color: $checkout_cc_list_hours_label_icon;
             font-size: 1.438rem;
             position: absolute;
             top: -0.3125rem;
@@ -1098,7 +1097,7 @@
 
           &.open {
             @include icon(chevronup, after) {
-              color: $grey-ash;
+              color: $checkout_cc_list_hours_label_icon;
               font-size: 1.438rem;
               position: absolute;
               top: -0.3125rem;
@@ -1115,7 +1114,7 @@
       .open--hours {
         @include breakpoint($desktop) {
           display: none;
-          color: $grey-ash;
+          color: $checkout_cc_list_hours_label_icon;
           font-size: 0.875rem;
           line-height: 1.57;
 
@@ -1130,14 +1129,14 @@
         }
 
         @include breakpoint($only-tablet) {
-          color: $greyish;
+          color: $checkout_cc_list_hours_content;
           font-size: 0.75rem;
           padding-top: 0.25rem;
         }
 
         @include breakpoint($only-mobile) {
           display: none;
-          color: $grey-ash;
+          color: $checkout_cc_list_hours_label_icon;
           font-size: 0.75rem;
           line-height: 1.83;
 
@@ -1150,11 +1149,11 @@
     }
 
     .cc-help-text {
-      color: $black;
+      color: $checkout_cc_help_text;
       font-weight: bold;
 
       p {
-        color: $grey-ash;
+        color: $checkout_cc_help_text_content;
         font-weight: normal;
         margin-top: 1.625rem;
         margin-bottom: 0;
@@ -1248,5 +1247,5 @@
   font-size: 0.75rem;
   margin-bottom: 0.5rem;
   display: inline-block;
-  color: $scarlet;
+  color: $checkout_cc_empty_store_error;
 }
