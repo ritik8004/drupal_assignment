@@ -439,6 +439,7 @@ $store_finder_search_results_tile_icon: $cerulean-two;
 $store_finder_search_results_hour_label: $cerulean-two;
 $store_finder_search_results_hour_icon_open: $marine-blue-two;
 $store_finder_storewrapper_bg: $white-four;
+
 // Checkout Pages & order summary block.
 $order_summary_border: $greyish;
 $order_summary_title: $black;
@@ -446,8 +447,10 @@ $order_summary_dropdown_icon: $black;
 $order_summary_section_border: $white;
 $order_summary_product_title: $black;
 $order_summary_product_price: $black;
+
 // Color for attributes and qty.
 $order_summary_sec_text: $greyish;
+
 // Color for delivery method and address.
 $order_summary_ter_text: $grey-ash;
 
@@ -474,6 +477,16 @@ $checkout_securely_txt: $marine-blue;
 $checkout_securely_icon_bg: $pumpkin-orange;
 $checkout_securely_icon_mobile_txt: $black;
 $checkout_securely_icon_txt: $white-five;
+
+// Checkout Login page.
+$checkout_login_footer_actions_bg: $white-four;
+$checkout_login_tab_border: $cerulean-two;
+$checkout_login_tab_text: $cerulean-two;
+$checkout_login_tab_border_active: $marine-blue;
+$checkout_login_tab_text_active: $marine-blue;
+$checkout_login_content_mobile: $black;
+$checkout_login_guest_email_text: $grey-ash;
+$checkout_login_guest_email_text_mobile: $light-ash;
 
 //  Checkout Confirmation.
 $checkout_confirmation_delivery_details: $white-smoke-light;
