@@ -307,7 +307,7 @@
 
     @include select-wrapper(4.375rem);
 
-    background: $white-five;
+    background: $primary_dropdown_bg;
 
     select.form-select {
       @include select-style(4.375rem);
@@ -344,7 +344,7 @@
       font-size: 1rem;
       font-family: $arial;
       font-weight: bold;
-      color: $marine-blue;
+      color: $pdp_sidebar_label;
       margin-top: 0;
     }
 
@@ -359,7 +359,7 @@
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $pdp_sidebar_link;
   }
 
   strong {
@@ -370,7 +370,7 @@
   .desc-label {
     font-family: $arial;
     font-weight: bold;
-    color: $marine-blue;
+    color: $pdp_sidebar_label;
     font-size: 0.875rem;
     margin-top: 0;
     margin-bottom: 0;
@@ -381,7 +381,7 @@
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $pdp_sidebar_link;
     text-transform: lowercase;
     cursor: pointer;
   }
@@ -389,7 +389,7 @@
   .desc-wrapper,
   .description-section,
   .address {
-    border-top: 1px solid $white;
+    border-top: 1px solid $pdp_title_section_border;
     padding: 0.75rem 0;
     line-height: 1.5;
 
@@ -400,7 +400,7 @@
     font-family: $arial;
     font-size: 0.875rem;
     font-weight: bold;
-    color: $pumpkin-orange;
+    color: $primary_btn_bg;
     float: $right;
   }
 
@@ -417,10 +417,10 @@
     top: 0;
     #{$right}: -38%;
     height: 33.75rem;
-    border: 1px solid $marine-blue;
+    border: 1px solid $pdp_desc_wrapper_border;
     padding: 1.25rem;
     padding-bottom: 0;
-    background: $white-five;
+    background: $pdp_desc_wrapper;
     overflow: hidden;
     width: 35%;
     z-index: 4;
@@ -437,8 +437,8 @@
       width: 2.188rem;
       font-size: 30px;
       text-align: center;
-      color: $white-two;
-      background-color: $marine-blue;
+      color: $pdp_desc_wrapper_close_icon;
+      background-color: $pdp_desc_wrapper_close_bg;
       cursor: pointer;
     }
 
@@ -465,7 +465,7 @@
       font-size: 1rem;
       font-family: $arial;
       font-weight: bold;
-      color: $marine-blue;
+      color: $pdp_sidebar_label;
     }
 
     &__content {
@@ -490,7 +490,7 @@
         .desc-label {
           font-family: $arial;
           font-weight: bold;
-          color: $marine-blue;
+          color: $pdp_sidebar_label;
           font-size: 0.875rem;
           margin-top: 0;
           margin-bottom: 0;
@@ -524,7 +524,7 @@
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $pdp_sidebar_link;
     text-transform: lowercase;
     cursor: pointer;
   }
@@ -534,7 +534,7 @@
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $pdp_sidebar_link;
     cursor: pointer;
     display: none;
 
@@ -548,7 +548,7 @@
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1.83;
-    color: $windows-blue;
+    color: $pdp_sidebar_link;
     cursor: pointer;
 
     @include breakpoint($tablet) {
@@ -589,7 +589,7 @@
       font-size: 1rem;
       font-family: $arial;
       font-weight: bold;
-      color: $marine-blue;
+      color: $pdp_sidebar_label;
 
       &.disabled {
         opacity: 0.4;
@@ -599,7 +599,7 @@
 
   .c-accordion {
     &-delivery-options {
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $pdp_title_section_border;
 
       &.click-collect,
       &.home-delivery {
@@ -609,10 +609,10 @@
 
         h3 {
           &.ui-state-disabled {
-            color: $white;
+            color: $accordion_title_disabled;
 
             span {
-              color: $white;
+              color: $accordion_title_disabled;
 
               &.title-price {
                 @include u-visibility(none);
@@ -626,7 +626,7 @@
     &__title {
       font-family: $arial;
       font-size: 0.875rem;
-      color: $black;
+      color: $pdp_accordion_title;
       line-height: 2;
       cursor: pointer;
       position: relative;
@@ -641,7 +641,7 @@
 
         font-family: $arial;
         font-size: 0.6875rem;
-        color: $brownish-grey;
+        color: $accordion_title;
         line-height: 1.5;
         max-width: 15rem;
 
@@ -661,7 +661,7 @@
         font-family: $arial;
         font-size: 0.6875rem;
         font-weight: bold;
-        color: $black;
+        color: $pdp_accordion_title;
       }
     }
 
@@ -671,7 +671,7 @@
           font-family: $arial;
           font-size: 0.6875rem;
           line-height: 1.64;
-          color: $brownish-grey;
+          color: $accordion_title;
 
           ul {
             li {
@@ -692,14 +692,14 @@
           font-size: 0.75rem;
           padding-bottom: 0.5rem;
           padding-top: 0.75rem;
-          color: $black-two;
+          color: $pdp_accordion_title;
 
           strong {
-            color: $black;
+            color: $pdp_accordion_title;
           }
 
           span {
-            color: $brownish-grey;
+            color: $accordion_title;
           }
         }
       }
@@ -716,14 +716,14 @@
     font-family: $arial;
     font-size: 0.75rem;
     line-height: 2;
-    color: $brownish-grey;
+    color: $accordion_title;
     padding-bottom: 1rem;
 
     .text p {
       font-family: $arial;
       font-size: 0.75rem;
       line-height: 2;
-      color: $brownish-grey;
+      color: $accordion_title;
       margin: 0;
     }
 
@@ -749,7 +749,7 @@
       font-family: $arial;
       font-size: 0.75rem;
       line-height: 2;
-      color: $brownish-grey;
+      color: $accordion_title;
       margin: 0;
     }
 
@@ -757,7 +757,7 @@
       float: $left;
       height: 2.188rem;
       padding: 0.3125rem;
-      border: solid 1px $white;
+      border: solid 1px $primary_border;
 
       @include breakpoint($mobile) {
         width: 11.56rem;
@@ -772,11 +772,11 @@
       float: $right;
       width: 6.563rem;
       height: 2.188rem;
-      background-color: $cerulean-two;
+      background-color: $pdp_cc_btn_bg;
       font-family: $alshaya-thin;
       appearance: none;
       font-size: 0.75rem;
-      color: $white-five;
+      color: $pdp_cc_btn_text;
       text-transform: lowercase;
       display: inline-block;
       vertical-align: middle;
@@ -787,7 +787,7 @@
     }
 
     .highlight {
-      color: $windows-blue;
+      color: $pdp_cc_highlight;
       font-weight: bold;
       cursor: pointer;
     }
@@ -801,7 +801,7 @@
     font-family: $arial;
     font-size: 0.75rem;
     line-height: 2;
-    color: $grey-ash;
+    color: $pdp_cc_storefinder_label;
     margin: 0;
   }
 
@@ -815,9 +815,9 @@
       width: 63%;
       height: 2.188rem;
       padding: 0.3125rem;
-      border: solid 1px $white;
+      border: solid 1px $primary_border;
       font-size: 0.75rem;
-      color: $greyish;
+      color: $pdp_cc_storefinder_input;
 
       @include breakpoint($desktop) {
         width: 185px;
@@ -828,7 +828,7 @@
       }
 
       &::placeholder {
-        color: $greyish;
+        color: $pdp_cc_storefinder_input;
       }
     }
 
@@ -836,11 +836,11 @@
       float: none;
       width: 6.563rem;
       height: 2.188rem;
-      background-color: $cerulean-two;
+      background-color: $pdp_cc_btn_bg;
       font-family: $alshaya-thin;
       appearance: none;
       font-size: 0.875rem;
-      color: $white-five;
+      color: $pdp_cc_btn_text;
       text-transform: lowercase;
       display: inline-block;
       vertical-align: middle;
@@ -873,13 +873,13 @@
     font-family: $arial;
     font-size: 0.75rem;
     line-height: 2;
-    color: $brownish-grey;
+    color: $pdp_cc_storefinder_label;
     margin: 0;
   }
 
   .change-location-link,
   .change-store-link {
-    color: $cerulean-two;
+    color: $pdp_cc_storefinder_link;
     font-size: 0.75rem;
     font-family: $arial;
     font-weight: bold;
@@ -892,7 +892,7 @@
     font-family: $arial;
     font-size: 0.75rem;
     line-height: 2;
-    color: $brownish-grey;
+    color: $pdp_cc_storefinder_label;
     margin: 0;
 
     .google-store-location {
@@ -911,18 +911,18 @@
       width: 10rem;
       height: 2.1875rem;
       font-size: 0.75rem;
-      border: 1px solid $white-two;
+      border: 1px solid $pdp_cc_changelocation;
       padding: 0.4375rem;
     }
 
     .cancel-change-location {
       width: 2.1875rem;
       height: 2.1875rem;
-      background: $white-two;
+      background: $pdp_cc_changelocation;
       float: $right;
       position: relative;
       border: none;
-      color: $white-two;
+      color: $pdp_cc_changelocation;
       vertical-align: middle;
       border-radius: 0;
       cursor: pointer;
@@ -932,7 +932,7 @@
         font-size: 2.1875rem;
         top: -1px;
         #{$left}: 1px;
-        color: $black;
+        color: $pdp_cc_changelocation_icon;
       }
     }
   }
@@ -940,7 +940,7 @@
 
 // Google Places Autocomplete results.
 .pac-container {
-  border: 1px solid $white;
+  border: 1px solid $primary_border;
   box-shadow: none;
   min-width: 11.25rem;
   margin-top: -1px;
@@ -969,7 +969,7 @@
     font-family: $arial;
 
     &:hover {
-      background-color: $white-four;
+      background-color: $pac_item_hover;
     }
   }
 
@@ -978,7 +978,7 @@
   .pac-matched,
   .pac-item-query {
     font-size: 0.75rem !important;
-    color: $grey-ash !important;
+    color: $pac_item !important;
   }
 }
 
