@@ -261,6 +261,12 @@ $gallery_pager_active_bg: $marine-blue-two;
 // Sharethis
 $sharethis_icon: $marine-blue-two;
 
+// Autocomplete
+$autocomplete_bg: $white-five;
+$autocomplete_border_last: $white;
+$autocomplete_hover: $white-smoke-light;
+$autocomplete_text: $grey-ash;
+
 /* ------- 6. Sections and Pages --------------- */
 
 // Header.
@@ -343,6 +349,7 @@ $plp_facet_label: $black;
 $plp_facet_filter_label: $black;
 $plp_facet_title: $grey-ash;
 $plp_facet_border: $white;
+$plp_item_label: $grey-ash;
 
 // PLP Filter bar.
 $plp_filterbar_filter_bg: $cerulean-two;
@@ -364,6 +371,7 @@ $plp_tile_product_hover_shadow: $whisper-light;
 $plp_tile_hover_slider_hover: $grey-ash;
 $plp_tile_hover_slider_nav: $grey-ash;
 $plp_tile_hover_slider_nav_hover: $grey-ash;
+$plp_tile_hover_slider_arrows: $black;
 
 // Product detail page.
 $pdp_product_title: $grey-ash;
@@ -390,33 +398,40 @@ $department_category_list_hover: $cerulean-two;
 
 // Store finder page.
 // Store finder header form.
-$store_finder_nearme_icon: $cerulean-two;
-$store_finder_nearme_text: $cerulean-two;
+$store_finder_header: $black;
+$store_finder_subheader: $marine-blue;
+$store_finder_backbtn: $marine-blue-two;
+$store_finder_icon: $cerulean-two;
+$store_finder_text: $cerulean-two;
+$store_finder_border: $cerulean-two;
+$store_finder_text_hover: $marine-blue;
+$store_finder_border_hover: $marine-blue;
 $store_finder_search_label: $grey-ash;
 $store_finder_search_input: $white;
+$store_finder_search_input_bg: $white-five;
+$store_finder_search_input_mobile_border: $greyish;
 $store_finder_search_input_border: $white;
-$store_finder_mapview_text: $cerulean-two;
-$store_finder_mapview_border: $cerulean-two;
-$store_finder_mapview_hover_text: $marine-blue;
-$store_finder_mapview_hover_border: $marine-blue;
-$store_finder_listview_text: $cerulean-two;
-$store_finder_listview_border: $cerulean-two;
-$store_finder_listview_hover_text: $marine-blue;
-$store_finder_listview_hover_border: $marine-blue;
 
 // Store finder gloassary.
 $store_finder_glossary_alphabet: $marine-blue;
 $store_finder_glossary_text: $grey-ash;
+$store_finder_glossary_icon: $black;
+$store_finder_glossary_text_hover: $cerulean-two;
+$store_finder_glossary_text_border: $white;
+$store_finder_glossary_border: $greyish;
 $store_finder_glossary_link: $marine-blue;
 // Store finder search results.
 $store_finder_search_results_label: $black;
 $store_finder_search_results_counter_bg: $cerulean-two;
+$store_finder_search_results_border: $white;
 $store_finder_search_results_counter_text: $white-five;
 $store_finder_search_results_tile_bg: $white-five;
 $store_finder_search_results_tile_hover_bg: $white-four;
 $store_finder_search_results_tile_link: $cerulean-two;
 $store_finder_search_results_tile_icon: $cerulean-two;
-
+$store_finder_search_results_hour_label: $cerulean-two;
+$store_finder_search_results_hour_icon_open: $marine-blue-two;
+$store_finder_storewrapper_bg: $white-four;
 // Checkout Pages & order summary block.
 $order_summary_border: $greyish;
 $order_summary_title: $black;
