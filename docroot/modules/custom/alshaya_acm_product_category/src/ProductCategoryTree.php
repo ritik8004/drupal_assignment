@@ -2,8 +2,6 @@
 
 namespace Drupal\alshaya_acm_product_category;
 
-use Drupal\Component\Transliteration\TransliterationInterface;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Url;
@@ -70,13 +68,6 @@ class ProductCategoryTree {
   protected $connection;
 
   /**
-   * The transliteration helper.
-   *
-   * @var \Drupal\Component\Transliteration\TransliterationInterface
-   */
-  protected $transliteration;
-
-  /**
    * Highlight image paragraph ids for all terms.
    *
    * @var array
@@ -96,34 +87,27 @@ class ProductCategoryTree {
    *   Route match service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
-   * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
-   *   The transliteration helper.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
     CacheBackendInterface $cache,
     RouteMatchInterface $route_match,
-    Connection $connection,
-    TransliterationInterface $transliteration) {
+    Connection $connection) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
-    $this->transliteration = $transliteration;
   }
 
   /**
    * Get top level category items.
    *
-   * @param bool $link_class
-   *   True if include link class else false.
-   *
    * @return array
    *   Processed term data.
    */
-  public function getCategoryRootTerms($link_class = FALSE) {
+  public function getCategoryRootTerms() {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     $cid = self::CACHE_ID . '_' . $langcode;
@@ -133,7 +117,7 @@ class ProductCategoryTree {
     }
 
     // Get all child terms for the given parent.
-    $term_data = $this->getCategoryTree($langcode, 0, FALSE, FALSE, $link_class);
+    $term_data = $this->getCategoryTree($langcode, 0, FALSE, FALSE);
 
     $cache_tags = [
       self::CACHE_TAG,
@@ -184,13 +168,11 @@ class ProductCategoryTree {
    *   True if include highlight image else false.
    * @param bool $child
    *   True if include child else false.
-   * @param bool $link_class
-   *   True if include link class else false.
    *
    * @return array
    *   Processed term data.
    */
-  public function getCategoryTree($langcode, $parent_tid = 0, $highlight_image = TRUE, $child = TRUE, $link_class = FALSE) {
+  public function getCategoryTree($langcode, $parent_tid = 0, $highlight_image = TRUE, $child = TRUE) {
     $data = [];
 
     // Get all child terms for the given parent.
@@ -210,13 +192,6 @@ class ProductCategoryTree {
         'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
       ];
-
-      // Create a link class based on taxonomy term name.
-      if ($link_class) {
-        $transliterated = $this->transliteration->transliterate($term->name, $langcode, '_');
-        $transliterated = Unicode::strtolower($transliterated);
-        $data[$term->tid]['link_class'] = preg_replace('@[^a-z0-9_]+@', '-', $transliterated);
-      }
 
       if ($highlight_image) {
         $data[$term->tid]['highlight_image'] = $this->getHighlightImage($term->tid, $langcode, self::VOCABULARY_ID);
