@@ -993,16 +993,16 @@
       font-family: $arial;
       font-size: 0.75rem;
       line-height: 1.5;
-      color: $grey-ash;
+      color: $pdp_cc_top_stores_list;
       list-style: none;
       padding: 0.6875rem 0;
-      border-top: 1px solid $white;
+      border-top: 1px solid $primary_border;
 
       @include clearfix;
 
       .store {
         &-sequence {
-          border: 1px solid $black;
+          border: 1px solid $pdp_cc_top_stores_list_border;
           height: 1.063rem;
           width: 1.063rem;
           border-radius: 1.063rem;
@@ -1020,7 +1020,7 @@
 
         &-name {
           font-weight: bold;
-          color: $black;
+          color: $pdp_cc_top_stores_list_name;
         }
 
         &-delivery-time {
@@ -1032,7 +1032,7 @@
           em {
             font-weight: bold;
             font-style: normal;
-            color: $black;
+            color: $pdp_cc_top_stores_list_time;
           }
         }
 
@@ -1045,7 +1045,7 @@
         &-low-stock {
           font-size: 0.6875rem;
           font-weight: bold;
-          color: $pumpkin-orange;
+          color: $primary_btn_bg;
           padding-top: 0.8125rem;
           display: inline-block;
         }
@@ -1082,13 +1082,13 @@
   font-family: $arial;
   font-size: 0.75rem;
   font-weight: bold;
-  color: $marine-blue;
+  color: $pdp_cc_other_stores;
   padding: 1.063rem 0;
-  border-top: 1px solid $white;
+  border-top: 1px solid $primary_border;
   cursor: pointer;
 
   @include breakpoint($only-mobile) {
-    color: $cerulean-two;
+    color: $pdp_cc_other_stores_mobile;
   }
 }
 
