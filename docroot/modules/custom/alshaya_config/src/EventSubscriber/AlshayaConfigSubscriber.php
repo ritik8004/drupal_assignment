@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_config\EventSubscriber;
 
+use Drupal\Component\Utility\DiffArray;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigCrudEvent;
@@ -62,10 +63,36 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
   public function onConfigSave(ConfigCrudEvent $event) {
     $config = $event->getConfig();
     $data = $config->getRawData();
+    $override_deletions = [];
 
+    // Override the config data with module overrides.
+    $this->fetchOverrides($data, 'override', $config->getName());
+
+    // Get delte-overrides from enabled modules.
+    $this->fetchOverrides($override_deletions, 'override-delete', $config->getName());
+
+    // Get recursive diff of config data with delete-overrides.
+    $data = DiffArray::diffAssocRecursive($data, $override_deletions);
+
+    // Re-write the config to make sure the overrides are not lost.
+    $this->configStorage->write($config->getName(), $data);
+    Cache::invalidateTags($config->getCacheTags());
+  }
+
+  /**
+   * Helper function to fetch overrides from all modules.
+   *
+   * @param array $data
+   *   Intial data variable that needs to be overridden.
+   * @param string $override_type
+   *   Override type: override/delete-override.
+   * @param string $config_name
+   *   Name of config for which we checking for overrides.
+   */
+  public function fetchOverrides(array &$data, $override_type, $config_name) {
     // We browse all the modules to check for override.
     foreach ($this->moduleHandler->getModuleList() as $module) {
-      $override_path = drupal_get_path('module', $module->getName()) . '/config/override/' . $config->getName() . '.yml';
+      $override_path = drupal_get_path('module', $module->getName()) . '/config/' . $override_type . '/' . $config_name . '.yml';
 
       // If there is an override, we merge it with the initial config.
       if (file_exists($override_path)) {
@@ -73,10 +100,6 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
         $data = NestedArray::mergeDeep($data, $override);
       }
     }
-
-    // Re-write the config to make sure the overrides are not lost.
-    $this->configStorage->write($config->getName(), $data);
-    Cache::invalidateTags($config->getCacheTags());
   }
 
 }
