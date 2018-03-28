@@ -1,3 +1,9 @@
 .vat-text-footer {
   font-style: italic;
 }
+
+.vat-container {
+  .vat-text {
+    font-family: $hnm-regular;
+  }
+}
