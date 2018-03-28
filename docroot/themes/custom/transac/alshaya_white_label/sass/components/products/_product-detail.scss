@@ -130,13 +130,13 @@
 
     .price {
       font-size: 1rem;
-      color: $black;
+      color: $pdp_product_price;
       margin-bottom: 1rem;
     }
 
     .content--item-code {
       font-size: 0.6875rem;
-      color: $brownish-grey;
+      color: $pdp_product_itemcode;
       padding-bottom: 0.75rem;
     }
 
@@ -155,7 +155,7 @@
 
       a {
         font-size: 0.9375rem;
-        color: $scarlet;
+        color: $pdp_product_discount_text;
         text-decoration: underline;
         display: inline-block;
         margin-bottom: 0.5rem;
