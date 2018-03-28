@@ -14,7 +14,7 @@
     position: relative;
     padding-top: 0.25rem;
     padding-bottom: 0.55rem;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $checkout_section_title_border;
     margin-#{$left}: 0;
 
     @include breakpoint($tablet) {
@@ -28,7 +28,7 @@
   }
 
   .checkout-login-actions-wrapper {
-    background: $white-four;
+    background: $checkout_login_footer_actions_bg;
     display: inline-block;
     width: 100%;
     vertical-align: middle;
@@ -68,7 +68,7 @@
 
     a {
       font-weight: bold;
-      color: $cerulean-two;
+      color: $content_link_color;
       font-size: 0.75rem;
 
       &.back-to-basket {
@@ -113,9 +113,9 @@
 
   .tab {
     padding: 0.5rem 1rem;
-    border: 1px solid $cerulean-two;
+    border: 1px solid $checkout_login_tab_border;
     display: inline-block;
-    color: $cerulean-two;
+    color: $checkout_login_tab_text;
     font-size: 0.75rem;
     width: 49%;
     height: 3.125rem;
@@ -130,15 +130,15 @@
     }
 
     &.active {
-      border: 2px solid $marine-blue;
-      color: $marine-blue;
+      border: 2px solid $checkout_login_tab_border_active;
+      color: $checkout_login_tab_text_active;
       font-weight: bold;
     }
 
     &.active--tab--head {
-      color: $marine-blue;
+      color: $checkout_login_tab_text_active;
       font-weight: bold;
-      border: 2px solid $marine-blue;
+      border: 2px solid $checkout_login_tab_border_active;
     }
 
     span {
@@ -208,7 +208,7 @@
     }
 
     @include breakpoint($desktop) {
-      border-#{$right}: 1px solid $white;
+      border-#{$right}: 1px solid $checkout_section_title_border;
     }
   }
 
@@ -221,7 +221,7 @@
       font-size: 14px;
       font-family: $alshaya-bold;
       font-weight: normal;
-      color: $marine-blue-two;
+      color: $checkout_section_titles;
 
       @include breakpoint($only-mobile) {
         font-size: 12px;
@@ -232,7 +232,7 @@
 
   #edit-checkout-login {
     @include breakpoint($tablet) {
-      border-#{$left}: 1px solid $white;
+      border-#{$left}: 1px solid $checkout_section_title_border;
       padding-#{$left}: 2.2rem;
       position: relative;
     }
@@ -247,7 +247,7 @@
       display: block;
       text-align: center;
       font-weight: bold;
-      color: $cerulean-two;
+      color: $content_link_color;
 
       @include breakpoint($tablet) {
         position: absolute;
@@ -288,7 +288,7 @@
     a {
       @extend %btn;
 
-      background: $pumpkin-orange;
+      background: $primary_btn_bg;
       display: inline-block;
       margin: 1em 0;
       margin-bottom: 2rem;
@@ -316,7 +316,7 @@
     font-size: 0.75rem;
 
     @include breakpoint($only-mobile) {
-      color: $black;
+      color: $checkout_login_content_mobile;
     }
 
     .tabs--content {
@@ -348,11 +348,11 @@
     }
 
     .checkout-guest-email-usage {
-      color: $light-ash;
+      color: $checkout_login_guest_email_text_mobile;
       margin-bottom: 1.85rem;
 
       @include breakpoint($tablet) {
-        color: $grey-ash;
+        color: $checkout_login_guest_email_text;
         margin-bottom: 1.4rem;
         font-weight: bold;
         font-size: 13px;
@@ -390,5 +390,5 @@
 }
 
 .form-item--error-message a {
-  color: $cerulean-two;
+  color: $content_link_color;
 }

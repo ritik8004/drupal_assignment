@@ -22,7 +22,7 @@
   }
 
   #product-image-gallery-container {
-    background: $white-five;
+    background: $gallery_bg;
   }
 }
 
@@ -41,8 +41,8 @@
   border: none;
   z-index: 9;
   font-size: 0;
-  color: $white-two;
-  background-color: $marine-blue;
+  color: $modal_close_icon;
+  background-color: $modal_close_bg;
   border-radius: 0;
   outline: solid transparent;
   text-indent: inherit;
@@ -137,12 +137,12 @@
       border: none;
       font-size: 1.5rem;
       margin: 0 0.625rem;
-      background-color: $white;
+      background-color: $gallery_zoombtn_bg;
       padding: 0.625rem;
       height: 0;
 
       &.disabled {
-        background-color: $light-ash;
+        background-color: $gallery_zoombtn_disabled;
       }
     }
 

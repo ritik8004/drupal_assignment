@@ -11,7 +11,11 @@ use Drupal\Core\Site\Settings;
  * Implements hook_install().
  */
 function alshaya_vs_transac_install() {
-// Set store id - EN.
+  // Enable and set alshaya_victoria_secret as default theme.
+  \Drupal::service('theme_handler')->install(['alshaya_victoria_secret'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_victoria_secret');
+
+  // Set store id - EN.
   \Drupal::configFactory()->getEditable('acq_commerce.store')
     ->set('store_id', Settings::get('store_id')['en'])
     ->save();

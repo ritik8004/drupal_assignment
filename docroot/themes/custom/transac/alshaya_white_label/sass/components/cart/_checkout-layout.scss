@@ -82,12 +82,12 @@
 .block-checkout-summary-block {
   .delivery-type,
   .address {
-    border-top: 1px solid $white;
+    border-top: 1px solid $checkout_section_title_border;
     font-size: 0.875rem;
     padding: 1rem 1.5rem;
     line-height: 1.5;
     font-weight: bold;
-    color: $black;
+    color: $order_summary_title;
 
     @include breakpoint($upto-desktop) {
       font-size: 0.75rem;
@@ -96,7 +96,7 @@
     a {
       font-size: 0.75rem;
       float: $right;
-      color: $cerulean-two;
+      color: $content_link_color;
     }
 
     .method,
@@ -104,12 +104,12 @@
       font-size: 0.75rem;
       font-weight: normal;
       margin-top: 1em;
-      color: $grey-ash;
+      color: $order_summary_ter_text;
     }
   }
 
   .address {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $checkout_section_title_border;
   }
 }
 
@@ -126,8 +126,8 @@
   }
 
   .c-post-content {
-    background-color: $white-five;
-    border-top: 2px solid $marine-blue-two;
+    background-color: $checkout_footer_bg;
+    border-top: 2px solid $checkout_footer_border-top;
   }
 
   .block-customer-service-block {
@@ -137,7 +137,7 @@
   }
 
   .site-brand-wrapper {
-    border-bottom: 1px solid $white-three;
+    border-bottom: 1px solid $checkout_header_border-bottom;
   }
 
   .site-brand-home {
@@ -171,7 +171,7 @@
 
     .secure__checkout--block {
       float: $right;
-      color: $marine-blue;
+      color: $checkout_securely_txt;
       font-size: 0.75rem;
       line-height: 2.25rem;
 
@@ -195,12 +195,12 @@
     .icon-ic_login {
       font-size: 1.25rem;
       line-height: 1.25rem;
-      color: $black;
+      color: $checkout_securely_icon_mobile_txt;
 
       @include breakpoint($tablet) {
         font-size: 1rem;
-        background: $pumpkin-orange;
-        color: $white-five;
+        background: $checkout_securely_icon_bg;
+        color: $checkout_securely_icon_txt;
         padding: 0.125rem;
         display: inline-block;
         margin-#{$left}: 0.75rem;
@@ -218,7 +218,7 @@
   }
 
   .c-footer-secondary {
-    background-color: $white-four;
+    background-color: $copyright_footer_bg;
   }
 
   .c-post-content .l-container {
@@ -237,8 +237,8 @@
 }
 
 .block-customer-service-block {
-  background-color: $white-five;
-  border-top: 2px solid $marine-blue-two;
+  background-color: $checkout_footer_bg;
+  border-top: 2px solid $checkout_footer_border-top;
   font-family: $alshaya-bold;
   font-weight: normal;
   text-transform: lowercase;
@@ -247,19 +247,19 @@
   padding-#{$right}: 1rem;
 
   p {
-    color: $black;
+    color: $checkout_footer_txt;
   }
 
   .light {
     font-family: $alshaya-thin;
-    color: $grey-ash;
+    color: $checkout_footer_light_txt;
   }
 
   p:last-child {
     .light {
       font-family: $alshaya-bold;
       font-weight: normal;
-      color: $black;
+      color: $checkout_footer_txt;
       line-height: 1.5;
     }
 
@@ -269,7 +269,7 @@
   }
 
   h3 {
-    color: $marine-blue-two;
+    color: $checkout_section_titles;
     margin-bottom: 0.8rem;
   }
 
