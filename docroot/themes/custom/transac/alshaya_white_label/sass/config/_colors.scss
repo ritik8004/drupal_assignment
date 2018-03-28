@@ -140,6 +140,7 @@ $primary_td_bg_highlight: $white-smoke-light;
 $primary_td_bg: $white-five;
 $primary_tr_hover: rgba(247, 247, 247, 0.72);
 $primary_table_border: $white;
+$primary_full_page_overlay_bg: rgba(255, 255, 255, 0.7);
 
 // Dropdown.
 $primary_dropdown_bg: $white-five;
@@ -432,6 +433,7 @@ $checkout_footer_border-top: $marine-blue-two;
 $checkout_pri_txt: $grey-ash;
 $checkout_section_border: $greyish;
 $checkout_section_titles: $marine-blue-two;
+$checkout_section_title_border: $white;
 
 // @todo Variables used in outdated markup, avoid using elsewhere.
 $checkout_out_sec_text: $windows-blue;
@@ -475,10 +477,62 @@ $checkout_cc_help_text: $black;
 $checkout_cc_help_text_content: $grey-ash;
 $checkout_cc_empty_store_error: $scarlet;
 
+// Checkout click and collect heading cnc form.
+$checkout_cc_cnc_form_title_border: $marine-blue-two;
+
+// Checkout tabs & form.
+$checkout_tab_bg: $white-five;
+$checkout_tab_active_bg: $white-two;
+$checkout_tab_default_title: $cerulean-two;
+$checkout_tab_active_title: $marine-blue-two;
+$checkout_tab_default_border: $light-greyish;
+$checkout_tab_active_border: $greyish;
+$checkout_tab_disabled_border: $light-greyish;
+$checkout_tab_disabled_text: $light-greyish;
+$checkout_tab_active_border_2: $marine-blue-two; // Probably outdated.
+$checkout_tab_active_hr: $cerulean-two;
+$checkout_form_actions_footer: $white-four;
+$checkout_form_actions_footer_white: $white-five;
+$checkout_tab_text_default: $black;
+$checkout_tab_description: $grey-ash;
+$checkout_tab_separator: $grey-ash;
+
+// Checkout tabs mobile.
+$checkout_tab_mob_active_bg: $white-five;
+$checkout_tab_mob_active_border: $marine-blue-two;
+
+// Checkout delivery options.
+$checkout_delivery_optn_odd_row: $white-four;
+$checkout_delivery_optn_shipping_method_title: $brownish-grey;
+
+// Checkout Payment.
+$checkout_payment_form_border: $greyish;
+$checkout_payment_option_border: $white;
+$checkout_payment_row_selected: $white-four;
+$checkout_payment_row_default: $white-five;
+$checkout_payment_row_hover: $white-four;
+$checkout_payment_method_title: $brownish-grey;
+$checkout_payment_method_icon_bg: $white;
+$checkout_payment_method_desc: $grey-ash;
+$checkout_transaction_type_color: $marine-blue-two;
+
 // Checkout Home delivery.
+$checkout_hd_selected_add_wrapper_border: $white;
+$checkout_hd_selected_add_bg: $white-four;
+
+// Checkout HD or CC options screen for mobile.
+$checkout_method_choice_tab_separator: $grey-ash;
+$checkout_method_choice_tab_border_default: $greyish;
+$checkout_method_choice_tab_text_default: $grey-ash;
+$checkout_method_choice_tab_title_active: $cerulean-two;
+
+// Checkout mobile back link.
+$checkout_mobile_back_link_icon: $black;
 
 // Address form.
 $address_form_country_disabled: $ladda-disabled;
+$address_button_border: $marine-blue-two;
+$address_button_text: $marine-blue-two;
 
 //My Account pages
 //block-myaccountneedhelp
