@@ -9,7 +9,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
-use Drupal\alshaya_stores_finder\StoresFinderUtility;
+use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -157,7 +157,7 @@ class AlshayaGtmManager {
   /**
    * Store Finder service.
    *
-   * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
+   * @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility
    */
   protected $storeFinder;
 
@@ -220,7 +220,7 @@ class AlshayaGtmManager {
    *   Entity Manager service.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager
    *   Checkout Options Manager service.
-   * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $storesFinderUtility
+   * @param \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storesFinderUtility
    *   Store Finder service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language Manager service.

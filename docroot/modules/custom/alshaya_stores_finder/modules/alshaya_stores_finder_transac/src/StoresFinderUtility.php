@@ -1,7 +1,9 @@
 <?php
 
-namespace Drupal\alshaya_stores_finder;
+namespace Drupal\alshaya_stores_finder_transac;
 
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -36,10 +38,26 @@ class StoresFinderUtility {
   protected $database;
 
   /**
+   * Address Book Manager service object.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
+  protected $addressBookManager;
+
+  /**
+   * Logger service object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * Constructs a new StoresFinderUtility object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
+   *   Address Book Manager service object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Core\Database\Connection $database
@@ -47,8 +65,13 @@ class StoresFinderUtility {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, Connection $database, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              AlshayaAddressBookManager $address_book_manager,
+                              LanguageManagerInterface $language_manager,
+                              Connection $database,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->addressBookManager = $address_book_manager;
     $this->languageManager = $language_manager;
     $this->database = $database;
     $this->logger = $logger_factory->get('alshaya_stores_finder');
@@ -195,14 +218,20 @@ class StoresFinderUtility {
 
     $node->get('field_store_phone')->setValue($store['store_phone']);
 
-    if (isset($store['address'])) {
-      $node->get('field_store_address')->setValue($store['address']);
-    }
-    else {
-      $node->get('field_store_address')->setValue('');
-    }
+    // Always set the textarea to empty value first.
+    $node->get('field_store_address')->setValue('');
+    $node->get('field_store_area')->setValue('');
 
-    $node->get('field_store_area')->setValue($store['area']);
+    if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+      if (isset($store['address']) && !empty($store['address'])) {
+        $address = $this->addressBookManager->getAddressArrayFromRawMagentoAddress($store['address']);
+        $node->get('field_address')->setValue($address);
+      }
+    }
+    elseif (isset($store['address'])) {
+      $node->get('field_store_address')->setValue($store['address']);
+      $node->get('field_store_area')->setValue($store['area']);
+    }
 
     if (isset($store['sts_delivery_time_label'])) {
       $node->get('field_store_sts_label')->setValue($store['sts_delivery_time_label']);

@@ -77,7 +77,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   /**
    * Store Finder Utility service object.
    *
-   * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
+   * @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility
    */
   protected $storesFinderUtility;
 
@@ -149,7 +149,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     /** @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler */
     $moduleHandler = $container->get('module_handler');
     if ($moduleHandler->moduleExists('alshaya_stores_finder')) {
-      $store_finder_utility = $container->get('alshaya_stores_finder.utility');
+      $store_finder_utility = $container->get('alshaya_stores_finder_transac.utility');
     }
 
     return new static(

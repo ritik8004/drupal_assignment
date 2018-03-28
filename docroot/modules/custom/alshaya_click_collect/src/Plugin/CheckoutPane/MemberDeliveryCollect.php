@@ -89,8 +89,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     }
 
     if ($store_code && $shipping_type) {
-      /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
-      $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+      /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_utility */
+      $store_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
 
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
 
@@ -312,8 +312,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']);
 
-    /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
-    $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+    /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_utility */
+    $store_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
     $store_node = $store_utility->getTranslatedStoreFromCode($values['store_code']);
 
     $address['extension']['address_area_segment'] = $store_node->get('field_store_area')->getString();

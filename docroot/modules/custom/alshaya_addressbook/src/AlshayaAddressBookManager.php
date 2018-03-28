@@ -380,6 +380,37 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   }
 
   /**
+   * Helper function to convert Magento raw address to Drupal format.
+   *
+   * @param array $magento_address
+   *   Magento address returned by direct Magento API call.
+   *
+   * @return array
+   *   Address array that Drupal understands.
+   */
+  public function getAddressArrayFromRawMagentoAddress(array $magento_address) {
+    $address = [];
+
+    $custom_fields = $this->getMagentoCustomFields();
+
+    foreach ($magento_address as $line_item) {
+      if (isset($custom_fields[$line_item['code']])) {
+        $address['extension'][$line_item['code']] = $line_item['value'];
+      }
+      else {
+        $address[$line_item['code']] = $line_item['value'];
+      }
+    }
+
+    // @TODO: Get this corrected in Magento if possible.
+    if (empty($address['country_id'])) {
+      $address['country_id'] = _alshaya_custom_get_site_level_country_code();
+    }
+
+    return $this->getAddressArrayFromMagentoAddress($address);
+  }
+
+  /**
    * Convert drupal address into magento address.
    *
    * @param array $magento_address
@@ -389,11 +420,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Drupal address.
    */
   public function getAddressArrayFromMagentoAddress(array $magento_address) {
-    $dm_version = $this->configFactory->get('alshaya_addressbook.settings')->get('dm_version');
-
     $address = [];
 
-    if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       $mapping = $this->getMagentoFieldMappings();
 
       // Flip the mapping to make it easy below.
@@ -547,9 +576,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     // City is core attribute in Magento and hard to remove validation.
     $magento_address['city'] = '&#8203;';
 
-    $dm_version = $this->configFactory->get('alshaya_addressbook.settings')->get('dm_version');
-
-    if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       $mapping = $this->getMagentoFieldMappings();
       $custom_fields = $this->getMagentoCustomFields();
 
@@ -921,8 +948,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $shipping = (array) $cart->getShipping();
     $field = 'address_area_segment';
 
-    $dm_version = $this->configFactory->get('alshaya_addressbook.settings')->get('dm_version');
-    if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       $mappings = $this->getMagentoFieldMappings();
       $field = $mappings['administrative_area'];
     }
@@ -932,6 +958,22 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       : '';
 
     return $this->areasTermsHelper->getShippingAreaLabel($value);
+  }
+
+  /**
+   * Wrapper function to get current DM Version from config.
+   *
+   * @return mixed
+   *   Current DM Version.
+   */
+  public function getDmVersion() {
+    static $dm_version;
+
+    if (!isset($dm_version)) {
+      $dm_version = $this->configFactory->get('alshaya_addressbook.settings')->get('dm_version');
+    }
+
+    return $dm_version;
   }
 
 }

@@ -78,6 +78,11 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
  * Processor for the country in address field.
  */
 function _alshaya_addressbook_country_process(array &$element, FormStateInterface $form_state) {
+  // No processing for field_ui admin page.
+  if (strpos($element['#name'], 'default_value_input') > -1) {
+    return $element;
+  }
+
   $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
 
   $magento_form = NULL;
@@ -95,17 +100,20 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['#prefix'] = '<div class="address-book-address">';
   $element['#suffix'] = '</div>';
 
-  $default_country_code = $element['#default_value']['country_code'];
+  $default_country_code = $element['#default_value']['country_code'] ?: _alshaya_custom_get_site_level_country_code();
+
   $element['country_code'] = [
     '#type' => 'hidden',
     '#value' => $default_country_code,
   ];
 
   // Validation for first and last name.
-  $element['given_name']['#element_validate'][] = '_alshaya_addressbook_firstname_validate';
-  $element['given_name']['#maxlength'] = 50;
-  $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
-  $element['family_name']['#maxlength'] = 50;
+  if (!empty($element['#used_fields']['givenName'])) {
+    $element['given_name']['#element_validate'][] = '_alshaya_addressbook_firstname_validate';
+    $element['given_name']['#maxlength'] = 50;
+    $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
+    $element['family_name']['#maxlength'] = 50;
+  }
 
   // This is required for guest checkout pages.
   if (isset($element['#require_email']) && $element['#require_email']) {
@@ -128,8 +136,10 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   }
 
   // Update field titles.
-  $element['given_name']['#title'] = t('First Name', [], ['context' => 'Address label']);
-  $element['family_name']['#title'] = t('Last Name', [], ['context' => 'Address label']);
+  if (!empty($element['#used_fields']['givenName'])) {
+    $element['given_name']['#title'] = t('First Name', [], ['context' => 'Address label']);
+    $element['family_name']['#title'] = t('Last Name', [], ['context' => 'Address label']);
+  }
   $element['address_line1']['#title'] = t('Street Name / No.', [], ['context' => 'Address label']);
   $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);
   $element['dependent_locality']['#maxlength'] = 89;
@@ -146,46 +156,50 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   // Special case - city is not required.
   $element['city']['#required'] = FALSE;
 
-  // Adding mobile number.
-  $mobile_number = [
-    'mobile_number' => [
-      '#type' => 'mobile_number',
-      '#title' => t('Mobile Number'),
-      '#verify' => 0,
-      '#tfa' => 0,
-      '#required' => TRUE,
-    ],
-  ];
+  if (!empty($element['#used_fields']['givenName'])) {
+    // Adding mobile number.
+    $mobile_number = [
+      'mobile_number' => [
+        '#type' => 'mobile_number',
+        '#title' => t('Mobile Number'),
+        '#verify' => 0,
+        '#tfa' => 0,
+        '#required' => TRUE,
+      ],
+    ];
+
+    if (!empty($form_state->getTemporaryValue('default_value_mobile'))) {
+      $mobile_number['mobile_number']['#default_value'] = str_replace(' ', '', $form_state->getTemporaryValue('default_value_mobile'));
+    }
+
+    // Adding mobile number field to appropriate position.
+    $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'organization');
+  }
 
   $country_label = t('Country');
 
-  if (!empty($form_state->getTemporaryValue('default_value_mobile'))) {
-    $mobile_number['mobile_number']['#default_value'] = str_replace(' ', '', $form_state->getTemporaryValue('default_value_mobile'));
+  if (isset($element['administrative_area'])) {
+    // Modifications for all countries (overridden in code below if required).
+    $administrative_area_default_value = $element['administrative_area']['#default_value'];
+    $element['administrative_area'] = [
+      '#type' => 'select',
+      '#title' => t('Area'),
+      '#required' => TRUE,
+      '#multiple' => FALSE,
+      '#default_value' => $administrative_area_default_value,
+      '#attributes' => [
+        'class' => [
+          'select2-select',
+          'area-list-dropdown',
+        ],
+      ],
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/convert_to_select2',
+        ],
+      ],
+    ];
   }
-
-  // Adding mobile number field to appropriate position.
-  $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'organization');
-
-  // Modifications for all countries (overridden in code below if required).
-  $administrative_area_default_value = $element['administrative_area']['#default_value'];
-  $element['administrative_area'] = [
-    '#type' => 'select',
-    '#title' => t('Area'),
-    '#required' => TRUE,
-    '#multiple' => FALSE,
-    '#default_value' => $administrative_area_default_value,
-    '#attributes' => [
-      'class' => [
-        'select2-select',
-        'area-list-dropdown',
-      ],
-    ],
-    '#attached' => [
-      'library' => [
-        'alshaya_white_label/convert_to_select2',
-      ],
-    ],
-  ];
 
   // Change the fields if dm version is 2 and magento form has data.
   if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2 && !empty($magento_form)) {

@@ -263,8 +263,8 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
     $cc_type = $shipping_assignment['shipping']['extension_attributes']['click_and_collect_type'];
 
-    /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
-    $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+    /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_utility */
+    $store_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
 
     $orderDetails['view_on_map_link'] = '';
 

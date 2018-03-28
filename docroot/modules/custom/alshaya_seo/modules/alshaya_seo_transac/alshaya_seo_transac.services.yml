@@ -9,7 +9,7 @@ services:
       - '@request_stack'
       - '@entity_type.manager'
       - '@alshaya_acm_checkout.options_manager'
-      - '@alshaya_stores_finder.utility'
+      - '@alshaya_stores_finder_transac.utility'
       - '@language_manager'
       - '@cache.alshaya'
       - '@database'
