@@ -10,6 +10,23 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update the 'checkout_guest_summary' config value.
+ */
+function alshaya_master_update_8012() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $val = '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p>';
+  $config->set('checkout_guest_summary.value', $val);
+  $config->save();
+
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_acm_checkout.settings');
+  $val = '<p> بإمكانك إنشاء حساب جديد عند إتمام عملية الشراء لكي تحصل على خصائص ومزايا تسهل عليك التسوق<p>';
+  $config->set('checkout_guest_summary.value', $val);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation.
  */
 function alshaya_master_update_8011() {
