@@ -104,11 +104,16 @@ class ProductCategoryTree {
   /**
    * Get top level category items.
    *
+   * @param string $langcode
+   *   (optional) The language code.
+   *
    * @return array
    *   Processed term data.
    */
-  public function getCategoryRootTerms() {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+  public function getCategoryRootTerms($langcode = NULL) {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
 
     $cid = self::CACHE_ID . '_' . $langcode;
 
@@ -130,6 +135,9 @@ class ProductCategoryTree {
 
   /**
    * Get the term tree for 'product_category' vocabulary from cache or fresh.
+   *
+   * @param int $parent_id
+   *   The term parent id, default 0.
    *
    * @return array
    *   Processed term data from cache if available or fresh.
