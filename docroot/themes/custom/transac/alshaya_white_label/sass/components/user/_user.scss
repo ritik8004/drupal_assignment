@@ -75,7 +75,8 @@
     position: relative;
   }
 
-  .c-sidebar-second {
+  .c-sidebar-second,
+  #block-youllbeableto {
     h3 {
       color: $marine-blue;
       font-size: 14px;
@@ -503,7 +504,7 @@
   text-transform: lowercase;
 
   a {
-    color: $cerulean-two;
+    color: $cerulean-two !important;
   }
 
   span {
