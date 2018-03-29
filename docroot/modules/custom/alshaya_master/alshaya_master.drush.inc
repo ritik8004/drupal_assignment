@@ -32,13 +32,14 @@ function alshaya_master_drush_command() {
  */
 function drush_alshaya_master_alshaya_post_drupal_install() {
   $post_install_status = \Drupal::state()->get('alshaya_master_post_drupal_install', 'not done');
+  $modules = \Drupal::state()->get('system.module.files', []);
 
   // Determine which country module to install.
   $country_code = drush_get_option('country_code', '');
   $country_code = empty($country_code) ? Settings::get('country_code') : $country_code;
   $country_module = 'alshaya_' . strtolower($country_code);
 
-  if (module_load_install($country_module)) {
+  if (isset($modules[$country_module])) {
     if (empty(\Drupal::configFactory()->get('alshaya.installed_country')->get('module'))) {
       drush_print(dt('Enabling the @country_module country module.', ['@country_module' => $country_module]));
 
@@ -69,17 +70,15 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
   $profile = str_replace('alshaya_', '_', \Drupal::service('config.storage')->read('core.extension')['profile']);
 
   // Try to look for transac and non transac specific module for brand before
-  // brand installing brand module. i.e. alshaya_vs_transac. We avoid warning
-  // when file does not exist as it is the purpose of this call to know if the
-  // file exists.
-  if (@module_load_install($brand_module . $profile)) {
+  // brand installing brand module. i.e. alshaya_vs_transac.
+  if (isset($modules[$brand_module . $profile])) {
     $brand_module = $brand_module . $profile;
   }
 
   if (!empty($brand_module)) {
     // We avoid warning when file does not exist as it is the purpose of this
     // call to know if the file exists.
-    if (@module_load_install($brand_module)) {
+    if (isset($modules[$brand_module])) {
       if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('module'))) {
         drush_print(dt('Enabling the @brand_module brand module.', ['@brand_module' => $brand_module]));
 
