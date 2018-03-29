@@ -29,12 +29,12 @@ path=$(dirname $0)
 alias="@alshaya.local"
 l_argument="-l local.alshaya-$site.com"
 
+local_archive="../tmp/alshaya_${site}_${env}.sql"
+
 # Check if we have an existing archive if we want to reuse existing one.
 if [ $mode = "reuse" ]
 then
   echo "Remote URL: $remote_url"
-
-  local_archive="../tmp/alshaya_${site}_${env}.sql"
   echo "Local archive: $local_archive"
 
   if [ ! -f $local_archive ]
@@ -84,7 +84,7 @@ drush $alias $l_argument php-eval "alshaya_config_install_configs(['search_api.s
 
 # Reset indexed data and reindex 5000 for search page to work.
 drush $alias $l_argument search-api-clear acquia_search_index -y
-drush $alias $l_argument search-api-index acquia_search_index 5000 -y
+# drush $alias $l_argument search-api-index acquia_search_index 5000 -y
 
 # Update super admin email to local default.
 echo "Update super admin email to no-reply@acquia.com."

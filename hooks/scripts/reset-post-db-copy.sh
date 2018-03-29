@@ -50,7 +50,7 @@ drush8 @$site.$target_env --uri=$uri pm-uninstall -y shield
 
 drush8 @$site.$target_env --uri=$uri sync-commerce-products en 10 -y
 drush8 @$site.$target_env --uri=$uri sync-commerce-products ar 5 -y
-drush8 @$site.$target_env --uri=$uri alshaya-api-sync-stores
+drush8 @$site.$target_env --uri=$uri sync-stores
 
 # Now wait for SKUs to be loaded.
 new_count="0"
