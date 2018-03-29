@@ -47,7 +47,7 @@
       }
 
       a {
-        color: $marine-blue !important;
+        color: $mm_l2_link !important;
 
         html[lang=ar] & {
           line-height: 1.7;
@@ -57,11 +57,11 @@
 
     .menu--three__list-item > .menu-two__link-wrapper a {
       font-size: 0.75rem !important;
-      color: $grey-ash !important;
+      color: $mm_l3_link !important;
       font-family: $arial !important;
 
       &:hover {
-        color: $cerulean-two !important;
+        color: $mm_l3_link_hover !important;
       }
     }
 

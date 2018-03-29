@@ -82,6 +82,10 @@
         background: $minicart_notification_btn_bg;
         color: $minicart_notification_btn_text;
         font-family: $alshaya-thin;
+
+        &:hover {
+          opacity: 0.75;
+        }
       }
     }
   }

@@ -637,7 +637,7 @@
         .store-name {
           font-size: 0.875rem;
           font-weight: bold;
-          color: $checkout_cc_map_store_name;
+          color: $checkout_cc_store_name;
 
           @include breakpoint($only-tablet) {
             font-size: 0.625rem;

@@ -17,6 +17,10 @@ sites:
     module: alshaya_mc
     type: alshaya_transac
     country: sa
+  mcae:
+    module: alshaya_mc
+    type: alshaya_transac
+    country: ae
   hmkw:
     module: alshaya_hm
     type: alshaya_transac
@@ -47,5 +51,9 @@ sites:
   dhuae:
     module: alshaya_d
     type: alshaya_non_transac
+  pbae:
+    module: alshaya_pb
+    type: alshaya_transac
+    country: ae
 vm:
   enable: true

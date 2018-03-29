@@ -44,7 +44,7 @@
         margin: 0;
 
         @include breakpoint($tablet) {
-          border-bottom: 1px solid $white;
+          border-bottom: 1px solid $plp_facet_input_border;
           display: inline-block;
           margin-bottom: 1.125rem;
           width: 100%;
@@ -57,7 +57,7 @@
           padding-bottom: 0.75rem;
 
           a {
-            color: $white-four;
+            color: $plp_facet_filter_link;
             font-size: 12px;
 
             span {
@@ -65,7 +65,7 @@
                 float: $left;
                 margin-#{$right}: 1px;
                 text-transform: lowercase;
-                background: $cerulean-two;
+                background: $plp_facet_filter_bg;
                 display: inline-block;
                 padding: 0.657rem 17px;
                 text-align: center;
@@ -95,7 +95,7 @@
                 height: 35px;
                 position: relative;
                 float: $right;
-                background: $cerulean-two;
+                background: $plp_facet_filter_bg;
                 display: inline-block;
                 padding: 0.657rem 17px;
                 text-align: center;
@@ -105,13 +105,17 @@
           }
 
           &.clear-all {
-            border: 2px solid $cerulean-two;
+            border: 2px solid $plp_facet_clear_border;
             padding: 0.407rem 1.5rem;
             text-transform: lowercase;
             height: 2.188rem;
 
+            &:hover {
+              opacity: 0.75;
+            }
+
             a {
-              color: $cerulean-two;
+              color: $plp_facet_clear_text;
             }
           }
         }
@@ -179,13 +183,13 @@
               font-size: 0.875rem;
               padding: 0.4375rem 0.78125rem 0.4375rem 0.84375rem;
               font-family: $alshaya-thin;
-              border: 1px solid $cerulean-two;
+              border: 1px solid $plp_facet_clear_border_mobile;
               margin-#{$left}: 0;
             }
 
             list-style: none;
             display: inline-block;
-            border: 1px solid $marine-blue-two;
+            border: 1px solid $plp_facet_clear_border;
             margin-#{$left}: 5.6rem;
             font-size: 12px;
             text-align: center;
@@ -194,13 +198,13 @@
             text-transform: lowercase;
 
             a {
-              color: $cerulean-two;
+              color: $plp_facet_clear_text;
             }
           }
 
           .applied-filter-count {
             font-family: $alshaya-bold;
-            color: $marine-blue-two;
+            color: $plp_facet_filter_count;
           }
 
           .c-accordion__title.ui-state-active {
@@ -231,7 +235,7 @@
 
           .c-facet__label {
             width: 100%;
-            border: 1px solid $white-two;
+            border: 1px solid $plp_facet_label_border_mobile;
           }
         }
 
@@ -280,7 +284,7 @@
       font-size: 0.875rem;
       color: $black;
       padding-bottom: 9px;
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $plp_facet_border;
       font-family: $alshaya-thin;
     }
 
@@ -308,7 +312,7 @@
     @include breakpoint($only-mobile) {
       padding-bottom: 0.5rem;
       margin-bottom: 0.75rem;
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $content_pagetitle_border;
     }
 
     @include breakpoint($only-tablet) {
@@ -332,7 +336,7 @@
     font-size: 1rem;
     font-weight: normal;
     text-transform: lowercase;
-    color: $cerulean-two;
+    color: $plp_promotion_description;
     margin-top: 0.45rem;
     font-family: $alshaya-thin;
 
@@ -357,7 +361,7 @@
       font-size: 0.875rem;
       color: $black;
       padding-bottom: 9px;
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $content_pagetitle_border;
       font-family: $alshaya-thin;
 
       @include breakpoint($only-mobile) {
@@ -374,7 +378,7 @@
 
   .c-products__item {
     text-align: center;
-    color: $black;
+    color: $plp_tile_product_text;
     margin-bottom: 4px;
     font-size: 0.9375rem;
     position: relative;
@@ -431,10 +435,10 @@
       }
 
       a {
-        color: $grey-ash;
+        color: $plp_tile_product_title;
 
         &:hover {
-          color: $cerulean-two;
+          color: $plp_tile_product_title_hover;
           text-decoration: underline;
         }
       }
@@ -448,7 +452,7 @@
       font-size: 0.75rem;
 
       &.special-price-exists {
-        color: $scarlet;
+        color: $plp_tile_product_special_price;
         text-decoration: line-through;
         margin-#{$right}: 4px;
       }
@@ -478,9 +482,9 @@
           bottom: -0.75rem;
           position: absolute;
           z-index: -1;
-          box-shadow: 4px 4px 0 0 $whisper-light;
-          border: 1px solid $greyish;
-          background: $white-five;
+          box-shadow: 4px 4px 0 0 $plp_tile_product_hover_shadow;
+          border: 1px solid $plp_tile_product_hover_border;
+          background: $plp_tile_product_hover_bg;
         }
 
         .field--name-name {
@@ -497,8 +501,8 @@
     }
 
     .out-of-stock span {
-      background: $cherry;
-      color: $white-five;
+      background: $oos_btn_bg;
+      color: $oos_btn_text;
       font-family: $alshaya-thin;
       font-size: 0.8125rem;
       padding: 0.5625rem 1.688rem;
@@ -520,7 +524,7 @@
       }
 
       .sku-promotion-link {
-        color: $cherry;
+        color: $oos_btn_bg;
       }
     }
   }
@@ -532,7 +536,7 @@
   }
 
   .c-products__item__link {
-    color: $black;
+    color: $plp_tile_product_text;
   }
 
   ul.js-pager__items {
@@ -542,9 +546,9 @@
     margin-bottom: 7.1rem;
 
     a {
-      color: $marine-blue;
+      color: $plp_pager_link;
       font-size: 0.813rem;
-      border: 1px solid $marine-blue;
+      border: 1px solid $plp_pager_link_border;
       padding: 0.563rem 7.12rem;
       font-family: $alshaya-bold;
       text-transform: lowercase;
@@ -573,7 +577,7 @@
         #{$right}: -2.188rem;
         height: 2.1875rem;
         width: 2.1875rem;
-        background-color: $white-two;
+        background-color: $plp_facet_dropdown_bg;
         position: absolute;
         text-align: center;
         top: 0;
@@ -588,7 +592,7 @@
         #{$right}: -2.188rem;
         height: 2.1875rem;
         width: 2.1875rem;
-        background-color: $white-two;
+        background-color: $plp_facet_dropdown_bg;
         position: absolute;
         text-align: center;
         top: 0;
@@ -596,7 +600,7 @@
       }
     }
 
-    border: 1px solid $white-two;
+    border: 1px solid $plp_facet_label_border_mobile;
     height: 2.1875rem;
     padding: 0.625rem;
     font-weight: normal;
@@ -608,7 +612,7 @@
     }
 
     &.is-active {
-      background: $white-five;
+      background: $plp_facet_active_bg;
       position: relative;
       border: none;
 
@@ -660,7 +664,7 @@
     width: 16.8125rem;
     position: absolute;
     display: none;
-    background-color: $white-five;
+    background-color: $plp_facet_active_bg;
     z-index: 1;
     padding: 0.9rem 1rem;
 
@@ -673,7 +677,7 @@
       .label {
         font-family: $alshaya-bold;
         font-size: 0.817rem;
-        color: $black;
+        color: $plp_facet_filter_label;
         float: $left;
         margin-top: 7px;
 
@@ -689,13 +693,13 @@
         font-size: 0.875rem;
         padding: 0.4375rem 0.78125rem 0.4375rem 0.84375rem;
         font-family: $alshaya-thin;
-        border: 1px solid $cerulean-two;
+        border: 1px solid $plp_facet_clear_border_mobile;
         margin-#{$left}: 0;
       }
 
       list-style: none;
       display: inline-block;
-      border: 1px solid $marine-blue-two;
+      border: 1px solid $plp_facet_clear_border;
       margin-#{$left}: 5.6rem;
       font-size: 12px;
       text-align: center;
@@ -704,13 +708,13 @@
       text-transform: lowercase;
 
       a {
-        color: $cerulean-two;
+        color: $plp_facet_clear_text;
       }
     }
 
     .applied-filter-count {
       font-family: $alshaya-bold;
-      color: $marine-blue-two;
+      color: $plp_facet_filter_count;
     }
 
     .c-accordion__title.ui-state-active {
@@ -850,7 +854,7 @@
         position: absolute;
         top: 1.125rem;
         #{$left}: 0.125rem !important;
-        background: $white-five;
+        background: $primary_dropdown_bg;
         width: 83%;
         pointer-events: none;
         height: 2rem;
@@ -924,7 +928,7 @@ html[lang=ar] {
       padding-bottom: 0.5rem;
 
       .c-department & {
-        border-top: 1px solid $white;
+        border-top: 1px solid $primary_border;
         padding-top: 0.5rem;
       }
     }

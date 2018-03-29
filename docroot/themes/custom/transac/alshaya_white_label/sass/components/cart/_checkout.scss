@@ -1119,7 +1119,7 @@ body.alias--cart {
   .edit-checkout {
     @extend %btn;
 
-    background: $primary_brand_button;
+    background: $primary_btn_bg;
     margin-top: 1em;
     margin-bottom: 0.75rem;
     min-width: 10.8125rem;
@@ -1199,8 +1199,8 @@ body.alias--cart {
 
     .checkout-top-button {
       cursor: pointer;
-      background: $primary_brand_button;
-      color: $primary_brand_button_text;
+      background: $primary_btn_bg;
+      color: $primary_btn_text;
       font-size: 0.75rem;
       font-family: $alshaya-bold;
       width: 10.81rem;

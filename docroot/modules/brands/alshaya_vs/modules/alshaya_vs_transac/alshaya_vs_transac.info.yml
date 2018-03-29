@@ -6,4 +6,4 @@ core: 8.x
 dependencies:
   - alshaya_vs:alshaya_vs
 themes:
-  - victoria_secret
+  - alshaya_victoria_secret
