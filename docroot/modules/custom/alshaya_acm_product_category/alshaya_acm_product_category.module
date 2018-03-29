@@ -10,6 +10,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -100,7 +101,11 @@ function alshaya_acm_product_category_preprocess_block(&$variables) {
             // @todo: Place uri for brand page. i.e. $parent->url().
             $variables['content']['site_logo']['#uri'] = $theme->getPath() . '/' . $term_machine_name . '-logo' . $langcode . '.svg';
             $variables['content']['site_logo']['#alt'] = $parent->label();
-            $variables['content']['site_name'] = $parent->label();
+            $variables['content']['site_name']['#markup'] = $parent->label();
+            $variables['content']['site_path'] = [
+              '#markup' => $parent->url(),
+              '#access' => TRUE,
+            ];
           }
         }
       }
