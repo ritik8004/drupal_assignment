@@ -101,6 +101,7 @@ $content_link_color: $cerulean-two;
 // Form elements.
 $primary_form_selector_border: $black;
 $primary_form_selector: $black;
+$primary_form_link: $windows-blue;
 $primary_input: $black;
 $primary_input_label: $greyish;
 $primary_input_border: $grey-ash;
@@ -724,27 +725,45 @@ $password_tooltip_list: $grey-ash;
 $user_nav_link: $marine-blue-two;
 $user_nav_mobile_title2: $black;
 $user_nav_mobile_link: $grey-ash;
+$user_order_list_text: $black;
+$user_order_list_border: $whisper-dark;
+$user_order_list_bg: $white-five;
+$user_order_list_hover_bg: $white-four;
+$user_order_list_hover_link_bg: $white-smoke;
+$user_order_list_light: $greyish;
+$user_order_list_dark: $black;
+$user_order_help_text: $windows-blue;
+$user_order_help_bg: $pale-grey;
 
 // User Form
 $user_form_text: $black;
 $user_form_error_label: $white-five;
 $user_field_link: $cerulean-two;
+$user_captcha: $greyish;
+$user_pwd_input: $grey-ash;
+$user_pwd_unmask: $greyish;
+$user_account_nav: $matterhorn;
 
 //block-myaccountneedhelp
 $myaccountneedhelp_bg: $pale-grey;
 $myaccountneedhelp_text: $windows-blue;
+
 //block-youllbeableto
-$youllbeableto_title: $marine-blue;
-$youllbeableto_text: $grey-ash;
-$youllbeableto_link: $cerulean-two;
+$user_blk_title: $marine-blue;
+$user_blk_text: $grey-ash;
+$user_blk_link: $cerulean-two;
+
 // joinclubblock
 $joinclubblock_title: $dark-sand;
 $joinclubblock_text: $grey-ash;
 $joinclubblock_link: $cerulean-two;
+
 // Privilege Card
 $privilege_card_title: $dark-sand;
 $privilege_card_subtitle: $greyish;
 $privilege_card_form_label: $greyish;
+$privilege_card_summary: $grey-ash;
+$privilege_card_summary_after: $black;
 $privilege_card_form_input: $black;
 $privilege_card_form_input_placeholder: $grey-shade;
 $privilege_card_form_error: $scarlet-two;
