@@ -287,16 +287,71 @@ $autocomplete_text: $grey-ash;
 /* ------- 6. Sections and Pages --------------- */
 
 // Header.
-$primary_topheader_bg: $white-four;
-$primary_topheader_ink: $marine-blue-two;
+$header_bg: $white-five;
+$header_search_block_bg: $white-five;
+$header_border: $white;
+
+// Header mobile search.
+$header_search_border_mobile: $marine-blue-two;
+$header_search_active_bg: $marine-blue;
+$header_search_active_text: $white-five;
 
 // Header - Search.
 $primary_search_btn: $marine-blue;
+$primary_search_bg: $white-five;
 $primary_search_btn_icon: $marine-blue;
 $primary_search_input: $grey-ash;
 $primary_search_input_placeholder: $grey-ash;
 $primary_search_border: $white;
 $primary_search_result_hover: $white-smoke-light;
+
+// C-menu primary i:e Mobile and tablet header menu links.
+$header_c_menu_text: $brownish-grey;
+$header_c_menu_icon_color: $marine-blue-two;
+$header_c_menu_icon_text: $white-five;
+$header_toggle_sign_default: $white;
+$header_toggle_sign_active_tab: $marine-blue;
+$header_toggle_sign_active_tab_bg: $white-five;
+$header_mobile_menu_arrow: $marine-blue-two;
+$header_mobile_menu_active: $white-five;
+$header_mobile_menu_close_bg: $white-five;
+$header_mobile_menu_close: $black;
+$header_mobile_menu_overlay: rgba(133, 133, 133, 0.27);
+
+// Branding menu mobile.
+$header_branding_shadow: $greyish;
+
+// Header secondary: ie: top header.
+$header_secondary_bg: $white-four;
+$header_secondary_bg_upto_desk: $white-five;
+$header_secondary_menu_link_mobile: $grey-ash;
+$header_secondary_menu_link: $marine-blue-two;
+$header_secondary_menu_link_hover_bg: $white-five;
+
+// Header my account nav.
+$header_my_account_h3_title: $marine-blue-two;
+$header_my_account_bg: $white-five;
+$header_my_account_link_hover: $grey-ash;
+$header_my_account_icon: $marine-blue-two;
+
+// Mega menu.
+$mm_bg: $white-five;
+$mm_body_overlay: rgba(0, 0, 0, 0.48);
+$mm_l1_border: $white;
+$mm_l1_link: $black;
+$mm_l1_link_bg: $marine-blue-two;
+$mm_l1_link_hover: $marine-blue;
+$mm_l1_link_hover_border_to_fill_space: $white-five;
+$mm_l1_link_active_border: $marine-blue;
+$mm_l2_link: $marine-blue;
+$mm_l2_link_hover: $white-five;
+$mm_l2_p: $brownish-grey;
+$mm_l3_link: $grey-ash;
+$mm_l3_link_2: $peacock-blue; // possible old markup.
+$mm_l3_link_bg: $white-five;
+$mm_l3_link_hover: $cerulean-two;
+$mm_highlight_label: $marine-blue;
+$mm_p_a_text: $white-five;
 
 //  Mini Cart.
 $primary_minicart_text: $black;
@@ -312,15 +367,6 @@ $minicart_notification_text: $pumpkin-orange;
 $minicart_notification_btn_bg: $pumpkin-orange;
 $minicart_notification_btn_text: $white-five;
 $minicart_notification_product_title: $grey-ash;
-
-// Mega menu.
-$mm_l1_link: $black;
-$mm_l1_link_hover: $marine-blue;
-$mm_l1_link_active_border: $marine-blue;
-$mm_l2_link: $marine-blue;
-$mm_l3_link: $grey-ash;
-$mm_l3_link_hover: $cerulean-two;
-$mm_highlight_label: $marine-blue;
 
 // Delivery tabs.
 $deliverybanner_title: $cerulean-two;
