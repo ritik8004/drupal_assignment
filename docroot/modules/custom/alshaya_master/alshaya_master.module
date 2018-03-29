@@ -5,7 +5,6 @@
  * Alshaya master module file.
  */
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Component\Utility\NestedArray;
@@ -652,22 +651,4 @@ function alshaya_master_webform_submission_presave(EntityInterface $entity) {
   if ($value_changed) {
     $entity->setData($data);
   }
-}
-
-/**
- * Generate machine name of a string.
- *
- * @param string $string
- *   String to process.
- * @param string $langcode
- *   Language code.
- *
- * @return string
- *   Return processed string.
- */
-function _alshaya_master_generate_machine_name($string, $langcode = 'en') {
-  $transliteration = \Drupal::service('transliteration');
-  $transliterated = $transliteration->transliterate($string, $langcode, '_');
-  $transliterated = Unicode::strtolower($transliterated);
-  return preg_replace('@[^a-z0-9_]+@', '-', $transliterated);
 }

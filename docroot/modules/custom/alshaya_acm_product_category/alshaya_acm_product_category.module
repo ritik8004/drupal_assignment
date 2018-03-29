@@ -6,6 +6,8 @@
  */
 
 use Drupal\block\Entity\Block;
+use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\taxonomy\Entity\Term;
@@ -91,7 +93,7 @@ function alshaya_acm_product_category_preprocess_block(&$variables) {
           }
 
           if (!empty($parent) && $variables['content']['site_logo']['#access']) {
-            $term_machine_name = _alshaya_master_generate_machine_name($parent->label());
+            $term_machine_name = Html::cleanCssIdentifier(Unicode::strtolower($parent->label()));
             $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
             $langcode = ($langcode != 'en') ? '-' . $langcode : '';
             $theme = \Drupal::service('theme.manager')->getActiveTheme();
