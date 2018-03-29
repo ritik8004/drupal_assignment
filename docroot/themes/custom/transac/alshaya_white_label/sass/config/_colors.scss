@@ -250,6 +250,14 @@ $breadcrumb_link: $greyish;
 $breadcrumb_link_hover: $greyish;
 $breadcrumb_link_active: $breadcrumb-active;
 
+// Language Switcher
+$lang_switch: $marine-blue-two;
+$lang_switch_active: $grey-ash;
+$lang_switch_firsttime_bg: $marine-blue-two;
+$lang_switch_firsttime_border: $white-five;
+$lang_switch_list: $white-two;
+$lang_switch_close_icon: $white-two;
+
 // 404
 $maintenance_container_border: $white-two;
 $maintenance_container_border_top: $white-four;
@@ -382,12 +390,14 @@ $deliverybanner_shadow: $shadow;
 $footer_bg: $white-five;
 $footer_border_top: $peacock-blue;
 $footer_title_h3: $marine-blue-two;
+$footer_link_mobile: $black;
 $footer_link: $grey-ash;
 $footer_link_hover: $cerulean-two;
 
 //1. Copyright
 $copyright_footer_bg: $white-four;
 $copyright_footer_text: $black;
+$copyright_footer_paragraph: $grey-ash;
 
 //7. Newsletter-signup
 $newsletter_title_h3: $marine-blue-two;
@@ -396,6 +406,7 @@ $newsletter_input_placeholder: $greyish;
 $newsletter_input_border: $marine-blue-two;
 $newsletter_submit_btn: $marine-blue-two;
 $newsletter_submit_btn_text: $white-five;
+$newsletter_success: $windows-blue;
 
 // Checkout Progress.
 $checkout_seperator: $greyish;
