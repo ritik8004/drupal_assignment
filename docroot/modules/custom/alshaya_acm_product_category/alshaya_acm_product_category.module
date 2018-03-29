@@ -94,17 +94,21 @@ function alshaya_acm_product_category_preprocess_block(&$variables) {
           }
 
           if (!empty($parent) && $variables['content']['site_logo']['#access']) {
-            $term_machine_name = Html::cleanCssIdentifier(Unicode::strtolower($parent->label()));
+            // Create a name without spaces and any special character.
+            $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent->label()));
+            // Set the language suffix for logo based on current language.
             $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
             $langcode = ($langcode != 'en') ? '-' . $langcode : '';
+            // Current active theme object.
             $theme = \Drupal::service('theme.manager')->getActiveTheme();
-            // @todo: Place uri for brand page. i.e. $parent->url().
-            $variables['content']['site_logo']['#uri'] = $theme->getPath() . '/' . $term_machine_name . '-logo' . $langcode . '.svg';
+            // Set the logo path based on term name and current language.
+            $variables['content']['site_logo']['#uri'] = $theme->getPath() . '/' . $term_clean_name . '-logo' . $langcode . '.svg';
+            // Set image Alt based on current brand.
             $variables['content']['site_logo']['#alt'] = $parent->label();
             $variables['content']['site_name']['#markup'] = $parent->label();
+            // Set the site path to brand page.
             $variables['content']['site_path'] = [
               '#markup' => $parent->url(),
-              '#access' => TRUE,
             ];
           }
         }
