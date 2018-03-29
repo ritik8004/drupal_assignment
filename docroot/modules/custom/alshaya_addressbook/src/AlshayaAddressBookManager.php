@@ -583,7 +583,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       foreach ($mapping as $field_code => $attribute_code) {
         switch ($field_code) {
           case 'mobile_number':
-            $magento_address[$attribute_code] = _alshaya_acm_checkout_clean_address_phone($address[$field_code]);
+            $magento_address[$attribute_code] = isset($address[$field_code])
+              ? _alshaya_acm_checkout_clean_address_phone($address[$field_code])
+              : '';
             break;
 
           case 'area_parent':

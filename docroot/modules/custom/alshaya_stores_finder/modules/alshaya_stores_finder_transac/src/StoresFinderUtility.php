@@ -335,9 +335,13 @@ class StoresFinderUtility {
       $store_address = $store->get('field_address')->getValue();
 
       if ($store_address) {
+        // This conversions are required to ensure we populate term names
+        // and process it properly before using in template.
+        $store_address = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
+        $store_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($store_address);
         $address = [
           '#theme' => 'store_address',
-          '#address' => reset($store_address),
+          '#address' => $store_address,
         ];
       }
     }
