@@ -21,7 +21,7 @@ body {
   }
 
   .site--brand {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $primary_border;
     margin-bottom: 1.56rem;
 
     img {
@@ -30,7 +30,7 @@ body {
   }
 
   .subtitle {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $primary_border;
     margin-bottom: 0.75rem;
   }
 }
@@ -39,14 +39,14 @@ body {
   border-top: none;
 
   .order-details-row {
-    background: $white-smoke-light;
+    background: $order_print_order_details_row_bg;
 
     .label {
-      color: $grey-ash;
+      color: $order_print_order_details_row_label;
     }
 
     .blend {
-      background-color: $whisper-ash;
+      background-color: $order_print_order_details_row_bg_blend;
 
       .delivery--method {
         margin-top: 1.7rem;
@@ -67,8 +67,8 @@ body {
   }
 
   .product--count {
-    border-top: 1px solid $white-five;
-    border-bottom: 1px solid $white-five;
+    border-top: 1px solid $order_print_product_count_row_border;
+    border-bottom: 1px solid $order_print_product_count_row_border;
 
     @include breakpoint($desktop) {
       td {
@@ -80,12 +80,12 @@ body {
 
   .sub-total-row .blend,
   .delivery-charge-row .blend {
-    background: $white-four;
+    background: $order_print_delivery_subtotal_row_blend;
   }
 
   .total-row {
     .warm--white {
-      background-color: $whisper-light;
+      background-color: $order_print_total_row;
     }
 
     td:nth-child(3) {
@@ -126,7 +126,7 @@ body {
 }
 
 .delivery-details {
-  background-color: $white-smoke-light;
+  background-color: $order_print_delivery_details_row;
   padding: 1.25rem 1rem;
   padding-#{$left}: 3.5rem;
   text-indent: -2.5rem;
@@ -148,7 +148,7 @@ body {
 }
 
 .dark--text {
-  color: $black;
+  color: $order_print_dark_txt;
 }
 
 .barcode--wrapper {
@@ -179,7 +179,7 @@ body {
     }
 
     .value {
-      color: $grey-ash;
+      color: $order_print_barcode;
       top: -0.4375rem;
       position: relative;
       font-size: 12px;
@@ -214,7 +214,7 @@ body.path--confirmation.alias--confirmation-print {
 
     .price-currency,
     .price-amount {
-      color: $black;
+      color: $order_print_dark_txt;
       font-weight: bold;
 
       html[lang=ar] & {

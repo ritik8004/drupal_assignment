@@ -4,12 +4,12 @@
   line-height: 1;
 
   .subtitle {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $primary_border;
     font-weight: 700;
     margin-bottom: 1.313rem;
     font-family: $alshaya-bold;
     font-size: 1rem;
-    color: $marine-blue;
+    color: $sub_title;
 
     @include breakpoint($tablet) {
       font-size: 0.875rem;
@@ -75,7 +75,7 @@
     }
 
     .light {
-      color: $grey-ash;
+      color: $user_account_wrapper_light;
     }
   }
 
@@ -91,14 +91,14 @@
       h3 {
         font-family: $alshaya-bold;
         font-size: 0.875rem;
-        color: $dark-sand;
+        color: $joinclubblock_title;
         margin-top: 0;
       }
 
       p {
         font-family: $arial;
         font-size: 0.75rem;
-        color: $grey-ash;
+        color: $joinclubblock_text;
         margin: 0.4rem 0;
         text-transform: none;
         padding-#{$left}: 0.5rem;
@@ -161,10 +161,10 @@
 }
 
 .label.dark {
-  color: #000;
+  color: $label_dark;
   font-size: 14px;
 }
 
 .label.black {
-  color: $black;
+  color: $label_black;
 }

@@ -12,7 +12,7 @@
   .c-page-title {
     margin-top: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $primary_border;
 
     @include breakpoint($only-mobile) {
       margin-top: 0;
@@ -52,7 +52,7 @@
 
         &::after {
           content: "...";
-          background: $white-smoke;
+          background: $order_product_title_elipsis_bg;
           position: absolute;
           left: 0;
           padding-right: 1px;
@@ -84,7 +84,7 @@
     &:hover,
     &:active,
     &:focus {
-      color: $white-five;
+      color: $primary_btn_text;
     }
   }
 
@@ -108,7 +108,7 @@
     }
 
     .download-invoice {
-      color: $cerulean-two;
+      color: $content_link_color;
 
       &:hover {
         text-decoration: underline;
@@ -120,8 +120,8 @@
 .user__order--detail {
   font-family: $arial;
   line-height: 1;
-  background: $white-four;
-  border-top: 1px solid #ddd;
+  background: $order_detail_table_bg;
+  border-top: 1px solid $primary_table_border;
   width: 100%;
   font-size: 0.75rem;
   margin-bottom: 5.5rem;
@@ -131,11 +131,11 @@
   }
 
   .light {
-    color: $greyish;
+    color: $order_detail_td_light_content;
   }
 
   .dark {
-    color: $black-two;
+    color: $order_detail_td_dark_content;
     font-weight: 700;
   }
 
@@ -161,7 +161,7 @@
   .delivery-charge-row,
   .total-row,
   .discount-row {
-    background: $white-five;
+    background: $order_detail_total_tr_row;
 
     td {
       padding: 0.625rem 1.375rem;
@@ -177,11 +177,11 @@
   .discount-row {
     td {
       &:nth-child(3) {
-        background: $white-five;
+        background: $order_detail_total_tr_row;
       }
 
       &:nth-child(4) {
-        background: $white-four;
+        background: $order_detail_total_tr_row_price_td;
       }
     }
   }
@@ -189,15 +189,15 @@
   .delivery-details-row {
     font-size: 0.8125rem;
     font-weight: 700;
-    border-top: 1px solid $white-five;
-    border-bottom: 1px solid $white-five;
+    border-top: 1px solid $order_detail_delivery_details_row_border;
+    border-bottom: 1px solid $order_detail_delivery_details_row_border;
 
     @include breakpoint($desktop) {
       font-size: 0.9375rem;
     }
 
     td {
-      background: $solitude;
+      background: $order_detail_delivery_details_row_bg;
       padding: 1.25rem 1rem;
       padding-#{$left}: 56px;
       text-indent: -2.5rem;
@@ -225,14 +225,14 @@
 
     .blend {
       @include breakpoint($desktop) {
-        background: $denim;
+        background: $order_detail_delivery_details_row_td_blend;
       }
     }
   }
 
   .delivery-details-row,
   .label {
-    color: $windows-blue;
+    color: $order_detail_delivery_details_row_content;
   }
 
   .delivery-charge-row,
@@ -240,10 +240,10 @@
   .order-item-row,
   .discount-row {
     .blend {
-      background: $white-four;
+      background: $order_detail_total_tr_row_price_td;
 
       @include breakpoint($tablet) {
-        background: $white-smoke-light;
+        background: $order_detail_total_tr_row_price_td_tablet;
       }
 
       @include breakpoint($only-tablet) {
@@ -255,7 +255,7 @@
   }
 
   .order-item-row {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $primary_border;
 
     .order__product--image {
       @include breakpoint($only-tablet) {
@@ -318,7 +318,7 @@
 
   .order-summary-row {
     td {
-      background: $white-smoke;
+      background: $order_detail_order_summary_row_bg;
       padding: 1.313rem 1rem;
 
       @include breakpoint($tablet) {
@@ -343,7 +343,7 @@
     }
 
     .blend {
-      background: $whisper;
+      background: $order_detail_order_summary_row_td_blend;
 
       @include breakpoint($tablet) {
         width: 17.4%;
@@ -358,10 +358,10 @@
   }
 
   .order-details-row {
-    background: $pale-grey;
+    background: $order_detail_order_details_row;
 
     .blend {
-      background: $solitude;
+      background: $order_detail_order_details_row_td_blend;
 
       @include breakpoint($tablet) {
         padding-right: 10px;
@@ -382,11 +382,11 @@
 
     .tablet-blend {
       @include breakpoint($tablet) {
-        background: $solitude;
+        background: $order_detail_order_details_row_td_blend;
       }
 
       @include breakpoint($desktop) {
-        background: $pale-grey;
+        background: $order_detail_order_details_row;
       }
     }
   }
@@ -401,7 +401,7 @@
   }
 
   .warm--white {
-    background-color: $white;
+    background-color: $order_detail_warm_white;
   }
 
   td {
@@ -528,11 +528,11 @@
       margin-top: 0.875rem;
 
       a {
-        color: $cerulean-two;
+        color: $content_link_color;
         font-size: 0.75rem;
 
         @include icon(map, before) {
-          color: $cerulean-two;
+          color: $content_link_color;
           vertical-align: middle;
           font-size: 1.5rem;
           line-height: 1;
@@ -564,7 +564,7 @@
 
     .path--user & {
       padding-bottom: 0.5625rem;
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $primary_border;
     }
   }
 
@@ -675,7 +675,7 @@
 
         &::after {
           content: "...";
-          background: $white-five;
+          background: $order_recent_orders_product_title_elipsis_bg;
           position: absolute;
           left: 0;
           padding-right: 1px;
@@ -691,7 +691,7 @@
 
   &:hover .second-third .second .dark::after {
     html[lang=ar] & {
-      background-color: $white-smoke;
+      background-color: $order_recent_orders_product_title_elipsis_bg_hover;
     }
   }
 }
