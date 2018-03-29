@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_main_menu\Plugin\Block;
 
-use Drupal\Component\Transliteration\TransliterationInterface;
+use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -44,13 +44,6 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
   protected $languageManager;
 
   /**
-   * The transliteration helper.
-   *
-   * @var \Drupal\Component\Transliteration\TransliterationInterface
-   */
-  protected $transliteration;
-
-  /**
    * AlshayaMainMenuSuperCategoryBlock constructor.
    *
    * @param array $configuration
@@ -63,14 +56,11 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    *   Product category tree.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
-   * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
-   *   The transliteration helper.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, TransliterationInterface $transliteration) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCateoryTree = $product_category_tree;
     $this->languageManager = $language_manager;
-    $this->transliteration = $transliteration;
   }
 
   /**
@@ -82,8 +72,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_product_category.product_category_tree'),
-      $container->get('language_manager'),
-      $container->get('transliteration')
+      $container->get('language_manager')
     );
   }
 
@@ -104,9 +93,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
     foreach ($term_data as $term_id => &$term_info) {
       $term_info_en = $term_data_en[$term_id];
       // Create a link class based on taxonomy term name.
-      $transliterated = $this->transliteration->transliterate($term_info_en['label'], 'en', '_');
-      $transliterated = Unicode::strtolower($transliterated);
-      $term_info['class'] .= ' brand-' . preg_replace('@[^a-z0-9_]+@', '-', $transliterated);
+      $term_info['class'] .= ' brand-' . Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
     }
 
     // Get current term from route.
