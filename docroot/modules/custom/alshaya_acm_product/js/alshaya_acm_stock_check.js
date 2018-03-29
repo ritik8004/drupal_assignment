@@ -265,9 +265,9 @@
       }
     });
 
-		// Attach back cart notifications events related to showing the spinner
+    // Attach back cart notifications events related to showing the spinner
     // which were lost above while de-taching listeners on the addtocart/size &
-		// color selectors.
+    // color selectors.
     Drupal.behaviors.alshayaAcmCartNotification.attach();
   };
 
