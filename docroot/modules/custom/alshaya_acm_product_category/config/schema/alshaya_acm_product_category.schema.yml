@@ -9,13 +9,13 @@ block.settings.alshaya_shop_by_block:
       type: integer
       label: 'Starting level'
 
-alshaya_acm_product_category.category_menu.settings:
+alshaya_acm_product_category.super_category.settings:
   type: config_object
   label: 'Category Menu settings'
   mapping:
-    category_menu_top_level:
+    status:
       type: boolean
-      label: 'Enable top level category menu'
-    category_default_parent:
+      label: 'Enable super category feature'
+    default_category_tid:
       type: integer
-      label: 'Default parent for main menu'
+      label: 'Default parent term id for main menu'
