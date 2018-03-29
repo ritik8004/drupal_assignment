@@ -264,6 +264,11 @@
         Drupal.ajax[configCastorIdBase] = new Drupal.Ajax(configCastorIdBase, this, editConfigCastorIdElementSettings);
       }
     });
+
+    // Attach back cart notifications events related to showing the spinner
+		// which were lost above while de-taching listeners on the addtocart/size &
+		// color selectors.
+		Drupal.behaviors.alshayaAcmCartNotification.attach();
   };
 
   /**
