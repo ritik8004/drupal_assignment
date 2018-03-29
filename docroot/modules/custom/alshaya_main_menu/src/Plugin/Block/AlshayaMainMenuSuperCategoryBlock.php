@@ -10,6 +10,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides alshaya main menu super category block.
@@ -36,6 +37,13 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
   protected $productCateoryTree;
 
   /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaMainMenuSuperCategoryBlock constructor.
    *
    * @param array $configuration
@@ -46,10 +54,13 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    *   Plugin defination.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCateoryTree = $product_category_tree;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -60,7 +71,8 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya_acm_product_category.product_category_tree')
+      $container->get('alshaya_acm_product_category.product_category_tree'),
+      $container->get('language_manager')
     );
   }
 
@@ -68,6 +80,8 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    * {@inheritdoc}
    */
   public function build() {
+    // Get current language code.
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get all the parents of product category.
     $term_data = $this->productCateoryTree->getCategoryRootTerms();
     // If no data, no need to render the block.
@@ -75,11 +89,13 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
       return [];
     }
     // Load english term data to set the css class based on term name.
-    $term_data_en = $this->productCateoryTree->getCategoryRootTerms('en');
+    if ($langcode !== 'en') {
+      $term_data_en = $this->productCateoryTree->getCategoryRootTerms('en');
+    }
 
     // Add class for all terms.
     foreach ($term_data as $term_id => &$term_info) {
-      $term_info_en = $term_data_en[$term_id];
+      $term_info_en = ($langcode !== 'en') ? $term_data_en[$term_id] : $term_info;
       // Create a link class based on taxonomy term name.
       $term_info['class'] .= ' brand-' . Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
     }
