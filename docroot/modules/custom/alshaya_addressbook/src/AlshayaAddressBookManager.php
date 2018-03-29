@@ -948,6 +948,21 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     $shipping = (array) $cart->getShipping();
+    return $this->getAddressShippingAreaValue($shipping);
+  }
+
+  /**
+   * Get Area label from Magento Address.
+   *
+   * This function takes care of DM V1/V2.
+   *
+   * @param array $magento_address
+   *   Magento address to extra info from.
+   *
+   * @return string|null
+   *   String value for the area or NULL.
+   */
+  public function getAddressShippingAreaValue(array $magento_address) {
     $field = 'address_area_segment';
 
     if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
@@ -955,8 +970,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       $field = $mappings['administrative_area'];
     }
 
-    $value = isset($shipping['extension'], $shipping['extension'][$field])
-      ? $shipping['extension'][$field]
+    $value = isset($magento_address['extension'], $magento_address['extension'][$field])
+      ? $magento_address['extension'][$field]
       : '';
 
     return $this->areasTermsHelper->getShippingAreaLabel($value);

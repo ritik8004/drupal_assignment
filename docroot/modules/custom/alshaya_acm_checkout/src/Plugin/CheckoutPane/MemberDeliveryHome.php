@@ -169,13 +169,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
         $view_builder = \Drupal::entityTypeManager()->getViewBuilder('profile');
         $pane_form['address']['selected']['display'] = $view_builder->view($entity, 'teaser');
 
-        // Expose selected delivery address to GTM.
-        if (\Drupal::moduleHandler()->moduleExists('alshaya_seo')) {
-          datalayer_add([
-            'deliveryArea' => $entity->get('field_address')->first()->get('administrative_area')->getString(),
-            'deliveryCity' => $entity->get('field_address')->first()->get('locality')->getString(),
-          ]);
-        }
+        GuestDeliveryHome::exposeSelectedDeliveryAddressToGtm($entity->get('field_address')->first()->getValue());
 
         $shipping_methods = self::generateShippingEstimates($entity);
         $default_shipping = $cart->getShippingMethodAsString();

@@ -108,12 +108,10 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   ];
 
   // Validation for first and last name.
-  if (!empty($element['#used_fields']['givenName'])) {
-    $element['given_name']['#element_validate'][] = '_alshaya_addressbook_firstname_validate';
-    $element['given_name']['#maxlength'] = 50;
-    $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
-    $element['family_name']['#maxlength'] = 50;
-  }
+  $element['given_name']['#element_validate'][] = '_alshaya_addressbook_firstname_validate';
+  $element['given_name']['#maxlength'] = 50;
+  $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
+  $element['family_name']['#maxlength'] = 50;
 
   // This is required for guest checkout pages.
   if (isset($element['#require_email']) && $element['#require_email']) {
@@ -136,10 +134,8 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   }
 
   // Update field titles.
-  if (!empty($element['#used_fields']['givenName'])) {
-    $element['given_name']['#title'] = t('First Name', [], ['context' => 'Address label']);
-    $element['family_name']['#title'] = t('Last Name', [], ['context' => 'Address label']);
-  }
+  $element['given_name']['#title'] = t('First Name', [], ['context' => 'Address label']);
+  $element['family_name']['#title'] = t('Last Name', [], ['context' => 'Address label']);
   $element['address_line1']['#title'] = t('Street Name / No.', [], ['context' => 'Address label']);
   $element['dependent_locality']['#title'] = t('Building Name / No.', [], ['context' => 'Address label']);
   $element['dependent_locality']['#maxlength'] = 89;
@@ -156,25 +152,23 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   // Special case - city is not required.
   $element['city']['#required'] = FALSE;
 
-  if (!empty($element['#used_fields']['givenName'])) {
-    // Adding mobile number.
-    $mobile_number = [
-      'mobile_number' => [
-        '#type' => 'mobile_number',
-        '#title' => t('Mobile Number'),
-        '#verify' => 0,
-        '#tfa' => 0,
-        '#required' => TRUE,
-      ],
-    ];
+  // Adding mobile number.
+  $mobile_number = [
+    'mobile_number' => [
+      '#type' => 'mobile_number',
+      '#title' => t('Mobile Number'),
+      '#verify' => 0,
+      '#tfa' => 0,
+      '#required' => TRUE,
+    ],
+  ];
 
-    if (!empty($form_state->getTemporaryValue('default_value_mobile'))) {
-      $mobile_number['mobile_number']['#default_value'] = str_replace(' ', '', $form_state->getTemporaryValue('default_value_mobile'));
-    }
-
-    // Adding mobile number field to appropriate position.
-    $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'organization');
+  if (!empty($form_state->getTemporaryValue('default_value_mobile'))) {
+    $mobile_number['mobile_number']['#default_value'] = str_replace(' ', '', $form_state->getTemporaryValue('default_value_mobile'));
   }
+
+  // Adding mobile number field to appropriate position.
+  $element = _alshaya_addressbook_array_insert($element, $mobile_number, 'organization');
 
   $country_label = t('Country');
 
@@ -303,14 +297,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   // Adding country code field to appropriate position.
   $element = _alshaya_addressbook_array_insert($element, $country_field, 'mobile_number');
-
-  // For store address, we don't want to use first/last name even if
-  // it is visible as per Magento.
-  if (empty($element['#used_fields']['givenName'])) {
-    $element['given_name']['#access'] = FALSE;
-    $element['family_name']['#access'] = FALSE;
-
-  }
 
   return $element;
 }
