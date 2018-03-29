@@ -10,7 +10,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides alshaya main menu super category block.
@@ -37,13 +36,6 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
   protected $productCateoryTree;
 
   /**
-   * Language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
    * AlshayaMainMenuSuperCategoryBlock constructor.
    *
    * @param array $configuration
@@ -54,13 +46,10 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    *   Plugin defination.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Language manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCateoryTree = $product_category_tree;
-    $this->languageManager = $language_manager;
   }
 
   /**
@@ -71,8 +60,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('alshaya_acm_product_category.product_category_tree'),
-      $container->get('language_manager')
+      $container->get('alshaya_acm_product_category.product_category_tree')
     );
   }
 
