@@ -13,9 +13,9 @@ alshaya_acm_product_category.category_menu.settings:
   type: config_object
   label: 'Category Menu settings'
   mapping:
-    category_menu_top_level:
+    satus:
       type: boolean
       label: 'Enable top level category menu'
-    category_default_parent:
+    default_category_tid:
       type: integer
       label: 'Default parent for main menu'

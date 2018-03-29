@@ -106,7 +106,6 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
     if ($term instanceof TermInterface) {
       $parents = $this->productCateoryTree->getCategoryTermParents($term);
 
-      // @todo: Deal with default case.
       if (!empty($parents)) {
         /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
         foreach ($parents as $parent) {
