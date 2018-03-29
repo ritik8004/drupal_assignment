@@ -110,6 +110,10 @@
             text-transform: lowercase;
             height: 2.188rem;
 
+            &:hover {
+              opacity: 0.75;
+            }
+
             a {
               color: $plp_facet_clear_text;
             }
