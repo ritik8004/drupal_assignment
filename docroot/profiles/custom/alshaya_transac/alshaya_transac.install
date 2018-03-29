@@ -6,6 +6,15 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Enable alshaya_stores_finder_transac sub module of alshaya_stores_finder.
+ */
+function alshaya_transac_update_8103() {
+  \Drupal::service('module_installer')->install(['alshaya_stores_finder_transac']);
+}
+
+/**
  * Implements hook_update_n().
  *
  * Hook update to disable whitelabel_transac theme and enable
@@ -56,6 +65,7 @@ function alshaya_transac_install() {
     'alshaya_product',
     'alshaya_seo_transac',
     'alshaya_stores_finder',
+    'alshaya_stores_finder_transac',
     'alshaya_user',
     'alshaya_acm_knet',
     'alshaya_static_html',

@@ -13,5 +13,5 @@ dependencies:
   - simple_sitemap:simple_sitemap
   - token:token
   - datalayer:datalayer
-  - alshaya_stores_finder:alshaya_stores_finder
+  - alshaya_stores_finder:alshaya_stores_finder_transac
   - metatag:metatag_verification
