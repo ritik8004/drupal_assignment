@@ -125,6 +125,7 @@
                 }
               }
               else {
+                fakeApplyButton.parent().removeClass('active');
                 fakeApplyButton.attr('disabled', 'disabled');
                 if (!fakeApplyButton.parent().hasClass('inactive')) {
                   fakeApplyButton.parent().addClass('inactive');
