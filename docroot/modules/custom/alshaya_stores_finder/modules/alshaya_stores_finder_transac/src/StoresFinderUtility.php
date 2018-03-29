@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 
 /**
  * Class StoresFinderUtility.
@@ -155,7 +156,7 @@ class StoresFinderUtility {
     if ($store_node) {
       $store['name'] = $store_node->label();
       $store['code'] = $store_node->get('field_store_locator_id')->getString();
-      $store['address'] = $store_node->get('field_store_address')->getString();
+      $store['address'] = $this->getStoreAddress($store_node);
       $store['phone_number'] = $store_node->get('field_store_phone')->getString();
       $store['open_hours'] = $store_node->get('field_store_open_hours')->getValue();
       $store['delivery_time'] = $store_node->get('field_store_sts_label')->getString();
@@ -316,6 +317,37 @@ class StoresFinderUtility {
       ->execute()->fetchCol();
 
     return $store_nids;
+  }
+
+  /**
+   * Wrapper to get store address based on DM version.
+   *
+   * @param \Drupal\node\NodeInterface $store
+   *   Store node.
+   *
+   * @return string
+   *   Rendered string.
+   */
+  public function getStoreAddress(NodeInterface $store) {
+    $address = [];
+
+    if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+      $store_address = $store->get('field_address')->getValue();
+
+      if ($store_address) {
+        $address = [
+          '#theme' => 'store_address',
+          '#address' => reset($store_address),
+        ];
+      }
+    }
+    else {
+      $address = [
+        '#markup' => $store->get('field_store_address')->getString(),
+      ];
+    }
+
+    return $address ? render($address) : '';
   }
 
 }

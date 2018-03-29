@@ -263,9 +263,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           $delivery['method_description'] = $this->t('Your order will be available in @duration', ['@duration' => $duration]);
           $delivery['address_label'] = $this->t('Collection Store');
 
-          $delivery['address'] = [
-            '#markup' => $store->get('field_store_address')->getString(),
-          ];
+          $delivery['address'] = $this->storesFinderUtility->getStoreAddress($store);
         }
         else {
           $delivery = [];

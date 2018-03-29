@@ -271,7 +271,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     // Getting store node object from store code.
     if ($store_node = $store_utility->getTranslatedStoreFromCode($store_code)) {
       $orderDetails['store_name'] = $store_node->label();
-      $orderDetails['store_address'] = $store_node->get('field_store_address')->getString();
+      $orderDetails['store_address'] = $store_utility->getStoreAddress($store_node);
       $orderDetails['store_phone'] = $store_node->get('field_store_phone')->getString();
       $orderDetails['store_open_hours'] = $store_node->get('field_store_open_hours')->getValue();
 

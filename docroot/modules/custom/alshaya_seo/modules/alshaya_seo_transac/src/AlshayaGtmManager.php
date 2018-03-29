@@ -639,7 +639,8 @@ class AlshayaGtmManager {
           // ensure the variable is not in list of disabled vars.
           if ((!in_array('dimension8', $gtm_disabled_vars)) &&
             ($store = $this->storeFinder->getStoreFromCode($store_code))) {
-            $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+            // @TODO: Check with Piyuesh on if we can use only one field now.
+            $dimension8 = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
           }
         }
       }
@@ -839,7 +840,8 @@ class AlshayaGtmManager {
       // ensure the variable is not in list of disabled vars.
       if ((!in_array('dimension8', $gtm_disabled_vars)) &&
         ($store = $this->storeFinder->getStoreFromCode($store_code))) {
-        $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+        // @TODO: Check with Piyuesh on if we can use only one field now.
+        $dimension8 = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
       }
     }
 
@@ -1100,8 +1102,8 @@ class AlshayaGtmManager {
 
                 if ($store = $this->storeFinder->getStoreFromCode($cart->getExtension('store_code'))) {
                   $page_dl_attributes['storeLocation'] = $store->label();
-                  // @TODO: Update this during CORE-748.
-                  $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+                  // @TODO: Check with Piyuesh on if we can use only one field now.
+                  $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
                 }
               }
               else {
@@ -1176,7 +1178,8 @@ class AlshayaGtmManager {
         // ensure the variable is not in list of disabled vars.
         if ($store_code && ($store = $this->storeFinder->getStoreFromCode($store_code))) {
           $page_dl_attributes['storeLocation'] = $store->label();
-          $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+          // @TODO: Check with Piyuesh on if we can use only one field now.
+          $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
         }
 
         // Add cartItemsRR variable only when its not in the list of disabled
