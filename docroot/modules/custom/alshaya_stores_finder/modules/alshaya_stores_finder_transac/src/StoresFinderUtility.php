@@ -225,6 +225,11 @@ class StoresFinderUtility {
     if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       if (isset($store['address']) && !empty($store['address'])) {
         $address = $this->addressBookManager->getAddressArrayFromRawMagentoAddress($store['address']);
+
+        // @TODO: Check if this can be removed from magento.
+        unset($address['family_name']);
+        unset($address['given_name']);
+
         $node->get('field_address')->setValue($address);
       }
     }

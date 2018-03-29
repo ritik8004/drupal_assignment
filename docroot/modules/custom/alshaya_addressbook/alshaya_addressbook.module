@@ -100,7 +100,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['#prefix'] = '<div class="address-book-address">';
   $element['#suffix'] = '</div>';
 
-  $default_country_code = $element['#default_value']['country_code'] ?: _alshaya_custom_get_site_level_country_code();
+  $default_country_code = $element['#default_value']['country_code'];
 
   $element['country_code'] = [
     '#type' => 'hidden',
@@ -303,6 +303,14 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
   // Adding country code field to appropriate position.
   $element = _alshaya_addressbook_array_insert($element, $country_field, 'mobile_number');
+
+  // For store address, we don't want to use first/last name even if
+  // it is visible as per Magento.
+  if (empty($element['#used_fields']['givenName'])) {
+    $element['given_name']['#access'] = FALSE;
+    $element['family_name']['#access'] = FALSE;
+
+  }
 
   return $element;
 }
