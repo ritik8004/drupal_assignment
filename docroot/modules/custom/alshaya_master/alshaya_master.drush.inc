@@ -76,8 +76,6 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
   }
 
   if (!empty($brand_module)) {
-    // We avoid warning when file does not exist as it is the purpose of this
-    // call to know if the file exists.
     if (isset($modules[$brand_module])) {
       if (empty(\Drupal::configFactory()->get('alshaya.installed_brand')->get('module'))) {
         drush_print(dt('Enabling the @brand_module brand module.', ['@brand_module' => $brand_module]));
