@@ -26,8 +26,8 @@ function alshaya_acm_product_category_drush_command() {
  * Implements drush command alshaya-super-category-switch.
  */
 function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
-  // Get editable alshaya_acm_product_category.category_menu.settings.
-  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.category_menu.settings');
+  // Get editable alshaya_acm_product_category.super_category.settings.
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings');
 
   $status = $config->get('status') ? FALSE : TRUE;
   $action = $status ? 'enable' : 'disabled';
@@ -36,12 +36,13 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
     return drush_user_abort();
   }
 
-  // @todo: VAlidate the given default_parent exists.
+  // @todo: Validate the given default_parent exists and from the appropriate
+  // vocabulary and is rootTerm.
   // Determine which default parent to use for main menu.
   $default_parent = $status ? drush_get_option('default_parent', '') : '';
 
-  // Update alshaya_acm_product_category.category_menu.settings.
-  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.category_menu.settings');
+  // Update alshaya_acm_product_category.super_category.settings.
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings');
   $config->set('status', $status);
   if (empty($default_parent) && $status) {
     $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();

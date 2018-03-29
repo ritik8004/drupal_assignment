@@ -92,7 +92,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $parent_id = 0;
 
     // Load category top level menu settings.
-    $config = $this->configFactory->get('alshaya_acm_product_category.category_menu.settings');
+    $config = $this->configFactory->get('alshaya_acm_product_category.super_category.settings');
     if ($config->get('status')) {
       // Set the default parent from settings.
       $parent_id = $config->get('default_category_tid');
