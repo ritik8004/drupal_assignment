@@ -697,7 +697,7 @@ $privilege_earn_txt: $grey-ash;
 // Contact Page
 $webform_contact_legend: $marine-blue-two;
 
-// Order detail page.
+// Order detail, recent orders, order list page.
 $order_product_title_elipsis_bg: $white-smoke;
 $order_recent_orders_product_title_elipsis_bg: $white-five;
 $order_recent_orders_product_title_elipsis_bg_hover: $white-smoke;
@@ -728,6 +728,17 @@ $order_no_orders_txt_mobile: $black;
 $order_no_orders_txt: $brownish-grey;
 $order_accordion_open_bg: $whisper-light;
 $order_edit_account_link: $white-five;
+
+// Order print.
+$order_print_order_details_row_bg: $white-smoke-light;
+$order_print_order_details_row_label: $grey-ash;
+$order_print_order_details_row_bg_blend: $whisper-ash;
+$order_print_product_count_row_border: $white-five;
+$order_print_delivery_subtotal_row_blend: $white-four;
+$order_print_total_row: $whisper-light;
+$order_print_delivery_details_row: $white-smoke-light;
+$order_print_dark_txt: $black;
+$order_print_barcode: $grey-ash;
 
 // Block Alshaya ACM customer .block-alshaya-acm-customer
 $block_acm_customer_txt: $windows-blue;
