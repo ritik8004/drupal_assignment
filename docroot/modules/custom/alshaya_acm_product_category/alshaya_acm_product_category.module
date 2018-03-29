@@ -81,36 +81,38 @@ function _alshaya_acm_product_category_hide_plp_banner_for_mobile(Term $term) {
 function alshaya_acm_product_category_preprocess_block(&$variables) {
   switch ($variables['base_plugin_id']) {
     case 'system_branding_block':
-      // Process if the super category feature enabled.
-      if (\Drupal::config('alshaya_acm_product_category.category_menu.settings')->get('category_menu_top_level')) {
-        /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
-        $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-        $term = $product_category_tree->getCategoryTermFromRoute();
+      // Do not process if the super category feature not enabled.
+      if (!\Drupal::config('alshaya_acm_product_category.category_menu.settings')->get('category_menu_top_level')) {
+        return;
+      }
 
-        if (!empty($term)) {
-          $parents = $product_category_tree->getCategoryTermParents($term);
-          if (!empty($parents)) {
-            $parent = end($parents);
-          }
+      /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+      $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+      $term = $product_category_tree->getCategoryTermFromRoute();
 
-          if (!empty($parent) && $variables['content']['site_logo']['#access']) {
-            // Create a name without spaces and any special character.
-            $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent->label()));
-            // Set the language suffix for logo based on current language.
-            $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
-            $langcode = ($langcode != 'en') ? '-' . $langcode : '';
-            // Current active theme object.
-            $theme = \Drupal::service('theme.manager')->getActiveTheme();
-            // Set the logo path based on term name and current language.
-            $variables['content']['site_logo']['#uri'] = $theme->getPath() . '/' . $term_clean_name . '-logo' . $langcode . '.svg';
-            // Set image Alt based on current brand.
-            $variables['content']['site_logo']['#alt'] = $parent->label();
-            $variables['content']['site_name']['#markup'] = $parent->label();
-            // Set the site path to brand page.
-            $variables['content']['site_path'] = [
-              '#markup' => $parent->url(),
-            ];
-          }
+      if (!empty($term)) {
+        $parents = $product_category_tree->getCategoryTermParents($term);
+        if (!empty($parents)) {
+          $parent = end($parents);
+        }
+
+        if (!empty($parent) && $variables['content']['site_logo']['#access']) {
+          // Create a name without spaces and any special character.
+          $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent->label()));
+          // Set the language suffix for logo based on current language.
+          $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+          $langcode = ($langcode != 'en') ? '-' . $langcode : '';
+          // Current active theme object.
+          $theme = \Drupal::service('theme.manager')->getActiveTheme();
+          // Set the logo path based on term name and current language.
+          $variables['content']['site_logo']['#uri'] = $theme->getPath() . '/' . $term_clean_name . '-logo' . $langcode . '.svg';
+          // Set image Alt based on current brand.
+          $variables['content']['site_logo']['#alt'] = $parent->label();
+          $variables['content']['site_name']['#markup'] = $parent->label();
+          // Set the site path to brand page.
+          $variables['content']['site_path'] = [
+            '#markup' => $parent->url(),
+          ];
         }
       }
       break;
