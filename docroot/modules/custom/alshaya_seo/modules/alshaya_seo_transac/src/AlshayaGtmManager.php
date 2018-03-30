@@ -220,8 +220,6 @@ class AlshayaGtmManager {
    *   Entity Manager service.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager
    *   Checkout Options Manager service.
-   * @param \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storesFinderUtility
-   *   Store Finder service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language Manager service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -242,7 +240,6 @@ class AlshayaGtmManager {
                               RequestStack $requestStack,
                               EntityTypeManagerInterface $entityTypeManager,
                               CheckoutOptionsManager $checkoutOptionsManager,
-                              StoresFinderUtility $storesFinderUtility,
                               LanguageManagerInterface $languageManager,
                               CacheBackendInterface $cache,
                               Connection $database,
@@ -256,13 +253,23 @@ class AlshayaGtmManager {
     $this->requestStack = $requestStack;
     $this->entityTypeManager = $entityTypeManager;
     $this->checkoutOptionsManager = $checkoutOptionsManager;
-    $this->storeFinder = $storesFinderUtility;
     $this->languageManager = $languageManager;
     $this->cache = $cache;
     $this->database = $database;
     $this->addressBookManager = $addressBookManager;
     $this->skuManager = $skuManager;
     $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * Setter function for Stores Finder Utility service.
+   *
+   * @param \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storesFinderUtility
+   *   Store Finder service.
+   */
+  public function setStoreFinderUtility(StoresFinderUtility $storesFinderUtility) {
+    // @TODO: Move this back to normal/constructor once module enabled on prod.
+    $this->storeFinder = $storesFinderUtility;
   }
 
   /**
