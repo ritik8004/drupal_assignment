@@ -117,6 +117,7 @@ class APIWrapper {
    * @throws \Exception
    */
   public function skuStockCheck($sku) {
+    $sku = urlencode($sku);
     $endpoint = $this->apiVersion . "/agent/stock/$sku";
 
     $doReq = function ($client, $opt) use ($endpoint) {
@@ -814,6 +815,7 @@ class APIWrapper {
    * @throws \Exception
    */
   public function getLinkedskus($sku, $type = LINKED_SKU_TYPE_ALL) {
+    $sku = urlencode($sku);
     $endpoint = $this->apiVersion . "/agent/product/$sku/related/$type";
 
     $doReq = function ($client, $opt) use ($endpoint) {
