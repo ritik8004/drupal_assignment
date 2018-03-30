@@ -97,7 +97,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
     foreach ($term_data as $term_id => &$term_info) {
       $term_info_en = ($langcode !== 'en') ? $term_data_en[$term_id] : $term_info;
       // Create a link class based on taxonomy term name.
-      $term_info['class'] .= ' brand-' . Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
+      $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
     }
 
     // Get current term from route.
