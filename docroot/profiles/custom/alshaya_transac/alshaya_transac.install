@@ -17,6 +17,19 @@ function alshaya_transac_update_8103() {
 /**
  * Implements hook_update_n().
  *
+ * Create super category block for current site.
+ */
+function alshaya_transac_update_8103() {
+  // Install default block config.
+  alshaya_config_install_configs(['block.block.supercategorymenu'], 'alshaya_transac', 'optional');
+  // Create super category menu block from alshaya_white_label theme for default
+  // theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
+}
+
+/**
+ * Implements hook_update_n().
+ *
  * Hook update to disable whitelabel_transac theme and enable
  * alshaya_white_label.
  */
