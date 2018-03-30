@@ -29,12 +29,12 @@ path=$(dirname $0)
 alias="@alshaya.local"
 l_argument="-l local.alshaya-$site.com"
 
+local_archive="../tmp/alshaya_${site}_${env}.sql"
+
 # Check if we have an existing archive if we want to reuse existing one.
 if [ $mode = "reuse" ]
 then
   echo "Remote URL: $remote_url"
-
-  local_archive="../tmp/alshaya_${site}_${env}.sql"
   echo "Local archive: $local_archive"
 
   if [ ! -f $local_archive ]

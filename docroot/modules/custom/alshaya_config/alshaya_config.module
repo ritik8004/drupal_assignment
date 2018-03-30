@@ -83,7 +83,7 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
     \Drupal::configFactory()
       ->getEditable($config)
       ->setData($config_yaml)
-      ->save();
+      ->save(TRUE);
   }
 }
 
