@@ -1,0 +1,15 @@
+header {
+  .block-views-exposed-filter-blocksearch-page {
+    input[type="text"] {
+      text-transform: none;
+    }
+  }
+
+  .site-brand-home {
+    a {
+      @include breakpoint($desktop) {
+        max-width: 29rem;
+      }
+    }
+  }
+}
