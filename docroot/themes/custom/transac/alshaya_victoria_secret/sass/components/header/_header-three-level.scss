@@ -1,0 +1,8 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .menu--three__list-item > .menu-two__link-wrapper a {
+      font-size: 0.875rem !important;
+      text-transform: none;
+    }
+  }
+}

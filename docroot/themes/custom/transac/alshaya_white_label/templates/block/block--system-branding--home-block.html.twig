@@ -14,10 +14,11 @@
  */
 #}
 {% set attributes = attributes.addClass('site-branding') %}
+{% set site_path = content.site_path is defined ? content.site_path : path('<front>') %}
 {% block content %}
     {% if site_logo %}
       <h1 class="site-brand-home">
-        <a href="{{ path('<front>') }}" title="{{ site_name }}" rel="home" class="logo">
+        <a href="{{ site_path }}" title="{{ site_name }}" rel="home" class="logo">
             <img src="{{ site_logo }}" alt="{{ site_name }}"/>
         </a>
       </h1>

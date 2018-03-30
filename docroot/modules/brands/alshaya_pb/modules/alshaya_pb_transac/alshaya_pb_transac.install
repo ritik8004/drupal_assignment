@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_pb_transac.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_pb_transac_install() {
+  // Enable and set alshaya_pottery_barn as default theme.
+  \Drupal::service('theme_handler')->install(['alshaya_pottery_barn'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_pottery_barn');
+}

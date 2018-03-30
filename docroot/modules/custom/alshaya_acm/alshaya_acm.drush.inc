@@ -144,8 +144,8 @@ function drush_alshaya_acm_offline_products_sync() {
  *   Language code for which we want to get category tree.
  */
 function drush_alshaya_acm_print_category_menu_tree($langcode) {
-  /** @var \Drupal\alshaya_main_menu\ProductCategoryTree $product_category_tree */
-  $product_category_tree = \Drupal::service('alshaya_main_menu.product_category_tree');
+  /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+  $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
 
   $tree = $product_category_tree->getCategoryTree($langcode);
 

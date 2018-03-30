@@ -1,0 +1,34 @@
+.c-menu-secondary {
+  text-transform: none;
+
+  .menu--account,
+  .block-alshaya-stores-finder,
+  .block-language-blocklanguage-interface,
+  li {
+    height: auto;
+  }
+
+  a {
+    font-size: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    display: block;
+    height: auto;
+
+    &::before {
+      content: none !important;
+    }
+  }
+
+  .block-alshaya-main-menu-super-category {
+    float: $left;
+
+    ul.menu--one__list {
+      background: transparent;
+    }
+
+    ul.menu--one__list a {
+      color: $vanilla;
+      border-bottom: none;
+    }
+  }
+}
