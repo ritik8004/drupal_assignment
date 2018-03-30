@@ -162,7 +162,10 @@ class CheckoutController implements ContainerInjectionInterface {
     }
 
     $cart = $this->cartStorage->getCart(FALSE);
-    $cart->setPaymentMethod($selected_payment_method);
+
+    if ($cart instanceof CartStorageInterface) {
+      $cart->setPaymentMethod($selected_payment_method);
+    }
 
     $response = new AjaxResponse();
 
