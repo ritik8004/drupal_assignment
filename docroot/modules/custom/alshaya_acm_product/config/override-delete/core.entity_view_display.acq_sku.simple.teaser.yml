@@ -1,0 +1,8 @@
+content:
+  price:
+    label: above
+    type: string
+    weight: 3
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }

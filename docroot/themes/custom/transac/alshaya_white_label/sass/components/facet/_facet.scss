@@ -2,7 +2,7 @@
   a {
     font-size: 0.75rem;
     line-height: 1;
-    color: $windows-blue;
+    color: $plp_facet_filter;
     font-weight: bold;
     margin-top: 0.75rem;
     display: inline-block;
@@ -17,7 +17,7 @@
     }
 
     input[type="text"] {
-      border: 1px solid $white;
+      border: 1px solid $plp_facet_input_border;
       font-family: $alshaya-thin;
       font-size: 0.75rem;
       padding: 0.25rem 0.5rem;
@@ -73,7 +73,7 @@
   text-transform: lowercase;
 
   @include breakpoint($desktop) {
-    color: $black;
+    color: $plp_facet_label;
   }
 }
 

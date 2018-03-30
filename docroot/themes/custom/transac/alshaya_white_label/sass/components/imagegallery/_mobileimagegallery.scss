@@ -7,16 +7,16 @@
   padding: 0;
   height: 100% !important;
   width: 100% !important;
-  background: $white-five;
+  background: $modal_bg;
 
   .subtext {
     width: 100%;
     padding: 1rem;
     font-size: 0.75rem;
     text-align: center;
-    color: $white-five;
+    color: $modal_subtext;
     line-height: 1;
-    background: $black-two;
+    background: $modal_subtext_bg;
     margin-top: 0;
     opacity: 0.62;
     position: absolute;
@@ -45,12 +45,12 @@
       border: none;
       font-size: 1.5rem;
       margin: 0 1rem;
-      background-color: $white;
+      background-color: $gallery_zoombtn_bg;
       padding: 0.625rem;
       height: 0;
 
       &.disabled {
-        background-color: $light-ash;
+        background-color: $gallery_zoombtn_disabled;
       }
     }
 

@@ -57,6 +57,12 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => 'd6b5bf8e0ea74347aaeb10dd5548c827',
       'hmac_secret' => 'nSAHBiZvuTiiJa-HC9xdnw',
     ],
+    // Mothercare UAE.
+    'mcae_test' => [
+      'url' => 'https://alshaya-mcae-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'e72aa471bdb24cb481bf94c639ad2d59',
+      'hmac_secret' => 'KhfeGmclXcqR87TQb2yQVg',
+    ],
     // H&M KW.
     'hm_dev' => [
       'url' => 'https://alshaya-hm-dev.eu-west-1.prod.acm.acquia.io/',
@@ -84,10 +90,10 @@ function alshaya_get_conductor_host_data() {
       'hmac_secret' => 'ngRQUE3QBP9zL-0-TC9XhQ',
     ],
     // H&M SA.
-    'hmsa_dev' => [
-      'url' => 'https://alshaya-mcksa-uat.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '6686b9362f9c48789c08782dc0f85b59',
-      'hmac_secret' => 'QIMU6nVtVUVJ3NtSErE5PA',
+    'hmsa_test' => [
+      'url' => 'https://alshaya-hmsa-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '3fdf3a81b66e416da5d2b53448a3931e',
+      'hmac_secret' => 'kfv0JI-8DcAoFU2JobkymQ',
     ],
     // H&M AE.
     'hmae_test' => [

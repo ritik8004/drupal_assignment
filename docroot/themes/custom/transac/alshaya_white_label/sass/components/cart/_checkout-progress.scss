@@ -73,7 +73,7 @@
     }
 
     &.-next {
-      color: $greyish;
+      color: $checkout_progress_text;
     }
 
     &.-has-link {
@@ -163,7 +163,7 @@
       border: 1px solid;
       line-height: 1.2rem;
       text-align: center;
-      background-color: white;
+      background-color: $checkout_progress_next_bg;
       border-radius: 100em;
       counter-increment: counter;
       content: counter(counter);
@@ -196,7 +196,7 @@
       left: auto;
       right: auto;
       margin-#{$left}: 0.25rem;
-      border: 1px solid $greyish;
+      border: 1px solid $checkout_seperator;
       border-bottom: 0;
       content: "";
       width: 65%;
@@ -229,17 +229,17 @@
 
   .checkout-progress__step.-next {
     background: transparent;
-    color: $greyish;
+    color: $checkout_progress_text;
   }
 
   .checkout-progress__step.-current {
     background: transparent;
-    color: $black;
+    color: $checkout_progress_current_text;
     font-weight: bold;
 
     &::before {
-      background: $marine-blue;
-      color: $white-five;
+      background: $primary_counter_bg;
+      color: $primary_counter_text;
 
       @include breakpoint($only-mobile) {
         position: absolute;
@@ -252,7 +252,7 @@
   .checkout-progress__step.-previous,
   .checkout-progress__step:last-child.-current {
     background: transparent;
-    color: $cerulean-two;
+    color: $secondary_counter_bg;
     border: 0;
     padding: 0;
     padding-top: 0.1875rem;
@@ -267,7 +267,7 @@
       font-size: 1.5625rem;
       border: 0 none;
       top: 0.25rem;
-      color: $cerulean-two;
+      color: $secondary_counter_bg;
       margin-#{$left}: -1px;
       background-color: transparent;
 
@@ -288,7 +288,7 @@
     }
 
     a {
-      color: $cerulean-two;
+      color: $secondary_counter_bg;
 
       @include breakpoint($tablet) {
         margin-#{$right}: 0.375rem;
@@ -348,14 +348,14 @@
 
   .checkout-progress__step.-previous,
   .checkout-progress__step:last-child.-current {
-    color: $brownish-grey;
+    color: $checkout_progress_next_txt;
 
     @include breakpoint($only-tablet) {
       font-weight: normal;
     }
 
     .checkout-progress__step:last-child.-current {
-      color: $black-two;
+      color: $checkout_progress_current_text;
     }
 
     &::after {
@@ -371,7 +371,7 @@
     }
 
     a {
-      color: $brownish-grey;
+      color: $checkout_progress_next_txt;
     }
   }
 
@@ -387,5 +387,5 @@
 }
 
 #block-checkoutsummaryblock {
-  border: 2px solid $greyish;
+  border: 2px solid $order_summary_border;
 }

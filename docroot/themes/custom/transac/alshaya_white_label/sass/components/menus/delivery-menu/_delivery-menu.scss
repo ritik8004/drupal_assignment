@@ -4,7 +4,7 @@
   padding: 0;
 
   @include breakpoint($only-mobile) {
-    margin: 0 auto 1em;
+    margin: 1rem 0;
   }
 }
 
@@ -15,8 +15,8 @@
   margin-#{$left}: auto;
   margin-#{$right}: auto;
   width: 100%;
-  border: 1px solid $cerulean-two;
-  box-shadow: 5px 5px 0 0 $shadow;
+  border: 1px solid $content_link_color;
+  box-shadow: 5px 5px 0 0 $deliverybanner_shadow;
   position: relative;
   line-height: normal;
 
@@ -57,7 +57,7 @@
     text-decoration: none;
     font-size: 18px;
     font-family: $alshaya-bold;
-    color: $cerulean-two;
+    color: $content_link_color;
 
     @include breakpoint($only-mobile) {
       font-size: 16px;
@@ -67,7 +67,7 @@
   .field--name-field-sub-title {
     font-size: 12px;
     font-family: $alshaya-thin;
-    color: $cerulean-two;
+    color: $content_link_color;
 
     @include breakpoint($only-mobile) {
       font-size: 10px;
@@ -88,7 +88,7 @@
     }
 
     a {
-      color: $cerulean-two;
+      color: $content_link_color;
     }
 
     .c-delivery-menu__description {

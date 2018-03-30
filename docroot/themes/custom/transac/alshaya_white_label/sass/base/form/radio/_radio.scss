@@ -8,7 +8,7 @@
   label {
     position: relative;
     font-size: 0.875rem;
-    color: $grey-ash;
+    color: $primary_radiobtn_label;
   }
 
   input[type=radio] {
@@ -22,13 +22,13 @@
     background: white;
     display: inline-block;
     border-radius: 100%;
-    border: 1px solid $greyish;
+    border: 1px solid $primary_radiobtn_empty;
     margin-#{$right}: 1rem;
     position: relative;
     top: 2px;
   }
 
   input[type=radio]:checked ~ label::before {
-    border: 3px solid $cerulean-two;
+    border: 3px solid $primary_radiobtn_filled;
   }
 }

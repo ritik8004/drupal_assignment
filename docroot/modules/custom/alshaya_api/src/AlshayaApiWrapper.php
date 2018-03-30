@@ -539,7 +539,23 @@ class AlshayaApiWrapper {
    *   Response from API.
    */
   public function getLocations($filterField = 'attribute_id', $filterValue = 'governate') {
-    $endpoint = 'deliverymatrix/address-locations/search?searchCriteria[filter_groups][0][filters][0][field]=' . $filterField . '&searchCriteria[filter_groups][0][filters][0][value]=' . $filterValue . '&searchCriteria[filter_groups][0][filters][0][condition_type]=eq';
+    $filters = [];
+
+    $filters[] = [
+      'field' => $filterField,
+      'value' => $filterValue,
+      'condition_type' => 'eq',
+    ];
+
+    // Always add status check.
+    $filters[] = [
+      'field' => 'status',
+      'value' => '1',
+      'condition_type' => 'eq',
+    ];
+
+    $endpoint = 'deliverymatrix/address-locations/search?';
+    $endpoint .= $this->prepareFilterUrl($filters);
     $response = $this->invokeApi($endpoint, [], 'GET');
 
     if ($response && is_string($response)) {
@@ -574,6 +590,38 @@ class AlshayaApiWrapper {
     }
 
     return [];
+  }
+
+  /**
+   * Helper function to prepare filter url query string.
+   *
+   * @param array $filters
+   *   Array containing all filters, must contain field and value, can contain
+   *   condition_type too or all that is supported by Magento.
+   * @param string $base
+   *   Filter Base, mostly searchCriteria.
+   * @param int $group_id
+   *   Filter group id, mostly 0.
+   *
+   * @return string
+   *   Prepared URL query string.
+   */
+  private function prepareFilterUrl(array $filters, $base = 'searchCriteria', $group_id = 0) {
+    $url = '';
+
+    foreach ($filters as $index => $filter) {
+      foreach ($filter as $key => $value) {
+        // Prepared string like below.
+        // searchCriteria[filter_groups][0][filters][0][field]=field
+        // This is how Magento search criteria in APIs work.
+        $url .= $base . '[filter_groups][' . $group_id . '][filters][' . $index . '][' . $key . ']=' . $value;
+
+        // Add query params separator.
+        $url .= '&';
+      }
+    }
+
+    return $url;
   }
 
 }

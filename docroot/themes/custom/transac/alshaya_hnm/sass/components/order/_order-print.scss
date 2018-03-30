@@ -169,6 +169,14 @@ body.path--confirmation.alias--confirmation-print {
         position: static;
       }
     }
+
+    &.vat-container {
+      .warm--white {
+        @include breakpoint($only-mobile) {
+          position: absolute;
+        }
+      }
+    }
   }
 }
 
