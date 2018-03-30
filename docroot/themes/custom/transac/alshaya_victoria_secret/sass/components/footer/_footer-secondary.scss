@@ -1,0 +1,32 @@
+.c-footer__logo--verisign,
+.c-footer__logo--visa,
+.c-footer__logo--mastercard {
+  background-position: center;
+}
+
+.c-footer__logo--verisign {
+  background-image: url("../../alshaya_white_label/imgs/cards/card-visa.png");
+  height: 2.25rem;
+  width: 4.375rem;
+}
+
+.c-footer__logo--visa {
+  background-image: url("../../alshaya_white_label/imgs/cards/card-verisign.png");
+  height: 1.75rem;
+  width: 4.125rem;
+}
+
+.c-footer__logo--mastercard {
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 1.625rem;
+  width: 5.375rem;
+}
+
+.c-footer__copy {
+  @include breakpoint($tablet) {
+    width: 55%;
+    margin-#{$right}: 0;
+    text-align: $right;
+  }
+}
