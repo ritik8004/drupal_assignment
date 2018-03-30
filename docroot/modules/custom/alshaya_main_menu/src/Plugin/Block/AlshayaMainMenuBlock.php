@@ -46,7 +46,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    *
    * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
    */
-  protected $productCateoryTree;
+  protected $productCategoryTree;
 
   /**
    * AlshayaMegaMenuBlock constructor.
@@ -56,7 +56,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * @param string $plugin_id
    *   Plugin id.
    * @param mixed $plugin_definition
-   *   Plugin defination.
+   *   Plugin definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
@@ -65,7 +65,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ProductCategoryTree $product_category_tree) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
-    $this->productCateoryTree = $product_category_tree;
+    $this->productCategoryTree = $product_category_tree;
   }
 
   /**
@@ -86,7 +86,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function build() {
     // Get the term object from current route.
-    $term = $this->productCateoryTree->getCategoryTermFromRoute();
+    $term = $this->productCategoryTree->getCategoryTermFromRoute();
 
     // Set default parent_id 0 to load first level category terms.
     $parent_id = 0;
@@ -98,7 +98,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $parent_id = $config->get('default_category_tid');
       // Get the term id from the current path, and display only the related
       // second level child terms.
-      if ($term instanceof TermInterface && $parents = $this->productCateoryTree->getCategoryTermParents($term)) {
+      if ($term instanceof TermInterface && $parents = $this->productCategoryTree->getCategoryTermParents($term)) {
         // Get the top level parent id if parent exists.
         $parents = array_keys($parents);
         $parent_id = empty($parents) ? $term->id() : end($parents);
@@ -106,7 +106,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     }
 
     // Child terms of given parent term id.
-    $term_data = $this->productCateoryTree->getCategoryTreeCached($parent_id);
+    $term_data = $this->productCategoryTree->getCategoryTreeCached($parent_id);
 
     // If no data, no need to render the block.
     if (empty($term_data)) {
@@ -115,7 +115,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
 
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {
-      $parents = $this->productCateoryTree->getCategoryTermParents($term);
+      $parents = $this->productCategoryTree->getCategoryTermParents($term);
 
       if (!empty($parents)) {
         /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
