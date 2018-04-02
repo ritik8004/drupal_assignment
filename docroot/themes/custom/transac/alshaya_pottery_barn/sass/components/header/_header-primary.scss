@@ -12,4 +12,11 @@ header {
       }
     }
   }
+
+  .c-header__region {
+    @include breakpoint($desktop) {
+      padding-bottom: 1.5625rem;
+      padding-top: 1.5625rem;
+    }
+  }
 }

@@ -1,3 +1,15 @@
 .c-menu-secondary {
   text-transform: none;
+
+  li {
+    @include breakpoint($desktop) {
+      border-#{$left}: 1px solid $header_secondary_menu_link_border;
+    }
+  }
+
+  .block-alshaya-stores-finder li a {
+    @include breakpoint($desktop) {
+      border-#{$left}: 1px solid $header_secondary_menu_link_border;
+    }
+  }
 }

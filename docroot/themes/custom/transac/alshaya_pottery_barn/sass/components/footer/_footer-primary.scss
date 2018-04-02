@@ -4,4 +4,23 @@
   #alshaya-newsletter-subscribe #edit-email {
     background: $PB_grey_five;
   }
+
+  .c-footer-menu--about,
+  .c-footer-menu--help,
+  .c-footer-menu--category,
+  .block-alshaya-newsletter {
+    h3 {
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+  }
+
+  .c-footer-menu {
+    a {
+      &:hover {
+        color: $footer_link_hover;
+        text-decoration: underline;
+      }
+    }
+  }
 }
