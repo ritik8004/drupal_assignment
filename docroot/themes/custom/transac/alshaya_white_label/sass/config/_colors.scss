@@ -350,9 +350,6 @@ $header_my_account_bg: $white-five;
 $header_my_account_link_hover: $grey-ash;
 $header_my_account_icon: $marine-blue-two;
 
-// Pre content region.
-$pre_content_region_bg: $white-five;
-
 // Mega menu.
 $mm_bg: $white-five;
 $mm_body_overlay: rgba(0, 0, 0, 0.48);
@@ -889,3 +886,15 @@ $order_print_barcode: $grey-ash;
 
 // Block Alshaya ACM customer .block-alshaya-acm-customer
 $block_acm_customer_txt: $windows-blue;
+
+// Colors not used in MC, but added here because used in brand themes.
+// This is to standardize the variables across themes, use the below if your brand has these elements.
+// Assigning to a false value.
+
+// From: PBAE.
+// Pre content region.
+$pre_content_region_bg: false;
+$header_secondary_menu_link_border: false;
+$mm_l1_link_active: false;
+$mm_l1_link_active_bg: false;
+$mm_l1_link_active_shadow: false;
