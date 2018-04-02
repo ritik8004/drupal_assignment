@@ -757,8 +757,10 @@
       max-width: 6.25rem;
     }
 
-    &:hover {
-      opacity: 0.75;
+    @include breakpoint($desktop) {
+      &:hover {
+        opacity: 0.75;
+      }
     }
 
     &.remove {
