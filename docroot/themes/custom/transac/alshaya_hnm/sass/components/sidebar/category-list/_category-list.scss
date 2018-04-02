@@ -7,7 +7,7 @@
   letter-spacing: 0.4px;
 
   a {
-    color: $hnm-black-two;
+    color: $title;
   }
 }
 
@@ -17,14 +17,14 @@
   a {
     @include arabic-letter-spacing;
 
-    color: $grey7;
+    color: $primary_link-active;
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
 
     .c-department & {
       &:hover {
         text-decoration: underline;
-        color: $link-hover;
+        color: $primary_link-hover;
       }
     }
   }

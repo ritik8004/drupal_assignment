@@ -36,12 +36,12 @@
     }
 
     &:hover {
-      background-color: $search-hover;
+      background-color: $autocomplete_hover;
     }
 
     a {
       font-family: $hnm-regular;
-      color: $hnm-black-two;
+      color: $autocomplete_text;
     }
   }
 }
@@ -95,14 +95,14 @@
 .region__content {
   .filter-menu-label {
     li.clear-all-fake {
-      border: 1px solid $hnm-black-two;
+      border: 1px solid $plp_filterbar_clearall_border;
       font-size: 0.75rem;
       padding: 0.4375rem 0.78125rem 0.4375rem 0.84375rem;
       font-family: $hnm-bold;
       text-transform: uppercase;
 
       span {
-        color: $hnm-black-two;
+        color: $plp_filterbar_clearall_text;
       }
     }
   }

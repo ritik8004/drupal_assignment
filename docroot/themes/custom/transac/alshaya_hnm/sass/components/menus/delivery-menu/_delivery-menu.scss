@@ -4,7 +4,7 @@
 
 .c-delivery-menu__tab {
   padding: 0.6875rem 0;
-  border: 2px solid $link-hover;
+  border: 2px solid $delivery_color;
   box-shadow: none;
 
   .field--name-field-title {
@@ -15,7 +15,7 @@
     font-weight: normal;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: $hnm-black-two;
+    color: $title;
   }
 
   .field--name-field-sub-title {
@@ -24,7 +24,7 @@
     font-size: 0.875rem;
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
-    color: $link-hover;
+    color: $delivery_color;
   }
 
   .c-delivery-menu__title {
@@ -33,7 +33,7 @@
     font-family: $hnm-demibold;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: $link-hover;
+    color: $delivery_color;
     font-size: 1.125rem;
 
     @include breakpoint($only-mobile) {
@@ -41,7 +41,7 @@
     }
 
     a {
-      color: $link-hover;
+      color: $delivery_color;
     }
 
     .c-delivery-menu__description {
