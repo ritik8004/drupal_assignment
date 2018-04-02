@@ -233,7 +233,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
         // Fallback to pull mode if no value available for the SKU.
         if (!($stock === '' || $stock === NULL)) {
-//          return (int) $stock;
+          return (int) $stock;
         }
       }
       // Return from Cache in Pull mode.
@@ -244,7 +244,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
         $cache = \Drupal::cache('stock')->get($cid);
 
         if (!empty($cache)) {
-//          return (int) $cache->data;
+          return (int) $cache->data;
         }
       }
     }

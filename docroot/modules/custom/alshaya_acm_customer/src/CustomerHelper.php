@@ -51,7 +51,9 @@ class CustomerHelper {
       'email' => $email,
     ];
 
-    return $this->apiWrapper->updateCustomer($customer_array, $password);
+    return $this->apiWrapper->updateCustomer($customer_array, [
+      'password' => $password,
+    ]);
   }
 
 }
