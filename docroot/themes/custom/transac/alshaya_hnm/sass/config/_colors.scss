@@ -65,99 +65,34 @@ $hnm-grey-light-three: #e6e6e6;
 // Global elements.
 $content_pagetitle: $hnm-black-two;
 $content_pagetitle_border: $white;
-$primary_text: $grey-ash;
 $primary_link: $black;
 $primary_link-hover: $grey7;
 $primary_link-active: $grey7;
-$primary_border: $white;
-$content_link_color: $cerulean-two;
+$content_link_color: $hnm-black-two;
 
 // Form elements.
-$primary_form_selector_border: $black;
-$primary_form_selector: $black;
-$primary_form_link: $windows-blue;
-$primary_input: $black;
-$primary_input_label: $greyish;
-$primary_input_border: $grey-ash;
-$primary_input_disabled: $greyish;
-$primary_input_focus_border: $windows-blue;
-$primary_input_inline_error: $red-error;
-
-// Form Items
-$formitem_label: $greyish;
-$formitem_input: $black;
+$primary_input: $hnm-black-two;
 
 //Buttons.
-$primary_btn_bg: $pumpkin-orange;
-$primary_btn_text: $white-five;
-$primary_empty_btn: $black;
-$primary_empty_btn_border: $black;
-$primary_brand_button: $marine-blue-two;
-$primary_brand_button_text: $marine-blue-two;
-$primary_button_disabled: $ladda-disabled;
-$pending_btn_bg: $tomato;
-$returned_btn_bg: $grey-ash;
-$complete_btn_bg: $medium-green;
+$primary_btn_bg: $hnm-black-two;
+$primary_empty_btn: $hnm-black-two;
+$primary_empty_btn_border: $hnm-black-two;
+$pending_btn_bg: $warning;
+$returned_btn_bg: $returned;
+$complete_btn_bg: $success;
 
 // Checkbox & Radio.
-$primary_checkbox_empty: $grey-ash;
-$primary_checkbox_filled: $windows-blue;
-$primary_radiobtn_label: $grey-ash;
-$primary_radiobtn_empty: $greyish;
-$primary_radiobtn_filled: $cerulean-two;
-
-// Tables.
-$primary_th_bg: $whisper-light;
-$primary_th_bg_highlight: $white-two;
-$primary_td_highlight2: $whisper-light; // used on order total (basket).
-$primary_td_highlight3: $white-four; // used on blend class.
-$primary_th_bg_order_highlight: $pale-grey;
-$primary_td_bg_highlight: $white-smoke-light;
-$primary_td_bg: $white-five;
-$primary_tr_hover: rgba(247, 247, 247, 0.72);
-$primary_table_border: $white;
-$primary_full_page_overlay_bg: rgba(255, 255, 255, 0.7);
+$primary_checkbox_empty: $hnm-black-four;
+$primary_checkbox_filled: $hnm-black-two;
+$primary_radiobtn_empty: $hnm-black-two;
 
 // Dropdown.
-$primary_dropdown_bg: $white-five;
-$primary_dropdown_arrow_bg: $white-two;
-$primary_dropdown_text: $grey-ash;
-$primary_dropdown_border: $white-two;
-$primary_dropdown_option_hover: $white-four;
-$primary_dropdown_option_border: $white;
-$primary_dropdown_option_disbled: $greyish;
-$primary_dropdown_focus: $black;
-
-// Text Area
-$primary_textarea_suffix: $greyish;
-$primary_textarea_border: $grey-ash;
-
-// Totals.
-$total_bg: $whisper-light;
-$total_td_2nd_child_bg: $white-four;
-$total_order_total_txt: $black;
-$total_order_total_row_td_2nd_child: $whisper-light;
-$total_discount_total: $scarlet;
-$total_discount_total_td_2nd_child_bg: $white-five;
-
-// Modal
-$modal_bg: $white-five;
-$modal_subtext: $white-five;
-$modal_subtext_bg: $black;
-$modal_close_bg: $marine-blue;
-$modal_close_icon: $white-two;
+$primary_dropdown_text: $hnm-black-two;
+$primary_dropdown_border: $hnm-black-two;
 
 /* ------- 3. Secondary color  ----- */
-// Global elements.
-$secondary_text: $black;
-$secondary_btn_text: $marine-blue;
-$secondary_btn_border: $marine-blue;
-$secondary_border: $black;
-$secondary_link: $marine-blue;
 
 /* ------- 4. Tertiary Colors ------- */
-$tertiary_btn_text: $white-five;
-$tertiary_btn_border: $cerulean-two;
 
 /* ------- 5. Components --------------- */
 // Titles.
