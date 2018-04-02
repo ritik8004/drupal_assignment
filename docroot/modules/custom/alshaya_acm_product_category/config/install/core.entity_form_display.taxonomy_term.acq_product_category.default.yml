@@ -57,7 +57,7 @@ content:
   field_promo_banner_for_mobile:
     weight: 10
     settings:
-    display_label: true
+      display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
