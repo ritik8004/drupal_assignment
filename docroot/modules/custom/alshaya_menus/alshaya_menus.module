@@ -22,6 +22,7 @@ function alshaya_menus_form_menu_link_content_form_alter(array &$form, FormState
     return;
   }
 
+  // @Todo: Display form for the menu type that could be rendered in footer.
   /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
   $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
   $terms = $product_category_tree->getCategoryRootTerms();
@@ -43,9 +44,8 @@ function alshaya_menus_form_menu_link_content_form_alter(array &$form, FormState
  * Submit function for menu add / edit form.
  */
 function alshaya_menus_menu_link_content_form_submit($form, FormStateInterface $form_state) {
-  /** @var \Drupal\menu_link_content\Form\MenuLinkContentForm $form_object */
-  $form_object = $form_state->getFormObject();
-  $menu_link = $form_object->getEntity();
+  /** @var \Drupal\menu_link_content\Form\MenuLinkContentForm $menu_link */
+  $menu_link = $form_state->getFormObject()->getEntity();
 
   if (!$menu_link->link) {
     return;
