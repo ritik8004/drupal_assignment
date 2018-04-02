@@ -63,9 +63,7 @@ $hnm-grey-light-three: #e6e6e6;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
-$primary_bg: $white-five;
-$body_bg: $primary_bg;
-$content_pagetitle: $marine-blue;
+$content_pagetitle: $hnm-black-two;
 $content_pagetitle_border: $white;
 $primary_text: $grey-ash;
 $primary_link: $black;
@@ -162,6 +160,12 @@ $tertiary_btn_text: $white-five;
 $tertiary_btn_border: $cerulean-two;
 
 /* ------- 5. Components --------------- */
+// Titles.
+$page_title: $hnm-black-two;
+$block_title: $hnm-black-two;
+$title: $hnm-black-two;
+$sub_title: $hnm-black-two;
+
 // Messages and Errors
 $default_msg_status_text: $white-four;
 $default_msg_bg: $success;
