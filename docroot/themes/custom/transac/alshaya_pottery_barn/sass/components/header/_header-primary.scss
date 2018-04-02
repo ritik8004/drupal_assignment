@@ -1,0 +1,22 @@
+header {
+  .block-views-exposed-filter-blocksearch-page {
+    input[type="text"] {
+      text-transform: none;
+    }
+  }
+
+  .site-brand-home {
+    a {
+      @include breakpoint($desktop) {
+        max-width: 29rem;
+      }
+    }
+  }
+
+  .c-header__region {
+    @include breakpoint($desktop) {
+      padding-bottom: 1.5625rem;
+      padding-top: 1.5625rem;
+    }
+  }
+}
