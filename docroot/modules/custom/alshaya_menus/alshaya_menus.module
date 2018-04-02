@@ -4,3 +4,61 @@
  * @file
  * Module file.
  */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_menus_form_menu_link_content_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Check super category feature status.
+  if (!\Drupal::config('alshaya_acm_product_category.super_category.settings')->get('status')) {
+    return;
+  }
+  // Check if the current form is menu link form.
+  $menu_link = $form_state->getFormObject()->getEntity();
+  if (!$menu_link instanceof MenuLinkContent) {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+  $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  $terms = $product_category_tree->getCategoryRootTerms();
+
+  foreach ($terms as $term) {
+    $options[$term['id']] = $term['label'];
+  }
+  // Form to select super category feature.
+  $form['menu_super_category'] = [
+    '#type' => 'checkboxes',
+    '#title' => t('Select super category'),
+    '#options' => $options,
+  ];
+  // Form submit handler.
+  $form['actions']['submit']['#submit'][] = 'alshaya_menus_menu_link_content_form_submit';
+}
+
+/**
+ * Submit function for menu add / edit form.
+ */
+function alshaya_menus_menu_link_content_form_submit($form, FormStateInterface $form_state) {
+  /** @var \Drupal\menu_link_content\Form\MenuLinkContentForm $form_object */
+  $form_object = $form_state->getFormObject();
+  $menu_link = $form_object->getEntity();
+
+  if (!$menu_link->link) {
+    return;
+  }
+
+  $menu_link_options = $menu_link->link->first()->options ?: [];
+  if (!empty($form_state->getValue('menu_super_category'))) {
+    $super_category_options = $form_state->getValue('menu_super_category');
+    $menu_link_options['super_category'] = $super_category_options;
+  }
+
+  if (!empty($super_category_options)) {
+    $menu_link->link->first()->options = $menu_link_options;
+    $menu_link->save();
+  }
+}
