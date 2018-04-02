@@ -475,21 +475,16 @@ header {
       }
 
       &.search-active {
-        a {
-          color: $white-five;
-          background: transparent;
-
+        .mobile--search {
           &::before {
-            background: url('../imgs/assets/ic-active-search.svg') no-repeat !important;
+            color: $hnm-red;
           }
         }
       }
 
       .mobile--search {
-        &::before {
-          background: url('../imgs/assets/ic-search.svg') no-repeat;
-          width: 1.375rem;
-          height: 1.375rem;
+        @include icon(search) {
+          color: $hnm-black-two;
         }
       }
     }
