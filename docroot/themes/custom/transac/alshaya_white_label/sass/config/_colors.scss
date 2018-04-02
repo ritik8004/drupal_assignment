@@ -430,7 +430,7 @@ $plp_sort_by_label: $grey-ash;
 $plp_facet_filter: $windows-blue;
 $plp_facet_filter_bg: $cerulean-two;
 $plp_facet_filter_link: $white-four;
-$plp_facet_clear_border: $marine-blue-two;
+$plp_facet_clear_border: $cerulean-two;
 $plp_facet_clear_border_mobile: $cerulean-two;
 $plp_facet_clear_text: $cerulean-two;
 $plp_facet_filter_count: $marine-blue-two;
@@ -475,8 +475,9 @@ $plp_pager_link_border: $marine-blue;
 // Product detail page.
 $pdp_product_title: $grey-ash;
 $pdp_product_price: $black;
-$pdp_product_price: $scarlet;
 $pdp_product_special_price: $special-price;
+$pdp_product_special_price_text: $scarlet;
+$pdp_product_discount_price: $scarlet;
 $pdp_product_discount_text: $scarlet;
 $pdp_product_itemcode: $grey-ash;
 $pdp_title_section_border: $white;
@@ -900,3 +901,15 @@ $mm_l1_link_active_bg: false;
 $mm_l1_link_active_shadow: false;
 $mm_l2_link_mobile_menu: false;
 $header_c_menu_search_icon: false;
+
+// From: HMKW
+$default_msg_status_text: false;
+$maintenance_link: false;
+$maintenance_text: false;
+$maintenance_title: false;
+$maintenance_mobile_body_bg: false;
+$maintenance_mobile_body_text: false;
+$plp_facet_input_placeholder: false;
+$delivery_color: false;
+$social_links: false;
+$social_links_hover: false;
