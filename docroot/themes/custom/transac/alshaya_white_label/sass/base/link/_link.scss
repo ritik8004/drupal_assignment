@@ -5,6 +5,8 @@ a {
 .field--name-field-button-link button,
 .field--name-field-button-link a {
   &:hover {
-    opacity: 0.75;
+    @include breakpoint($desktop) {
+      opacity: 0.75;
+    }
   }
 }
