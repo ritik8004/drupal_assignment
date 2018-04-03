@@ -324,7 +324,7 @@ class ProductCategoryTree {
   }
 
   /**
-   * Get super parent of given term.
+   * Get root parent of given term.
    *
    * OR get parent of the term by getting term from current route.
    *
@@ -334,7 +334,7 @@ class ProductCategoryTree {
    * @return int|mixed|null|string
    *   Return the parent id term.
    */
-  public function getCategoryTermSuperParent($term = NULL) {
+  public function getCategoryTermRootParent($term = NULL) {
     $parent_id = 0;
     if (empty($term) || !$term instanceof  TermInterface) {
       $term = $this->getCategoryTermFromRoute();
