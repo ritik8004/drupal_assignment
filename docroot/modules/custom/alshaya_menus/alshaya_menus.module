@@ -12,14 +12,15 @@ use Drupal\menu_link_content\Entity\MenuLinkContent;
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_menus_form_menu_link_content_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
-  // Get entity from form state object.
-  $menu_link = $form_state->getFormObject()->getEntity();
   // Get the settings of super category feature.
   $super_category_config = \Drupal::config('alshaya_acm_product_category.super_category.settings');
   // Proceed if super category feature is enabled.
   if (!$super_category_config->get('status')) {
     return;
   }
+
+  // Get entity from form state object.
+  $menu_link = $form_state->getFormObject()->getEntity();
 
   // Check if the current form is menu link form of configured menu types.
   if (!$menu_link instanceof MenuLinkContent &&
