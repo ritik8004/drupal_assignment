@@ -16,6 +16,6 @@ settings:
   label: 'Application Links'
   provider: alshaya_block
   label_display: '0'
-  app_android_link: ''
-  app_apple_link: ''
+  app_android_link: 'https://play.google.com/store/apps/details?id=com.alshaya.apc'
+  app_apple_link: 'https://itunes.apple.com/us/app/privileges-club/id1066799342?mt=8'
 visibility: {  }

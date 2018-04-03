@@ -12,8 +12,22 @@ use Drupal\field\Entity\FieldConfig;
  *
  * Install config using for new key footer_menu_blocks.
  */
-function alshaya_acm_product_category_update_8004() {
+function alshaya_acm_product_category_update_8005() {
   alshaya_config_install_configs(['alshaya_acm_product_category.super_category.settings'], 'alshaya_acm_product_category');
+}
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new field for product category vocabulary for show/hide plp banner.
+ */
+function alshaya_acm_product_category_update_8004() {
+  $configs = [
+    'field.storage.taxonomy_term.field_promo_banner_for_mobile',
+    'field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
 }
 
 /**

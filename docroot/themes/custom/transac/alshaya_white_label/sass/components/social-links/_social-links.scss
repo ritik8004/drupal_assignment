@@ -33,11 +33,11 @@
 
     &::before {
       font-size: 1.938rem;
-      color: $primary_link;
+      color: $social_links;
     }
 
     &:hover::before {
-      color: transparent;
+      color: $social_links_hover;
       height: 31px;
       width: 31px;
     }

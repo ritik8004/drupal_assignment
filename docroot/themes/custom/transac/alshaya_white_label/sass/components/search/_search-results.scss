@@ -216,7 +216,11 @@ header,
     @include breakpoint($only-mobile) {
       z-index: 9999;
       position: fixed !important;
-      top: 9.6rem !important;
+      top: 6.75rem !important;
+
+      html[lang=ar] & {
+        top: 7.25rem !important;
+      }
     }
   }
 }

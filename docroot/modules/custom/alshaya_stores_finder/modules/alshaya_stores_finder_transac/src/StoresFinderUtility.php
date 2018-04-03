@@ -223,6 +223,8 @@ class StoresFinderUtility {
     $node->get('field_store_address')->setValue('');
     $node->get('field_store_area')->setValue('');
 
+    $open_hours = [];
+
     if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       if (isset($store['address']) && !empty($store['address'])) {
         $address = $this->addressBookManager->getAddressArrayFromRawMagentoAddress($store['address']);
@@ -233,11 +235,27 @@ class StoresFinderUtility {
 
         $node->get('field_address')->setValue($address);
       }
+
+      foreach ($store['store_hours'] as $store_hour) {
+        $open_hours[] = [
+          'key' => $store_hour['label'],
+          'value' => $store_hour['value'],
+        ];
+      }
     }
     elseif (isset($store['address'])) {
       $node->get('field_store_address')->setValue($store['address']);
       $node->get('field_store_area')->setValue($store['area']);
+
+      foreach ($store['store_hours'] as $store_hour) {
+        $open_hours[] = [
+          'key' => $store_hour['day'],
+          'value' => $store_hour['hours'],
+        ];
+      }
     }
+
+    $node->get('field_store_open_hours')->setValue($open_hours);
 
     if (isset($store['sts_delivery_time_label'])) {
       $node->get('field_store_sts_label')->setValue($store['sts_delivery_time_label']);
@@ -245,17 +263,6 @@ class StoresFinderUtility {
     else {
       $node->get('field_store_sts_label')->setValue('');
     }
-
-    $open_hours = [];
-
-    foreach ($store['store_hours'] as $store_hour) {
-      $open_hours[] = [
-        'key' => $store_hour['day'],
-        'value' => $store_hour['hours'],
-      ];
-    }
-
-    $node->get('field_store_open_hours')->setValue($open_hours);
 
     // Set the status.
     $node->setPublished((bool) $store['status']);
