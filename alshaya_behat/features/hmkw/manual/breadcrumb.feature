@@ -10,7 +10,7 @@ Feature: Test breadcrumbs displayed across the site
     |page|breadcrumb|
     |/ladies|Home > Ladies|
     |/ladies/new-arrivals/clothes|Home > Ladies > New Arrivals > Clothes|
-    |/small-shoulder-bag|Home > Ladies > Shop By Product > Accessories > Small Shoulder Bag|
+    |/shoulder-bag-26|Home > Ladies > Shop By Product > Accessories > Shoulder Bag|
     |/cart                                                 |Home > Basket                                                                                            |
     |/store-finder                                         |Home > Find Stores                                                                                       |
 
@@ -23,18 +23,18 @@ Feature: Test breadcrumbs displayed across the site
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load
-    When I follow "للنساء"
+    When I follow "النساء"
     And I wait for the page to load
-    Then the breadcrumb "الصفحة الرئيسية > للنساء" should be displayed
-    When I follow "الملابس"
-    And I wait for the page to load
-    Then the breadcrumb "الصفحة الرئيسية > للنساء > شسيبلاتنمثقفصض > الملابس" should be displayed
-    When I follow "جاكيت بقبعة"
-    And I wait for the page to load
-    Then the breadcrumb "الصفحة الرئيسية > للنساء > شسيبلاتنمثقفصض > الملابس > جاكيت بقبعة" should be displayed
+    Then the breadcrumb "الصفحة الرئيسية > النساء" should be displayed
+#    When I follow "الملابس"
+#    And I wait for the page to load
+#    Then the breadcrumb "الصفحة الرئيسية > للنساء > شسيبلاتنمثقفصض > الملابس" should be displayed
+#    When I follow "جاكيت بقبعة"
+#    And I wait for the page to load
+#    Then the breadcrumb "الصفحة الرئيسية > للنساء > شسيبلاتنمثقفصض > الملابس > جاكيت بقبعة" should be displayed
     When I click the label for ".cart-link"
     And I wait for the page to load
-    Then the breadcrumb "الرئيسية > حقيبة التسوق" should be displayed
+    Then the breadcrumb "الصفحة الرئيسية > حقيبة التسوق" should be displayed
     When I follow "البحث عن محلاتنا"
     And I wait for the page to load
     Then the breadcrumb "الصفحة الرئيسية > البحث عن المحلات" should be displayed
