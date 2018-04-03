@@ -14,39 +14,43 @@ use Drupal\menu_link_content\Entity\MenuLinkContent;
 function alshaya_menus_form_menu_link_content_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   // Get entity from form state object.
   $menu_link = $form_state->getFormObject()->getEntity();
-  // Check super category feature status.
-  if (!\Drupal::config('alshaya_acm_product_category.super_category.settings')->get('status')) {
+  // Get the settings of super category feature.
+  $super_category_config = \Drupal::config('alshaya_acm_product_category.super_category.settings');
+  // Proceed if super category feature is enabled.
+  if (!$super_category_config->get('status')) {
     return;
   }
 
-  // Check if the current form is menu link form.
-  if (!$menu_link instanceof MenuLinkContent) {
+  // Check if the current form is menu link form of configured menu types.
+  if (!$menu_link instanceof MenuLinkContent &&
+      !in_array($menu_link->getMenuName(), $super_category_config->get('footer_menu_blocks'))) {
     return;
   }
 
-  // @Todo: Display form for the menu type that could be rendered in footer.
   /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
   $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
   $terms = $product_category_tree->getCategoryRootTerms();
-
+  // Create option array of root terms.
   foreach ($terms as $term) {
     $options[$term['id']] = $term['label'];
   }
 
   $menu_link_options = $menu_link->link->first()->options ?: [];
-  // Form to select super category feature.
+  // Form to select root terms.
   $form['menu_super_category'] = [
     '#type' => 'checkboxes',
     '#title' => t('Select super category'),
     '#options' => $options,
     '#default_value' => !empty($menu_link_options['super_category']) ? $menu_link_options['super_category'] : [],
+    '#required' => TRUE,
   ];
+
   // Form submit handler.
   $form['actions']['submit']['#submit'][] = 'alshaya_menus_menu_link_content_form_submit';
 }
 
 /**
- * Submit function for menu add / edit form.
+ * Submit function for menu add / edit form to save category root term.
  */
 function alshaya_menus_menu_link_content_form_submit($form, FormStateInterface $form_state) {
   /** @var \Drupal\menu_link_content\Form\MenuLinkContentForm $menu_link */
