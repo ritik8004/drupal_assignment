@@ -5,8 +5,6 @@
  * Provides Drush commands for alshaya_acm_product_category.
  */
 
-use Symfony\Component\Yaml\Yaml;
-
 /**
  * Implements hook_drush_command().
  */
@@ -18,6 +16,7 @@ function alshaya_acm_product_category_drush_command() {
     'aliases' => ['ascs'],
     'options' => [
       'default_parent' => 'Default parent term id to render main menu',
+      'footer_menus' => 'Default footer menus to react on super category feature',
     ],
   ];
 
@@ -28,14 +27,13 @@ function alshaya_acm_product_category_drush_command() {
  * Implements drush command alshaya-super-category-switch.
  */
 function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
-  $config_file = drupal_get_path('module', 'alshaya_acm_product_category') . '/config/install/alshaya_acm_product_category.super_category.settings.yml';
-  $config_yaml = Yaml::parse(file_get_contents($config_file));
-
   // Get editable alshaya_acm_product_category.super_category.settings.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings');
 
   $status = $config->get('status') ? FALSE : TRUE;
   $action = $status ? 'enable' : 'disabled';
+
+  $footer_menus = $config->get('footer_menu_blocks') ? $config->get('footer_menu_blocks') : ['about-brand', 'help'];
 
   if (!drush_confirm(dt('Are you sure you want to !action super category feature?', ['!action' => $action]))) {
     return drush_user_abort();
@@ -44,17 +42,23 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
   // @todo: Validate the given default_parent exists and from the appropriate
   // vocabulary and is rootTerm.
   // Determine which default parent to use for main menu.
-  $default_parent = $status ? drush_get_option('default_parent', '') : '';
+  $default_parent = drush_get_option('default_parent', 0);
+
+  // Determine footer menus to change based on super category feature.
+  $footer_menus = drush_get_option_list('footer_menus', $footer_menus);
 
   // Update alshaya_acm_product_category.super_category.settings.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings');
   $config->set('status', $status);
-  if (empty($default_parent) && $status) {
-    $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
-    $default_parent = key($terms);
+  if ($status) {
+    if (empty($default_parent)) {
+      $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
+      $default_parent = key($terms);
+    }
+    $config->set('default_category_tid', $default_parent);
+    $config->set('footer_menu_blocks', $footer_menus);
   }
-  $config->set('default_category_tid', $default_parent);
-  $config->set('footer_menu_blocks', $config_yaml['footer_menu_blocks']);
+
   $config->save(TRUE);
 
   // Load super category menu block and change status.
