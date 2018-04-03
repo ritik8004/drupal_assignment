@@ -324,6 +324,30 @@ class ProductCategoryTree {
   }
 
   /**
+   * Get super parent of given term.
+   *
+   * OR get parent of the term by getting term from current route.
+   *
+   * @param null|object $term
+   *   (optional) The term object or nothing.
+   *
+   * @return int|mixed|null|string
+   *   Return the parent id term.
+   */
+  public function getCategoryTermSuperParent($term = NULL) {
+    $parent_id = 0;
+    if (empty($term) || !$term instanceof  TermInterface) {
+      $term = $this->getCategoryTermFromRoute();
+    }
+    if ($term instanceof TermInterface && $parents = $this->getCategoryTermParents($term)) {
+      // Get the top level parent id if parent exists.
+      $parents = array_keys($parents);
+      $parent_id = empty($parents) ? $term->id() : end($parents);
+    }
+    return $parent_id;
+  }
+
+  /**
    * Get all child terms of a given term in a language.
    *
    * @param string $langcode
