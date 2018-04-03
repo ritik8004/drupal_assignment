@@ -5,6 +5,8 @@
  * Provides Drush commands for alshaya_acm_product_category.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  * Implements hook_drush_command().
  */
@@ -26,6 +28,9 @@ function alshaya_acm_product_category_drush_command() {
  * Implements drush command alshaya-super-category-switch.
  */
 function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
+  $config_file = drupal_get_path('module', 'alshaya_acm_product_category') . '/config/install/alshaya_acm_product_category.super_category.settings.yml';
+  $config_yaml = Yaml::parse(file_get_contents($config_file));
+
   // Get editable alshaya_acm_product_category.super_category.settings.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings');
 
@@ -49,6 +54,7 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
     $default_parent = key($terms);
   }
   $config->set('default_category_tid', $default_parent);
+  $config->set('footer_menu_blocks', $config_yaml['footer_menu_blocks']);
   $config->save(TRUE);
 
   // Load super category menu block and change status.
