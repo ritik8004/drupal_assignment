@@ -26,14 +26,8 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
  * Implements template_preprocess_hook().
  */
 function template_preprocess_alshaya_shop_by(&$variables) {
-  // Number of columns to show/divide.
-  $column_count = 2;
-
-  // Splite/Chunk the array.
-  $items = array_chunk($variables['term_tree'], ceil(count($variables['term_tree']) / $column_count));
-
-  // Add items to the variables array.
-  $variables['items'] = $items;
+  // Split/Chunk the array into two parts.
+  $variables['term_tree'] = array_chunk($variables['term_tree'], ceil(count($variables['term_tree']) / 2));
 }
 
 /**

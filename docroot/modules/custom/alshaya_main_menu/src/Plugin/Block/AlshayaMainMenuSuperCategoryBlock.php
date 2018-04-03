@@ -34,7 +34,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    *
    * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
    */
-  protected $productCateoryTree;
+  protected $productCategoryTree;
 
   /**
    * Language manager.
@@ -51,7 +51,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    * @param string $plugin_id
    *   Plugin id.
    * @param mixed $plugin_definition
-   *   Plugin defination.
+   *   Plugin definition.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
@@ -59,7 +59,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->productCateoryTree = $product_category_tree;
+    $this->productCategoryTree = $product_category_tree;
     $this->languageManager = $language_manager;
   }
 
@@ -83,14 +83,14 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
     // Get current language code.
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get all the parents of product category.
-    $term_data = $this->productCateoryTree->getCategoryRootTerms();
+    $term_data = $this->productCategoryTree->getCategoryRootTerms();
     // If no data, no need to render the block.
     if (empty($term_data)) {
       return [];
     }
     // Load english term data to set the css class based on term name.
     if ($langcode !== 'en') {
-      $term_data_en = $this->productCateoryTree->getCategoryRootTerms('en');
+      $term_data_en = $this->productCategoryTree->getCategoryRootTerms('en');
     }
 
     // Add class for all terms.
@@ -101,10 +101,10 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
     }
 
     // Get current term from route.
-    $term = $this->productCateoryTree->getCategoryTermFromRoute();
+    $term = $this->productCategoryTree->getCategoryTermFromRoute();
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {
-      $parents = $this->productCateoryTree->getCategoryTermParents($term);
+      $parents = $this->productCategoryTree->getCategoryTermParents($term);
 
       if (!empty($parents)) {
         /* @var \Drupal\taxonomy\TermInterface $root_parent_term */

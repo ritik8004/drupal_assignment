@@ -877,7 +877,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       foreach ($magento_form as $index => $form_item) {
         if (isset($form_item['attribute'])) {
           // Copy values from attribute to main array.
-          $form_item = array_merge($form_item, $form_item['attribute']);
+          $form_item = array_merge($form_item['attribute'], $form_item);
           unset($form_item['attribute']);
         }
 
