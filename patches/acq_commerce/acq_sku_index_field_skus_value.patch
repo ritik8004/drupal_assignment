@@ -1,11 +1,11 @@
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install
-index 70a32e62b..16d1bfb6a 100644
+index 70a32e62b..c18ca5aab 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install
 @@ -9,6 +9,21 @@
  use Drupal\menu_link_content\Entity\MenuLinkContent;
  use Symfony\Component\Yaml\Yaml;
- 
+
 +/**
 + * Implements hook_update_N().
 + *
@@ -27,9 +27,9 @@ index 70a32e62b..16d1bfb6a 100644
 @@ -122,6 +137,23 @@ function _acq_sku_indexes() {
      ],
    ];
- 
+
 +  // Add index for field_skus on node__field_skus table.
-+  $indexes['acq_sku_field_skus'] = [
++  $indexes['node__field_skus'] = [
 +    'table' => 'node__field_skus',
 +    'fields' => [
 +      ['field_skus_value', 64],
