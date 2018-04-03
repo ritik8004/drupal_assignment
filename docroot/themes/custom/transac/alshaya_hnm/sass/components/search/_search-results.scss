@@ -50,6 +50,10 @@
   .block-views-exposed-filter-blocksearch-page .ui-autocomplete {
     @include breakpoint($only-mobile) {
       top: 6.375rem !important;
+
+      html[lang=ar] & {
+        top: 6.375rem !important;
+      }
     }
 
     @include breakpoint($tablet) {
