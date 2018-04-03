@@ -85,6 +85,7 @@ $complete_btn_bg: $success;
 $primary_checkbox_empty: $hnm-black-four;
 $primary_checkbox_filled: $hnm-black-two;
 $primary_radiobtn_empty: $hnm-black-two;
+$primary_radiobtn_filled: $hnm-black-two;
 
 // Dropdown.
 $primary_dropdown_text: $hnm-black-two;
@@ -157,3 +158,22 @@ $oos_pdp_text: $hnm-grey;
 // Social links
 $social_links: $white-five;
 $social_links_hover: $grey5;
+
+//Address book
+$address_tile_selected_bg: $grey3;
+$address_tile_label: $grey-ash;
+$address_tile_border: $grey4;
+$address_content_text: $hnm-black-two;
+$address_content_link_border: $hnm-black-two;
+$address_content_link_bg: $hnm-black-two;
+$address_book_mobile_prefix: $greyish;
+$cancel_button: $hnm-black-two;
+
+// Modal
+$modal_close_bg: $hnm-black-two;
+$modal_close_icon: $white-five;
+
+// zoomin and zoomout button
+$gallery_zoombtn_bg: $white-five-20;
+$gallery_zoombtn_text: $hnm-black-two;
+$gallery_zoombtn_disabled: $light-ash;
