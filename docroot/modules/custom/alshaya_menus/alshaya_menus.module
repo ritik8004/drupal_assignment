@@ -12,12 +12,14 @@ use Drupal\menu_link_content\Entity\MenuLinkContent;
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_menus_form_menu_link_content_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Get entity from form state object.
+  $menu_link = $form_state->getFormObject()->getEntity();
   // Check super category feature status.
   if (!\Drupal::config('alshaya_acm_product_category.super_category.settings')->get('status')) {
     return;
   }
+
   // Check if the current form is menu link form.
-  $menu_link = $form_state->getFormObject()->getEntity();
   if (!$menu_link instanceof MenuLinkContent) {
     return;
   }
@@ -30,11 +32,14 @@ function alshaya_menus_form_menu_link_content_form_alter(array &$form, FormState
   foreach ($terms as $term) {
     $options[$term['id']] = $term['label'];
   }
+
+  $menu_link_options = $menu_link->link->first()->options ?: [];
   // Form to select super category feature.
   $form['menu_super_category'] = [
     '#type' => 'checkboxes',
     '#title' => t('Select super category'),
     '#options' => $options,
+    '#default_value' => !empty($menu_link_options['super_category']) ? $menu_link_options['super_category'] : [],
   ];
   // Form submit handler.
   $form['actions']['submit']['#submit'][] = 'alshaya_menus_menu_link_content_form_submit';
