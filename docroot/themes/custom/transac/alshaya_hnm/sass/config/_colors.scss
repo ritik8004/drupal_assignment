@@ -105,6 +105,7 @@ $sub_title: $hnm-black-two;
 // Messages and Errors
 $default_msg_status_text: $white-four;
 $default_msg_bg: $success;
+$default_error: $red-error;
 
 // Tooltip
 $tooltip_border: $grey1;
@@ -121,6 +122,8 @@ $maintenance_mobile_body_text: $black;
 
 // Accordion
 $accordion_title: $hnm-black-two;
+$accordion_border: $white-smoke-border;
+$accordion_bg: $white-five;
 
 // Back to top
 $btt_bg: $white-three;
@@ -190,3 +193,28 @@ $promo_title: $hnm-red;
 $promo_sub_title: $grey-ash;
 $promo_bordered_title: $hnm-black-two;
 $promo_bordered_border: $grey-ash;
+
+// Copyright
+$copyright_footer_bg: $hnm-black;
+$copyright_footer_text: $grey5;
+
+//3. Footer
+$footer_bg: $hnm-black;
+$footer_title_h3: $white-five;
+$footer_link: $white-five;
+$footer_link2: $white-two;
+$footer_link_active: $grey5;
+$footer_submit_text: $hnm-black-two;
+$footer_submit_bg: $white-five;
+$footer_input_text: $white-five;
+$footer_input_placeholder: $grey5;
+$footer_input_bg: $hnm-black;
+
+// language Switcher
+$lang_switch_firsttime_border: $white-smoke-border;
+$lang_switch_firsttime_bg: $hnm-black-two;
+
+// Newsletter
+$footer_newsletter_label: $grey5;
+$footer_newsletter_success_bg: $tealish;
+$footer_newsletter_success_text: $white-four;
