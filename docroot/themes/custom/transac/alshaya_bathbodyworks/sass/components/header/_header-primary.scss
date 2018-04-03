@@ -54,6 +54,12 @@ header {
     }
 
     .block-views-exposed-filter-blocksearch-page {
+      @include breakpoint($tablet) {
+        input[type="text"] {
+          padding-#{$right}: 2.5rem;
+        }
+      }
+
       @include breakpoint($only-tablet) {
         input[type="text"] {
           width: 100%;
@@ -432,7 +438,7 @@ header {
       margin-top: 0;
 
       &::before {
-        margin-top: -0.0625rem;
+        margin-top: -0.4rem;
         margin-#{$right}: 0.312rem;
       }
     }
@@ -537,7 +543,7 @@ header {
           letter-spacing: 0.5px;
           line-height: 1.69;
           text-transform: uppercase;
-          color: $black;
+          color: $black !important;
         }
 
         p {
@@ -552,12 +558,17 @@ header {
       }
 
       .menu-two__link {
-        font-size: 0.8125rem;
+        font-size: 0.75rem;
       }
 
       .menu--three__list {
         li {
           padding: 0.19rem 0;
+        }
+
+        a {
+          color: $warm-grey-one !important;
+          font-size: 0.875rem;
         }
       }
     }
@@ -692,22 +703,26 @@ header {
   font-weight: normal;
   letter-spacing: 1px;
   text-transform: uppercase;
+  display: flex;
 
   @include breakpoint ($only-tablet) {
     width: 20rem;
-    display: table;
+    display: flex;
   }
 
   .one {
     @include arabic-letter-spacing;
 
-    font-family: inherit;
+    flex: 1;
+    font-family: $alshaya-thin;
 
     @include breakpoint($upto-desktop) {
       &.shop {
         float: $left;
         font-size: 0.75rem;
         padding-top: 1.125rem;
+        padding-left: 0;
+        padding-right: 0;
       }
 
       &.account,
@@ -723,7 +738,7 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      width: 59%;
+      width: 100%;
 
       .logged-out & {
         padding: 0.9rem 0.25rem;
@@ -738,7 +753,7 @@ header {
 
         &.account,
         &.account--logged_in {
-          width: 68%;
+          width: 100%;
         }
       }
     }
@@ -750,13 +765,14 @@ header {
 
     &.shop {
       @include breakpoint ($only-tablet) {
-        width: 6.4375rem;
+        width: 100%;
       }
     }
   }
 
   .active {
     color: $black;
+    font-family: $alshaya-bold;
   }
 }
 

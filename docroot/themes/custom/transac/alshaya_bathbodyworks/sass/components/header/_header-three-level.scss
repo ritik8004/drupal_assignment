@@ -1,0 +1,24 @@
+.has--three-levels {
+  @include breakpoint($desktop) {
+    .menu--two__list {
+      padding-top: 1rem;
+    }
+
+    .menu--two__list .menu--two__list-item > .menu-two__link-wrapper {
+      a {
+        color: $black !important;
+      }
+    }
+
+    .menu--three__list-item > .menu-two__link-wrapper a {
+      font-size: 0.875rem !important;
+      color: $warm-grey-one !important;
+      font-family: $alshaya-thin !important;
+      text-transform: capitalize;
+
+      &:hover {
+        color: $peacock-blue !important;
+      }
+    }
+  }
+}
