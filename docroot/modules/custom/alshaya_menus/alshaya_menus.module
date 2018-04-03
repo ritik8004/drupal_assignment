@@ -42,10 +42,8 @@ function alshaya_menus_preprocess_block(&$variables) {
         $menu_link = $item['original_link'];
         $options = $menu_link->getOptions();
         $super_category = !empty($options['super_category']) ? array_filter($options['super_category']) : NULL;
-        if (!empty($term) && !empty($super_category)) {
-          if (!in_array($parent_id, $super_category)) {
-            unset($items[$id]);
-          }
+        if (!empty($super_category) && !in_array($parent_id, $super_category)) {
+          unset($items[$id]);
         }
       }
       break;
