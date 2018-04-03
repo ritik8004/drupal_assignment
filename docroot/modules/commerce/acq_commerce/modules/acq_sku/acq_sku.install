@@ -14,6 +14,21 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Add additional indexes to improve performance.
  */
+function acq_sku_update_8005() {
+  foreach (_acq_sku_indexes() as $index => $data) {
+    if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
+      \Drupal::database()
+        ->schema()
+        ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add additional indexes to improve performance.
+ */
 function acq_sku_update_8004() {
   foreach (_acq_sku_indexes() as $index => $data) {
     if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
@@ -114,6 +129,23 @@ function _acq_sku_indexes() {
     'spec' => [
       'fields' => [
         'sku' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ],
+  ];
+
+  // Add index for field_skus on node__field_skus table.
+  $indexes['acq_sku_field_skus'] = [
+    'table' => 'node__field_skus',
+    'fields' => [
+      ['field_skus_value', 64],
+    ],
+    'spec' => [
+      'fields' => [
+        'field_skus_value' => [
           'type' => 'varchar',
           'length' => 255,
           'default' => '',
