@@ -22,6 +22,7 @@ function alshaya_menus_preprocess_block(&$variables) {
         return;
       }
 
+      // Update block cache context.
       $variables['content']['#cache']['contexts'][] = 'url.path';
 
       // Default parent term id.
