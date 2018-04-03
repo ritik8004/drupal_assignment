@@ -138,7 +138,7 @@ function _acq_sku_indexes() {
   ];
 
   // Add index for field_skus on node__field_skus table.
-  $indexes['acq_sku_field_skus'] = [
+  $indexes['node__field_skus'] = [
     'table' => 'node__field_skus',
     'fields' => [
       ['field_skus_value', 64],
