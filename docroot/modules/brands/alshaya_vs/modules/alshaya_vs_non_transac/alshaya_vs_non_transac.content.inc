@@ -19,6 +19,13 @@ function alshaya_vs_non_transac_create_default_content() {
  * Create default email signup form block content.
  */
 function alshaya_vs_non_transac_create_email_signup_form_incentive_text_block_content() {
+  $block = \Drupal::entityManager()->loadEntityByUuid('block_content', '19207aad-0e43-4d3a-96d7-c74141f75bb1');
+
+  if ($block instanceof BlockContent) {
+    // Block already created.
+    return;
+  }
+
   // Create email signup form incentive text block content.
   $block_content = BlockContent::create([
     'uuid' => '19207aad-0e43-4d3a-96d7-c74141f75bb1',
