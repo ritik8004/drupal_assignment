@@ -504,7 +504,7 @@
   text-transform: lowercase;
 
   a {
-    color: $user_blk_link !important;
+    color: $user_block_link !important;
   }
 
   span {
@@ -516,7 +516,7 @@
     background-size: 18px;
     position: relative;
     top: 0;
-    color: $user_blk_link;
+    color: $user_block_link;
 
     @include breakpoint($upto-desktop) {
       vertical-align: bottom;

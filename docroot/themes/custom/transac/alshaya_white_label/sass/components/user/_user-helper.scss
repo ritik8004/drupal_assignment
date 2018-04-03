@@ -688,17 +688,17 @@ main .user-register-form {
     #block-youllbeableto {
       @include breakpoint($only-mobile) {
         h2 {
-          margin-bottom: 15px;
+          margin-bottom: 1rem;
         }
 
         span.icon-wish {
-          margin-#{$left}: -34px;
+          margin-#{$left}: -2.125rem;
         }
 
         span {
-          margin-#{$left}: -12px;
+          margin-#{$left}: -0.75rem;
           vertical-align: middle;
-          height: 15px;
+          height: 0.9375rem;
           background-size: contain;
         }
 
