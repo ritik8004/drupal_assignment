@@ -2,6 +2,7 @@
   <div class="l-container">
     <div class="c-footer-primary__region">
 
+      {% block footer_menu_newsletter %}
       <div class="primary--footer--right">
 
         <div class="language--switcher mobile-only-block only-first-time" style="display: none;">
@@ -37,6 +38,7 @@
           {{ page.footer_primary.sociallinks }}
         </div>
       </div>
+      {% endblock %}
     </div>
   </div>
 </div>
