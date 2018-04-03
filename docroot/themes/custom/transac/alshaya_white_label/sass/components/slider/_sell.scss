@@ -425,13 +425,13 @@
 .special--price .price-amount,
 .special--price .price-currency,
 .special--price .price-wrapper {
-  color: $pdp_product_price !important;
+  color: $pdp_product_special_price_text !important;
 }
 
 .price--discount {
   margin-top: 0;
   font-size: 0.625rem;
-  color: $pdp_product_price;
+  color: $pdp_product_discount_price;
 
   @include breakpoint($tablet) {
     margin-top: 0.75rem;

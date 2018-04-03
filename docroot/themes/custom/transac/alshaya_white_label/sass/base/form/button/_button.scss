@@ -8,8 +8,10 @@
   padding: 11px;
   text-align: center;
 
-  &:hover {
-    opacity: 0.75;
+  @include breakpoint($desktop) {
+    &:hover {
+      opacity: 0.75;
+    }
   }
 }
 
@@ -21,16 +23,14 @@
   font-weight: bold;
   padding: 10px 20px 9px;
 
-  &:hover {
-    opacity: 0.75;
+  @include breakpoint($desktop) {
+    &:hover {
+      opacity: 0.75;
+    }
   }
 }
 
 .button {
-  &:hover {
-    opacity: 0.75;
-  }
-
   &.status-pending,
   &.status-delivered,
   &.status-complete,
@@ -71,10 +71,6 @@
   clear: both;
   display: block;
 
-  &:hover {
-    opacity: 0.75;
-  }
-
   @include breakpoint($tablet) {
     padding-top: 1rem;
     max-width: 35.8%;
@@ -96,8 +92,11 @@
   }
 }
 
-button[type="submit"] {
-  &:hover {
-    opacity: 0.75;
+button[type="submit"],
+.button {
+  @include breakpoint($desktop) {
+    &:hover {
+      opacity: 0.75;
+    }
   }
 }
