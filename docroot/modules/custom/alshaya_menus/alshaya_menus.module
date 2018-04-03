@@ -38,9 +38,10 @@ function alshaya_menus_form_menu_link_content_form_alter(array &$form, FormState
 
   $menu_link_options = $menu_link->link->first()->options ?: [];
   // Form to select root terms.
-  $form['menu_super_category'] = [
+  $form['category'] = [
     '#type' => 'checkboxes',
-    '#title' => t('Select super category'),
+    '#title' => t('Select category'),
+    '#description' => t('Please select category for which you want to show this menu item.'),
     '#options' => $options,
     '#default_value' => !empty($menu_link_options['super_category']) ? $menu_link_options['super_category'] : [],
     '#required' => TRUE,
@@ -61,13 +62,13 @@ function alshaya_menus_menu_link_content_form_submit($form, FormStateInterface $
     return;
   }
 
+  // Load previous link options coming from menu_link_attributes.
   $menu_link_options = $menu_link->link->first()->options ?: [];
-  if (!empty($form_state->getValue('menu_super_category'))) {
-    $super_category_options = $form_state->getValue('menu_super_category');
-    $menu_link_options['super_category'] = $super_category_options;
+  if (!empty($form_state->getValue('category'))) {
+    $menu_link_options['super_category'] = $form_state->getValue('category');
   }
 
-  if (!empty($super_category_options)) {
+  if (!empty($menu_link_options['super_category'])) {
     $menu_link->link->first()->options = $menu_link_options;
     $menu_link->save();
   }
