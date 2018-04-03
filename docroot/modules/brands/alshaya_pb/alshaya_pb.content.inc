@@ -25,7 +25,7 @@ function alshaya_pb_create_copyright_block_content() {
     'info' => 'Copyright',
     'machine_name' => 'copyright',
     'body' => [
-      'value' => "<p>&copy; 2016 Williams-Sonoma, Inc. All Rights Reserved</p>",
+      'value' => "<p>&copy; 2017 Williams-Sonoma, Inc. All Rights Reserved</p>",
       'format' => 'rich_text',
     ],
     'type' => 'basic',
@@ -36,7 +36,7 @@ function alshaya_pb_create_copyright_block_content() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Copyright',
     'body' => [
-      'value' => "<p>فيكتوريا سيكريت. كل الحقوق محفوظة. &copy;</p>",
+      'value' => "<p>ويليامز سونوما، وشركة جميع الحقوق محفوظة 2017 &copy;</p>",
       'format' => 'rich_text',
     ],
   ]);
