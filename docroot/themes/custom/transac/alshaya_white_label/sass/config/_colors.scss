@@ -399,6 +399,10 @@ $footer_link_mobile: $black;
 $footer_link: $grey-ash;
 $footer_link_hover: $cerulean-two;
 
+// Social links.
+$social_links: $marine-blue-two;
+$social_links_hover: transparent;
+
 //1. Copyright
 $copyright_footer_bg: $white-four;
 $copyright_footer_text: $black;
@@ -912,8 +916,6 @@ $maintenance_mobile_body_bg: false;
 $maintenance_mobile_body_text: false;
 $plp_facet_input_placeholder: false;
 $delivery_color: false;
-$social_links: false;
-$social_links_hover: false;
 $address_tile_border: false;
 $address_content_text: false;
 $address_content_link_border: false;
