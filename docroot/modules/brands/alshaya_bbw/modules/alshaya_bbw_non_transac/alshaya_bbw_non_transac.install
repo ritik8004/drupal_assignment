@@ -50,6 +50,10 @@ function alshaya_bbw_non_transac_install() {
     $configFactory->save();
   }
 
-  \Drupal::service('theme_handler')->install(['alshaya_amp_bath_body_works'], TRUE);
-  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_bath_body_works')->save();
+  // @codingStandardsIgnoreStart
+  // @TODO: Move this to separate update hook and install when AMP theme is
+  // ready, for now we don't have it.
+  // \Drupal::service('theme_handler')->install(['alshaya_amp_bath_body_works'], TRUE);
+  // \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_bath_body_works')->save();
+  // @codingStandardsIgnoreEnd
 }
