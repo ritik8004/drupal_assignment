@@ -71,7 +71,7 @@ To prepare your local env:
   * `composer blt-alias`
   * `blt vm`
   * `blt refresh:local`
-  * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local -Dsite=mckw`)
+  * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
   * `drush @alshaya.local uli`
 * Access site through Varnish in local
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
@@ -124,9 +124,9 @@ using drush which can take too much of time.
 
 ### Local setup of Behat:
 * Start Behat installation on your local by following the steps below:
-  * Create a directory, say 'alshaya_behat'
+  * Create a directory, say 'alshaya_behat' [if not exist]
   * cd into the above directory - `cd alshaya_behat`
-  * Create a file composer.json and paste the contents below in it:
+  * Create a file composer.json and paste the contents below in it: [if not exist]
   
     `{
     "require-dev" : {
@@ -203,10 +203,14 @@ using drush which can take too much of time.
 * Install JDK on your machine.
 * Download the latest Selenium standalone server from http://www.seleniumhq.org/download/
 * Download the latest chrome driver from https://sites.google.com/a/chromium.org/chromedriver/downloads
+* Install npm
+  - `npm install --prefix bin chromedriver`
 * Run the selenium server on your machine by using the following command:
-  `java -Dwebdriver.chrome.driver=/path/to/chromedriver  -jar selenium-server-standalone-*.jar` (type the selenium server version you downloaded in place of *)
+ - (In a separate terminal window) `java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar`
 * You are now good to start runnning Behat scripts on your machine
 * Below are various ways to run Behat feature files:
+  * To run a single feature file with specific brand - `bin/behat features/<brand>/manual/<feature> --profile=<instance>` [<brand> i.e. hmkw, <feature> i.e. signin.feature, <instance> i.e. hmuat]
+  * To run a single feature file with multi brand - `bin/behat features/hmkw/manual/basket.feature --profile=(hmuat,hmqa,mckwqa,mckwuat)`
   * To run all the feature files - `bin/behat features`
   * To run a single feature file - `bin/behat features/filename.feature` (e.g. `bin/behat features/checkout.feature`)
   * To run tagged scenarios - `bin/behat features --tags @tagname` (e.g. `bin/behat features --tags @checkout`)

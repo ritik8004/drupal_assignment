@@ -43,7 +43,7 @@
         }
 
         a {
-          color: $cerulean-two;
+          color: $content_link_color;
           font-weight: bold;
         }
       }
@@ -91,7 +91,7 @@
 
     .discount-row {
       td {
-        background: $white-five;
+        background: $checkout_confirm_discount_row;
 
         &:nth-child(4) {
           background: $white-smoke-light;
@@ -120,7 +120,7 @@
   }
 
   .continue--shopping--mobile {
-    background-color: $white-five;
+    background-color: $checkout_confirm_continue_shopping_bg;
 
     td {
       padding: 0;
@@ -166,12 +166,12 @@
     @include breakpoint($tablet) {
       margin-top: 2.1rem;
       margin-bottom: 2.7rem;
-      background-color: $pale-grey;
+      background-color: $checkout_confirm_order_summary_row;
       padding: 1.125rem;
       padding-#{$left}: 1.3rem;
       padding-#{$right}: 1.5rem;
       font-size: 0.875rem;
-      color: $cerulean-two;
+      color: $checkout_confirm_order_summary_row_text;
       display: table;
       width: 100%;
     }
@@ -216,12 +216,12 @@
   .order-id-details,
   .order-print-button {
     @include breakpoint($only-mobile) {
-      background-color: $pale-grey;
+      background-color: $checkout_confirm_order_summary_row;
       padding: 1.125rem;
       padding-#{$left}: 3.3rem;
       padding-#{$right}: 1.5rem;
       font-size: 0.8125rem;
-      color: $cerulean-two;
+      color: $checkout_confirm_order_summary_row_text;
     }
   }
 
@@ -247,10 +247,14 @@
   .order-print-button a {
     display: inline-block;
     font-family: $alshaya-bold;
-    background: $white-five;
+    background: $checkout_order_print_btn_bg;
     padding: 0.5rem 2.45rem;
-    border: solid 1px $marine-blue;
+    border: solid 1px $checkout_order_print_btn_border;
     font-size: 0.75rem;
+
+    &:hover {
+      opacity: 0.75;
+    }
   }
 
   tr td {
@@ -385,7 +389,7 @@
   .label.font-small {
     font-size: 0.75rem;
     margin-bottom: 0.25rem;
-    color: $cerulean-two;
+    color: $checkout_order_details_label;
   }
 
   td .contact {
@@ -417,12 +421,12 @@
   }
 
   .product--count {
-    border-top: 0.625rem solid $white-five;
+    border-top: 0.625rem solid $checkout_order_details_product_count_border;
     font-size: 0.875rem;
 
     @include breakpoint($tablet) {
-      border-bottom: 1px solid $white-five;
-      border-top: 1px solid $white-five;
+      border-bottom: 1px solid $checkout_order_details_product_count_border;
+      border-top: 1px solid $checkout_order_details_product_count_border;
     }
 
     @include breakpoint($only-tablet) {
@@ -465,9 +469,9 @@
   }
 
   .subtitle {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $checkout_section_title_border;
     margin-bottom: 0.75rem;
-    color: $marine-blue-two;
+    color: $checkout_section_titles;
     font-size: 1rem;
   }
 
@@ -597,12 +601,16 @@
   font-size: 0.75rem;
   font-family: $alshaya-bold;
   font-weight: normal;
-  border: 1px solid $marine-blue;
+  border: 1px solid $checkout_confirm_continue_shopping_border;
   float: $right;
   padding: 0.5rem 1em;
   width: 100%;
   text-align: center;
   text-transform: lowercase;
+
+  &:hover {
+    opacity: 0.75;
+  }
 
   @include breakpoint($tablet) {
     margin-#{$right}: 6.15rem;
@@ -668,14 +676,18 @@
         width: 9.875rem;
       }
     }
+
+    &:hover {
+      opacity: unset;
+    }
   }
 }
 
 .confirmation__signup--title {
-  color: $marine-blue-two;
+  color: $checkout_section_titles;
   font-family: $alshaya-bold;
   font-weight: normal;
-  border-bottom: 1px solid $white;
+  border-bottom: 1px solid $checkout_section_title_border;
   padding-bottom: 0.5rem;
   margin-bottom: 2.3125rem;
   text-transform: lowercase;

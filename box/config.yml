@@ -143,7 +143,15 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-mcae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
   - servername: "local.alshaya-hmae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-bbwae.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
@@ -151,15 +159,19 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-vsae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
   - servername: "local.alshaya-bbme.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
-  - servername: "local.alshaya-bbwuae.com"
+  - servername: "local.alshaya-dhuae.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
-  - servername: "local.alshaya-dhuae.com"
+  - servername: "local.alshaya-pbae.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
@@ -180,6 +192,10 @@ mysql_databases:
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
+  - name: drupal_alshaya_mcae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
   - name: drupal_alshaya_hmae
     encoding: utf8mb4
     collation: utf8mb4_general_ci
@@ -188,7 +204,15 @@ mysql_databases:
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
+  - name: drupal_alshaya_bbwae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
   - name: drupal_alshaya_vskw
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_vsae
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
@@ -196,11 +220,11 @@ mysql_databases:
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
-  - name: drupal_alshaya_bbwuae
+  - name: drupal_alshaya_dhuae
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
-  - name: drupal_alshaya_dhuae
+  - name: drupal_alshaya_pbae
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 

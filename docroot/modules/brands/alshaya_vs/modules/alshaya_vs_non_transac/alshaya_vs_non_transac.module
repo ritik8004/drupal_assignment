@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * The Module file.
+ */
+
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_block_access().
+ *
+ * Can't handle visibility for content type from visibility settings.
+ *
+ * We have two vertical tabs for content type on block settings page and the
+ * one which allows "negate the condition", is not working as expected. so, we
+ * had to write this hook to hide page title block from advanced page CT.
+ */
+function alshaya_vs_non_transac_block_access(Block $block, $operation, AccountInterface $account) {
+  // Not allow 'page_title_block' block on advanced page content type.
+  if ($operation == 'view' && $block->getPluginId() == 'page_title_block') {
+    $route = \Drupal::routeMatch();
+    if ($route->getRouteName() == 'entity.node.canonical') {
+      /* @var \Drupal\node\Entity\Node $node */
+      $node = $route->getParameter('node');
+      return AccessResult::forbiddenIf($node->bundle() == 'advanced_page');
+    }
+  }
+}

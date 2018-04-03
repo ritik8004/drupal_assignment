@@ -1,0 +1,207 @@
+@import "../../alshaya_white_label/sass/config/_fonts.scss";
+
+// Define Fonts
+@font-face {
+  font-family: "GESSTwoLight-Light";
+  src: url("../fonts/GESSTwoLight.eot");
+  src:
+    url("../fonts/GESSTwoLight.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/GESSTwoLight.otf") format("opentype"),
+    url("../fonts/GESSTwoLight.svg") format("svg"),
+    url("../fonts/GESSTwoLight.ttf") format("truetype"),
+    url("../fonts/GESSTwoLight.woff") format("woff"),
+    url("../fonts/GESSTwoLight.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi-Light";
+  src: url("../fonts/droidkufi-regular.eot");
+  src:
+    url("../fonts/droidkufi-regular.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/droidkufi-regular.svg") format("svg"),
+    url("../fonts/droidkufi-regular.ttf") format("truetype"),
+    url("../fonts/droidkufi-regular.woff") format("woff"),
+    url("../fonts/droidkufi-regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi-Bold";
+  src: url("../fonts/droidkufi-bold.eot");
+  src:
+    url("../fonts/droidkufi-bold.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/droidkufi-bold.svg") format("svg"),
+    url("../fonts/droidkufi-bold.ttf") format("truetype"),
+    url("../fonts/droidkufi-bold.woff") format("woff"),
+    url("../fonts/droidkufi-bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BentonSans-Regular";
+  src: url("../fonts/BentonSans-Light.eot");
+  src:
+    url("../fonts/BentonSans-Light.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/BentonSans-Light.otf") format("opentype"),
+    url("../fonts/BentonSans-Light.svg") format("svg"),
+    url("../fonts/BentonSans-Light.ttf") format("truetype"),
+    url("../fonts/BentonSans-Light.woff") format("woff"),
+    url("../fonts/BentonSans-Light.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BentonSans-Medium";
+  src: url("../fonts/BentonSans-Medium.eot");
+  src:
+    url("../fonts/BentonSans-Medium.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/BentonSans-Medium.otf") format("opentype"),
+    url("../fonts/BentonSans-Medium.svg") format("svg"),
+    url("../fonts/BentonSans-Medium.ttf") format("truetype"),
+    url("../fonts/BentonSans-Medium.woff") format("woff"),
+    url("../fonts/BentonSans-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'vs-icons';
+  src: url('../fonts/VSIcons.eot?yy6ec8');
+  src:
+    url('../fonts/VSIcons.eot?yy6ec8#iefix') format('embedded-opentype'),
+    url('../fonts/VSIcons.ttf?yy6ec8') format('truetype'),
+    url('../fonts/VSIcons.woff?yy6ec8') format('woff'),
+    url('../fonts/VSIcons.svg?yy6ec8#VSIcons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// VS specific font family
+// English fonts.
+// Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
+$vs-bold: 'BentonSans-Medium', 'DroidArabicKufi-Bold';
+$vs-regular: 'BentonSans-Regular', 'DroidArabicKufi-Light';
+$vspromo-regular: 'BentonSans-Regular', 'GESSTwoLight-Light';
+
+// Arabic fonts.
+// Adding En fonts so browser prints English characters & numbers correctly in arabic.
+$vs-arabic-bold: 'BentonSans-Medium', 'DroidArabicKufi-Bold';
+$vs-arabic-regular: 'BentonSans-Regular', 'DroidArabicKufi-Light';
+$vspromo-arabic-regular: 'BentonSans-Regular', 'GESSTwoLight-Light';
+
+$vs-icons: 'font-icons';
+$body_font: $vs-regular;
+
+// Override font variables coming from MC, without this we get a 404 as font files are no longer present in VS theme.
+$arial: $vs-regular;
+$alshaya-bold: $vs-bold;
+$alshaya-arabic-bold: $vs-arabic-bold;
+$alshaya-thin: $vs-regular;
+$alshaya-arabic-thin: $vs-arabic-regular;
+
+// Icon Fonts
+$icons: (
+  arrowdown: "\e900",
+  arrowup: "\e901",
+  checkboxempty: "\e904",
+  checkboxfull: "\e905",
+  checkshape: "\e906",
+  chevrondown: "\e907",
+  chevronleft: "\e908",
+  chevronright: "\e909",
+  chevronup: "\e90a",
+  close: "\e90b",
+  closeshape: "\e90c",
+  delivery: "\e90d",
+  deliveryservice: "\e90e",
+  direction: "\e90f",
+  email: "\e910",
+  emailselect: "\e911",
+  facebook: "\e912",
+  facebookselect: "\e913",
+  googleplus: "\e914",
+  googleplusselect: "\e915",
+  hide: "\e916",
+  information: "\e917",
+  instagram: "\e918",
+  instagramselect: "\e919",
+  language: "\e91a",
+  list: "\e91b",
+  login: "\e91c",
+  logout: "\e91d",
+  map: "\e91e",
+  mappin: "\e91f",
+  menu: "\e920",
+  mylocation: "\e921",
+  newsletter: "\e922",
+  nextdaydelivery: "\e923",
+  play: "\e926",
+  prize: "\e927",
+  radioempty: "\e928",
+  radiofull: "\e929",
+  rating: "\e92a",
+  ratingfull: "\e92b",
+  rewards: "\e92c",
+  search: "\e92d",
+  shoppingbag: "\e92e",
+  show: "\e92f",
+  user: "\e932",
+  warning: "\ea07",
+  whiteglovedelivery: "\e933",
+  zoom: "\e938",
+  bell: "\e006",
+  marquee-plus: "\e083",
+  price-tag: "\e939",
+  spinner: "\e97c"
+);
+
+@mixin iconbase() {
+  font-family: $vs-icons;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin icon($icon: false, $position: before, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $icon {
+      content: "#{map-get($icons, $icon)}";
+    }
+
+    @if $styles {
+      @include iconbase;
+    }
+
+    @content;
+  }
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  &::before {
+    @include iconbase;
+  }
+}
+
+@each $icon, $unicode in $icons {
+  %icon-#{$icon},
+  .icon-#{$icon} {
+    &::before {
+      content: $unicode;
+    }
+  }
+}

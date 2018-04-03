@@ -104,13 +104,13 @@
   .full-prod-link {
     display: block;
     padding: 0.55rem 0;
-    border-top: 1px solid $white;
-    border-bottom: 1px solid $white;
+    border-top: 1px solid $pdp_modal_full_prodlink_border;
+    border-bottom: 1px solid $pdp_modal_full_prodlink_border;
     margin-bottom: 1.5rem;
     font-family: $arial;
     font-size: 0.875rem;
     font-weight: bold;
-    color: $marine-blue;
+    color: $pdp_modal_full_prodlink;
     line-height: 1.8rem;
     text-align: $left;
 

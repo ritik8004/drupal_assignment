@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_block
+  theme:
+    - bath_body_works
+id: alshaya_bbw_application_links
+theme: bath_body_works
+region: footer
+weight: -4
+provider: null
+plugin: alshaya_application_links
+settings:
+  id: alshaya_application_links
+  label: 'Application Links'
+  provider: alshaya_block
+  label_display: '0'
+  app_android_link: 'https://play.google.com/store/apps/details?id=com.alshaya.apc'
+  app_apple_link: 'https://itunes.apple.com/us/app/privileges-club/id1066799342?mt=8'
+visibility: {  }

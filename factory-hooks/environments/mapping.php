@@ -73,32 +73,37 @@ function alshaya_get_env_keys($site, $env) {
     // Mothercare SA.
     'mcsa' => [
       '01test' => [
-        'magento' => 'mcsa_qa',
+        'magento' => 'mc_qa',
         'conductor' => 'mcsa_test',
       ],
       '01uat' => [
-        'magento' => 'mcsa_uat',
+        'magento' => 'mc_uat',
         'conductor' => 'mcsa_uat',
       ],
       '01pprod' => [
-        'magento' => 'mcsa_uat',
+        'magento' => 'mc_uat',
         'conductor' => 'mcsa_pprod',
       ],
       '01live' => [
-        'magento' => 'mcsa_prod',
+        'magento' => 'mc_prod',
         'conductor' => 'mcsa_prod',
       ],
       '01update' => [
-        'magento' => 'mcsa_prod',
+        'magento' => 'mc_prod',
         'conductor' => 'mcsa_prod',
       ],
       'default' => [
-        'magento' => 'mcsa_dev',
+        'magento' => 'mc_qa',
         'conductor' => 'mcsa_dev',
       ],
     ],
     // Mothercare UAE.
-    'mcuae' => [],
+    'mcae' => [
+      'default' => [
+        'magento' => 'mc_qa',
+        'conductor' => 'mcae_test',
+      ],
+    ],
     // H&M Kuwait.
     'hmkw' => [
       '01dev2' => [
@@ -137,7 +142,7 @@ function alshaya_get_env_keys($site, $env) {
     'hmsa' => [
       'default' => [
         'magento' => 'hm_qa',
-        'conductor' => 'hmsa_dev',
+        'conductor' => 'hmsa_test',
       ],
     ],
     // H&M AE.
