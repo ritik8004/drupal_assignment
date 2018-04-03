@@ -31,14 +31,6 @@ function alshaya_bbw_update_8103() {
       ->save();
   }
 
-  // @codingStandardsIgnoreStart
-  // @TODO: Move this to separate update hook and install when AMP theme is
-  // ready, for now we don't have it.
-  // Enable and set default amp theme.
-  // \Drupal::service('theme_handler')->install(['alshaya_amp_bathbodyworks'], TRUE);
-  // \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_bathbodyworks')->save();
-  // @codingStandardsIgnoreEnd
-
   $blocks = \Drupal::entityTypeManager()->getStorage('block_content')
     ->loadByProperties(['uuid' => '54b4369d-fb82-4f9f-9034-fc869dda1007']);
   // Get the first block returned from the database.
