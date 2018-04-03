@@ -12,11 +12,11 @@
 }
 
 .c-footer-primary {
-  border-top: 2px solid $peacock-blue;
+  border-top: 2px solid $footer_border_top;
   padding-top: 1rem;
   padding-bottom: 2.25rem;
   position: relative;
-  background: $white-five;
+  background: $footer_bg;
   -webkit-transform: translate3d(0, 0, 0);
 
   @include breakpoint($tablet) {
@@ -106,7 +106,7 @@
 
   a {
     font-size: 0.875rem;
-    color: $black;
+    color: $footer_link_mobile;
     display: block;
     padding: 0.875rem 0;
     text-decoration: none;
@@ -114,7 +114,7 @@
     font-family: $alshaya-thin;
 
     @include breakpoint($tablet) {
-      color: $brownish-grey;
+      color: $footer_link;
       line-height: 2.16;
       padding: 0;
     }
@@ -124,7 +124,7 @@
     }
 
     &:hover {
-      color: $cerulean-two;
+      color: $footer_link_hover;
       text-decoration: underline;
     }
   }
@@ -143,7 +143,7 @@
 .c-footer-menu--category {
   h3 {
     font-size: 0.875rem;
-    color: $marine-blue-two;
+    color: $footer_title_h3;
     font-family: $alshaya-bold;
     font-weight: normal;
     cursor: pointer;
@@ -175,7 +175,7 @@
 
   @include breakpoint($only-mobile) {
     width: 100%;
-    border-top: 1px solid $white;
+    border-top: 1px solid $primary_border;
     margin: 0;
     padding: 0;
     text-align: $left;
@@ -278,7 +278,7 @@
   h3 {
     font-size: 14px;
     font-family: $alshaya-bold;
-    color: $marine-blue-two;
+    color: $footer_title_h3;
     text-transform: lowercase;
     font-weight: normal;
     margin-bottom: 0.75rem;
@@ -296,7 +296,7 @@
 
   .form-item {
     font-size: 0.875rem;
-    color: $brownish-grey;
+    color: $footer_link;
 
     @include breakpoint($tablet) {
       max-width: 18.18rem;
@@ -321,23 +321,23 @@
       &#edit-email-error {
         right: 0;
         top: 100%;
-        color: $red-error;
+        color: $primary_input_inline_error;
         padding: 0.3125rem 0;
         z-index: 9;
         font-size: 0.75rem;
-        background: $white-five;
+        background: $primary_bg;
         margin-top: 0.1875rem;
         text-align: $left;
       }
     }
 
     input[type=email]::placeholder {
-      color: $greyish;
+      color: $primary_input_label;
     }
   }
 
   .form-email {
-    border-bottom: 1px solid $brownish-grey;
+    border-bottom: 1px solid $primary_input_border;
     border-width: 0 0 1px;
     margin-top: 2rem;
     padding-#{$right}: 6.25rem;
@@ -360,7 +360,7 @@
 
     font-family: $alshaya-bold;
     font-weight: normal;
-    background: $marine-blue-two;
+    background: $newsletter_submit_btn;
     position: absolute;
     font-size: 0.75rem;
     #{$right}: 0;
@@ -399,12 +399,12 @@
   }
 
   .edit-newsletter[data-style=zoom-in][data-loading] {
-    background: $marine-blue-two;
+    background: $primary_brand_button;
   }
 
   .subscription-status {
     .success {
-      color: $windows-blue;
+      color: $newsletter_success;
       font-size: 0.75rem;
       padding: 0.3125rem 0;
       margin-top: 0.1875rem;
@@ -470,7 +470,7 @@
 .c-footer-is-accordion {
   .accordion--body {
     display: none;
-    border-top: 1px solid $white;
+    border-top: 1px solid $accordion_border;
 
     @include breakpoint($tablet) {
       border-top: 0;
@@ -577,7 +577,7 @@
           position: absolute;
           right: -2px;
           left: auto;
-          color: $marine-blue-two;
+          color: $lang_switch;
           font-size: 1rem;
         }
       }
@@ -585,7 +585,7 @@
       a {
         font-size: 0.875rem;
         text-transform: lowercase;
-        color: $marine-blue-two;
+        color: $lang_switch;
         margin: 0 0.4375rem;
         text-decoration: underline;
 
@@ -598,7 +598,7 @@
         }
 
         &.is-active {
-          color: $grey-ash;
+          color: $lang_switch_active;
           font-weight: normal;
           text-decoration: none;
         }
@@ -631,9 +631,9 @@
 .language--switcher.only-first-time {
   @include stickyButton();
 
-  border-color: $white-five;
+  border-color: $lang_switch_firsttime_border;
   width: 100%;
-  background-color: $marine-blue-two;
+  background-color: $lang_switch_firsttime_bg;
 
   .links {
     @include breakpoint($only-tablet) {
@@ -648,16 +648,16 @@
       padding: 0.375rem;
 
       a {
-        color: $white-two;
+        color: $lang_switch_list;
 
         &.is-active {
-          color: $white-two;
+          color: $lang_switch_list;
         }
       }
 
       &:first-child {
         &::after {
-          color: $white-two;
+          color: $lang_switch_list;
         }
       }
     }
@@ -673,7 +673,7 @@
 
     @include icon(close, after) {
       position: absolute;
-      color: $white-two;
+      color: $lang_switch_close_icon;
       font-size: 2.688rem;
     }
   }

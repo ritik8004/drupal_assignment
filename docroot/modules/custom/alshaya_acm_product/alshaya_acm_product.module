@@ -970,7 +970,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           continue;
         }
 
-        $configurable['#options_attributes'] = [];
+        $configurable['#options_attributes'] = isset($configurable['#options_attributes'])
+          ? $configurable['#options_attributes']
+          : [];
 
         // Check if it is a dropdown, we disable the options for which we don't
         // have stock. Apply this check only if we have just 1 configurable
@@ -1003,6 +1005,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           }
         }
 
+        // If only one configurable option there, select first value as default.
+        if (count($configurables) == 1) {
+          $options = $configurable['#options'];
+          if (count($options) == 1) {
+            $form['ajax']['configurables'][key($configurables)]['#value'] = key($options);
+            $user_input = $form_state->getUserInput();
+            $user_input['configurables'] = [key($configurables) => key($options)];
+            $form_state->setUserInput($user_input);
+          }
+        }
+
         // If there are no options to display, we show the product as not
         // available.
         if (empty($configurable['#options'])) {
@@ -1018,7 +1031,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           ];
         }
         // If all the options are disabled, we show the product is out of stock.
-        elseif (count($configurable['#options']) == count($configurable['#options_attributes'])) {
+        // We reduce one in options_attributes count as we will always have
+        // empty_option disabled.
+        elseif (count($configurable['#options']) == count($configurable['#options_attributes']) - 1) {
           $configurable = [
             '#markup' => '',
           ];

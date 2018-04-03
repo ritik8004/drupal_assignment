@@ -67,7 +67,7 @@ function alshaya_hm_images_update_dependencies() {
   return [
     'alshaya_hm_images' => [
       8003 => [
-        'alshaya_acm_product_category' => 8002,
+        'alshaya_acm_product_category' => 8004,
       ],
     ],
   ];

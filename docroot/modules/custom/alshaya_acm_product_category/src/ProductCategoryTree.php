@@ -1,14 +1,16 @@
 <?php
 
-namespace Drupal\alshaya_main_menu;
+namespace Drupal\alshaya_acm_product_category;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Url;
+use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Class ProductCategoryTree.
@@ -52,6 +54,13 @@ class ProductCategoryTree {
   protected $cache;
 
   /**
+   * Route match service.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
    * Database connection.
    *
    * @var \Drupal\Core\Database\Connection
@@ -74,28 +83,37 @@ class ProductCategoryTree {
    *   Language manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for alshaya.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   Route match service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
-                              LanguageManagerInterface $language_manager,
-                              CacheBackendInterface $cache,
-                              Connection $connection) {
+    LanguageManagerInterface $language_manager,
+    CacheBackendInterface $cache,
+    RouteMatchInterface $route_match,
+    Connection $connection) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->cache = $cache;
+    $this->routeMatch = $route_match;
     $this->connection = $connection;
   }
 
   /**
-   * Get the term tree for 'product_category' vocabulary from cache or fresh.
+   * Get top level category items.
+   *
+   * @param string $langcode
+   *   (optional) The language code.
    *
    * @return array
-   *   Processed term data from cache if available or fresh.
+   *   Processed term data.
    */
-  public function getCategoryTreeCached() {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+  public function getCategoryRootTerms($langcode = NULL) {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
 
     $cid = self::CACHE_ID . '_' . $langcode;
 
@@ -103,7 +121,37 @@ class ProductCategoryTree {
       return $term_data->data;
     }
 
-    $term_data = $this->getCategoryTree($langcode);
+    // Get all child terms for the given parent.
+    $term_data = $this->getCategoryTree($langcode, 0, FALSE, FALSE);
+
+    $cache_tags = [
+      self::CACHE_TAG,
+      self::VOCABULARY_ID,
+    ];
+
+    $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
+    return $term_data;
+  }
+
+  /**
+   * Get the term tree for 'product_category' vocabulary from cache or fresh.
+   *
+   * @param int $parent_id
+   *   The term parent id, default 0.
+   *
+   * @return array
+   *   Processed term data from cache if available or fresh.
+   */
+  public function getCategoryTreeCached($parent_id = 0) {
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    $cid = self::CACHE_ID . '_' . $langcode . '_' . $parent_id;
+
+    if ($term_data = $this->cache->get($cid)) {
+      return $term_data->data;
+    }
+
+    $term_data = $this->getCategoryTree($langcode, $parent_id);
 
     $cache_tags = [
       self::CACHE_TAG,
@@ -118,15 +166,21 @@ class ProductCategoryTree {
   /**
    * Get the term tree for 'product_category' vocabulary.
    *
+   * Optionally with highlight images and child.
+   *
    * @param string $langcode
    *   Language code in which we need term to be displayed.
    * @param int $parent_tid
    *   Parent term id.
+   * @param bool $highlight_image
+   *   True if include highlight image else false.
+   * @param bool $child
+   *   True if include child else false.
    *
    * @return array
    *   Processed term data.
    */
-  public function getCategoryTree($langcode, $parent_tid = 0) {
+  public function getCategoryTree($langcode, $parent_tid = 0, $highlight_image = TRUE, $child = TRUE) {
     $data = [];
 
     // Get all child terms for the given parent.
@@ -147,8 +201,14 @@ class ProductCategoryTree {
         'active_class' => '',
       ];
 
-      $data[$term->tid]['highlight_image'] = $this->getHighlightImage($term->tid, $langcode, self::VOCABULARY_ID);
-      $data[$term->tid]['child'] = $this->getCategoryTree($langcode, $term->tid);
+      if ($highlight_image) {
+        $data[$term->tid]['highlight_image'] = $this->getHighlightImage($term->tid, $langcode, self::VOCABULARY_ID);
+      }
+
+      if ($child) {
+        $data[$term->tid]['child'] = $this->getCategoryTree($langcode, $term->tid);
+      }
+
     }
 
     return $data;
@@ -214,6 +274,80 @@ class ProductCategoryTree {
   }
 
   /**
+   * Get the term object from current route.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|mixed|null
+   *   Return the taxonomy term object if found else NULL.
+   */
+  public function getCategoryTermFromRoute() {
+    $route_name = $this->routeMatch->getRouteName();
+    $term = NULL;
+    // If /taxonomy/term/tid page.
+    if ($route_name == 'entity.taxonomy_term.canonical') {
+      /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
+      $term = $this->routeMatch->getParameter('taxonomy_term');
+    }
+    // If it's a department page.
+    elseif ($route_name == 'entity.node.canonical') {
+      $node = $this->routeMatch->getParameter('node');
+      if ($node->bundle() == 'department_page') {
+        $terms = $node->get('field_product_category')->getValue();
+        $term = $this->termStorage->load($terms[0]['target_id']);
+      }
+    }
+
+    // If term is of 'acq_product_category' vocabulary.
+    if ($term instanceof TermInterface && $term->getVocabularyId() == self::VOCABULARY_ID) {
+      return $term;
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get all the parents from given term object.
+   *
+   * @param object $term
+   *   The term object.
+   *
+   * @return array|\Drupal\taxonomy\TermInterface[]
+   *   Returns the array of all parents.
+   */
+  public function getCategoryTermParents($term) {
+    $parents = [];
+    // If term is of 'acq_product_category' vocabulary.
+    if ($term instanceof TermInterface && $term->getVocabularyId() == self::VOCABULARY_ID) {
+      // Get all parents of the given term.
+      $parents = $this->termStorage->loadAllParents($term->id());
+    }
+    return $parents;
+  }
+
+  /**
+   * Get root parent of given term.
+   *
+   * OR get parent of the term by getting term from current route.
+   *
+   * @param null|object $term
+   *   (optional) The term object or nothing.
+   *
+   * @return int|mixed|null|string
+   *   Return the parent id term.
+   */
+  public function getCategoryTermRootParent($term = NULL) {
+    $parent_id = 0;
+    if (empty($term) || !$term instanceof  TermInterface) {
+      $term = $this->getCategoryTermFromRoute();
+    }
+    if ($term instanceof TermInterface && $parents = $this->getCategoryTermParents($term)) {
+      // Get the top level parent id if parent exists.
+      $parents = array_keys($parents);
+      $parent_id = empty($parents) ? $term->id() : end($parents);
+    }
+    return $parent_id;
+  }
+
+  /**
    * Get all child terms of a given term in a language.
    *
    * @param string $langcode
@@ -229,11 +363,10 @@ class ProductCategoryTree {
   protected function allChildTerms($langcode, $vid, $parent_tid) {
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name', 'description__value']);
-    $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid=tfd.tid');
-    $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id=tfd.tid');
+    $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
+    $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
     $query->condition('ttim.field_category_include_menu_value', 1);
     $query->condition('tth.parent', $parent_tid);
-    $query->condition('ttim.langcode', $langcode);
     $query->condition('tfd.langcode', $langcode);
     $query->condition('tfd.vid', $vid);
     $query->orderBy('tfd.weight', 'ASC');

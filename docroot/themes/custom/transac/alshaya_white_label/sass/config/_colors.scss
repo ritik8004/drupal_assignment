@@ -250,6 +250,14 @@ $breadcrumb_link: $greyish;
 $breadcrumb_link_hover: $greyish;
 $breadcrumb_link_active: $breadcrumb-active;
 
+// Language Switcher
+$lang_switch: $marine-blue-two;
+$lang_switch_active: $grey-ash;
+$lang_switch_firsttime_bg: $marine-blue-two;
+$lang_switch_firsttime_border: $white-five;
+$lang_switch_list: $white-two;
+$lang_switch_close_icon: $white-two;
+
 // 404
 $maintenance_container_border: $white-two;
 $maintenance_container_border_top: $white-four;
@@ -278,6 +286,10 @@ $gallery_pager_bg: $white-five;
 $gallery_pager_active_bg: $marine-blue-two;
 $gallery_zoombtn_bg: $white;
 $gallery_zoombtn_disabled: $light-ash;
+
+// Homepage Slider
+$hp_slider_dots: $marine-blue-two;
+$hp_slider_arrows_dark: $mothercare-black;
 
 // Sharethis
 $sharethis_icon: $marine-blue-two;
@@ -313,6 +325,7 @@ $primary_search_result_hover: $white-smoke-light;
 $header_c_menu_text: $brownish-grey;
 $header_c_menu_icon_color: $marine-blue-two;
 $header_c_menu_icon_text: $white-five;
+$header_c_menu_search_active_icon: $pumpkin-orange;
 $header_toggle_sign_default: $white;
 $header_toggle_sign_active_tab: $marine-blue;
 $header_toggle_sign_active_tab_bg: $white-five;
@@ -382,12 +395,14 @@ $deliverybanner_shadow: $shadow;
 $footer_bg: $white-five;
 $footer_border_top: $peacock-blue;
 $footer_title_h3: $marine-blue-two;
+$footer_link_mobile: $black;
 $footer_link: $grey-ash;
 $footer_link_hover: $cerulean-two;
 
 //1. Copyright
 $copyright_footer_bg: $white-four;
 $copyright_footer_text: $black;
+$copyright_footer_paragraph: $grey-ash;
 
 //7. Newsletter-signup
 $newsletter_title_h3: $marine-blue-two;
@@ -396,6 +411,7 @@ $newsletter_input_placeholder: $greyish;
 $newsletter_input_border: $marine-blue-two;
 $newsletter_submit_btn: $marine-blue-two;
 $newsletter_submit_btn_text: $white-five;
+$newsletter_success: $windows-blue;
 
 // Checkout Progress.
 $checkout_seperator: $greyish;
@@ -415,7 +431,7 @@ $plp_sort_by_label: $grey-ash;
 $plp_facet_filter: $windows-blue;
 $plp_facet_filter_bg: $cerulean-two;
 $plp_facet_filter_link: $white-four;
-$plp_facet_clear_border: $marine-blue-two;
+$plp_facet_clear_border: $cerulean-two;
 $plp_facet_clear_border_mobile: $cerulean-two;
 $plp_facet_clear_text: $cerulean-two;
 $plp_facet_filter_count: $marine-blue-two;
@@ -429,6 +445,7 @@ $plp_facet_title: $grey-ash;
 $plp_facet_border: $white;
 $plp_item_label: $grey-ash;
 $plp_promotion_description: $cerulean-two;
+$plp_promotion_link: $cherry;
 
 // PLP Filter bar.
 $plp_filterbar_filter_bg: $cerulean-two;
@@ -459,8 +476,9 @@ $plp_pager_link_border: $marine-blue;
 // Product detail page.
 $pdp_product_title: $grey-ash;
 $pdp_product_price: $black;
-$pdp_product_price: $scarlet;
 $pdp_product_special_price: $special-price;
+$pdp_product_special_price_text: $scarlet;
+$pdp_product_discount_price: $scarlet;
 $pdp_product_discount_text: $scarlet;
 $pdp_product_itemcode: $grey-ash;
 $pdp_title_section_border: $white;
@@ -526,8 +544,23 @@ $clear_btn_text: $whisper-dark;
 $not_buyable_msg: $marine-blue;
 $not_buyable_help: $cerulean-two;
 
+// Cross sell and Up Sell
+$sell_list_label: $grey-ash;
+$sell_owl_dots: $greyish;
+$sell_owl_dots_bg: $whisper-light;
+
 // Department page
 $department_category_list_hover: $cerulean-two;
+
+// Promo Blocks
+$promo_link: $peacock-blue;
+$promo_text: $grey-ash;
+$promo_black_amperserif: $mothercare-black;
+$promo_black_btn: $mothercare-black;
+$promo_black_btn_text: $white-five;
+$promo_white_amperserif: $white-five;
+$promo_white_btn: $white-five;
+$promo_white_btn_text: $mothercare-black;
 
 // Store finder page.
 // Store finder header form.
@@ -810,7 +843,7 @@ $privilege_earn_txt: $grey-ash;
 // Contact Page
 $webform_contact_legend: $marine-blue-two;
 
-// Order detail page.
+// Order detail, recent orders, order list page.
 $order_product_title_elipsis_bg: $white-smoke;
 $order_recent_orders_product_title_elipsis_bg: $white-five;
 $order_recent_orders_product_title_elipsis_bg_hover: $white-smoke;
@@ -829,3 +862,68 @@ $order_detail_order_summary_row_td_blend: $whisper;
 $order_detail_order_details_row: $pale-grey;
 $order_detail_order_details_row_td_blend: $solitude;
 $order_detail_warm_white: $white;
+$order_search_form_icon: $whisper-dark;
+$order_search_form_border: $whisper-dark;
+$order_search_form_label: $black;
+$order_search_form_label_mobile: $grey-ash;
+$order_recent_orders_row_hover: $white-four;
+$order_recent_order_order_detail_link: $windows-blue; // possibly old markup.
+$order_recent_order_order_detail_link_bg: $whisper-light; // possibly old markup.
+$order_recent_order_order_summary_bg: $white-five; // possibly old markup.
+$order_no_orders_txt_mobile: $black;
+$order_no_orders_txt: $brownish-grey;
+$order_accordion_open_bg: $whisper-light;
+$order_edit_account_link: $white-five;
+
+// Order print.
+$order_print_order_details_row_bg: $white-smoke-light;
+$order_print_order_details_row_label: $grey-ash;
+$order_print_order_details_row_bg_blend: $whisper-ash;
+$order_print_product_count_row_border: $white-five;
+$order_print_delivery_subtotal_row_blend: $white-four;
+$order_print_total_row: $whisper-light;
+$order_print_delivery_details_row: $white-smoke-light;
+$order_print_dark_txt: $black;
+$order_print_barcode: $grey-ash;
+
+// Block Alshaya ACM customer .block-alshaya-acm-customer
+$block_acm_customer_txt: $windows-blue;
+
+// Colors not used in MC, but added here because used in brand themes.
+// This is to standardize the variables across themes, use the below if your brand has these elements.
+// Assigning to a false value.
+
+// From: PBAE.
+// Pre content region.
+$pre_content_region_bg: false;
+$header_secondary_menu_link_border: false;
+$mm_l1_link_active: false;
+$mm_l1_link_active_bg: false;
+$mm_l1_link_active_shadow: false;
+$mm_l2_link_mobile_menu: false;
+$header_c_menu_search_icon: false;
+
+// From: HMKW
+$default_msg_status_text: false;
+$maintenance_link: false;
+$maintenance_text: false;
+$maintenance_title: false;
+$maintenance_mobile_body_bg: false;
+$maintenance_mobile_body_text: false;
+$plp_facet_input_placeholder: false;
+$delivery_color: false;
+$social_links: false;
+$social_links_hover: false;
+$address_tile_border: false;
+$address_content_text: false;
+$address_content_link_border: false;
+$address_content_link_bg: false;
+$address_book_mobile_prefix: false;
+$cancel_button: false;
+$gallery_zoombtn_text: false;
+$sell_label: false;
+$price_default: false;
+$promo_title: false;
+$promo_sub_title: false;
+$promo_bordered_title: false;
+$promo_bordered_border: false;

@@ -1,0 +1,19 @@
+langcode: en
+status: false
+dependencies:
+  module:
+    - alshaya_main_menu
+  theme:
+    - alshaya_white_label
+id: supercategorymenu
+theme: alshaya_white_label
+region: header_primary
+weight: 0
+provider: null
+plugin: alshaya_main_menu_super_category
+settings:
+  id: alshaya_main_menu_super_category
+  label: 'Alshaya main menu super category'
+  provider: alshaya_main_menu
+  label_display: '0'
+visibility: {  }

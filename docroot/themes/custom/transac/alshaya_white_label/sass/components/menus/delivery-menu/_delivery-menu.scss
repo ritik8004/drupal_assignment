@@ -108,7 +108,7 @@
     @include breakpoint($desktop) {
       .l-container {
         &.l-column--one {
-          @include container(77.25rem);
+          max-width: 100%;
         }
       }
 

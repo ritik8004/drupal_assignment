@@ -89,8 +89,8 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     }
 
     if ($store_code && $shipping_type) {
-      /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
-      $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+      /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_utility */
+      $store_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
 
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
 
@@ -300,9 +300,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     // Clear the payment now.
     $cart->clearPayment();
 
-    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-    $address = $address_book_manager->getAddressStructureWithEmptyValues();
+    $address = GuestDeliveryCollect::getStoreAddress($values['store_code']);
 
     // Adding first and last name from custom info.
     /** @var \Drupal\user\Entity\User $account */
@@ -311,12 +309,6 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $address['lastname'] = $account->get('field_last_name')->getString();
 
     $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']);
-
-    /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
-    $store_utility = \Drupal::service('alshaya_stores_finder.utility');
-    $store_node = $store_utility->getTranslatedStoreFromCode($values['store_code']);
-
-    $address['extension']['address_area_segment'] = $store_node->get('field_store_area')->getString();
 
     $cart->setShipping($address);
   }

@@ -251,6 +251,12 @@
     padding: 0.5rem 2.45rem;
     border: solid 1px $checkout_order_print_btn_border;
     font-size: 0.75rem;
+
+    @include breakpoint($desktop) {
+      &:hover {
+        opacity: 0.75;
+      }
+    }
   }
 
   tr td {
@@ -632,6 +638,10 @@
       margin-#{$right}: 3.3rem;
       width: 9.875rem;
     }
+
+    &:hover {
+      opacity: 0.75;
+    }
   }
 
   &.expanded-table {
@@ -667,6 +677,10 @@
         margin-#{$right}: 3.3rem;
         width: 9.875rem;
       }
+    }
+
+    &:hover {
+      opacity: unset;
     }
   }
 }

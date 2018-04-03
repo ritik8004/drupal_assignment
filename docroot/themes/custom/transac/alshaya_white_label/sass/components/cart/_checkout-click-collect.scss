@@ -92,8 +92,10 @@
         font-weight: bold;
         color: $checkout_cc_list_map_link_active;
 
-        &:hover {
-          opacity: 0.75;
+        @include breakpoint($desktop) {
+          &:hover {
+            opacity: 0.75;
+          }
         }
       }
 

@@ -175,13 +175,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         '#change_address' => render($change_address_button),
       ];
 
-      // Expose selected delivery address to GTM.
-      if (\Drupal::moduleHandler()->moduleExists('alshaya_seo')) {
-        datalayer_add([
-          'deliveryArea' => $drupal_address['administrative_area'],
-          'deliveryCity' => $drupal_address['locality'],
-        ]);
-      }
+      GuestDeliveryHome::exposeSelectedDeliveryAddressToGtm($drupal_address);
 
       $selected_address = '<div id="selected-address-wrapper">' . render($selected_address_build) . '</div>';
     }
@@ -380,6 +374,27 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     // Clear the payment now.
     $cart->clearPayment();
+  }
+
+  /**
+   * Wrapper function to add Delivery info into GTM.
+   *
+   * @param array $address
+   *   Drupal address.
+   */
+  public static function exposeSelectedDeliveryAddressToGtm(array $address) {
+    // Expose selected delivery address to GTM.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_seo')) {
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
+      $magento_address = $address_book_manager->getMagentoAddressFromAddressArray($address);
+
+      datalayer_add([
+        'deliveryArea' => $address_book_manager->getAddressShippingAreaValue($magento_address),
+        'deliveryCity' => $address['locality'],
+      ]);
+    }
   }
 
 }

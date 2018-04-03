@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_click_collect\Form;
 
-use Drupal\alshaya_stores_finder\StoresFinderUtility;
+use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\geolocation\GoogleMapsDisplayTrait;
@@ -17,14 +17,14 @@ class ClickCollectAvailableStores extends FormBase {
   /**
    * The action plugin manager.
    *
-   * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
+   * @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility
    */
   protected $storeFinder;
 
   /**
    * Constructs a new ActionAdminManageForm.
    *
-   * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $storeFinder
+   * @param \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storeFinder
    *   The action plugin manager.
    */
   public function __construct(StoresFinderUtility $storeFinder) {
@@ -36,7 +36,7 @@ class ClickCollectAvailableStores extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('alshaya_stores_finder.utility')
+      $container->get('alshaya_stores_finder_transac.utility')
     );
   }
 

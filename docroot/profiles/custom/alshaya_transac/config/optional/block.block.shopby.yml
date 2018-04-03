@@ -16,6 +16,4 @@ settings:
   label: 'Shop by'
   provider: alshaya_acm_product_category
   label_display: visible
-  level: 1
-  vocabulary: acq_product_category
 visibility: {  }

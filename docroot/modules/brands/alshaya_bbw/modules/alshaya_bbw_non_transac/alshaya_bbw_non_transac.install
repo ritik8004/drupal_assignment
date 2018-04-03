@@ -49,7 +49,4 @@ function alshaya_bbw_non_transac_install() {
     $configFactory->set('button_option', 'stbc_large');
     $configFactory->save();
   }
-
-  \Drupal::service('theme_handler')->install(['alshaya_amp_bath_body_works'], TRUE);
-  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_bath_body_works')->save();
 }
