@@ -3,7 +3,8 @@
     padding: 1.563rem 0;
   }
 
-  .c-sidebar-second {
+  .c-sidebar-second,
+  #block-youllbeableto {
     h3 {
       @include arabic-letter-spacing;
 
@@ -152,7 +153,7 @@
 #block-youllbeableto,
 #block-jointheclub {
   a {
-    color: $hnm-black-two;
+    color: $hnm-black-two !important;
     text-decoration: underline;
     font-family: $hnm-demibold;
   }

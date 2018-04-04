@@ -22,6 +22,12 @@ body {
     font-family: $vs-bold;
   }
 
+  .block-join-the-club__title {
+    html[lang=ar] & {
+      font-family: $vs_arabic_bold;
+    }
+  }
+
   .theme-white-ampersand-bold,
   .theme-black-ampersand-bold {
     .field-promo-text-2 {
