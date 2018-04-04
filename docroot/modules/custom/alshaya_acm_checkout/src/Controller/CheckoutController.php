@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_checkout\Controller;
 
+use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Utility\NestedArray;
@@ -163,7 +164,7 @@ class CheckoutController implements ContainerInjectionInterface {
 
     $cart = $this->cartStorage->getCart(FALSE);
 
-    if ($cart instanceof CartStorageInterface) {
+    if ($cart instanceof CartInterface) {
       $cart->setPaymentMethod($selected_payment_method);
     }
 

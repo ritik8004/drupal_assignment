@@ -256,6 +256,14 @@ $maintenance_container_border_top: $white-four;
 $maintenance_body_bg: $matterhorn;
 $maintenance_link: $cerulean-two;
 
+// Language Switcher
+$lang_switch: $brilliant-rose;
+$lang_switch_active: $vanilla;
+$lang_switch_firsttime_bg: $marine-blue-two;
+$lang_switch_firsttime_border: $white-five;
+$lang_switch_list: $white-two;
+$lang_switch_close_icon: $white-two;
+
 // Accordion
 $accordion_border: $white;
 $accordion_title: $grey-ash;
@@ -301,8 +309,8 @@ $header_search_active_bg: $marine-blue;
 $header_search_active_text: $white-five;
 
 // Header - Search.
-$primary_search_btn: $marine-blue;
-$primary_search_bg: #f2f2f2;
+$primary_search_btn: transparent;
+$primary_search_bg: $white-smoke-light;
 $primary_search_btn_icon: transparent;
 $primary_search_input: $grey-ash;
 $primary_search_input_placeholder: #777;
@@ -379,23 +387,30 @@ $deliverybanner_border: $cerulean-two;
 $deliverybanner_shadow: $shadow;
 
 //3. Footer
-$footer_bg: $white-five;
-$footer_border_top: $peacock-blue;
-$footer_title_h3: $marine-blue-two;
-$footer_link: $grey-ash;
-$footer_link_hover: $cerulean-two;
+$footer_bg: $nero;
+$footer_text: $vanilla;
+$footer_border_top: $nero;
+$footer_title_h3: $vanilla;
+$footer_link_mobile: $vanilla;
+$footer_link: $vanilla;
+$footer_link_hover: $brilliant-rose;
+
+// Social links.
+$social_links: $vanilla;
+$social_links_hover: $vanilla;
 
 //1. Copyright
 $copyright_footer_bg: $white-four;
 $copyright_footer_text: $black;
 
 //7. Newsletter-signup
-$newsletter_title_h3: $marine-blue-two;
-$newsletter_block_text: $grey-ash;
-$newsletter_input_placeholder: $greyish;
-$newsletter_input_border: $marine-blue-two;
-$newsletter_submit_btn: $marine-blue-two;
-$newsletter_submit_btn_text: $white-five;
+$newsletter_title_h3: $vanilla;
+$newsletter_block_text: $vanilla;
+$newsletter_input_placeholder: $vanilla;
+$newsletter_input_border: $vanilla;
+$newsletter_input_bg: $nero;
+$newsletter_submit_btn: $vanilla;
+$newsletter_submit_btn_text: $black;
 
 // Checkout Progress.
 $checkout_seperator: $greyish;
