@@ -240,7 +240,7 @@ header {
 .block-views-exposed-filter-blocksearch-page {
   form {
     @include breakpoint($only-mobile) {
-      box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
+      box-shadow: 0 0.5px 0 0 $header_branding_shadow;
     }
   }
 }
@@ -304,8 +304,8 @@ header {
       font-size: 0;
 
       &::before {
-        width: 30px;
-        height: 30px;
+        width: 1.875rem;
+        height: 1.875rem;
       }
     }
 
@@ -369,12 +369,12 @@ header {
     li {
       &.search-active {
         a.mobile--search {
-          width: 100px;
+          width: 6.25rem;
           display: block;
-          color: $white;
+          color: $primary_search_bg;
 
           &::before {
-            color: $white;
+            color: $primary_search_bg;
 
             html[lang=ar] & {
               transform: rotate(90deg);
@@ -389,8 +389,8 @@ header {
 
         &::before {
           color: $primary_search_btn_icon;
-          width: 30px;
-          height: 30px;
+          width: 1.875rem;
+          height: 1.875rem;
           margin-right: 0;
           left: 0;
           top: -0.125rem;
@@ -410,7 +410,7 @@ header {
 
 .menu--mobile-navigation {
   @include breakpoint($only-mobile) {
-    height: 35px;
+    height: 2.187rem;
 
     .mobile--menu {
       position: relative;
@@ -457,7 +457,7 @@ header {
           &::after {
             content: '';
             height: 2px;
-            background: $primary_link-hover;
+            background: $primary_link-hover !important;
             display: inherit;
             width: 100%;
             margin-top: 0.425rem;
@@ -599,6 +599,7 @@ header {
     display: block;
     font-size: 0.875rem;
     letter-spacing: 1px;
+    border-bottom: 1px solid $mm_l1_border;
   }
 
   .menu--two__list-item {
@@ -615,10 +616,16 @@ header {
 
   .menu--three__list-item {
     > .menu-two__link-wrapper {
-      border-bottom: 1px solid $warm-grey-two;
+      border-bottom: 1px solid $mm_l1_border;
       margin-left: 0 !important;
       margin-right: 0 !important;
     }
+  }
+
+  .menu--three__list-item,
+  .menu--four__list-item {
+    margin-left: 0.625rem;
+    margin-right: 0.625rem;
   }
 
   .menu__in {
@@ -650,6 +657,10 @@ header {
   .menu--two__list,
   .menu--three__list,
   .menu--four__list {
+    @include breakpoint ($upto-desktop) {
+      background-color: $mm_bg;
+    }
+
     @include breakpoint ($only-tablet) {
       width: 20rem;
     }
@@ -692,6 +703,7 @@ header {
     @include arabic-letter-spacing;
 
     flex: 1;
+    font-family: $alshaya-thin;
 
     @include breakpoint($upto-desktop) {
       &.shop {
@@ -716,6 +728,7 @@ header {
 
     @include breakpoint($only-mobile) {
       width: 100%;
+      color: $header_c_menu_icon_text;
 
       .logged-out & {
         padding: 0.9rem 0.25rem;

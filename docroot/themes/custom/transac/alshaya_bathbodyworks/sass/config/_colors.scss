@@ -17,6 +17,7 @@ $vibrant-purple: #7e00c6;
 $bright-sky-blue: #01ccff;
 $tangerine: #fa9900;
 $light-gold: #ffd65a;
+$shadow: rgba(0, 0, 0, 0.24);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -66,19 +67,19 @@ $primary_search_result_hover: rgba(51, 51, 51, 0.06);
 // C-menu primary i:e Mobile and tablet header menu links.
 $header_c_menu_text: $brownish-grey;
 $header_c_menu_icon_color: $peacock-blue;
-$header_c_menu_icon_text: $peacock-blue;
+$header_c_menu_icon_text: $black;
 $header_c_menu_search_active_icon: $pumpkin-orange;
-$header_toggle_sign_default: $black;
-$header_toggle_sign_active_tab: $peacock-blue;
+$header_toggle_sign_default: $warm-grey-three;
+$header_toggle_sign_active_tab: $black;
 $header_toggle_sign_active_tab_bg: $white;
 $header_mobile_menu_arrow: $peacock-blue;
-$header_mobile_menu_active: $peacock-blue;
+$header_mobile_menu_active: $warm-grey-three;
 $header_mobile_menu_close_bg: $peacock-blue;
 $header_mobile_menu_close: $white;
 $header_mobile_menu_overlay: rgba(133, 133, 133, 0.27);
 
 // Branding menu mobile.
-$header_branding_shadow: $greyish;
+$header_branding_shadow: $shadow;
 
 // Header secondary: ie: top header.
 $header_secondary_bg: $white-four;
@@ -100,7 +101,7 @@ $mm_l1_border: $warm-grey-two;
 $mm_l1_link: $black;
 $mm_l1_link_bg: $white;
 $mm_l1_link_hover: $peacock-blue;
-$mm_l1_link_hover_border_to_fill_space: $white;
+$mm_l1_link_hover_border_to_fill_space: $peacock-blue;
 $mm_l1_link_active_border: $peacock-blue;
 $mm_l2_link: $black;
 $mm_l2_link_hover: $peacock-blue;
