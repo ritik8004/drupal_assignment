@@ -8,7 +8,7 @@ header {
   .region__header .block-views-exposed-filter-blocksearch-page {
     @include breakpoint($upto-desktop) {
       z-index: 2;
-      top: 0;
+      top: -0.175rem;
     }
 
     @include breakpoint($upto-tablet) {
@@ -60,11 +60,6 @@ header {
 }
 
 @include breakpoint($upto-desktop) {
-  .header--wrapper {
-    position: relative;
-    z-index: 8;
-  }
-
   .logged-in .mobile--close,
   .mobile--close {
     top: 3.7rem;
@@ -121,6 +116,12 @@ header {
 
   body {
     margin-top: 5.5rem;
+  }
+
+  body {
+    html[lang="ar"] & {
+      margin-top: 5.5rem;
+    }
   }
 
   .block-alshaya-main-menu-super-category {
