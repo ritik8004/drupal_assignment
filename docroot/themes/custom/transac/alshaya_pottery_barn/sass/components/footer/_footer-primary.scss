@@ -17,6 +17,8 @@
 
   .c-footer-menu {
     a {
+      text-transform: none;
+
       &:hover {
         color: $footer_link_hover;
         text-decoration: underline;

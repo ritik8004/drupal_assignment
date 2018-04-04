@@ -7,7 +7,7 @@ docrootDir="$1"
 
 # TODO: This task seems not defined in non transact sites.
 # Also not doing this for amp as of now.
-transac=( "alshaya_white_label" "alshaya_hnm" "pottery_barn_non_trans")
+transac=( "alshaya_white_label" "alshaya_hnm" "pottery_barn_non_trans" "alshaya_pottery_barn" "alshaya_victoria_secret" "alshaya_bathbodyworks" )
 
 for i in "${transac[@]}"
 do

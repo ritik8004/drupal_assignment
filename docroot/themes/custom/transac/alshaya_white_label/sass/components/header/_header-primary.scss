@@ -1432,12 +1432,13 @@ html {
 
     .mobile--search {
       float: $right;
-      margin-#{$right}: 1.5625rem;
+      margin-#{$right}: 1.25rem;
       position: absolute;
       top: 0.625rem;
       #{$right}: 3.25rem;
       font-size: 0;
       padding-top: 0.625rem;
+      padding-#{$right}: 1.25rem;
 
       html[lang=ar] & {
         font-size: 1px;
@@ -1446,13 +1447,13 @@ html {
 
     .store {
       float: $right;
-      margin-#{$right}: 1.5625rem;
+      margin-#{$right}: 1.125rem;
       position: absolute;
       top: 0.625rem;
       font-size: 0;
       margin-top: 0;
       #{$right}: 1rem;
-      padding: 0.625rem 0.375rem;
+      padding-top: 0.625rem;
 
       &::before {
         #{$left}: -0.125rem;
