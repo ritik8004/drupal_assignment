@@ -26,7 +26,7 @@ widget:
     soft_limit: 0
 query_operator: or
 use_hierarchy: true
-expand_hierarchy: true
+expand_hierarchy: false
 enable_parent_when_child_gets_disabled: true
 hard_limit: 0
 exclude: false
