@@ -88,6 +88,7 @@ $sticky-btn: rgba(0, 0, 0, 0.07);
 $nero: #232323;
 $vanilla: #fff;
 $brilliant-rose: #ef5f96;
+$gainsboro: #dadada;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -299,14 +300,15 @@ $autocomplete_text: $grey-ash;
 /* ------- 6. Sections and Pages --------------- */
 
 // Header.
-$header_bg: $white-five;
-$header_search_block_bg: $white-five;
+$header_bg: $vanilla;
+$header_top_bg: $nero;
+$header_search_block_bg: $vanilla;
 $header_border: $white;
 
 // Header mobile search.
-$header_search_border_mobile: $marine-blue-two;
-$header_search_active_bg: $marine-blue;
-$header_search_active_text: $white-five;
+$header_search_border_mobile: $nero;
+$header_search_active_bg: $nero;
+$header_search_active_text: $vanilla;
 
 // Header - Search.
 $primary_search_btn: transparent;
@@ -319,12 +321,15 @@ $primary_search_result_hover: $white-smoke-light;
 
 // C-menu primary i:e Mobile and tablet header menu links.
 $header_c_menu_text: $brownish-grey;
-$header_c_menu_icon_color: $marine-blue-two;
+$header_c_menu_icon_color: $black;
 $header_c_menu_icon_text: $white-five;
-$header_toggle_sign_default: $white;
-$header_toggle_sign_active_tab: $marine-blue;
+$header_c_menu_search_active_icon: $vanilla;
+$header_c_menu_store_active_icon: $brilliant-rose;
+$header_toggle_sign_default: $white-smoke-light;
+$header_toggle_sign_active_tab: $black;
 $header_toggle_sign_active_tab_bg: $white-five;
-$header_mobile_menu_arrow: $marine-blue-two;
+$header_mobile_menu_bg: $vanilla;
+$header_mobile_menu_arrow: $black;
 $header_mobile_menu_active: $white-five;
 $header_mobile_menu_close_bg: $brilliant-rose;
 $header_mobile_menu_close: $black;
@@ -335,8 +340,8 @@ $header_branding_shadow: $greyish;
 
 // Header secondary: ie: top header.
 $header_secondary_bg: $nero;
-$header_secondary_bg_upto_desk: $nero;
-$header_secondary_menu_link_mobile: $vanilla;
+$header_secondary_bg_upto_desk: $vanilla;
+$header_secondary_menu_link_mobile: $nero;
 $header_secondary_menu_link: $vanilla;
 $header_secondary_menu_link_hover_bg: $black;
 
@@ -349,7 +354,7 @@ $header_my_account_icon: $marine-blue-two;
 // Mega menu.
 $mm_bg: $white-five;
 $mm_body_overlay: rgba(0, 0, 0, 0.48);
-$mm_l1_border: transparent;
+$mm_l1_border: $gainsboro;
 $mm_l1_link: $black;
 $mm_l1_link_bg: $brilliant-rose;
 $mm_l1_link_hover: $black;

@@ -63,7 +63,7 @@
 
       $('.hamburger--menu').click(function () {
         if ($('.search-active').length > 0) {
-          $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle();
+          $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle().toggleClass('show-search');
           $('.search-active').removeClass('search-active');
         }
 
@@ -74,7 +74,7 @@
 
       $('.c-menu-primary .mobile--search').off().on('click', function (e) {
         e.preventDefault();
-        $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle();
+        $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle().toggleClass('show-search');
         $(this).parent().toggleClass('search-active');
       });
 
