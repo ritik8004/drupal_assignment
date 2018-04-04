@@ -198,3 +198,9 @@
     }
   }
 }
+
+.pdp-modal-overlay {
+  .select2-container {
+    z-index: 9999;
+  }
+}
