@@ -1368,7 +1368,7 @@ function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) 
  */
 function alshaya_acm_product_pathauto_pattern_alter(&$pattern, array $context) {
   if ($context['module'] == 'node' && $context['bundle'] == 'acq_product') {
-    if (!\Drupal::service('alshaya_acm_product_category.super_category.settings')->get('status')) {
+    if (!\Drupal::config('alshaya_acm_product_category.super_category.settings')->get('status')) {
       return;
     }
     // Get the node object.
