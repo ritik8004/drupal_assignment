@@ -330,13 +330,11 @@ class ProductCategoryTree {
    *
    * @param null|object $term
    *   (optional) The term object or nothing.
-   * @param bool $object
-   *   Set true if return needs object else false for term id.
    *
    * @return int|mixed|null|string
    *   Return the parent term id or object.
    */
-  public function getCategoryTermRootParent($term = NULL, $object = FALSE) {
+  public function getCategoryTermRootParent($term = NULL) {
     $parent = 0;
     if (empty($term) || !$term instanceof  TermInterface) {
       $term = $this->getCategoryTermFromRoute();
@@ -344,8 +342,8 @@ class ProductCategoryTree {
     if ($term instanceof TermInterface && $parents = $this->getCategoryTermParents($term)) {
       // Get the top level parent id if parent exists.
       $parent = end($parents);
-      $parent = ($object) ? $parent : key($parent);
     }
+
     return $parent;
   }
 
