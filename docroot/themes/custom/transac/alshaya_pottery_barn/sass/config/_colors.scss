@@ -25,6 +25,7 @@ $_black_two: #333;
 // Overrides for variables.
 // Global elements.
 $content_link_color: $PB_confirmation_blue;
+$primary_input_focus_border: $PB_confirmation_blue;
 
 // Titles.
 $page_title: $_black_two;
@@ -81,6 +82,13 @@ $mm_l3_link_hover: $PB_deep_red;
 // Home page - slider.
 $gallery_arrows_bg: $PB_deep_red;
 $hp_slider_dots: $PB_deep_red;
+
+// Delivery banner.
+// Delivery tabs.
+$deliverybanner_title: $_black_two;
+$deliverybanner_subtitle: $PB_grey_one;
+$deliverybanner_border: $PB_black_one;
+$deliverybanner_shadow: rgba(236, 236, 236, 0.5);
 
 // Footer Primary.
 $footer_bg: $PB_grey_five;

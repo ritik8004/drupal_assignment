@@ -101,5 +101,11 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '932982860b7b4ec18e1b0d5979006fdd',
       'hmac_secret' => 'I7orNPTFOrHdpRAku4AHbQ',
     ],
+    // Pottery Barn AE.
+    'pbae_test' => [
+      'url' => 'https://alshaya-pbae-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'cbf73a1b03eb43369149662f41980491',
+      'hmac_secret' => '_tcQBAc4nXGPNsSH1AAARw',
+    ],
   ];
 }

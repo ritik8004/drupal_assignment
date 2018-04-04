@@ -184,6 +184,10 @@ class ProductSyncResource extends ResourceBase {
         $has_bundle = $query->execute();
 
         if (!$has_bundle) {
+          $this->logger->warning('Product type @type not supported.', [
+            '@type' => $product['type'],
+          ]);
+          $ignored++;
           continue;
         }
 

@@ -42,7 +42,7 @@ header {
         position: absolute;
         z-index: 1;
         top: 0;
-        right: 0;
+        #{$right}: 0;
       }
     }
   }
@@ -90,5 +90,20 @@ header {
     .menu--three__list {
       font-size: 0.875rem;
     }
+  }
+}
+
+.c-header .block-views-exposed-filter-blocksearch-page {
+  @include breakpoint($desktop) {
+    left: 0;
+
+    html[lang=ar] & {
+      right: 0;
+    }
+  }
+
+  .ui-autocomplete-input {
+    background-color: $primary_search_bg;
+    border: none;
   }
 }

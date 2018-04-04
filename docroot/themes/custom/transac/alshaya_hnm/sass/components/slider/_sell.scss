@@ -19,7 +19,7 @@
   .c-products__item__label {
     font-size: 0.875rem;
     font-family: $hnm-regular;
-    color: $hnm-black-two;
+    color: $sell_label;
   }
 
   .owl-carousel .owl-item img {
@@ -59,7 +59,7 @@
   .sku-base-form {
     .js-form-submit {
       text-transform: uppercase;
-      background: $hnm-black-two;
+      background: $primary_btn_bg;
       margin-top: 1rem;
     }
 
@@ -68,7 +68,7 @@
 
       .form-type-select {
         margin-top: 1rem;
-        background: $white-five;
+        background: $primary_dropdown_bg;
 
         @include breakpoint($only-mobile) {
           padding-bottom: 1rem;
@@ -167,13 +167,13 @@
 .special--price .price-amount,
 .special--price .price-currency,
 .special--price .price-wrapper {
-  color: $cherry !important;
+  color: $price_default !important;
 }
 
 .price--discount {
   margin-top: 0;
   font-size: 0.625rem;
-  color: $cherry;
+  color: $price_default;
 }
 
 .no-carousel {

@@ -113,6 +113,34 @@ mckwprod:
       base_url: 'https://www.mothercare.com.kw/en'
       files_path: "%paths.base%/media"
 
+mcae:
+  autoload:
+    '': %paths.base%/features/mckw/bootstrap
+  suites:
+    default:
+      paths: [ %paths.base%/features/mckw/manual ]
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/vk-test-checkout-002'
+              simpletitle: 'vk test checkout 002'
+              simpletitlear: 'المنتج'
+              configurl: '/paradise-graphic-tee'
+              configtitle: 'Paradise Graphic Tee'
+              configtitlear: 'تي-شيرت برسمة Paradise'
+              configvariant: '6-7 Years'
+              base_url: 'https://mcae.test-alshaya.acsitefactory.com/en'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  formatters:
+      html:
+        output_path: %paths.base%/features/mckw/reports/html/behat
+  extensions:
+    Behat\MinkExtension:
+      base_url: 'https://mcae.test-alshaya.acsitefactory.com/en'
+      files_path: "%paths.base%/features/mckw/media"
+
 hmsa:
   autoload:
     '': %paths.base%/features/hmkw/bootstrap
