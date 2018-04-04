@@ -330,18 +330,18 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         if(!$instagram_link){
             throw new Exception('Instagram link is missing');
         }
-        $youtube_link = $page->find('css','#block-sociallinks .c-social-links--youtube');
-        if(!$youtube_link){
-            throw new Exception('YouTube link is missing');
-        }
-        $googlePlus_link = $page->find('css','#block-sociallinks .c-social-links--google-plus');
-        if(!$googlePlus_link){
-            throw new Exception('Google plus link is missing');
-        }
-        $pinterest_link = $page->find('css','#block-sociallinks .c-social-links--pinterest');
-        if(!$pinterest_link){
-            throw new Exception('Pinterest link is missing');
-        }
+//        $youtube_link = $page->find('css','#block-sociallinks .c-social-links--youtube');
+//        if(!$youtube_link){
+//            throw new Exception('YouTube link is missing');
+//        }
+//        $googlePlus_link = $page->find('css','#block-sociallinks .c-social-links--google-plus');
+//        if(!$googlePlus_link){
+//            throw new Exception('Google plus link is missing');
+//        }
+//        $pinterest_link = $page->find('css','#block-sociallinks .c-social-links--pinterest');
+//        if(!$pinterest_link){
+//            throw new Exception('Pinterest link is missing');
+//        }
 
         $hnm_logo = $page->find('css','#block-footerhnmlogo > div > div > a > img');
         if(!$hnm_logo){
@@ -473,18 +473,18 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         if(!$instagram_link){
             throw new Exception('Instagram link is missing');
         }
-        $youtube_link = $page->find('css','#block-sociallinks .c-social-links--youtube');
-        if(!$youtube_link){
-            throw new Exception('YouTube link is missing');
-        }
-        $googlePlus_link = $page->find('css','#block-sociallinks .c-social-links--google-plus');
-        if(!$googlePlus_link){
-            throw new Exception('Google plus link is missing');
-        }
-        $pinterest_link = $page->find('css','#block-sociallinks .c-social-links--pinterest');
-        if(!$pinterest_link){
-            throw new Exception('Pinterest link is missing');
-        }
+//        $youtube_link = $page->find('css','#block-sociallinks .c-social-links--youtube');
+//        if(!$youtube_link){
+//            throw new Exception('YouTube link is missing');
+//        }
+//        $googlePlus_link = $page->find('css','#block-sociallinks .c-social-links--google-plus');
+//        if(!$googlePlus_link){
+//            throw new Exception('Google plus link is missing');
+//        }
+//        $pinterest_link = $page->find('css','#block-sociallinks .c-social-links--pinterest');
+//        if(!$pinterest_link){
+//            throw new Exception('Pinterest link is missing');
+//        }
 
         $hnm_logo = $page->find('css','#block-footerhnmlogo > div > div > a > img');
         if(!$hnm_logo){
@@ -1407,7 +1407,7 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     public function iConfirmDeletionOfAddress()
     {
         $page = $this->getSession()->getPage();
-        $button = $page->find('css', '.ui-dialog-buttonset.form-actions > button > span.ui-button-text');
+        $button = $page->find('css', '.ui-dialog-buttonset.form-actions > button.button--primary.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget');
         if ($button !== null) {
             $button->click();
         } else {
