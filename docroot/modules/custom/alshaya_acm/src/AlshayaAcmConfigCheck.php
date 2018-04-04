@@ -140,6 +140,7 @@ class AlshayaAcmConfigCheck {
       'alshaya_acm_knet.settings',
       'recaptcha.settings',
       'geolocation.settings',
+      'google_tag.settings',
     ];
 
     // Reset the settings.
@@ -158,11 +159,6 @@ class AlshayaAcmConfigCheck {
     $config = $this->configFactory->getEditable('simple_oauth.settings');
     $config->set('public_key', Settings::get('alshaya_acm_soauth_public_key'));
     $config->set('private_key', Settings::get('alshaya_acm_soauth_private_key'));
-    $config->save();
-
-    // Always set GTM id to null on all envs (except prod) first time.
-    $config = $this->configFactory->getEditable('google_tag.settings');
-    $config->set('container_id', '');
     $config->save();
 
     // Reset :to e-mail for contact us page.
