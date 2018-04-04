@@ -1388,11 +1388,12 @@ function alshaya_acm_product_pathauto_pattern_alter(&$pattern, array $context) {
 
     // Get parent term object of given term.
     $parent = \Drupal::service('alshaya_acm_product_category.product_category_tree')
-      ->getCategoryTermRootParent($term, TRUE);
-    // Create clean term name for url alias.
-    $string = \Drupal::service('pathauto.alias_cleaner')
-      ->cleanString($parent->label(), ['langcode' => $context['language']]);
-    // Update root parent term name to default product path alias pattern.
-    $pattern->setPattern($string . '/' . $pattern->getPattern());
+      ->getCategoryTermRootParent($term);
+
+    // Get term alias to append with node alias.
+    $alias = \Drupal::service('path.alias_manager')
+      ->getAliasByPath('/taxonomy/term/' . $parent->id(), $context['language']);
+
+    $pattern->setPattern($alias . '/' . $pattern->getPattern());
   }
 }
