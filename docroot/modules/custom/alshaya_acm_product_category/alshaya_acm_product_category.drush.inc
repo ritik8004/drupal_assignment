@@ -16,7 +16,6 @@ function alshaya_acm_product_category_drush_command() {
     'aliases' => ['ascs'],
     'options' => [
       'default_parent' => 'Default parent term id to render main menu',
-      'footer_menus' => 'Default footer menus to react on super category feature',
     ],
   ];
 
@@ -45,9 +44,6 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
   // vocabulary and is rootTerm.
   // Determine which default parent to use for main menu.
   $default_parent = drush_get_option('default_parent', 0);
-
-  // Determine footer menus to change based on super category feature.
-  $footer_menus = drush_get_option_list('footer_menus', $footer_menus);
 
   // Update alshaya_acm_product_category.super_category.settings.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings');

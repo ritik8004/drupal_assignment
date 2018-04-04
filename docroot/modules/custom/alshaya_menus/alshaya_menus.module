@@ -44,7 +44,7 @@ function alshaya_menus_form_menu_link_content_form_alter(array &$form, FormState
     '#title' => t('Categories'),
     '#description' => t('Please select categories for which you want to show this menu item.'),
     '#options' => $options,
-    '#default_value' => !empty($menu_link_options['super_categories']) ? $menu_link_options['super_categories'] : [],
+    '#default_value' => !empty($menu_link_options['categories']) ? $menu_link_options['categories'] : [],
     '#required' => TRUE,
   ];
 
@@ -66,10 +66,10 @@ function alshaya_menus_menu_link_content_form_submit($form, FormStateInterface $
   // Load previous link options coming from menu_link_attributes.
   $menu_link_options = $menu_link->link->first()->options ?: [];
   if (!empty($form_state->getValue('categories'))) {
-    $menu_link_options['super_categories'] = $form_state->getValue('categories');
+    $menu_link_options['categories'] = $form_state->getValue('categories');
   }
 
-  if (!empty($menu_link_options['super_categories'])) {
+  if (!empty($menu_link_options['categories'])) {
     $menu_link->link->first()->options = $menu_link_options;
     $menu_link->save();
   }
@@ -107,8 +107,12 @@ function alshaya_menus_form_menu_edit_form_alter(array &$form, FormStateInterfac
 
     // Loop through each menu links.
     foreach ($filtered_links as $id => $link) {
+      if (empty($link['#item']->link->getOptions()['categories'])) {
+        continue;
+      }
+
       // Filter out selected categories.
-      $categories = array_filter($link['#item']->link->getOptions()['super_categories']);
+      $categories = array_filter($link['#item']->link->getOptions()['categories']);
 
       if (!empty($categories)) {
         // Load all the terms from term ids.
@@ -118,7 +122,7 @@ function alshaya_menus_form_menu_edit_form_alter(array &$form, FormStateInterfac
           return $term->label();
         }, $terms);
         // Append categories name to menu title.
-        $form['links']['links'][$id]['title'][1]['#title'] .= ' (' . implode(',', $names) . ')';
+        $form['links']['links'][$id]['title'][1]['#title'] .= ' (' . implode(', ', $names) . ')';
       }
     }
   }
