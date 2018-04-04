@@ -32,9 +32,6 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
   $status = $config->get('status') ? FALSE : TRUE;
   $action = $status ? 'enable' : 'disabled';
 
-  // Default footer menu blocks that depends on super category feature status.
-  $footer_menus = ['about-brand', 'help', 'social-links'];
-
   if (!drush_confirm(dt('Are you sure you want to !action super category feature?', ['!action' => $action]))) {
     return drush_user_abort();
   }
@@ -53,7 +50,6 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
       $default_parent = key($terms);
     }
     $config->set('default_category_tid', $default_parent);
-    $config->set('footer_menu_blocks', $footer_menus);
   }
 
   $config->save(TRUE);
