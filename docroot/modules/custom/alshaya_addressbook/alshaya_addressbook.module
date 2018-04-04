@@ -173,28 +173,28 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $country_label = t('Country');
   $country_field = [];
 
-  if (isset($element['administrative_area'])) {
-    // Modifications for all countries (overridden in code below if required).
-    $administrative_area_default_value = $element['administrative_area']['#default_value'];
-    $element['administrative_area'] = [
-      '#type' => 'select',
-      '#title' => t('Area'),
-      '#required' => TRUE,
-      '#multiple' => FALSE,
-      '#default_value' => $administrative_area_default_value,
-      '#attributes' => [
-        'class' => [
-          'select2-select',
-          'area-list-dropdown',
-        ],
+  $administrative_area_default_value = empty($element['administrative_area'])
+    ? ''
+    : $element['administrative_area']['#default_value'];
+
+  $element['administrative_area'] = [
+    '#type' => 'select',
+    '#title' => t('Area'),
+    '#required' => TRUE,
+    '#multiple' => FALSE,
+    '#default_value' => $administrative_area_default_value,
+    '#attributes' => [
+      'class' => [
+        'select2-select',
+        'area-list-dropdown',
       ],
-      '#attached' => [
-        'library' => [
-          'alshaya_white_label/convert_to_select2',
-        ],
+    ],
+    '#attached' => [
+      'library' => [
+        'alshaya_white_label/convert_to_select2',
       ],
-    ];
-  }
+    ],
+  ];
 
   // Change the fields if dm version is 2 and magento form has data.
   if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2 && !empty($magento_form)) {
