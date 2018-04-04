@@ -1364,7 +1364,7 @@ function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) 
 /**
  * Implements hook_pathauto_pattern_alter().
  *
- * Update url alias for product node to support super category feature.
+ * Update url alias for product node based on super category feature status.
  */
 function alshaya_acm_product_pathauto_pattern_alter(&$pattern, array $context) {
   if ($context['module'] == 'node' && $context['bundle'] == 'acq_product') {
