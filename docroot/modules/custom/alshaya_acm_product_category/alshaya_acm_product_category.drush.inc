@@ -32,9 +32,8 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
   $status = $config->get('status') ? FALSE : TRUE;
   $action = $status ? 'enable' : 'disabled';
 
-  $footer_menus = $config->get('footer_menu_blocks')
-    ? $config->get('footer_menu_blocks')
-    : ['about-brand', 'help', 'social-links'];
+  // Default footer menu blocks that depends on super category feature status.
+  $footer_menus = ['about-brand', 'help', 'social-links'];
 
   if (!drush_confirm(dt('Are you sure you want to !action super category feature?', ['!action' => $action]))) {
     return drush_user_abort();
