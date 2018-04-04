@@ -16,7 +16,8 @@
         arrows: true,
         autoplay: true,
         autoplaySpeed: 15000,
-        dots: true
+        dots: true,
+        useTransform: false
       };
 
       function centerDots() {
