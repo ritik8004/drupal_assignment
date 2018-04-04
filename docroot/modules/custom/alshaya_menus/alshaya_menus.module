@@ -11,14 +11,14 @@
 function alshaya_menus_preprocess_block(&$variables) {
   switch ($variables['base_plugin_id']) {
     case 'system_menu_block':
-      $super_category_config = \Drupal::config('alshaya_acm_product_category.super_category.settings');
+      $config = \Drupal::config('alshaya_acm_product_category.super_category.settings');
       // Check super category feature status.
-      if (!$super_category_config->get('status')) {
+      if (!$config->get('status')) {
         return;
       }
 
       // Check current menu type.
-      if (!in_array($variables['derivative_plugin_id'], $super_category_config->get('footer_menu_blocks'))) {
+      if (!in_array($variables['derivative_plugin_id'], $config->get('footer_menu_blocks'))) {
         return;
       }
 
@@ -26,23 +26,22 @@ function alshaya_menus_preprocess_block(&$variables) {
       $variables['content']['#cache']['contexts'][] = 'url.path';
 
       // Default parent term id.
-      $parent_id = $super_category_config->get('default_category_tid');
+      $current_category_id = $config->get('default_category_tid');
 
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
       $term = $product_category_tree->getCategoryTermFromRoute();
       if (!empty($term)) {
-        $parent_id = $product_category_tree->getCategoryTermRootParent($term);
+        $current_category_id = $product_category_tree->getCategoryTermRootParent($term);
       }
       // Get all the menu items.
       $items = &$variables['content']['#items'];
 
       // Loop through each item, & remove item that isn't in parent term id.
       foreach ($items as $id => $item) {
-        $menu_link = $item['original_link'];
-        $options = $menu_link->getOptions();
-        $super_category = !empty($options['super_category']) ? array_filter($options['super_category']) : NULL;
-        if (!empty($super_category) && !in_array($parent_id, $super_category)) {
+        $options = $item['original_link']->getOptions();
+        $super_categories = !empty($options['super_categories']) ? array_filter($options['super_categories']) : [];
+        if (!in_array($current_category_id, $super_categories)) {
           unset($items[$id]);
         }
       }
