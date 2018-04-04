@@ -724,7 +724,7 @@ class APIWrapper implements APIWrapperInterface {
     }
 
     try {
-      $categories = $this->tryAgentRequest($doReq, 'getCategories', 'categories', "", $acm_uuid);
+      $categories = $this->tryAgentRequest($doReq, 'getCategories', 'categories', $acm_uuid);
     }
     catch (ConductorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
@@ -745,8 +745,10 @@ class APIWrapper implements APIWrapperInterface {
 
     $options = [];
 
+    $acm_uuid = $this->storeId ? $this->storeId : '';
+
     try {
-      $options = $this->tryAgentRequest($doReq, 'getAttributeOptions', 'options');
+      $options = $this->tryAgentRequest($doReq, 'getAttributeOptions', 'options', $acm_uuid);
     }
     catch (ConductorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
