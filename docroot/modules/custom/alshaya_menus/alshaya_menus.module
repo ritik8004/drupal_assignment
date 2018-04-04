@@ -40,7 +40,7 @@ function alshaya_menus_preprocess_block(&$variables) {
       // Loop through each item, & remove item that isn't in parent term id.
       foreach ($items as $id => $item) {
         $options = $item['original_link']->getOptions();
-        $super_categories = !empty($options['super_categories']) ? array_filter($options['super_categories']) : [];
+        $super_categories = !empty($options['categories']) ? array_filter($options['categories']) : [];
         if (!in_array($current_category_id, $super_categories)) {
           unset($items[$id]);
         }
