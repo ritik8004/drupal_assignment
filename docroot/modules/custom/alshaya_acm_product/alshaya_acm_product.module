@@ -1374,6 +1374,7 @@ function alshaya_acm_product_pathauto_pattern_alter(&$pattern, array $context) {
     // Get the node object.
     $node = $context['data']['node'];
 
+    // Do not proceed if not node object, Or missing category.
     if (!$node instanceof NodeInterface || empty($node->get('field_category')->get(0))) {
       return;
     }
