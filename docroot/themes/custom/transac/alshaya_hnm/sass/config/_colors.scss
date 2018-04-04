@@ -92,9 +92,16 @@ $primary_radiobtn_filled: $hnm-black-two;
 $primary_dropdown_text: $hnm-black-two;
 $primary_dropdown_border: $hnm-black-two;
 
+// close button
+$primary_close_btn: $white-five;
+$primary_close_bg: $hnm-black-two;
+
 /* ------- 3. Secondary color  ----- */
+$secondary_link: $black-two;
+$secondary_border: $hnm-black-two;
 
 /* ------- 4. Tertiary Colors ------- */
+$tertiary_link: $black-three;
 
 /* ------- 5. Components --------------- */
 // Titles.
@@ -123,6 +130,7 @@ $maintenance_mobile_body_text: $black;
 
 // Accordion
 $accordion_title: $hnm-black-two;
+$accordion_subtitle: $grey6;
 $accordion_border: $white-smoke-border;
 $accordion_bg: $white-five;
 
@@ -257,3 +265,36 @@ $header_toggle_sign_default: $hnm-grey;
 $header_toggle_sign_active_tab: $hnm-black-two;
 $header_toggle_sign_active_tab_bg: $white-five;
 $header_branding_shadow: $white;
+
+// PLP
+$plp_swatch_more_link: $hnm-black-two;
+$plp_facet_label: $hnm-black-two;
+$plp_facet_clear_border: $hnm-black-two;
+$plp_facet_border: $hnm-black-two;
+$plp_search_count: $grey7;
+$plp_category_desc: $grey7;
+$plp_tile_product_title: $hnm-black-two;
+$plp_tile_product_title_hover: $black;
+$plp_tile_oos_bg: $hnm-red;
+$plp_pager_link: $hnm-black-two;
+$plp_pager_link_border: $hnm-black-two;
+$plp__label_active_bg: $white-five;
+
+// PDP
+$pdp_modal_full_prodlink: $hnm-black-two;
+$pdp_product_price: $black-two;
+$pdp_product_itemcode: $grey7;
+$pdp_swatch_border: $white-five;
+$pdp_swatch_hover: $hnm-black-two-50;
+$pdp_swatch_selected_border: $hnm-black-two;
+$pdp_swatch_disabled: $white;
+$pdp_desc_wrapper: $grey7;
+$pdp_desc_wrapper_label: $hnm-black-two;
+$pdp_cc_highlight: $hnm-black-two;
+$pdp_cc_text: $grey7;
+$pdp_cc_modal_border: $black;
+$pdp_select_selectedtext: $hnm-black-two;
+$pdp_select_hover: $hnm-black-two-50;
+$pdp_oos_text: $white-five;
+$pdp_oos_bg: $error;
+$fake_apply_btn: $white-five;
