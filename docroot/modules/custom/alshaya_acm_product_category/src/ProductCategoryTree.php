@@ -335,16 +335,15 @@ class ProductCategoryTree {
    *   Return the parent term id or object.
    */
   public function getCategoryTermRootParent($term = NULL) {
-    $parent = 0;
     if (empty($term) || !$term instanceof  TermInterface) {
       $term = $this->getCategoryTermFromRoute();
     }
     if ($term instanceof TermInterface && $parents = $this->getCategoryTermParents($term)) {
       // Get the top level parent id if parent exists.
-      $parent = end($parents);
+      return end($parents);
     }
 
-    return $parent;
+    return NULL;
   }
 
   /**
