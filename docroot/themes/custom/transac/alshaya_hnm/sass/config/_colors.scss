@@ -70,6 +70,7 @@ $primary_link-hover: $link-hover;
 $primary_link-active: $grey7;
 $content_link_color: $hnm-black-two;
 $primary_border: $white-smoke-border;
+$primary_dark_color: $hnm-black-two;
 
 // Form elements.
 $primary_input: $hnm-black-two;
@@ -116,8 +117,12 @@ $default_msg_bg: $success;
 $default_error: $red-error;
 
 // Tooltip
+$tooltip_bg: $grey1;
+$tooltip_text: $hnm-black-two;
 $tooltip_border: $grey1;
 $tooltip_border_2: $hnm-black-two;
+$tooltip_icon: $hnm-black-two;
+$basket_tooltip_not_available: $grey4;
 
 // Maintenance
 $maintenance_container_border: $white-two;
@@ -313,3 +318,11 @@ $myaccountneedhelp_text: $white-five;
 $user_block_title: $black-three;
 $user_block_text: $grey-ash;
 $user_block_link: $hnm-black-two;
+
+// Basket
+$basket_header_promo_bg: $hnm-black-two;
+$basket_header_promo_txt: $white-five;
+$basket_block_title: $hnm-black-two;
+$basket_promo_wrapper: $info;
+$basket_promo_wrapper_link: $hnm-black-two;
+$basket_continue_shopping_btn: $hnm-black-two;
