@@ -26,6 +26,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\ViewExecutable;
 
@@ -1357,5 +1358,40 @@ function alshaya_acm_product_is_buyable(SKU $sku_entity) {
 function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) {
   if (!empty($variables['data'])) {
     $variables['data'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $variables['data']));
+  }
+}
+
+/**
+ * Implements hook_pathauto_pattern_alter().
+ *
+ * Update url alias for product node to support super category feature.
+ */
+function alshaya_acm_product_pathauto_pattern_alter(&$pattern, array $context) {
+  if ($context['module'] == 'node' && $context['bundle'] == 'acq_product') {
+    if (!\Drupal::service('alshaya_acm_product_category.super_category.settings')->get('status')) {
+      return;
+    }
+    // Get the node object.
+    $node = $context['data']['node'];
+
+    if (!$node instanceof NodeInterface || empty($node->get('field_category')->get(0))) {
+      return;
+    }
+
+    // Get the category field of the node to generate path alias.
+    $term = $node->get('field_category')->get(0)->entity;
+    // Get the translations of the term based on the current lang code.
+    if ($context['language'] !== 'en' && $term->hasTranslation($context['language'])) {
+      $term = $term->getTranslation($context['language']);
+    }
+
+    // Get parent term object of given term.
+    $parent = \Drupal::service('alshaya_acm_product_category.product_category_tree')
+      ->getCategoryTermRootParent($term, TRUE);
+    // Create clean term name for url alias.
+    $string = \Drupal::service('pathauto.alias_cleaner')
+      ->cleanString($parent->label(), ['langcode' => $context['language']]);
+    // Update root parent term name to default product path alias pattern.
+    $pattern->setPattern($string . '/' . $pattern->getPattern());
   }
 }
