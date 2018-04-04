@@ -1,3 +1,4 @@
+uuid: null
 langcode: en
 status: true
 dependencies:
@@ -42,6 +43,12 @@ facets:
   promotion_color_facet:
     checked: true
     label: 'Promotion color facet'
+    separator: ', '
+    show_count: true
+    weight: 0
+  category_promotion:
+    checked: true
+    label: Category
     separator: ', '
     show_count: true
     weight: 0

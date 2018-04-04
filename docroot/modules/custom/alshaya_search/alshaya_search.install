@@ -13,18 +13,32 @@ use Drupal\search_api\Entity\Index;
  * Updated facets config.
  */
 function alshaya_search_update_8012() {
-  $config_facets = [
+  $config_facets_alshaya_search = [
+    'search_api.index.acquia_search_index',
     'facets.facet.category',
     'facets_summary.facets_summary.filter_bar',
-    'search_api.index.acquia_search_index',
   ];
 
-  alshaya_config_install_configs($config_facets, 'alshaya_search');
+  // Add index for category data to SOLR index & create facets, facet summary.
+  alshaya_config_install_configs($config_facets_alshaya_search, 'alshaya_search');
+
+  // Update alshaya product index to reflect category field.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+
+  $config_facets_acm_promotion = [
+    'facets.facet.category_promotion',
+    'facets_summary.facets_summary.filter_bar_promotions',
+  ];
+
+  // Create facets, facet summary for promotion facets.
+  alshaya_config_install_configs($config_facets_acm_promotion, 'alshaya_acm_promotion', 'optional');
 
   $config_block = [
     'block.block.category',
+    'block.block.promotioncategoryfacet',
   ];
 
+  // Place category filter blocks on search & promotion pages.
   alshaya_config_install_configs($config_block, 'alshaya_transac', 'optional');
 }
 
