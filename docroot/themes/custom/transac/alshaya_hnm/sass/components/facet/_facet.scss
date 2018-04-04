@@ -69,3 +69,18 @@
     font-weight: normal;
   }
 }
+
+.js-facets-checkbox-links {
+  .facet-item {
+    position: relative;
+
+    &.facet-item--collapsed {
+      &:hover {
+        @include icon(dropdown-expand, after) {
+          font-size: 2.25rem;
+          color: $hnm-black-two;
+        }
+      }
+    }
+  }
+}

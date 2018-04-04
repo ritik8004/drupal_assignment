@@ -88,3 +88,64 @@
   }
 }
 
+.js-facets-checkbox-links {
+  .facet-item {
+    position: relative;
+
+    &.facet-item--collapsed {
+      &:hover {
+        @include icon(chevrondown, after) {
+          position: absolute;
+          #{$right}: 0.33rem;
+          font-size: 1.875rem;
+          top: 54%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=category] {
+  .facet-item--collapsed {
+    label {
+      &::before {
+        content: unset;
+      }
+    }
+  }
+
+  .facet-item--expanded {
+    margin-#{$left}: 1rem;
+
+    > label {
+      @include icon(chevronleft, before) {
+        position: absolute;
+        #{$left}: -1rem;
+        font-size: 1.875rem;
+        top: 0.125rem;
+        transform: translateY(-50%);
+      }
+    }
+
+    ul {
+      html[lang=ar] & {
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+.c-sidebar-first {
+  .c-facet__blocks {
+    .block {
+      &:first-child {
+        border-width: 0;
+      }
+
+      &.block-facet-blockcategory {
+        border-bottom: 1px solid $accordion_border;
+      }
+    }
+  }
+}
