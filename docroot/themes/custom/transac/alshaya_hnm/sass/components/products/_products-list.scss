@@ -93,28 +93,15 @@
                 letter-spacing: 1px;
                 text-transform: uppercase;
               }
-
-              @include icon(dropdown-expand, after) {
-                position: absolute;
-                #{$left}: 1.3%;
-                top: 0.8125rem;
-                font-size: 2.125rem;
-                pointer-events: none;
-                transform: rotate(90deg);
-                color: $hnm-black-two;
-              }
-
-              &::after {
-                html[lang=ar] & {
-                  transform: rotate(270deg);
-                  top: 0.75rem;
-                }
-              }
             }
           }
 
           li.clear-all {
             border: 1px solid $hnm-black-two;
+
+            a {
+              color: $hnm-black-two;
+            }
           }
 
           .applied-filter-count {
@@ -333,6 +320,10 @@
 
     @include breakpoint($only-mobile) {
       width: 100%;
+
+      .c-facet__blocks {
+        color: $hnm-black-two;
+      }
     }
 
     width: 16.85rem;
@@ -348,17 +339,14 @@
         letter-spacing: 1px;
         text-transform: uppercase;
       }
-
-      @include icon(chevron-#{$left}, after) {
-        position: absolute;
-        #{$left}: 1.3%;
-        font-size: 2rem;
-        pointer-events: none;
-      }
     }
 
     li.clear-all {
       border: 1px solid $hnm-black-two;
+
+      a {
+        color: $hnm-black-two;
+      }
     }
 
     .applied-filter-count {

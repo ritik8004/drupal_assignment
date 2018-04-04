@@ -152,6 +152,13 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'hmae_test',
       ],
     ],
+    // Pottery Barn AE.
+    'pbae' => [
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_test',
+      ],
+    ],
   ];
 
   // Get the keys following this fallback (from the more specific to the more

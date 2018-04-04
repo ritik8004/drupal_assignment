@@ -4,7 +4,7 @@
   }
 
   @include breakpoint($upto-desktop) {
-    background: $white-five;
+    background: $header_secondary_bg_upto_desk;
     display: none;
     position: fixed;
     width: 84.375%;
@@ -23,7 +23,7 @@
     }
   }
 
-  background: $white-four;
+  background: $header_secondary_bg;
   text-transform: lowercase;
 
   &.block--display {
@@ -52,7 +52,7 @@
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
         #{$right}: 0;
-        color: $marine-blue-two;
+        color: $header_mobile_menu_arrow;
         position: absolute;
         margin-top: -2.0625rem;
         font-size: 1.313rem;
@@ -64,7 +64,7 @@
         @include u-visibility(none);
       }
 
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid $header_border;
       margin-left: 0.625rem;
       margin-right: 0.625rem;
       position: relative;
@@ -80,7 +80,7 @@
     font-family: $alshaya-thin;
 
     @include breakpoint($upto-desktop) {
-      color: $grey-ash;
+      color: $header_secondary_menu_link_mobile;
       display: block;
       font-size: 0.75rem;
       padding: 1rem 0;
@@ -90,7 +90,7 @@
     }
 
     @include breakpoint($desktop) {
-      color: $marine-blue-two;
+      color: $header_secondary_menu_link;
       display: block;
       padding-top: 0.075rem;
       padding-bottom: 0.075rem;
@@ -105,8 +105,8 @@
 
     &:hover,
     &.is-active {
-      color: $marine-blue-two;
-      background: $white-five;
+      color: $header_secondary_menu_link;
+      background: $header_secondary_menu_link_hover_bg;
     }
 
     &::before,
@@ -192,11 +192,11 @@
   }
 
   h3 {
-    color: $marine-blue-two;
+    color: $header_my_account_h3_title;
     font-size: 12px;
     padding: 0.94rem 0;
     margin: 0 0.625rem;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $header_border;
     text-transform: lowercase;
     font-weight: normal;
     font-family: $alshaya-bold;
@@ -205,7 +205,7 @@
   position: fixed;
   width: 84.375%;
   top: 2.9rem;
-  background: $white-five;
+  background: $header_my_account_bg;
   height: 100%;
   z-index: 1000;
   padding: 0;
@@ -223,7 +223,7 @@
   li {
     display: block;
     font-family: $alshaya-thin;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $header_border;
     padding: 0.94rem 0;
     margin-left: 0.625rem;
     margin-right: 0.625rem;
@@ -234,12 +234,12 @@
       background: none;
 
       a {
-        color: $brownish-grey;
+        color: $header_my_account_link_hover;
       }
     }
 
     @include icon(chevron#{$right}, after) {
-      color: $marine-blue-two;
+      color: $header_my_account_icon;
       font-size: 1.313rem;
       cursor: pointer;
       pointer-events: none;
@@ -267,7 +267,7 @@
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
         position: absolute;
-        color: $marine-blue;
+        color: $header_mobile_menu_arrow;
         #{$right}: 0;
         font-size: 1.25rem;
         top: 50%;
@@ -290,13 +290,13 @@
   top: 0 !important;
   width: 100%;
   z-index: 999;
-  background-color: $white-five;
+  background-color: $header_bg;
 }
 
 .branding__menu {
   position: relative;
   z-index: 6;
-  background-color: $white-five;
+  background-color: $header_bg;
 
   @include breakpoint($upto-desktop) {
     position: fixed;
@@ -305,7 +305,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    box-shadow: 0 0 0.125rem $greyish;
+    box-shadow: 0 0 0.125rem $header_branding_shadow;
   }
 }
 
@@ -320,7 +320,7 @@
 
   &::before {
     content: '';
-    background: rgba(133, 133, 133, 0.27);
+    background: $header_mobile_menu_overlay;
     position: absolute;
     left: 0;
     right: 0;
@@ -336,29 +336,29 @@
   }
 
   .branding__menu {
-    box-shadow: 0 0 0.125rem $greyish;
+    box-shadow: 0 0 0.125rem $header_branding_shadow;
   }
 }
 
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 6.875rem;
+    margin-top: 3.8125rem;
 
     html[lang=ar] & {
-      margin-top: 6.9375rem;
+      margin-top: 4.0625rem;
     }
 
     &.logged-in.toolbar-vertical {
-      margin-top: 10.125rem;
+      margin-top: 6.25rem;
       padding-top: 0 !important;
 
-      html[lang=ar] {
-        margin-top: 9.375rem;
+      html[lang=ar] & {
+        margin-top: 6.5rem;
       }
     }
 
     &.logged-in.toolbar-vertical .branding__menu {
-      top: 3.8125rem;
+      top: 2.4375rem;
     }
   }
 

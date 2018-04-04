@@ -1,0 +1,9 @@
+name: 'Alshaya Potterybarn (Transac)'
+type: module
+description: 'The dedicated module for transac Potterybarn brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_pb:alshaya_pb
+themes:
+  - alshaya_pottery_barn

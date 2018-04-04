@@ -33,7 +33,7 @@
 
 .captcha {
   font-size: 12px;
-  color: $greyish;
+  color: $user_captcha;
   margin-top: 1.5rem;
 
   + .captcha-inline-error {
@@ -43,7 +43,7 @@
 
 .messages--error {
   font-size: 13px;
-  color: $red-error;
+  color: $primary_input_inline_error;
 
   em {
     font-style: normal;
@@ -51,7 +51,7 @@
 }
 
 .user-page {
-  border-top: 1px solid $white;
+  border-top: 1px solid $primary_border;
   margin: 4.5em auto 1em;
   padding: 1em 0;
   position: relative;
@@ -75,9 +75,10 @@
     position: relative;
   }
 
-  .c-sidebar-second {
+  .c-sidebar-second,
+  #block-youllbeableto {
     h3 {
-      color: $marine-blue;
+      color: $title;
       font-size: 14px;
       font-family: $alshaya-bold;
       text-transform: lowercase;
@@ -85,7 +86,7 @@
     }
 
     p {
-      color: $brownish-grey;
+      color: $primary_text;
       margin: 10px 0;
     }
 
@@ -126,7 +127,7 @@
   }
 
   #block-jointheclub {
-    border-top: 1px solid $white;
+    border-top: 1px solid $primary_border;
     margin-top: 1.5rem;
     padding-top: 0.5rem;
 
@@ -141,7 +142,7 @@
     }
 
     @include breakpoint($desktop) {
-      border-top: 1px solid $white;
+      border-top: 1px solid $primary_border;
       margin-#{$left}: -5.5em;
       padding-#{$left}: 5.5em;
       width: 30.25rem;
@@ -155,7 +156,7 @@
     }
 
     h3 {
-      color: $dark-sand;
+      color: $privilege_card_title;
       margin-bottom: 0.1rem;
     }
 
@@ -288,7 +289,7 @@
     }
 
     input {
-      color: $black-two;
+      color: $privilege_card_form_input;
     }
   }
 
@@ -325,7 +326,7 @@
   .user-pass,
   .multistep-checkout {
     font-size: 12px;
-    color: $brownish-grey;
+    color: $primary_text;
     line-height: 1.43;
     max-width: 100%;
 
@@ -341,7 +342,7 @@
     .form-submit {
       @extend %btn;
 
-      background: $pumpkin-orange;
+      background: $primary_btn_bg;
       margin-top: 1em;
       width: 100%;
       text-transform: lowercase;
@@ -369,7 +370,7 @@
     .form-item-privilege-card-number label:not(.error),
     .form-item-privilege-card-number2 label:not(.error) {
       font-size: 1rem;
-      color: $greyish;
+      color: $primary_input_label;
       position: absolute;
       #{$left}: 0;
       top: -0.125rem;
@@ -398,7 +399,7 @@
     .form-email,
     .form-text,
     .form-tel {
-      border: 1px solid $brownish-grey;
+      border: 1px solid $primary_input_border;
       border-width: 0 0 1px;
       width: 100%;
       height: 1.563rem;
@@ -413,12 +414,12 @@
     }
 
     input.error {
-      border-color: $red-error;
+      border-color: $primary_input_inline_error;
       border-width: 0 0 2px;
 
       &:focus,
       &.active {
-        border-color: $red-error;
+        border-color: $primary_input_inline_error;
       }
     }
   }
@@ -488,7 +489,7 @@
     z-index: 2;
     width: 100%;
     text-align: center;
-    color: $windows-blue;
+    color: $primary_form_link;
   }
 
   label.error {
@@ -503,7 +504,7 @@
   text-transform: lowercase;
 
   a {
-    color: $cerulean-two;
+    color: $user_block_link !important;
   }
 
   span {
@@ -515,7 +516,7 @@
     background-size: 18px;
     position: relative;
     top: 0;
-    color: $cerulean-two;
+    color: $user_block_link;
 
     @include breakpoint($upto-desktop) {
       vertical-align: bottom;
@@ -586,7 +587,7 @@
       }
 
       input[type=email] {
-        color: $grey-ash;
+        color: $user_pwd_input;
       }
     }
   }
@@ -611,16 +612,16 @@
         height: 143px;
       }
 
-      background-color: $white-five;
+      background-color: $user_order_list_bg;
       display: table-row;
 
       &:hover {
-        background-color: $white-four;
+        background-color: $user_order_list_hover_bg;
       }
 
       &:hover li a .second-third .second .dark::after {
         html[lang=ar] & {
-          background-color: $white-four;
+          background-color: $user_order_list_hover_bg;
         }
       }
 
@@ -630,7 +631,7 @@
           position: absolute;
           #{$right}: 1rem;
           border-radius: 100%;
-          color: $black;
+          color: $user_order_list_text;
           padding: 2px;
           padding-#{$left}: 4px;
           top: 2rem;
@@ -638,14 +639,14 @@
           width: 35px;
 
           @include breakpoint($only-mobile) {
-            background-color: $white-smoke;
+            background-color: $user_order_list_hover_link_bg;
             #{$right}: 3rem;
             top: 62%;
           }
         }
 
         display: block;
-        border-bottom: 1px solid $whisper-dark;
+        border-bottom: 1px solid $user_order_list_border;
         position: relative;
 
         @include breakpoint($only-tablet) {
@@ -811,7 +812,7 @@
         }
 
         .light {
-          color: $greyish;
+          color: $user_order_list_light;
           height: 14px;
           font-family: $arial;
           font-size: 12px;
@@ -823,7 +824,7 @@
         }
 
         .dark {
-          color: $black-two;
+          color: $user_order_list_dark;
           height: 16px;
           font-family: $arial;
           font-size: 14px;
@@ -848,7 +849,7 @@
   top: 0;
   #{$right}: 0;
   font-size: 12px;
-  color: $greyish;
+  color: $user_pwd_unmask;
   z-index: 3;
 }
 
@@ -865,7 +866,7 @@
   .c-page-title {
     font-family: $alshaya-bold;
     font-weight: normal;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $primary_border;
     padding-bottom: 1rem;
 
     @include breakpoint($only-tablet) {
@@ -893,7 +894,7 @@
       margin-bottom: 1.5rem;
 
       a {
-        color: $windows-blue;
+        color: $myaccountneedhelp_text;
       }
     }
   }
@@ -912,7 +913,7 @@
     padding-top: 1px;
 
     .form-text {
-      color: $black;
+      color: $user_form_text;
       margin-top: 0.56rem;
       padding-bottom: 0.5rem;
       font-size: 1.25rem;
@@ -924,7 +925,7 @@
       }
 
       &.error {
-        border-color: $red-error !important;
+        border-color: $primary_input_inline_error !important;
       }
     }
 
@@ -1033,7 +1034,7 @@
     list-style: none;
     padding-#{$left}: 0;
     margin: 0;
-    color: $matterhorn;
+    color: $user_account_nav;
     font-size: 0.875rem;
 
     @include breakpoint($desktop) {
@@ -1052,7 +1053,7 @@
   }
 
   .c-order-help .field--name-body {
-    color: $windows-blue;
+    color: $user_order_help_text;
     overflow: hidden;
     font-size: 0;
 
@@ -1104,7 +1105,7 @@
     }
 
     a {
-      color: $windows-blue;
+      color: $user_order_help_text;
 
       &:hover {
         text-decoration: underline;
@@ -1182,7 +1183,7 @@
   }
 
   .c-order-help .field--name-body {
-    background: $pale-grey;
+    background: $user_order_help_bg;
     margin-top: 1.5rem;
     margin-bottom: 2rem;
     padding: 1.25rem 1rem;
@@ -1201,7 +1202,7 @@
   margin-top: 2rem;
 
   .privilege-card-wrapper-title {
-    color: $dark-sand;
+    color: $privilege_card_title;
     font-family: $alshaya-bold;
   }
 
@@ -1211,7 +1212,7 @@
 
   summary {
     outline: transparent;
-    color: $brownish-grey;
+    color: $privilege_card_summary;
     position: relative;
 
     @include icon(chevrondown, after) {
@@ -1231,7 +1232,7 @@
       #{$right}: 0.3125rem;
       #{$left}: auto;
       font-size: 1.875rem;
-      color: $black;
+      color: $privilege_card_summary_after;
     }
   }
 

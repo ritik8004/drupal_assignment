@@ -12,6 +12,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Url;
 
 /**
@@ -67,9 +68,16 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $pluginManager;
 
   /**
+   * Request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * Store Finder Utility service object.
    *
-   * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
+   * @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility
    */
   protected $storesFinderUtility;
 
@@ -103,6 +111,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   ACQ Checkout Flow plugin manager object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    * @param mixed $store_finder_utility
    *   Store Finder Utility service object.
    */
@@ -116,6 +126,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
                               CountryRepository $address_country_repository,
                               PluginManagerInterface $plugin_manager,
                               ModuleHandlerInterface $module_handler,
+                              RequestStack $request_stack,
                               $store_finder_utility) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
@@ -125,6 +136,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->addressCountryRepository = $address_country_repository;
     $this->pluginManager = $plugin_manager;
     $this->moduleHandler = $module_handler;
+    $this->requestStack = $request_stack;
     $this->storesFinderUtility = $store_finder_utility;
   }
 
@@ -137,7 +149,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     /** @var \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler */
     $moduleHandler = $container->get('module_handler');
     if ($moduleHandler->moduleExists('alshaya_stores_finder')) {
-      $store_finder_utility = $container->get('alshaya_stores_finder.utility');
+      $store_finder_utility = $container->get('alshaya_stores_finder_transac.utility');
     }
 
     return new static(
@@ -151,6 +163,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $container->get('address.country_repository'),
       $container->get('plugin.manager.acq_checkout_flow'),
       $moduleHandler,
+      $container->get('request_stack'),
       $store_finder_utility
     );
   }
@@ -217,14 +230,21 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     if ($method = $cart->getShippingMethodAsString()) {
       $method = $this->checkoutOptionsManager->getCleanShippingMethodCode($method);
-      $method_query_code = 'hd';
 
       $term = $this->checkoutOptionsManager->loadShippingMethod($method);
 
       $method_code = $term->get('field_shipping_code')->getString();
 
-      if ($this->storesFinderUtility && $method_code == $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
-        $method_query_code = 'cc';
+      $method_query_code = ($this->storesFinderUtility && $method_code == $this->checkoutOptionsManager->getClickandColectShippingMethod()) ? 'cc' : 'hd';
+
+      // If we have shipping method in cart different than what currently we
+      // have selected from checkout page, then remove the delivery info from
+      // the display/block as causing confusion for the user.
+      $shipping_method_from_url = $this->requestStack->getCurrentRequest()->get('method');
+      if ($shipping_method_from_url && ($shipping_method_from_url !== $method_query_code)) {
+        $delivery = [];
+      }
+      elseif ($method_query_code == 'cc') {
         if ($store_code = $cart->getExtension('store_code')) {
           // Not injected here to avoid module dependency.
           $store = $this->storesFinderUtility->getTranslatedStoreFromCode($store_code);
@@ -243,9 +263,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           $delivery['method_description'] = $this->t('Your order will be available in @duration', ['@duration' => $duration]);
           $delivery['address_label'] = $this->t('Collection Store');
 
-          $delivery['address'] = [
-            '#markup' => $store->get('field_store_address')->getString(),
-          ];
+          $delivery['address'] = $this->storesFinderUtility->getStoreAddress($store);
         }
         else {
           $delivery = [];
@@ -307,12 +325,14 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
         }
       }
 
-      // URL to change delivery address or shipping method.
-      $options = ['absolute' => TRUE];
-      $delivery['change_url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
-      $edit_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options);
-      $edit_url->setRouteParameter('method', $method_query_code);
-      $delivery['edit_url'] = $edit_url->toString();
+      if (!empty($delivery)) {
+        // URL to change delivery address or shipping method.
+        $options = ['absolute' => TRUE];
+        $delivery['change_url'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options)->toString();
+        $edit_url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], $options);
+        $edit_url->setRouteParameter('method', $method_query_code);
+        $delivery['edit_url'] = $edit_url->toString();
+      }
     }
 
     // Totals.

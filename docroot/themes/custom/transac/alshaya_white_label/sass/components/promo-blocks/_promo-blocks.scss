@@ -47,7 +47,7 @@
   }
 
   .field--name-field-link {
-    color: $peacock-blue;
+    color: $promo_link;
     font-size: 0.75rem;
     font-weight: bold;
 
@@ -63,7 +63,7 @@
 
   .field--name-field-title {
     font-size: 0.5625rem;
-    color: $brownish-grey;
+    color: $promo_text;
     text-transform: lowercase;
     margin-top: 0.5rem;
 
@@ -200,7 +200,6 @@
 
 .promo-block__position {
   position: absolute !important;
-  text-transform: uppercase;
   text-align: center;
   max-width: 19.375rem;
   width: 100%;
@@ -215,26 +214,26 @@
 
   &.theme-black-amperserif,
   &.theme-black-ampersand-bold {
-    color: $mothercare-black;
+    color: $promo_black_amperserif;
 
     .field--name-field-button-link {
       a,
       span {
-        color: $white-five;
-        background-color: $mothercare-black;
+        color: $promo_black_btn_text;
+        background-color: $promo_black_btn;
       }
     }
   }
 
   &.theme-white-amperserif,
   &.theme-white-ampersand-bold {
-    color: $white-five;
+    color: $promo_white_amperserif;
 
     .field--name-field-button-link {
       a,
       span {
-        color: $mothercare-black;
-        background-color: $white-five;
+        color: $promo_white_btn_text;
+        background-color: $promo_white_btn;
       }
     }
   }
@@ -427,6 +426,14 @@
       @include breakpoint($only-mobile) {
         max-width: 12.9375rem;
       }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .promo-banner {
+    .hide-on-mobile {
+      display: none;
     }
   }
 }

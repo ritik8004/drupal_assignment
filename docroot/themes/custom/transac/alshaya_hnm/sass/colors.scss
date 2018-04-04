@@ -3,22 +3,22 @@
 /* ---------- Color Module Styles ----------- */
 
 body {
-  color: $brownish-grey;
+  color: $primary_text;
 }
 
 a,
 .link {
-  color: $black;
+  color: $primary_link;
 }
 
 a:hover,
 a:focus,
 .link:hover,
 .link:focus {
-  color: $grey7;
+  color: $primary_link-hover;
 }
 
 a:active,
 .link:active {
-  color: $grey7;
+  color: $primary_link-hover;
 }

@@ -624,7 +624,14 @@
 }
 
 .cnc-collect-from {
-  color: $black;
+  color: $hnm-black-two;
   text-transform: uppercase;
-  border-bottom: 1px solid $black;
+  border-bottom: 1px solid $hnm-black-two;
+  font-family: $hnm-demibold;
+  letter-spacing: normal;
+  font-size: 0.875rem;
+
+  @include breakpoint($desktop) {
+    font-size: 1rem;
+  }
 }

@@ -1,6 +1,6 @@
 .region__footer-secondary {
   padding: 2.5rem 0.5rem 2.625rem;
-  background-color: $hnm-black;
+  background-color: $copyright_footer_bg;
 
   @include breakpoint($tablet) {
     padding: 2.0625rem 0 2.625rem;
@@ -29,7 +29,7 @@
       font-size: 0.5625rem;
       line-height: 1.44;
       text-align: center;
-      color: $grey5;
+      color: $copyright_footer_text;
       margin: 0;
     }
   }
@@ -37,7 +37,7 @@
 
 .c-footer__logos {
   float: none;
-  background-color: $hnm-black;
+  background-color: $copyright_footer_bg;
   line-height: 1;
 
   .menu {

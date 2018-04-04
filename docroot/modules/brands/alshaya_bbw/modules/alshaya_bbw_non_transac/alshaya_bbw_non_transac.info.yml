@@ -1,0 +1,9 @@
+name: 'Alshaya Bath and Body Works (Non Transac)'
+type: module
+description: 'The dedicated module for non transac Bath and Body Works brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_bbw:alshaya_bbw
+themes:
+  - bath_body_works

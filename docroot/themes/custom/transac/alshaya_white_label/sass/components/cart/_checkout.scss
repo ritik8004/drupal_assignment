@@ -32,10 +32,11 @@
     }
   }
 
+  // @todo This looks like a redundant code, the markup is no longer available.
   .multistep-default {
     & > a {
       position: absolute;
-      color: $windows-blue;
+      color: $checkout_out_sec_text;
       bottom: 1.375rem;
       #{$left}: 1.563rem;
       text-decoration: none;
@@ -51,9 +52,9 @@
 
   .multistep-default {
     font-size: 12px;
-    color: $brownish-grey;
+    color: $primary_text;
     line-height: 1.43;
-    border: 1px solid $greyish;
+    border: 1px solid $checkout_section_border;
     position: relative;
 
     #address_wrapper {
@@ -67,7 +68,7 @@
     .form-submit {
       @extend %btn;
 
-      background: $pumpkin-orange;
+      background: $primary_btn_bg;
       margin-top: 1em;
       width: 100%;
 
@@ -79,7 +80,7 @@
     .js-form-type-textfield {
       label {
         font-size: 1rem;
-        color: $greyish;
+        color: $primary_text;
         position: absolute;
         pointer-events: none;
         left: 0;
@@ -99,12 +100,12 @@
     .error {
       position: relative !important;
       font-size: 12px !important;
-      color: $red-error !important;
+      color: $formitem_error_label !important;
     }
 
     #edit-billing-information {
       input {
-        border: 1px solid $brownish-grey;
+        border: 1px solid $primary_input_border;
         border-width: 0 0 1px;
         padding: 0.35rem 0 0.4rem;
         width: 100%;
@@ -115,25 +116,18 @@
         &::placeholder {
           opacity: 0;
           visibility: hidden;
-          color: $white-five;
+          color: $tertiary_btn_text;
         }
-      }
-
-      &:focus,
-      &:active,
-      &.valid {
-        border-color: $windows-blue;
-        background: transparent;
       }
     }
 
     input.error {
-      border-color: $red-error;
+      border-color: $formitem_error_label;
       border-width: 0 0 2px;
 
       &:focus,
       &.active {
-        border-color: $red-error;
+        border-color: $formitem_error_label;
       }
     }
   }
@@ -153,8 +147,8 @@
 
     .ui-accordion-header {
       font-size: 12px;
-      color: $brownish-grey;
-      background: $white-four;
+      color: $accordion_title;
+      background: $checkout_out_acc_header;
       border-radius: 0;
       border: 0;
       padding: 1.563rem 1.25rem;
@@ -169,7 +163,7 @@
       width: 100%;
       list-style: none;
       display: inline-block;
-      border-top: 1px solid $white;
+      border-top: 1px solid $primary_border;
       padding: 1.563rem;
     }
 
@@ -197,7 +191,7 @@
       }
 
       .product-qty {
-        color: $greyish;
+        color: $formitem_label;
         margin-bottom: 3px;
       }
     }
@@ -220,9 +214,9 @@
 
   .fieldset-legend {
     font-size: 1rem;
-    color: $peacock-blue;
+    color: $checkout_out_fieldset_legend;
     padding-bottom: 8px;
-    border-bottom: 1px solid $greyish;
+    border-bottom: 1px solid $checkout_out_fieldset_legend_bottom_border;
   }
 
   .fieldset-legend,
@@ -257,10 +251,10 @@
       width: 100%;
       height: 1.563rem;
       font-size: 16px;
-      color: $greyish;
+      color: $primary_dropdown_text;
       border: none;
       background: transparent;
-      border-bottom: 1px solid $brownish-grey;
+      border-bottom: 1px solid $primary_dropdown_border;
       -webkit-appearance: none;
       -moz-appearance: none;
       -ms-progress-appearance: none;
@@ -270,7 +264,7 @@
 
   .multistep-default #edit-actions {
     text-align: $right;
-    background: $white-four;
+    background: $checkout_out_btn;
     margin-top: 1rem;
     padding: 0.9375rem 1.563rem;
 
@@ -283,7 +277,7 @@
 .acq-cart-summary {
   .caption {
     font-size: 0.875rem;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $primary_border;
     padding: 1rem 1.5rem;
 
     @include breakpoint($upto-desktop) {
@@ -291,7 +285,7 @@
     }
 
     .title {
-      color: $black-two;
+      color: $order_summary_title;
       font-weight: bold;
     }
 
@@ -300,7 +294,7 @@
       float: $right;
       font-weight: bold;
       font-size: 0.75rem;
-      color: $cerulean-two;
+      color: $content_link_color;
     }
   }
 
@@ -320,7 +314,7 @@
       #{$right}: 1rem;
       font-size: 1.875rem;
       top: 50%;
-      color: $black;
+      color: $order_summary_dropdown_icon;
       transform: translateY(-50%);
     }
   }
@@ -358,7 +352,7 @@
     width: 100%;
     list-style: none;
     display: inline-block;
-    border-top: 1px solid $white;
+    border-top: 1px solid $order_summary_section_border;
     padding: 1.5rem;
   }
 
@@ -377,12 +371,12 @@
 
     .dark {
       a {
-        color: $black;
+        color: $order_summary_product_title;
       }
     }
 
     span.price-wrapper {
-      color: $black;
+      color: $order_summary_product_price;
       font-weight: bold;
     }
 
@@ -414,7 +408,7 @@
     }
 
     .product-qty {
-      color: $greyish;
+      color: $order_summary_sec_text;
       margin-bottom: 3px;
 
       html[lang=ar] & {
@@ -423,7 +417,7 @@
     }
 
     .sku-attributes {
-      color: $greyish;
+      color: $order_summary_sec_text;
       font-weight: normal;
       margin-top: 0.3125rem;
     }
@@ -431,7 +425,7 @@
 
   .totals {
     background: none;
-    border-top: 1px solid $white;
+    border-top: 1px solid $order_summary_section_border;
 
     html[lang=ar] & {
       line-height: 1.5;
@@ -457,7 +451,7 @@
 
 .totals {
   font-size: 0.875rem;
-  background: $white-three;
+  background: $total_bg;
   padding: 1.563rem 1.5rem;
 
   @include breakpoint($upto-desktop) {
@@ -515,7 +509,7 @@
 
   .order-total {
     font-weight: bold;
-    color: $black-two;
+    color: $total_order_total_txt;
     margin-top: 10px;
   }
 
@@ -581,8 +575,8 @@ body.alias--cart {
   h1 {
     font-size: 1.125rem;
     font-weight: normal;
-    color: $marine-blue-two;
-    border-bottom: 1px solid $white;
+    color: $basket_page_title;
+    border-bottom: 1px solid $primary_border;
     margin-bottom: 0.75rem;
     padding-bottom: 0.625rem;
 
@@ -617,7 +611,7 @@ body.alias--cart {
     }
 
     thead {
-      background: $white-three;
+      background: $primary_th_bg;
 
       th {
         font-family: $arial;
@@ -628,25 +622,25 @@ body.alias--cart {
     tbody tr {
       &:hover {
         @include breakpoint($tablet) {
-          background: rgba(247, 247, 247, 0.72);
+          background: $primary_tr_hover;
         }
 
         .name .items a {
-          color: $cerulean-two;
+          color: $content_link_color;
           text-decoration: underline;
         }
       }
     }
 
     tr {
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $primary_border;
 
       td {
         &:first-child {
           a {
             font-size: 14px;
             font-weight: normal;
-            color: $black-two;
+            color: $basket_td_pri_txt;
           }
         }
       }
@@ -754,11 +748,11 @@ body.alias--cart {
       }
 
       td.blend {
-        background: $white-four;
+        background: $primary_td_highlight3;
         width: 8rem;
 
         @include breakpoint($tablet) {
-          background: $white-smoke-light;
+          background: $primary_td_bg_highlight;
           min-width: 7.688rem;
         }
 
@@ -832,7 +826,7 @@ body.alias--cart {
 
       th {
         &:nth-child(4) {
-          background: $white-two;
+          background: $basket_th_4th_child;
         }
       }
     }
@@ -860,7 +854,7 @@ body.alias--cart {
         width: 100%;
         font-size: 12px;
         font-weight: bold;
-        color: $cerulean-two;
+        color: $content_link_color;
       }
 
       select {
@@ -933,10 +927,10 @@ body.alias--cart {
       }
 
       td {
-        color: $scarlet;
+        color: $total_discount_total;
 
         &:nth-child(2) {
-          background: $white-five;
+          background: $total_discount_total_td_2nd_child_bg;
           padding-top: 0.5em !important;
 
           @include breakpoint($only-mobile) {
@@ -1022,7 +1016,7 @@ body.alias--cart {
             top: 0.5em;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
-            border-#{$right}: 8px solid $cerulean-two;
+            border-#{$right}: 8px solid $tooltip_border;
           }
         }
 
@@ -1032,7 +1026,7 @@ body.alias--cart {
             top: 0.5em;
             border-top: 8px solid transparent;
             border-bottom: 8px solid transparent;
-            border-#{$right}: 8px solid $alice-blue;
+            border-#{$right}: 8px solid $tooltip_border_2;
           }
         }
       }
@@ -1045,7 +1039,7 @@ body.alias--cart {
         font-weight: normal;
         border: 0;
         padding: 0;
-        color: $cerulean-two;
+        color: $content_link_color;
       }
 
       @include breakpoint($only-mobile) {
@@ -1064,8 +1058,8 @@ body.alias--cart {
     }
 
     td:last-child {
-      background: $white-four;
-      color: $black;
+      background: $total_td_2nd_child_bg;
+      color: $total_order_total_txt;
       margin-#{$left}: 1rem;
       padding: 1rem;
       text-align: $left;
@@ -1091,7 +1085,7 @@ body.alias--cart {
       }
 
       td:nth-child(2) {
-        background-color: $whisper-light;
+        background-color: $total_order_total_row_td_2nd_child;
         font-weight: bold;
       }
     }
@@ -1125,7 +1119,7 @@ body.alias--cart {
   .edit-checkout {
     @extend %btn;
 
-    background: $pumpkin-orange;
+    background: $primary_btn_bg;
     margin-top: 1em;
     margin-bottom: 0.75rem;
     min-width: 10.8125rem;
@@ -1136,6 +1130,7 @@ body.alias--cart {
     @include breakpoint($upto-tablet) {
       display: block;
       width: 100%;
+      font-size: 0.875rem;
     }
 
     @include breakpoint($tablet) {
@@ -1155,7 +1150,7 @@ body.alias--cart {
   .edit-continue-shopping-mobile {
     font-size: 12px;
     font-weight: bold;
-    border: 1px solid $marine-blue-two;
+    border: 1px solid $basket_continue_shopping_btn_border;
     display: block;
     padding: 0.625rem 1.6rem;
     text-align: center;
@@ -1204,8 +1199,8 @@ body.alias--cart {
 
     .checkout-top-button {
       cursor: pointer;
-      background: $pumpkin-orange;
-      color: $white-five;
+      background: $primary_btn_bg;
+      color: $primary_btn_text;
       font-size: 0.75rem;
       font-family: $alshaya-bold;
       width: 10.81rem;
@@ -1216,10 +1211,16 @@ body.alias--cart {
       max-height: 2.188rem;
       line-height: 2.7;
 
+      @include breakpoint($desktop) {
+        &:hover {
+          opacity: 0.75;
+        }
+      }
+
       &.disabled {
         &:hover {
           cursor: default;
-          background-color: $ladda-disabled;
+          background-color: $primary_button_disabled;
         }
       }
     }
@@ -1256,9 +1257,9 @@ body.alias--cart {
 
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    color: $white-five;
-    background: $pumpkin-orange;
-    border: 1px solid $pumpkin-orange;
+    color: $primary_brand_button_text;
+    background: $primary_brand_button;
+    border: 1px solid $primary_brand_button;
     font-weight: normal;
   }
 }
@@ -1390,11 +1391,9 @@ html[lang=ar] {
   &.alias--cart-checkout-delivery main form .form-actions .form-submit,
   &.alias--cart-checkout-payment main form .form-actions .form-submit {
     @include breakpoint($only-mobile) {
-      position: fixed;
-      bottom: 0;
-      #{$left}: 0;
-      z-index: 5;
-      margin-bottom: 0;
+      @include stickyButton();
+
+      height: 3.5rem;
     }
   }
 }

@@ -9,13 +9,13 @@
 
   [class^="c-social-links--"] {
     &::before {
-      color: $white-five;
+      color: $social_links;
       font-size: 1.75rem;
     }
 
     &:hover {
       &::before {
-        color: $grey5;
+        color: $social_links_hover;
         background: none;
       }
     }

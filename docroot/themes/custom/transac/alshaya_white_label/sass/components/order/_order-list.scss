@@ -1,6 +1,6 @@
 .c-order-list {
   .subtitle {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $primary_border;
     margin-top: 1.25rem;
     font-size: 0.875rem;
     font-weight: normal;
@@ -24,7 +24,7 @@
   }
 
   .order-search-form {
-    border-bottom: 1px solid $whisper-dark;
+    border-bottom: 1px solid $order_search_form_border;
     margin-top: 12px;
     padding-bottom: 12px;
 
@@ -73,7 +73,7 @@
     }
 
     label {
-      color: $black-two;
+      color: $order_search_form_label;
       display: none;
       float: $left;
       line-height: 35px;
@@ -117,7 +117,7 @@
   }
 
   .form-text {
-    border: 1px solid $whisper-dark;
+    border: 1px solid $order_search_form_border;
     padding-top: 0.3125rem;
     padding-bottom: 0.25rem;
     padding-#{$left}: 1rem;
@@ -144,9 +144,9 @@
     }
 
     @include icon(search, after) {
-      background-color: $whisper-dark;
-      border: 1px solid $whisper-dark;
-      color: $black;
+      background-color: $order_search_form_icon;
+      border: 1px solid $order_search_form_border;
+      color: $order_search_form_label;
       line-height: 19px;
       font-size: 1.625rem;
       pointer-events: none;
@@ -198,7 +198,7 @@
 
 .block-alshaya-user-recent-orders + .c-order-help {
   @include breakpoint($tablet) {
-    border-top: 1px solid $white;
+    border-top: 1px solid $primary_border;
   }
 }
 
@@ -209,7 +209,7 @@
   border-spacing: 0;
 
   .order-summary-row:hover td {
-    background: $white-four;
+    background: $order_recent_orders_row_hover;
   }
 
   @include breakpoint($desktop) {
@@ -218,7 +218,7 @@
   }
 
   .recent__orders--body td {
-    border-top: 1px solid $white;
+    border-top: 1px solid $primary_border;
   }
 
   &:nth-of-type(1) {
@@ -350,12 +350,12 @@
     font-size: 12px;
 
     td {
-      background-color: $whisper-light;
+      background-color: $order_recent_order_order_detail_link_bg;
       padding: 16px 24px;
     }
 
     a {
-      color: $windows-blue;
+      color: $order_recent_order_order_detail_link;
     }
   }
 
@@ -373,7 +373,7 @@
 
         &::after {
           content: "...";
-          background: $white-five;
+          background: $order_recent_orders_product_title_elipsis_bg;
           position: absolute;
           left: 0;
           padding-right: 1px;
@@ -388,7 +388,7 @@
   }
 
   .order-summary-row td {
-    background-color: $white-five;
+    background-color: $order_recent_order_order_summary_bg;
     line-height: 1.2;
   }
 
@@ -429,7 +429,7 @@
 .block-alshaya-acm-customer > a {
   font-family: $arial;
   font-size: 0.875rem;
-  color: $windows-blue;
+  color: $block_acm_customer_txt;
   position: absolute;
   #{$right}: 0;
   top: 0;
@@ -444,7 +444,7 @@
 }
 
 .no--orders {
-  color: $black;
+  color: $order_no_orders_txt_mobile;
   padding-top: 1rem;
   font-size: 14px;
   font-weight: bold;
@@ -470,7 +470,7 @@
     @include breakpoint($tablet) {
       text-align: $left;
       font-weight: normal;
-      color: $brownish-grey;
+      color: $order_no_orders_txt;
       padding-top: 1.7rem;
 
       & + a {
@@ -493,14 +493,14 @@
 
 .open--accordion {
   .order-summary-row td {
-    background-color: $whisper-light;
+    background-color: $order_accordion_open_bg;
   }
 
   .order--items {
     html[lang=ar] & {
       @include breakpoint($tablet) {
         &::after {
-          background-color: $whisper-light;
+          background-color: $order_accordion_open_bg;
         }
       }
     }
@@ -516,7 +516,7 @@
 .block-alshaya-acm-customer > .edit-account {
   font-family: $arial;
   line-height: 1;
-  color: $white-five;
+  color: $order_edit_account_link;
   top: -5.3rem;
   font-size: 0.75rem;
   text-transform: lowercase;
@@ -552,20 +552,20 @@
         #{$left}: 0;
         margin-#{$left}: -2.5%;
         #{$right}: -2.5%;
-        border: 0.5625rem solid $white;
+        border: 0.5625rem solid $primary_border;
         padding: 1rem 0.5rem 0.9375rem 1rem;
-        background: $white-five;
+        background: $primary_bg;
       }
 
       label {
         display: block;
-        background-color: $white-five;
-        border: 1px solid $whisper-dark;
+        background-color: $primary_bg;
+        border: 1px solid $order_search_form_border;
         padding-#{$left}: 0.625rem;
         width: 100%;
         position: relative;
         line-height: 2.0625rem;
-        color: $grey-ash;
+        color: $order_search_form_label_mobile;
         height: 2.1875rem;
 
         @include icon(search, before) {

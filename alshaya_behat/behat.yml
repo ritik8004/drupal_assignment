@@ -15,8 +15,13 @@ default:
       javascript_session: selenium2
       selenium2:
         wd_host: http://127.0.0.1:4444/wd/hub
-        browser: chrome
-        capabilities: { "browserName": "chrome", "browser": "chrome", "version":  "62", 'chrome': {'switches':['--start-maximized']}}
+        capabilities:
+          chrome:
+            switches:
+               - "--headless"
+               - "--disable-gpu"
+               - "--window-size=1920,1080"
+               - "--no-sandbox"
     Drupal\DrupalExtension:
       blackbox: ~
     emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
@@ -106,6 +111,62 @@ mckwprod:
   extensions:
     Behat\MinkExtension:
       base_url: 'https://www.mothercare.com.kw/en'
+      files_path: "%paths.base%/media"
+
+mcae:
+  autoload:
+    '': %paths.base%/features/mckw/bootstrap
+  suites:
+    default:
+      paths: [ %paths.base%/features/mckw/manual ]
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/vk-test-checkout-002'
+              simpletitle: 'vk test checkout 002'
+              simpletitlear: 'المنتج'
+              configurl: '/paradise-graphic-tee'
+              configtitle: 'Paradise Graphic Tee'
+              configtitlear: 'تي-شيرت برسمة Paradise'
+              configvariant: '6-7 Years'
+              base_url: 'https://mcae.test-alshaya.acsitefactory.com/en'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  formatters:
+      html:
+        output_path: %paths.base%/features/mckw/reports/html/behat
+  extensions:
+    Behat\MinkExtension:
+      base_url: 'https://mcae.test-alshaya.acsitefactory.com/en'
+      files_path: "%paths.base%/features/mckw/media"
+
+hmsa:
+  autoload:
+    '': %paths.base%/features/hmkw/bootstrap
+  suites:
+    default:
+      paths: [ %paths.base%/features/hmkw/manual ]
+      contexts:
+        - FeatureContext:
+            parameters:
+              simpleurl: '/knitted-jumper'
+              simpletitle: 'Knitted jumper'
+              simpletitlear: 'Knitted jumper'
+              configurl: '/bikini-bottoms-0'
+              configtitle: 'Bikini bottoms'
+              configtitlear: 'سروال سباحة'
+              configvariant: '8'
+              base_url: 'https://hmsa.dev3-alshaya.acsitefactory.com/en'
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MessageContext
+  formatters:
+      html:
+        output_path: %paths.base%/features/hmkw/reports/html/behat
+  extensions:
+    Behat\MinkExtension:
+      base_url: 'https://hmsa.dev3-alshaya.acsitefactory.com/en'
       files_path: "%paths.base%/media"
 
 hmuat:

@@ -7,7 +7,10 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\CategoryManagerInterface;
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\alshaya_stores_finder_transac\StoresFinderManager;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -70,6 +73,20 @@ class SyncForm extends FormBase {
   private $languageManager;
 
   /**
+   * Stores Finder Manager service object.
+   *
+   * @var \Drupal\alshaya_stores_finder_transac\StoresFinderManager
+   */
+  private $storesManager;
+
+  /**
+   * Address Book Manager service object.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
+  private $addressBookManager;
+
+  /**
    * ProductSyncForm constructor.
    *
    * @param \Drupal\acq_sku\CategoryManagerInterface $product_categories_manager
@@ -86,6 +103,10 @@ class SyncForm extends FormBase {
    *   I18nHelper object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager service object.
+   * @param \Drupal\alshaya_stores_finder_transac\StoresFinderManager $stores_manager
+   *   Stores Finder Manager service object.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
+   *   AddressBook Manager service object.
    */
   public function __construct(
     CategoryManagerInterface $product_categories_manager,
@@ -94,7 +115,9 @@ class SyncForm extends FormBase {
     IngestAPIWrapper $ingest_api,
     AlshayaApiWrapper $alshaya_api,
     I18nHelper $i18n_helper,
-    LanguageManagerInterface $language_manager) {
+    LanguageManagerInterface $language_manager,
+    StoresFinderManager $stores_manager,
+    AlshayaAddressBookManager $address_book_manager) {
     $this->productCategoriesManager = $product_categories_manager;
     $this->productOptionsManager = $product_options_manager;
     $this->promotionsManager = $promotions_manager;
@@ -102,6 +125,8 @@ class SyncForm extends FormBase {
     $this->alshayaApi = $alshaya_api;
     $this->i18nHelper = $i18n_helper;
     $this->languageManager = $language_manager;
+    $this->storesManager = $stores_manager;
+    $this->addressBookManager = $address_book_manager;
   }
 
   /**
@@ -115,7 +140,9 @@ class SyncForm extends FormBase {
       $container->get('acq_commerce.ingest_api'),
       $container->get('alshaya_api.api'),
       $container->get('acq_commerce.i18n_helper'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('alshaya_stores_finder_transac.manager'),
+      $container->get('alshaya_addressbook.manager')
     );
   }
 
@@ -209,8 +236,13 @@ class SyncForm extends FormBase {
         break;
 
       case $this->t('Synchronize stores'):
-        $this->alshayaApi->syncStores();
+        $this->storesManager->syncStores();
         drupal_set_message($this->t('Stores synchronization complete.'), 'status');
+        break;
+
+      case $this->t('Synchronize areas'):
+        $this->addressBookManager->syncAreas();
+        drupal_set_message($this->t('Areas synchronization complete.'), 'status');
         break;
     }
   }
@@ -337,6 +369,21 @@ class SyncForm extends FormBase {
         ],
       ],
     ];
+
+    if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+      // Areas.
+      $form['areas_fieldset'] = [
+        '#type' => 'fieldset',
+        '#title' => $this->t('Areas'),
+        'areas' => [
+          '#type' => 'actions',
+          'stores_action' => [
+            '#type' => 'submit',
+            '#value' => $this->t('Synchronize areas'),
+          ],
+        ],
+      ];
+    }
 
     $form['#attached']['library'][] = 'alshaya_acm/alshaya_acm.sync_form';
 
