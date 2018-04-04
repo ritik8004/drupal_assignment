@@ -4,15 +4,15 @@
     </defs>
     <g fill="none" fill-rule="evenodd">
         <path d="M0 0h34v34H0z"/>
-        <path fill="#FFF" d="M34 34H0V0h34z"/>
+        <path fill="transparent" d="M34 34H0V0h34z"/>
         <mask id="b" fill="#fff">
             <use xlink:href="#a"/>
         </mask>
         <use fill="#000" fill-rule="nonzero" xlink:href="#a"/>
-        <g fill="#005699" mask="url(#b)">
+        <g fill="#fff" mask="url(#b)">
             <path d="M0 0h34v34H0z"/>
         </g>
-        <g fill="#FFF" fill-opacity=".25" mask="url(#b)">
+        <g fill="#fff" fill-opacity=".25" mask="url(#b)">
             <path d="M0 0h34v34H0z"/>
         </g>
     </g>
