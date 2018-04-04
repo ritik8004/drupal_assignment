@@ -65,10 +65,12 @@ header {
     z-index: 8;
   }
 
+  .logged-in .mobile--close,
   .mobile--close {
     top: 3.7rem;
   }
 
+  .logged-in .toggle--sign,
   .toggle--sign {
     top: 2.8125rem;
   }
@@ -79,7 +81,7 @@ header {
 
   .main--menu ul.menu--one__list,
   .c-menu-secondary {
-    top: 5.75rem;
+    top: 5.7rem;
 
     a {
       text-transform: uppercase;
@@ -167,6 +169,10 @@ header {
     @include breakpoint($upto-desktop) {
       display: none;
     }
+  }
+
+  .c-my-account-nav {
+    top: 2.95rem;
   }
 }
 

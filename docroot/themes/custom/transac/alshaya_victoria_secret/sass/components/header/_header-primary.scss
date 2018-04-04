@@ -239,7 +239,7 @@ header {
   a {
     @include breakpoint($upto-desktop) {
       display: block;
-      padding: 1rem;
+      text-transform: uppercase;
     }
   }
 
@@ -253,6 +253,14 @@ header {
       float: none;
       height: 2.5rem;
     }
+  }
+}
+
+.c-menu-secondary a:hover,
+.c-menu-secondary a.is-active {
+  @include breakpoint($upto-desktop) {
+    color: $header_secondary_menu_mobile_link;
+    background: $header_secondary_menu_link_mobile_hover_bg;
   }
 }
 
