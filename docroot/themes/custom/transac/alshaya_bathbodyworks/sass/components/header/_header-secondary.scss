@@ -12,7 +12,7 @@
   li {
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
-        color: $peacock-blue;
+        color: $header_mobile_menu_arrow;
         margin-top: -2.5rem;
         font-size: 2rem;
       }

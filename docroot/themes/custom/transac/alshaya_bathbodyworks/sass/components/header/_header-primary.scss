@@ -69,7 +69,7 @@ header {
 
         .form--inline {
           border: 0;
-          border-bottom: 1px solid $warm-grey-two;
+          border-bottom: 1px solid $primary_search_border;
         }
       }
 
@@ -91,7 +91,7 @@ header {
     .form--inline {
       width: 12.5em;
       height: 2.5rem;
-      border: 1px solid $warm-grey-two;
+      border: 1px solid $primary_search_border;
       position: relative;
 
       @include breakpoint($only-mobile) {
@@ -102,25 +102,18 @@ header {
     input[type="text"] {
       @include arabic-letter-spacing;
 
-      font-family: $alshaya-thin;
       padding: 0.4375rem;
-      padding-#{$left}: 0;
+      padding-#{$left}: 0.4375rem;
       padding-bottom: 0;
       max-width: 17.5rem;
       border: none;
       background-image: none;
       letter-spacing: 1px;
-      color: $black;
-      padding-#{$left}: 0.4375rem;
+      color: $primary_search_input;
 
       @include breakpoint($only-mobile) {
         padding: 0.6rem;
         vertical-align: bottom;
-        border: none;
-        border: 0;
-        background-image: none;
-        font-family: $alshaya-thin;
-        color: $black;
         font-size: 0.875rem;
         line-height: 1.36;
         letter-spacing: 0.5px;
@@ -128,7 +121,7 @@ header {
       }
 
       &::placeholder {
-        color: $black;
+        color: $primary_search_input_placeholder;
         text-transform: capitalize;
       }
     }
@@ -175,8 +168,6 @@ header {
       display: inline-block;
       width: 2.125rem;
       height: 2.125rem;
-      position: relative;
-      margin-bottom: -2px;
       vertical-align: middle;
 
       @include breakpoint($only-mobile) {
@@ -193,7 +184,6 @@ header {
     .quantity {
       font-size: 0.75rem;
       font-family: $alshaya-thin-nodir;
-      background: $deep-red;
       bottom: -0.625rem;
       line-height: 1.25rem;
     }
@@ -237,8 +227,6 @@ header {
       position: static;
 
       @include breakpoint($only-mobile) {
-        background: none;
-        position: static;
         vertical-align: middle;
       }
     }
@@ -252,7 +240,6 @@ header {
 .block-views-exposed-filter-blocksearch-page {
   form {
     @include breakpoint($only-mobile) {
-      border: 0.5rem solid $peacock-blue;
       box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
     }
   }
@@ -261,7 +248,7 @@ header {
 .c-menu-primary {
   #block-exposedformsearchpage {
     input {
-      color: $greyish;
+      color: $primary_input;
     }
   }
 
@@ -269,14 +256,12 @@ header {
     a {
       @include arabic-letter-spacing;
 
-      color: $black;
+      color: $primary_text;
       letter-spacing: 1px;
       text-transform: capitalize;
     }
 
     .store {
-      float: $right;
-      margin-#{$right}: 1.5625rem;
       position: absolute;
       top: 0.875rem;
       #{$right}: 0.375rem;
@@ -284,13 +269,12 @@ header {
       margin-top: 0;
       padding: 0.3125rem 0.875rem 0.664rem 0.625rem;
 
+      &:hover {
+        background-color: none;
+      }
+
       @include icon(mappin) {
-        color: $peacock-blue;
-        width: 1rem;
-        height: 1.4375rem;
-        font-size: 1.875rem;
-        position: relative;
-        top: -0.3125rem;
+        color: $header_c_menu_icon_color;
         #{$left}: -0.1rem;
       }
 
@@ -360,7 +344,7 @@ header {
     .store {
       &.is-active {
         &::before {
-          color: $deep-red;
+          color: $header_c_menu_icon_text;
         }
       }
 
@@ -385,17 +369,14 @@ header {
     li {
       &.search-active {
         a.mobile--search {
-          background: $peacock-blue;
           width: 100px;
           display: block;
+          color: $white;
 
           &::before {
-            background: url('../imgs/icons/ic-search--hover.svg') 1px -3px no-repeat;
-            width: 30px;
-            height: 30px;
+            color: $white;
 
             html[lang=ar] & {
-              background-position: -3px -3px;
               transform: rotate(90deg);
             }
           }
@@ -404,15 +385,17 @@ header {
 
       .mobile--search {
         display: inline-block;
+        color: $primary_search_input;
 
         &::before {
-          background: url('../imgs/icons/ic-search-store.svg') 1px -3px no-repeat;
+          color: $primary_search_btn_icon;
           width: 30px;
           height: 30px;
           margin-right: 0;
+          left: 0;
+          top: -0.125rem;
 
           html[lang=ar] & {
-            background-position: -3px -3px;
             transform: rotate(90deg);
           }
         }
@@ -434,7 +417,7 @@ header {
       top: 0;
       padding: 0 0.625rem;
       font-size: 0.75rem;
-      color: $black;
+      color: $primary_text;
       margin-top: 0;
 
       &::before {
@@ -474,7 +457,7 @@ header {
           &::after {
             content: '';
             height: 2px;
-            background: $peacock-blue;
+            background: $primary_link-hover;
             display: inherit;
             width: 100%;
             margin-top: 0.425rem;
@@ -484,7 +467,7 @@ header {
 
       &:hover {
         & > ul.menu--two__list {
-          border-bottom: 2px solid $black;
+          border-bottom: 2px solid $mm_l1_border;
           border-top: none;
           transform: none;
 
@@ -492,7 +475,7 @@ header {
             content: '';
             height: 1px;
             width: 100%;
-            background: $black;
+            background: $mm_l1_link_bg;
             position: absolute;
             top: -0.9375rem;
             opacity: 0.24;
@@ -521,7 +504,7 @@ header {
             &::after {
               content: '';
               height: 2px;
-              background: $peacock-blue;
+              background: $mm_l1_link_bg;
               display: inherit;
               width: 100%;
               margin-top: 0.425rem;
@@ -543,7 +526,7 @@ header {
           letter-spacing: 0.5px;
           line-height: 1.69;
           text-transform: uppercase;
-          color: $black !important;
+          color: $mm_l1_link !important;
         }
 
         p {
@@ -567,7 +550,7 @@ header {
         }
 
         a {
-          color: $warm-grey-one !important;
+          color: $mm_l2_link !important;
           font-size: 0.875rem;
         }
       }
@@ -601,22 +584,18 @@ header {
   .main--menu a {
     @include arabic-letter-spacing;
 
-    font-family: $alshaya-thin;
     font-size: 0.875rem;
     letter-spacing: 1px;
-    color: $black;
+    color: $mm_l1_link;
   }
 
   .menu__list-item {
     @include arabic-letter-spacing;
 
-    border-bottom: 1px solid $warm-grey-two;
-    margin-#{$left}: 0.625rem;
-    margin-#{$right}: 0.625rem;
     font-family: $alshaya-thin;
     text-transform: capitalize;
     font-weight: normal;
-    color: $black;
+    color: $mm_l1_link;
     display: block;
     font-size: 0.875rem;
     letter-spacing: 1px;
@@ -643,12 +622,11 @@ header {
   }
 
   .menu__in {
-    float: $right;
     margin-top: -2.5rem;
     margin-#{$right}: 0.51rem;
 
     @include icon(chevron#{$right}, after) {
-      color: $peacock-blue;
+      color: $header_c_menu_icon_color;
       font-size: 2rem;
       display: inline-block;
     }
@@ -658,7 +636,7 @@ header {
     background: transparent;
 
     @include icon(chevron#{$left}, after) {
-      color: $peacock-blue;
+      color: $header_c_menu_icon_color;
       font-size: 2rem;
       display: inline-block;
       cursor: pointer;
@@ -679,7 +657,7 @@ header {
 }
 
 .mobile--close {
-  background: $peacock-blue;
+  background: $header_mobile_menu_close_bg;
 
   span {
     @include icon(close) {
@@ -689,7 +667,7 @@ header {
       position: absolute;
       top: -0.3125rem;
       #{$left}: -2px;
-      color: $white-five;
+      color: $header_mobile_menu_close;
     }
   }
 }
@@ -697,7 +675,7 @@ header {
 .toggle--sign {
   @include arabic-letter-spacing;
 
-  background: $warm-grey-three;
+  background: $header_toggle_sign_default;
   font-size: 0.875rem;
   font-family: $alshaya-thin;
   font-weight: normal;
@@ -714,7 +692,6 @@ header {
     @include arabic-letter-spacing;
 
     flex: 1;
-    font-family: $alshaya-thin;
 
     @include breakpoint($upto-desktop) {
       &.shop {
@@ -734,7 +711,7 @@ header {
     }
 
     @include breakpoint($only-tablet) {
-      color: $black;
+      color: $header_c_menu_icon_text;
     }
 
     @include breakpoint($only-mobile) {
@@ -771,7 +748,7 @@ header {
   }
 
   .active {
-    color: $black;
+    color: $header_c_menu_icon_text;
     font-family: $alshaya-bold;
   }
 }
@@ -779,8 +756,6 @@ header {
 // Tablet Specific menu width
 @include breakpoint($upto-desktop) {
   .menu--active .toggle--sign {
-    #{$left}: 0;
-
     @include breakpoint ($only-tablet) {
       width: 20rem;
     }
@@ -819,8 +794,6 @@ header {
   }
 
   a {
-    display: block;
-    font-size: 2rem;
     max-width: 100%;
 
     @include breakpoint($upto-desktop) {
@@ -865,14 +838,9 @@ html[lang=ar] {
 
 .c-pre-content__region {
   @include breakpoint($desktop) {
-    height: 2.75rem;
     border-top: none;
     border-bottom: none;
   }
-}
-
-.branding__menu {
-  border-bottom: 1px solid $white;
 }
 
 html[lang='ar'] {
@@ -946,7 +914,7 @@ html[lang='ar'] {
           a {
             &.menu--one__link {
               border: none;
-              color: $black;
+              color: $mm_l1_link;
               border-top: 2px solid transparent;
             }
           }
