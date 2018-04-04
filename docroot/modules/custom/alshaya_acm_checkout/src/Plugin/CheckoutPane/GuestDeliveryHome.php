@@ -329,7 +329,11 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $api_wrapper = \Drupal::service('acq_commerce.api');
 
       try {
-        $customer = $api_wrapper->createCustomer($address['firstname'], $address['lastname'], $email);
+        $customer = [];
+        $customer['firstname'] = $address['firstname'];
+        $customer['lastname'] = $address['lastname'];
+        $customer['email'] = $email;
+        $customer = $api_wrapper->createCustomer($customer);
 
         /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
         $cart_storage = \Drupal::service('acq_cart.cart_storage');
