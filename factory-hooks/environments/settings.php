@@ -31,6 +31,7 @@ function alshaya_get_additional_settings($site, $env) {
     ],
     'mcsa' => [
       'default' => [
+        'website_id' => 2,
         'store_id' => [
           'en' => 5,
           'ar' => 4,
@@ -43,6 +44,7 @@ function alshaya_get_additional_settings($site, $env) {
     ],
     'mcae' => [
       'default' => [
+        'website_id' => 3,
         'store_id' => [
           'en' => 7,
           'ar' => 6,
@@ -73,6 +75,7 @@ function alshaya_get_additional_settings($site, $env) {
     ],
     'hmsa' => [
       'default' => [
+        'website_id' => 2,
         'store_id' => [
           'en' => 3,
           'ar' => 4,
@@ -85,6 +88,7 @@ function alshaya_get_additional_settings($site, $env) {
     ],
     'hmae' => [
       'default' => [
+        'website_id' => 3,
         'store_id' => [
           'en' => 6,
           'ar' => 5,
@@ -97,6 +101,7 @@ function alshaya_get_additional_settings($site, $env) {
     ],
     'default' => [
       'default' => [
+        'website_id' => 1,
         'store_id' => [
           'en' => 1,
           'ar' => 2,

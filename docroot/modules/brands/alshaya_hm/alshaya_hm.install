@@ -375,6 +375,11 @@ function alshaya_hm_install() {
   \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
   \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
 
+  // Set website id.
+  \Drupal::configFactory()->getEditable('acq_commerce.store')
+    ->set('website_id', Settings::get('website_id'))
+    ->save();
+
   // Set store id - EN.
   \Drupal::configFactory()->getEditable('acq_commerce.store')
     ->set('store_id', Settings::get('store_id')['en'])

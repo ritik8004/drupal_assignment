@@ -34,6 +34,7 @@ class StoreSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('acq_commerce.store')
       ->set('store_id', $form_state->getValue('store_id'))
+      ->set('website_id', $form_state->getValue('website_id'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -49,6 +50,12 @@ class StoreSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Store id'),
       '#default_value' => $config->get('store_id'),
+    ];
+
+    $form['website_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Website id'),
+      '#default_value' => $config->get('website_id'),
     ];
 
     return parent::buildForm($form, $form_state);
