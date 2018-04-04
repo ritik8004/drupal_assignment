@@ -94,12 +94,12 @@
 
     &.facet-item--collapsed {
       &:hover {
-        @include icon(chevrondown, after) {
-          position: absolute;
-          #{$right}: 0.33rem;
-          font-size: 1.875rem;
-          top: 54%;
-          transform: translateY(-50%);
+        cursor: pointer;
+
+        label {
+          span {
+            cursor: pointer;
+          }
         }
       }
     }
@@ -107,6 +107,10 @@
 }
 
 ul[data-drupal-facet-id=category] {
+  &.js-facets-checkbox-links {
+    display: block;
+  }
+
   .facet-item--collapsed {
     label {
       &::before {
@@ -118,6 +122,34 @@ ul[data-drupal-facet-id=category] {
   .facet-item--expanded {
     margin-#{$left}: 1rem;
 
+    ul {
+      html[lang=ar] & {
+        padding-top: 0;
+      }
+    }
+
+    &.facet-item--active-trail {
+      .facet-item--expanded {
+        > label {
+          &::before {
+            content: unset;
+          }
+
+          span {
+            font-weight: bold;
+          }
+        }
+      }
+
+      > label {
+        span {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+
+  > .facet-item--expanded {
     > label {
       @include icon(chevronleft, before) {
         position: absolute;
@@ -126,11 +158,9 @@ ul[data-drupal-facet-id=category] {
         top: 0.125rem;
         transform: translateY(-50%);
       }
-    }
 
-    ul {
-      html[lang=ar] & {
-        padding-top: 0;
+      span {
+        font-weight: bold;
       }
     }
   }
@@ -147,5 +177,15 @@ ul[data-drupal-facet-id=category] {
         border-bottom: 1px solid $accordion_border;
       }
     }
+  }
+}
+
+.block-facet-blockcategory {
+  .c-accordion__title {
+    border-bottom: 1px solid $accordion_border;
+  }
+
+  .ui-state-active {
+    border-bottom: none;
   }
 }
