@@ -342,14 +342,9 @@ class ProductCategoryTree {
       $term = $this->getCategoryTermFromRoute();
     }
     if ($term instanceof TermInterface && $parents = $this->getCategoryTermParents($term)) {
-      if ($object) {
-        // Get the top level parent id if parent exists.
-        $parent = end($parents);
-      }
-      else {
-        // Get the top level parent id if parent exists.
-        $parent = key(end($parent_keys));
-      }
+      // Get the top level parent id if parent exists.
+      $parent = end($parents);
+      $parent = ($object) ? $parent : key($parent);
     }
     return $parent;
   }
