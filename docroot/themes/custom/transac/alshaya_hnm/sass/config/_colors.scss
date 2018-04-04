@@ -69,6 +69,7 @@ $primary_link: $black;
 $primary_link-hover: $link-hover;
 $primary_link-active: $grey7;
 $content_link_color: $hnm-black-two;
+$primary_border: $white-smoke-border;
 
 // Form elements.
 $primary_input: $hnm-black-two;
@@ -91,9 +92,16 @@ $primary_radiobtn_filled: $hnm-black-two;
 $primary_dropdown_text: $hnm-black-two;
 $primary_dropdown_border: $hnm-black-two;
 
+// close button
+$primary_close_btn: $white-five;
+$primary_close_bg: $hnm-black-two;
+
 /* ------- 3. Secondary color  ----- */
+$secondary_link: $black-two;
+$secondary_border: $hnm-black-two;
 
 /* ------- 4. Tertiary Colors ------- */
+$tertiary_link: $black-three;
 
 /* ------- 5. Components --------------- */
 // Titles.
@@ -105,6 +113,7 @@ $sub_title: $hnm-black-two;
 // Messages and Errors
 $default_msg_status_text: $white-four;
 $default_msg_bg: $success;
+$default_error: $red-error;
 
 // Tooltip
 $tooltip_border: $grey1;
@@ -121,6 +130,9 @@ $maintenance_mobile_body_text: $black;
 
 // Accordion
 $accordion_title: $hnm-black-two;
+$accordion_subtitle: $grey6;
+$accordion_border: $white-smoke-border;
+$accordion_bg: $white-five;
 
 // Back to top
 $btt_bg: $white-three;
@@ -190,3 +202,114 @@ $promo_title: $hnm-red;
 $promo_sub_title: $grey-ash;
 $promo_bordered_title: $hnm-black-two;
 $promo_bordered_border: $grey-ash;
+
+// Copyright
+$copyright_footer_bg: $hnm-black;
+$copyright_footer_text: $grey5;
+
+//3. Footer
+$footer_bg: $hnm-black;
+$footer_title_h3: $white-five;
+$footer_link: $white-five;
+$footer_link2: $white-two;
+$footer_link_active: $grey5;
+$footer_submit_text: $hnm-black-two;
+$footer_submit_bg: $white-five;
+$footer_input_text: $white-five;
+$footer_input_placeholder: $grey5;
+$footer_input_bg: $hnm-black;
+
+// language Switcher
+$lang_switch_firsttime_border: $white-smoke-border;
+$lang_switch_firsttime_bg: $hnm-black-two;
+
+// Newsletter
+$footer_newsletter_label: $grey5;
+$footer_newsletter_success_bg: $tealish;
+$footer_newsletter_success_text: $white-four;
+
+// Welcome user block
+$welcome_h3: $hnm-black-four;
+
+// Header
+$primary_search_input_placeholder: $grey6;
+$primary_minicart_text2: $hnm-black-four;
+$primary_minicart_quantity_bg: $hnm-red;
+$header_blocksearch_border: $grey2;
+$header_blocksearch_bg: $marine-blue;
+$header_blocksearch_input: $grey-ash;
+$mm_l1_link: $hnm-black-four;
+$mm_mobile_icon: $hnm-black-two;
+$mm_mobile_icon_active: $hnm-red;
+$mm_bg: $white-five;
+$mm_l1_link: $black-two;
+$mm_l1_link2: $black;
+$mm_l1_link_desktop: $grey8;
+$mm_l1_link_desktop_active_bg: $grey1;
+$mm_l1_link_active: $white-smoke-border;
+$mm_l2_bg: $white-five;
+$mm_l2_link: $peacock-blue;
+$mm_l2_hover_border: $black;
+$mm_l2_p: $brownish-grey;
+$mm_l2_p_hover  : $white-five;
+$mm_l3_link_bg: $white-five;
+$mm_l3_link: $peacock-blue;
+$mm_l2_wrapper_link: $marine-blue;
+$mm_border: $white;
+$mm_highlight_bg: $grey1;
+$mm_highlight_title: $black-three;
+$mm_link_text: $grey7;
+$mm_link_hover: $link-hover;
+$header_toggle_sign_default_mobile: $black;
+$header_toggle_sign_default: $hnm-grey;
+$header_toggle_sign_active_tab: $hnm-black-two;
+$header_toggle_sign_active_tab_bg: $white-five;
+$header_branding_shadow: $white;
+
+// PLP
+$plp_swatch_more_link: $hnm-black-two;
+$plp_facet_label: $hnm-black-two;
+$plp_facet_clear_border: $hnm-black-two;
+$plp_facet_border: $hnm-black-two;
+$plp_search_count: $grey7;
+$plp_category_desc: $grey7;
+$plp_tile_product_title: $hnm-black-two;
+$plp_tile_product_title_hover: $black;
+$plp_tile_oos_bg: $hnm-red;
+$plp_pager_link: $hnm-black-two;
+$plp_pager_link_border: $hnm-black-two;
+$plp__label_active_bg: $white-five;
+
+// PDP
+$pdp_modal_full_prodlink: $hnm-black-two;
+$pdp_product_price: $black-two;
+$pdp_product_itemcode: $grey7;
+$pdp_swatch_border: $white-five;
+$pdp_swatch_hover: $hnm-black-two-50;
+$pdp_swatch_selected_border: $hnm-black-two;
+$pdp_swatch_disabled: $white;
+$pdp_desc_wrapper: $grey7;
+$pdp_desc_wrapper_label: $hnm-black-two;
+$pdp_cc_highlight: $hnm-black-two;
+$pdp_cc_text: $grey7;
+$pdp_cc_modal_border: $black;
+$pdp_select_selectedtext: $hnm-black-two;
+$pdp_select_hover: $hnm-black-two-50;
+$pdp_oos_text: $white-five;
+$pdp_oos_bg: $error;
+$fake_apply_btn: $white-five;
+
+// User my account
+$password_tooltip_list: $cerulean-two;
+$myaccount_icon: $hnm-black-two;
+$myaccount_mobile_title: $hnm-black-two;
+$myaccount_mobile_title2: $black-two;
+$privilege_card_title: $hnm-black-two;
+$login_form_text: $black-two;
+$newsletter_subscribe_label: $grey-ash;
+$myaccountneedhelp_text: $white-five;
+
+//block-youllbeableto
+$user_block_title: $black-three;
+$user_block_text: $grey-ash;
+$user_block_link: $hnm-black-two;

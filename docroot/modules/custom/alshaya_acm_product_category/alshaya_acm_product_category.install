@@ -10,6 +10,15 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Install config using for new key footer_menu_blocks.
+ */
+function alshaya_acm_product_category_update_8005() {
+  alshaya_config_install_configs(['alshaya_acm_product_category.super_category.settings'], 'alshaya_acm_product_category');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new field for product category vocabulary for show/hide plp banner.
  */
 function alshaya_acm_product_category_update_8004() {
