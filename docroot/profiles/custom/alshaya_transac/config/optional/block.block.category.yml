@@ -5,12 +5,13 @@ dependencies:
     - facets.facet.category
   module:
     - facets
+    - system
   theme:
     - alshaya_hnm
 id: category
 theme: alshaya_hnm
 region: sidebar_first
-weight: 0
+weight: -38
 provider: null
 plugin: 'facet_block:category'
 settings:
@@ -24,4 +25,3 @@ visibility:
     pages: /search
     negate: false
     context_mapping: {  }
-
