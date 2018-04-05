@@ -1,0 +1,27 @@
+.path--store-finder,
+.nodetype--store {
+  .form-item-geolocation-geocoder-google-places-api {
+    input[type=text] {
+      &::placeholder {
+        color: $store_finder_location_search_text_placeholder;
+      }
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    text-transform: none;
+  }
+
+  .label--location::before {
+    background: url(../imgs/icons/store-search.svg) no-repeat;
+  }
+
+  .list-view-locator .row-title {
+    font-weight: 600;
+  }
+
+  .get--directions div {
+    color: $store_finder_get_direction_label_color;
+  }
+}
