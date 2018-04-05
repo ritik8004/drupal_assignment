@@ -1,0 +1,5 @@
+dependencies:
+  config:
+    - field.field.node.department_page.field_show_left_menu
+hidden:
+  field_show_left_menu: true
