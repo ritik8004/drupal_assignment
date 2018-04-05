@@ -65,8 +65,10 @@ class LocalCommand extends BltTasks {
       ->run();
 
     $this->say('Disable cloud modules');
+    // We disable dblog here and enable again to ensure table is created and
+    // we don't really need to copy heavy watchdog table from remote to local.
     $this->taskDrush()
-      ->drush('pmu purge alshaya_search_acquia_search acquia_search acquia_connector shield')
+      ->drush('pmu purge alshaya_search_acquia_search acquia_search acquia_connector shield dblog')
       ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
