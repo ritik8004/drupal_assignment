@@ -6,7 +6,7 @@
         margin-#{$left}: 0;
 
         a {
-          color: $hnm-black-two;
+          color: $content_link_color;
           font-family: $hnm-demibold;
           font-weight: normal;
           text-decoration: underline;
@@ -70,8 +70,8 @@
   .order-id-details,
   .order-print-button {
     @include breakpoint($only-mobile) {
-      background-color: $info;
-      color: $white-five;
+      background-color: $order_summary_bg;
+      color: $order_summary_text;
     }
   }
 
@@ -81,17 +81,17 @@
     display: inline-block;
     font-family: $hnm-bold;
     text-transform: uppercase;
-    color: $hnm-black-two;
-    background: $white-five;
+    color: $order_print_btn_text;
+    background: $order_print_btn_bg;
     padding: 0.5rem 2.45rem;
-    border: 1px solid $hnm-black-two;
+    border: 1px solid $order_print_btn_border;
     font-size: 0.75rem;
     letter-spacing: 1px;
   }
 
   tr.price-row {
     .blend {
-      background: $white-four !important;
+      background: $order_print_price_row_blend !important;
     }
   }
 
@@ -100,16 +100,16 @@
     .price-amount {
       font-weight: normal;
       font-family: $hnm-bold;
-      color: $hnm-black-two;
+      color: $order_print_price_row;
     }
   }
 
   tr.order-item-row {
     .blend {
-      background: $grey9;
+      background: $order_print_item_row_blend;
     }
 
-    background: $white-five;
+    background: $order_print_item_row;
   }
 
   .block-checkout-register-block {
@@ -121,7 +121,7 @@
   }
 
   .label.font-small {
-    color: $hnm-black-two;
+    color: $order_print_label;
     font-family: $hnm-demibold;
   }
 
@@ -129,7 +129,7 @@
     text-align: $right;
 
     &.label {
-      color: $grey7;
+      color: $order_print_right_label;
       font-family: $hnm-regular;
     }
   }
@@ -155,7 +155,7 @@
   }
 
   .product--count {
-    color: $hnm-black-two;
+    color: $order_print_label;
     background-color: $hnm-grey;
 
     td {
@@ -172,9 +172,9 @@
   .subtitle {
     @include arabic-letter-spacing;
 
-    border-bottom: 1px solid $hnm-black-two;
+    border-bottom: 1px solid $secondary_border;
     margin-bottom: 0.75rem;
-    color: $hnm-black-two;
+    color: $order_print_label;
     font-size: 1rem;
     font-family: $hnm-demibold;
     letter-spacing: 1px;
@@ -185,7 +185,7 @@
     .inner--wrap {
       .dark--text {
         font-family: $hnm-bold;
-        color: $hnm-black-two;
+        color: $primary_dark_color;
         font-weight: bold;
       }
     }
@@ -212,8 +212,8 @@
   font-size: 0.75rem;
   font-family: $hnm-bold;
   font-weight: bold;
-  border: 1px solid $hnm-black-two;
-  color: $hnm-black-two;
+  border: 1px solid $primary_empty_btn_border;
+  color: $primary_empty_btn;
   float: $right;
   padding: 0.5rem 1em;
   width: 100%;
@@ -261,10 +261,10 @@
 .confirmation__signup--title {
   @include arabic-letter-spacing;
 
-  color: $hnm-black-two;
+  color: $title;
   font-family: $hnm-demibold;
   font-weight: normal;
-  border-bottom: 1px solid $hnm-black-two;
+  border-bottom: 1px solid $secondary_border;
   padding-bottom: 0.5rem;
   margin-bottom: 2.3125rem;
   text-transform: uppercase;
@@ -273,7 +273,7 @@
 
 .confirmation__signup--description {
   font-size: 0.875rem;
-  color: $black-two;
+  color: $secondary_link;
   font-weight: bold;
   font-family: $arial;
 }

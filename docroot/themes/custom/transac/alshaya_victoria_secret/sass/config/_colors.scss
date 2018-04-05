@@ -71,7 +71,7 @@ $white-two: #e5e5e5;
 $white-five: #fff;
 $matterhorn: #535353;
 $cerulean-two: #0084cc;
-$red-error: #d0011b;
+$red-error: #c00;
 $light-ash: #9c9c9c;
 $alice-blue: #f0f6fc;
 $shadow: #dae7ee;
@@ -88,6 +88,8 @@ $sticky-btn: rgba(0, 0, 0, 0.07);
 $nero: #232323;
 $vanilla: #fff;
 $brilliant-rose: #ef5f96;
+$gainsboro: #dadada;
+$ash-triplet: #777;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -105,11 +107,14 @@ $content_link_color: $cerulean-two;
 // Form elements.
 $primary_form_selector_border: $black;
 $primary_form_selector: $black;
+$primary_form_link: $nero;
 $primary_input: $black;
 $primary_input_label: $greyish;
-$primary_input_border: $grey-ash;
-$primary_input_focus_border: $windows-blue;
+$primary_input_border: $ash-triplet;
+$primary_input_disabled: $greyish;
+$primary_input_focus_border: $nero;
 $primary_input_inline_error: $red-error;
+$online_exclusive_link: $nero;
 
 // Form Items
 $formitem_label: $greyish;
@@ -129,10 +134,10 @@ $complete_btn_bg: $medium-green;
 
 // Checkbox & Radio.
 $primary_checkbox_empty: $grey-ash;
-$primary_checkbox_filled: $windows-blue;
+$primary_checkbox_filled: $black;
 $primary_radiobtn_label: $grey-ash;
 $primary_radiobtn_empty: $greyish;
-$primary_radiobtn_filled: $cerulean-two;
+$primary_radiobtn_filled: $brilliant-rose;
 
 // Tables.
 $primary_th_bg: $whisper-light;
@@ -202,10 +207,12 @@ $tertiary_counter_text: $white-five;
 $tertiary_counter_border: $greyish;
 
 // Titles.
-$page_title: $marine-blue;
-$block_title: $marine-blue;
-$title: $marine-blue;
-$sub_title: $marine-blue;
+$page_title: $black;
+$block_title: $black;
+$title: $black;
+$sub_title: $black;
+$label_black: $black;
+$user_sidebar_block_title: $nero;
 
 // Messages and Errors
 $default_msg_text: $white-five;
@@ -299,32 +306,38 @@ $autocomplete_text: $grey-ash;
 /* ------- 6. Sections and Pages --------------- */
 
 // Header.
-$header_bg: $white-five;
-$header_search_block_bg: $white-five;
+$header_bg: $vanilla;
+$header_top_bg: $nero;
+$header_search_block_bg: $vanilla;
 $header_border: $white;
+$header_super_category_bg: $vanilla;
 
 // Header mobile search.
-$header_search_border_mobile: $marine-blue-two;
-$header_search_active_bg: $marine-blue;
-$header_search_active_text: $white-five;
+$header_search_border_mobile: $nero;
+$header_search_active_bg: $nero;
+$header_search_active_text: $vanilla;
+$header_super_category_bg: $vanilla;
 
 // Header - Search.
 $primary_search_btn: transparent;
 $primary_search_bg: $white-smoke-light;
 $primary_search_btn_icon: transparent;
 $primary_search_input: $grey-ash;
-$primary_search_input_placeholder: #777;
+$primary_search_input_placeholder: $ash-triplet;
 $primary_search_border: $white;
 $primary_search_result_hover: $white-smoke-light;
 
 // C-menu primary i:e Mobile and tablet header menu links.
 $header_c_menu_text: $brownish-grey;
-$header_c_menu_icon_color: $marine-blue-two;
+$header_c_menu_icon_color: $black;
 $header_c_menu_icon_text: $white-five;
-$header_toggle_sign_default: $white;
-$header_toggle_sign_active_tab: $marine-blue;
+$header_c_menu_search_active_icon: $vanilla;
+$header_c_menu_store_active_icon: $brilliant-rose;
+$header_toggle_sign_default: $white-smoke-light;
+$header_toggle_sign_active_tab: $black;
 $header_toggle_sign_active_tab_bg: $white-five;
-$header_mobile_menu_arrow: $marine-blue-two;
+$header_mobile_menu_bg: $vanilla;
+$header_mobile_menu_arrow: $black;
 $header_mobile_menu_active: $white-five;
 $header_mobile_menu_close_bg: $brilliant-rose;
 $header_mobile_menu_close: $black;
@@ -335,21 +348,23 @@ $header_branding_shadow: $greyish;
 
 // Header secondary: ie: top header.
 $header_secondary_bg: $nero;
-$header_secondary_bg_upto_desk: $nero;
-$header_secondary_menu_link_mobile: $vanilla;
+$header_secondary_bg_upto_desk: $vanilla;
+$header_secondary_menu_link_mobile: $nero;
 $header_secondary_menu_link: $vanilla;
 $header_secondary_menu_link_hover_bg: $black;
+$header_secondary_menu_mobile_link: $brilliant-rose;
+$header_secondary_menu_link_mobile_hover_bg: $vanilla;
 
 // Header my account nav.
 $header_my_account_h3_title: $vanilla;
-$header_my_account_bg: $nero;
+$header_my_account_bg: $vanilla;
 $header_my_account_link_hover: $vanilla;
-$header_my_account_icon: $marine-blue-two;
+$header_my_account_icon: $black;
 
 // Mega menu.
 $mm_bg: $white-five;
 $mm_body_overlay: rgba(0, 0, 0, 0.48);
-$mm_l1_border: transparent;
+$mm_l1_border: $gainsboro;
 $mm_l1_link: $black;
 $mm_l1_link_bg: $brilliant-rose;
 $mm_l1_link_hover: $black;
@@ -735,17 +750,58 @@ $address_button_border: $marine-blue-two;
 $address_button_text: $marine-blue-two;
 
 //My Account pages
+$user_account_wrapper_light: $grey-ash;
+$password_tooltip_list: $red-error;
+$user_nav_link: $marine-blue-two;
+$user_nav_mobile_title2: $black;
+$user_nav_mobile_link: $grey-ash;
+$user_order_list_text: $black;
+$user_order_list_border: $whisper-dark;
+$user_order_list_bg: $white-five;
+$user_order_list_hover_bg: $white-four;
+$user_order_list_hover_link_bg: $white-smoke;
+$user_order_list_light: $greyish;
+$user_order_list_dark: $black;
+$user_order_help_text: $brilliant-rose;
+$user_order_help_text_links: $nero;
+$user_order_help_bg: transparent;
+$user_order_help_border: $gainsboro;
+
+// User Form
+$user_form_text: $black;
+$user_form_error_label: $white-five;
+$user_field_link: $brilliant-rose;
+$user_captcha: $greyish;
+$user_pwd_input: $grey-ash;
+$user_pwd_unmask: $black;
+$user_account_nav: $matterhorn;
+$my_account_nav: $nero;
+$my_account_nav_active: $black;
+$my_account_nav_hover: $brilliant-rose;
+
 //block-myaccountneedhelp
 $myaccountneedhelp_bg: $pale-grey;
-$myaccountneedhelp_text: $windows-blue;
+$myaccountneedhelp_text: $nero;
+
 //block-youllbeableto
-$youllbeableto_title: $marine-blue;
-$youllbeableto_text: $grey-ash;
-$youllbeableto_link: $cerulean-two;
+$user_block_title: $marine-blue;
+$user_block_text: $grey-ash;
+$user_block_link: $nero;
+
 // joinclubblock
 $joinclubblock_title: $dark-sand;
 $joinclubblock_text: $grey-ash;
-$joinclubblock_link: $cerulean-two;
+$joinclubblock_link: $black;
+
+// Privilege Card
+$privilege_card_title: $dark-sand;
+$privilege_card_subtitle: $greyish;
+$privilege_card_form_label: $greyish;
+$privilege_card_summary: $grey-ash;
+$privilege_card_summary_after: $black;
+$privilege_card_form_input: $black;
+$privilege_card_form_input_placeholder: $grey-shade;
+$privilege_card_form_error: $scarlet-two;
 
 //Address book
 $address_tile_bg: $white-five;
@@ -787,4 +843,4 @@ $basket_header_oos_txt: $white-four;
 $privilege_earn_txt: $grey-ash;
 
 // Contact Page
-$webform_contact_legend: $marine-blue-two;
+$webform_contact_legend: $brilliant-rose;

@@ -91,10 +91,9 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
       $parent_id = $config->get('default_category_tid');
       // Get the term id from the current path, and display only the related
       // second level child terms.
-      if ($term instanceof TermInterface && $parents = $this->productCategoryTree->getCategoryTermParents($term)) {
+      if ($parent = $this->productCategoryTree->getCategoryTermRootParent($term)) {
         // Get the top level parent id if parent exists.
-        $parents = array_keys($parents);
-        $parent_id = empty($parents) ? $term->id() : end($parents);
+        $parent_id = $parent->id();
       }
     }
 
