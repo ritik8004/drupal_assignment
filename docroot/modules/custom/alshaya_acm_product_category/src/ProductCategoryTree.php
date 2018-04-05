@@ -331,8 +331,8 @@ class ProductCategoryTree {
    * @param null|object $term
    *   (optional) The term object or nothing.
    *
-   * @return int|mixed|null|string
-   *   Return the parent term id or object.
+   * @return \Drupal\taxonomy\TermInterface|mixed|null
+   *   Return the parent term object or NULL.
    */
   public function getCategoryTermRootParent($term = NULL) {
     if (empty($term) || !$term instanceof  TermInterface) {
