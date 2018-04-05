@@ -18,7 +18,7 @@
     }
 
     .download-invoice {
-      color: $hnm-black-two;
+      color: $content_link_color;
     }
   }
 
@@ -38,12 +38,12 @@
     .user__order--detail {
       .total-row {
         .warm--white {
-          background-color: $whisper-light;
+          background-color: $order_detail_total_white;
         }
 
         &.vat-row {
           .warm--white {
-            background-color: $white-five;
+            background-color: $order_detail_total_vat;
           }
         }
       }
@@ -53,12 +53,12 @@
 
 .user__order--detail {
   font-family: $hnm-regular;
-  border-top: 1px solid $white;
+  border-top: 1px solid $order_detail_total_border;
 
   .sub-total-row,
   .delivery-charge-row,
   .total-row {
-    background: $white-five;
+    background: $order_detail_total_bg;
 
     td {
       padding: 0.625rem 1.375rem;
@@ -80,14 +80,14 @@
   }
 
   .total-row {
-    color: $black-two;
+    color: $order_detail_total;
     font-weight: normal;
     font-family: $hnm-demibold;
   }
 
   .delivery-details-row {
     td {
-      background: $info;
+      background: $order_summary_bg;
 
       .icon-ic_info {
         font-size: 1.9375rem;
@@ -99,7 +99,7 @@
 
     .blend {
       @include breakpoint($desktop) {
-        background: $info-two;
+        background: $order_summary_blend_bg;
       }
     }
   }
@@ -110,17 +110,17 @@
   }
 
   .delivery-details-row {
-    color: $white-five;
+    color: $order_detail_total_bg;
   }
 
   .delivery-charge-row,
   .sub-total-row,
   .order-item-row {
     .blend {
-      background: $white-four;
+      background: $order_detail_blend_row;
 
       @include breakpoint($tablet) {
-        background: $white-smoke-light;
+        background: $order_detail_blend_row_tablet;
       }
     }
   }
@@ -136,7 +136,7 @@
 
   .order-summary-row {
     td {
-      background: $whisper-light-59;
+      background: $order_summary_row;
       padding: 1.313rem 1rem;
     }
   }
@@ -146,21 +146,21 @@
   }
 
   .order-details-row {
-    background: $info-19;
-    color: $grey8;
+    background: $order_detail_item_row;
+    color: $order_detail_item_row_text;
 
     .label {
-      color: $hnm-black-two;
+      color: $title;
       font-family: $hnm-bold;
       font-weight: normal;
     }
 
     .address--name {
-      color: $black-two !important;
+      color: $order_detail_item_row_address_name !important;
     }
 
     .blend {
-      background: $info-30;
+      background: $order_detail_item_row_blend;
 
       @include breakpoint($tablet) {
         padding-#{$right}: 0.625rem;
@@ -199,7 +199,7 @@
     .form-item-field-subscribe-newsletter-value {
       label {
         top: 0 !important;
-        color: $grey-ash;
+        color: $user_confirmation_newsletter_label;
         font-size: 0.875rem;
         padding-#{$left}: 1.6875rem;
       }
@@ -227,11 +227,11 @@
 }
 
 .user__order--detail .total-row:not(.price-row) .warm--white {
-  background: $white-five;
+  background: $user_order_detail_bg;
 
   .dark {
     font-size: 0.75rem;
-    color: $light-greyish;
+    color: $user_order_detail_dark;
     line-height: 1.125rem;
     font-weight: normal;
     font-family: $hnm-regular;

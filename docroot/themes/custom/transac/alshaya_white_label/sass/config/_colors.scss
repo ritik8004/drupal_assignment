@@ -108,6 +108,7 @@ $primary_input_border: $grey-ash;
 $primary_input_disabled: $greyish;
 $primary_input_focus_border: $windows-blue;
 $primary_input_inline_error: $red-error;
+$online_exclusive_link: $cerulean-two;
 
 // Form Items
 $formitem_label: $greyish;
@@ -206,6 +207,7 @@ $title: $marine-blue;
 $sub_title: $marine-blue;
 $label_black: $black;
 $label_dark: $mothercare-black;
+$user_sidebar_block_title: $marine-blue;
 
 // Messages and Errors
 $default_msg_text: $white-five;
@@ -304,6 +306,7 @@ $autocomplete_text: $grey-ash;
 
 // Header.
 $header_bg: $white-five;
+$header_top_bg: $white-five;
 $header_search_block_bg: $white-five;
 $header_border: $white;
 
@@ -569,6 +572,7 @@ $promo_white_btn_text: $mothercare-black;
 // Store finder page.
 // Store finder header form.
 $store_finder_header: $black;
+$store_finder_header_desktop: $marine-blue;
 $store_finder_subheader: $marine-blue;
 $store_finder_backbtn: $marine-blue-two;
 $store_finder_icon: $cerulean-two;
@@ -770,6 +774,7 @@ $user_order_list_hover_link_bg: $white-smoke;
 $user_order_list_light: $greyish;
 $user_order_list_dark: $black;
 $user_order_help_text: $windows-blue;
+$user_order_help_text_links: $user_order_help_text;
 $user_order_help_bg: $pale-grey;
 
 // User Form
@@ -780,6 +785,9 @@ $user_captcha: $greyish;
 $user_pwd_input: $grey-ash;
 $user_pwd_unmask: $greyish;
 $user_account_nav: $matterhorn;
+$my_account_nav: $primary_text;
+$my_account_nav_active: $marine-blue;
+$my_account_nav_hover: $content_link_color;
 
 //block-myaccountneedhelp
 $myaccountneedhelp_bg: $pale-grey;
@@ -906,6 +914,7 @@ $mm_l1_link_active_bg: false;
 $mm_l1_link_active_shadow: false;
 $mm_l2_link_mobile_menu: false;
 $header_c_menu_search_icon: false;
+$store_finder_get_direction_label_color: false;
 
 // From: HMKW
 $default_msg_status_text: false;
@@ -949,3 +958,11 @@ $newsletter_input_bg: false;
 
 // Footer.
 $footer_text: false;
+
+// Header.
+$header_c_menu_store_active_icon: false;
+$header_mobile_menu_bg: false;
+$header_secondary_menu_mobile_link: false;
+$header_secondary_menu_link_mobile_hover_bg: false;
+$header_super_category_bg: false;
+$user_order_help_border: false;

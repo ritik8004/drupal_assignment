@@ -6,6 +6,8 @@
   }
 
   li.menu--one__list-item {
+    text-transform: none;
+
     @include breakpoint($desktop) {
       height: 2rem;
 
@@ -64,5 +66,12 @@
         text-decoration: underline;
       }
     }
+  }
+}
+
+.highlights {
+  .title {
+    font-weight: bold;
+    text-transform: uppercase;
   }
 }
