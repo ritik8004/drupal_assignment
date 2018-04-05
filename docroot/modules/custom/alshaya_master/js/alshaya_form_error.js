@@ -34,6 +34,10 @@ Drupal.behaviors.alshayaFormError = {
       $(this).find('input').each(function() {
         errorObserver.observe($(this)[0], observerConfig);
       });
+
+      $(this).find('input[type="submit"]').click(function() {
+        Drupal.setFocusToFirstError($(this));
+      });
     });
   }
 };
