@@ -10,6 +10,15 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Install alshaya_super_category module.
+ */
+function alshaya_acm_product_category_update_8006() {
+  \Drupal::service('module_installer')->install(['alshaya_super_category']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install config using for new key footer_menu_blocks.
  */
 function alshaya_acm_product_category_update_8005() {
