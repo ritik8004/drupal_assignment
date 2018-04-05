@@ -103,21 +103,26 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
   /**
    * {@inheritdoc}
    */
-  public function cartName($sku, array $cart) {
+  public function cartName(SKU $sku, array $cart, $asString = FALSE) {
     // For all configurable products we will have sku of simple variant only
     // in cart so we add a check if parent is available, process cartName of
     // that.
     if ($parent_sku = $this->getParentSku($sku)) {
       $plugin_manager = \Drupal::service('plugin.manager.sku');
       $plugin = $plugin_manager->pluginInstanceFromType($parent_sku->bundle());
-      return $plugin->cartName($sku, $cart);
+      if (method_exists($plugin, 'cartName')) {
+        return $plugin->cartName($sku, $cart, $asString);
+      }
     }
 
-    $label = $sku->label();
-    $display_node = $this->getDisplayNode($sku);
-    $url = $display_node->toUrl();
-    $renderArray = Link::fromTextAndUrl($label, $url)->toRenderable();
-    return render($renderArray);
+    $cartName = $sku->label();
+    if (!$asString) {
+      $display_node = $this->getDisplayNode($sku);
+      $url = $display_node->toUrl();
+      $link = Link::fromTextAndUrl($cartName, $url);
+      $cartName = $link->toRenderable();
+    }
+    return $cartName;
   }
 
   /**

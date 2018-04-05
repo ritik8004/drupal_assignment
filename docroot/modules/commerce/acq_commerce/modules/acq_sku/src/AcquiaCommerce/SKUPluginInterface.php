@@ -75,15 +75,17 @@ interface SKUPluginInterface {
   /**
    * Returns the SKUs cart name.
    *
-   * @param object $sku
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU to get Cart Name.
    * @param array $cart
    *   Item array from cart.
+   * @param bool $asString
+   *   Indicates if function should return a string or a renderable array.
    *
-   * @return string
-   *   Name
+   * @return mixed
+   *   Name as string or a renderable object
    */
-  public function cartName($sku, array $cart);
+  public function cartName(SKU $sku, array $cart, $asString = FALSE);
 
   /**
    * Returns the SKU's display node.
