@@ -17,8 +17,17 @@
     background: url(../imgs/icons/store-search.svg) no-repeat;
   }
 
-  .list-view-locator .row-title {
-    font-weight: 600;
+  .list-view-locator {
+    border-left: 0;
+    border-right: 0;
+
+    .row-title {
+      font-weight: 600;
+    }
+
+    .store-row--counter {
+      line-height: 1.1;
+    }
   }
 
   .get--directions div {
