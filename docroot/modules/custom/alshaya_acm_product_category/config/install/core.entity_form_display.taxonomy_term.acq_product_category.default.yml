@@ -6,6 +6,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_commerce_id
     - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
     - field.field.taxonomy_term.acq_product_category.field_meta_tags
+    - field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner
     - image.style.thumbnail
     - taxonomy.vocabulary.acq_product_category
@@ -52,6 +53,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: metatag_firehose
+    region: content
+  field_promo_banner_for_mobile:
+    weight: 10
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
     region: content
   field_promotion_banner:
     type: image_image
