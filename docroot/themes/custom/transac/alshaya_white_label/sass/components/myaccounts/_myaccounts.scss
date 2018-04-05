@@ -14,7 +14,7 @@
     }
 
     a {
-      color: $primary_text;
+      color: $my_account_nav;
       display: block;
       line-height: 1.9;
       text-transform: lowercase;
@@ -25,12 +25,12 @@
       }
 
       &.active {
-        color: $secondary_link;
+        color: $my_account_nav_active;
         font-weight: bold;
       }
 
       &:hover {
-        color: $content_link_color;
+        color: $my_account_nav_hover;
         text-decoration: underline;
       }
     }
