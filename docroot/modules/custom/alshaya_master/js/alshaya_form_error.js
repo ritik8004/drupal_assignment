@@ -44,19 +44,13 @@ Drupal.behaviors.alshayaFormError = {
 Drupal.setFocusToFirstError =  function(errorElement) {
   var focusElement = errorElement.closest('form').find('input.error:first');
   var stickyHeaderHeight = $('branding__menu').height();
-  var animateOptions = {
-    duration: 5000,
-    specialEasing: {
-      width: "linear",
-      height: "easeOutBounce"
-    }
-  };
+
   focusElement.focus();
 
   // Scroll to the first element with error.
   $('html, body').animate({
     scrollTop: focusElement.offset().top + parseInt(stickyHeaderHeight)
-  }, animateOptions);
+  });
 };
 
 })(jQuery, Drupal);
