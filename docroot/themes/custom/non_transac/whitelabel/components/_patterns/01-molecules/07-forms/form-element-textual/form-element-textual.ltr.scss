@@ -88,7 +88,7 @@
   bottom: 0;
   height: 1px;
   background: $greyish-light;
-  left: 45%;
+  #{direction(left)}: 45%;
   width: 0.625rem;
   transition: left 0.25s ease-in-out, width 0.25s ease-in-out, background 0.25s ease-in-out;
 }
@@ -139,7 +139,7 @@ input:active ~ .input__label label {
     margin-top: 0.3125rem;
     position: absolute;
     bottom: -0.125rem;
-    left: 0;
+    #{direction(left)}: 0;
   }
 }
 
@@ -197,7 +197,7 @@ input:active ~ .input__label label {
   .form-type-textfield {
     label {
       font-size: 0.75rem;
-      left: -2.875rem;
+      #{direction(left)}: -2.875rem;
       top: -0.875rem;
     }
   }
