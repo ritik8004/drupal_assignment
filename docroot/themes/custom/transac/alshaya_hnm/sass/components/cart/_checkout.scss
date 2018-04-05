@@ -112,6 +112,7 @@
 .alias--cart {
   h1 {
     color: $title;
+    border-bottom: 1px solid $content_pagetitle_border;
 
     @include breakpoint($tablet) {
       font-size: 1.25rem;
@@ -128,6 +129,10 @@
   }
 
   #table-cart-items {
+    tr {
+      border-bottom: 1px solid $content_pagetitle_border;
+    }
+
     table {
       width: 100%;
       font-family: $hnm-regular;
