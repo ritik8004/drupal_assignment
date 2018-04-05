@@ -264,6 +264,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    *   Available shipping methods.
    */
   public static function generateShippingEstimates($address) {
+    if (empty($address['country_id'])) {
+      return [];
+    }
+
     /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
     return $checkout_options_manager->getHomeDeliveryShippingEstimates($address);
@@ -328,11 +332,11 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
       $api_wrapper = \Drupal::service('acq_commerce.api');
 
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+
       try {
         $customer = $api_wrapper->createCustomer($address['firstname'], $address['lastname'], $email);
-
-        /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-        $cart_storage = \Drupal::service('acq_cart.cart_storage');
         $cart_storage->associateCart($customer['customer_id'], $email);
       }
       catch (\Exception $e) {
@@ -341,6 +345,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
           $form_state->setErrorByName('custom', $e->getMessage());
           return;
         }
+
+        // Restore the cart to revert customer id and email in cart.
+        $cart_storage->restoreCart($cart->id());
 
         // @TODO: Handle create customer errors here.
         // Probably just the email error.
