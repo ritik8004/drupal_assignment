@@ -895,20 +895,3 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
 function alshaya_acm_acsf_duplication_scrub_admin_roles_alter(array &$admin_roles) {
   $admin_roles[] = 'acq_commerce_sync';
 }
-
-/**
- * Wrapper function to check current stock mode.
- *
- * @return bool
- *   TRUE if stock mode is push.
- */
-function alshaya_acm_is_stock_push_enabled() {
-  static $status;
-
-  if (!isset($status)) {
-    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
-    $status = $stock_mode === 'push';
-  }
-
-  return $status;
-}
