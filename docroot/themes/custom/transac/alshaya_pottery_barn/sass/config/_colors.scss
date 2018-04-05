@@ -31,6 +31,7 @@ $primary_input_focus_border: $PB_confirmation_blue;
 $page_title: $_black_two;
 $block_title: $_black_two;
 $title: $_black_two;
+$sub_title: $_black_two;
 
 // Form elements.
 $primary_input_label: $PB_grey_two;
@@ -67,6 +68,22 @@ $primary_search_btn_icon: $_black_two;
 $primary_search_input: $PB_grey_one;
 $primary_search_input_placeholder: $PB_grey_one;
 $primary_search_border: $white;
+
+// Header - welcome user.
+$header_my_account_h3_title: $_black_two;
+
+// User - My account nav & dashboard.
+$my_account_nav_active: $PB_deep_red;
+
+// Join the club block - user dashboard page.
+$joinclubblock_title: $PB_alshaya_priv;
+
+// Breadcrumb.
+$breadcrumb_bg: $white-two;
+$breadcrumb_bg_tablet: $PB_white;
+$breadcrumb_link: $PB_grey_one;
+$breadcrumb_link_hover: $PB_grey_one;
+$breadcrumb_link_active: $_black_two;
 
 // Mega menu.
 $pre_content_region_bg: $_black_two;

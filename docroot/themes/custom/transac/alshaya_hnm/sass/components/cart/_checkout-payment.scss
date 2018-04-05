@@ -1,8 +1,8 @@
 .user-page.checkout-delivery.checkout-payment {
   .multistep-checkout {
     @include breakpoint($tablet) {
-      border: 1px solid $hnm-black-two;
-      border-top: 1px solid $hnm-black-two !important;
+      border: 1px solid $secondary_border;
+      border-top: 1px solid $secondary_border !important;
     }
   }
 }
@@ -10,7 +10,7 @@
 .checkout-delivery.checkout-payment .address_wrapper > .billing-address-title {
   font-family: $hnm-demibold;
   font-weight: normal;
-  color: $hnm-black-two;
+  color: $title;
 }
 
 #edit-billing-address-address:empty {
@@ -31,7 +31,7 @@
 
   .fieldset-wrapper {
     padding: 1.375rem;
-    color: $hnm-black-two;
+    color: $title;
     font-size: 0.875rem;
   }
 
@@ -43,7 +43,7 @@
     }
 
     input[type=radio]:checked ~ label {
-      color: $hnm-black-two;
+      color: $primary_input;
     }
 
     label.option {
@@ -76,7 +76,7 @@
 
 #edit-checkout-terms {
   a {
-    color: $hnm-black-two;
+    color: $content_link_color;
     text-decoration: underline;
     font-family: $hnm-demibold;
   }
@@ -100,7 +100,7 @@
     }
 
     p {
-      color: $grey-ash;
+      color: $checkout_payment_text;
       padding-#{$left}: 2rem;
     }
   }
@@ -108,8 +108,8 @@
 
 #payment_details {
   #payment_method_cybersource & {
-    background: $white-five;
-    border: 1px solid $white;
+    background: $checkout_payment_method_bg;
+    border: 1px solid $checkout_payment_method_border;
     border-top: none;
 
     @include breakpoint($mobile) {
@@ -118,11 +118,11 @@
   }
 
   .cc_cvv_help_text {
-    color: $grey7;
+    color: $checkout_payment_help;
     #{$left}: 24%;
 
     &::before {
-      background: $white url(../imgs/cards/back-card.png) no-repeat;
+      background: $checkout_payment_method_border url(../imgs/cards/back-card.png) no-repeat;
       background-size: 100%;
     }
 
@@ -173,7 +173,7 @@
 .cvv-help-text-wrapper {
   .mobile-tooltip-icon {
     .tooltip-icon {
-      color: $hnm-black-two;
+      color: $tooltip_text;
 
       @include icon(info, after) {
         font-size: 1.25rem;
@@ -183,13 +183,13 @@
     span.tooltip-content {
       top: 1.84rem;
       #{$left}: -7.2rem;
-      color: $hnm-black-two;
-      background-color: $grey1;
-      border: 1px solid $hnm-black-two;
+      color: $tooltip_text;
+      background-color: $tooltip_border;
+      border: 1px solid $tooltip_border_2;
 
       &::before {
         border-color: rgba(0, 132, 204, 0);
-        border-bottom-color: $hnm-black-two;
+        border-bottom-color: $tooltip_border_2;
       }
     }
   }
