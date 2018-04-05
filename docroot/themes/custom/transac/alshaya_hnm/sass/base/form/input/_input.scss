@@ -4,15 +4,7 @@
 .checkout-payment .multistep-checkout {
   .country-field-wrapper {
     .country-name {
-      border-bottom: 1px solid $hnm-black-two;
+      border-bottom: 1px solid $primary_input;
     }
-  }
-}
-
-input,
-textarea {
-  &.error {
-    border-color: $red-error !important;
-    border-width: 0 0 0.125rem !important;
   }
 }

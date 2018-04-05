@@ -17,10 +17,10 @@
 
   width: 6.563rem;
   height: 2.188rem;
-  background-color: $cherry;
+  background-color: $oos_btn_bg;
   font-family: $alshaya-thin;
   font-size: 0.75rem;
-  color: $white-two;
+  color: $oos_btn_text;
   text-transform: lowercase;
   display: inline-block;
   vertical-align: middle;
@@ -33,7 +33,7 @@
   opacity: 0.4;
   font-family: $arial;
   font-size: 0.6875rem;
-  color: $grey-ash;
+  color: $oos_quantity_text;
   float: $left;
   width: 6.688rem;
 
@@ -42,11 +42,11 @@
   }
 
   span {
-    background: $whisper-dark;
+    background: $oos_wrapper;
     display: inline-block;
     vertical-align: middle;
     text-align: center;
-    color: $black;
+    color: $oos_wrapper_text;
     max-width: 2.188rem;
     max-height: 2.188rem;
 

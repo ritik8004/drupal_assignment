@@ -9,7 +9,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
-use Drupal\alshaya_stores_finder\StoresFinderUtility;
+use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -157,7 +157,7 @@ class AlshayaGtmManager {
   /**
    * Store Finder service.
    *
-   * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
+   * @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility
    */
   protected $storeFinder;
 
@@ -220,8 +220,6 @@ class AlshayaGtmManager {
    *   Entity Manager service.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager
    *   Checkout Options Manager service.
-   * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $storesFinderUtility
-   *   Store Finder service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   Language Manager service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -242,7 +240,6 @@ class AlshayaGtmManager {
                               RequestStack $requestStack,
                               EntityTypeManagerInterface $entityTypeManager,
                               CheckoutOptionsManager $checkoutOptionsManager,
-                              StoresFinderUtility $storesFinderUtility,
                               LanguageManagerInterface $languageManager,
                               CacheBackendInterface $cache,
                               Connection $database,
@@ -256,13 +253,23 @@ class AlshayaGtmManager {
     $this->requestStack = $requestStack;
     $this->entityTypeManager = $entityTypeManager;
     $this->checkoutOptionsManager = $checkoutOptionsManager;
-    $this->storeFinder = $storesFinderUtility;
     $this->languageManager = $languageManager;
     $this->cache = $cache;
     $this->database = $database;
     $this->addressBookManager = $addressBookManager;
     $this->skuManager = $skuManager;
     $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * Setter function for Stores Finder Utility service.
+   *
+   * @param \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storesFinderUtility
+   *   Store Finder service.
+   */
+  public function setStoreFinderUtility(StoresFinderUtility $storesFinderUtility) {
+    // @TODO: Move this back to normal/constructor once module enabled on prod.
+    $this->storeFinder = $storesFinderUtility;
   }
 
   /**
@@ -639,7 +646,8 @@ class AlshayaGtmManager {
           // ensure the variable is not in list of disabled vars.
           if ((!in_array('dimension8', $gtm_disabled_vars)) &&
             ($store = $this->storeFinder->getStoreFromCode($store_code))) {
-            $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+            // @TODO: Check with Piyuesh on if we can use only one field now.
+            $dimension8 = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
           }
         }
       }
@@ -839,7 +847,8 @@ class AlshayaGtmManager {
       // ensure the variable is not in list of disabled vars.
       if ((!in_array('dimension8', $gtm_disabled_vars)) &&
         ($store = $this->storeFinder->getStoreFromCode($store_code))) {
-        $dimension8 = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+        // @TODO: Check with Piyuesh on if we can use only one field now.
+        $dimension8 = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
       }
     }
 
@@ -1100,8 +1109,8 @@ class AlshayaGtmManager {
 
                 if ($store = $this->storeFinder->getStoreFromCode($cart->getExtension('store_code'))) {
                   $page_dl_attributes['storeLocation'] = $store->label();
-                  // @TODO: Update this during CORE-748.
-                  $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+                  // @TODO: Check with Piyuesh on if we can use only one field now.
+                  $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
                 }
               }
               else {
@@ -1147,14 +1156,9 @@ class AlshayaGtmManager {
         if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
+        }
 
-          $billing_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
-          $deliveryArea = $billing_address['administrative_area'];
-        }
-        else {
-          $billing_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
-          $deliveryArea = $billing_address['administrative_area'];
-        }
+        $deliveryArea = $this->addressBookManager->getAddressShippingAreaValue($order['shipping']['address']);
 
         foreach ($orderItems as $orderItem) {
           $productSKU[] = $orderItem['sku'];
@@ -1176,7 +1180,8 @@ class AlshayaGtmManager {
         // ensure the variable is not in list of disabled vars.
         if ($store_code && ($store = $this->storeFinder->getStoreFromCode($store_code))) {
           $page_dl_attributes['storeLocation'] = $store->label();
-          $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($store->get('field_store_address')->getString()));
+          // @TODO: Check with Piyuesh on if we can use only one field now.
+          $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
         }
 
         // Add cartItemsRR variable only when its not in the list of disabled

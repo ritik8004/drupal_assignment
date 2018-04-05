@@ -51,8 +51,9 @@
   .slick-slider .slick-track,
   .slick-slider .slick-list {
     transform: translate3d(0, 0, 0) translateZ(0);
-    perspective: 1000;
+    perspective: 1000px;
     backface-visibility: hidden;
+    will-change: transform;
   }
 }
 
@@ -103,7 +104,7 @@
     height: 2.25rem;
     line-height: 2.25rem;
     width: 2.25rem;
-    color: #000;
+    color: $hp_slider_arrows_dark;
     font-size: 2rem;
     display: block;
   }
@@ -158,13 +159,13 @@
 .owl-dot,
 .slick-dots li {
   @include breakpoint($tablet) {
-    color: $white-five;
+    color: $gallery_arrows_bg;
   }
 
   width: 0.625rem;
   height: 0.625rem;
   border-radius: 100%;
-  color: $marine-blue-two;
+  color: $hp_slider_dots;
   border: 1px solid currentColor;
   display: inline-block;
   margin: 1em 0.75em;
@@ -182,10 +183,8 @@
 
 .c-slider-promo__items {
   .slick-dots {
-    display: none;
-
-    @include breakpoint($tablet) {
-      display: block;
+    @include breakpoint($only-mobile) {
+      display: none !important;
     }
   }
 }

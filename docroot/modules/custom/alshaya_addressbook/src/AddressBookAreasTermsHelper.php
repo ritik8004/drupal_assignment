@@ -257,8 +257,12 @@ class AddressBookAreasTermsHelper {
    */
   public function getShippingAreaLabel($value, $langcode = 'en') {
     // For DM V2, we will have it id instead of string.
-    if ($this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if ($value && $this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       $term = $this->getLocationTermFromLocationId($value);
+
+      if (empty($term)) {
+        return '';
+      }
 
       // We always want labels in English for GTM.
       if ($term->language()->getId() != $langcode && $term->hasTranslation($langcode)) {

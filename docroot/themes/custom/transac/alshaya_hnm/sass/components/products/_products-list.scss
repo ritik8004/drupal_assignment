@@ -22,7 +22,7 @@
 
             span {
               &.facet-item__value {
-                background: $hnm-black-two;
+                background: $plp_facet_label;
                 display: inline;
                 vertical-align: top;
                 line-height: 0.9375rem;
@@ -30,7 +30,7 @@
               }
 
               &.js-facet-deactivate {
-                background: $hnm-black-two;
+                background: $plp_facet_label;
               }
 
               div {
@@ -49,11 +49,11 @@
           }
 
           &.clear-all {
-            border: 2px solid $hnm-black-two;
+            border: 2px solid $plp_facet_clear_border;
             line-height: 1;
 
             a {
-              color: $hnm-black-two;
+              color: $plp_facet_label;
               font-family: $hnm-bold;
               text-transform: uppercase;
             }
@@ -93,35 +93,22 @@
                 letter-spacing: 1px;
                 text-transform: uppercase;
               }
-
-              @include icon(dropdown-expand, after) {
-                position: absolute;
-                #{$left}: 1.3%;
-                top: 0.8125rem;
-                font-size: 2.125rem;
-                pointer-events: none;
-                transform: rotate(90deg);
-                color: $hnm-black-two;
-              }
-
-              &::after {
-                html[lang=ar] & {
-                  transform: rotate(270deg);
-                  top: 0.75rem;
-                }
-              }
             }
           }
 
           li.clear-all {
-            border: 1px solid $hnm-black-two;
+            border: 1px solid $plp_facet_clear_border;
+
+            a {
+              color: $plp_facet_label;
+            }
           }
 
           .applied-filter-count {
             @include arabic-letter-spacing;
 
             font-family: $hnm-bold;
-            color: $hnm-black-two;
+            color: $plp_facet_label;
             letter-spacing: 1px;
             text-transform: uppercase;
           }
@@ -131,7 +118,7 @@
       @include breakpoint($only-mobile) {
         .c-facet__blocks__wrapper--mobile {
           .c-facet__label {
-            border: 1px solid $hnm-black-two;
+            border: 1px solid $plp_facet_clear_border;
             border-#{$right}: none;
           }
         }
@@ -139,9 +126,10 @@
     }
 
     .view-header.search-count {
-      color: $grey7;
+      color: $plp_search_count;
       padding-bottom: 0.75rem;
       font-family: $hnm-regular;
+      border-bottom: 1px solid $content_pagetitle_border;
 
       @include breakpoint($only-mobile) {
         margin-top: 0.75rem;
@@ -158,7 +146,7 @@
 
   .c-page-title__description,
   .field--name-field-acq-promotion-description {
-    color: $grey7;
+    color: $plp_category_desc;
     margin-top: 0.3125rem;
     font-family: $hnm-regular;
     line-height: 1.56;
@@ -226,7 +214,7 @@
       font-family: $hnm-regular;
 
       a {
-        color: $hnm-black-two;
+        color: $plp_tile_product_title;
       }
     }
 
@@ -238,7 +226,7 @@
 
         .field--name-name {
           a {
-            color: $black;
+            color: $plp_tile_product_title_hover;
             text-decoration: none;
           }
         }
@@ -248,7 +236,7 @@
     .out-of-stock span {
       @include arabic-letter-spacing;
 
-      background: $hnm-red;
+      background: $plp_tile_oos_bg;
       font-family: $hnm-bold;
       letter-spacing: 1px;
       padding: 0.5rem 0.8125rem;
@@ -260,9 +248,9 @@
     margin-bottom: 2rem;
 
     a {
-      color: $hnm-black-two;
+      color: $plp_pager_link;
       font-size: 0.875rem;
-      border: 2px solid $hnm-black-two;
+      border: 2px solid $plp_pager_link_border;
       padding: 0.5625rem 6.8rem;
       font-family: $hnm-bold;
       text-transform: uppercase;
@@ -273,7 +261,7 @@
 .c-facet__blocks__wrapper--mobile {
   .c-facet__label {
     @include breakpoint($only-mobile) {
-      border: 1px solid $hnm-black-two;
+      border: 1px solid $plp_facet_border;
       border-#{$right}: none;
 
       @include icon(dropdown-expand, after) {
@@ -284,7 +272,7 @@
         text-align: center;
         top: 0;
         font-size: 2.1875rem;
-        border: 1px solid $hnm-black-two;
+        border: 1px solid $plp_facet_border;
         border-#{$left}: none;
         background-color: transparent;
       }
@@ -301,13 +289,13 @@
         text-align: center;
         top: 0;
         font-size: 2.1875rem;
-        border: 1px solid $hnm-black-two;
+        border: 1px solid $plp_facet_border;
         border-#{$left}: none;
         background-color: transparent;
       }
     }
 
-    border: 1px solid $hnm-black-two;
+    border: 1px solid $plp_facet_border;
     border-#{$right}: none;
 
     &.is-active {
@@ -320,7 +308,7 @@
       &::after {
         @include breakpoint($tablet) {
           border: none;
-          background-color: $white-five;
+          background-color: $plp__label_active_bg;
         }
       }
     }
@@ -333,6 +321,10 @@
 
     @include breakpoint($only-mobile) {
       width: 100%;
+
+      .c-facet__blocks {
+        color: $plp_facet_label;
+      }
     }
 
     width: 16.85rem;
@@ -348,24 +340,21 @@
         letter-spacing: 1px;
         text-transform: uppercase;
       }
-
-      @include icon(chevron-#{$left}, after) {
-        position: absolute;
-        #{$left}: 1.3%;
-        font-size: 2rem;
-        pointer-events: none;
-      }
     }
 
     li.clear-all {
-      border: 1px solid $hnm-black-two;
+      border: 1px solid $plp_facet_clear_border;
+
+      a {
+        color: $plp_facet_label;
+      }
     }
 
     .applied-filter-count {
       @include arabic-letter-spacing;
 
       font-family: $hnm-bold;
-      color: $hnm-black-two;
+      color: $plp_facet_label;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
@@ -386,7 +375,7 @@
       @include arabic-letter-spacing;
 
       font-size: 0.75rem;
-      color: $hnm-black-two;
+      color: $title;
       text-transform: uppercase;
       letter-spacing: 1px;
     }

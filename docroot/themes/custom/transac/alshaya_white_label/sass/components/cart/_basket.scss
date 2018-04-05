@@ -39,7 +39,7 @@
 
         .sku-promotion-link {
           font-size: 12px !important;
-          color: $scarlet !important;
+          color: $basket_sku_promo_link !important;
           width: 100% !important;
           padding-top: 1px;
 
@@ -78,16 +78,16 @@
             #{$left}: -6px;
             top: 37%;
             border-bottom-width: 6px;
-            border-#{$right}-color: #0084cc;
-            border-bottom-color: rgba(0, 132, 204, 0);
+            border-#{$right}-color: $tooltip_border;
+            border-bottom-color: $tooltip_border_opacity_0;
           }
 
           &::after {
             top: 39%;
             border-bottom-width: 5px;
             #{$left}: -5px;
-            border-#{$right}-color: #f0f6fc;
-            border-bottom-color: rgba(0, 132, 204, 0);
+            border-#{$right}-color: $tooltip_bg;
+            border-bottom-color: $tooltip_border_opacity_0;
           }
 
           @include breakpoint($only-mobile) {
@@ -105,13 +105,13 @@
 
         .tooltip--head::after {
           margin-#{$left}: 0;
-          color: #0084cc;
+          color: $tooltip_text;
         }
       }
 
       &.sku-out-stock {
         opacity: 0.7;
-        background-color: $white-four;
+        background-color: $basket_oos_tr_bg;
       }
 
       td {
@@ -266,12 +266,12 @@
       }
 
       img {
-        border: 1px solid $white;
+        border: 1px solid $basket_img_border;
       }
     }
 
     .dark {
-      color: $black;
+      color: $basket_td_pri_txt;
     }
 
     .item-code {
@@ -280,14 +280,14 @@
     }
 
     .item--bundle {
-      color: $cerulean-two;
+      color: $basket_item_bundle;
       margin-top: 0.75rem;
     }
 
     .items {
       display: inline-block;
       width: 54%;
-      color: $greyish;
+      color: $basket_td_sec_txt;
       padding-#{$left}: 0.625rem;
 
       @include breakpoint($desktop) {
@@ -359,9 +359,9 @@
       padding: 10px 11px;
       top: 1rem;
       #{$left}: -4.3rem;
-      color: $windows-blue;
-      background-color: $alice-blue;
-      border: 1px solid $cerulean-two;
+      color: $tooltip_text;
+      background-color: $tooltip_bg;
+      border: 1px solid $tooltip_border;
       border-radius: 2px;
       width: 10.81rem;
 
@@ -436,7 +436,7 @@
   .tooltip--head {
     font-size: 0.75rem;
     font-family: $arial;
-    color: $cerulean-two;
+    color: $tooltip_border;
     margin: 0;
 
     @include icon(infomation, after) {
@@ -456,7 +456,7 @@
     }
 
     &.not-available {
-      color: $white;
+      color: $basket_tooltip_not_available;
       text-decoration: line-through;
 
       &:hover + .tooltip {
@@ -536,7 +536,7 @@
 #details-privilege-card-wrapper {
   .privilege-card-wrapper {
     padding-left: 0;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $accordion_border;
   }
 
   .c-user-register & {
@@ -619,13 +619,13 @@
 
   .coupon-code-wrapper {
     .card__header.ui-state-active {
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $accordion_border;
     }
   }
 
   .coupon-code-wrapper,
   #details-privilege-card-wrapper {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $accordion_border;
     position: relative;
     font-size: 0.875rem;
 
@@ -671,7 +671,7 @@
     position: relative;
     padding: 0 1.5rem;
     padding-top: 0.2rem;
-    border-top: 1px solid $white;
+    border-top: 1px solid $accordion_border;
 
     .alias--cart & {
       border-top: none;
@@ -686,7 +686,7 @@
     position: relative;
     top: -1.4rem;
     font-size: 1rem;
-    color: $greyish;
+    color: $primary_input_label;
     font-family: $arial;
     transition: 0.2s ease all;
 
@@ -695,7 +695,7 @@
       position: absolute;
       top: auto;
       left: 0;
-      color: $cherry;
+      color: $content_error_msg_bg;
       font-size: 0.75rem;
     }
 
@@ -714,9 +714,9 @@
 
   input {
     border: none;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $basket_promotion_input_border;
     background-color: transparent;
-    color: $black;
+    color: $primary_input;
     text-shadow: none;
     width: 100%;
     margin-top: 1.9rem;
@@ -727,7 +727,7 @@
     z-index: 1;
 
     &:focus {
-      border-color: $windows-blue;
+      border-color: $primary_input_focus_border;
 
       & ~ label {
         top: -2.938rem;
@@ -739,7 +739,7 @@
     }
 
     &.error {
-      border-bottom: 2px solid $cherry;
+      border-bottom: 2px solid $content_error_input_border;
     }
   }
 
@@ -749,18 +749,24 @@
       display: block;
       margin-bottom: 14px;
       padding: 9px 30px;
-      background: $pumpkin-orange;
-      color: $white-five;
+      background: $primary_btn_bg;
+      color: $primary_btn_text;
       cursor: pointer;
       margin-#{$left}: 1.5rem;
       font-size: 0.75rem;
       max-width: 6.25rem;
     }
 
+    @include breakpoint($desktop) {
+      &:hover {
+        opacity: 0.75;
+      }
+    }
+
     &.remove {
       margin-#{$left}: 1.5rem;
       text-decoration: underline;
-      color: $cerulean-two;
+      color: $basket_remove_link;
       font-family: $arial;
       font-size: 0.75rem;
       margin-bottom: 0.75rem;
@@ -768,7 +774,7 @@
   }
 
   .form-item--error-message {
-    color: $cherry;
+    color: $content_error_msg_txt;
     position: relative;
     top: -1rem;
   }
@@ -791,7 +797,7 @@
   }
 
   & > h3 {
-    color: $marine-blue;
+    color: $block_title;
     margin-bottom: 0.3rem;
     padding-bottom: 0.56rem;
     font-family: $alshaya-bold;
@@ -873,7 +879,7 @@
     }
 
     .owl-dots .owl-dot {
-      color: $marine-blue-two;
+      color: $basket_horizontal_recommendation_slider_dots;
     }
   }
 }
@@ -883,8 +889,8 @@
 }
 
 .cart-promotions-wrapper {
-  background: $rosy-pink;
-  color: $white-four;
+  background: $basket_header_promo_bg;
+  color: $basket_header_promo_txt;
   padding: 0.85rem 1rem;
   margin-bottom: 0.875rem;
   letter-spacing: 0.0125rem;
@@ -918,9 +924,9 @@
 #out-of-stock-message {
   font-family: $arial;
   font-size: 0.75rem;
-  color: $white-four;
+  color: $basket_header_oos_txt;
   font-weight: bold;
-  background-color: $cherry;
+  background-color: $basket_header_oos_bg;
   padding: 1.38rem 3rem;
   margin-bottom: 0.875rem;
   position: relative;
@@ -952,7 +958,7 @@
   font-family: $arial;
   font-size: 0.75rem;
   font-weight: bold;
-  color: $cherry;
+  color: $basket_oos_inline_txt;
   margin-top: 1.375rem;
 
   @include breakpoint($only-tablet) {
@@ -966,7 +972,7 @@
 
 .stock-quantity-error {
   .form-type-select {
-    border: 1px solid $cherry !important;
+    border: 1px solid $basket_oos_inline_qty_border !important;
     padding: 2px;
     width: 4.75rem !important;
 
@@ -1024,8 +1030,8 @@ html[lang=ar] {
 
     .image {
       @include breakpoint($only-mobile) {
-        border: 1px solid #ddd;
-        background: white;
+        border: 1px solid $basket_img_border;
+        background: $basket_img_bg;
 
         img {
           border: 0;
@@ -1051,7 +1057,7 @@ html[lang=ar] {
       font-size: 0.75rem;
 
       &.not-available {
-        color: $white;
+        color: $basket_tooltip_not_available;
       }
     }
 
@@ -1295,7 +1301,7 @@ html[lang=ar] {
 }
 
 .privilege-earn-text {
-  color: $grey-ash;
+  color: $privilege_earn_txt;
   font-size: 0.75rem;
   border-bottom: 0;
   font-weight: bold;
@@ -1422,7 +1428,7 @@ body .ladda-button {
   }
 
   a {
-    color: $white-five;
+    color: $primary_btn_text;
     font-size: 1rem;
     text-decoration: underline;
 
@@ -1434,7 +1440,7 @@ body .ladda-button {
 
 #block-baskethorizontalproductrecommendation {
   .owl-item a.above-mobile-block:hover .c-products__item__label {
-    color: $cerulean-two;
+    color: $content_link_color;
     text-decoration: underline;
   }
 }

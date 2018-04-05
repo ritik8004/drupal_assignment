@@ -2,7 +2,7 @@
   a {
     font-size: 0.75rem;
     line-height: 1;
-    color: $windows-blue;
+    color: $plp_facet_filter;
     font-weight: bold;
     margin-top: 0.75rem;
     display: inline-block;
@@ -17,7 +17,7 @@
     }
 
     input[type="text"] {
-      border: 1px solid $white;
+      border: 1px solid $plp_facet_input_border;
       font-family: $alshaya-thin;
       font-size: 0.75rem;
       padding: 0.25rem 0.5rem;
@@ -73,7 +73,7 @@
   text-transform: lowercase;
 
   @include breakpoint($desktop) {
-    color: $black;
+    color: $plp_facet_label;
   }
 }
 
@@ -88,3 +88,104 @@
   }
 }
 
+.js-facets-checkbox-links {
+  .facet-item {
+    position: relative;
+
+    &.facet-item--collapsed {
+      &:hover {
+        cursor: pointer;
+
+        label {
+          span {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=category] {
+  &.js-facets-checkbox-links {
+    display: block;
+  }
+
+  .facet-item--collapsed {
+    label {
+      &::before {
+        content: unset;
+      }
+    }
+  }
+
+  .facet-item--expanded {
+    margin-#{$left}: 1rem;
+
+    ul {
+      html[lang=ar] & {
+        padding-top: 0;
+      }
+    }
+
+    &.facet-item--active-trail {
+      .facet-item--expanded {
+        > label {
+          &::before {
+            content: unset;
+          }
+
+          span {
+            font-weight: bold;
+          }
+        }
+      }
+
+      > label {
+        span {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+
+  > .facet-item--expanded {
+    > label {
+      @include icon(chevronleft, before) {
+        position: absolute;
+        #{$left}: -1rem;
+        font-size: 1.875rem;
+        top: 0.125rem;
+        transform: translateY(-50%);
+      }
+
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.c-sidebar-first {
+  .c-facet__blocks {
+    .block {
+      &:first-child {
+        border-width: 0;
+      }
+
+      &.block-facet-blockcategory {
+        border-bottom: 1px solid $accordion_border;
+      }
+    }
+  }
+}
+
+.block-facet-blockcategory {
+  .c-accordion__title {
+    border-bottom: 1px solid $accordion_border;
+  }
+
+  .ui-state-active {
+    border-bottom: none;
+  }
+}

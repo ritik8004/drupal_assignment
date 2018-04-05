@@ -1,5 +1,5 @@
 .c-footer-secondary {
-  background: $white-four;
+  background: $copyright_footer_bg;
   font-size: 0.6875rem;
   position: relative;
 
@@ -77,12 +77,16 @@
 
 .c-footer__logo--verisign {
   background-image: url("../imgs/cards/card-verisign.png");
+  background-size: contain;
+  background-repeat: no-repeat;
   height: 34px;
   width: 68px;
 }
 
 .c-footer__logo--visa {
   background-image: url("../imgs/cards/card-visa.png");
+  background-size: contain;
+  background-repeat: no-repeat;
   height: 25px;
   width: 60px;
 }
@@ -94,7 +98,7 @@
 }
 
 .c-footer__copy {
-  color: $black-two;
+  color: $copyright_footer_text;
   line-height: 1.5;
 
   @include breakpoint($only-tablet) {
@@ -123,7 +127,7 @@
 
   .field--name-body p {
     margin-top: 0;
-    color: $grey-ash;
+    color: $copyright_footer_paragraph;
     font-size: 0.75rem;
     margin-bottom: 0;
 
@@ -132,7 +136,7 @@
     }
 
     @include breakpoint($tablet) {
-      color: $black;
+      color: $copyright_footer_text;
       font-size: 0.6875rem;
     }
   }

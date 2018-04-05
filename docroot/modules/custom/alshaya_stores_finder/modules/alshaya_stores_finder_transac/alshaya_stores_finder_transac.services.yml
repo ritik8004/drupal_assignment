@@ -1,0 +1,18 @@
+services:
+  alshaya_stores_finder_transac.manager:
+    class: Drupal\alshaya_stores_finder_transac\StoresFinderManager
+    arguments:
+      - '@alshaya_api.api'
+      - '@alshaya_stores_finder_transac.utility'
+      - '@language_manager'
+      - '@logger.factory'
+      - '@config.factory'
+
+  alshaya_stores_finder_transac.utility:
+    class: Drupal\alshaya_stores_finder_transac\StoresFinderUtility
+    arguments:
+      - '@entity_type.manager'
+      - '@alshaya_addressbook.manager'
+      - '@language_manager'
+      - '@database'
+      - '@logger.factory'

@@ -112,21 +112,23 @@ in local as and when required. All required changes are done.
 * Enable dblog and other ui modules
 * Allows hooking into the script, we can create scripts/install-site-dev.sh
 which is already added to .gitignore and add any code we want to execute post
-this script (for instance command to shout loud in mac - `say installation done`)
+this script (for instance command to shout loud in mac - `say installation 
+done`). One argument - site code will be passed to this script.
 
 Script usage:
-* `scripts/update-local.sh "site" "env" "mode"`
-* `scripts/update-local.sh mckw 01dev reuse`
-* `scripts/update-local.sh mckw 01dev download`
+* `blt local:sync "site" "env" "mode"`
+* `blt local:sync mckw dev reuse`
+* `blt local:sync mckw dev download`
+* `blt local:download "site" "env"`
 
 Be careful in using the mode download, it will take time as it does sql-dump
 using drush which can take too much of time.
 
 ### Local setup of Behat:
 * Start Behat installation on your local by following the steps below:
-  * Create a directory, say 'alshaya_behat'
+  * Create a directory, say 'alshaya_behat' [if not exist]
   * cd into the above directory - `cd alshaya_behat`
-  * Create a file composer.json and paste the contents below in it:
+  * Create a file composer.json and paste the contents below in it: [if not exist]
   
     `{
     "require-dev" : {
@@ -203,10 +205,14 @@ using drush which can take too much of time.
 * Install JDK on your machine.
 * Download the latest Selenium standalone server from http://www.seleniumhq.org/download/
 * Download the latest chrome driver from https://sites.google.com/a/chromium.org/chromedriver/downloads
+* Install npm
+  - `npm install --prefix bin chromedriver`
 * Run the selenium server on your machine by using the following command:
-  `java -Dwebdriver.chrome.driver=/path/to/chromedriver  -jar selenium-server-standalone-*.jar` (type the selenium server version you downloaded in place of *)
+ - (In a separate terminal window) `java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar`
 * You are now good to start runnning Behat scripts on your machine
 * Below are various ways to run Behat feature files:
+  * To run a single feature file with specific brand - `bin/behat features/<brand>/manual/<feature> --profile=<instance>` [<brand> i.e. hmkw, <feature> i.e. signin.feature, <instance> i.e. hmuat]
+  * To run a single feature file with multi brand - `bin/behat features/hmkw/manual/basket.feature --profile=(hmuat,hmqa,mckwqa,mckwuat)`
   * To run all the feature files - `bin/behat features`
   * To run a single feature file - `bin/behat features/filename.feature` (e.g. `bin/behat features/checkout.feature`)
   * To run tagged scenarios - `bin/behat features --tags @tagname` (e.g. `bin/behat features --tags @checkout`)

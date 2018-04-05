@@ -4,7 +4,7 @@
 //
 // Style guide: base.form
 %btn {
-  color: $white-five;
+  color: $primary_btn_text;
   padding: 0.625rem 1.6rem;
   border: 0;
   font-size: 0.813rem;
@@ -31,10 +31,10 @@
 
 @mixin form-selector($height) {
   border: 0;
-  border-bottom: 1px solid $black;
+  border-bottom: 1px solid $primary_form_selector_border;
   background: transparent;
   border-radius: 0;
-  color: $black;
+  color: $primary_form_selector;
   width: 100%;
   height: $height;
   outline: none;

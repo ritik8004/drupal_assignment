@@ -1,0 +1,9 @@
+name: 'Alshaya Stores - Transac'
+type: module
+core: 8.x
+package: Alshaya
+description: 'Alshaya stores CT and related settings.'
+dependencies:
+  - alshaya_addressbook:alshaya_addressbook
+  - alshaya_stores_finder:alshaya_stores_finder
+  - alshaya_click_collect:alshaya_click_collect

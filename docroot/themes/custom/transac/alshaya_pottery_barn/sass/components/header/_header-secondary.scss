@@ -1,0 +1,27 @@
+.c-menu-secondary {
+  text-transform: none;
+
+  li {
+    @include breakpoint($desktop) {
+      border-#{$left}: 1px solid $header_secondary_menu_link_border;
+    }
+  }
+
+  .block-alshaya-stores-finder a {
+    @include breakpoint($desktop) {
+      border-#{$left}: 1px solid $header_secondary_menu_link_border;
+    }
+  }
+
+  a {
+    @include breakpoint($upto-desktop) {
+      text-transform: uppercase;
+    }
+  }
+}
+
+.header--wrapper.navbar-fixed-top {
+  @include breakpoint($desktop) {
+    display: none;
+  }
+}

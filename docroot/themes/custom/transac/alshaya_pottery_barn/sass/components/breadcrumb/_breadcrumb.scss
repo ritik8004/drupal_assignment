@@ -1,0 +1,10 @@
+.c-breadcrumb {
+  @include breakpoint($only-tablet) {
+    background: $breadcrumb_bg_tablet;
+  }
+
+  li {
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+}

@@ -1,0 +1,13 @@
+dependencies:
+   config:
+     - field.field.taxonomy_term.acq_product_category.field_swatch_type
+content:
+  field_swatch_type:
+    type: string_textfield
+    weight: 8
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+

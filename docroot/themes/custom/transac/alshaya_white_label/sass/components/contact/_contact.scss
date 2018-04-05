@@ -10,7 +10,7 @@
   }
 
   .c-page-title {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $content_pagetitle_border;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
     margin-top: 1rem;
@@ -31,7 +31,7 @@
       top: 0.125rem;
       #{$right}: 0;
       font-size: 0.8125rem;
-      color: $greyish;
+      color: $primary_textarea_suffix;
       font-weight: normal;
       z-index: 3;
     }
@@ -72,13 +72,13 @@
   input[type="text"],
   input,
   textarea {
-    border: 1px solid $grey-ash;
+    border: 1px solid $primary_textarea_border;
     border-width: 0 0 1px;
     width: 100%;
     height: 1.563rem;
     outline: rgba(0, 0, 0, 0);
     font-size: 16px;
-    border-bottom: 1px solid $grey-ash;
+    border-bottom: 1px solid $primary_textarea_border;
   }
 
   label.error {
@@ -86,14 +86,14 @@
     margin-top: 0.5rem;
     margin-bottom: 0;
     display: block;
-    color: $red-error;
+    color: $formitem_error_label;
     top: 0;
     padding-top: 0;
   }
 
   .form-item--error {
     input.error {
-      color: $black;
+      color: $formitem_error;
     }
   }
 
@@ -103,7 +103,7 @@
   .form-item.form-type-textarea {
     label:last-of-type {
       font-size: 1rem;
-      color: $greyish;
+      color: $formitem_label;
       position: absolute;
       #{$left}: 0;
       top: -0.125rem;
@@ -136,13 +136,13 @@
 
     .country-label {
       font-size: 0.75rem;
-      color: $greyish;
+      color: $formitem_label;
       transition: 0.2s ease all;
     }
 
     .country-name {
       font-size: 1rem;
-      color: $black;
+      color: $formitem_input;
       transition: 0.2s ease all;
     }
   }
@@ -201,8 +201,8 @@
     height: 2.1875rem;
     text-transform: lowercase;
     font-size: 0.875rem;
-    color: $white-five;
-    background: $pumpkin-orange;
+    color: $primary_btn_text;
+    background: $primary_btn_bg;
     margin-bottom: 7.1875rem;
     border: none;
     margin-top: 3rem;
@@ -228,7 +228,7 @@
   }
 
   legend {
-    color: $marine-blue-two;
+    color: $webform_contact_legend;
   }
 }
 

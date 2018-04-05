@@ -6,7 +6,7 @@
     }
 
     input:disabled {
-      color: $greyish;
+      color: $primary_input_disabled;
     }
 
     input:not(:focus):valid ~ label,
