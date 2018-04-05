@@ -53,6 +53,7 @@
     transform: translate3d(0, 0, 0) translateZ(0);
     perspective: 1000px;
     backface-visibility: hidden;
+    will-change: transform;
   }
 }
 
