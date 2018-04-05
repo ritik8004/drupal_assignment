@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_super_category.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_super_category_install() {
+  // Delete old config as it's not needed any more.
+  Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings')->delete();
+  _alshaya_config_save_overridden_configs('alshaya_super_category');
+}

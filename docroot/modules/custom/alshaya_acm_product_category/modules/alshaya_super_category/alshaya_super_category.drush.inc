@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Provides Drush commands for alshaya_acm_product_category.
+ * Provides Drush commands for alshaya_super_category.
  */
 
 /**
  * Implements hook_drush_command().
  */
-function alshaya_acm_product_category_drush_command() {
+function alshaya_super_category_drush_command() {
   $commands = [];
 
   $commands['alshaya-super-category-switch'] = [
@@ -25,9 +25,9 @@ function alshaya_acm_product_category_drush_command() {
 /**
  * Implements drush command alshaya-super-category-switch.
  */
-function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
+function drush_alshaya_super_category_switch() {
   // Get editable alshaya_acm_product_category.super_category.settings.
-  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings');
+  $config = \Drupal::configFactory()->getEditable('alshaya_super_category.settings');
 
   $status = $config->get('status') ? FALSE : TRUE;
   $action = $status ? 'enable' : 'disabled';
@@ -42,7 +42,6 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
   $default_parent = drush_get_option('default_parent', 0);
 
   // Update alshaya_acm_product_category.super_category.settings.
-  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings');
   $config->set('status', $status);
   if ($status) {
     if (empty($default_parent)) {
