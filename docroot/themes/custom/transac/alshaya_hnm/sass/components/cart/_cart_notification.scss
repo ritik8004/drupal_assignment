@@ -12,7 +12,7 @@
   }
 
   &.has--notification::before {
-    border-bottom: 11px solid $hnm-black-two;
+    border-bottom: 11px solid $minicart_notification_border;
 
     @include breakpoint($only-mobile) {
       #{$right}: 0.625rem;
@@ -21,7 +21,7 @@
 
   .notification,
   .error {
-    border: 2px solid $hnm-black-two;
+    border: 2px solid $minicart_notification_border;
     box-shadow: none;
 
     img {
@@ -29,12 +29,12 @@
     }
 
     .col-2 {
-      color: $hnm-black-two;
+      color: $minicart_notification_text;
 
       .name {
         font-family: $hnm-demibold;
         font-size: 0.8125rem;
-        color: $hnm-black-two;
+        color: $minicart_notification_name;
       }
 
       a {
@@ -46,10 +46,10 @@
         display: block;
         line-height: 32px;
         text-align: center;
-        background: $white-five;
-        border: 2px solid $hnm-black-two;
+        background: $minicart_notification_bg;
+        border: 2px solid $minicart_notification_border;
         text-transform: uppercase;
-        color: $hnm-black-two;
+        color: $minicart_notification_text;
         font-family: $hnm-bold;
         font-weight: normal;
         letter-spacing: 1px;
@@ -67,13 +67,13 @@
 
       .qty-label {
         font-family: $hnm-regular;
-        color: $grey7;
+        color: $primary_minicart_quantity_bg;
         font-size: 0.625rem;
       }
 
       .qty {
         font-family: $hnm-bold;
-        color: $grey7;
+        color: $primary_minicart_quantity_bg;
         font-size: 0.625rem;
         margin-#{$left}: 0.25rem;
       }
