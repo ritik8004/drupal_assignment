@@ -34,4 +34,9 @@ function alshaya_pb_transac_install() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
     ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
     ->save();
+
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_pb_transac');
+  }
 }
