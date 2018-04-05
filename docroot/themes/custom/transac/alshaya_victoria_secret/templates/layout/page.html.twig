@@ -1,20 +1,35 @@
 <div>
-  <!-- ______________________ MENU SECONDARY _______________________ -->
+
 
   <div class="header--wrapper">
-    {% if page.menu_secondary %}
-      <div class="c-menu-secondary">
-        <div class="l-container">
-          <div class="c-menu-secondary__region">
-            {{ page.menu_secondary }}
+    <!-- ______________________ MENU PRIMARY _______________________ -->
+    <div class="c-header__wrapper--inner">
+      {% if page.menu_primary %}
+        <div class="c-menu-primary">
+          <div class="l-container">
+            <div id="c-menu-primary__region">
+              {{ page.menu_primary }}
+            </div>
           </div>
         </div>
-      </div>
-    {% endif %}
-  </div>
-    <!-- /menu-secondary -->
+      {% endif %}
+      <!-- /menu-primary -->
 
-    <!-- ______________________ HEADER _______________________ -->
+      <!-- ______________________ MENU SECONDARY _______________________ -->
+      {% if page.menu_secondary %}
+        <div class="c-menu-secondary">
+          <div class="l-container">
+            <div class="c-menu-secondary__region">
+              {{ page.menu_secondary }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <!-- /menu-secondary -->
+  </div>
+
+  <!-- ______________________ HEADER _______________________ -->
   <div class="branding__menu">
     {% include directory ~ '/../alshaya_white_label/templates/partial/nojs.html.twig' %}
 
@@ -28,19 +43,6 @@
       </header>
     {% endif %}
     <!-- /header -->
-
-    <!-- ______________________ MENU PRIMARY _______________________ -->
-
-    {% if page.menu_primary %}
-      <div class="c-menu-primary">
-        <div class="l-container">
-          <div id="c-menu-primary__region">
-            {{ page.menu_primary }}
-          </div>
-        </div>
-      </div>
-    {% endif %}
-    <!-- /menu-primary -->
 
     <!-- ______________________ Pre content _______________________ -->
     {% if page.pre_content %}
