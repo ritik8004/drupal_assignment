@@ -429,3 +429,11 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .promo-banner {
+    .hide-on-mobile {
+      display: none;
+    }
+  }
+}

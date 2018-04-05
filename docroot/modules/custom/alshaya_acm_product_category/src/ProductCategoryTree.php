@@ -331,20 +331,19 @@ class ProductCategoryTree {
    * @param null|object $term
    *   (optional) The term object or nothing.
    *
-   * @return int|mixed|null|string
-   *   Return the parent id term.
+   * @return \Drupal\taxonomy\TermInterface|mixed|null
+   *   Return the parent term object or NULL.
    */
   public function getCategoryTermRootParent($term = NULL) {
-    $parent_id = 0;
     if (empty($term) || !$term instanceof  TermInterface) {
       $term = $this->getCategoryTermFromRoute();
     }
     if ($term instanceof TermInterface && $parents = $this->getCategoryTermParents($term)) {
       // Get the top level parent id if parent exists.
-      $parents = array_keys($parents);
-      $parent_id = empty($parents) ? $term->id() : end($parents);
+      return end($parents);
     }
-    return $parent_id;
+
+    return NULL;
   }
 
   /**

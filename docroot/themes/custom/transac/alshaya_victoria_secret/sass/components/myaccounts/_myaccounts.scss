@@ -1,0 +1,10 @@
+.c-sidebar-first {
+  .my-account-nav {
+    a {
+      &.active {
+        font-family: $vs-bold;
+        text-transform: none;
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@
     padding: 0.9375rem 1.0625rem 0.9375rem 1.5rem;
 
     .title {
-      color: $hnm-black-two;
+      color: $order_summary_title;
       font-weight: normal;
       font-family: $hnm-demibold;
     }
@@ -11,7 +11,7 @@
     a {
       float: $right;
       font-size: 0.75rem;
-      color: $hnm-black-two;
+      color: $order_summary_link;
       font-weight: normal;
       font-family: $hnm-demibold;
 
@@ -24,7 +24,7 @@
   .content-head {
     width: 100%;
     padding: 0.9375rem 1.25rem 0.9375rem 1.5rem;
-    color: $hnm-black-two;
+    color: $order_summary_title;
 
     @include icon(dropdown-expand, after) {
       position: absolute;
@@ -51,7 +51,7 @@
       span.price-currency,
       span.price-amount {
         font-family: $hnm-bold;
-        color: $hnm-black-two;
+        color: $order_summary_product_price;
       }
 
       span.price-amount {
@@ -76,7 +76,7 @@
     }
 
     .discount-total {
-      color: $error;
+      color: $order_summary_product_price_discount;
     }
   }
 }
@@ -111,7 +111,8 @@
 
 .alias--cart {
   h1 {
-    color: $hnm-black-two;
+    color: $title;
+    border-bottom: 1px solid $content_pagetitle_border;
 
     @include breakpoint($tablet) {
       font-size: 1.25rem;
@@ -128,6 +129,10 @@
   }
 
   #table-cart-items {
+    tr {
+      border-bottom: 1px solid $content_pagetitle_border;
+    }
+
     table {
       width: 100%;
       font-family: $hnm-regular;
@@ -135,11 +140,11 @@
     }
 
     thead {
-      background: $grey9;
+      background: $order_detail_table_head;
 
       th {
         font-family: $hnm-regular;
-        color: $hnm-black-two;
+        color: $order_detail_th_color;
         font-weight: normal;
       }
     }
@@ -147,7 +152,7 @@
     tbody tr {
       &:hover {
         .name .items a {
-          color: $hnm-black-two;
+          color: $order_detail_tr_color;
         }
       }
     }
@@ -173,7 +178,7 @@
           a {
             font-family: $hnm-demibold;
             font-weight: normal;
-            color: $hnm-black-two;
+            color: $order_detail_tr_quantity;
           }
         }
       }
@@ -221,7 +226,7 @@
 
     table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] {
       td {
-        color: $scarlet;
+        color: $order_detail_total_tr_row_price_td;
 
         &:nth-child(2) {
           background: $white-five;
@@ -276,7 +281,7 @@
       .tooltip {
         &::before {
           @include breakpoint($desktop) {
-            border-#{$right}: 8px solid $hnm-black-two;
+            border-#{$right}: 8px solid $tooltip_border_2;
           }
         }
       }
@@ -291,7 +296,7 @@
         text-decoration: underline;
         border: 0;
         padding: 0;
-        color: $hnm-black-two;
+        color: $basket_continue_shopping_text;
       }
 
       @include breakpoint($only-mobile) {
@@ -315,13 +320,13 @@
       }
 
       td:nth-child(2) {
-        background-color: $whisper-light;
+        background-color: $order_details_table_total_bg;
       }
 
       span.price-currency,
       span.price-amount {
         font-family: $hnm-bold;
-        color: $hnm-black-two;
+        color: $order_details_table_total_price;
       }
 
       span.price-currency {
@@ -344,7 +349,7 @@
   .edit-checkout {
     @extend %btn;
 
-    background: $hnm-black-two;
+    background: $primary_btn_bg;
     margin-top: 1em;
     margin-bottom: 0.75rem;
     min-width: 10.8125rem;
@@ -367,7 +372,7 @@
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
     font-size: 0.75rem;
-    border: 1px solid $hnm-black-two;
+    border: 1px solid $secondary_border;
     display: block;
     padding: 0.625rem 1.6rem;
     text-align: center;
@@ -397,8 +402,8 @@
   #edit-actions-top {
     .checkout-top-button {
       cursor: pointer;
-      background: $hnm-black-two;
-      color: $white-five;
+      background: $primary_btn_bg;
+      color: $order_actions_checkout;
       font-size: 0.875rem;
       font-family: $hnm-bold;
       text-transform: uppercase;
@@ -421,12 +426,12 @@
   .edit-continue-shopping-mobile {
     font-size: 0.875rem;
     font-family: $hnm-bold;
-    border: 1px solid $hnm-black-two;
-    background: $hnm-black-two;
+    border: 1px solid $secondary_border;
+    background: $primary_btn_bg;
     padding: 0.53125rem 0;
     text-align: center;
     text-transform: uppercase;
-    color: $white-five;
+    color: $primary_btn_text;
     position: relative;
     padding-#{$left}: 1.688rem;
 
@@ -464,7 +469,7 @@
   margin-bottom: 2.375rem;
   margin-top: 2.625rem;
   font-weight: normal;
-  color: $black;
+  color: $primary_link;
   font-family: $hnm-bold;
   text-transform: uppercase;
   font-size: 0.8125rem;

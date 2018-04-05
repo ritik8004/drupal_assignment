@@ -39,16 +39,19 @@ function drush_alshaya_acm_product_category_alshaya_super_category_switch() {
   // @todo: Validate the given default_parent exists and from the appropriate
   // vocabulary and is rootTerm.
   // Determine which default parent to use for main menu.
-  $default_parent = $status ? drush_get_option('default_parent', '') : '';
+  $default_parent = drush_get_option('default_parent', 0);
 
   // Update alshaya_acm_product_category.super_category.settings.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings');
   $config->set('status', $status);
-  if (empty($default_parent) && $status) {
-    $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
-    $default_parent = key($terms);
+  if ($status) {
+    if (empty($default_parent)) {
+      $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
+      $default_parent = key($terms);
+    }
+    $config->set('default_category_tid', $default_parent);
   }
-  $config->set('default_category_tid', $default_parent);
+
   $config->save(TRUE);
 
   // Load super category menu block and change status.

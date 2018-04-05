@@ -20,7 +20,7 @@
       height: 27.5rem;
       width: auto;
       padding: 2.5rem 1.875rem;
-      background-color: $grey1;
+      background-color: $mm_highlight_bg;
 
       .title {
         @include arabic-letter-spacing;
@@ -31,14 +31,14 @@
         font-size: 0.8125rem;
         letter-spacing: 0.5px;
         font-weight: normal;
-        color: $black-three;
+        color: $mm_highlight_title;
         margin-#{$left}: 0.625rem;
       }
     }
 
     .menu--two__list .menu--two__list-item > .menu-two__link-wrapper {
       a {
-        color: $black-three !important;
+        color: $mm_highlight_title !important;
       }
     }
 
@@ -46,14 +46,14 @@
       @include arabic-letter-spacing;
 
       font-size: 0.75rem !important;
-      color: $grey7 !important;
+      color: $mm_link_text !important;
       font-family: $hnm-regular !important;
       letter-spacing: 0.3px;
       line-height: 1.1;
       text-transform: capitalize;
 
       &:hover {
-        color: $link-hover !important;
+        color: $mm_link_hover !important;
         text-decoration: underline;
       }
     }
