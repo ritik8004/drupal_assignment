@@ -1,13 +1,31 @@
 @import "../../alshaya_white_label/sass/config/_colors.scss";
 
-// Alshaya White Label
-$black-three: #2f2f2f;
+/* *********Steps to add colors for new brand ************ */
 
-// Mothercare
-$scarlet-three: #cc071e;
-$white-five-20: rgba(255, 255, 255, 0.2);
+// 1) Copy the color variables by going to Zeplin > Styleguide.
+// 2) Paste them under section 1 under brand colors.
+// 3) Copy the variables from section 2 onwards from alshaya_white_label > _color.scss file.
+// 4) Map the variables copied from whitelabel with the color variables copied in section #1.
 
+// ================================= //
+// ------  TABLE of CONTENTS ------- //
+// --------------------------------- //
+// ------- 1. Brand Colors --------- //
+// ------- 2. Primary color--------- //
+// ------- 3. Secondary color  ----- //
+// ------- 4. Tertiary Colors ------ //
+// ------- 5. Components ----------- //
+// ------- 6. Sections  ------------ //
+// ------- 7. Pages ---------------- //
+// ================================= //
+
+/* ------- 1. Brand Colors ------- */
+// Colors from Zeplin pallete for the site.
 // H&M custom color.
+$black-three: #2f2f2f;
+$scarlet-three: #cc071e;
+$white-five: #fff;
+$white-five-20: rgba(255, 255, 255, 0.2);
 $hnm-black: #0d0d0d;
 $hnm-red: #cd2026;
 $info: #569de5;
@@ -42,3 +60,256 @@ $white-four-70: rgba(247, 247, 247, 0.7);
 $hnm-grey-light: #dee6f0;
 $hnm-grey-light-two: #d7e1ec;
 $hnm-grey-light-three: #e6e6e6;
+
+/* ------- 2. Primary Colors ------- */
+// Global elements.
+$content_pagetitle: $hnm-black-two;
+$content_pagetitle_border: $white;
+$primary_link: $black;
+$primary_link-hover: $link-hover;
+$primary_link-active: $grey7;
+$content_link_color: $hnm-black-two;
+$primary_border: $white-smoke-border;
+
+// Form elements.
+$primary_input: $hnm-black-two;
+
+//Buttons.
+$primary_btn_bg: $hnm-black-two;
+$primary_empty_btn: $hnm-black-two;
+$primary_empty_btn_border: $hnm-black-two;
+$pending_btn_bg: $warning;
+$returned_btn_bg: $returned;
+$complete_btn_bg: $success;
+
+// Checkbox & Radio.
+$primary_checkbox_empty: $hnm-black-four;
+$primary_checkbox_filled: $hnm-black-two;
+$primary_radiobtn_empty: $hnm-black-two;
+$primary_radiobtn_filled: $hnm-black-two;
+
+// Dropdown.
+$primary_dropdown_text: $hnm-black-two;
+$primary_dropdown_border: $hnm-black-two;
+
+// close button
+$primary_close_btn: $white-five;
+$primary_close_bg: $hnm-black-two;
+
+/* ------- 3. Secondary color  ----- */
+$secondary_link: $black-two;
+$secondary_border: $hnm-black-two;
+
+/* ------- 4. Tertiary Colors ------- */
+$tertiary_link: $black-three;
+
+/* ------- 5. Components --------------- */
+// Titles.
+$page_title: $hnm-black-two;
+$block_title: $hnm-black-two;
+$title: $hnm-black-two;
+$sub_title: $hnm-black-two;
+
+// Messages and Errors
+$default_msg_status_text: $white-four;
+$default_msg_bg: $success;
+$default_error: $red-error;
+
+// Tooltip
+$tooltip_border: $grey1;
+$tooltip_border_2: $hnm-black-two;
+
+// Maintenance
+$maintenance_container_border: $white-two;
+$maintenance_body_bg: $matterhorn;
+$maintenance_link: $black;
+$maintenance_text: $grey-ash;
+$maintenance_title: $black;
+$maintenance_mobile_body_bg: $faun;
+$maintenance_mobile_body_text: $black;
+
+// Accordion
+$accordion_title: $hnm-black-two;
+$accordion_subtitle: $grey6;
+$accordion_border: $white-smoke-border;
+$accordion_bg: $white-five;
+
+// Back to top
+$btt_bg: $white-three;
+
+// Breadcrumb.
+$breadcrumb_link: $hnm-black-two;
+
+// Cloudzoom
+$cloudzoom_hovertext: $hnm-black-two;
+
+// Contact Page
+$webform_contact_legend: $hnm-black-two;
+
+// Facet
+$plp_facet_filter: $black-three;
+$plp_facet_input_placeholder: $hnm-black-two;
+$plp_facet_label: $black-two;
+
+// Delivery Menu
+$delivery_color: $link-hover;
+
+// Search Results
+$plp_filterbar_clearall_border: $hnm-black-two;
+$plp_filterbar_clearall_text: $hnm-black-two;
+$autocomplete_hover: $search-hover;
+$autocomplete_text: $hnm-black-two;
+
+// Sharethis
+$sharethis_icon: $hnm-black-two;
+$sharethis_text: $grey5;
+
+// Out of stock button.
+$oos_pdp_text: $hnm-grey;
+
+// Social links
+$social_links: $white-five;
+$social_links_hover: $grey5;
+
+//Address book
+$address_tile_selected_bg: $grey3;
+$address_tile_label: $grey-ash;
+$address_tile_border: $grey4;
+$address_content_text: $hnm-black-two;
+$address_content_link_border: $hnm-black-two;
+$address_content_link_bg: $hnm-black-two;
+$address_book_mobile_prefix: $greyish;
+$cancel_button: $hnm-black-two;
+
+// Modal
+$modal_close_bg: $hnm-black-two;
+$modal_close_icon: $white-five;
+
+// zoomin and zoomout button
+$gallery_zoombtn_bg: $white-five-20;
+$gallery_zoombtn_text: $hnm-black-two;
+$gallery_zoombtn_disabled: $light-ash;
+
+// Cross Sell - Upsell
+$sell_owl_dots: $hnm-black-two;
+$sell_label: $hnm-black-two;
+
+// Price
+$price_default: $cherry;
+
+// Promo Blocks
+$promo_title: $hnm-red;
+$promo_sub_title: $grey-ash;
+$promo_bordered_title: $hnm-black-two;
+$promo_bordered_border: $grey-ash;
+
+// Copyright
+$copyright_footer_bg: $hnm-black;
+$copyright_footer_text: $grey5;
+
+//3. Footer
+$footer_bg: $hnm-black;
+$footer_title_h3: $white-five;
+$footer_link: $white-five;
+$footer_link2: $white-two;
+$footer_link_active: $grey5;
+$footer_submit_text: $hnm-black-two;
+$footer_submit_bg: $white-five;
+$footer_input_text: $white-five;
+$footer_input_placeholder: $grey5;
+$footer_input_bg: $hnm-black;
+
+// language Switcher
+$lang_switch_firsttime_border: $white-smoke-border;
+$lang_switch_firsttime_bg: $hnm-black-two;
+
+// Newsletter
+$footer_newsletter_label: $grey5;
+$footer_newsletter_success_bg: $tealish;
+$footer_newsletter_success_text: $white-four;
+
+// Welcome user block
+$welcome_h3: $hnm-black-four;
+
+// Header
+$primary_search_input_placeholder: $grey6;
+$primary_minicart_text2: $hnm-black-four;
+$primary_minicart_quantity_bg: $hnm-red;
+$header_blocksearch_border: $grey2;
+$header_blocksearch_bg: $marine-blue;
+$header_blocksearch_input: $grey-ash;
+$mm_l1_link: $hnm-black-four;
+$mm_mobile_icon: $hnm-black-two;
+$mm_mobile_icon_active: $hnm-red;
+$mm_bg: $white-five;
+$mm_l1_link: $black-two;
+$mm_l1_link2: $black;
+$mm_l1_link_desktop: $grey8;
+$mm_l1_link_desktop_active_bg: $grey1;
+$mm_l1_link_active: $white-smoke-border;
+$mm_l2_bg: $white-five;
+$mm_l2_link: $peacock-blue;
+$mm_l2_hover_border: $black;
+$mm_l2_p: $brownish-grey;
+$mm_l2_p_hover  : $white-five;
+$mm_l3_link_bg: $white-five;
+$mm_l3_link: $peacock-blue;
+$mm_l2_wrapper_link: $marine-blue;
+$mm_border: $white;
+$mm_highlight_bg: $grey1;
+$mm_highlight_title: $black-three;
+$mm_link_text: $grey7;
+$mm_link_hover: $link-hover;
+$header_toggle_sign_default_mobile: $black;
+$header_toggle_sign_default: $hnm-grey;
+$header_toggle_sign_active_tab: $hnm-black-two;
+$header_toggle_sign_active_tab_bg: $white-five;
+$header_branding_shadow: $white;
+
+// PLP
+$plp_swatch_more_link: $hnm-black-two;
+$plp_facet_label: $hnm-black-two;
+$plp_facet_clear_border: $hnm-black-two;
+$plp_facet_border: $hnm-black-two;
+$plp_search_count: $grey7;
+$plp_category_desc: $grey7;
+$plp_tile_product_title: $hnm-black-two;
+$plp_tile_product_title_hover: $black;
+$plp_tile_oos_bg: $hnm-red;
+$plp_pager_link: $hnm-black-two;
+$plp_pager_link_border: $hnm-black-two;
+$plp__label_active_bg: $white-five;
+
+// PDP
+$pdp_modal_full_prodlink: $hnm-black-two;
+$pdp_product_price: $black-two;
+$pdp_product_itemcode: $grey7;
+$pdp_swatch_border: $white-five;
+$pdp_swatch_hover: $hnm-black-two-50;
+$pdp_swatch_selected_border: $hnm-black-two;
+$pdp_swatch_disabled: $white;
+$pdp_desc_wrapper: $grey7;
+$pdp_desc_wrapper_label: $hnm-black-two;
+$pdp_cc_highlight: $hnm-black-two;
+$pdp_cc_text: $grey7;
+$pdp_cc_modal_border: $black;
+$pdp_select_selectedtext: $hnm-black-two;
+$pdp_select_hover: $hnm-black-two-50;
+$pdp_oos_text: $white-five;
+$pdp_oos_bg: $error;
+$fake_apply_btn: $white-five;
+
+// User my account
+$password_tooltip_list: $cerulean-two;
+$myaccount_icon: $hnm-black-two;
+$myaccount_mobile_title: $hnm-black-two;
+$myaccount_mobile_title2: $black-two;
+$privilege_card_title: $hnm-black-two;
+$login_form_text: $black-two;
+$newsletter_subscribe_label: $grey-ash;
+$myaccountneedhelp_text: $white-five;
+
+//block-youllbeableto
+$user_block_title: $black-three;
+$user_block_text: $grey-ash;
+$user_block_link: $hnm-black-two;

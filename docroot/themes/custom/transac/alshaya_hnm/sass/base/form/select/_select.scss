@@ -1,8 +1,8 @@
 @mixin select-style($select-width) {
   appearance: none;
-  border: 1px solid $hnm-black-two;
+  border: 1px solid $primary_dropdown_border;
   border-radius: 0;
-  background-color: $white-five;
+  background-color: $primary_dropdown_bg;
   padding: 0.5rem;
   padding-#{$left}: 0.7rem;
   padding-#{$right}: 1.5rem;
@@ -12,7 +12,7 @@
   outline: none;
   direction: $dir;
   text-transform: uppercase;
-  color: $hnm-black-two;
+  color: $primary_dropdown_text;
 
   @include breakpoint($tablet) {
     background-color: transparent;
@@ -33,7 +33,7 @@
 
   @include icon(dropdown-expand, after) {
     font-size: 2.1875rem;
-    color: $hnm-black-two;
+    color: $primary_dropdown_text;
     text-indent: -3px;
     pointer-events: none;
     position: absolute;
@@ -72,19 +72,19 @@
     padding: 0.25rem 0.2rem;
     text-align: $left;
     width: $select-width;
-    border: 1px solid $hnm-black-two;
+    border: 1px solid $primary_dropdown_border;
     border-radius: 0;
     outline: none;
 
     .select2-selection__rendered {
       @include arabic-letter-spacing;
 
-      color: $hnm-black-two;
+      color: $primary_dropdown_text;
       text-transform: uppercase;
       letter-spacing: 1px;
 
       .select2-selection__placeholder {
-        color: $hnm-black-two;
+        color: $primary_dropdown_text;
       }
     }
   }
@@ -100,7 +100,7 @@
     #{$right}: 1px;
     width: 2.063rem;
     height: 2.063rem;
-    background: $white-five;
+    background: $primary_dropdown_bg;
 
     &::after {
       // IE10 needs this in px.
@@ -119,13 +119,13 @@
 }
 
 .select2-dropdown {
-  border-color: $hnm-black-two;
+  border-color: $primary_dropdown_border;
 
   ul.select2-results__options {
     li.select2-results__option {
       @include arabic-letter-spacing;
 
-      color: $hnm-black-two;
+      color: $primary_dropdown_text;
       font-size: 0.75rem;
       text-transform: uppercase;
       font-family: $hnm-regular;

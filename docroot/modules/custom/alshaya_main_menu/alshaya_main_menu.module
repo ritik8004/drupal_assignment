@@ -6,7 +6,7 @@
  */
 
 use Drupal\Core\Cache\Cache;
-use Drupal\alshaya_main_menu\ProductCategoryTree;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -14,6 +14,12 @@ use Drupal\taxonomy\TermInterface;
  */
 function alshaya_main_menu_theme($existing, $type, $theme, $path) {
   return [
+    'alshaya_main_menu_top_level' => [
+      'template' => 'alshaya-main-menu-top-level',
+      'variables' => [
+        'term_tree' => NULL,
+      ],
+    ],
     'alshaya_main_menu_level1' => [
       'template' => 'alshaya-main-menu-level1',
       'variables' => [

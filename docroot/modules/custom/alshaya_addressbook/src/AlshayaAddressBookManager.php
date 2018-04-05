@@ -877,7 +877,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       foreach ($magento_form as $index => $form_item) {
         if (isset($form_item['attribute'])) {
           // Copy values from attribute to main array.
-          $form_item = array_merge($form_item, $form_item['attribute']);
+          $form_item = array_merge($form_item['attribute'], $form_item);
           unset($form_item['attribute']);
         }
 
@@ -958,11 +958,13 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *
    * @param array $magento_address
    *   Magento address to extra info from.
+   * @param string $langcode
+   *   Language code in which we want the value to be returned.
    *
    * @return string|null
    *   String value for the area or NULL.
    */
-  public function getAddressShippingAreaValue(array $magento_address) {
+  public function getAddressShippingAreaValue(array $magento_address, $langcode = 'en') {
     $field = 'address_area_segment';
 
     if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
@@ -974,7 +976,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       ? $magento_address['extension'][$field]
       : '';
 
-    return $this->areasTermsHelper->getShippingAreaLabel($value);
+    return $this->areasTermsHelper->getShippingAreaLabel($value, $langcode);
   }
 
   /**

@@ -1,10 +1,10 @@
 .path--user {
   .ui-dialog .ui-dialog-titlebar-close {
-    color: $white-five;
+    color: $modal_subtext;
 
     @include icon(close, after) {
-      color: $white-five;
-      background: $hnm-black-two;
+      color: $modal_close_icon;
+      background: $modal_close_bg;
       width: 2.188rem;
       padding: 0;
       height: 2.188rem;
@@ -15,7 +15,7 @@
   }
 
   .dialog-cancel {
-    color: $hnm-black-two;
+    color: $cancel_button;
     font-family: $hnm-bold;
     font-weight: normal;
     font-size: 0.625rem;

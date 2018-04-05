@@ -99,6 +99,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     ];
 
     $pane_form['address_form']['save'] = [
+      '#name' => 'save_address',
       '#type' => 'button',
       '#value' => $this->t('deliver to this address'),
       '#executes_submit_callback' => FALSE,
@@ -220,6 +221,14 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       return;
     }
 
+    // Validate only part of the form if we are saving address.
+    if ($form_state->getTriggeringElement()['#name'] === 'save_address') {
+      $this->saveAddressValidateCallback($complete_form, $form_state);
+
+      // We will validate complete form later, not in this call.
+      return;
+    }
+
     $values = $form_state->getValue($pane_form['#parents']);
 
     $shipping_method = isset($values['address']['shipping_methods']) ? $values['address']['shipping_methods'] : NULL;
@@ -280,23 +289,17 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
   }
 
   /**
-   * Ajax callback to save address and use it for shipping.
+   * Validate callback to save new/updated address and use it for shipping.
    *
    * @param mixed|array $form
    *   Form array.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state object.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   Ajax response to reload page on successfully adding new address.
    */
-  public function saveAddressAjaxCallback($form, FormStateInterface $form_state) {
-    $response = new AjaxResponse();
-
+  public function saveAddressValidateCallback($form, FormStateInterface $form_state) {
+    // No further validations required if we already have some errors reported.
     if ($form_state->getErrors()) {
-      $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form['member_delivery_home']['address_form']));
-      $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'show'));
-      return $response;
+      return;
     }
 
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
@@ -329,19 +332,48 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       }
     }
 
-    if ($form_state->getErrors()) {
-      return $form;
+    try {
+      $cart = $this->getCart();
+
+      if ($customer_address_id = $address_book_manager->pushUserAddressToApi($profile)) {
+        $update = [];
+        $update['customer_address_id'] = $customer_address_id;
+        $update['country_id'] = $address_values['country_code'];
+        $update['customer_id'] = $cart->customerId();
+
+        $cart->setShipping($update);
+      }
     }
+    catch (\Exception $e) {
+      // Something might go wrong while updating cart.
+      // We set temporary flag here which we use in ajax callback and
+      // if there is an error we will just reload the page, code in page load
+      // should handle the exception properly.
+      // Error is already logged in API wrapper.
+      $form_state->setTemporaryValue('cart_update_failed', 1);
+    }
+  }
 
-    $cart = $this->getCart();
+  /**
+   * Ajax callback to save address and use it for shipping.
+   *
+   * @param mixed|array $form
+   *   Form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state object.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Ajax response to reload page on successfully adding new address.
+   */
+  public function saveAddressAjaxCallback($form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
 
-    if ($customer_address_id = $address_book_manager->pushUserAddressToApi($profile)) {
-      $update = [];
-      $update['customer_address_id'] = $customer_address_id;
-      $update['country_id'] = $address_values['country_code'];
-      $update['customer_id'] = $cart->customerId();
-
-      $cart->setShipping($update);
+    // If we face any API error while updating cart, we set temporary value
+    // above, for such cases we just reload the page which is done below.
+    if ($form_state->getErrors() && empty($form_state->getTemporaryValue('cart_update_failed'))) {
+      $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form['member_delivery_home']['address_form']));
+      $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'show'));
+      return $response;
     }
 
     $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));

@@ -10,6 +10,23 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update the 'checkout_guest_summary' config value.
+ */
+function alshaya_master_update_8012() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $val = '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p>';
+  $config->set('checkout_guest_summary.value', $val);
+  $config->save();
+
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_acm_checkout.settings');
+  $val = '<p> بإمكانك إنشاء حساب جديد عند إتمام عملية الشراء لكي تحصل على خصائص ومزايا تسهل عليك التسوق<p>';
+  $config->set('checkout_guest_summary.value', $val);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation.
  */
 function alshaya_master_update_8011() {
@@ -451,8 +468,8 @@ function alshaya_master_install() {
     'Your email will be used only to send you information about your order.' => [
       'ar' => 'سيتم استخدام عنوان البريد الإلكتروني الخاص بك فقط عند إرسال تفاصيل الطلبية',
     ],
-    '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p><ul><li>Express checkout</li><li>Personalized offers</li><li>Favorite list</li><li>Order history</li><li>And more…</li></ul>' => [
-      'ar' => '<p> بإمكانك إنشاء حساب جديد عند إتمام عملية الشراء لكي تحصل على خصائص ومزايا تسهل عليك التسوق<p><ul><li>إتمام عملية الشراء السريعة</li><li>العروض الحصرية الخاصة بك</li><li>قائمة المنتجات المفضلة</li><li>سجل الطلبيات</li><li>المزيد</li></ul>',
+    '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p>' => [
+      'ar' => '<p> بإمكانك إنشاء حساب جديد عند إتمام عملية الشراء لكي تحصل على خصائص ومزايا تسهل عليك التسوق<p>',
     ],
     'Checkout' => [
       'ar' => 'إتمام عملية الشراء',

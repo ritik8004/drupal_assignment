@@ -4,13 +4,13 @@
   .c-page-title {
     @include arabic-letter-spacing;
 
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $content_pagetitle_border;
     margin-bottom: 1.438rem;
     padding-bottom: 0.875rem;
     font-family: $hnm-demibold;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: $hnm-black-two;
+    color: $content_pagetitle;
   }
 
   .c-sidebar-first .block:first-child {
@@ -20,7 +20,7 @@
   .c-promo-block-seo-title {
     font-family: $hnm-demibold;
     text-transform: uppercase;
-    color: $hnm-black-two;
+    color: $title;
   }
 }
 
