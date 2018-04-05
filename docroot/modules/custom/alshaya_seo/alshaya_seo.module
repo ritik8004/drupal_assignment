@@ -24,6 +24,11 @@ function _alshaya_seo_process_gtm() {
     return $process;
   }
 
+  // Not process GTM for amp route.
+  if (_alshaya_custom_is_amp_route()) {
+    return FALSE;
+  }
+
   $currentUser = \Drupal::currentUser();
   $current_route_name = \Drupal::routeMatch()->getRouteName();
 
