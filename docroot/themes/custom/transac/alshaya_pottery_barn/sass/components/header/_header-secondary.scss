@@ -19,3 +19,9 @@
     }
   }
 }
+
+.header--wrapper.navbar-fixed-top {
+  @include breakpoint($desktop) {
+    display: none;
+  }
+}

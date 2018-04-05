@@ -19,3 +19,9 @@ alshaya_acm_product_category.super_category.settings:
     default_category_tid:
       type: integer
       label: 'Default parent term id for main menu'
+    footer_menu_blocks:
+      type: sequence
+      label: 'Menu types that needs to alter for footer'
+      sequence:
+        type: string
+        label: 'Menu type'

@@ -1156,14 +1156,9 @@ class AlshayaGtmManager {
         if ($shipping_method_name === $this->checkoutOptionsManager->getClickandColectShippingMethod()) {
           $shipping_assignment = reset($order['extension']['shipping_assignments']);
           $store_code = $shipping_assignment['shipping']['extension_attributes']['store_code'];
+        }
 
-          $billing_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
-          $deliveryArea = $billing_address['administrative_area'];
-        }
-        else {
-          $billing_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['billing']);
-          $deliveryArea = $billing_address['administrative_area'];
-        }
+        $deliveryArea = $this->addressBookManager->getAddressShippingAreaValue($order['shipping']['address']);
 
         foreach ($orderItems as $orderItem) {
           $productSKU[] = $orderItem['sku'];
