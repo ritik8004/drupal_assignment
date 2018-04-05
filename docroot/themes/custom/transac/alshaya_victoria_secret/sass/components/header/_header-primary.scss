@@ -10,6 +10,7 @@
 
 .c-pre-content__region {
   border-top: 0;
+  border-bottom: 0;
 }
 
 header {
@@ -48,6 +49,7 @@ header {
     .block-views-exposed-filter-blocksearch-page input[type="text"] {
       @include breakpoint($desktop) {
         width: 12.5rem;
+        padding-#{$right}: 2.5rem;
       }
     }
   }
@@ -203,6 +205,10 @@ header {
     .menu--mobile-navigation {
       @include breakpoint($upto-desktop) {
         position: fixed;
+      }
+
+      @include breakpoint($upto-tablet) {
+        border-bottom: 2px solid $header_mobile_border;
       }
     }
   }

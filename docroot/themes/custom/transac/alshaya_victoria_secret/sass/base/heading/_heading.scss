@@ -11,3 +11,18 @@
     font-size: 1.5rem;
   }
 }
+
+.order-detail,
+.c-change-password,
+.c-communication-preferences,
+.c-user-edit,
+.c-order-list,
+.c-user--node,
+.c-address-book {
+  .block-page-title-block {
+    .back-link::before {
+      position: relative;
+      top: -0.25rem;
+    }
+  }
+}

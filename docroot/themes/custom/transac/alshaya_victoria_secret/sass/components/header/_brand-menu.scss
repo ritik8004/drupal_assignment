@@ -15,7 +15,8 @@
         font-size: 0;
 
         @include breakpoint ($desktop) {
-          padding: 0.5rem 1rem;
+          padding: 0.45rem 1rem;
+          height: auto;
         }
       }
     }
