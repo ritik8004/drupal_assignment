@@ -417,9 +417,6 @@ class APIWrapper {
   public function updateCustomer($customer, $password = NULL) {
     $endpoint = $this->apiVersion . "/agent/customer";
 
-    // Always add the website id here so it is set properly.
-    $customer['website_id'] = $this->i18nHelper->getWebsiteId();
-
     $doReq = function ($client, $opt) use ($endpoint, $customer, $password) {
 
       $opt['json']['customer'] = $customer;

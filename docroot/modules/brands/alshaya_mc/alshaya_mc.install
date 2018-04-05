@@ -261,11 +261,6 @@ function alshaya_mc_install() {
     ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
     ->save();
 
-  // Set website id.
-  \Drupal::configFactory()->getEditable('acq_commerce.store')
-    ->set('website_id', Settings::get('website_id'))
-    ->save();
-
   // Set store id - EN.
   \Drupal::configFactory()->getEditable('acq_commerce.store')
     ->set('store_id', Settings::get('store_id')['en'])

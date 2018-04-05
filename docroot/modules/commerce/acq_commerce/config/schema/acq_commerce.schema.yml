@@ -22,9 +22,6 @@ acq_commerce.store:
     store_id:
       type: label
       label: 'Store id'
-    website_id:
-      type: string
-      label: 'Website id'
     langcode:
       type: string
       label: 'Language code'

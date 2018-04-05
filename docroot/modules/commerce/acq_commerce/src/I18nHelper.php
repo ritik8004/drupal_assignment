@@ -99,15 +99,4 @@ class I18nHelper {
     return !empty($mapping[$store_id]) ? $mapping[$store_id] : NULL;
   }
 
-  /**
-   * Get the website id for all the stores we support in this site.
-   *
-   * @return string
-   *   Website id.
-   */
-  public function getWebsiteId() {
-    $config = $this->configFactory->get('acq_commerce.store');
-    return $config->get('website_id') ? $config->get('website_id') : '1';
-  }
-
 }
