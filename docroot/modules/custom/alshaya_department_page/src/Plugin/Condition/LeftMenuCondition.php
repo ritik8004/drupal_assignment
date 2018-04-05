@@ -1,10 +1,12 @@
 <?php
 
 namespace Drupal\alshaya_department_page\Plugin\Condition;
+
 use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Provides the 'Left menu condition' condition.
  *
@@ -20,6 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class LeftMenuCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
+
   /**
    * {@inheritdoc}
    */
@@ -30,6 +33,7 @@ class LeftMenuCondition extends ConditionPluginBase implements ContainerFactoryP
       $plugin_definition
     );
   }
+
   /**
    * Creates a new LeftMenuCondition object.
    *
@@ -42,22 +46,26 @@ class LeftMenuCondition extends ConditionPluginBase implements ContainerFactoryP
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
+   *  @codingStandardsIgnoreStart
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    // @codingStandardsIgnoreEnd
   }
+
   /**
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form['leftMenuActive'] = [
-      '#type'          => 'checkbox',
-      '#title'         => $this->t("Apply 'show left menu' condition on this block"),
+      '#type' => 'checkbox',
+      '#title' => $this->t("Apply 'show left menu' condition on this block"),
       '#default_value' => $this->configuration['leftMenuActive'],
-      '#description'   => $this->t('If selected, this block will only be displayed on those department pages on which Show left menu field is checked.'),
+      '#description' => $this->t('If selected, this block will only be displayed on those department pages on which Show left menu field is checked.'),
     ];
     return parent::buildConfigurationForm($form, $form_state);
   }
+
   /**
    * {@inheritdoc}
    */
@@ -65,12 +73,14 @@ class LeftMenuCondition extends ConditionPluginBase implements ContainerFactoryP
     $this->configuration['leftMenuActive'] = $form_state->getValue('leftMenuActive');
     parent::submitConfigurationForm($form, $form_state);
   }
+
   /**
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
     return ['leftMenuActive' => 0] + parent::defaultConfiguration();
   }
+
   /**
    * Provides a human readable summary of the condition's configuration.
    */
@@ -83,7 +93,6 @@ class LeftMenuCondition extends ConditionPluginBase implements ContainerFactoryP
 
   /**
    * Evaluates the condition and returns TRUE or FALSE accordingly.
-   * If the value of field is 0, left menu is not displayed.
    *
    * @return bool
    *   FALSE if the condition has been met, TRUE otherwise.
@@ -99,4 +108,5 @@ class LeftMenuCondition extends ConditionPluginBase implements ContainerFactoryP
     }
     return TRUE;
   }
+
 }
