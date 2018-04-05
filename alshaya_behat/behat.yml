@@ -68,13 +68,13 @@ mckwuat:
       contexts:
         - FeatureContext:
             parameters:
-              simpleurl: '/baby-boys-socks-gift-box'
-              simpletitle: 'Baby Boys Socks Gift Box'
+              simpleurl: '/baby-boys-socks-gift-box-test'
+              simpletitle: 'Baby Boys Socks Gift Box test'
               simpletitlear: 'صندوق هدية جوارب للأولاد'
-              configurl: '/paradise-graphic-tee'
-              configtitle: 'Paradise Graphic Tee'
-              configtitlear: 'تي-شيرت برسمة Paradise'
-              configvariant: '6-7 Years'
+              configurl: '/my-first-bodysuits-3-pack'
+              configtitle: 'My First Bodysuits - 3 Pack'
+              configtitlear: 'لباس عادي My First - عبوة من 3 قطع'
+              configvariant: '2-3 Years'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -83,7 +83,7 @@ mckwuat:
         output_path: %paths.base%/features/mckw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://mckw-uat.factory.alshaya.com/en'
+      base_url: 'https://mckw-uat.factory.alshaya.com'
       files_path: "%paths.base%/features/mckw/media"
 
 mckwprod:
@@ -209,10 +209,10 @@ hmqa:
               simpleurl: '/aq-product1'
               simpletitle: '[AQ]-Product_1'
               simpletitlear: '[AQ]-Product_1'
-              configurl: '/lyocell-top-0'
-              configtitle: 'Lyocell top'
-              configtitlear: 'Lyocell top'
-              configvariant: 'L'
+              configurl: 'fine-knit-jumper-0'
+              configtitle: 'Fine-knit jumper'
+              configtitlear: ' كنزة من الصوف الناعم'
+              configvariant: 'S'
               base_url: 'https://hmkw-test.factory.alshaya.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
