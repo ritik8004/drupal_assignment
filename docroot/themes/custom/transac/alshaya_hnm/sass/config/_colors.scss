@@ -70,12 +70,16 @@ $primary_link-hover: $link-hover;
 $primary_link-active: $grey7;
 $content_link_color: $hnm-black-two;
 $primary_border: $white-smoke-border;
+$primary_dark_color: $hnm-black-two;
 
 // Form elements.
 $primary_input: $hnm-black-two;
+$primary_input_placeholder: $grey6;
+$primary_input_label: $black-two;
 
 //Buttons.
 $primary_btn_bg: $hnm-black-two;
+$primary_btn_text: $white-five;
 $primary_empty_btn: $hnm-black-two;
 $primary_empty_btn_border: $hnm-black-two;
 $pending_btn_bg: $warning;
@@ -116,8 +120,12 @@ $default_msg_bg: $success;
 $default_error: $red-error;
 
 // Tooltip
+$tooltip_bg: $grey1;
+$tooltip_text: $hnm-black-two;
 $tooltip_border: $grey1;
 $tooltip_border_2: $hnm-black-two;
+$tooltip_icon: $hnm-black-two;
+$basket_tooltip_not_available: $grey4;
 
 // Maintenance
 $maintenance_container_border: $white-two;
@@ -313,3 +321,141 @@ $myaccountneedhelp_text: $white-five;
 $user_block_title: $black-three;
 $user_block_text: $grey-ash;
 $user_block_link: $hnm-black-two;
+
+// Basket
+$basket_header_promo_bg: $hnm-black-two;
+$basket_header_promo_txt: $white-five;
+$basket_block_title: $hnm-black-two;
+$basket_promo_wrapper: $info;
+$basket_promo_wrapper_link: $hnm-black-two;
+$basket_continue_shopping_btn: $hnm-black-two;
+$basket_continue_shopping_text: $hnm-black-two;
+
+// Mini Cart Notification
+$minicart_notification_border: $hnm-black-two;
+$minicart_notification_text: $hnm-black-two;
+$minicart_notification_name: $hnm-black-two;
+$minicart_notification_bg: $white-five;
+$primary_minicart_quantity_bg: $grey7;
+
+// Order confirmation
+$order_summary_title: $hnm-black-two;
+$order_summary_link: $hnm-black-two;
+$order_summary_product_price: $hnm-black-two;
+$order_summary_product_price_discount: $error;
+$order_summary_order_total: $black-two;
+$order_detail_table_head: $grey9;
+$order_detail_th_color: $hnm-black-two;
+$order_detail_tr_color: $hnm-black-two;
+$order_detail_tr_quantity: $hnm-black-two;
+$order_detail_total_tr_row_price_td: $scarlet;
+$order_detail_total_tr_row_price_td_bg: $white-five;
+$order_details_table_total_bg: $whisper-light;
+$order_details_table_total_price: $hnm-black-two;
+$order_actions_checkout: $white-five;
+
+// Checkout Click and Collect
+$checkout_cc_input: $hnm-black-two;
+$checkout_cc_view_text: $hnm-black-two;
+$checkout_cc_view_border: $hnm-black-two;
+$checkout_cc_view_active_border: $hnm-black-two;
+$checkout_cc_view_active_bg: $hnm-black-two;
+$checkout_cc_view_active_text: $white-five;
+$checkout_cc_listview_border: $grey4;
+$checkout_cc_listview_text: $grey8;
+$checkout_cc_store_hover: $grey1;
+$checkout_cc_store_name: $hnm-black-two;
+$checkout_cc_store_address: $grey7;
+$checkout_cc_list_delivery_time: $hnm-red;
+$checkout_cc_selected_store_content_bg: $hnm-black-two;
+$checkout_cc_selected_store_content_border: $hnm-black-two;
+$checkout_cc_selected_store_content_txt: $white-five;
+$checkout_cc_list_open_hours: $grey7;
+$checkout_cc_list_open_hours_tablet: $greyish;
+$checkout_cc_list_delivery_time_text: $black;
+$checkout_cc_list_delivery_time_label: $hnm-black-two;
+$selected_store_content_bg: $white-five;
+$selected_store_content_border: $white-two;
+
+// Order print.
+$order_summary_bg: $info;
+$order_summary_blend_bg: $info-two;
+$order_summary_row: $whisper-light-59;
+$order_summary_text: $white-five;
+$order_print_btn_bg: $white-five;
+$order_print_btn_text: $hnm-black-two;
+$order_print_btn_border: $hnm-black-two;
+$order_print_price_row_blend: $white-four;
+$order_print_price_row: $hnm-black-two;
+$order_print_item_row: $white-five;
+$order_print_item_row_blend: $grey9;
+$order_print_label: $hnm-black-two;
+$order_print_right_label: $grey7;
+$order_detail_dark_price: $black;
+$order_detail_total_white: $whisper-light;
+$order_detail_total_vat: $white-five;
+$order_detail_total_border: $white;
+$order_detail_total_bg: $white-five;
+$order_detail_total: $black-two;
+$order_detail_blend_row: $white-four;
+$order_detail_blend_row_tablet: $white-smoke-light;
+$order_detail_item_row_border: $white;
+$order_detail_item_row_bg: $white-four-70;
+$order_detail_item_row: $info-19;
+$order_detail_item_row_text: $grey8;
+$order_detail_item_row_address_name: $black-two;
+$order_detail_item_row_blend: $info-30;
+$order_detail_item_row_dark: $grey8;
+$order_detail_item_row_warm_white: $white-three;
+$user_order_detail_bg: $white-five;
+$user_order_detail_dark: $light-greyish;
+$user_confirmation_newsletter_label: $grey-ash;
+
+// checkout progress
+$checkout_progress_complete_text: $brownish-grey;
+$checkout_progress_current_text: $hnm-red;
+$checkout_progress_next_txt: $hnm-black-two;
+$checkout_progress_next: $grey6;
+
+// Checkout Payment.
+$checkout_payment_method_bg: $white-five;
+$checkout_payment_method_border: $white;
+$checkout_payment_text: $grey-ash;
+$checkout_payment_help: $grey7;
+
+// Checkout Login
+$checkout_guest_summary: $grey-ash;
+
+// Checkout Layout
+$checkout_layout_summary_block_method: $grey7;
+$secure_checkout_block: $black-two;
+$secure_checkout_block_label: $hnm-black-four;
+$login_icon_bg: $hnm-red;
+$login_icon: $white-five;
+$block_acm_customer_txt: $hnm-black;
+$block_acm_customer_title_bg: $white-five;
+$delivery_tab_active_bg: $hnm-grey;
+$delivery_tab_text: $grey-ash;
+$delivery_tab_active_bg: $hnm-grey;
+$delivery_tab_active_title: $hnm-black-two;
+$delivery_tab_disabled_border: $light-greyish;
+$checkout_tab_separator: $hnm-black-two;
+$delivery_form_radio_border: $white;
+$delivery_form_radio_odd: $white-five;
+$delivery_form_radio_selected: $hnm-grey;
+$delivery_payment_wrapper_border: $grey4;
+$delivery_payment_selected_bg: $hnm-grey;
+$delivery_add_address_bg: $white-five;
+$delivery_selected_address_border: $grey4;
+$delivery_selected_address_bg: $hnm-grey;
+
+// Delivery details
+$order_detail_thankyou_border: $grey4;
+$order_detail_sitebrand_border: $white;
+$order_print_order_details_row_bg: $grey2-19;
+$order_print_order_details_row_blend: $grey4-30;
+$order_print_product_count_bg: $hnm-grey;
+$order_print_customer_service_border: $hnm-black;
+$order_print_customer_service_bg: $grey1;
+$order_print_accordion_summary_bg: $whisper-light-59;
+$order_customer_search_label_bg: $white-five;
