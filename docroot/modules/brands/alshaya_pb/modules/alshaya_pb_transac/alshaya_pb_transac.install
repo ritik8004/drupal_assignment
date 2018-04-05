@@ -36,7 +36,7 @@ function alshaya_pb_transac_install() {
     ->save();
 
   // Set google map marker.
-  if (\Drupal::moduleHandler()->moduleExists(‘alshaya_stores_finder’)) {
-    alshaya_stores_finder_set_default_marker_icon(‘alshaya_pb_transac’);
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_pb_transac');
   }
 }
