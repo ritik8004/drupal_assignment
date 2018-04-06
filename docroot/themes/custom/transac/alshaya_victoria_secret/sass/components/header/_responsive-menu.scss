@@ -182,3 +182,9 @@ header {
     background-color: transparent;
   }
 }
+
+.block-cart-mini-block {
+  @include breakpoint($upto-tablet) {
+    border-bottom: 2px solid $header_mobile_border;
+  }
+}
