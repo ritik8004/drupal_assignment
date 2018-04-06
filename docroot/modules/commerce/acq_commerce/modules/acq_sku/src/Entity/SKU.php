@@ -676,7 +676,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * {@inheritdoc}
    */
   public static function postDelete(EntityStorageInterface $storage, array $entities) {
-    parent::invalidateTagsOnDelete($storage, $entities);
+    parent::postDelete($storage, $entities);
 
     // Delete media files.
     foreach ($entities as $entity) {

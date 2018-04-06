@@ -18,7 +18,7 @@ index 095d6e0c5c..c75886aa1c 100644
 +   * {@inheritdoc}
 +   */
 +  public static function postDelete(EntityStorageInterface $storage, array $entities) {
-+    parent::invalidateTagsOnDelete($storage, $entities);
++    parent::postDelete($storage, $entities);
 +
 +    // Delete media files.
 +    foreach ($entities as $entity) {
