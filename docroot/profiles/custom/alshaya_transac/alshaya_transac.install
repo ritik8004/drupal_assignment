@@ -8,6 +8,19 @@
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_super_category.
+ */
+function alshaya_transac_update_8105() {
+  // Delete existing super category menu block.
+  alshaya_block_delete_blocks(['supercategorymenu']);
+  \Drupal::service('module_installer')->install(['alshaya_super_category']);
+  // Move super category block from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_stores_finder_transac sub module of alshaya_stores_finder.
  */
 function alshaya_transac_update_8104() {
