@@ -1,0 +1,59 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.paragraph.hightlight_image_186x184
+    - field.field.paragraph.image_title_subtitle.field_banner
+    - field.field.paragraph.image_title_subtitle.field_link
+    - field.field.paragraph.image_title_subtitle.field_sub_title
+    - field.field.paragraph.image_title_subtitle.field_title
+    - image.style.186x184
+    - paragraphs.paragraphs_type.image_title_subtitle
+  module:
+    - image
+    - link
+_core:
+  default_config_hash: 9o-BUJcb7_onbm5kCZze7XqWl3fCdB1eDA8To_eYAlo
+id: paragraph.image_title_subtitle.hightlight_image_186x184
+targetEntityType: paragraph
+bundle: image_title_subtitle
+mode: hightlight_image_186x184
+content:
+  field_banner:
+    weight: 0
+    label: hidden
+    settings:
+      image_style: 186x184
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_link:
+    weight: 3
+    label: hidden
+    settings:
+      trim_length: 255
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_sub_title:
+    weight: 2
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_title:
+    weight: 1
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden: {  }
