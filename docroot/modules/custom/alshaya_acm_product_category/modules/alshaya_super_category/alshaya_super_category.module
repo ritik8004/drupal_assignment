@@ -38,7 +38,6 @@ function alshaya_super_category_preprocess_block(&$variables) {
 
   switch ($variables['base_plugin_id']) {
     case 'system_menu_block':
-
       // Check current menu type.
       if (!in_array($variables['derivative_plugin_id'], $config->get('footer_menu_blocks'))) {
         return;
@@ -71,11 +70,6 @@ function alshaya_super_category_preprocess_block(&$variables) {
       break;
 
     case 'system_branding_block':
-      // Do not process if the super category feature not enabled.
-      if (!$config->get('status')) {
-        return;
-      }
-
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
       $term = $product_category_tree->getCategoryTermFromRoute();
@@ -102,8 +96,9 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $langcode = ($langcode != 'en') ? '-' . $langcode : '';
       // Current active theme object.
       $theme = \Drupal::service('theme.manager')->getActiveTheme();
+      global $base_url;
       // Set the logo path based on term name and current language.
-      $variables['content']['site_logo']['#uri'] = $GLOBALS['base_url'] . '/' . $theme->getPath() . '/imgs/logos/' . $term_clean_name . '-logo' . $langcode . '.svg';
+      $variables['content']['site_logo']['#uri'] = $base_url . '/' . $theme->getPath() . '/imgs/logos/' . $term_clean_name . '-logo' . $langcode . '.svg';
       // Set image Alt based on current brand.
       $variables['content']['site_logo']['#alt']    = $parent->label();
       $variables['content']['site_name']['#markup'] = $parent->label();

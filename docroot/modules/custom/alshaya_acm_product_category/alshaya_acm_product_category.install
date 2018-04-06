@@ -10,15 +10,23 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
- * Install alshaya_super_category module and config for adding extra paragraph to 
- * main menu highlight field.
+ * Install alshaya_super_category module.
  */
-function alshaya_acm_product_category_update_8006() {
+function alshaya_acm_product_category_update_8007() {
   // Delete old config as it's not needed any more.
-  Drupal::configFactory()->getEditable('alshaya_acm_product_category.super_category.settings')->delete();
+  Drupal::configFactory()
+    ->getEditable('alshaya_acm_product_category.super_category.settings')
+    ->delete();
   \Drupal::service('module_installer')->install(['alshaya_super_category']);
   _alshaya_config_save_overridden_configs('alshaya_super_category');
+}
 
+/**
+ * Implements hook_update_N().
+ *
+ * Install config for adding extra paragraph to main menu highlight field.
+ */
+function alshaya_acm_product_category_update_8006() {
   $configs = [
     'field.field.taxonomy_term.acq_product_category.field_main_menu_highlight',
     'core.entity_view_mode.paragraph.hightlight_image_186x184',
