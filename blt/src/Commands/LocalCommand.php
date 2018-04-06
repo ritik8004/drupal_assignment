@@ -65,10 +65,8 @@ class LocalCommand extends BltTasks {
       ->run();
 
     $this->say('Disable cloud modules');
-    // We disable dblog here and enable again to ensure table is created and
-    // we don't really need to copy heavy watchdog table from remote to local.
     $this->taskDrush()
-      ->drush('pmu purge alshaya_search_acquia_search acquia_search acquia_connector shield dblog')
+      ->drush('pmu purge alshaya_search_acquia_search acquia_search acquia_connector shield')
       ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
@@ -198,6 +196,16 @@ class LocalCommand extends BltTasks {
   public function downloadDb($site = '', $env = 'dev') {
     $info = $this->validateAndPrepareInfo($site, $env);
 
+    if ($env == 'live') {
+      $this->say('=========================');
+      $this->say('=========================');
+      $this->say('Please DO NOT SLOW DOWN THE PRODUCTION SERVER');
+      $this->say('Go get the dump from Cloud or from someone who has access and put that in ../tmp directory, save it as alshaya_[SITE]_[ENV].sql, use reuse after that.');
+      $this->say('=========================');
+      $this->say('=========================');
+      throw new \Exception('Downloading LIVE DB through drush sql-dump is BAD, REALLY BAD');
+    }
+
     if (empty($info)) {
       return FALSE;
     }
@@ -208,7 +216,6 @@ class LocalCommand extends BltTasks {
       ->drush('sql-dump')
       ->alias($info['remote']['alias'])
       ->uri($info['remote']['url'])
-      ->option('skip-tables-list', 'cache*,watchdog')
       ->rawArg(' > ' . $info['archive']);
 
     $result = $task->run();
