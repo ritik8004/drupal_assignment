@@ -94,4 +94,111 @@ Feature: As a guest user I should be able to
     Then I should not see "Please select the category you require"
     And I should see the link "Size Guide"
 
+  Scenario: As a Guest user I should be able to select product from
+  PLP page, add to basket select Home Delivery and see COD, Cybersource
+  and KNET as payment methods
+    When I select a product from a product category
+    And I wait for the page to load
+    When I select a color for the product
+    And I wait for AJAX to finish
+    When I select a size for the product
+    And I wait for AJAX to finish
+    When I press "add to basket"
+    And I wait for AJAX to finish
+    When I go to "/cart"
+    And I wait for the page to load
+    And I press "checkout securely"
+    And I wait for the page to load
+    And I follow "checkout as guest"
+    And I wait for the page to load
+    And I should be able to see the header for checkout
+    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
+    And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
+    And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
+    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
+    And I press "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
+    And I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_cashondelivery"
+    And I wait for AJAX to finish
+    When I select a payment option "payment_method_title_cybersource"
+    And I wait for AJAX to finish
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
+    When I accept terms and conditions
+    Then I should see "I confirm that I have read and accept the"
+    When I select a payment option "payment_method_title_knet"
+    And I wait for AJAX to finish
+    And I accept terms and conditions
+    And I wait for the page to load
+    And I press "place order"
+    And I wait for the page to load
+    And I press "CancelAction_id"
+
+
+  Scenario: As a Guest user I should be able to select product from
+  PLP page, add to basket select Click and Collect and see  Cybersource
+  and KNET as payment methods
+    When I select a product from a product category
+    And I wait for the page to load
+    When I select a color for the product
+    And I wait for AJAX to finish
+    When I select a size for the product
+    And I wait for AJAX to finish
+    When I press "add to basket"
+    And I wait for AJAX to finish
+    When I go to "/cart"
+    And I wait for the page to load
+    And I press "checkout securely"
+    And I wait for the page to load
+    And I follow "checkout as guest"
+    And I wait for the page to load
+    And I should be able to see the header for checkout
+    When I follow "Click & Collect"
+    And I wait for the page to load
+    When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
+    And I wait for AJAX to finish
+    When I wait 5 seconds
+    When I follow "select this store"
+    And I wait for AJAX to finish
+    When I fill in "edit-cc-firstname" with "Test"
+    And I fill in "edit-cc-lastname" with "Test"
+    When I enter a valid Email ID in field "edit-cc-email"
+    And I fill in "edit-cc-mobile-number-mobile" with "55667733"
+    And I select an element having class ".cc-action"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_cybersource"
+    And I wait for AJAX to finish
+    When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
+    And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
+    And I select "Abbasiya" from "edit-billing-address-address-billing-administrative-area"
+    And I fill in "edit-billing-address-address-billing-locality" with "Block A"
+    And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
+    And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
+    When I fill in "edit-billing-address-address-billing-address-line2" with "1"
+    And I accept terms and conditions
+    Then I should see "I confirm that I have read and accept the"
+    When I select a payment option "payment_method_title_knet"
+    And I wait for AJAX to finish
+    And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
+    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
+    And I fill in "edit-billing-address-address-billing-locality" with "Block A"
+    And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
+    And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
+    And I accept terms and conditions
+    And I press "place order"
+    And I wait for the page to load
+    And I press "CancelAction_id"
+
+
 
