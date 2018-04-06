@@ -83,7 +83,7 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
     \Drupal::configFactory()
       ->getEditable($config)
       ->setData($config_yaml)
-      ->save();
+      ->save(TRUE);
   }
 }
 
@@ -121,7 +121,7 @@ function _alshaya_config_get_config_yml($module_name, $directory) {
   $ymls = file_scan_directory($directory_path, '/[(.yml)]$/');
   if (!empty($ymls)) {
     foreach ($ymls as $yml) {
-      $files[] = $yml->filename;
+      $files[] = $yml->name;
     }
   }
 

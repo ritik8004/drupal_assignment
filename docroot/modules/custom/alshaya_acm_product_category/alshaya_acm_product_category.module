@@ -5,6 +5,10 @@
  * Module file.
  */
 
+use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\Unicode;
+use Drupal\taxonomy\Entity\Term;
+
 /**
  * Implements hook_theme().
  */
@@ -23,14 +27,8 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
  * Implements template_preprocess_hook().
  */
 function template_preprocess_alshaya_shop_by(&$variables) {
-  // Number of columns to show/divide.
-  $column_count = 2;
-
-  // Splite/Chunk the array.
-  $items = array_chunk($variables['term_tree'], ceil(count($variables['term_tree']) / $column_count));
-
-  // Add items to the variables array.
-  $variables['items'] = $items;
+  // Split/Chunk the array into two parts.
+  $variables['term_tree'] = array_chunk($variables['term_tree'], ceil(count($variables['term_tree']) / 2));
 }
 
 /**
@@ -69,7 +67,7 @@ function alshaya_acm_product_category_preprocess_block(&$variables) {
       // Current active theme object.
       $theme = \Drupal::service('theme.manager')->getActiveTheme();
       // Set the logo path based on term name and current language.
-      $variables['content']['site_logo']['#uri'] = $GLOBALS['base_url'] . '/' . $theme->getPath() . '/' . $term_clean_name . '-logo' . $langcode . '.svg';
+      $variables['content']['site_logo']['#uri'] = $GLOBALS['base_url'] . '/' . $theme->getPath() . '/imgs/logos/' . $term_clean_name . '-logo' . $langcode . '.svg';
       // Set image Alt based on current brand.
       $variables['content']['site_logo']['#alt'] = $parent->label();
       $variables['content']['site_name']['#markup'] = $parent->label();
@@ -77,4 +75,30 @@ function alshaya_acm_product_category_preprocess_block(&$variables) {
       $variables['content']['site_path']['#markup'] = $parent->toLink();
       break;
   }
+
+  if ($variables['plugin_id'] == 'views_block:plp_promotional_banner-block_1') {
+    // If plp promotional banner block.
+    $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+    $hide_for_mobile = $term ? _alshaya_acm_product_category_hide_plp_banner_for_mobile($term) : FALSE;
+    if ($hide_for_mobile) {
+      $variables['content']['#attributes']['class'][] = 'hide-on-mobile';
+    }
+  }
+}
+
+/**
+ * Hide or not PLP banner for mobile.
+ *
+ * @param \Drupal\taxonomy\Entity\Term $term
+ *   Term object.
+ *
+ * @return bool
+ *   PLP banner for mobile hide or not.
+ */
+function _alshaya_acm_product_category_hide_plp_banner_for_mobile(Term $term) {
+  if ($mobile_banner = $term->get('field_promo_banner_for_mobile')) {
+    return $mobile_banner->getValue() ? (bool) $mobile_banner->getValue()[0]['value'] : FALSE;
+  }
+
+  return FALSE;
 }

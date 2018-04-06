@@ -1,6 +1,6 @@
 .ui-dialog .ui-dialog-titlebar-close {
-  color: $white-five;
-  background-color: $hnm-black-two;
+  color: $gallery_bg;
+  background-color: $modal_close_bg;
 }
 
 #product-image-gallery-container {
@@ -11,12 +11,12 @@
   .button__wrapper {
     .zoomout,
     .zoomin {
-      background: $white-five-20;
+      background: $gallery_zoombtn_bg;
       padding: 0;
       border: none;
 
       &::before {
-        color: $hnm-black-two;
+        color: $gallery_zoombtn_text;
         font-size: 1.5rem;
         height: 2.188rem;
         width: 2.188rem;
@@ -27,7 +27,7 @@
       }
 
       &.disabled {
-        background-color: $light-ash;
+        background-color: $gallery_zoombtn_disabled;
       }
     }
 

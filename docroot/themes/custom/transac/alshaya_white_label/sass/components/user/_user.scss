@@ -75,9 +75,10 @@
     position: relative;
   }
 
-  .c-sidebar-second {
+  .c-sidebar-second,
+  #block-youllbeableto {
     h3 {
-      color: $title;
+      color: $user_sidebar_block_title;
       font-size: 14px;
       font-family: $alshaya-bold;
       text-transform: lowercase;
@@ -184,7 +185,7 @@
     a {
       font-weight: bold;
       text-transform: lowercase;
-      color: $cerulean-two;
+      color: $online_exclusive_link;
     }
 
     h3 {
@@ -503,7 +504,7 @@
   text-transform: lowercase;
 
   a {
-    color: $user_blk_link;
+    color: $user_block_link !important;
   }
 
   span {
@@ -515,7 +516,7 @@
     background-size: 18px;
     position: relative;
     top: 0;
-    color: $user_blk_link;
+    color: $user_block_link;
 
     @include breakpoint($upto-desktop) {
       vertical-align: bottom;
@@ -1104,7 +1105,7 @@
     }
 
     a {
-      color: $user_order_help_text;
+      color: $user_order_help_text_links;
 
       &:hover {
         text-decoration: underline;

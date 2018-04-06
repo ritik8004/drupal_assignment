@@ -19,8 +19,10 @@
     color: $btt_text;
   }
 
-  &:hover {
-    opacity: 0.75 !important;
+  @include breakpoint($desktop) {
+    &:hover {
+      opacity: 0.75 !important;
+    }
   }
 
   #{$right}: 20px;
