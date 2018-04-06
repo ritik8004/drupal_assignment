@@ -68,11 +68,11 @@ class ProductCategoryTree {
   protected $connection;
 
   /**
-   * Highlight image paragraph ids for all terms.
+   * Highlight paragraph ids for all terms.
    *
    * @var array
    */
-  protected $highlightImages = [];
+  protected $highlightParagraphs = [];
 
   /**
    * ProductCategoryTree constructor.
@@ -166,21 +166,21 @@ class ProductCategoryTree {
   /**
    * Get the term tree for 'product_category' vocabulary.
    *
-   * Optionally with highlight images and child.
+   * Optionally with highlight paragraphs and child.
    *
    * @param string $langcode
    *   Language code in which we need term to be displayed.
    * @param int $parent_tid
    *   Parent term id.
-   * @param bool $highlight_image
-   *   True if include highlight image else false.
+   * @param bool $highlight_paragraph
+   *   True if include highlight paragraph else false.
    * @param bool $child
    *   True if include child else false.
    *
    * @return array
    *   Processed term data.
    */
-  public function getCategoryTree($langcode, $parent_tid = 0, $highlight_image = TRUE, $child = TRUE) {
+  public function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
     $data = [];
 
     // Get all child terms for the given parent.
@@ -201,8 +201,8 @@ class ProductCategoryTree {
         'active_class' => '',
       ];
 
-      if ($highlight_image) {
-        $data[$term->tid]['highlight_image'] = $this->getHighlightImage($term->tid, $langcode, self::VOCABULARY_ID);
+      if ($highlight_paragraph) {
+        $data[$term->tid]['highlight_paragraph'] = $this->getHighlightParagraph($term->tid, $langcode, self::VOCABULARY_ID);
       }
 
       if ($child) {
@@ -215,7 +215,7 @@ class ProductCategoryTree {
   }
 
   /**
-   * Get highlight image for a term.
+   * Get highlight paragraph for a term.
    *
    * @param int $tid
    *   Term id.
@@ -225,23 +225,23 @@ class ProductCategoryTree {
    *   Vocabulary id.
    *
    * @return array
-   *   Highlight image array.
+   *   Highlight paragraphs array.
    */
-  protected function getHighlightImage($tid, $langcode, $vid) {
-    $highlight_images = [];
+  protected function getHighlightParagraph($tid, $langcode, $vid) {
+    $highlight_paragraphs = [];
 
     // We fetch this from first request and shouldn't be empty. If empty,
     // assuming its first request and prepare data.
-    if (empty($this->highlightImages)) {
-      $this->getHighLightImages($vid);
+    if (empty($this->highlightParagraphs)) {
+      $this->getHighLightParagraphs($vid);
     }
 
     // If no data in paragraph referenced field.
-    if (empty($this->highlightImages[$tid])) {
-      return $highlight_images;
+    if (empty($this->highlightParagraphs[$tid])) {
+      return $highlight_paragraphs;
     }
 
-    foreach ($this->highlightImages[$tid] as $paragraph_id) {
+    foreach ($this->highlightParagraphs[$tid] as $paragraph_id) {
       // Load paragraph entity.
       $paragraph = Paragraph::load($paragraph_id);
 
@@ -256,21 +256,44 @@ class ProductCategoryTree {
         $paragraph = $paragraph->getTranslation($langcode);
       }
 
-      if ($paragraph && !empty($paragraph->get('field_highlight_image'))) {
+      if ($paragraph && $paragraph->getType() == 'main_menu_highlight' && !empty($paragraph->get('field_highlight_image'))) {
         $image = $paragraph->get('field_highlight_image')->getValue();
         $image_link = $paragraph->get('field_highlight_link')->getValue();
-        $renderable_image = $paragraph->get('field_highlight_image')->view('default');
+        $renderable_image = $paragraph->get('field_highlight_image')
+          ->view('default');
+        $paragraph_type = $paragraph->getType();
         if (!empty($image)) {
           $url = Url::fromUri($image_link[0]['uri']);
-          $highlight_images[] = [
+          $highlight_paragraphs[] = [
             'image_link' => $url->toString(),
             'img' => $renderable_image,
+            'paragraph_type' => $paragraph_type,
+          ];
+        }
+      }
+
+      elseif ($paragraph && $paragraph->getType() == 'image_title_subtitle') {
+        $image = $paragraph->get('field_banner')->getValue();
+        $image_link = $paragraph->get('field_link')->getValue();
+        $renderable_image = $paragraph->get('field_banner')
+          ->view('hightlight_image_186x184');
+        $image_title = $paragraph->get('field_title')->value;
+        $image_description = $paragraph->get('field_sub_title')->value;
+        $paragraph_type = $paragraph->getType();
+        if (!empty($image)) {
+          $url = Url::fromUri($image_link[0]['uri']);
+          $highlight_paragraphs[] = [
+            'image_link' => $url->toString(),
+            'img' => $renderable_image,
+            'title' => $image_title,
+            'description' => $image_description,
+            'paragraph_type' => $paragraph_type,
           ];
         }
       }
     }
 
-    return $highlight_images;
+    return $highlight_paragraphs;
   }
 
   /**
@@ -373,19 +396,19 @@ class ProductCategoryTree {
   }
 
   /**
-   * Get highlight image paragraphs id for all terms.
+   * Get highlight paragraph id for all terms.
    *
    * @param string $vid
    *   Vocabulary id.
    */
-  protected function getHighLightImages($vid) {
+  protected function getHighLightParagraphs($vid) {
     $query = $this->connection->select('taxonomy_term__field_main_menu_highlight', 'tmmh');
     $query->fields('tmmh', ['entity_id', 'field_main_menu_highlight_target_id']);
     $query->condition('tmmh.bundle', $vid);
-    $highlight_images = $query->execute()->fetchAll();
-    if (!empty($highlight_images)) {
-      foreach ($highlight_images as $highlight_image) {
-        $this->highlightImages[$highlight_image->entity_id][] = $highlight_image->field_main_menu_highlight_target_id;
+    $highlight_paragraphs = $query->execute()->fetchAll();
+    if (!empty($highlight_paragraphs)) {
+      foreach ($highlight_paragraphs as $highlight_paragraph) {
+        $this->highlightParagraphs[$highlight_paragraph->entity_id][] = $highlight_paragraph->field_main_menu_highlight_target_id;
       }
     }
   }
