@@ -7,13 +7,13 @@ Feature: As an authenticated user
     Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
     And I wait for the page to load
     Then I should see the link "My account"
-    When I am on a simple product page
+    When I am on a configurable product
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
     When I press "Add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
@@ -28,6 +28,7 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
+    And I scroll to the "#edit-actions-next" element
     And I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
@@ -48,6 +49,7 @@ Feature: As an authenticated user
       And I wait for the page to load
       When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
       And I wait for AJAX to finish
+      And I scroll to the "#edit-actions-next" element
       And I press "proceed to payment"
       And I wait for the page to load
       When I select a payment option "payment_method_title_knet"
@@ -92,6 +94,7 @@ Feature: As an authenticated user
     And I fill in "Ecom_Payment_Pin" with "1234"
     And I press "Submit"
     And I press "Confirm"
+    And I wait 10 seconds
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
@@ -106,6 +109,7 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
+    And I scroll to the "#edit-actions-next" element
     And I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cybersource"
@@ -141,5 +145,6 @@ Feature: As an authenticated user
     And I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
+    And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "

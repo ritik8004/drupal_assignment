@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.department_page.field_product_category
     - field.field.node.department_page.field_promo_blocks
     - node.type.department_page
+    - field.field.node.department_page.field_show_left_menu
   module:
     - metatag
     - paragraphs
@@ -15,6 +16,13 @@ targetEntityType: node
 bundle: department_page
 mode: default
 content:
+  field_show_left_menu:
+    weight: 2
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
   created:
     type: datetime_timestamp
     weight: 3

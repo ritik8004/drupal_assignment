@@ -90,9 +90,9 @@ $vspromo-regular: 'BentonSans-Regular', 'GESSTwoLight-Light';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$vs-arabic-bold: 'BentonSans-Medium', 'DroidArabicKufi-Bold';
-$vs-arabic-regular: 'BentonSans-Regular', 'DroidArabicKufi-Light';
-$vspromo-arabic-regular: 'BentonSans-Regular', 'GESSTwoLight-Light';
+$vs-arabic-bold: 'DroidArabicKufi-Bold', 'BentonSans-Medium';
+$vs-arabic-regular: 'DroidArabicKufi-Light', 'BentonSans-Regular';
+$vspromo-arabic-regular: 'GESSTwoLight-Light', 'BentonSans-Regular';
 
 $vs-icons: 'alshaya-icons';
 $body_font: $vs-regular;
