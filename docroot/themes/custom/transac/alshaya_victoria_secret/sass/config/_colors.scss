@@ -98,9 +98,9 @@ $body_bg: $primary_bg;
 $content_pagetitle: $marine-blue;
 $content_pagetitle_border: $white;
 $primary_text: $grey-ash;
-$primary_link: $marine-blue-two;
-$primary_link-hover: $marine-blue-two;
-$primary_link-active: $marine-blue-two;
+$primary_link: $black;
+$primary_link-hover: $brilliant-rose;
+$primary_link-active: $brilliant-rose;
 $primary_border: $white;
 $content_link_color: $cerulean-two;
 
@@ -252,10 +252,10 @@ $btt_hover_text: $grey-ash;
 $btt_text: $black;
 
 // Breadcrumb.
-$breadcrumb_bg: $white-four;
-$breadcrumb_link: $greyish;
-$breadcrumb_link_hover: $greyish;
-$breadcrumb_link_active: $breadcrumb-active;
+$breadcrumb_bg: $white-smoke-light;
+$breadcrumb_link: $black;
+$breadcrumb_link_hover: $black;
+$breadcrumb_link_active: $black;
 
 // 404
 $maintenance_container_border: $white-two;
@@ -342,6 +342,7 @@ $header_mobile_menu_active: $white-five;
 $header_mobile_menu_close_bg: $brilliant-rose;
 $header_mobile_menu_close: $black;
 $header_mobile_menu_overlay: rgba(133, 133, 133, 0.27);
+$header_mobile_border: $white-smoke-light;
 
 // Branding menu mobile.
 $header_branding_shadow: $greyish;
@@ -426,6 +427,8 @@ $newsletter_input_border: $vanilla;
 $newsletter_input_bg: $nero;
 $newsletter_submit_btn: $vanilla;
 $newsletter_submit_btn_text: $black;
+$footer_input_text: $vanilla;
+$footer_input_border_active: $vanilla;
 
 // Checkout Progress.
 $checkout_seperator: $greyish;
@@ -750,7 +753,7 @@ $address_button_border: $marine-blue-two;
 $address_button_text: $marine-blue-two;
 
 //My Account pages
-$user_account_wrapper_light: $grey-ash;
+$user_account_wrapper_light: $black;
 $password_tooltip_list: $red-error;
 $user_nav_link: $marine-blue-two;
 $user_nav_mobile_title2: $black;
