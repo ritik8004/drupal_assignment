@@ -121,7 +121,7 @@ function _alshaya_config_get_config_yml($module_name, $directory) {
   $ymls = file_scan_directory($directory_path, '/[(.yml)]$/');
   if (!empty($ymls)) {
     foreach ($ymls as $yml) {
-      $files[] = $yml->filename;
+      $files[] = $yml->name;
     }
   }
 

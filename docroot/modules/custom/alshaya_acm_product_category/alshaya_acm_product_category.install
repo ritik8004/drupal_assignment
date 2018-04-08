@@ -10,6 +10,20 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Install config for adding extra paragraph to main menu highlight field.
+ */
+function alshaya_acm_product_category_update_8006() {
+  $configs = [
+    'field.field.taxonomy_term.acq_product_category.field_main_menu_highlight',
+    'core.entity_view_mode.paragraph.hightlight_image_186x184',
+    'core.entity_view_display.paragraph.image_title_subtitle.hightlight_image_186x184',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_acm_product_category', 'install');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install config using for new key footer_menu_blocks.
  */
 function alshaya_acm_product_category_update_8005() {

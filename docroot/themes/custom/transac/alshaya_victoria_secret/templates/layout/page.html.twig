@@ -1,6 +1,5 @@
-<div>
-
-
+{% extends '@alshaya_white_label/layout/page.html.twig' %}
+{% block header_precontent %}
   <div class="header--wrapper">
     <!-- ______________________ MENU PRIMARY _______________________ -->
     <div class="c-header__wrapper--inner">
@@ -55,139 +54,11 @@
       </div>
     {% endif %}
   </div>
+{% endblock %}
 
-    <!-- ______________________ BREADCRUMB _______________________ -->
-
-  {% if page.breadcrumb %}
-    <div class="c-breadcrumb">
-      <div class="l-container">
-        <div class="c-breadcrumb__region">
-          {{ page.breadcrumb }}
-        </div>
-      </div>
-    </div>
+{% block primary_footer %}
+  {% if page.footer_primary %}
+      {% include directory ~ '/templates/partial/footer-primary.html.twig' %}
+    <!-- /footer-primary -->
   {% endif %}
-  <!-- /breadcrumb -->
-
-  <!-- ______________________ HERO CONTENT _______________________ -->
-
-  {% if page.hero_content %}
-    <div class="c-hero-content">
-      <div class="l-container">
-        <div class="c-hero-content__region">
-          {{ page.hero_content }}
-        </div>
-      </div>
-    </div>
-  {% endif %}
-  <!-- /hero content -->
-
-  <!-- ______________________ MAIN _______________________ -->
-
-  <div class="clearfix">
-    <div{{ attributes.addClass('l-container') }}>
-
-      {% if page.sidebar_first %}
-        <aside class="c-sidebar-first">
-          <div class="c-sidebar-first__region">
-            {{ page.sidebar_first }}
-          </div>
-        </aside>
-      {% endif %}
-      <!-- /sidebar-first -->
-
-      <main>
-
-        {% if title or messages or tabs or action_links %}
-          <div class="c-content__header">
-
-            {% if page.highlighted %}
-              <div class="c-content__highlighted">
-                {{ page.highlighted }}
-              </div>
-            {% endif %}
-
-            {{ title_prefix }}
-
-            {% if title %}
-              <h1 class="c-content__title">
-                {{ title }}
-              </h1>
-            {% endif %}
-
-            {{ title_suffix }}
-            {{ messages }}
-            {{ page.help }}
-
-            {% if tabs %}
-              <div class="c-content__tabs">{{ tabs }}</div>
-            {% endif %}
-
-            {% if action_links %}
-              <ul class="c-content__action-links">{{ action_links }}</ul>
-            {% endif %}
-
-          </div>
-          <!-- /#content-header -->
-        {% endif %}
-
-        <div class="c-content">
-          <div class="c-content__region">
-            {{ page.content }}
-            {% block after_content %}{% endblock %}
-          </div>
-        </div>
-
-        {{ feed_icons }}
-
-      </main>
-      <!-- /content-inner /content -->
-
-      {% if page.sidebar_second %}
-        <aside class="c-sidebar-second">
-          <div class="c-sidebar-second__region">
-            {{ page.sidebar_second }}
-          </div>
-        </aside>
-      {% endif %}
-      <!-- /sidebar-first -->
-
-    </div>
-  </div>
-  <!-- /main -->
-
-  <!-- ______________________ Post content _______________________ -->
-
-  {% if page.post_content %}
-    <div class="c-post-content">
-      <div class="l-container">
-        <div class="c-post-content__region">
-          {{ page.post_content }}
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  <!-- ______________________ FOOTER PRIMARY _______________________ -->
-  <footer class="c-footer">
-    {% if page.footer_primary %}
-        {% include directory ~ '/templates/partial/footer-primary.html.twig' %}
-      <!-- /footer-primary -->
-    {% endif %}
-
-    <!-- ______________________ FOOTER SECONDARY _______________________ -->
-
-    {% if page.footer_secondary %}
-      <div class="c-footer-secondary">
-        <div class="l-container">
-          <div class="c-footer-secondary__region">
-            {{ page.footer_secondary }}
-          </div>
-        </div>
-      </div>
-      <!-- /footer-secondary -->
-    {% endif %}
-  </footer>
-
-</div>
-<!-- /page -->
+{% endblock %}

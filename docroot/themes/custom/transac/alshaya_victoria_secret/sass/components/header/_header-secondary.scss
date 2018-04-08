@@ -38,3 +38,9 @@
     margin: 0;
   }
 }
+
+.header--wrapper {
+  @include breakpoint($desktop) {
+    height: 2.5rem;
+  }
+}
