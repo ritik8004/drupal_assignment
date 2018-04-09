@@ -109,6 +109,13 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Function to reset context langcode for API calls.
+   */
+  public function resetStoreContext() {
+    $this->langcode = $this->languageManager->getCurrentLanguage()->getId();
+  }
+
+  /**
    * Method to provide the Language prefix for magento, per language.
    *
    * @return string

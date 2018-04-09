@@ -845,26 +845,47 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       }
     }
 
+    $this->logger->notice('Area sync completed.');
+  }
+
+  /**
+   * Helper function to reset Magento Form fields cache.
+   */
+  public function resetMagentoFormFields() {
+    foreach ($this->languageManager->getLanguages() as $language) {
+      $this->getMagentoFormFields($language->getId(), TRUE);
+    }
   }
 
   /**
    * Get address form fields from Magento.
    *
+   * @param string $langcode
+   *   Language code.
+   * @param bool $reset
+   *   Reset cached data and fetch again.
+   *
    * @return array
    *   Address form fields.
    */
-  public function getMagentoFormFields() {
-    // Cache the form per language.
-    $cid = 'magento_customer_address_form_' . $this->languageManager->getCurrentLanguage()->getId();
+  public function getMagentoFormFields($langcode = NULL, $reset = FALSE) {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
 
-    $cache = $this->cache->get($cid);
+    // Cache the form per language.
+    $cid = 'magento_customer_address_form_' . $langcode;
+
+    $cache = $reset ? NULL : $this->cache->get($cid);
 
     if ($cache) {
       return $cache->data;
     }
 
     try {
+      $this->alshayaApiWrapper->updateStoreContext($langcode);
       $magento_form = $this->alshayaApiWrapper->getCustomerAddressForm();
+      $this->alshayaApiWrapper->resetStoreContext();
 
       if (empty($magento_form)) {
         return [];
