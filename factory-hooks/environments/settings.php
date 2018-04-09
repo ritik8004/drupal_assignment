@@ -40,6 +40,12 @@ function alshaya_get_additional_settings($site, $env) {
           'ar' => 'ksa_ar',
         ],
       ],
+      '01uat' => [
+        'store_id' => [
+          'en' => 7,
+          'ar' => 10,
+        ],
+      ],
     ],
     'mcae' => [
       'default' => [
