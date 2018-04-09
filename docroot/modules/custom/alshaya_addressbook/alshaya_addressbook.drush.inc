@@ -19,7 +19,7 @@ function alshaya_addressbook_drush_command() {
   ];
 
   $commands['alshaya-addressbook-sync-form-fields'] = [
-    'description' => 'Imports all areas into Drupal using direct Magento API.',
+    'description' => 'Syncs and resets form fields cache.',
     'aliases'     => ['aasff', 'sync-form-fields'],
   ];
 
