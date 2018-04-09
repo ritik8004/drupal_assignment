@@ -10,7 +10,7 @@
  *
  * Enable alshaya_super_category.
  */
-function alshaya_transac_update_8105() {
+function alshaya_transac_update_8106() {
   // Delete existing super category menu block.
   alshaya_block_delete_blocks(['supercategorymenu']);
   \Drupal::service('module_installer')->install(['alshaya_super_category']);
