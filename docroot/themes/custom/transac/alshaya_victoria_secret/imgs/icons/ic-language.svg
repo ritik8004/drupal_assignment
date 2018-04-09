@@ -9,7 +9,7 @@
             <use xlink:href="#a"/>
         </mask>
         <use fill="#0ABB76" fill-rule="nonzero" opacity=".485" xlink:href="#a"/>
-        <g fill="#ef5f96" mask="url(#b)">
+        <g fill="#d91560" mask="url(#b)">
             <path d="M0 0h48v48H0z"/>
         </g>
         <g fill="#FFF" fill-opacity=".25" mask="url(#b)">
