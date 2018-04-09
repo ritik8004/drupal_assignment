@@ -131,6 +131,12 @@
   }
 }
 
+.block-alshaya-user-recent-orders + .c-order-help {
+  @include breakpoint($tablet) {
+    border-top: 1px solid $content_pagetitle_border;
+  }
+}
+
 .block-alshaya-acm-customer > .no--orders + a {
   text-transform: uppercase;
 }
