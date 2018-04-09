@@ -30,7 +30,8 @@
       padding-left: 0.937rem;
       padding-right: 0.937rem;
 
-      &::before {
+      &::before,
+      &::after {
         display: none;
       }
     }
@@ -72,5 +73,9 @@ body {
 
   @include breakpoint($only-mobile) {
     margin-top: 5.68rem;
+
+    html[lang=ar] & {
+      margin-top: 5.68rem;
+    }
   }
 }
