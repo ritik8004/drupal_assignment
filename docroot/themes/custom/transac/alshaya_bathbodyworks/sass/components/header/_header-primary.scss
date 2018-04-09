@@ -172,6 +172,7 @@ header {
 
       @include breakpoint($only-mobile) {
         background-size: 1.92rem;
+        background-position: $right;
       }
     }
 
@@ -832,7 +833,7 @@ header .region__header {
       width: 74%;
 
       a {
-        margin-#{$left}: 0.51rem;
+        margin-#{$left}: 0;
       }
     }
   }
@@ -860,7 +861,7 @@ html[lang=ar] {
 html[lang='ar'] {
   .block-system-branding-block {
     @include breakpoint($only-mobile) {
-      width: 50%;
+      width: 54%;
 
       .site-brand-home {
         max-width: 100%;
