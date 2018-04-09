@@ -324,7 +324,7 @@ class ProductCategoryTree {
       return $term;
     }
 
-    return NULL;
+    return $term;
   }
 
   /**

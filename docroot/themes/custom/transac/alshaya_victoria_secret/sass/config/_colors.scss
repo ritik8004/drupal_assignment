@@ -90,6 +90,7 @@ $vanilla: #fff;
 $brilliant-rose: #ef5f96;
 $gainsboro: #dadada;
 $ash-triplet: #777;
+$vivid-raspberry: #d91560;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -565,39 +566,42 @@ $department_category_list_hover: $cerulean-two;
 // Store finder page.
 // Store finder header form.
 $store_finder_header: $black;
-$store_finder_subheader: $marine-blue;
-$store_finder_backbtn: $marine-blue-two;
-$store_finder_icon: $cerulean-two;
-$store_finder_text: $cerulean-two;
-$store_finder_border: $cerulean-two;
-$store_finder_text_hover: $marine-blue;
-$store_finder_border_hover: $marine-blue;
+$store_finder_header_desktop: $black;
+$store_finder_subheader: $brilliant-rose;
+$store_finder_backbtn: $brilliant-rose;
+$store_finder_icon: $black;
+$store_finder_text: $black;
+$store_finder_border: $black;
+$store_finder_text_hover: $black;
+$store_finder_border_hover: $brilliant-rose;
 $store_finder_search_label: $grey-ash;
 $store_finder_search_input: $white;
-$store_finder_search_input_bg: $white-five;
+$store_finder_search_input_bg: $vanilla;
 $store_finder_search_input_mobile_border: $greyish;
 $store_finder_search_input_border: $white;
+$store_finder_glossary_btn_border: $nero;
 
 // Store finder gloassary.
-$store_finder_glossary_alphabet: $marine-blue;
+$store_finder_glossary_alphabet: $brilliant-rose;
 $store_finder_glossary_text: $grey-ash;
 $store_finder_glossary_icon: $black;
-$store_finder_glossary_text_hover: $cerulean-two;
+$store_finder_glossary_text_hover: $brilliant-rose;
 $store_finder_glossary_text_border: $white;
 $store_finder_glossary_border: $greyish;
-$store_finder_glossary_link: $marine-blue;
+$store_finder_glossary_link: $brilliant-rose;
 // Store finder search results.
 $store_finder_search_results_label: $black;
-$store_finder_search_results_counter_bg: $cerulean-two;
+$store_finder_search_results_counter_bg: $vivid-raspberry;
 $store_finder_search_results_border: $white;
-$store_finder_search_results_counter_text: $white-five;
-$store_finder_search_results_tile_bg: $white-five;
-$store_finder_search_results_tile_hover_bg: $white-four;
-$store_finder_search_results_tile_link: $cerulean-two;
-$store_finder_search_results_tile_icon: $cerulean-two;
-$store_finder_search_results_hour_label: $cerulean-two;
-$store_finder_search_results_hour_icon_open: $marine-blue-two;
+$store_finder_search_results_counter_text: $vanilla;
+$store_finder_search_results_tile_bg: $vanilla;
+$store_finder_search_results_tile_hover_bg: $vanilla;
+$store_finder_search_results_tile_link: $black;
+$store_finder_search_results_tile_icon: $nero;
+$store_finder_search_results_hour_label: $black;
+$store_finder_search_results_hour_icon_open: $nero;
 $store_finder_storewrapper_bg: $white-four;
+$store_finder_map_border: $gainsboro;
 
 // Checkout Pages & order summary block.
 $order_summary_border: $greyish;

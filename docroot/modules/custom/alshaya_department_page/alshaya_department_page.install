@@ -12,7 +12,6 @@ use Drupal\node\Entity\Node;
  * Implements hook_update_N().
  *
  * Add new field show_left_menu.
- * Set default value of show left menu field on all department pages.
  */
 function alshaya_department_page_update_8004() {
   $configs = [
@@ -22,9 +21,6 @@ function alshaya_department_page_update_8004() {
     'core.entity_view_display.node.department_page.default',
   ];
   alshaya_config_install_configs($configs, 'alshaya_department_page', 'install');
-
-  // Visibility config for category block.
-  alshaya_config_install_configs(['block.block.views_block__product_category_level_2_3_block_2'], 'alshaya_transac', 'optional');
 
   // Set default value for 'show left menu' field on department pages.
   $nids = \Drupal::entityQuery('node')

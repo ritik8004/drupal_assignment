@@ -5,6 +5,10 @@
       &::placeholder {
         color: $store_finder_location_search_text_placeholder;
       }
+
+      @include breakpoint($only-mobile) {
+        border-color: $store_finder_location_search_text_input_border_mobile;
+      }
     }
   }
 
