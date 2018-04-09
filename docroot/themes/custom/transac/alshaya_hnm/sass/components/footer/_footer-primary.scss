@@ -235,7 +235,7 @@
       @include breakpoint($upto-tablet) {
         width: 100%;
         text-align: center;
-        border-bottom: 1px solid $accordion_border;
+        border-bottom: 1px solid $accordion_footer_border;
         border-top: none;
       }
 
@@ -564,7 +564,7 @@
 
     .accordion--body {
       @include breakpoint($only-mobile) {
-        border-top: 2px solid $accordion_border;
+        border-top: 2px solid $accordion_footer_border;
       }
     }
   }
