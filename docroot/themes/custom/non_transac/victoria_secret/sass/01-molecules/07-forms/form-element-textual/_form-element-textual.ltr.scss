@@ -31,12 +31,6 @@ html[dir=rtl] {
       }
     }
   }
-
-  .input__container--half {
-    .input--textual__container--errors {
-      right: 0;
-    }
-  }
 }
 
 .mobile-number-field {
@@ -46,6 +40,16 @@ html[dir=rtl] {
     .input--textual__container--errors {
       position: absolute;
       top: 2.2rem;
+    }
+  }
+}
+
+html[dir=rtl] {
+  .mobile-input--wrapper {
+    .form-item-mobile-number-mobile {
+      label {
+        #{direction(right)}: -2.875rem;
+      }
     }
   }
 }
