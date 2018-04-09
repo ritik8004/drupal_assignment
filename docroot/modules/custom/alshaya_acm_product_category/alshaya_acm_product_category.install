@@ -10,6 +10,18 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Remove config that no longer exists.
+ */
+function alshaya_acm_product_category_update_8007() {
+  // Delete old config as it's not needed any more.
+  Drupal::configFactory()
+    ->getEditable('alshaya_acm_product_category.super_category.settings')
+    ->delete();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install config for adding extra paragraph to main menu highlight field.
  */
 function alshaya_acm_product_category_update_8006() {

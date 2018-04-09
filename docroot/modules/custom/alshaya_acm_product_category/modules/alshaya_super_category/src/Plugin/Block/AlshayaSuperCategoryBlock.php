@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_main_menu\Plugin\Block;
+namespace Drupal\alshaya_super_category\Plugin\Block;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
@@ -13,14 +13,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
- * Provides alshaya main menu super category block.
+ * Provides alshaya super category menu block.
  *
  * @Block(
- *   id = "alshaya_main_menu_super_category",
- *   admin_label = @Translation("Alshaya main menu super category")
+ *   id = "alshaya_super_category_menu",
+ *   admin_label = @Translation("Alshaya super category menu")
  * )
  */
-class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * Array of terms for cache bubbling up.
@@ -44,7 +44,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
   protected $languageManager;
 
   /**
-   * AlshayaMainMenuSuperCategoryBlock constructor.
+   * AlshayaSuperCategoryBlock constructor.
    *
    * @param array $configuration
    *   The configuration.
@@ -88,6 +88,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
     if (empty($term_data)) {
       return [];
     }
+
     // Load english term data to set the css class based on term name.
     if ($langcode !== 'en') {
       $term_data_en = $this->productCategoryTree->getCategoryRootTerms('en');
@@ -117,7 +118,7 @@ class AlshayaMainMenuSuperCategoryBlock extends BlockBase implements ContainerFa
     }
 
     return [
-      '#theme' => 'alshaya_main_menu_top_level',
+      '#theme' => 'alshaya_super_category_top_level',
       '#term_tree' => $term_data,
     ];
   }

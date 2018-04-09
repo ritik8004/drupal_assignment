@@ -15,7 +15,7 @@
         font-size: 0;
 
         @include breakpoint ($desktop) {
-          padding: 0.45rem 1rem;
+          padding: 0.5rem 1rem;
           height: auto;
         }
       }
@@ -97,11 +97,16 @@
     }
   }
 
-  .block-alshaya-main-menu {
+  .block-alshaya-super-category-menu {
     .menu--one__list {
       background-color: transparent;
       text-align: $left;
       padding-left: 1.5rem;
+      font-size: 0;
+
+      li {
+        display: inline-block;
+      }
     }
 
     .active--menu--links li.menu--one__list-item:hover {

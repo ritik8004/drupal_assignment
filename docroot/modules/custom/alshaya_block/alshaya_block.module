@@ -99,7 +99,7 @@ function alshaya_block_move_blocks_theme_to_theme($target_theme, $source_theme =
 /**
  * Utility function to delete blocks from a theme.
  */
-function alshaya_block_delete_blocks($blocks, $theme = NULL) {
+function alshaya_block_delete_blocks(array $blocks, $theme = NULL) {
   $theme = empty($theme) ? \Drupal::config('system.theme')->get('default') : $theme;
 
   foreach ($blocks as $block_id) {
