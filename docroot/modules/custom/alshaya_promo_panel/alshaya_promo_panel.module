@@ -24,7 +24,7 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
       $lang = \Drupal::languageManager()->getCurrentLanguage();
       // Get the language code.
       $lang_code = $lang->getId();
-
+      // @todo: Make this config configurable based on super category feature.
       $variables['#cache']['contexts'][] = 'url.path';
 
       if ($variables['content'] && $machine_name == 'block_content_promo_panel') {
@@ -35,7 +35,7 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
           $element['label'] = [
             '#type' => 'link',
             '#title' => $label,
-            // @todo: Create config to change this url.
+            // @todo: Make this link configurable.
             '#url' => Url::fromUri('internal:/todays-offer', ['language' => $lang]),
             '#options' => [
               'attributes' => [
@@ -49,9 +49,12 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
             '#markup' => \Drupal::service('renderer')->render($element),
           ];
 
+          $variables['title_attributes']['class'][] = 'promo-panel-label';
+
+          // @todo: Check if we can make css generic.
           $variables['content']['#attached']['library'][] = 'alshaya_promo_panel/promo-panel';
         }
-        // If the block is added to block reference paragraph type.
+        // If the block is added to "block reference" paragraph type.
         else {
           // Get the referer path.
           $referrer_path = parse_url(\Drupal::request()->headers->get('referer'))['path'];
