@@ -469,7 +469,7 @@
     }
 
     &::placeholder {
-      color: $footer_input_placeholder;
+      color: $footer_input_placeholder !important;
       opacity: 1;
     }
   }
