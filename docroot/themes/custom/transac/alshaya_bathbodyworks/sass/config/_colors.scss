@@ -43,6 +43,17 @@ $primary_input_disabled: $greyish;
 $primary_input_focus_border: $peacock-blue;
 $primary_input_inline_error: $red-error;
 
+/* ------- 5. Components --------------- */
+// Language Switcher
+$lang_switch: $peacock-blue;
+$lang_switch_active: $black;
+$lang_switch_firsttime_bg: $white;
+$lang_switch_firsttime_border: $white;
+$lang_switch_list_bg: $black;
+$lang_switch_list: $white;
+$lang_switch_close_icon_bg: $peacock-blue;
+$lang_switch_close_icon: $white;
+
 /* ------- 6. Sections and Pages --------------- */
 
 // Header.
@@ -112,3 +123,29 @@ $mm_l3_link_bg: $white;
 $mm_l3_link_hover: $peacock-blue;
 $mm_highlight_label: $peacock-blue;
 $mm_p_a_text: $black;
+
+//3. Footer
+$footer_bg: $white-five;
+$footer_border_top: $peacock-blue;
+$footer_title_h3: $black;
+$footer_link_mobile: $warm-grey-one;
+$footer_link: $warm-grey-one;
+$footer_link_hover: $peacock-blue;
+
+// Social links.
+$social_links: $peacock-blue;
+$social_links_hover: transparent;
+
+//1. Copyright
+$copyright_footer_bg: $warm-grey-three;
+$copyright_footer_text: $black;
+$copyright_footer_paragraph: $black;
+
+//7. Newsletter-signup
+$newsletter_title_h3: $black;
+$newsletter_block_text: $black;
+$newsletter_input_placeholder: $warm-grey-one;
+$newsletter_input_border: $warm-grey-two;
+$newsletter_submit_btn: $black;
+$newsletter_submit_btn_text: $white;
+$newsletter_success: $peacock-blue;

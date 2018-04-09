@@ -24,6 +24,16 @@
       color: $black;
       font-size: 0.875rem;
     }
+
+    @include breakpoint($desktop) {
+      padding-top: 0.475rem;
+      padding-left: 0.937rem;
+      padding-right: 0.937rem;
+
+      &::before {
+        display: none;
+      }
+    }
   }
 }
 
