@@ -57,6 +57,10 @@ header {
       @include breakpoint($tablet) {
         input[type="text"] {
           padding-#{$right}: 2.5rem;
+
+          html[lang='ar'] & {
+            padding-top: 0;
+          }
         }
       }
 
