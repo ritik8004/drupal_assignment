@@ -25,7 +25,6 @@ sites_type="$3"
 if [ "$sites_type" == "code,db" ]
 then
     sites_type="code, db"
-    echo "here!"
 fi
 
 curl "https://www.${env}-alshaya.acsitefactory.com/api/v1/update" \
