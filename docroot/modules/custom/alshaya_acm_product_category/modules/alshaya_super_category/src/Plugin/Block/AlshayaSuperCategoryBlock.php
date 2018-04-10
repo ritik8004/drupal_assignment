@@ -113,27 +113,20 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
     }
 
+    // Set the default parent from settings.
+    $parent_id = $this->configFactory->get('alshaya_super_category.settings')->get('default_category_tid');
     // Get current term from route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {
-      $parents = $this->productCategoryTree->getCategoryTermParents($term);
-
-      if (!empty($parents)) {
-        /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
-        foreach ($parents as $parent) {
-          if (isset($term_data[$parent->id()])) {
-            $term_data[$parent->id()]['class'] .= ' active';
-          }
-        }
+      $parent = $this->productCategoryTree->getCategoryTermRootParent($term);
+      if ($parent instanceof TermInterface) {
+        $parent_id = $parent->id();
       }
     }
-    else {
-      // Set the default parent from settings.
-      $parent_id = $this->configFactory->get('alshaya_super_category.settings')->get('default_category_tid');
-      if (isset($term_data[$parent_id])) {
-        $term_data[$parent_id]['class'] .= ' active';
-      }
+
+    if (isset($term_data[$parent_id])) {
+      $term_data[$parent_id]['class'] .= ' active';
     }
 
     return [
