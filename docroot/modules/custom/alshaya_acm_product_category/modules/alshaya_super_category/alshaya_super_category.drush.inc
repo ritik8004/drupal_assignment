@@ -58,6 +58,8 @@ function drush_alshaya_super_category_switch() {
   $block = reset($blocks);
   $block->setStatus($status);
   $block->save();
+  // Clear cache to rebuild menu blocks.
+  drupal_flush_all_caches();
 
   drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));
 }

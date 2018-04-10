@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_super_category\Plugin\Block;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Block\BlockBase;
@@ -44,6 +45,13 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
   protected $languageManager;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * AlshayaSuperCategoryBlock constructor.
    *
    * @param array $configuration
@@ -56,11 +64,14 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    *   Product category tree.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryTree = $product_category_tree;
     $this->languageManager = $language_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -72,7 +83,8 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_product_category.product_category_tree'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('config.factory')
     );
   }
 
@@ -114,6 +126,13 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
             $term_data[$parent->id()]['class'] .= ' active';
           }
         }
+      }
+    }
+    else {
+      // Set the default parent from settings.
+      $parent_id = $this->configFactory->get('alshaya_super_category.settings')->get('default_category_tid');
+      if (isset($term_data[$parent_id])) {
+        $term_data[$parent_id]['class'] .= ' active';
       }
     }
 
