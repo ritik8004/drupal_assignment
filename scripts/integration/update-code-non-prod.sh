@@ -21,7 +21,7 @@ env="$1"
 sites_ref="$2"
 sites_type="$3"
 
-# add comma to "code,db" if not alread
+# add comma to "code,db" if not already entered
 if [ "$sites_type" == "code,db" ]
 then
     sites_type="code, db"
