@@ -659,3 +659,14 @@ function alshaya_master_webform_submission_presave(EntityInterface $entity) {
     $entity->setData($data);
   }
 }
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function alshaya_master_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
+  // Attach a library to element as widget not showing proper palette in arabic
+  // version of site.
+  if ($context['widget']->getPluginId() == 'jquery_minicolors_widget') {
+    $element['#attached']['library'][] = 'alshaya_master/jquery_minicolor_arabic';
+  }
+}
