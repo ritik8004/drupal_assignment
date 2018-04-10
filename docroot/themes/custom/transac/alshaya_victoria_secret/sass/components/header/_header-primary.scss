@@ -10,7 +10,6 @@
 
 .c-pre-content__region {
   border-top: 0;
-  border-bottom: 0;
 }
 
 header {
@@ -89,6 +88,10 @@ header {
         font-size: 0.875rem;
         text-transform: uppercase;
       }
+
+      &.active a.menu--one__link {
+        border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
+      }
     }
 
     .active--menu--links {
@@ -134,18 +137,17 @@ header {
   margin: 0 auto;
 }
 
-.mobile--overlay {
-  .c-menu-primary {
-    z-index: 9;
-  }
-}
-
 .c-menu-primary {
-  @include breakpoint($upto-desktop) {
-    height: auto;
-    position: fixed;
-    z-index: 9;
-    top: 0;
+  li:hover a {
+    @include breakpoint($upto-desktop) {
+      color: $header_my_account_mobile_link_hover;
+    }
+  }
+
+  h3 {
+    @include breakpoint($upto-desktop) {
+      color: $header_my_account_mobile_h3_title;
+    }
   }
 
   ul.menu {

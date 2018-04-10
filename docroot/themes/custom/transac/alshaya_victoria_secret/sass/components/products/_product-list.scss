@@ -1,0 +1,19 @@
+.c-plp {
+  .c-page-title__description,
+  .field--name-field-acq-promotion-description {
+    text-transform: none;
+    font-size: 0.875rem;
+  }
+
+  .region__content {
+    .filter--mobile .form-type-select {
+      text-transform: none;
+    }
+  }
+}
+
+.c-facet__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-family: $vs-bold;
+}
