@@ -191,7 +191,7 @@ $secondary_text: $black;
 $secondary_btn_text: $marine-blue;
 $secondary_btn_border: $marine-blue;
 $secondary_border: $black;
-$secondary_link: $marine-blue;
+$secondary_link: $black;
 
 /* ------- 4. Tertiary Colors ------- */
 $tertiary_btn_text: $white-five;
@@ -216,8 +216,10 @@ $label_black: $black;
 $user_sidebar_block_title: $nero;
 
 // Messages and Errors
-$default_msg_text: $white-five;
-$default_msg_bg: $tealish;
+$default_msg_text: $brilliant-rose;
+$default_msg_bg: $vanilla;
+$default_msg_border: $gainsboro;
+$default_msg_icon: $nero;
 $default_msg_info_bg: $message-info;
 $default_msg_info_text: $black;
 $content_error_msg_bg: $cherry;
@@ -359,8 +361,10 @@ $header_secondary_menu_link_mobile_hover_bg: $vanilla;
 
 // Header my account nav.
 $header_my_account_h3_title: $vanilla;
+$header_my_account_mobile_h3_title: $black;
 $header_my_account_bg: $vanilla;
 $header_my_account_link_hover: $vanilla;
+$header_my_account_mobile_link_hover: $brilliant-rose;
 $header_my_account_icon: $black;
 
 // Mega menu.
@@ -462,7 +466,7 @@ $plp_facet_filter_label: $black;
 $plp_facet_title: $grey-ash;
 $plp_facet_border: $white;
 $plp_item_label: $grey-ash;
-$plp_promotion_description: $cerulean-two;
+$plp_promotion_description: $ash-triplet;
 
 // PLP Filter bar.
 $plp_filterbar_filter_bg: $cerulean-two;
@@ -851,3 +855,6 @@ $privilege_earn_txt: $grey-ash;
 
 // Contact Page
 $webform_contact_legend: $brilliant-rose;
+
+// VAT text
+$vat: $ash-triplet;
