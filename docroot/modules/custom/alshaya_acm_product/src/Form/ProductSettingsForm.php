@@ -38,6 +38,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('not_buyable_help_text', $form_state->getValue('not_buyable_help_text'));
     $config->set('vat_text', $form_state->getValue('vat_text'));
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
+    $config->set('image_position_pdp', $form_state->getValue('image_position_pdp'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -113,6 +114,16 @@ class ProductSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('VAT disclaimer text for the footer'),
       '#default_value' => $config->get('vat_text_footer'),
+    ];
+
+    $form['image_position_pdp'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Image position on PDP'),
+      '#default_value' => $config->get('image_position_pdp'),
+      '#options' => [
+        'Left' => $this->t('Left'),
+        'Bottom' => $this->t('Bottom'),
+      ],
     ];
 
     return $form;
