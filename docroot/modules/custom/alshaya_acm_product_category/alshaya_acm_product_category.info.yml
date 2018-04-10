@@ -12,5 +12,6 @@ dependencies:
   - alshaya_product_zoom:alshaya_product_zoom
   - drupal:content_translation
   - form_options_attributes:form_options_attributes
+  - jquery_minicolors:jquery_minicolors
   - metatag:metatag
   - drupal:views
