@@ -6,6 +6,9 @@
 #
 # Mandatory parameters:
 # task_id : id of task to get information to. This can be found from response e.g. from deploy-staging-environment.shExample: 59951
+#
+# Important (for later purposes) is "status_string" in response. This is "Waiting" when in progress
+# and "Completed" when successfully completed
 
 source $(dirname "$0")/includes/global-api-settings.inc.sh
 
