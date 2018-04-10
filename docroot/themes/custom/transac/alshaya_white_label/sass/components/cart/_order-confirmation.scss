@@ -721,9 +721,3 @@
     }
   }
 }
-
-.vat-text-footer {
-  @include breakpoint($only-mobile) {
-    text-align: center;
-  }
-}
