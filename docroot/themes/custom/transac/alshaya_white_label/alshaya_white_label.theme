@@ -131,6 +131,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
       $variables['category_term_name'] = $term->getName();
       $variables['category_term_description'] = $description;
     }
+    $variables['show_left_menu'] = $variables['node']->get('field_show_left_menu')->value;
   }
 
   // Attach the plp search js library to Search page.
