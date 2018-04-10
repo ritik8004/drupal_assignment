@@ -1,7 +1,9 @@
 #!/bin/sh
 
-# Usage: scripts/deploy-staging-environment.sh "target_env" "site_ids"
-# Example usage: scripts/deploy_staging_environment.sh qa2 201,311
+# Usage: scripts/integration/deploy-staging-environment.sh "target_env" "site_ids"
+# Example usages:
+# scripts/integration/deploy-staging-environment.sh qa2 201,311
+# scripts/integration/deploy-staging-environment.sh pprod 321,296,291,246,196,311,336,366,306,351,361,201,256,251,346,376
 #
 # This is a command-line version of "Deploy staging environment" ACSF functionality
 # located at https://www.alshaya.acsitefactory.com/admin/gardens/staging/deploy
@@ -30,8 +32,7 @@
 # tzkw - 346
 # vskw - 376
 
-user=integration
-api_key=960af8b40bb9c44202f99588dfd4136bfebd0b59
+source $(dirname "$0")/global-api-settings.sh
 
 # "dev" or "test" or "uat" or "pprod" or "live" or "qa2".
 to_acsf_environment="$1"
