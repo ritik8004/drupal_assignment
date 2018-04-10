@@ -87,6 +87,8 @@ function alshaya_super_category_preprocess_block(&$variables) {
         return;
       }
 
+      // Update block cache context.
+      $variables['content']['#cache']['contexts'][] = 'url.path';
       // Create a name without spaces and any special character.
       $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent->label()));
       // Set the language suffix for logo based on current language.
@@ -98,7 +100,21 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $theme = \Drupal::service('theme.manager')->getActiveTheme();
       global $base_url;
       // Set the logo path based on term name and current language.
-      $variables['content']['site_logo']['#uri'] = $base_url . '/' . $theme->getPath() . '/imgs/logos/' . $term_clean_name . '-logo' . $langcode . '.svg';
+      $logo_path = $base_url . '/' . $theme->getPath() . '/imgs/logos/' . $term_clean_name . '-logo';
+      // Check logo fallback.
+      $logo_path = function () use ($logo_path, $langcode) {
+        if (file_exists($logo_path . $langcode . '.svg')) {
+          return $logo_path . $langcode . '.svg';
+        }
+        elseif (file_exists($logo_path . '.svg')) {
+          return $logo_path . '.svg';
+        }
+        return NULL;
+      };
+
+      if ($logo_path() != '') {
+        $variables['content']['site_logo']['#uri'] = $logo_path;
+      }
       // Set image Alt based on current brand.
       $variables['content']['site_logo']['#alt']    = $parent->label();
       $variables['content']['site_name']['#markup'] = $parent->label();
