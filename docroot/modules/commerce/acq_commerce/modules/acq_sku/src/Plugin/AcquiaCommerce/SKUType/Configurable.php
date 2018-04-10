@@ -480,9 +480,8 @@ class Configurable extends SKUPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function cartName($sku, array $cart) {
+  public function cartName(SKU $sku, array $cart, $asString = FALSE) {
     $parent_sku = $this->getParentSku($sku);
-
     if (empty($parent_sku)) {
       return $sku->label();
     }
@@ -492,7 +491,6 @@ class Configurable extends SKUPluginBase {
     );
 
     $label_parts = [];
-
     foreach ($configurables as $configurable) {
       $key = $configurable['code'];
       $attribute_value = $this->getAttributeValue($sku, $key);
@@ -509,16 +507,21 @@ class Configurable extends SKUPluginBase {
       }
     }
 
-    $label = sprintf(
+    // Create name from label parts.
+    $cartName = sprintf(
       '%s (%s)',
       $cart['name'],
       implode(', ', $label_parts)
     );
 
-    $display_node = $this->getDisplayNode($parent_sku);
-    $url = $display_node->toUrl();
-    $link = Link::fromTextAndUrl($label, $url)->toRenderable();
-    return render($link);
+    if (!$asString) {
+      $display_node = $this->getDisplayNode($parent_sku);
+      $url = $display_node->toUrl();
+      $link = Link::fromTextAndUrl($cartName, $url);
+      $cartName = $link->toRenderable();
+    }
+
+    return $cartName;
   }
 
   /**
