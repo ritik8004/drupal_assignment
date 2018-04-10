@@ -32,7 +32,7 @@
 # tzkw - 346
 # vskw - 376
 
-source $(dirname "$0")/global-api-settings.sh
+source $(dirname "$0")/includes/global-api-settings.inc.sh
 
 # "dev" or "test" or "uat" or "pprod" or "live" or "qa2".
 to_acsf_environment="$1"
