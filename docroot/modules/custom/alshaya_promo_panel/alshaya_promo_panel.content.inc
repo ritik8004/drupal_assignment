@@ -24,7 +24,6 @@ function alshaya_promo_panel_create_promo_panel_block_content() {
     'uuid' => '95bb6c44-62eb-4bdc-870d-cd0d8d1a7460',
     'info' => 'Promo panel',
     'machine_name' => 'block_content_promo_panel',
-    'template_suggestion' => 'block_content__promo_panel',
     'type' => 'paragraph_block',
     'langcode' => 'en',
   ]);
