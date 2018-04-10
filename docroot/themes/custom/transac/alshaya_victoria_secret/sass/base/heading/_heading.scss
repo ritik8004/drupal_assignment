@@ -1,0 +1,28 @@
+%page-title {
+  text-transform: none;
+  font-family: $vs-regular;
+  color: $page_title;
+
+  @include breakpoint($mobile) {
+    font-size: 1rem;
+  }
+
+  @include breakpoint($tablet) {
+    font-size: 1.5rem;
+  }
+}
+
+.order-detail,
+.c-change-password,
+.c-communication-preferences,
+.c-user-edit,
+.c-order-list,
+.c-user--node,
+.c-address-book {
+  .block-page-title-block {
+    .back-link::before {
+      position: relative;
+      top: -0.25rem;
+    }
+  }
+}

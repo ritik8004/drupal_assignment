@@ -14,7 +14,8 @@
     display: block;
     height: auto;
 
-    &::before {
+    &::before,
+    &::after {
       content: none !important;
     }
   }
@@ -30,5 +31,16 @@
       color: $vanilla;
       border-bottom: none;
     }
+  }
+
+  .c-menu-secondary__region {
+    max-width: none;
+    margin: 0;
+  }
+}
+
+.header--wrapper {
+  @include breakpoint($desktop) {
+    height: 2.5rem;
   }
 }

@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -671,4 +672,20 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public static function postDelete(EntityStorageInterface $storage, array $entities) {
+    parent::postDelete($storage, $entities);
+
+    // Delete media files.
+    foreach ($entities as $entity) {
+      /** @var \Drupal\acq_sku\Entity\SKU $sku  */
+      foreach ($entity->getMedia() as $media) {
+        if ($media['file'] instanceof FileInterface) {
+          $media['file']->delete();
+        }
+      }
+    }
+  }
 }

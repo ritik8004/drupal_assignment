@@ -1,6 +1,7 @@
 {{ attach_library('alshaya_white_label/convert_to_select2') }}
 {% set attributes = attributes.addClass('c-plp', 'c-plp-only', 'l-two--sf') %}
 <div>
+  {% block header_precontent %}
   <!-- ______________________ MENU SECONDARY _______________________ -->
 
   <div class="header--wrapper">
@@ -55,6 +56,7 @@
       </div>
     {% endif %}
   </div>
+  {% endblock %}
 
   <!-- ______________________ BREADCRUMB _______________________ -->
 
@@ -181,10 +183,12 @@
 
   <!-- ______________________ FOOTER PRIMARY _______________________ -->
   <footer class="c-footer">
+  {% block primary_footer %}
     {% if page.footer_primary %}
         {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
       <!-- /footer-primary -->
     {% endif %}
+  {% endblock %}
 
     <!-- ______________________ FOOTER SECONDARY _______________________ -->
 

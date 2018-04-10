@@ -146,6 +146,17 @@
       #{$right}: 0;
     }
   }
+
+  form:not(.alshaya-acm-customer-order-list-search, .alshaya-stores-available-stores, .store-finder-exposed-form) {
+    input[type="email"] {
+      color: $footer_input_text;
+    }
+  }
+
+  .c-input__bar::before,
+  .c-input__bar::after {
+    background-color: $footer_input_border_active;
+  }
 }
 
 .c-footer-primary,
@@ -159,6 +170,7 @@
       &.en a {
         margin-left: 0;
         margin-right: 0;
+        font-family: $vs-regular;
       }
 
       a {

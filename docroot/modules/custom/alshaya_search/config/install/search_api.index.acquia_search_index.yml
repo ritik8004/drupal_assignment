@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.storage.node.field_skus
     - field.storage.node.body
+    - field.storage.node.field_category
     - search_api.server.acquia_search_server
   module:
     - acq_sku
@@ -128,6 +129,14 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  field_category:
+    label: Category
+    datasource_id: 'entity:node'
+    property_path: field_category
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_category
 datasource_settings:
   'entity:node':
     bundles:
@@ -138,12 +147,18 @@ datasource_settings:
       default: true
       selected: {  }
 processor_settings:
+  rendered_item: {  }
   add_url: {  }
   aggregated_field: {  }
   entity_status: {  }
-  rendered_item: {  }
+  hierarchy:
+    fields:
+      field_category: taxonomy_term-parent
+    weights:
+      preprocess_index: -45
 tracker_settings:
-  default: {  }
+  default:
+    indexing_order: fifo
 options:
   index_directly: false
   cron_limit: 1000

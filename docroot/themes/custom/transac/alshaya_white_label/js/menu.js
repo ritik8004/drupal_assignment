@@ -63,7 +63,7 @@
 
       $('.hamburger--menu').click(function () {
         if ($('.search-active').length > 0) {
-          $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle();
+          $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle().toggleClass('show-search');
           $('.search-active').removeClass('search-active');
         }
 
@@ -74,7 +74,7 @@
 
       $('.c-menu-primary .mobile--search').off().on('click', function (e) {
         e.preventDefault();
-        $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle();
+        $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle().toggleClass('show-search');
         $(this).parent().toggleClass('search-active');
       });
 
@@ -126,7 +126,7 @@
       });
 
       var header_timer;
-      $('.main--menu').hover(function () {
+      $('.branding__menu .main--menu').hover(function () {
         header_timer = setTimeout(function () {
           $('body').addClass('overlay');
         }, 300);
@@ -187,9 +187,9 @@
       */
 
       if ($('.block-alshaya-main-menu').length) {
-        var parent = $('.block-alshaya-main-menu li.menu--one__list-item');
+        var parent = $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item');
 
-        $('.block-alshaya-main-menu').mouseenter(function () {
+        $('.branding__menu .block-alshaya-main-menu').mouseenter(function () {
           setTimeout(function () {
             $(parent).parent().addClass('active--menu--links');
           }, 310);
@@ -207,14 +207,17 @@
       if ($('.branding__menu').length) {
         var position = $('.branding__menu').offset().top;
         var nav = $('.branding__menu');
+        var topHeader = $('.header--wrapper');
 
         $(window, context).once().scroll(function () {
           if ($(this).scrollTop() > position) {
             $('body').addClass('header--fixed');
             nav.addClass('navbar-fixed-top');
+            topHeader.addClass('navbar-fixed-top');
           }
           else {
             nav.removeClass('navbar-fixed-top');
+            topHeader.removeClass('navbar-fixed-top');
             $('body').removeClass('header--fixed');
           }
         });

@@ -3,12 +3,12 @@
   .address {
     font-family: $hnm-demibold;
     font-weight: normal;
-    color: $hnm-black-two;
+    color: $primary_dark_color;
 
     a {
       font-size: 0.75rem;
       float: $right;
-      color: $hnm-black-two;
+      color: $content_link_color;
       font-family: $hnm-demibold;
 
       &:hover {
@@ -19,7 +19,7 @@
     .method,
     .delivery-address {
       font-family: $hnm-regular;
-      color: $grey7;
+      color: $checkout_layout_summary_block_method;
     }
   }
 }
@@ -91,12 +91,12 @@
     }
 
     .secure__checkout--block {
-      color: $black-two;
+      color: $secure_checkout_block;
 
       .secure__checkout--label {
         @include arabic-letter-spacing;
 
-        color: $hnm-black-four;
+        color: $secure_checkout_block_label;
         font-family: $hnm-demibold;
         letter-spacing: 0.5px;
 
@@ -109,8 +109,8 @@
 
     .icon-ic_login {
       font-size: 1.313rem;
-      background: $hnm-red;
-      color: $white-five;
+      background: $login_icon_bg;
+      color: $login_icon;
       padding: 0.125rem;
       display: inline-block;
       margin-#{$left}: 0.75rem;
@@ -137,7 +137,7 @@
 }
 
 .block-customer-service-block {
-  background-color: $hnm-black;
+  background-color: $block_acm_customer_txt;
   font-family: $hnm-regular;
   font-weight: normal;
   font-size: 0.75rem;
@@ -214,7 +214,7 @@
     .light {
       font-family: $hnm-regular;
       font-weight: normal;
-      color: $hnm-black-two;
+      color: $primary_dark_color;
       line-height: 1.5;
     }
   }
@@ -224,7 +224,7 @@
 
     font-family: $hnm-bold;
     font-weight: normal;
-    color: $white-five;
+    color: $block_acm_customer_title_bg;
     font-size: 0.75rem;
     letter-spacing: 1px;
     margin-bottom: 1.188rem;

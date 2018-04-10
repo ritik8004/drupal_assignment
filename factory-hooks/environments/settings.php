@@ -40,6 +40,12 @@ function alshaya_get_additional_settings($site, $env) {
           'ar' => 'ksa_ar',
         ],
       ],
+      '01uat' => [
+        'store_id' => [
+          'en' => 7,
+          'ar' => 10,
+        ],
+      ],
     ],
     'mcae' => [
       'default' => [
@@ -50,6 +56,12 @@ function alshaya_get_additional_settings($site, $env) {
         'magento_lang_prefix' => [
           'en' => 'uae_en',
           'ar' => 'uae_ar',
+        ],
+      ],
+      '01uat' => [
+        'store_id' => [
+          'en' => 16,
+          'ar' => 13,
         ],
       ],
     ],
@@ -82,6 +94,12 @@ function alshaya_get_additional_settings($site, $env) {
           'ar' => 'ksa_ar',
         ],
       ],
+      '01uat' => [
+        'store_id' => [
+          'en' => 8,
+          'ar' => 5,
+        ],
+      ],
     ],
     'hmae' => [
       'default' => [
@@ -93,6 +111,22 @@ function alshaya_get_additional_settings($site, $env) {
           'en' => 'uae_en',
           'ar' => 'uae_ar',
         ],
+      ],
+      '01uat' => [
+        'store_id' => [
+          'en' => 14,
+          'ar' => 11,
+        ],
+      ],
+    ],
+    'pbae' => [
+      'default' => [
+        'en' => 1,
+        'ar' => 1,
+      ],
+      'magento_lang_prefix' => [
+        'en' => 'uae_en',
+        'ar' => 'uae_en',
       ],
     ],
     'default' => [

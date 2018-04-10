@@ -845,26 +845,47 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       }
     }
 
+    $this->logger->notice('Area sync completed.');
+  }
+
+  /**
+   * Helper function to reset Magento Form fields cache.
+   */
+  public function resetMagentoFormFields() {
+    foreach ($this->languageManager->getLanguages() as $language) {
+      $this->getMagentoFormFields($language->getId(), TRUE);
+    }
   }
 
   /**
    * Get address form fields from Magento.
    *
+   * @param string $langcode
+   *   Language code.
+   * @param bool $reset
+   *   Reset cached data and fetch again.
+   *
    * @return array
    *   Address form fields.
    */
-  public function getMagentoFormFields() {
-    // Cache the form per language.
-    $cid = 'magento_customer_address_form_' . $this->languageManager->getCurrentLanguage()->getId();
+  public function getMagentoFormFields($langcode = NULL, $reset = FALSE) {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
 
-    $cache = $this->cache->get($cid);
+    // Cache the form per language.
+    $cid = 'magento_customer_address_form_' . $langcode;
+
+    $cache = $reset ? NULL : $this->cache->get($cid);
 
     if ($cache) {
       return $cache->data;
     }
 
     try {
+      $this->alshayaApiWrapper->updateStoreContext($langcode);
       $magento_form = $this->alshayaApiWrapper->getCustomerAddressForm();
+      $this->alshayaApiWrapper->resetStoreContext();
 
       if (empty($magento_form)) {
         return [];
@@ -958,11 +979,13 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *
    * @param array $magento_address
    *   Magento address to extra info from.
+   * @param string $langcode
+   *   Language code in which we want the value to be returned.
    *
    * @return string|null
    *   String value for the area or NULL.
    */
-  public function getAddressShippingAreaValue(array $magento_address) {
+  public function getAddressShippingAreaValue(array $magento_address, $langcode = 'en') {
     $field = 'address_area_segment';
 
     if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
@@ -974,7 +997,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       ? $magento_address['extension'][$field]
       : '';
 
-    return $this->areasTermsHelper->getShippingAreaLabel($value);
+    return $this->areasTermsHelper->getShippingAreaLabel($value, $langcode);
   }
 
   /**

@@ -17,10 +17,30 @@
 
   .c-footer-menu {
     a {
+      text-transform: none;
+
       &:hover {
         color: $footer_link_hover;
         text-decoration: underline;
       }
+    }
+  }
+
+  .primary--footer--right {
+    @include breakpoint($desktop) {
+      width: 26.5%;
+    }
+  }
+
+  .footer--categories {
+    @include breakpoint($desktop) {
+      width: 38.2%;
+    }
+  }
+
+  .footer--abouthelp {
+    @include breakpoint($desktop) {
+      width: 58.7%;
     }
   }
 }
