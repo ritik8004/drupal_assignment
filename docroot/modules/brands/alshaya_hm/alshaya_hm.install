@@ -403,11 +403,6 @@ function alshaya_hm_install() {
     ->set('all_products_buyable', 1)
     ->save();
 
-  // Set default marker image for stores finder.
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
-    alshaya_stores_finder_set_default_marker_icon('alshaya_hm');
-  }
-
   // Update the customer service text.
   $customer_service_text = '<p class="line1">For Kuwait <span class="light no-direction">+965 123 4567</span></p>'
     . '<p class="line2">For other regions <span class="light no-direction">8 (800) 123 45 67</span></p>'
