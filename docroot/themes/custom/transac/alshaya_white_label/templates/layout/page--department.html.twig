@@ -1,4 +1,5 @@
 {% extends 'page.html.twig' %}
+{% set show_left_menu = node.field_show_left_menu.value %}
 {% set sidebar_visibility = show_left_menu == 0 ? 'l-one--w' : 'l-two--sf' %}
 {% set attributes = attributes.addClass('c-department', sidebar_visibility) %}
 {% block after_content %}
