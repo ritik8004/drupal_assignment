@@ -21,8 +21,14 @@ env="$1"
 sites_ref="$2"
 sites_type="$3"
 
-curl "https://www.${env}-alshaya.acsitefactory.com/api/v1/update" \
-  -v -u {user_name}:{api_key} -k -X POST \
-  -H 'Content-Type: application/json' \
-  -d "{\"scope\": \"sites\", \"sites_ref\": \"${sites_ref}\", \"sites_type\": \"${sites_type}\"}"
+# add comma to "code,db" if not alread
+if [ "$sites_type" == "code,db" ]
+then
+    sites_type="code, db"
+    echo "here!"
+fi
 
+curl "https://www.${env}-alshaya.acsitefactory.com/api/v1/update" \
+  -v -u ${user}:${api_key} -k -X POST \
+  -H 'Content-Type: application/json' \
+  -d "{\"sites_ref\": \"${sites_ref}\", \"sites_type\": \"${sites_type}\"}"
