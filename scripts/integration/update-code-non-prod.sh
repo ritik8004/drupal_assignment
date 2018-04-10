@@ -26,5 +26,3 @@ curl "https://www.${env}-alshaya.acsitefactory.com/api/v1/update" \
   -H 'Content-Type: application/json' \
   -d "{\"scope\": \"sites\", \"sites_ref\": \"${sites_ref}\", \"sites_type\": \"${sites_type}\"}"
 
-curl "https://www.alshaya.acsitefactory.com/api/v1/wip/task/${task_id}/status" -u $user:$api_key
-
