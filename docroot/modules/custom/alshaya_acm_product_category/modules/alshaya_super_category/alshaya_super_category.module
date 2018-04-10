@@ -102,18 +102,11 @@ function alshaya_super_category_preprocess_block(&$variables) {
       // Set the logo path based on term name and current language.
       $logo_path = $base_url . '/' . $theme->getPath() . '/imgs/logos/' . $term_clean_name . '-logo';
       // Check logo fallback.
-      $logo_path = function () use ($logo_path, $langcode) {
-        if (file_exists($logo_path . $langcode . '.svg')) {
-          return $logo_path . $langcode . '.svg';
-        }
-        elseif (file_exists($logo_path . '.svg')) {
-          return $logo_path . '.svg';
-        }
-        return NULL;
-      };
-
-      if ($logo_path() != '') {
-        $variables['content']['site_logo']['#uri'] = $logo_path;
+      if (file_exists($logo_path . $langcode . '.svg')) {
+        $variables['content']['site_logo']['#uri'] = $logo_path . $langcode . '.svg';
+      }
+      elseif (file_exists($logo_path . '.svg') {
+        $variables['content']['site_logo']['#uri'] = $logo_path . '.svg';
       }
       // Set image Alt based on current brand.
       $variables['content']['site_logo']['#alt']    = $parent->label();
