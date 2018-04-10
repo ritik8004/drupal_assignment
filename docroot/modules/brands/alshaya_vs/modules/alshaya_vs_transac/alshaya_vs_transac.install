@@ -35,8 +35,6 @@ function alshaya_vs_transac_install() {
     ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
     ->save();
 
-  // @todo: Call this function dynamically on brand module installed, instead
-  // of calling manually for each brand.
   // Set site logo and favicon.
   _alshaya_config_set_default_logo_favicon();
 
