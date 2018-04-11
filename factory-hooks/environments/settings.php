@@ -122,11 +122,11 @@ function alshaya_get_additional_settings($site, $env) {
     'pbae' => [
       'default' => [
         'en' => 1,
-        'ar' => 1,
+        'ar' => 2,
       ],
       'magento_lang_prefix' => [
         'en' => 'uae_en',
-        'ar' => 'uae_en',
+        'ar' => 'uae_ar',
       ],
     ],
     'default' => [
