@@ -26,6 +26,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\ViewExecutable;
 
@@ -601,16 +602,31 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         if (alshaya_acm_product_is_buyable($sku_entity)) {
-          if ($stock_mode == 'pull') {
-            $build['stock_placeholder'] = [
-              '#markup' => '<div class="stock-placeholder ' . $sku_identifier . ' out-of-stock">' . t('Checking stock...') . '</div>',
-            ];
-          }
-          // In push mode we check stock on page load only.
-          elseif (!alshaya_acm_get_product_stock($sku_entity)) {
+          $build['sku_id'] = [
+            '#markup' => $sku_entity->id(),
+          ];
+
+          $build['mobile_add_to_cart_form'] = [
+            '#type' => 'link',
+            '#title' => '',
+            '#url' => Url::fromRoute('alshaya_acm_product.get_cart_form', [
+              'view_mode' => 'teaser',
+              'entity' => $sku_entity->id(),
+            ]),
+            '#attributes' => [
+              'class' => [
+                'use-ajax',
+                'add-to-cart-form-placeholder-teaser',
+              ],
+            ],
+          ];
+
+          if ($stock_mode != 'pull' && !alshaya_acm_get_product_stock($sku_entity)) {
             $build['stock_placeholder'] = [
               '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
             ];
+
+            $build['mobile_add_to_cart_form'] = $build['stock_placeholder'];
           }
         }
       }
@@ -650,6 +666,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
  * Implements hook_ENTITY_TYPE_view_alter().
  */
 function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  /** @var \Drupal\acq_sku\Entity\SKU $entity */
   // Remove/Hide the 'add to cart' form from product list/search page.
   if ($build['#view_mode'] == 'teaser') {
     $build['#no_add_to_cart'] = TRUE;
@@ -657,6 +674,9 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
 
   // Show the placeholder to load add to cart form in full view mode.
   if ($build['#view_mode'] == 'full') {
+    unset($build['name']);
+    unset($build['price']);
+
     // We don't display form and placeholder if not buyable.
     if (!alshaya_acm_product_is_buyable($entity)) {
       $build['#no_add_to_cart'] = TRUE;
@@ -687,14 +707,37 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
       ];
     }
     else {
-      // Show placeholder to allow adding form in AJAX.
-      $build['cart_form_placeholder'] = [
-        '#markup' => '<div class="stock-checker">' . t('Checking stock...') . '</div>',
-      ];
-    }
+      if (!isset($build['#no_add_to_cart']) || !$build['#no_add_to_cart']) {
+        $route = \Drupal::routeMatch();
+        if ($route->getRouteName() == 'alshaya_acm_product.product_modal') {
+          return;
+        }
 
-    unset($build['name']);
-    unset($build['price']);
+        $build['#no_add_to_cart'] = TRUE;
+
+        $node = $route->getParameter('node');
+        $node_view_mode = 'teaser';
+        if ($node instanceof NodeInterface && $node->bundle() == 'acq_product') {
+          $node_sku = $node->get('field_skus')->first()->getString();
+          $node_view_mode = $entity->getSku() == $node_sku ? 'full' : 'teaser';
+        }
+
+        $build['cart_form_placeholder'] = [
+          '#type' => 'link',
+          '#title' => '',
+          '#url' => Url::fromRoute('alshaya_acm_product.get_cart_form', [
+            'view_mode' => $node_view_mode,
+            'entity' => $entity->id(),
+          ]),
+          '#attributes' => [
+            'class' => [
+              'use-ajax',
+              'add-to-cart-form-placeholder',
+            ],
+          ],
+        ];
+      }
+    }
   }
 }
 
@@ -755,25 +798,17 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
-  $process_stock = FALSE;
-
-  // We process stock only when loaded from our custom controller.
-  if (\Drupal::routeMatch()->getRouteName() == 'alshaya_acm_product.get_cart_form') {
-    $process_stock = TRUE;
-  }
+  $process_stock = TRUE;
 
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
   // Get SKU id.
   $sku_entity = SKU::load($form['sku_id']['#value']);
 
-  // For simple products, we just return from here. For configurable products,
-  // we check inside loop.
-  if ($sku_entity->getType() == 'simple') {
-    // We are not going to show the form right now, we don't do any stock check.
-    if (!$process_stock) {
-      return;
-    }
-  }
+  // This is require for ajax to work properly with multiple forms on one page.
+  $form['add_to_cart']['#id'] = 'edit-add-to-cart-' . $sku_entity->id();
+  $form['add_to_cart']['#attributes']['id'] = 'edit-add-to-cart-' . $sku_entity->id();
+  $form['add_to_cart']['#name'] = 'add_to_cart_' . $sku_entity->id();
 
   $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
   $form['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
@@ -1195,8 +1230,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new ReplaceCommand('.warning-wrapper', $warning_markup));
 
     // Update cross-sell region with products.
-    if ((\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) &&
-    ($form_state->getUserInput()['sku_view_mode'] == 'full')) {
+    if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')
+      && $form_state->getUserInput()['sku_view_mode'] == 'full') {
       $cross_sell_markup = [
         '#theme' => 'products_horizontal_slider',
         '#section_title' => t('Customers also bought'),
@@ -1211,12 +1246,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $cross_sell_markup_desktop = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell above-mobile-block">', '#suffix' => '</div>']);
       $cross_sell_markup_mobile = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell mobile-only-block">', '#suffix' => '</div>']);
 
-      $cross_sell_processing = \Drupal::requestStack()->getCurrentRequest()->get('skip_crosssell_processing');
-      // For modal/mobile crosssell form, not processing the crosssell section.
-      if (!$cross_sell_processing) {
-        $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup_mobile));
-        $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup_desktop));
-      }
+      $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup_mobile));
+      $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup_desktop));
     }
 
     // React for click & collect if stock is available.
