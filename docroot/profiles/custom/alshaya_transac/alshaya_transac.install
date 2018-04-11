@@ -105,7 +105,6 @@ function alshaya_transac_install() {
     'alshaya_newsletter',
     'alshaya_permissions',
     'alshaya_product',
-    'alshaya_promo_panel',
     'alshaya_seo_transac',
     'alshaya_stores_finder',
     'alshaya_stores_finder_transac',
