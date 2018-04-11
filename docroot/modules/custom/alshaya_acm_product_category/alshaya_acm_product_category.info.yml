@@ -9,6 +9,7 @@ dependencies:
   - alshaya_api:alshaya_api
   - alshaya_department_page:alshaya_department_page
   - alshaya_main_menu:alshaya_main_menu
+  - alshaya_master:alshaya_master
   - alshaya_product_zoom:alshaya_product_zoom
   - drupal:content_translation
   - form_options_attributes:form_options_attributes

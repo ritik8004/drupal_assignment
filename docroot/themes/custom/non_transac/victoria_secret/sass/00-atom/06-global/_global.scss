@@ -41,3 +41,11 @@ body {
     }
   }
 }
+
+.alias--pink {
+  .menu-social-links {
+    .icon-facebook {
+      display: none;
+    }
+  }
+}
