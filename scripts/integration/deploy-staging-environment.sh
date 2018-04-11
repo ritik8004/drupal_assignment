@@ -34,7 +34,7 @@
 
 source $(dirname "$0")/includes/global-api-settings.inc.sh
 
-# "dev" or "test" or "uat" or "pprod" or "live" or "qa2".
+# "dev" or "dev2" or "dev3" or "test" or "uat" or "pprod" or "qa2".
 to_acsf_environment="$1"
 sites="$2"
 
