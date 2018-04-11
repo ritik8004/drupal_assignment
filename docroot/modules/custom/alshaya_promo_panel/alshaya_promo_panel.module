@@ -55,7 +55,6 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
             '#markup' => \Drupal::service('renderer')->render($element),
           ];
 
-
           $variables['attributes']['class'][] = 'block-promo-panel-wrapper';
           $variables['title_attributes']['class'][] = 'promo-panel-label';
           $variables['content']['#attached']['library'][] = 'alshaya_promo_panel/promo-panel';

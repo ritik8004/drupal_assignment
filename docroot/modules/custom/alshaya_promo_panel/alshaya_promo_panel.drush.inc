@@ -38,7 +38,7 @@ function drush_alshaya_promo_panel_set() {
     $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_name]);
     $block = reset($blocks);
     if (strpos($block->getPluginId(), 'block_content') !== FALSE) {
-      $uuid = explode('.', $block->getPluginId())[1];
+      $uuid = explode(':', $block->getPluginId())[1];
       $block_contents = \Drupal::entityTypeManager()->getStorage('block_content')->loadByProperties(['uuid' => $uuid]);
       $block_content = reset($block_contents);
       $machine_name = $block_content->get('machine_name')->value;
