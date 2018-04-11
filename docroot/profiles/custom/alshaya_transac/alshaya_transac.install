@@ -8,13 +8,12 @@
 /**
  * Implements hook_update_N().
  *
- * Enable alshaya_super_category and alshaya_promo_panel.
+ * Enable alshaya_super_category.
  */
 function alshaya_transac_update_8106() {
   // Delete existing super category menu block.
   alshaya_block_delete_blocks(['supercategorymenu']);
-  // Enable alshaya_super_category and alshaya_promo_panel modules.
-  \Drupal::service('module_installer')->install(['alshaya_super_category', 'alshaya_promo_panel']);
+  \Drupal::service('module_installer')->install(['alshaya_super_category']);
   // Move super category block from alshaya_white_label to default theme.
   alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
 }
