@@ -201,10 +201,10 @@ class ProductCategoryTree {
     $terms = $this->allChildTerms($langcode, self::VOCABULARY_ID, $parent_tid);
 
     // Initialize the background color for term.
-    $this->termBackgroundColors(self::VOCABULARY_ID, $langcode);
+    $this->termsBackgroundColor = $this->getTermsColors($langcode, self::VOCABULARY_ID, 'background');
 
     // Initialize the font color for the term.
-    $this->termFontColors(self::VOCABULARY_ID, $langcode);
+    $this->termsFontColor = $this->getTermsColors($langcode, self::VOCABULARY_ID, 'font');
 
     if (empty($terms)) {
       return [];
@@ -444,35 +444,39 @@ class ProductCategoryTree {
   }
 
   /**
-   * Get background color for all terms.
+   * Gets the colors for all the terms in 'acq_product_category' vocabulary.
    *
-   * @param string $vid
-   *   Vocabulary id.
    * @param string $langcode
    *   Language code.
+   * @param string $vid
+   *   Vocabulary id.
+   * @param string $type
+   *   Color type background/font.
+   *
+   * @return array
+   *   Array of colors keyed by term id.
    */
-  protected function termBackgroundColors($vid, $langcode) {
-    $query = $this->connection->select('taxonomy_term__field_term_background_color', 'ttbc');
-    $query->fields('ttbc', ['entity_id', 'field_term_background_color_value']);
+  protected function getTermsColors($langcode, $vid, $type) {
+    switch ($type) {
+      case 'background':
+        $table = 'taxonomy_term__field_term_background_color';
+        $field = 'field_term_background_color_value';
+        break;
+
+      case 'font':
+        $table = 'taxonomy_term__field_term_font_color';
+        $field = 'field_term_font_color_value';
+        break;
+
+      default:
+        return [];
+    }
+
+    $query = $this->connection->select($table, 'ttbc');
+    $query->fields('ttbc', ['entity_id', $field]);
     $query->condition('ttbc.langcode', $langcode);
     $query->condition('ttbc.bundle', $vid);
-    $this->termsBackgroundColor = $query->execute()->fetchAllKeyed();
-  }
-
-  /**
-   * Get font color for all terms.
-   *
-   * @param string $vid
-   *   Vocabulary id.
-   * @param string $langcode
-   *   Language code.
-   */
-  protected function termFontColors($vid, $langcode) {
-    $query = $this->connection->select('taxonomy_term__field_term_font_color', 'ttfc');
-    $query->fields('ttfc', ['entity_id', 'field_term_font_color_value']);
-    $query->condition('ttfc.langcode', $langcode);
-    $query->condition('ttfc.bundle', $vid);
-    $this->termsFontColor = $query->execute()->fetchAllKeyed();
+    return $query->execute()->fetchAllKeyed();
   }
 
 }
