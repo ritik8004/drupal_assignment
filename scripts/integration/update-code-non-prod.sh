@@ -12,22 +12,22 @@
 # env : environment to run update on. Example: dev, pprod, qa2, test.
 #       - the api user must exist on this environment.
 #       - for security reasons, update of prod environment is *not* supported and must be performed manually through UI
-# sites_ref : branch/tag to update. Example: qa-build
-# sites_type : code or code,db
+# branch : branch/tag to update. Example: qa-build
+# update_type : code or code,db
 
 source $(dirname "$0")/includes/global-api-settings.inc.sh
 
 env="$1"
-sites_ref="$2"
-sites_type="$3"
+branch="$2"
+update_type="$3"
 
 # add comma to "code,db" if not already entered
-if [ "$sites_type" == "code,db" ]
+if [ "$update_type" == "code,db" ]
 then
-    sites_type="code, db"
+    update_type="code, db"
 fi
 
 curl "https://www.${env}-alshaya.acsitefactory.com/api/v1/update" \
   -v -u ${user}:${api_key} -k -X POST \
   -H 'Content-Type: application/json' \
-  -d "{\"sites_ref\": \"${sites_ref}\", \"sites_type\": \"${sites_type}\"}"
+  -d "{\"sites_ref\": \"${branch}\", \"sites_type\": \"${update_type}\"}"
