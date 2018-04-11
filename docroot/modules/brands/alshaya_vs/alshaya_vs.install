@@ -6,17 +6,6 @@
  */
 
 /**
- * Implements hook_update().
- *
- * Update header store finder title.
- */
-function alshaya_vs_update_8104() {
-  // Override located /config/override/block.block.alshaya_stores_finder_header.
-  \Drupal::configFactory()->getEditable('block.block.alshaya_stores_finder_header')
-    ->save();
-}
-
-/**
  * Implements hook_update_N().
  *
  * Enable transac/non-transac specific brand module.
