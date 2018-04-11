@@ -171,6 +171,13 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'pbae_test',
       ],
     ],
+    // Victoria Secret AE. Use PB stream until we get proper VS setup.
+    'vsae' => [
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_test',
+      ],
+    ],
   ];
 
   // Get the keys following this fallback (from the more specific to the more
