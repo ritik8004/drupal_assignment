@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "323f5960bd6a6a37c394aa52a50928fa",
+    "content-hash": "f268bd8cb96f083f904054dde23f5122",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -6690,7 +6690,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Fix notices": "https://www.drupal.org/files/issues/2886786.patch"
+                    "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
+                    "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
