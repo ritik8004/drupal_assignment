@@ -457,23 +457,8 @@ class ProductCategoryTree {
    *   Array of colors keyed by term id.
    */
   protected function getTermsColors($langcode, $vid, $type) {
-    switch ($type) {
-      case 'background':
-        $table = 'taxonomy_term__field_term_background_color';
-        $field = 'field_term_background_color_value';
-        break;
-
-      case 'font':
-        $table = 'taxonomy_term__field_term_font_color';
-        $field = 'field_term_font_color_value';
-        break;
-
-      default:
-        return [];
-    }
-
-    $query = $this->connection->select($table, 'ttbc');
-    $query->fields('ttbc', ['entity_id', $field]);
+    $query = $this->connection->select('taxonomy_term__field_term_' . $type . '_color', 'ttbc');
+    $query->fields('ttbc', ['entity_id', 'field_term_' . $type . '_color_value']);
     $query->condition('ttbc.langcode', $langcode);
     $query->condition('ttbc.bundle', $vid);
     return $query->execute()->fetchAllKeyed();
