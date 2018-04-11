@@ -13,12 +13,19 @@ use Drupal\Core\Url;
 function alshaya_promo_panel_preprocess_block(&$variables) {
   switch ($variables['base_plugin_id']) {
     case 'block_content':
+
+      $config = \Drupal::config('alshaya_promo_panel.settings');
+      $promo_panel_block_content = $config->get('promo_panel_block_content');
+      // Get machine of block content from current block.
       $block_content = $variables['content']['#block_content'];
       $machine_name = $block_content->get('machine_name')->value;
 
-      if (!in_array($machine_name, ['block_content_promo_panel'])) {
+      if ($machine_name !== $promo_panel_block_content) {
         return;
       }
+
+      $promo_panel_block = $config->get('promo_panel_block');
+      $promo_panel_page = $config->get('promo_panel_page_url');
 
       // Get current language object.
       $lang = \Drupal::languageManager()->getCurrentLanguage();
@@ -27,16 +34,15 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
       // @todo: Make this config configurable based on super category feature.
       $variables['#cache']['contexts'][] = 'url.path';
 
-      if ($variables['content'] && $machine_name == 'block_content_promo_panel') {
+      if ($variables['content']) {
         // If the block is placed in "Block Layout".
-        if (isset($variables['elements']['#id']) && $variables['elements']['#id'] == 'alshaya_promo_panel') {
+        if (isset($variables['elements']['#id']) && $variables['elements']['#id'] == $promo_panel_block) {
           // Make label a link to redirect to Promo panel page on mobile.
           $label = $variables['label'];
           $element['label'] = [
             '#type' => 'link',
             '#title' => $label,
-            // @todo: Make this link configurable.
-            '#url' => Url::fromUri('internal:/todays-offer', ['language' => $lang]),
+            '#url' => Url::fromUri('internal:' . $promo_panel_page, ['language' => $lang]),
             '#options' => [
               'attributes' => [
                 'class' => ['mobile-link'],
@@ -49,9 +55,9 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
             '#markup' => \Drupal::service('renderer')->render($element),
           ];
 
-          $variables['title_attributes']['class'][] = 'promo-panel-label';
 
-          // @todo: Check if we can make css generic.
+          $variables['attributes']['class'][] = 'block-promo-panel-wrapper';
+          $variables['title_attributes']['class'][] = 'promo-panel-label';
           $variables['content']['#attached']['library'][] = 'alshaya_promo_panel/promo-panel';
         }
         // If the block is added to "block reference" paragraph type.

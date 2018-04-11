@@ -1,0 +1,13 @@
+alshaya_promo_panel.settings:
+  type: config_object
+  label: 'Category Menu settings'
+  mapping:
+    promo_panel_block:
+      type: string
+      label: 'Promo panel block'
+    promo_panel_block_content:
+      type: string
+      label: 'Promo panel block content'
+    promo_panel_page_url:
+      type: path
+      label: 'Promo panel page link'
