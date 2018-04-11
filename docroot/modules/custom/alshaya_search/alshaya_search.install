@@ -40,6 +40,14 @@ function alshaya_search_update_8012() {
 
   // Place category filter blocks on search & promotion pages.
   alshaya_config_install_configs($config_block, 'alshaya_transac', 'optional');
+
+  // Get current default theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+
+  // Move blocks to current default theme.
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
 }
 
 /**
