@@ -3,6 +3,9 @@ Feature: Test Sign in and Forgot password features
   Scenario: As an authenticated user,
   I should be able to sign in after providing valid credentials
     Given I am on homepage
+    And I wait for the page to load
+    When I close the popup
+    And I follow "English"
     And I go to "/user/login"
     When I fill in "edit-name" with "anjali.nikumb@acquia.com"
     And I fill in "edit-pass" with "password@1"
@@ -14,8 +17,8 @@ Feature: Test Sign in and Forgot password features
   @arabic 
   Scenario: As an authenticated user,
   I should be able to sign in after providing valid credentials
-    Given I go to "/user/login"
-    And I follow "عربية"
+    Given I go to "ar/user/login"
+#    And I follow "عربية"
     When I fill in "edit-name" with "anjali.nikumb@acquia.com"
     And I fill in "edit-pass" with "password@1"
     And I press "تسجيل الدخول"
@@ -26,7 +29,7 @@ Feature: Test Sign in and Forgot password features
   Scenario: As a Guest user
   I should be prompted with warning messages
   when I try to sign in without submitting any credentials
-    Given I go to "user/login"
+    Given I go to "/en/user/login"
     When I press "sign in"
     And I wait for AJAX to finish
     Then I should see "Please enter your Email address."
@@ -36,8 +39,8 @@ Feature: Test Sign in and Forgot password features
   Scenario: As a Guest user
   I should be prompted with warning messages
   when I try to sign in without submitting any credentials
-    Given I go to "user/login"
-    And I follow "عربية"
+    Given I go to "/ar/user/login"
+#    And I follow "عربية"
     When I press "تسجيل الدخول"
     And I wait for AJAX to finish
     Then I should see "يرجى إدخال عنوان البريد الإلكتروني"
@@ -46,7 +49,7 @@ Feature: Test Sign in and Forgot password features
   Scenario: As a Guest user
   I should be shown error messages
   when I try to login using invalid email ID and password
-    Given I am on "/user/login"
+    Given I am on "/en/user/login"
     When I fill in "edit-name" with "name@surname@gmail.com"
     And I press "sign in"
     And I wait 2 seconds
@@ -57,8 +60,8 @@ Feature: Test Sign in and Forgot password features
   Scenario: As a Guest user
   I should be shown error messages
   when I try to login using invalid email ID and password
-    Given I am on "/user/login"
-    And I follow "عربية"
+    Given I am on "/ar/user/login"
+#    And I follow "عربية"
     When I fill in "edit-name" with "name@surname@gmail.com"
     And I press "تسجيل الدخول"
     And I wait 2 seconds
@@ -67,7 +70,7 @@ Feature: Test Sign in and Forgot password features
   Scenario: As a Guest user
     I should be able to reset my password
     after providing valid Email ID
-    Given I am on "/user/login"
+    Given I am on "/en/user/login"
     And I follow "Forgot password?"
     And the url should match "/user/password"
     When I fill in "edit-name" with "anjali.nikumb@acquia.com"
@@ -79,8 +82,8 @@ Feature: Test Sign in and Forgot password features
   Scenario: As a Guest user
   I should be able to reset my password
   after providing valid Email ID
-    Given I am on "/user/login"
-    And I follow "عربية"
+    Given I am on "/ar/user/login"
+#    And I follow "عربية"
     And I follow "هل نسيت كلمة السر؟"
     And the url should match "/user/password"
     When I fill in "edit-name" with "anjali.nikumb@acquia.com"
@@ -91,7 +94,7 @@ Feature: Test Sign in and Forgot password features
   Scenario: As a Guest user
     An error message should be displayed
     when user tries to reset password for an invalid Email ID
-    Given I am on "/user/login"
+    Given I am on "/en/user/login"
     And I follow "Forgot password?"
     When I fill in "edit-name" with "noemail@gmail.com"
     And I press "Submit"
@@ -102,8 +105,8 @@ Feature: Test Sign in and Forgot password features
   Scenario: As a Guest user
   An error message should be displayed
   when user tries to reset password for an invalid Email ID
-    Given I am on "/user/login"
-    And I follow "عربية"
+    Given I am on "/ar/user/login"
+#    And I follow "عربية"
     And I follow "هل نسيت كلمة السر؟"
     When I fill in "edit-name" with "noemail@gmail.com"
     And I press "إرسال"
