@@ -75,6 +75,20 @@ class ProductCategoryTree {
   protected $highlightParagraphs = [];
 
   /**
+   * Background color for all terms.
+   *
+   * @var array
+   */
+  protected $termsBackgroundColor = [];
+
+  /**
+   * Font color for all terms.
+   *
+   * @var array
+   */
+  protected $termsFontColor = [];
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -186,6 +200,12 @@ class ProductCategoryTree {
     // Get all child terms for the given parent.
     $terms = $this->allChildTerms($langcode, self::VOCABULARY_ID, $parent_tid);
 
+    // Initialize the background color for term.
+    $this->termsBackgroundColor = $this->getTermsColors($langcode, self::VOCABULARY_ID, 'background');
+
+    // Initialize the font color for the term.
+    $this->termsFontColor = $this->getTermsColors($langcode, self::VOCABULARY_ID, 'font');
+
     if (empty($terms)) {
       return [];
     }
@@ -207,6 +227,16 @@ class ProductCategoryTree {
 
       if ($child) {
         $data[$term->tid]['child'] = $this->getCategoryTree($langcode, $term->tid);
+      }
+
+      // Set the background/highlight color for the term.
+      if (!empty($this->termsBackgroundColor[$term->tid])) {
+        $data[$term->tid]['term_bg_color'] = $this->termsBackgroundColor[$term->tid];
+      }
+
+      // Set the font color for the term.
+      if (!empty($this->termsFontColor[$term->tid])) {
+        $data[$term->tid]['term_font_color'] = $this->termsFontColor[$term->tid];
       }
 
     }
@@ -411,6 +441,42 @@ class ProductCategoryTree {
         $this->highlightParagraphs[$highlight_paragraph->entity_id][] = $highlight_paragraph->field_main_menu_highlight_target_id;
       }
     }
+  }
+
+  /**
+   * Gets the colors for all the terms in 'acq_product_category' vocabulary.
+   *
+   * @param string $langcode
+   *   Language code.
+   * @param string $vid
+   *   Vocabulary id.
+   * @param string $type
+   *   Color type background/font.
+   *
+   * @return array
+   *   Array of colors keyed by term id.
+   */
+  protected function getTermsColors($langcode, $vid, $type) {
+    switch ($type) {
+      case 'background':
+        $table = 'taxonomy_term__field_term_background_color';
+        $field = 'field_term_background_color_value';
+        break;
+
+      case 'font':
+        $table = 'taxonomy_term__field_term_font_color';
+        $field = 'field_term_font_color_value';
+        break;
+
+      default:
+        return [];
+    }
+
+    $query = $this->connection->select($table, 'ttbc');
+    $query->fields('ttbc', ['entity_id', $field]);
+    $query->condition('ttbc.langcode', $langcode);
+    $query->condition('ttbc.bundle', $vid);
+    return $query->execute()->fetchAllKeyed();
   }
 
 }
