@@ -31,3 +31,4 @@ mapping_ae:
   dependent_locality: 'address_building_segment'
   administrative_area: 'area'
   area_parent: 'address_city_segment'
+  locality: 'address_block_segment'
