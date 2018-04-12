@@ -15,8 +15,7 @@ function alshaya_promo_panel_drush_command() {
     'description' => 'config promo panel block and path.',
     'aliases' => ['apps'],
     'options' => [
-      'block' => 'Default block machine name to use for promo panel',
-      'url' => 'url for promo panel in mobile.',
+      'blocks' => 'Default block machine name to use for promo panel',
     ],
   ];
 
@@ -27,30 +26,35 @@ function alshaya_promo_panel_drush_command() {
  * Implements drush command alshaya-promo-panel-set.
  */
 function drush_alshaya_promo_panel_set() {
+  $block_names = drush_get_option_list('blocks', []);
+
+  if (empty($block_names)) {
+    drush_print(dt('Please pass the --blocks argument to set block as promo panel.'));
+    return;
+  }
+
   $config = \Drupal::configFactory()->getEditable('alshaya_promo_panel.settings');
+  $new_array = [];
 
-  $block_name = drush_get_option('block', 0);
-  $page_url = drush_get_option('url', 0);
+  // Set multiple blocks as key and value array.
+  array_map(function ($block_name) use (&$new_array) {
+    list($block, $url) = explode(':', $block_name);
+    $new_array[$block] = $url;
+  }, $block_names);
+  $config->set('promo_panel_blocks', $new_array);
+  $config->save();
 
-  if (!empty($block_name)) {
-    $config->set('promo_panel_block', $block_name);
-    // Get the block content machine name from the block and set it in config.
-    $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_name]);
-    $block = reset($blocks);
-    if (strpos($block->getPluginId(), 'block_content') !== FALSE) {
-      $uuid = explode(':', $block->getPluginId())[1];
-      $block_contents = \Drupal::entityTypeManager()->getStorage('block_content')->loadByProperties(['uuid' => $uuid]);
-      $block_content = reset($block_contents);
-      $machine_name = $block_content->get('machine_name')->value;
-      $config->set('promo_panel_block_content', $machine_name);
+  // Enable the blocks.
+  $storage = \Drupal::entityTypeManager()->getStorage('block');
+  $query = $storage->getQuery()->condition('id', array_keys($new_array), 'IN');
+  $blocks = $storage->loadMultiple($query->execute());
+  foreach ($blocks as $block) {
+    if ($block->status()) {
+      continue;
     }
+    $block->setStatus(TRUE);
+    $block->save();
   }
-
-  if (!empty($page_url) && \Drupal::service('path.validator')->isValid($page_url)) {
-    $config->set('promo_panel_page_url', $page_url);
-  }
-
-  $config->save(TRUE);
 
   drush_print(dt('Successfully updated promo panel config.'));
 }

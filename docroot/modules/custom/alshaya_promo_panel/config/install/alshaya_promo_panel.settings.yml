@@ -1,3 +1,3 @@
-promo_panel_block: 'block_content_promo_panel'
-promo_panel_block_content: 'block_content_promo_panel'
-promo_panel_page_url: '/todays-offer'
+promo_panel_blocks:
+  alshaya_promo_panel: '/todays-offer'
+  alshaya_custom: '/about'
