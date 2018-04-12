@@ -51,6 +51,9 @@ class AlshayaStoresFinderConfigSubscriber implements EventSubscriberInterface {
   /**
    * This method is called whenever the config.save event is fired.
    *
+   * The stores_finder views are generic so we must apply the brand overrides
+   * when config is changed.
+   *
    * @param \Drupal\Core\Config\ConfigCrudEvent $event
    *   Response event Object.
    */
@@ -68,6 +71,7 @@ class AlshayaStoresFinderConfigSubscriber implements EventSubscriberInterface {
         $data['display'][$view_display]['display_options']['filters']['field_latitude_longitude_proximity']['expose']['geocoder_plugin_settings']['settings']['component_restrictions']['country'] = $country_code;
         $data['display'][$view_display]['display_options']['style']['options']['google_map_settings']['marker_icon_path'] = $marker_path;
       }
+
       // Re-write the config to make sure the overrides are not lost.
       $this->configStorage->write($config->getName(), $data);
     }
