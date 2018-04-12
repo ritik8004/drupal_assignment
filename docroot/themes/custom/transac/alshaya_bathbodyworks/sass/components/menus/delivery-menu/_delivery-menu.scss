@@ -9,6 +9,18 @@
     @include breakpoint($only-mobile) {
       font-size: 1.125rem;
     }
+
+    html[lang='ar'] & {
+      line-height: 1.21;
+
+      @include breakpoint($only-tablet) {
+        font-size: 1.0625rem;
+      }
+
+      @include breakpoint($desktop) {
+        font-size: 1rem;
+      }
+    }
   }
 
   .field--name-field-sub-title {
@@ -16,6 +28,11 @@
 
     @include breakpoint($only-mobile) {
       font-size: 1.125rem;
+    }
+
+    html[lang='ar'] & {
+      font-size: 0.875rem;
+      line-height: 1.8;
     }
   }
 

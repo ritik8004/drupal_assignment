@@ -49,11 +49,6 @@ function alshaya_bbw_install() {
   // Change region for main navigation block.
   alshaya_block_move_blocks(['main_navigation' => 'header_primary']);
 
-  // Set default marker image for stores finder.
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
-    alshaya_stores_finder_set_default_marker_icon('alshaya_bbw');
-  }
-
   // Create default content for the site.
   alshaya_bbw_create_default_content();
 
