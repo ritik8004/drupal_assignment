@@ -1,0 +1,722 @@
+<?php
+global $_alshaya_acm_products;
+
+$_alshaya_acm_products = array(
+array (
+  'product_id' => 4,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'test-Simple-1-v2',
+  'name' => 'Test-Simple-1-v2',
+  'type' => 'simple',
+  'price' => '10.0000',
+  'special_price' => '0',
+  'final_price' => '10',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'meta_title' => 'test-Simple-1',
+    'meta_keyword' => 'test-Simple-1',
+    'meta_description' => 'test-Simple-1 ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2018-03-28 00:00:00',
+    'url_key' => 'test-simple-2',
+    'product_state' => '5',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 17,
+      'product_id' => 4,
+      'stock_id' => 2,
+      'qty' => 1000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 8,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'test-Simple-3-v2',
+  'name' => 'Test-Simple-3-v2',
+  'type' => 'simple',
+  'price' => '6.0000',
+  'special_price' => '0',
+  'final_price' => '6',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'meta_title' => 'test-Simple-1',
+    'meta_keyword' => 'test-Simple-1',
+    'meta_description' => 'test-Simple-1 ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2018-03-28 00:00:00',
+    'url_key' => 'test-simple-5',
+    'product_state' => '5',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '3',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 21,
+      'product_id' => 8,
+      'stock_id' => 2,
+      'qty' => 999,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 10,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'test-Simple-3-v3',
+  'name' => 'Test-Simple-3-v3',
+  'type' => 'simple',
+  'price' => '7.0000',
+  'special_price' => '0',
+  'final_price' => '7',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'meta_title' => 'test-Simple-1',
+    'meta_keyword' => 'test-Simple-1',
+    'meta_description' => 'test-Simple-1 ',
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'product_activation_date' => '2018-03-28 00:00:00',
+    'url_key' => 'test-simple-7',
+    'product_state' => '5',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '3',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 23,
+      'product_id' => 10,
+      'stock_id' => 2,
+      'qty' => 1000,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 11,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'PB-POC-Bundle-1',
+  'name' => 'PB-POC-Bundle-1',
+  'type' => 'bundle',
+  'price' => '0',
+  'special_price' => '0',
+  'final_price' => '0',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'special_from_date' => '2018-04-10 02:34:56',
+    'meta_title' => 'PB-POC-Bundle-1',
+    'meta_keyword' => 'PB-POC-Bundle-1',
+    'meta_description' => 'PB-POC-Bundle-1 ',
+    'image' => '/h/o/holman-shelves-o.jpg',
+    'small_image' => '/h/o/holman-shelves-o.jpg',
+    'thumbnail' => '/h/o/holman-shelves-o.jpg',
+    'news_from_date' => '2018-04-10 02:34:56',
+    'custom_design_from' => '2018-04-10 02:34:56',
+    'options_container' => 'container2',
+    'required_options' => '1',
+    'has_options' => '1',
+    'product_activation_date' => '2018-03-28 00:00:00',
+    'price_type' => '0',
+    'sku_type' => '0',
+    'weight_type' => '0',
+    'price_view' => '0',
+    'shipment_type' => '0',
+    'url_key' => 'pb-poc-bundle-1',
+    'product_state' => '4',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '3',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 15,
+      'product_id' => 11,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => false,
+      'manage_stock' => false,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+        1 => 
+        array (
+          'value_id' => '1',
+          'file' => 'http://qa-h47ppbq-rfuu4sicyisyw.eu.magentosite.cloud/media/catalog/product/h/o/holman-shelves-o.jpg',
+          'media_type' => 'image',
+          'row_id' => '11',
+          'label' => NULL,
+          'position' => '1',
+          'disabled' => '0',
+          'label_default' => NULL,
+          'position_default' => '1',
+          'disabled_default' => '0',
+          'video_provider' => NULL,
+          'video_url' => NULL,
+          'video_title' => NULL,
+          'video_description' => NULL,
+          'video_metadata' => NULL,
+          'video_provider_default' => NULL,
+          'video_url_default' => NULL,
+          'video_title_default' => NULL,
+          'video_description_default' => NULL,
+          'video_metadata_default' => NULL,
+        ),
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 12,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'PB-POC-Bundle-2',
+  'name' => 'PB-POC-Bundle-2',
+  'type' => 'bundle',
+  'price' => '0',
+  'special_price' => '0',
+  'final_price' => '0',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'meta_title' => 'PB-POC-Bundle-1',
+    'meta_keyword' => 'PB-POC-Bundle-1',
+    'meta_description' => 'PB-POC-Bundle-1 ',
+    'image' => '/h/o/holman-shelves-o_1.jpg',
+    'small_image' => '/h/o/holman-shelves-o_1.jpg',
+    'thumbnail' => '/h/o/holman-shelves-o_1.jpg',
+    'options_container' => 'container2',
+    'required_options' => '1',
+    'has_options' => '1',
+    'product_activation_date' => '2018-03-28 00:00:00',
+    'price_type' => '0',
+    'sku_type' => '0',
+    'weight_type' => '0',
+    'price_view' => '0',
+    'shipment_type' => '0',
+    'url_key' => 'pb-poc-bundle-2',
+    'product_state' => '4',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '3',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 24,
+      'product_id' => 12,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+        2 => 
+        array (
+          'value_id' => '2',
+          'file' => 'http://qa-h47ppbq-rfuu4sicyisyw.eu.magentosite.cloud/media/catalog/product/h/o/holman-shelves-o_1.jpg',
+          'media_type' => 'image',
+          'row_id' => '12',
+          'label' => NULL,
+          'position' => '1',
+          'disabled' => '0',
+          'label_default' => NULL,
+          'position_default' => '1',
+          'disabled_default' => '0',
+          'video_provider' => NULL,
+          'video_url' => NULL,
+          'video_title' => NULL,
+          'video_description' => NULL,
+          'video_metadata' => NULL,
+          'video_provider_default' => NULL,
+          'video_url_default' => NULL,
+          'video_title_default' => NULL,
+          'video_description_default' => NULL,
+          'video_metadata_default' => NULL,
+        ),
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 11,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'PB-POC-Bundle-1',
+  'name' => 'PB-POC-Bundle-1',
+  'type' => 'bundle',
+  'price' => '0',
+  'special_price' => '0',
+  'final_price' => '0',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'special_from_date' => '2018-04-10 02:34:56',
+    'meta_title' => 'PB-POC-Bundle-1',
+    'meta_keyword' => 'PB-POC-Bundle-1',
+    'meta_description' => 'PB-POC-Bundle-1 ',
+    'image' => '/h/o/holman-shelves-o.jpg',
+    'small_image' => '/h/o/holman-shelves-o.jpg',
+    'thumbnail' => '/h/o/holman-shelves-o.jpg',
+    'news_from_date' => '2018-04-10 02:34:56',
+    'custom_design_from' => '2018-04-10 02:34:56',
+    'options_container' => 'container2',
+    'required_options' => '1',
+    'has_options' => '1',
+    'product_activation_date' => '2018-03-28 00:00:00',
+    'price_type' => '0',
+    'sku_type' => '0',
+    'weight_type' => '0',
+    'price_view' => '0',
+    'shipment_type' => '0',
+    'url_key' => 'pb-poc-bundle-1',
+    'product_state' => '4',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '3',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 15,
+      'product_id' => 11,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => false,
+      'manage_stock' => false,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+        1 => 
+        array (
+          'value_id' => '1',
+          'file' => 'http://qa-h47ppbq-rfuu4sicyisyw.eu.magentosite.cloud/media/catalog/product/h/o/holman-shelves-o.jpg',
+          'media_type' => 'image',
+          'row_id' => '11',
+          'label' => NULL,
+          'position' => '1',
+          'disabled' => '0',
+          'label_default' => NULL,
+          'position_default' => '1',
+          'disabled_default' => '0',
+          'video_provider' => NULL,
+          'video_url' => NULL,
+          'video_title' => NULL,
+          'video_description' => NULL,
+          'video_metadata' => NULL,
+          'video_provider_default' => NULL,
+          'video_url_default' => NULL,
+          'video_title_default' => NULL,
+          'video_description_default' => NULL,
+          'video_metadata_default' => NULL,
+        ),
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 12,
+  'store_id' => 1,
+  'attribute_set_id' => 4,
+  'attribute_set_label' => 'Default',
+  'sku' => 'PB-POC-Bundle-2',
+  'name' => 'PB-POC-Bundle-2',
+  'type' => 'bundle',
+  'price' => '0',
+  'special_price' => '0',
+  'final_price' => '0',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' => 
+  array (
+    'meta_title' => 'PB-POC-Bundle-1',
+    'meta_keyword' => 'PB-POC-Bundle-1',
+    'meta_description' => 'PB-POC-Bundle-1 ',
+    'image' => '/h/o/holman-shelves-o_1.jpg',
+    'small_image' => '/h/o/holman-shelves-o_1.jpg',
+    'thumbnail' => '/h/o/holman-shelves-o_1.jpg',
+    'options_container' => 'container2',
+    'required_options' => '1',
+    'has_options' => '1',
+    'product_activation_date' => '2018-03-28 00:00:00',
+    'price_type' => '0',
+    'sku_type' => '0',
+    'weight_type' => '0',
+    'price_view' => '0',
+    'shipment_type' => '0',
+    'url_key' => 'pb-poc-bundle-2',
+    'product_state' => '4',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+  ),
+  'linked' => 
+  array (
+  ),
+  'categories' => 
+  array (
+    0 => '3',
+  ),
+  'extension' => 
+  array (
+    'stock_item' => 
+    array (
+      'item_id' => 24,
+      'product_id' => 12,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => false,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' => 
+    array (
+    ),
+    'media' => 
+    array (
+      0 => 
+      array (
+        2 => 
+        array (
+          'value_id' => '2',
+          'file' => 'http://qa-h47ppbq-rfuu4sicyisyw.eu.magentosite.cloud/media/catalog/product/h/o/holman-shelves-o_1.jpg',
+          'media_type' => 'image',
+          'row_id' => '12',
+          'label' => NULL,
+          'position' => '1',
+          'disabled' => '0',
+          'label_default' => NULL,
+          'position_default' => '1',
+          'disabled_default' => '0',
+          'video_provider' => NULL,
+          'video_url' => NULL,
+          'video_title' => NULL,
+          'video_description' => NULL,
+          'video_metadata' => NULL,
+          'video_provider_default' => NULL,
+          'video_url_default' => NULL,
+          'video_title_default' => NULL,
+          'video_description_default' => NULL,
+          'video_metadata_default' => NULL,
+        ),
+      ),
+      1 => 
+      array (
+      ),
+    ),
+  ),
+),
+);
