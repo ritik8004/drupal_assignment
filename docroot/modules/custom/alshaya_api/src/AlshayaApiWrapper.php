@@ -458,6 +458,13 @@ class AlshayaApiWrapper {
       'condition_type' => 'eq',
     ];
 
+    // Filter by Country.
+    $filters[] = [
+      'field' => 'country_id',
+      'value' => strtoupper(_alshaya_custom_get_site_level_country_code()),
+      'condition_type' => 'eq',
+    ];
+
     $endpoint = 'deliverymatrix/address-locations/search?';
     $endpoint .= $this->prepareFilterUrl($filters);
     $response = $this->invokeApi($endpoint, [], 'GET');
