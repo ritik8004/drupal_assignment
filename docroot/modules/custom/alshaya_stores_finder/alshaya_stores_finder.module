@@ -256,18 +256,14 @@ function alshaya_stores_finder_set_default_marker_icon($name = 'alshaya_stores_f
     ->set('marker.url', $icon_path)
     ->save(TRUE);
 
-  $view_displays = ['attachment_1', 'page_3', 'page_2'];
-  foreach ($view_displays as $view_display) {
-    \Drupal::configFactory()->getEditable('views.view.stores_finder')
-      ->set('display.' . $view_display . '.display_options.style.options.google_map_settings.marker_icon_path', $icon_path)
-      ->save(TRUE);
-  }
+  \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
 }
 
 /**
  * Implements hook_alshaya_master_post_drupal_install().
+ *
+ * Set default marker image for stores finder.
  */
 function alshaya_stores_finder_alshaya_master_post_drupal_install() {
-  // Set default marker image for stores finder.
   alshaya_stores_finder_set_default_marker_icon(\Drupal::config('alshaya.installed_brand')->get('module'));
 }

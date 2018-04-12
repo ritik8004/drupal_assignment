@@ -61,7 +61,7 @@ class AlshayaStoresFinderConfigSubscriber implements EventSubscriberInterface {
     if ($config->getName() == 'views.view.stores_finder') {
       $country_code = strtolower(_alshaya_custom_get_site_level_country_code());
       $marker_path = $this->configFactory->get('alshaya_stores_finder.settings')->get('marker.url');
-      
+
       $data = $config->getRawData();
       $view_displays = ['attachment_1', 'page_3', 'page_2'];
       foreach ($view_displays as $view_display) {
