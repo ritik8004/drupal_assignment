@@ -182,6 +182,5 @@ function alshaya_get_additional_settings($site, $env) {
     $settings = array_replace_recursive($settings, $mapping[$site_name][$country][$env]);
   }
 
-  _alshaya_config_save_overridden_configs();
   return $settings;
 }
