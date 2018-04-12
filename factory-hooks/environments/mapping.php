@@ -166,16 +166,27 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Pottery Barn AE.
     'pbae' => [
+      // PBAE local is connect to MCKW QA.
+      'local' => [
+        'magento' => 'mc_qa',
+        'conductor' => 'mc_test',
+      ],
       'default' => [
         'magento' => 'pb_qa',
         'conductor' => 'pbae_test',
       ],
     ],
-    // Victoria Secret AE. Use PB stream until we get proper VS setup.
+    // Victoria Secret AE.
     'vsae' => [
+      // VSAE local is connect to MCKW QA.
+      'local' => [
+        'magento' => 'mc_qa',
+        'conductor' => 'mc_test',
+      ],
+      // Other VSAE env are connect to PBAE QA.
       'default' => [
-        'magento' => 'pb_qa',
-        'conductor' => 'pbae_test',
+        'magento' => 'mc_qa',
+        'conductor' => 'mc_test',
       ],
     ],
   ];
