@@ -558,6 +558,7 @@ header {
   @include breakpoint($upto-desktop) {
     ul {
       padding: 0;
+      width: 100%;
     }
   }
 

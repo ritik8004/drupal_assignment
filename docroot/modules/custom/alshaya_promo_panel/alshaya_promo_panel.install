@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_promo_panel.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_promo_panel_install() {
+  // Load default content file and save it.
+  \Drupal::moduleHandler()->loadInclude('alshaya_promo_panel', 'inc', 'alshaya_promo_panel.content');
+  alshaya_promo_panel_create_default_content();
+}

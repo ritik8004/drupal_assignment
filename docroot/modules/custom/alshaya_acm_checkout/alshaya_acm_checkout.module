@@ -150,6 +150,14 @@ function _alshaya_acm_checkout_clean_address($address) {
     $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['telephone']);
   }
 
+  // @TODO: CORE-2332 - Fix this properly, possibly in Magento.
+  // City is Magento core field but we don't use it at all.
+  // But this is required by Cybersource so we need proper value.
+  // For now, we copy value of Area to City.
+  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+  $address['city'] = $address_book_manager->getAddressShippingAreaValue($address);
+
   return $address;
 }
 
