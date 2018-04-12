@@ -21,6 +21,10 @@
 
   .mobile-number-field .local-number {
     direction: ltr;
+
+    &::placeholder {
+      color: transparent;
+    }
   }
 
   .form__form-fields {
