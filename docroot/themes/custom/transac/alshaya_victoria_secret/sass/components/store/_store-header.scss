@@ -58,7 +58,7 @@
   .back-to-glossary {
     @include breakpoint($tablet) {
       width: 40.5%;
-      padding: 0.658rem;
+      padding: 0.66rem;
     }
 
     @include breakpoint($desktop) {

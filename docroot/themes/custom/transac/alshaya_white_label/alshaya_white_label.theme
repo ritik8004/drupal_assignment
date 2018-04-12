@@ -123,12 +123,16 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
   if ($node_bundle == 'department_page') {
     $term_id = $variables['node']->get('field_product_category')->first()->target_id;
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     // Load the term object.
     $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term_id);
+    // Get translated taxonomy term based on language.
+    $term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($term, $langcode);
+
     // Add term description in variables to be printed in page--department.
-    $description = $term->getDescription();
+    $description = $term_trans->getDescription();
     if (isset($description)) {
-      $variables['category_term_name'] = $term->getName();
+      $variables['category_term_name'] = $term_trans->getName();
       $variables['category_term_description'] = $description;
     }
   }
@@ -160,7 +164,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
     $bundle = $variables['elements']['content']['#block_content']->bundle();
     $bundle_class = str_replace('_', '-', $bundle);
     if (isset($variables['attributes']['class'])) {
-      $variables['attributes']['class'] = Html::cleanCssIdentifier('block--' . $bundle_class);
+      $variables['attributes']['class'][] = Html::cleanCssIdentifier('block--' . $bundle_class);
       $variables['attributes']['data-bundle-class'] = $bundle_class;
     }
   }
@@ -283,6 +287,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
+    $variables['image_slider_position_pdp'] = \Drupal::config('alshaya_acm_product.settings')->get('image_slider_position_pdp');
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();

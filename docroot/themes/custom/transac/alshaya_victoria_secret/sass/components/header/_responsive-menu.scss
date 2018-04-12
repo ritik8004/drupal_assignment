@@ -24,6 +24,10 @@ header {
       width: 100%;
       height: 2.5rem;
       background-size: 2.125rem;
+
+      html[lang="ar"] & {
+        margin-top: 0;
+      }
     }
 
     @include breakpoint($upto-tablet) {
@@ -119,12 +123,12 @@ header {
   }
 
   body {
-    margin-top: 5.5rem;
+    margin-top: 5.4rem;
   }
 
   body {
     html[lang="ar"] & {
-      margin-top: 5.5rem;
+      margin-top: 5.4rem;
     }
   }
 
@@ -133,10 +137,6 @@ header {
     width: 100%;
     top: 0;
     z-index: 7;
-
-    .main--menu {
-      position: static;
-    }
   }
 
   .menu--mobile-navigation {
@@ -202,7 +202,7 @@ header {
 }
 
 .block-cart-mini-block {
-  @include breakpoint($upto-tablet) {
+  @include breakpoint($upto-desktop) {
     border-bottom: 2px solid $header_mobile_border;
   }
 }

@@ -30,7 +30,7 @@ function drush_alshaya_super_category_switch() {
   $config = \Drupal::configFactory()->getEditable('alshaya_super_category.settings');
 
   $status = $config->get('status') ? FALSE : TRUE;
-  $action = $status ? 'enable' : 'disabled';
+  $action = $status ? 'enable' : 'disable';
 
   if (!drush_confirm(dt('Are you sure you want to !action super category feature?', ['!action' => $action]))) {
     return drush_user_abort();
@@ -58,6 +58,8 @@ function drush_alshaya_super_category_switch() {
   $block = reset($blocks);
   $block->setStatus($status);
   $block->save();
+  // Clear cache to rebuild menu blocks.
+  drupal_flush_all_caches();
 
   drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));
 }

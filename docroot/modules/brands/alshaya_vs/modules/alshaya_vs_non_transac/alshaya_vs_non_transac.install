@@ -6,6 +6,16 @@
  */
 
 /**
+ * Implements hook_update().
+ *
+ * Update header store finder title.
+ */
+function alshaya_vs_non_transac_update_8101() {
+  // Save overridden configs.
+  _alshaya_config_save_overridden_configs('alshaya_vs_non_transac');
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_vs_non_transac_install() {
@@ -21,11 +31,6 @@ function alshaya_vs_non_transac_install() {
 
   // Change region for main navigation block.
   alshaya_block_move_blocks(['main_navigation' => 'header_primary']);
-
-  // Set default marker image for stores finder.
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
-    alshaya_stores_finder_set_default_marker_icon('alshaya_vs');
-  }
 
   // Override join the club default value.
   $join_the_club_body = "<div class=\"block-join-the-club__title-wrapper\"><h2 class=\"block-join-the-club__title\">Join the club</h2><p class=\"block-join-the-club__title-link\"><a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></p></div><div class=\"block-join-the-club__list\"><p><span class=\"icon-prize\"></span>Win exciting prizes</p><p><span class=\"icon-rewards\"></span>Unlock exclusive rewards</p><p><span class=\"icon-newsletter\"></span>Be the first to know</p><a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></div>";
@@ -75,4 +80,7 @@ function alshaya_vs_non_transac_install() {
 
   \Drupal::service('theme_handler')->install(['alshaya_amp_victoria_secret'], TRUE);
   \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_victoria_secret')->save();
+
+  // Save overridden configs.
+  _alshaya_config_save_overridden_configs('alshaya_vs_non_transac');
 }

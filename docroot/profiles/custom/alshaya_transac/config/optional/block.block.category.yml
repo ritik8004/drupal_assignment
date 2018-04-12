@@ -7,9 +7,9 @@ dependencies:
     - facets
     - system
   theme:
-    - alshaya_hnm
+    - alshaya_white_label
 id: category
-theme: alshaya_hnm
+theme: alshaya_white_label
 region: sidebar_first
 weight: -38
 provider: null

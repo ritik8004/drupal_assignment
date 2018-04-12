@@ -1,0 +1,79 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya_promo_panel.
+ */
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function alshaya_promo_panel_preprocess_block(&$variables) {
+  switch ($variables['base_plugin_id']) {
+    case 'block_content':
+      $block_content = $variables['content']['#block_content'];
+      $machine_name = $block_content->get('machine_name')->value;
+
+      if (!in_array($machine_name, ['block_content_promo_panel'])) {
+        return;
+      }
+
+      // Get current language object.
+      $lang = \Drupal::languageManager()->getCurrentLanguage();
+      // Get the language code.
+      $lang_code = $lang->getId();
+      // @todo: Make this config configurable based on super category feature.
+      $variables['#cache']['contexts'][] = 'url.path';
+
+      if ($variables['content'] && $machine_name == 'block_content_promo_panel') {
+        // If the block is placed in "Block Layout".
+        if (isset($variables['elements']['#id']) && $variables['elements']['#id'] == 'alshaya_promo_panel') {
+          // Make label a link to redirect to Promo panel page on mobile.
+          $label = $variables['label'];
+          $element['label'] = [
+            '#type' => 'link',
+            '#title' => $label,
+            // @todo: Make this link configurable.
+            '#url' => Url::fromUri('internal:/todays-offer', ['language' => $lang]),
+            '#options' => [
+              'attributes' => [
+                'class' => ['mobile-link'],
+              ],
+            ],
+          ];
+
+          // Change default label with link.
+          $variables['label'] = [
+            '#markup' => \Drupal::service('renderer')->render($element),
+          ];
+
+          $variables['title_attributes']['class'][] = 'promo-panel-label';
+
+          // @todo: Check if we can make css generic.
+          $variables['content']['#attached']['library'][] = 'alshaya_promo_panel/promo-panel';
+        }
+        // If the block is added to "block reference" paragraph type.
+        else {
+          // Get the referer path.
+          $referrer_path = parse_url(\Drupal::request()->headers->get('referer'))['path'];
+          $referrer_path = preg_replace('/^(\/' . $lang_code . ')(.*)/g', '', $referrer_path);
+          $empty = !empty($referrer_path) ? $referrer_path : 'home';
+
+          // Create the back link.
+          $element['back'] = [
+            '#type' => 'link',
+            '#title' => t('Back'),
+            '#url' => Url::fromUri('internal:/' . $empty, ['language' => $lang]),
+            '#options' => [
+              'attributes' => [
+                'class' => ['mobile-back-link'],
+              ],
+            ],
+          ];
+        }
+      }
+      break;
+  }
+}

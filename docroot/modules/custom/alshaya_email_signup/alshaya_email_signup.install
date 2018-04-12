@@ -8,6 +8,22 @@
 /**
  * Implements hook_update_n().
  *
+ * Update translation.
+ */
+function alshaya_email_signup_update_8104() {
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'Email sign up' => [
+      'ar' => 'تسجيل مستخدم جديد',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_n().
+ *
  * Disable 'form_disable_back' feature.
  */
 function alshaya_email_signup_update_8103() {
@@ -46,7 +62,7 @@ function alshaya_email_signup_install() {
   // Set initial translation string for en language.
   // Array of language translation strings.
   $strings = [
-    'email sign up' => [
+    'Email sign up' => [
       'ar' => 'تسجيل مستخدم جديد',
     ],
   ];

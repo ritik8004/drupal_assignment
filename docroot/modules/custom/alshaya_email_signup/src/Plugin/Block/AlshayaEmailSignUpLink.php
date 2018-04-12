@@ -65,7 +65,7 @@ class AlshayaEmailSignUpLink extends BlockBase implements ContainerFactoryPlugin
     $lang = $this->languageManager->getCurrentLanguage();
     return [
       '#type' => 'link',
-      '#title' => $this->t('email sign up'),
+      '#title' => $this->t('Email sign up'),
       '#url' => Url::fromUri('internal:/email-sign-up', ['language' => $lang]),
       '#options' => [
         'attributes' => [

@@ -173,7 +173,10 @@
 	 */
   Drupal.reAttachAddCartAndConfigSizeAjax = function (element) {
     var postUrl = $(element).find('form').attr('action');
-
+    // There is no form when the product is out of stock.
+    if (typeof postUrl == 'undefined') {
+      return;
+    }
     // If url already contains '?', then append by '&'.
     if (postUrl.indexOf('?') !== -1) {
       postUrl = postUrl + '&ajax_form=1';
