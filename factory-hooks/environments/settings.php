@@ -71,6 +71,13 @@ function alshaya_get_additional_settings($site, $env) {
           ],
         ],
       ],
+      'default' => [
+        'default' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-PP5PK4C',
+          ],
+        ],
+      ],
     ],
     'hm' => [
       'kw' => [
@@ -127,6 +134,13 @@ function alshaya_get_additional_settings($site, $env) {
           ],
         ],
       ],
+      'default' => [
+        'default' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-NQ4JXJP',
+          ],
+        ],
+      ],
     ],
     'pb' => [
       'default' => [
@@ -153,6 +167,9 @@ function alshaya_get_additional_settings($site, $env) {
           ],
           'alshaya_acm_knet.settings' => [
             'alias' => 'alshaya',
+          ],
+          'google_tag.settings' => [
+            'container_id' => '',
           ],
         ],
       ]
