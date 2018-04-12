@@ -68,7 +68,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     // Override the config data with module overrides.
     $this->fetchOverrides($data, 'override', $config->getName());
 
-    // Get delte-overrides from enabled modules.
+    // Get delete-overrides from enabled modules.
     $this->fetchOverrides($override_deletions, 'override-delete', $config->getName());
 
     // Get recursive diff of config data with delete-overrides.
