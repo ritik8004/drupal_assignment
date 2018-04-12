@@ -58,8 +58,65 @@ function drush_alshaya_super_category_switch() {
   $block = reset($blocks);
   $block->setStatus($status);
   $block->save();
+  drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));
+  _alshaya_super_category_product_alias_bulk_process();
   // Clear cache to rebuild menu blocks.
   drupal_flush_all_caches();
+}
 
-  drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));
+/**
+ * Product url alias bulk process.
+ */
+function _alshaya_super_category_product_alias_bulk_process() {
+  if (!drush_confirm(dt("Are you sure you want to regenerate product aliases?"))) {
+    return drush_user_abort();
+  }
+  drush_print(dt('Generating product aliases, please wait...'));
+
+  // Set batch operation.
+  $batch = [
+    'title' => t('Bulk updating product URL aliases'),
+    'init_message' => t('Product alias generating...'),
+    'operations' => [
+      ['\Drupal\pathauto\Form\PathautoBulkUpdateForm::batchStart', []],
+      ['\Drupal\pathauto\Form\PathautoBulkUpdateForm::batchProcess',
+        ['canonical_entities:node', 'all'],
+      ],
+    ],
+    'progress_message' => t('Processed @current out of @total.'),
+    'error_message' => t('Synced data could not be cleaned because an error occurred.'),
+    // Drush doesn't support static method call for "finished".
+    'finished' => '_alshaya_super_category_product_alias_batch_finished',
+  ];
+
+  batch_set($batch);
+  drush_backend_batch_process();
+}
+
+/**
+ * Batch finished callback.
+ *
+ * @param bool $success
+ *   Whether the batch job was successful.
+ * @param \Drupal\security_review\CheckResult[] $results
+ *   The results of the batch job.
+ * @param array $operations
+ *   The array of batch operations.
+ */
+function _alshaya_super_category_product_alias_batch_finished($success, array $results, array $operations) {
+  if ($success) {
+    if ($results['updates']) {
+      drupal_set_message(\Drupal::translation()->formatPlural($results['updates'], 'Generated 1 URL alias.', 'Generated @count URL aliases.'));
+    }
+    else {
+      drupal_set_message(t('No new URL aliases to generate.'));
+    }
+  }
+  else {
+    $error_operation = reset($operations);
+    drupal_set_message(t('An error occurred while processing @operation with arguments : @args', [
+      '@operation' => $error_operation[0],
+      '@args' => print_r($error_operation[0], TRUE),
+    ]));
+  }
 }
