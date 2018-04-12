@@ -9,6 +9,7 @@ Feature: Test generic features on the site
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
+    When I follow "English"
     Then I should be able to see the header
     And I should be able to see the footer
 
@@ -20,7 +21,6 @@ Feature: Test generic features on the site
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    When I follow "عربية"
     Then I should be able to see the header in Arabic
     And I should be able to see the footer in Arabic
 
@@ -30,6 +30,7 @@ Feature: Test generic features on the site
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
+    When I follow "English"
     When I enter a valid Email ID in field "edit-email"
     And I press "sign up"
     And I wait for AJAX to finish
@@ -42,7 +43,6 @@ Feature: Test generic features on the site
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    And I follow "عربية"
     When I enter a valid Email ID in field "edit-email"
     And I press "سجل الآن"
     And I wait for AJAX to finish
@@ -56,7 +56,8 @@ Feature: Test generic features on the site
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    When I fill in "edit-email" with "shweta+3@axelerant.com"
+    When I follow "English"
+    And I fill in "edit-email" with "shweta+3@axelerant.com"
     And I press "sign up"
     And I wait for AJAX to finish
     Then I should see "This email address is already subscribed."
@@ -69,7 +70,6 @@ Feature: Test generic features on the site
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    And I follow "عربية"
     When I fill in "edit-email" with "shweta+3@axelerant.com"
     And I press "سجل الآن"
     And I wait for AJAX to finish

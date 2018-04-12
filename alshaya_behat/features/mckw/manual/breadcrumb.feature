@@ -24,7 +24,7 @@ Feature: Test breadcrumbs displayed across the site
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I follow "العربية"
+#    When I follow "العربية"
     And I wait for the page to load
     When I follow "ملابس الرضع"
     And I wait for the page to load
