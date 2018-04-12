@@ -13,6 +13,21 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Changes the label from promo block button to live text.
+ */
+function alshaya_paragraphs_update_8112() {
+  $configs = [
+    'paragraphs.paragraphs_type.promo_block_button',
+    'field.storage.paragraph.field_promo_theme',
+    'field.field.paragraph.promo_block_button.field_button_position',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding SEO text and title fields to promo block paragraph to be used on
  * department page.
  */
