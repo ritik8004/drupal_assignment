@@ -26,6 +26,9 @@ alshaya_acm_product.settings:
     vat_text_footer:
       type: label
       label: 'VAT disclaimer text for the footer'
+    image_position_pdp:
+      type: label
+      label: 'Image position on pdp'
     langcode:
       type: string
       label: 'Language code'
