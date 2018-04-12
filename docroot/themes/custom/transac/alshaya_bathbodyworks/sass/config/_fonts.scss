@@ -56,14 +56,14 @@
 }
 
 // Font Family
-$alshaya-bold: 'BBWTradeGothicLTStd_Bold';
-$alshaya-bold-nodir: 'BBWTradeGothicLTStd_Bold';
+$alshaya-bold: 'BBWTradeGothicLTStd_Bold', 'DroidArabicKufi_Bold';
+$alshaya-bold-nodir: 'BBWTradeGothicLTStd_Bold', 'DroidArabicKufi_Bold';
 
-$alshaya-thin: 'BBWTradeGothicLTStd';
-$alshaya-thin-nodir: 'BBWTradeGothicLTStd';
+$alshaya-thin: 'BBWTradeGothicLTStd', 'DroidKufi_Regular';
+$alshaya-thin-nodir: 'BBWTradeGothicLTStd', 'DroidKufi_Regular';
 
-$alshaya-arabic-bold: 'DroidArabicKufi_Bold';
-$alshaya-arabic-bold-nodir: 'DroidArabicKufi_Bold';
+$alshaya-arabic-bold: 'DroidArabicKufi_Bold', 'BBWTradeGothicLTStd_Bold';
+$alshaya-arabic-bold-nodir: 'DroidArabicKufi_Bold', 'BBWTradeGothicLTStd_Bold';
 
-$alshaya-arabic-thin: 'DroidKufi_Regular';
-$alshaya-arabic-thin-nodir: 'DroidKufi_Regular';
+$alshaya-arabic-thin: 'DroidKufi_Regular', 'BBWTradeGothicLTStd';
+$alshaya-arabic-thin-nodir: 'DroidKufi_Regular', 'BBWTradeGothicLTStd';
