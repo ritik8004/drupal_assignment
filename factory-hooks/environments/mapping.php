@@ -185,8 +185,8 @@ function alshaya_get_env_keys($site, $env) {
       ],
       // Other VSAE env are connect to PBAE QA.
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_test',
       ],
     ],
   ];
