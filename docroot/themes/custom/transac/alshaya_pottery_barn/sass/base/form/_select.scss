@@ -58,3 +58,29 @@
     }
   }
 }
+
+@mixin select-wrapper($wrapper-width) {
+  width: $wrapper-width;
+  margin-bottom: 0.75rem;
+  position: relative;
+
+  @include icon(chevrondown, after) {
+    font-size: 1.75rem;
+    line-height: 35px;
+    pointer-events: none;
+    position: absolute;
+    #{$right}: 0;
+    top: 0;
+    text-align: center;
+    background-color: $primary_dropdown_arrow_bg;
+    width: 2.1875rem;
+    height: 35px;
+    height: 2.1875rem;
+    border-#{$left}: 1px solid $primary_dropdown_arrow_left_border;
+    color: $primary_dropdown_arrow_icon;
+
+    @include breakpoint($tablet) {
+      z-index: 3;
+    }
+  }
+}

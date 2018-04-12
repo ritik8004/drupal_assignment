@@ -36,3 +36,19 @@
     }
   }
 }
+
+.c-facet__blocks__wrapper--mobile {
+  @include breakpoint($upto-desktop) {
+    .c-facet__label {
+      border-color: $plp_facet_label_border_mobile;
+      background: $plp_facet_label_bg_mobile;
+
+      &::after {
+        border-#{$left}: 1px solid $primary_dropdown_arrow_left_border;
+        color: $primary_dropdown_arrow_icon;
+        font-size: 1.75rem;
+        line-height: 1.23;
+      }
+    }
+  }
+}
