@@ -24,6 +24,8 @@ echo "Disabling all search api indexes."
 drush8 @$site.$target_env --uri=$uri search-api-disable-all
 
 # Now clean all data.
+SECONDS=0
+
 while :
 do
   drush8 @$site.$target_env --uri=$uri clean-synced-data -y
@@ -35,6 +37,12 @@ do
     break
   fi
 done
+
+let "minutes=(SECONDS%3600)/60"
+let "seconds=(SECONDS%3600)%60"
+echo "Data cleanup completed in $minutes minute(s) and $seconds second(s)."
+
+SECONDS=0
 
 echo "Enable the search api indexes again."
 drush8 @$site.$target_env --uri=$uri search-api-enable-all
@@ -72,6 +80,10 @@ drush8 @$site.$target_env --uri=$uri sync-commerce-promotions
 drush8 @$site.$target_env --uri=$uri sapi-i
 drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_attach_queue
 drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_detach_queue
+
+let "minutes=(SECONDS%3600)/60"
+let "seconds=(SECONDS%3600)%60"
+echo "Data import completed in $minutes minute(s) and $seconds second(s)."
 
 # Save the dump for later use and use in local.
 timestamp=$(date +%s)
