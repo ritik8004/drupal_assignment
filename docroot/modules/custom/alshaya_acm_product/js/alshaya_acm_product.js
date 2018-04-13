@@ -42,7 +42,7 @@
   };
 
   /**
-   * Helper function to add compute height of add to cart button and make it sticky.
+   * Helper function to compute height of add to cart button and make it sticky.
    */
   function mobileStickyAddtobasketButton() {
     // Button top.
@@ -68,7 +68,7 @@
       if ($(window).width() < 768) {
         mobileStickyAddtobasketButton();
         $(window, context).on('scroll', function () {
-          mobileStickyAddtobasketButton()
+          mobileStickyAddtobasketButton();
         });
       }
     }
