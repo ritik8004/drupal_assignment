@@ -14,12 +14,12 @@
 }
 
 .vat-container {
-  @extend %l-container--center;
+  @include container(77.25rem);
 
   .vat-text-footer {
     @include breakpoint($tablet) {
       text-align: $left;
-      padding: 0.3125rem;
+      padding: 0.3125rem 1.5rem;
     }
 
     @include breakpoint($desktop) {
@@ -34,5 +34,11 @@
 
   .warm--white {
     background-color: $vat_dark;
+  }
+}
+
+.nodetype--acq_product {
+  .vat-container {
+    @include container(66.35rem);
   }
 }
