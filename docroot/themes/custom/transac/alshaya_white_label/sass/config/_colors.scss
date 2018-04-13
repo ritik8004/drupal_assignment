@@ -437,7 +437,6 @@ $checkout_progress_next_txt: $brownish-grey;
 // Product listing page and search page.
 $plp_category_desc: $cerulean-two;
 $plp_search_count: $black;
-$plp_sort_by_label: $grey-ash;
 $plp_facet_filter: $windows-blue;
 $plp_facet_filter_bg: $cerulean-two;
 $plp_facet_item_label: $grey-ash;
@@ -922,6 +921,7 @@ $mm_l1_link_active_shadow: false;
 $mm_l2_link_mobile_menu: false;
 $header_c_menu_search_icon: false;
 $store_finder_get_direction_label_color: false;
+$plp_sort_by_label: false;
 
 // From: HMKW
 $default_msg_status_text: false;
