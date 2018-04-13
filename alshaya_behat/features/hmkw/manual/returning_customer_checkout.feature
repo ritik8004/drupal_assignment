@@ -107,6 +107,7 @@ Feature: Test various checkout scenarios as returning customer
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I accept terms and conditions
     And I press "place order"
+    And I wait 10 seconds
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
@@ -116,6 +117,7 @@ Feature: Test various checkout scenarios as returning customer
   I should be able to checkout using CC - Cybersource
     When I follow "Click & Collect"
     And I wait for AJAX to finish
+    And I wait 5 seconds
     When I select a store
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
@@ -129,6 +131,7 @@ Feature: Test various checkout scenarios as returning customer
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
     When I press "place order"
+    And I wait 10 seconds
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
