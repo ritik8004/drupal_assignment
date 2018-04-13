@@ -30,6 +30,10 @@ function alshaya_promo_panel_drush_command() {
  * Implements drush command alshaya-promo-panel-set.
  */
 function drush_alshaya_promo_panel_set($blocks) {
+  if (empty($blocks)) {
+    return drush_set_error(dt('blocks is required argument. i.e. drush apps alshaya_promo_panel:/todays-offer,alshaya_custom:/about'));
+  }
+
   // Clean input and parse comma-separated input items into array.
   $block_names = explode(',', $blocks);
   $new_array = [];
