@@ -4,7 +4,6 @@ namespace Drupal\alshaya_super_category\Plugin\Condition;
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Condition\ConditionPluginBase;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\taxonomy\TermInterface;
