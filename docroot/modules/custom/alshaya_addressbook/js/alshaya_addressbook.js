@@ -10,13 +10,20 @@
 
   // Focus on first error.
   $.fn.firstErrorFocus = function (arg, scroll) {
-    console.error(arg);
     // We doing this as at this point of time, process is not fully completed
     // so we relying on this ajaxComplete. This will only be called when there
     // is error on address book form.
     $(document).ajaxComplete(function(event, xhr, settings) {
       var focusElement = $(arg+ ' input.error:first');
+      var error_div = focusElement.parent().find('div.form-item--error-message');
+
       focusElement.focus();
+
+      // This is doing because cv.jquery.ife.js removes any server side error
+      // on element focus.
+      if (error_div) {
+        focusElement.parent().append(error_div);
+      }
 
       // Scroll to the first element with error.
       if (scroll) {
