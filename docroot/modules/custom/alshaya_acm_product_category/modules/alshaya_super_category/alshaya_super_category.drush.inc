@@ -68,9 +68,6 @@ function drush_alshaya_super_category_switch() {
  * Product url alias bulk process.
  */
 function _alshaya_super_category_product_alias_bulk_process() {
-  if (!drush_confirm(dt("Are you sure you want to regenerate product aliases?"))) {
-    return drush_user_abort();
-  }
   drush_print(dt('Generating product aliases, please wait...'));
 
   // Set batch operation.
