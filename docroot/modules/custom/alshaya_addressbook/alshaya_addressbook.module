@@ -67,7 +67,7 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
   if ($form_state->getErrors()) {
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('#address-book-form-wrapper', $form));
-    $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', []));
+    $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['#address-book-form-wrapper', TRUE]));
     return $response;
   }
 
