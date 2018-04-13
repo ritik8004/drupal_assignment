@@ -202,6 +202,17 @@ class ClickCollectController extends ControllerBase {
     $response->addCommand(new HtmlCommand('#click-and-collect-map-view .geolocation-common-map-locations', $build['map_info_window']));
     $response->addCommand(new InvokeCommand('#click-and-collect-map-view .geolocation-common-map-locations', 'hide'));
     $response->addCommand(new ClickCollectStoresCommand(['raw' => $stores]));
+
+    // If there are no stores, hide 'list view' and 'map view'.
+    if (count($stores) == 0) {
+      $response->addCommand(new InvokeCommand('.stores-list-view', 'hide'));
+      $response->addCommand(new InvokeCommand('.stores-map-view', 'hide'));
+    }
+    else {
+      $response->addCommand(new InvokeCommand('.stores-list-view', 'show'));
+      $response->addCommand(new InvokeCommand('.stores-map-view', 'show'));
+    }
+
     return $response;
   }
 

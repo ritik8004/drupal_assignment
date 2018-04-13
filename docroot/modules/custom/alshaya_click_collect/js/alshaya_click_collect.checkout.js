@@ -59,6 +59,23 @@
         }
       });
 
+      // Checkout click and collect near me.
+      $('#edit-guest-delivery-collect, #edit-member-delivery-collect', context).once('get-location').on('click', '.cc-near-me', function () {
+        if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
+            Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
+        }
+        // Fetch location name from lat/lng and then fill the text box.
+        var geocoder = Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
+        var latlng = {lat: parseFloat(ascoords.lat), lng: parseFloat(ascoords.lng)};
+        geocoder.geocode({location: latlng}, function (results, status) {
+            if (status === 'OK') {
+              $('#edit-store-location').val(results[2].formatted_address);
+            }
+        });
+       Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+       return false;
+      });
+
       $('.hours--wrapper').once('initiate-toggle').on('click', '.hours--label', function () {
         $(this).toggleClass('open');
       });
