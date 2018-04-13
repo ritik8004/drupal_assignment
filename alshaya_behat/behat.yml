@@ -181,10 +181,10 @@ hmuat:
               simpleurl: '/knitted-jumper'
               simpletitle: 'Knitted jumper'
               simpletitlear: 'Knitted jumper'
-              configurl: '/bikini-bottoms-0'
-              configtitle: 'Bikini bottoms'
-              configtitlear: 'سروال سباحة'
-              configvariant: '8'
+              configurl: '/leggings'
+              configtitle: 'Leggings'
+              configtitlear: 'ليغنغز'
+              configvariant: 'S'
               base_url: 'https://hmkw-uat.factory.alshaya.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
@@ -194,7 +194,7 @@ hmuat:
         output_path: %paths.base%/features/hmkw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://hmkw-uat.factory.alshaya.com/en'
+      base_url: 'https://hmkw-uat.factory.alshaya.com'
       files_path: "%paths.base%/media"
 
 hmqa:

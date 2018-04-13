@@ -2,9 +2,11 @@
 Feature: Test various checkout scenarios for Arabic site
 
   Background:
-    Given I am on a simple product page
+    Given I am on a configurable product
     And I wait for the page to load
-    When I press "add to basket"
+    When I select a size for the product
+    And I wait for AJAX to finish
+    When I press "Add to basket"
     And I wait for AJAX to finish
     And I go to "/ar/cart"
     And I wait for the page to load
@@ -31,6 +33,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
+    And I wait 10 seconds
     And I accept terms and conditions
     When I press "سجل الطلبية"
     And I wait for the page to load

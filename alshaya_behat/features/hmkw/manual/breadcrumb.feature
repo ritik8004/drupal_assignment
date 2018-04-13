@@ -21,7 +21,7 @@ Feature: Test breadcrumbs displayed across the site
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I follow "عربية"
+#    When I follow "عربية"
     And I wait for the page to load
     When I follow "النساء"
     And I wait for the page to load
@@ -47,7 +47,7 @@ Feature: Test breadcrumbs displayed across the site
     And I wait for the page to load
     Then the breadcrumb "Home > Find Stores > Avenues Family" should be displayed
     
-  @arabic
+  @arabic,
   Scenario: As a Guest on Arabic site
   I should be able to view breadcrumb on store detail page
     Given I am on "/store-finder"
