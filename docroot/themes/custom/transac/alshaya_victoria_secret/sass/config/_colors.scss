@@ -134,7 +134,7 @@ $returned_btn_bg: $grey-ash;
 $complete_btn_bg: $medium-green;
 
 // Checkbox & Radio.
-$primary_checkbox_empty: $grey-ash;
+$primary_checkbox_empty: $ash-triplet;
 $primary_checkbox_filled: $black;
 $primary_radiobtn_label: $grey-ash;
 $primary_radiobtn_empty: $greyish;
@@ -154,9 +154,9 @@ $primary_full_page_overlay_bg: rgba(255, 255, 255, 0.7);
 
 // Dropdown.
 $primary_dropdown_bg: $white-five;
-$primary_dropdown_arrow_bg: $white-two;
-$primary_dropdown_text: $grey-ash;
-$primary_dropdown_border: $white-two;
+$primary_dropdown_arrow_bg: transparent;
+$primary_dropdown_text: $nero;
+$primary_dropdown_border: $gainsboro;
 $primary_dropdown_option_hover: $white-four;
 $primary_dropdown_option_border: $white;
 $primary_dropdown_option_disbled: $greyish;
@@ -275,9 +275,9 @@ $lang_switch_list: $white-two;
 $lang_switch_close_icon: $white-two;
 
 // Accordion
-$accordion_border: $white;
-$accordion_title: $grey-ash;
-$accordion_title_disabled: $white;
+$accordion_border: $gainsboro;
+$accordion_title: $black;
+$accordion_title_disabled: $gainsboro;
 
 // Cloudzoom
 $cloudzoom_hovertext: $grey-ash;
@@ -449,38 +449,40 @@ $checkout_progress_next_txt: $brownish-grey;
 
 /* ------- 7. Pages ----- */
 // Product listing page and search page.
-$plp_category_desc: $cerulean-two;
+$plp_category_desc: $nero;
 $plp_search_count: $black;
-$plp_sort_by_label: $grey-ash;
-$plp_facet_filter: $windows-blue;
-$plp_facet_filter_bg: $cerulean-two;
-$plp_facet_filter_link: $white-four;
-$plp_facet_clear_border: $marine-blue-two;
-$plp_facet_clear_border_mobile: $cerulean-two;
-$plp_facet_clear_text: $cerulean-two;
-$plp_facet_filter_count: $marine-blue-two;
+$plp_sort_by_label: $nero;
+$plp_facet_filter: $brilliant-rose;
+$plp_facet_item_label: $black;
+$plp_facet_filter_bg: transparent;
+$plp_facet_filter_link: $nero;
+$plp_facet_clear_border: $nero;
+$plp_facet_clear_border_mobile: $nero;
+$plp_facet_clear_text: $nero;
+$plp_facet_filter_count: $nero;
 $plp_facet_input_border: $white;
 $plp_facet_label: $black;
-$plp_facet_dropdown_bg: $white-two;
-$plp_facet_label_border_mobile: $white-two;
+$plp_facet_dropdown_bg: $vanilla;
+$plp_facet_label_border_mobile: $gainsboro;
+$plp_facet_summary_filter_icon: $nero;
 $plp_facet_active_bg: $white-five;
 $plp_facet_filter_label: $black;
 $plp_facet_title: $grey-ash;
 $plp_facet_border: $white;
-$plp_item_label: $grey-ash;
+$plp_item_label: $black;
 $plp_promotion_description: $ash-triplet;
 
 // PLP Filter bar.
-$plp_filterbar_filter_bg: $cerulean-two;
+$plp_filterbar_filter_bg: $nero;
 $plp_filterbar_filter_text: $white-five;
 $plp_filterbar_filter_clear: $white-five;
-$plp_filterbar_clearall_border: $cerulean-two;
-$plp_filterbar_clearall_text: $cerulean-two;
+$plp_filterbar_clearall_border: $nero;
+$plp_filterbar_clearall_text: $nero;
 
 // PLP Product tile.
 $plp_tile_product_text: $black;
-$plp_tile_product_title: $grey-ash;
-$plp_tile_product_title_hover: $cerulean-two;
+$plp_tile_product_title: $black;
+$plp_tile_product_title_hover: $nero;
 $plp_tile_product_price: $black;
 $plp_tile_product_special_price: $scarlet;
 $plp_tile_product_discount_label: $scarlet;
@@ -629,7 +631,7 @@ $checkout_footer_border-top: $marine-blue-two;
 $checkout_footer_txt: $black;
 $checkout_footer_light_txt: $grey-ash;
 $checkout_header_border-bottom: $white-three;
-$checkout_pri_txt: $grey-ash;
+$checkout_pri_txt: $nero;
 $checkout_section_border: $greyish;
 $checkout_section_titles: $marine-blue-two;
 $checkout_section_title_border: $white;

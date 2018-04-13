@@ -86,7 +86,7 @@
                   position: absolute;
                   top: 2.15%;
                   #{$left}: 3.5%;
-                  color: $white-four;
+                  color: $plp_facet_summary_filter_icon;
                 }
 
                 color: transparent;
@@ -492,7 +492,7 @@
 
         .field--name-name {
           a {
-            color: $cerulean-two;
+            color: $plp_tile_product_title_hover;
             text-decoration: underline;
           }
         }
