@@ -8,6 +8,24 @@
     }
   };
 
+  // Focus on first error.
+  $.fn.firstErrorFocus = function () {
+    // We doing this as at this point of time, process is not fully completed
+    // so we relying on this ajaxComplete. This will only be called when there
+    // is error on address book form.
+    $(document).ajaxComplete(function(event, xhr, settings) {
+      var focusElement = $('#address-book-form-wrapper input.error:first');
+      var stickyHeaderHeight = $('.branding__menu').height();
+
+      focusElement.focus();
+
+      // Scroll to the first element with error.
+      $('html, body').animate({
+          scrollTop: focusElement.offset().top - parseInt(stickyHeaderHeight)
+      });
+    });
+  };
+
   /**
    * Updates area list options based on options provided in argument.
    *
