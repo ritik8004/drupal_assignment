@@ -292,6 +292,7 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
     $alias = \Drupal::service('path.alias_manager')
       ->getAliasByPath('/taxonomy/term/' . $parent->id(), $context['language']);
 
+    // Check if the pattern is already set with the alias.
     if (strpos($pattern->getPattern(), $alias . '/') === FALSE) {
       $pattern->setPattern($alias . '/' . $pattern->getPattern());
     }

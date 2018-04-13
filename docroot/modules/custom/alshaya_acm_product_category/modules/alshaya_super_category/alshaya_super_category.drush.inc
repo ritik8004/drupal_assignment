@@ -103,15 +103,15 @@ function _alshaya_super_category_product_alias_bulk_process() {
 function _alshaya_super_category_product_alias_batch_finished($success, array $results, array $operations) {
   if ($success) {
     if ($results['updates']) {
-      drupal_set_message(\Drupal::translation()->formatPlural($results['updates'], 'Generated 1 URL alias.', 'Generated @count URL aliases.'));
+      drush_print(\Drupal::translation()->formatPlural($results['updates'], 'Generated 1 URL alias.', 'Generated @count URL aliases.'));
     }
     else {
-      drupal_set_message(t('No new URL aliases to generate.'));
+      drush_print(dt('No new URL aliases to generate.'));
     }
   }
   else {
     $error_operation = reset($operations);
-    drupal_set_message(t('An error occurred while processing @operation with arguments : @args', [
+    drush_print(dt('An error occurred while processing @operation with arguments : @args', [
       '@operation' => $error_operation[0],
       '@args' => print_r($error_operation[0], TRUE),
     ]));
