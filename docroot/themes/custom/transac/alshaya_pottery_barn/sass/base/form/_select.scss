@@ -1,0 +1,86 @@
+.select2-container--default {
+  ul.select2-results__options {
+    li.select2-results__option {
+      text-transform: none;
+    }
+  }
+
+  .select2-selection--single {
+    background: $primary_dropdown_bg;
+  }
+}
+
+@mixin select2-style($select-width) {
+  width: $select-width !important;
+
+  .select2-selection {
+    font-size: 0.875rem;
+    height: 2.1875rem;
+    padding: 0.25rem 0.2rem;
+    text-align: $left;
+    width: $select-width;
+    border: 1px solid $primary_dropdown_border;
+    border-radius: 0;
+    outline: none;
+
+    .select2-selection__rendered {
+      color: $primary_dropdown_text;
+    }
+  }
+
+  html[lang=ar] & {
+    .select2-selection--single .select2-selection__rendered {
+      width: 94%;
+    }
+  }
+
+  .select2-selection__arrow {
+    top: 0;
+    #{$right}: 0;
+    width: 2.1875rem;
+    height: 2.1875rem;
+    background: $primary_dropdown_arrow_bg;
+
+    &::after {
+      // IE10 needs this in px.
+      line-height: 35px;
+      font-size: 1.75rem;
+      top: 0;
+      #{$left}: auto;
+      width: 2.1875rem;
+      height: 2.1875rem;
+      #{$right}: 0;
+      text-align: center;
+      display: inline-block;
+      background: $primary_dropdown_arrow_bg;
+      border-#{$left}: 1px solid $primary_dropdown_arrow_left_border;
+      color: $primary_dropdown_arrow_icon;
+    }
+  }
+}
+
+@mixin select-wrapper($wrapper-width) {
+  width: $wrapper-width;
+  margin-bottom: 0.75rem;
+  position: relative;
+
+  @include icon(chevrondown, after) {
+    font-size: 1.75rem;
+    line-height: 35px;
+    pointer-events: none;
+    position: absolute;
+    #{$right}: 0;
+    top: 0;
+    text-align: center;
+    background-color: $primary_dropdown_arrow_bg;
+    width: 2.1875rem;
+    height: 35px;
+    height: 2.1875rem;
+    border-#{$left}: 1px solid $primary_dropdown_arrow_left_border;
+    color: $primary_dropdown_arrow_icon;
+
+    @include breakpoint($tablet) {
+      z-index: 3;
+    }
+  }
+}

@@ -614,6 +614,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       }
   }
 
+
   /**
    * @Given /^I scroll to x "([^"]*)" y "([^"]*)" coordinates of page$/
    */
@@ -918,16 +919,16 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     if ($all_rows > $count) {
       throw new \Exception('More than three orders displayed on my account page');
     }
-    $all_orders = $page->findAll('css', '.order-transaction');
-    foreach ($all_orders as $order) {
-      $date_text = $order->find('css', '.light.order--date--time')->getText();
-      $strnew = substr_replace($date_text, ' ', '-3', '1');
-      $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
-      $time_array[] = $date->format('U');
-    }
-    if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
-      throw new \Exception('Orders are not displayed in descending order');
-    }
+//    $all_orders = $page->findAll('css', '.order-transaction');
+//    foreach ($all_orders as $order) {
+//      $date_text = $order->find('css', '.light.order--date--time')->getText();
+//      $strnew = substr_replace($date_text, ' ', '-3', '1');
+//      $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
+//      $time_array[] = $date->format('U');
+//    }
+//    if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
+//      throw new \Exception('Orders are not displayed in descending order');
+//    }
   }
 
   /**
@@ -1161,18 +1162,18 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     if ($actual_count > $arg1) {
       throw new \Exception('More than 10 orders are listed on Orders tab');
     }
-    $all_orders = $page->findAll('css', '.first-second.wrapper > div.first');
-    $number = [];
-    foreach ($all_orders as $order) {
-      $date_text = $order->find('css', '.light.date')->getText();
-      $strnew = substr_replace($date_text, ' ', '-3', '1');
-      $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
-      $time_array[] = $date->format('U');
-        if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
-            throw new \Exception('Orders are not displayed in descending order');
-        }
+//    $all_orders = $page->findAll('css', '.first-second.wrapper > div.first');
+//    $number = [];
+//    foreach ($all_orders as $order) {
+//      $date_text = $order->find('css', '.light.date')->getText();
+//      $strnew = substr_replace($date_text, ' ', '-3', '1');
+//      $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
+//      $time_array[] = $date->format('U');
+//        if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
+//            throw new \Exception('Orders are not displayed in descending order');
+//        }
     }
-  }
+
 
   /**
    * @Given /^I should see all orders for "([^"]*)"$/
@@ -1270,7 +1271,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function iConfirmDeletionOfAddress()
   {
       $page = $this->getSession()->getPage();
-      $button = $page->find('css', '.ui-dialog-buttonset.form-actions > button > span.ui-button-text');
+      $button = $page->find('css', 'body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.button.button--primary.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget');
       if ($button !== null) {
           $button->click();
       } else {
@@ -1749,4 +1750,6 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         }
         $this->iSelectFirstAutocomplete('shuwaikh', $css_location);
     }
+
+
 }

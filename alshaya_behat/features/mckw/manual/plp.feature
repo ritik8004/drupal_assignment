@@ -37,6 +37,7 @@ Feature: Test the PLP page
     And I wait for AJAX to finish
     Then I should see results sorted in ascending price order
 
+
   Scenario: As a Guest
     I should be able to select a product in stock and
     complete the checkout journey
@@ -73,6 +74,41 @@ Feature: Test the PLP page
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
+
+  @prod
+  Scenario: As a Guest
+  I should be able to select a product in stock and
+  complete the checkout journey
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    And I wait for the page to load
+    When I select a size for the product
+    And I wait for AJAX to finish
+    When I press "Add to basket"
+    And I wait for AJAX to finish
+    When I go to "/cart"
+    And I wait for the page to load
+    And I press "checkout securely"
+    And I wait for the page to load
+    And I follow "checkout as guest"
+    And I wait for the page to load
+    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
+    And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
+    And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
+    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
+    And I press "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
+    And I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_cashondelivery"
+    And I wait for AJAX to finish
+    And I accept terms and conditions
+    Then I should see "I confirm that I have read and accept the"
 
   @arabic @prod
   Scenario: As a Guest
@@ -130,41 +166,6 @@ Feature: Test the PLP page
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see "رقم طلبيتك هو"
-
-  @prod
-  Scenario: As a Guest
-  I should be able to select a product in stock and
-  complete the checkout journey
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
-    And I wait for the page to load
-    When I select a size for the product
-    And I wait for AJAX to finish
-    When I press "Add to basket"
-    And I wait for AJAX to finish
-    When I go to "/cart"
-    And I wait for the page to load
-    And I press "checkout securely"
-    And I wait for the page to load
-    And I follow "checkout as guest"
-    And I wait for the page to load
-    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
-    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
-    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
-    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Abbasiya" from "edit-guest-delivery-home-address-shipping-administrative-area"
-    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
-    And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
-    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
-    And I press "deliver to this address"
-    And I wait for AJAX to finish
-    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
-    And I wait for AJAX to finish
-    And I press "proceed to payment"
-    And I wait for the page to load
-    When I select a payment option "payment_method_title_cashondelivery"
-    And I wait for AJAX to finish
-    And I accept terms and conditions
-    Then I should see "I confirm that I have read and accept the"
 
   @arabic @prod
   Scenario: As a Guest on Arabic site

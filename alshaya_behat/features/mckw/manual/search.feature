@@ -19,7 +19,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    And I follow "عربية"
+#    And I follow "عربية"
     When I wait for the page to load
     When I fill in "edit-keywords" with "جوارب"
     And I press "Search"
@@ -67,11 +67,12 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    And I follow "عربية"
+#    And I follow "عربية"
     When I wait for the page to load
     When I fill in "edit-keywords" with "نص عشوائي"
     And I press "Search"
     Then I should see "لا يوجد نتائج لبحثك"
+
 
   Scenario: As a Guest
     I should be able to search for a product
@@ -83,7 +84,7 @@ Feature: Search feature
     When I fill in "edit-keywords" with "green t shirt"
     And I press "Search"
     And I wait for AJAX to finish
-    When I select a product in stock
+    When I select a product in stock on "page"
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
@@ -122,7 +123,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    And I follow "عربية"
+#    And I follow "عربية"
     When I wait for the page to load
     When I fill in "edit-keywords" with "تي-شيرت برسمة Paradise"
     And I press "Search"
@@ -247,7 +248,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    And I follow "عربية"
+#    And I follow "عربية"
     When I wait for the page to load
     When I fill in "edit-keywords" with "تي-شيرت برسمة"
     And I press "Search"
