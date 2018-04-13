@@ -437,9 +437,9 @@ $checkout_progress_next_txt: $brownish-grey;
 // Product listing page and search page.
 $plp_category_desc: $cerulean-two;
 $plp_search_count: $black;
-$plp_sort_by_label: $grey-ash;
 $plp_facet_filter: $windows-blue;
 $plp_facet_filter_bg: $cerulean-two;
+$plp_facet_item_label: $grey-ash;
 $plp_facet_filter_link: $white-four;
 $plp_facet_clear_border: $cerulean-two;
 $plp_facet_clear_border_mobile: $cerulean-two;
@@ -453,6 +453,7 @@ $plp_facet_active_bg: $white-five;
 $plp_facet_filter_label: $black;
 $plp_facet_title: $grey-ash;
 $plp_facet_border: $white;
+$plp_facet_summary_filter_icon: $white-four;
 $plp_item_label: $grey-ash;
 $plp_promotion_description: $cerulean-two;
 $plp_promotion_link: $cherry;
@@ -692,6 +693,8 @@ $checkout_cc_selected_store_content_bg: $white-four;
 $checkout_cc_help_text: $black;
 $checkout_cc_help_text_content: $grey-ash;
 $checkout_cc_empty_store_error: $scarlet;
+$checkout_cc_near_me_border: $greyish;
+$checkout_cc_tab_border: $greyish;
 
 // Checkout click and collect heading cnc form.
 $checkout_cc_cnc_form_title_border: $marine-blue-two;
@@ -918,6 +921,7 @@ $mm_l1_link_active_shadow: false;
 $mm_l2_link_mobile_menu: false;
 $header_c_menu_search_icon: false;
 $store_finder_get_direction_label_color: false;
+$plp_sort_by_label: false;
 
 // From: HMKW
 $default_msg_status_text: false;
