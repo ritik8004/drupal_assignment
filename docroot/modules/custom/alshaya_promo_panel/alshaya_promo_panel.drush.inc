@@ -14,8 +14,12 @@ function alshaya_promo_panel_drush_command() {
   $commands['alshaya-promo-panel-set'] = [
     'description' => 'config promo panel block and path.',
     'aliases' => ['apps'],
-    'options' => [
-      'blocks' => 'Default block machine name to use for promo panel',
+    'arguments' => [
+      'blocks' => 'Block with url value. i.e. alshaya_promo_panel:/todays-offer',
+    ],
+    'examples' => [
+      'drush apps alshaya_promo_panel:/todays-offer' => 'Single input to set block and url for mobile.',
+      'drush apps alshaya_promo_panel:/todays-offer,alshaya_custom:/about' => 'Comma separated input to set multiple blocks.',
     ],
   ];
 
@@ -25,26 +29,20 @@ function alshaya_promo_panel_drush_command() {
 /**
  * Implements drush command alshaya-promo-panel-set.
  */
-function drush_alshaya_promo_panel_set() {
-  $block_names = drush_get_option_list('blocks', []);
-
-  if (empty($block_names)) {
-    drush_print(dt('Please pass the --blocks argument to set block as promo panel.'));
-    return;
-  }
-
-  $config = \Drupal::configFactory()->getEditable('alshaya_promo_panel.settings');
+function drush_alshaya_promo_panel_set($blocks) {
+  // Clean input and parse comma-separated input items into array.
+  $block_names = explode(',', $blocks);
   $new_array = [];
-
-  // Set multiple blocks as key and value array.
   array_map(function ($block_name) use (&$new_array) {
     list($block, $url) = explode(':', $block_name);
     $new_array[$block] = $url;
   }, $block_names);
+
+  $config = \Drupal::configFactory()->getEditable('alshaya_promo_panel.settings');
   $config->set('promo_panel_blocks', $new_array);
   $config->save();
 
-  // Enable the blocks.
+  // Enable the blocks if disabled.
   $storage = \Drupal::entityTypeManager()->getStorage('block');
   $query = $storage->getQuery()->condition('id', array_keys($new_array), 'IN');
   $blocks = $storage->loadMultiple($query->execute());
