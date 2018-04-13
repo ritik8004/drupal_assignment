@@ -35,7 +35,7 @@
     }
 
     &:hover::before {
-      color: transparent;
+      color: $sharethis_icon_hover;
     }
 
     @include if-rtl {
