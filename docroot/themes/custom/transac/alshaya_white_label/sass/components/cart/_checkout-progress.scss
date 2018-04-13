@@ -124,7 +124,7 @@
       width: 32%;
 
       @include breakpoint($only-mobile) {
-        width: 33%;
+        width: 35%;
         padding-#{$left}: 0.5rem;
 
         &::before {
