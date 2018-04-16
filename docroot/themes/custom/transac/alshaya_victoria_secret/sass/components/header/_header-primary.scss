@@ -208,7 +208,7 @@ header {
       @include breakpoint($upto-desktop) {
         border-bottom: 2px solid $header_mobile_border;
         position: fixed;
-        z-index: 5;
+        z-index: 6;
       }
     }
   }

@@ -178,8 +178,8 @@ $total_discount_total_td_2nd_child_bg: $white-five;
 $modal_bg: $white-five;
 $modal_subtext: $white-five;
 $modal_subtext_bg: $black;
-$modal_close_bg: $marine-blue;
-$modal_close_icon: $white-two;
+$modal_close_bg: $black;
+$modal_close_icon: $vanilla;
 
 // VAT text
 $vat: $light-greyish;
@@ -222,20 +222,20 @@ $default_msg_border: $gainsboro;
 $default_msg_icon: $nero;
 $default_msg_info_bg: $message-info;
 $default_msg_info_text: $black;
-$content_error_msg_bg: $cherry;
-$content_error_msg_txt: $cherry;
-$content_error_input_border: $cherry;
+$content_error_msg_bg: $red-error;
+$content_error_msg_txt: $red-error;
+$content_error_input_border: $red-error;
 $content_error_msg_text: $white-five;
 $formitem_error: $black;
 $formitem_error_label: $red-error;
 
 // Out of stock button.
-$oos_btn_bg: $cherry;
+$oos_btn_bg: $red-error;
 $oos_btn_text: $white-five;
 $oos_wrapper: $whisper-dark;
 $oos_wrapper_text: $black;
-$oos_quantity_text: $grey-ash;
-$oos_pdp_text: $white;
+$oos_quantity_text: $vanilla;
+$oos_pdp_text: $vanilla;
 
 // Tooltip
 $tooltip_bg: $alice-blue;
@@ -298,7 +298,8 @@ $gallery_zoombtn_bg: $white;
 $gallery_zoombtn_disabled: $light-ash;
 
 // Sharethis
-$sharethis_icon: $marine-blue-two;
+$sharethis_icon: $gainsboro;
+$sharethis_icon_hover: $black;
 
 // Autocomplete
 $autocomplete_bg: $white-five;
@@ -460,7 +461,7 @@ $plp_facet_clear_border: $nero;
 $plp_facet_clear_border_mobile: $nero;
 $plp_facet_clear_text: $nero;
 $plp_facet_filter_count: $nero;
-$plp_facet_input_border: $white;
+$plp_facet_input_border: $gainsboro;
 $plp_facet_label: $black;
 $plp_facet_dropdown_bg: $vanilla;
 $plp_facet_label_border_mobile: $gainsboro;
@@ -468,7 +469,7 @@ $plp_facet_summary_filter_icon: $nero;
 $plp_facet_active_bg: $white-five;
 $plp_facet_filter_label: $black;
 $plp_facet_title: $grey-ash;
-$plp_facet_border: $white;
+$plp_facet_border: $gainsboro;
 $plp_item_label: $black;
 $plp_promotion_description: $ash-triplet;
 
@@ -478,14 +479,15 @@ $plp_filterbar_filter_text: $white-five;
 $plp_filterbar_filter_clear: $white-five;
 $plp_filterbar_clearall_border: $nero;
 $plp_filterbar_clearall_text: $nero;
+$plp_search_count: $nero;
 
 // PLP Product tile.
 $plp_tile_product_text: $black;
 $plp_tile_product_title: $black;
 $plp_tile_product_title_hover: $nero;
 $plp_tile_product_price: $black;
-$plp_tile_product_special_price: $scarlet;
-$plp_tile_product_discount_label: $scarlet;
+$plp_tile_product_special_price: $red-error;
+$plp_tile_product_discount_label: $red-error;
 $plp_tile_product_hover_border: $greyish;
 $plp_tile_product_hover_shadow: $whisper-light;
 $plp_tile_product_hover_bg: $white-five;
@@ -501,9 +503,10 @@ $plp_pager_link_border: $marine-blue;
 // Product detail page.
 $pdp_product_title: $grey-ash;
 $pdp_product_price: $black;
-$pdp_product_price: $scarlet;
-$pdp_product_special_price: $special-price;
-$pdp_product_discount_text: $scarlet;
+$pdp_product_special_price: $red-error;
+$pdp_product_special_price_text: $red-error;
+$pdp_product_discount_price: $red-error;
+$pdp_product_discount_text: $red-error;
 $pdp_product_itemcode: $grey-ash;
 $pdp_title_section_border: $white;
 $pdp_mobile_wrapper: $white-five;
@@ -513,21 +516,21 @@ $pdp_modal_full_prodlink: $marine-blue;
 $pdp_modal_full_prodlink_border: $white;
 
 // Product Add to cart form.
-$pdp_sizeguide_link: $windows-blue;
-$pdp_form_item_label: $windows-blue;
+$pdp_sizeguide_link: $brilliant-rose;
+$pdp_form_item_label: $brilliant-rose;
 $pdp_size_selected_text: $black;
-$pdp_size_option_bg: $marine-blue;
-$pdp_size_option_border: $marine-blue;
-$pdp_size_option_text: $marine-blue;
+$pdp_size_option_bg: $black;
+$pdp_size_option_border: $black;
+$pdp_size_option_text: $black;
 $pdp_size_option_selected_text: $white-five;
-$pdp_size_option_selected_bg: $marine-blue;
+$pdp_size_option_selected_bg: $black;
 $pdp_size_option_text_hover : $white-five;
-$pdp_size_option_bg_hover: $marine-blue;
-$pdp_sidebar_label: $marine-blue;
-$pdp_sidebar_link: $windows-blue;
+$pdp_size_option_bg_hover: $black;
+$pdp_sidebar_label: $black;
+$pdp_sidebar_link: $brilliant-rose;
 $pdp_desc_wrapper: $white-five;
-$pdp_desc_wrapper_border: $marine-blue;
-$pdp_desc_wrapper_close_bg: $marine-blue;
+$pdp_desc_wrapper_border: $black;
+$pdp_desc_wrapper_close_bg: $black;
 $pdp_desc_wrapper_close_icon: $white-two;
 $pdp_accordion_title: $black;
 $pdp_cc_btn_text: $white-five;
@@ -544,13 +547,13 @@ $pdp_cc_top_stores_list: $grey-ash;
 $pdp_cc_top_stores_list_border: $black;
 $pdp_cc_top_stores_list_name: $black;
 $pdp_cc_top_stores_list_time: $black;
-$pdp_cc_other_stores: $marine-blue;
+$pdp_cc_other_stores: $black;
 $pdp_cc_other_stores_mobile: $cerulean-two;
 $pdp_all_stores_modal_bg: $white-five;
-$pdp_all_stores_modal_border: $marine-blue;
+$pdp_all_stores_modal_border: $black;
 $pdp_all_stores_name: $breadcrumb-active;
 $pdp_all_stores_modal_close_icon: $white-two;
-$pdp_all_stores_modal_close_bg: $marine-blue;
+$pdp_all_stores_modal_close_bg: $black;
 $pdp_all_stores_modal_text: $grey-ash;
 $pdp_all_stores_modal_strong: $black;
 $pdp_all_stores_modal_link: $windows-blue;
@@ -565,7 +568,7 @@ $fake_apply_btn: $white-four;
 $fake_apply_btn_border: $white-five;
 $clear_btn_border: $whisper-dark;
 $clear_btn_text: $whisper-dark;
-$not_buyable_msg: $marine-blue;
+$not_buyable_msg: $black;
 $not_buyable_help: $cerulean-two;
 
 // Department page
