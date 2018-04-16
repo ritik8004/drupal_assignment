@@ -23,6 +23,12 @@
         });
       });
 
+      $('.address--deliver-to-this-address .use-ajax').on('click', function () {
+        $(document).ajaxComplete(function () {
+          localStorage.setItem('address_save_scroll', 'Y');
+        });
+      });
+
       var guestDiv = $('#edit-guest-delivery-home');
       var memberDiv = $('#edit-member-delivery-home');
       var scrollHeight;
