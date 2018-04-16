@@ -29,7 +29,7 @@ function alshaya_product_update_8015() {
   alshaya_config_install_configs($facet_summary_config, 'alshaya_product', 'optional');
 
   $facet_block_config = [
-    'block.block.category_2',
+    'block.block.categoryplp',
   ];
   alshaya_config_install_configs($facet_block_config, 'alshaya_transac', 'optional');
 

@@ -8,7 +8,7 @@ dependencies:
     - system
   theme:
     - alshaya_white_label
-id: category_2
+id: category_plp
 theme: alshaya_white_label
 region: sidebar_first
 weight: -36
