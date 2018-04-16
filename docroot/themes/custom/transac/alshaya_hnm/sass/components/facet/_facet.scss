@@ -69,3 +69,23 @@
     font-weight: normal;
   }
 }
+
+ul[data-drupal-facet-id=category] {
+  > .facet-item--expanded {
+    > label {
+      &::before {
+        top: 0.125rem;
+      }
+    }
+  }
+}
+
+.block-facet-blockcategory {
+  .c-accordion__title {
+    @include icon(dropdown-collapse, after);
+  }
+
+  .ui-state-active {
+    @include icon(dropdown-expand, after);
+  }
+}
