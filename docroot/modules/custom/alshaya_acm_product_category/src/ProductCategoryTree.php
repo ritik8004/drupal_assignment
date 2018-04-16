@@ -343,8 +343,15 @@ class ProductCategoryTree {
     // If it's a department page.
     elseif ($route_name == 'entity.node.canonical') {
       $node = $this->routeMatch->getParameter('node');
-      if ($node->bundle() == 'department_page') {
+
+      if ($node->bundle() == 'acq_product') {
+        $terms = $node->get('field_category')->getValue();
+      }
+      elseif ($node->bundle() == 'department_page') {
         $terms = $node->get('field_product_category')->getValue();
+      }
+
+      if (count($terms) > 0) {
         $term = $this->termStorage->load($terms[0]['target_id']);
       }
     }

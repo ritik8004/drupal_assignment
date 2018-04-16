@@ -1,7 +1,12 @@
 .c-facet__label {
   font-size: 0.75rem;
-  text-transform: uppercase;
-  font-family: $vs-bold;
+  text-transform: none;
+  font-family: $vs-regular;
+
+  @include breakpoint($desktop) {
+    text-transform: uppercase;
+    font-family: $vs-bold;
+  }
 }
 
 .c-facet__blocks {
@@ -30,6 +35,22 @@
     &::after {
       border: 1px solid $plp_facet_label_border_mobile;
       border-#{$left}: 0;
+    }
+  }
+}
+
+.c-facet {
+  a {
+    text-transform: none;
+  }
+
+  & > a {
+    margin-bottom: 0.625rem;
+
+    &::after {
+      content: "";
+      display: block;
+      height: 0.625rem;
     }
   }
 }

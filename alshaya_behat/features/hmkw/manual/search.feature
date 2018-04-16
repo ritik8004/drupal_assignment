@@ -8,10 +8,12 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I fill in "edit-keywords" with "bikini bottoms"
+    And I follow "English"
+    And I wait for the page to load
+    When I fill in "edit-keywords" with "tops"
     And I press "Search"
     And I wait for the page to load
-    Then I should see Search results page for "bikini bottoms"
+    Then I should see Search results page for "tops"
 
   @eng @prod
   Scenario: As a Guest user
@@ -19,6 +21,8 @@ Feature: Search feature
     Given I am on homepage
     And I wait for the page to load
     When I close the popup
+    And I wait for the page to load
+    And I follow "English"
     And I wait for the page to load
     When I fill in "edit-keywords" with "sweatshirt"
     And I press "Search"
@@ -37,9 +41,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I follow "العربية"
-    And I wait for the page to load
-    When I fill in "edit-keywords" with "سروال سباحة "
+    When I fill in "edit-keywords" with "من قطعتين "
     And I press "Search"
     And I wait for the page to load
     When I click the label for "#block-content > div > div > ul > li > a"
@@ -57,36 +59,30 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    And I follow "عربية"
-    When I wait for the page to load
-    When I fill in "edit-keywords" with "بلوزة بدون أ"
+    When I fill in "edit-keywords" with "من قطعتين"
     And I press "Search"
     And I wait for the page to load
-    Then I should see Search results page in Arabic for "بلوزة بدون أ"
+    Then I should see Search results page in Arabic for "من قطعتين"
 
   @eng @prod
   Scenario: As an authenticated user
   I should be able to search products
     Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    When I fill in "edit-keywords" with "bikini bottoms"
+    When I fill in "edit-keywords" with "tops"
     And I press "Search"
     And I wait for the page to load
-    Then I should see Search results page for "bikini bottoms"
+    Then I should see Search results page for "tops"
 
   @arabic @prod
   Scenario: As an authenticated user
   I should be able to search products
     Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
-    And I follow "عربية"
-    When I wait for the page to load
-    When I fill in "edit-keywords" with "بلوزة بدون أ"
-#    When I fill in "edit-keywords" with "الرضع"
+    When I fill in "edit-keywords" with "من قطعتين"
     And I press "Search"
     And I wait for the page to load
-    Then I should see Search results page for "بلوزة بدون أ"
-#    Then I should see Search results page in Arabic for "الرضع"
+    Then I should see Search results page for "من قطعتين"
 
   @eng @prod
   Scenario: As an user
@@ -95,6 +91,8 @@ Feature: Search feature
     Given I am on homepage
     And I wait for the page to load
     When I close the popup
+    And I wait for the page to load
+    And I follow "English"
     And I wait for the page to load
     When I fill in "edit-keywords" with "randomtext"
     And I press "Search"
@@ -109,12 +107,10 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    And I follow "عربية"
-    When I wait for the page to load
-    When I fill in "edit-keywords" with "نص عشوائي"
+    When I fill in "edit-keywords" with "من قطعتين"
     And I press "Search"
     And I wait for the page to load
-    Then I should see "لا يوجد نتائج لبحثك"
+    Then I should see "من قطعتين"
 
   @eng
   Scenario: As a Guest
@@ -123,6 +119,8 @@ Feature: Search feature
     Given I am on homepage
     And I wait for the page to load
     When I close the popup
+    And I wait for the page to load
+    And I follow "English"
     And I wait for the page to load
     When I fill in "edit-keywords" with "sweatshirt"
     And I press "Search"
@@ -166,9 +164,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    And I follow "عربية"
-    When I wait for the page to load
-    When I fill in "edit-keywords" with "بلوزة بدون أ"
+    When I fill in "edit-keywords" with "من قطعتين"
     And I press "Search"
     And I wait for the page to load
     When I select a product in stock
@@ -210,6 +206,8 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
+    And I follow "English"
+    And I wait for the page to load
     When I fill in "edit-keywords" with "sweatshirt"
     And I press "Search"
     And I wait for the page to load
@@ -234,16 +232,18 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
+    And I follow "English"
+    And I wait for the page to load
 #    When I fill in "edit-keywords" with "بكحتة"
-    When I fill in "edit-keywords" with "بلوزة بدون أ"
+    When I fill in "edit-keywords" with "من قطعتين"
     And I press "Search"
 #    Then I should see Search results page in Arabic for "بكحتة"
     And I wait for the page to load
-    Then I should see Search results page in Arabic for "بلوزة بدون أ"
-    When I fill in "edit-keywords" with "bikini bottoms"
+    Then I should see Search results page in Arabic for "من قطعتين"
+    When I fill in "edit-keywords" with "tops"
     And I press "Search"
     When I wait for the page to load
-    Then I should see Search results page for "bikini bottoms"
+    Then I should see Search results page for "tops"
 
   @eng @prod
   Scenario: As a Guest
@@ -292,9 +292,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    And I follow "عربية"
-    When I wait for the page to load
-    When I fill in "edit-keywords" with "بلوزة بدون أ"
+    When I fill in "edit-keywords" with "من قطعتين"
     And I press "Search"
     And I wait for the page to load
     When I select a product in stock

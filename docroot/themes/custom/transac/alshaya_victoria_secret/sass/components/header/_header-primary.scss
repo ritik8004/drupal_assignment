@@ -16,6 +16,28 @@ header {
   .block-cart-mini-block {
     .cart-link {
       background-size: contain;
+      width: 2.125rem;
+      height: 2.125rem;
+
+      @include breakpoint($desktop) {
+        top: -0.4rem;
+      }
+    }
+
+    .quantity {
+      width: 1.5rem;
+      height: 1.5rem;
+      font-family: $vs-bold;
+      font-size: 0.75rem;
+
+      @include breakpoint($upto-desktop) {
+        bottom: 0.125rem;
+        #{$left}: 39%;
+      }
+
+      @include breakpoint($upto-tablet) {
+        #{$left}: 28%;
+      }
     }
   }
 
@@ -208,7 +230,7 @@ header {
       @include breakpoint($upto-desktop) {
         border-bottom: 2px solid $header_mobile_border;
         position: fixed;
-        z-index: 5;
+        z-index: 6;
       }
     }
   }
