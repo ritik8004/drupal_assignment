@@ -138,6 +138,10 @@ ul[data-drupal-facet-id=category] {
       .facet-item {
         margin-#{$left}: 1rem;
 
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0.625rem;
+        }
+
         html[lang=ar] & {
           margin-left: 0;
         }
