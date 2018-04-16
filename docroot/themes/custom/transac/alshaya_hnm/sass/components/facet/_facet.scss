@@ -68,6 +68,14 @@
     font-family: $hnm-bold;
     font-weight: normal;
   }
+
+  .facet-item--expanded {
+    ul {
+      html[lang=ar] & {
+        padding-top: 0;
+      }
+    }
+  }
 }
 
 ul[data-drupal-facet-id=category] {
