@@ -139,14 +139,10 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
    */
   public function summary() {
     if (count($this->configuration['categories']) > 1) {
-      $terms = $this->configuration['categories'];
-      $last = array_pop($terms);
-      $terms = implode(', ', $terms);
-      return $this->t('The taxonomy term is @bundles or @last', ['@bundles' => $terms, '@last' => $last]);
+      return $this->t('There are multiple categories selected');
     }
     $category = reset($this->configuration['categories']);
-
-    return $this->t('The taxonomy term is @bundle', ['@bundle' => $category]);
+    return $this->t('The category term is @bundle', ['@bundle' => $category]);
   }
 
   /**
