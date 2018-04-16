@@ -38,3 +38,19 @@
     }
   }
 }
+
+.c-facet {
+  a {
+    text-transform: none;
+  }
+
+  & > a {
+    margin-bottom: 0.625rem;
+
+    &::after {
+      content: "";
+      display: block;
+      height: 0.625rem;
+    }
+  }
+}
