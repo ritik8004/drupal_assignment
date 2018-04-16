@@ -211,7 +211,7 @@ $tertiary_counter_border: $greyish;
 $page_title: $black;
 $block_title: $black;
 $title: $black;
-$sub_title: $black;
+$sub_title: $nero;
 $label_black: $black;
 $user_sidebar_block_title: $nero;
 
@@ -238,16 +238,16 @@ $oos_quantity_text: $vanilla;
 $oos_pdp_text: $vanilla;
 
 // Tooltip
-$tooltip_bg: $alice-blue;
+$tooltip_bg: $white-smoke-light;
 // $tooltip_bg + opacity 0.
 $tooltip_bg_opacity_0: rgba(240, 246, 252, 0);
-$tooltip_text: $windows-blue;
-$tooltip_border: $cerulean-two;
+$tooltip_text: $nero;
+$tooltip_border: $nero;
 // Second color for arrow of tooltip.
-$tooltip_border_2: $alice-blue;
+$tooltip_border_2: $white-smoke-light;
 // $tooltip_border + opacity 0.
 $tooltip_border_opacity_0: rgba(0, 132, 204, 0);
-$tooltip_icon: $cerulean-two;
+$tooltip_icon: $nero;
 
 // Back to top
 $btt_bg: $whisper-light;
@@ -277,6 +277,7 @@ $lang_switch_close_icon: $white-two;
 // Accordion
 $accordion_border: $gainsboro;
 $accordion_title: $black;
+$accordion_sub_title: $ash-triplet;
 $accordion_title_disabled: $gainsboro;
 
 // Cloudzoom
@@ -392,15 +393,15 @@ $mm_p_a_text: $white-five;
 //  Mini Cart.
 $primary_minicart_text: $black;
 $primary_minicart_quantity_text: $white-five;
-$primary_minicart_quantity_bg: $pumpkin-orange;
+$primary_minicart_quantity_bg: $brilliant-rose;
 
 // Notification popup.
 $minicart_notification_bg: $white-five;
-$minicart_notification_border: $pumpkin-orange;
+$minicart_notification_border: $brilliant-rose;
 $minicart_notification_shadow: $white-two;
 $minicart_notification_name: $grey-ash;
-$minicart_notification_text: $pumpkin-orange;
-$minicart_notification_btn_bg: $pumpkin-orange;
+$minicart_notification_text: $brilliant-rose;
+$minicart_notification_btn_bg: $brilliant-rose;
 $minicart_notification_btn_text: $white-five;
 $minicart_notification_product_title: $grey-ash;
 
@@ -501,19 +502,21 @@ $plp_pager_link: $marine-blue;
 $plp_pager_link_border: $marine-blue;
 
 // Product detail page.
-$pdp_product_title: $grey-ash;
+$pdp_product_title: $nero;
 $pdp_product_price: $black;
 $pdp_product_special_price: $red-error;
 $pdp_product_special_price_text: $red-error;
 $pdp_product_discount_price: $red-error;
 $pdp_product_discount_text: $red-error;
-$pdp_product_itemcode: $grey-ash;
-$pdp_title_section_border: $white;
+$pdp_product_itemcode: $ash-triplet;
+$pdp_filter_selector_label: $nero;
+$pdp_title_section_border: $gainsboro;
 $pdp_mobile_wrapper: $white-five;
+$pdp_sell_title: $nero;
 
 // Product modal
 $pdp_modal_full_prodlink: $marine-blue;
-$pdp_modal_full_prodlink_border: $white;
+$pdp_modal_full_prodlink_border: $gainsboro;
 
 // Product Add to cart form.
 $pdp_sizeguide_link: $brilliant-rose;
@@ -534,11 +537,11 @@ $pdp_desc_wrapper_close_bg: $black;
 $pdp_desc_wrapper_close_icon: $white-two;
 $pdp_accordion_title: $black;
 $pdp_cc_btn_text: $white-five;
-$pdp_cc_btn_bg: $cerulean-two;
+$pdp_cc_btn_bg: $nero;
 $pdp_cc_highlight: $windows-blue;
 $pdp_cc_storefinder_label: $grey-ash;
 $pdp_cc_storefinder_input: $greyish;
-$pdp_cc_storefinder_link: $cerulean-two;
+$pdp_cc_storefinder_link: $brilliant-rose;
 $pdp_cc_changelocation: $white-two;
 $pdp_cc_changelocation_icon: $black;
 $pac_item: $grey-ash;
@@ -548,7 +551,7 @@ $pdp_cc_top_stores_list_border: $black;
 $pdp_cc_top_stores_list_name: $black;
 $pdp_cc_top_stores_list_time: $black;
 $pdp_cc_other_stores: $black;
-$pdp_cc_other_stores_mobile: $cerulean-two;
+$pdp_cc_other_stores_mobile: $brilliant-rose;
 $pdp_all_stores_modal_bg: $white-five;
 $pdp_all_stores_modal_border: $black;
 $pdp_all_stores_name: $breadcrumb-active;
@@ -560,14 +563,14 @@ $pdp_all_stores_modal_link: $windows-blue;
 $pdp_all_stores_modal_list_border: $black;
 $pdp_all_stores_modal_list_name: $blue-three;
 $pdp_all_stores_modal_list_time: $black;
-$pdp_skus_border: $whisper-dark;
+$pdp_skus_border: $gainsboro;
 $pdp_field_label: $peacock-blue;
 $pdp_basic_wrapper_border: $white-five;
 $pdp_error_text: $white-four;
 $fake_apply_btn: $white-four;
 $fake_apply_btn_border: $white-five;
-$clear_btn_border: $whisper-dark;
-$clear_btn_text: $whisper-dark;
+$clear_btn_border: $gainsboro;
+$clear_btn_text: $gainsboro;
 $not_buyable_msg: $black;
 $not_buyable_help: $cerulean-two;
 
@@ -833,15 +836,16 @@ $address_pp_delete_closebtn: $white;
 $address_pp_delete_closebtn_icon: $black;
 
 // Basket
-$basket_page_title: $marine-blue-two;
+$basket_page_title: $black;
 $basket_sku_promo_link: $scarlet;
 $basket_oos_tr_bg: $white-four;
-$basket_oos_inline_txt: $cherry;
-$basket_oos_inline_qty_border: $cherry;
+$basket_oos_inline_txt: $red-error;
+$basket_oos_inline_qty_border: $red-error;
 $basket_img_border: $white;
 $basket_img_bg: $white-five;
 $basket_th_4th_child: $white-two;
-$basket_continue_shopping_btn_border: $marine-blue-two;
+$basket_continue_shopping_btn_border: $black;
+$basket_content_link_color: $nero;
 // Pri text is product title, price, etc.
 $basket_td_pri_txt: $black;
 // Sec text is Size, color, item code attributes.
@@ -850,7 +854,7 @@ $basket_item_bundle: $cerulean-two;
 $basket_tooltip_not_available: $white;
 $basket_promotion_input_border: $white;
 $basket_remove_link: $cerulean-two;
-$basket_horizontal_recommendation_slider_dots: $marine-blue-two;
+$basket_horizontal_recommendation_slider_dots: $black;
 // Basket top promotions.
 $basket_header_promo_bg: $rosy-pink;
 $basket_header_promo_txt: $white-four;

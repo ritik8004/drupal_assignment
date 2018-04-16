@@ -23,4 +23,55 @@
     font-family: $vs-regular;
     font-size: 0.875rem;
   }
+
+  .form-type-select {
+    label {
+      color: $pdp_filter_selector_label;
+    }
+  }
+
+  .gallery-wrapper {
+    @include breakpoint($desktop) {
+      margin-bottom: 5rem;
+    }
+  }
+}
+
+.field--name-field-skus {
+  .sku-base-form {
+    button[type="submit"] {
+      text-transform: uppercase;
+    }
+  }
+}
+
+.acq-content-product {
+  .content__title_wrapper {
+    h1,
+    h1 span {
+      font-size: 1rem;
+    }
+
+    .content--item-code {
+      font-size: 0.625rem;
+    }
+  }
+
+  .gallery-wrapper {
+    @include breakpoint($tablet) {
+      margin-bottom: 1.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-bottom: 5rem;
+    }
+  }
+}
+
+.store-finder-form-wrapper {
+  .search-store {
+    button {
+      text-transform: none;
+    }
+  }
 }
