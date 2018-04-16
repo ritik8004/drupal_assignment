@@ -1,0 +1,26 @@
+.short-description-wrapper,
+.delivery-options-wrapper {
+  .field__label {
+    font-size: 0.875rem;
+    font-family: $vs-bold;
+    font-weight: normal;
+  }
+}
+
+.short-description-wrapper {
+  .field__content,
+  .show-less-link,
+  .read-more-description-link-mobile,
+  .read-more-description-link {
+    font-size: 0.75rem;
+    font-weight: normal;
+  }
+}
+
+.nodetype--acq_product,
+.path--cart {
+  span.out-of-stock {
+    font-family: $vs-regular;
+    font-size: 0.875rem;
+  }
+}
