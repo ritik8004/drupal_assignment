@@ -269,6 +269,7 @@ $maintenance_link: $cerulean-two;
 // Accordion
 $accordion_border: $white;
 $accordion_title: $grey-ash;
+$accordion_sub_title: $grey-ash;
 $accordion_title_disabled: $white;
 
 // Cloudzoom
@@ -295,6 +296,7 @@ $hp_slider_arrows_dark: $mothercare-black;
 
 // Sharethis
 $sharethis_icon: $marine-blue-two;
+$sharethis_icon_hover: transparent;
 
 // Autocomplete
 $autocomplete_bg: $white-five;
@@ -464,6 +466,7 @@ $plp_filterbar_filter_text: $white-five;
 $plp_filterbar_filter_clear: $white-five;
 $plp_filterbar_clearall_border: $cerulean-two;
 $plp_filterbar_clearall_text: $cerulean-two;
+$plp_search_count: $black;
 
 // PLP Product tile.
 $plp_tile_product_text: $black;
@@ -494,6 +497,7 @@ $pdp_product_discount_text: $scarlet;
 $pdp_product_itemcode: $grey-ash;
 $pdp_title_section_border: $white;
 $pdp_mobile_wrapper: $white-five;
+$pdp_sell_title: $grey-ash;
 
 // Product modal
 $pdp_modal_full_prodlink: $marine-blue;
@@ -840,6 +844,7 @@ $basket_img_border: $white;
 $basket_img_bg: $white-five;
 $basket_th_4th_child: $white-two;
 $basket_continue_shopping_btn_border: $marine-blue-two;
+$basket_content_link_color: $cerulean-two;
 // Pri text is product title, price, etc.
 $basket_td_pri_txt: $black;
 // Sec text is Size, color, item code attributes.
@@ -922,6 +927,8 @@ $mm_l2_link_mobile_menu: false;
 $header_c_menu_search_icon: false;
 $store_finder_get_direction_label_color: false;
 $plp_sort_by_label: false;
+$pdp_sidebar_desc_overlay_section_border: false;
+$pdp_delivery_options_subtitle: false;
 
 // From: HMKW
 $default_msg_status_text: false;
@@ -986,3 +993,6 @@ $store_finder_glossary_btn_border: false;
 // Messages and Errors.
 $default_msg_border: false;
 $default_msg_icon: false;
+
+// PDP.
+$pdp_filter_selector_label: false;

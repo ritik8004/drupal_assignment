@@ -8,14 +8,23 @@
   .region__content {
     .filter--mobile .form-type-select {
       text-transform: none;
+      color: $plp_facet_filter_label;
     }
   }
 
   .c-products__item {
     font-size: 0.875rem;
 
-    &:hover .field--name-name a {
-      text-decoration: none;
+    &:hover {
+      .field--name-name a {
+        text-decoration: none;
+      }
+
+      &::after {
+        @include breakpoint($tablet) {
+          box-shadow: none;
+        }
+      }
     }
   }
 
@@ -27,6 +36,7 @@
     .filter--mobile {
       .c-facet__blocks__wrapper--mobile .c-facet__label {
         border-#{$right}: 0;
+        color: $plp_facet_filter_label;
 
         &::after {
           border: 1px solid $plp_facet_label_border_mobile;
@@ -86,5 +96,18 @@
         }
       }
     }
+  }
+
+  .term-description-mobile-only {
+    display: none;
+  }
+}
+
+.price--discount {
+  font-size: 0.75rem;
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0.625rem;
+    margin-bottom: 0.625rem;
   }
 }
