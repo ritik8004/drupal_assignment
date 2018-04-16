@@ -266,7 +266,8 @@ function alshaya_super_category_product_category_parent_alter(&$parent_id, &$con
  */
 function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context) {
   if ($context['module'] == 'node' && $context['bundle'] == 'acq_product') {
-    if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    $super_category = \Drupal::config('alshaya_super_category.settings');
+    if (!$super_category->get('status') || !$super_category->get('product_path_alter')) {
       return;
     }
     // Get the node object.

@@ -19,6 +19,11 @@ function alshaya_super_category_drush_command() {
     ],
   ];
 
+  $commands['alshaya-super-category-product-alias'] = [
+    'description' => 'Enable or disable product alias alster based on super category status.',
+    'aliases' => ['ascs-pa'],
+  ];
+
   return $commands;
 }
 
@@ -32,7 +37,15 @@ function drush_alshaya_super_category_switch() {
   $status = $config->get('status') ? FALSE : TRUE;
   $action = $status ? 'enable' : 'disable';
 
-  if (!drush_confirm(dt('Are you sure you want to !action super category feature?', ['!action' => $action]))) {
+  $msg = dt('Are you sure you want to !action super category feature?', ['!action' => $action]);
+
+  // Check path alter status to display message and trigger bulk alias generate.
+  $path_alter = $config->get('product_path_alter', TRUE);
+  if ($path_alter && 'enable' == $action) {
+    $msg = dt('Are you sure you want to !action super category feature and do bulk update on product aliases', ['!action' => $action]);
+  }
+
+  if (!drush_confirm($msg)) {
     return drush_user_abort();
   }
 
@@ -59,9 +72,27 @@ function drush_alshaya_super_category_switch() {
   $block->setStatus($status);
   $block->save();
   drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));
-  _alshaya_super_category_product_alias_bulk_process();
+  if ($path_alter) {
+    _alshaya_super_category_product_alias_bulk_process();
+  }
   // Clear cache to rebuild menu blocks.
   drupal_flush_all_caches();
+}
+
+/**
+ * Implements drush command alshaya-super-category-product-alias (ascs-pa).
+ */
+function drush_alshaya_super_category_product_alias() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_super_category.settings');
+  $status = $config->get('product_path_alter') ? FALSE : TRUE;
+  $action = $status ? 'true' : 'false';
+
+  if (!drush_confirm(dt('Are you sure you want to set product alias alter to !value, for super category feature?', ['!value' => $action]))) {
+    return drush_user_abort();
+  }
+
+  $config->set('product_path_alter', $status)->save();
+  _alshaya_super_category_product_alias_bulk_process();
 }
 
 /**
