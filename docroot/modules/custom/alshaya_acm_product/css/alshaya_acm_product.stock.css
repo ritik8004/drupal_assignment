@@ -1,0 +1,8 @@
+
+.add-to-cart-form-placeholder + .ajax-progress {
+  display: none;
+}
+
+.add-to-cart-form-placeholder-teaser + .ajax-progress {
+  display: none;
+}

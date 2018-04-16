@@ -10,6 +10,9 @@ stock_check:
   version: 1.x
   js:
     js/alshaya_acm_stock_check.js: {}
+  css:
+    theme:
+      css/alshaya_acm_product.stock.css: {}
   dependencies:
     - core/jquery
     - core/drupal.ajax
