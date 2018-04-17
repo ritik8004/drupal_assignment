@@ -202,6 +202,12 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       if ((jQuery('ul[data-drupal-facet-id="category"]').children('li.facet-item--expanded')).length > 0) {
         jQuery('[data-drupal-facet-id="category"]').children('li:not(.facet-item--expanded)').hide();
       }
+
+      // Hide other category filter options when one of the L1 items is
+      // selected for the PLP category facet.
+      if ((jQuery('ul[data-drupal-facet-id="plp_category_facet"]').children('li.facet-item--expanded')).length > 0) {
+        jQuery('[data-drupal-facet-id="plp_category_facet"]').children('li:not(.facet-item--expanded)').hide();
+      }
     }
   };
 
