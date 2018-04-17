@@ -283,7 +283,15 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       $element[$field_code]['#type'] = 'hidden';
       $element[$field_code]['#required'] = FALSE;
       $element[$field_code]['#validated'] = TRUE;
-      $element[$field_code]['#default_value'] = '&#8203;';
+      $element[$field_code]['#value'] = '&#8203;';
+    }
+
+    $fields_disabled = $address_book_manager->getMagentoDisabledFields();
+    foreach ($fields_disabled as $field_code => $magento_field_code) {
+      $element[$field_code]['#type'] = 'hidden';
+      $element[$field_code]['#required'] = FALSE;
+      $element[$field_code]['#validated'] = TRUE;
+      $element[$field_code]['#value'] = '&#8203;';
     }
   }
   else {
