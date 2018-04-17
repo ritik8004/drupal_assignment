@@ -1018,7 +1018,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    * This function takes care of DM V1/V2.
    *
    * @param array $magento_address
-   *   Magento address to extra info from.
+   *   Magento address to extract info from.
    * @param string $langcode
    *   Language code in which we want the value to be returned.
    *
@@ -1032,6 +1032,36 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       $mappings = $this->getMagentoFieldMappings();
       $field = $mappings['administrative_area'];
     }
+
+    $value = isset($magento_address['extension'], $magento_address['extension'][$field])
+      ? $magento_address['extension'][$field]
+      : '';
+
+    return $this->areasTermsHelper->getShippingAreaLabel($value, $langcode);
+  }
+
+  /**
+   * Get City/Governate label from Magento Address.
+   *
+   * This function takes care of DM V1/V2.
+   *
+   * @param array $address
+   *   Drupal address to extract info from.
+   * @param array $magento_address
+   *   Magento address to extract info from.
+   * @param string $langcode
+   *   Language code in which we want the value to be returned.
+   *
+   * @return string|null
+   *   String value for the area or NULL.
+   */
+  public function getAddressShippingAreaParentValue(array $address, array $magento_address, $langcode = 'en') {
+    if ($this->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+      return $address['locality'];
+    }
+
+    $mappings = $this->getMagentoFieldMappings();
+    $field = $mappings['area_parent'];
 
     $value = isset($magento_address['extension'], $magento_address['extension'][$field])
       ? $magento_address['extension'][$field]
