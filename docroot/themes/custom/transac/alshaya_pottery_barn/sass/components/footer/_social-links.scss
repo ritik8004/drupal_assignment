@@ -28,4 +28,10 @@
       background: url("../imgs/icons/ic-pinterestselect.svg") no-repeat center;
     }
   }
+
+  .c-social-links--google-plus {
+    &:hover::before {
+      background: url("../imgs/icons/ic-googleselect.svg") no-repeat center;
+    }
+  }
 }
