@@ -2,6 +2,7 @@
   .label {
     position: absolute;
     max-width: 5rem;
+    z-index: 5;
 
     &.top {
       &-left {
