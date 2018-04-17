@@ -699,12 +699,13 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   $parameters = $menu_tree->getCurrentRouteMenuTreeParameters('social-links');
   $menus = $menu_tree->load('social-links', $parameters);
 
-  foreach ($menus as $menu) {
-    $title = $menu->link->getTitle();
-    $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+  if (isset($menus)) {
+    foreach ($menus as $menu) {
+      $title = $menu->link->getTitle();
+      $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+    }
+    $variables['links'] = $links;
   }
-
-  $variables['links'] = $links;
 }
 
 /**

@@ -400,7 +400,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       datalayer_add([
         'deliveryArea' => $address_book_manager->getAddressShippingAreaValue($magento_address),
-        'deliveryCity' => $address['locality'],
+        'deliveryCity' => $address_book_manager->getAddressShippingAreaParentValue($address, $magento_address),
       ]);
     }
   }
