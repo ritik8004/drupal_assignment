@@ -132,9 +132,12 @@
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val('');
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val('');
 
-          // Select value.
+          // Select value and trigger change to ensure js dropdown shows proper value.
+          $('[data-drupal-selector="edit-member-delivery-home-address-form-form-area-parent"]').val('');
+          $('[data-drupal-selector="edit-member-delivery-home-address-form-form-area-parent"]').trigger('change');
+
+          // Select value and trigger change to ensure js dropdown shows proper value.
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val('');
-          // Trigger chance of select to ensure js dropdown shows proper value.
           $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').trigger('change');
 
           // Show the form.
@@ -276,10 +279,15 @@
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val(data.address_line2);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]').val(data.mobile);
 
-    // Select value.
+    // Select value and trigger change to ensure js dropdown shows proper value.
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').val(data.administrative_area);
-    // Trigger chance of select to ensure js dropdown shows proper value.
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-administrative-area"]').trigger('change');
+
+    // Select value and trigger change to ensure js dropdown shows proper value.
+    if (typeof data.area_parent !== 'undefined') {
+      $('[data-drupal-selector="edit-member-delivery-home-address-form-form-area-parent"]').val(data.area_parent);
+      $('[data-drupal-selector="edit-member-delivery-home-address-form-form-area-parent"]').trigger('change');
+    }
 
     // Show the form.
     $('#address-book-form-wrapper').slideDown();
