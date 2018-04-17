@@ -123,6 +123,7 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    $this->configuration['use_super_category'] = $form_state->getValue('use_super_category');
     $this->configuration['categories'] = $form_state->getValue('categories');
     parent::submitConfigurationForm($form, $form_state);
   }
