@@ -223,6 +223,11 @@ class AlshayaAcmConfigCheck {
       }
       if (!$this->moduleHandler->moduleExists('alshaya_' . $expected_country_code)) {
         $this->moduleInstaller->install(['alshaya_' . $expected_country_code]);
+
+        // Update config with installed brand and module names.
+        $this->configFactory->getEditable('alshaya.installed_country')
+          ->set('module', 'alshaya_' . $expected_country_code)
+          ->save();
       }
     }
 
