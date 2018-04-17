@@ -130,18 +130,32 @@ function alshaya_get_additional_settings($site, $env) {
     ],
     'pb' => [
       'ae' => [
+        //'default' => [
+        //  'store_id' => [
+        //    'en' => 1,
+        //    'ar' => 2,
+        //  ],
+        //  'magento_lang_prefix' => [
+        //    'en' => 'uae_en',
+        //    'ar' => 'uae_ar',
+        //  ],
+        //],
+        // PBAE is connected to MCKW QA for now.
         'default' => [
           'store_id' => [
-            'en' => 1,
-            'ar' => 2,
+            'ar' => 3,
           ],
           'magento_lang_prefix' => [
-            'en' => 'uae_en',
-            'ar' => 'uae_ar',
+            'en' => 'kwt_en',
+            'ar' => 'kwt_ar',
           ],
         ],
-        // PBAE local is connect to MCKW QA.
-        'local' => [
+      ],
+    ],
+    'vs' => [
+      'ae' => [
+        // VSAE is connected to MCKW QA for now.
+        'default' => [
           'store_id' => [
             'ar' => 3,
           ],
