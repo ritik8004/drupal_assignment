@@ -52,6 +52,12 @@ function alshaya_get_additional_settings($site, $env) {
             'ar' => 10,
           ],
         ],
+        '01live' => [
+          'store_id' => [
+            'en' => 7,
+            'ar' => 13,
+          ],
+        ],
       ],
       'ae' => [
         'default' => [
@@ -68,6 +74,12 @@ function alshaya_get_additional_settings($site, $env) {
           'store_id' => [
             'en' => 16,
             'ar' => 13,
+          ],
+        ],
+        '01live' => [
+          'store_id' => [
+            'en' => 19,
+            'ar' => 22,
           ],
         ],
       ],
@@ -108,6 +120,12 @@ function alshaya_get_additional_settings($site, $env) {
             'ar' => 5,
           ],
         ],
+        '01live' => [
+          'store_id' => [
+            'en' => 8,
+            'ar' => 14,
+          ],
+        ],
       ],
       'ae' => [
         'default' => [
@@ -124,6 +142,12 @@ function alshaya_get_additional_settings($site, $env) {
           'store_id' => [
             'en' => 14,
             'ar' => 11,
+          ],
+        ],
+        '01live' => [
+          'store_id' => [
+            'en' => 17,
+            'ar' => 23,
           ],
         ],
       ],

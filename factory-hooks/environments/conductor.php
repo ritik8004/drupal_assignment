@@ -68,6 +68,11 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => 'c47e33167b1d4031a18acbf8c9fb9aa8',
       'hmac_secret' => 'QK1RFjIn1Subjk7m-1A2hw',
     ],
+    'mcae_prod' => [
+      'url' => 'https://alshaya-mcae-prod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'f755609b5006476e85acf942f54da3a0',
+      'hmac_secret' => 'GOvi4TncWFS-kqU9H6p4vg',
+    ],
     // H&M KW.
     'hm_dev' => [
       'url' => 'https://alshaya-hm-dev.eu-west-1.prod.acm.acquia.io/',
@@ -105,6 +110,11 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => 'c0c16680158b4caa91a0756e39f98d2f',
       'hmac_secret' => 'HmPdJJdF_UAqNlWYiWsmdw',
     ],
+    'hmsa_prod' => [
+      'url' => 'https://alshaya-hmsa-prod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '046a4e9c6ef8467da0e29ca8f3b1793f',
+      'hmac_secret' => 'hGeJbwVRoDK-H336mE3BFg',
+    ],
     // H&M AE.
     'hmae_test' => [
       'url' => 'https://alshaya-hmae-test.eu-west-1.prod.acm.acquia.io/',
@@ -115,6 +125,11 @@ function alshaya_get_conductor_host_data() {
       'url' => 'https://alshaya-hmae-uat.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '01d9fafe1f5f4fc6b3d53e3badc61915',
       'hmac_secret' => 'iO1OtAiXLrxbDzLVEEJSrg',
+    ],
+    'hmae_prod' => [
+      'url' => 'https://alshaya-hmae-prod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '7640a5cfcaef4efc815230419a0c5b06',
+      'hmac_secret' => 'wOSnsIw9eRfSpkjOSaXTAw',
     ],
     // Pottery Barn AE.
     'pbae_test' => [

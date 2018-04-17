@@ -88,10 +88,6 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'mc_prod',
         'conductor' => 'mcsa_prod',
       ],
-      '01update' => [
-        'magento' => 'mc_prod',
-        'conductor' => 'mcsa_prod',
-      ],
       'default' => [
         'magento' => 'mc_qa',
         'conductor' => 'mcsa_dev',
@@ -106,6 +102,10 @@ function alshaya_get_env_keys($site, $env) {
       '01uat' => [
         'magento' => 'mc_uat',
         'conductor' => 'mcae_uat',
+      ],
+      '01live' => [
+        'magento' => 'mc_prod',
+        'conductor' => 'mcae_prod',
       ],
     ],
     // H&M Kuwait.
@@ -152,6 +152,10 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'hm_uat',
         'conductor' => 'hmsa_uat',
       ],
+      '01live' => [
+        'magento' => 'hm_prod',
+        'conductor' => 'hmsa_prod'
+      ],
     ],
     // H&M AE.
     'hmae' => [
@@ -162,6 +166,10 @@ function alshaya_get_env_keys($site, $env) {
       '01uat' => [
         'magento' => 'hm_uat',
         'conductor' => 'hmae_uat',
+      ],
+      '01live' => [
+        'magento' => 'hm_prod',
+        'conductor' => 'hmae_prod'
       ],
     ],
     // Pottery Barn AE.
