@@ -78,7 +78,8 @@
   }
 }
 
-ul[data-drupal-facet-id=category] {
+ul[data-drupal-facet-id=category],
+ul[data-drupal-facet-id=plp_category_facet] {
   > .facet-item--expanded {
     > label {
       &::before {
@@ -88,7 +89,8 @@ ul[data-drupal-facet-id=category] {
   }
 }
 
-.block-facet-blockcategory {
+.block-facet-blockcategory,
+.block-facet-blockplp-category-facet {
   .c-accordion__title {
     @include icon(dropdown-collapse, after);
   }
