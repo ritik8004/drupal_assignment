@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_addressbook\EventSubscriber;
 
+use CommerceGuys\Addressing\AddressFormat\AdministrativeAreaType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\address\Event\AddressFormatEvent;
 use Drupal\address\Event\AddressEvents;
@@ -27,6 +28,9 @@ class AddressFormatSubscriber implements EventSubscriberInterface {
    */
   public function onGetDefinition(AddressFormatEvent $event) {
     $definition = $event->getDefinition();
+
+    $definition['administrative_area_type'] = AdministrativeAreaType::AREA;
+    $definition['subdivision_depth'] = 0;
 
     $definition['format'] = "%givenName %familyName\n%organization\n%administrativeArea\n%locality\n%addressLine1\n%dependentLocality\n%addressLine2";
 

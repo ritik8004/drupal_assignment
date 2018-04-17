@@ -541,6 +541,7 @@
 
       #edit-field-address-0-address-mobile-number-mobile-error,
       #edit-mobile-number-mobile-error {
+        border-top: 2px solid $primary_input_inline_error;
         position: absolute;
         top: 2rem;
         #{$left}: 0;
@@ -550,6 +551,8 @@
         position: absolute;
         #{$left}: 0;
         line-height: 1;
+        border-top: 2px solid $primary_input_inline_error;
+        width: 100%;
       }
     }
 

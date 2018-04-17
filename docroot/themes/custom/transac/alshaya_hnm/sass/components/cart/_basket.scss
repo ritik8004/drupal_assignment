@@ -115,6 +115,10 @@
 }
 
 .promo-continue-shopping-wrapper {
+  label {
+    color: $primary_input_label_hnm;
+  }
+
   .coupon-code-wrapper,
   #details-privilege-card-wrapper {
     .form-item-privilege-card-number,
