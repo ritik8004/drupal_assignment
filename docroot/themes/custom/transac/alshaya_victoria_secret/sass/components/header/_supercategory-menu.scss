@@ -68,3 +68,11 @@
     }
   }
 }
+
+.header--fixed {
+  .c-header__wrapper--inner {
+    @include breakpoint($desktop) {
+      display: none;
+    }
+  }
+}
