@@ -26,6 +26,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
   use StringTranslationTrait;
 
+  const INVISIBLE_CHARACTER = '&#8203;';
+
   /**
    * Entity Repository object.
    *
@@ -574,7 +576,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $magento_address = [];
 
     // City is core attribute in Magento and hard to remove validation.
-    $magento_address['city'] = '&#8203;';
+    $magento_address['city'] = self::INVISIBLE_CHARACTER;
 
     if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       $mapping = $this->getMagentoFieldMappings();
@@ -618,12 +620,19 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       // This is exceptional case for Kuwait where we do not show the
       // governate but Magento needs it.
       if (isset($mapping, $mapping['area_parent'])
-        && (empty($address['area_parent']) || $address['area_parent'] === '&#8203;')) {
+        && (empty($address['area_parent']) || $address['area_parent'] === self::INVISIBLE_CHARACTER)) {
         $parent = $this->getLocationParentTerm($address['administrative_area']);
         if ($parent) {
           $magento_address['extension'][$mapping['area_parent']] = $parent->get('field_location_id')->getString();
         }
       }
+
+      // @TODO: CORE-2332 - Fix this properly, possibly in Magento.
+      // City is Magento core field but we don't use it at all.
+      // But this is required by Cybersource so we need proper value.
+      // For now, we copy value of Area to City.
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+      $magento_address['city'] = $this->getAddressShippingAreaValue($magento_address);
     }
     else {
       $magento_address['firstname'] = (string) $address['given_name'];
@@ -649,19 +658,19 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   public function getAddressStructureWithEmptyValues() {
     $magento_address = [];
 
-    $magento_address['firstname'] = '&#8203;';
-    $magento_address['lastname'] = '&#8203;';
-    $magento_address['telephone'] = '&#8203;';
-    $magento_address['street'] = '&#8203;';
-    $magento_address['extension']['address_apartment_segment'] = '&#8203;';
-    $magento_address['extension']['address_area_segment'] = '&#8203;';
-    $magento_address['extension']['address_building_segment'] = '&#8203;';
-    $magento_address['extension']['address_block_segment'] = '&#8203;';
-    $magento_address['extension']['area'] = '&#8203;';
-    $magento_address['extension']['governate'] = '&#8203;';
-    $magento_address['extension']['address_city_segment'] = '&#8203;';
+    $magento_address['firstname'] = self::INVISIBLE_CHARACTER;
+    $magento_address['lastname'] = self::INVISIBLE_CHARACTER;
+    $magento_address['telephone'] = self::INVISIBLE_CHARACTER;
+    $magento_address['street'] = self::INVISIBLE_CHARACTER;
+    $magento_address['extension']['address_apartment_segment'] = self::INVISIBLE_CHARACTER;
+    $magento_address['extension']['address_area_segment'] = self::INVISIBLE_CHARACTER;
+    $magento_address['extension']['address_building_segment'] = self::INVISIBLE_CHARACTER;
+    $magento_address['extension']['address_block_segment'] = self::INVISIBLE_CHARACTER;
+    $magento_address['extension']['area'] = self::INVISIBLE_CHARACTER;
+    $magento_address['extension']['governate'] = self::INVISIBLE_CHARACTER;
+    $magento_address['extension']['address_city_segment'] = self::INVISIBLE_CHARACTER;
     $magento_address['country_id'] = _alshaya_custom_get_site_level_country_code();
-    $magento_address['city'] = '&#8203;';
+    $magento_address['city'] = self::INVISIBLE_CHARACTER;
 
     return $magento_address;
   }
@@ -916,15 +925,46 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   }
 
   /**
-   * Function to get field mapping betting magento form and address fields.
+   * Function to get field mapping between magento form and address fields.
    *
    * @return array
    *   Mapping Address field <-> Magento form field.
    */
   public function getMagentoFieldMappings() {
-    // Fields that can be used in area_parent: governate, city, emirates.
-    $mapping_key = 'mapping_' . strtolower(_alshaya_custom_get_site_level_country_code());
-    $mapping = $this->configFactory->get('alshaya_addressbook.settings')->get($mapping_key);
+    static $mapping;
+
+    if (empty($mapping)) {
+      // Fields that can be used in area_parent: governate, city, emirates.
+      $mapping_key = 'mapping_' . strtolower(_alshaya_custom_get_site_level_country_code());
+      $mapping = $this->configFactory->get('alshaya_addressbook.settings')->get($mapping_key);
+      $magento_form = $this->getMagentoFormFields();
+      $mapping = array_filter($mapping, function ($form_item) use ($magento_form) {
+        return isset($magento_form[$form_item]);
+      });
+    }
+
+    return $mapping;
+  }
+
+  /**
+   * Function to get fields disabled in magento form and available in address.
+   *
+   * @return array
+   *   Mapped but disabled Address field <-> Magento form field.
+   */
+  public function getMagentoDisabledFields() {
+    static $mapping;
+
+    if (empty($mapping)) {
+      // Fields that can be used in area_parent: governate, city, emirates.
+      $mapping_key = 'mapping_' . strtolower(_alshaya_custom_get_site_level_country_code());
+      $mapping = $this->configFactory->get('alshaya_addressbook.settings')->get($mapping_key);
+      $magento_form = $this->getMagentoFormFields();
+      $mapping = array_filter($mapping, function ($form_item) use ($magento_form) {
+        return !isset($magento_form[$form_item]);
+      });
+    }
+
     return $mapping;
   }
 
