@@ -299,3 +299,14 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
     }
   }
 }
+
+/**
+ * Hide super category visibility settings, if feature is not enabled.
+ *
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_super_category_form_block_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    unset($form['visibility']['alshaya_super_category']);
+  }
+}
