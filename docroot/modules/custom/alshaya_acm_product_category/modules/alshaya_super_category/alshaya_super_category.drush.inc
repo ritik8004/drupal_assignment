@@ -20,7 +20,7 @@ function alshaya_super_category_drush_command() {
   ];
 
   $commands['alshaya-super-category-product-alias'] = [
-    'description' => 'Enable or disable product alias alster based on super category status.',
+    'description' => 'Enable or disable product alias alter based on super category status.',
     'aliases' => ['ascs-pa'],
   ];
 
@@ -71,12 +71,12 @@ function drush_alshaya_super_category_switch() {
   $block = reset($blocks);
   $block->setStatus($status);
   $block->save();
-  drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));
   if ($path_alter) {
     _alshaya_super_category_product_alias_bulk_process();
   }
   // Clear cache to rebuild menu blocks.
   drupal_flush_all_caches();
+  drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));
 }
 
 /**
