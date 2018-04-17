@@ -1,6 +1,6 @@
 <div>
     <!-- ______________________ MENU SECONDARY _______________________ -->
-
+  {% block header_precontent %}
     <div class="header--wrapper">
         {% if page.menu_secondary %}
             <div class="c-menu-secondary">
@@ -53,6 +53,7 @@
             </div>
         {% endif %}
     </div>
+    {% endblock %}
 
     <!-- ______________________ BREADCRUMB _______________________ -->
 

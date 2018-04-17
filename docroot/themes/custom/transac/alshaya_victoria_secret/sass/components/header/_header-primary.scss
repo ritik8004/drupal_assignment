@@ -67,10 +67,29 @@ header {
   }
 
   .region__header {
-    .block-views-exposed-filter-blocksearch-page input[type="text"] {
-      @include breakpoint($desktop) {
-        width: 12.5rem;
-        padding-#{$right}: 2.5rem;
+    .block-views-exposed-filter-blocksearch-page {
+      .form-item-keywords {
+        display: block;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        max-width: none;
+        background-position-x: 95% !important;
+
+        html[lang="ar"] & {
+          background-position-x: 5% !important;
+        }
+
+        @include breakpoint($desktop) {
+          background-position-x: 84% !important;
+          width: 12.5rem;
+          padding-#{$right}: 3.5rem;
+
+          html[lang="ar"] & {
+            background-position-x: 16% !important;
+          }
+        }
       }
     }
   }
