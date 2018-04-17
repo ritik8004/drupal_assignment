@@ -529,6 +529,10 @@ function alshaya_acm_customer_register_validate_final(array &$form, FormStateInt
       drupal_set_message($e->getMessage(), 'error');
     }
     else {
+      \Drupal::logger('alshaya_acm_customer')->error('Error occurred during customer registration @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
       // Only email address is something where our validations dont match.
       $form_state->setErrorByName('mail', t('The email address %mail is not valid.', ['%mail' => $email]));
     }
