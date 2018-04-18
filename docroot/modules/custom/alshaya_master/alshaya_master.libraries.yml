@@ -19,11 +19,3 @@ mobile_number:
   dependencies:
     - core/jquery.once
     - core/drupal
-
-focus_form_error:
-  version: 1.x
-  js:
-    js/alshaya_form_error.js: {}
-  dependencies:
-    - core/jquery.once
-    - core/drupal
