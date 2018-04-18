@@ -7,6 +7,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
@@ -265,7 +266,8 @@ function alshaya_super_category_product_category_parent_alter(&$parent_id, &$con
  */
 function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context) {
   if ($context['module'] == 'node' && $context['bundle'] == 'acq_product') {
-    if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    $super_category = \Drupal::config('alshaya_super_category.settings');
+    if (!$super_category->get('status') || !$super_category->get('product_path_alter')) {
       return;
     }
     // Get the node object.
@@ -291,6 +293,20 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
     $alias = \Drupal::service('path.alias_manager')
       ->getAliasByPath('/taxonomy/term/' . $parent->id(), $context['language']);
 
-    $pattern->setPattern($alias . '/' . $pattern->getPattern());
+    // Check if the pattern is already set with the alias.
+    if (strpos($pattern->getPattern(), $alias . '/') === FALSE) {
+      $pattern->setPattern($alias . '/' . $pattern->getPattern());
+    }
+  }
+}
+
+/**
+ * Hide super category visibility settings, if feature is not enabled.
+ *
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_super_category_form_block_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    unset($form['visibility']['alshaya_super_category']);
   }
 }

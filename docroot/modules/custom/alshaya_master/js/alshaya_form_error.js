@@ -66,15 +66,19 @@ Drupal.behaviors.alshayaFormError = {
 * Helper function to set focus to first error element in the form.
 */
 Drupal.setFocusToFirstError =  function(errorElement) {
-  var focusElement = errorElement.closest('form').find('input.error:first');
-  var stickyHeaderHeight = $('branding__menu').height();
+  try {
+    var focusElement = errorElement.closest('form').find('input.error:first');
+    var stickyHeaderHeight = $('branding__menu').height();
 
-  focusElement.focus();
+    focusElement.focus();
 
-  // Scroll to the first element with error.
-  $('html, body').animate({
-    scrollTop: focusElement.offset().top + parseInt(stickyHeaderHeight)
-  });
+    // Scroll to the first element with error.
+    $('html, body').animate({
+      scrollTop: focusElement.offset().top + parseInt(stickyHeaderHeight)
+    });
+  }
+  catch (e) {
+  }
 };
 
 })(jQuery, Drupal);

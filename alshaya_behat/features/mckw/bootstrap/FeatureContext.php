@@ -95,6 +95,27 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   {
     $this->visitPath($this->config_url);
     $this->iWaitForThePageToLoad();
+      $page = $this->getSession()->getPage();
+      $all_sizes = $page->findById('configurable_ajax');
+      if ($all_sizes !== NULL) {
+          $all_sizes = $all_sizes->findAll('css', 'div > div.select2Option > ul li');
+          $total_sizes = count($all_sizes);
+          foreach ($all_sizes as $size) {
+              $check_li = $size->find('css', 'li')->getText();
+              $size_status = count($size->find('css', '.disabled'));
+              if ($size_status || !$check_li) {
+                  $total_sizes--;
+                  if (!$total_sizes) {
+                      throw new \Exception('All sizes are disabled');
+                  }
+                  continue;
+              }
+              $size->find('css', 'a')->click();
+              break;
+          }
+      } else {
+          echo 'No size attribute is available for this product';
+      }
   }
 
   /**
@@ -601,26 +622,39 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     }
   }
 
-  /**
-   * @Given /^I accept terms and conditions$/
-   */
+    /**
+     * @When I accept terms and conditions
+     */
   public function iAcceptTermsAndConditions()
   {
       $checkbox = $this->getSession()
           ->getPage()
           ->find('css', '#edit-checkout-terms > div > div > label.option');
+
       if ($checkbox !== null) {
           $checkbox->click();
       }
   }
 
+    /**
+     * @When /^I select address for Arabic$/
+     */
+    public function iSelectAddressForArabic()
+    {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('توصيل إلى هذا العنوان')->isVisible();
+        if($address_button == true){
+            $page->findLink('توصيل إلى هذا العنوان')->click();
+        }
+        else{
+            echo 'Address is auto selected';
+        }
+    }
 
   /**
    * @Given /^I scroll to x "([^"]*)" y "([^"]*)" coordinates of page$/
    */
-  public function iScrollToXYCoordinatesOfPage($arg1, $arg2)
-  {
-
+  public function iScrollToXYCoordinatesOfPage($arg1, $arg2) {
     try {
       $this->getSession()
         ->executeScript("(function(){window.scrollTo($arg1, $arg2);})();");
@@ -1271,7 +1305,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function iConfirmDeletionOfAddress()
   {
       $page = $this->getSession()->getPage();
-      $button = $page->find('css', 'body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button.button.button--primary.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget');
+      $button = $page->find('css','.ui-dialog-buttonset.form-actions > button.button--primary.js-form-submit.form-submit.ui-button.ui-corner-all.ui-widget');
       if ($button !== null) {
           $button->click();
       } else {
@@ -1751,5 +1785,55 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         $this->iSelectFirstAutocomplete('shuwaikh', $css_location);
     }
 
+    /**
+     * @Given /^I select a product in stock$/
+     */
+    public function iSelectAProductInStock() {
+        $page = $this->getSession()->getPage();
+        $all_products = $page->findById('block-content');
+        if ($all_products !== NULL) {
+            $all_products = $all_products->findAll('css', '.c-products__item');
+            $total_products = count($all_products);
+        } else {
+            throw new Exception('Search passed, but search results were empty');
+        }
+        foreach ($all_products as $item) {
+            $item_status = count($item->find('css', 'div.out-of-stock span'));
+            if ($item_status) {
+                $total_products--;
+                if (!$total_products) {
+                    throw new Exception('All products are out of stock');
+                }
+                continue;
+            }
+            $this->product = $item->find('css', 'h2.field--name-name')->getText();
+            $page->clickLink($this->product);
+            break;
+        }
+    }
+
+
+    /**
+     * @When /^I select a store on arabic$/
+     */
+    public function iSelectAStoreOnArabic()
+     {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('تغيير المحل');
+        if ($address_button !== null && $address_button->isVisible()) {
+            $this->iSelectAnElementHavingClass('.cc-action');
+        } else {
+            $this->iSelectFirstAutocomplete('Shuwaikh', 'edit-store-location');
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iWaitSeconds('5');
+            $select_store = $page->findLink('اختر هذا المحل');
+            if ($select_store->isVisible()) {
+                $select_store->click();
+            }
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iSelectAnElementHavingClass('.cc-action');
+            $this->iWaitForThePageToLoad();
+        }
+      }
 
 }
