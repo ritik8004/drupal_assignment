@@ -1270,7 +1270,6 @@
         margin: 0;
         padding: 0.4375rem 1rem;
         border: 1px solid $checkout_cc_near_me_border;
-        text-transform: uppercase;
 
         @include breakpoint($desktop) {
           html[lang=ar] & {
