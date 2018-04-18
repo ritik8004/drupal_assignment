@@ -1,9 +1,5 @@
 // Layout of the detail page
 .nodetype--acq_product {
-  .region__content {
-    margin: 1.25rem 0;
-  }
-
   #backtotop {
     &.backtotop-nofooter {
       @include breakpoint($only-mobile) {

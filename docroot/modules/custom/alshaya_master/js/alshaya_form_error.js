@@ -23,7 +23,8 @@ Drupal.alshayaFormError = Drupal.alshayaFormError || {};
 
       // Scroll to the first element with error.
       if (scroll) {
-        var stickyHeaderHeight = $('.branding__menu').height();
+        // Sticky header is not on cart/checkout/* pages.
+        var stickyHeaderHeight = ($('.branding__menu').length > 0) ? $('.branding__menu').height() : 0;
         $('html, body').animate({
             scrollTop: focusElement.offset().top - parseInt(stickyHeaderHeight)
         });

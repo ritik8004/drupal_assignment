@@ -27,6 +27,7 @@ $_gray_two: #b3b3b3;
 // Global elements.
 $content_link_color: $PB_confirmation_blue;
 $primary_input_focus_border: $PB_confirmation_blue;
+$secondary_link: $PB_deep_red;
 
 // Titles.
 $page_title: $_black_two;
@@ -48,6 +49,9 @@ $primary_input_inline_error: $PB_warning_red;
 // Buttons.
 $primary_btn_bg: $_black_two;
 $primary_btn_text: $white-two;
+$pending_btn_bg: $tomato;
+$returned_btn_bg: $PB_grey_one;
+$complete_btn_bg: $medium-green;
 
 // Dropdown.
 $primary_dropdown_bg: $PB_grey_four;
@@ -90,8 +94,21 @@ $primary_search_border: $white;
 // Header - welcome user.
 $header_my_account_h3_title: $_black_two;
 
+// Mini cart.
+$primary_minicart_quantity_bg: $PB_deep_red;
+$primary_minicart_quantity_text: $white-two;
+$minicart_notification_border: $_black_two;
+$minicart_notification_bg: $white_two;
+$minicart_notification_border: $_black_two;
+$minicart_notification_shadow: transparent;
+$minicart_notification_text: $_black_two;
+$minicart_notification_btn_bg: $_black_two;
+$minicart_notification_btn_text: $white_two;
+$minicart_notification_label: $PB_grey_one;
+
 // User - My account nav & dashboard.
 $my_account_nav_active: $PB_deep_red;
+$user_recent_order_icon: $_black_two;
 
 // Join the club block - user dashboard page.
 $joinclubblock_title: $PB_alshaya_priv;
@@ -125,6 +142,7 @@ $deliverybanner_title: $_black_two;
 $deliverybanner_subtitle: $PB_grey_one;
 $deliverybanner_border: $PB_black_one;
 $deliverybanner_shadow: rgba(236, 236, 236, 0.5);
+$deliverybanner_link: $_black_two;
 
 // Footer Primary.
 $footer_bg: $PB_grey_five;

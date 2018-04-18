@@ -281,13 +281,17 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
     // Get the category field of the node to generate path alias.
     $term = $node->get('field_category')->get(0)->entity;
     // Get the translations of the term based on the current lang code.
-    if ($context['language'] !== 'en' && $term->hasTranslation($context['language'])) {
+    if ($term instanceof TermInterface && $context['language'] !== 'en' && $term->hasTranslation($context['language'])) {
       $term = $term->getTranslation($context['language']);
     }
 
     // Get parent term object of given term.
     $parent = \Drupal::service('alshaya_acm_product_category.product_category_tree')
       ->getCategoryTermRootParent($term);
+
+    if (!$parent instanceof TermInterface) {
+      return;
+    }
 
     // Get term alias to append with node alias.
     $alias = \Drupal::service('path.alias_manager')
@@ -297,5 +301,16 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
     if (strpos($pattern->getPattern(), $alias . '/') === FALSE) {
       $pattern->setPattern($alias . '/' . $pattern->getPattern());
     }
+  }
+}
+
+/**
+ * Hide super category visibility settings, if feature is not enabled.
+ *
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_super_category_form_block_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    unset($form['visibility']['alshaya_super_category']);
   }
 }
