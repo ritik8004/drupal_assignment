@@ -9,6 +9,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_preprocess_html().
@@ -184,6 +185,15 @@ function alshaya_white_label_theme_suggestions_views_view_alter(array &$suggesti
   if ($variables['view']->current_display == "block_product_slider") {
     $suggestions[] = 'views_view__product_slider';
     $variables['row_limit'] = 3;
+  }
+
+  if ($variables['view']->current_display == "category_product_slider") {
+    $suggestions[] = 'views_view__category_product_slider';
+    $variables['row_limit'] = 5;
+
+    if (\Drupal::service('path.matcher')->isFrontPage()) {
+      $variables['row_limit'] = 6;
+    }
   }
 }
 
@@ -493,7 +503,12 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
 function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, array $variables) {
   // Check if the current node is front page.
   if (\Drupal::service('path.matcher')->isFrontPage()) {
-    $suggestions[] = 'node__advanced_page_front';
+    $node = $variables['elements']['#node'];
+    if ($node instanceof Node) {
+      if ($node->getType() == 'advanced_page') {
+        $suggestions[] = 'node__advanced_page_front';
+      }
+    }
   }
 }
 
@@ -837,22 +852,32 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             $data[] = $result->_object->getValue()->id();
           }
 
-          // Make carousel title link.
-          if (!empty($carousel_title)) {
-            $carousel_title = [
-              '#title' => $carousel_title,
-              '#type' => 'link',
-              '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
-            ];
-          }
-
           if (!empty($data)) {
+            // Make carousel title link.
+            if (!empty($carousel_title)) {
+              $carousel_title = [
+                '#title' => $carousel_title,
+                '#type' => 'link',
+                '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+              ];
+            }
+
+            $variables['content']['product_category_carousel'] = [];
             $variables['content'] = [
               '#theme' => 'products_horizontal_slider',
               '#data' => $data,
               '#views_display_id' => 'category_product_slider',
               '#views_name' => 'product_slider',
               '#section_title' => $carousel_title,
+            ];
+
+            $variables['content']['shop_now'] = [
+              '#title' => t('Shop Now'),
+              '#type' => 'link',
+              '#attributes' => [
+                'class' => ['category-carousel-view-all'],
+               ],
+              '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
             ];
           }
         }
