@@ -40,4 +40,19 @@ function alshaya_vs_transac_install() {
 
   // Save overridden configs.
   _alshaya_config_save_overridden_configs('alshaya_vs_transac');
+
+  // Enable super category feature and menu block with config factory.
+  // Placing config in "override" folder won't work here. As we have an event
+  // subscriber written for config save, which will always override the value
+  // from the config placed in override folder and that will not allow drush
+  // command, for super category feature, to execute properly.
+  $config = \Drupal::configFactory()->getEditable('alshaya_super_category.settings');
+  $config->set('status', TRUE);
+  $config->save(TRUE);
+
+  $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => 'supercategorymenu']);
+  $block = reset($blocks);
+  $block->setStatus(TRUE);
+  $block->save();
+
 }
