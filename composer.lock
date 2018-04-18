@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b375f20722bae133060978b11092168",
+    "content-hash": "fd09db7278dc1a25b67f34d9252f6eb3",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -2990,10 +2990,14 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/clientside_validation",
-                "reference": "18b8aca905b3288d469105689494a3a601f7ceb7"
+                "reference": "d65b355a086812d7d3c84945da2a5df01b7815cf"
             },
             "require": {
                 "drupal/core": "~8.0"
+            },
+            "require-dev": {
+                "drupal/clientside_validation_demo": "*",
+                "drupal/clientside_validation_jquery": "*"
             },
             "type": "drupal-module",
             "extra": {
@@ -3001,16 +3005,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc3+4-dev",
-                    "datestamp": "1504288744",
+                    "version": "8.x-1.0-rc3+17-dev",
+                    "datestamp": "1517296980",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
-                    "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3036,7 +3036,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/clientside_validation"
             },
-            "time": "2017-09-01T18:16:38+00:00"
+            "time": "2018-01-30T07:21:06+00:00"
         },
         {
             "name": "drupal/coder",
@@ -6231,7 +6231,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha5",
-                    "datestamp": "1508351344",
+                    "datestamp": "1508351413",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
