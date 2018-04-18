@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6fafb7c1bab2e41a4fefb768f7c9321",
+    "content-hash": "1b375f20722bae133060978b11092168",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -4808,7 +4808,7 @@
                 },
                 "patches_applied": {
                     "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
-                    "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-04/facets-views-ajax-2826449-8.x-alpha11-145.patch",
+                    "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-17/facets-views-ajax-2826449-8.x-alpha11-146.patch",
                     "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
                     "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch"
                 }

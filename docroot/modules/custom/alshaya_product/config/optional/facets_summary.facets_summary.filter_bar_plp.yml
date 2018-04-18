@@ -45,6 +45,12 @@ facets:
     separator: ', '
     show_count: true
     weight: 0
+  plp_category_facet:
+    checked: true
+    label: Category
+    separator: ', '
+    weight: 0
+    show_count: true
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
 processor_configs:
   reset_facets:
