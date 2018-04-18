@@ -12,3 +12,14 @@ button.edit-add-to-cart {
     }
   }
 }
+
+.button.status-pending,
+.button.status-delivered,
+.button.status-complete,
+.button.status-processing,
+.button.status-returned,
+.button-wide,
+.user-communication-preference .form-submit {
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+}
