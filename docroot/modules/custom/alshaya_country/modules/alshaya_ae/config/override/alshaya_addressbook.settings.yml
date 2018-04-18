@@ -1,0 +1,3 @@
+mapping:
+  locality: ''
+  area_parent: 'address_city_segment'
