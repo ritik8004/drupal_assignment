@@ -27,6 +27,7 @@ $_gray_two: #b3b3b3;
 // Global elements.
 $content_link_color: $PB_confirmation_blue;
 $primary_input_focus_border: $PB_confirmation_blue;
+$secondary_link: $PB_deep_red;
 
 // Titles.
 $page_title: $_black_two;
@@ -125,6 +126,7 @@ $deliverybanner_title: $_black_two;
 $deliverybanner_subtitle: $PB_grey_one;
 $deliverybanner_border: $PB_black_one;
 $deliverybanner_shadow: rgba(236, 236, 236, 0.5);
+$deliverybanner_link: $_black_two;
 
 // Footer Primary.
 $footer_bg: $PB_grey_five;

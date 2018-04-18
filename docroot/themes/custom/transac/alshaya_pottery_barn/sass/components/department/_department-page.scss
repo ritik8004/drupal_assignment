@@ -1,0 +1,17 @@
+.c-department {
+  .c-category-list__title {
+    text-transform: uppercase;
+
+    a {
+      color: $secondary_link;
+    }
+  }
+
+  .c-category-list__item {
+    text-transform: none;
+
+    a:hover {
+      color: $content_link_color;
+    }
+  }
+}
