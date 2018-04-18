@@ -258,11 +258,12 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       $element['area_parent']['#default_value'] = $area_parent;
 
       $empty_option = [
-        '' => t('Select @label', [
-          '@label' => $element['area_parent']['#title'],
+        '' => t('Select @title', [
+          '@title' => $element['area_parent']['#title'],
         ]),
       ];
 
+      $element['area_parent']['#empty_option'] = reset($empty_option);
       $element['area_parent']['#options'] = $empty_option + $area_terms_helper->getAllGovernates();
       $element['area_parent']['#attributes'] = [
         'class' => ['select2-select'],
@@ -309,7 +310,14 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     $area_options = $area_terms_helper->getAllAreasWithParent(0);
   }
 
-  $element['administrative_area']['#options'] = ['' => t('Select Area')] + $area_options;
+  $area_empty_option = [
+    '' => t('Select @title', [
+      '@title' => $element['administrative_area']['#title'],
+    ]),
+  ];
+
+  $element['administrative_area']['#empty_option'] = reset($area_empty_option);
+  $element['administrative_area']['#options'] = ['' => $area_empty_option] + $area_options;
 
   // Adding country.
   $country_list = \Drupal::service('address.country_repository')->getList();
