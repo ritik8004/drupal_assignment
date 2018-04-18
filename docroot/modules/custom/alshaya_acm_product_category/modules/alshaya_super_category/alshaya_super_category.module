@@ -8,7 +8,9 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\NodeInterface;
+use Drupal\search_api\IndexInterface;
 use Drupal\system\Entity\Menu;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
@@ -332,5 +334,35 @@ function alshaya_super_category_views_pre_view(ViewExecutable $view, $display_id
     $handler = $view->getHandler($display_id, 'filter', 'depth_level');
     $handler['value']['value'] = 2;
     $view->setHandler($display_id, 'filter', 'depth_level', $handler);
+  }
+}
+
+/**
+ * Implements hook_search_api_index_items_alter().
+ */
+function alshaya_super_category_search_api_index_items_alter(IndexInterface $index, array &$items) {
+  $super_category = \Drupal::config('alshaya_super_category.settings');
+  if (!$super_category->get('status')) {
+    return;
+  }
+
+  if (!in_array($index->id(), ['product', 'acquia_search_index'])) {
+    return;
+  }
+
+  // Index field_category_parent, with root term id for super category feature.
+  $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  foreach ($items as $item) {
+    $field = $item->getField('field_category_parent');
+    $values = $field->getValues();
+
+    if (!empty($values[0])) {
+      $tid = $values[0];
+      $term = Term::load($tid);
+      $parent = $product_category_tree->getCategoryTermRootParent($term);
+      if ($parent instanceof TermInterface) {
+        $field->setValues([$parent->id()]);
+      }
+    }
   }
 }
