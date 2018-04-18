@@ -242,7 +242,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $address_fields['selected_address']['#access'] = FALSE;
 
       $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
-      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['form.multistep-checkout .address-book-address', TRUE]));
     }
     else {
       // Clear the shipping method info now to ensure we set it properly again.

@@ -56,13 +56,6 @@ function alshaya_master_block_build_alter(array &$build, BlockPluginInterface $b
  * Implements hook_form_alter().
  */
 function alshaya_master_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Attach form error JS to all forms(except forms on admin pages & user edit
-  // form) to make sure the first error element is focused in case of error.
-  if (!\Drupal::service('router.admin_context')->isAdminRoute() ||
-    (\Drupal::routeMatch()->getRouteName() === 'entity.user.edit_form')) {
-    $form['#attached']['library'][] = 'alshaya_master/focus_form_error';
-  }
-
   if (!in_array($form_id, ['customer_cart_form'])) {
     $form['#disable_inline_form_errors_summary'] = TRUE;
   }
