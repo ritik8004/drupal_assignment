@@ -1,0 +1,92 @@
+header .block-cart-mini-block {
+  .quantity {
+    bottom: -0.6875rem;
+    #{$left}: 0.25rem;
+    width: 1.5625rem;
+    height: 1.5625rem;
+    font-size: 0.75rem;
+
+    @include breakpoint($only-tablet) {
+      bottom: -0.1875rem;
+      #{$left}: 0.1875rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      font-size: 10px;
+
+      html[lang=ar] & {
+        right: 9px;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      bottom: -0.625rem;
+      #{$left}: 2px;
+      width: 1.125rem;
+      height: 1.125rem;
+      font-size: 0.5625rem;
+    }
+  }
+
+  .cart-link-total {
+    @include breakpoint($desktop) {
+      margin-top: 0.625rem;
+    }
+
+    .price-amount {
+      font-weight: bold;
+    }
+  }
+
+  #cart_notification {
+    @include breakpoint($tablet) {
+      #{$right}: -0.625rem;
+      top: 3.5rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: 2.87rem;
+      #{$right}: -0.4375rem;
+
+      html[lang=ar] & {
+        top: 3.6rem;
+        left: -0.8rem;
+      }
+    }
+
+    &.has--notification::before {
+      @include breakpoint($only-mobile) {
+        #{$right}: 0.625rem;
+      }
+    }
+
+    .notification {
+      .col-1 {
+        color: $minicart_notification_label;
+
+        .qty {
+          font-weight: 600;
+        }
+      }
+
+      .col-2 {
+        font-weight: 600;
+
+        .name {
+          font-weight: 300;
+        }
+
+        a {
+          text-transform: uppercase;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  html[lang=ar] & {
+    .price-amount,
+    .quantity {
+      font-family: $body_font;
+    }
+  }
+}
