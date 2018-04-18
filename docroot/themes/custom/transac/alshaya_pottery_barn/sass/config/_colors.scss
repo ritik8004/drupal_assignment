@@ -49,6 +49,9 @@ $primary_input_inline_error: $PB_warning_red;
 // Buttons.
 $primary_btn_bg: $_black_two;
 $primary_btn_text: $white-two;
+$pending_btn_bg: $tomato;
+$returned_btn_bg: $PB_grey_one;
+$complete_btn_bg: $medium-green;
 
 // Dropdown.
 $primary_dropdown_bg: $PB_grey_four;
@@ -105,6 +108,7 @@ $minicart_notification_label: $PB_grey_one;
 
 // User - My account nav & dashboard.
 $my_account_nav_active: $PB_deep_red;
+$user_recent_order_icon: $_black_two;
 
 // Join the club block - user dashboard page.
 $joinclubblock_title: $PB_alshaya_priv;
