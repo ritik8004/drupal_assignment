@@ -9,8 +9,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
-use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -63,14 +61,6 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
  * Submit Ajax callback to reload the page.
  */
 function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form_state) {
-  // If any error.
-  if ($form_state->getErrors()) {
-    $response = new AjaxResponse();
-    $response->addCommand(new HtmlCommand('#address-book-form-wrapper', $form));
-    $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['#address-book-form-wrapper', TRUE]));
-    return $response;
-  }
-
   if (!$form_state->getErrors()) {
     $entity   = $form_state->getFormObject()->getEntity();
     $response = new AjaxResponse();

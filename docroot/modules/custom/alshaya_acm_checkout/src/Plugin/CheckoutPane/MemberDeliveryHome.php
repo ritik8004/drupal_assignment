@@ -373,7 +373,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     if ($form_state->getErrors() && empty($form_state->getTemporaryValue('cart_update_failed'))) {
       $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form['member_delivery_home']['address_form']));
       $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'show'));
-      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['form.multistep-checkout .address-book-address', TRUE]));
       return $response;
     }
 
