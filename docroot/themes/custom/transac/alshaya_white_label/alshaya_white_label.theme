@@ -809,4 +809,43 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       $variables['button_text']['#markup'] = $variables['elements']['field_button_link'][0]['#title'];
     }
   }
+  elseif ($variables['elements']['#paragraph']->getType() == 'product_carousel_category') {
+    /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = $variables['elements']['#paragraph'];
+    if ($paragraph) {
+      // If category value is filled.
+      if (!empty($category = $paragraph->get('field_category_carousel'))) {
+        // Fetch values from the paragraph.
+        $category_id = $category->getValue()[0]['target_id'];
+        $carousel_title = $paragraph->get('field_category_carousel_title')->getValue()[0]['value'];
+        $product_in_carousel = $paragraph->get('field_products_in_cat_carousel')->getValue()[0]['value'];
+
+        // Prepare argument for the views.
+        $arguments = [
+          'tid' => $category_id,
+        ];
+
+        // Get views result.
+        $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
+
+        // If there are results.
+        if (!empty($results)) {
+          // Slice number of results that we want for the carousel.
+          $results = array_slice($results, 0, $product_in_carousel);
+          $data = [];
+          foreach ($results as $result) {
+            $data[] = $result->_object->getValue()->id();
+          }
+
+          if (!empty($data)) {
+            $variables['product_category_carousel'] = [
+              '#theme' => 'products_horizontal_slider',
+              '#data' => $data,
+              '#section_title' => $carousel_title,
+            ];
+          }
+        }
+      }
+    }
+  }
 }
