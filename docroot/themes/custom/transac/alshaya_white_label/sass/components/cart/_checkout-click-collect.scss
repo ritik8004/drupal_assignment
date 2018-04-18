@@ -228,7 +228,7 @@
 
     #click-and-collect-list-view {
       @include breakpoint($tablet) {
-        margin-top: 0;
+        margin-top: 0.5rem;
       }
 
       span.empty {
@@ -1270,7 +1270,6 @@
         margin: 0;
         padding: 0.4375rem 1rem;
         border: 1px solid $checkout_cc_near_me_border;
-        text-transform: uppercase;
 
         @include breakpoint($desktop) {
           html[lang=ar] & {
@@ -1477,11 +1476,11 @@
         }
       }
 
-      .stores-list-view {
+      .stores-map-view {
         #{$right}: 0;
       }
 
-      .stores-map-view {
+      .stores-list-view {
         #{$right}: 11.25rem;
 
         @include breakpoint($only-tablet) {

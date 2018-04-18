@@ -935,12 +935,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
     if (empty($mapping)) {
       // Fields that can be used in area_parent: governate, city, emirates.
-      $mapping_key = 'mapping_' . strtolower(_alshaya_custom_get_site_level_country_code());
-      $mapping = $this->configFactory->get('alshaya_addressbook.settings')->get($mapping_key);
-      $magento_form = $this->getMagentoFormFields();
-      $mapping = array_filter($mapping, function ($form_item) use ($magento_form) {
-        return isset($magento_form[$form_item]);
-      });
+      $mapping = $this->configFactory->get('alshaya_addressbook.settings')->get('mapping');
+      $mapping = array_filter($mapping);
     }
 
     return $mapping;
@@ -953,19 +949,16 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Mapped but disabled Address field <-> Magento form field.
    */
   public function getMagentoDisabledFields() {
-    static $mapping;
+    static $disabled;
 
-    if (empty($mapping)) {
+    if (empty($disabled)) {
       // Fields that can be used in area_parent: governate, city, emirates.
-      $mapping_key = 'mapping_' . strtolower(_alshaya_custom_get_site_level_country_code());
-      $mapping = $this->configFactory->get('alshaya_addressbook.settings')->get($mapping_key);
-      $magento_form = $this->getMagentoFormFields();
-      $mapping = array_filter($mapping, function ($form_item) use ($magento_form) {
-        return !isset($magento_form[$form_item]);
-      });
+      $mapping = $this->configFactory->get('alshaya_addressbook.settings')->get('mapping');
+      $enabled = $this->getMagentoFieldMappings();
+      $disabled = array_diff($mapping, $enabled);
     }
 
-    return $mapping;
+    return $disabled;
   }
 
   /**
