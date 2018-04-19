@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.product_category_carousel
     - core.entity_view_mode.node.teaser
     - node.type.acq_product
   module:
@@ -259,6 +260,36 @@ display:
       max-age: -1
       contexts:
         - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
+  block_1:
+    display_plugin: block
+    id: block_1
+    display_title: 'Block - Product Category Carousel'
+    position: 2
+    display_options:
+      display_extenders: {  }
+      display_description: ''
+      title: 'Product Category Slider'
+      defaults:
+        title: false
+        style: false
+        row: false
+      rendering_language: '***LANGUAGE_language_interface***'
+      style:
+        type: default
+        options: {  }
+      row:
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: product_category_carousel
+    cache_metadata:
+      max-age: -1
+      contexts:
         - 'languages:language_interface'
         - url
         - 'user.node_grants:view'
