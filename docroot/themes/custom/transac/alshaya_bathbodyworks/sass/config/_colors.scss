@@ -29,7 +29,7 @@ $primary_text: $black;
 $primary_link: $warm-grey-one;
 $primary_link-hover: $peacock-blue;
 $primary_link-active: $peacock-blue;
-$primary_border: $warm-grey-two;
+$primary_border: $warm-grey-one; // Global border color
 $content_link_color: $peacock-blue;
 
 // Form elements.
@@ -38,10 +38,11 @@ $primary_form_selector: $black;
 $primary_form_link: $peacock-blue;
 $primary_input: $black;
 $primary_input_label: $warm-grey-one;
-$primary_input_border: $warm-grey-two;
+$primary_input_border: $warm-grey-one; // Global form input border
 $primary_input_disabled: $greyish;
 $primary_input_focus_border: $peacock-blue;
 $primary_input_inline_error: $red-error;
+$primary_btn_bg: $black;
 
 /* ------- 5. Components --------------- */
 // Language Switcher
@@ -190,3 +191,10 @@ $store_finder_search_results_hour_label: $black;
 
 // Titles.
 $page_title: $black;
+$title: $black;
+
+// User Form.
+$user_form_layout_divider_color: $warm-grey-one;
+$user_block_link: $peacock-blue;
+$user_sidebar_block_title: $peacock-blue;
+$accordion_border: $warm-grey-one;

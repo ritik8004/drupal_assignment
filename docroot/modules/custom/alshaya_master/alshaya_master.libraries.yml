@@ -33,3 +33,11 @@ jquery_minicolor_arabic:
   css:
     theme:
       css/jquery_minicolor_arabic.css: {scope: footer}
+
+cv_ife:
+  version: 1.x
+  js:
+    js/cv.jquery.ife.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
