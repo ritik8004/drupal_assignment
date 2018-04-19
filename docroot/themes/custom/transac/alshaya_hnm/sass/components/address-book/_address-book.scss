@@ -252,7 +252,7 @@
       #edit-field-address-0-address-mobile-number-mobile-error,
       #edit-mobile-number-mobile-error,
       label.error {
-        top: 2rem;
+        top: 2rem !important;
         // Show red border for mobile number error.
         border-top: 2px solid $primary_input_inline_error;
         padding-top: 0.4375rem;
@@ -261,7 +261,7 @@
         width: 100%;
 
         .checkout & {
-          top: 2.85rem;
+          top: 3rem !important;
         }
       }
 

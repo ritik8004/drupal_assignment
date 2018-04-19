@@ -1,6 +1,17 @@
 .c-department {
   margin-top: 1.75rem;
 
+  .c-content__region {
+    @include breakpoint($tablet) {
+      flex-direction: column-reverse;
+      display: flex;
+
+      .term-description-mobile-only.c-page-title__description {
+        display: block;
+      }
+    }
+  }
+
   .c-page-title {
     border-bottom: 1px solid $content_pagetitle_border;
     margin-bottom: 0.75rem;
