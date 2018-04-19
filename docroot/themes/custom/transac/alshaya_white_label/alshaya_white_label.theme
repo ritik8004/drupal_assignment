@@ -837,6 +837,15 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             $data[] = $result->_object->getValue()->id();
           }
 
+          // Make carousel title link.
+          if (!empty($carousel_title)) {
+            $carousel_title = [
+              '#title' => $carousel_title,
+              '#type' => 'link',
+              '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+            ];
+          }
+
           if (!empty($data)) {
             $variables['product_category_carousel'] = [
               '#theme' => 'products_horizontal_slider',
