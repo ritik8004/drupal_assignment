@@ -10,14 +10,39 @@
     font-weight: 600;
   }
 
-  .address--edit a {
+  .address--edit a,
+  .address--delete a {
     @include breakpoint($desktop) {
       font-weight: 600;
     }
   }
 
-  &.default .address--primary {
+  &.default,
+  &:hover {
+    .address--primary {
+      font-weight: 600;
+      color: $address_primary_controls_active;
+    }
+  }
+}
+
+.path--user .ui-dialog {
+  .ui-dialog-titlebar-close {
+    color: transparent;
+
+    @include icon(close, after) {
+      font-size: 2.19rem;
+      color: $address_pp_delete_closebtn_icon;
+      padding: 0;
+    }
+  }
+
+  .ui-button {
+    text-transform: uppercase;
     font-weight: 600;
-    color: $address_primary_controls_active;
+
+    &.dialog-cancel {
+      text-transform: capitalize;
+    }
   }
 }
