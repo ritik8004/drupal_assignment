@@ -446,6 +446,14 @@
       opacity: 1;
       font-size: 0.75rem !important;
       color: $greyish;
+
+      &.error {
+        position: absolute;
+        #{$left}: 0;
+        top: 2.7rem !important;
+        width: 100%;
+        border-top: 1px solid $primary_input_inline_error;
+      }
     }
 
     .form-type-textfield {
