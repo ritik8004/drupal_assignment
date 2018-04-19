@@ -1,0 +1,23 @@
+.c-address-book {
+  .block-system > a {
+    text-transform: uppercase !important;
+    font-weight: 600 !important;
+  }
+}
+
+.address {
+  .address--content {
+    font-weight: 600;
+  }
+
+  .address--edit a {
+    @include breakpoint($desktop) {
+      font-weight: 600;
+    }
+  }
+
+  &.default .address--primary {
+    font-weight: 600;
+    color: $address_primary_controls_active;
+  }
+}

@@ -12,10 +12,10 @@
     &.active {
       color: $my_account_nav_active;
       font-weight: 600;
+    }
 
-      &:hover {
-        color: $content_link_color;
-      }
+    &:hover {
+      color: $secondary_link;
     }
   }
 }
