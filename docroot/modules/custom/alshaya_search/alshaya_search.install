@@ -25,6 +25,9 @@ function alshaya_search_update_8012() {
   // Update alshaya product index to reflect category field.
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
 
+  // Reset static caches to release memory.
+  drupal_static_reset();
+
   // Queue items for re-indexing. Required specifically for search_api_db to
   // avoid creating tables with numeric prefixes when indexing content.
   $index = Index::load('product');
