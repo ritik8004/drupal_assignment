@@ -21,8 +21,7 @@
     }
 
     .mobile-number-field .mobile-input--wrapper label.error {
-      top: 1.0625rem;
-      width: 100%;
+      top: 1.0625rem !important;
       padding-top: 0.4375rem;
       border-top: 2px solid $primary_input_inline_error;
     }
