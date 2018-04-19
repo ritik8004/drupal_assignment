@@ -1046,7 +1046,7 @@ class SkuManager {
    *   Linked SKUs for requested type.
    */
   public function getLinkedSkus(SKU $sku, $type) {
-    $linked_skus = $this->linkedSkus->getLinkedSKus($sku);
+    $linked_skus = $this->linkedSkus->getLinkedSKus($sku, $type);
 
     $linked_skus_requested = [];
 
