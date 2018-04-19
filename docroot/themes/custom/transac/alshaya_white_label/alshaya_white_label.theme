@@ -871,8 +871,8 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
               ];
             }
 
-            $variables['content']['product_category_carousel'] = [];
-            $variables['content'] = [
+            $variables['content'] = [];
+            $variables['content']['product_category_carousel'] = [
               '#theme' => 'products_horizontal_slider',
               '#data' => $data,
               '#views_display_id' => 'category_product_slider',
