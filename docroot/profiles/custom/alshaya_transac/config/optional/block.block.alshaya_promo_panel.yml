@@ -9,7 +9,7 @@ dependencies:
     - alshaya_white_label
 id: alshaya_promo_panel
 theme: alshaya_white_label
-region: footer_primary
+region: post_content
 weight: 0
 provider: null
 plugin: 'block_content:95bb6c44-62eb-4bdc-870d-cd0d8d1a7460'
