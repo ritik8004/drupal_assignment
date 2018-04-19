@@ -82,3 +82,15 @@
     }
   }
 }
+
+.alias--user-password {
+  .user-page {
+    .user-pass {
+      input[type=submit] {
+        @include breakpoint($tablet) {
+          min-width: 9.125rem;
+        }
+      }
+    }
+  }
+}
