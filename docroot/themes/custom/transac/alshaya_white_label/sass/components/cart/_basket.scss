@@ -436,7 +436,7 @@
   .tooltip--head {
     font-size: 0.75rem;
     font-family: $arial;
-    color: $tooltip_border;
+    color: $tooltip_link;
     margin: 0;
 
     @include icon(infomation, after) {
