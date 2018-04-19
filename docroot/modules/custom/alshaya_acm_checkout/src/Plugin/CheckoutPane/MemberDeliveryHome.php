@@ -63,6 +63,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
 
     $cart = $this->getCart();
+
+    // Once we open HD page, clear temp cc selected info.
+    $cart->setExtension('cc_selected_info', NULL);
+
     $address = (array) $cart->getShipping();
 
     $pane_form['address_form'] = [

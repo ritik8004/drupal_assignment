@@ -78,10 +78,16 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
+    $cc_selected_info = $cart->getExtension('cc_selected_info');
+
     if ($form_values = $form_state->getValue($pane_form['#parents'])) {
       $store_code = $form_values['store_code'];
       $shipping_type = $form_values['shipping_type'];
       $default_mobile = $form_values['cc_mobile'];
+    }
+    elseif ($cc_selected_info && isset($cc_selected_info['store_code'])) {
+      $store_code = $cc_selected_info['store_code'];
+      $shipping_type = $cc_selected_info['shipping_type'];
     }
     elseif ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
       // Check if value available in shipping address.
@@ -404,6 +410,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $term = $checkout_options_manager->getClickandColectShippingMethodTerm();
 
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
+    $cart->setExtension('cc_selected_info', NULL);
 
     // Clear the payment now.
     $cart->clearPayment();
