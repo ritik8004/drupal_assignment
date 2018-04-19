@@ -1,0 +1,84 @@
+.user-page {
+  .c-sidebar-second,
+  #block-youllbeableto {
+    h3 {
+      font-family: $alshaya-thin;
+      text-transform: unset;
+    }
+
+    .c-sidebar-second__region {
+      @include breakpoint($desktop) {
+        p {
+          line-height: 1.8;
+        }
+      }
+    }
+  }
+
+  #block-youllbeableto {
+    a {
+      font-weight: normal;
+      padding-top: 0.5rem;
+    }
+  }
+
+  #block-jointheclub {
+    border-top: 0;
+
+    a {
+      font-weight: normal;
+    }
+  }
+
+  .user-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
+    .form-submit {
+      height: 2.5rem;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.user-login-form {
+  & > a {
+    font-weight: normal;
+    font-size: 0.875rem;
+
+    @include breakpoint($tablet) {
+      #{$left}: 13em;
+
+      html[lang='ar'] & {
+        #{$left}: 15em;
+        bottom: 0.75em;
+      }
+    }
+  }
+}
+
+#block-youllbeableto,
+#block-jointheclub {
+  text-transform: unset;
+
+  span {
+    width: 1.25rem;
+    height: 1.25rem;
+    background-size: 1.25rem;
+  }
+
+  span.icon {
+    &-offer {
+      background-image: url("../imgs/icons/ic-rewards.svg");
+    }
+
+    &-reward {
+      background-image: url("../imgs/icons/ic-unlock.svg");
+    }
+
+    &-heart {
+      background-image: url("../imgs/icons/ic-newsletter.svg");
+      top: 0;
+    }
+  }
+}
