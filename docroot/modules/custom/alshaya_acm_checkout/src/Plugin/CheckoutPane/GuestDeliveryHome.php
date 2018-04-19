@@ -67,6 +67,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     ];
 
     $cart = $this->getCart();
+
+    // Once we open HD page, clear temp cc selected info.
+    $cart->setExtension('cc_selected_info', NULL);
+
     $address = (array) $cart->getShipping();
     $default_shipping = '';
 
