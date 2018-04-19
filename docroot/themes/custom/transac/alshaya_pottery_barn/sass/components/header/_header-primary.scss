@@ -168,3 +168,9 @@ header {
     }
   }
 }
+
+.header--fixed .branding__menu {
+  @include breakpoint($desktop) {
+    box-shadow: none;
+  }
+}
