@@ -22,3 +22,13 @@
     }
   }
 }
+
+.c-user-register {
+  &.user-page .c-sidebar-second .c-sidebar-second__region {
+    font-size: 0.875rem;
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: 6.5em;
+    }
+  }
+}
