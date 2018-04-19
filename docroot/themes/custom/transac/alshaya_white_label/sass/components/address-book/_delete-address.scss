@@ -2,7 +2,7 @@
   .ui-dialog-title {
     @extend %page-title;
 
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $user_ui_dialog_border;
     font-size: 18px;
     float: $left;
     padding-bottom: 7px;
@@ -68,7 +68,7 @@
   }
 
   .ui-dialog .ui-dialog-titlebar-close {
-    color: $black;
+    color: $address_book_delete_close;
     height: 3.125rem;
     font-size: 1rem;
     #{$right}: 0;
@@ -101,7 +101,7 @@
   }
 
   .dialog-cancel {
-    color: #3381d0;
+    color: $address_book_delete_cancel;
     font-size: 10px;
 
     @include breakpoint($tablet) {
