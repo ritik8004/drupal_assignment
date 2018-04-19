@@ -48,7 +48,7 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical' => 'taxonomy term',
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
-    'entity.node.canonical:department_page' => 'department page',
+    'entity.node.canonical:advanced_page' => 'advanced page',
     'entity.node.canonical:acq_promotion' => 'promotion page',
     'entity.node.canonical:static_html' => 'static page',
     'entity.user.canonical' => 'my account page',
@@ -1041,16 +1041,20 @@ class AlshayaGtmManager {
         $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
         break;
 
-      case 'department page':
+      case 'advanced page':
         $department_node = $current_route['route_params']['node'];
-        $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($department_node->get('field_product_category')->target_id);
-        if (!empty($taxonomy_term)) {
-          $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
-          foreach ($taxonomy_parents as $taxonomy_parent) {
-            $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
-          }
+        if ($department_node->get('field_use_as_department_page')->value == 1) {
+          $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')
+            ->load($department_node->get('field_product_category')->target_id);
+          if (!empty($taxonomy_term)) {
+            $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')
+              ->loadAllParents($taxonomy_term->id()));
+            foreach ($taxonomy_parents as $taxonomy_parent) {
+              $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+            }
 
-          $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+            $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+          }
         }
         break;
 
