@@ -57,3 +57,25 @@
     }
   }
 }
+
+.c-user-register {
+  .c-sidebar-second {
+    #block-youllbeableto {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: 1rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-bottom: 1rem;
+      }
+
+      p {
+        margin: 0.375rem 0;
+      }
+    }
+  }
+}
