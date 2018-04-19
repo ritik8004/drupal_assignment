@@ -189,10 +189,6 @@
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
             },
-            "drupal/clientside_validation": {
-                "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
-                "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
-            },
             "drupal/redirect": {
                 "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch",
                 "Fix - Integrity constraint violation": "https://www.drupal.org/files/issues/duplicate-entry-fix-2887866-9.patch"

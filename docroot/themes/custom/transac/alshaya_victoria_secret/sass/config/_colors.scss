@@ -298,6 +298,10 @@ $gallery_pager_active_bg: $marine-blue-two;
 $gallery_zoombtn_bg: $white;
 $gallery_zoombtn_disabled: $light-ash;
 
+// Homepage Slider
+$hp_slider_dots: $nero;
+$hp_slider_arrows_dark: $nero;
+
 // Sharethis
 $sharethis_icon: $gainsboro;
 $sharethis_icon_hover: $black;
@@ -406,11 +410,21 @@ $minicart_notification_btn_text: $white-five;
 $minicart_notification_product_title: $grey-ash;
 
 // Delivery tabs.
-$deliverybanner_title: $black;
+$deliverybanner_title: $brilliant-rose;
 $deliverybanner_subtitle: $nero;
-$deliverybanner_border: $nero;
+$deliverybanner_border: $gainsboro;
 $deliverybanner_shadow: $white-smoke-light;
-$deliverybanner_link: $black;
+$deliverybanner_link: $brilliant-rose;
+
+// Promo panel.
+$promo_panel_mobile_bg: $nero;
+$promo_panel_content: $nero;
+$promo_panel_content_bg: $vanilla;
+$promo_panel_border: $gainsboro;
+$promo_panel_mobile_label: $vanilla;
+$promo_panel_label_bg: $vanilla;
+$promo_panel_label: $nero;
+$promo_panel_label_icon: $brilliant-rose;
 
 //3. Footer
 $footer_bg: $nero;
@@ -516,7 +530,7 @@ $pdp_mobile_wrapper: $white-five;
 $pdp_sell_title: $nero;
 
 // Product modal
-$pdp_modal_full_prodlink: $marine-blue;
+$pdp_modal_full_prodlink: $brilliant-rose;
 $pdp_modal_full_prodlink_border: $gainsboro;
 
 // Product Add to cart form.

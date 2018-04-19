@@ -1,0 +1,13 @@
+.c-delivery-menu__tab {
+  box-shadow: none;
+
+  .c-delivery-menu__title {
+    text-transform: uppercase;
+
+    .c-delivery-menu__description {
+      color: $deliverybanner_subtitle;
+      text-transform: none;
+      font-size: 0.875rem;
+    }
+  }
+}
