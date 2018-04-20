@@ -1,0 +1,21 @@
+.multistep-checkout {
+  fieldset {
+    legend {
+      span {
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+    }
+  }
+}
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-login,
+.alias--cart-checkout-payment,
+.alias--cart-checkout-confirmation {
+  .site-brand-home a {
+    @include breakpoint($desktop) {
+      max-width: 29rem;
+    }
+  }
+}
