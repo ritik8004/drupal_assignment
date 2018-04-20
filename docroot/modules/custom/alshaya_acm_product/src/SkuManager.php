@@ -845,7 +845,7 @@ class SkuManager {
       ->condition('type', $type, '=')
       ->condition('langcode', $langcode, '=');
 
-    return array_keys($query->execute()->fetchAllKeyed(0));
+    return array_keys($query->execute()->fetchAllKeyed(0, 0));
   }
 
   /**
