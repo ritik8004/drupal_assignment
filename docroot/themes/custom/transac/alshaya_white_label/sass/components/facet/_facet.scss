@@ -92,14 +92,12 @@
   .facet-item {
     position: relative;
 
-    &.facet-item--collapsed {
-      &:hover {
-        cursor: pointer;
+    &:hover {
+      cursor: pointer;
 
-        label {
-          span {
-            cursor: pointer;
-          }
+      label {
+        span {
+          cursor: pointer;
         }
       }
     }
@@ -112,6 +110,48 @@ ul[data-drupal-facet-id=plp_category_facet] {
     display: block;
   }
 
+  > li {
+    > label {
+      &::before {
+        content: unset;
+      }
+    }
+
+    > input[type=checkbox] {
+      &:checked {
+        ~ label {
+          font-weight: bold;
+
+          &::before {
+            content: unset;
+          }
+        }
+      }
+    }
+
+    > ul {
+      > li {
+        > label {
+          &::before {
+            content: unset;
+          }
+        }
+
+        > input[type=checkbox] {
+          &:checked {
+            ~ label {
+              font-weight: bold;
+
+              &::before {
+                content: unset;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   .facet-item--collapsed {
     label {
       &::before {
@@ -121,23 +161,15 @@ ul[data-drupal-facet-id=plp_category_facet] {
   }
 
   .facet-item--expanded {
-    margin-#{$left}: 1rem;
-
     > ul {
-      > .facet-item--collapsed {
-        > label {
-          .facet-item__value {
-            margin-#{$left}: 0;
-          }
-        }
-      }
+      margin-#{$left}: 0.625rem;
 
       @include breakpoint($upto-desktop) {
         padding-top: 0.625rem !important;
       }
 
       .facet-item {
-        margin-#{$left}: 1rem;
+        margin-#{$left}: 0;
 
         @include breakpoint($only-tablet) {
           margin-#{$left}: 0.625rem;
@@ -145,11 +177,6 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
         html[lang=ar] & {
           margin-left: 0;
-        }
-
-        &.facet-item--collapsed,
-        &.facet-item--expanded {
-          margin-#{$left}: 0;
         }
       }
     }
@@ -163,7 +190,6 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
           span {
             font-weight: bold;
-            margin-#{$left}: 0;
           }
         }
       }
@@ -177,6 +203,8 @@ ul[data-drupal-facet-id=plp_category_facet] {
   }
 
   > .facet-item--expanded {
+    margin-#{$left}: 1rem;
+
     > label {
       @include icon(chevronleft, before) {
         position: absolute;
@@ -189,6 +217,14 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
       span {
         font-weight: bold;
+      }
+    }
+
+    > input[type=checkbox]:checked {
+      ~ label {
+        font-weight: normal;
+
+        @include icon(chevronleft, before);
       }
     }
   }
