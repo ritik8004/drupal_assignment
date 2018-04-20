@@ -51,7 +51,7 @@
         #{$right}: 4.75rem;
       }
 
-      @include breakpoint($tablet) {
+      @include breakpoint($only-tablet) {
         #{$right}: 1px;
       }
     }
@@ -61,7 +61,7 @@
         #{$right}: 4.8125rem;
       }
 
-      @include breakpoint($tablet) {
+      @include breakpoint($only-tablet) {
         #{$right}: 0.125rem;
       }
     }
