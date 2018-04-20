@@ -152,6 +152,14 @@
     line-height: 1.56;
   }
 
+  .c-products-list {
+    .views-infinite-scroll-content-wrapper {
+      display: flex;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+  }
+
   .c-products__item {
     margin-bottom: 0.125rem;
 
@@ -220,7 +228,7 @@
 
     @include breakpoint($desktop) {
       &:hover {
-        &::after {
+        article::after {
           display: none;
         }
 
