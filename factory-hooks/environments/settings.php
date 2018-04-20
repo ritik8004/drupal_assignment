@@ -152,6 +152,16 @@ function alshaya_get_additional_settings($site, $env) {
         ],
       ],
     ],
+    'bbw' => [
+      'ae' => [
+        'default' => [
+          'magento_lang_prefix' => [
+            'en' => 'uae_en',
+            'ar' => 'uae_ar',
+          ],
+        ],
+      ],
+    ],
     'pb' => [
       'ae' => [
         //'default' => [
