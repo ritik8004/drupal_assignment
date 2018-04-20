@@ -116,7 +116,7 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
       // Loop over all results.
       foreach ($results as $i => $result) {
         if (($entities[$ids[$i]] instanceof TermInterface) &&
-          ($entities[$ids[$i]]->get('field_included_in_menu')->getString() != 1)) {
+          ($entities[$ids[$i]]->get('field_category_include_menu')->getString() != 1)) {
           unset($results[$i]);
           continue;
         }
