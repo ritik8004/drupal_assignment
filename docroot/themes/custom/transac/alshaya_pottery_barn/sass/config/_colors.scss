@@ -22,6 +22,11 @@ $medium-green: #3ab549;
 // Colors for which variables are not present in Zeplin but colors are used.
 $_black_two: #333;
 $_gray_two: #b3b3b3;
+$_gray_three: #f0f0f0;
+$_gray_four: #e8e8e8;
+$_gray_five: #f2f2f2;
+$_gray_six: #fafafa;
+$_gray_seven: #f8f8f8;
 
 // Overrides for variables.
 // Global elements.
@@ -52,6 +57,8 @@ $primary_btn_text: $white-two;
 $pending_btn_bg: $tomato;
 $returned_btn_bg: $PB_grey_one;
 $complete_btn_bg: $medium-green;
+$primary_brand_button_text: $white-two;
+$primary_brand_button: $_black_two;
 
 // Dropdown.
 $primary_dropdown_bg: $PB_grey_four;
@@ -64,6 +71,34 @@ $primary_dropdown_option_hover: $PB_grey_four;
 $primary_dropdown_option_border: $white-two;
 $primary_dropdown_option_disbled: $PB_grey_one;
 $primary_dropdown_focus: $_black_two;
+
+// Tables.
+$primary_th_bg: $_gray_three;
+$primary_td_highlight3: $PB_white;
+
+// Basket table.
+$basket_th_4th_child: $_gray_four;
+$basket_th_text: $PB_black_one;
+$basket_tr: $_gray_six;
+$primary_td_bg_highlight: $_gray_five;
+$basket_content_link_color: $PB_confirmation_blue;
+$basket_tooltip_not_available: $white;
+$basket_total_label_text: $PB_black_one;
+$basket_total_label_text_subtitle: $PB_grey_one;
+$basket_table_th_and_tr_last_border: $white-two;
+$basket_continue_shopping_link: $PB_black_one;
+$basket_empty_message: $PB_black_one;
+
+// Totals.
+$total_td_2nd_child_bg: $_gray_seven;
+
+// Tooltip
+$tooltip_bg: $_gray_seven;
+$tooltip_text: $PB_black_one;
+$tooltip_border: $PB_black_one;
+$tooltip_border_2: $PB_black_one;
+$tooltip_icon: $PB_confirmation_blue;
+$tooltip_link: $PB_confirmation_blue;
 
 // Header - Top header.
 $header_secondary_bg: $white;
@@ -233,3 +268,6 @@ $webform_contact_legend: $_black_two;
 $address_primary_controls_active: $_black_two;
 $address_pp_delete_closebtn: $white;
 $address_pp_delete_closebtn_icon: $_black_two;
+
+// Basket.
+$basket_page_title: $_black_two;
