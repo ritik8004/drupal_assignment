@@ -39,6 +39,13 @@
       text-transform: uppercase;
     }
   }
+
+  .change-pwd-form {
+    .form-submit {
+      margin-top: 1.5rem;
+      height: 2.5rem !important;
+    }
+  }
 }
 
 .user-login-form {
