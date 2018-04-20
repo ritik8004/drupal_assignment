@@ -5,13 +5,13 @@
 
 /* global isRTL */
 
-(function ($) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
       var slickOptions = {
         slidesToShow: 5,
-        vertical: true,
+        vertical: getPDPSliderPosition(),
         arrows: true,
         focusOnSelect: false,
         centerMode: true,
@@ -100,7 +100,7 @@
 
           var slickModalOptions = {
             slidesToShow: 5,
-            vertical: true,
+            vertical: getPDPSliderPosition(),
             arrows: true,
             centerMode: true,
             infinite: false,
@@ -463,4 +463,21 @@
       }
     }
   };
-})(jQuery);
+
+  /**
+   * Get the vertical paramerter for slick slider on the basis of the config
+   * image_slider_position_pdp from drupalSettings.
+   *
+   * @return {boolean} vertical
+   *   The vertical paramerter for slick slider.
+   */
+  function getPDPSliderPosition() {
+    var pdp_slider_position = drupalSettings.alshaya_white_label.image_slider_position_pdp;
+    if (pdp_slider_position === 'slider-position-bottom') {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+})(jQuery, Drupal, drupalSettings);

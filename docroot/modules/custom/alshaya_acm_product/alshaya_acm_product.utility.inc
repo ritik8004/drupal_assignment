@@ -283,6 +283,9 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       '#type' => 'pdp',
     ];
 
+    // Add PDP slider position variable to config.
+    $pdp_image_slider_position = \Drupal::config('alshaya_acm_product.settings')->get('image_slider_position_pdp');
+
     $build['gallery']['product_zoom'] = [
       '#theme' => 'product_zoom',
       '#mainImage' => $main_image,
@@ -290,6 +293,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       '#pager_flag' => $pager_flag,
       '#properties' => alshaya_product_zoom_get_rel_cloudzoom($settings),
       '#labels' => $labels,
+      '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
       '#attached' => [
         'library' => [
           'alshaya_product_zoom/product.cloud_zoom',
