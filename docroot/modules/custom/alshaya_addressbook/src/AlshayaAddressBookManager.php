@@ -608,9 +608,11 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
           default:
             if (isset($custom_fields[$attribute_code])) {
-              $magento_address['extension'][$attribute_code] = $address[$field_code];
+              $magento_address['extension'][$attribute_code] = isset($address[$field_code])
+                ? $address[$field_code]
+                : '';
             }
-            else {
+            elseif (isset($address[$field_code])) {
               $magento_address[$attribute_code] = $address[$field_code];
             }
         }
