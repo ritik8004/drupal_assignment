@@ -48,7 +48,7 @@
   .tooltip {
     &::before {
       @include breakpoint($desktop) {
-        #{$right}: 76px;
+        #{$right}: 4.75rem;
       }
 
       @include breakpoint($tablet) {
@@ -58,11 +58,11 @@
 
     &::after {
       @include breakpoint($desktop) {
-        #{$right}: 77px;
+        #{$right}: 4.8125rem;
       }
 
       @include breakpoint($tablet) {
-        #{$right}: 2px;
+        #{$right}: 0.125rem;
       }
     }
   }
@@ -90,6 +90,20 @@
         border: none;
         font-weight: 600;
       }
+    }
+  }
+
+  .empty-cart-wrapper {
+    .empty-cart-message {
+      font-weight: normal;
+    }
+
+    #edit-continue-shopping,
+    #edit-continue-shopping-mobile {
+      background: $primary_btn_bg;
+      color: $primary_btn_text;
+      text-transform: uppercase;
+      font-weight: 600;
     }
   }
 }
