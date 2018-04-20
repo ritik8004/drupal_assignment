@@ -2,8 +2,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.acquia_search_index
-    - views.view.search
+    - search_api.index.product
+    - views.view.alshaya_product_list
   module:
     - alshaya_search
     - search_api
@@ -11,14 +11,14 @@ third_party_settings:
   alshaya_search:
     display_textbox: 0
     display_textbox_item_count: ''
-id: category
+id: plp_category_facet
 name: Category
-url_alias: category
+url_alias: plp_category_facet
 weight: 0
 min_count: 1
 show_only_one_result: false
 field_identifier: field_category
-facet_source_id: 'search_api:views_page__search__page'
+facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
 widget:
   type: checkbox
   config:
