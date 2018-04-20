@@ -78,19 +78,10 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
    * {@inheritdoc}
    */
   public function build(FacetInterface $facet, array $results) {
-    $ids = [];
-
-    /** @var \Drupal\facets\Result\ResultInterface $result */
-    foreach ($results as $delta => $result) {
-      $ids[$delta] = $result->getRawValue();
-    }
-
-    $entity_type = '';
     $source = $facet->getFacetSource();
 
     // Support multiple entity types when using Search API.
     if ($source instanceof SearchApiDisplay) {
-
       $field_id = $facet->getFieldIdentifier();
 
       // Load the index from the source, load the definition from the
@@ -104,26 +95,29 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
         ->getPropertyDefinition('entity')
         ->getTargetDefinition()
         ->getEntityTypeId();
-    }
 
-    // Process taxonomy terms & remove items not included in menu.
-    if ($entity_type == 'taxonomy_term') {
-      // Load all indexed entities of this type.
-      $entities = $this->entityTypeManager
-        ->getStorage($entity_type)
-        ->loadMultiple($ids);
+      // Process taxonomy terms & remove items not included in menu.
+      if ($entity_type == 'taxonomy_term') {
+        /** @var \Drupal\facets\Result\ResultInterface $result */
+        foreach ($results as $delta => $result) {
+          $ids[$delta] = $result->getRawValue();
+        }
 
-      // Loop over all results.
-      foreach ($results as $i => $result) {
-        if (($entities[$ids[$i]] instanceof TermInterface) &&
-          ($entities[$ids[$i]]->get('field_category_include_menu')->getString() != 1)) {
-          unset($results[$i]);
-          continue;
+        // Load indexed term object.
+        $entities = $this->entityTypeManager
+          ->getStorage($entity_type)
+          ->loadMultiple($ids);
+
+        foreach ($results as $i => $result) {
+          if (($entities[$ids[$i]] instanceof TermInterface) &&
+            ($entities[$ids[$i]]->get('field_category_include_menu')->getString() != 1)) {
+            unset($results[$i]);
+          }
         }
       }
     }
 
-    // Return the results with the new display values.
+    // Return the filtered results.
     return $results;
   }
 
