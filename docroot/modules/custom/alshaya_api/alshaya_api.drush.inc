@@ -42,11 +42,11 @@ function drush_alshaya_api_sanity_check() {
 
   if ($verbose) {
     foreach ($types as $type) {
-      drush_print(dt("@type SKUs (@count) from Magento:\n@skus"), [
+      drush_print(dt("@type SKUs (@count) from Magento:\n@skus", [
         '@type' => $type,
         '@count' => count($mskus[$type]),
-        '@skus' => "'" . implode("','", $mskus[$type]) . "'",
-      ]);
+        '!skus' => "'" . implode("','", $mskus[$type]) . "'",
+      ]));
     }
   }
 
@@ -60,12 +60,12 @@ function drush_alshaya_api_sanity_check() {
       $dskus[$type][$language->getId()] = \Drupal::service('alshaya_acm_product.skumanager')->getSkus($language->getId(), $type);
 
       if ($verbose) {
-        drush_print(dt("@type @language SKUs (@count) from Drupal:\n@skus"), [
+        drush_print(dt("@type @language SKUs (@count) from Drupal:\n@skus", [
           '@type' => $type,
           '@language' => $language->getName(),
           '@count' => count($dskus[$type][$language->getId()]),
-          '@skus' => "'" . implode("','", $dskus[$type][$language->getId()]) . "'",
-        ]);
+          '!skus' => "'" . implode("','", $dskus[$type][$language->getId()]) . "'",
+        ]));
       }
     }
   }
