@@ -359,6 +359,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
               '#theme' => 'products_horizontal_slider',
               '#data' => $skuManager->filterRelatedSkus(array_unique($cross_sell_skus)),
               '#section_title' => t('Customers also bought'),
+              '#views_name' => 'product_slider',
+              '#views_display_id' => 'block_product_slider',
             ];
 
             // Weight will have no effect later once template is modified.
@@ -371,6 +373,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
             '#section_title' => t('You may also like'),
+            '#views_name' => 'product_slider',
+            '#views_display_id' => 'block_product_slider',
           ];
           // Weight will have no effect later once template is modified.
           $build['up_sell']['#weight'] = 10;
@@ -381,6 +385,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($related_skus)),
             '#section_title' => t('Related'),
+            '#views_name' => 'product_slider',
+            '#views_display_id' => 'block_product_slider',
           ];
           // Weight will have no effect later once template is modified.
           $build['related']['#weight'] = 11;
@@ -1240,6 +1246,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $cross_sell_markup = [
         '#theme' => 'products_horizontal_slider',
         '#section_title' => t('Customers also bought'),
+        '#views_name' => 'product_slider',
+        '#views_display_id' => 'block_product_slider',
       ];
 
       if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL))) {

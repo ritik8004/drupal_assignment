@@ -850,7 +850,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             $variables['product_category_carousel'] = [
               '#theme' => 'products_horizontal_slider',
               '#data' => $data,
-              '#views_display_id' => 'block_1',
+              '#views_display_id' => 'block_category_product_slider',
               '#views_name' => 'product_slider',
               '#section_title' => $carousel_title,
             ];
