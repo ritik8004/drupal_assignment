@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.field.paragraph.product_carousel_category.field_category_carousel
     - field.field.paragraph.product_carousel_category.field_category_carousel_title
-    - field.field.paragraph.product_carousel_category.field_products_in_cat_carousel
+    - field.field.paragraph.product_carousel_category.field_category_carousel_limit
     - paragraphs.paragraphs_type.product_carousel_category
   module:
     - content_moderation
@@ -31,13 +31,12 @@ content:
     third_party_settings: {  }
     type: string_textfield
     region: content
-  field_products_in_cat_carousel:
+  field_category_carousel_limit:
     weight: 103
     settings:
-      size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
+    type: number
     region: content
   moderation_state:
     type: moderation_state_default

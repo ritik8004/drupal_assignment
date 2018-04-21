@@ -3,14 +3,13 @@ status: true
 dependencies:
   module:
     - paragraphs
-id: paragraph.field_products_in_cat_carousel
-field_name: field_products_in_cat_carousel
+id: paragraph.field_category_carousel_limit
+field_name: field_category_carousel_limit
 entity_type: paragraph
-type: string
+type: integer
 settings:
-  max_length: 255
-  is_ascii: false
-  case_sensitive: false
+  unsigned: false
+  size: normal
 module: core
 locked: false
 cardinality: 1
