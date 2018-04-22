@@ -7,9 +7,21 @@
     .input--textual__container--errors {
       position: absolute;
       bottom: -0.2rem;
+      #{direction(left)}: 0;
+      line-height: 1;
+      border-top: 0.125rem solid $venetian-red;
+      padding-top: 0.5625rem;
+      z-index: 1;
 
       @include breakpoint($upto-palm) {
-        bottom: -1rem;
+        bottom: 0;
+        padding-top: 0.5rem;
+      }
+
+      .form-item--error-message {
+        @include breakpoint($upto-palm) {
+          font-size: 0.625rem;
+        }
       }
     }
   }
@@ -50,6 +62,19 @@ html[dir=rtl] {
       label {
         #{direction(right)}: -2.875rem;
       }
+    }
+  }
+}
+
+.form-item-mobile-number-mobile {
+  .input--textual__container {
+    input.error {
+      ~ .input__line {
+        background: transparent;
+        height: 0;
+      }
+
+      border: none;
     }
   }
 }
