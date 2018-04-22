@@ -18,7 +18,7 @@ function alshaya_search_update_8013() {
   ];
 
   // Avoid hiding concept facet when source is not rendered.
-  alshaya_config_install_configs($config_facets_alshaya_search, 'alshaya_search');
+  alshaya_config_install_configs($config_facets_alshaya_search, 'alshaya_hm');
 }
 
 /**
