@@ -13,9 +13,32 @@
 .alias--cart-checkout-login,
 .alias--cart-checkout-payment,
 .alias--cart-checkout-confirmation {
-  .site-brand-home a {
-    @include breakpoint($desktop) {
-      max-width: 29rem;
+  .site-brand-wrapper {
+    @include breakpoint($only-mobile) {
+      border-bottom: none;
+    }
+
+    .site-brand-home {
+      a {
+        @include breakpoint($only-mobile) {
+          max-width: 14.9375rem;
+          width: 80%;
+        }
+
+        @include breakpoint($desktop) {
+          max-width: 29rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          width: 40%;
+          max-width: 17.5625rem;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-top: 0;
+        border-bottom: 0.5625rem solid $checkout_header_border-bottom;
+      }
     }
   }
 }
