@@ -897,6 +897,11 @@
    * @param position
    */
   Drupal.alshaya_seo_gtm_push_product_clicks = function (element, currencyCode, listName, position) {
+    // Don't trigger product click event for items in cross-sell on Mobile.
+    if ((element.closest('.owl-item').length !== 0) && ($(window).width() < 320)) {
+      return;
+    }
+    
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
     product.variant = '';
     if (position) {

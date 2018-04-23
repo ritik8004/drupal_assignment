@@ -1,0 +1,18 @@
+.c-user-edit {
+  .field--name-field-first-name,
+  .field--name-field-last-name {
+    max-width: calc(50% - 1rem);
+  }
+
+  .mobile-number-field {
+    max-width: 100%;
+  }
+
+  #user-form {
+    @include breakpoint($tablet) {
+      #edit-submit {
+        min-width: 9.125rem;
+      }
+    }
+  }
+}

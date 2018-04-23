@@ -8,20 +8,6 @@
 use Drupal\search_api\Entity\Index;
 
 /**
- * Implements hook_update_N().
- *
- * Avoid hiding concept facet when source is not rendered.
- */
-function alshaya_search_update_8013() {
-  $config_facets_alshaya_search = [
-    'facets.facet.concept',
-  ];
-
-  // Avoid hiding concept facet when source is not rendered.
-  alshaya_config_install_configs($config_facets_alshaya_search, 'alshaya_search');
-}
-
-/**
  * Implements hook_post_update_NAME().
  *
  * Re-save index to create required tables.

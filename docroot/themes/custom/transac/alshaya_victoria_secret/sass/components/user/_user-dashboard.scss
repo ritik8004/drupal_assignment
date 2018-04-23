@@ -9,3 +9,35 @@
     }
   }
 }
+
+.subtitle {
+  font-family: $vs-regular;
+  font-size: 1.125rem;
+  text-transform: capitalize;
+}
+
+.block-alshaya-acm-customer {
+  & > a {
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.path--user {
+  #block-userrecentorders {
+    h2 {
+      &.subtitle {
+        border-bottom: 0;
+      }
+    }
+  }
+}
+
+.recent__orders--list {
+  &.user__order--detail {
+    background-color: $order_detail_delivery_details_row_bg;
+  }
+}

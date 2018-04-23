@@ -207,12 +207,12 @@ class ClickCollectController extends ControllerBase {
 
     // If there are no stores, hide 'list view' and 'map view'.
     if (count($stores) == 0) {
-      $response->addCommand(new InvokeCommand('.stores-list-view', 'hide'));
-      $response->addCommand(new InvokeCommand('.stores-map-view', 'hide'));
+      $response->addCommand(new InvokeCommand('.stores-list-view', 'addClass', ['hidden-important']));
+      $response->addCommand(new InvokeCommand('.stores-map-view', 'addClass', ['hidden-important']));
     }
     else {
-      $response->addCommand(new InvokeCommand('.stores-list-view', 'show'));
-      $response->addCommand(new InvokeCommand('.stores-map-view', 'show'));
+      $response->addCommand(new InvokeCommand('.stores-list-view', 'removeClass', ['hidden-important']));
+      $response->addCommand(new InvokeCommand('.stores-map-view', 'removeClass', ['hidden-important']));
     }
 
     return $response;

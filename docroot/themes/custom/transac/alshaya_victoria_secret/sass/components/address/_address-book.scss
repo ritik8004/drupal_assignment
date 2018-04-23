@@ -1,0 +1,95 @@
+.user__address--column {
+  @include breakpoint($only-tablet) {
+    width: 100%;
+    margin-#{$right}: 0;
+    float: none;
+  }
+
+  .address--label {
+    font-family: $vs-bold;
+  }
+}
+
+.address {
+  .address--data {
+    min-height: 0;
+
+    @include breakpoint($desktop) {
+      min-height: 10.5rem;
+    }
+  }
+
+  .address--edit,
+  .address--delete {
+    a {
+      @include breakpoint($desktop) {
+        border: 0;
+        display: block;
+      }
+    }
+  }
+
+  .address--options {
+    @include breakpoint($desktop) {
+      padding: 0;
+      padding-#{$left}: 1.5rem;
+    }
+  }
+
+  .address--controls {
+    @include breakpoint($only-tablet) {
+      width: auto;
+      padding: 0.84rem 0.875rem;
+    }
+
+    &.address--primary {
+      @include breakpoint($only-tablet) {
+        padding-#{$left}: 2.4rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      border-#{$right}: 0.0625rem solid $address_book_border;
+      padding-#{$right}: 0;
+    }
+  }
+
+  .address--primary {
+    letter-spacing: 0;
+    text-align: $left;
+  }
+}
+
+.path--user {
+  .ui-dialog {
+    .ui-dialog-buttonpane {
+      .ui-dialog-buttonset {
+        @include breakpoint($upto-tablet) {
+          float: none;
+          margin-#{$left}: -1.25rem;
+        }
+
+        .button {
+          text-transform: uppercase;
+          font-size: 0.875rem;
+
+          @include breakpoint($upto-tablet) {
+            display: block;
+            margin: 0 auto;
+            width: 90%;
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-address-book .profile-form {
+  .form-actions {
+    .cancel-button {
+      text-transform: uppercase;
+      color: $address_book_delete_cancel;
+      margin-top: 0.125rem;
+    }
+  }
+}
