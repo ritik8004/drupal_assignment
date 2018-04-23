@@ -21,6 +21,7 @@
 
       a {
         font-weight: 600;
+        text-transform: none;
       }
     }
   }
@@ -28,5 +29,20 @@
   #edit-checkout-login .request-password-link,
   .checkout-login-actions-wrapper a {
     font-weight: 600;
+  }
+
+  .checkout-login-actions-wrapper {
+    @include breakpoint($only-mobile) {
+      background: $checkout_login_footer_actions_bg;
+    }
+  }
+
+  .tab {
+    text-transform: none;
+
+    &.active {
+      font-weight: normal;
+      border-width: 1px;
+    }
   }
 }
