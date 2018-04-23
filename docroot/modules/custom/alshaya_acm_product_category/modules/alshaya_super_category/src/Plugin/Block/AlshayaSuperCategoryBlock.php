@@ -117,6 +117,9 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     // Set the default parent from settings.
     $parent_id = $this->configFactory->get('alshaya_super_category.settings')->get('default_category_tid');
 
+    // Set default category link to redirect to home page.
+    // Default category is set to active, while we are on home page, But the
+    // link is pointing to term page.
     if (isset($term_data[$parent_id])) {
       $term_data[$parent_id]['path'] = Url::fromRoute('<front>')->toString();
     }
