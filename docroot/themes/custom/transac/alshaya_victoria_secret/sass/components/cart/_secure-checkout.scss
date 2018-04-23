@@ -1,0 +1,44 @@
+.page-standard.user-page.checkout-delivery {
+  main form {
+    .tab h2,
+    .fieldset-legend h2 {
+      text-transform: capitalize;
+    }
+
+    #edit-guest-delivery-home .title,
+    fieldset .title {
+      font-family: $vs-regular;
+      text-transform: capitalize;
+    }
+
+    .form-actions a.back-to-basket {
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  #edit-delivery-tabs {
+    .tab h2 {
+      font-family: $vs-regular;
+    }
+
+    .tab.active--tab--head h2 {
+      font-family: $vs-bold;
+    }
+
+    hr {
+      border: 0;
+    }
+  }
+}
+
+#block-checkoutprogress,
+.block-acm-checkout-progress {
+  .checkout-progress__step.-next {
+    border-color: $checkout_progress_border;
+    color: $checkout_progress_text;
+  }
+}

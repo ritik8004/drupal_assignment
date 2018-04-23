@@ -11,6 +11,20 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Avoid hiding concept facet when source is not rendered.
+ */
+function alshaya_hm_update_8019() {
+  $config_facets = [
+    'facets.facet.concept',
+  ];
+
+  // Avoid hiding concept facet when source is not rendered.
+  alshaya_config_install_configs($config_facets, 'alshaya_hm');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable brand AMP theme and set logo and favicon.
  */
 function alshaya_hm_update_8018() {

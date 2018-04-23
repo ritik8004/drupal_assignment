@@ -77,7 +77,8 @@
         "drupal/amptheme": "^1.0",
         "drupal/media_entity_actions": "1.x-dev",
         "drupal/jquery_minicolors": "^1.2",
-        "claviska/jquery-minicolors": "^2.2"
+        "claviska/jquery-minicolors": "^2.2",
+        "drupal/jsonapi": "1.15 as 1.4.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",

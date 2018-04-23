@@ -9,6 +9,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -115,6 +116,14 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
 
     // Set the default parent from settings.
     $parent_id = $this->configFactory->get('alshaya_super_category.settings')->get('default_category_tid');
+
+    // Set default category link to redirect to home page.
+    // Default category is set to active, while we are on home page, But the
+    // link is pointing to term page.
+    if (isset($term_data[$parent_id])) {
+      $term_data[$parent_id]['path'] = Url::fromRoute('<front>')->toString();
+    }
+
     // Get current term from route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
     // Get all parents of the given term.

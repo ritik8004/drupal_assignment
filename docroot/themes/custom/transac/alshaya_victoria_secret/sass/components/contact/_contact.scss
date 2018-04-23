@@ -16,3 +16,23 @@
     float: none;
   }
 }
+
+.webform-submission-alshaya-contact-add-form {
+  .form-item {
+    &.form-type-textfield,
+    &.form-type-textarea,
+    &.form-type-email {
+      label {
+        &:last-of-type {
+          text-transform: unset;
+        }
+      }
+    }
+  }
+
+  .mobile-number-field {
+    label {
+      text-transform: unset;
+    }
+  }
+}

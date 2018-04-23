@@ -4,12 +4,44 @@
   .mobile-input--wrapper {
     position: relative;
 
-    .input--textual__container--errors {
-      position: absolute;
-      bottom: -0.2rem;
+    .form-item-mobile-number-mobile {
+      .input--textual__container--errors {
+        position: absolute;
+        bottom: -0.2rem;
+        #{direction(left)}: 0;
+        line-height: 1;
+        border-top: 0.125rem solid $venetian-red;
+        padding-top: 0.5625rem;
+        z-index: 1;
 
-      @include breakpoint($upto-palm) {
-        bottom: -1rem;
+        html[lang=ar] & {
+          left: 0;
+          right: unset;
+          padding-top: 0.625rem;
+
+          @include breakpoint($upto-lap) {
+            padding-top: 0.5625rem;
+          }
+
+          @include breakpoint($upto-palm) {
+            padding-top: 0.6875rem;
+          }
+
+          .form-item--error-message {
+            text-align: right;
+          }
+        }
+
+        @include breakpoint($upto-palm) {
+          bottom: 0;
+          padding-top: 0.5rem;
+        }
+
+        .form-item--error-message {
+          @include breakpoint($upto-palm) {
+            font-size: 0.625rem;
+          }
+        }
       }
     }
   }
@@ -21,7 +53,7 @@ html[dir=rtl] {
       width: 50%;
 
       @include breakpoint($upto-palm) {
-        width: 55%;
+        width: 65%;
       }
 
       .input--textual__container--errors {
@@ -50,6 +82,24 @@ html[dir=rtl] {
       label {
         #{direction(right)}: -2.875rem;
       }
+    }
+  }
+}
+
+.form-item-mobile-number-mobile {
+  .input--textual__container {
+    input.error {
+      ~ .input__line {
+        background: transparent;
+        height: 0;
+
+        html[lang=ar] & {
+          background: $venetian-red;
+          height: 0.125rem;
+        }
+      }
+
+      border: none;
     }
   }
 }

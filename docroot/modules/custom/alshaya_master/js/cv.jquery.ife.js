@@ -20,13 +20,16 @@
         // Remove IFE error on focus out only if there is client side error.
         $(this).on('focusout', function () {
           var wrapper = $(this).closest('.form-item');
-          if (wrapper.find('label.error:visible').length > 0) {
-            wrapper.find('.form-item--error-message').remove();
-          }
+          setTimeout(function () {
+            if (wrapper.find('label.error:visible').length > 0) {
+              wrapper.removeClass('form-item--error');
+              wrapper.find('.form-item--error-message').remove();
+            }
+          }, 1);
         });
 
         // Remove IFE error on change, we will validate again.
-        $(this).on('change', function () {
+        $(this).on('keypress', function () {
           var wrapper = $(this).closest('.form-item');
           wrapper.find('.form-item--error-message').remove();
           wrapper.removeClass('form-item--error');
