@@ -98,6 +98,10 @@
       }
     }
   }
+
+  @include breakpoint($only-mobile) {
+    border-top: 1px solid $accordion_border;
+  }
 }
 
 .c-footer-menu--help {
