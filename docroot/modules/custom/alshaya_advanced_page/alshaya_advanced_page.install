@@ -39,8 +39,6 @@ function alshaya_advanced_page_update_8006() {
     ->condition('type', 'department_page')
     ->execute();
 
-  drush_print_r($nids);
-
   if (!empty($nids)) {
     $base_tables = [
       'node',
@@ -62,8 +60,7 @@ function alshaya_advanced_page_update_8006() {
 
     _alshaya_advanced_page_convert_field_tables('advanced_page', $nids, $field_tables);
 
-    drush_print('Following nodes have been succesfully migrated as department pages.');
-    drush_print_r($nids);
+    drush_print('Nodes have been succesfully migrated as department pages.');
   }
 }
 
