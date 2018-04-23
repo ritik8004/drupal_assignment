@@ -17,7 +17,7 @@ Drupal.alshayaFormError = Drupal.alshayaFormError || {};
     // so we relying on this ajaxComplete. This will only be called when there
     // is error on address book form.
     $(document).ajaxComplete(function(event, xhr, settings) {
-      var focusElement = $(arg+ ' input.error:first');
+      var focusElement = $(arg+ ' .error:first');
 
       focusElement.focus();
 
