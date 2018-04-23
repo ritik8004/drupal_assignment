@@ -14,7 +14,10 @@
 .alias--cart-checkout-payment,
 .alias--cart-checkout-confirmation {
   .site-brand-wrapper {
-    @include breakpoint($only-mobile) {
+    border-bottom: none;
+
+    @include breakpoint($desktop) {
+      border-top: 24px solid $checkout_header_border-top;
       border-bottom: none;
     }
 
