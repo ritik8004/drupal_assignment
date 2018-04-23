@@ -10,6 +10,22 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Remove 'alshaya_white_label_main_menu' and 'alshaya_white_label_powered'
+ * block from DB.
+ */
+function alshaya_mc_update_8312() {
+  if ($config = \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')) {
+    $config->delete();
+  }
+
+  if ($config = \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_powered')) {
+    $config->delete();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-order the PLP sort config by re-saving config.
  */
 function alshaya_mc_update_8311() {

@@ -1,0 +1,25 @@
+%modal-overlay,
+.modal-overlay {
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    top: -3.75rem;
+  }
+}
+
+%modal-overlay-spinner,
+.modal-overlay--spinner {
+  &::after {
+    content: '';
+    background-image: url("../imgs/icons/ic-loader.svg");
+    width: 2rem;
+    height: 1.7rem;
+  }
+}
+
+@mixin arabic-letter-spacing {
+  html[lang='ar'] & {
+    letter-spacing: normal;
+  }
+}

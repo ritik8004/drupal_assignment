@@ -108,6 +108,7 @@ $primary_input_border: $grey-ash;
 $primary_input_disabled: $greyish;
 $primary_input_focus_border: $windows-blue;
 $primary_input_inline_error: $red-error;
+$online_exclusive_link: $cerulean-two;
 
 // Form Items
 $formitem_label: $greyish;
@@ -206,6 +207,7 @@ $title: $marine-blue;
 $sub_title: $marine-blue;
 $label_black: $black;
 $label_dark: $mothercare-black;
+$user_sidebar_block_title: $marine-blue;
 
 // Messages and Errors
 $default_msg_text: $white-five;
@@ -304,6 +306,7 @@ $autocomplete_text: $grey-ash;
 
 // Header.
 $header_bg: $white-five;
+$header_top_bg: $white-five;
 $header_search_block_bg: $white-five;
 $header_border: $white;
 
@@ -325,6 +328,7 @@ $primary_search_result_hover: $white-smoke-light;
 $header_c_menu_text: $brownish-grey;
 $header_c_menu_icon_color: $marine-blue-two;
 $header_c_menu_icon_text: $white-five;
+$header_c_menu_search_active_icon: $pumpkin-orange;
 $header_toggle_sign_default: $white;
 $header_toggle_sign_active_tab: $marine-blue;
 $header_toggle_sign_active_tab_bg: $white-five;
@@ -398,6 +402,10 @@ $footer_link_mobile: $black;
 $footer_link: $grey-ash;
 $footer_link_hover: $cerulean-two;
 
+// Social links.
+$social_links: $marine-blue-two;
+$social_links_hover: transparent;
+
 //1. Copyright
 $copyright_footer_bg: $white-four;
 $copyright_footer_text: $black;
@@ -430,7 +438,7 @@ $plp_sort_by_label: $grey-ash;
 $plp_facet_filter: $windows-blue;
 $plp_facet_filter_bg: $cerulean-two;
 $plp_facet_filter_link: $white-four;
-$plp_facet_clear_border: $marine-blue-two;
+$plp_facet_clear_border: $cerulean-two;
 $plp_facet_clear_border_mobile: $cerulean-two;
 $plp_facet_clear_text: $cerulean-two;
 $plp_facet_filter_count: $marine-blue-two;
@@ -564,6 +572,7 @@ $promo_white_btn_text: $mothercare-black;
 // Store finder page.
 // Store finder header form.
 $store_finder_header: $black;
+$store_finder_header_desktop: $marine-blue;
 $store_finder_subheader: $marine-blue;
 $store_finder_backbtn: $marine-blue-two;
 $store_finder_icon: $cerulean-two;
@@ -680,6 +689,8 @@ $checkout_cc_selected_store_content_bg: $white-four;
 $checkout_cc_help_text: $black;
 $checkout_cc_help_text_content: $grey-ash;
 $checkout_cc_empty_store_error: $scarlet;
+$checkout_cc_near_me_border: $greyish;
+$checkout_cc_tab_border: $greyish;
 
 // Checkout click and collect heading cnc form.
 $checkout_cc_cnc_form_title_border: $marine-blue-two;
@@ -765,6 +776,7 @@ $user_order_list_hover_link_bg: $white-smoke;
 $user_order_list_light: $greyish;
 $user_order_list_dark: $black;
 $user_order_help_text: $windows-blue;
+$user_order_help_text_links: $user_order_help_text;
 $user_order_help_bg: $pale-grey;
 
 // User Form
@@ -775,15 +787,18 @@ $user_captcha: $greyish;
 $user_pwd_input: $grey-ash;
 $user_pwd_unmask: $greyish;
 $user_account_nav: $matterhorn;
+$my_account_nav: $primary_text;
+$my_account_nav_active: $marine-blue;
+$my_account_nav_hover: $content_link_color;
 
 //block-myaccountneedhelp
 $myaccountneedhelp_bg: $pale-grey;
 $myaccountneedhelp_text: $windows-blue;
 
 //block-youllbeableto
-$user_blk_title: $marine-blue;
-$user_blk_text: $grey-ash;
-$user_blk_link: $cerulean-two;
+$user_block_title: $marine-blue;
+$user_block_text: $grey-ash;
+$user_block_link: $cerulean-two;
 
 // joinclubblock
 $joinclubblock_title: $dark-sand;
@@ -885,5 +900,77 @@ $order_print_delivery_details_row: $white-smoke-light;
 $order_print_dark_txt: $black;
 $order_print_barcode: $grey-ash;
 
+// Facet
+$category_facet_active_icon: $windows-blue;
+
 // Block Alshaya ACM customer .block-alshaya-acm-customer
 $block_acm_customer_txt: $windows-blue;
+
+// Colors not used in MC, but added here because used in brand themes.
+// This is to standardize the variables across themes, use the below if your brand has these elements.
+// Assigning to a false value.
+
+// From: PBAE.
+// Pre content region.
+$pre_content_region_bg: false;
+$header_secondary_menu_link_border: false;
+$mm_l1_link_active: false;
+$mm_l1_link_active_bg: false;
+$mm_l1_link_active_shadow: false;
+$mm_l2_link_mobile_menu: false;
+$header_c_menu_search_icon: false;
+$store_finder_get_direction_label_color: false;
+
+// From: HMKW
+$default_msg_status_text: false;
+$maintenance_link: false;
+$maintenance_text: false;
+$maintenance_title: false;
+$maintenance_mobile_body_bg: false;
+$maintenance_mobile_body_text: false;
+$plp_facet_input_placeholder: false;
+$delivery_color: false;
+$address_tile_border: false;
+$address_content_text: false;
+$address_content_link_border: false;
+$address_content_link_bg: false;
+$address_book_mobile_prefix: false;
+$cancel_button: false;
+$gallery_zoombtn_text: false;
+$sell_label: false;
+$price_default: false;
+$promo_title: false;
+$promo_sub_title: false;
+$promo_bordered_title: false;
+$promo_bordered_border: false;
+$footer_link2: false;
+$footer_link_active: false;
+$footer_submit_text: false;
+$footer_submit_bg: false;
+$footer_input_text: false;
+$footer_input_placeholder: false;
+$footer_input_bg: false;
+$footer_newsletter_label: false;
+$footer_newsletter_success_bg: false;
+$footer_newsletter_success_text: false;
+$welcome_h3: false;
+$plp_swatch_more_link: false;
+$pdp_swatch_border: false;
+
+// From: Victoria Secret.
+// Newsletter-signup.
+$newsletter_input_bg: false;
+
+// Footer.
+$footer_text: false;
+$footer_input_text: false;
+$footer_input_border_active: false;
+
+// Header.
+$header_c_menu_store_active_icon: false;
+$header_mobile_menu_bg: false;
+$header_secondary_menu_mobile_link: false;
+$header_secondary_menu_link_mobile_hover_bg: false;
+$header_super_category_bg: false;
+$user_order_help_border: false;
+$header_mobile_border: false;

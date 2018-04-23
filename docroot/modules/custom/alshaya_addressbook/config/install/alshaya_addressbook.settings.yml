@@ -1,5 +1,5 @@
-dm_version: 1
-mapping_kw:
+dm_version: 2
+mapping:
   country_code: 'country_id'
   given_name: 'firstname'
   family_name: 'lastname'
@@ -10,14 +10,3 @@ mapping_kw:
   dependent_locality: 'address_building_segment'
   administrative_area: 'area'
   area_parent: 'governate'
-mapping_sa:
-  country_code: 'country_id'
-  given_name: 'firstname'
-  family_name: 'lastname'
-  mobile_number: 'telephone'
-  address_line1: 'street'
-  address_line2: 'address_apartment_segment'
-  locality: 'address_block_segment'
-  dependent_locality: 'address_building_segment'
-  administrative_area: 'area'
-  area_parent: 'address_city_segment'

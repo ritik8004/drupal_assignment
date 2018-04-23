@@ -1,4 +1,5 @@
 .path--store-finder,
+.alias--cart-checkout-delivery,
 .nodetype--store {
   .view-header {
     font-size: 14px;
@@ -22,7 +23,7 @@
       @include breakpoint($desktop) {
         font-weight: normal;
         font-family: $alshaya-bold;
-        color: $marine-blue;
+        color: $store_finder_header_desktop;
       }
     }
 

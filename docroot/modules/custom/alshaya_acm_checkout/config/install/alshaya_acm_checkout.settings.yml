@@ -1,5 +1,5 @@
 checkout_guest_summary:
-  value: '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p><ul><li>Express checkout</li><li>Personalized offers</li><li>Favorite list</li><li>Order history</li><li>And more…</li></ul>'
+  value: '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p>'
   format: 'rich_text'
 checkout_guest_email_usage:
   value: 'Your email will be used only to send you information about your order.'

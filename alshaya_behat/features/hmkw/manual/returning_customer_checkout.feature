@@ -4,7 +4,7 @@ Feature: Test various checkout scenarios as returning customer
   Background:
     Given I am on a configurable product
     And I wait for the page to load
-    When I press "Add to cart"
+    When I press "add to basket"
     And I wait for AJAX to finish
     Then I go to "/cart"
     And I wait for the page to load
@@ -86,7 +86,7 @@ Feature: Test various checkout scenarios as returning customer
     Then I press "Submit"
     And I press "Confirm"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
 
   @hd @cs
@@ -108,7 +108,7 @@ Feature: Test various checkout scenarios as returning customer
     And I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
 
   @cc @cs
@@ -130,5 +130,5 @@ Feature: Test various checkout scenarios as returning customer
     And I accept terms and conditions
     When I press "place order"
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "

@@ -28,13 +28,13 @@
       @include arabic-letter-spacing;
 
       text-transform: uppercase;
-      color: $grey6;
+      color: $primary_input_placeholder;
       font-size: 0.6875rem;
       letter-spacing: 1px;
     }
 
     label {
-      color: $black-two;
+      color: $primary_input_label;
       text-transform: uppercase;
       display: none;
       float: $left;
@@ -47,16 +47,16 @@
   }
 
   .form-text {
-    border: 1px solid $hnm-black-two;
+    border: 1px solid $secondary_border;
     border-#{$right}: none;
   }
 
   .form-actions {
     @include icon(search, after) {
       background-color: $white-five;
-      border: 1px solid $hnm-black-two;
+      border: 1px solid $secondary_border;
       border-#{$left}: none;
-      color: $hnm-black-two;
+      color: $primary_dark_color;
       line-height: 0.93;
     }
   }
@@ -86,7 +86,7 @@
 
   .toggle--icon .icon-ic_dropdown-expand {
     font-size: 2.125rem;
-    color: $hnm-black-two;
+    color: $primary_dark_color;
     position: absolute;
     #{$right}: 3.2rem;
     top: 50%;
@@ -103,14 +103,14 @@
 
   .order__detail--link {
     a {
-      color: $hnm-black-two;
+      color: $content_link_color;
     }
   }
 }
 
 .block-alshaya-user-recent-orders {
   a.show-all {
-    color: $hnm-black-two;
+    color: $content_link_color;
     font-family: $hnm-regular;
     text-transform: none;
   }
@@ -121,7 +121,7 @@
   font-weight: normal;
   text-transform: uppercase;
   font-size: 0.875rem;
-  color: $white-five;
+  color: $block_acm_customer_title_bg;
   position: absolute;
   #{$right}: 0;
   top: 0;
@@ -137,7 +137,7 @@
 
 .open--accordion {
   .order-summary-row td {
-    background-color: $whisper-light-59;
+    background-color: $order_print_accordion_summary_bg;
   }
 
   .toggle--icon {
@@ -152,7 +152,7 @@
   font-weight: normal;
   text-transform: uppercase;
   line-height: 1;
-  color: $white-five;
+  color: $block_acm_customer_title_bg;
   top: -5.7rem;
   font-size: 0.875rem;
   height: 2.1875rem;
@@ -165,12 +165,12 @@
     .form-item-search {
       label {
         display: block;
-        background-color: $white-five;
-        border: 1px solid $hnm-black-two;
+        background-color: $order_customer_search_label_bg;
+        border: 1px solid $secondary_border;
         width: 100%;
         position: relative;
         line-height: 2.0625rem;
-        color: $hnm-black-two;
+        color: $title;
         height: 2.1875rem;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -207,7 +207,7 @@
         top: 50%;
         #{$right}: 0.3125rem;
         transform: translate(-50%, -50%);
-        color: $hnm-black-two;
+        color: $primary_dark_color;
         font-size: 2.125rem;
       }
     }

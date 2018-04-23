@@ -6,7 +6,7 @@
     }
 
     a {
-      color: $grey7;
+      color: $primary_link-active;
       font-family: $hnm-regular;
       line-height: 1.9;
       text-transform: capitalize;
@@ -21,13 +21,13 @@
       }
 
       &.active {
-        color: $hnm-black-two;
+        color: $content_link_color;
         font-family: $hnm-demibold;
         font-weight: normal;
       }
 
       &:hover {
-        color: $hnm-black-two;
+        color: $content_link_color;
         text-decoration: underline;
       }
     }
@@ -37,7 +37,7 @@
 .account--dashboard {
   #block-jointheclub {
     h3 {
-      color: $hnm-black-two;
+      color: $title;
       font-size: 0.75rem;
       font-family: $hnm-demibold;
     }

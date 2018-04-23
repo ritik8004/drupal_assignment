@@ -175,13 +175,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         '#change_address' => render($change_address_button),
       ];
 
-      // Expose selected delivery address to GTM.
-      if (\Drupal::moduleHandler()->moduleExists('alshaya_seo')) {
-        datalayer_add([
-          'deliveryArea' => $drupal_address['administrative_area'],
-          'deliveryCity' => $drupal_address['locality'],
-        ]);
-      }
+      GuestDeliveryHome::exposeSelectedDeliveryAddressToGtm($drupal_address);
 
       $selected_address = '<div id="selected-address-wrapper">' . render($selected_address_build) . '</div>';
     }
@@ -270,6 +264,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    *   Available shipping methods.
    */
   public static function generateShippingEstimates($address) {
+    if (empty($address['country_id'])) {
+      return [];
+    }
+
     /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
     return $checkout_options_manager->getHomeDeliveryShippingEstimates($address);
@@ -334,11 +332,11 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
       $api_wrapper = \Drupal::service('acq_commerce.api');
 
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+
       try {
         $customer = $api_wrapper->createCustomer($address['firstname'], $address['lastname'], $email);
-
-        /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-        $cart_storage = \Drupal::service('acq_cart.cart_storage');
         $cart_storage->associateCart($customer['customer_id'], $email);
       }
       catch (\Exception $e) {
@@ -347,6 +345,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
           $form_state->setErrorByName('custom', $e->getMessage());
           return;
         }
+
+        // Restore the cart to revert customer id and email in cart.
+        $cart_storage->restoreCart($cart->id());
 
         // @TODO: Handle create customer errors here.
         // Probably just the email error.
@@ -380,6 +381,27 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     // Clear the payment now.
     $cart->clearPayment();
+  }
+
+  /**
+   * Wrapper function to add Delivery info into GTM.
+   *
+   * @param array $address
+   *   Drupal address.
+   */
+  public static function exposeSelectedDeliveryAddressToGtm(array $address) {
+    // Expose selected delivery address to GTM.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_seo')) {
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
+      $magento_address = $address_book_manager->getMagentoAddressFromAddressArray($address);
+
+      datalayer_add([
+        'deliveryArea' => $address_book_manager->getAddressShippingAreaValue($magento_address),
+        'deliveryCity' => $address_book_manager->getAddressShippingAreaParentValue($address, $magento_address),
+      ]);
+    }
   }
 
 }

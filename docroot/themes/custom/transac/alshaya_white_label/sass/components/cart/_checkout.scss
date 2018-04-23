@@ -1211,8 +1211,10 @@ body.alias--cart {
       max-height: 2.188rem;
       line-height: 2.7;
 
-      &:hover {
-        opacity: 0.75;
+      @include breakpoint($desktop) {
+        &:hover {
+          opacity: 0.75;
+        }
       }
 
       &.disabled {

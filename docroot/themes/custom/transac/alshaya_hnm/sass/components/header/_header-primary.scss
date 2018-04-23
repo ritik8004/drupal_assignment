@@ -94,10 +94,10 @@ header {
       padding-bottom: 0;
       max-width: 17.5rem;
       border: none;
-      border-bottom: 1px solid $white-smoke-border;
+      border-bottom: 1px solid $primary_border;
       background-image: none;
       letter-spacing: 1px;
-      color: $hnm-black-two;
+      color: $primary_input;
       padding-#{$left}: 0.4375rem;
 
       @include breakpoint($only-mobile) {
@@ -107,7 +107,7 @@ header {
         border: 0;
         background-image: none;
         font-family: $hnm-regular;
-        color: $hnm-black-two;
+        color: $primary_input;
         font-size: 0.875rem;
         line-height: 1.36;
         letter-spacing: 0.5px;
@@ -123,7 +123,7 @@ header {
     #edit-submit-search,
     #edit-submit-search--2 {
       background: url('../imgs/assets/ic-search.svg') 15px 10px no-repeat;
-      border-bottom: 1px solid $white-smoke-border;
+      border-bottom: 1px solid $primary_border;
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: -0.3125rem;
@@ -137,7 +137,7 @@ header {
 
     font-size: 0.875rem;
     text-align: $right;
-    color: $black;
+    color: $primary_minicart_text;
     letter-spacing: 0.5px;
 
     @include breakpoint($only-tablet) {
@@ -169,7 +169,7 @@ header {
     }
 
     .cart-link-total {
-      color: $hnm-black-four;
+      color: $primary_minicart_text2;
       float: $left;
       margin-top: 0.3125rem;
       margin-#{$right}: 0.125rem;
@@ -179,7 +179,7 @@ header {
     .quantity {
       font-size: 0.75rem;
       font-family: $hnm-regular-nodir;
-      background: $hnm-red;
+      background: $primary_minicart_quantity_bg;
       bottom: -0.625rem;
       line-height: 1.25rem;
     }
@@ -258,7 +258,7 @@ header {
 .block-views-exposed-filter-blocksearch-page {
   form {
     @include breakpoint($only-mobile) {
-      border: 0.5rem solid $grey2;
+      border: 0.5rem solid $header_blocksearch_border;
       box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
 
       .form-item {
@@ -311,7 +311,7 @@ header {
     }
 
     form {
-      background: $marine-blue;
+      background: $header_blocksearch_bg;
       padding: 0.625rem;
     }
   }
@@ -324,7 +324,7 @@ header {
     }
 
     input {
-      color: $grey-ash;
+      color: $header_blocksearch_input;
       font-family: $hnm-regular;
 
       @include breakpoint($only-mobile) {
@@ -341,7 +341,7 @@ header {
       @include arabic-letter-spacing;
 
       text-decoration: none;
-      color: $hnm-black-four;
+      color: $mm_l1_link;
       font-size: 0.875rem;
       letter-spacing: 1px;
       display: block;
@@ -367,7 +367,7 @@ header {
       padding: 0.3125rem 0.875rem 0.664rem 0.625rem;
 
       @include icon(mappin) {
-        color: $hnm-black-two;
+        color: $mm_mobile_icon;
         width: 1rem;
         height: 1.4375rem;
         font-size: 1.875rem;
@@ -378,7 +378,7 @@ header {
 
       @include breakpoint($only-mobile) {
         padding-#{$right}: 0;
-        #{$right}: 1.25rem;
+        #{$right}: 0.875rem;
       }
 
       @include breakpoint($upto-desktop) {
@@ -440,14 +440,14 @@ header {
     .store {
       &.is-active {
         &::before {
-          color: $hnm-red;
+          color: $mm_mobile_icon_active;
         }
       }
     }
 
     .mobile--search {
       float: $right;
-      margin-#{$right}: 1.5625rem;
+      margin-#{$right}: 1.0625rem;
       position: absolute;
       #{$right}: 3.25rem;
       top: 0.8125rem;
@@ -475,21 +475,16 @@ header {
       }
 
       &.search-active {
-        a {
-          color: $white-five;
-          background: transparent;
-
+        .mobile--search {
           &::before {
-            background: url('../imgs/assets/ic-active-search.svg') no-repeat !important;
+            color: $mm_mobile_icon_active;
           }
         }
       }
 
       .mobile--search {
-        &::before {
-          background: url('../imgs/assets/ic-search.svg') no-repeat;
-          width: 1.375rem;
-          height: 1.375rem;
+        @include icon(search) {
+          color: $mm_mobile_icon;
         }
       }
     }
@@ -543,7 +538,7 @@ header {
       width: 100%;
       margin: 0;
       font-size: 0;
-      background: $white-five;
+      background: $mm_bg;
       padding: 0 calc((100% - 1284px) / 2);
     }
 
@@ -579,7 +574,7 @@ header {
           &::after {
             content: '';
             height: 2px;
-            background: $white-smoke-border;
+            background: $mm_l1_link_active;
             display: inherit;
             width: 100%;
             margin-top: 0.125rem;
@@ -596,7 +591,7 @@ header {
           visibility: visible;
           opacity: 1;
           z-index: 1;
-          border-bottom: 2px solid $black;
+          border-bottom: 2px solid $mm_l2_hover_border;
           border-top: none;
           transform: none;
 
@@ -604,7 +599,7 @@ header {
             content: '';
             height: 1px;
             width: 100%;
-            background: $hnm-black-two;
+            background: $mm_mobile_icon;
             position: absolute;
             top: -0.9375rem;
             opacity: 0.24;
@@ -615,7 +610,7 @@ header {
 
       a {
         font-size: 0.75rem;
-        color: $black-two;
+        color: $mm_l1_link;
         text-decoration: none;
       }
 
@@ -650,7 +645,7 @@ header {
             &::after {
               content: '';
               height: 2px;
-              background: $white-smoke-border;
+              background: $primary_border;
               display: inherit;
               width: 100%;
               margin-top: 0.125rem;
@@ -668,7 +663,7 @@ header {
     top: 2.5625rem;
     #{$left}: 0;
     #{$left}: 0;
-    background: $white-five;
+    background: $mm_l2_bg;
     z-index: 10;
     padding-top: 0.5625rem;
     padding-#{$left}: 0;
@@ -676,10 +671,10 @@ header {
     min-height: 22.125rem;
 
     a {
-      color: $peacock-blue;
+      color: $mm_l2_link;
 
       &:hover {
-        color: $peacock-blue !important;
+        color: $mm_l2_link !important;
       }
     }
 
@@ -705,10 +700,10 @@ header {
           font-weight: normal;
           line-height: 1.69;
           text-transform: uppercase;
-          color: $black;
+          color: $mm_l2_hover_border;
 
           &:hover {
-            color: $white-five !important;
+            color: $mm_l2_bg !important;
           }
         }
 
@@ -717,7 +712,7 @@ header {
           font-size: 0.75rem;
           margin: 0;
           margin-top: 0.375rem;
-          color: $brownish-grey;
+          color: $mm_l2_p;
         }
 
         &:hover {
@@ -725,7 +720,7 @@ header {
 
           a,
           p {
-            color: $white-five;
+            color: $mm_l2_p_hover;
           }
         }
 
@@ -762,7 +757,7 @@ header {
         min-height: 100%;
         vertical-align: top;
         position: absolute;
-        background: $white-five;
+        background: $mm_l3_link_bg;
         top: 0;
         padding-#{$left}: 16rem;
         padding-top: 1.5625rem;
@@ -777,7 +772,7 @@ header {
           width: 12rem;
 
           a {
-            color: $brownish-grey;
+            color: $mm_l2_p;
 
             &:hover {
               text-decoration: underline;
@@ -811,7 +806,7 @@ header {
 
   .level--three {
     font-size: 14px !important;
-    color: $peacock-blue !important;
+    color: $mm_l3_link !important;
     margin-bottom: 0.5rem;
   }
 
@@ -888,7 +883,7 @@ header {
     display: none;
 
     ul.menu--one__list {
-      background: $white-five;
+      background: $mm_l2_bg;
       width: 84.375%;
       height: 100%;
       position: fixed;
@@ -958,7 +953,7 @@ header {
     border: 0;
 
     > .menu-two__link-wrapper {
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $mm_border;
 
       a {
         padding-top: 0.9375rem;
@@ -979,7 +974,7 @@ header {
 
   .menu--three__list-item {
     > .menu-two__link-wrapper {
-      border-bottom: 1px solid $white;
+      border-bottom: 1px solid $mm_border;
 
       a {
         padding-top: 0.9375rem;
@@ -1005,7 +1000,7 @@ header {
     pointer-events: none;
 
     @include icon(chevron#{$right}, after) {
-      color: $hnm-black-two;
+      color: $mm_mobile_icon;
       font-size: 1.313rem;
       font-weight: bold;
       cursor: pointer;
@@ -1020,7 +1015,7 @@ header {
     background: transparent;
 
     @include icon(chevron#{$left}, after) {
-      color: $hnm-black-two;
+      color: $mm_mobile_icon;
       font-size: 1.313rem;
       font-weight: bold;
       cursor: pointer;
@@ -1068,7 +1063,7 @@ header {
     bottom: 0;
     z-index: 1000;
     height: auto !important;
-    background: $white-five;
+    background: $mm_bg;
     padding-bottom: 4em !important;
     overflow-y: auto;
 
@@ -1078,7 +1073,7 @@ header {
   }
 
   .menu-two__link-wrapper.contains-sublink .menu--three__link {
-    color: $marine-blue;
+    color: $mm_l2_wrapper_link;
   }
 
   .menu--two__list.menu__list--active {
@@ -1119,7 +1114,7 @@ header {
 }
 
 .mobile--close {
-  background: $hnm-black-two;
+  background: $mm_mobile_icon;
   position: fixed;
   top: 0.5rem;
   #{$left}: -100%;
@@ -1141,7 +1136,7 @@ header {
       position: absolute;
       top: -0.3125rem;
       #{$left}: -2px;
-      color: $white-five;
+      color: $mm_bg;
     }
   }
 }
@@ -1150,12 +1145,12 @@ header {
   @include arabic-letter-spacing;
 
   @include breakpoint($only-mobile) {
-    color: $black;
+    color: $header_toggle_sign_default_mobile;
   }
 
   position: fixed;
   top: 0;
-  background: $hnm-grey;
+  background: $header_toggle_sign_default;
   z-index: 10;
   transition: #{$left 0.5s ease-in-out};
   -moz-transform: translateZ(0);
@@ -1220,8 +1215,8 @@ header {
   }
 
   .active {
-    color: $hnm-black-two;
-    background: $white-five;
+    color: $header_toggle_sign_active_tab;
+    background: $header_toggle_sign_active_tab_bg;
     text-align: center;
   }
 
@@ -1438,7 +1433,7 @@ html[lang=ar] {
 }
 
 .branding__menu {
-  border-bottom: 1px solid $white;
+  border-bottom: 1px solid $header_branding_shadow;
 }
 
 html[lang='ar'] {
@@ -1537,7 +1532,7 @@ html {
           a {
             &.menu--one__link {
               border: none;
-              color: $black;
+              color: $mm_l1_link2;
               border-top: 2px solid transparent;
             }
           }

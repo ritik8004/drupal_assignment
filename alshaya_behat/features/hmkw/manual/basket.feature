@@ -65,18 +65,18 @@ Feature: Test basket page
     And I wait 2 seconds
     Then I should see "Collect the order in store from 2-3 days"
 
-  @loyalty
-  Scenario: As a Guest
-    I should be warned about privelege card number mismatch
-    When I go to "/cart"
-    And I wait for the page to load
-    When I click the label for "#details-privilege-card-wrapper > div"
-    Then I should see "Earn one draw entry for every KD 5 spent online"
-    When I fill in "privilege_card_number" with "0-0013-5844"
-    And I wait for AJAX to finish
-    And I fill in "privilege_card_number2" with "0-0013-5845"
-    And I wait for AJAX to finish
-    Then I should see "Specified PRIVILEGES CLUB card numbers do not match."
+#  @loyalty
+#  Scenario: As a Guest
+#    I should be warned about privelege card number mismatch
+#    When I go to "/cart"
+#    And I wait for the page to load
+#    When I click the label for "#details-privilege-card-wrapper > div"
+#    Then I should see "Earn one draw entry for every KD 5 spent online"
+#    When I fill in "privilege_card_number" with "0-0013-5844"
+#    And I wait for AJAX to finish
+#    And I fill in "privilege_card_number2" with "0-0013-5845"
+#    And I wait for AJAX to finish
+#    Then I should see "Specified PRIVILEGES CLUB card numbers do not match."
 
   @arabic
   Scenario: As a Guest on arabic site
@@ -120,17 +120,17 @@ Feature: Test basket page
     And I wait 2 seconds
     Then I should see "استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى 2-3 أيام"
 
-  @arabic @loyalty
-  Scenario: As a Guest
-  I should be warned about privelege card number mismatch
-    When I go to "/cart"
-    And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
-    When I click the label for "#details-privilege-card-wrapper > div"
-    Then I should see "إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني"
-    When I fill in "privilege_card_number" with "0-0013-5844"
-    And I wait for AJAX to finish
-    And I fill in "privilege_card_number2" with "0-0013-5845"
-    And I wait for AJAX to finish
-    Then I should see "أرقام نادي الامتيازات التي أدخلتها غير متطابقة."
+#  @arabic @loyalty
+#  Scenario: As a Guest
+#  I should be warned about privelege card number mismatch
+#    When I go to "/cart"
+#    And I wait for the page to load
+#    When I follow "عربية"
+#    And I wait for the page to load
+#    When I click the label for "#details-privilege-card-wrapper > div"
+#    Then I should see "إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني"
+#    When I fill in "privilege_card_number" with "0-0013-5844"
+#    And I wait for AJAX to finish
+#    And I fill in "privilege_card_number2" with "0-0013-5845"
+#    And I wait for AJAX to finish
+#    Then I should see "أرقام نادي الامتيازات التي أدخلتها غير متطابقة."

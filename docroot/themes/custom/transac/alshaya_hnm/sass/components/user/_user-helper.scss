@@ -7,7 +7,7 @@
           @include icon(chevron#{$right}, after) {
             font-size: 1.6rem;
             font-weight: bold;
-            color: $hnm-black-two;
+            color: $myaccount_icon;
           }
         }
       }
@@ -23,13 +23,13 @@
           font-family: $hnm-demibold;
           text-transform: uppercase;
           letter-spacing: 0.8px;
-          color: $hnm-black-two;
+          color: $myaccount_mobile_title;
           padding-top: 0.25rem;
         }
 
         .my-account-mobile-title2 {
           font-family: $hnm-regular;
-          color: $black-two;
+          color: $myaccount_mobile_title2;
         }
       }
     }
@@ -40,7 +40,7 @@
   .user-login-form {
     .form-text,
     .form-email {
-      color: $black-two !important;
+      color: $login_form_text !important;
       font-family: $hnm-regular;
     }
 
@@ -87,7 +87,7 @@
         font-size: 0.875rem;
 
         a {
-          color: $hnm-black-two;
+          color: $content_link_color;
           font-family: $hnm-demibold;
           text-decoration: underline;
           font-weight: normal;
@@ -96,7 +96,7 @@
 
       label {
         padding-#{$left}: 1.6875rem;
-        color: $grey-ash;
+        color: $newsletter_subscribe_label;
         font-size: 0.875rem !important;
       }
     }
@@ -108,7 +108,8 @@
     }
   }
 
-  .c-sidebar-second {
+  .c-sidebar-second,
+  .fieldset-wrapper {
     #block-youllbeableto {
       p {
         font-size: 0.875rem;

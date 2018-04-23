@@ -3,7 +3,7 @@
     .privilege-card-wrapper-title {
       font-family: $hnm-demibold;
       font-weight: normal;
-      color: $hnm-black-two;
+      color: $privilege_card_title;
       padding-bottom: 0.375rem;
 
       &.ui-state-active {
@@ -32,7 +32,7 @@
       .privilege-card-wrapper-title {
         font-family: $hnm-demibold;
         font-size: 0.75rem;
-        color: $hnm-black-two;
+        color: $privilege_card_title;
       }
 
       .privilege-card-wrapper {

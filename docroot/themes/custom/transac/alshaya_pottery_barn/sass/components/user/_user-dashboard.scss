@@ -1,0 +1,39 @@
+.c-sidebar-first {
+  .c-user--node.l-two--sf & {
+    .my-account-mobile-title1 {
+      font-weight: normal;
+      text-transform: uppercase;
+    }
+  }
+
+  .my-account-nav a {
+    text-transform: capitalize;
+
+    &.active {
+      color: $my_account_nav_active;
+      font-weight: 600;
+
+      &:hover {
+        color: $content_link_color;
+      }
+    }
+  }
+}
+
+.account--dashboard {
+  .subtitle {
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .label {
+    font-weight: 600;
+  }
+
+  #block-jointheclub {
+    a {
+      font-weight: 600;
+      color: $content_link_color;
+    }
+  }
+}

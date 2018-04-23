@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_pb.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_pb_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_pb', 'inc', 'alshaya_pb.content');
+
+  // Create default content for the site.
+  alshaya_pb_create_default_content();
+}

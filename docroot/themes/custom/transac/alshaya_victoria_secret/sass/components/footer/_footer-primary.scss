@@ -1,0 +1,181 @@
+.c-footer-primary {
+  color: $footer_text;
+
+  .footer--menu {
+    @include breakpoint($tablet) {
+      display: flex;
+      float: none;
+      width: 100%;
+    }
+  }
+
+  .primary__footer--menu {
+    @include breakpoint($tablet) {
+      flex-grow: 1;
+      flex-basis: 24%;
+    }
+  }
+
+  .footer_primary-right-block {
+    @include breakpoint($tablet) {
+      flex-basis: 28%;
+      flex-grow: 1;
+    }
+  }
+
+  .footer__categories {
+    @include breakpoint($only-tablet) {
+      flex-basis: 18%;
+    }
+  }
+
+  .footer__help {
+    @include breakpoint($only-tablet) {
+      flex-basis: 22%;
+    }
+  }
+
+  .footer__about,
+  .footer_primary-right-block {
+    @include breakpoint($only-tablet) {
+      flex-basis: 30%;
+    }
+  }
+
+  .c-footer-menu--about,
+  .c-footer-menu--help {
+    float: none;
+    margin-top: 0;
+
+    @include breakpoint($only-tablet) {
+      padding-left: 0.75rem;
+    }
+
+    html[lang=en] &,
+    html[lang=ar] {
+      width: auto;
+      margin-#{$left}: 0;
+    }
+  }
+
+  .language-switcher-language-url {
+    padding-bottom: 0.65rem;
+
+    @include breakpoint($only-tablet) {
+      padding-top: 3.3rem;
+      padding-bottom: 0;
+    }
+  }
+}
+
+.c-footer-menu {
+  @include breakpoint($desktop) {
+    float: none;
+    width: auto;
+  }
+
+  a {
+    text-transform: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.c-footer-menu--about,
+.c-footer-menu--help,
+.c-footer-menu--category {
+  h3 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+
+    @include breakpoint($tablet) {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+.c-footer-menu--category {
+  text-transform: none;
+}
+
+.cols-6 .c-footer-menu:last-child {
+  @include breakpoint($desktop) {
+    padding-#{$left}: 0;
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  @include breakpoint($only-mobile) {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 2rem;
+  }
+
+  h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .newsletter-block-label {
+    text-transform: none;
+    text-align: $left;
+    padding: 0;
+  }
+
+  @include breakpoint($only-tablet) {
+    min-width: 14.5rem;
+  }
+
+  input {
+    background-color: $newsletter_input_bg;
+  }
+
+  .form-email {
+    margin-top: 1rem;
+  }
+
+  .form-submit {
+    color: $newsletter_submit_btn_text;
+    text-transform: uppercase;
+    font-family: $vs-bold;
+
+    @include breakpoint($only-tablet) {
+      padding: 0.75rem 1rem;
+      #{$right}: 0;
+    }
+  }
+
+  form:not(.alshaya-acm-customer-order-list-search, .alshaya-stores-available-stores, .store-finder-exposed-form) {
+    input[type="email"] {
+      color: $footer_input_text;
+    }
+  }
+
+  .c-input__bar::before,
+  .c-input__bar::after {
+    background-color: $footer_input_border_active;
+  }
+}
+
+.c-footer-primary,
+.only-first-time {
+  .language-switcher-language-url {
+    ul li {
+      &:first-child::after {
+        content: none;
+      }
+
+      &.en a {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      a {
+        text-decoration: none;
+        text-transform: none;
+      }
+    }
+  }
+}

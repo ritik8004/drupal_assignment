@@ -260,6 +260,10 @@ class AddressBookAreasTermsHelper {
     if ($value && $this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       $term = $this->getLocationTermFromLocationId($value);
 
+      if (empty($term)) {
+        return '';
+      }
+
       // We always want labels in English for GTM.
       if ($term->language()->getId() != $langcode && $term->hasTranslation($langcode)) {
         $term = $term->getTranslation($langcode);

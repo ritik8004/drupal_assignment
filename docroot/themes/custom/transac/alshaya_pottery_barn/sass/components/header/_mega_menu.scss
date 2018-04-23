@@ -1,0 +1,77 @@
+.block-alshaya-main-menu {
+  ul.menu--one__list {
+    @include breakpoint($desktop) {
+      background: $pre_content_region_bg;
+    }
+  }
+
+  li.menu--one__list-item {
+    text-transform: none;
+
+    @include breakpoint($desktop) {
+      height: 2rem;
+
+      a.menu--one__link {
+        height: 2rem;
+        border-bottom: none;
+        border-top: none;
+        color: $mm_l1_link;
+        text-transform: uppercase;
+      }
+
+      &:hover {
+        > ul.menu--two__list {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  .active--menu--links {
+    li.menu--one__list-item {
+      @include breakpoint($desktop) {
+        &:hover {
+          a.menu--one__link {
+            background: $mm_l1_link_active_bg;
+            border-top: none;
+            color: $mm_l1_link_active;
+            box-shadow: inset 0 2px 0 0 $mm_l1_link_active_shadow;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+
+    &:hover {
+      li.menu--one__list-item a.menu--one__link {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+.has--three-levels {
+  .menu--two__list {
+    .menu--two__list-item > .menu-two__link-wrapper a {
+      @include breakpoint($desktop) {
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .menu--three__list-item > .menu-two__link-wrapper a {
+    @include breakpoint($desktop) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.highlights {
+  .title {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+}

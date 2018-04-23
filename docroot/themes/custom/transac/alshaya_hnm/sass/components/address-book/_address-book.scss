@@ -1,5 +1,5 @@
 .user__address--column {
-  border: 0.0625rem solid $grey4;
+  border: 0.0625rem solid $address_tile_border;
   font-family: $hnm-regular;
 }
 
@@ -17,7 +17,7 @@
 
 .address {
   .address--content {
-    color: $hnm-black-two;
+    color: $address_content_text;
     font-family: $hnm-demibold;
     font-weight: normal;
 
@@ -28,7 +28,7 @@
 
   .address--label {
     font-family: $hnm-regular;
-    color: $grey-ash;
+    color: $address_tile_label;
   }
 
   .address--primary {
@@ -49,7 +49,7 @@
 
     span {
       @include icon(radio-filled, before) {
-        color: $hnm-black-two;
+        color: $primary_radiobtn_filled;
         font-size: 2.625rem;
         display: inline-block;
         position: absolute;
@@ -75,7 +75,7 @@
 
     a {
       @include icon(radio-empty, before) {
-        color: $hnm-black-two;
+        color: $primary_radiobtn_empty;
         font-size: 2.625rem;
         display: inline-block;
         position: absolute;
@@ -114,7 +114,7 @@
   &:hover,
   &.default {
     .address--data {
-      background: $grey3;
+      background: $address_tile_selected_bg;
     }
 
     .address--primary {
@@ -122,7 +122,7 @@
 
       font-family: $hnm-bold;
       font-weight: normal;
-      color: $hnm-black-two;
+      color: $address_content_text;
       letter-spacing: 0;
       font-size: 0.875rem;
     }
@@ -136,14 +136,14 @@
         font-family: $hnm-demibold;
         font-weight: normal;
         text-decoration: underline;
-        color: $hnm-black-two;
+        color: $address_content_text;
       }
     }
 
     &--deliver-to-this-address {
       a {
-        color: $hnm-black-two;
-        border: 0.0625rem solid $hnm-black-two;
+        color: $address_content_text;
+        border: 0.0625rem solid $address_content_link_border;
         font-family: $hnm-bold;
         font-weight: normal;
         text-transform: uppercase;
@@ -158,8 +158,8 @@
 
       .address--deliver-to-this-address {
         a {
-          border: 1px solid $hnm-black-two;
-          background-color: $hnm-black-two;
+          border: 1px solid $address_content_link_border;
+          background-color: $address_content_link_bg;
           font-family: $hnm-bold;
           font-weight: normal;
           text-transform: uppercase;
@@ -222,7 +222,7 @@
       .prefix {
         font-size: 1rem;
         line-height: 2.25;
-        color: $greyish;
+        color: $address_book_mobile_prefix;
 
         html[lang=ar] .safari &,
         html[lang=ar] .ie & {
@@ -254,7 +254,7 @@
       label.error {
         top: 2rem;
         // Show red border for mobile number error.
-        border-top: 2px solid $red-error;
+        border-top: 2px solid $primary_input_inline_error;
         padding-top: 0.4375rem;
         margin-top: -0.1875rem;
         z-index: 1;
@@ -266,7 +266,6 @@
       }
 
       .form-item--error-message {
-        border-top: 2px solid $red-error;
         padding-top: 0.4375rem;
         margin-top: 0;
         z-index: 1;
@@ -289,7 +288,7 @@
     font-family: $hnm-regular;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    border-color: $hnm-black-two;
+    border-color: $primary_dropdown_border;
   }
 
   .select2-selection__arrow {
@@ -297,7 +296,7 @@
     #{$right}: 1px;
     width: 2.063rem;
     height: 2.063rem;
-    background: $white-five;
+    background: $primary_dropdown_bg;
 
     &::after {
       font-size: 2.438rem;
@@ -311,7 +310,7 @@
 
   .select2-selection__rendered {
     font-family: $hnm-regular;
-    color: $hnm-black-two;
+    color: $primary_dropdown_text;
   }
 }
 
@@ -319,7 +318,7 @@
   .select2-selection__arrow {
     @include icon(dropdown-expand, after) {
       font-size: 2.438rem;
-      color: $hnm-black-two;
+      color: $primary_dropdown_text;
       line-height: 35px;
       position: absolute;
       top: 0;

@@ -97,7 +97,7 @@ if [ "$loadProducts" = "yes" ]
 then
     drush $envn -l $site sync-commerce-product-options;
 	drush $envn -l $site sync-commerce-cats;
-	drush $envn -l $site alshaya-api-sync-stores;
+	drush $envn -l $site sync-stores;
 	drush $envn -l $site acspm;
     drush $envn -l $site queue-run acq_promotion_attach_queue;
     drush $envn -l $site queue-run acq_promotion_detach_queue;

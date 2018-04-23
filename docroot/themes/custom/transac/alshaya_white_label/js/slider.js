@@ -16,7 +16,10 @@
         arrows: true,
         autoplay: true,
         autoplaySpeed: 15000,
-        dots: true
+        dots: true,
+        // Fixes the blink issue:
+        // https://github.com/kenwheeler/slick/issues/1890
+        useTransform: false
       };
 
       function centerDots() {

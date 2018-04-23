@@ -3,11 +3,12 @@
     padding: 1.563rem 0;
   }
 
-  .c-sidebar-second {
+  .c-sidebar-second,
+  #block-youllbeableto {
     h3 {
       @include arabic-letter-spacing;
 
-      color: $black-three;
+      color: $user_block_title;
       font-size: 0.875rem;
       font-family: $hnm-demibold;
       letter-spacing: 0.4px;
@@ -33,7 +34,7 @@
 
   #block-jointheclub {
     h3 {
-      color: $hnm-black-two;
+      color: $user_block_link;
       font-family: $hnm-demibold;
       margin-bottom: 0.1rem;
     }
@@ -58,7 +59,7 @@
 
     a {
       font-weight: normal;
-      color: $hnm-black-two;
+      color: $user_block_link;
       text-decoration: underline;
       font-family: $hnm-demibold;
     }
@@ -90,7 +91,7 @@
   .user-pass,
   .multistep-checkout {
     .form-submit {
-      background: $hnm-black-two;
+      background: $primary_btn_bg;
       font-family: $hnm_demibold;
       text-transform: uppercase;
     }
@@ -106,6 +107,14 @@
     input.error {
       border-color: $red-error !important;
       border-width: 0 0 0.125rem !important;
+    }
+
+    label.form-required:not(.error),
+    .form-type-textfield label:not(.error),
+    .field--name-field-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number2 label:not(.error) {
+      color: $primary_input_label_hnm;
     }
   }
 
@@ -144,7 +153,7 @@
 
     text-decoration: underline;
     font-weight: normal;
-    color: $hnm-black-two;
+    color: $user_block_link;
     font-family: $hnm-regular;
   }
 }
@@ -152,7 +161,7 @@
 #block-youllbeableto,
 #block-jointheclub {
   a {
-    color: $hnm-black-two;
+    color: $user_block_link !important;
     text-decoration: underline;
     font-family: $hnm-demibold;
   }
@@ -259,7 +268,7 @@
 
 .path--user {
   .c-order-help .field--name-body {
-    color: $white-five;
+    color: $myaccountneedhelp_text;
     overflow: hidden;
     font-size: 0;
 
@@ -283,7 +292,7 @@
     }
 
     a {
-      color: $white-five;
+      color: $myaccountneedhelp_text;
       font-family: $hnm-regular;
 
       &:hover {
@@ -323,7 +332,7 @@
 
 .privilege-card-wrapper {
   .privilege-card-wrapper-title {
-    color: $hnm-black-two;
+    color: $privilege_card_title;
     font-family: $hnm-demibold;
   }
 }
@@ -349,7 +358,7 @@
     a {
       font-family: $hnm-demibold;
       font-weight: normal;
-      color: $hnm-black-two;
+      color: $user_block_link;
       text-decoration: underline;
     }
   }

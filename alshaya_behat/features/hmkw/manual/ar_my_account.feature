@@ -56,48 +56,48 @@ Feature: Test the My account section for authenticated user
     Then I should see the link "سياسية الاسترجاع اونلاين وفي المحلات"
     And I should see the link "معلومات التوصيل"
 
-  @loyalty
-  Scenario: As an authenticated user
-  I should be prompted to join the privilege club
-  if I don't have a privilege account
-    When I follow "تعديل معلومات الحساب"
-    And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with "55004455"
-    When I click the label for "#ui-id-2 > p.title"
-    When I fill in "edit-privilege-card-number" with ""
-    And I press "حفظ"
-    And I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
-    And I wait for the page to load
-    Then I should see "نادي الامتيازات"
-    Then I should see "احصل على مكافآت حصرية"
-    And I should see "كُن أول من يعلم"
-    Then I should see the link "مزيد من المعلومات"
-    And I should not see "رقم بطاقة نادي الامتيازات"
+#  @loyalty
+#  Scenario: As an authenticated user
+#  I should be prompted to join the privilege club
+#  if I don't have a privilege account
+#    When I follow "تعديل معلومات الحساب"
+#    And I wait for the page to load
+#    When I fill in "edit-field-mobile-number-0-mobile" with "55004455"
+#    When I click the label for "#ui-id-2 > p.title"
+#    When I fill in "edit-privilege-card-number" with ""
+#    And I press "حفظ"
+#    And I wait for the page to load
+#    Then I should see "تم حفظ ببيانات الاتصال"
+#    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
+#    And I wait for the page to load
+#    Then I should see "نادي الامتيازات"
+#    Then I should see "احصل على مكافآت حصرية"
+#    And I should see "كُن أول من يعلم"
+#    Then I should see the link "مزيد من المعلومات"
+#    And I should not see "رقم بطاقة نادي الامتيازات"
 
-  @loyalty
-  Scenario: As an authenticated user
-  account details section should display Privilege card number
-  along with Email address
-    When I follow "تعديل معلومات الحساب"
-    And I wait for the page to load
-    When I fill in "edit-field-mobile-number-0-mobile" with "55004455"
-    When I click the label for "#ui-id-2 > p.title"
-    When I fill in "edit-privilege-card-number" with "000135844"
-    When I fill in "edit-privilege-card-number2" with "000135844"
-    And I press "حفظ"
-    And I wait for the page to load
-    Then I should see "تم حفظ ببيانات الاتصال"
-    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
-    And I wait for the page to load
-    Then I should see "shweta+2@axelerant.com"
-    Then I should see "6362 - 5440 - 0013 - 5844"
-    And I should not see "اربح جوائز مدهشة"
-    Then I should not see "احصل على مكافآت حصرية"
-    And I should not see "كُن أول من يعلم"
-    Then I should not see the link "مزيد من المعلومات"
-    And I should see "رقم بطاقة نادي الامتيازات"
+#  @loyalty
+#  Scenario: As an authenticated user
+#  account details section should display Privilege card number
+#  along with Email address
+#    When I follow "تعديل معلومات الحساب"
+#    And I wait for the page to load
+#    When I fill in "edit-field-mobile-number-0-mobile" with "55004455"
+#    When I click the label for "#ui-id-2 > p.title"
+#    When I fill in "edit-privilege-card-number" with "000135844"
+#    When I fill in "edit-privilege-card-number2" with "000135844"
+#    And I press "حفظ"
+#    And I wait for the page to load
+#    Then I should see "تم حفظ ببيانات الاتصال"
+#    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
+#    And I wait for the page to load
+#    Then I should see "shweta+2@axelerant.com"
+#    Then I should see "6362 - 5440 - 0013 - 5844"
+#    And I should not see "اربح جوائز مدهشة"
+#    Then I should not see "احصل على مكافآت حصرية"
+#    And I should not see "كُن أول من يعلم"
+#    Then I should not see the link "مزيد من المعلومات"
+#    And I should see "رقم بطاقة نادي الامتيازات"
 
   Scenario: As an authenticated user
   I should be able to see most recent 10 orders

@@ -1,6 +1,8 @@
-<div class="address--name dark">
-  {{ address.given_name }} {{ address.family_name }}
-</div>
+{% if address.given_name %}
+  <div class="address--name dark">
+    {{ address.given_name }} {{ address.family_name }}
+  </div>
+{% endif %}
 
 {% if address.address_line2 is not empty %}
   <div class="address--content">{{ address.address_line2 }}</div>
@@ -43,6 +45,8 @@
   <div class="address--content">{{ address.postal_code }}</div>
 {% endif %}
 
-<div class="address--contact">
-  {{ 'Mobile Number' | t }}: <div class="no-direction">{{ address.telephone|replace({' ':''}) }}</div>
-</div>
+{% if address.telephone %}
+  <div class="address--contact">
+    {{ 'Mobile Number' | t }}: <div class="no-direction">{{ address.telephone|replace({' ':''}) }}</div>
+  </div>
+{% endif %}

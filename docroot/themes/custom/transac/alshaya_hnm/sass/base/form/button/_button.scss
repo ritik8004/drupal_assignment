@@ -1,7 +1,7 @@
 %button-wide,
 .button-wide {
-  background-color: $hnm-black-two;
-  color: $white-five;
+  background-color: $primary_btn_bg;
+  color: $primary_btn_text;
   font-family: $hnm-bold;
   text-transform: uppercase;
 }
@@ -10,8 +10,8 @@
 .brand-button {
   @include arabic-letter-spacing;
 
-  border: 2px solid $hnm-black-two;
-  color: $hnm-black-two;
+  border: 2px solid $primary_empty_btn_border;
+  color: $primary_empty_btn;
   font-size: 0.875rem;
   font-weight: bold;
   padding: 10px 20px 9px;
@@ -30,7 +30,7 @@
     font-weight: normal;
     text-transform: uppercase;
     text-align: center;
-    color: $white-five;
+    color: $primary_btn_text;
     height: 1.875rem;
     line-height: 1.875rem;
     width: 106px;
@@ -45,26 +45,26 @@
 
   &.status-processing,
   &.status-pending {
-    background-color: $warning;
+    background-color: $pending_btn_bg;
   }
 
   &.status-returned {
-    background-color: $returned;
+    background-color: $returned_btn_bg;
   }
 
   &.status-delivered,
   &.status-complete {
-    background-color: $success;
+    background-color: $complete_btn_bg;
   }
 }
 
 .load-more-button {
   a {
-    color: $hnm-black-two;
+    color: $primary_empty_btn;
     display: block;
     font-size: 0.875rem;
     text-align: center;
-    border: 1px solid $hnm-black-two;
+    border: 1px solid $primary_empty_btn_border;
     padding: 0.563rem 4.12rem;
     font-family: $hnm-regular;
   }

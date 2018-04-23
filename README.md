@@ -112,12 +112,14 @@ in local as and when required. All required changes are done.
 * Enable dblog and other ui modules
 * Allows hooking into the script, we can create scripts/install-site-dev.sh
 which is already added to .gitignore and add any code we want to execute post
-this script (for instance command to shout loud in mac - `say installation done`)
+this script (for instance command to shout loud in mac - `say installation 
+done`). One argument - site code will be passed to this script.
 
 Script usage:
-* `scripts/update-local.sh "site" "env" "mode"`
-* `scripts/update-local.sh mckw 01dev reuse`
-* `scripts/update-local.sh mckw 01dev download`
+* `blt local:sync "site" "env" "mode"`
+* `blt local:sync mckw dev reuse`
+* `blt local:sync mckw dev download`
+* `blt local:download "site" "env"`
 
 Be careful in using the mode download, it will take time as it does sql-dump
 using drush which can take too much of time.

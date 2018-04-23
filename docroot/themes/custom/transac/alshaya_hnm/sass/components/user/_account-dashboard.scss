@@ -1,6 +1,6 @@
 .account--dashboard {
   .subtitle {
-    color: $hnm-black-two;
+    color: $title;
     font-family: $hnm-demibold;
     font-weight: normal;
 
@@ -17,7 +17,7 @@
 
   .card--number {
     .black {
-      color: $hnm-black-two;
+      color: $content_link_color;
     }
   }
 
@@ -30,7 +30,7 @@
     #block-jointheclub {
       h3 {
         font-family: $hnm-demibold;
-        color: $hnm-black-two;
+        color: $title;
       }
 
       p {

@@ -1,0 +1,170 @@
+header {
+  &.c-header {
+    .block-views-exposed-filter-blocksearch-page {
+      input[type="text"] {
+        text-transform: none;
+        height: 2.1875rem;
+        width: 100%;
+
+        @include breakpoint($only-tablet) {
+          width: 10.625rem;
+        }
+
+        @include breakpoint($desktop) {
+          width: 14.4375rem;
+        }
+      }
+
+      #edit-submit-search {
+        height: 2.1875rem;
+        width: 2.625rem;
+      }
+
+      @include breakpoint($desktop) {
+        #{$left}: -1rem;
+        top: -0.25rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        bottom: -3.35rem;
+
+        html[lang=ar] & {
+          bottom: -2.0625rem;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        top: 2.75rem;
+      }
+    }
+
+    .block-cart-mini-block {
+      .cart-link {
+        background-size: 2rem;
+        margin-bottom: 0.5rem;
+
+        @include breakpoint($only-tablet) {
+          background-size: 1.625rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          background-size: 1.375rem;
+          margin-bottom: 0.5rem;
+          margin-top: 0.625rem;
+          height: 1.3125rem;
+
+          html[lang=ar] & {
+            margin-top: 0.625rem;
+          }
+        }
+      }
+
+      @include breakpoint($desktop) {
+        top: -0.25rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        #mini-cart-wrapper {
+          margin-top: 0;
+
+          .block-cart-mini-block .cart-link {
+            margin-top: 0;
+            margin-bottom: 0;
+          }
+        }
+
+        top: 0.625rem;
+        #{$right}: -0.4375rem;
+
+        html[lang=ar] & {
+          top: 0;
+          left: 1px;
+        }
+      }
+    }
+
+    .site-brand-home {
+      html[lang=ar] & {
+        @include breakpoint($only-tablet) {
+          width: 19rem;
+        }
+      }
+
+      a {
+        max-width: none;
+
+        @include breakpoint($desktop) {
+          max-width: 29rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          max-width: 17.5625rem;
+
+          html[lang=ar] & {
+            max-width: none;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          margin-top: 0;
+          max-width: none;
+          font-size: 1rem;
+          line-height: 2.3;
+        }
+      }
+
+      img {
+        html[lang=ar] & {
+          @include breakpoint($desktop) {
+            width: 25.94rem;
+            margin-top: -1.25rem;
+            margin-right: 0.25rem;
+          }
+
+          @include breakpoint($only-tablet) {
+            max-width: 18.1875rem;
+            width: 18.1875rem !important;
+          }
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .block-system-branding-block {
+      @include breakpoint($only-mobile) {
+        width: 60%;
+
+        .site-brand-home {
+          max-width: 14rem;
+        }
+      }
+    }
+
+    .c-header__region {
+      @include breakpoint($desktop) {
+        padding-bottom: 1.125rem;
+        padding-top: 2rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-top: 0.6875rem;
+        padding-#{$left}: 1.5rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin: 0.5rem 0;
+      }
+
+      .block-system-branding-block .site-brand-home {
+        @include breakpoint($only-tablet) {
+          img {
+            width: 17.5625rem;
+          }
+        }
+      }
+    }
+  }
+}

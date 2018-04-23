@@ -15,7 +15,7 @@
 .c-user-login {
   h1 {
     font-family: $hnm-demibold;
-    color: $hnm-black-two;
+    color: $title;
   }
 }
 
@@ -61,7 +61,7 @@
         margin-#{$left}: -0.75rem;
         line-height: 0.875;
         font-weight: bold;
-        color: $hnm-black-two;
+        color: $myaccount_icon;
       }
 
       h1.c-page-title {

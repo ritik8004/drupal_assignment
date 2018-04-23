@@ -6,4 +6,4 @@ core: 8.x
 dependencies:
   - alshaya_pb:alshaya_pb
 themes:
-  - alshaya_potterybarn
+  - alshaya_pottery_barn

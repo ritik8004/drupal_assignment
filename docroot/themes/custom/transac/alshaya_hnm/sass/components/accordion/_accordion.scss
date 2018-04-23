@@ -1,13 +1,13 @@
 .c-accordion {
   &:last-child {
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid $accordion_border;
   }
 }
 
 .c-accordion__title {
   @include arabic-letter-spacing;
 
-  color: $hnm-black-two;
+  color: $accordion_title;
   text-transform: uppercase;
   letter-spacing: 1px;
 
@@ -18,7 +18,7 @@
     width: 1.75rem;
     top: 50%;
     transform: translateY(-50%);
-    color: $hnm-black-two;
+    color: $accordion_title;
   }
 
   &.ui-state-active {

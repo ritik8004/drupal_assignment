@@ -77,12 +77,16 @@
 
 .c-footer__logo--verisign {
   background-image: url("../imgs/cards/card-verisign.png");
+  background-size: contain;
+  background-repeat: no-repeat;
   height: 34px;
   width: 68px;
 }
 
 .c-footer__logo--visa {
   background-image: url("../imgs/cards/card-visa.png");
+  background-size: contain;
+  background-repeat: no-repeat;
   height: 25px;
   width: 60px;
 }

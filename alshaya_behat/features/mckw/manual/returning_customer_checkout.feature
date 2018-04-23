@@ -8,7 +8,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     When I press "Add to basket"
     And I wait for AJAX to finish
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
@@ -26,6 +26,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
+    And I scroll to the "#edit-actions-next" element
     Then I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
@@ -45,6 +46,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
+    And I scroll to the "#edit-actions-next" element
     Then I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_knet"
@@ -60,6 +62,7 @@ Feature: Test various checkout scenarios as returning customer
     When I fill in "Ecom_Payment_Pin_id" with "1234"
     Then I press "Submit"
     When I press "Confirm"
+    And I wait 10 seconds
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
@@ -71,7 +74,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     And I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
-    When I wait 5 seconds
+    When I wait 10 seconds
     And I follow "select this store"
     And I wait 10 seconds
     And I select an element having class ".cc-action"
@@ -79,7 +82,7 @@ Feature: Test various checkout scenarios as returning customer
     When I select a payment option "payment_method_title_knet"
     And I wait for AJAX to finish
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Kuwait International Airport" from "edit-billing-address-address-billing-administrative-area"
     When I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     When I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
@@ -93,6 +96,7 @@ Feature: Test various checkout scenarios as returning customer
     When I fill in "Ecom_Payment_Pin" with "1234"
     Then I press "Submit"
     And I press "Confirm"
+    And I wait 10 seconds
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
@@ -106,6 +110,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for AJAX to finish
+    And I scroll to the "#edit-actions-next" element
     And I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cybersource"
@@ -126,7 +131,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     When I select the first autocomplete option for "Shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
-    When I wait 5 seconds
+    When I wait 15 seconds
     And I follow "select this store"
     When I wait 10 seconds
     And I select an element having class ".cc-action"

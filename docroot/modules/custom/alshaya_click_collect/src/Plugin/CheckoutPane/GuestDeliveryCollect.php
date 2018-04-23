@@ -5,6 +5,7 @@ namespace Drupal\alshaya_click_collect\Plugin\CheckoutPane;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
@@ -92,7 +93,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     if ($store_code && $shipping_type) {
       // Not injected here to avoid module dependency.
       // Get store info.
-      $store_utility = \Drupal::service('alshaya_stores_finder.utility');
+      $store_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
       $store = $store_utility->getStoreExtraData(['code' => $store_code]);
 
       if (!empty($store)) {
@@ -136,6 +137,21 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div class="cnc-collect-from">' . $this->t('Select your preferred pickup store') . '</div>',
     ];
 
+    // Near Me.
+    $pane_form['store_finder']['near_me'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Near me'),
+      '#prefix' => '<div>',
+      '#url' => Url::fromRoute('<none>', [], [
+        'fragment' => 'edit-near-me',
+        'attributes' => [
+          'class' => [
+            'cc-near-me current-location',
+          ],
+        ],
+      ]),
+    ];
+
     $pane_form['store_finder']['store_location'] = [
       '#type' => 'textfield',
       '#title' => $this->t('find your closest collection point'),
@@ -152,6 +168,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     $pane_form['store_finder']['toggle_map_view'] = [
       '#markup' => '<a href="#" class="stores-map-view">' . $this->t('Map view') . '</a>',
+      '#suffix' => '</div>',
     ];
 
     $pane_form['store_finder']['list_view'] = [
@@ -391,21 +408,13 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     // Clear the payment now.
     $cart->clearPayment();
 
-    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-    $address = $address_book_manager->getAddressStructureWithEmptyValues();
+    $address = GuestDeliveryCollect::getStoreAddress($values['store_code']);
 
     // Adding first and last name from custom info.
     $address['firstname'] = $values['cc_firstname'];
     $address['lastname'] = $values['cc_lastname'];
 
     $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($values['cc_mobile_number']);
-
-    /** @var \Drupal\alshaya_stores_finder\StoresFinderUtility $store_utility */
-    $store_utility = \Drupal::service('alshaya_stores_finder.utility');
-    $store_node = $store_utility->getTranslatedStoreFromCode($values['store_code']);
-
-    $address['extension']['address_area_segment'] = $store_node->get('field_store_area')->getString();
 
     $cart->setShipping($address);
   }
@@ -439,6 +448,39 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
     $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString()));
     return $response;
+  }
+
+  /**
+   * Wrapper function to get store address based on V1/V2 conditions.
+   *
+   * @param string $store_code
+   *   Store code to get the address array for.
+   *
+   * @return array
+   *   Address array.
+   */
+  public static function getStoreAddress($store_code) {
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+    $address = $address_book_manager->getAddressStructureWithEmptyValues();
+
+    /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $store_utility */
+    $store_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
+    $store_node = $store_utility->getTranslatedStoreFromCode($store_code);
+
+    // V1 - we update only area in address.
+    $address['extension']['address_area_segment'] = $store_node->get('field_store_area')->getString();
+
+    // V2 - copy address from Store.
+    if ($address_book_manager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+      $store_address = $store_node->get('field_address')->getValue();
+
+      if ($store_address) {
+        $address = $address_book_manager->getMagentoAddressFromAddressArray(reset($store_address));
+      }
+    }
+
+    return $address;
   }
 
 }

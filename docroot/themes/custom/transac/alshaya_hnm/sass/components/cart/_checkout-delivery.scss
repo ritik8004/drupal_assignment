@@ -35,7 +35,7 @@
           @include arabic-letter-spacing;
 
           font-size: 0.75rem;
-          color: $hnm-black-two;
+          color: $title;
           text-transform: uppercase;
           font-family: $hnm-bold;
           letter-spacing: 1px;
@@ -46,12 +46,12 @@
         background: $white-five;
 
         @include breakpoint($tablet) {
-          background: $hnm-grey;
+          background: $delivery_tab_active_bg;
         }
 
         a {
           font-family: $hnm-demibold;
-          color: $hnm-black-two;
+          color: $content_link_color;
           font-size: 0.75rem;
         }
       }
@@ -63,9 +63,9 @@
       .tab {
         &.active--tab--head {
           display: block;
-          background-color: $hnm-grey;
+          background-color: $delivery_tab_active_bg;
           border-width: 1px;
-          border-color: $hnm-black-two;
+          border-color: $secondary_border;
         }
       }
     }
@@ -82,7 +82,7 @@
       font-family: $hnm-regular;
 
       p {
-        color: $grey-ash;
+        color: $delivery_tab_text;
         font-family: $hnm-regular;
       }
 
@@ -127,7 +127,7 @@
           position: relative;
           z-index: 2;
           border-width: 1px;
-          border-color: $hnm-black-two;
+          border-color: $secondary_border;
           background: $hnm-grey;
         }
 
@@ -151,17 +151,17 @@
       }
 
       &.disabled--tab--head {
-        border-color: $light-greyish !important;
+        border-color: $delivery_tab_disabled_border !important;
       }
 
       &.active--tab--head {
         h2 {
-          color: $hnm-black-two;
+          color: $delivery_tab_active_title;
         }
       }
 
       &:hover {
-        background: $hnm-grey;
+        background: $delivery_tab_active_bg;
       }
     }
 
@@ -171,7 +171,7 @@
     }
 
     .tab-separator {
-      color: $hnm-black-two;
+      color: $checkout_tab_separator;
       font-size: 0.875rem;
 
       @include breakpoint($tablet) {
@@ -201,9 +201,9 @@
 
         &.active--tab--head {
           display: block;
-          background-color: $hnm-grey;
+          background-color: $delivery_tab_active_bg;
           border-width: 1px;
-          border-color: $hnm-black-two;
+          border-color: $secondary_border;
           padding: 5px;
         }
       }
@@ -216,7 +216,7 @@
 .shipping-methods-container {
   legend {
     .fieldset-legend {
-      border-bottom: 1px solid $hnm-black-two;
+      border-bottom: 1px solid $secondary_border;
 
       @include breakpoint($upto-desktop) {
         font-size: 0.875rem;
@@ -226,16 +226,16 @@
 
   .form-type-radio {
     @include breakpoint($only-mobile) {
-      border-left: 1px solid $white;
-      border-right: 1px solid $white;
+      border-left: 1px solid $delivery_form_radio_border;
+      border-right: 1px solid $delivery_form_radio_border;
     }
 
     &:nth-child(odd) {
-      background-color: $white-five;
+      background-color: $delivery_form_radio_odd;
     }
 
     &.selected {
-      background-color: $hnm-grey !important;
+      background-color: $delivery_form_radio_selected !important;
     }
 
     label {
@@ -265,7 +265,7 @@
           &-title {
             font-size: 0.875rem;
             font-family: $hnm-demibold;
-            color: $hnm-black-two;
+            color: $title;
           }
         }
       }
@@ -299,7 +299,7 @@
 
     span {
       font-size: 1rem;
-      border-bottom-color: $hnm-black-two;
+      border-bottom-color: $secondary_border;
 
       @include breakpoint($upto-desktop) {
         font-size: 0.875rem;
@@ -343,13 +343,13 @@
 
     &:last-child {
       .payment-plugin-wrapper-div {
-        border-bottom: 1px solid $grey4;
+        border-bottom: 1px solid $delivery_payment_wrapper_border;
       }
     }
 
     .payment-plugin-wrapper-div {
       &.plugin-selected {
-        background-color: $hnm-grey;
+        background-color: $delivery_payment_selected_bg;
 
         .method-knet {
           background: url('../imgs/cards/knet-active.png') no-repeat;
@@ -379,7 +379,7 @@
       @include icon(radio-empty, before) {
         display: inline-block;
         margin-#{$right}: 1rem;
-        color: $hnm-black-two;
+        color: $primary_dark_color;
         font-size: 2.438rem;
         position: absolute;
         top: 22%;
@@ -392,7 +392,7 @@
       }
 
       &:hover {
-        background-color: $hnm-grey;
+        background-color: $delivery_payment_selected_bg;
       }
 
       @include breakpoint($tablet) {
@@ -403,9 +403,9 @@
       float: $left;
       margin: 0;
       padding: 1.5rem 0.5rem;
-      border-top: 1px solid $grey4;
-      border-#{$left}: 1px solid $grey4;
-      border-#{$right}: 1px solid $grey4;
+      border-top: 1px solid $delivery_payment_wrapper_border;
+      border-#{$left}: 1px solid $delivery_payment_wrapper_border;
+      border-#{$right}: 1px solid $delivery_payment_wrapper_border;
 
       .payment-method {
         &-name {
@@ -420,7 +420,7 @@
           font-size: 0.875rem;
           font-weight: normal;
           font-family: $hnm-demibold;
-          color: $hnm-black-two;
+          color: $title;
 
           @include breakpoint($only-mobile) {
             font-size: 0.75rem;
@@ -444,9 +444,9 @@
             top: -1px;
             position: relative;
             border-width: 1px;
-            border-color: $hnm-black-two;
+            border-color: $secondary_border;
             border: none;
-            border-top: 1px solid $hnm-black-two;
+            border-top: 1px solid $secondary_border;
           }
         }
 
@@ -456,7 +456,7 @@
             background: transparent;
             margin-top: 0;
             text-transform: capitalize;
-            color: $hnm-black-two;
+            color: $primary_empty_btn;
             font-family: $hnm-demibold;
             font-weight: normal;
             text-decoration: underline;
@@ -488,7 +488,7 @@
             font-size: 0.75rem;
             display: block;
             padding: 0.5625rem 1.5625rem;
-            border: 1px solid $hnm-black-two;
+            border: 1px solid $secondary_border;
             background: $white-five;
             font-family: $hnm-bold;
             font-weight: normal;
@@ -519,14 +519,14 @@
 
         legend {
           span {
-            color: $hnm-black-two;
+            color: $primary_dark_color;
           }
         }
 
         .title {
           @include arabic-letter-spacing;
 
-          color: $hnm-black-two;
+          color: $title;
           font-size: 1rem;
           font-family: $hnm-demibold;
           letter-spacing: 1px;
@@ -535,12 +535,12 @@
 
           @include breakpoint($tablet) {
             padding-bottom: 0.4375rem;
-            border-bottom: 1px solid $hnm-black-two;
+            border-bottom: 1px solid $secondary_border;
           }
 
           @include breakpoint($only-mobile) {
             padding-bottom: 0.5625rem;
-            border-bottom: 1px solid $hnm-black-two;
+            border-bottom: 1px solid $secondary_border;
           }
         }
       }
@@ -548,7 +548,7 @@
 
     .tabs--content {
       @include breakpoint($tablet) {
-        border: 1px solid $hnm-black-two;
+        border: 1px solid $secondary_border;
         border-top: none;
         margin-top: 0.4375rem;
       }
@@ -557,18 +557,18 @@
 }
 
 #selected-address-wrapper {
-  border: 1px solid $grey4;
+  border: 1px solid $delivery_selected_address_border;
   font-family: $hnm-regular;
 
   .address--data {
-    background: $hnm-grey;
+    background: $delivery_selected_address_bg;
   }
 
   .address--controls {
     #change-address {
       font-size: 0.75rem;
       font-family: $hnm-demibold;
-      color: $hnm-black-two;
+      color: $content_link_color;
       text-decoration: underline;
     }
   }
@@ -580,7 +580,7 @@
   text-transform: uppercase;
   font-size: 1rem;
   line-height: 1.12;
-  color: $hnm-black-two;
+  color: $primary_dark_color;
   margin-bottom: 1rem;
   display: none;
 }
@@ -589,14 +589,14 @@
   @include breakpoint($only-mobile) {
     .tab-click-collect,
     .tab-home-delivery {
-      border-color: $hnm-black-two !important;
+      border-color: $secondary_border !important;
       border-width: 1px !important;
       padding: 0.5rem 0 !important;
       display: block !important;
 
       &.active--tab--head {
         h2 {
-          color: $hnm-black-two !important;
+          color: $title !important;
         }
       }
     }
@@ -609,7 +609,7 @@
       background-color: #fff !important;
 
       &:hover {
-        background-color: $hnm-grey !important;
+        background-color: $delivery_tab_active_bg !important;
       }
     }
   }
@@ -617,16 +617,16 @@
   .show-form {
     #edit-delivery-tabs {
       .active--tab--head {
-        background-color: $hnm-grey !important;
+        background-color: $delivery_tab_active_bg !important;
       }
     }
   }
 }
 
 .cnc-collect-from {
-  color: $hnm-black-two;
+  color: $primary_dark_color;
   text-transform: uppercase;
-  border-bottom: 1px solid $hnm-black-two;
+  border-bottom: 1px solid $secondary_border;
   font-family: $hnm-demibold;
   letter-spacing: normal;
   font-size: 0.875rem;

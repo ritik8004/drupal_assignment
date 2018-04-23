@@ -7,7 +7,7 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     When I press "Add to basket"
     And I wait for AJAX to finish
-    And I go to "/cart"
+    And I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
@@ -26,7 +26,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Kuwait International Airport" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -53,7 +53,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Kuwait International Airport" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -76,6 +76,7 @@ Feature: Test Checkout feature
     And I fill in "Ecom_Payment_Pin_id" with "1234"
     And I press "Submit"
     And I press "Confirm"
+    And I wait 10 seconds
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
@@ -103,7 +104,7 @@ Feature: Test Checkout feature
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Kuwait International Airport" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
@@ -117,6 +118,7 @@ Feature: Test Checkout feature
     And I fill in "Ecom_Payment_Pin" with "1234"
     And I press "Submit"
     And I press "Confirm"
+    And I wait 10 seconds
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
@@ -129,7 +131,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Kuwait International Airport" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -229,7 +231,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    When I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    When I select "Kuwait International Airport" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -247,6 +249,7 @@ Feature: Test Checkout feature
     When I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
+    And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
@@ -275,13 +278,14 @@ Feature: Test Checkout feature
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Kuwait International Airport" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
+    And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
@@ -308,7 +312,7 @@ Feature: Test Checkout feature
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
     And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I select "Kuwait International Airport" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
@@ -342,9 +346,9 @@ Feature: Test Checkout feature
     Then the "Map view" tab should be selected
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div > img"
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
     And I wait for the page to load
     When I fill in "edit-cc-firstname" with "Test"
@@ -361,13 +365,14 @@ Feature: Test Checkout feature
     When I fill in "edit-billing-address-address-billing-given-name" with "Test"
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
-    And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"
+    And I select "Kuwait International Airport" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-locality" with "Block A"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
     And I press "place order"
     When I wait for the page to load
+    And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Test Test "
 
   @cc
@@ -381,12 +386,10 @@ Feature: Test Checkout feature
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div > img"
     When I wait 2 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
     And I wait 2 seconds
-    Then I should see "Monday"
-    And I should see "Sunday"
     When I follow "back to basket"
     Then I should see the button "checkout securely"
     And the url should match "/cart"

@@ -25,7 +25,7 @@
   padding: 1.1875rem 0 1.125rem;
 
   @include breakpoint($only-mobile) {
-    border-bottom: 1px solid $white-smoke-border;
+    border-bottom: 1px solid $lang_switch_firsttime_border;
   }
 
   @include breakpoint($only-tablet) {
@@ -85,7 +85,7 @@
 
         font-size: 0.875rem;
         text-transform: uppercase;
-        color: $white-five;
+        color: $footer_link;
         line-height: 1.29;
         letter-spacing: 1px;
         text-decoration: underline;
@@ -95,7 +95,7 @@
         }
 
         &.is-active {
-          color: $grey5;
+          color: $footer_link_active;
           text-decoration: none;
         }
       }
@@ -119,7 +119,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: $hnm-black-two;
+  background-color: $lang_switch_firsttime_bg;
   z-index: 9;
 
   .links {
@@ -135,16 +135,16 @@
       padding: 0.375rem;
 
       a {
-        color: $white-two;
+        color: $footer_link2;
 
         &.is-active {
-          color: $grey5;
+          color: $footer_link_active;
         }
       }
 
       &:first-child {
         &::after {
-          color: $white-two;
+          color: $footer_link2;
         }
       }
     }
@@ -164,7 +164,7 @@
 
     @include icon(close, after) {
       position: absolute;
-      color: $white-two;
+      color: $footer_link2;
       font-size: 2.688rem;
     }
   }
@@ -186,7 +186,7 @@
 .c-footer-primary {
   @include clearfix;
 
-  background-color: $hnm-black;
+  background-color: $footer_bg;
   border-top: none;
   padding: 0;
 
@@ -235,7 +235,7 @@
       @include breakpoint($upto-tablet) {
         width: 100%;
         text-align: center;
-        border-bottom: 1px solid $white-smoke-border;
+        border-bottom: 1px solid $accordion_footer_border;
         border-top: none;
       }
 
@@ -244,7 +244,7 @@
 
         font-family: $hnm-bold;
         text-align: $left;
-        color: $white-five;
+        color: $accordion_bg;
         text-transform: uppercase;
         margin-top: 0;
         font-size: 0.875rem;
@@ -290,7 +290,7 @@
         font-size: 0.875rem;
         line-height: 1.71;
         text-align: $left;
-        color: $grey5;
+        color: $footer_link_active;
         text-transform: capitalize;
         font-family: $hnm-regular;
 
@@ -305,7 +305,7 @@
         }
 
         &:hover {
-          color: $white-five;
+          color: $footer_link;
         }
       }
 
@@ -362,12 +362,12 @@
 .block-alshaya-newsletter {
   @include clearfix;
 
-  color: $white-five;
+  color: $footer_link;
   float: $right;
   position: relative;
   width: 100%;
   padding: 1.25rem 0 0;
-  background-color: $hnm-black;
+  background-color: $footer_bg;
   margin: 0;
 
   @include breakpoint($tablet) {
@@ -388,7 +388,7 @@
     font-size: 0.875rem;
     letter-spacing: 1.2px;
     text-align: $left;
-    color: $white-five;
+    color: $footer_title_h3;
     text-transform: uppercase;
     margin-top: 0;
     margin-bottom: 0.625rem;
@@ -413,7 +413,7 @@
     font-size: 0.875rem;
     line-height: 1.5;
     text-align: $left;
-    color: $grey5;
+    color: $footer_newsletter_label;
     padding: 0;
 
     @include breakpoint($tablet) {
@@ -450,10 +450,10 @@
     line-height: 2;
     text-align: $left;
     background-color: $hnm-black;
-    border-bottom: 1px solid $white-five !important;
+    border-bottom: 1px solid $footer_input_text !important;
     padding-#{$right}: 33%;
     height: 2rem;
-    color: $white-five !important;
+    color: $footer_input_text !important;
     margin-top: 1.75rem;
 
     @include breakpoint($upto-desktop) {
@@ -469,7 +469,7 @@
     }
 
     &::placeholder {
-      color: $grey5;
+      color: $footer_input_placeholder !important;
       opacity: 1;
     }
   }
@@ -480,8 +480,8 @@
     @include arabic-letter-spacing;
 
     font-family: $hnm-bold;
-    background: $white-five;
-    color: $hnm-black-two;
+    background: $footer_submit_bg;
+    color: $footer_submit_text;
     position: absolute;
     font-size: 0.8125rem;
     #{$right}: 0;
@@ -517,13 +517,13 @@
     position: absolute;
     #{$right}: 0;
     top: 100%;
-    color: $red-error;
+    color: $default_error;
     padding: 0.3125rem 0;
     z-index: 9;
     font-size: 0.75rem;
     margin-top: 0.1875rem;
     text-align: $left;
-    background-color: $hnm-black;
+    background-color: $footer_bg;
 
     @include breakpoint($upto-tablet) {
       #{$right}: 0.5rem;
@@ -564,7 +564,7 @@
 
     .accordion--body {
       @include breakpoint($only-mobile) {
-        border-top: 2px solid $white-smoke-border;
+        border-top: 2px solid $accordion_footer_border;
       }
     }
   }
@@ -591,8 +591,8 @@
 .alshaya-newsletter-subscribe {
   .subscription-status {
     .success {
-      background: $tealish;
-      color: $white-four;
+      background: $footer_newsletter_success_bg;
+      color: $footer_newsletter_success_text;
       font-size: 0.75rem;
       padding: 0.3125rem 0.875rem;
       margin-top: 0.1875rem;
@@ -605,7 +605,7 @@
   }
 
   .edit-newsletter[data-style=zoom-in][data-loading] {
-    background: $white-five;
+    background: $footer_link;
   }
 
   .ladda-spinner {
@@ -621,11 +621,11 @@
 }
 
 .footer_primary-right-block {
-  color: $white-five;
+  color: $footer_link;
   float: $right;
   position: relative;
   width: 100%;
-  background-color: $hnm-black;
+  background-color: $footer_bg;
   padding: 1.25rem 0.5rem 0;
 
   @include breakpoint($tablet) {

@@ -2,7 +2,7 @@
   a {
     font-family: $hnm-regular;
     line-height: 1.83;
-    color: $black-three;
+    color: $plp_facet_filter;
     font-weight: normal;
   }
 
@@ -15,7 +15,7 @@
       font-family: $hnm-regular;
 
       &::placeholder {
-        color: $hnm-black-two;
+        color: $plp_facet_input_placeholder;
         opacity: 1;
       }
     }
@@ -62,10 +62,38 @@
   margin: 0 0.5rem 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: $black-two;
+  color: $plp_facet_label;
 
   @include breakpoint($desktop) {
     font-family: $hnm-bold;
     font-weight: normal;
+  }
+
+  .facet-item--expanded {
+    ul {
+      html[lang=ar] & {
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=category] {
+  > .facet-item--expanded {
+    > label {
+      &::before {
+        top: 0.125rem;
+      }
+    }
+  }
+}
+
+.block-facet-blockcategory {
+  .c-accordion__title {
+    @include icon(dropdown-collapse, after);
+  }
+
+  .ui-state-active {
+    @include icon(dropdown-expand, after);
   }
 }

@@ -1,1 +1,10 @@
 // Define theme fonts here.
+$vs_regular: 'BentonSans-Book';
+$vs_bold: 'BentonSans-Bold';
+$vs_arabic_regular: 'droid_arabic_kufiregular';
+$vs_arabic_bold: 'droid_arabic_kufibold';
+
+$arial: $vs_regular;
+$open-sans: $vs_bold;
+$cairo: $vs_regular;
+$cairo-bold: $vs_bold;

@@ -1,8 +1,9 @@
 .path--store-finder,
+.alias--cart-checkout-delivery,
 .nodetype--store {
   .view-header {
     font-size: 0.875rem;
-    color: $hnm-black-two;
+    color: $title;
 
     @include breakpoint($only-tablet) {
       margin-bottom: 2.5rem;
@@ -13,7 +14,7 @@
     .view-header {
       @include breakpoint($desktop) {
         font-family: $hnm-demibold;
-        color: $hnm-black-two;
+        color: $title;
       }
     }
 
@@ -36,22 +37,22 @@
   .mobile-only-back-to-glossary {
     a {
       @include icon(chevron#{$left}, after) {
-        color: $hnm-black-two;
+        color: $content_link_color;
       }
     }
   }
 
   .back-to-glossary {
-    color: $hnm-red;
+    color: $store_finder_backbtn;
     font-family: $hnm-regular;
   }
 
   .input--wrapper {
     .icon-search[id^=edit-actions] {
-      border-color: $hnm-black-two;
+      border-color: $store_finder_glossary_icon_border;
 
       @include breakpoint($tablet) {
-        border-color: $white;
+        border-color: $store_finder_glossary_icon_tablet_border;
         #{$right}: 1.75rem;
       }
 
@@ -70,7 +71,7 @@
   }
 
   .label--location {
-    color: $hnm-black-two !important;
+    color: $title !important;
   }
 
   input {
@@ -116,19 +117,19 @@
 
   .list-view-link {
     @include icon(list, before) {
-      color: $hnm-black-two;
+      color: $content_link_color;
       line-height: 0.6;
     }
 
     &:hover::before,
     &.active::before {
-      color: $white-five;
+      color: $store_finder_view_link_hover;
     }
   }
 
   .map-view-link {
     @include icon(map, before) {
-      color: $hnm-black-two;
+      color: $store_finder_glossary_icon;
 
       @include breakpoint($only-tablet) {
         display: inline-table;
@@ -141,7 +142,7 @@
 
     &:hover::before,
     &.active::before {
-      color: $white-five;
+      color: $store_finder_view_link_hover;
     }
   }
 
@@ -159,9 +160,9 @@
 
     &:hover,
     &.active {
-      border: 1px solid $hnm-black-two;
-      color: $white-five;
-      background-color: $hnm-black-two;
+      border: 1px solid $secondary_border;
+      color: $store_finder_view_link_hover;
+      background-color: $primary_dark_color;
     }
   }
 
@@ -169,7 +170,7 @@
   .form-item-geolocation-geocoder-google-places-api {
     [id^=edit-geolocation-geocoder-google-places-api] {
       @include breakpoint($only-mobile) {
-        border: 1px solid $hnm-black-two;
+        border: 1px solid $secondary_border;
       }
 
       &.ui-autocomplete-loading {
@@ -189,7 +190,7 @@
 
     h3 {
       font-family: $hnm-demibold;
-      color: $hnm-black-two;
+      color: $title;
       width: 9.836%;
     }
 
@@ -207,19 +208,19 @@
 
       @include breakpoint($only-mobile) {
         a {
-          color: $hnm-black-two !important;
+          color: $content_link_color !important;
 
           @include icon(chevron#{$right}, after) {
-            color: $hnm-black-two;
+            color: $store_finder_glossary_icon;
           }
         }
       }
 
       a {
-        color: $grey7;
+        color: $store_finder_glossary_alphabet;
 
         &:hover {
-          color: $link-hover;
+          color: $store_finder_glossary_alphabet_hover;
         }
       }
     }
@@ -233,19 +234,19 @@
 
     &:hover,
     &.selected {
-      background-color: $white-five;
+      background-color: $store_finder_view_link_hover;
     }
 
     .row-title {
-      color: $hnm-black-two;
+      color: $title;
       font-family: $hnm-demibold;
     }
 
     .views-field-field-store-address {
-      color: $grey7;
+      color: $store_finder_view_address;
 
       p {
-        color: $grey7;
+        color: $store_finder_view_address;
         margin: 0.125rem 0;
       }
     }
@@ -254,7 +255,7 @@
       .hours--wrapper .open--hours {
         padding-top: 0.75rem;
         padding-bottom: 0.75rem;
-        color: $grey7;
+        color: $store_finder_open_hours;
       }
     }
   }
@@ -262,8 +263,8 @@
   @include breakpoint($only-mobile) {
     .current-location {
       font-size: 0.75rem;
-      border: 1px solid $scarlet-three;
-      color: $scarlet-three;
+      border: 1px solid $store_finder_current_location;
+      color: $store_finder_current_location;
     }
   }
 
@@ -297,7 +298,7 @@
 
   @include breakpoint($tablet) {
     .store-row--counter {
-      background: $hnm-red;
+      background: $store_finder_search_results_counter_bg;
       padding-top: 0.125rem;
       line-height: 1.2;
 
@@ -347,7 +348,7 @@
 
     .current-location {
       width: 19.75%;
-      color: $hnm-red;
+      color: $store_finder_current_location_tablet;
     }
   }
 
@@ -375,7 +376,7 @@
   .list-view-link,
   .map-view-link {
     line-height: 1.4;
-    color: $hnm-black-two;
+    color: $content_link_color;
 
     @include breakpoint($tablet) {
       margin-#{$left}: 1px;
@@ -443,7 +444,7 @@
       border-bottom: none !important;
 
       @include icon(chevronup, after) {
-        color: $hnm-black-two;
+        color: $primary_dark_color;
       }
     }
   }
@@ -454,7 +455,7 @@
   .hours--wrapper {
     .hours--label.open {
       @include icon(dropdown-collapse, after) {
-        color: $hnm-black-two;
+        color: $primary_dark_color;
         font-size: 2rem;
       }
     }
@@ -465,13 +466,13 @@
   .view-on--map {
     @include arabic-letter-spacing;
 
-    color: $hnm-black-two;
+    color: $primary_dark_color;
     letter-spacing: 0.5px;
 
     a {
       @include arabic-letter-spacing;
 
-      color: $hnm-black-two;
+      color: $content_link_color;
       letter-spacing: 0.5px;
     }
   }
@@ -491,7 +492,7 @@
     @include icon(dropdown-expand, after) {
       position: absolute;
       display: inline-block;
-      color: $hnm-black-two;
+      color: $primary_dark_color;
       font-size: 2rem;
       top: 0.5rem;
       #{$right}: 0.7rem;
@@ -505,7 +506,7 @@
 
   .view-on--map {
     @include icon(map, after) {
-      color: $hnm-black-two;
+      color: $primary_dark_color;
     }
   }
 
@@ -529,7 +530,7 @@
   .open--hours {
     .key-value-key,
     .key-value-value {
-      color: $grey7;
+      color: $individual_store_open_hours;
     }
   }
 
@@ -543,13 +544,13 @@
   .views-field-title {
     span {
       font-family: $hnm-demibold;
-      color: $hnm-black-two;
+      color: $title;
     }
   }
 
   .views-field-field-store-address {
     font-family: $hnm-regular;
-    color: $grey7;
+    color: $individual_store_address;
 
     p {
       margin: 0;
@@ -572,13 +573,13 @@
   .hours--label {
     @include icon(dropdown-expand, after);
 
-    color: $hnm-black-two;
+    color: $primary_dark_color;
   }
 
   .hours--label.open {
     @include icon(dropdown-collapse, after);
 
-    color: $hnm-black-two;
+    color: $primary_dark_color;
   }
 
   .get--directions div::after {
@@ -597,8 +598,8 @@
 .geolocation-common-map-container {
   .hours--wrapper {
     .hours--label {
-      border-top: 1px solid $white;
-      border-bottom: 1px solid $white;
+      border-top: 1px solid $individual_store_hours_label_border;
+      border-bottom: 1px solid $individual_store_hours_label_border;
 
       &.open {
         border-bottom: none;
@@ -606,8 +607,8 @@
     }
 
     .open--hours {
-      border-bottom: 1px solid $white;
-      color: $grey7;
+      border-bottom: 1px solid $individual_store_hours_label_border;
+      color: $individual_store_open_hours;
     }
   }
 }
@@ -615,6 +616,6 @@
 .path--store-finder,
 .nodetype--store {
   .active {
-    color: $hnm-black-two;
+    color: $content_link_color;
   }
 }

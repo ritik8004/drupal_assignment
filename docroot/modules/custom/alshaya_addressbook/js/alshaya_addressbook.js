@@ -18,6 +18,7 @@
    *   New areas based on selected parent.
    */
   $.fn.updateAreaList = function (areas) {
+    var currentSelection = $('.area-list-dropdown').val();
     var emptyOption = $('.area-list-dropdown option[value=""]');
     $('.area-list-dropdown option').remove();
     $('.area-list-dropdown').append(emptyOption);
@@ -28,6 +29,8 @@
       option.html(areas[i]);
       $('.area-list-dropdown').append(option);
     }
+
+    $('.area-list-dropdown').val(currentSelection);
 
     $('.area-list-dropdown').trigger('change');
   }

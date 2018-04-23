@@ -5,6 +5,46 @@
  * Install, update and uninstall hooks for the alshaya_transac subprofile.
  */
 
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install config for department page block.
+ */
+function alshaya_transac_update_8105() {
+  alshaya_config_install_configs(['block.block.views_block__product_category_level_2_3_block_2'], 'alshaya_transac', 'optional');
+  // Move super category block from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable alshaya_stores_finder_transac sub module of alshaya_stores_finder.
+ */
+function alshaya_transac_update_8104() {
+  \Drupal::service('module_installer')->install(['alshaya_stores_finder_transac']);
+}
+
+/**
+ * Implements hook_update_n().
+ *
+ * Enable on stores finder transac module and super category features.
+ */
+function alshaya_transac_update_8103() {
+  // Enable alshaya_stores_finder_transac sub module of alshaya_stores_finder.
+  \Drupal::service('module_installer')->install(['alshaya_stores_finder_transac']);
+  // Install default block config.
+  $configs = [
+    'block.block.supercategorymenu',
+    'block.block.shopby',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_transac', 'optional');
+  // Move super category block from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
+}
+
 /**
  * Implements hook_update_n().
  *
@@ -56,6 +96,7 @@ function alshaya_transac_install() {
     'alshaya_product',
     'alshaya_seo_transac',
     'alshaya_stores_finder',
+    'alshaya_stores_finder_transac',
     'alshaya_user',
     'alshaya_acm_knet',
     'alshaya_static_html',

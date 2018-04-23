@@ -34,4 +34,7 @@ function alshaya_vs_transac_install() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
     ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
     ->save();
+
+  // Save overridden configs.
+  _alshaya_config_save_overridden_configs('alshaya_vs_transac');
 }

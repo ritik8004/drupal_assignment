@@ -16,7 +16,7 @@
     a {
       font-weight: normal;
       font-family: $hnm-demibold;
-      color: $hnm-black-two;
+      color: $content_link_color;
       font-size: 0.75rem;
 
       &:hover {
@@ -33,13 +33,13 @@
     padding: 0.5rem 2rem;
     border: 1px solid $grey5;
     display: inline-block;
-    color: $hnm-black-two;
+    color: $primary_dark_color;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 
     &.active {
-      border: 1px solid $hnm-black-two;
-      color: $hnm-black-two;
+      border: 1px solid $secondary_border;
+      color: $primary_dark_color;
       font-weight: normal;
       font-family: $hnm-bold;
       text-transform: uppercase;
@@ -68,7 +68,7 @@
       line-height: 1.29;
       text-transform: uppercase;
       font-weight: normal;
-      color: $hnm-black-two;
+      color: $primary_dark_color;
     }
   }
 
@@ -76,7 +76,7 @@
     .request-password-link {
       font-family: $hnm-demibold;
       font-weight: normal;
-      color: $hnm-black-two;
+      color: $primary_dark_color;
 
       &:hover {
         text-decoration: underline;
@@ -114,7 +114,7 @@
 
   #edit-checkout-guest {
     a {
-      background: $hnm-black-two;
+      background: $primary_dark_color;
       display: inline-block;
       margin: 1em 0;
       margin-bottom: 2rem;
@@ -138,13 +138,13 @@
     }
 
     .checkout-guest-email-usage {
-      color: $hnm-black-two;
+      color: $primary_dark_color;
       margin-bottom: 1.85rem;
       font-family: $hnm-bold;
       font-weight: normal;
 
       @include breakpoint($tablet) {
-        color: $hnm-black-two;
+        color: $primary_dark_color;
         margin-bottom: 1.4rem;
         font-size: 13px;
         width: 80%;
@@ -154,6 +154,6 @@
 
   .checkout-guest-summary {
     line-height: 1.6;
-    color: $grey-ash;
+    color: $checkout_guest_summary;
   }
 }

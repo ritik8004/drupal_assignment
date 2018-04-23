@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.department_page.field_product_category
     - field.field.node.department_page.field_promo_blocks
     - node.type.department_page
+    - field.field.node.department_page.field_show_left_menu
   module:
     - entity_reference_revisions
     - metatag
@@ -41,3 +42,4 @@ hidden:
   field_product_category: true
   langcode: true
   content_moderation_control: true
+  field_show_left_menu: true

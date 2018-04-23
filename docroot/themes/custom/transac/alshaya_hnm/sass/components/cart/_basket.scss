@@ -33,7 +33,7 @@
     }
 
     .dark {
-      color: $hnm-black-two;
+      color: $primary_dark_color;
     }
 
     .item-code {
@@ -46,9 +46,9 @@
       font-family: $hnm-regular;
       top: 1.6rem;
       #{$left}: -4.3rem;
-      color: $hnm-black-two;
-      background-color: $grey1;
-      border: 1px solid $hnm-black-two;
+      color: $tooltip_text;
+      background-color: $tooltip_bg;
+      border: 1px solid $tooltip_border_2;
       margin: 0;
 
       @include breakpoint($only-tablet) {
@@ -70,17 +70,17 @@
 
   .tooltip--head {
     font-family: $hnm-regular;
-    color: $hnm-black-two;
+    color: $tooltip_text;
 
     @include icon(info, after) {
-      color: $hnm-black-two;
+      color: $tooltip_icon;
     }
 
     &.not-available {
-      color: $grey4;
+      color: $basket_tooltip_not_available;
 
       &::after {
-        color: $grey4;
+        color: $basket_tooltip_not_available;
       }
     }
   }
@@ -94,14 +94,14 @@
 .card__header,
 .privilege-card-wrapper-title {
   font-family: $hnm-regular;
-  color: $hnm-black-two;
+  color: $privilege_card_title;
 
   @include icon(dropdown-expand, after) {
     position: absolute;
     #{$right}: 0.3125rem;
     top: 50%;
     transform: translateY(-50%);
-    color: $hnm-black-two;
+    color: $myaccount_icon;
     font-size: 2.4rem;
   }
 
@@ -115,6 +115,10 @@
 }
 
 .promo-continue-shopping-wrapper {
+  label {
+    color: $primary_input_label_hnm;
+  }
+
   .coupon-code-wrapper,
   #details-privilege-card-wrapper {
     .form-item-privilege-card-number,
@@ -136,8 +140,8 @@
       display: block;
       margin-bottom: 14px;
       padding: 9px 30px;
-      background: $hnm-black-two;
-      color: $white-five;
+      background: $basket_header_promo_bg;
+      color: $basket_header_promo_txt;
       cursor: pointer;
       margin-#{$left}: 1.5rem;
       font-size: 0.8125rem;
@@ -148,7 +152,7 @@
     &.remove {
       margin-#{$left}: 1.5rem;
       text-decoration: underline;
-      color: $hnm-black-two;
+      color: $basket_header_promo_bg;
       font-family: $hnm-bold;
       font-size: 0.75rem;
       display: block;
@@ -161,7 +165,7 @@
   & > h3 {
     @include arabic-letter-spacing;
 
-    color: $hnm-black-two;
+    color: $basket_block_title;
     margin-bottom: 0.3rem;
     padding-bottom: 0.56rem;
     font-family: $hnm-demibold;
@@ -183,7 +187,7 @@
     }
 
     .owl-dots .owl-dot {
-      color: $hnm-black-two;
+      color: $sell_owl_dots;
     }
   }
 
@@ -195,13 +199,13 @@
 .cart-promotions-wrapper {
   @include arabic-letter-spacing;
 
-  background: $info;
+  background: $basket_promo_wrapper;
 
   .continue-shopping a {
     font-family: $hnm-bold;
     text-transform: uppercase;
     text-decoration: underline;
-    color: $hnm-black-two;
+    color: $basket_promo_wrapper_link;
   }
 }
 
@@ -244,10 +248,10 @@ html[lang=ar] {
   .alias--cart {
     .tooltip--head {
       &.not-available {
-        color: $grey4;
+        color: $basket_tooltip_not_available;
 
         &::after {
-          color: $grey4;
+          color: $basket_tooltip_not_available;
         }
       }
     }
@@ -282,14 +286,14 @@ html[lang=ar] {
   }
 
   a {
-    color: $hnm-black-two;
+    color: $basket_continue_shopping_btn;
     font-size: 0.75rem;
   }
 }
 
 #block-baskethorizontalproductrecommendation {
   .owl-item a.above-mobile-block:hover .c-products__item__label {
-    color: $hnm-black-two;
+    color: $basket_block_title;
   }
 }
 

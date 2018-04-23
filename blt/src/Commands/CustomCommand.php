@@ -192,7 +192,7 @@ class CustomCommand extends BltTasks {
       ->stopOnFail()
       ->assume(TRUE)
       ->alias($drush_alias)
-      ->drush('alshaya-api-sync-stores')
+      ->drush('sync-stores')
       ->uri($uri)
       ->run();
 

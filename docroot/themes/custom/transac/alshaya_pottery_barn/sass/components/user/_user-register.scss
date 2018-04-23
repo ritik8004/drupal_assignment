@@ -1,0 +1,11 @@
+.c-user-register {
+  .c-content__region {
+    .user-form,
+    .change-pwd-form {
+      .field--name-field-subscribe-newsletter p a {
+        font-weight: 600;
+        color: $content_link_color;
+      }
+    }
+  }
+}

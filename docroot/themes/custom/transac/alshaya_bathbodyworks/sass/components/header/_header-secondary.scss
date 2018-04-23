@@ -1,0 +1,66 @@
+.c-menu-secondary {
+  @include breakpoint($only-tablet) {
+    max-width: 20rem;
+  }
+
+  @include breakpoint($desktop) {
+    text-align: center;
+  }
+
+  text-transform: uppercase;
+
+  li {
+    @include breakpoint($upto-desktop) {
+      @include icon(chevron#{$right}, after) {
+        color: $header_mobile_menu_arrow;
+        margin-top: -2.5rem;
+        font-size: 2rem;
+      }
+    }
+  }
+
+  a {
+    @include breakpoint($upto-desktop) {
+      color: $black;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.menu--three__list-item {
+  .menu--three__link {
+    @include breakpoint($upto-desktop) {
+      @include icon(chevron#{$right}, after) {
+        font-size: 2rem;
+      }
+    }
+  }
+}
+
+.branding__menu {
+  @include breakpoint($upto-desktop) {
+    height: 4.375rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    height: 5.625rem;
+
+    .navbar-fixed-top {
+      height: 5.625rem;
+    }
+  }
+}
+
+body {
+  @include breakpoint($only-tablet) {
+    html[lang=ar] & {
+      margin-top: 4.15rem;
+    }
+
+    margin-top: 4.15rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-top: 5.68rem;
+  }
+}

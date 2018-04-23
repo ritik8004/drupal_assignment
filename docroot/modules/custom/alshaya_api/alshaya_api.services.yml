@@ -6,7 +6,5 @@ services:
       - '@language_manager'
       - '@datetime.time'
       - '@cache.data'
-      - '@module_handler'
       - '@logger.factory'
-    calls:
-      - [setStoreFinderUtility, ['@?alshaya_stores_finder.utility']]
+      - '@acq_commerce.i18n_helper'

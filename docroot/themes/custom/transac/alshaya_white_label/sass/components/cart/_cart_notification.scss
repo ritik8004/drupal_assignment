@@ -83,8 +83,10 @@
         color: $minicart_notification_btn_text;
         font-family: $alshaya-thin;
 
-        &:hover {
-          opacity: 0.75;
+        @include breakpoint($desktop) {
+          &:hover {
+            opacity: 0.75;
+          }
         }
       }
     }

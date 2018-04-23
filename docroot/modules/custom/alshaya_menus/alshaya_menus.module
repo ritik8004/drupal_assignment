@@ -4,3 +4,171 @@
  * @file
  * Module file.
  */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\system\Entity\Menu;
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function alshaya_menus_preprocess_block(&$variables) {
+  switch ($variables['base_plugin_id']) {
+    case 'system_menu_block':
+      $config = \Drupal::config('alshaya_acm_product_category.super_category.settings');
+      // Check super category feature status.
+      if (!$config->get('status')) {
+        return;
+      }
+
+      // Check current menu type.
+      if (!in_array($variables['derivative_plugin_id'], $config->get('footer_menu_blocks'))) {
+        return;
+      }
+
+      // Update block cache context.
+      $variables['content']['#cache']['contexts'][] = 'url.path';
+
+      // Default parent term id.
+      $current_category_id = $config->get('default_category_tid');
+
+      /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+      $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+      $term = $product_category_tree->getCategoryTermFromRoute();
+      if (!empty($term)) {
+        $current_category = $product_category_tree->getCategoryTermRootParent($term);
+        $current_category_id = $current_category->id();
+      }
+      // Get all the menu items.
+      $items = &$variables['content']['#items'];
+
+      // Loop through each item, & remove item that isn't in parent term id.
+      foreach ($items as $id => $item) {
+        $options = $item['original_link']->getOptions();
+        $super_categories = !empty($options['categories']) ? array_filter($options['categories']) : [];
+        if (!in_array($current_category_id, $super_categories)) {
+          unset($items[$id]);
+        }
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_menus_form_menu_link_content_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Get entity from form state object.
+  $menu_link = $form_state->getFormObject()->getEntity();
+
+  // Check if the current form is menu link form of configured menu types.
+  if (!$menu_link instanceof MenuLinkContent) {
+    return;
+  }
+
+  // Get the settings of super category feature.
+  $config = \Drupal::config('alshaya_acm_product_category.super_category.settings');
+  // We don't do anything if the super-category feature is disabled or if the
+  // menu is not listed in super-category config.
+  if (!$config->get('status') || !in_array($menu_link->getMenuName(), $config->get('footer_menu_blocks'))) {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+  $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  $terms = $product_category_tree->getCategoryRootTerms();
+  // Create option array of root terms.
+  foreach ($terms as $term) {
+    $options[$term['id']] = $term['label'];
+  }
+
+  $menu_link_options = $menu_link->link->first()->options ?: [];
+  // Form to select root terms.
+  $form['categories'] = [
+    '#type' => 'checkboxes',
+    '#title' => t('Categories'),
+    '#description' => t('Please select categories for which you want to show this menu item.'),
+    '#options' => $options,
+    '#default_value' => !empty($menu_link_options['categories']) ? $menu_link_options['categories'] : [],
+    '#required' => TRUE,
+  ];
+
+  // Form submit handler.
+  $form['actions']['submit']['#submit'][] = 'alshaya_menus_menu_link_content_form_submit';
+}
+
+/**
+ * Submit function for menu add / edit form to save category root term.
+ */
+function alshaya_menus_menu_link_content_form_submit($form, FormStateInterface $form_state) {
+  /** @var \Drupal\menu_link_content\Form\MenuLinkContentForm $menu_link */
+  $menu_link = $form_state->getFormObject()->getEntity();
+
+  if (!$menu_link->link) {
+    return;
+  }
+
+  // Load previous link options coming from menu_link_attributes.
+  $menu_link_options = $menu_link->link->first()->options ?: [];
+  if (!empty($form_state->getValue('categories'))) {
+    $menu_link_options['categories'] = $form_state->getValue('categories');
+  }
+
+  if (!empty($menu_link_options['categories'])) {
+    $menu_link->link->first()->options = $menu_link_options;
+    $menu_link->save();
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ *
+ * Append categories name to menu title when super category feature is enabled.
+ */
+function alshaya_menus_form_menu_edit_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Get entity from form state object.
+  $menu_object = $form_state->getFormObject()->getEntity();
+  // Do not proceed if menu object is empty.
+  if (!$menu_object instanceof Menu) {
+    return;
+  }
+
+  // Get the settings of super category feature.
+  $config = \Drupal::config('alshaya_acm_product_category.super_category.settings');
+  // We don't do anything if the super-category feature is disabled or if the
+  // menu is not listed in super-category config.
+  if (!$config->get('status') || !in_array($menu_object->id(), $config->get('footer_menu_blocks'))) {
+    return;
+  }
+
+  if (!empty($form['links']['links'])) {
+    // Get only menu links from child elements.
+    $filtered_links = array_filter($form['links']['links'], function ($key) {
+      return strpos($key, 'menu_plugin_id:menu_link_content') !== FALSE;
+    }, ARRAY_FILTER_USE_KEY);
+
+    // Get term storage.
+    $term_storage = $terms = \Drupal::service('entity_type.manager')->getStorage('taxonomy_term');
+
+    // Loop through each menu links.
+    foreach ($filtered_links as $id => $link) {
+      if (empty($link['#item']->link->getOptions()['categories'])) {
+        continue;
+      }
+
+      // Filter out selected categories.
+      $categories = array_filter($link['#item']->link->getOptions()['categories']);
+
+      if (!empty($categories)) {
+        // Load all the terms from term ids.
+        $terms = $term_storage->loadMultiple($categories);
+        // Get the label of each terms.
+        $names = array_map(function ($term) {
+          return $term->label();
+        }, $terms);
+        // Append categories name to menu title.
+        $form['links']['links'][$id]['title'][1]['#title'] .= ' (' . implode(', ', $names) . ')';
+      }
+    }
+  }
+}

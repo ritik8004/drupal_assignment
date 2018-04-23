@@ -1,0 +1,43 @@
+body {
+  font-family: $vs-regular;
+
+  .block-join-the-club__list,
+  .block-join-the-club__list-link,
+  .pac-item,
+  .pac-not-found,
+  .field-promo-text-2 {
+    font-family: $vs-regular;
+  }
+
+  .pac-container {
+    .field-button-link {
+      font-family: $vs-regular;
+    }
+  }
+
+  .field-promo-text-1,
+  .view-product-item__meta,
+  .block-join-the-club__title,
+  .block-join-the-club__title-link {
+    font-family: $vs-bold;
+  }
+
+  .block-join-the-club__title {
+    html[lang=ar] & {
+      font-family: $vs_arabic_bold;
+    }
+  }
+
+  .theme-white-ampersand-bold,
+  .theme-black-ampersand-bold {
+    .field-promo-text-2 {
+      font-family: $vs-bold;
+    }
+  }
+
+  .block-find-store-heading {
+    a {
+      font-family: $vs-regular;
+    }
+  }
+}

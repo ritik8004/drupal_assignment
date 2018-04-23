@@ -2,11 +2,10 @@
 
 namespace Drupal\alshaya_api;
 
-use Drupal\alshaya_stores_finder\StoresFinderUtility;
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -24,13 +23,6 @@ class AlshayaApiWrapper {
    * @var \Drupal\Core\Config\ImmutableConfig
    */
   protected $config;
-
-  /**
-   * Stores the click_collect settings config.
-   *
-   * @var \Drupal\Core\Config\ImmutableConfig
-   */
-  protected $clickCollectSettings;
 
   /**
    * Token to access APIs.
@@ -54,13 +46,6 @@ class AlshayaApiWrapper {
   protected $langcode;
 
   /**
-   * Store finder utility object.
-   *
-   * @var object
-   */
-  protected $storeUtility;
-
-  /**
    * The date time service.
    *
    * @var \Drupal\Component\Datetime\TimeInterface
@@ -75,6 +60,13 @@ class AlshayaApiWrapper {
   protected $cache;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -85,39 +77,24 @@ class AlshayaApiWrapper {
    *   The date time service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend object for "cache.data".
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   Module Handler service object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
                               TimeInterface $date_time,
                               CacheBackendInterface $cache,
-                              ModuleHandlerInterface $module_handler,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              LoggerChannelFactoryInterface $logger_factory,
+                              I18nHelper $i18n_helper) {
     $this->config = $config_factory->get('alshaya_api.settings');
-
-    // Initialise click and collect settings only if module enabled.
-    if ($module_handler->moduleExists('alshaya_click_collect')) {
-      $this->clickCollectSettings = $config_factory->get('alshaya_click_collect.settings');
-    }
-
     $this->logger = $logger_factory->get('alshaya_api');
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
     $this->dateTime = $date_time;
     $this->cache = $cache;
-  }
-
-  /**
-   * Set store finder utility when available.
-   *
-   * @param \Drupal\alshaya_api\StoresFinderUtility $stores_utility
-   *   The store finder utility object.
-   */
-  public function setStoreFinderUtility(StoresFinderUtility $stores_utility) {
-    $this->storeUtility = $stores_utility;
+    $this->i18nHelper = $i18n_helper;
   }
 
   /**
@@ -129,6 +106,13 @@ class AlshayaApiWrapper {
   public function updateStoreContext($langcode) {
     // Calling code will be responsible for doing all checks on the value.
     $this->langcode = $langcode;
+  }
+
+  /**
+   * Function to reset context langcode for API calls.
+   */
+  public function resetStoreContext() {
+    $this->langcode = $this->languageManager->getCurrentLanguage()->getId();
   }
 
   /**
@@ -274,7 +258,24 @@ class AlshayaApiWrapper {
   public function getStores($langcode) {
     $this->updateStoreContext($langcode);
 
-    $endpoint = 'storeLocator/search?searchCriteria=';
+    $filters = [];
+
+    // Always add status check.
+    $filters[] = [
+      'field' => 'status',
+      'value' => '1',
+      'condition_type' => 'eq',
+    ];
+
+    $filters[] = [
+      'field' => 'store_id',
+      'value' => $this->i18nHelper->getStoreIdFromLangcode($langcode),
+      'condition_type' => 'eq',
+    ];
+
+    $endpoint = 'storeLocator/search?';
+    $endpoint .= $this->prepareFilterUrl($filters);
+
     $response = $this->invokeApi($endpoint, [], 'GET');
 
     $stores = NULL;
@@ -377,103 +378,6 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Function to sync all stores.
-   *
-   * @return bool
-   *   Flag to specify if sync was successful or not.
-   */
-  public function syncStores() {
-    $stored_synced = FALSE;
-
-    $store_locator_ids = [];
-
-    // Do API call to get stores for each language.
-    foreach ($this->languageManager->getLanguages() as $langcode => $language) {
-      // Get all stores for particular language.
-      $stores = $this->getStores($langcode);
-
-      if ($stores && is_array($stores) && !empty($stores['items'])) {
-        // Loop through all the stores and add/edit/translate the store node.
-        foreach ($stores['items'] as $store) {
-          $this->storeUtility->updateStore($store, $langcode);
-
-          // Store code will be unique for node/language.
-          $store_locator_ids[] = $store['store_code'];
-
-          // If we update even single store, we return TRUE.
-          $stored_synced = TRUE;
-        }
-      }
-    }
-
-    // If there is at least one store id.
-    if (!empty($store_locator_ids)) {
-      // Get orphan store node ids.
-      $orphan_store_nids = $this->storeUtility->getOrphanStores($store_locator_ids);
-      // Delete orphan stores.
-      $this->storeUtility->deleteStores($orphan_store_nids);
-    }
-
-    return $stored_synced;
-  }
-
-  /**
-   * Function to get stores for a product variant near the user's location.
-   *
-   * @param string $sku
-   *   Product SKU.
-   * @param float $lat
-   *   Latitude.
-   * @param float $lon
-   *   Longitude.
-   *
-   * @return array
-   *   Stores array.
-   */
-  public function getSkuStores($sku, $lat, $lon) {
-    $stores = $this->getProductStores($sku, $lat, $lon);
-    if (empty($stores)) {
-      return [];
-    }
-
-    // Start sequence from 1.
-    $index = 1;
-
-    // Add missing information to store data.
-    array_walk($stores, function (&$store) use (&$index) {
-      $store['rnc_available'] = (int) $store['rnc_available'];
-      $store['sts_available'] = (int) $store['sts_available'];
-      $store['sequence'] = $index++;
-
-      if ($store_node = $this->storeUtility->getTranslatedStoreFromCode($store['code'])) {
-        $extra_data = $this->storeUtility->getStoreExtraData($store, $store_node);
-        $store = array_merge($store, $extra_data);
-      }
-    });
-
-    // Sort the stores first by distance and then by name.
-    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
-
-    // Add sequence and proper delivery_time label and low stock text.
-    foreach ($stores as $index => $store) {
-      $stores[$index]['sequence'] = $index + 1;
-
-      // Display sts label by default.
-      $time = $store['sts_delivery_time_label'];
-
-      // Display configured value for rnc if available.
-      if ($store['rnc_available'] && $this->clickCollectSettings) {
-        $time = $this->clickCollectSettings->get('click_collect_rnc');
-      }
-
-      $stores[$index]['delivery_time'] = $this->t('Collect from store in <em>@time</em>', ['@time' => $time]);
-      $stores[$index]['low_stock_text'] = $store['low_stock'] ? $this->t('Low stock') : '';
-    }
-
-    return $stores;
-  }
-
-  /**
    * Function to get click and collect stores available nearby for a product.
    *
    * @param string $sku
@@ -551,6 +455,13 @@ class AlshayaApiWrapper {
     $filters[] = [
       'field' => 'status',
       'value' => '1',
+      'condition_type' => 'eq',
+    ];
+
+    // Filter by Country.
+    $filters[] = [
+      'field' => 'country_id',
+      'value' => strtoupper(_alshaya_custom_get_site_level_country_code()),
       'condition_type' => 'eq',
     ];
 

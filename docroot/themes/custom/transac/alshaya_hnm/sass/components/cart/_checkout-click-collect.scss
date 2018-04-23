@@ -14,14 +14,14 @@
       }
 
       input[type=text] {
-        color: $hnm-black-two;
+        color: $checkout_cc_input;
 
         @include breakpoint($desktop) {
           max-width: 11.75rem;
         }
 
         &::placeholder {
-          color: $hnm-black-two;
+          color: $checkout_cc_input;
         }
       }
     }
@@ -32,7 +32,7 @@
 
       max-height: 2.188rem;
       vertical-align: middle;
-      color: $hnm-black-two;
+      color: $checkout_cc_view_text;
       line-height: 4px;
       text-transform: uppercase;
       font-family: $hnm-demibold;
@@ -40,17 +40,17 @@
       letter-spacing: 1px;
 
       &:hover {
-        color: $hnm-black-two;
+        color: $checkout_cc_view_text;
 
         &::before {
-          color: $hnm-black-two;
+          color: $checkout_cc_view_text;
         }
       }
 
       &.active {
-        border: 1px solid $hnm-black-two;
-        color: $white-five;
-        background-color: $hnm-black-two;
+        border: 1px solid $checkout_cc_view_active_border;
+        color: $checkout_cc_view_active_text;
+        background-color: $checkout_cc_view_active_bg;
       }
 
       @include breakpoint($only-tablet) {
@@ -61,7 +61,7 @@
 
     .stores-list-view {
       @include icon(list, before) {
-        color: $hnm-black-two;
+        color: $checkout_cc_view_text;
         vertical-align: top;
         font-size: 2.188rem;
         line-height: 2px;
@@ -84,7 +84,7 @@
 
     .stores-map-view {
       @include icon(map, before) {
-        color: $hnm-black-two;
+        color: $checkout_cc_view_text;
         padding-#{$right}: 0.25rem;
         font-size: 1.75rem;
         line-height: 4px;
@@ -100,7 +100,7 @@
 
       &.active {
         &::before {
-          color: $white-five;
+          color: $checkout_cc_view_active_text;
         }
       }
     }
@@ -111,18 +111,18 @@
       text-transform: none;
 
       @include breakpoint($only-mobile) {
-        color: $hnm-black-two;
+        color: $checkout_cc_view_text;
       }
 
       @include breakpoint($desktop) {
         font-size: 0.875rem;
-        color: $hnm-black-two;
+        color: $checkout_cc_view_text;
         width: 30.5%;
         padding-#{$left}: 2.625rem;
       }
 
       @include breakpoint($only-tablet) {
-        color: $hnm-black-two;
+        color: $checkout_cc_view_text;
       }
 
       @include icon(search, before) {
@@ -134,8 +134,12 @@
     }
 
     #click-and-collect-list-view {
+      @include breakpoint($only-tablet) {
+        margin-top: 1.6rem;
+      }
+
       .all-stores-info {
-        border-top: 1px solid $grey4;
+        border-top: 1px solid $checkout_cc_listview_border;
         margin-top: 1.125rem;
 
         h3 {
@@ -146,10 +150,10 @@
         .selected-store-location {
           font-weight: normal;
           font-family: $hnm-bold;
-          color: $hnm-black-two;
+          color: $checkout_cc_view_text;
         }
 
-        color: $grey8;
+        color: $checkout_cc_listview_text;
       }
 
       ul {
@@ -157,26 +161,26 @@
           @include breakpoint($only-mobile) {
             .store-actions {
               .select-store {
-                border: 1px solid $hnm-black-two;
-                color: $hnm-black-two;
+                border: 1px solid $checkout_cc_view_active_border;
+                color: $checkout_cc_view_text;
               }
             }
           }
 
           &:hover {
-            background-color: $grey1;
+            background-color: $checkout_cc_store_hover;
           }
 
           .store-name-and-address {
             .store-name {
-              color: $hnm-black-two;
+              color: $checkout_cc_store_name;
               font-weight: normal;
               font-family: $hnm-demibold;
               display: block;
             }
 
             .store-address {
-              color: $grey7;
+              color: $checkout_cc_store_address;
             }
           }
 
@@ -184,18 +188,18 @@
             font-size: 0.75rem;
             font-weight: normal;
             font-family: $hnm-demibold;
-            color: $hnm-black-two;
+            color: $checkout_cc_view_text;
           }
 
           .delivery--time--value {
             display: block;
-            color: $hnm-red;
+            color: $checkout_cc_list_delivery_time;
           }
 
           .store-actions {
             .select-store {
-              color: $hnm-black-two;
-              border: 1px solid $hnm-black-two;
+              color: $checkout_cc_view_text;
+              border: 1px solid $checkout_cc_view_active_border;
               font-family: $hnm-regular;
               text-transform: uppercase;
               letter-spacing: 1px;
@@ -205,15 +209,15 @@
               }
 
               &:hover {
-                background-color: $hnm-black-two;
-                color: $white-five;
-                border-color: $hnm-black-two;
+                background-color: $checkout_cc_selected_store_content_bg;
+                color: $checkout_cc_selected_store_content_txt;
+                border-color: $checkout_cc_selected_store_content_border;
                 font-family: $hnm-bold;
               }
 
               &.ajax-ladda-spinner {
-                background: $white-five url(../imgs/icons/ic-loader.svg) center center no-repeat !important;
-                border-color: $hnm-black-two !important;
+                background: $checkout_cc_selected_store_content_txt url(../imgs/icons/ic-loader.svg) center center no-repeat !important;
+                border-color: $checkout_cc_selected_store_content_border !important;
               }
 
               @include breakpoint($only-mobile) {
@@ -223,7 +227,7 @@
 
             .store-on-map,
             .view-on-map {
-              color: $hnm-black-two;
+              color: $checkout_cc_view_text;
               text-transform: none;
 
               @include icon(map, before) {
@@ -234,7 +238,7 @@
 
           .store-open-hours {
             .hours--label {
-              color: $hnm-black-two;
+              color: $checkout_cc_view_text;
               font-size: 0.75rem;
               font-weight: normal;
               font-family: $hnm-demibold;
@@ -248,13 +252,13 @@
               }
 
               @include breakpoint($desktop) {
-                color: $hnm-black-two;
+                color: $checkout_cc_view_text;
                 font-size: 0.875rem;
                 margin-bottom: 0.875rem;
                 font-weight: normal;
 
                 @include icon(dropdown-expand, after) {
-                  color: $hnm-black-two;
+                  color: $checkout_cc_view_text;
                   font-size: 2.313rem;
                   position: absolute;
                   top: -0.4375rem;
@@ -264,7 +268,7 @@
 
                 &.open {
                   @include icon(dropdown-collapse, after) {
-                    color: $hnm-black-two;
+                    color: $checkout_cc_view_text;
                     font-size: 2.313rem;
                     position: absolute;
                     top: -0.4375rem;
@@ -275,14 +279,14 @@
               }
 
               @include breakpoint($only-mobile) {
-                color: $hnm-black-two;
+                color: $checkout_cc_view_text;
                 font-family: $hnm-demibold;
                 font-weight: normal;
                 font-size: 0.75rem;
                 margin-bottom: 0.3125rem;
 
                 @include icon(dropdown-expand, after) {
-                  color: $hnm-black-two;
+                  color: $checkout_cc_view_text;
                   font-size: 1.875rem;
                   position: absolute;
                   top: -0.3125rem;
@@ -291,7 +295,7 @@
 
                 &.open {
                   @include icon(dropdown-collapse, after) {
-                    color: $hnm-black-two;
+                    color: $checkout_cc_view_text;
                     font-size: 1.875rem;
                     position: absolute;
                     top: -0.3125rem;
@@ -310,7 +314,7 @@
 
                 &.open {
                   @include icon(dropdown-collapse, after) {
-                    color: $hnm-black-two;
+                    color: $checkout_cc_view_text;
                     font-size: 1.875rem;
                     position: absolute;
                     top: -0.3125rem;
@@ -322,7 +326,7 @@
 
             .open--hours {
               display: none;
-              color: $grey7;
+              color: $checkout_cc_list_open_hours;
               font-size: 0.75rem;
               line-height: 1.57;
 
@@ -363,7 +367,7 @@
     .geolocation-common-map-container {
       .store-name-and-address {
         .store-name {
-          color: $hnm-black-two;
+          color: $checkout_cc_store_name;
           font-weight: normal;
           font-family: $hnm-demibold;
 
@@ -373,12 +377,12 @@
         }
 
         .store-address {
-          color: $grey7;
+          color: $checkout_cc_store_address;
         }
       }
 
       .store-delivery-time {
-        color: $black;
+        color: $checkout_cc_list_delivery_time_text;
         font-size: 0.875rem;
         margin-top: 0.95rem;
 
@@ -390,13 +394,13 @@
         .label--delivery-time {
           font-weight: normal;
           font-family: $hnm-demibold;
-          color: $hnm-black-two;
+          color: $checkout_cc_list_delivery_time_label;
         }
       }
 
       .store-open-hours {
         .hours--label {
-          color: $hnm-black-two;
+          color: $checkout_cc_view_text;
           font-family: $hnm-demibold;
 
           &.open {
@@ -410,25 +414,25 @@
             margin-top: 0.95rem;
 
             @include icon(dropdown-expand, after) {
-              color: $hnm-black-two;
+              color: $checkout_cc_view_text;
             }
 
             &.open {
               @include icon(dropdown-collapse, after) {
-                color: $hnm-black-two;
+                color: $checkout_cc_view_text;
               }
             }
           }
 
           @include breakpoint($only-tablet) {
             font-size: 0.625rem;
-            color: $hnm-black-two;
+            color: $checkout_cc_view_text;
             font-weight: bold;
             padding-top: 0.5rem;
             margin-top: 0.5rem;
 
             @include icon(dropdown-expand, after) {
-              color: $hnm-black-two;
+              color: $checkout_cc_view_text;
               font-size: 1.875rem;
               position: absolute;
               top: 1px;
@@ -437,7 +441,7 @@
 
             &.open {
               @include icon(dropdown-collapse, after) {
-                color: $hnm-black-two;
+                color: $checkout_cc_view_text;
                 font-size: 1.875rem;
                 position: absolute;
                 top: 1px;
@@ -451,7 +455,7 @@
           display: none;
 
           @include breakpoint($desktop) {
-            color: $grey7;
+            color: $checkout_cc_list_open_hours;
           }
 
           @include breakpoint($only-tablet) {
@@ -463,8 +467,8 @@
 
       .store-actions {
         .select-store {
-          color: $hnm-black-two;
-          border: 1px solid $hnm-black-two;
+          color: $checkout_cc_view_text;
+          border: 1px solid $checkout_cc_selected_store_content_border;
           font-family: $hnm-regular;
           text-transform: uppercase;
           letter-spacing: 1px;
@@ -474,16 +478,16 @@
           }
 
           &.ajax-ladda-spinner {
-            background: $white-five url(../imgs/icons/ic-loader.svg) center center no-repeat !important;
+            background: $checkout_cc_selected_store_content_txt url(../imgs/icons/ic-loader.svg) center center no-repeat !important;
             background-size: 1.95rem !important;
             color: rgba(0, 0, 0, 0) !important;
-            border-color: $hnm-black-two !important;
+            border-color: $checkout_cc_selected_store_content_border !important;
           }
 
           &:hover {
-            background-color: $hnm-black-two;
-            color: $white-five;
-            border-color: $hnm-black-two;
+            background-color: $checkout_cc_selected_store_content_bg;
+            color: $checkout_cc_selected_store_content_txt;
+            border-color: $checkout_cc_selected_store_content_bg;
             font-family: $hnm-bold;
           }
         }
@@ -501,32 +505,32 @@
     }
 
     .selected-store-content {
-      border-bottom: 1px solid $white-two;
+      border-bottom: 1px solid $selected_store_content_border;
       padding-#{$left}: 1.375rem;
       padding-#{$right}: 1.313rem;
       padding-top: 1.438rem;
       padding-bottom: 1.188rem;
-      background: $white-five;
+      background: $selected_store_content_bg;
 
       @include breakpoint($only-mobile) {
         .store-actions {
           .change-store {
-            border: 1px solid $hnm-black-two;
-            color: $hnm-black-two;
+            border: 1px solid $checkout_cc_view_text;
+            color: $checkout_cc_view_border;
           }
         }
       }
 
       .store-name-and-address {
         .store-name {
-          color: $hnm-black-two;
+          color: $checkout_cc_store_name;
           font-weight: normal;
           font-family: $hnm-demibold;
           display: block;
         }
 
         .store-address {
-          color: $grey7;
+          color: $checkout_cc_store_address;
         }
       }
 
@@ -534,18 +538,18 @@
         font-size: 0.75rem;
         font-weight: normal;
         font-family: $hnm-demibold;
-        color: $hnm-black-two;
+        color: $checkout_cc_view_text;
       }
 
       .delivery--time--value {
         display: block;
-        color: $hnm-red;
+        color: $checkout_cc_list_delivery_time;
       }
 
       .store-actions {
         .change-store {
-          color: $hnm-black-two;
-          border: 1px solid $hnm-black-two;
+          color: $checkout_cc_view_text;
+          border: 1px solid $checkout_cc_view_border;
           font-family: $hnm-regular;
           text-transform: uppercase;
           letter-spacing: 1px;
@@ -555,9 +559,9 @@
           }
 
           &:hover {
-            background-color: $hnm-black-two;
-            color: $white-five;
-            border-color: $hnm-black-two;
+            background-color: $checkout_cc_selected_store_content_bg;
+            color: $checkout_cc_selected_store_content_txt;
+            border-color: $checkout_cc_selected_store_content_border;
             font-family: $hnm-bold;
           }
 
@@ -568,11 +572,11 @@
 
         .store-on-map,
         .view-on-map {
-          color: $hnm-black-two;
+          color: $checkout_cc_view_text;
           text-transform: none;
 
           @include icon(map, before) {
-            color: $hnm-black-two;
+            color: $checkout_cc_view_text;
           }
         }
       }
@@ -580,7 +584,7 @@
 
     .store-open-hours {
       .hours--label {
-        color: $hnm-black-two;
+        color: $checkout_cc_view_text;
         font-family: $hnm-demibold;
 
         &.open {
@@ -591,12 +595,12 @@
 
         @include breakpoint($desktop) {
           @include icon(dropdown-expand, after) {
-            color: $hnm-black-two;
+            color: $checkout_cc_view_text;
           }
 
           &.open {
             @include icon(dropdown-collapse, after) {
-              color: $hnm-black-two;
+              color: $checkout_cc_view_text;
             }
           }
         }
@@ -611,14 +615,14 @@
 
           &.open {
             @include icon(dropdown-collapse, after) {
-              color: $hnm-black-two;
+              color: $checkout_cc_view_text;
               font-size: 1.875rem;
             }
           }
         }
 
         @include breakpoint($only-mobile) {
-          color: $hnm-black-two;
+          color: $checkout_cc_view_text;
 
           @include icon(dropdown-expand, after) {
             color: $hnm-black-two;
@@ -627,7 +631,7 @@
 
           &.open {
             @include icon(dropdown-collapse, after) {
-              color: $hnm-black-two;
+              color: $checkout_cc_view_text;
               font-size: 1.875rem;
             }
           }
@@ -638,11 +642,11 @@
         display: none;
 
         @include breakpoint($desktop) {
-          color: $grey7;
+          color: $checkout_cc_list_open_hours;
         }
 
         @include breakpoint($only-tablet) {
-          color: $greyish;
+          color: $checkout_cc_list_open_hours_tablet;
           font-size: 0.75rem;
           padding-top: 0.25rem;
 
@@ -655,7 +659,7 @@
     }
 
     .cc-help-text {
-      color: $hnm-black-two;
+      color: $checkout_cc_view_text;
       font-weight: normal;
       font-family: $hnm-demibold;
     }
@@ -687,6 +691,94 @@
         padding-#{$left}: 0.9375rem;
         padding-#{$right}: 0.9375rem;
         margin-#{$left}: 0;
+      }
+    }
+  }
+}
+
+.alias--cart-checkout-delivery {
+  #edit-guest-delivery-collect,
+  #edit-member-delivery-collect {
+    #store-finder-wrapper {
+      .current-location {
+        padding: 0.4375rem 1.25rem;
+      }
+
+      .label-store-location {
+        margin: 0.625rem 0;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0.5625rem;
+        }
+      }
+
+      .current-location {
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            width: 10.125rem;
+          }
+        }
+      }
+
+      .stores-list-view,
+      .stores-map-view {
+        top: 7.75rem;
+
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            top: 9rem;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 8.5rem;
+
+          html[lang=ar] & {
+            top: 9.5rem;
+          }
+
+          &::before {
+            top: 0.25rem;
+
+            @include breakpoint($only-tablet) {
+              top: 0.4375rem;
+            }
+          }
+        }
+      }
+
+      .form-item-store-location {
+        width: 46%;
+
+        @include breakpoint($only-tablet) {
+          width: 34%;
+        }
+
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            width: 42%;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+      }
+
+      #click-and-collect-map-view {
+        @include breakpoint($only-tablet) {
+          html[lang=ar] & {
+            margin-top: 7.125rem;
+          }
+        }
+      }
+
+      #click-and-collect-list-view {
+        @include breakpoint($tablet) {
+          html[lang=ar] & {
+            min-height: 6rem;
+          }
+        }
       }
     }
   }

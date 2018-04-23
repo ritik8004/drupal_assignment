@@ -1,0 +1,23 @@
+uuid: 66e65137-1a60-4b5a-9844-f8ed8460dc91
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_promo_banner_for_mobile
+    - taxonomy.vocabulary.acq_product_category
+id: taxonomy_term.acq_product_category.field_promo_banner_for_mobile
+field_name: field_promo_banner_for_mobile
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Disable promo banner for mobile'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

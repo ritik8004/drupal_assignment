@@ -252,8 +252,10 @@
     border: solid 1px $checkout_order_print_btn_border;
     font-size: 0.75rem;
 
-    &:hover {
-      opacity: 0.75;
+    @include breakpoint($desktop) {
+      &:hover {
+        opacity: 0.75;
+      }
     }
   }
 
@@ -608,10 +610,6 @@
   text-align: center;
   text-transform: lowercase;
 
-  &:hover {
-    opacity: 0.75;
-  }
-
   @include breakpoint($tablet) {
     margin-#{$right}: 6.15rem;
     width: 8.5rem;
@@ -639,6 +637,10 @@
     html[lang=ar] & {
       margin-#{$right}: 3.3rem;
       width: 9.875rem;
+    }
+
+    &:hover {
+      opacity: 0.75;
     }
   }
 

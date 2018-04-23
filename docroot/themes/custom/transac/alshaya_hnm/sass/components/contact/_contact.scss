@@ -33,8 +33,8 @@
   .form-submit {
     text-transform: uppercase;
     font-size: 0.8125rem;
-    color: $white-five;
-    background: $hnm-black-two;
+    color: $primary_btn_text;
+    background: $primary_btn_bg;
     font-family: $hnm-bold;
   }
 }
@@ -62,7 +62,7 @@
   }
 
   legend {
-    color: $hnm-black-two;
+    color: $webform_contact_legend;
     font-family: $hnm-demibold;
     text-transform: uppercase;
   }

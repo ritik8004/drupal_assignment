@@ -3,3 +3,5 @@ type: module
 description: 'Contains wrappers to APIs exposed by Magento (bypass Conductor).'
 package: 'Alshaya'
 core: 8.x
+dependencies:
+  - acq_commerce:acq_commerce

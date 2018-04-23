@@ -110,8 +110,10 @@
             text-transform: lowercase;
             height: 2.188rem;
 
-            &:hover {
-              opacity: 0.75;
+            @include breakpoint($desktop) {
+              &:hover {
+                opacity: 0.75;
+              }
             }
 
             a {

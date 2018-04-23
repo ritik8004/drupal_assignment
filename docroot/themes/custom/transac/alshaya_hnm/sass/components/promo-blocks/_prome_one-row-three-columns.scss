@@ -5,7 +5,7 @@
     cursor: pointer;
 
     .field--name-field-title {
-      color: $hnm-red;
+      color: $promo_title;
       font-size: 1.25rem;
       font-family: $hnm_bold;
       line-height: 1;
@@ -37,7 +37,7 @@
   }
 
   .paragraph--type--offers-bordered {
-    border: 1px solid $grey-ash;
+    border: 1px solid $promo_bordered_border;
     text-align: center;
     margin-bottom: 0;
 
@@ -48,7 +48,7 @@
     .field--name-field-heading {
       font-size: 1rem;
       font-family: $hnm_regular;
-      color: $hnm-black-two;
+      color: $promo_bordered_title;
       padding-top: 0.3rem;
       padding-bottom: 0.375rem;
       letter-spacing: 1px;
@@ -81,7 +81,7 @@
     .field--name-field-title {
       font-size: 1.25rem;
       font-family: $hnm_bold;
-      color: $hnm-red;
+      color: $promo_title;
       line-height: 1;
       text-transform: uppercase;
 

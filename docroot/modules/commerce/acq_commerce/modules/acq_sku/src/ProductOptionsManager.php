@@ -128,6 +128,19 @@ class ProductOptionsManager {
    *   Attribute code.
    */
   protected function createProductOption($langcode, $option_id, $option_value, $attribute_id, $attribute_code, $weight) {
+    if (empty($option_value)) {
+      $this->logger->warning('Got empty value while syncing production options: @data', [
+        '@data' => json_encode([
+          'langcode' => $langcode,
+          'option_id' => $option_id,
+          'attribute_id' => $attribute_id,
+          'attribute_code' => $attribute_code,
+        ]),
+      ]);
+
+      return;
+    }
+
     // Update the term if already available.
     if ($term = $this->loadProductOptionByOptionId($attribute_code, $option_id, NULL, FALSE)) {
       $save_term = FALSE;

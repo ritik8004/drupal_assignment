@@ -1,0 +1,9 @@
+.block-alshaya-newsletter {
+  .newsletter-block-label {
+    text-transform: none;
+  }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    background: $primary_btn_bg;
+  }
+}

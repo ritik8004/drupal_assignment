@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_cart\CartInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
@@ -53,6 +54,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     ],
   ];
 
+  $cart_items = NULL;
+
   // Get the current cart.
   /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
   $cart_storage = \Drupal::service('acq_cart.cart_storage');
@@ -60,8 +63,19 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   /** @var \Drupal\acq_cart\Cart $cart */
   $cart = $cart_storage->getCart(FALSE);
 
-  // Get current cart items.
-  $cart_items = $cart ? $cart->items() : NULL;
+  if ($cart instanceof CartInterface) {
+    // If for any reason user comes back to basket from checkout pages, we clear
+    // API caches.
+    $tags = [
+      'acq_cart_shipping_estimate:' . $cart->id(),
+      'acq_cart_payment_methods:' . $cart->id(),
+    ];
+
+    Cache::invalidateTags($tags);
+
+    // Get current cart items.
+    $cart_items = $cart->items();
+  }
 
   if (empty($cart_items)) {
     // Add empty message wrapper container.
@@ -518,6 +532,8 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
     foreach ($form['ajax']['configurables'] as $key => $form_item) {
       if (is_array($form_item) && isset($form_item['#type']) && $form_item['#type'] == 'select') {
+        $form['ajax']['configurables'][$key]['#empty_value'] = '';
+        $form['ajax']['configurables'][$key]['#options_attributes']['']['disabled'] = 'disabled';
         $form['ajax']['configurables'][$key]['#empty_option'] = t('Select @title', ['@title' => $form_item['#title']]);
         $form['ajax']['configurables'][$key]['#attributes']['data-default-title'] = $form_item['#title'];
       }

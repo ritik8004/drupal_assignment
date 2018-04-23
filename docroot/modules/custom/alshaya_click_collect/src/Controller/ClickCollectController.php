@@ -6,7 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_click_collect\Ajax\ClickCollectStoresCommand;
 use Drupal\alshaya_click_collect\Ajax\StoreDisplayFillCommand;
-use Drupal\alshaya_stores_finder\StoresFinderUtility;
+use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
@@ -34,7 +34,7 @@ class ClickCollectController extends ControllerBase {
   /**
    * Stores Finder Utility service object.
    *
-   * @var \Drupal\alshaya_stores_finder\StoresFinderUtility
+   * @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility
    */
   protected $storesFinderUtility;
 
@@ -71,7 +71,7 @@ class ClickCollectController extends ControllerBase {
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   AlshayaApiWrapper service object.
-   * @param \Drupal\alshaya_stores_finder\StoresFinderUtility $stores_finder_utility
+   * @param \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $stores_finder_utility
    *   Stores Finder Utility service object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity repository.
@@ -107,7 +107,7 @@ class ClickCollectController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_api.api'),
-      $container->get('alshaya_stores_finder.utility'),
+      $container->get('alshaya_stores_finder_transac.utility'),
       $container->get('entity.repository'),
       $container->get('config.factory'),
       $container->get('acq_cart.cart_storage'),
@@ -202,6 +202,17 @@ class ClickCollectController extends ControllerBase {
     $response->addCommand(new HtmlCommand('#click-and-collect-map-view .geolocation-common-map-locations', $build['map_info_window']));
     $response->addCommand(new InvokeCommand('#click-and-collect-map-view .geolocation-common-map-locations', 'hide'));
     $response->addCommand(new ClickCollectStoresCommand(['raw' => $stores]));
+
+    // If there are no stores, hide 'list view' and 'map view'.
+    if (count($stores) == 0) {
+      $response->addCommand(new InvokeCommand('.stores-list-view', 'hide'));
+      $response->addCommand(new InvokeCommand('.stores-map-view', 'hide'));
+    }
+    else {
+      $response->addCommand(new InvokeCommand('.stores-list-view', 'show'));
+      $response->addCommand(new InvokeCommand('.stores-map-view', 'show'));
+    }
+
     return $response;
   }
 
@@ -280,7 +291,7 @@ class ClickCollectController extends ControllerBase {
     $all_stores = $top_three = [];
 
     if (SKU::loadFromSku($sku)) {
-      if ($stores = $this->apiWrapper->getSkuStores($sku, $lat, $lon)) {
+      if ($stores = $this->getSkuStores($sku, $lat, $lon)) {
         $top_three = [];
         $top_three['#theme'] = 'pdp_click_collect_top_stores';
         $top_three['#stores'] = array_slice($stores, 0, $limit);
@@ -307,6 +318,65 @@ class ClickCollectController extends ControllerBase {
     }
 
     return ['top_three' => $top_three, 'all_stores' => $all_stores];
+  }
+
+  /**
+   * Get Stores for particular SKU.
+   *
+   * @param string $sku
+   *   SKU to check for stores.
+   * @param float $lat
+   *   User's latitude.
+   * @param float $lon
+   *   User's longitude.
+   *
+   * @return array
+   *   Processed stores array.
+   */
+  private function getSkuStores($sku, $lat, $lon) {
+    $stores = $this->apiWrapper->getProductStores($sku, $lat, $lon);
+
+    if (empty($stores)) {
+      return [];
+    }
+
+    // Start sequence from 1.
+    $index = 1;
+
+    // Add missing information to store data.
+    array_walk($stores, function (&$store) use (&$index) {
+      $store['rnc_available'] = (int) $store['rnc_available'];
+      $store['sts_available'] = (int) $store['sts_available'];
+      $store['sequence'] = $index++;
+
+      if ($store_node = $this->storesFinderUtility->getTranslatedStoreFromCode($store['code'])) {
+        $extra_data = $this->storesFinderUtility->getStoreExtraData($store, $store_node);
+        $store = array_merge($store, $extra_data);
+      }
+    });
+
+    // Sort the stores first by distance and then by name.
+    alshaya_master_utility_usort($stores, 'rnc_available', 'desc', 'distance', 'asc');
+
+    $config = $this->configFactory->get('alshaya_click_collect.settings');
+
+    // Add sequence and proper delivery_time label and low stock text.
+    foreach ($stores as $index => $store) {
+      $stores[$index]['sequence'] = $index + 1;
+
+      // Display sts label by default.
+      $time = $store['sts_delivery_time_label'];
+
+      // Display configured value for rnc if available.
+      if ($store['rnc_available'] && $config) {
+        $time = $config->get('click_collect_rnc');
+      }
+
+      $stores[$index]['delivery_time'] = $this->t('Collect from store in <em>@time</em>', ['@time' => $time]);
+      $stores[$index]['low_stock_text'] = $store['low_stock'] ? $this->t('Low stock') : '';
+    }
+
+    return $stores;
   }
 
   /**

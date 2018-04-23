@@ -224,16 +224,16 @@
         text-align: center;
       }
 
-      &:hover {
-        opacity: 0.75;
-      }
-
       @include breakpoint($desktop) {
         border: 0.0625rem solid $black-two;
         display: inline-block;
         font-weight: 700;
         padding: 0.625rem 1.5rem;
         min-width: 5.9375rem;
+
+        &:hover {
+          opacity: 0.75;
+        }
       }
 
       &:focus {
@@ -337,8 +337,10 @@
           border: 1px solid $pumpkin-orange;
           background-color: $pumpkin-orange;
 
-          &:hover {
-            opacity: 0.75;
+          @include breakpoint($desktop) {
+            &:hover {
+              opacity: 0.75;
+            }
           }
         }
       }
@@ -539,6 +541,7 @@
 
       #edit-field-address-0-address-mobile-number-mobile-error,
       #edit-mobile-number-mobile-error {
+        border-top: 2px solid $primary_input_inline_error;
         position: absolute;
         top: 2rem;
         #{$left}: 0;
@@ -548,6 +551,8 @@
         position: absolute;
         #{$left}: 0;
         line-height: 1;
+        border-top: 2px solid $primary_input_inline_error;
+        width: 100%;
       }
     }
 

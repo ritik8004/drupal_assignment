@@ -1,8 +1,8 @@
 .c-order-print {
   .delivery-details {
-    border: 1px solid $hnm-black-two;
-    color: $hnm-black-two;
-    background: $white-five;
+    border: 1px solid $secondary_border;
+    color: $primary_dark_color;
+    background: $order_print_item_row;
     margin-bottom: 1.5rem;
   }
 
@@ -10,7 +10,7 @@
   .barcode--wrapper {
     strong {
       font-family: $hnm-bold;
-      color: $hnm-black-two;
+      color: $primary_dark_color;
       font-weight: normal;
     }
   }
@@ -21,7 +21,7 @@
 
       font-family: $hnm-demibold;
       letter-spacing: 0.8px;
-      color: $hnm-black-two;
+      color: $title;
       font-size: 1.25rem;
       border-bottom: 1px solid $grey4;
       padding-bottom: 1rem;
@@ -40,8 +40,8 @@
     font-family: $hnm-demibold;
     font-weight: normal;
     letter-spacing: 1px;
-    color: $hnm-black-two;
-    border-bottom: 1px solid $hnm-black-two;
+    color: $sub_title;
+    border-bottom: 1px solid $secondary_border;
     margin-bottom: 0.75rem;
   }
 
@@ -52,7 +52,7 @@
       .price-currency,
       .price-amount {
         font-family: $hnm-bold;
-        color: $hnm-black-two;
+        color: $primary_dark_color;
       }
     }
   }
@@ -77,12 +77,12 @@
     background: $grey2-19;
 
     .label {
-      color: $hnm-black-two;
+      color: $title;
       font-family: $hnm-demibold;
     }
 
     .blend {
-      background-color: $grey4-30;
+      background-color: $order_print_order_details_row_blend;
     }
   }
 
@@ -94,7 +94,7 @@
 
   .product--count {
     background: $hnm-grey;
-    color: $hnm-black-two;
+    color: $primary_dark_color;
   }
 }
 
@@ -152,11 +152,11 @@ body.path--confirmation.alias--confirmation-print {
   }
 
   .warm--white {
-    background-color: $white-five;
+    background-color: $order_detail_item_row_warm_white;
 
     .dark {
       font-family: $hnm-regular;
-      color: $light-greyish;
+      color: $user_order_detail_dark;
       font-weight: normal;
     }
   }
@@ -189,7 +189,7 @@ body.path--confirmation.alias--confirmation-print {
 
     h3,
     p {
-      color: $hnm-black-two;
+      color: $primary_dark_color;
     }
 
     .line4 {

@@ -1,5 +1,5 @@
 .c-menu-secondary {
-  background: $white-five;
+  background: $mm_bg;
 
   @include breakpoint($only-tablet) {
     width: 20rem;
@@ -8,7 +8,7 @@
   li {
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
-        color: $hnm-black-two;
+        color: $mm_mobile_icon;
         font-weight: bold;
       }
     }
@@ -20,14 +20,14 @@
     font-family: $hnm-regular;
 
     @include breakpoint($upto-desktop) {
-      color: $hnm-black-four;
+      color: $mm_l1_link;
       text-transform: uppercase;
       font-size: 0.875rem;
       letter-spacing: 1px;
     }
 
     @include breakpoint($desktop) {
-      color: $grey8;
+      color: $mm_l1_link_desktop;
       display: block;
       font-size: 0.75rem;
       line-height: 1.2;
@@ -38,8 +38,8 @@
 
       &:hover,
       &.is-active {
-        background-color: $grey1 !important;
-        color: $grey8 !important;
+        background-color: $mm_l1_link_desktop_active_bg !important;
+        color: $mm_l1_link_desktop !important;
       }
 
       &.language-link {
@@ -57,8 +57,8 @@
 
     &:hover,
     &.is-active {
-      background-color: $white-five;
-      color: $hnm-black-four;
+      background-color: $mm_bg;
+      color: $mm_l1_link;
     }
   }
 
@@ -68,7 +68,7 @@
       li:first-child a {
         &:hover,
         &.is-active {
-          background-color: $grey1;
+          background-color: $mm_l1_link_desktop_active_bg;
         }
       }
     }
@@ -90,12 +90,12 @@
   h3 {
     @include arabic-letter-spacing;
 
-    color: $hnm-black-four;
+    color: $mm_l1_link;
     font-size: 0.75rem;
     font-family: $hnm-bold;
 
     @include breakpoint($upto-desktop) {
-      color: $hnm-black-four;
+      color: $mm_l1_link;
       font-family: $hnm-bold;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -107,12 +107,12 @@
 
     &:hover {
       a {
-        color: $hnm-black-four;
+        color: $mm_l1_link;
       }
     }
 
     @include icon(chevron#{$right}, after) {
-      color: $hnm-black-two;
+      color: $mm_mobile_icon;
       font-weight: bold;
     }
   }
@@ -122,7 +122,7 @@
   .menu--three__link {
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
-        color: $hnm-black-two;
+        color: $mm_mobile_icon;
         font-weight: bold;
         font-size: 1.313rem;
         cursor: pointer;

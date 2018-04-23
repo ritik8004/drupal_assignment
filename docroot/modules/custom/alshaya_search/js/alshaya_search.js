@@ -197,6 +197,11 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
           }
         }
       });
+
+      // Hide other category filter options when one of the L1 items is selected.
+      if ((jQuery('ul[data-drupal-facet-id="category"]').children('li.facet-item--expanded')).length > 0) {
+        jQuery('[data-drupal-facet-id="category"]').children('li:not(.facet-item--expanded)').hide();
+      }
     }
   };
 

@@ -17,7 +17,7 @@
     }
 
     &.-complete.-previous.-has-link a {
-      color: $black-two;
+      color: $secondary_link;
     }
 
     &::before {
@@ -25,50 +25,50 @@
     }
 
     &::after {
-      border: 1px solid $hnm-black-two;
+      border: 1px solid $secondary_border;
       border-bottom: 1px;
     }
   }
 
   .checkout-progress__step.-next {
-    color: $grey6;
+    color: $checkout_progress_next;
   }
 
   .checkout-progress__step.-current {
     background: transparent;
-    color: $black-two;
+    color: $secondary_link;
     font-weight: normal;
     font-family: $hnm-demibold;
 
     &::before {
-      background: $hnm-red;
+      background: $checkout_progress_current_text;
     }
   }
 
   .checkout-progress__step.-previous,
   .checkout-progress__step:last-child.-current {
     background: transparent;
-    color: $hnm-red;
+    color: $checkout_progress_current_text;
 
     &::before {
-      color: $hnm-red;
+      color: $checkout_progress_current_text;
     }
   }
 }
 
 .order-confirmation {
   .checkout-progress__step:last-child.-current {
-    color: $hnm-black-two;
+    color: $checkout_progress_next_txt;
     font-family: $hnm-demibold;
   }
 
   .checkout-progress__step.-previous {
-    color: $brownish-grey;
+    color: $checkout_progress_complete_text;
   }
 }
 
 #block-checkoutsummaryblock {
-  border: 1px solid $hnm-black-two;
+  border: 1px solid $secondary_border;
 }
 
 .cybersource-ajax-progress-throbber .cybersource-throbber {

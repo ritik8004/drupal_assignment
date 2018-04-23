@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac\Controller;
 
-use Drupal\alshaya_main_menu\ProductCategoryTree;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -14,14 +14,14 @@ class AlshayaSeoController extends ControllerBase {
   /**
    * Product Category Tree service object.
    *
-   * @var \Drupal\alshaya_main_menu\ProductCategoryTree
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
    */
   protected $productCategoryTree;
 
   /**
    * AlshayaSeoController constructor.
    *
-   * @param \Drupal\alshaya_main_menu\ProductCategoryTree $product_category_tree
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product Category Tree service object.
    */
   public function __construct(ProductCategoryTree $product_category_tree) {
@@ -33,7 +33,7 @@ class AlshayaSeoController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('alshaya_main_menu.product_category_tree')
+      $container->get('alshaya_acm_product_category.product_category_tree')
     );
   }
 

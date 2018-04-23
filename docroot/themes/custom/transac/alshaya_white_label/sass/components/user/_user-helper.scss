@@ -681,32 +681,36 @@ main .user-register-form {
 }
 
 .c-user-login.user-page,
+.checkout-login.user-page,
 .c-user-register {
-  .c-sidebar-second #block-youllbeableto {
-    @include breakpoint($only-mobile) {
-      h2 {
-        margin-bottom: 15px;
+  .c-sidebar-second,
+  .fieldset-wrapper {
+    #block-youllbeableto {
+      @include breakpoint($only-mobile) {
+        h2 {
+          margin-bottom: 1rem;
+        }
+
+        span.icon-wish {
+          margin-#{$left}: -2.125rem;
+        }
+
+        span {
+          margin-#{$left}: -0.75rem;
+          vertical-align: middle;
+          height: 0.9375rem;
+          background-size: contain;
+        }
+
+        p {
+          margin: 0.6rem 0;
+        }
       }
 
-      span.icon-wish {
-        margin-#{$left}: -34px;
-      }
-
-      span {
-        margin-#{$left}: -12px;
-        vertical-align: middle;
-        height: 15px;
-        background-size: contain;
-      }
-
-      p {
-        margin: 0.6rem 0;
-      }
-    }
-
-    .field--type-image {
-      @include breakpoint($only-tablet) {
-        margin-top: 0.5rem;
+      .field--type-image {
+        @include breakpoint($only-tablet) {
+          margin-top: 0.5rem;
+        }
       }
     }
   }

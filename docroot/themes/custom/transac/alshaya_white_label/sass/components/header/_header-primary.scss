@@ -6,7 +6,7 @@
 
   .header--wrapper {
     position: relative;
-    background: $header_bg;
+    background: $header_top_bg;
     z-index: 5;
   }
 
@@ -521,28 +521,25 @@ header {
 
       &.search-active {
         background: $header_search_active_bg;
-
-        a {
-          color: $header_search_active_text;
-          background: $header_search_active_bg;
-        }
       }
 
       &.search-active {
         .mobile--search {
           &::before {
-            background: url('../imgs/icons/ic-search--hover.svg') no-repeat;
-            background-size: contain;
-            margin-#{$right}: 0;
+            color: $header_c_menu_search_active_icon;
           }
         }
       }
 
       .mobile--search {
-        &::before {
-          background: url('../imgs/icons/ic-search.svg');
-          width: 22px;
-          height: 22px;
+        @include icon(search) {
+          color: $header_c_menu_icon_color;
+          width: 1rem;
+          height: 1.4375rem;
+          font-size: 2rem;
+          position: relative;
+          top: -0.3125rem;
+          #{$left}: -0.375rem;
         }
       }
     }
@@ -1435,12 +1432,13 @@ html {
 
     .mobile--search {
       float: $right;
-      margin-#{$right}: 1.5625rem;
+      margin-#{$right}: 1.25rem;
       position: absolute;
       top: 0.625rem;
       #{$right}: 3.25rem;
       font-size: 0;
       padding-top: 0.625rem;
+      padding-#{$right}: 1.25rem;
 
       html[lang=ar] & {
         font-size: 1px;
@@ -1449,13 +1447,13 @@ html {
 
     .store {
       float: $right;
-      margin-#{$right}: 1.5625rem;
+      margin-#{$right}: 1.125rem;
       position: absolute;
       top: 0.625rem;
       font-size: 0;
       margin-top: 0;
       #{$right}: 1rem;
-      padding: 0.625rem 0.375rem;
+      padding-top: 0.625rem;
 
       &::before {
         #{$left}: -0.125rem;

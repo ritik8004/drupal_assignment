@@ -164,6 +164,14 @@ class ProductStockSyncResource extends ResourceBase {
 
         // Clear product and forms related to sku.
         Cache::invalidateTags(['acq_sku:' . $sku->id()]);
+
+        // Clear cache for parent SKU too.
+        /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Simple $plugin */
+        $plugin = $sku->getPluginInstance();
+        $parent = $plugin->getParentSku($sku);
+        if ($parent instanceof SKU) {
+          Cache::invalidateTags(['acq_sku:' . $parent->id()]);
+        }
       }
     }
 

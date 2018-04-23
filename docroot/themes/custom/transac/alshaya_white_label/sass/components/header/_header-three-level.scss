@@ -84,10 +84,24 @@
   }
 }
 
-.block-alshaya-main-menu .has--three-levels {
-  &.menu--one__list-item ul ul {
-    @include breakpoint($desktop) {
-      display: block;
+.block-alshaya-main-menu {
+  .has--three-levels {
+    &.menu--one__list-item ul ul {
+      @include breakpoint($desktop) {
+        display: block;
+      }
+    }
+  }
+
+  .active--menu--links {
+    &:hover {
+      li.menu--one__list-item {
+        a.menu--one__link {
+          @include breakpoint($desktop) {
+            border-bottom: 1px solid transparent;
+          }
+        }
+      }
     }
   }
 }

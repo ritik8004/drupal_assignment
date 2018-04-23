@@ -49,7 +49,7 @@
     }
 
     a {
-      color: $white-five;
+      color: $default_msg_text;
     }
   }
 
@@ -92,8 +92,8 @@
   }
 
   &.messages--status {
-    background: $success;
-    color: $white-four;
+    background: $default_msg_bg;
+    color: $default_msg_status_text;
     border: none;
     border-radius: 0;
 
@@ -102,8 +102,8 @@
 
   &.messages--warning,
   &.messages--error {
-    background: $cherry;
-    color: $white-five;
+    background: $content_error_msg_bg;
+    color: $content_error_msg_text;
 
     @include icon(warning);
 

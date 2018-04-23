@@ -155,5 +155,5 @@ select:focus::-ms-value {
 }
 
 .select2-container--open .select2-dropdown {
-  z-index: 4;
+  z-index: 999;
 }

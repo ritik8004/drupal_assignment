@@ -88,3 +88,142 @@
   }
 }
 
+.js-facets-checkbox-links {
+  .facet-item {
+    position: relative;
+
+    &.facet-item--collapsed {
+      &:hover {
+        cursor: pointer;
+
+        label {
+          span {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=category] {
+  &.js-facets-checkbox-links {
+    display: block;
+  }
+
+  .facet-item--collapsed {
+    label {
+      &::before {
+        content: unset;
+      }
+    }
+  }
+
+  .facet-item--expanded {
+    margin-#{$left}: 1rem;
+
+    > ul {
+      > .facet-item--collapsed {
+        > label {
+          .facet-item__value {
+            margin-#{$left}: 0;
+          }
+        }
+      }
+
+      @include breakpoint($upto-desktop) {
+        padding-top: 0.625rem !important;
+      }
+
+      .facet-item {
+        margin-#{$left}: 1rem;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0.625rem;
+        }
+
+        html[lang=ar] & {
+          margin-left: 0;
+        }
+
+        &.facet-item--collapsed,
+        &.facet-item--expanded {
+          margin-#{$left}: 0;
+        }
+      }
+    }
+
+    &.facet-item--active-trail {
+      .facet-item--expanded {
+        > label {
+          &::before {
+            content: unset;
+          }
+
+          span {
+            font-weight: bold;
+            margin-#{$left}: 0;
+          }
+        }
+      }
+
+      > label {
+        span {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+
+  > .facet-item--expanded {
+    > label {
+      @include icon(chevronleft, before) {
+        position: absolute;
+        #{$left}: -1rem;
+        font-size: 1.875rem;
+        top: -0.375rem;
+        color: $category_facet_active_icon;
+        transform: translateY(-50%);
+      }
+
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .facet-item {
+    label {
+      .facet-item__count,
+      .facet-item__value {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.c-sidebar-first {
+  .c-facet__blocks {
+    .block {
+      &:first-child {
+        border-width: 0;
+      }
+    }
+  }
+}
+
+.block-facet-blockcategory {
+  .c-accordion__title {
+    @include icon(chevronup, after);
+
+    @include breakpoint($desktop) {
+      border-bottom: 1px solid $accordion_border;
+    }
+  }
+
+  .ui-state-active {
+    @include icon(chevrondown, after);
+
+    border-bottom: none;
+  }
+}

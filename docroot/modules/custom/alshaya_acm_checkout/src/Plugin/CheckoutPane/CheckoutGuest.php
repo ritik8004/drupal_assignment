@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\block\BlockViewBuilder;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 
@@ -48,6 +49,15 @@ class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $pane_form['summary'] = [
       '#markup' => '<div class="checkout-guest-summary">' . $config->get('checkout_guest_summary.value') . '</div>',
+    ];
+
+    // Load the block 'youllbeableto' and render it.
+    $block = BlockViewBuilder::lazyBuilder('youllbeableto', 'full');
+    $block_markup = \Drupal::service('renderer')->renderPlain($block);
+    $pane_form['you_will_able_to'] = [
+      '#markup' => $block_markup->__toString(),
+      '#prefix' => '<div id="block-youllbeableto">',
+      '#suffix' => '<div>',
     ];
 
     return $pane_form;

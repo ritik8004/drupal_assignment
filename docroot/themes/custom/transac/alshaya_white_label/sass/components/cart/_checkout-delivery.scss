@@ -861,6 +861,7 @@
 
         @include breakpoint($tablet) {
           margin: 0;
+          display: none;
 
           &.active--tab--content {
             top: -2px;

@@ -82,9 +82,14 @@ function alshaya_hnm_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_hnm/convert_to_select2';
   }
 
-  if (isset($variables['node'])) {
+  if (isset($variables['node']) && $variables['node'] instanceof NodeInterface) {
     if ($variables['node']->bundle() === 'acq_product') {
       $variables['#attached']['library'][] = 'alshaya_hnm/convert_to_select2';
+    }
+
+    // Attach the plp search js library to the promotion product listing page.
+    elseif ($variables['node']->bundle() === 'acq_promotion') {
+      $variables['#attached']['library'][] = 'alshaya_hnm/plp_search_js';
     }
   }
 
@@ -104,13 +109,6 @@ function alshaya_hnm_preprocess_page(&$variables) {
   // Attach the plp search js library to Search page.
   if ($routmatch->getRouteName() == 'view.search.page') {
     $variables['#attached']['library'][] = 'alshaya_hnm/plp_search_js';
-  }
-
-  // Attach the plp search js library to the promotion product listing page.
-  if (isset($variables['node'])) {
-    if ($variables['node']->bundle() === 'acq_promotion') {
-      $variables['#attached']['library'][] = 'alshaya_hnm/plp_search_js';
-    }
   }
 
   // Make site name and logo available to all templates.
@@ -738,7 +736,7 @@ function alshaya_hnm_preprocess_acq_sku(&$variables) {
 function alshaya_hnm_preprocess_page_title(&$variables) {
   if ($node = \Drupal::routeMatch()->getParameter('node')) {
 
-    if ($node->bundle() === 'acq_promotion') {
+    if ($node instanceof NodeInterface && $node->bundle() === 'acq_promotion') {
       $variables['title'] = $node->get('field_acq_promotion_label')->getString();
     }
   }

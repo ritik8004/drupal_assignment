@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="21" viewBox="0 0 22 21">
+    <defs>
+        <rect id="a" width="2.75" height="1" x="6.188" y="7.7" rx=".5"/>
+        <rect id="b" width="2.75" height="1" x="13.063" y="7.7" rx=".5"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <path stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width=".7" d="M14.438 8.7V4.5c0-1.933-1.54-3.5-3.438-3.5-1.898 0-3.438 1.567-3.438 3.5v4.2"/>
+        <path stroke="#333" stroke-width=".7" d="M20.057 7.294a.794.794 0 0 0-.777-.694H2.72a.802.802 0 0 0-.778.694L.612 19.906a.614.614 0 0 0 .622.694h19.53a.618.618 0 0 0 .624-.694l-1.33-12.612z"/>
+        <g transform="matrix(-1 0 0 1 22 1)">
+            <use fill="#D8D8D8" xlink:href="#a"/>
+            <rect width="2.05" height="1" x="6.537" y="8.05" stroke="#333" stroke-width=".7" rx=".5"/>
+        </g>
+        <g transform="matrix(-1 0 0 1 22 1)">
+            <use fill="#D8D8D8" xlink:href="#b"/>
+            <rect width="2.05" height="1" x="13.412" y="8.05" stroke="#333" stroke-width=".7" rx=".5"/>
+        </g>
+    </g>
+</svg>

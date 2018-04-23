@@ -486,6 +486,9 @@ function alshaya_acm_customer_register_validate(array &$form, FormStateInterface
     if (!empty($customer) && !empty($customer['customer_id']) && $customer['customer_id'] != $customer_id) {
       $form_state->setErrorByName('mail', t('The email address @email is already taken.', ['@email' => $mail]));
     }
+    else {
+      $form_state->setTemporaryValue('acq_customer_id', $customer_id);
+    }
   }
   catch (\Exception $e) {
     // Do nothing except for downtime exception, we will do other validations
@@ -510,6 +513,8 @@ function alshaya_acm_customer_register_validate_final(array &$form, FormStateInt
     return;
   }
 
+  $customer_id = $form_state->getTemporaryValue('acq_customer_id');
+  $customer_id = !empty($customer_id) ? $customer_id : NULL;
   $email = $form_state->getValue('mail');
   $first_name = $form_state->getValue('field_first_name')[0]['value'];
   $last_name = $form_state->getValue('field_last_name')[0]['value'];
@@ -519,7 +524,7 @@ function alshaya_acm_customer_register_validate_final(array &$form, FormStateInt
   $customer_helper = \Drupal::service('alshaya_acm_customer.helper');
 
   try {
-    $customer = $customer_helper->createCustomer($email, $first_name, $last_name, $pass);
+    $customer = $customer_helper->updateCustomer($customer_id, $email, $first_name, $last_name, $pass);
   }
   catch (\Exception $e) {
     // Do nothing except for downtime exception, we will do other validations
@@ -529,6 +534,10 @@ function alshaya_acm_customer_register_validate_final(array &$form, FormStateInt
       drupal_set_message($e->getMessage(), 'error');
     }
     else {
+      \Drupal::logger('alshaya_acm_customer')->error('Error occurred during customer registration @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
       // Only email address is something where our validations dont match.
       $form_state->setErrorByName('mail', t('The email address %mail is not valid.', ['%mail' => $email]));
     }

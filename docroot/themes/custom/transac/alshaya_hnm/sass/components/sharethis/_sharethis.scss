@@ -2,7 +2,7 @@
 .sharethis-wrapper {
   &.out-of-stock {
     span::before {
-      color: $hnm-grey;
+      color: $oos_pdp_text;
       background: none;
     }
 
@@ -14,8 +14,8 @@
       .field__content .c-accordion__title::after,
       .subtitle,
       .c-accordion-delivery-options {
-        color: $hnm-grey;
-        border-color: $hnm-grey;
+        color: $oos_pdp_text;
+        border-color: $oos_pdp_text;
       }
     }
   }
@@ -23,7 +23,7 @@
   & > span {
     &::before {
       cursor: pointer;
-      color: $grey5;
+      color: $sharethis_text;
       font-size: 1.938rem;
     }
   }
@@ -32,7 +32,7 @@
     @include icon(facebook);
 
     &:hover::before {
-      color: $hnm-black-two;
+      color: $sharethis_icon;
       background: none;
     }
   }
@@ -41,7 +41,7 @@
     @include icon(twitter);
 
     &:hover::before {
-      color: $hnm-black-two;
+      color: $sharethis_icon;
       background: none;
     }
   }
@@ -50,7 +50,7 @@
     @include icon(pinterest);
 
     &:hover::before {
-      color: $hnm-black-two;
+      color: $sharethis_icon;
       background: none;
     }
   }
@@ -59,7 +59,7 @@
     @include icon(instagram);
 
     &:hover::before {
-      color: $hnm-black-two;
+      color: $sharethis_icon;
       background: none;
     }
   }
@@ -68,7 +68,7 @@
     @include icon(youtube);
 
     &:hover::before {
-      color: $hnm-black-two;
+      color: $sharethis_icon;
     }
   }
 }

@@ -1,0 +1,37 @@
+.c-social-links {
+  [class^="c-social-links--"] {
+    &::before {
+      font-size: 2.3rem;
+    }
+
+    &:hover::before {
+      background: none;
+      opacity: 0.7;
+    }
+  }
+}
+
+.footer--social {
+  h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-family: $vs-bold;
+    text-align: center;
+
+    @include breakpoint($tablet) {
+      text-align: $left;
+    }
+  }
+
+  .c-social-links {
+    @include breakpoint($tablet) {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      margin-#{$left}: 0;
+    }
+
+    @include breakpoint($desktop) {
+      margin-bottom: 2rem;
+    }
+  }
+}

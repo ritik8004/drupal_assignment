@@ -9,10 +9,11 @@ services:
       - '@request_stack'
       - '@entity_type.manager'
       - '@alshaya_acm_checkout.options_manager'
-      - '@alshaya_stores_finder.utility'
       - '@language_manager'
       - '@cache.alshaya'
       - '@database'
       - '@alshaya_addressbook.manager'
       - '@alshaya_acm_product.skumanager'
       - '@module_handler'
+    calls:
+      - [setStoreFinderUtility, ['@?alshaya_stores_finder_transac.utility']]

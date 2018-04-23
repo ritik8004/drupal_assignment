@@ -1,0 +1,51 @@
+.mobile-number-field {
+  width: 100%;
+
+  .mobile-input--wrapper {
+    position: relative;
+
+    .input--textual__container--errors {
+      position: absolute;
+      bottom: -0.2rem;
+
+      @include breakpoint($upto-palm) {
+        bottom: -1rem;
+      }
+    }
+  }
+}
+
+html[dir=rtl] {
+  .mobile-number-field {
+    .mobile-input--wrapper {
+      width: 50%;
+
+      @include breakpoint($upto-palm) {
+        width: 55%;
+      }
+
+      .input--textual__container--errors {
+        @include breakpoint($upto-palm) {
+          bottom: -0.2rem;
+        }
+      }
+    }
+  }
+
+  .input__container--half {
+    .input--textual__container--errors {
+      right: 0;
+    }
+  }
+}
+
+.mobile-number-field {
+  + div {
+    position: relative;
+
+    .input--textual__container--errors {
+      position: absolute;
+      top: 2.2rem;
+    }
+  }
+}

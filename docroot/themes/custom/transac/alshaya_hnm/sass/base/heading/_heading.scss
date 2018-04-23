@@ -3,7 +3,7 @@
 
   font-family: $hnm-demibold;
   font-weight: normal;
-  color: $hnm-black-two;
+  color: $title;
   letter-spacing: 0.8px;
   text-transform: uppercase;
 
@@ -20,7 +20,7 @@
   @include arabic-letter-spacing;
 
   font-family: $hnm-regular;
-  color: $hnm-black-two;
+  color: $sub_title;
   font-size: 1rem;
   text-transform: uppercase;
   padding-bottom: 9px;

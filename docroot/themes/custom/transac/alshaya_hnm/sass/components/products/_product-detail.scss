@@ -26,18 +26,18 @@
       font-family: $hnm-regular;
       font-weight: normal;
       font-size: 1.125rem;
-      color: $hnm-black-two;
+      color: $page_title;
       margin-top: 0;
     }
 
     .price {
-      color: $black-two;
+      color: $pdp_product_price;
       font-family: $hnm-demibold;
       font-size: 0.9375rem;
     }
 
     .content--item-code {
-      color: $grey7;
+      color: $pdp_product_itemcode;
     }
   }
 }
@@ -49,18 +49,18 @@
     a[data-swatch-type=miniature_image] {
       max-width: 3rem;
       padding: 0;
-      border: 1px solid $white-five;
+      border: 1px solid $pdp_swatch_border;
       background: none;
 
       &.picked {
-        border: 1px solid $hnm-black-two;
+        border: 1px solid $pdp_swatch_selected_border;
         background: none;
       }
 
       &:hover {
         &::after {
           content: '';
-          background-color: $hnm-black-two-50;
+          background-color: $pdp_swatch_hover;
           position: absolute;
           top: 0;
           bottom: 0;
@@ -183,7 +183,7 @@
       font-family: $hnm-bold;
       text-transform: uppercase;
       font-weight: normal;
-      color: $hnm-black-two;
+      color: $title;
     }
   }
 
@@ -197,7 +197,7 @@
   strong {
     font-weight: normal;
     font-family: $hnm-bold;
-    color: $hnm-black-two;
+    color: $content_link_color;
   }
 
   .desc-label {
@@ -205,7 +205,7 @@
 
     font-family: $hnm-demibold;
     font-weight: normal;
-    color: $hnm-black-two;
+    color: $title;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-size: 0.875rem;
@@ -215,17 +215,18 @@
 
   .show-less-link {
     font-family: $arial;
-    color: $black-two;
+    color: $secondary_link;
   }
 }
 
 @include breakpoint($tablet) {
   .description-wrapper {
-    border: 1px solid $hnm-black-two;
+    border: 1px solid $secondary_border;
+    background: $primary_bg;
 
     .close {
-      color: $white-five;
-      background-color: $hnm-black-two;
+      color: $primary_close_btn;
+      background-color: $primary_close_bg;
       cursor: pointer;
     }
   }
@@ -240,7 +241,7 @@
       font-family: $hnm-bold;
       text-transform: uppercase;
       font-weight: normal;
-      color: $hnm-black-two;
+      color: $title;
       letter-spacing: 0.5px;
     }
 
@@ -252,7 +253,7 @@
           font-family: $hnm-demibold;
           font-weight: normal;
           text-transform: uppercase;
-          color: $hnm-black-two;
+          color: $title;
           font-size: 0.875rem;
           margin-top: 0;
           margin-bottom: 0;
@@ -265,7 +266,7 @@
     font-family: $hnm-regular;
     font-size: 0.875rem;
     line-height: 1.83;
-    color: $black-three;
+    color: $tertiary_link;
     text-transform: lowercase;
     cursor: pointer;
   }
@@ -274,21 +275,21 @@
     font-family: $hnm-regular;
     font-size: 0.75rem;
     line-height: 1.83;
-    color: $black-three;
+    color: $tertiary_link;
   }
 
   .read-more-description-link-mobile {
     font-family: $hnm-regular;
     font-size: 0.875rem;
     line-height: 1.83;
-    color: $black-three;
+    color: $tertiary_link;
   }
 
   .composition-wrapper,
   .care-instructions-wrapper,
   .concept-wrapper,
   .warning-wrapper {
-    color: $grey7;
+    color: $pdp_desc_wrapper;
     margin-top: 0.75rem;
 
     .composition-label,
@@ -298,7 +299,7 @@
       @include arabic-letter-spacing;
 
       font-family: $hnm-demibold;
-      color: $hnm-black-two;
+      color: $pdp_desc_wrapper_label;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -321,7 +322,7 @@
       text-transform: uppercase;
       font-weight: normal;
       letter-spacing: 0.5px;
-      color: $hnm-black-two;
+      color: $title;
       margin-bottom: 0.9375rem;
 
       &.disabled {
@@ -334,7 +335,7 @@
     &__title {
       font-family: $hnm-regular;
       font-size: 0.875rem;
-      color: $hnm-black-two;
+      color: $accordion_title;
       line-height: 2.5;
       height: 3.2rem;
       cursor: pointer;
@@ -358,7 +359,7 @@
 
         font-family: $hnm-regular;
         font-size: 0.6875rem;
-        color: $grey6;
+        color: $accordion_subtitle;
         line-height: 1;
         text-transform: none;
         margin-top: -0.5rem;
@@ -370,14 +371,14 @@
       .delivery-option {
         &-title {
           font-family: $hnm-bold;
-          color: $hnm-black-two;
+          color: $accordion_title;
 
           strong {
             font-family: $hnm-regular;
           }
 
           span {
-            color: $hnm-black-two;
+            color: $accordion_title;
             font-family: $hnm-regular;
           }
         }
@@ -392,26 +393,26 @@
     label,
     .text p {
       font-family: $hnm-regular;
-      color: $grey7;
+      color: $pdp_cc_text;
     }
 
     strong {
       font-family: $hnm-bold;
       font-weight: normal;
-      color: $hnm-black-two;
+      color: $pdp_cc_highlight;
     }
 
     button {
       float: $right;
       width: 8.25rem;
-      background-color: $hnm-black-two;
+      background-color: $primary_btn_bg;
       font-family: $hnm-bold;
       text-transform: uppercase;
       font-size: 0.8125rem;
     }
 
     .highlight {
-      color: $hnm-black-two;
+      color: $pdp_cc_highlight;
       font-family: $hnm-bold;
       font-weight: normal;
       cursor: pointer;
@@ -424,7 +425,7 @@
 
   span.label {
     font-family: $arial;
-    color: $grey7;
+    color: $pdp_desc_wrapper;
     margin: 0;
   }
 
@@ -433,7 +434,7 @@
       float: none;
       width: 8.25rem;
       height: 2.188rem;
-      background-color: $hnm-black-two;
+      background-color: $primary_btn_bg;
       font-family: $hnm-bold;
       text-transform: uppercase;
       font-size: 0.8125rem;
@@ -444,7 +445,7 @@
 .available_store {
   .change-location-link,
   .change-store-link {
-    color: $black;
+    color: $primary_link;
   }
 
   .change-location {
@@ -479,7 +480,7 @@
 }
 
 .other-stores-link {
-  color: $black;
+  color: $primary_link;
 }
 
 .click-collect-form,
@@ -497,7 +498,7 @@
 .click-collect-all-stores {
   &.inline-modal-wrapper {
     @include breakpoint($tablet) {
-      border: 1px solid $black;
+      border: 1px solid $pdp_cc_modal_border;
     }
 
     @include breakpoint($only-mobile) {
@@ -505,7 +506,7 @@
         ul {
           li {
             .store-name {
-              color: $hnm-black-two;
+              color: $title;
             }
           }
         }
@@ -513,12 +514,12 @@
     }
 
     .close-inline-modal {
-      background-color: $hnm-black-two;
+      background-color: $primary_close_bg;
     }
 
     .all-stores-info {
       h3 {
-        color: $hnm-black-two;
+        color: $title;
       }
     }
 
@@ -526,7 +527,7 @@
       li {
         .store {
           &-name {
-            color: $hnm-black-two;
+            color: $title;
           }
 
           &-low-stock {
@@ -577,7 +578,7 @@
     .sku-base-form {
       button[type="submit"] {
         font-family: $hnm-bold;
-        background: $hnm-black-two;
+        background: $primary_btn_bg;
         text-transform: uppercase;
         padding-#{$left}: 2.938rem;
 
@@ -626,33 +627,33 @@
     margin: 0;
     font-size: 0.6875rem;
     font-weight: 100;
-    color: $grey7;
+    color: $pdp_desc_wrapper;
   }
 
   .selected-text {
     font-family: $hnm-bold;
-    color: $hnm-black-two;
+    color: $pdp_select_selectedtext;
     display: inline-block;
   }
 
   .select-buttons {
     li {
       a:hover {
-        background: $hnm-black-two-50;
+        background: $pdp_select_hover;
       }
 
       a,
       span {
         @include u-visibility(block);
 
-        border: 1px solid $hnm-black-two;
+        border: 1px solid $pdp_swatch_selected_border;
         text-align: center;
         padding: 0.596rem;
         min-width: 2.375rem;
         max-height: 2.375rem;
         font-family: $hnm-regular;
         font-size: 0.875rem;
-        color: $hnm-black-two;
+        color: $pdp_select_selectedtext;
 
         &.picked {
           color: $white-five;
@@ -672,7 +673,7 @@
 
             &.picked {
               background: none;
-              border: 1px solid $hnm-black-two;
+              border: 1px solid $pdp_swatch_selected_border;
             }
 
             &:hover {
@@ -680,7 +681,7 @@
 
               &::before {
                 content: '';
-                background: $hnm-black-two-50;
+                background: $pdp_select_hover;
                 box-shadow: none;
                 height: 100%;
                 top: 0;
@@ -709,7 +710,7 @@
                 #{$right}: -0.1875rem;
                 bottom: -0.1875rem;
                 z-index: 1;
-                border: 1px solid $hnm-black-two;
+                border: 1px solid $pdp_swatch_selected_border;
                 pointer-events: none;
               }
             }
@@ -721,8 +722,8 @@
         a,
         span {
           background: none;
-          border: 1px solid $white;
-          color: $white;
+          border: 1px solid $pdp_swatch_disabled;
+          color: $pdp_swatch_disabled;
         }
       }
     }
@@ -784,12 +785,12 @@ article[gtm-sku-type="simple"] {
   }
 
   span.out-of-stock {
-    background-color: $error;
+    background-color: $pdp_oos_bg;
     font-family: $hnm-bold;
     text-transform: uppercase;
     margin: 1rem 0;
     padding: 0.6rem 1.5rem;
-    color: $white-five;
+    color: $pdp_oos_text;
 
     @include breakpoint($desktop) {
       display: inline-block;
@@ -830,8 +831,8 @@ article[gtm-sku-type="simple"] {
   display: inline-block;
   margin-bottom: 0.875rem;
   padding: 0.5rem 0.875rem;
-  background: $hnm-black-two;
-  color: $white-five !important;
+  background: $primary_btn_bg;
+  color: $fake_apply_btn !important;
   cursor: pointer;
   margin-#{$left}: 1rem;
   font-size: 0.75rem;

@@ -13,7 +13,7 @@
     align-items: center;
 
     &:last-of-type a {
-      color: $hnm-black-two;
+      color: $breadcrumb_link;
       font-family: $hnm-bold;
       text-transform: capitalize;
     }
@@ -25,6 +25,7 @@
       text-transform: capitalize;
       letter-spacing: 0.5px;
       font-size: 0.75rem;
+      color: $breadcrumb_link_light;
     }
 
     &::after {
