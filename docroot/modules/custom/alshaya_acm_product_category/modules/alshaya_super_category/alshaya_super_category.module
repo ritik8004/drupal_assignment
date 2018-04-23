@@ -12,6 +12,7 @@ use Drupal\system\Entity\Menu;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -312,5 +313,23 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
 function alshaya_super_category_form_block_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
     unset($form['visibility']['alshaya_super_category']);
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function alshaya_super_category_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ('product_category_level_3' == $view->id() && 'entity_reference_1' == $display_id) {
+    // Load category top level menu settings.
+    $config = \Drupal::config('alshaya_super_category.settings');
+    if (!$config->get('status')) {
+      return;
+    }
+
+    $handler = $view->getHandler($display_id, 'filter', 'depth_level');
+    // For super category make the depth of term list to 2.
+    $handler['value']['value'] = 2;
+    $view->setHandler($display_id, 'filter', 'depth_level', $handler);
   }
 }
