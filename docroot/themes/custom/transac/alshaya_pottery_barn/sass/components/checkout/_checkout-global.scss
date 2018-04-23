@@ -17,7 +17,7 @@
     border-bottom: none;
 
     @include breakpoint($desktop) {
-      border-top: 24px solid $checkout_header_border-top;
+      border-top: 1.5rem solid $checkout_header_border-top;
       border-bottom: none;
     }
 
