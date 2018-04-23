@@ -1446,7 +1446,7 @@
       .stores-list-view,
       .stores-map-view {
         position: absolute;
-        display: none;
+        display: block;
         top: 6.75rem;
         z-index: 1;
         border: 1px solid $checkout_cc_tab_border;
