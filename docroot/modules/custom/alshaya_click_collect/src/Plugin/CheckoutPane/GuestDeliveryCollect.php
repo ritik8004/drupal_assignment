@@ -169,11 +169,11 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     $pane_form['store_finder']['toggle_list_view'] = [
-      '#markup' => '<a href="#" class="stores-list-view active">' . $this->t('List view') . '</a>',
+      '#markup' => '<a href="#" class="stores-list-view active hidden-important">' . $this->t('List view') . '</a>',
     ];
 
     $pane_form['store_finder']['toggle_map_view'] = [
-      '#markup' => '<a href="#" class="stores-map-view">' . $this->t('Map view') . '</a>',
+      '#markup' => '<a href="#" class="stores-map-view hidden-important">' . $this->t('Map view') . '</a>',
       '#suffix' => '</div>',
     ];
 
