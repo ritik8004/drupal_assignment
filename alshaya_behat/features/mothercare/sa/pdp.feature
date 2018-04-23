@@ -1,7 +1,6 @@
-@javascript @prod
+@javascript
 Feature: Test the product detail page
 
-  @config
   Scenario: As a Guest user
   I should be able to expand HD and CC on a configurable PDP
     Given I am on a configurable product
@@ -36,7 +35,6 @@ Feature: Test the product detail page
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
-  @config
   Scenario: As a Guest
     I should be able to see all the various sections
     on a configurable product detail page
@@ -63,7 +61,6 @@ Feature: Test the product detail page
     And I should see " to check stock availability near to you"
     Then I should be able to see the footer
 
-  @media @config
   Scenario Outline:
   As an User
   I should be able to connect via Social media
@@ -78,7 +75,6 @@ Feature: Test the product detail page
       |.st_twitter_custom|Share a link with your followers|
 
 
-  @arabic @config
   Scenario: As a Guest user on Arabic site
   I should be able to expand HD and CC on a configurable PDP
     Given I am on a configurable product
@@ -117,7 +113,6 @@ Feature: Test the product detail page
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
-  @arabic @config
   Scenario: As a Guest on Arabic site
   I should be able to see all the various sections
   on a configurable product detail page
@@ -142,7 +137,6 @@ Feature: Test the product detail page
     And I should see "التوصيل من 2 – 5 أيام فقط بـ 1 دينار"
     Then I should be able to see the footer in Arabic
 
-  @media @arabic @config
   Scenario Outline:
   As an User on Arabic site
   I should be able to connect via Social media

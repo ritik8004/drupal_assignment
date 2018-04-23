@@ -1,4 +1,4 @@
-@javascript @manual @mmcpa-2325 @prod
+@javascript
 Feature: Test basket page
 
   Background:
@@ -82,7 +82,6 @@ Feature: Test basket page
     And I wait for the page to load
     Then the url should match "/ar"
 
-  @arabic
   Scenario: As a Guest on arabic site
   I should be able to see tooltips
   for both Home Deliver and Click and Collect
