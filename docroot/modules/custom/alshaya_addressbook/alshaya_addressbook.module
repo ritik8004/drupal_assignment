@@ -66,8 +66,22 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
   // If any error.
   if ($form_state->getErrors()) {
     $response = new AjaxResponse();
-    $response->addCommand(new HtmlCommand('#address-book-form-wrapper', $form));
-    $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['#address-book-form-wrapper', TRUE]));
+    $user_id = \Drupal::currentUser()->getAccount()->id();
+    /* @var \Drupal\user\Entity\User $user */
+    $user = User::load($user_id);
+    /** @var \Drupal\profile\Entity\ProfileInterface|bool $default_address */
+    $default_address = \Drupal::entityTypeManager()->getStorage('profile')
+      ->loadByUser($user, 'address_book');
+    // If user already has address, we have different wrapper.
+    if ($default_address) {
+      $response->addCommand(new HtmlCommand('#address-book-form-wrapper', $form));
+      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['#address-book-form-wrapper', TRUE]));
+    }
+    else {
+      $response->addCommand(new HtmlCommand('#address-book-form-open', $form));
+      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['#address-book-form-open', TRUE]));
+    }
+
     return $response;
   }
 
