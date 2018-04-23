@@ -136,6 +136,7 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
       return FALSE;
     }
 
+    // Check L1 parent for the field_include_in_menu.
     if ((count($term_parents = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($term->id())) > 0) &&
     (($parent_l1 = end($term_parents)) instanceof TermInterface) &&
     ($parent_l1->get('field_category_include_menu')->getString() != 1)) {
