@@ -109,8 +109,9 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
           ->loadMultiple($ids);
 
         foreach ($results as $i => $result) {
-          if (($entities[$ids[$i]] instanceof TermInterface) &&
-            ($entities[$ids[$i]]->get('field_category_include_menu')->getString() != 1)) {
+          $term = $entities[$ids[$i]];
+          if (($term instanceof TermInterface) &&
+            (!$this->shouldRenderTerm($term))) {
             unset($results[$i]);
           }
         }
@@ -119,6 +120,29 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
 
     // Return the filtered results.
     return $results;
+  }
+
+  /**
+   * Helper function to check if this term should be rendered in facet list.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Taxonomy term that is being rendered.
+   *
+   * @return bool
+   *   Status of the Term.
+   */
+  protected function shouldRenderTerm(TermInterface $term) {
+    if ($term->get('field_category_include_menu')->getString() != 1) {
+      return FALSE;
+    }
+
+    if ((count($term_parents = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($term->id())) > 0) &&
+    (($parent_l1 = end($term_parents)) instanceof TermInterface) &&
+    ($parent_l1->get('field_category_include_menu')->getString() != 1)) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
 }
