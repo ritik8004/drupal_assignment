@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\Role;
+use Drupal\user\Entity\User;
 
 /**
  * Implements hook_acsf_staging_scrub_admin_roles_alter().
@@ -29,6 +30,26 @@ function alshaya_master_acsf_staging_scrub_admin_roles_alter(array &$admin_roles
   unset($roles[Role::ANONYMOUS_ID]);
 
   $admin_roles = array_merge($admin_roles, array_keys($roles));
+
+  // Create default administrator user.
+  $admin_user = User::create();
+  $admin_user->setPassword('AlShAyAU1admin');
+  $admin_user->enforceIsNew();
+  $admin_user->setUsername('admin1');
+  $admin_user->setEmail('user3+admin@example.com');
+  $admin_user->addRole('administrator');
+  $admin_user->activate();
+  $admin_user->save();
+
+  // Create default webmaster user.
+  $webmaster_user = User::create();
+  $webmaster_user->setPassword('AlShAyAU1webmaster');
+  $webmaster_user->enforceIsNew();
+  $webmaster_user->setEmail('user3+webmaster@example.com');
+  $webmaster_user->setUsername('webmaster');
+  $webmaster_user->addRole('webmaster');
+  $webmaster_user->activate();
+  $webmaster_user->save();
 }
 
 /**
