@@ -38,6 +38,10 @@
       @include breakpoint($only-mobile) {
         padding-top: 0;
         border-bottom: 0.5625rem solid $checkout_header_border-bottom;
+
+        html[lang=ar] & {
+          padding-top: 0.5rem;
+        }
       }
     }
   }
