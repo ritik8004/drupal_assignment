@@ -32,12 +32,15 @@ default:
           print_outp: true
           loop_break: true
 
-mckwqa:
+mcqa:
   autoload:
     '': %paths.base%/features/mckw/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/mckw/manual ]
+      paths:
+          - %paths.base%/features/mothercare/kw
+          - %paths.base%/features/mothercare/sa
+          - %paths.base%/features/mothercare/ae
       contexts:
         - FeatureContext:
             parameters:
@@ -59,34 +62,37 @@ mckwqa:
       base_url: 'https://mckw-test.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
 
-mckwuat:
+mcuat:
   autoload:
-    '': %paths.base%/features/mckw/bootstrap
+    '': %paths.base%/features/mothercare/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/mckw/manual ]
+      paths:
+          - %paths.base%/features/mothercare/kw
+          - %paths.base%/features/mothercare/sa
+          - %paths.base%/features/mothercare/ae
       contexts:
         - FeatureContext:
             parameters:
               simpleurl: '/baby-boys-socks-gift-box-test'
               simpletitle: 'Baby Boys Socks Gift Box test'
               simpletitlear: 'صندوق هدية جوارب للأولاد'
-              configurl: '/my-first-bodysuits-3-pack'
-              configtitle: 'My First Bodysuits - 3 Pack'
-              configtitlear: 'لباس عادي My First - عبوة من 3 قطع'
-              configvariant: '2-3 Years'
+              configurl: '/disney-bambi-dress-and-bodysuit-set'
+              configtitle: 'Disney Bambi Dress and Bodysuit Set'
+              configtitlear: 'Disney Bambi Dress and Bodysuit Set'
+              configvariant: '3-6 Months'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
   formatters:
       html:
-        output_path: %paths.base%/features/mckw/reports/html/behat
+        output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
       base_url: 'https://mckw-uat.factory.alshaya.com'
-      files_path: "%paths.base%/features/mckw/media"
+      files_path: "%paths.base%/features/mothercare/media"
 
-mckwprod:
+mcprod:
   autoload:
     '': %paths.base%/features/mckw/bootstrap
   suites:
