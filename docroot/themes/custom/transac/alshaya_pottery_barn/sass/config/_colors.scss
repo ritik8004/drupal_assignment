@@ -27,6 +27,7 @@ $_gray_four: #e8e8e8;
 $_gray_five: #f2f2f2;
 $_gray_six: #fafafa;
 $_gray_seven: #f8f8f8;
+$_gray_eight: #c8c8c8;
 
 // Overrides for variables.
 // Global elements.
@@ -101,6 +102,12 @@ $tooltip_border: $PB_black_one;
 $tooltip_border_2: $PB_black_one;
 $tooltip_icon: $PB_confirmation_blue;
 $tooltip_link: $PB_confirmation_blue;
+
+// Checkout securely block.
+$checkout_securely_txt: $_black_two;
+$checkout_securely_icon_bg: $PB_deep_red;
+$checkout_securely_icon_mobile_txt: $_black_two;
+$checkout_securely_icon_txt: $white-two;
 
 // Header - Top header.
 $header_secondary_bg: $white;
@@ -189,6 +196,7 @@ $footer_link_hover: $PB_deep_red;
 // Copyright Footer.
 $copyright_footer_bg: $white-two;
 $copyright_footer_text: $PB_grey_one;
+$checkout_footer_copyright_mobile_bg: $PB_white;
 
 // Footer social icons.
 $social_links: $PB_grey_one;
@@ -283,3 +291,11 @@ $checkout_footer_txt: $_black_two;
 $checkout_footer_light_txt: $PB_grey_one;
 $checkout_login_guest_email_text_mobile: $PB_black_one;
 $checkout_login_guest_email_text: $PB_black_one;
+$checkout_header_border-bottom: $PB_black_one;
+$checkout_header_border-top: $white;
+
+// Checkout login.
+$checkout_login_tab_border: $_gray_eight;
+$checkout_login_tab_text: $PB_grey_one;
+$checkout_login_tab_border_active: $PB_deep_red;
+$checkout_login_tab_text_active: $PB_black_one;
