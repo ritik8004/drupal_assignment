@@ -69,6 +69,7 @@
 
         select {
           line-height: 1.7;
+          font-size: 0.875rem;
         }
       }
 
@@ -111,12 +112,12 @@
 
   .c-page-title__description,
   .field--name-field-acq-promotion-description {
-    @include breakpoint($only-tablet) {
+    width: 75%;
+
+    @include breakpoint($upto-desktop) {
       max-width: 100%;
       width: 100%;
     }
-
-    width: 75%;
   }
 
   .c-products-list {
