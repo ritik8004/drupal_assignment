@@ -156,7 +156,7 @@ function alshaya_get_additional_settings($site, $env) {
       'ae' => [
         'default' => [
           'magento_lang_prefix' => [
-            'en' => 'uae_en',
+            'en' => '',
             'ar' => 'uae_ar',
           ],
         ],
