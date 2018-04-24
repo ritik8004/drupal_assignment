@@ -132,6 +132,7 @@ header {
       position: absolute;
       #{$right}: 0;
       top: 0;
+      z-index: 1;
 
       html[lang='ar'] & {
         transform: rotate(90deg);
@@ -271,7 +272,11 @@ header {
       padding: 0.3125rem 0.875rem 0.664rem 0.625rem;
 
       &:hover {
-        background-color: none;
+        background: none;
+
+        &::before {
+          color: $header_c_menu_icon_color;
+        }
       }
 
       @include icon(mappin) {

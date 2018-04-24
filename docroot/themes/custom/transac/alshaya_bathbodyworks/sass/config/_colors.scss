@@ -44,6 +44,17 @@ $primary_input_focus_border: $peacock-blue;
 $primary_input_inline_error: $red-error;
 $primary_btn_bg: $black;
 
+// Dropdown.
+$primary_dropdown_bg: $white;
+$primary_dropdown_arrow_bg: false;
+$primary_dropdown_arrow: $peacock-blue;
+$primary_dropdown_text: $black;
+$primary_dropdown_border: $warm-grey-two;
+$primary_dropdown_option_hover: $warm-grey-three;
+$primary_dropdown_option_border: $warm-grey-two;
+$primary_dropdown_option_disbled: $greyish;
+$primary_dropdown_focus: $black;
+
 /* ------- 5. Components --------------- */
 // Language Switcher
 $lang_switch: $peacock-blue;
@@ -54,6 +65,13 @@ $lang_switch_list_bg: $black;
 $lang_switch_list: $white;
 $lang_switch_close_icon_bg: $peacock-blue;
 $lang_switch_close_icon: $white;
+
+// Accordion
+$accordion_border: $warm-grey-two;
+$accordion_title: $black;
+$accordion_sub_title: $black;
+$accordion_title_arrow: $peacock-blue;
+$accordion_title_disabled: $grey-ash;
 
 /* ------- 6. Sections and Pages --------------- */
 
@@ -168,6 +186,32 @@ $promo_white_btn: $white;
 $promo_white_btn_border: $black;
 $promo_white_btn_text: $black;
 
+/* ------- 7. Pages ----- */
+// Product listing page and search page.
+$plp_category_desc: $peacock-blue;
+$plp_facet_filter_bg: $peacock-blue;
+$plp_facet_clear_border: $peacock-blue;
+$plp_facet_clear_border_mobile: $peacock-blue;
+$plp_facet_clear_text: $peacock-blue;
+$plp_facet_input_border: $warm-grey-two;
+$plp_facet_dropdown_bg: $white;
+$plp_facet_dropdown_icon: $peacock-blue;
+$plp_facet_label_border_mobile: $warm-grey-two;
+$plp_facet_border: $warm-grey-two;
+$plp_facet_summary_filter_icon: $white;
+$plp_item_label: $black;
+$plp_promotion_description: $warm-grey-one;
+$plp_promotion_link: $peacock-blue;
+
+// PLP Product tile.
+$plp_tile_product_title: $black;
+$plp_tile_product_title_hover: $peacock-blue;
+
+// PLP Product title hover.
+$plp_pager_link: $white;
+$plp_pager_link_border: $black;
+$plp_pager_link_bg: $black;
+
 // Store finder page.
 // Store finder header form.
 $store_finder_header_desktop: $black;
@@ -197,7 +241,6 @@ $title: $black;
 $user_form_layout_divider_color: $warm-grey-one;
 $user_block_link: $peacock-blue;
 $user_sidebar_block_title: $peacock-blue;
-$accordion_border: $warm-grey-one;
 $default_msg_bg: $success-green;
 
 // Contact Page
