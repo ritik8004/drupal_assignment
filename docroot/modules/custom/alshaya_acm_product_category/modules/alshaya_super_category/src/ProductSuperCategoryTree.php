@@ -11,6 +11,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class ProductSuperCategoryTree.
@@ -25,10 +26,19 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   protected $productCategoryTree;
 
   /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
    *   Entity type manager.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
@@ -40,9 +50,66 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
    */
-  public function __construct(ProductCategoryTreeInterface $product_category_tree, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection) {
+  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection) {
     $this->productCategoryTree = $product_category_tree;
+    $this->requestStack = $request_stack;
     parent::__construct($entity_type_manager, $language_manager, $cache, $route_match, $connection);
+  }
+
+  /**
+   * Get the term object from current route.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|mixed|null
+   *   Return the taxonomy term object if found else NULL.
+   */
+  public function getCategoryTermFromRoute() {
+    $term = parent::getCategoryTermFromRoute();
+
+    if (empty($term)) {
+      $current_uri = $this->requestStack->getCurrentRequest()->getRequestUri();
+      $path_parts = pathinfo($current_uri);
+      $term_path = explode('/', $path_parts['dirname']);
+      if (!empty($term_path[2])) {
+        $term = $this->getTermByName($term_path[2]);
+        if (!empty($term->tid)) {
+          $term = $this->termStorage->load($term->tid);
+        }
+      }
+    }
+
+    // If term is of 'acq_product_category' vocabulary.
+    if ($term instanceof TermInterface && $term->getVocabularyId() == self::VOCABULARY_ID) {
+      return $term;
+    }
+
+    return $term;
+  }
+
+  /**
+   * Get term object by name.
+   *
+   * @param string $name
+   *   The term label.
+   * @param string $langcode
+   *   The language code.
+   *
+   * @return array
+   *   Return the result array.
+   */
+  protected function getTermByName($name, $langcode = NULL) {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+    $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
+    $query->fields('tfd', ['tid', 'name', 'description__value']);
+    $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
+    $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
+    $query->condition('ttim.field_category_include_menu_value', 1);
+    $query->condition('tfd.langcode', $langcode);
+    $query->condition('tfd.vid', self::VOCABULARY_ID);
+    $query->where("REPLACE(LOWER(tfd.name), ' ','-') LIKE :name", [':name' => Html::cleanCssIdentifier($name)]);
+    $query->orderBy('tfd.weight', 'ASC');
+    return $query->execute()->fetch();
   }
 
   /**
