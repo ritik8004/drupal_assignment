@@ -6,11 +6,13 @@
  */
 
 use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Solarium\Core\Query\QueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -357,5 +359,75 @@ function alshaya_search_alshaya_profile_installed_final_task() {
     // Enable alshaya_search_local_search to ensure config are overridden to
     // use solr in local.
     \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_search_taxonomy_term_presave(TermInterface $term) {
+  /** @var \Drupal\taxonomy\Entity\Term $entity */
+  if ($term->getVocabularyId() == 'acq_product_category') {
+    $category_tree_manager = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+
+    // Get the root parent term for the term being saved.
+    $root_parent_term = $category_tree_manager->getCategoryTermRootParent($term);
+    $root_include_in_menu_flag = $root_parent_term->get('field_category_include_menu')->getString();
+
+    // If root parent term is same as the term being edited, it means we editing
+    // a root parent item & should update all its children with the same
+    // include_menu value.
+    if (($root_parent_term->id() === $term->id()) &&
+      (count($children_tids = $category_tree_manager->getNestedChildrenTids($term)) > 0)) {
+
+      // If root term is the one being edited, rely on term object received in
+      // presave.
+      $root_include_in_menu_flag = $term->get('field_category_include_menu')->getString();
+
+      // Update the field directly rather than doing a term load &
+      // saving the term.
+      \Drupal::database()->update('taxonomy_term__field_category_include_menu')
+        ->fields(['field_category_include_menu_value' => $root_include_in_menu_flag])
+        ->condition('entity_id', $children_tids, 'IN')
+        ->execute();
+
+      // Prepare cache tags that need to invalidated. Since we doing db query to
+      // update the field's value, we will need to invalidate the relevant cache
+      // tags explicitly.
+      $tags = [];
+
+      foreach ($children_tids as $child_tid) {
+        $tags[] = 'taxonomy_term:' . $child_tid;
+      }
+
+      $tags = array_merge($tags, [
+        'acq_product_category_list',
+        'taxonomy_term_list',
+        'taxonomy_term_values',
+      ]);
+
+      Cache::invalidateTags($tags);
+    }
+    elseif ($root_parent_term->id() !== $term->id()) {
+      // Otherwise we dealing with a L2/L3 item. We should sync the value for
+      // include_in_menu flag for this item with root's value. This will also
+      // mean we won't be able to set a different value(compared to L1) for this
+      // flag on L2/L3 from admin interface.
+      $term->set('field_category_include_menu', $root_include_in_menu_flag);
+
+      // Get the language other than the one this term is being edited in.
+      $enabled_langcodes = array_keys(\Drupal::languageManager()->getLanguages());
+      $translation_langcode = array_diff($enabled_langcodes, [$term->language()->getId()]);
+      $translation_langcode = array_shift($translation_langcode);
+
+      // Update the field value for translation as well.
+      if ($term->hasTranslation($translation_langcode)) {
+        \Drupal::database()->update('taxonomy_term__field_category_include_menu')
+          ->fields(['field_category_include_menu_value' => $root_include_in_menu_flag])
+          ->condition('entity_id', $term->id())
+          ->condition('langcode', $translation_langcode)
+          ->execute();
+      }
+    }
   }
 }

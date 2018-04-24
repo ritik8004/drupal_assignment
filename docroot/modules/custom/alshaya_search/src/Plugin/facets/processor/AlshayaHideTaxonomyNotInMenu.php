@@ -11,7 +11,6 @@ use Drupal\facets\FacetInterface;
 use Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay;
 use Drupal\facets\Processor\BuildProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginBase;
-use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -117,11 +116,6 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
           $ids[$delta] = $result->getRawValue();
         }
 
-        // Load indexed term object.
-        $entities = $this->entityTypeManager
-          ->getStorage($entity_type)
-          ->loadMultiple($ids);
-
         // List of term ids that need to be hidden based on its parent's not
         // included in menu flag.
         $hide_tids = [];
@@ -132,16 +126,19 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
           }
         }
 
-        // Process results array > remove parent items which are marked for
-        // excluding from menu & mark it & its children recursively for hiding.
+        // Process results array & mark terms for hiding & cache the list of
+        // hidden terms.
         if (empty($hide_tids)) {
+          // Load indexed term object.
+          $entities = $this->entityTypeManager
+            ->getStorage($entity_type)
+            ->loadMultiple($ids);
+
           foreach ($results as $i => $result) {
             $term = $entities[$ids[$i]];
             if (($term instanceof TermInterface) &&
               (!$this->shouldRenderTerm($term))) {
               $hide_tids[] = $ids[$i];
-              unset($results[$i]);
-              $this->markChildrenTermsForHiding($term, $hide_tids);
             }
           }
 
@@ -153,7 +150,7 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
         }
 
         // Process tids marked for hiding.
-        $this->hideMarkedChildrenTerms($hide_tids, $results);
+        $this->hideMarkedTerms($hide_tids, $results);
       }
     }
 
@@ -179,33 +176,6 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
   }
 
   /**
-   * Mark children terms from facet list in case parent is not being rendered.
-   *
-   * @param \Drupal\taxonomy\TermInterface $term
-   *   Parent term not supposed to be rendered.
-   * @param array $hide_tids
-   *   List of tids to be hidden.
-   */
-  protected function markChildrenTermsForHiding(TermInterface $term, array &$hide_tids) {
-    // Process further only if the term has children.
-    if (count($child_terms = $this->categoryTreeManager->allChildTerms($term->language()->getId(),
-        'acq_product_category',
-        $term->id())) > 0) {
-
-      // Mark the child tids for hiding later once we are done processing the
-      // results array.
-      foreach ($child_terms as $child_term) {
-        $hide_tids[] = $child_term->tid;
-        $child_term_obj = Term::load($child_term->tid);
-        $this->markChildrenTermsForHiding($child_term_obj, $hide_tids);
-      }
-    }
-    else {
-      return;
-    }
-  }
-
-  /**
    * Hide Children terms that were discovered while hiding parent terms.
    *
    * @param array $hide_tids
@@ -213,7 +183,7 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
    * @param array $results
    *   List of facet result set items.
    */
-  protected function hideMarkedChildrenTerms(array $hide_tids, array &$results) {
+  protected function hideMarkedTerms(array $hide_tids, array &$results) {
 
     $keyed_results = [];
 
