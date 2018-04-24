@@ -50,7 +50,14 @@ view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
     {% block content %}
       {% if promo_link == 1 %}
         <a href="{{ button_link }}">
-          {{ content.field_banner }}
+          <!-- /#For demo purpose only. -->
+            <div class="picture-tag">
+              <picture>
+                <source media="(min-width: 768px)" srcset="{{ file_url(desktop_image) }}">
+                <source media="(min-width: 320px)" srcset="{{ file_url(mobile_image) }}">
+                <img src="{{ file_url(desktop_image) }}"/>
+              </picture>
+            </div>
           {{ content.field_promo_block_button }}
         </a>
       {% else %}

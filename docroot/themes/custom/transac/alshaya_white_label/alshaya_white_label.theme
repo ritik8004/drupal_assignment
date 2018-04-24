@@ -799,6 +799,25 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         $variables['button_link'] = Url::fromUri($button_link[0]['uri'])->toString();
       }
     }
+    // Get the desktop and mobile images for promo blocks if available.
+    $mobile_image = $variables['elements']['field_banner_mobile']['#items'];
+    if (!is_null($mobile_image)) {
+      if ($images = $mobile_image->referencedEntities()) {
+        foreach ($images as $image) {
+          $mobile_image_url = $image->getFileUri();
+        }
+      }
+    }
+    $desktop_image = $variables['elements']['field_promotion_image']['#items'];
+    if (!is_null($desktop_image)) {
+      if ($images = $desktop_image->referencedEntities()) {
+        foreach ($images as $image) {
+          $desktop_image_url = $image->getFileUri();
+        }
+      }
+    }
+    $variables['mobile_image'] = $mobile_image_url;
+    $variables['desktop_image'] = $desktop_image_url;
   }
   elseif ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {
     // Get the promo block display config for twig file.
