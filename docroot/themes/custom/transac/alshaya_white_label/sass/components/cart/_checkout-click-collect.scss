@@ -1265,18 +1265,47 @@
         margin: 0;
       }
 
-      .current-location {
+      .current-location,
+      .cc-near-me {
         width: 8.75rem;
         margin: 0;
         padding: 0.4375rem 1rem;
         border: 1px solid $checkout_cc_near_me_border;
+        color: $store_finder_text;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+
+        @include breakpoint($tablet) {
+          float: $left;
+        }
+
+        &::before {
+          content: '';
+          display: inline-block;
+          vertical-align: middle;
+          margin-#{$right}: 0.6875rem;
+          background: url('../imgs/icons/current.svg') no-repeat;
+          width: 1.625rem;
+          height: 1.625rem;
+
+          @include breakpoint($tablet) {
+            html[lang=ar] & {
+              margin-right: 0;
+            }
+          }
+
+          @include breakpoint($only-tablet) {
+            position: absolute;
+          }
+        }
 
         @include breakpoint($desktop) {
           html[lang=ar] & {
             padding: 0.4375rem;
             width: 11rem;
             position: relative;
-            padding-right: 4.75rem;
+            padding-right: 2.25rem;
             margin-top: 0.75rem;
 
             &::before {
@@ -1299,6 +1328,8 @@
 
         @include breakpoint($only-mobile) {
           width: 100%;
+          display: block;
+          text-align: center;
         }
       }
 
@@ -1472,7 +1503,7 @@
         }
 
         @include breakpoint($only-mobile) {
-          display: none;
+          display: none !important;
         }
       }
 
