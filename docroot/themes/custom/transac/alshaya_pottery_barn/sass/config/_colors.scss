@@ -294,6 +294,24 @@ $checkout_login_guest_email_text: $PB_black_one;
 $checkout_header_border-bottom: $PB_black_one;
 $checkout_header_border-top: $white;
 
+// Counters.
+$primary_counter_bg: $PB_deep_red;
+$primary_counter_text: $white-two;
+
+// Checkout tabs.
+$checkout_tab_active_hr: $PB_deep_red;
+$checkout_tab_default_border: $PB_grey_five;
+$checkout_tab_default_title: $PB_grey_one;
+$checkout_tab_active_title: $PB_black_one;
+$checkout_tab_active_description: $PB_deep_red;
+$checkout_tab_separator: $PB_black_one;
+$checkout_progress_bg: $PB_white;
+
+// Order summary block.
+$order_summary_caption_bg: $PB_grey_five;
+$order_summary_content_bg: $PB_white;
+$order_summary_totals_bg: $PB_grey_five;
+
 // Checkout login.
 $checkout_login_tab_border: $_gray_eight;
 $checkout_login_tab_text: $PB_grey_one;

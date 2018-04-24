@@ -15,7 +15,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 /**
  * Class ProductCategoryTree.
  */
-class ProductCategoryTree {
+class ProductCategoryTree implements ProductCategoryTreeInterface {
 
   const CACHE_BIN = 'alshaya';
 
@@ -113,38 +113,6 @@ class ProductCategoryTree {
     $this->cache = $cache;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
-  }
-
-  /**
-   * Get top level category items.
-   *
-   * @param string $langcode
-   *   (optional) The language code.
-   *
-   * @return array
-   *   Processed term data.
-   */
-  public function getCategoryRootTerms($langcode = NULL) {
-    if (empty($langcode)) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    }
-
-    $cid = self::CACHE_ID . '_' . $langcode;
-
-    if ($term_data = $this->cache->get($cid)) {
-      return $term_data->data;
-    }
-
-    // Get all child terms for the given parent.
-    $term_data = $this->getCategoryTree($langcode, 0, FALSE, FALSE);
-
-    $cache_tags = [
-      self::CACHE_TAG,
-      self::VOCABULARY_ID,
-    ];
-
-    $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
-    return $term_data;
   }
 
   /**
@@ -381,29 +349,6 @@ class ProductCategoryTree {
       $parents = $this->termStorage->loadAllParents($term->id());
     }
     return $parents;
-  }
-
-  /**
-   * Get root parent of given term.
-   *
-   * OR get parent of the term by getting term from current route.
-   *
-   * @param null|object $term
-   *   (optional) The term object or nothing.
-   *
-   * @return \Drupal\taxonomy\TermInterface|mixed|null
-   *   Return the parent term object or NULL.
-   */
-  public function getCategoryTermRootParent($term = NULL) {
-    if (empty($term) || !$term instanceof  TermInterface) {
-      $term = $this->getCategoryTermFromRoute();
-    }
-    if ($term instanceof TermInterface && $parents = $this->getCategoryTermParents($term)) {
-      // Get the top level parent id if parent exists.
-      return end($parents);
-    }
-
-    return NULL;
   }
 
   /**
