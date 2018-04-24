@@ -17,7 +17,8 @@
 
         &:hover ~ hr,
         &.active--tab--head ~ hr {
-          margin-#{$left}: 53%;
+          margin-#{$left}: 52.9%;
+          width: calc(50% - 28px);
         }
       }
 
