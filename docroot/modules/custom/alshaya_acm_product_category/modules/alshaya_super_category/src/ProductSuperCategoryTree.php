@@ -4,6 +4,7 @@ namespace Drupal\alshaya_super_category;
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\taxonomy\TermInterface;
