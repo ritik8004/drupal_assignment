@@ -9,8 +9,8 @@
       When I close the popup
       And I wait for the page to load
       And I go to "/user/login"
-      When I fill in "edit-name" with "shweta+3@axelerant.com"
-      And I fill in "edit-pass" with "Alshaya123$"
+      When I fill in "edit-name" with "anjali.nikumb@acquia.com"
+      And I fill in "edit-pass" with "password@1"
       And I press "sign in"
       Then I should see the link "My account"
       And I should see the link "Sign out"
@@ -21,7 +21,7 @@
       And the url should match "/user/login"
       And I follow "Forgot password?"
       And the url should match "/user/password"
-      When I fill in "edit-name" with "shweta+3@axelerant.com"
+      When I fill in "edit-name" with "anjali.nikumb@acquia.com"
       And I press "Submit"
       Then I should see "Further instructions have been sent to your email address."
       And the url should match "/user/login"
@@ -186,7 +186,7 @@
 
     Scenario: As an authenticated user
     I should be able to view breadcrumbs on My Account section
-      Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
       And I wait for the page to load
       Then the breadcrumb "Home > My Account" should be displayed
       When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
