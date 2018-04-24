@@ -364,7 +364,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @return array
    *   Child term array.
    */
-  protected function allChildTerms($langcode, $vid, $parent_tid) {
+  public function allChildTerms($langcode, $vid, $parent_tid) {
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name', 'description__value']);
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
