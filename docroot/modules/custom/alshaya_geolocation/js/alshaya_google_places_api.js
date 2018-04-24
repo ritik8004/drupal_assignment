@@ -171,7 +171,7 @@
     // Get the permission track the user location.
     try {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(successCall, ErrorCall);
+        navigator.geolocation.getCurrentPosition(successCall, ErrorCall, {timeout: 10000});
       }
     }
     catch (e) {
