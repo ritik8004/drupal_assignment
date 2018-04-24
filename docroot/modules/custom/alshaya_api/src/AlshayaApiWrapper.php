@@ -315,7 +315,11 @@ class AlshayaApiWrapper {
                 'value' => 1,
                 'condition_type' => 'eq',
               ],
-              1 => [
+            ],
+          ],
+          1 => [
+            'filters' => [
+              0 => [
                 'field' => 'type_id',
                 'condition_type' => 'eq',
               ],
@@ -362,7 +366,7 @@ class AlshayaApiWrapper {
             // we test if there is any SKU in current page which was already
             // present in previous page. If yes, then we reached the end of
             // the list.
-            if (empty(array_diff($previous_page_skus, $current_page_skus))) {
+            if (!empty(array_diff($current_page_skus, $previous_page_skus))) {
               $continue = TRUE;
             }
 
