@@ -2,8 +2,8 @@
 
 namespace Drupal\alshaya_search\Plugin\facets\processor;
 
-use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -43,11 +43,11 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
   protected $entityTypeManager;
 
   /**
-   * The product category tree Manager.
+   * Cache Backend object for "cache.data".
    *
-   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   * @var \Drupal\Core\Cache\CacheBackendInterface
    */
-  protected $categoryTreeManager;
+  protected $cache;
 
   /**
    * Constructs a new object.
@@ -62,15 +62,15 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
    *   The language manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $category_tree_manager
-   *   The Product category tree manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend object for "cache.data".
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, ProductCategoryTree $category_tree_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
-    $this->categoryTreeManager = $category_tree_manager;
+    $this->cache = $cache;
   }
 
   /**
@@ -83,7 +83,7 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
       $plugin_definition,
       $container->get('language_manager'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_acm_product_category.product_category_tree')
+      $container->get('cache.data')
     );
   }
 
@@ -120,7 +120,7 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
         // included in menu flag.
         $hide_tids = [];
 
-        if ($cached_hide_tids = \Drupal::cache()->get('alshaya_hidden_category_tids')) {
+        if ($cached_hide_tids = $this->cache->get('alshaya_hidden_category_tids')) {
           if (!empty($cached_hide_tids->data)) {
             $hide_tids = $cached_hide_tids->data;
           }
@@ -146,7 +146,7 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
           $hide_tids = array_unique($hide_tids);
 
           // Cache this data to be used on other pages.
-          \Drupal::cache()->set('alshaya_hidden_category_tids', $hide_tids, Cache::PERMANENT, ['acq_product_category_list']);
+          $this->cache->set('alshaya_hidden_category_tids', $hide_tids, Cache::PERMANENT, ['acq_product_category_list']);
         }
 
         // Process tids marked for hiding.
