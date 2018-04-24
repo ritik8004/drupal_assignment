@@ -20,5 +20,7 @@ function alshaya_get_magento_host_data() {
     'hm_prod' => 'http://hm.store.alshaya.com.c.zbrr3sobrsb3o.ent.magento.cloud',
     // Pottery Barn.
     'pb_qa' => 'https://qa-h47ppbq-rfuu4sicyisyw.eu.magentosite.cloud',
+    // BathBodyWorks.
+    'bbw_qa' => 'https://integration-5ojmyuq-bbk3lvknero4c.eu-3.magentosite.cloud',
   ];
 }

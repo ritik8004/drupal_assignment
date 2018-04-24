@@ -137,5 +137,11 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => 'cbf73a1b03eb43369149662f41980491',
       'hmac_secret' => '_tcQBAc4nXGPNsSH1AAARw',
     ],
+    // BathBodyWorks AE.
+    'bbwae_test' => [
+      'url' => 'https://alshaya-bbwae-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '2c9c003acdf34ae29fb2c87a7401cf0a',
+      'hmac_secret' => '8UUzR1z6OcFbnjhtl5U8Vg',
+    ],
   ];
 }
