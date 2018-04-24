@@ -33,7 +33,7 @@ function alshaya_get_additional_settings($site, $env) {
           'store_id' => [
             'ar' => 3,
           ],
-        ]
+        ],
       ],
       'sa' => [
         'default' => [
@@ -101,7 +101,7 @@ function alshaya_get_additional_settings($site, $env) {
           'alshaya_acm_knet.settings' => [
             'alias' => 'hm',
           ],
-        ]
+        ],
       ],
       'sa' => [
         'default' => [
@@ -166,7 +166,8 @@ function alshaya_get_additional_settings($site, $env) {
           //  'en' => '',
           //  'ar' => 'uae_ar',
           //],
-       ],
+        ],
+      ],
     ],
     'pb' => [
       'ae' => [
@@ -221,7 +222,7 @@ function alshaya_get_additional_settings($site, $env) {
             'alias' => 'alshaya',
           ],
         ],
-      ]
+      ],
     ],
   ];
 
