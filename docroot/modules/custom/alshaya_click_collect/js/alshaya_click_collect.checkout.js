@@ -101,7 +101,7 @@
       // CnC near me failure callback.
       var cncNearMeError = function(error) {
         // Close the throbber.
-        //$(".checkout-ajax-progress-throbber").remove()
+        $(".checkout-ajax-progress-throbber").remove()
       };
 
       $('.hours--wrapper').once('initiate-toggle').on('click', '.hours--label', function () {
