@@ -230,6 +230,7 @@
   }
 
   .current-location,
+  .cc-near-me,
   .list-view-link,
   .map-view-link,
   .label--location {
@@ -247,7 +248,8 @@
     }
   }
 
-  .current-location {
+  .current-location,
+  .cc-near-me {
     @include breakpoint($only-tablet) {
       #{$left}: 0;
       padding-#{$left}: 2.125rem !important;
@@ -265,10 +267,13 @@
     }
   }
 
-  .current-location::before {
-    background: url('../imgs/icons/current.svg') no-repeat;
-    width: 26px;
-    height: 26px;
+  .current-location,
+  .cc-near-me {
+    &::before {
+      background: url('../imgs/icons/current.svg') no-repeat;
+      width: 26px;
+      height: 26px;
+    }
   }
 
   .label--location::before {
@@ -428,6 +433,7 @@
   }
 
   .current-location,
+  .cc-near-me,
   .form-type-textfield,
   .c-content__region .form-actions,
   .list-view-link,
@@ -637,7 +643,8 @@
       border-bottom: 1px solid $store_finder_search_results_border;
     }
 
-    .current-location {
+    .current-location,
+    .cc-near-me {
       display: block;
       font-size: 12px;
       text-align: center;
@@ -654,10 +661,13 @@
   }
 
   @include breakpoint($only-tablet) {
-    .form--inline .current-location {
-      width: 17%;
-      padding-#{$left}: 1.25rem;
-      padding-#{$right}: 0;
+    .form--inline {
+      .current-location,
+      .cc-near-me {
+        width: 17%;
+        padding-#{$left}: 1.25rem;
+        padding-#{$right}: 0;
+      }
     }
 
     .store-finder--wrapper {
@@ -783,11 +793,13 @@
       }
     }
 
-    .current-location {
+    .current-location,
+    .cc-near-me {
       padding: 0 1.5rem;
     }
 
-    .current-location {
+    .current-location,
+    .cc-near-me {
       width: 20%;
     }
 
@@ -850,6 +862,7 @@
   }
 
   .current-location,
+  .cc-near-me,
   .label--location {
     @include breakpoint($tablet) {
       margin: 0.8rem 0;
@@ -868,7 +881,8 @@
     }
   }
 
-  .current-location {
+  .current-location,
+  .cc-near-me {
     @include breakpoint($desktop) {
       html[lang=ar] & {
         margin-top: 1.2rem;
@@ -880,6 +894,7 @@
   }
 
   .current-location,
+  .cc-near-me,
   .store-finder--wrapper,
   .list-view-link,
   .map-view-link {
