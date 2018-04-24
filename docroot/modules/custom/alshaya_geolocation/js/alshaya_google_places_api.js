@@ -148,7 +148,7 @@
   };
 
   // Get formatted address from geocode.
-  Drupal.click_collect.getFormattedAddress = function (coords, $target) {
+  Drupal.click_collect.getFormattedAddress = function (coords, $target, type) {
     if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
       Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
     }
@@ -156,7 +156,12 @@
     var latlng = {lat: parseFloat(coords.lat), lng: parseFloat(coords.lng)};
     geocoder.geocode({location: latlng}, function (results, status) {
       if (status === 'OK') {
-        $target.html(results[2].formatted_address);
+        if (type === 'val') {
+            $target.val(results[2].formatted_address);
+        }
+        else {
+            $target.html(results[2].formatted_address);
+        }
       }
     });
   };

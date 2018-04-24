@@ -63,46 +63,9 @@
       $('#edit-guest-delivery-collect, #edit-member-delivery-collect', context).once('get-location').on('click', '.cc-near-me', function () {
         // Start the loader.
         $(this).showCheckoutLoader();
-        if (typeof ascoords !== 'undefined') {
-          cncNearMe(ascoords);
-        }
-        else {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(cncNearMeSuccess, cncNearMeError);
-          }
-        }
-      });
-
-      // CnC near me success callback.
-      var cncNearMeSuccess = function(position) {
-        ascoords = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        cncNearMe(ascoords);
-      };
-
-      var cncNearMe = function(ascoords) {
-        if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
-            Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
-        }
-        // Fetch location name from lat/lng and then fill the text box.
-        var geocoder = Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
-        var latlng = {lat: parseFloat(ascoords.lat), lng: parseFloat(ascoords.lng)};
-        geocoder.geocode({location: latlng}, function (results, status) {
-          if (status === 'OK') {
-            $('#edit-store-location').val(results[2].formatted_address);
-          }
-        });
         Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
         return false;
-      };
-
-      // CnC near me failure callback.
-      var cncNearMeError = function(error) {
-        // Close the throbber.
-        $(".checkout-ajax-progress-throbber").remove()
-      };
+      });
 
       $('.hours--wrapper').once('initiate-toggle').on('click', '.hours--label', function () {
         $(this).toggleClass('open');
@@ -433,7 +396,11 @@
             var showMap = false;
 
             if (storeList !== null && storeList.length > 0) {
-              Drupal.click_collect.getFormattedAddress(ascoords, $('#click-and-collect-list-view').find('.selected-store-location'));
+              Drupal.click_collect.getFormattedAddress(ascoords, $('#click-and-collect-list-view').find('.selected-store-location'), 'html');
+              // Fill the input box.
+              if ($('#edit-store-location').length > 0) {
+                Drupal.click_collect.getFormattedAddress(ascoords, $('#edit-store-location'), 'val');
+              }
               var map = Drupal.checkoutClickCollect.mapCreate(true);
               Drupal.geolocation.removeMapMarker(map);
               Drupal.checkoutClickCollect.storeViewOnMapAll(storeList);

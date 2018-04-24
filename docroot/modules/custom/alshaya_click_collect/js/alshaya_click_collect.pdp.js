@@ -264,10 +264,10 @@
             }
 
             // Add formatted address based on lat/lng before ajax for top three stores.
-            Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'));
+            Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-form').find('.google-store-location'), 'html');
             // Add formatted address based on lat/lng before ajax for all stores. If html elements available.
             if ($('.click-collect-all-stores').find('.google-store-location').length > 0) {
-              Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
+              Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
             }
 
             var storeDisplayAjax = Drupal.ajax({
@@ -283,7 +283,7 @@
               if (status === 'success') {
                 if (response.data.alshaya_click_collect.pdp.top_three) {
                   // Show formatted address after ajax for all stores, once we have html elements.
-                  Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'));
+                  Drupal.click_collect.getFormattedAddress(asCoords, $('.click-collect-all-stores').find('.google-store-location'), 'html');
                   displaySearchForm = false;
                   records = true;
                 }
