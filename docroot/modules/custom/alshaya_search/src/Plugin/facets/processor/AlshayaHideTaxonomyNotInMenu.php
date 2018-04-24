@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_search\Plugin\facets\processor;
 
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -41,6 +42,13 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
   protected $entityTypeManager;
 
   /**
+   * The product category tree Manager.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   */
+  protected $categoryTreeManager;
+
+  /**
    * Constructs a new object.
    *
    * @param array $configuration
@@ -53,12 +61,15 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
    *   The language manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $category_tree_manager
+   *   The Product category tree manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, ProductCategoryTree $category_tree_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->categoryTreeManager = $category_tree_manager;
   }
 
   /**
@@ -70,7 +81,8 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
       $plugin_id,
       $plugin_definition,
       $container->get('language_manager'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('alshaya_acm_product_category.product_category_tree')
     );
   }
 
@@ -137,8 +149,7 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
     }
 
     // Check L1 parent for the field_include_in_menu.
-    if ((count($term_parents = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($term->id())) > 0) &&
-    (($parent_l1 = end($term_parents)) instanceof TermInterface) &&
+    if (($parent_l1 = $this->categoryTreeManager->getCategoryTermRootParent($term)) &&
     ($parent_l1->get('field_category_include_menu')->getString() != 1)) {
       return FALSE;
     }
