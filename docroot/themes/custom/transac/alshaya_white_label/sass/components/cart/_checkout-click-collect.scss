@@ -1265,7 +1265,8 @@
         margin: 0;
       }
 
-      .current-location {
+      .current-location,
+      .cc-near-me {
         width: 8.75rem;
         margin: 0;
         padding: 0.4375rem 1rem;
@@ -1472,7 +1473,7 @@
         }
 
         @include breakpoint($only-mobile) {
-          display: none;
+          display: none !important;
         }
       }
 
