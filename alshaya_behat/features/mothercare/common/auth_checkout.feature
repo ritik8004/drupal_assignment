@@ -119,6 +119,7 @@ Feature: As an authenticated user
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I accept terms and conditions
     And I press "place order"
+    And I wait 10 seconds
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
@@ -144,7 +145,7 @@ Feature: As an authenticated user
     When I fill in "edit-billing-address-address-billing-address-line2" with "1"
     And I accept terms and conditions
     And I press "place order"
-    When I wait for the page to load
     And I wait 10 seconds
+    When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
