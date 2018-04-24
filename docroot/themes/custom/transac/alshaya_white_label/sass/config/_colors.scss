@@ -651,6 +651,8 @@ $checkout_pri_txt: $grey-ash;
 $checkout_section_border: $greyish;
 $checkout_section_titles: $marine-blue-two;
 $checkout_section_title_border: $white;
+$secure_checkout_back_link: $content_link_color;
+$checkout_tab_active_head: $light-greyish;
 
 // @todo Variables used in outdated markup, avoid using elsewhere.
 $checkout_out_sec_text: $windows-blue;
@@ -779,8 +781,15 @@ $checkout_order_details_product_count_border: $white-five;
 
 // Address form.
 $address_form_country_disabled: $ladda-disabled;
+$address_form_radio: $windows-blue;
+$address_form_default: $white-four;
 $address_button_border: $marine-blue-two;
 $address_button_text: $marine-blue-two;
+$address_book_border: $white;
+$user_ui_dialog_border: $white;
+$address_book_delete_cancel: #3381d0;
+$address_book_delete_close: $black;
+$address_book_delete_close_bg: $white;
 
 //My Account pages
 $user_account_wrapper_light: $grey-ash;
@@ -856,6 +865,8 @@ $basket_img_border: $white;
 $basket_img_bg: $white-five;
 $basket_th_4th_child: $white-two;
 $basket_continue_shopping_btn_border: $marine-blue-two;
+$basket_continue_shopping_link: $content_link_color;
+$basket_sell_hover_link: $content_link_color;
 $basket_content_link_color: $cerulean-two;
 // Pri text is product title, price, etc.
 $basket_td_pri_txt: $black;
@@ -1012,3 +1023,9 @@ $default_msg_icon: false;
 
 // PDP.
 $pdp_filter_selector_label: false;
+
+// Orders.
+$order_detail_order_sub_total_border: false;
+
+// Checkout.
+$checkout_progress_border: false;

@@ -1,0 +1,48 @@
+.user__order--detail {
+  border-top: 0;
+
+  .delivery-details-row,
+  .total-row {
+    td {
+      font-family: $vs-bold;
+    }
+  }
+
+  .delivery-details-row {
+    @include breakpoint($desktop) {
+      border: 0;
+    }
+  }
+
+  .order__user--info .label,
+  .payment-method,
+  .address--contact,
+  .delivery-method {
+    font-family: $vs-bold;
+  }
+
+  .address--contact {
+    line-height: 1.4;
+    margin-top: 0.625rem;
+
+    .no-direction {
+      font-family: $vs-regular;
+    }
+  }
+
+  .sub-total-row {
+    border-top: 1px solid $order_detail_order_sub_total_border;
+
+    td {
+      padding-top: 1.125rem;
+    }
+  }
+}
+
+.order-detail {
+  .user__order--detail {
+    .order-item-row {
+      border-bottom: 0;
+    }
+  }
+}

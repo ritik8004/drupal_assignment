@@ -10,4 +10,14 @@
       font-size: 0.875rem;
     }
   }
+
+  .field--name {
+    &-field-title {
+      text-transform: uppercase;
+    }
+
+    &-field-sub-title {
+      text-transform: initial;
+    }
+  }
 }

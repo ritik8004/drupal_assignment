@@ -1,0 +1,48 @@
+.user-page.checkout-login {
+  .fieldset-wrapper {
+    .checkout-guest-email-usage {
+      text-transform: none;
+      font-weight: normal;
+    }
+  }
+
+  #block-youllbeableto {
+    text-transform: none;
+
+    h3 {
+      color: $checkout_section_titles;
+      text-transform: none;
+    }
+
+    p {
+      span {
+        line-height: 1;
+      }
+
+      a {
+        font-weight: 600;
+        text-transform: none;
+      }
+    }
+  }
+
+  #edit-checkout-login .request-password-link,
+  .checkout-login-actions-wrapper a {
+    font-weight: 600;
+  }
+
+  .checkout-login-actions-wrapper {
+    @include breakpoint($only-mobile) {
+      background: $checkout_login_footer_actions_bg;
+    }
+  }
+
+  .tab {
+    text-transform: none;
+
+    &.active {
+      font-weight: normal;
+      border-width: 1px;
+    }
+  }
+}

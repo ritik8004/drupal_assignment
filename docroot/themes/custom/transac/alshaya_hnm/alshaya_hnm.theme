@@ -48,7 +48,8 @@ function alshaya_hnm_preprocess_page(&$variables) {
  */
 function alshaya_hnm_preprocess_block(&$variables) {
   // Custom block type helper classes.
-  if ($variables['elements']['#id'] === 'branding') {
+  if (isset($variables['elements'], $variables['elements']['#id'])
+    && $variables['elements']['#id'] === 'branding') {
     $variables['site_logo'] = theme_get_setting('logo.url');
     $variables['site_name'] = theme_get_setting('name');
   }

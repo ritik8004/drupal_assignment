@@ -218,6 +218,7 @@
 @include breakpoint($tablet) {
   .description-wrapper {
     border: 1px solid $secondary_border;
+    background: $primary_bg;
 
     .close {
       color: $primary_close_btn;
