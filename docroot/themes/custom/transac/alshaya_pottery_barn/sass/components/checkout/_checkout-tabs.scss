@@ -5,15 +5,45 @@
       border-width: 2px;
       margin-#{$left}: -1px;
       width: calc(50% - 29px);
+
+      @include breakpoint($only-tablet) {
+        width: calc(50% - 17px);
+      }
     }
 
     .tab.tab-click-collect {
-      margin-#{$left}: -2px;
+      @include breakpoint($desktop) {
+        margin-#{$left}: -2px;
 
-      &:hover ~ hr,
-      &.active--tab--head ~ hr {
-        margin-#{$left}: 52.8%;
-        width: calc(50% - 27px);
+        &:hover ~ hr,
+        &.active--tab--head ~ hr {
+          margin-#{$left}: 53%;
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: 1px;
+
+        &:hover ~ hr,
+        &.active--tab--head ~ hr {
+          margin-#{$left}: 53.1%;
+        }
+
+        &.active--tab--head {
+          margin-#{$left}: 1px;
+        }
+      }
+    }
+
+    .tab.tab-home-delivery {
+      &:not(.active--tab--head) {
+        @include breakpoint($desktop) {
+          margin-#{$left}: -1px;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: -1px;
+        }
       }
     }
 
