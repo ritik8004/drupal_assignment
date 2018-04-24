@@ -24,13 +24,13 @@ default:
                - "--no-sandbox"
     Drupal\DrupalExtension:
       blackbox: ~
-#    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
-#          name: html
-#          renderer: Twig,Behat2
-#          file_name: index
-#          print_args: true
-#          print_outp: true
-#          loop_break: true
+    emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+          name: html
+          renderer: Twig,Behat2
+          file_name: index
+          print_args: true
+          print_outp: true
+          loop_break: true
 
 mcqa:
   autoload:
@@ -84,9 +84,9 @@ mcuat:
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
-#  formatters:
-#      html:
-#        output_path: %paths.base%/features/mothercare/reports/html/behat
+  formatters:
+      html:
+        output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
       base_url: 'https://mcsa-uat.factory.alshaya.com'
