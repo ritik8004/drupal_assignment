@@ -152,7 +152,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         'fragment' => 'edit-near-me',
         'attributes' => [
           'class' => [
-            'cc-near-me current-location',
+            'cc-near-me',
           ],
         ],
       ]),

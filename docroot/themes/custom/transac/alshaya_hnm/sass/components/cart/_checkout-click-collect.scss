@@ -700,7 +700,7 @@
   #edit-guest-delivery-collect,
   #edit-member-delivery-collect {
     #store-finder-wrapper {
-      .current-location {
+      .cc-near-me {
         padding: 0.4375rem 1.25rem;
       }
 
@@ -712,7 +712,7 @@
         }
       }
 
-      .current-location {
+      .cc-near-me {
         @include breakpoint($desktop) {
           html[lang=ar] & {
             width: 10.125rem;
