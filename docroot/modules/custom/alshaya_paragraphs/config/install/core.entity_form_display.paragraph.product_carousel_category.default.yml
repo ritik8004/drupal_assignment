@@ -1,14 +1,15 @@
+uuid: null
 langcode: en
 status: true
 dependencies:
   config:
     - field.field.paragraph.product_carousel_category.field_category_carousel
-    - field.field.paragraph.product_carousel_category.field_category_carousel_title
     - field.field.paragraph.product_carousel_category.field_category_carousel_limit
+    - field.field.paragraph.product_carousel_category.field_category_carousel_title
+    - field.field.paragraph.product_carousel_category.field_view_all_text
     - paragraphs.paragraphs_type.product_carousel_category
   module:
     - content_moderation
-    - datetime
 id: paragraph.product_carousel_category.default
 targetEntityType: paragraph
 bundle: product_carousel_category
@@ -23,6 +24,13 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
+  field_category_carousel_limit:
+    weight: 103
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
   field_category_carousel_title:
     weight: 102
     settings:
@@ -31,12 +39,13 @@ content:
     third_party_settings: {  }
     type: string_textfield
     region: content
-  field_category_carousel_limit:
-    weight: 103
+  field_view_all_text:
+    weight: 104
     settings:
+      size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: number
+    type: string_textfield
     region: content
   moderation_state:
     type: moderation_state_default
