@@ -23,3 +23,22 @@ function _alshaya_custom_get_site_level_country_code() {
   }
   return $default_site_country;
 }
+
+/**
+ * Utility function to get the country name.
+ *
+ * @return string
+ *   Country name.
+ */
+function get_country_name () {
+  $country_name = 'Kuwait';
+  $default_site_country = \Drupal::config('system.date')->get('country.default');
+  $countries = \Drupal\Core\Locale\CountryManager::getStandardList();
+  foreach ($countries as $key => $value) {
+    if ($key == $default_site_country) {
+      $country_name = (string) $value;
+      break;
+    }
+  }
+  return $country_name;
+}
