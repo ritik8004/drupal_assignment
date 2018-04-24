@@ -1271,6 +1271,17 @@
         margin: 0;
         padding: 0.4375rem 1rem;
         border: 1px solid $checkout_cc_near_me_border;
+        color: $store_finder_current_location_tablet;
+
+        &::before {
+          content: '';
+          display: inline-block;
+          vertical-align: middle;
+          margin-right: 0.6875rem;
+          background: url('../imgs/icons/current.svg') no-repeat;
+          width: 26px;
+          height: 26px;
+        }
 
         @include breakpoint($desktop) {
           html[lang=ar] & {

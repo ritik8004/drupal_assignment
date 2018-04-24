@@ -37,14 +37,6 @@
   }
 }
 
-.alias-cart,
-.alias--cart-checkout-payment,
-.alias--cart-checkout-confirmation {
-  .vat-container {
-    @include container(77.25rem);
-  }
-}
-
 .nodetype--acq_product {
   .vat-container {
     @include container(66.35rem);
