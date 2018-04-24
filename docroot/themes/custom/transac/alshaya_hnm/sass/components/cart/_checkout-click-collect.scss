@@ -702,6 +702,12 @@
     #store-finder-wrapper {
       .cc-near-me {
         padding: 0.4375rem 1.25rem;
+
+        &::before {
+          background: url('../imgs/icons/ic-mylocation.svg') no-repeat;
+          width: 1.625rem;
+          height: 1.625rem;
+        }
       }
 
       .label-store-location {
