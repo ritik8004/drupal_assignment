@@ -3,6 +3,7 @@
 
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
+    	  var currency = drupalSettings.currency_code;
       $(window).on('click', function () {
         if ($('#cart_notification').length) {
           // check if element is Visible
@@ -138,7 +139,7 @@
             var productData = {
               event: 'addToCart',
               ecommerce: {
-                currencyCode: 'KWD',
+                currencyCode: currency,
                 add: {
                   products: [
                     product
