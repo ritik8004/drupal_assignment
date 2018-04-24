@@ -56,7 +56,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $term = $product_category_tree->getCategoryTermFromRoute();
       if (!empty($term)) {
         $current_category = $product_category_tree->getCategoryTermRootParent($term);
-        $current_category_id = $current_category->id();
+        $current_category_id = $current_category['id'];
       }
       // Get all the menu items.
       $items = &$variables['content']['#items'];
@@ -256,7 +256,7 @@ function alshaya_super_category_product_category_parent_alter(&$parent_id, &$con
   if ($context['term'] instanceof TermInterface
       && $parent = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRootParent($context['term'])) {
     // Get the top level parent id if parent exists.
-    $parent_id = $parent->id();
+    $parent_id = $parent['id'];
   }
 }
 
@@ -290,7 +290,7 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
     $parent = \Drupal::service('alshaya_acm_product_category.product_category_tree')
       ->getCategoryTermRootParent($term);
 
-    if (!$parent instanceof TermInterface) {
+    if (count($parent) <= 0) {
       return;
     }
 

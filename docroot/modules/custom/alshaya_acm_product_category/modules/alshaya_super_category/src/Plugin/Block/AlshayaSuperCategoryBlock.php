@@ -129,8 +129,8 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {
       $parent = $this->productCategoryTree->getCategoryTermRootParent($term);
-      if ($parent instanceof TermInterface) {
-        $parent_id = $parent->id();
+      if (count($parent) > 0) {
+        $parent_id = $parent['id'];
       }
     }
 
