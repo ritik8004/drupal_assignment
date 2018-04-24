@@ -1,5 +1,5 @@
 .user__address--column {
-  border-color: $warm-grey-two;
+  border-color: $address_book_list_border;
   font-family: $alshaya-thin;
   max-width: 26rem;
   width: 100%;
@@ -30,7 +30,7 @@
   }
 
   .address--options {
-    border-color: $warm-grey-two;
+    border-color: $address_book_list_border;
 
     @include breakpoint($desktop) {
       padding: 0;
@@ -53,7 +53,7 @@
 
     a {
       border: 0;
-      border-#{$left}: 1px solid $warm-grey-two;
+      border-#{$left}: 1px solid $address_book_list_border;
       height: 2.5rem;
       padding: 0.925rem 0;
 
