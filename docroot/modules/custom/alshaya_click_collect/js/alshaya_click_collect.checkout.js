@@ -61,8 +61,8 @@
 
       // Checkout click and collect near me.
       $('#edit-guest-delivery-collect, #edit-member-delivery-collect', context).once('get-location').on('click', '.cc-near-me', function () {
-        // Start the overlay.
-        $('body').addClass('modal-overlay--spinner');
+        // Start the loader.
+        $(this).showCheckoutLoader();
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(cncNearMeSuccess, cncNearMeError);
         }
@@ -86,15 +86,14 @@
           }
         });
         Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
-        // Close the overlay.
-        $('body').removeClass('modal-overlay--spinner');
+        $('.checkout-ajax-progress-throbber').remove();
         return false;
       };
 
       // CnC near me failure callback.
       var cncNearMeError = function(error) {
-        // Close the overlay.
-        $('body').removeClass('modal-overlay--spinner');
+        // Close the throbber.
+        $(".checkout-ajax-progress-throbber").remove()
       };
 
       $('.hours--wrapper').once('initiate-toggle').on('click', '.hours--label', function () {
