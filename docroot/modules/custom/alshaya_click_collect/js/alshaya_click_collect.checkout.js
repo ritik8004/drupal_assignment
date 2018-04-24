@@ -63,8 +63,13 @@
       $('#edit-guest-delivery-collect, #edit-member-delivery-collect', context).once('get-location').on('click', '.cc-near-me', function () {
         // Start the loader.
         $(this).showCheckoutLoader();
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(cncNearMeSuccess, cncNearMeError);
+        if (typeof ascoords !== 'undefined') {
+          cncNearMe(ascoords);
+        }
+        else {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(cncNearMeSuccess, cncNearMeError);
+          }
         }
       });
 
@@ -74,6 +79,10 @@
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
+        cncNearMe(ascoords);
+      };
+
+      var cncNearMe = function(ascoords) {
         if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
             Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
         }
@@ -82,18 +91,17 @@
         var latlng = {lat: parseFloat(ascoords.lat), lng: parseFloat(ascoords.lng)};
         geocoder.geocode({location: latlng}, function (results, status) {
           if (status === 'OK') {
-              $('#edit-store-location').val(results[2].formatted_address);
+            $('#edit-store-location').val(results[2].formatted_address);
           }
         });
         Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
-        $('.checkout-ajax-progress-throbber').remove();
         return false;
       };
 
       // CnC near me failure callback.
       var cncNearMeError = function(error) {
         // Close the throbber.
-        $(".checkout-ajax-progress-throbber").remove()
+        //$(".checkout-ajax-progress-throbber").remove()
       };
 
       $('.hours--wrapper').once('initiate-toggle').on('click', '.hours--label', function () {
@@ -434,6 +442,11 @@
               }
             }
             $('#click-and-collect-map-view').toggle(showMap);
+
+            // If there any throbber, remove it.
+            if ($('.checkout-ajax-progress-throbber').length > 0) {
+              $('.checkout-ajax-progress-throbber').remove();
+            }
           }
         };
 
