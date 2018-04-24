@@ -57,19 +57,9 @@
         }
       }
 
-      .form-type-select {
-        text-transform: none;
-
-        &::after {
-          font-size: 2rem;
-          border: 1px solid $plp_facet_border;
-          border-#{$left}: 0;
-          color: $plp_facet_dropdown_icon;
-        }
-
-        select {
-          line-height: 1.7;
-          font-size: 0.875rem;
+      @include breakpoint($upto-desktop) {
+        .form-type-select {
+          @include select3-style(9rem);
         }
       }
 
@@ -90,7 +80,6 @@
               line-height: 1.9;
             }
 
-            font-size: 0.875rem;
             text-transform: uppercase;
           }
         }
