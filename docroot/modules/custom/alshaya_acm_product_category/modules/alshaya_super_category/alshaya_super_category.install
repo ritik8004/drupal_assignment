@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_super_category.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_super_category_install() {
+  \Drupal::configFactory()->getEditable('search_api.index.acquia_search_index')->save();
+}
