@@ -14,7 +14,7 @@
 }
 
 .vat-container {
-  @include container(74.25rem);
+  @include container(77.25rem);
 
   .vat-text-footer {
     @include breakpoint($tablet) {
@@ -34,14 +34,6 @@
 
   .warm--white {
     background-color: $vat_dark;
-  }
-}
-
-.alias-cart,
-.alias--cart-checkout-payment,
-.alias--cart-checkout-confirmation {
-  .vat-container {
-    @include container(77.25rem);
   }
 }
 
