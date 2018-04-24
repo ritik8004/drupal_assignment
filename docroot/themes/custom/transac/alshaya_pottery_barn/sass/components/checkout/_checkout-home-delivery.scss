@@ -1,0 +1,14 @@
+.user-page.c-delivery-checkout {
+  main {
+    form {
+      fieldset .title,
+      #edit-guest-delivery-home .title {
+        text-transform: capitalize;
+      }
+
+      .form-actions a {
+        font-weight: 600;
+      }
+    }
+  }
+}
