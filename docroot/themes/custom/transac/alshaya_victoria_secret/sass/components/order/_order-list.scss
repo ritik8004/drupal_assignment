@@ -1,0 +1,50 @@
+.recent__orders--list {
+  .order__detail--link {
+    a {
+      font-size: 0.875rem;
+      text-decoration: underline;
+      text-transform: capitalize;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  .form-text {
+    border-#{$right}: 0;
+  }
+
+  .form-actions {
+    &::after {
+      line-height: 22px;
+      border-#{$left}: 0;
+    }
+  }
+
+  .form-item-search label {
+    @include breakpoint($upto-tablet) {
+      border: 0;
+      text-decoration: underline;
+      padding-#{$left}: 0.125rem;
+      font-size: 0.875rem;
+
+      &::before {
+        content: none;
+      }
+
+      @include icon(search, after) {
+        pointer-events: none;
+        line-height: 1.1;
+        text-align: center;
+        font-size: 1.875rem;
+        margin-#{$left}: 0.3125rem;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0;
+      }
+    }
+  }
+}

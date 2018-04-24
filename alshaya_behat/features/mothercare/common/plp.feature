@@ -1,4 +1,4 @@
-@javascript @manual @mmcpa-2465
+@javascript
 Feature: Test the PLP page
 
   Background:

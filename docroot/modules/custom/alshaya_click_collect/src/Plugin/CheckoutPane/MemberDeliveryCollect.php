@@ -158,11 +158,11 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     ];
 
     $pane_form['store_finder']['toggle_list_view'] = [
-      '#markup' => '<a href="#" class="stores-list-view active">' . $this->t('List view') . '</a>',
+      '#markup' => '<a href="#" class="stores-list-view active hidden-important">' . $this->t('List view') . '</a>',
     ];
 
     $pane_form['store_finder']['toggle_map_view'] = [
-      '#markup' => '<a href="#" class="stores-map-view">' . $this->t('Map view') . '</a>',
+      '#markup' => '<a href="#" class="stores-map-view hidden-important">' . $this->t('Map view') . '</a>',
       '#suffix' => '</div>',
     ];
 
@@ -187,7 +187,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $pane_form['selected_store'] = [
       '#type' => 'container',
       '#title' => t('selected store'),
-      '#tree' => TRUE,
+      '#tree' => FALSE,
       '#id' => 'selected-store-wrapper',
       '#attributes' => ($store_code) ? [] : ['style' => 'display:none;'],
     ];

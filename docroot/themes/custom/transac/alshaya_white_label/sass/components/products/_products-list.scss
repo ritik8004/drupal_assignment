@@ -371,20 +371,16 @@
         display: none;
       }
     }
-
-    .views-infinite-scroll-content-wrapper {
-      display: flex;
-      align-items: stretch;
-      flex-wrap: wrap;
-    }
   }
 
   .c-products__item {
+    display: block;
     text-align: center;
     color: $plp_tile_product_text;
     margin-bottom: 4px;
     font-size: 0.9375rem;
     position: relative;
+    float: #{$left};
 
     @include breakpoint($mobile) {
       width: 50%;
@@ -466,8 +462,13 @@
     }
 
     @include breakpoint($desktop) {
-      &:hover {
+      article:hover {
         z-index: 1;
+        position: relative;
+
+        article .content {
+          position: absolute;
+        }
 
         .product-plp-detail-wrapper,
         .stock-placeholder.out-of-stock,
