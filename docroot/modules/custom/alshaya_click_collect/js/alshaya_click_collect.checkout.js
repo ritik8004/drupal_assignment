@@ -61,6 +61,19 @@
 
       // Checkout click and collect near me.
       $('#edit-guest-delivery-collect, #edit-member-delivery-collect', context).once('get-location').on('click', '.cc-near-me', function () {
+        // Start the overlay.
+        $('body').addClass('modal-overlay--spinner');
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(cncNearMeSuccess, cncNearMeError);
+        }
+      });
+
+      // CnC near me success callback.
+      var cncNearMeSuccess = function(position) {
+        ascoords = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
         if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
             Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
         }
@@ -68,13 +81,21 @@
         var geocoder = Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
         var latlng = {lat: parseFloat(ascoords.lat), lng: parseFloat(ascoords.lng)};
         geocoder.geocode({location: latlng}, function (results, status) {
-            if (status === 'OK') {
+          if (status === 'OK') {
               $('#edit-store-location').val(results[2].formatted_address);
-            }
+          }
         });
-       Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
-       return false;
-      });
+        Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+        // Close the overlay.
+        $('body').removeClass('modal-overlay--spinner');
+        return false;
+      };
+
+      // CnC near me failure callback.
+      var cncNearMeError = function(error) {
+        // Close the overlay.
+        $('body').removeClass('modal-overlay--spinner');
+      };
 
       $('.hours--wrapper').once('initiate-toggle').on('click', '.hours--label', function () {
         $(this).toggleClass('open');
