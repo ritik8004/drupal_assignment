@@ -128,7 +128,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
         'fragment' => 'edit-near-me',
         'attributes' => [
           'class' => [
-            'cc-near-me current-location',
+            'cc-near-me',
           ],
         ],
       ]),
