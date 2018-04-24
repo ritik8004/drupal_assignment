@@ -13,6 +13,7 @@ use Drupal\Core\Locale\CountryManager;
  * @return string
  *   Country code.
  */
+
 function _alshaya_custom_get_site_level_country_code() {
   $default_site_country = &drupal_static(__FUNCTION__);
   if (empty($default_site_country)) {
@@ -32,15 +33,12 @@ function _alshaya_custom_get_site_level_country_code() {
  * @return string
  *   Country name.
  */
-function get_country_name() {
-  $country_name = 'Kuwait';
-  $default_site_country = \Drupal::config('system.date')->get('country.default');
+function _alshaya_custom_get_site_level_country_name() {
+  $country_name = '';
+  $default_site_country = _alshaya_custom_get_site_level_country_code();
   $countries = CountryManager::getStandardList();
-  foreach ($countries as $key => $value) {
-    if ($key == $default_site_country) {
-      $country_name = (string) $value;
-      break;
-    }
+  if (isset($countries[$default_site_country])) {
+    $default_site_country = $countries[$default_site_country];
   }
-  return $country_name;
+  return $default_site_country;
 }

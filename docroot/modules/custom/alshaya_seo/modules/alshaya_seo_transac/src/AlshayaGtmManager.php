@@ -950,7 +950,7 @@ class AlshayaGtmManager {
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
-      'country' => get_country_name(),
+      'country' => _alshaya_custom_get_site_level_country_name(),
       'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
