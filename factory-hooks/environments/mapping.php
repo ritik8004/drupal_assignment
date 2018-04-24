@@ -172,6 +172,17 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'hmae_prod'
       ],
     ],
+    // BathBodyWorks AE.
+    'bbwae' => [
+      'default' => [
+        'magento' => 'mc_qa',
+        'conductor' => 'mc_test',
+      ],
+      //'default' => [
+      //  'magento' => 'bbw_qa',
+      //  'conductor' => 'bbwae_test',
+      //],
+    ],
     // Pottery Barn AE.
     'pbae' => [
       // PBAE is connected to MCKW QA for now.
