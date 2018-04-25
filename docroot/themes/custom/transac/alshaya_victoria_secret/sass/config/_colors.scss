@@ -238,7 +238,7 @@ $oos_quantity_text: $vanilla;
 $oos_pdp_text: $vanilla;
 
 // Tooltip
-$tooltip_bg: $white-smoke-light;
+$tooltip_bg: $vanilla;
 // $tooltip_bg + opacity 0.
 $tooltip_bg_opacity_0: rgba(240, 246, 252, 0);
 $tooltip_text: $nero;
@@ -247,7 +247,8 @@ $tooltip_border: $nero;
 $tooltip_border_2: $white-smoke-light;
 // $tooltip_border + opacity 0.
 $tooltip_border_opacity_0: rgba(0, 132, 204, 0);
-$tooltip_icon: $nero;
+$tooltip_icon: $black;
+$tooltip_link: $black;
 
 // Back to top
 $btt_bg: $whisper-light;
@@ -553,7 +554,7 @@ $pdp_desc_wrapper_close_icon: $white-two;
 $pdp_accordion_title: $black;
 $pdp_cc_btn_text: $white-five;
 $pdp_cc_btn_bg: $nero;
-$pdp_cc_highlight: $windows-blue;
+$pdp_cc_highlight: $brilliant-rose;
 $pdp_cc_storefinder_label: $grey-ash;
 $pdp_cc_storefinder_input: $greyish;
 $pdp_cc_storefinder_link: $brilliant-rose;
@@ -587,10 +588,10 @@ $fake_apply_btn_border: $white-five;
 $clear_btn_border: $gainsboro;
 $clear_btn_text: $gainsboro;
 $not_buyable_msg: $black;
-$not_buyable_help: $cerulean-two;
+$not_buyable_help: $brilliant-rose;
 
 // Department page
-$department_category_list_hover: $cerulean-two;
+$department_category_list_hover: $brilliant-rose;
 
 // Store finder page.
 // Store finder header form.

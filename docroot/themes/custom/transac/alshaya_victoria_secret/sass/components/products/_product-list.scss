@@ -15,7 +15,7 @@
   .c-products__item {
     font-size: 0.875rem;
 
-    &:hover {
+    article:hover {
       .field--name-name a {
         text-decoration: none;
       }
@@ -109,5 +109,11 @@
   @include breakpoint($only-tablet) {
     margin-top: 0.625rem;
     margin-bottom: 0.625rem;
+  }
+}
+
+.alshaya_search_slider {
+  .lslide img {
+    min-height: 3.7rem;
   }
 }
