@@ -61,7 +61,7 @@ Feature: Test various checkout scenarios as returning customer
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
     And I press "إرسال"
-    And I wait 5 seconds
+    And I press "تأكيد العملية"
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "

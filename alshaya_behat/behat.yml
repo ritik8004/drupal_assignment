@@ -34,11 +34,11 @@ default:
 
 mcqa:
   autoload:
-    '': %paths.base%/features/mckw/bootstrap
+    '': %paths.base%/features/mothercare/bootstrap
   suites:
     default:
       paths:
-          - %paths.base%/features/mothercare/kw
+          - %paths.base%/features/mothercare/common
           - %paths.base%/features/mothercare/sa
           - %paths.base%/features/mothercare/ae
       contexts:
@@ -47,19 +47,19 @@ mcqa:
               simpleurl: '/stronglax'
               simpletitle: 'Stronglax'
               simpletitlear: 'Mothercare Three Position Baby Carrier test - Black'
-              configurl: '/grey-navy-and-yellow-jersey-shorts-3-pack'
-              configtitle: 'Grey, Navy and Yellow Jersey Shorts - 3 Pack'
-              configtitlear: 'Grey, Navy and Yellow Jersey Shorts - 3 Pack'
+              configurl: '/pink-and-white-cami-vests-5-pack'
+              configtitle: 'Pink and White Cami Vests - 5 Pack'
+              configtitlear: 'سترات تحتية بحمالات باللون الأبيض والوردي - عبوة من 5 قطع'
               configvariant: '2-3 Years'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
   formatters:
       html:
-        output_path: %paths.base%/features/mckw/reports/html/behat
+        output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://mckw-test.factory.alshaya.com/en'
+      base_url: 'https://mckw-test.factory.alshaya.com/'
       files_path: "%paths.base%/media"
 
 mcuat:
@@ -68,7 +68,7 @@ mcuat:
   suites:
     default:
       paths:
-          - %paths.base%/features/mothercare/kw
+          - %paths.base%/features/mothercare/common
           - %paths.base%/features/mothercare/sa
           - %paths.base%/features/mothercare/ae
       contexts:
@@ -77,10 +77,10 @@ mcuat:
               simpleurl: '/baby-boys-socks-gift-box-test'
               simpletitle: 'Baby Boys Socks Gift Box test'
               simpletitlear: 'صندوق هدية جوارب للأولاد'
-              configurl: '/disney-bambi-dress-and-bodysuit-set'
-              configtitle: 'Disney Bambi Dress and Bodysuit Set'
-              configtitlear: 'Disney Bambi Dress and Bodysuit Set'
-              configvariant: '3-6 Months'
+              configurl: '/pink-and-grey-marl-modesty-shorts-2-pack'
+              configtitle: 'Pink and Grey Marl Modesty Shorts - 2 Pack'
+              configtitlear: 'Pink and Grey Marl Modesty Shorts - 2 Pack'
+              configvariant: '5-6 Years'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -94,10 +94,13 @@ mcuat:
 
 mcprod:
   autoload:
-    '': %paths.base%/features/mckw/bootstrap
+    '': %paths.base%/features/mothercare/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/mckw/manual ]
+      paths:
+          - %paths.base%/features/mothercare/common
+          - %paths.base%/features/mothercare/sa
+          - %paths.base%/features/mothercare/ae
       contexts:
         - FeatureContext:
             parameters:
@@ -113,7 +116,7 @@ mcprod:
         - Drupal\DrupalExtension\Context\MessageContext
   formatters:
       html:
-        output_path: %paths.base%/features/mckw/reports/html/behat
+        output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
       base_url: 'https://www.mothercare.com.kw/en'
@@ -121,10 +124,10 @@ mcprod:
 
 mcae:
   autoload:
-    '': %paths.base%/features/mckw/bootstrap
+    '': %paths.base%/features/mothercare/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/mckw/manual ]
+      paths: [ %paths.base%/features/mothercare/common ]
       contexts:
         - FeatureContext:
             parameters:
@@ -141,11 +144,11 @@ mcae:
         - Drupal\DrupalExtension\Context\MessageContext
   formatters:
       html:
-        output_path: %paths.base%/features/mckw/reports/html/behat
+        output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
       base_url: 'https://mcae.test-alshaya.acsitefactory.com/en'
-      files_path: "%paths.base%/features/mckw/media"
+      files_path: "%paths.base%/features/mothercare/media"
 
 hmsa:
   autoload:

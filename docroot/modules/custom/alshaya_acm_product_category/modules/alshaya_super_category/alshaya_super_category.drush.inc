@@ -73,6 +73,13 @@ function drush_alshaya_super_category_switch() {
   if ($path_alter) {
     _alshaya_super_category_product_alias_bulk_process();
   }
+
+  \Drupal::moduleHandler()->invokeAll('alshaya_super_category_status_update', [
+    $status,
+    $default_parent,
+    $path_alter,
+  ]);
+
   // Clear cache to rebuild menu blocks.
   drupal_flush_all_caches();
   drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));
