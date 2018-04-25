@@ -51,17 +51,28 @@ view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
       {% if promo_link == 1 %}
         <a href="{{ button_link }}">
           <!-- /#For demo purpose only. -->
+          {% if content.field_banner or content.field_promotion_image_mobile %}
             <div class="picture-tag">
               <picture>
                 <source media="(min-width: 768px)" srcset="{{ file_url(desktop_image) }}">
-                <source media="(min-width: 320px)" srcset="{{ file_url(mobile_image) }}">
-                <img src="{{ file_url(desktop_image) }}"/>
+                <source media="(max-width: 767px)" srcset="{{ file_url(mobile_image) }}">
+                <img src="{{ file_url(promo_default_imagee) }}"/>
               </picture>
             </div>
+          {% endif %}
           {{ content.field_promo_block_button }}
         </a>
       {% else %}
-        {{ content }}
+        {% if content.field_banner or content.field_promotion_image_mobile %}
+          <div class="picture-tag">
+            <picture>
+              <source media="(min-width: 768px)" srcset="{{ file_url(desktop_image) }}">
+              <source media="(max-width: 767px)" srcset="{{ file_url(mobile_image) }}">
+              <img src="{{ file_url(promo_default_image) }}"/>
+            </picture>
+          </div>
+        {% endif %}
+        {{ content|without('field_banner', 'field_promotion_image_mobile') }}
       {% endif %}
     {% endblock %}
   </div>

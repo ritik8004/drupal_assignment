@@ -800,15 +800,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       }
     }
     // Get the desktop and mobile images for promo blocks if available.
-    $mobile_image = $variables['elements']['field_banner_mobile']['#items'];
-    if (!is_null($mobile_image)) {
-      if ($images = $mobile_image->referencedEntities()) {
-        foreach ($images as $image) {
-          $mobile_image_url = $image->getFileUri();
-        }
-      }
-    }
-    $desktop_image = $variables['elements']['field_promotion_image']['#items'];
+    $desktop_image = $variables['elements']['field_banner']['#items'];
     if (!is_null($desktop_image)) {
       if ($images = $desktop_image->referencedEntities()) {
         foreach ($images as $image) {
@@ -816,8 +808,29 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         }
       }
     }
+
+    $mobile_image = $variables['elements']['field_promotion_image_mobile']['#items'];
+    if (!is_null($mobile_image)) {
+      if ($images = $mobile_image->referencedEntities()) {
+        foreach ($images as $image) {
+          $mobile_image_url = $image->getFileUri();
+        }
+      }
+    }
+
+    $default_image_url = '';
+    if (is_null($mobile_image_url)) {
+      $mobile_image_url = $desktop_image_url;
+      $default_image_url = $desktop_image_url;
+    }
+    elseif (is_null($mobile_image_url)) {
+      $desktop_image_url = $mobile_image_url;
+      $default_image_url = $mobile_image_url;
+    }
+
     $variables['mobile_image'] = $mobile_image_url;
     $variables['desktop_image'] = $desktop_image_url;
+    $variables['promo_default_image'] = $default_image_url;
   }
   elseif ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {
     // Get the promo block display config for twig file.
