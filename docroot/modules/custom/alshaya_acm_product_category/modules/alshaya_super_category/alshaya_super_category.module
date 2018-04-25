@@ -72,6 +72,9 @@ function alshaya_super_category_preprocess_block(&$variables) {
       break;
 
     case 'system_branding_block':
+      // Update block cache context.
+      $variables['content']['#cache']['contexts'][] = 'url.path';
+
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
       $term = $product_category_tree->getCategoryTermFromRoute();
@@ -89,8 +92,6 @@ function alshaya_super_category_preprocess_block(&$variables) {
         return;
       }
 
-      // Update block cache context.
-      $variables['content']['#cache']['contexts'][] = 'url.path';
       // Create a name without spaces and any special character.
       $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($parent->label()));
       // Set the language suffix for logo based on current language.
@@ -100,14 +101,14 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $langcode = ($langcode != 'en') ? '-' . $langcode : '';
       // Current active theme object.
       $theme = \Drupal::service('theme.manager')->getActiveTheme();
-      global $base_url;
       // Set the logo path based on term name and current language.
-      $logo_path = $base_url . '/' . $theme->getPath() . '/imgs/logos/' . $term_clean_name . '-logo';
+      $logo_path = '/' . $theme->getPath() . '/imgs/logos/' . $term_clean_name . '-logo';
+      $logo_relative_path = DRUPAL_ROOT . $logo_path;
       // Check logo fallback.
-      if (file_exists($logo_path . $langcode . '.svg')) {
+      if (file_exists($logo_relative_path . $langcode . '.svg')) {
         $variables['content']['site_logo']['#uri'] = $logo_path . $langcode . '.svg';
       }
-      elseif (file_exists($logo_path . '.svg')) {
+      elseif (file_exists($logo_relative_path . '.svg')) {
         $variables['content']['site_logo']['#uri'] = $logo_path . '.svg';
       }
       // Set image Alt based on current brand.
@@ -296,7 +297,7 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
 
     // Get term alias to append with node alias.
     $alias = \Drupal::service('path.alias_manager')
-      ->getAliasByPath('/taxonomy/term/' . $parent->id(), $context['language']);
+      ->getAliasByPath('/taxonomy/term/' . $parent['id'], $context['language']);
 
     // Check if the pattern is already set with the alias.
     if (strpos($pattern->getPattern(), $alias . '/') === FALSE) {

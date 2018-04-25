@@ -118,6 +118,7 @@ Feature: Test the product detail page
     Then I should see "This service is "
     And I should see "FREE"
     Then I should see " of charge."
+    And I scroll to the "#ui-id-5 > div.click-collect-empty-selection > div > div > p > span" element
     And I should see "Select a size"
     And I should see " to check stock availability near to you"
     Then I should be able to see the footer

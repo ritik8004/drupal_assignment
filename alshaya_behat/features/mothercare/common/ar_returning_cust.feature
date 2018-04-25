@@ -2,25 +2,28 @@
 Feature: Test various checkout scenarios as returning customer
 
   Background:
-    Given I am on a simple product page
-    When I wait for the page to load
-    When I press "add to basket"
+    Given I am on a configurable product
+    And I wait for the page to load
+    When I select a size for the product
+    And I wait for AJAX to finish
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/ar/cart"
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "shweta+4@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    Then I fill in "edit-checkout-login-name" with "anjali.nikumb@acquia.com"
+    And I fill in "edit-checkout-login-pass" with "password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
 
-  @hd @cod
+  @hd @cod @two
   Scenario: As a returning customer
   I should be able to place an order for HD - COD on Arabic site
     Given I follow "توصيل إلى هذا العنوان"
     And I wait for the page to load
-    When I press "تابع للدفع"
+    And I scroll to the "#edit-member-delivery-home-addresses > div > div > div > div > div > div > span > div > div.address--options > div.address--deliver-to-this-address.address--controls > a" element
+    And I press "توصيل إلى هذا العنوان"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish

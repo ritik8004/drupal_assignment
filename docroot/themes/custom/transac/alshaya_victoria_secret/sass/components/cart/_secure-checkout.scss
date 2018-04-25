@@ -18,11 +18,30 @@
         text-decoration: none;
       }
     }
+
+    fieldset {
+      #addresses-header {
+        #add-address-button {
+          font-family: $vs-regular;
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+
+  .block-page-title-block h1 {
+    text-transform: capitalize;
   }
 
   #edit-delivery-tabs {
     .tab h2 {
       font-family: $vs-regular;
+    }
+
+    .tab-separator {
+      font-family: $vs-regular;
+      font-weight: normal;
+      font-size: 1rem;
     }
 
     .tab.active--tab--head h2 {
@@ -33,12 +52,83 @@
       border: 0;
     }
   }
+
+  .address {
+    .address--options {
+      padding: 0;
+      text-transform: uppercase;
+    }
+
+    .address--deliver-to-this-address a,
+    .address--controls {
+      padding: 0.625rem 0.875rem;
+      min-height: 0;
+    }
+  }
+
+  #edit-member-delivery-home-addresses {
+    .address--edit a {
+      text-transform: uppercase;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    .address--deliver-to-this-address a {
+      border: 0;
+      margin: 0;
+      border-#{$right}: 1px solid $address_button_border;
+      padding: 0.625rem 0.875rem;
+    }
+  }
 }
 
 #block-checkoutprogress,
 .block-acm-checkout-progress {
-  .checkout-progress__step.-next {
-    border-color: $checkout_progress_border;
+  .checkout-progress__step.-next,
+  .checkout-progress__step.-previous {
     color: $checkout_progress_text;
+
+    &::before {
+      border-color: $checkout_progress_border;
+      color: $checkout_progress_next_txt;
+    }
   }
+
+  .checkout-progress__step.-previous {
+    color: $checkout_progress_current_text;
+  }
+
+  .checkout-progress__step.-current {
+    font-family: $vs-bold;
+  }
+}
+
+.alias--cart-checkout-delivery {
+  #edit-guest-delivery-collect,
+  #edit-member-delivery-collect {
+    #store-finder-wrapper {
+      .current-location,
+      .cc-near-me {
+        &::before {
+          background-size: contain;
+        }
+      }
+    }
+  }
+}
+
+.acq-cart-summary {
+  .caption {
+    .title {
+      font-weight: normal;
+      font-family: $vs-bold;
+    }
+  }
+}
+
+#block-checkoutsummaryblock {
+  border: 0;
 }

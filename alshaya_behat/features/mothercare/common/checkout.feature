@@ -148,6 +148,7 @@ Feature: Test Checkout feature
     And I press "place order"
     And I wait for the page to load
     And I press "Cancel"
+    And I wait 10 seconds
     And I wait for the page to load
     Then I should see text matching "Sorry, we are unable to process your payment. Please contact our customer service team for assistance."
     And the url should match "/cart/checkout/payment"
