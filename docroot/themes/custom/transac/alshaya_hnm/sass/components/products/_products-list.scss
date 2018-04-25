@@ -477,3 +477,16 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .c-plp {
+    .region__content {
+      .view-header {
+        &.search-count {
+          border-bottom: none;
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
