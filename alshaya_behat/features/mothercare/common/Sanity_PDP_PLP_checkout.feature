@@ -31,7 +31,7 @@ Feature: As a guest user I should be able to
 #    When I select "Name A to Z" from the dropdown
 #    And I wait for AJAX to finish
 #    And I wait for the page to load
-#    Then I should see results sorted in ascending order
+#  Then I should see results sorted in ascending order
 #    When I select "Name Z to A" from the dropdown
 #    And I wait for the page to load
 #    Then I should see results sorted in descending order

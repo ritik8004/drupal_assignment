@@ -552,7 +552,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $page = $this->getSession()->getPage();
     $all_sizes = $page->findById('configurable_ajax');
     if ($all_sizes !== NULL) {
-      $all_sizes = $all_sizes->findAll('css', 'div > div.select2Option > ul li');
+        $all_sizes = $all_sizes->findAll('css', 'div.form-item-configurables-size > div.select2Option > ul li');
       $total_sizes = count($all_sizes);
       foreach ($all_sizes as $size) {
         $check_li = $size->find('css', 'li')->getText();
