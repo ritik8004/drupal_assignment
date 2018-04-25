@@ -64,6 +64,10 @@
     max-width: 10rem;
     margin: 0.625rem auto;
 
+    a {
+      color: $pdp_sell_title;
+    }
+
     &:hover {
       text-decoration: underline;
     }
