@@ -12,6 +12,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_term_font_color
     - image.style.thumbnail
     - taxonomy.vocabulary.acq_product_category
+    - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
   module:
     - image
     - jquery_minicolors
@@ -34,6 +35,13 @@ content:
     region: content
   field_category_include_menu:
     weight: 6
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_category_quicklink_plp_mob:
+    weight: 14
     settings:
       display_label: true
     third_party_settings: {  }
