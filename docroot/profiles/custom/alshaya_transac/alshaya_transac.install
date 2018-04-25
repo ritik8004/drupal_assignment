@@ -32,17 +32,6 @@ function alshaya_transac_update_8105() {
 /**
  * Implements hook_update_N().
  *
- * Install config for department page block.
- */
-function alshaya_transac_update_8105() {
-  alshaya_config_install_configs(['block.block.views_block__product_category_level_2_3_block_2'], 'alshaya_transac', 'optional');
-  // Move super category block from alshaya_white_label to default theme.
-  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable alshaya_stores_finder_transac sub module of alshaya_stores_finder.
  */
 function alshaya_transac_update_8104() {
