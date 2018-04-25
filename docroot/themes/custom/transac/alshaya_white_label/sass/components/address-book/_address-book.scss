@@ -290,7 +290,7 @@
         font-weight: bold;
         padding: 0;
         min-width: auto;
-        color: $cerulean-two;
+        color: $checkout_address_edit_link;
         text-transform: capitalize;
         text-align: center;
       }
@@ -310,9 +310,9 @@
         display: block;
         padding: 1rem;
         margin: 0;
-        color: $marine-blue-two;
+        color: $address_button_text;
         text-align: center;
-        border: 0.0625rem solid $marine-blue-two;
+        border: 0.0625rem solid $address_button_border;
 
         @include breakpoint($tablet) {
           padding: 0.625rem;
@@ -334,8 +334,8 @@
       .address--deliver-to-this-address {
         a {
           color: $white-five;
-          border: 1px solid $pumpkin-orange;
-          background-color: $pumpkin-orange;
+          border: 1px solid $checkout_default_address_border;
+          background-color: $checkout_default_address_bg;
 
           @include breakpoint($desktop) {
             &:hover {
