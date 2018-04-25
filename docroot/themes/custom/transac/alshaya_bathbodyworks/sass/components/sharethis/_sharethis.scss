@@ -36,8 +36,7 @@
     @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-youtubeselect.png', 1.5625rem, 1.5625rem);
 
     &:hover::before {
-      background: none;
-      opacity: 0.5;
+      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-youtubeselect.png', 1.5625rem, 1.5625rem);
     }
   }
 }
