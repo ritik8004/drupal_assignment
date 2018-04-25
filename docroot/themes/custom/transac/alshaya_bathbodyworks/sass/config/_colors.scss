@@ -18,6 +18,7 @@ $bright-sky-blue: #01ccff;
 $tangerine: #fa9900;
 $light-gold: #ffd65a;
 $shadow: rgba(0, 0, 0, 0.24);
+$error-red: #c00;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -72,6 +73,22 @@ $accordion_title: $black;
 $accordion_sub_title: $black;
 $accordion_title_arrow: $peacock-blue;
 $accordion_title_disabled: $grey-ash;
+
+// Product detail page.
+$pdp_product_title: $black;
+
+// Product Add to cart form.
+$pdp_sidebar_label: $peacock-blue;
+$pdp_sidebar_link: $peacock-blue;
+$pdp_sidebar_label: $peacock-blue;
+$pdp_desc_wrapper_border: $warm-grey-two;
+
+// product details page carousel arrow
+$pdp_carousel_arrows_blue: $peacock-blue;
+
+// Out of stock button.
+$oos_btn_bg: $error-red;
+$oos_pdp_text: $white;
 
 /* ------- 6. Sections and Pages --------------- */
 
@@ -165,6 +182,26 @@ $social_links_hover: transparent;
 $copyright_footer_bg: $warm-grey-three;
 $copyright_footer_text: $black;
 $copyright_footer_paragraph: $black;
+
+// Product detail page.
+$pdp_product_title: $black;
+
+// Product Add to cart form.
+$pdp_sidebar_label: $peacock-blue;
+$pdp_sidebar_link: $peacock-blue;
+$pdp_sidebar_label: $peacock-blue;
+$pdp_desc_wrapper_border: $warm-grey-two;
+
+// Accordion
+$accordion_sub_title: $warm-grey-one;
+$accordion_arrow_icon: $peacock-blue;
+
+// product details page carousel arrow
+$pdp_carousel_arrows_blue: $peacock-blue;
+
+// Out of stock button.
+$oos_btn_bg: $error-red;
+$oos_pdp_text: $white;
 
 //7. Newsletter-signup
 $newsletter_title_h3: $black;
