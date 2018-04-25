@@ -296,7 +296,7 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
 
     // Get term alias to append with node alias.
     $alias = \Drupal::service('path.alias_manager')
-      ->getAliasByPath('/taxonomy/term/' . $parent->id(), $context['language']);
+      ->getAliasByPath('/taxonomy/term/' . $parent['id'], $context['language']);
 
     // Check if the pattern is already set with the alias.
     if (strpos($pattern->getPattern(), $alias . '/') === FALSE) {
