@@ -362,8 +362,8 @@ function alshaya_super_category_search_api_index_items_alter(IndexInterface $ind
         $tid = $values[0];
         $term = Term::load($tid);
         $parent = $product_category_tree->getCategoryTermRootParent($term);
-        if ($parent instanceof TermInterface) {
-          $field->setValues([$parent->id()]);
+        if (count($parent) > 0) {
+          $field->setValues([$parent['id']]);
         }
       }
     }
