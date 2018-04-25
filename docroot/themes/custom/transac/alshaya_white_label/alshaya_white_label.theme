@@ -833,11 +833,13 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         // Fetch values from the paragraph.
         $category_id = $category->getValue()[0]['target_id'];
         $carousel_title = $paragraph->get('field_category_carousel_title')->getValue()[0]['value'];
+        $view_all_text = $paragraph->get('field_view_all_text')->getValue()[0]['value'];
         $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getValue()[0]['value'];
 
         // Prepare argument for the views.
+        $terms = _alshaya_master_get_recursive_child_terms($category_id);
         $arguments = [
-          'tid' => $category_id,
+          'tid' => implode('+', $terms),
         ];
 
         // Get views result.
@@ -871,8 +873,8 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
               '#section_title' => $carousel_title,
             ];
 
-            $variables['content']['shop_now'] = [
-              '#title' => t('Shop Now'),
+            $variables['content']['view_all'] = [
+              '#title' => $view_all_text,
               '#type' => 'link',
               '#attributes' => [
                 'class' => ['category-carousel-view-all'],

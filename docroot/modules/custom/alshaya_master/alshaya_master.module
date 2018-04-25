@@ -15,6 +15,8 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\views\Views;
 use Drupal\user\Entity\Role;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\TermInterface;
 use Drupal\user\Entity\User;
 
 /**
@@ -703,6 +705,32 @@ function alshaya_master_library_info_alter(&$libraries, $extension) {
     // modules same and make it work without this JS.
     $libraries['jquery.validate']['dependencies'][] = 'alshaya_master/cv_ife';
   }
+}
+
+/**
+ * Get array of all child terms recursively.
+ *
+ * @param int $tid
+ *   Term id.
+ *
+ * @return array
+ *   Array of Child tid + the passed tid.
+ */
+function _alshaya_master_get_recursive_child_terms($tid) {
+  $terms = [];
+  if (($taxonomy_term = Term::load($tid)) instanceof TermInterface) {
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $term_items = $storage->loadTree($taxonomy_term->getVocabularyId(), $taxonomy_term->id(), NULL, TRUE);
+    $terms[] = $taxonomy_term->id();
+    if (!empty($term_items)) {
+      // Loop to get children term names.
+      foreach ($term_items as $term_item) {
+        $terms[] = $term_item->id();
+      }
+    }
+  }
+
+  return $terms;
 }
 
 /**

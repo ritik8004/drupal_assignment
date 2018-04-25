@@ -10,21 +10,6 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
- * Adding arabic translation for 'shop now'.
- */
-function alshaya_master_update_8013() {
-  $strings = [
-    'shop now' => [
-      'ar' => 'تسوق الآن',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update the 'checkout_guest_summary' config value.
  */
 function alshaya_master_update_8012() {
@@ -1405,9 +1390,6 @@ function alshaya_master_install() {
     ],
     'Select your preferred pickup store' => [
       'ar' => 'يرجى اختيار المحل الذي ترغب في الاستلام منه',
-    ],
-    'shop now' => [
-      'ar' => 'تسوق الآن',
     ],
   ];
 
