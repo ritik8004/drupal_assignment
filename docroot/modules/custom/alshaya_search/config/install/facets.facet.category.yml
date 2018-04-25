@@ -16,7 +16,7 @@ name: Category
 url_alias: category
 weight: 0
 min_count: 1
-show_only_one_result: false
+show_only_one_result: true
 field_identifier: field_category
 facet_source_id: 'search_api:views_page__search__page'
 widget:
