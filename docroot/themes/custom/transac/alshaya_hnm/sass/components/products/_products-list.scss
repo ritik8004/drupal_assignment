@@ -461,3 +461,19 @@
   transition: opacity 0.2s ease-out;
   width: 100%;
 }
+
+.block-views-blockproduct-category-level-3-block-2 {
+  @include breakpoint($only-mobile) {
+    .views-row {
+      a {
+        @include arabic-letter-spacing;
+
+        font-family: $hnm-regular;
+        font-size: 0.875rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        color: $mm_l1_link;
+      }
+    }
+  }
+}

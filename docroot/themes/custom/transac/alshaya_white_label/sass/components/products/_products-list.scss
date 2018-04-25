@@ -943,3 +943,56 @@ html[lang=ar] {
     }
   }
 }
+
+.block-views-blockproduct-category-level-3-block-2 {
+  @include breakpoint($tablet) {
+    display: none;
+  }
+
+  @include breakpoint($only-mobile) {
+    .views-row {
+      a {
+        font-family: $alshaya-thin;
+        font-size: 0.75rem;
+        text-decoration: none;
+        color: $mm_l3_link;
+        display: block;
+        padding: 0.9375rem 0;
+        border-top: 1px solid $mm_l1_border;
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .c-plp {
+    .region__content {
+      display: flex;
+      flex-flow: row wrap;
+      flex-direction: column;
+
+      > div {
+        width: 100%;
+      }
+
+      #block-page-title {
+        order: -2;
+      }
+
+      .view-header {
+        &.search-count {
+          order: -1;
+          margin-bottom: 0;
+          padding-top: 0.9rem;
+          margin-top: 0;
+          border-bottom: none;
+        }
+      }
+
+      .block-views-exposed-filter-blockalshaya-product-list-block-1 {
+        padding-top: 0.9rem;
+        border-top: 1px solid $mm_l1_border;
+      }
+    }
+  }
+}
