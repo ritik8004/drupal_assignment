@@ -1,0 +1,10 @@
+.c-accordion__title {
+  font-family: $alshaya-thin;
+  height: 3rem;
+  line-height: 3.6;
+  text-transform: capitalize;
+
+  &::after {
+    color: $accordion_title_arrow;
+  }
+}

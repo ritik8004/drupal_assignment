@@ -1,0 +1,74 @@
+.c-facet {
+  ul {
+    input[type="text"] {
+      padding: 0.75rem 0.5rem;
+    }
+  }
+
+  label {
+    top: 0;
+  }
+
+  label {
+    .facet-item__value {
+      margin-#{$left}: 0.312rem;
+    }
+
+    .facet-item__count,
+    .facet-item__value {
+      text-transform: capitalize;
+    }
+  }
+}
+
+.c-facet__label {
+  font-size: 0.75rem;
+  text-transform: capitalize;
+
+  @include breakpoint($desktop) {
+    font-family: $alshaya-bold;
+    text-transform: uppercase;
+  }
+}
+
+.js-facets-checkbox-links {
+  .facet-item {
+    label {
+      &::before {
+        font-size: 1.125rem;
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=category],
+ul[data-drupal-facet-id=plp_category_facet] {
+  .facet-item--expanded {
+    > ul {
+      padding-top: 0.625rem;
+      margin-#{$left}: 0.625rem;
+
+      li:not(:last-child) {
+        margin-bottom: 0.625rem;
+      }
+    }
+  }
+
+  > .facet-item--expanded {
+    > label {
+      @include icon(chevronleft, before) {
+        #{$left}: -1.5rem;
+      }
+    }
+  }
+}
+
+.c-sidebar-first {
+  .c-facet__blocks {
+    .block {
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}

@@ -7,7 +7,6 @@ use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -158,10 +157,9 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
     // @todo: check why this context is not working in block.
     // $term = $this->getContextValue('taxonomy_term');
     $parent = $this->productCategoryTree->getCategoryTermRootParent();
-    if ($parent instanceof TermInterface) {
-      return in_array($parent->id(), $this->configuration['categories']);
+    if (count($parent) > 0) {
+      return in_array($parent['id'], $this->configuration['categories']);
     }
-
     return TRUE;
   }
 

@@ -68,7 +68,7 @@ mcuat:
   suites:
     default:
       paths:
-          - %paths.base%/features/mothercare/kw
+          - %paths.base%/features/mothercare/common
           - %paths.base%/features/mothercare/sa
           - %paths.base%/features/mothercare/ae
       contexts:
@@ -77,10 +77,10 @@ mcuat:
               simpleurl: '/baby-boys-socks-gift-box-test'
               simpletitle: 'Baby Boys Socks Gift Box test'
               simpletitlear: 'صندوق هدية جوارب للأولاد'
-              configurl: '/disney-bambi-dress-and-bodysuit-set'
-              configtitle: 'Disney Bambi Dress and Bodysuit Set'
-              configtitlear: 'Disney Bambi Dress and Bodysuit Set'
-              configvariant: '3-6 Months'
+              configurl: '/horse-photographic-t-shirt'
+              configtitle: 'Horse Photographic T-Shirt'
+              configtitlear: 'Horse Photographic تي- شيرت'
+              configvariant: '2-3 Years'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext

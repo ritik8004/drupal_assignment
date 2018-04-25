@@ -8,9 +8,10 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    When I fill in "edit-keywords" with "baby carrier"
+    When I fill in "edit-keywords" with "top"
     And I press "Search"
-    Then I should see Search results page for "baby carrier"
+    And I wait 2 seconds
+    Then I should see Search results page for "top"
 
   @arabic @prod
   Scenario: As a Guest user
@@ -84,7 +85,7 @@ Feature: Search feature
     When I fill in "edit-keywords" with "green t shirt"
     And I press "Search"
     And I wait for AJAX to finish
-    When I select a product in stock on "page"
+    When I select a product in stock
     And I wait for the page to load
     When I select a size for the product
     And I wait for AJAX to finish
