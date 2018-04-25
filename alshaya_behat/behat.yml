@@ -56,7 +56,7 @@ mcqa:
         - Drupal\DrupalExtension\Context\MessageContext
   formatters:
       html:
-        output_path: %paths.base%/features/mckw/reports/html/behat
+        output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
       base_url: 'https://mckw-test.factory.alshaya.com/'
@@ -94,7 +94,7 @@ mcuat:
 
 mcprod:
   autoload:
-    '': %paths.base%/features/mckw/bootstrap
+    '': %paths.base%/features/mothercare/bootstrap
   suites:
     default:
       paths:
@@ -116,7 +116,7 @@ mcprod:
         - Drupal\DrupalExtension\Context\MessageContext
   formatters:
       html:
-        output_path: %paths.base%/features/mckw/reports/html/behat
+        output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
       base_url: 'https://www.mothercare.com.kw/en'
@@ -124,10 +124,10 @@ mcprod:
 
 mcae:
   autoload:
-    '': %paths.base%/features/mckw/bootstrap
+    '': %paths.base%/features/mothercare/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/mckw/manual ]
+      paths: [ %paths.base%/features/mothercare/common ]
       contexts:
         - FeatureContext:
             parameters:
@@ -144,11 +144,11 @@ mcae:
         - Drupal\DrupalExtension\Context\MessageContext
   formatters:
       html:
-        output_path: %paths.base%/features/mckw/reports/html/behat
+        output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
       base_url: 'https://mcae.test-alshaya.acsitefactory.com/en'
-      files_path: "%paths.base%/features/mckw/media"
+      files_path: "%paths.base%/features/mothercare/media"
 
 hmsa:
   autoload:
