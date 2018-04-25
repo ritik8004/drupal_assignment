@@ -11,6 +11,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_term_background_color
     - field.field.taxonomy_term.acq_product_category.field_term_font_color
     - taxonomy.vocabulary.acq_product_category
+    - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
   module:
     - metatag
     - text
@@ -29,6 +30,7 @@ content:
 hidden:
   description: true
   field_category_include_menu: true
+  field_category_quicklink_plp_mob: true
   field_commerce_id: true
   field_main_menu_highlight: true
   field_promo_banner_for_mobile: true

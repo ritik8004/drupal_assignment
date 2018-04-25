@@ -29,12 +29,6 @@
       color: $pdp_filter_selector_label;
     }
   }
-
-  .gallery-wrapper {
-    @include breakpoint($desktop) {
-      margin-bottom: 5rem;
-    }
-  }
 }
 
 .field--name-field-skus {
@@ -57,14 +51,8 @@
     }
   }
 
-  .gallery-wrapper {
-    @include breakpoint($tablet) {
-      margin-bottom: 1.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      margin-bottom: 5rem;
-    }
+  .price-block {
+    clear: both;
   }
 }
 

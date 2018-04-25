@@ -7,10 +7,12 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -54,7 +56,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $term = $product_category_tree->getCategoryTermFromRoute();
       if (!empty($term)) {
         $current_category = $product_category_tree->getCategoryTermRootParent($term);
-        $current_category_id = $current_category->id();
+        $current_category_id = $current_category['id'];
       }
       // Get all the menu items.
       $items = &$variables['content']['#items'];
@@ -254,7 +256,7 @@ function alshaya_super_category_product_category_parent_alter(&$parent_id, &$con
   if ($context['term'] instanceof TermInterface
       && $parent = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRootParent($context['term'])) {
     // Get the top level parent id if parent exists.
-    $parent_id = $parent->id();
+    $parent_id = $parent['id'];
   }
 }
 
@@ -265,7 +267,8 @@ function alshaya_super_category_product_category_parent_alter(&$parent_id, &$con
  */
 function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context) {
   if ($context['module'] == 'node' && $context['bundle'] == 'acq_product') {
-    if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    $super_category = \Drupal::config('alshaya_super_category.settings');
+    if (!$super_category->get('status') || !$super_category->get('product_path_alter')) {
       return;
     }
     // Get the node object.
@@ -279,7 +282,7 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
     // Get the category field of the node to generate path alias.
     $term = $node->get('field_category')->get(0)->entity;
     // Get the translations of the term based on the current lang code.
-    if ($context['language'] !== 'en' && $term->hasTranslation($context['language'])) {
+    if ($term instanceof TermInterface && $context['language'] !== 'en' && $term->hasTranslation($context['language'])) {
       $term = $term->getTranslation($context['language']);
     }
 
@@ -287,10 +290,46 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
     $parent = \Drupal::service('alshaya_acm_product_category.product_category_tree')
       ->getCategoryTermRootParent($term);
 
+    if (count($parent) <= 0) {
+      return;
+    }
+
     // Get term alias to append with node alias.
     $alias = \Drupal::service('path.alias_manager')
-      ->getAliasByPath('/taxonomy/term/' . $parent->id(), $context['language']);
+      ->getAliasByPath('/taxonomy/term/' . $parent['id'], $context['language']);
 
-    $pattern->setPattern($alias . '/' . $pattern->getPattern());
+    // Check if the pattern is already set with the alias.
+    if (strpos($pattern->getPattern(), $alias . '/') === FALSE) {
+      $pattern->setPattern($alias . '/' . $pattern->getPattern());
+    }
+  }
+}
+
+/**
+ * Hide super category visibility settings, if feature is not enabled.
+ *
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_super_category_form_block_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    unset($form['visibility']['alshaya_super_category']);
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function alshaya_super_category_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() == 'product_category_level_3' && $display_id == 'entity_reference_1') {
+    // Check super category feature status.
+    if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+      return;
+    }
+
+    // When super category feature is enabled, we want to allow creation of
+    // page for both super-categories and second level too.
+    $handler = $view->getHandler($display_id, 'filter', 'depth_level');
+    $handler['value']['value'] = 2;
+    $view->setHandler($display_id, 'filter', 'depth_level', $handler);
   }
 }

@@ -11,6 +11,27 @@ Drupal.alshayaFormError = Drupal.alshayaFormError || {};
 (function ($, Drupal) {
 'use strict';
 
+  // Focus on first error.
+  $.fn.firstErrorFocus = function (arg, scroll) {
+    // We doing this as at this point of time, process is not fully completed
+    // so we relying on this ajaxComplete. This will only be called when there
+    // is error on address book form.
+    $(document).ajaxComplete(function(event, xhr, settings) {
+      var focusElement = $(arg+ ' .error:first');
+
+      focusElement.focus();
+
+      // Scroll to the first element with error.
+      if (scroll) {
+        // Sticky header is not on cart/checkout/* pages.
+        var stickyHeaderHeight = ($('.branding__menu').length > 0) ? $('.branding__menu').height() + 40 : 40;
+        $('html, body').animate({
+            scrollTop: focusElement.offset().top - parseInt(stickyHeaderHeight)
+        });
+      }
+    });
+  };
+
 Drupal.behaviors.alshayaFormError = {
   attach: function (context, settings) {
     var observerConfig = {
@@ -46,15 +67,19 @@ Drupal.behaviors.alshayaFormError = {
 * Helper function to set focus to first error element in the form.
 */
 Drupal.setFocusToFirstError =  function(errorElement) {
-  var focusElement = errorElement.closest('form').find('input.error:first');
-  var stickyHeaderHeight = $('branding__menu').height();
+  try {
+    var focusElement = errorElement.closest('form').find('input.error:first');
+    var stickyHeaderHeight = $('branding__menu').height();
 
-  focusElement.focus();
+    focusElement.focus();
 
-  // Scroll to the first element with error.
-  $('html, body').animate({
-    scrollTop: focusElement.offset().top + parseInt(stickyHeaderHeight)
-  });
+    // Scroll to the first element with error.
+    $('html, body').animate({
+      scrollTop: focusElement.offset().top + parseInt(stickyHeaderHeight)
+    });
+  }
+  catch (e) {
+  }
 };
 
 })(jQuery, Drupal);

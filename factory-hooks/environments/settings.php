@@ -33,7 +33,7 @@ function alshaya_get_additional_settings($site, $env) {
           'store_id' => [
             'ar' => 3,
           ],
-        ]
+        ],
       ],
       'sa' => [
         'default' => [
@@ -52,6 +52,12 @@ function alshaya_get_additional_settings($site, $env) {
             'ar' => 10,
           ],
         ],
+        '01live' => [
+          'store_id' => [
+            'en' => 7,
+            'ar' => 13,
+          ],
+        ],
       ],
       'ae' => [
         'default' => [
@@ -68,6 +74,12 @@ function alshaya_get_additional_settings($site, $env) {
           'store_id' => [
             'en' => 16,
             'ar' => 13,
+          ],
+        ],
+        '01live' => [
+          'store_id' => [
+            'en' => 19,
+            'ar' => 22,
           ],
         ],
       ],
@@ -89,7 +101,7 @@ function alshaya_get_additional_settings($site, $env) {
           'alshaya_acm_knet.settings' => [
             'alias' => 'hm',
           ],
-        ]
+        ],
       ],
       'sa' => [
         'default' => [
@@ -106,6 +118,12 @@ function alshaya_get_additional_settings($site, $env) {
           'store_id' => [
             'en' => 8,
             'ar' => 5,
+          ],
+        ],
+        '01live' => [
+          'store_id' => [
+            'en' => 8,
+            'ar' => 14,
           ],
         ],
       ],
@@ -126,22 +144,59 @@ function alshaya_get_additional_settings($site, $env) {
             'ar' => 11,
           ],
         ],
+        '01live' => [
+          'store_id' => [
+            'en' => 17,
+            'ar' => 23,
+          ],
+        ],
+      ],
+    ],
+    'bbw' => [
+      'ae' => [
+        'default' => [
+          'store_id' => [
+            'ar' => 3,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'kwt_en',
+            'ar' => 'kwt_ar',
+          ],
+          //'magento_lang_prefix' => [
+          //  'en' => '',
+          //  'ar' => 'uae_ar',
+          //],
+        ],
       ],
     ],
     'pb' => [
       'ae' => [
+        //'default' => [
+        //  'store_id' => [
+        //    'en' => 1,
+        //    'ar' => 2,
+        //  ],
+        //  'magento_lang_prefix' => [
+        //    'en' => 'uae_en',
+        //    'ar' => 'uae_ar',
+        //  ],
+        //],
+        // PBAE is connected to MCKW QA for now.
         'default' => [
           'store_id' => [
-            'en' => 1,
-            'ar' => 2,
+            'ar' => 3,
           ],
           'magento_lang_prefix' => [
-            'en' => 'uae_en',
-            'ar' => 'uae_ar',
+            'en' => 'kwt_en',
+            'ar' => 'kwt_ar',
           ],
         ],
-        // PBAE local is connect to MCKW QA.
-        'local' => [
+      ],
+    ],
+    'vs' => [
+      'ae' => [
+        // VSAE is connected to MCKW QA for now.
+        'default' => [
           'store_id' => [
             'ar' => 3,
           ],
@@ -167,7 +222,7 @@ function alshaya_get_additional_settings($site, $env) {
             'alias' => 'alshaya',
           ],
         ],
-      ]
+      ],
     ],
   ];
 

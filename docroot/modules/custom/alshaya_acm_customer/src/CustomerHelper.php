@@ -44,8 +44,29 @@ class CustomerHelper {
    *   Customer array.
    */
   public function createCustomer($email, $first_name, $last_name, $password) {
+    return $this->updateCustomer(NULL, $email, $first_name, $last_name, $password);
+  }
+
+  /**
+   * Update customer.
+   *
+   * @param mixed $customer_id
+   *   Customer ID.
+   * @param string $email
+   *   E-Mail.
+   * @param string $first_name
+   *   First name.
+   * @param string $last_name
+   *   Last name.
+   * @param string $password
+   *   Password in plain text format.
+   *
+   * @return array
+   *   Customer array.
+   */
+  public function updateCustomer($customer_id, $email, $first_name, $last_name, $password) {
     $customer_array = [
-      'customer_id' => NULL,
+      'customer_id' => $customer_id,
       'firstname' => $first_name,
       'lastname' => $last_name,
       'email' => $email,

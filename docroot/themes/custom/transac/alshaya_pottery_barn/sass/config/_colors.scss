@@ -22,11 +22,18 @@ $medium-green: #3ab549;
 // Colors for which variables are not present in Zeplin but colors are used.
 $_black_two: #333;
 $_gray_two: #b3b3b3;
+$_gray_three: #f0f0f0;
+$_gray_four: #e8e8e8;
+$_gray_five: #f2f2f2;
+$_gray_six: #fafafa;
+$_gray_seven: #f8f8f8;
+$_gray_eight: #c8c8c8;
 
 // Overrides for variables.
 // Global elements.
 $content_link_color: $PB_confirmation_blue;
 $primary_input_focus_border: $PB_confirmation_blue;
+$secondary_link: $PB_deep_red;
 
 // Titles.
 $page_title: $_black_two;
@@ -34,6 +41,8 @@ $block_title: $_black_two;
 $title: $_black_two;
 $sub_title: $_black_two;
 $user_sidebar_block_title: $_black_two;
+$user_block_link: $PB_confirmation_blue;
+$promo_panel_image_title_subtitle_title_text: $_black_two;
 
 // Accordions.
 $accordion_title: $PB_grey_one;
@@ -48,6 +57,11 @@ $primary_input_inline_error: $PB_warning_red;
 // Buttons.
 $primary_btn_bg: $_black_two;
 $primary_btn_text: $white-two;
+$pending_btn_bg: $tomato;
+$returned_btn_bg: $PB_grey_one;
+$complete_btn_bg: $medium-green;
+$primary_brand_button_text: $white-two;
+$primary_brand_button: $_black_two;
 
 // Dropdown.
 $primary_dropdown_bg: $PB_grey_four;
@@ -60,6 +74,40 @@ $primary_dropdown_option_hover: $PB_grey_four;
 $primary_dropdown_option_border: $white-two;
 $primary_dropdown_option_disbled: $PB_grey_one;
 $primary_dropdown_focus: $_black_two;
+
+// Tables.
+$primary_th_bg: $_gray_three;
+$primary_td_highlight3: $PB_white;
+
+// Basket table.
+$basket_th_4th_child: $_gray_four;
+$basket_th_text: $PB_black_one;
+$basket_tr: $_gray_six;
+$primary_td_bg_highlight: $_gray_five;
+$basket_content_link_color: $PB_confirmation_blue;
+$basket_tooltip_not_available: $white;
+$basket_total_label_text: $PB_black_one;
+$basket_total_label_text_subtitle: $PB_grey_one;
+$basket_table_th_and_tr_last_border: $white-two;
+$basket_continue_shopping_link: $PB_black_one;
+$basket_empty_message: $PB_black_one;
+
+// Totals.
+$total_td_2nd_child_bg: $_gray_seven;
+
+// Tooltip
+$tooltip_bg: $_gray_seven;
+$tooltip_text: $PB_black_one;
+$tooltip_border: $PB_black_one;
+$tooltip_border_2: $PB_black_one;
+$tooltip_icon: $PB_confirmation_blue;
+$tooltip_link: $PB_confirmation_blue;
+
+// Checkout securely block.
+$checkout_securely_txt: $_black_two;
+$checkout_securely_icon_bg: $PB_deep_red;
+$checkout_securely_icon_mobile_txt: $_black_two;
+$checkout_securely_icon_txt: $white-two;
 
 // Header - Top header.
 $header_secondary_bg: $white;
@@ -90,8 +138,21 @@ $primary_search_border: $white;
 // Header - welcome user.
 $header_my_account_h3_title: $_black_two;
 
+// Mini cart.
+$primary_minicart_quantity_bg: $PB_deep_red;
+$primary_minicart_quantity_text: $white-two;
+$minicart_notification_border: $_black_two;
+$minicart_notification_bg: $white_two;
+$minicart_notification_border: $_black_two;
+$minicart_notification_shadow: transparent;
+$minicart_notification_text: $_black_two;
+$minicart_notification_btn_bg: $_black_two;
+$minicart_notification_btn_text: $white_two;
+$minicart_notification_label: $PB_grey_one;
+
 // User - My account nav & dashboard.
 $my_account_nav_active: $PB_deep_red;
+$user_recent_order_icon: $_black_two;
 
 // Join the club block - user dashboard page.
 $joinclubblock_title: $PB_alshaya_priv;
@@ -125,6 +186,7 @@ $deliverybanner_title: $_black_two;
 $deliverybanner_subtitle: $PB_grey_one;
 $deliverybanner_border: $PB_black_one;
 $deliverybanner_shadow: rgba(236, 236, 236, 0.5);
+$deliverybanner_link: $_black_two;
 
 // Footer Primary.
 $footer_bg: $PB_grey_five;
@@ -134,6 +196,7 @@ $footer_link_hover: $PB_deep_red;
 // Copyright Footer.
 $copyright_footer_bg: $white-two;
 $copyright_footer_text: $PB_grey_one;
+$checkout_footer_copyright_mobile_bg: $PB_white;
 
 // Footer social icons.
 $social_links: $PB_grey_one;
@@ -207,3 +270,50 @@ $pdp_desc_wrapper_close_icon: $_black-two;
 $pdp_desc_wrapper_close_bg: $white;
 $pdp_sidebar_desc_overlay_section_border: $PB_grey_one;
 $pdp_delivery_options_subtitle: $PB_grey_two;
+
+// Webform Contact Us.
+$webform_contact_legend: $_black_two;
+
+// Addressbook.
+$address_primary_controls_active: $_black_two;
+$address_pp_delete_closebtn: $white;
+$address_pp_delete_closebtn_icon: $_black_two;
+
+// Basket.
+$basket_page_title: $_black_two;
+
+// Checkout Global.
+$checkout_section_titles: $PB_black_one;
+$checkout_footer_title: $_black_two;
+$checkout_footer_bg: $PB_grey_five;
+$checkout_footer_border-top: $PB_grey_five;
+$checkout_footer_txt: $_black_two;
+$checkout_footer_light_txt: $PB_grey_one;
+$checkout_login_guest_email_text_mobile: $PB_black_one;
+$checkout_login_guest_email_text: $PB_black_one;
+$checkout_header_border-bottom: $PB_black_one;
+$checkout_header_border-top: $white;
+
+// Counters.
+$primary_counter_bg: $PB_deep_red;
+$primary_counter_text: $white-two;
+
+// Checkout tabs.
+$checkout_tab_active_hr: $PB_deep_red;
+$checkout_tab_default_border: $PB_grey_five;
+$checkout_tab_default_title: $PB_grey_one;
+$checkout_tab_active_title: $PB_black_one;
+$checkout_tab_active_description: $PB_deep_red;
+$checkout_tab_separator: $PB_black_one;
+$checkout_progress_bg: $PB_white;
+
+// Order summary block.
+$order_summary_caption_bg: $PB_grey_five;
+$order_summary_content_bg: $PB_white;
+$order_summary_totals_bg: $PB_grey_five;
+
+// Checkout login.
+$checkout_login_tab_border: $_gray_eight;
+$checkout_login_tab_text: $PB_grey_one;
+$checkout_login_tab_border_active: $PB_deep_red;
+$checkout_login_tab_text_active: $PB_black_one;

@@ -134,6 +134,10 @@
     }
 
     #click-and-collect-list-view {
+      @include breakpoint($only-tablet) {
+        margin-top: 1.6rem;
+      }
+
       .all-stores-info {
         border-top: 1px solid $checkout_cc_listview_border;
         margin-top: 1.125rem;
@@ -687,6 +691,100 @@
         padding-#{$left}: 0.9375rem;
         padding-#{$right}: 0.9375rem;
         margin-#{$left}: 0;
+      }
+    }
+  }
+}
+
+.alias--cart-checkout-delivery {
+  #edit-guest-delivery-collect,
+  #edit-member-delivery-collect {
+    #store-finder-wrapper {
+      .cc-near-me {
+        padding: 0.4375rem 1.25rem;
+
+        &::before {
+          background: url('../imgs/icons/ic-mylocation.svg') no-repeat;
+          width: 1.625rem;
+          height: 1.625rem;
+        }
+      }
+
+      .label-store-location {
+        margin: 0.625rem 0;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0.5625rem;
+        }
+      }
+
+      .cc-near-me {
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            width: 10.125rem;
+          }
+        }
+      }
+
+      .stores-list-view,
+      .stores-map-view {
+        top: 7.75rem;
+
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            top: 9rem;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          top: 8.5rem;
+
+          html[lang=ar] & {
+            top: 9.5rem;
+          }
+
+          &::before {
+            top: 0.25rem;
+
+            @include breakpoint($only-tablet) {
+              top: 0.4375rem;
+            }
+          }
+        }
+      }
+
+      .form-item-store-location {
+        width: 46%;
+
+        @include breakpoint($only-tablet) {
+          width: 34%;
+        }
+
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            width: 42%;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
+      }
+
+      #click-and-collect-map-view {
+        @include breakpoint($only-tablet) {
+          html[lang=ar] & {
+            margin-top: 7.125rem;
+          }
+        }
+      }
+
+      #click-and-collect-list-view {
+        @include breakpoint($tablet) {
+          html[lang=ar] & {
+            min-height: 6rem;
+          }
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 .user__address--column {
-  border: 0.0625rem solid $white;
+  border: 0.0625rem solid $address_book_border;
   font-family: $arial;
   font-size: 0.75rem;
   margin-bottom: 1.5rem;
@@ -131,7 +131,7 @@
   }
 
   .address--options {
-    border-top: 0.0625rem solid $white;
+    border-top: 0.0625rem solid $address_book_border;
     clear: both;
     display: table;
     width: 100%;
@@ -146,7 +146,7 @@
   }
 
   .address--controls {
-    border-#{$right}: 0.0625rem solid $white;
+    border-#{$right}: 0.0625rem solid $address_book_border;
     display: table-cell;
     min-height: 3.0625rem;
     padding: 0.9375rem;
@@ -209,7 +209,7 @@
 
     span::before,
     a:hover::before {
-      border: 0.1875rem solid $windows-blue;
+      border: 0.1875rem solid $address_form_radio;
       background: white;
     }
   }
@@ -258,7 +258,7 @@
   &:hover,
   &.default {
     .address--data {
-      background: $white-four;
+      background: $address_form_default;
     }
 
     .address--primary {
@@ -446,6 +446,14 @@
       opacity: 1;
       font-size: 0.75rem !important;
       color: $greyish;
+
+      &.error {
+        position: absolute;
+        #{$left}: 0;
+        top: 2.75rem !important;
+        width: 100%;
+        border-top: 1px solid $primary_input_inline_error;
+      }
     }
 
     .form-type-textfield {
@@ -641,7 +649,7 @@
     #{$right}: 0;
     width: 2.1875rem;
     height: 2.1875rem;
-    background: $white-two;
+    background: $primary_dropdown_arrow_bg;
 
     &::after {
       font-size: 1.7rem;

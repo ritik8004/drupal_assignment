@@ -227,12 +227,8 @@
     }
 
     #click-and-collect-list-view {
-      @include breakpoint($only-tablet) {
-        margin-top: 1.6rem;
-      }
-
-      @include breakpoint($desktop) {
-        margin-top: 0;
+      @include breakpoint($tablet) {
+        margin-top: 0.5rem;
       }
 
       span.empty {
@@ -252,7 +248,7 @@
         h3 {
           font-weight: normal;
           margin-top: 1.875rem;
-          margin-bottom: 0.625rem;
+          margin-bottom: 2.25rem;
           display: inline-block;
           font-size: 0.875rem;
 
@@ -1269,19 +1265,47 @@
         margin: 0;
       }
 
-      .current-location {
+      .current-location,
+      .cc-near-me {
         width: 8.75rem;
         margin: 0;
-        padding: 0.4375rem 1.25rem;
+        padding: 0.4375rem 1rem;
         border: 1px solid $checkout_cc_near_me_border;
-        text-transform: uppercase;
+        color: $store_finder_text;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+
+        @include breakpoint($tablet) {
+          float: $left;
+        }
+
+        &::before {
+          content: '';
+          display: inline-block;
+          vertical-align: middle;
+          margin-#{$right}: 0.6875rem;
+          background: url('../imgs/icons/current.svg') no-repeat;
+          width: 1.625rem;
+          height: 1.625rem;
+
+          @include breakpoint($tablet) {
+            html[lang=ar] & {
+              margin-right: 0;
+            }
+          }
+
+          @include breakpoint($only-tablet) {
+            position: absolute;
+          }
+        }
 
         @include breakpoint($desktop) {
           html[lang=ar] & {
             padding: 0.4375rem;
-            width: 10.125rem;
+            width: 11rem;
             position: relative;
-            padding-right: 4.75rem;
+            padding-right: 2.25rem;
             margin-top: 0.75rem;
 
             &::before {
@@ -1304,11 +1328,14 @@
 
         @include breakpoint($only-mobile) {
           width: 100%;
+          display: block;
+          text-align: center;
         }
       }
 
       #click-and-collect-map-view {
         margin-top: 6.125rem;
+        display: none;
 
         @include breakpoint($only-mobile) {
           margin-top: 1.5rem;
@@ -1316,7 +1343,7 @@
 
         @include breakpoint($only-tablet) {
           html[lang=ar] & {
-            margin-top: 7.125rem;
+            margin-top: 5.125rem;
           }
         }
       }
@@ -1351,6 +1378,14 @@
         .all-stores-info {
           h3 {
             @include breakpoint($desktop) {
+              width: 53%;
+            }
+          }
+        }
+
+        .all-stores-info {
+          h3 {
+            @include breakpoint($desktop) {
               html[lang=ar] & {
                 width: 43%;
               }
@@ -1363,6 +1398,7 @@
         margin: 0.625rem 0;
         width: 30.4%;
         max-width: 15.625rem;
+        margin-#{$left}: 1rem;
 
         @include breakpoint($desktop) {
           html[lang=ar] & {
@@ -1395,15 +1431,16 @@
       }
 
       .form-item-store-location {
-        width: 46%;
+        width: 44%;
         padding: 0;
         float: $right;
         padding-#{$left}: 0.5rem;
+        margin-top: 0;
 
         @include breakpoint($desktop) {
           html[lang=ar] & {
             margin-top: 0.75rem;
-            width: 42%;
+            width: 40%;
           }
         }
 
@@ -1441,36 +1478,40 @@
       .stores-map-view {
         position: absolute;
         display: block;
-        top: 7.75rem;
+        top: 6.75rem;
         z-index: 1;
         border: 1px solid $checkout_cc_tab_border;
 
         @include breakpoint($desktop) {
           html[lang=ar] & {
-            top: 9rem;
+            top: 7rem;
             width: 10.1875rem;
           }
         }
 
         @include breakpoint($only-tablet) {
           font-size: 0;
-          top: 8.5rem;
+          top: 7.5rem;
 
           html[lang=ar] & {
-            top: 9.5rem;
+            top: 8rem;
+          }
+
+          &::before {
+            top: 0.625rem;
           }
         }
 
         @include breakpoint($only-mobile) {
-          display: none;
+          display: none !important;
         }
       }
 
-      .stores-list-view {
+      .stores-map-view {
         #{$right}: 0;
       }
 
-      .stores-map-view {
+      .stores-list-view {
         #{$right}: 11.25rem;
 
         @include breakpoint($only-tablet) {

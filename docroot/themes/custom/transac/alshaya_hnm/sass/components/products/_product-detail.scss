@@ -1,9 +1,5 @@
 // Layout of the detail page
 .nodetype--acq_product {
-  .region__content {
-    margin: 1.25rem 0;
-  }
-
   #backtotop {
     &.backtotop-nofooter {
       @include breakpoint($only-mobile) {
@@ -222,6 +218,7 @@
 @include breakpoint($tablet) {
   .description-wrapper {
     border: 1px solid $secondary_border;
+    background: $primary_bg;
 
     .close {
       color: $primary_close_btn;

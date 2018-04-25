@@ -67,6 +67,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     ];
 
     $cart = $this->getCart();
+
+    // Once we open HD page, clear temp cc selected info.
+    $cart->setExtension('cc_selected_info', NULL);
+
     $address = (array) $cart->getShipping();
     $default_shipping = '';
 
@@ -242,6 +246,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $address_fields['selected_address']['#access'] = FALSE;
 
       $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
+      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['form.multistep-checkout .address-book-address', TRUE]));
     }
     else {
       // Clear the shipping method info now to ensure we set it properly again.
@@ -399,7 +404,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       datalayer_add([
         'deliveryArea' => $address_book_manager->getAddressShippingAreaValue($magento_address),
-        'deliveryCity' => $address['locality'],
+        'deliveryCity' => $address_book_manager->getAddressShippingAreaParentValue($address, $magento_address),
       ]);
     }
   }

@@ -240,6 +240,7 @@ $tooltip_border_2: $alice-blue;
 // $tooltip_border + opacity 0.
 $tooltip_border_opacity_0: rgba(0, 132, 204, 0);
 $tooltip_icon: $cerulean-two;
+$tooltip_link: $cerulean-two;
 
 // Back to top
 $btt_bg: $whisper-light;
@@ -397,7 +398,18 @@ $minicart_notification_product_title: $grey-ash;
 $deliverybanner_title: $cerulean-two;
 $deliverybanner_subtitle: $cerulean-two;
 $deliverybanner_border: $cerulean-two;
+$deliverybanner_link: $content_link_color;
 $deliverybanner_shadow: $shadow;
+
+// Promo panel.
+$promo_panel_mobile_bg: $white-five;
+$promo_panel_content: $black;
+$promo_panel_content_bg: $white-five;
+$promo_panel_border: $white;
+$promo_panel_mobile_label: $marine-blue-two;
+$promo_panel_label_bg: $white-five;
+$promo_panel_label: $black;
+$promo_panel_label_icon: $marine-blue-two;
 
 //3. Footer
 $footer_bg: $white-five;
@@ -639,6 +651,8 @@ $checkout_pri_txt: $grey-ash;
 $checkout_section_border: $greyish;
 $checkout_section_titles: $marine-blue-two;
 $checkout_section_title_border: $white;
+$secure_checkout_back_link: $content_link_color;
+$checkout_tab_active_head: $light-greyish;
 
 // @todo Variables used in outdated markup, avoid using elsewhere.
 $checkout_out_sec_text: $windows-blue;
@@ -767,8 +781,15 @@ $checkout_order_details_product_count_border: $white-five;
 
 // Address form.
 $address_form_country_disabled: $ladda-disabled;
+$address_form_radio: $windows-blue;
+$address_form_default: $white-four;
 $address_button_border: $marine-blue-two;
 $address_button_text: $marine-blue-two;
+$address_book_border: $white;
+$user_ui_dialog_border: $white;
+$address_book_delete_cancel: #3381d0;
+$address_book_delete_close: $black;
+$address_book_delete_close_bg: $white;
 
 //My Account pages
 $user_account_wrapper_light: $grey-ash;
@@ -844,6 +865,8 @@ $basket_img_border: $white;
 $basket_img_bg: $white-five;
 $basket_th_4th_child: $white-two;
 $basket_continue_shopping_btn_border: $marine-blue-two;
+$basket_continue_shopping_link: $content_link_color;
+$basket_sell_hover_link: $content_link_color;
 $basket_content_link_color: $cerulean-two;
 // Pri text is product title, price, etc.
 $basket_td_pri_txt: $black;
@@ -862,6 +885,7 @@ $basket_header_oos_bg: $cherry;
 $basket_header_oos_txt: $white-four;
 // Privilege card earn text only for the basket page.
 $privilege_earn_txt: $grey-ash;
+$basket_empty_message: $black;
 
 // Contact Page
 $webform_contact_legend: $marine-blue-two;
@@ -908,6 +932,9 @@ $order_print_total_row: $whisper-light;
 $order_print_delivery_details_row: $white-smoke-light;
 $order_print_dark_txt: $black;
 $order_print_barcode: $grey-ash;
+
+// Facet
+$category_facet_active_icon: $windows-blue;
 
 // Block Alshaya ACM customer .block-alshaya-acm-customer
 $block_acm_customer_txt: $windows-blue;
@@ -996,3 +1023,9 @@ $default_msg_icon: false;
 
 // PDP.
 $pdp_filter_selector_label: false;
+
+// Orders.
+$order_detail_order_sub_total_border: false;
+
+// Checkout.
+$checkout_progress_border: false;

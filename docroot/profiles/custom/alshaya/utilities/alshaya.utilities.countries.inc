@@ -26,7 +26,7 @@ function _alshaya_get_currency_code($country_code, $lang_code) {
   $currency['kw']['ar'] = 'د٠ك٠';
 
   // KSA.
-  $currency['sa']['en'] = 'SR';
+  $currency['sa']['en'] = 'SAR';
   $currency['sa']['ar'] = '.ر.س';
 
   // UAE.

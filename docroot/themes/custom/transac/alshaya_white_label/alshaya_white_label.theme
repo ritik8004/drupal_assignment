@@ -287,7 +287,6 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
-    $variables['image_slider_position_pdp'] = \Drupal::config('alshaya_acm_product.settings')->get('image_slider_position_pdp');
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();
@@ -699,12 +698,13 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   $parameters = $menu_tree->getCurrentRouteMenuTreeParameters('social-links');
   $menus = $menu_tree->load('social-links', $parameters);
 
-  foreach ($menus as $menu) {
-    $title = $menu->link->getTitle();
-    $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+  if (isset($menus)) {
+    foreach ($menus as $menu) {
+      $title = $menu->link->getTitle();
+      $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+    }
+    $variables['links'] = $links;
   }
-
-  $variables['links'] = $links;
 }
 
 /**

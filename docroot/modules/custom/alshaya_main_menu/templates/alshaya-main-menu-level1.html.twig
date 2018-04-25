@@ -9,29 +9,27 @@
   </div>
   <ul class="menu__list menu--one__list">
     {% for key1, level1 in term_tree %}
-      {% if level1.class == true %}
-        <li class="menu__list-item menu--one__list-item {{ level1.class }}">
+      {% if level1.class == true and level1.term_bg_color == true %}
+        <li class="menu__list-item menu--one__list-item {{ level1.class }} has-bg-color">
+      {% elseif level1.term_bg_color == true %}
+        <li class="menu__list-item menu--one__list-item has-bg-color">
       {% else %}
         <li class="menu__list-item menu--one__list-item">
       {% endif %}
-          {% if level1.term_bg_color %}
-            <div class="menu__link-wrapper menu-two__link-wrapper has-bg-color">
-          {% else %}
-            <div class="menu__link-wrapper menu-two__link-wrapper">
-          {% endif %}
-              {% set style = '' %}
-              {% if level1.term_bg_color %}
-                  {% set style = style ~ 'background-color:' ~ level1.term_bg_color ~ ';' %}
-              {% endif %}
-              {% if level1.term_font_color %}
-                  {% set style = style ~ 'color:' ~ level1.term_font_color ~ ';' %}
-              {% endif %}
-              {% if style is not empty %}
-                  <a class="menu__link menu--one__link {{ level1.class }}" style="{{ style }}" href="{{ level1.path }}">{{ level1.label }}</a>
-              {% else %}
-                  <a class="menu__link menu--one__link {{ level1.class }}" href="{{ level1.path }}">{{ level1.label }}</a>
-              {% endif %}
-              {% set style = '' %}
+          <div class="menu__link-wrapper menu-two__link-wrapper">
+            {% set style = '' %}
+            {% if level1.term_bg_color %}
+                {% set style = style ~ 'background-color:' ~ level1.term_bg_color ~ ';' %}
+            {% endif %}
+            {% if level1.term_font_color %}
+                {% set style = style ~ 'color:' ~ level1.term_font_color ~ ';' %}
+            {% endif %}
+            {% if style is not empty %}
+                <a class="menu__link menu--one__link {{ level1.class }}" style="{{ style }}" href="{{ level1.path }}">{{ level1.label }}</a>
+            {% else %}
+                <a class="menu__link menu--one__link {{ level1.class }}" href="{{ level1.path }}">{{ level1.label }}</a>
+            {% endif %}
+            {% set style = '' %}
           </div>
           {% if level1.child is not empty %}
             {{ alshaya_main_menu('alshaya_main_menu_level2', level1) }}

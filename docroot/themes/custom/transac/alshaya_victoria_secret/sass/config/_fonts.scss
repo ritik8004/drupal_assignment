@@ -105,6 +105,7 @@ $alshaya-arabic-thin: $vs-arabic-regular;
 $icons: (
   login: "\e929",
   chevrondown: "\25bd",
+  ic_chevrondown: "\25bd",
   chevronleft: "\e901",
   chevronright: "\e902",
   chevronup: "\e903",
@@ -144,13 +145,15 @@ $icons: (
   rewards: "\e926",
   language: "\e927",
   infomation: "\e928",
+  ic_infomation: "\e928",
   warning: "\2757",
   googleplus: "\1f576",
   facebook: "\1f575",
   twitter: "\1f425",
   pinterest: "\1f4cc",
   instagram: "\1f305",
-  youtube: "\1f4fa"
+  youtube: "\1f4fa",
+  price-tag: "\e93a"
 );
 
 @mixin iconbase() {

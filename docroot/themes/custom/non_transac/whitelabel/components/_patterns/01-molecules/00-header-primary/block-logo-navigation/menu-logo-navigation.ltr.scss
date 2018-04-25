@@ -30,6 +30,7 @@
 
     @include breakpoint($lap) {
       padding: 0.5rem 1.5rem;
+      height: 2.5625rem;
     }
 
     @include breakpoint($desk) {
