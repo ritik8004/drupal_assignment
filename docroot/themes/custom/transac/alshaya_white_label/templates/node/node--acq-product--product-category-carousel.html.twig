@@ -38,39 +38,4 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
       {{ content.stock_placeholder }}
     </div>
   {% endif %}
-
-  <table class="mobile--only--sell">
-    <tr>
-      <td class="sell--image">
-        {% if content.image is not null %}
-          {{ content.image }}
-        {% endif %}
-
-        {{ content.labels }}
-      </td>
-
-      <td class="sell--description">
-        {{ title_prefix }}
-        {% if not page %}
-          <h2{{ title_attributes.addClass("c-products__item__label") }}>
-            {{ label }}
-          </h2>
-        {% endif %}
-        {{ title_suffix }}
-
-        <div class="price-block {{ content.price_block_identifier }}">
-            {{ content.price_block }}
-        </div>
-      </td>
-    </tr>
-
-    {% if content.promotions %}
-      <tr>
-        <td colspan="2" class="sell-promotions">
-          {{ content.promotions }}
-        </td>
-      </tr>
-    {% endif %}
-
-  </table>
 </article>
