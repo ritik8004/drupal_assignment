@@ -529,8 +529,8 @@ class SkuAssetManager {
     $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $query = \Drupal::database()->select('acq_sku_field_data', 'asfd');
     $query->fields('asfd', ['attr_color_label', 'attr_rgb_color']);
-    $query->condition("id", $sku_id);
-    $query->condition("langcode", $current_langcode);
+    $query->condition('id', $sku_id);
+    $query->condition('langcode', $current_langcode);
     return $query->execute()->fetchAssoc();
   }
 
