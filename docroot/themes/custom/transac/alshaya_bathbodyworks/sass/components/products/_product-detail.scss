@@ -1,0 +1,65 @@
+// Title wrapper
+.content {
+  &__title_wrapper {
+    h1,
+    h1 span {
+      font-weight: normal;
+      color: $pdp_product_title;
+      margin-bottom: 0;
+    }
+
+    .price {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.description-wrapper {
+  .field {
+    &__label {
+      font-weight: normal;
+    }
+  }
+
+  .desc-label {
+    font-weight: normal;
+  }
+}
+
+.short-description-wrapper {
+  .field {
+    &__label {
+      font-weight: normal;
+    }
+  }
+}
+
+.short-description-wrapper {
+  .show-less-link,
+  .read-more-description-link,
+  .read-more-description-link-mobile {
+    font-weight: normal;
+    line-height: 1.33;
+  }
+
+  .show-less-link,
+  .read-more-description-link {
+    margin-top: 0.5rem;
+  }
+}
+
+.delivery-options-wrapper {
+  .field {
+    &__label {
+      font-weight: normal;
+    }
+  }
+
+  .c-accordion {
+    &__title {
+      .subtitle {
+        line-height: 1.33;
+      }
+    }
+  }
+}

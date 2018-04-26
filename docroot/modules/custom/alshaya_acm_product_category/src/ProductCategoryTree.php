@@ -137,7 +137,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
     $cache_tags = [
       self::CACHE_TAG,
-      'node_type:department_page',
+      'node_type:advanced_page',
     ];
 
     $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
@@ -315,7 +315,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       if ($node->bundle() == 'acq_product') {
         $terms = $node->get('field_category')->getValue();
       }
-      elseif ($node->bundle() == 'department_page') {
+      elseif ($node->bundle() == 'advanced_page') {
         $terms = $node->get('field_product_category')->getValue();
       }
 

@@ -1202,7 +1202,7 @@ html[lang=ar] {
       width: 1.063rem;
       height: 1.375rem;
 
-      @include icon(chevronleft, before) {
+      @include icon(chevron#{left}, before) {
         position: absolute;
         #{$left}: -0.6875rem;
         top: 0;
