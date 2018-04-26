@@ -248,18 +248,20 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Found SKU
    */
   public static function loadFromSku($sku, $langcode = '', $log_not_found = TRUE, $create_translation = FALSE) {
-    $skus = &drupal_static(__FUNCTION__, []);
-    $static_cache_sku_identifier = $sku . ':' . $langcode;
+    $skus_static_cache = &drupal_static(__FUNCTION__, []);
 
-    // Check if data is available in static cache, return from there.
-    if (isset($skus[$static_cache_sku_identifier])) {
-      return $skus[$static_cache_sku_identifier];
-    }
 
     $is_multilingual = \Drupal::languageManager()->isMultilingual();
 
     if ($is_multilingual && empty($langcode)) {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
+
+    $static_cache_sku_identifier = $sku . ':' . $langcode;
+
+    // Check if data is available in static cache, return from there.
+    if (isset($skus_static_cache[$static_cache_sku_identifier])) {
+      return $skus_static_cache[$static_cache_sku_identifier];
     }
 
     $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
@@ -307,7 +309,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
 
     // Set value in static variable.
-    $skus[$static_cache_sku_identifier] = $sku_entity;
+    $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
 
     return $sku_entity;
   }
