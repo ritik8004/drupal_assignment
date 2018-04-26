@@ -89,6 +89,7 @@ $ash-triplet: #777;
 $vivid-raspberry: #d91560;
 $whisper-dark: #e5e5e5;
 $white-smoke-light: #f2f2f2;
+$white-smoke-fog: #f9f9f9;
 $medium-green: #39b54a;
 $tomato: #e6591b;
 
@@ -195,13 +196,13 @@ $secondary_link: $black;
 
 /* ------- 4. Tertiary Colors ------- */
 $tertiary_btn_text: $white-five;
-$tertiary_btn_border: $cerulean-two;
+$tertiary_btn_border: $black;
 
 /* ------- 5. Components --------------- */
 // Counters.
 $primary_counter_bg: $brilliant-rose;
 $primary_counter_text: $white-five;
-$secondary_counter_bg: $cerulean-two;
+$secondary_counter_bg: $black;
 $secondary_counter_text: $white-five;
 $tertiary_counter_bg: $brilliant-rose;
 $tertiary_counter_text: $white-five;
@@ -634,10 +635,10 @@ $store_finder_storewrapper_bg: $white-four;
 $store_finder_map_border: $gainsboro;
 
 // Checkout Pages & order summary block.
-$order_summary_border: $greyish;
+$order_summary_border: $gainsboro;
 $order_summary_title: $black;
 $order_summary_dropdown_icon: $black;
-$order_summary_section_border: $white;
+$order_summary_section_border: $gainsboro;
 $order_summary_product_title: $black;
 $order_summary_product_price: $black;
 
@@ -696,38 +697,41 @@ $checkout_confirmation_delivery_details: $white-smoke-light;
 $checkout_confirmation_table_pm_highlight: $solitude;
 
 // Checkout Click & collect.
-$checkout_cc_list_map_link_default: $brilliant-rose;
+$checkout_cc_list_map_link_default: $black;
 $checkout_cc_list_map_link_active: $black;
+$checkout_cc_list_map_link_active_border: $brilliant-rose;
 $checkout_cc_store_location_input_label: $grey-ash;
 $checkout_cc_store_location_input_label_mobile_color: $black;
 $checkout_cc_location_empty_txt: $grey-ash;
-$checkout_cc_location_empty_txt_border: $greyish;
+$checkout_cc_location_empty_txt_border: $gainsboro;
 $checkout_cc_location_result_label: $black;
-$checkout_cc_list_bg: $white-five;
-$checkout_cc_list_bg_hover: $white-four;
-$checkout_cc_list_border: $white-two;
+$checkout_cc_list_bg: $vanilla;
+$checkout_cc_list_bg_hover: $white-smoke;
+$checkout_cc_list_border: $gainsboro;
 $checkout_cc_list_select_store_btn_bg: $white-five;
-$checkout_cc_list_select_store_btn_border: $gainsboro;
-$checkout_cc_list_select_store_btn_txt: $marine-blue-two;
+$checkout_cc_list_select_store_btn_border: $black;
+$checkout_cc_list_select_store_btn_txt: $nero;
 $checkout_cc_store_name: $black;
-$checkout_cc_store_address: $greyish;
+$checkout_cc_store_address: $ash-triplet;
 $checkout_cc_list_delivery_time: $black;
-$checkout_cc_list_delivery_time_tablet: $marine-blue-two;
+$checkout_cc_list_delivery_time_tablet: $nero;
 $checkout_cc_list_hours_label: $black;
-$checkout_cc_list_hours_label_icon: $grey-ash;
-$checkout_cc_list_hours_content: $greyish;
-$checkout_cc_list_hours_content_tablet: $grey-ash;
-$checkout_cc_map_hours: $grey-ash;
-$checkout_cc_map_hours_tablet: $greyish;
+$checkout_cc_list_hours_label_icon: $black;
+$checkout_cc_list_hours_content: $black;
+$checkout_cc_list_hours_content_tablet: $black;
+$checkout_cc_map_hours: $black;
+$checkout_cc_map_hours_tablet: $black;
 $checkout_cc_map_hours_label: $black;
-$checkout_cc_selected_store_content_border: $white-two;
+$checkout_cc_selected_store_content_border: $gainsboro;
 $checkout_cc_selected_store_content_bg: $white-four;
-$checkout_cc_help_text: $black;
-$checkout_cc_help_text_content: $grey-ash;
+$checkout_cc_help_text: $nero;
+$checkout_cc_help_text_content: $black;
 $checkout_cc_empty_store_error: $red-error;
+$checkout_cc_near_me_border: $nero;
+$checkout_cc_tab_border: $gainsboro;
 
 // Checkout click and collect heading cnc form.
-$checkout_cc_cnc_form_title_border: $black;
+$checkout_cc_cnc_form_title_border: $gainsboro;
 
 // Checkout tabs & form.
 $checkout_tab_bg: $white-five;
@@ -740,7 +744,7 @@ $checkout_tab_disabled_border: $light-greyish;
 $checkout_tab_disabled_text: $light-greyish;
 $checkout_tab_active_border_2: $black; // Probably outdated.
 $checkout_tab_active_hr: $black;
-$checkout_form_actions_footer: $white-four;
+$checkout_form_actions_footer: $white-smoke-fog;
 $checkout_form_actions_footer_white: $white-five;
 $checkout_tab_text_default: $black;
 $checkout_tab_description: $black;
