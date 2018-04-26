@@ -12,6 +12,15 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add new 'image position on pdp' field to product settings form.
+ */
+function alshaya_acm_product_update_8012() {
+  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product', 'install');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Configure view mode for product teaser & SKU entity teaser.
  */
 function alshaya_acm_product_update_8011() {

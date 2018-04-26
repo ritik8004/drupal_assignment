@@ -1,0 +1,124 @@
+.checkout-login {
+  .multistep-checkout {
+    color: $multistep_checkout_text;
+
+    fieldset {
+      legend span {
+        font-family: $vs-regular;
+        font-size: 1.125rem;
+        text-transform: capitalize;
+      }
+    }
+
+    #edit-checkout-guest-checkout-as-guest {
+      text-transform: uppercase;
+    }
+  }
+
+  #edit-checkout-login {
+    .request-password-link {
+      color: $checkout_request_password_link;
+
+      @include breakpoint($tablet) {
+        text-decoration: underline;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  #block-youllbeableto a {
+    font-family: $vs-regular;
+    font-weight: normal;
+    text-transform: none;
+  }
+
+  .tab {
+    font-size: 0.875rem;
+    text-transform: capitalize;
+    height: 3.625rem;
+
+    @include breakpoint($tablet) {
+      height: auto;
+    }
+
+    &.tab-separator {
+      height: auto;
+    }
+  }
+
+  .fieldset-wrapper {
+    .checkout-guest-email-usage,
+    .checkout-guest-summary {
+      text-align: center;
+      font-size: 0.875rem;
+
+      @include breakpoint($tablet) {
+        text-align: $left;
+      }
+    }
+  }
+
+  &.user-page .checkout-login-actions-wrapper {
+    a {
+      color: $checkout_login_form_action;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.block-customer-service-block {
+  font-family: $vs-regular;
+  font-size: 0.875rem;
+  text-transform: none;
+
+  h3 {
+    font-family: $vs-bold;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  p {
+    color: $checkout_footer_light_txt;
+
+    &:last-child .light {
+      font-family: $vs-regular;
+      color: $checkout_footer_light_txt;
+    }
+  }
+}
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-login,
+.alias--cart-checkout-payment,
+.alias--cart-checkout-confirmation {
+  .site-brand-home {
+    .secure__checkout--block {
+      font-size: 0.875rem;
+    }
+
+    .icon-ic_login {
+      font-size: 1rem;
+      background: $checkout_securely_icon_bg;
+      color: $checkout_securely_icon_txt;
+      padding: 0.125rem;
+      display: inline-block;
+      margin-#{$left}: 0.75rem;
+      height: 1.375rem;
+      width: 1.375rem;
+      vertical-align: middle;
+      border-radius: 100%;
+      text-align: center;
+
+      &::before {
+        font-weight: normal;
+      }
+    }
+  }
+}

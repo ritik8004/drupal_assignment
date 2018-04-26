@@ -1,0 +1,22 @@
+.messages {
+  &.messages--status {
+    background: $default_msg_bg;
+    color: $default_msg_text;
+    border: 1px solid $default_msg_border;
+
+    &::before {
+      color: $default_msg_icon;
+    }
+  }
+}
+
+.messages__wrapper {
+  .messages {
+    &.messages--status,
+    &.messages--warning,
+    &.messages--error {
+      font-family: $vs-regular;
+      font-size: 0.875rem;
+    }
+  }
+}

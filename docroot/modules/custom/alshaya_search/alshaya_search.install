@@ -30,6 +30,36 @@ function alshaya_search_post_update_8012(&$sandbox) {
 /**
  * Implements hook_update_N().
  *
+ * Expand only one category at a time.
+ */
+function alshaya_search_update_8013() {
+  alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
+  alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+}
+
+/**
+ * Implements hook_post_update_NAME().
+ *
+ * Re-save index to create required tables.
+ *
+ * We do this in post update hook as it doesn't work together with config update
+ * in normal hook_update.
+ */
+function alshaya_search_post_update_8012(&$sandbox) {
+  // Queue items for re-indexing. Required specifically for search_api_db to
+  // avoid creating tables with numeric prefixes when indexing content.
+  $index = Index::load('product');
+
+  // Re-index all items.
+  $index->reindex();
+
+  // Save index to reflect new category field.
+  $index->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updated facets config.
  */
 function alshaya_search_update_8012() {

@@ -59,10 +59,14 @@
   .c-products__item__label {
     font-size: 0.8125rem;
     font-family: $alshaya-thin;
-    color: $grey-ash;
+    color: $pdp_sell_title;
     font-weight: normal;
     max-width: 10rem;
     margin: 0.625rem auto;
+
+    a {
+      color: $pdp_sell_title;
+    }
 
     &:hover {
       text-decoration: underline;

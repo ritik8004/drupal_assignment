@@ -1,0 +1,7 @@
+name: 'Alshaya Promo Panel'
+type: module
+description: 'Alshaya Promo panel to show in the footer.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - block_content_machine_name:block_content_machine_name

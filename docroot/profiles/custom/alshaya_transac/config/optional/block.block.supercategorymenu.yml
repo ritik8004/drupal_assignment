@@ -2,7 +2,7 @@ langcode: en
 status: false
 dependencies:
   module:
-    - alshaya_main_menu
+    - alshaya_super_category
   theme:
     - alshaya_white_label
 id: supercategorymenu
@@ -10,10 +10,10 @@ theme: alshaya_white_label
 region: header_primary
 weight: 0
 provider: null
-plugin: alshaya_main_menu_super_category
+plugin: alshaya_super_category_menu
 settings:
-  id: alshaya_main_menu_super_category
-  label: 'Alshaya main menu super category'
-  provider: alshaya_main_menu
+  id: alshaya_super_category_menu
+  label: 'Alshaya super category menu'
+  provider: alshaya_super_category
   label_display: '0'
 visibility: {  }

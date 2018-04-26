@@ -5,7 +5,29 @@
  * Install, update and uninstall hooks for the alshaya_transac subprofile.
  */
 
-use Drupal\Core\Site\Settings;
+/**
+ * Implements hook_update_N().
+ *
+ * Enable alshaya_super_category.
+ */
+function alshaya_transac_update_8106() {
+  // Delete existing super category menu block.
+  alshaya_block_delete_blocks(['supercategorymenu']);
+  \Drupal::service('module_installer')->install(['alshaya_super_category']);
+  // Move super category block from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install config for department page block.
+ */
+function alshaya_transac_update_8105() {
+  alshaya_config_install_configs(['block.block.views_block__product_category_level_2_3_block_2'], 'alshaya_transac', 'optional');
+  // Move super category block from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
+}
 
 /**
  * Implements hook_update_N().
@@ -97,6 +119,7 @@ function alshaya_transac_install() {
     'alshaya_seo_transac',
     'alshaya_stores_finder',
     'alshaya_stores_finder_transac',
+    'alshaya_super_category',
     'alshaya_user',
     'alshaya_acm_knet',
     'alshaya_static_html',

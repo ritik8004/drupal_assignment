@@ -2,7 +2,7 @@
 {% set attributes = attributes.addClass('c-pdp', 'l-one--w') %}
 <div>
   <!-- ______________________ MENU SECONDARY _______________________ -->
-
+{% block header_precontent %}
   <div class="header--wrapper">
     {% if page.menu_secondary %}
       <div class="c-menu-secondary">
@@ -55,6 +55,7 @@
       </div>
     {% endif %}
   </div>
+  {% endblock %}
 
   <!-- ______________________ BREADCRUMB _______________________ -->
 
@@ -160,8 +161,10 @@
     {% endif %}
 
     {% if page.footer_primary %}
+      {% block primary_footer %}
         {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
       <!-- /footer-primary -->
+      {% endblock %}
     {% endif %}
 
     <!-- ______________________ FOOTER SECONDARY _______________________ -->

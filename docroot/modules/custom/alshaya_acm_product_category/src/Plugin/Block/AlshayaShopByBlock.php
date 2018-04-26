@@ -9,6 +9,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides Shop by block.
@@ -42,6 +43,13 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
   protected $productCategoryTree;
 
   /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaShopByBlock constructor.
    *
    * @param array $configuration
@@ -54,11 +62,14 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
    *   The factory for configuration objects.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ProductCategoryTree $product_category_tree) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ProductCategoryTree $product_category_tree, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -70,7 +81,8 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('alshaya_acm_product_category.product_category_tree')
+      $container->get('alshaya_acm_product_category.product_category_tree'),
+      $container->get('module_handler')
     );
   }
 
@@ -84,18 +96,9 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     // Set default parent_id 0 to load first level category terms.
     $parent_id = 0;
 
-    // Load category top level menu settings.
-    $config = $this->configFactory->get('alshaya_acm_product_category.super_category.settings');
-    if ($config->get('status')) {
-      // Set the default parent from settings.
-      $parent_id = $config->get('default_category_tid');
-      // Get the term id from the current path, and display only the related
-      // second level child terms.
-      if ($parent = $this->productCategoryTree->getCategoryTermRootParent($term)) {
-        // Get the top level parent id if parent exists.
-        $parent_id = $parent->id();
-      }
-    }
+    $context = ['block' => $this->getBaseId(), 'term' => $term];
+    // Invoke the alter hook to allow all modules to update parent_id.
+    $this->moduleHandler->alter('product_category_parent', $parent_id, $context);
 
     // Child terms of given parent term id.
     $term_data = $this->productCategoryTree->getCategoryTreeCached($parent_id);

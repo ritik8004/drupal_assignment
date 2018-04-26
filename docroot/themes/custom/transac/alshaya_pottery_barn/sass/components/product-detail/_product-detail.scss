@@ -1,0 +1,47 @@
+.c-pdp {
+  .content__title_wrapper h1 span {
+    font-weight: 300;
+  }
+
+  .delivery-options-wrapper,
+  .short-description-wrapper {
+    .field__label {
+      font-weight: 600;
+    }
+  }
+
+  .description-wrapper {
+    .desc-label {
+      font-weight: 600;
+    }
+
+    @include breakpoint($tablet) {
+      border: none;
+    }
+
+    .desc-wrapper,
+    .description-section,
+    .address {
+      border-color: $pdp_sidebar_desc_overlay_section_border;
+    }
+  }
+
+  .delivery-options-wrapper {
+    .c-accordion__title {
+      .subtitle {
+        color: $pdp_delivery_options_subtitle;
+        text-transform: none;
+      }
+    }
+  }
+}
+
+.field--name {
+  &-field-skus {
+    .sku-base-form {
+      button[type="submit"] {
+        text-transform: uppercase;
+      }
+    }
+  }
+}

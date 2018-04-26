@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - lightning_core
+    - paragraphs
+third_party_settings:
+  lightning_core:
+    description: ''
+id: paragraph.hightlight_image_186x184
+label: hightlight_image(186X184)
+targetEntityType: paragraph
+cache: true
