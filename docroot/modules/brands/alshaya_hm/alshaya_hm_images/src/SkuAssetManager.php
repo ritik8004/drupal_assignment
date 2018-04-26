@@ -437,7 +437,7 @@ class SkuAssetManager {
    *   Array of RGB color values keyed by article_castor_id.
    */
   public function getColorsForSku(SKU $sku) {
-    $child_skus = $this->skuManager->getChildSkus($sku);
+    $child_skus = $this->skuManager->getChildrenSkus($sku);
     $article_castor_ids = [];
     $traversed_article_castor_ids = [];
 
@@ -445,22 +445,22 @@ class SkuAssetManager {
       return [];
     }
 
+    $child_sku_ids = $this->skuManager->getEntityIdsBySku($child_skus);
     $plugin_definition = $this->skuPluginManager->pluginFromSKU($sku);
 
     $class = $plugin_definition['class'];
     $plugin = new $class();
 
-    foreach ($child_skus as $child_sku) {
-      if ($child_sku instanceof SKU) {
-        // Avoid duplicate colors in cases of corrupt data.
-        // e.g., color label= '' for rgb_color=#234567 &
-        // color_label=grey for rgb_color=#234567. Also, return back
-        // color label-code mapping uniquely identified by an article_castor_id.
-        if (!empty($article_castor_id = $plugin->getAttributeValue($child_sku, 'article_castor_id')) &&
-          (!in_array($article_castor_id, $traversed_article_castor_ids))) {
-          $traversed_article_castor_ids[] = $article_castor_id;
-          $article_castor_ids[$child_sku->get('attr_color_label')->value] = $child_sku->get('attr_rgb_color')->value;
-        }
+    foreach ($child_sku_ids as $child_sku) {
+      // Avoid duplicate colors in cases of corrupt data.
+      // e.g., color label= '' for rgb_color=#234567 &
+      // color_label=grey for rgb_color=#234567. Also, return back
+      // color label-code mapping uniquely identified by an article_castor_id.
+      if (!empty($article_castor_id = $plugin->getAttributeValue($child_sku, 'article_castor_id')) &&
+        (!in_array($article_castor_id, $traversed_article_castor_ids))) {
+        $traversed_article_castor_ids[] = $article_castor_id;
+        $color_attributes = $this->getColorAttributesFromSku($child_sku);
+        $article_castor_ids[$color_attributes['attr_color_label']] = $color_attributes['attr_rgb_color'];
       }
     }
 
@@ -514,6 +514,24 @@ class SkuAssetManager {
       $images = $this->getChildSkuAssets($sku, $page_type, $image_types);
     }
     return $images;
+  }
+
+  /**
+   * Helper function to get color label & rgb code for SKU.
+   *
+   * @param int $sku_id
+   *   Entity id for the SKU being processed.
+   *
+   * @return array
+   *   Associative array returning color label & code.
+   */
+  public function getColorAttributesFromSku($sku_id) {
+    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $query = \Drupal::database()->select('acq_sku_field_data', 'asfd');
+    $query->fields('asfd', ['attr_color_label', 'attr_rgb_color']);
+    $query->condition("id", $sku_id);
+    $query->condition("langcode", $current_langcode);
+    return $query->execute()->fetchAssoc();
   }
 
 }
