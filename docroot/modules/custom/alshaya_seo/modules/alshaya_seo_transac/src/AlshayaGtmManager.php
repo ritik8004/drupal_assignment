@@ -624,7 +624,7 @@ class AlshayaGtmManager {
       // We receive address id in case of authenticated users & address as an
       // extension attribute for anonymous.
       elseif (((isset($address['customer_address_id']) && (!empty($address['customer_address_id']))) ||
-        (isset($address['extension'], $address['extension']['address_area_segment']))) &&
+        (isset($address['extension'], $address['extension']['area']))) &&
         ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
         // For HD we use step 3 if we have address saved.
         $attributes['step'] = 3;
