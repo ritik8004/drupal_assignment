@@ -9,8 +9,17 @@
   }
 }
 
-.user-page .multistep-checkout .form-submit {
-  font-weight: normal !important;
+.user-page {
+  .multistep-checkout {
+    .form-submit {
+      font-weight: normal !important;
+    }
+  }
+
+  &.checkout-delivery main form .form-actions a,
+  label.option p a {
+    font-weight: 600 !important;
+  }
 }
 
 .alias--cart-checkout-delivery,
