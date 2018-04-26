@@ -10,7 +10,7 @@ id: paragraph.promo_block_button.field_button_position
 field_name: field_button_position
 entity_type: paragraph
 bundle: promo_block_button
-label: 'Button position'
+label: 'Live text position'
 description: ''
 required: true
 translatable: true

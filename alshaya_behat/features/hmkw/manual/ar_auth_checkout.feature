@@ -96,7 +96,7 @@ Feature: As an authenticated user
   Scenario: As an authenticated user
     I should be able to checkout using Click and Collect
     and pay by KNET on Arabic site
-    When I follow "اختر واستلم"
+    When I follow "الاستلام من محلاتنا"
     And I wait for AJAX to finish
     When I select a store on arabic
     When I select a payment option "payment_method_title_knet"
@@ -119,18 +119,20 @@ Feature: As an authenticated user
     And I fill in "Ecom_Payment_Pin" with "1234"
     And I press "إرسال"
     And I press "تأكيد العملية"
+    And I wait 5 seconds
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
-  @cc @cs
+  @cc @cs @dd
   Scenario: As an authenticated user
   I should be able to checkout using Click and Collect
   and pay by Cybersource on Arabic site
-    When I follow "اختر واستلم"
+    When I follow "الاستلام من محلاتنا"
     And I wait for AJAX to finish
     When I select a store on arabic
+    And I wait 10 seconds
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
@@ -146,7 +148,7 @@ Feature: As an authenticated user
     When I accept terms and conditions
     And I wait for the page to load
     When I press "سجل الطلبية"
-    When I wait 10 seconds
+    When I wait 20 seconds
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"

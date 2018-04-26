@@ -1,0 +1,78 @@
+.c-menu-primary {
+  display: block;
+  height: auto;
+
+  .region__menu-primary {
+    @include breakpoint ($desktop) {
+      float: $left;
+      width: 50%;
+    }
+
+    .menu--one__list {
+      .menu--one__link {
+        font-size: 0;
+      }
+    }
+
+    .menu--one__link {
+      &::after {
+        content: "";
+        width: 3.4375rem;
+        height: 1.5625rem;
+        display: block;
+        margin: auto;
+      }
+
+      &.brand-victoria-secret {
+        &::after {
+          background: url("../imgs/logos/super-category/vsecret.svg") no-repeat center;
+          background-size: contain;
+        }
+
+        &:hover::after {
+          background: url("../imgs/logos/super-category/vsecret-active.svg") no-repeat center;
+          background-size: contain;
+        }
+      }
+
+      &.brand-pink {
+        &::after {
+          background: url("../imgs/logos/super-category/pink.svg") no-repeat center;
+          background-size: contain;
+        }
+      }
+
+      &.brand-victoria-sport {
+        &::after {
+          background: url("../imgs/logos/super-category/vsport.svg") no-repeat center;
+          background-size: contain;
+        }
+
+        &:hover::after {
+          background: url("../imgs/logos/super-category/vsport-active.svg") no-repeat center;
+          background-size: contain;
+        }
+      }
+    }
+
+    .active {
+      .brand-victoria-secret::after {
+        background: url("../imgs/logos/super-category/vsecret-active.svg") no-repeat center;
+        background-size: contain;
+      }
+
+      .brand-victoria-sport::after {
+        background: url("../imgs/logos/super-category/vsport-active.svg") no-repeat center;
+        background-size: contain;
+      }
+    }
+  }
+}
+
+.header--fixed {
+  .c-header__wrapper--inner {
+    @include breakpoint($desktop) {
+      display: none;
+    }
+  }
+}

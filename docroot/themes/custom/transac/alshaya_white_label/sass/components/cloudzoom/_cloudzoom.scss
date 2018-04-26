@@ -411,3 +411,20 @@
     left: 0;
   }
 }
+
+// Horizontal main slider on PDP.
+.slider-position-bottom {
+  .cloudzoom .cloudzoom__thumbnails {
+    width: 100%;
+  }
+
+  #product-image-gallery,
+  #lightSlider {
+    height: auto;
+    width: 100%;
+
+    .slick-slide {
+      width: auto !important;
+    }
+  }
+}

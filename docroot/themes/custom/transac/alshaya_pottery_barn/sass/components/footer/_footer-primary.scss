@@ -25,4 +25,22 @@
       }
     }
   }
+
+  .primary--footer--right {
+    @include breakpoint($desktop) {
+      width: 26.5%;
+    }
+  }
+
+  .footer--categories {
+    @include breakpoint($desktop) {
+      width: 38.2%;
+    }
+  }
+
+  .footer--abouthelp {
+    @include breakpoint($desktop) {
+      width: 58.7%;
+    }
+  }
 }

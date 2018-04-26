@@ -6,7 +6,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  if (window.outerWidth < 768) {
+  if ($(window).width() < 768) {
     if (navigator.userAgent.match(/Mobi/)) {
       $('a[data-dialog-type="modal"],  a.mobile-link').each(function () {
         $(this).removeClass('use-ajax');

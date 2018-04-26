@@ -1,0 +1,56 @@
+.c-facet__label {
+  font-size: 0.75rem;
+  text-transform: none;
+  font-family: $vs-regular;
+
+  @include breakpoint($desktop) {
+    text-transform: uppercase;
+    font-family: $vs-bold;
+  }
+}
+
+.c-facet__blocks {
+  .facet-item .facet-item__value,
+  .c-accordion__title {
+    text-transform: none;
+  }
+
+  .facet-item .facet-item__value,
+  .facet-item .facet-item__count {
+    line-height: 1.57;
+    vertical-align: middle;
+    margin-top: 0.125rem;
+    display: inline-block;
+  }
+
+  input[type=checkbox] ~ label::before {
+    margin-#{$left}: -0.5rem;
+  }
+}
+
+.c-facet__blocks__wrapper--mobile {
+  .c-facet__label {
+    border-#{$right}: 0;
+
+    &::after {
+      border: 1px solid $plp_facet_label_border_mobile;
+      border-#{$left}: 0;
+    }
+  }
+}
+
+.c-facet {
+  a {
+    text-transform: none;
+  }
+
+  & > a {
+    margin-bottom: 0.625rem;
+
+    &::after {
+      content: "";
+      display: block;
+      height: 0.625rem;
+    }
+  }
+}

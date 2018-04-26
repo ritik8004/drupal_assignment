@@ -2,7 +2,7 @@
 Feature: Test the PLP page
 
   Background:
-    Given I am on "/ladies"
+    Given I am on "/en/ladies/new-arrivals/clothes"
     And I wait for the page to load
 
   @eng @prod
@@ -47,7 +47,7 @@ Feature: Test the PLP page
     And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
@@ -146,7 +146,7 @@ Feature: Test the PLP page
     And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
@@ -184,7 +184,7 @@ Feature: Test the PLP page
     And I wait for AJAX to finish
     When I press "أضف إلى سلة التسوق"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load

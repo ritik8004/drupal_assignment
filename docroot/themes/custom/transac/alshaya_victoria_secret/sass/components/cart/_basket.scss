@@ -1,0 +1,97 @@
+.alias--cart {
+  .edit-checkout,
+  #edit-actions-top .checkout-top-button {
+    text-transform: uppercase;
+    padding: 0 0.125rem;
+    line-height: 2.5;
+    font-size: 0.875rem;
+  }
+
+  #table-cart-totals {
+    .edit-continue-shopping-mobile,
+    #edit-continue-shopping-mobile {
+      text-decoration: underline;
+      text-transform: none;
+      font-size: 0.875rem;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  #edit-continue-shopping-mobile,
+  .edit-continue-shopping-mobile {
+    border: 0;
+  }
+}
+
+.promo-continue-shopping-wrapper {
+  #coupon-button.add {
+    text-transform: uppercase;
+  }
+}
+
+.block-basket-horizontal-recommendation > h3 {
+  font-size: 1.125rem;
+  font-family: $vs-regular;
+  text-align: center;
+  text-transform: none;
+  margin-bottom: 0.3rem;
+  padding-bottom: 0.56rem;
+}
+
+.empty-cart-wrapper {
+  .empty-cart-message {
+    text-transform: uppercase;
+    font-size: 2.25rem;
+    margin-top: 5.625rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 8.875rem;
+    }
+  }
+
+  #edit-continue-shopping-mobile,
+  .edit-continue-shopping-mobile,
+  #edit-continue-shopping {
+    border: 0;
+    background-color: $primary_btn_bg;
+    color: $primary_btn_text;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    font-family: $vs-bold;
+    padding: 0.75rem;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
+}
+
+.path--cart {
+  .contains--tooltip {
+    .tooltip {
+      font-size: 0.75rem;
+    }
+  }
+
+  #table-cart-items {
+    table {
+      tr {
+        td {
+          .dark a {
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+#cart_notification {
+  .notification .col-2 a,
+  .error .col-2 a {
+    text-transform: uppercase;
+  }
+}

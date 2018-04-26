@@ -558,6 +558,7 @@ header {
   @include breakpoint($upto-desktop) {
     ul {
       padding: 0;
+      width: 100%;
     }
   }
 
@@ -866,9 +867,24 @@ header {
       font-family: $alshaya-bold;
       font-weight: normal;
       display: block;
-      font-size: 14px;
+      font-size: 0.875rem;
       color: $mm_highlight_label;
       margin-bottom: 0.8rem;
+    }
+
+    .hightlight__title {
+      display: block;
+      font-family: $alshaya-bold;
+      margin-top: 0.625rem;
+      font-size: 0.75rem;
+      color: $mm_highlight_title;
+    }
+
+    .hightlight__description {
+      font-size: 0.875rem;
+      color: $mm_highlight_description;
+      margin-top: 0.25rem;
+      display: block;
     }
   }
 

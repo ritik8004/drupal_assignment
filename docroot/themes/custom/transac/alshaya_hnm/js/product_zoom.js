@@ -392,24 +392,36 @@
         }
       });
 
-      $('#lightSlider .slick-prev', context).on('click', function () {
+      $('#lightSlider .slick-prev').on('click', function () {
         var previndex = $(this).parent().slick('slickCurrentSlide');
         $(this).parent().slick('slickGoTo', previndex);
         var prevImage = $(this).parent().find('li[data-slick-index = "' + previndex + '"] a.cloudzoom__thumbnails__image').attr('href');
-        $('.acq-content-product #cloud-zoom-wrap img').attr('src', prevImage);
-        $('.acq-content-product #cloud-zoom-wrap img').css('transform', 'scale(1)');
-        $('.acq-content-product #cloud-zoom-wrap iframe').remove();
-        $('.acq-content-product #cloud-zoom-wrap img').show();
+        var imgTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap img');
+        var bigimgTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap a#cloud-zoom');
+        var cloudzoomBig = $(this).parent().parent().parent().find('#cloud-zoom-wrap #cloud-zoom-big');
+        var iframeTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap iframe');
+        cloudzoomBig.css('background-image', 'url(' + prevImage + ')');
+        bigimgTag.attr('href', prevImage);
+        imgTag.attr('src', prevImage);
+        imgTag.css('transform', 'scale(1)');
+        iframeTag.remove();
+        imgTag.show();
       });
 
-      $('#lightSlider .slick-next', context).on('click', function () {
+      $('#lightSlider .slick-next').on('click', function () {
         var nextindex = $(this).parent().slick('slickCurrentSlide');
         $(this).parent().slick('slickGoTo', nextindex);
         var nextImage = $(this).parent().find('li[data-slick-index = "' + nextindex + '"] a.cloudzoom__thumbnails__image').attr('href');
-        $('.acq-content-product #cloud-zoom-wrap img').attr('src', nextImage);
-        $('.acq-content-product #cloud-zoom-wrap img').css('transform', 'scale(1)');
-        $('.acq-content-product #cloud-zoom-wrap iframe').remove();
-        $('.acq-content-product #cloud-zoom-wrap img').show();
+        var bigimgTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap a#cloud-zoom');
+        var cloudzoomBig = $(this).parent().parent().parent().find('#cloud-zoom-wrap #cloud-zoom-big');
+        var imgTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap img');
+        var iframeTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap iframe');
+        cloudzoomBig.css('background-image', 'url(' + nextImage + ')');
+        bigimgTag.attr('href', nextImage);
+        imgTag.attr('src', nextImage);
+        imgTag.css('transform', 'scale(1)');
+        iframeTag.remove();
+        imgTag.show();
       });
 
       // Preventing click on image.

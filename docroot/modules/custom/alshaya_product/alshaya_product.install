@@ -12,6 +12,39 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Adding new 'category' facet to the PLP page.
+ */
+function alshaya_product_update_8015() {
+  // New category facet.
+  $category_facet_config = [
+    'facets.facet.plp_category_facet',
+  ];
+  alshaya_config_install_configs($category_facet_config, 'alshaya_product');
+
+  // Facet summary to update config.
+  $facet_summary_config = [
+    'facets_summary.facets_summary.filter_bar_plp',
+  ];
+
+  alshaya_config_install_configs($facet_summary_config, 'alshaya_product', 'optional');
+
+  $facet_block_config = [
+    'block.block.plpcategoryfacet',
+  ];
+  alshaya_config_install_configs($facet_block_config, 'alshaya_transac', 'optional');
+
+  // Get current default theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+
+  // Move blocks to current default theme.
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updated facets config.
  */
 function alshaya_product_update_8014() {

@@ -11,6 +11,26 @@ set classes = [
 
   <article{{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
+    <div class="content__main {{ image_slider_position_pdp }}">
+      {{ content.gallery }}
+      <div class="horizontal-crossell above-mobile-block">
+        {{ content.cross_sell }}
+      </div>
+
+      {% if content.up_sell %}
+        <div class="horizontal-upell above-mobile-block">
+          {{ content.up_sell }}
+        </div>
+      {% endif %}
+
+      {% if content.related %}
+        <div class="horizontal-related above-mobile-block">
+          {{ content.related }}
+        </div>
+      {% endif %}
+
+    </div>
+
     <div class="content__title_wrapper">
       {% if content.brand_logo %}
         <div class="brand-logo-wrapper">
@@ -36,25 +56,6 @@ set classes = [
       </div>
     </div>
 
-    <div class="content__main">
-      {{ content.gallery }}
-      <div class="horizontal-crossell above-mobile-block">
-			  {{ content.cross_sell }}
-      </div>
-
-      {% if content.up_sell %}
-        <div class="horizontal-upell above-mobile-block">
-          {{ content.up_sell }}
-        </div>
-      {% endif %}
-
-      {% if content.related %}
-        <div class="horizontal-related above-mobile-block">
-          {{ content.related }}
-        </div>
-      {% endif %}
-
-    </div>
     <div class="content__sidebar">
       <div class="mobile-content-wrapper">
         <div class="basic-details-wrapper">

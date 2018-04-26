@@ -1,0 +1,12 @@
+.button {
+  &.status-pending,
+  &.status-delivered,
+  &.status-complete,
+  &.status-processing,
+  &.status-returned {
+    font-family: $vs-bold;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    font-weight: normal;
+  }
+}

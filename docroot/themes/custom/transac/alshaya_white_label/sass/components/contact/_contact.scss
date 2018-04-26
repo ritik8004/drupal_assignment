@@ -325,3 +325,23 @@ html[lang=ar] {
     display: inline-block;
   }
 }
+
+.webform-submission-alshaya-contact-add-form {
+  .form-item {
+    &.form-type-textfield,
+    &.form-type-textarea,
+    &.form-type-email {
+      label {
+        &:last-of-type {
+          text-transform: lowercase;
+        }
+      }
+    }
+  }
+
+  .mobile-number-field {
+    label {
+      text-transform: lowercase;
+    }
+  }
+}

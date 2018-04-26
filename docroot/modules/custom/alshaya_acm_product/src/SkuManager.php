@@ -845,7 +845,7 @@ class SkuManager {
       ->condition('type', $type, '=')
       ->condition('langcode', $langcode, '=');
 
-    return array_keys($query->execute()->fetchAllKeyed(0));
+    return array_keys($query->execute()->fetchAllKeyed(0, 0));
   }
 
   /**
@@ -1046,7 +1046,7 @@ class SkuManager {
    *   Linked SKUs for requested type.
    */
   public function getLinkedSkus(SKU $sku, $type) {
-    $linked_skus = $this->linkedSkus->getLinkedSKus($sku);
+    $linked_skus = $this->linkedSkus->getLinkedSKus($sku, $type);
 
     $linked_skus_requested = [];
 

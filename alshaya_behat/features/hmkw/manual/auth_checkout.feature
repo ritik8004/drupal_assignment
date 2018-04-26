@@ -9,7 +9,7 @@ Feature: As an authenticated user
     Then I should see the link "My account"
     When I am on a configurable product
     And I wait for the page to load
-    When I press "Add to cart"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     When I go to "/cart"
     And I wait for the page to load
@@ -61,6 +61,7 @@ Feature: As an authenticated user
       And I fill in "Ecom_Payment_Pin_id" with "1234"
       And I press "Submit"
       And I press "Confirm"
+      And I wait 5 seconds
       And I wait for the page to load
       Then I should see text matching "Thank you for shopping online with us, Test Test "
       And I should see text matching "Your order number is "
@@ -84,6 +85,7 @@ Feature: As an authenticated user
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I accept terms and conditions
     And I press "place order"
+    And I wait 10 seconds
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
@@ -112,6 +114,7 @@ Feature: As an authenticated user
     And I fill in "Ecom_Payment_Pin" with "1234"
     And I press "Submit"
     And I press "Confirm"
+    And I wait 5 seconds
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
@@ -136,6 +139,7 @@ Feature: As an authenticated user
     When I fill in "edit-billing-address-address-billing-address-line2" with "1"
     And I accept terms and conditions
     And I press "place order"
+    And I wait 10 seconds
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
