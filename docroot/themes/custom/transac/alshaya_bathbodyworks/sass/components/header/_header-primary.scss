@@ -178,16 +178,14 @@ header {
     }
 
     .cart-link-total {
-      margin-top: 0.3125rem;
-      margin-#{$right}: 0.125rem;
-      padding-#{$right}: 1rem;
+      margin-top: 0.81rem;
     }
 
     .quantity {
       font-size: 0.75rem;
-      font-family: $alshaya-thin-nodir;
-      bottom: -0.625rem;
+      bottom: -0.325rem;
       line-height: 1.87;
+      #{$left}: -0.2rem;
     }
   }
 
