@@ -31,6 +31,7 @@ $_gray_eight: #c8c8c8;
 $_gray_nine: #555;
 $_gray_ten: #777;
 $_gray_eleven: #dadada;
+$_gray_twelve: #f9f9f9;
 
 // Overrides for variables.
 // Global elements.
@@ -308,12 +309,17 @@ $checkout_tab_default_title: $PB_grey_one;
 $checkout_tab_active_title: $PB_black_one;
 $checkout_tab_active_description: $PB_deep_red;
 $checkout_tab_separator: $PB_black_one;
+
+// Checkout progress.
 $checkout_progress_bg: $PB_white;
+$checkout_progress_complete_text: $PB_grey_one;
 
 // Order summary block.
 $order_summary_caption_bg: $PB_grey_five;
 $order_summary_content_bg: $PB_white;
 $order_summary_totals_bg: $PB_grey_five;
+$order_summary_delivery_type_bg: $PB_white;
+$order_summary_address_bg: $PB_white;
 
 // Checkout login.
 $checkout_login_tab_border: $_gray_eight;
@@ -349,3 +355,12 @@ $checkout_cc_selected_store_content_border: $_gray_eleven;
 $checkout_cc_selected_store_content_bg: $white-two;
 $checkout_cc_help_text: $PB_black_one;
 $checkout_cc_help_text_content: $PB_grey_one;
+
+// Checkout payment.
+$checkout_payment_row_selected: $_gray_twelve;
+$checkout_payment_row_default: $white-two;
+$checkout_payment_row_hover: $_gray_twelve;
+$checkout_payment_method_title: $PB_black_one;
+$checkout_payment_method_icon_bg: $_gray_twelve;
+$checkout_payment_method_desc: $PB_grey_one;
+$checkout_payment_option_border: $_gray_eleven;
