@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e097b70a2be6e163dcab57a3d31a368c",
+    "content-hash": "add4ba1187e3cacfa603234d5a3ccb09",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -2748,7 +2748,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-11-03 01:51:12"
+            "time": "2017-11-03T01:51:12+00:00"
         },
         {
             "name": "drupal/block_content_machine_name",
@@ -3036,7 +3036,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/clientside_validation"
             },
-            "time": "2018-01-30 07:21:06"
+            "time": "2018-01-30T07:21:06+00:00"
         },
         {
             "name": "drupal/coder",
@@ -5205,7 +5205,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/google_tag"
             },
-            "time": "2018-01-02 23:43:05"
+            "time": "2018-01-02T23:43:05+00:00"
         },
         {
             "name": "drupal/image_widget_crop",
@@ -5514,7 +5514,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.15",
-                    "datestamp": "1524679677",
+                    "datestamp": "1522558384",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5698,7 +5698,7 @@
                 "issues": "http://drupal.org/project/issues/libraries",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-03-15 17:04:08"
+            "time": "2017-03-15T17:04:08+00:00"
         },
         {
             "name": "drupal/machine_name_widget",
@@ -5970,7 +5970,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/media_entity_actions"
             },
-            "time": "2017-11-13 15:49:17"
+            "time": "2017-11-13T15:49:17+00:00"
         },
         {
             "name": "drupal/media_entity_document",
@@ -6021,7 +6021,7 @@
                 "source": "https://www.drupal.org/project/media_entity_document",
                 "issues": "https://www.drupal.org/project/issues/media_entity_document"
             },
-            "time": "2017-10-24 14:14:45"
+            "time": "2017-10-24T14:14:45+00:00"
         },
         {
             "name": "drupal/media_entity_image",
@@ -6081,7 +6081,7 @@
                 "source": "https://www.drupal.org/project/media_entity_image",
                 "issues": "https://www.drupal.org/project/issues/media_entity_image"
             },
-            "time": "2017-10-24 13:23:24"
+            "time": "2017-10-24T13:23:24+00:00"
         },
         {
             "name": "drupal/media_entity_instagram",
@@ -6717,7 +6717,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/mimemail"
             },
-            "time": "2017-05-14 15:11:59"
+            "time": "2017-05-14T15:11:59+00:00"
         },
         {
             "name": "drupal/mobile_number",
@@ -7764,7 +7764,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/r4032login"
             },
-            "time": "2017-02-08 04:20:19"
+            "time": "2017-02-08T04:20:19+00:00"
         },
         {
             "name": "drupal/recaptcha",
@@ -7827,7 +7827,7 @@
                 "source": "http://git.drupal.org/project/recaptcha.git",
                 "issues": "https://www.drupal.org/project/issues/recaptcha"
             },
-            "time": "2017-04-02 21:15:08"
+            "time": "2017-04-02T21:15:08+00:00"
         },
         {
             "name": "drupal/redirect",
@@ -8521,7 +8521,7 @@
             "support": {
                 "issues": "http://drupal.org/"
             },
-            "time": "2017-03-02 15:34:04"
+            "time": "2017-03-02T15:34:04+00:00"
         },
         {
             "name": "drupal/seckit",
@@ -8630,7 +8630,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/security_review"
             },
-            "time": "2016-10-20 15:43:48"
+            "time": "2016-10-20T15:43:48+00:00"
         },
         {
             "name": "drupal/sharethis",
@@ -8915,7 +8915,7 @@
                 "issues": "https://drupal.org/project/issues/simple_sitemap",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2018-01-01 23:13:47"
+            "time": "2018-01-01T23:13:47+00:00"
         },
         {
             "name": "drupal/taxonomy_access_fix",
@@ -9011,7 +9011,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/taxonomy_term_depth"
             },
-            "time": "2017-02-10 12:17:57"
+            "time": "2017-02-10T12:17:57+00:00"
         },
         {
             "name": "drupal/token",
@@ -9295,7 +9295,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/views_block_filter_block"
             },
-            "time": "2017-10-13 06:53:22"
+            "time": "2017-10-13T06:53:22+00:00"
         },
         {
             "name": "drupal/views_field_view",
@@ -9568,7 +9568,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/wbm2cm"
             },
-            "time": "2018-01-10 00:31:21"
+            "time": "2018-01-10T00:31:21+00:00"
         },
         {
             "name": "drupal/webform",

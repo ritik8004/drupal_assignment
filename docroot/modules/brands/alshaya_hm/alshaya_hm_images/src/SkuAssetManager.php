@@ -437,7 +437,7 @@ class SkuAssetManager {
    *   Array of RGB color values keyed by article_castor_id.
    */
   public function getColorsForSku(SKU $sku) {
-    $child_skus = $this->skuManager->getChildrenSkus($sku);
+    $child_skus = $this->skuManager->getChildrenSkuIds(($sku);
     $article_castor_ids = [];
     $traversed_article_castor_ids = [];
 
