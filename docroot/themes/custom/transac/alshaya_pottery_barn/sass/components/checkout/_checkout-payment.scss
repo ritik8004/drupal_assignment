@@ -1,0 +1,130 @@
+#payment_details {
+  .cvv-help-text-wrapper {
+    .cc_cvv_help_text {
+      &::before {
+        background: url(../imgs/cards/back-of-card.svg);
+        width: 3.1875rem;
+        height: 2.0625rem;
+      }
+    }
+
+    .mobile-tooltip-icon {
+      span.tooltip-content {
+        p {
+          &::before {
+            background: url(../imgs/cards/back-of-card.svg);
+            background-size: contain;
+          }
+        }
+      }
+    }
+  }
+}
+
+.user-page.checkout-delivery.checkout-payment {
+  .multistep-checkout {
+    border-width: 1px;
+    border-top: 1px solid $checkout_payment_form_border !important;
+  }
+
+  fieldset#edit-acm-payment-methods {
+    > legend {
+      display: block;
+      padding: 1rem 1.5rem 2rem;
+
+      span {
+        font-weight: normal;
+        font-size: 1rem;
+
+        @include breakpoint($upto-desktop) {
+          font-size: 0.875rem;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        padding: 0.75rem 0;
+      }
+    }
+
+    > .fieldset-wrapper {
+      float: $left;
+      width: 100%;
+      padding: 0 1.5rem;
+
+      @include breakpoint($only-mobile) {
+        padding: 0;
+      }
+    }
+  }
+
+  #payment_details_wrapper {
+    @include clearfix;
+
+    border: 1px solid $checkout_payment_option_border;
+
+    > .form-wrapper {
+      .payment-plugin-wrapper-div {
+        &.plugin-selected {
+          .method-title {
+            font-weight: normal;
+          }
+        }
+
+        &::before {
+          @include breakpoint($upto-desktop) {
+            margin-#{$right}: 0.5rem;
+          }
+        }
+      }
+
+      &:first-child {
+        .payment-plugin-wrapper-div {
+          border-top: none;
+        }
+      }
+
+      &:last-child {
+        .payment-plugin-wrapper-div {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+}
+
+#payment_method_cybersource {
+  #payment_details {
+    @include breakpoint($only-mobile) {
+      padding: 1rem;
+    }
+  }
+
+  .card-types-wrapper {
+    .card-type {
+      opacity: 0.3;
+      background-size: contain !important;
+
+      &.active {
+        opacity: 1;
+      }
+
+      &.card-type-visa {
+        background: url(../imgs/cards/visa-active.svg) no-repeat;
+      }
+
+      &.card-type-mastercard {
+        background: url(../imgs/cards/mastercard-active.svg) no-repeat;
+      }
+
+      &.card-type-diners-club {
+        background: url(../imgs/cards/dinersclub-active.svg) no-repeat;
+      }
+    }
+  }
+}
+
+#edit-billing-address .fieldset-wrapper {
+  @include breakpoint($only-mobile) {
+    padding: 1.375rem 0;
+  }
+}
