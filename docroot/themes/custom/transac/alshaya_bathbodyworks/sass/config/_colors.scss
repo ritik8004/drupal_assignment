@@ -19,6 +19,7 @@ $tangerine: #fa9900;
 $light-gold: #ffd65a;
 $shadow: rgba(0, 0, 0, 0.24);
 $error-red: #c00;
+$cerulean-two: #ed088c;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -263,7 +264,7 @@ $plp_pager_link_bg: $black;
 // Store finder header form.
 $store_finder_header_desktop: $black;
 $store_finder_subheader: $peacock-blue;
-$store_finder_text: $black;
+$store_finder_text: $peacock-blue;
 $store_finder_search_input_mobile_border: $warm-grey-two;
 $store_finder_search_input_border: $warm-grey-two;
 
@@ -277,8 +278,12 @@ $store_finder_glossary_border: $warm-grey-two;
 $store_finder_search_results_border: $warm-grey-two;
 $store_finder_search_results_tile_hover_bg: $white;
 $store_finder_search_results_tile_link: $warm-grey-two;
-$store_finder_search_results_tile_icon: $cerulean-two;
-$store_finder_search_results_hour_label: $black;
+$store_finder_search_results_tile_icon: $peacock-blue;
+$store_finder_search_results_hour_label: $warm-grey-one;
+$store_finder_search_results_title: $black;
+$store_finder_search_results_counter_bg: $cerulean-two;
+$store_finder_search_results_store_address: $warm-grey-one;
+$store_finder_search_results_down_arrow: $peacock-blue;
 
 // Titles.
 $page_title: $black;
