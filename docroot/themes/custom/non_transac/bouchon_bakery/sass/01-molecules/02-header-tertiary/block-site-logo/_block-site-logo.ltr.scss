@@ -1,6 +1,6 @@
 .region-page-header .site__logo {
   display: table;
-  padding: 2.1875rem 0 1.25rem;
+  padding: 1.25rem 0 0.75rem;
   margin: 0;
   height: auto;
   text-align: center;
@@ -23,7 +23,6 @@
     }
 
     @include breakpoint($lap) {
-      max-width: 8.625rem;
       max-height: none;
     }
 
@@ -64,6 +63,10 @@ header[role="banner"] {
   left: 0;
   top: 0;
   z-index: $z-9;
+
+  @include breakpoint($upto-palm) {
+    height: 3.313rem;
+  }
 }
 
 main[role="main"] {
