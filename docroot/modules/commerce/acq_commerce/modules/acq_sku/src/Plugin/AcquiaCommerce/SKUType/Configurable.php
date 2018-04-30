@@ -495,7 +495,7 @@ class Configurable extends SKUPluginBase {
 
     foreach ($configurables as $configurable) {
       $key = $configurable['code'];
-      $attribute_value = $this->getAttributeValue($sku, $key);
+      $attribute_value = $this->getAttributeValue($sku->id(), $key);
       $label = $configurable['label'];
 
       foreach ($configurable['values'] as $value) {
