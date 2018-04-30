@@ -4,3 +4,9 @@ services:
    arguments: ['@title_resolver', '@request_stack']
    tags:
     - { name: breadcrumb_builder, priority: 100 }
+
+ alshaya_advanced_page.event_subscriber:
+    class: Drupal\alshaya_advanced_page\EventSubscriber\AlshayaAdvancedPageEventSubscriber
+    arguments: ['@current_route_match']
+    tags:
+     - { name: event_subscriber }

@@ -88,7 +88,7 @@
       }
 
       &.active {
-        border: 1px solid $checkout_cc_list_map_link_active;
+        border: 1px solid $checkout_cc_list_map_link_active_border;
         font-weight: bold;
         color: $checkout_cc_list_map_link_active;
 
@@ -417,7 +417,7 @@
           .label--delivery-time {
             font-size: 0.75rem;
             font-weight: bold;
-            color: $checkout_cc_list_delivery_time;
+            color: $checkout_cc_list_delivery_time_label;
 
             @include breakpoint($desktop) {
               font-size: 0.875rem;
@@ -602,7 +602,7 @@
                 line-height: 1.57;
 
                 .key-value-key {
-                  width: 51%;
+                  width: 41%;
                   display: inline-block;
 
                   html[lang=ar] & {
@@ -662,7 +662,7 @@
 
       .store-delivery-time {
         margin-top: 1.563rem;
-        color: $checkout_cc_list_delivery_time;
+        color: $checkout_cc_list_delivery_time_label;
         font-size: 0.875rem;
 
         @include breakpoint($only-tablet) {
@@ -739,7 +739,7 @@
             line-height: 1.57;
 
             .key-value-key {
-              width: 51%;
+              width: 41%;
               display: inline-block;
 
               html[lang=ar] & {
@@ -946,7 +946,7 @@
       .label--delivery-time {
         font-size: 0.75rem;
         font-weight: bold;
-        color: $checkout_cc_list_delivery_time;
+        color: $checkout_cc_list_delivery_time_label;
 
         @include breakpoint($desktop) {
           font-size: 0.875rem;
@@ -1117,7 +1117,7 @@
           line-height: 1.57;
 
           .key-value-key {
-            width: 51%;
+            width: 41%;
             display: inline-block;
 
             html[lang=ar] & {

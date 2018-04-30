@@ -135,7 +135,7 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
     // Add department page node type cache tag.
     // This is custom cache tag and cleared in hook_presave in department
     // module.
-    $this->cacheTags[] = 'node_type:department_page';
+    $this->cacheTags[] = 'node_type:advanced_page';
 
     // Discard cache for the block once a term gets updated.
     $this->cacheTags[] = ProductCategoryTree::CACHE_TAG;

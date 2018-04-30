@@ -18,6 +18,8 @@ $bright-sky-blue: #01ccff;
 $tangerine: #fa9900;
 $light-gold: #ffd65a;
 $shadow: rgba(0, 0, 0, 0.24);
+$error-red: #c00;
+$cerulean-two: #ed088c;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -72,6 +74,22 @@ $accordion_title: $black;
 $accordion_sub_title: $black;
 $accordion_title_arrow: $peacock-blue;
 $accordion_title_disabled: $grey-ash;
+
+// Product detail page.
+$pdp_product_title: $black;
+
+// Product Add to cart form.
+$pdp_sidebar_label: $peacock-blue;
+$pdp_sidebar_link: $peacock-blue;
+$pdp_sidebar_label: $peacock-blue;
+$pdp_desc_wrapper_border: $warm-grey-two;
+
+// product details page carousel arrow
+$pdp_carousel_arrows_blue: $peacock-blue;
+
+// Out of stock button.
+$oos_btn_bg: $error-red;
+$oos_pdp_text: $white;
 
 /* ------- 6. Sections and Pages --------------- */
 
@@ -143,6 +161,16 @@ $mm_l3_link_hover: $peacock-blue;
 $mm_highlight_label: $peacock-blue;
 $mm_p_a_text: $black;
 
+//  Mini Cart.
+$primary_minicart_text: $black;
+$primary_minicart_quantity_bg: $hot-pink;
+
+// Notification popup.
+$minicart_notification_border: $peacock-blue;
+$minicart_notification_text: $peacock-blue;
+$minicart_notification_btn_bg: $black;
+$minicart_notification_product_title: $black;
+
 // Delivery tabs.
 $deliverybanner_title: $peacock-blue;
 $deliverybanner_subtitle: $peacock-blue;
@@ -165,6 +193,26 @@ $social_links_hover: transparent;
 $copyright_footer_bg: $warm-grey-three;
 $copyright_footer_text: $black;
 $copyright_footer_paragraph: $black;
+
+// Product detail page.
+$pdp_product_title: $black;
+
+// Product Add to cart form.
+$pdp_sidebar_label: $peacock-blue;
+$pdp_sidebar_link: $peacock-blue;
+$pdp_sidebar_label: $peacock-blue;
+$pdp_desc_wrapper_border: $warm-grey-two;
+
+// Accordion
+$accordion_sub_title: $warm-grey-one;
+$accordion_arrow_icon: $peacock-blue;
+
+// product details page carousel arrow
+$pdp_carousel_arrows_blue: $peacock-blue;
+
+// Out of stock button.
+$oos_btn_bg: $error-red;
+$oos_pdp_text: $white;
 
 //7. Newsletter-signup
 $newsletter_title_h3: $black;
@@ -216,7 +264,7 @@ $plp_pager_link_bg: $black;
 // Store finder header form.
 $store_finder_header_desktop: $black;
 $store_finder_subheader: $peacock-blue;
-$store_finder_text: $black;
+$store_finder_text: $peacock-blue;
 $store_finder_search_input_mobile_border: $warm-grey-two;
 $store_finder_search_input_border: $warm-grey-two;
 
@@ -230,8 +278,12 @@ $store_finder_glossary_border: $warm-grey-two;
 $store_finder_search_results_border: $warm-grey-two;
 $store_finder_search_results_tile_hover_bg: $white;
 $store_finder_search_results_tile_link: $warm-grey-two;
-$store_finder_search_results_tile_icon: $cerulean-two;
-$store_finder_search_results_hour_label: $black;
+$store_finder_search_results_tile_icon: $peacock-blue;
+$store_finder_search_results_hour_label: $warm-grey-one;
+$store_finder_search_results_title: $black;
+$store_finder_search_results_counter_bg: $cerulean-two;
+$store_finder_search_results_store_address: $warm-grey-one;
+$store_finder_search_results_down_arrow: $peacock-blue;
 
 // Titles.
 $page_title: $black;
