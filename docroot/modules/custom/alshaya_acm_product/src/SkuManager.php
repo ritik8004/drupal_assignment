@@ -1197,7 +1197,7 @@ class SkuManager {
    *
    * @todo: Rename getChildSkus function to getChildSkuEntities to avoid confusion.
    */
-  public function getChildrenSkus(SKU $sku_entity) {
+  public function getChildrenSkuIds(SKU $sku_entity) {
     $child_skus = [];
 
     if ($sku_entity->getType() == 'configurable') {

@@ -8,6 +8,16 @@
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Expand only one category at a time.
+ */
+function alshaya_search_update_8013() {
+  alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
+  alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+}
+
+/**
  * Implements hook_post_update_NAME().
  *
  * Re-save index to create required tables.

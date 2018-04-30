@@ -2,7 +2,6 @@
 Feature: Test generic features on the site
   like Header, footer and subscription
 
-
   Scenario: As a Guest user
     I should be able to view the header and the footer
     Given I am on homepage

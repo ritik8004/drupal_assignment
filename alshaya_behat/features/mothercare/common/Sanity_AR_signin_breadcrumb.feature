@@ -43,7 +43,7 @@ Feature: To verify Signin and Breadcrumbs
 
   Scenario: As an authenticated user on Arabic site
   I should be able to view breadcrumbs on My account section
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load

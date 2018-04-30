@@ -125,7 +125,6 @@ Feature: Test the product detail page
     And I wait for AJAX to finish
     Then I should be able to see the header in Arabic
     Then it should display title, price and item code
-#    Then I should see "المقاس : "
     Then I should see "الكمية"
     Then I should see the button "أضف إلى سلة التسوق"
     Then I should see "وصف المنتج"
