@@ -4,6 +4,7 @@ $cool-blue: #4e8abe;
 $cool-blue-two: #b8d1ed;
 $hot-pink: #ed088c;
 $white: #fff;
+$warm-grey-four: #f9f9f9;
 $warm-grey-three: #f2f2f2;
 $warm-grey-two: #dadada;
 $warm-grey-one: #777;
@@ -164,6 +165,22 @@ $mm_p_a_text: $black;
 $primary_minicart_text: $black;
 $primary_minicart_quantity_bg: $hot-pink;
 
+// Counters.
+$primary_counter_bg: $hot-pink;
+
+// Checkout tabs & form.
+
+$checkout_tab_default_title: $peacock-blue;
+$checkout_tab_active_border: $peacock-blue;
+$delivery_tab_active_bg: $warm-grey-four;
+$checkout_tab_description: $black;
+$checkout_section_titles: $black;
+$secure_checkout_back_link: $peacock-blue;
+$checkout_transaction_type_color: $peacock-blue;
+
+// Checkout mobile back link.
+$checkout_mobile_back_link_icon: $peacock-blue;
+
 // Notification popup.
 $minicart_notification_border: $peacock-blue;
 $minicart_notification_text: $peacock-blue;
@@ -175,6 +192,9 @@ $deliverybanner_title: $peacock-blue;
 $deliverybanner_subtitle: $peacock-blue;
 $deliverybanner_border: $peacock-blue;
 $deliverybanner_shadow: transparent;
+
+//bbw specific Colors
+$bbw-grey: $warm-grey-three;
 
 //3. Footer
 $footer_bg: $white-five;

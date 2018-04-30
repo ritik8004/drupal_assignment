@@ -1,0 +1,18 @@
+#block-checkoutprogress,
+.block-acm-checkout-progress {
+  .checkout-progress__step {
+    font-family: $alshaya-thin;
+
+    &.-current {
+      font-weight: normal;
+
+      &::before {
+        border: 1px solid $primary_counter_bg;
+      }
+    }
+
+    &::before {
+      border: 1px solid $deliverybanner_border;
+    }
+  }
+}

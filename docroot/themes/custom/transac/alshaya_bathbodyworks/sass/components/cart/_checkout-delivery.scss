@@ -1,0 +1,132 @@
+.page-standard.user-page.checkout-delivery {
+  #edit-delivery-tabs {
+    .tab {
+      font-family: $bbw-thin;
+
+      @include breakpoint($tablet) {
+        &.active--tab--head {
+          background-color: $delivery_tab_active_bg;
+          border-width: 1px;
+          border-color: $checkout_tab_active_border;
+
+          &::after {
+            display: none;
+          }
+        }
+      }
+
+      @include breakpoint($mobile) {
+        &.active--tab--head {
+          background-color: $delivery_tab_active_bg;
+
+          h2 {
+            font-family: $bbw-bold;
+            color: $checkout_tab_active_title;
+          }
+        }
+      }
+
+      &.tab-click-collect {
+        margin-#{$left}: -0.125rem;
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0;
+        }
+      }
+
+      &.tab-separator {
+        @include breakpoint($only-tablet) {
+          width: 6.2%;
+        }
+
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            width: 6.1%;
+          }
+        }
+
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            margin-left: 0.125rem;
+          }
+        }
+      }
+
+      @include breakpoint($desktop) {
+        html[lang=ar] & {
+          width: 47%;
+        }
+      }
+
+      h2 {
+        text-transform: capitalize;
+        color: $checkout_tab_description;
+      }
+
+      &:hover {
+        background: $delivery_tab_active_bg;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 47%;
+      }
+    }
+
+    hr {
+      display: none;
+    }
+  }
+}
+
+// Checkout delivery address theming.
+.user-page.c-delivery-checkout {
+  main {
+    .tabs--content {
+      @include breakpoint($tablet) {
+        border: 1px solid $checkout_tab_active_border;
+        border-top: none;
+      }
+    }
+
+    form {
+      #edit-guest-delivery-home,
+      fieldset {
+        @include breakpoint($tablet) {
+          &.active--tab--content {
+            top: -0.0625rem;
+            border-top: 1px solid $checkout_tab_active_border;
+          }
+
+          .title {
+            font-family: $bbw-thin;
+            text-transform: capitalize;
+          }
+        }
+      }
+    }
+  }
+}
+
+.show-only-buttons {
+  @include breakpoint($only-mobile) {
+    .tab-click-collect,
+    .tab-home-delivery {
+      &.active--tab--head {
+        h2 {
+          color: $checkout_tab_active_title !important;
+        }
+      }
+    }
+  }
+}
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-payment {
+  .back-link {
+    @include breakpoint($only-mobile) {
+      @include icon(chevron#{left}, before) {
+        top: -0.125rem;
+      }
+    }
+  }
+}
