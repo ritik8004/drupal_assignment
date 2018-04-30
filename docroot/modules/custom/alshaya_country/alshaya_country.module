@@ -47,7 +47,7 @@ function _alshaya_country_get_site_level_country_name() {
   $default_site_country = _alshaya_custom_get_site_level_country_code();
   $countries = CountryManager::getStandardList();
   if (isset($countries[$default_site_country])) {
-    $default_site_country = t($countries[$default_site_country]->getUntranslatedString(), [], ['langcode' => 'en']);
+    $default_site_country = t("@country_name", ['@country_name' => $countries[$default_site_country]->getUntranslatedString()], ['langcode' => 'en']);
   }
   return $default_site_country;
 }
