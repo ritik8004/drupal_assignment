@@ -15,6 +15,7 @@ use Drupal\search_api\Entity\Index;
 function alshaya_search_update_8013() {
   alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
   alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
 }
 
 /**
