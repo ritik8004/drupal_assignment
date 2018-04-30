@@ -36,21 +36,13 @@
 
   a {
     display: block;
-    padding: 1rem 1.6rem;
+    padding: 1.25rem 1.6rem;
     font-size: 0.9375rem;
     letter-spacing: 0.09375rem;
     color: $camo-green;
     font-family: $beton-bold;
     text-decoration: none;
     text-transform: uppercase;
-
-    @include breakpoint($lap) {
-      padding: 1rem 1.6rem;
-    }
-
-    @include breakpoint($desk) {
-      padding: 1.25rem 1.6rem;
-    }
 
     &::after {
       content: "";
@@ -186,18 +178,23 @@
   @include breakpoint($upto-palm) {
     .burger {
       display: block;
-      width: 15%;
-      height: 3rem;
+      width: 3.313rem;
+      height: 3.313rem;
       position: relative;
-      padding-top: 0.375rem;
-      padding-#{direction(left)}: 0.6875rem;
+      padding-top: 0;
+      padding-#{direction(left)}: 0;
       background: $white;
+
+      &::before {
+        line-height: 3.313rem;
+      }
     }
   }
 
   .menu-logo-navigation {
     display: block;
     background: $white;
+    padding-bottom: 0.625rem;
 
     @include breakpoint($upto-palm) {
       width: 84.7%;

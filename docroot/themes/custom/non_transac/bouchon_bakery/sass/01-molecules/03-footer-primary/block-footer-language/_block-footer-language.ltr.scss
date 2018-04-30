@@ -1,0 +1,31 @@
+.region-footer-primary {
+  .block-language-switcher__cookies {
+    background-color: $bakery-brown;
+    height: 2.188rem;
+
+    .en {
+      font-family: $at-sackers-gothic;
+    }
+
+    .ar {
+      font-family: $ge-dinar-one;
+    }
+
+    li {
+      text-decoration: none;
+      font-size: 0.75rem;
+      text-transform: lowercase;
+      padding: 0;
+
+      a {
+        height: 2.188rem;
+        line-height: 2.188rem;
+        padding: 0 1.563rem;
+      }
+
+      &:first-child::after {
+        display: none;
+      }
+    }
+  }
+}
