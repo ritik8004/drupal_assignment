@@ -128,3 +128,21 @@
     padding: 1.375rem 0;
   }
 }
+
+.cybersource-ajax-progress-throbber .cybersource-throbber {
+  background: url(../imgs/icons/MC-loader.svg) center no-repeat;
+  background-size: 5.5rem;
+}
+
+#edit-billing-address .mobile-input--wrapper {
+  .prefix {
+    line-height: 1.6;
+  }
+
+  .form-item-billing-address-address-billing-mobile-number-mobile {
+    label.error {
+      top: 2.75rem !important;
+      z-index: 2;
+    }
+  }
+}

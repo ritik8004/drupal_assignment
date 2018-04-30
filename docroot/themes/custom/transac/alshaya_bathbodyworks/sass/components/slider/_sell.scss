@@ -21,3 +21,11 @@
     font-size: 3rem;
   }
 }
+
+.horizontal-upell {
+  .view-product-slider {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+    }
+  }
+}

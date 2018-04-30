@@ -34,30 +34,13 @@ Drupal.alshayaFormError = Drupal.alshayaFormError || {};
 
 Drupal.behaviors.alshayaFormError = {
   attach: function (context, settings) {
-    var observerConfig = {
-      attributes: true
-    };
-
-    // Create an error Observer to test class change.
-    var errorObserver = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        var newVal = $(mutation.target).prop(mutation.attributeName);
-        if (mutation.attributeName === "class") {
-          if (newVal.indexOf('error') !== -1) {
-            Drupal.setFocusToFirstError($(mutation.target));
-          }
-        }
-      });
-    });
-
-    // Attach error Observer to all form input elements.
-    $('form').each(function() {
-      $(this).find('input').each(function() {
-        errorObserver.observe($(this)[0], observerConfig);
-      });
-
-      $(this).find('input[type="submit"]').click(function() {
-        Drupal.setFocusToFirstError($(this));
+    $(context).find('form').each(function() {
+      $(this).on('submit.validate', function() {
+        var form_element = this;
+        // This is because we getting some race condition.
+        setTimeout(function() {
+          Drupal.setFocusToFirstError($(form_element));
+        }, 100);
       });
     });
   }
@@ -68,7 +51,7 @@ Drupal.behaviors.alshayaFormError = {
 */
 Drupal.setFocusToFirstError =  function(errorElement) {
   try {
-    var focusElement = errorElement.closest('form').find('input.error:first');
+    var focusElement = errorElement.find('input.error:first');
     var stickyHeaderHeight = $('branding__menu').height();
 
     focusElement.focus();
