@@ -13,6 +13,12 @@
 
     &::before {
       border: 1px solid $deliverybanner_border;
+
+      @include breakpoint($only-tablet) {
+        html[lang=ar] & {
+          right: 0.125rem;
+        }
+      }
     }
   }
 }

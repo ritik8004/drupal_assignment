@@ -42,11 +42,6 @@
         @include breakpoint($desktop) {
           html[lang=ar] & {
             width: 6.1%;
-          }
-        }
-
-        @include breakpoint($desktop) {
-          html[lang=ar] & {
             margin-left: 0.125rem;
           }
         }
