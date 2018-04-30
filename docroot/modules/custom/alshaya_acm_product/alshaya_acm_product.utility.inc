@@ -283,7 +283,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       '#type' => 'pdp',
     ];
 
-    // Add PDP slider position variable to config.
+    // Add PDP slider position class in template.
     $pdp_image_slider_position = \Drupal::config('alshaya_acm_product.settings')->get('image_slider_position_pdp');
 
     $build['gallery']['product_zoom'] = [

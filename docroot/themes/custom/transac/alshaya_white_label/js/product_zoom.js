@@ -465,19 +465,14 @@
   };
 
   /**
-   * Get the vertical paramerter for slick slider on the basis of the config
-   * image_slider_position_pdp from drupalSettings.
+   * Get the vertical parameter for slick slider on the basis of the drupalsetting
+   * image_slider_position_pdp.
    *
    * @return {boolean} vertical
    *   The vertical paramerter for slick slider.
    */
   function getPDPSliderPosition() {
     var pdp_slider_position = drupalSettings.alshaya_white_label.image_slider_position_pdp;
-    if (pdp_slider_position === 'slider-position-bottom') {
-      return false;
-    }
-    else {
-      return true;
-    }
+    return !(pdp_slider_position === 'slider-position-bottom');
   }
 })(jQuery, Drupal, drupalSettings);

@@ -9,6 +9,7 @@ use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
@@ -448,7 +449,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     }
 
     if ($form_state->getErrors()) {
-      return $form['guest_delivery_collect']['selected_store']['elements'];
+      $response = new AjaxResponse();
+      $response->addCommand(new ReplaceCommand('#selected-store-elements-wrapper', $form['guest_delivery_collect']['selected_store']['elements']));
+      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['form.multistep-checkout #selected-store-elements-wrapper', TRUE]));
+      return $response;
     }
 
     $response = new AjaxResponse();
