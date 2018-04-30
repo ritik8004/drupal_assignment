@@ -350,7 +350,7 @@ function alshaya_super_category_search_api_index_items_alter(IndexInterface $ind
     return;
   }
 
-  if (!in_array($index->id(), ['product', 'acquia_search_index'])) {
+  if (!in_array($index->id(), ['acquia_search_index'])) {
     return;
   }
 
