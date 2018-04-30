@@ -407,3 +407,39 @@ function alshaya_super_category_alshaya_super_category_status_update($status, $d
   // Save index to reflect new concept field.
   $index->save();
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add hidden field to pass current super category to query string.
+ */
+function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    $view = $form_state->get('view');
+    if (substr($view->storage->get('base_table'), 0, 17) != 'search_api_index_') {
+      return;
+    }
+
+    $status = \Drupal::configFactory()->get('alshaya_super_category.settings')->get('status');
+    if (!$status) {
+      return;
+    }
+
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
+
+    if (is_array($term)) {
+      $tid = $term['id'];
+    }
+    elseif (is_int($term)) {
+      $tid = $term;
+    }
+
+    $form['brand'] = [
+      '#type' => 'hidden',
+      '#value' => $tid,
+    ];
+
+    $form['#cache']['contexts'][] = 'url.path';
+    $form['#cache']['contexts'][] = 'url.query_args';
+  }
+}
