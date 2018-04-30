@@ -16,6 +16,8 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
 use Drupal\views\ViewExecutable;
+use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
+use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 
 /**
  * Implements hook_theme().
@@ -77,6 +79,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
     case 'system_branding_block':
       // Update block cache context.
       $variables['content']['#cache']['contexts'][] = 'url.path';
+      $variables['content']['#cache']['contexts'][] = 'url.query_args';
 
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
@@ -406,6 +409,26 @@ function alshaya_super_category_alshaya_super_category_status_update($status, $d
   $index->reindex();
   // Save index to reflect new concept field.
   $index->save();
+}
+
+/**
+ * Implements hook_search_api_solr_query_alter().
+ *
+ * Alter solr query to boost result related to current super category.
+ */
+function alshaya_super_category_search_api_solr_query_alter(SolariumQueryInterface $solarium_query, SearchApiQueryInterface $query) {
+  $status = \Drupal::configFactory()->get('alshaya_super_category.settings')->get('status');
+  if (!$status) {
+    return;
+  }
+
+  $index = $query->getIndex();
+  $fields = $index->getServerInstance()->getBackend()->getSolrFieldNames($index);
+  $solr_field = !empty($fields['field_category_parent']) ? $fields['field_category_parent'] : '';
+  if ($solr_field) {
+    $brand = \Drupal::requestStack()->getCurrentRequest()->query->get('brand');
+    $solarium_query->addParam('bq', "{$solr_field}:$brand^20");
+  }
 }
 
 /**
