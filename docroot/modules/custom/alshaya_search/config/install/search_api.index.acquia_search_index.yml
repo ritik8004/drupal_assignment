@@ -8,6 +8,7 @@ dependencies:
     - search_api.server.acquia_search_server
   module:
     - acq_sku
+    - taxonomy
     - search_api
     - node
 id: acquia_search_index
@@ -137,6 +138,17 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_category
+  name:
+    label: 'Category Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_category:entity:name'
+    type: text
+    boost: !!float 2
+    dependencies:
+      config:
+        - field.storage.node.field_category
+      module:
+        - taxonomy
 datasource_settings:
   'entity:node':
     bundles:
@@ -156,6 +168,7 @@ processor_settings:
       field_category: taxonomy_term-parent
     weights:
       preprocess_index: -45
+  entity_status: {  }
 tracker_settings:
   default:
     indexing_order: fifo
