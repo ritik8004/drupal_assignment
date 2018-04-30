@@ -134,7 +134,7 @@
     }
 
     .price-block {
-      clear: both;
+      @include clearfix;
     }
 
     h1,
