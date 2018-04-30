@@ -1,0 +1,27 @@
+.multistep-checkout {
+  fieldset legend span {
+    font-family: $alshaya-thin;
+    text-transform: capitalize;
+    font-size: 1.125rem;
+  }
+
+  #edit-checkout-guest a {
+    text-transform: uppercase;
+  }
+}
+
+html[lang=ar] {
+  .fieldset-wrapper {
+    #edit-checkout-guest-checkout-as-guest {
+      padding-top: 10px !important;
+    }
+  }
+}
+
+.alias--cart-checkout-login .tab {
+  text-transform: capitalize;
+
+  &.active {
+    border: 1px solid $checkout_login_tab_text_active;
+  }
+}
