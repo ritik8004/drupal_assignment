@@ -330,11 +330,20 @@ $tooltip_link: $black;
 
 // Basket
 $basket_page_title: $black;
-
+$basket_img_border: $warm-grey-two;
+$basket_th_4th_child: $primary_td_highlight3;
 $basket_continue_shopping_btn_border: $peacock-blue;
 $basket_continue_shopping_link: $peacock-blue;
+$basket_content_link_color: $peacock-blue;
 $basket_empty_continue_shopping_link: $white;
 $basket_empty_continue_shopping_btn_bg: $black;
-$basket_remove_link: $cerulean-two;
+// Sec text is Size, color, item code attributes.
+$basket_td_sec_txt: $warm-grey-one;
+$basket_item_bundle: $peacock-blue;
+$basket_tooltip_not_available: $warm-grey-one;
+$basket_promotion_input_border: $black;
+$basket_remove_link: $peacock-blue;
 $basket_horizontal_recommendation_slider_dots: $peacock-blue;
+// Privilege card earn text only for the basket page.
 $privilege_earn_txt: $black;
+$privilege_earn_icon: $peacock-blue;
