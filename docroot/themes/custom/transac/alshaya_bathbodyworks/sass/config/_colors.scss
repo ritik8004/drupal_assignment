@@ -287,6 +287,7 @@ $store_finder_search_results_down_arrow: $peacock-blue;
 
 // Titles.
 $page_title: $black;
+$block_title: $peacock-blue;
 $title: $black;
 
 // User Form.
@@ -311,3 +312,29 @@ $address_list_background: rgba(51, 51, 51, 0.06);
 $address_pp_delete_closebtn: $peacock-blue;
 $address_pp_delete_closebtn_cross: $white;
 $address_book_list_border: $warm-grey-two;
+
+// Tables.
+$primary_th_bg: $warm-grey-three;
+$primary_th_bg_highlight: $warm-grey-two;
+$primary_td_highlight3: rgba(218, 218, 218, 0.19); // used on blend class.
+$primary_td_bg_highlight: rgba(218, 218, 218, 0.19);
+$primary_tr_hover: rgba(218, 218, 218, 0.19);
+$primary_full_page_overlay_bg: rgba(255, 255, 255, 0.7);
+
+// Tooltip
+$tooltip_bg: $white;
+$tooltip_text: $info-blue;
+$tooltip_border: $info-blue;
+$tooltip_icon: $info-blue;
+$tooltip_link: $black;
+
+// Basket
+$basket_page_title: $black;
+
+$basket_continue_shopping_btn_border: $peacock-blue;
+$basket_continue_shopping_link: $peacock-blue;
+$basket_empty_continue_shopping_link: $white;
+$basket_empty_continue_shopping_btn_bg: $black;
+$basket_remove_link: $cerulean-two;
+$basket_horizontal_recommendation_slider_dots: $peacock-blue;
+$privilege_earn_txt: $black;
