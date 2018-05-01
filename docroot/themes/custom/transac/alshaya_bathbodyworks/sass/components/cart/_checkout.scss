@@ -14,7 +14,7 @@
     line-height: 1.1;
   }
 
-  #table-cart-items {
+  #table-cart-items table {
     thead tr {
       border-bottom: 0;
 
@@ -26,7 +26,7 @@
     tr {
       border-bottom: 1px solid $primary_table_border;
 
-      @include breakpoint ($only-mobile) {
+      @include breakpoint ($upto-tablet) {
         td {
           &.name {
             padding-#{$left}: 0;
@@ -77,6 +77,8 @@
       span {
         font-family: $alshaya-thin;
         text-transform: none;
+        font-size: 0.75rem;
+        color: $basket_td_sec_txt;
       }
     }
   }
