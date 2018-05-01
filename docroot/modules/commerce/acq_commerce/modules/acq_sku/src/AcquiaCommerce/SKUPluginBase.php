@@ -123,7 +123,8 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
       return render($renderArray);
     }
 
-    return '';
+    \Drupal::logger('acq_sku')->info('Parent product for the sku: @sku seems to be unavailable.', ['@sku' => $sku->getSku()]);
+    return $sku->label();
   }
 
   /**
