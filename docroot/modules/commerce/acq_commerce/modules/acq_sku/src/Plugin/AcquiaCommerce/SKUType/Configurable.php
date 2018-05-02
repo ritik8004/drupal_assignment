@@ -9,6 +9,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Link;
 use Drupal\acq_sku\AddToCartErrorEvent;
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\node\Entity\Node;
 
 /**
  * Defines the configurable SKU type.
@@ -516,9 +517,14 @@ class Configurable extends SKUPluginBase {
     );
 
     $display_node = $this->getDisplayNode($parent_sku);
-    $url = $display_node->toUrl();
-    $link = Link::fromTextAndUrl($label, $url)->toRenderable();
-    return render($link);
+    if ($display_node instanceof Node) {
+      $url = $display_node->toUrl();
+      $link = Link::fromTextAndUrl($label, $url)->toRenderable();
+      return render($link);
+    }
+
+    \Drupal::logger('acq_sku')->info('Parent product for the sku: @sku seems to be unavailable.', ['@sku' => $sku->getSku()]);
+    return $sku->label();
   }
 
   /**
