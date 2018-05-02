@@ -32,7 +32,7 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: title
     type: text
-    boost: !!float 2
+    boost: !!float 3
   brand:
     label: Brand
     datasource_id: 'entity:node'
@@ -138,7 +138,7 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_category
-  name:
+  field_category_name:
     label: 'Category Name'
     datasource_id: 'entity:node'
     property_path: 'field_category:entity:name'

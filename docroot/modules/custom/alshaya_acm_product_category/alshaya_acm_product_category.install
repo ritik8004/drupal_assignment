@@ -19,10 +19,10 @@ function alshaya_acm_product_category_update_8004() {
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
     'core.entity_view_display.taxonomy_term.acq_product_category.default',
     'views.view.product_category_level_3',
-    'block.block.views_block__product_category_level_3_block_2',
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
+  alshaya_config_install_configs(['block.block.views_block__product_category_level_3_block_2'], 'alshaya_acm_product_category', 'optional');
 }
 
 /**

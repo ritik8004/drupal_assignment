@@ -76,6 +76,11 @@ function alshaya_stores_finder_transac_preprocess_views_view_field__field_store_
 
   /* @var \Drupal\node\Entity\Node $node */
   $node = $variables['row']->_entity;
+  /* @var \Drupal\Core\Entity\EntityRepository $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
+  $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  // Get correct translated node in current language.
+  $node = $entity_repository->getTranslationFromContext($node, $current_langcode);
   $variables['output'] = $store_finder_utility->getStoreAddress($node);
 }
 

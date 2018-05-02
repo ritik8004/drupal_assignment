@@ -28,6 +28,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -142,6 +143,23 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
           }
 
           $item->getField('final_price')->setValues([$min_final_price]);
+        }
+      }
+
+      // Index parent terms as well while indexing leaf term names.
+      $field = $item->getField('field_category_name');
+      $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+      if (!empty($field)) {
+        $values = $field->getValues();
+        if (!empty($values[0])) {
+          $tid = $values[0];
+          $term = Term::load($tid);
+          $parents = $product_category_tree->getCategoryTermParents($term);
+          $parents[] = $tid;
+          $parents = array_unique($parents);
+          if (count($parents) > 0) {
+            $field->setValues($parents);
+          }
         }
       }
     }
