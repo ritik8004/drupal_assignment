@@ -34,6 +34,7 @@ function alshaya_product_views_query_alter(ViewExecutable $view, QueryPluginBase
   elseif ($view->storage->get('id') === 'product_slider' && $view->current_display === 'category_product_slider') {
     $nids = $view->args[0];
     if (!empty($nids)) {
+      // This is just to maintain the order in which nids passed to views.
       $query->addOrderBy(NULL, 'FIELD(node_field_data.nid, ' . $nids . ')', 'ASC', 'order_field');
     }
   }
