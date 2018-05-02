@@ -1,13 +1,12 @@
 .page-standard.user-page.checkout-delivery {
   #edit-delivery-tabs {
     .tab {
-      font-family: $bbw-thin;
+      font-family: $alshaya-thin;
 
       @include breakpoint($tablet) {
         &.active--tab--head {
-          background-color: $delivery_tab_active_bg;
           border-width: 1px;
-          border-color: $checkout_tab_active_border;
+          background-color: $delivery_tab_active_bg;
 
           &::after {
             display: none;
@@ -17,11 +16,8 @@
 
       @include breakpoint($mobile) {
         &.active--tab--head {
-          background-color: $delivery_tab_active_bg;
-
           h2 {
-            font-family: $bbw-bold;
-            color: $checkout_tab_active_title;
+            font-family: $alshaya-bold;
           }
         }
       }
@@ -55,7 +51,6 @@
 
       h2 {
         text-transform: capitalize;
-        color: $checkout_tab_description;
       }
 
       &:hover {
@@ -89,7 +84,7 @@
         @include breakpoint($tablet) {
           &.active--tab--content {
             top: -0.0625rem;
-            border-top: 1px solid $checkout_tab_active_border;
+            border-width: 1px;
           }
 
           .title {
