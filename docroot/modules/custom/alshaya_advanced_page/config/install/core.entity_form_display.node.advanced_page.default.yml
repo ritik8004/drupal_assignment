@@ -166,7 +166,7 @@ content:
     region: content
   field_delivery_banner:
     type: entity_reference_paragraphs
-    weight: 16
+    weight: 18
     settings:
       title: Paragraph
       title_plural: Paragraphs
