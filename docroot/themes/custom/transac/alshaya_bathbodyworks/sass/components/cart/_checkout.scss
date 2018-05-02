@@ -1,0 +1,105 @@
+.alias--cart {
+  .edit-checkout,
+  .edit-update,
+  #edit-actions-top .checkout-top-button {
+    font-family: $alshaya-thin;
+    text-transform: uppercase;
+    padding: 0.925rem 0;
+    height: 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  #edit-actions-top .checkout-top-button {
+    max-height: inherit;
+    line-height: 1.1;
+  }
+
+  #table-cart-items table {
+    thead tr {
+      border-bottom: 0;
+
+      th {
+        font-family: $alshaya-bold;
+      }
+    }
+
+    tr {
+      border-bottom: 1px solid $primary_table_border;
+
+      @include breakpoint ($upto-tablet) {
+        td {
+          &.name {
+            padding-#{$left}: 0;
+          }
+
+          &.quantity {
+            padding-#{$left}: 0.312rem;
+          }
+
+          .dark a {
+            font-size: 0.875rem;
+          }
+
+          .price-type__wrapper {
+            font-size: 0.875rem;
+          }
+
+          .price--discount {
+            font-size: 0.75rem;
+          }
+
+          &.delivery-option {
+            float: $right;
+            padding-#{$right}: 0;
+
+            .delivery-options-mobile {
+              float: $right;
+              font-size: 0.875rem;
+              font-family: $alshaya-bold;
+              margin-bottom: 0.9375rem;
+            }
+
+            .delivery-options-tooltip-wrapper {
+              float: $right;
+              position: static;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #table-cart-totals {
+    tr[data-drupal-selector="edit-totals-grand"] > td:first-child {
+      text-transform: uppercase;
+      font-family: $alshaya-bold;
+
+      span {
+        font-family: $alshaya-thin;
+        text-transform: none;
+        font-size: 0.75rem;
+        color: $basket_td_sec_txt;
+      }
+    }
+  }
+
+  #edit-continue-shopping,
+  #edit-continue-shopping-mobile,
+  .edit-continue-shopping-mobile {
+    color: $basket_continue_shopping_link;
+  }
+
+  .empty-cart-wrapper {
+    #edit-continue-shopping,
+    #edit-continue-shopping-mobile {
+      background-color: $basket_empty_continue_shopping_btn_bg;
+      color: $basket_empty_continue_shopping_link;
+      border: 0;
+      font-size: 0.875rem;
+      font-weight: normal;
+      text-transform: uppercase;
+      height: 2.5rem;
+      line-height: 1.7;
+    }
+  }
+}

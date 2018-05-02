@@ -9,6 +9,16 @@
   border-color: $primary_dropdown_option_border;
 }
 
+.form-type-select {
+  &::after {
+    color: $plp_facet_dropdown_icon;
+
+    @include breakpoint ($desktop) {
+      display: none;
+    }
+  }
+}
+
 @mixin select3-style($select-width) {
   @include select-wrapper($select-width);
 

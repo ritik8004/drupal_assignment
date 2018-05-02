@@ -360,16 +360,20 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Vocabulary id.
    * @param int $parent_tid
    *   Parent term id.
+   * @param bool $exclude_not_in_menu
+   *   Indicates if the result should have items that are excluded from menu.
    *
    * @return array
    *   Child term array.
    */
-  protected function allChildTerms($langcode, $vid, $parent_tid) {
+  public function allChildTerms($langcode, $vid, $parent_tid, $exclude_not_in_menu = TRUE) {
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name', 'description__value']);
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
-    $query->condition('ttim.field_category_include_menu_value', 1);
+    if ($exclude_not_in_menu) {
+      $query->condition('ttim.field_category_include_menu_value', 1);
+    }
     $query->condition('tth.parent', $parent_tid);
     $query->condition('tfd.langcode', $langcode);
     $query->condition('tfd.vid', $vid);
@@ -414,6 +418,36 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->condition('ttbc.langcode', $langcode);
     $query->condition('ttbc.bundle', $vid);
     return $query->execute()->fetchAllKeyed();
+  }
+
+  /**
+   * Fetch a flat list of all child tids for a given term.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Parent term for which child tids need to be fetched.
+   * @param array $child_tids
+   *   Children tids that needs to be returned by the recursive function.
+   *
+   * @return array
+   *   Flat array of all children terms n-level.
+   */
+  public function getNestedChildrenTids(TermInterface $term, array &$child_tids = []) {
+
+    // Process further only if the term has children.
+    if (count($child_terms = $this->allChildTerms($term->language()->getId(),
+        'acq_product_category',
+        $term->id(), FALSE)) > 0) {
+
+      // Push child term ids into an array & re-lookup for the child if it has
+      // further children.
+      foreach ($child_terms as $child_term) {
+        $child_tids[] = $child_term->tid;
+        $child_term_obj = $this->termStorage->load($child_term->tid);
+        $this->getNestedChildrenTids($child_term_obj, $child_tids);
+      }
+    }
+
+    return array_unique($child_tids);
   }
 
 }
