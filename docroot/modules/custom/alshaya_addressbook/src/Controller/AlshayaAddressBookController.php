@@ -195,7 +195,7 @@ class AlshayaAddressBookController extends ProfileController {
 
       $build['address_book_wrapper'] = [
         '#type' => 'item',
-        '#markup' => '<div id="address-book-form-wrapper"></div>',
+        '#markup' => '<div id="address-book-form-wrapper" class="address-book-form-ajax-wrapper"></div>',
       ];
 
       // Render the active profiles.

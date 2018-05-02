@@ -30,7 +30,7 @@ function alshaya_addressbook_form_profile_address_book_add_form_alter(array &$fo
   $default_address = \Drupal::entityTypeManager()->getStorage('profile')
     ->loadByUser($user, 'address_book');
 
-  $form['#prefix'] = '<div id="address-book-form-open">';
+  $form['#prefix'] = '<div id="address-book-form-open" class="address-book-form-ajax-wrapper">';
   $form['#suffix'] = '</div>';
 
   // If user doesn't have any default address yet.
@@ -66,8 +66,8 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
   // If any error.
   if ($form_state->getErrors()) {
     $response = new AjaxResponse();
-    $response->addCommand(new HtmlCommand('#address-book-form-wrapper', $form));
-    $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['#address-book-form-wrapper', TRUE]));
+    $response->addCommand(new HtmlCommand('.address-book-form-ajax-wrapper', $form));
+    $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['.address-book-form-ajax-wrapper', TRUE]));
     return $response;
   }
 
@@ -397,7 +397,7 @@ function alshaya_addressbook_user_view_alter(&$build) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_addressbook_form_profile_address_book_edit_form_alter(array &$form, FormStateInterface $form_state) {
-  $form['#prefix'] = '<div id="address-book-form-open">';
+  $form['#prefix'] = '<div id="address-book-form-open" class="address-book-form-ajax-wrapper">';
   $form['#suffix'] = '</div>';
 
   // Save profile form.
