@@ -16,6 +16,23 @@ use Solarium\Core\Query\QueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
+ * Implements hook_acsf_registry().
+ *
+ * Adding our custom class to the registry that changes Alshaya configuration.
+ */
+function alshaya_search_acsf_registry() {
+  return [
+    'events' => [
+      [
+        'weight' => 15,
+        'type' => 'site_duplication_scrub',
+        'class' => '\Drupal\alshaya_search\Event\AlshayaAcsfDuplicationScrubConfigurationHandler',
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_views_pre_render().
  */
 function alshaya_search_views_pre_render(ViewExecutable $view) {
