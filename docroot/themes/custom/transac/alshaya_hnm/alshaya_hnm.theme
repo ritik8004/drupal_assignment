@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Theme specific functionality.
+ * Theme specific H&M functionality.
  */
 
 use Drupal\Core\Form\FormStateInterface;
