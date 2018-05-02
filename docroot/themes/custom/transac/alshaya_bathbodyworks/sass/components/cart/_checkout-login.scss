@@ -7,21 +7,33 @@
 
   #edit-checkout-guest a {
     text-transform: uppercase;
+    padding-top: 0.687rem;
+  }
+
+  fieldset {
+    padding-left: 0;
   }
 }
 
 html[lang=ar] {
   .fieldset-wrapper {
     #edit-checkout-guest-checkout-as-guest {
-      padding-top: 10px !important;
+      padding-top: 0.625rem !important;
     }
   }
 }
 
-.alias--cart-checkout-login .tab {
-  text-transform: capitalize;
+.alias--cart-checkout-login {
+  .tab {
+    text-transform: capitalize;
 
-  &.active {
-    border: 1px solid $checkout_login_tab_text_active;
+    &.active {
+      border: 1px solid $checkout_login_tab_text_active;
+    }
+  }
+
+  .tabs--content {
+    margin: 0;
+    max-width: 100%;
   }
 }
