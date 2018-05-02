@@ -1,0 +1,175 @@
+<?php
+
+namespace Drupal\alshaya_promo_panel\Form;
+
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Path\PathValidatorInterface;
+
+/**
+ * Admin form for promo panel config.
+ */
+class AlshayaPromoPanelForm extends ConfigFormBase {
+
+  /**
+   * The block storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $blockStorage;
+
+  /**
+   * The path validator.
+   *
+   * @var \Drupal\Core\Path\PathValidatorInterface
+   */
+  protected $pathValidator;
+
+  /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Constructs a AlshayaPromoPanelForm object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Block field manger service.
+   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
+   *   The path validator.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, PathValidatorInterface $path_validator) {
+    parent::__construct($config_factory);
+    $this->configFactory = $config_factory;
+    $this->blockStorage = $entity_type_manager->getStorage('block');
+    $this->pathValidator = $path_validator;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('entity_type.manager'),
+      $container->get('path.validator')
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    return ['alshaya_promo_panel.settings'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    return 'alshaya_promo_panel_config_form';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $config = $this->config('alshaya_promo_panel.settings');
+
+    $current_theme = $this->configFactory->get('system.theme')->get('default');
+    $blocks = $this->blockStorage->loadByProperties(['theme' => $current_theme, 'region' => 'post_content']);
+
+    $options = [];
+    foreach ($blocks as $id => $block) {
+      $options[$id] = $block->label();
+    }
+
+    $promo_panel_blocks = !empty($config->get('promo_panel_blocks')) ? $config->get('promo_panel_blocks') : [];
+    $form['blocks'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Select Promo panel block(s)'),
+      '#description' => $this->t('Select block(s) which should displayed as promo panel.'),
+      '#options' => $options,
+      '#multiple' => TRUE,
+      '#required' => TRUE,
+      '#default_value' => array_keys($promo_panel_blocks),
+      '#ajax' => [
+        'callback' => [$this, 'buildAjaxConfigForm'],
+        'wrapper' => 'page-urls',
+        'effect' => 'fade',
+      ],
+    ];
+
+    $form['page_urls'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t("Configure page urls for selected blocks"),
+      '#description' => $this->t('Add page urls, user will navigate to this page while accessing from mobile.'),
+      '#prefix' => '<div id="page-urls">',
+      '#suffix' => '</div>',
+      '#tree' => TRUE,
+    ];
+
+    $allvalues = $form_state->getValues();
+    if (!empty($allvalues['blocks']) && !empty(array_filter($allvalues['blocks']))) {
+      $default_blocks = array_filter($allvalues['blocks']);
+    }
+    elseif (!empty($promo_panel_blocks)) {
+      $default_blocks = array_keys($promo_panel_blocks);
+    }
+
+    foreach ($default_blocks as $id) {
+      $form['page_urls'][$id] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Page url for @id block', ['@id' => $blocks[$id]->label()]),
+        '#required' => TRUE,
+        '#default_value' => $promo_panel_blocks[$id],
+      ];
+    }
+
+    $form_state->setCached(FALSE);
+    return parent::buildForm($form, $form_state);
+  }
+
+  /**
+   * Ajax callback method to render textfield to add urls.
+   */
+  public function buildAjaxConfigForm(&$form, FormStateInterface $form_state) {
+    return $form['page_urls'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $blocks = $form_state->getValue('page_urls');
+
+    $promo_config = $this->config('alshaya_promo_panel.settings');
+    $promo_config->set('promo_panel_blocks', $blocks);
+    $promo_config->save();
+
+    parent::submitForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $page_urls = $form_state->getValue('page_urls');
+
+    foreach ($page_urls as $block => $page_url) {
+      if (is_string($page_url) && !$this->pathValidator->isValid($page_url)) {
+        $form_state->setError($form['page_urls'][$block], $this->t('Value is not a valid path.'));
+      }
+    }
+
+    parent::validateForm($form, $form_state);
+  }
+
+}
