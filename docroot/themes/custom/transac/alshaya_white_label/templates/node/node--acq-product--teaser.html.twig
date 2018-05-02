@@ -66,9 +66,11 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
     <tr>
       <td colspan="2" class="sell-sku">
-        <article data-skuid="{{ content.sku_id }}">
-          {{ content.mobile_add_to_cart_form }}
-        </article>
+        <div class="field--name-field-skus">
+          <article data-skuid="{{ content.sku_id }}">
+            {{ content.mobile_add_to_cart_form }}
+          </article>
+        </div>
       </td>
     </tr>
 
