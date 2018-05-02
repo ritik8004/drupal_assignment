@@ -704,7 +704,7 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   if (isset($menus)) {
     foreach ($menus as $menu) {
       $title = $menu->link->getTitle();
-      $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+      $links[strtolower($title)] = $menu->link->getUrlObject()->setAbsolute(TRUE)->toString();
     }
     $variables['links'] = $links;
   }
