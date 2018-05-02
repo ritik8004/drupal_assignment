@@ -115,9 +115,16 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
     $label = $sku->label();
     $display_node = $this->getDisplayNode($sku);
-    $url = $display_node->toUrl();
-    $renderArray = Link::fromTextAndUrl($label, $url)->toRenderable();
-    return render($renderArray);
+
+    // If node object.
+    if ($display_node instanceof Node) {
+      $url = $display_node->toUrl();
+      $renderArray = Link::fromTextAndUrl($label, $url)->toRenderable();
+      return render($renderArray);
+    }
+
+    \Drupal::logger('acq_sku')->info('Parent product for the sku: @sku seems to be unavailable.', ['@sku' => $sku->getSku()]);
+    return $sku->label();
   }
 
   /**
