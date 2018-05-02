@@ -142,3 +142,11 @@ checkout_scroll:
 plp_hover:
   js:
     js/plp-hover.js: {}
+
+category_product_carousel:
+  js:
+    js/category_product_carousel.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_white_label/utils
+    - alshaya_white_label/owlcarousel

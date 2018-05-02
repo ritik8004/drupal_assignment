@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "alshaya_super_category",
  *   label = @Translation("Alshaya Super Category"),
  *   context = {
- *     "term" = @ContextDefinition("entity:taxonomy_term", label = @Translation("Taxonomy term")),
+ *     "term" = @ContextDefinition("entity:taxonomy_term", label = @Translation("Taxonomy term"), required = FALSE),
  *   }
  * )
  */
@@ -160,7 +160,7 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
     if (count($parent) > 0) {
       return in_array($parent['id'], $this->configuration['categories']);
     }
-    return TRUE;
+    return FALSE;
   }
 
 }

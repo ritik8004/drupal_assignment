@@ -7,6 +7,7 @@ dependencies:
     - field.field.paragraph.promo_block.field_promo_block_button
     - field.field.paragraph.promo_block.field_promo_block_seo_text
     - field.field.paragraph.promo_block.field_promo_block_seo_title
+    - field.field.paragraph.promo_block.field_promotion_image_mobile
     - paragraphs.paragraphs_type.promo_block
   module:
     - entity_reference_revisions
@@ -28,7 +29,7 @@ content:
     type: image
     region: content
   field_link:
-    weight: 1
+    weight: 2
     label: hidden
     settings:
       trim_length: 80
@@ -41,7 +42,7 @@ content:
     region: content
   field_promo_block_button:
     type: entity_reference_revisions_entity_view
-    weight: 2
+    weight: 3
     region: content
     label: above
     settings:
@@ -49,17 +50,26 @@ content:
       link: ''
     third_party_settings: {  }
   field_promo_block_seo_text:
-    weight: 4
+    weight: 5
     label: hidden
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
   field_promo_block_seo_title:
-    weight: 3
+    weight: 4
     label: hidden
     settings: {  }
     third_party_settings: {  }
     type: text_default
+    region: content
+  field_promotion_image_mobile:
+    weight: 1
+    label: hidden
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
     region: content
 hidden: {  }

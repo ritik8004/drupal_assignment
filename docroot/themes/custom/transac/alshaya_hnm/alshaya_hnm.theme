@@ -56,15 +56,6 @@ function alshaya_hnm_preprocess_block(&$variables) {
 }
 
 /**
- * Implements template_view_alter().
- */
-function alshaya_hnm_theme_suggestions_views_view_alter(array &$suggestions, &$variables) {
-  if ($variables['view']->current_display == "block_product_slider") {
-    $suggestions[] = 'views_view__product_slider';
-  }
-}
-
-/**
  * Implements hook_form_alter().
  */
 // @codingStandardsIgnoreLine
@@ -77,18 +68,6 @@ function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id
       }
       break;
   }
-}
-
-/**
- * Implements hook_theme().
- */
-function alshaya_hnm_theme() {
-  return [
-    'customer_cart_form' => [
-      'render element' => 'form',
-      'path' => drupal_get_path('theme', 'alshaya_hnm') . '/templates/form',
-    ],
-  ];
 }
 
 /**
@@ -228,65 +207,6 @@ function alshaya_hnm_preprocess_user(&$variables) {
       }
     }
   }
-}
-
-/**
- * Implements hook_preprocess_menu().
- */
-function alshaya_hnm_preprocess_menu(&$variables) {
-  if ($variables['menu_name'] === 'account') {
-    // Get the current path.
-    $current_path_Uri = \Drupal::request()->getRequestUri();
-    $items = $variables['items'];
-    foreach ($items as $item) {
-      // If path is current_path, add active class.
-      if ($item['url']->toString() == $current_path_Uri) {
-        $attributes = $item['url']->getOption('attributes');
-        $attributes['class'][] = 'is-active';
-        $item['url']->setOption('attributes', $attributes);
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_preprocess_mimemail_messages().
- */
-function alshaya_hnm_preprocess_mimemail_messages(&$variables) {
-  $user = user_load_by_mail($variables['recipient']);
-  if ($user) {
-    $lang = $user->getPreferredLangcode();
-  }
-  else {
-    $lang = \Drupal::currentUser()->getPreferredLangcode();
-  }
-
-  // Get logo based on user preferred language.
-  $email_logo = alshaya_master_get_email_logo('alshaya_hnm', $lang);
-  if (empty($email_logo['logo_url'])) {
-    $email_logo['logo_url'] = file_create_url($email_logo['logo_path']);
-  }
-  $variables['email_logo'] = $email_logo['logo_url'];
-
-  // Add website footer block information with UUID as this is the unique id
-  // with different env.
-  $uuid = '340b823b-e16c-457a-bc03-4a096f8ae171';
-  // Get copyright block based on language.
-  $copyright_block = \Drupal::entityManager()->loadEntityByUuid('block_content', $uuid);
-  $block_view = \Drupal::entityManager()->getViewBuilder('block_content')->view($copyright_block, 'full', $lang);
-  $variables['email_footer'] = $block_view;
-  $variables['lang'] = $lang;
-
-  // Social links for email template.
-  $menu_tree = \Drupal::menuTree();
-  // Build the typical default set of menu tree parameters.
-  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters('social-links');
-  $menus = $menu_tree->load('social-links', $parameters);
-  foreach ($menus as $menu) {
-    $title = $menu->link->getTitle();
-    $links[strtolower($title)] = $menu->link->getUrlObject()->setAbsolute(TRUE)->toString();
-  }
-  $variables['links'] = $links;
 }
 
 /**
