@@ -141,7 +141,7 @@ field_settings:
   field_category_name:
     label: 'Category Name'
     datasource_id: 'entity:node'
-    property_path: 'field_category:entity:name'
+    property_path: 'field_category'
     type: text
     boost: !!float 2
     dependencies:

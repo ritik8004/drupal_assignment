@@ -28,7 +28,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
+use Drupal\search_api\Plugin\search_api\data_type\value\TextValue;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -152,13 +154,29 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
       if (!empty($field)) {
         $values = $field->getValues();
         if (!empty($values[0])) {
-          $tid = $values[0];
+          // Get text value form the TextValue plugin instance. Only use the
+          // first category term the product is tagged with in case of multiple
+          // terms.
+          $tid = $values[0]->getOriginalText();
           $term = Term::load($tid);
-          $parents = $product_category_tree->getCategoryTermParents($term);
-          $parents[] = $tid;
-          $parents = array_unique($parents);
-          if (count($parents) > 0) {
-            $field->setValues($parents);
+          if ($term instanceof TermInterface) {
+            // Get all parent terms for the parent being processed, returns
+            // empty in case of root parent terms.
+            $parents = $product_category_tree->getCategoryTermParents($term);
+
+            // Append current terms to the list of parents, since we want to
+            // index current term name along with all of its parents.
+            $parents[] = $term;
+            if (count($parents) > 0) {
+              $parent_term_names = [];
+              foreach ($parents as $parent) {
+                // Convert the value to a TextValue plugin since we indexing the
+                // field as fulltext.
+                $parent_term_names[] = new TextValue((string) $parent->getName());
+              }
+
+              $field->setValues($parent_term_names);
+            }
           }
         }
       }
