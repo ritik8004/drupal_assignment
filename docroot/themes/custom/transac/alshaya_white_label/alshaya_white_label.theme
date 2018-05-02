@@ -7,6 +7,7 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
 
@@ -799,6 +800,16 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         $variables['button_link'] = Url::fromUri($button_link[0]['uri'])->toString();
       }
     }
+    // Get the desktop and mobile images for promo blocks if available.
+    $mobile_image = !empty($variables['elements']['field_promotion_image_mobile']['#items']) ? $variables['elements']['field_promotion_image_mobile']['#items'] : '';
+    $desktop_image = !empty($variables['elements']['field_banner']['#items']) ? $variables['elements']['field_banner']['#items'] : '';
+    $default_image = !empty($desktop_image) ? $desktop_image : $mobile_image;
+
+    if (!empty($default_image)) {
+      $variables['mobile_image'] = !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image);
+      $variables['desktop_image'] = !empty($desktop_image) ? _alshaya_white_label_get_image_url($desktop_image) : _alshaya_white_label_get_image_url($mobile_image);
+      $variables['promo_default_image'] = _alshaya_white_label_get_image_url($default_image);
+    }
   }
   elseif ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {
     // Get the promo block display config for twig file.
@@ -807,6 +818,24 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     if ($variables['promo_link'] == 1) {
       // Get button text and set as markup.
       $variables['button_text']['#markup'] = $variables['elements']['field_button_link'][0]['#title'];
+    }
+  }
+}
+
+/**
+ * Helper function to calculate image url from image file object.
+ *
+ * @param \Drupal\file\Plugin\Field\FieldType\FileFieldItemList $file_item_list
+ *   Field field item list.
+ *
+ * @return string
+ *   Url to the image file.
+ */
+function _alshaya_white_label_get_image_url(FileFieldItemList $file_item_list) {
+  if ((!empty($file_item_list)) &&
+  (!empty($images = $file_item_list->referencedEntities()))) {
+    foreach ($images as $image) {
+      return $image->getFileUri();
     }
   }
 }
