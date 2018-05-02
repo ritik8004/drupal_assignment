@@ -7,9 +7,9 @@ dependencies:
     - system
     - views
   theme:
-    - alshaya_hnm
+    - alshaya_white_label
 id: views_block__product_category_level_3_block_2
-theme: alshaya_hnm
+theme: alshaya_white_label
 region: content
 weight: -27
 provider: null

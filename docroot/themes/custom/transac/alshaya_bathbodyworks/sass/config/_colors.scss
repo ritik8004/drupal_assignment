@@ -20,6 +20,7 @@ $tangerine: #fa9900;
 $light-gold: #ffd65a;
 $shadow: rgba(0, 0, 0, 0.24);
 $error-red: #c00;
+$cerulean-two: #ed088c;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -285,7 +286,7 @@ $plp_pager_link_bg: $black;
 // Store finder header form.
 $store_finder_header_desktop: $black;
 $store_finder_subheader: $peacock-blue;
-$store_finder_text: $black;
+$store_finder_text: $peacock-blue;
 $store_finder_search_input_mobile_border: $warm-grey-two;
 $store_finder_search_input_border: $warm-grey-two;
 
@@ -299,11 +300,16 @@ $store_finder_glossary_border: $warm-grey-two;
 $store_finder_search_results_border: $warm-grey-two;
 $store_finder_search_results_tile_hover_bg: $white;
 $store_finder_search_results_tile_link: $warm-grey-two;
-$store_finder_search_results_tile_icon: $cerulean-two;
-$store_finder_search_results_hour_label: $black;
+$store_finder_search_results_tile_icon: $peacock-blue;
+$store_finder_search_results_hour_label: $warm-grey-one;
+$store_finder_search_results_title: $black;
+$store_finder_search_results_counter_bg: $cerulean-two;
+$store_finder_search_results_store_address: $warm-grey-one;
+$store_finder_search_results_down_arrow: $peacock-blue;
 
 // Titles.
 $page_title: $black;
+$block_title: $peacock-blue;
 $title: $black;
 
 // User Form.
@@ -328,3 +334,38 @@ $address_list_background: rgba(51, 51, 51, 0.06);
 $address_pp_delete_closebtn: $peacock-blue;
 $address_pp_delete_closebtn_cross: $white;
 $address_book_list_border: $warm-grey-two;
+
+// Tables.
+$primary_th_bg: $warm-grey-three;
+$primary_th_bg_highlight: $warm-grey-two;
+$primary_td_highlight3: rgba(218, 218, 218, 0.19); // used on blend class.
+$primary_td_bg_highlight: rgba(218, 218, 218, 0.19);
+$primary_tr_hover: rgba(218, 218, 218, 0.19);
+$primary_full_page_overlay_bg: rgba(255, 255, 255, 0.7);
+
+// Tooltip
+$tooltip_bg: $white;
+$tooltip_text: $info-blue;
+$tooltip_border: $info-blue;
+$tooltip_icon: $info-blue;
+$tooltip_link: $black;
+
+// Basket
+$basket_page_title: $black;
+$basket_img_border: $warm-grey-two;
+$basket_th_4th_child: $primary_td_highlight3;
+$basket_continue_shopping_btn_border: $peacock-blue;
+$basket_continue_shopping_link: $peacock-blue;
+$basket_content_link_color: $peacock-blue;
+$basket_empty_continue_shopping_link: $white;
+$basket_empty_continue_shopping_btn_bg: $black;
+// Sec text is Size, color, item code attributes.
+$basket_td_sec_txt: $warm-grey-one;
+$basket_item_bundle: $peacock-blue;
+$basket_tooltip_not_available: $warm-grey-one;
+$basket_promotion_input_border: $black;
+$basket_remove_link: $peacock-blue;
+$basket_horizontal_recommendation_slider_dots: $peacock-blue;
+// Privilege card earn text only for the basket page.
+$privilege_earn_txt: $black;
+$privilege_earn_icon: $peacock-blue;
