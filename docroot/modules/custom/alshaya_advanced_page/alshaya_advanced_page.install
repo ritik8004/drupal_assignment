@@ -142,6 +142,7 @@ function alshaya_advanced_page_update_8003() {
  * Implements hook_update_N().
  *
  * Enabling translation on paragraph referenced fields.
+ * Delete the department page CT.
  */
 function alshaya_advanced_page_update_8002() {
   $fields = [
@@ -200,6 +201,10 @@ function alshaya_advanced_page_update_8002() {
 
     $node->save();
   }
+
+  // Delete the department page CT.
+  $content_type = \Drupal::entityManager()->getStorage('node_type')->load('department_page');
+  $content_type->delete();
 }
 
 /**

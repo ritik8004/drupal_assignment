@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.storage.paragraph.field_promo_block
     - paragraphs.paragraphs_type.1_row_1_col
+    - paragraphs.paragraphs_type.product_carousel_category
     - paragraphs.paragraphs_type.promo_block
     - paragraphs.paragraphs_type.title_textarea
     - paragraphs.paragraphs_type.video
@@ -26,6 +27,7 @@ settings:
       promo_block: promo_block
       title_textarea: title_textarea
       video: video
+      product_carousel_category: product_carousel_category
     target_bundles_drag_drop:
       1_row_1_col:
         weight: 10
@@ -96,4 +98,7 @@ settings:
       views_reference:
         weight: 40
         enabled: false
+      product_carousel_category:
+        enabled: true
+        weight: 43
 field_type: entity_reference_revisions

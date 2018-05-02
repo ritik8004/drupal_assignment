@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_view_all_text
+    - paragraphs.paragraphs_type.product_carousel_category
+id: paragraph.product_carousel_category.field_view_all_text
+field_name: field_view_all_text
+entity_type: paragraph
+bundle: product_carousel_category
+label: 'View all text'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
