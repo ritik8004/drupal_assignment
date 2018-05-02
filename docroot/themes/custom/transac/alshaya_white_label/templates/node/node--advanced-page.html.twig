@@ -22,29 +22,11 @@
       {% endif %}
 
       <div class="c-content__container clearfix">
-          {% if content.field_delivery_banner %}
-            {{ content.field_delivery_banner }}
-          {% endif %}
+        {% if content.field_delivery_banner %}
+          {{ content.field_delivery_banner }}
+        {% endif %}
 
-          <div class="c-content__primary">
-          {% if title_prefix or title_suffix or display_submitted or unpublished or page is empty and label %}
-            {% if not is_front %}
-            <header>
-              {{ title_prefix }}
-              {% if label %}
-                <h2{{ title_attributes.addClass("c-content__title") }}>
-                  <a href="{{ url }}">{{ label }}</a>
-                </h2>
-              {% endif %}
-              {{ title_suffix }}
-
-              {% if unpublished %}
-                <p class="unpublished">{{ 'Unpublished'|t }}</p>
-              {% endif %}
-            </header>
-            {% endif %}
-          {% endif %}
-
+        <div class="c-content__primary">
           <div class="c-content__body">
             {{ content.body }}
             {{ content.field_promo_blocks }}
