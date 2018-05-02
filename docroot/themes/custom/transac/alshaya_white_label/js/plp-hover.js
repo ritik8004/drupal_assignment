@@ -14,10 +14,10 @@
         Hgt = (Hgt > Height) ? Hgt : Height;
       });
 
-      $('.c-products__item').css('height', Hgt + 40);
+      $('.c-products__item').css('height', Hgt + 10);
       $('.c-products__item').hover(function () {
         var dwHeight = $(this).find('.product-plp-detail-wrapper').height();
-        $(this).find('article').css('height', Hgt + dwHeight + 80);
+        $(this).find('article').css('height', Hgt + dwHeight + 30);
       }, function () {
         $('.c-products__item').css('height', Hgt);
       });
