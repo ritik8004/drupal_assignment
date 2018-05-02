@@ -51,7 +51,6 @@ function alshaya_hnm_preprocess_block(&$variables) {
   if (isset($variables['elements'], $variables['elements']['#id'])
     && $variables['elements']['#id'] === 'branding') {
     $variables['site_logo'] = theme_get_setting('logo.url');
-    $variables['site_name'] = theme_get_setting('name');
   }
 }
 
