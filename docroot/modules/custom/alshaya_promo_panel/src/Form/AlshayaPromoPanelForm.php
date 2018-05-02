@@ -117,10 +117,10 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     ];
 
     $allvalues = $form_state->getValues();
-    if (!empty($allvalues['blocks']) && !empty(array_filter($allvalues['blocks']))) {
-      $default_blocks = array_filter($allvalues['blocks']);
+    if (!empty($allvalues['blocks']) && $filtered_blocks = array_filter($allvalues['blocks'])) {
+      $default_blocks = $filtered_blocks;
     }
-    elseif (!empty($promo_panel_blocks)) {
+    elseif (count($promo_panel_blocks) > 0) {
       $default_blocks = array_keys($promo_panel_blocks);
     }
 
@@ -129,7 +129,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
         '#type' => 'textfield',
         '#title' => $this->t('Page url for @id block', ['@id' => $blocks[$id]->label()]),
         '#required' => TRUE,
-        '#default_value' => $promo_panel_blocks[$id],
+        '#default_value' => !empty($promo_panel_blocks) ? $promo_panel_blocks[$id] : '',
       ];
     }
 
