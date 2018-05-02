@@ -372,14 +372,7 @@ function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
   // included in menu flag.
   $hide_tids = [];
 
-  if ($cached_hide_tids = \Drupal::cache()->get('alshaya_hidden_category_tids')) {
-    if (!empty($cached_hide_tids->data)) {
-      $hide_tids = $cached_hide_tids->data;
-    }
-  }
-
-  // Process results array & mark terms for hiding & cache the list of
-  // hidden terms.
+  // Process results array & mark terms for hiding.
   if (empty($hide_tids)) {
     // Load indexed term object.
     $entities = \Drupal::service('entity_type.manager')
@@ -398,9 +391,6 @@ function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
 
     // Remove any duplicate term ids.
     $hide_tids = array_unique($hide_tids);
-
-    // Cache this data to be used on other pages.
-    \Drupal::cache()->set('alshaya_hidden_category_tids', $hide_tids, Cache::PERMANENT, ['acq_product_category_list']);
   }
 
   // Process tids marked for hiding.
