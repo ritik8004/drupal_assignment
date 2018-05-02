@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_category_carousel
+    - paragraphs.paragraphs_type.product_carousel_category
+    - taxonomy.vocabulary.acq_product_category
+id: paragraph.product_carousel_category.field_category_carousel
+field_name: field_category_carousel
+entity_type: paragraph
+bundle: product_carousel_category
+label: Category
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      acq_product_category: acq_product_category
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
