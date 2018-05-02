@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.product_category_carousel
+    - field.field.node.acq_product.body
+    - field.field.node.acq_product.field_category
+    - field.field.node.acq_product.field_meta_tags
+    - field.field.node.acq_product.field_skus
+    - node.type.acq_product
+  module:
+    - acq_sku
+    - user
+id: node.acq_product.product_category_carousel
+targetEntityType: node
+bundle: acq_product
+mode: product_category_carousel
+content:
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  sharethis:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  body: true
+  field_category: true
+  field_meta_tags: true
+  field_skus: true
+  langcode: true
+  scheduled_publication: true

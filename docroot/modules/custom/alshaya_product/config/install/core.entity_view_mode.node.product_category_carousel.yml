@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - lightning_core
+    - node
+third_party_settings:
+  lightning_core:
+    description: ''
+id: node.product_category_carousel
+label: 'Product Category Carousel'
+targetEntityType: node
+cache: true

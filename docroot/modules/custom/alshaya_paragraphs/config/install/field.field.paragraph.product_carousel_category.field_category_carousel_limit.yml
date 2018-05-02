@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_category_carousel_limit
+    - paragraphs.paragraphs_type.product_carousel_category
+id: paragraph.product_carousel_category.field_category_carousel_limit
+field_name: field_category_carousel_limit
+entity_type: paragraph
+bundle: product_carousel_category
+label: 'Number of products'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 12
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer
