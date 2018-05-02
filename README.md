@@ -11,7 +11,7 @@ Multi brands and multi countries solution for selling Alshaya products online.
 
 ## BLT
 
-Please see the [BLT documentation](http://blt.readthedocs.io/en/latest/) for information on build, testing, and deployment processes.
+See the [BLT documentation](http://blt.readthedocs.io/en/latest/) for information on build, testing, and deployment processes.
 
 ## Resources
 
