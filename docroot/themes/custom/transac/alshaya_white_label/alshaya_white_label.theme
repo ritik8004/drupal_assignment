@@ -185,17 +185,18 @@ function alshaya_white_label_preprocess_block(&$variables) {
  * Implements template_view_alter().
  */
 function alshaya_white_label_theme_suggestions_views_view_alter(array &$suggestions, &$variables) {
+  $config = \Drupal::config('alshaya_acm_product.carousel_settings');
   if ($variables['view']->current_display == "block_product_slider") {
     $suggestions[] = 'views_view__product_slider';
-    $variables['row_limit'] = 3;
+    $variables['row_limit'] = $config->get('carousel_recommended_product_limit');
   }
 
   if ($variables['view']->current_display == "category_product_slider") {
     $suggestions[] = 'views_view__category_product_slider';
-    $variables['row_limit'] = 5;
+    $variables['row_limit'] = $config->get('carousel_category_product_limit');
 
     if (\Drupal::service('path.matcher')->isFrontPage()) {
-      $variables['row_limit'] = 6;
+      $variables['row_limit'] = $config->get('carousel_category_product_limit_front_page');
     }
   }
 }

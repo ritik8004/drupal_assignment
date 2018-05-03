@@ -1,4 +1,4 @@
 alshaya_stores_migrate.upload:
   route_name: alshaya_stores_migrate.upload
   title: 'Migrate stores'
-  parent: system.admin_config_system
+  parent: alshaya_master.alshaya_admin

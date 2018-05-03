@@ -165,7 +165,15 @@ Drupal.alshaya_hm_images_generate_swatch_markup = function (currentOption, selec
     // If status is disabled, use <span>, otherwise use <a>.
     var markup = status === 'enabled' ? '<a data-color-label="' + color_label + '" data-swatch-type="' + swatch_type + '" href="#" class="' + currentOption.text() + '" data-select-index="' + selectIndex + '"' : '<span class="' + currentOption.text() + '"';
     // If swatch type is RGB, add provided value as background-color, otherwise use it as markup.
-    markup += swatch_type.toLowerCase() !== 'rgb' ? '>' + sku_configurable_options_color[option_id].display_value : ' style="background-color:' + sku_configurable_options_color[option_id].display_value + ';">';
+    // If white color as a border so it is recognizable.
+    var colorHEX = sku_configurable_options_color[option_id].display_value;
+    if (colorHEX === ('#FFFFFF' || '#ffffff' || '#fff' || '#FFF')) {
+      markup += swatch_type.toLowerCase() !== 'rgb' ? '>' + colorHEX : ' style="background-color:' + colorHEX + '; box-shadow: 0px 0px 0px 1px inset #C8c8c8;">';
+    }
+    else {
+      markup += swatch_type.toLowerCase() !== 'rgb' ? '>' + colorHEX : ' style="background-color:' + colorHEX + ';">';
+    }
+
     markup += status === 'enabled' ? '</a>' : '</span>';
 
     return markup;
