@@ -73,30 +73,3 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
       break;
   }
 }
-
-/**
- * Get the block content machine name from.
- *
- * @param string $block_name
- *   The block machine name.
- *
- * @return null|string
- *   Return string if block found else null.
- */
-function alshaya_promo_panel_get_block_content_name($block_name) {
-  // Get the block content machine name from the block and set it in config.
-  $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_name]);
-  $block = reset($blocks);
-  if (strpos($block->getPluginId(), 'block_content') !== TRUE) {
-    return NULL;
-  }
-
-  $uuid = explode(':', $block->getPluginId())[1];
-  $block_contents = \Drupal::entityTypeManager()->getStorage('block_content')->loadByProperties(['uuid' => $uuid]);
-  if (!count($block_contents)) {
-    return NULL;
-  }
-
-  $block_content = reset($block_contents);
-  return $block_content->get('machine_name')->value;
-}
