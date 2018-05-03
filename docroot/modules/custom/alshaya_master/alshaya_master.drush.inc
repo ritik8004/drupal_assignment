@@ -10,7 +10,6 @@ use Drupal\lightning_core\ConfigHelper;
 use Drupal\locale\Locale;
 use Drupal\user\Entity\User;
 
-
 /**
  * Implements hook_drush_command().
  */
@@ -26,9 +25,9 @@ function alshaya_master_drush_command() {
     ],
   ];
 
-  // As this is dangerous operation, it intentionally doesn't have an alias
+  // As this is dangerous operation, it intentionally doesn't have an alias.
   $commands['alshaya-scrub-users'] = [
-    'description' => 'Delete all user that have only autheticated user role.',
+    'description' => 'Delete all users that have only autheticated user role.',
   ];
 
   return $commands;
@@ -156,8 +155,8 @@ function drush_alshaya_master_alshaya_scrub_users() {
     $num_roles = count($roles);
 
     // Only if a user has just a single role of authenticated user,
-    // we will delete him
-    if ( ($num_roles == 1) && ($roles[0] == 'authenticated') ) {
+    // we will delete him.
+    if (($num_roles == 1) && ($roles[0] == 'authenticated')) {
       $ids_to_delete[] = $id;
     }
   }
@@ -166,13 +165,15 @@ function drush_alshaya_master_alshaya_scrub_users() {
     drush_print(dt('Following user ids are about to be deleted: @ids', ['@ids' => implode(', ', $ids_to_delete)]));
 
     if (drush_confirm(dt('Are you sure you want to delete @num non-privileged users?', ['@num' => count($ids_to_delete)]))) {
-      drush_print(dt('Done.... Deleting...'));
+      foreach ($ids_to_delete as $id_to_delete) {
+        drush_print(dt('Deleting user: @id', ['@id' => $id_to_delete]));
+        user_delete($id_to_delete);
+      }
 
+      drush_print(dt('Done.'));
     }
     else {
       drush_user_abort();
     }
   }
-
-  drush_print(dt('Done.'));
 }
