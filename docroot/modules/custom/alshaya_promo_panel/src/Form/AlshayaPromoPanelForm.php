@@ -109,7 +109,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
 
     $form['page_urls'] = [
       '#type' => 'fieldset',
-      '#title' => $this->t("Configure page urls for selected blocks"),
+      '#title' => $this->t('Configure page urls for selected blocks'),
       '#description' => $this->t('Add page urls, user will navigate to this page while accessing from mobile.'),
       '#prefix' => '<div id="page-urls">',
       '#suffix' => '</div>',
@@ -133,7 +133,6 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
       ];
     }
 
-    $form_state->setCached(FALSE);
     return parent::buildForm($form, $form_state);
   }
 
