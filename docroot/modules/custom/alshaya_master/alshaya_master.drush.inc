@@ -175,5 +175,7 @@ function drush_alshaya_master_alshaya_scrub_users() {
     else {
       drush_user_abort();
     }
+  } else {
+    drush_print(dt('No matching users found to be deleted.'));
   }
 }
