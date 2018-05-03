@@ -1,5 +1,5 @@
 alshaya_loyalty.loyalty_settings_form:
-  path: '/admin/config/people/loyalty'
+  path: '/admin/config/alshaya/loyalty'
   defaults:
     _form: '\Drupal\alshaya_loyalty\Form\LoyaltyConfigForm'
     _title: 'Loyalty settings'

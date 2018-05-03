@@ -1,5 +1,5 @@
 alshaya_stores_migrate.upload:
-  path: '/admin/config/system/store-migrate'
+  path: '/admin/config/alshaya/store-migrate'
   defaults:
     _form: '\Drupal\alshaya_stores_migrate\Form\StoresMigrateUploadForm'
     _title: 'Migrate stores'
