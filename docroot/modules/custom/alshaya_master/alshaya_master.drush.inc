@@ -8,6 +8,8 @@
 use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
 use Drupal\locale\Locale;
+use Drupal\user\Entity\User;
+
 
 /**
  * Implements hook_drush_command().
@@ -22,6 +24,11 @@ function alshaya_master_drush_command() {
       'brand_module' => 'The brand module to install.',
       'country_code' => 'The country code the module.',
     ],
+  ];
+
+  // As this is dangerous operation, it intentionally doesn't have an alias
+  $commands['alshaya-scrub-users'] = [
+    'description' => 'Delete all user that have only autheticated user role.',
   ];
 
   return $commands;
@@ -130,4 +137,42 @@ function drush_alshaya_master_alshaya_post_drupal_install() {
   else {
     drush_print(dt('Post install code executed already, not doing again.'));
   }
+}
+
+/**
+ * Implements drush command alshaya-scrub-users.
+ *
+ * Removes all users that don't only have authenticated user role.
+ */
+function drush_alshaya_master_alshaya_scrub_users() {
+  $ids = \Drupal::entityQuery('user')
+    ->execute();
+  $ids_to_delete = [];
+
+  foreach ($ids as $id) {
+    $user = User::load($id);
+    $roles = $user->getRoles();
+
+    $num_roles = count($roles);
+
+    // Only if a user has just a single role of authenticated user,
+    // we will delete him
+    if ( ($num_roles == 1) && ($roles[0] == 'authenticated') ) {
+      $ids_to_delete[] = $id;
+    }
+  }
+
+  if ($ids_to_delete) {
+    drush_print(dt('Following user ids are about to be deleted: @ids', ['@ids' => implode(', ', $ids_to_delete)]));
+
+    if (drush_confirm(dt('Are you sure you want to delete @num non-privileged users?', ['@num' => count($ids_to_delete)]))) {
+      drush_print(dt('Done.... Deleting...'));
+
+    }
+    else {
+      drush_user_abort();
+    }
+  }
+
+  drush_print(dt('Done.'));
 }
