@@ -36,7 +36,7 @@
 
       // We trigger focus of cart button to avoid issue in iOS.
       setTimeout(function () {
-        jQuery('.edit-add-to-cart', $(data.selector).closest('form')).trigger('focus');
+        jQuery('.mobile-content-wrapper .edit-add-to-cart', $(data.selector).closest('form')).trigger('focus');
       }, 50);
     }
   };
