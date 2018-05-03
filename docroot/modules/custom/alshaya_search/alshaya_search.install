@@ -48,6 +48,22 @@ function alshaya_search_update_8014() {
  * Expand only one category at a time.
  * Revert hide taxonomy term from menu processor for category facets.
  */
+function alshaya_search_update_8014() {
+  $facet_configs = [
+    'facets.facet.plp_category_facet',
+    'facets.facet.category',
+  ];
+  alshaya_config_install_configs($facet_configs, 'alshaya_search');
+
+  alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Expand only one category at a time.
+ * Revert hide taxonomy term from menu processor for category facets.
+ */
 function alshaya_search_update_8013() {
   alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
   alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
