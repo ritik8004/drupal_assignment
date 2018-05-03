@@ -23,7 +23,7 @@ alshaya_stores_finder.glossary_back:
   requirements:
     _permission: 'access content'
 alshaya_stores_finder.configuration:
-  path: '/admin/config/system/store-finder'
+  path: '/admin/config/alshaya/store-finder'
   defaults:
     _form: '\Drupal\alshaya_stores_finder\Form\StoresFinderConfigForm'
     _title: 'Store finder configuration'
