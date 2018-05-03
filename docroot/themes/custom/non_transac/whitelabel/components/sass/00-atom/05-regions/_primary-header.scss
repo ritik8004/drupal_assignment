@@ -7,4 +7,8 @@
   @include breakpoint($desk) {
     width: 60%;
   }
+
+  @include breakpoint($lap) {
+    height: 2.5625rem;
+  }
 }

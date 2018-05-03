@@ -1,0 +1,25 @@
+name: Alshaya Example Subtheme
+type: theme
+description: 'Theme for Example brand (Transactional).'
+core: 8.x
+base theme: alshaya_white_label
+alshaya_theme_type: transac
+
+regions:
+  menu_primary: 'Menu Primary'
+  menu_secondary: 'Menu Secondary'
+  header: Header
+  pre_content: 'Pre content'
+  breadcrumb: Breadcrumb
+  hero_content: 'Hero Content'
+  highlighted: 'Highlight Content'
+  content: Content
+  sidebar_first: 'Sidebar first'
+  sidebar_second: 'Sidebar second'
+  post_content: 'Post content'
+  footer_primary: 'Footer Primary'
+  footer_secondary: 'Footer Secondary'
+
+libraries:
+  - alshaya_example_subtheme/global_styles
+  - alshaya_white_label/ucfix

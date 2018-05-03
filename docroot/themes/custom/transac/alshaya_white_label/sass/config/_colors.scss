@@ -175,7 +175,7 @@ $modal_close_bg: $marine-blue;
 $modal_close_icon: $white-two;
 
 // VAT text
-$vat: $light-greyish;
+$vat: $grey-ash;
 $vat_dark: $whisper-light;
 
 /* ------- 3. Secondary color  ----- */
@@ -240,6 +240,7 @@ $tooltip_border_2: $alice-blue;
 // $tooltip_border + opacity 0.
 $tooltip_border_opacity_0: rgba(0, 132, 204, 0);
 $tooltip_icon: $cerulean-two;
+$tooltip_link: $cerulean-two;
 
 // Back to top
 $btt_bg: $whisper-light;
@@ -269,6 +270,7 @@ $maintenance_link: $cerulean-two;
 // Accordion
 $accordion_border: $white;
 $accordion_title: $grey-ash;
+$accordion_sub_title: $grey-ash;
 $accordion_title_disabled: $white;
 
 // Cloudzoom
@@ -295,6 +297,7 @@ $hp_slider_arrows_dark: $mothercare-black;
 
 // Sharethis
 $sharethis_icon: $marine-blue-two;
+$sharethis_icon_hover: transparent;
 
 // Autocomplete
 $autocomplete_bg: $white-five;
@@ -306,9 +309,10 @@ $autocomplete_text: $grey-ash;
 
 // Header.
 $header_bg: $white-five;
-$header_top_bg: $white-five;
+$header_top_bg: $white-four;
 $header_search_block_bg: $white-five;
 $header_border: $white;
+$header_super_category_bg: $white-five;
 
 // Header mobile search.
 $header_search_border_mobile: $marine-blue-two;
@@ -371,6 +375,8 @@ $mm_l3_link_2: $peacock-blue; // possible old markup.
 $mm_l3_link_bg: $white-five;
 $mm_l3_link_hover: $cerulean-two;
 $mm_highlight_label: $marine-blue;
+$mm_highlight_title: $marine-blue;
+$mm_highlight_description: $grey-ash;
 $mm_p_a_text: $white-five;
 
 //  Mini Cart.
@@ -392,7 +398,18 @@ $minicart_notification_product_title: $grey-ash;
 $deliverybanner_title: $cerulean-two;
 $deliverybanner_subtitle: $cerulean-two;
 $deliverybanner_border: $cerulean-two;
+$deliverybanner_link: $content_link_color;
 $deliverybanner_shadow: $shadow;
+
+// Promo panel.
+$promo_panel_mobile_bg: $white-five;
+$promo_panel_content: $black;
+$promo_panel_content_bg: $white-five;
+$promo_panel_border: $white;
+$promo_panel_mobile_label: $marine-blue-two;
+$promo_panel_label_bg: $white-five;
+$promo_panel_label: $black;
+$promo_panel_label_icon: $marine-blue-two;
 
 //3. Footer
 $footer_bg: $white-five;
@@ -434,9 +451,9 @@ $checkout_progress_next_txt: $brownish-grey;
 // Product listing page and search page.
 $plp_category_desc: $cerulean-two;
 $plp_search_count: $black;
-$plp_sort_by_label: $grey-ash;
 $plp_facet_filter: $windows-blue;
 $plp_facet_filter_bg: $cerulean-two;
+$plp_facet_item_label: $grey-ash;
 $plp_facet_filter_link: $white-four;
 $plp_facet_clear_border: $cerulean-two;
 $plp_facet_clear_border_mobile: $cerulean-two;
@@ -450,6 +467,7 @@ $plp_facet_active_bg: $white-five;
 $plp_facet_filter_label: $black;
 $plp_facet_title: $grey-ash;
 $plp_facet_border: $white;
+$plp_facet_summary_filter_icon: $white-four;
 $plp_item_label: $grey-ash;
 $plp_promotion_description: $cerulean-two;
 $plp_promotion_link: $cherry;
@@ -460,6 +478,7 @@ $plp_filterbar_filter_text: $white-five;
 $plp_filterbar_filter_clear: $white-five;
 $plp_filterbar_clearall_border: $cerulean-two;
 $plp_filterbar_clearall_text: $cerulean-two;
+$plp_search_count: $black;
 
 // PLP Product tile.
 $plp_tile_product_text: $black;
@@ -490,6 +509,7 @@ $pdp_product_discount_text: $scarlet;
 $pdp_product_itemcode: $grey-ash;
 $pdp_title_section_border: $white;
 $pdp_mobile_wrapper: $white-five;
+$pdp_sell_title: $grey-ash;
 
 // Product modal
 $pdp_modal_full_prodlink: $marine-blue;
@@ -631,6 +651,11 @@ $checkout_pri_txt: $grey-ash;
 $checkout_section_border: $greyish;
 $checkout_section_titles: $marine-blue-two;
 $checkout_section_title_border: $white;
+$secure_checkout_back_link: $content_link_color;
+$checkout_tab_active_head: $light-greyish;
+$checkout_default_address_border: $pumpkin-orange;
+$checkout_default_address_bg: $pumpkin-orange;
+$checkout_address_edit_link: $content_link_color;
 
 // @todo Variables used in outdated markup, avoid using elsewhere.
 $checkout_out_sec_text: $windows-blue;
@@ -759,8 +784,15 @@ $checkout_order_details_product_count_border: $white-five;
 
 // Address form.
 $address_form_country_disabled: $ladda-disabled;
+$address_form_radio: $windows-blue;
+$address_form_default: $white-four;
 $address_button_border: $marine-blue-two;
 $address_button_text: $marine-blue-two;
+$address_book_border: $white;
+$user_ui_dialog_border: $white;
+$address_book_delete_cancel: #3381d0;
+$address_book_delete_close: $black;
+$address_book_delete_close_bg: $white;
 
 //My Account pages
 $user_account_wrapper_light: $grey-ash;
@@ -836,6 +868,9 @@ $basket_img_border: $white;
 $basket_img_bg: $white-five;
 $basket_th_4th_child: $white-two;
 $basket_continue_shopping_btn_border: $marine-blue-two;
+$basket_continue_shopping_link: $content_link_color;
+$basket_sell_hover_link: $content_link_color;
+$basket_content_link_color: $cerulean-two;
 // Pri text is product title, price, etc.
 $basket_td_pri_txt: $black;
 // Sec text is Size, color, item code attributes.
@@ -853,6 +888,7 @@ $basket_header_oos_bg: $cherry;
 $basket_header_oos_txt: $white-four;
 // Privilege card earn text only for the basket page.
 $privilege_earn_txt: $grey-ash;
+$basket_empty_message: $black;
 
 // Contact Page
 $webform_contact_legend: $marine-blue-two;
@@ -920,6 +956,9 @@ $mm_l1_link_active_shadow: false;
 $mm_l2_link_mobile_menu: false;
 $header_c_menu_search_icon: false;
 $store_finder_get_direction_label_color: false;
+$plp_sort_by_label: false;
+$pdp_sidebar_desc_overlay_section_border: false;
+$pdp_delivery_options_subtitle: false;
 
 // From: HMKW
 $default_msg_status_text: false;
@@ -971,6 +1010,25 @@ $header_c_menu_store_active_icon: false;
 $header_mobile_menu_bg: false;
 $header_secondary_menu_mobile_link: false;
 $header_secondary_menu_link_mobile_hover_bg: false;
-$header_super_category_bg: false;
 $user_order_help_border: false;
 $header_mobile_border: false;
+$header_my_account_mobile_h3_title: false;
+$header_my_account_mobile_link_hover: false;
+$mm_highlight_bg: false;
+
+// Store.
+$store_finder_map_border: false;
+$store_finder_glossary_btn_border: false;
+
+// Messages and Errors.
+$default_msg_border: false;
+$default_msg_icon: false;
+
+// PDP.
+$pdp_filter_selector_label: false;
+
+// Orders.
+$order_detail_order_sub_total_border: false;
+
+// Checkout.
+$checkout_progress_border: false;

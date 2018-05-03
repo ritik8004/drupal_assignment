@@ -74,9 +74,22 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
-    if ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
+    $cc_selected_info = $cart->getExtension('cc_selected_info');
+
+    if ($form_values = $form_state->getValue($pane_form['#parents'])) {
+      $store_code = $form_values['store_code'];
+      $shipping_type = $form_values['shipping_type'];
+      $default_mobile = $form_values['cc_mobile_number'];
+    }
+    elseif ($cc_selected_info && isset($cc_selected_info['store_code'])) {
+      $store_code = $cc_selected_info['store_code'];
+      $shipping_type = $cc_selected_info['shipping_type'];
+    }
+    elseif ($cart->getExtension('store_code') && $shipping) {
       // Check if value available in shipping address.
-      $default_mobile = $shipping['telephone'];
+      if (!empty($shipping['telephone'])) {
+        $default_mobile = $shipping['telephone'];
+      }
       $store_code = $cart->getExtension('store_code');
       $shipping_type = $cart->getExtension('click_and_collect_type');
     }
@@ -145,11 +158,11 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     ];
 
     $pane_form['store_finder']['toggle_list_view'] = [
-      '#markup' => '<a href="#" class="stores-list-view active">' . $this->t('List view') . '</a>',
+      '#markup' => '<a href="#" class="stores-list-view active hidden-important">' . $this->t('List view') . '</a>',
     ];
 
     $pane_form['store_finder']['toggle_map_view'] = [
-      '#markup' => '<a href="#" class="stores-map-view">' . $this->t('Map view') . '</a>',
+      '#markup' => '<a href="#" class="stores-map-view hidden-important">' . $this->t('Map view') . '</a>',
       '#suffix' => '</div>',
     ];
 
@@ -269,11 +282,14 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       ],
       '#ajax' => [
         'callback' => [$this, 'submitMemberDeliveryCollect'],
-        'wrapper' => 'selected-store-elements-wrapper',
+        'wrapper' => 'selected-store-wrapper',
       ],
       // This is required for limit_validation_errors to work.
       '#submit' => [],
-      '#limit_validation_errors' => [['cc_mobile_number']],
+      '#limit_validation_errors' => [
+        ['member_delivery_collect'],
+        ['cc_mobile_number'],
+      ],
     ];
 
     $complete_form['actions']['next']['#attributes']['class'][] = 'hidden-important';
@@ -312,6 +328,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     $cart = $this->getCart();
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
+    $cart->setExtension('cc_selected_info', NULL);
 
     // Clear the payment now.
     $cart->clearPayment();
@@ -351,7 +368,10 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     }
 
     if ($form_state->getErrors()) {
-      return $form['member_delivery_collect']['selected_store'];
+      $response = new AjaxResponse();
+      $response->addCommand(new ReplaceCommand('#selected-store-elements-wrapper', $form['guest_delivery_collect']['selected_store']['elements']));
+      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['form.multistep-checkout #selected-store-elements-wrapper', TRUE]));
+      return $response;
     }
 
     $response = new AjaxResponse();

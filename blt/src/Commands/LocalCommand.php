@@ -136,7 +136,7 @@ class LocalCommand extends BltTasks {
     $this->taskDrush()
       ->drush('cset')
       ->arg('stage_file_proxy.settings')
-      ->arg('origin ')
+      ->arg('origin')
       ->arg($info['origin'])
       ->assume(TRUE)
       ->alias($info['local']['alias'])

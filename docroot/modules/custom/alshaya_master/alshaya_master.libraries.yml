@@ -19,3 +19,25 @@ mobile_number:
   dependencies:
     - core/jquery.once
     - core/drupal
+
+focus_form_error:
+  version: 1.x
+  js:
+    js/alshaya_form_error.js: {}
+  dependencies:
+    - core/jquery.once
+    - core/drupal
+
+jquery_minicolor_arabic:
+  version: 1.x
+  css:
+    theme:
+      css/jquery_minicolor_arabic.css: {scope: footer}
+
+cv_ife:
+  version: 1.x
+  js:
+    js/cv.jquery.ife.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

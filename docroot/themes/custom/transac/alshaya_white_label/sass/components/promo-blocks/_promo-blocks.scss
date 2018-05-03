@@ -212,8 +212,8 @@
     max-width: 26.25rem;
   }
 
-  &.theme-black-amperserif,
-  &.theme-black-ampersand-bold {
+  &.theme-black-normal,
+  &.theme-black-bold {
     color: $promo_black_amperserif;
 
     .field--name-field-button-link {
@@ -225,8 +225,8 @@
     }
   }
 
-  &.theme-white-amperserif,
-  &.theme-white-ampersand-bold {
+  &.theme-white-normal,
+  &.theme-white-bold {
     color: $promo_white_amperserif;
 
     .field--name-field-button-link {
@@ -358,8 +358,8 @@
   }
 }
 
-.theme-white-ampersand-bold,
-.theme-black-ampersand-bold {
+.theme-white-bold,
+.theme-black-bold {
   .field--name-field-promo-text-2 {
     font-family: $alshaya-bold;
   }

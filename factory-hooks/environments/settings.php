@@ -11,156 +11,242 @@
  * Get settings which are environment and/or site dependent.
  */
 function alshaya_get_additional_settings($site, $env) {
+  // Like mc, hm or pb.
+  $site_name = substr($site, 0, -2);
+  // Like kw, sa or ae.
+  $country = substr($site, 2, 2);
+
   $mapping = [
-    'mckw' => [
-      '01live' => [
-        'store_id' => [
-          'ar' => 4,
+    'mc' => [
+      'kw' => [
+        '01live' => [
+          'store_id' => [
+            'ar' => 4,
+          ],
+        ],
+        '01update' => [
+          'store_id' => [
+            'ar' => 4,
+          ],
+        ],
+        'default' => [
+          'store_id' => [
+            'ar' => 3,
+          ],
         ],
       ],
-      '01update' => [
-        'store_id' => [
-          'ar' => 4,
+      'sa' => [
+        'default' => [
+          'store_id' => [
+            'en' => 5,
+            'ar' => 4,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'ksa_en',
+            'ar' => 'ksa_ar',
+          ],
+        ],
+        '01uat' => [
+          'store_id' => [
+            'en' => 7,
+            'ar' => 10,
+          ],
+        ],
+        '01live' => [
+          'store_id' => [
+            'en' => 7,
+            'ar' => 13,
+          ],
         ],
       ],
-      'default' => [
-        'store_id' => [
-          'ar' => 3,
+      'ae' => [
+        'default' => [
+          'store_id' => [
+            'en' => 7,
+            'ar' => 6,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'uae_en',
+            'ar' => 'uae_ar',
+          ],
         ],
-      ]
-    ],
-    'mcsa' => [
-      'default' => [
-        'store_id' => [
-          'en' => 5,
-          'ar' => 4,
+        '01uat' => [
+          'store_id' => [
+            'en' => 16,
+            'ar' => 13,
+          ],
         ],
-        'magento_lang_prefix' => [
-          'en' => 'ksa_en',
-          'ar' => 'ksa_ar',
-        ],
-      ],
-      '01uat' => [
-        'store_id' => [
-          'en' => 7,
-          'ar' => 10,
-        ],
-      ],
-    ],
-    'mcae' => [
-      'default' => [
-        'store_id' => [
-          'en' => 7,
-          'ar' => 6,
-        ],
-        'magento_lang_prefix' => [
-          'en' => 'uae_en',
-          'ar' => 'uae_ar',
-        ],
-      ],
-      '01uat' => [
-        'store_id' => [
-          'en' => 16,
-          'ar' => 13,
-        ],
-      ],
-    ],
-    'hmkw' => [
-      'default' => [
-        'store_id' => [
-          'ar' => 2,
-        ],
-        'magento_lang_prefix' => [
-          'en' => 'default',
-        ],
-      ],
-      '01live' => [
-        'store_id' => [
-          'ar' => 5,
-        ],
-        'alshaya_acm_knet.settings' => [
-          'alias' => 'hm',
-        ],
-      ]
-    ],
-    'hmsa' => [
-      'default' => [
-        'store_id' => [
-          'en' => 3,
-          'ar' => 4,
-        ],
-        'magento_lang_prefix' => [
-          'en' => 'ksa_en',
-          'ar' => 'ksa_ar',
-        ],
-      ],
-      '01uat' => [
-        'store_id' => [
-          'en' => 8,
-          'ar' => 5,
+        '01live' => [
+          'store_id' => [
+            'en' => 19,
+            'ar' => 22,
+          ],
         ],
       ],
     ],
-    'hmae' => [
-      'default' => [
-        'store_id' => [
-          'en' => 6,
-          'ar' => 5,
+    'hm' => [
+      'kw' => [
+        'default' => [
+          'store_id' => [
+            'ar' => 2,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'default',
+          ],
         ],
-        'magento_lang_prefix' => [
-          'en' => 'uae_en',
-          'ar' => 'uae_ar',
+        '01live' => [
+          'store_id' => [
+            'ar' => 5,
+          ],
+          'alshaya_acm_knet.settings' => [
+            'alias' => 'hm',
+          ],
         ],
       ],
-      '01uat' => [
-        'store_id' => [
-          'en' => 14,
-          'ar' => 11,
+      'sa' => [
+        'default' => [
+          'store_id' => [
+            'en' => 3,
+            'ar' => 4,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'ksa_en',
+            'ar' => 'ksa_ar',
+          ],
+        ],
+        '01uat' => [
+          'store_id' => [
+            'en' => 8,
+            'ar' => 5,
+          ],
+        ],
+        '01live' => [
+          'store_id' => [
+            'en' => 8,
+            'ar' => 14,
+          ],
+        ],
+      ],
+      'ae' => [
+        'default' => [
+          'store_id' => [
+            'en' => 6,
+            'ar' => 5,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'uae_en',
+            'ar' => 'uae_ar',
+          ],
+        ],
+        '01uat' => [
+          'store_id' => [
+            'en' => 14,
+            'ar' => 11,
+          ],
+        ],
+        '01live' => [
+          'store_id' => [
+            'en' => 17,
+            'ar' => 23,
+          ],
         ],
       ],
     ],
-    'pbae' => [
-      'default' => [
-        'en' => 1,
-        'ar' => 1,
+    'bbw' => [
+      'ae' => [
+        'default' => [
+          'store_id' => [
+            'ar' => 3,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'kwt_en',
+            'ar' => 'kwt_ar',
+          ],
+          //'magento_lang_prefix' => [
+          //  'en' => '',
+          //  'ar' => 'uae_ar',
+          //],
+        ],
       ],
-      'magento_lang_prefix' => [
-        'en' => 'uae_en',
-        'ar' => 'uae_en',
+    ],
+    'pb' => [
+      'ae' => [
+        //'default' => [
+        //  'store_id' => [
+        //    'en' => 1,
+        //    'ar' => 2,
+        //  ],
+        //  'magento_lang_prefix' => [
+        //    'en' => 'uae_en',
+        //    'ar' => 'uae_ar',
+        //  ],
+        //],
+        // PBAE is connected to MCKW QA for now.
+        'default' => [
+          'store_id' => [
+            'ar' => 3,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'kwt_en',
+            'ar' => 'kwt_ar',
+          ],
+        ],
+      ],
+    ],
+    'vs' => [
+      'ae' => [
+        // VSAE is connected to MCKW QA for now.
+        'default' => [
+          'store_id' => [
+            'ar' => 3,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'kwt_en',
+            'ar' => 'kwt_ar',
+          ],
+        ],
       ],
     ],
     'default' => [
       'default' => [
-        'store_id' => [
-          'en' => 1,
-          'ar' => 2,
-        ],
-        'magento_lang_prefix' => [
-          'en' => 'kwt_en',
-          'ar' => 'kwt_ar',
-        ],
-        'alshaya_acm_knet.settings' => [
-          'alias' => 'alshaya',
+        'default' => [
+          'store_id' => [
+            'en' => 1,
+            'ar' => 2,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'kwt_en',
+            'ar' => 'kwt_ar',
+          ],
+          'alshaya_acm_knet.settings' => [
+            'alias' => 'alshaya',
+          ],
         ],
       ],
     ],
   ];
 
   // Get the settings following this fallback (from the more generic to the
-  // more specific one): default+default > default+env > site+default >
-  // site+env.
+  // more specific one): default+default+default > site+country+env.
   $settings = [];
-  if (isset($mapping['default']['default'])) {
-    $settings = array_replace_recursive($settings, $mapping['default']['default']);
+
+  if (isset($mapping['default']['default']['default'])) {
+    $settings = array_replace_recursive($settings, $mapping['default']['default']['default']);
   }
-  if (isset($mapping['default'][$env])) {
-    $settings = array_replace_recursive($settings, $mapping['default'][$env]);
+  if (isset($mapping['default']['default'][$env])) {
+    $settings = array_replace_recursive($settings, $mapping['default']['default'][$env]);
   }
-  if (isset($mapping[$site]['default'])) {
-    $settings = array_replace_recursive($settings, $mapping[$site]['default']);
+  if (isset($mapping['default'][$country]['default'])) {
+    $settings = array_replace_recursive($settings, $mapping['default'][$country]['default']);
   }
-  if (isset($mapping[$site][$env])) {
-    $settings = array_replace_recursive($settings, $mapping[$site][$env]);
+  if (isset($mapping[$site_name]['default']['default'])) {
+    $settings = array_replace_recursive($settings, $mapping[$site_name]['default']['default']);
+  }
+  if (isset($mapping[$site_name][$country]['default'])) {
+    $settings = array_replace_recursive($settings, $mapping[$site_name][$country]['default']);
+  }
+  if (isset($mapping[$site_name][$country][$env])) {
+    $settings = array_replace_recursive($settings, $mapping[$site_name][$country][$env]);
   }
 
   return $settings;

@@ -1049,16 +1049,16 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         if ($all_rows > $count) {
             throw new Exception('More than three orders displayed on my account page');
         }
-        $all_orders = $page->findAll('css', '.order-transaction');
-        foreach ($all_orders as $order) {
-            $date_text = $order->find('css', '.light.order--date--time')->getText();
-            $strnew = substr_replace($date_text, ' ', '-3', '1');
-            $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
-            $time_array[] = $date->format('U');
-        }
-        if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
-            throw new Exception('Orders are not displayed in descending order');
-        }
+//        $all_orders = $page->findAll('css', '.order-transaction');
+//        foreach ($all_orders as $order) {
+//            $date_text = $order->find('css', '.light.order--date--time')->getText();
+//            $strnew = substr_replace($date_text, ' ', '-3', '1');
+//            $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
+//            $time_array[] = $date->format('U');
+//        }
+//        if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
+//            throw new Exception('Orders are not displayed in descending order');
+//        }
     }
 
     /**
@@ -1291,17 +1291,17 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
         if ($actual_count > $arg1) {
             throw new Exception('More than 10 orders are listed on Orders tab');
         }
-        $all_orders = $page->findAll('css', '.first-second.wrapper > div.first');
-        $number = [];
-        foreach ($all_orders as $order) {
-            $date_text = $order->find('css', '.light.date')->getText();
-            $strnew = substr_replace($date_text, ' ', '-3', '1');
-            $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
-            $time_array[] = $date->format('U');
-            if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
-                throw new Exception('Orders are not displayed in descending order');
-            }
-        }
+//        $all_orders = $page->findAll('css', '.first-second.wrapper > div.first');
+//        $number = [];
+//        foreach ($all_orders as $order) {
+//            $date_text = $order->find('css', '.light.date')->getText();
+//            $strnew = substr_replace($date_text, ' ', '-3', '1');
+//            $date = DateTime::createFromFormat('j M. Y @ H i', $strnew);
+//            $time_array[] = $date->format('U');
+//            if (!$this->is_array_ordered($time_array, ORDER_DSC)) {
+//                throw new Exception('Orders are not displayed in descending order');
+//            }
+//        }
     }
 
     /**

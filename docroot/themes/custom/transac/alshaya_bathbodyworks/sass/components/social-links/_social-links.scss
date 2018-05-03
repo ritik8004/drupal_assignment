@@ -1,0 +1,106 @@
+
+// Todo Temp png icons - needs to convert to font
+$path-social-icons: "../../alshaya_white_label/imgs/social-icons/pdp";
+
+@mixin ic-social {
+  content: '';
+  background-repeat: no-repeat;
+  width: 1.76rem;
+  height: 1.59rem;
+  display: inline-block;
+  background-size: contain;
+  background-position: center;
+}
+
+.ic-social {
+  &-facebook {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$path-social-icons}/ic-facebookselect.png);
+    }
+  }
+
+  &-instagram {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$path-social-icons}/ic-instagramselect.png);
+    }
+  }
+
+  &-twitter {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$path-social-icons}/ic-twitterselect.png);
+    }
+  }
+
+  &-youtube {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$path-social-icons}/ic-youtubeselect.png);
+    }
+  }
+
+  &-pinterest {
+    &::before {
+      @include ic-social;
+
+      background-image: url(#{$path-social-icons}/ic-pinterestselect.png);
+    }
+  }
+}
+
+//specific to BBW brand
+.footer--social {
+  .c-social-links {
+    text-align: $left;
+    padding-top: 0;
+    padding-bottom: 1.125rem;
+    margin-top: 0;
+    padding-left: 0.13rem;
+
+    @include breakpoint($only-mobile) {
+      padding-bottom: 0;
+    }
+
+    h3 {
+      margin-top: 0;
+      font-family: $alshaya-bold;
+      text-align: $left;
+      color: $black;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      margin-bottom: 0.5rem;
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      padding-top: 0;
+      padding-bottom: 1.1875rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-bottom: 2rem;
+    }
+
+    li:not(:last-child) {
+      margin-#{$right}: 1rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 2.4rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 0.75rem;
+      }
+    }
+  }
+}

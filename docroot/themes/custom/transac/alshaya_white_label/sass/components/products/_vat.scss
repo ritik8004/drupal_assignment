@@ -18,13 +18,17 @@
 
   .vat-text-footer {
     @include breakpoint($tablet) {
-      text-align: $right;
-      padding: 0.3125rem;
+      text-align: $left;
+      padding: 0.3125rem 1.5rem;
     }
 
     @include breakpoint($desktop) {
-      text-align: $right;
       padding: 1rem 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+      margin: 0 0.5rem;
     }
   }
 

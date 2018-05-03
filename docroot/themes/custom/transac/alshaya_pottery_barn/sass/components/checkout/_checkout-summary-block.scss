@@ -1,0 +1,29 @@
+.block-checkout-summary-block {
+  border: none !important;
+
+  .acq-cart-summary {
+    .caption {
+      background: $order_summary_caption_bg;
+
+      .title {
+        font-weight: 600;
+      }
+    }
+
+    .content {
+      background: $order_summary_content_bg;
+    }
+
+    .totals {
+      background: $order_summary_totals_bg;
+
+      .order-total {
+        font-weight: 600;
+      }
+    }
+
+    .right span.price-wrapper {
+      font-weight: 600;
+    }
+  }
+}

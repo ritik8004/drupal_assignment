@@ -245,6 +245,10 @@ function alshaya_stores_finder_preprocess_field__node__field_store_address__stor
 function alshaya_stores_finder_set_default_marker_icon($name = 'alshaya_stores_finder', $type = 'module') {
   // Set default marker image settings.
   $marker_path = drupal_get_path($type, $name) . '/images/google-map-marker.svg';
+  if (!file_exists($marker_path)) {
+    return;
+  }
+
   $icon_path = file_url_transform_relative(file_create_url($marker_path));
   \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
     ->set('marker.use_default', FALSE)
@@ -252,10 +256,14 @@ function alshaya_stores_finder_set_default_marker_icon($name = 'alshaya_stores_f
     ->set('marker.url', $icon_path)
     ->save(TRUE);
 
-  $view_displays = ['attachment_1', 'page_3', 'page_2'];
-  foreach ($view_displays as $view_display) {
-    \Drupal::configFactory()->getEditable('views.view.stores_finder')
-      ->set('display.' . $view_display . '.display_options.style.options.google_map_settings.marker_icon_path', $icon_path)
-      ->save(TRUE);
-  }
+  \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
+}
+
+/**
+ * Implements hook_alshaya_master_post_drupal_install().
+ *
+ * Set default marker image for stores finder.
+ */
+function alshaya_stores_finder_alshaya_master_post_drupal_install() {
+  alshaya_stores_finder_set_default_marker_icon(\Drupal::config('alshaya.installed_brand')->get('module'));
 }

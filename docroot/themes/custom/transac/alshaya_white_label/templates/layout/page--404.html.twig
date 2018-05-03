@@ -14,7 +14,7 @@
 
 <div class="fourzerofour">
   <!-- ______________________ MENU SECONDARY _______________________ -->
-
+{% block header_precontent %}
   <div class="header--wrapper">
     {% if page.menu_secondary %}
       <div class="c-menu-secondary">
@@ -80,6 +80,7 @@
     </div>
   {% endif %}
   <!-- /breadcrumb -->
+  {% endblock %}
 
   <!-- ______________________ HERO CONTENT _______________________ -->
 
@@ -194,11 +195,12 @@
   {% endif %}
 
   <!-- ______________________ FOOTER PRIMARY _______________________ -->
-
+  {% block primary_footer %}
   {% if page.footer_primary %}
     {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
     <!-- /footer-primary -->
   {% endif %}
+  {% endblock %}
 
   <!-- ______________________ FOOTER SECONDARY _______________________ -->
 

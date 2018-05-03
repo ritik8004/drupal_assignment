@@ -1,0 +1,65 @@
+.short-description-wrapper,
+.delivery-options-wrapper {
+  .field__label {
+    font-size: 0.875rem;
+    font-family: $vs-bold;
+    font-weight: normal;
+  }
+}
+
+.short-description-wrapper {
+  .field__content,
+  .show-less-link,
+  .read-more-description-link-mobile,
+  .read-more-description-link {
+    font-size: 0.75rem;
+    font-weight: normal;
+  }
+}
+
+.nodetype--acq_product,
+.path--cart {
+  span.out-of-stock {
+    font-family: $vs-regular;
+    font-size: 0.875rem;
+  }
+
+  .form-type-select {
+    label {
+      color: $pdp_filter_selector_label;
+    }
+  }
+}
+
+.field--name-field-skus {
+  .sku-base-form {
+    button[type="submit"] {
+      text-transform: uppercase;
+    }
+  }
+}
+
+.acq-content-product {
+  .content__title_wrapper {
+    h1,
+    h1 span {
+      font-size: 1rem;
+    }
+
+    .content--item-code {
+      font-size: 0.625rem;
+    }
+  }
+
+  .price-block {
+    clear: both;
+  }
+}
+
+.store-finder-form-wrapper {
+  .search-store {
+    button {
+      text-transform: none;
+    }
+  }
+}

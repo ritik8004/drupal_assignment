@@ -1,0 +1,7 @@
+name: 'Alshaya Super Category'
+type: module
+description: 'Super category feature related changes.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_acm_product_category:alshaya_acm_product_category

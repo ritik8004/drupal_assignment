@@ -15,6 +15,7 @@ dependencies:
   - default_content:default_content
   - drupal:filter
   - drupal:inline_form_errors
+  - jquery_minicolors:jquery_minicolors
   - mailsystem:mailsystem
   - mimemail:mimemail
   - mobile_number:mobile_number

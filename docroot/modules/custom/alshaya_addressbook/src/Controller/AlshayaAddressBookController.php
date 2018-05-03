@@ -67,9 +67,14 @@ class AlshayaAddressBookController extends ProfileController {
       throw new NotFoundHttpException();
     }
 
+    $request_params = $request->request->all();
+    if (!is_array($request_params)) {
+      throw new NotFoundHttpException();
+    }
+
     // Get governate value dynamically to ensure it doesn't depend on form
     // structure.
-    $governate = NestedArray::getValue($request->request->all(), explode('[', str_replace(']', '', $element)));
+    $governate = NestedArray::getValue($request_params, explode('[', str_replace(']', '', $element)));
 
     // Check if we have value available for governate.
     if (empty($governate)) {
@@ -190,7 +195,7 @@ class AlshayaAddressBookController extends ProfileController {
 
       $build['address_book_wrapper'] = [
         '#type' => 'item',
-        '#markup' => '<div id="address-book-form-wrapper"></div>',
+        '#markup' => '<div id="address-book-form-wrapper" class="address-book-form-ajax-wrapper"></div>',
       ];
 
       // Render the active profiles.

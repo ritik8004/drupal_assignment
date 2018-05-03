@@ -1,0 +1,33 @@
+.c-footer__logo--verisign {
+  background-image: url("../../alshaya_white_label/imgs/cards/card-verisign.png");
+}
+
+.c-footer__logo--visa {
+  background-image: url("../../alshaya_white_label/imgs/cards/card-visa.png");
+}
+
+.c-footer__logo--mastercard {
+  background-image: url("../../alshaya_white_label/imgs/cards/card-mastercard.png");
+}
+
+.c-footer__copy {
+  @include breakpoint($only-tablet) {
+    .field--name-body {
+      p {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: 1rem 1.25rem;
+    height: 4rem;
+  }
+
+  .field--name-body p {
+    @include breakpoint($tablet) {
+      font-size: 0.75rem;
+      text-align: $right;
+    }
+  }
+}
