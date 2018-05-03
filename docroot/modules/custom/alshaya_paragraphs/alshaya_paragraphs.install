@@ -13,6 +13,37 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Adds a new field for uploading a different image for the desktop and mobile.
+ */
+function alshaya_paragraphs_update_8113() {
+  $configs = [
+    'field.storage.paragraph.field_promotion_image_mobile',
+    'field.field.paragraph.promo_block.field_promotion_image_mobile',
+    'core.entity_view_display.paragraph.promo_block.default',
+    'core.entity_form_display.paragraph.promo_block.default',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Changes the label from promo block button to live text.
+ */
+function alshaya_paragraphs_update_8112() {
+  $configs = [
+    'paragraphs.paragraphs_type.promo_block_button',
+    'field.storage.paragraph.field_promo_theme',
+    'field.field.paragraph.promo_block_button.field_button_position',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding SEO text and title fields to promo block paragraph to be used on
  * department page.
  */

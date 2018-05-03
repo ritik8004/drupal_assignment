@@ -6,6 +6,7 @@ Feature: Test Store finder page
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
+    And I follow "English"
     When I follow "Find Store"
     And I wait for the page to load
 

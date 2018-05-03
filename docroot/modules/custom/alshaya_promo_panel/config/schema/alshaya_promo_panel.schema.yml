@@ -1,0 +1,13 @@
+alshaya_promo_panel.settings:
+  type: config_object
+  label: 'Category Menu settings'
+  mapping:
+    promo_panel_blocks:
+      type: sequence
+      label: 'Promo panel blocks'
+      sequence:
+        type: alshaya_promo_panel.blocks.[%key]
+
+alshaya_promo_panel.blocks:*:
+  type: string
+  label: 'Mobile path'

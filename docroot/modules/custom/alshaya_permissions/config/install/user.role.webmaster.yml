@@ -109,3 +109,4 @@ permissions:
   - 'use alshaya_workflow transition needs_review_published'
   - 'use alshaya_workflow transition draft_needs_review'
   - 'use alshaya_workflow transition needs_review_draft'
+  - 'use text format mail_text'

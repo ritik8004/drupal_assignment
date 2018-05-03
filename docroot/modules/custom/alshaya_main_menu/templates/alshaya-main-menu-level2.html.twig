@@ -27,12 +27,22 @@
       {% endif %}
 
       {#Highlight image start#}
-      {% if level2.highlight_image is not empty %}
+      {% if level2.highlight_paragraph is not empty %}
         <div class="highlights">
           <div class="title">{{ 'highlights' | t }}</div>
-          {% for highlight_image in level2.highlight_image %}
+          {% for highlight_paragraph in level2.highlight_paragraph %}
             <div class="highlighted" gtm-type="gtm-highlights">
-              <a href="{{ highlight_image.image_link }}">{{ highlight_image.img }}</a>
+              <a href="{{ highlight_paragraph.image_link }}">
+                {{ highlight_paragraph.img }}
+
+                {% if highlight_paragraph.title %}
+                  <span class="hightlight__title">{{ highlight_paragraph.title }}</span>
+                {% endif %}
+
+                {% if highlight_paragraph.description %}
+                  <span class="hightlight__description">{{ highlight_paragraph.description }}</span>
+                {% endif %}
+              </a>
             </div>
           {% endfor %}
         </div>
@@ -42,12 +52,22 @@
   {% endfor %}
 
   {#Highlight image start#}
-  {% if data.highlight_image is not empty %}
+  {% if data.highlight_paragraph is not empty %}
     <div class="highlights">
       <div class="title">{{ 'highlights' | t }}</div>
-      {% for highlight_image in data.highlight_image %}
+      {% for highlight_paragraph in data.highlight_paragraph %}
         <div class="highlighted" gtm-type="gtm-highlights">
-          <a href="{{ highlight_image.image_link }}">{{ highlight_image.img }}</a>
+          <a href="{{ highlight_paragraph.image_link }}">
+            {{ highlight_paragraph.img }}
+
+            {% if highlight_paragraph.title %}
+              <span class="hightlight__title">{{ highlight_paragraph.title }}</span>
+            {% endif %}
+
+            {% if highlight_paragraph.description %}
+              <span class="hightlight__description">{{ highlight_paragraph.description }}</span>
+            {% endif %}
+          </a>
         </div>
       {% endfor %}
     </div>

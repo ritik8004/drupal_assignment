@@ -9,6 +9,10 @@
         font-size: 0.875rem;
         text-transform: uppercase;
         padding: 0.75rem 2.85rem;
+
+        html[lang="ar"] & {
+          padding: 0.75rem 1.5rem;
+        }
       }
 
       & > a {
@@ -20,7 +24,7 @@
 
         html[lang="ar"] & {
           @include breakpoint($tablet) {
-            right: 12rem;
+            right: 10rem;
           }
         }
       }

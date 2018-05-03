@@ -15,7 +15,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 /**
  * Class ProductCategoryTree.
  */
-class ProductCategoryTree {
+class ProductCategoryTree implements ProductCategoryTreeInterface {
 
   const CACHE_BIN = 'alshaya';
 
@@ -68,11 +68,25 @@ class ProductCategoryTree {
   protected $connection;
 
   /**
-   * Highlight image paragraph ids for all terms.
+   * Highlight paragraph ids for all terms.
    *
    * @var array
    */
-  protected $highlightImages = [];
+  protected $highlightParagraphs = [];
+
+  /**
+   * Background color for all terms.
+   *
+   * @var array
+   */
+  protected $termsBackgroundColor = [];
+
+  /**
+   * Font color for all terms.
+   *
+   * @var array
+   */
+  protected $termsFontColor = [];
 
   /**
    * ProductCategoryTree constructor.
@@ -99,38 +113,6 @@ class ProductCategoryTree {
     $this->cache = $cache;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
-  }
-
-  /**
-   * Get top level category items.
-   *
-   * @param string $langcode
-   *   (optional) The language code.
-   *
-   * @return array
-   *   Processed term data.
-   */
-  public function getCategoryRootTerms($langcode = NULL) {
-    if (empty($langcode)) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    }
-
-    $cid = self::CACHE_ID . '_' . $langcode;
-
-    if ($term_data = $this->cache->get($cid)) {
-      return $term_data->data;
-    }
-
-    // Get all child terms for the given parent.
-    $term_data = $this->getCategoryTree($langcode, 0, FALSE, FALSE);
-
-    $cache_tags = [
-      self::CACHE_TAG,
-      self::VOCABULARY_ID,
-    ];
-
-    $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
-    return $term_data;
   }
 
   /**
@@ -166,25 +148,31 @@ class ProductCategoryTree {
   /**
    * Get the term tree for 'product_category' vocabulary.
    *
-   * Optionally with highlight images and child.
+   * Optionally with highlight paragraphs and child.
    *
    * @param string $langcode
    *   Language code in which we need term to be displayed.
    * @param int $parent_tid
    *   Parent term id.
-   * @param bool $highlight_image
-   *   True if include highlight image else false.
+   * @param bool $highlight_paragraph
+   *   True if include highlight paragraph else false.
    * @param bool $child
    *   True if include child else false.
    *
    * @return array
    *   Processed term data.
    */
-  public function getCategoryTree($langcode, $parent_tid = 0, $highlight_image = TRUE, $child = TRUE) {
+  public function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
     $data = [];
 
     // Get all child terms for the given parent.
     $terms = $this->allChildTerms($langcode, self::VOCABULARY_ID, $parent_tid);
+
+    // Initialize the background color for term.
+    $this->termsBackgroundColor = $this->getTermsColors($langcode, self::VOCABULARY_ID, 'background');
+
+    // Initialize the font color for the term.
+    $this->termsFontColor = $this->getTermsColors($langcode, self::VOCABULARY_ID, 'font');
 
     if (empty($terms)) {
       return [];
@@ -201,12 +189,22 @@ class ProductCategoryTree {
         'active_class' => '',
       ];
 
-      if ($highlight_image) {
-        $data[$term->tid]['highlight_image'] = $this->getHighlightImage($term->tid, $langcode, self::VOCABULARY_ID);
+      if ($highlight_paragraph) {
+        $data[$term->tid]['highlight_paragraph'] = $this->getHighlightParagraph($term->tid, $langcode, self::VOCABULARY_ID);
       }
 
       if ($child) {
         $data[$term->tid]['child'] = $this->getCategoryTree($langcode, $term->tid);
+      }
+
+      // Set the background/highlight color for the term.
+      if (!empty($this->termsBackgroundColor[$term->tid])) {
+        $data[$term->tid]['term_bg_color'] = $this->termsBackgroundColor[$term->tid];
+      }
+
+      // Set the font color for the term.
+      if (!empty($this->termsFontColor[$term->tid])) {
+        $data[$term->tid]['term_font_color'] = $this->termsFontColor[$term->tid];
       }
 
     }
@@ -215,7 +213,7 @@ class ProductCategoryTree {
   }
 
   /**
-   * Get highlight image for a term.
+   * Get highlight paragraph for a term.
    *
    * @param int $tid
    *   Term id.
@@ -225,23 +223,23 @@ class ProductCategoryTree {
    *   Vocabulary id.
    *
    * @return array
-   *   Highlight image array.
+   *   Highlight paragraphs array.
    */
-  protected function getHighlightImage($tid, $langcode, $vid) {
-    $highlight_images = [];
+  protected function getHighlightParagraph($tid, $langcode, $vid) {
+    $highlight_paragraphs = [];
 
     // We fetch this from first request and shouldn't be empty. If empty,
     // assuming its first request and prepare data.
-    if (empty($this->highlightImages)) {
-      $this->getHighLightImages($vid);
+    if (empty($this->highlightParagraphs)) {
+      $this->getHighLightParagraphs($vid);
     }
 
     // If no data in paragraph referenced field.
-    if (empty($this->highlightImages[$tid])) {
-      return $highlight_images;
+    if (empty($this->highlightParagraphs[$tid])) {
+      return $highlight_paragraphs;
     }
 
-    foreach ($this->highlightImages[$tid] as $paragraph_id) {
+    foreach ($this->highlightParagraphs[$tid] as $paragraph_id) {
       // Load paragraph entity.
       $paragraph = Paragraph::load($paragraph_id);
 
@@ -256,21 +254,44 @@ class ProductCategoryTree {
         $paragraph = $paragraph->getTranslation($langcode);
       }
 
-      if ($paragraph && !empty($paragraph->get('field_highlight_image'))) {
+      if ($paragraph && $paragraph->getType() == 'main_menu_highlight' && !empty($paragraph->get('field_highlight_image'))) {
         $image = $paragraph->get('field_highlight_image')->getValue();
         $image_link = $paragraph->get('field_highlight_link')->getValue();
-        $renderable_image = $paragraph->get('field_highlight_image')->view('default');
+        $renderable_image = $paragraph->get('field_highlight_image')
+          ->view('default');
+        $paragraph_type = $paragraph->getType();
         if (!empty($image)) {
           $url = Url::fromUri($image_link[0]['uri']);
-          $highlight_images[] = [
+          $highlight_paragraphs[] = [
             'image_link' => $url->toString(),
             'img' => $renderable_image,
+            'paragraph_type' => $paragraph_type,
+          ];
+        }
+      }
+
+      elseif ($paragraph && $paragraph->getType() == 'image_title_subtitle') {
+        $image = $paragraph->get('field_banner')->getValue();
+        $image_link = $paragraph->get('field_link')->getValue();
+        $renderable_image = $paragraph->get('field_banner')
+          ->view('hightlight_image_186x184');
+        $image_title = $paragraph->get('field_title')->value;
+        $image_description = $paragraph->get('field_sub_title')->value;
+        $paragraph_type = $paragraph->getType();
+        if (!empty($image)) {
+          $url = Url::fromUri($image_link[0]['uri']);
+          $highlight_paragraphs[] = [
+            'image_link' => $url->toString(),
+            'img' => $renderable_image,
+            'title' => $image_title,
+            'description' => $image_description,
+            'paragraph_type' => $paragraph_type,
           ];
         }
       }
     }
 
-    return $highlight_images;
+    return $highlight_paragraphs;
   }
 
   /**
@@ -290,8 +311,15 @@ class ProductCategoryTree {
     // If it's a department page.
     elseif ($route_name == 'entity.node.canonical') {
       $node = $this->routeMatch->getParameter('node');
-      if ($node->bundle() == 'department_page') {
+
+      if ($node->bundle() == 'acq_product') {
+        $terms = $node->get('field_category')->getValue();
+      }
+      elseif ($node->bundle() == 'department_page') {
         $terms = $node->get('field_product_category')->getValue();
+      }
+
+      if (count($terms) > 0) {
         $term = $this->termStorage->load($terms[0]['target_id']);
       }
     }
@@ -301,7 +329,7 @@ class ProductCategoryTree {
       return $term;
     }
 
-    return NULL;
+    return $term;
   }
 
   /**
@@ -321,29 +349,6 @@ class ProductCategoryTree {
       $parents = $this->termStorage->loadAllParents($term->id());
     }
     return $parents;
-  }
-
-  /**
-   * Get root parent of given term.
-   *
-   * OR get parent of the term by getting term from current route.
-   *
-   * @param null|object $term
-   *   (optional) The term object or nothing.
-   *
-   * @return \Drupal\taxonomy\TermInterface|mixed|null
-   *   Return the parent term object or NULL.
-   */
-  public function getCategoryTermRootParent($term = NULL) {
-    if (empty($term) || !$term instanceof  TermInterface) {
-      $term = $this->getCategoryTermFromRoute();
-    }
-    if ($term instanceof TermInterface && $parents = $this->getCategoryTermParents($term)) {
-      // Get the top level parent id if parent exists.
-      return end($parents);
-    }
-
-    return NULL;
   }
 
   /**
@@ -373,21 +378,42 @@ class ProductCategoryTree {
   }
 
   /**
-   * Get highlight image paragraphs id for all terms.
+   * Get highlight paragraph id for all terms.
    *
    * @param string $vid
    *   Vocabulary id.
    */
-  protected function getHighLightImages($vid) {
+  protected function getHighLightParagraphs($vid) {
     $query = $this->connection->select('taxonomy_term__field_main_menu_highlight', 'tmmh');
     $query->fields('tmmh', ['entity_id', 'field_main_menu_highlight_target_id']);
     $query->condition('tmmh.bundle', $vid);
-    $highlight_images = $query->execute()->fetchAll();
-    if (!empty($highlight_images)) {
-      foreach ($highlight_images as $highlight_image) {
-        $this->highlightImages[$highlight_image->entity_id][] = $highlight_image->field_main_menu_highlight_target_id;
+    $highlight_paragraphs = $query->execute()->fetchAll();
+    if (!empty($highlight_paragraphs)) {
+      foreach ($highlight_paragraphs as $highlight_paragraph) {
+        $this->highlightParagraphs[$highlight_paragraph->entity_id][] = $highlight_paragraph->field_main_menu_highlight_target_id;
       }
     }
+  }
+
+  /**
+   * Gets the colors for all the terms in 'acq_product_category' vocabulary.
+   *
+   * @param string $langcode
+   *   Language code.
+   * @param string $vid
+   *   Vocabulary id.
+   * @param string $type
+   *   Color type background/font.
+   *
+   * @return array
+   *   Array of colors keyed by term id.
+   */
+  protected function getTermsColors($langcode, $vid, $type) {
+    $query = $this->connection->select('taxonomy_term__field_term_' . $type . '_color', 'ttbc');
+    $query->fields('ttbc', ['entity_id', 'field_term_' . $type . '_color_value']);
+    $query->condition('ttbc.langcode', $langcode);
+    $query->condition('ttbc.bundle', $vid);
+    return $query->execute()->fetchAllKeyed();
   }
 
 }

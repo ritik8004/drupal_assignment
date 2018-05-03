@@ -845,7 +845,7 @@ class SkuManager {
       ->condition('type', $type, '=')
       ->condition('langcode', $langcode, '=');
 
-    return array_keys($query->execute()->fetchAllKeyed(0));
+    return array_keys($query->execute()->fetchAllKeyed(0, 0));
   }
 
   /**
@@ -1046,7 +1046,7 @@ class SkuManager {
    *   Linked SKUs for requested type.
    */
   public function getLinkedSkus(SKU $sku, $type) {
-    $linked_skus = $this->linkedSkus->getLinkedSKus($sku);
+    $linked_skus = $this->linkedSkus->getLinkedSKus($sku, $type);
 
     $linked_skus_requested = [];
 
@@ -1197,7 +1197,7 @@ class SkuManager {
    *
    * @todo: Rename getChildSkus function to getChildSkuEntities to avoid confusion.
    */
-  public function getChildrenSkus(SKU $sku_entity) {
+  public function getChildrenSkuIds(SKU $sku_entity) {
     $child_skus = [];
 
     if ($sku_entity->getType() == 'configurable') {

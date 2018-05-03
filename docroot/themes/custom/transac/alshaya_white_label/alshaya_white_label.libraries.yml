@@ -116,6 +116,7 @@ cloud_zoom:
   js:
     js/product_zoom.js: {}
   dependencies:
+    - core/drupalSettings
     - alshaya_white_label/cloud_zoom_common
 
 utils:
@@ -137,3 +138,7 @@ jquery_mobile_touch_swipe:
 checkout_scroll:
   js:
     js/checkout_scroll.js: {}
+
+plp_hover:
+  js:
+    js/plp-hover.js: {}

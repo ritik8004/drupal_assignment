@@ -7,6 +7,7 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
 
@@ -123,12 +124,16 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
   if ($node_bundle == 'department_page') {
     $term_id = $variables['node']->get('field_product_category')->first()->target_id;
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     // Load the term object.
     $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term_id);
+    // Get translated taxonomy term based on language.
+    $term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($term, $langcode);
+
     // Add term description in variables to be printed in page--department.
-    $description = $term->getDescription();
+    $description = $term_trans->getDescription();
     if (isset($description)) {
-      $variables['category_term_name'] = $term->getName();
+      $variables['category_term_name'] = $term_trans->getName();
       $variables['category_term_description'] = $description;
     }
   }
@@ -160,7 +165,7 @@ function alshaya_white_label_preprocess_block(&$variables) {
     $bundle = $variables['elements']['content']['#block_content']->bundle();
     $bundle_class = str_replace('_', '-', $bundle);
     if (isset($variables['attributes']['class'])) {
-      $variables['attributes']['class'] = Html::cleanCssIdentifier('block--' . $bundle_class);
+      $variables['attributes']['class'][] = Html::cleanCssIdentifier('block--' . $bundle_class);
       $variables['attributes']['data-bundle-class'] = $bundle_class;
     }
   }
@@ -694,12 +699,13 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   $parameters = $menu_tree->getCurrentRouteMenuTreeParameters('social-links');
   $menus = $menu_tree->load('social-links', $parameters);
 
-  foreach ($menus as $menu) {
-    $title = $menu->link->getTitle();
-    $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+  if (isset($menus)) {
+    foreach ($menus as $menu) {
+      $title = $menu->link->getTitle();
+      $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+    }
+    $variables['links'] = $links;
   }
-
-  $variables['links'] = $links;
 }
 
 /**
@@ -794,6 +800,16 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         $variables['button_link'] = Url::fromUri($button_link[0]['uri'])->toString();
       }
     }
+    // Get the desktop and mobile images for promo blocks if available.
+    $mobile_image = !empty($variables['elements']['field_promotion_image_mobile']['#items']) ? $variables['elements']['field_promotion_image_mobile']['#items'] : '';
+    $desktop_image = !empty($variables['elements']['field_banner']['#items']) ? $variables['elements']['field_banner']['#items'] : '';
+    $default_image = !empty($desktop_image) ? $desktop_image : $mobile_image;
+
+    if (!empty($default_image)) {
+      $variables['mobile_image'] = !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image);
+      $variables['desktop_image'] = !empty($desktop_image) ? _alshaya_white_label_get_image_url($desktop_image) : _alshaya_white_label_get_image_url($mobile_image);
+      $variables['promo_default_image'] = _alshaya_white_label_get_image_url($default_image);
+    }
   }
   elseif ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {
     // Get the promo block display config for twig file.
@@ -802,6 +818,24 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     if ($variables['promo_link'] == 1) {
       // Get button text and set as markup.
       $variables['button_text']['#markup'] = $variables['elements']['field_button_link'][0]['#title'];
+    }
+  }
+}
+
+/**
+ * Helper function to calculate image url from image file object.
+ *
+ * @param \Drupal\file\Plugin\Field\FieldType\FileFieldItemList $file_item_list
+ *   Field field item list.
+ *
+ * @return string
+ *   Url to the image file.
+ */
+function _alshaya_white_label_get_image_url(FileFieldItemList $file_item_list) {
+  if ((!empty($file_item_list)) &&
+  (!empty($images = $file_item_list->referencedEntities()))) {
+    foreach ($images as $image) {
+      return $image->getFileUri();
     }
   }
 }

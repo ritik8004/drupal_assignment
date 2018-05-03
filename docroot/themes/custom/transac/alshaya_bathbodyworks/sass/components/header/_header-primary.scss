@@ -132,6 +132,7 @@ header {
       position: absolute;
       #{$right}: 0;
       top: 0;
+      z-index: 1;
 
       html[lang='ar'] & {
         transform: rotate(90deg);
@@ -172,6 +173,7 @@ header {
 
       @include breakpoint($only-mobile) {
         background-size: 1.92rem;
+        background-position: $right;
       }
     }
 
@@ -185,7 +187,7 @@ header {
       font-size: 0.75rem;
       font-family: $alshaya-thin-nodir;
       bottom: -0.625rem;
-      line-height: 1.25rem;
+      line-height: 1.87;
     }
   }
 
@@ -270,7 +272,11 @@ header {
       padding: 0.3125rem 0.875rem 0.664rem 0.625rem;
 
       &:hover {
-        background-color: none;
+        background: none;
+
+        &::before {
+          color: $header_c_menu_icon_color;
+        }
       }
 
       @include icon(mappin) {
@@ -449,6 +455,7 @@ header {
         text-transform: uppercase;
         font-family: $alshaya-thin;
         letter-spacing: 1px;
+        height: 2.5rem;
       }
 
       &:hover,
@@ -831,7 +838,7 @@ header .region__header {
       width: 74%;
 
       a {
-        margin-#{$left}: 0.51rem;
+        margin-#{$left}: 0;
       }
     }
   }
@@ -859,7 +866,7 @@ html[lang=ar] {
 html[lang='ar'] {
   .block-system-branding-block {
     @include breakpoint($only-mobile) {
-      width: 50%;
+      width: 54%;
 
       .site-brand-home {
         max-width: 100%;

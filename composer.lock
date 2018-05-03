@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f268bd8cb96f083f904054dde23f5122",
+    "content-hash": "add4ba1187e3cacfa603234d5a3ccb09",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -544,6 +544,17 @@
                 "html"
             ],
             "time": "2018-01-06T17:58:46+00:00"
+        },
+        {
+            "name": "claviska/jquery-minicolors",
+            "version": "2.2.6",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "drupal-library"
         },
         {
             "name": "commerceguys/addressing",
@@ -2096,17 +2107,17 @@
         },
         {
             "name": "drupal/acsf",
-            "version": "1.42.0",
+            "version": "1.46.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/acsf",
-                "reference": "8.x-1.42"
+                "reference": "8.x-1.46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-1.42.zip",
-                "reference": "8.x-1.42",
-                "shasum": "b74d5f5dd2520d65fc60ad092a7c0c6572ad0a2a"
+                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-1.46.zip",
+                "reference": "8.x-1.46",
+                "shasum": "b013b06d12c32c0209c652bee25408b370ef0516"
             },
             "require": {
                 "drupal/acsf_duplication": "*",
@@ -2126,8 +2137,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.42",
-                    "datestamp": "1522075655",
+                    "version": "8.x-1.46",
+                    "datestamp": "1523273884",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2182,7 +2193,7 @@
         },
         {
             "name": "drupal/acsf_duplication",
-            "version": "1.42.0",
+            "version": "1.46.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/core": "~8.0"
@@ -2193,8 +2204,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.42",
-                    "datestamp": "1522075655",
+                    "version": "8.x-1.46",
+                    "datestamp": "1523273884",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2243,7 +2254,7 @@
         },
         {
             "name": "drupal/acsf_theme",
-            "version": "1.42.0",
+            "version": "1.46.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/acsf_variables": "*",
@@ -2255,8 +2266,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.42",
-                    "datestamp": "1522075655",
+                    "version": "8.x-1.46",
+                    "datestamp": "1523273884",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2305,7 +2316,7 @@
         },
         {
             "name": "drupal/acsf_variables",
-            "version": "1.42.0",
+            "version": "1.46.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/core": "~8.0"
@@ -2316,8 +2327,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.42",
-                    "datestamp": "1522075655",
+                    "version": "8.x-1.46",
+                    "datestamp": "1523273884",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2979,10 +2990,14 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/clientside_validation",
-                "reference": "18b8aca905b3288d469105689494a3a601f7ceb7"
+                "reference": "d65b355a086812d7d3c84945da2a5df01b7815cf"
             },
             "require": {
                 "drupal/core": "~8.0"
+            },
+            "require-dev": {
+                "drupal/clientside_validation_demo": "*",
+                "drupal/clientside_validation_jquery": "*"
             },
             "type": "drupal-module",
             "extra": {
@@ -2990,16 +3005,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc3+4-dev",
-                    "datestamp": "1504288744",
+                    "version": "8.x-1.0-rc3+17-dev",
+                    "datestamp": "1517296980",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
-                    "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3025,7 +3036,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/clientside_validation"
             },
-            "time": "2017-09-01T18:16:38+00:00"
+            "time": "2018-01-30T07:21:06+00:00"
         },
         {
             "name": "drupal/coder",
@@ -3690,7 +3701,7 @@
                 "GPL-2.0+"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2018-04-25T15:39:04+00:00"
+            "time": "2018-04-18T17:19:54+00:00"
         },
         {
             "name": "drupal/crop",
@@ -4797,7 +4808,7 @@
                 },
                 "patches_applied": {
                     "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
-                    "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-04/facets-views-ajax-2826449-8.x-alpha11-145.patch",
+                    "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-17/facets-views-ajax-2826449-8.x-alpha11-146.patch",
                     "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
                     "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch"
                 }
@@ -5424,23 +5435,76 @@
             }
         },
         {
-            "name": "drupal/jsonapi",
-            "version": "1.4.0",
+            "name": "drupal/jquery_minicolors",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
-                "url": "https://git.drupal.org/project/jsonapi",
-                "reference": "8.x-1.4"
+                "url": "https://git.drupal.org/project/jquery_minicolors",
+                "reference": "8.x-1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jsonapi-8.x-1.4.zip",
-                "reference": "8.x-1.4",
-                "shasum": "ba38178daaecac2e6b88a5180fccb3edecd00b67"
+                "url": "https://ftp.drupal.org/files/projects/jquery_minicolors-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "ae8eb6df3904b50e3baf8e7a9a68fd4f64838816"
             },
             "require": {
-                "drupal/core": "^8.2"
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1482265384",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "flocondetoile",
+                    "homepage": "https://www.drupal.org/user/2006064"
+                }
+            ],
+            "description": "Provide a text field widget for using jQuery MiniColors Plugin",
+            "homepage": "https://www.drupal.org/project/jquery_minicolors",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/jquery_minicolors",
+                "issues": "https://www.drupal.org/project/issues/jquery_minicolors"
+            }
+        },
+        {
+            "name": "drupal/jsonapi",
+            "version": "1.15.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/jsonapi",
+                "reference": "8.x-1.15"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/jsonapi-8.x-1.15.zip",
+                "reference": "8.x-1.15",
+                "shasum": "6fd6f2efd1b117e21f44a8857cfca42ff460d455"
+            },
+            "require": {
+                "drupal/core": "^8.3"
             },
             "require-dev": {
+                "drupal/schemata": "1.x-dev#8325d172e1d6880aa24073f8f751ef089282cf9a",
+                "drupal/schemata_json_schema": "*",
                 "justinrainbow/json-schema": "^4.1"
             },
             "type": "drupal-module",
@@ -5449,8 +5513,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.4",
-                    "datestamp": "1514013485",
+                    "version": "8.x-1.15",
+                    "datestamp": "1522558384",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16966,7 +17030,14 @@
             "time": "2017-10-24T08:12:11+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "1.4.0",
+            "alias_normalized": "1.4.0.0",
+            "version": "1.15.0.0",
+            "package": "drupal/jsonapi"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/menu_admin_per_menu": 5,

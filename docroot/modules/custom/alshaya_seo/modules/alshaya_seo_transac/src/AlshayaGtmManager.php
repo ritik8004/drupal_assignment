@@ -624,7 +624,7 @@ class AlshayaGtmManager {
       // We receive address id in case of authenticated users & address as an
       // extension attribute for anonymous.
       elseif (((isset($address['customer_address_id']) && (!empty($address['customer_address_id']))) ||
-        (isset($address['extension'], $address['extension']['address_area_segment']))) &&
+        (isset($address['extension'], $address['extension']['area']))) &&
         ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
         // For HD we use step 3 if we have address saved.
         $attributes['step'] = 3;
@@ -950,7 +950,7 @@ class AlshayaGtmManager {
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
-      'country' => 'Kuwait',
+      'country' => _alshaya_country_get_site_level_country_name(),
       'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
