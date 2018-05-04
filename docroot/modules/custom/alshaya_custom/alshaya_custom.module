@@ -8,14 +8,14 @@
 /**
  * Utility function to get the site level country code.
  *
- * @param bool $force
+ * @param bool $reset
  *   (optional) True to reset the static cache.
  *
  * @return string
  *   Country code.
  */
-function _alshaya_custom_get_site_level_country_code($force = FALSE) {
-  if ($force) {
+function _alshaya_custom_get_site_level_country_code($reset = FALSE) {
+  if ($reset) {
     drupal_static_reset(__FUNCTION__);
   }
   $default_site_country = &drupal_static(__FUNCTION__);
