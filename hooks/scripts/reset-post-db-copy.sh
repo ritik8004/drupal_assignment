@@ -29,6 +29,11 @@ drush8 @$site.$target_env --uri=$uri search-api-disable-all
 # Now clean all data.
 SECONDS=0
 
+# Truncate acq_sku% tables.
+# @TODO: Confirm no SKU blocking data are remaining (workflow, files, ...)."
+echo "Truncate acq_sku% tables to speed up commerce data cleaning."
+drush8 @$site.$target_env --uri=$uri sqlq "SHOW TABLES LIKE 'acq_sku%'" | xargs -I acq_sku_tables drush8 @$site.$target_env --uri=$uri sqlq "TRUNCATE table acq_sku_tables"
+
 while :
 do
   drush8 @$site.$target_env --uri=$uri clean-synced-data -y
