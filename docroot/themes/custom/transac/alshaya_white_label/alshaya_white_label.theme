@@ -185,17 +185,18 @@ function alshaya_white_label_preprocess_block(&$variables) {
  * Implements template_view_alter().
  */
 function alshaya_white_label_theme_suggestions_views_view_alter(array &$suggestions, &$variables) {
+  $config = \Drupal::config('alshaya_acm_product.carousel_settings');
   if ($variables['view']->current_display == "block_product_slider") {
     $suggestions[] = 'views_view__product_slider';
-    $variables['row_limit'] = 3;
+    $variables['row_limit'] = $config->get('carousel_recommended_product_limit');
   }
 
   if ($variables['view']->current_display == "category_product_slider") {
     $suggestions[] = 'views_view__category_product_slider';
-    $variables['row_limit'] = 5;
+    $variables['row_limit'] = $config->get('carousel_category_product_limit');
 
     if (\Drupal::service('path.matcher')->isFrontPage()) {
-      $variables['row_limit'] = 6;
+      $variables['row_limit'] = $config->get('carousel_category_product_limit_front_page');
     }
   }
 }
@@ -855,6 +856,9 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         // Get views result.
         $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
 
+        // By default we don't show any carousel content.
+        $variables['content'] = [];
+
         // If there are results.
         if (!empty($results)) {
           // Prepare argument for the views.
@@ -876,7 +880,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
           ];
 
-          $variables['content'] = [];
           $variables['content']['product_category_carousel'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $data,

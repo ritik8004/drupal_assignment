@@ -1,5 +1,5 @@
 alshaya_user.user_settings_form:
-  path: '/admin/config/people/custom'
+  path: '/admin/config/alshaya/people'
   defaults:
     _form: '\Drupal\alshaya_user\Form\UserConfigForm'
     _title: 'Custom account settings'
@@ -32,7 +32,7 @@ alshaya_user.user_communication_preference:
     user: \d+
 
 alshaya_user.join_club_form:
-  path: '/admin/config/people/join-club'
+  path: '/admin/config/alshaya/join-club'
   defaults:
     _form: '\Drupal\alshaya_user\Form\JoinClubConfigForm'
     _title: 'Join Club content'
