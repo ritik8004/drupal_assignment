@@ -341,7 +341,7 @@ class AlshayaApiWrapper {
     $mskus = [];
 
     foreach ($types as $type) {
-      $query['searchCriteria']['filterGroups'][0]['filters'][1]['value'] = $type;
+      $query['searchCriteria']['filterGroups'][1]['filters'][0]['value'] = $type;
 
       $page = 0;
       $continue = TRUE;

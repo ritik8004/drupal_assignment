@@ -172,7 +172,7 @@
 
 .c-footer-menu--help {
   @include breakpoint($only-mobile) {
-    border-bottom: 1px solid $primary_border;
+    border-bottom: 1px solid $accordion_border;
   }
 
   @include breakpoint($only-tablet) {
