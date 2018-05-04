@@ -101,10 +101,14 @@ function alshaya_admin_update_8002() {
 /**
  * Implements hook_update_N().
  *
- * Update the /admin/content view.
+ * Update the /admin/content and needs review view.
  */
 function alshaya_admin_update_8001() {
-  alshaya_config_install_configs(['views.view.content'], 'alshaya_admin');
+  $configs = [
+    'views.view.content',
+    'views.view.content_needs_review',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_admin', 'install');
 }
 
 /**
