@@ -5,6 +5,10 @@ namespace Drupal\alshaya_product\Plugin\facets\processor;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\Processor\BuildProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginBase;
+use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Removes other terms (except child terms of current term) from facet items.
@@ -18,16 +22,52 @@ use Drupal\facets\Processor\ProcessorPluginBase;
  *   }
  * )
  */
-class AlshayaRemoveCurrentTermProcessor extends ProcessorPluginBase implements BuildProcessorInterface {
+class AlshayaRemoveCurrentTermProcessor extends ProcessorPluginBase implements BuildProcessorInterface, ContainerFactoryPluginInterface {
+
+  /**
+   * Current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
+   * AlshayaRemoveCurrentTermProcessor constructor.
+   *
+   * @param array $configuration
+   *   Configuration array.
+   * @param string $plugin_id
+   *   Plugin id.
+   * @param mixed $plugin_definition
+   *   Plugin defination.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $request_stack) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+
+    $this->currentRequest = $request_stack->getCurrentRequest();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('request_stack')
+    );
+  }
 
   /**
    * {@inheritdoc}
    */
   public function build(FacetInterface $facet, array $results) {
     if (!empty($results)) {
-      // For PLP page, the result url will always point to current plp page, so
-      // we assuming the first result will give the current plp page tid.
-      $current_term = $results[0]->getUrl()->getRouteParameters()['taxonomy_term'];
+      // Get current page term.
+      $current_term = $this->getCurrentPageTerm();
 
       // If no term, means no PLP page. So we not process further.
       if (empty($current_term)) {
@@ -47,6 +87,23 @@ class AlshayaRemoveCurrentTermProcessor extends ProcessorPluginBase implements B
 
     // Return the results.
     return $results;
+  }
+
+  /**
+   * Get the current page term id.
+   *
+   * @return int|null
+   *   Current term id.
+   */
+  protected function getCurrentPageTerm() {
+    if ($this->currentRequest->attributes->get('_route') == 'entity.taxonomy_term.canonical') {
+      $term = $this->currentRequest->attributes->get('taxonomy_term');
+      if ($term instanceof TermInterface) {
+        return $term->id();
+      }
+    }
+
+    return NULL;
   }
 
 }
