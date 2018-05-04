@@ -30,7 +30,7 @@ class AlshayaRemoveCurrentTermProcessor extends ProcessorPluginBase implements B
       $current_term = $results[0]->getUrl()->getRouteParameters()['taxonomy_term'];
 
       // If no term, means no PLP page. So we not process further.
-      if (!$current_term) {
+      if (empty($current_term)) {
         return $results;
       }
 
