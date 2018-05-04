@@ -108,7 +108,13 @@ class AlshayaQueryString extends QueryString {
             (count($this->activeFilters[$this->urlAlias]) > 0)) {
             foreach ($filter_params as $key => $param) {
               if (strpos($param, $this->urlAlias) === 0) {
-                unset($filter_params[$key]);
+                foreach ($child_ids as $child) {
+                  // If root term has any child active, then unset it.
+                  if (in_array($child, $this->activeFilters[$this->urlAlias])) {
+                    unset($filter_params[$key]);
+                    break;
+                  }
+                }
               }
             }
           }
