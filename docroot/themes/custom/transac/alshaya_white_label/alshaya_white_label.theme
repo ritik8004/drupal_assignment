@@ -856,6 +856,9 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         // Get views result.
         $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
 
+        // By default we don't show any carousel content.
+        $variables['content'] = [];
+
         // If there are results.
         if (!empty($results)) {
           // Prepare argument for the views.
