@@ -880,7 +880,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
           ];
 
-          $variables['content'] = [];
           $variables['content']['product_category_carousel'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $data,
