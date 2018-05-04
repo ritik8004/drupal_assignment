@@ -175,7 +175,7 @@
               }
 
               // Close the overlay.
-              if ($('body').hasClass('alias--store-finder-list')) {
+              if ($('body').hasClass('alias--store-finder-list') || $('body').hasClass('alias--store-finder-map') || $('body').hasClass('alias--store-finder')) {
                 $('body').removeClass('modal-overlay--spinner');
               }
             }, 500);

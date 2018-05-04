@@ -1,6 +1,6 @@
 alshaya_loyalty.loyalty_settings_form:
   title: 'Loyalty settings'
-  parent: user.admin_index
+  parent: alshaya_master.alshaya_admin
   description: 'Administer the validation criteria for PRIVILEGES CLUB card number.'
   route_name: alshaya_loyalty.loyalty_settings_form
   weight: 1

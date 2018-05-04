@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_preprocess_html().
@@ -122,19 +123,21 @@ function alshaya_white_label_preprocess_page(&$variables) {
     }
   }
 
-  if ($node_bundle == 'department_page') {
+  if ($node_bundle == 'advanced_page' && $variables['node']->get('field_use_as_department_page')->value == 1) {
     $term_id = $variables['node']->get('field_product_category')->first()->target_id;
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     // Load the term object.
     $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term_id);
     // Get translated taxonomy term based on language.
-    $term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($term, $langcode);
-
-    // Add term description in variables to be printed in page--department.
-    $description = $term_trans->getDescription();
-    if (isset($description)) {
-      $variables['category_term_name'] = $term_trans->getName();
-      $variables['category_term_description'] = $description;
+    if ($term) {
+      $term_trans = \Drupal::service('entity.repository')
+        ->getTranslationFromContext($term, $langcode);
+      // Add term description in variables to be printed in page--department.
+      $description = $term_trans->getDescription();
+      if (isset($description)) {
+        $variables['category_term_name'] = $term_trans->getName();
+        $variables['category_term_description'] = $description;
+      }
     }
   }
 
@@ -182,9 +185,19 @@ function alshaya_white_label_preprocess_block(&$variables) {
  * Implements template_view_alter().
  */
 function alshaya_white_label_theme_suggestions_views_view_alter(array &$suggestions, &$variables) {
+  $config = \Drupal::config('alshaya_acm_product.carousel_settings');
   if ($variables['view']->current_display == "block_product_slider") {
     $suggestions[] = 'views_view__product_slider';
-    $variables['row_limit'] = 3;
+    $variables['row_limit'] = $config->get('carousel_recommended_product_limit');
+  }
+
+  if ($variables['view']->current_display == "category_product_slider") {
+    $suggestions[] = 'views_view__category_product_slider';
+    $variables['row_limit'] = $config->get('carousel_category_product_limit');
+
+    if (\Drupal::service('path.matcher')->isFrontPage()) {
+      $variables['row_limit'] = $config->get('carousel_category_product_limit_front_page');
+    }
   }
 }
 
@@ -446,7 +459,7 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
     $node = Drupal::request()->attributes->get('node');
 
     // For now we want to update only the department_page template.
-    if ($node->bundle() == 'department_page') {
+    if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
       $suggestions[] = 'page__department';
     }
     elseif ($node->bundle() == 'acq_product') {
@@ -494,7 +507,12 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
 function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, array $variables) {
   // Check if the current node is front page.
   if (\Drupal::service('path.matcher')->isFrontPage()) {
-    $suggestions[] = 'node__advanced_page_front';
+    $node = $variables['elements']['#node'];
+    if ($node instanceof Node) {
+      if ($node->getType() == 'advanced_page') {
+        $suggestions[] = 'node__advanced_page_front';
+      }
+    }
   }
 }
 
@@ -702,7 +720,7 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   if (isset($menus)) {
     foreach ($menus as $menu) {
       $title = $menu->link->getTitle();
-      $links[strtolower($title)] = $menu->link->getUrlObject()->toString();
+      $links[strtolower($title)] = $menu->link->getUrlObject()->setAbsolute(TRUE)->toString();
     }
     $variables['links'] = $links;
   }
@@ -818,6 +836,68 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     if ($variables['promo_link'] == 1) {
       // Get button text and set as markup.
       $variables['button_text']['#markup'] = $variables['elements']['field_button_link'][0]['#title'];
+    }
+  }
+  elseif ($variables['elements']['#paragraph']->getType() == 'product_carousel_category') {
+    /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = $variables['elements']['#paragraph'];
+    if ($paragraph) {
+      // If category value is filled.
+      if (!empty($category = $paragraph->get('field_category_carousel'))) {
+        // Fetch values from the paragraph.
+        $category_id = $category->getValue()[0]['target_id'];
+
+        // Prepare argument for the views.
+        $terms = _alshaya_master_get_recursive_child_terms($category_id);
+        $arguments = [
+          'tid' => implode('+', $terms),
+        ];
+
+        // Get views result.
+        $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
+
+        // By default we don't show any carousel content.
+        $variables['content'] = [];
+
+        // If there are results.
+        if (!empty($results)) {
+          // Prepare argument for the views.
+          $carousel_title = $paragraph->get('field_category_carousel_title')->getValue()[0]['value'];
+          $view_all_text = $paragraph->get('field_view_all_text')->getValue()[0]['value'];
+          $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getValue()[0]['value'];
+
+          // Slice number of results that we want for the carousel.
+          $results = array_slice($results, 0, $product_in_carousel);
+          $data = [];
+          foreach ($results as $result) {
+            $data[] = $result->_object->getValue()->id();
+          }
+
+          // Make carousel title link.
+          $carousel_title = [
+            '#title' => $carousel_title,
+            '#type' => 'link',
+            '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+          ];
+
+          $variables['content']['product_category_carousel'] = [
+            '#theme' => 'products_horizontal_slider',
+            '#data' => $data,
+            '#views_display_id' => 'category_product_slider',
+            '#views_name' => 'product_slider',
+            '#section_title' => $carousel_title ?: NULL,
+          ];
+
+          $variables['content']['view_all'] = [
+            '#title' => $view_all_text,
+            '#type' => 'link',
+            '#attributes' => [
+              'class' => ['category-carousel-view-all'],
+            ],
+            '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+          ];
+        }
+      }
     }
   }
 }

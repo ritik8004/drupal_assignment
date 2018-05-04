@@ -1,0 +1,42 @@
+// share fields on product detail page
+.sharethis-wrapper {
+  .st_facebook_custom {
+    @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-facebookselect.png', 1.5625rem, 1.5625rem);
+
+    &:hover::before {
+      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-facebookselect.png', 1.5625rem, 1.5625rem);
+    }
+  }
+
+  .st_twitter_custom {
+    @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-twitterselect.png', 1.5625rem, 1.5625rem);
+
+    &:hover::before {
+      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-twitterselect.png', 1.5625rem, 1.5625rem);
+    }
+  }
+
+  .st_pinterest_custom {
+    @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-pinterestselect.png', 1.5625rem, 1.5625rem);
+
+    &:hover::before {
+      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-pinterestselect.png', 1.5625rem, 1.5625rem);
+    }
+  }
+
+  .st_instagram_custom {
+    @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-instagramselect.png', 1.5625rem, 1.5625rem);
+
+    &:hover::before {
+      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-instagramselect.png', 1.5625rem, 1.5625rem);
+    }
+  }
+
+  .st_youtube_custom {
+    @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-youtubeselect.png', 1.5625rem, 1.5625rem);
+
+    &:hover::before {
+      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-youtubeselect.png', 1.5625rem, 1.5625rem);
+    }
+  }
+}

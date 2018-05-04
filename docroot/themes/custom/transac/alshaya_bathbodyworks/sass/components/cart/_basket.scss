@@ -1,0 +1,82 @@
+.path--cart {
+  .tooltip--head {
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+    }
+
+    &::after {
+      color: $tooltip_icon;
+      margin-#{$left}: 0.3rem;
+    }
+  }
+
+  .contains--tooltip {
+    .click-collect.tooltip--head,
+    .home-delivery.tooltip--head {
+      & + .tooltip {
+        font-size: 0.75rem;
+
+        @include breakpoint($desktop) {
+          #{$left}: 1.3rem;
+        }
+      }
+    }
+  }
+
+  .promo-continue-shopping-wrapper {
+    margin-top: 0;
+
+    .card__header,
+    .privilege-card-wrapper-title {
+      &::after {
+        color: $privilege_earn_icon;
+      }
+    }
+
+    .card__header,
+    .privilege-card-wrapper-title,
+    #details-privilege-card-wrapper .form-item,
+    #details-privilege-card-wrapper .privilege-earn-text,
+    .form-item {
+      padding-#{$left}: 0;
+    }
+
+    #details-privilege-card-wrapper {
+      .privilege-earn-text {
+        font-size: 0.875rem;
+        font-family: $alshaya-bold;
+        padding-top: 0;
+      }
+
+      .form-item-privilege-card-number label:not(.error) {
+        #{$left}: 0;
+      }
+    }
+
+    .coupon-code-wrapper,
+    #details-privilege-card-wrapper {
+      .card__header.ui-state-active {
+        border-bottom: 0;
+      }
+    }
+
+    #coupon-button.add {
+      font-size: 0.875rem;
+      font-family: $alshaya-thin;
+      height: 2.5rem;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.9;
+      margin-#{$left}: 0;
+      max-width: 10.625rem;
+    }
+  }
+}
+
+.block-basket-horizontal-recommendation {
+  & > h3 {
+    text-align: center;
+    font-family: $alshaya-thin;
+    text-transform: capitalize;
+  }
+}

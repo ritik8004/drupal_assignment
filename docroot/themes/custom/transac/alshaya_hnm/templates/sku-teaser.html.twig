@@ -29,8 +29,8 @@
     {% for key,swatch in swatches %}
 			{% if swatch is not empty %}
 				<a href="{{ product_url }}?color={{ key }}">
-					{% if (swatch == '#FFFFFF') or (swatch == '#ffffff') %}
-						<span class='swatch-block' style="background-color:{{ swatch }}; border: 1px solid #C8C8C8;"></span>
+					{% if (swatch == '#FFFFFF') or (swatch == '#ffffff') or (swatch == '#fff') or (swatch == '#FFF') %}
+						<span class='swatch-block' style="background-color:{{ swatch }}; box-shadow: 0px 0px 0px 1px inset #C8C8C8;"></span>
 					{% else %}
 						<span class='swatch-block' style="background-color:{{ swatch }};"></span>
           {% endif %}

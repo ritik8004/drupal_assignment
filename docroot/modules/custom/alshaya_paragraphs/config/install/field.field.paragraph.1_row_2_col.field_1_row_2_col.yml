@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.storage.paragraph.field_1_row_2_col
     - paragraphs.paragraphs_type.1_row_2_col
+    - paragraphs.paragraphs_type.product_carousel_category
     - paragraphs.paragraphs_type.promo_block
   module:
     - entity_reference_revisions
@@ -22,6 +23,7 @@ settings:
   handler_settings:
     target_bundles:
       promo_block: promo_block
+      product_carousel_category: product_carousel_category
     target_bundles_drag_drop:
       1_row_2_col:
         weight: 22
@@ -86,4 +88,7 @@ settings:
       views_reference:
         weight: 42
         enabled: false
+      product_carousel_category:
+        enabled: true
+        weight: 43
 field_type: entity_reference_revisions

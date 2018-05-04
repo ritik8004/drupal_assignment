@@ -7,7 +7,7 @@ dependencies:
   - alshaya_acm:alshaya_acm
   - alshaya_acm_product:alshaya_acm_product
   - alshaya_api:alshaya_api
-  - alshaya_department_page:alshaya_department_page
+  - alshaya_advanced_page:alshaya_advanced_page
   - alshaya_main_menu:alshaya_main_menu
   - alshaya_master:alshaya_master
   - alshaya_product_zoom:alshaya_product_zoom

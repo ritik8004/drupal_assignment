@@ -1,0 +1,5 @@
+.paragraph-vm-default {
+  @include breakpoint($upto-palm) {
+    margin-bottom: 0;
+  }
+}

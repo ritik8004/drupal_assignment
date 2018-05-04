@@ -7,6 +7,136 @@
 
 use Drupal\field\Entity\FieldConfig;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set value of 'use as department page' field.
+ * Delete the department page CT.
+ */
+function alshaya_advanced_page_update_8007() {
+  $db = Database::getConnection();
+  $results = $db->select('node__field_product_category')
+    ->fields('node__field_product_category', ['entity_id'])
+    ->execute()->fetchAll();
+  foreach ($results as $result) {
+    $node = Node::load($result->entity_id);
+    $node->set('field_use_as_department_page', '1');
+    $node->save();
+  }
+
+  // Delete the department page CT.
+  $content_type = \Drupal::entityTypeManager()
+    ->getStorage('node_type')
+    ->load('department_page');
+  $content_type->delete();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Migrating department pages to advanced department pages.
+ */
+function alshaya_advanced_page_update_8006() {
+  // Load all product categories in department page & check if they exist.
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'department_page')
+    ->execute();
+
+  if (!empty($nids)) {
+    $base_tables = [
+      'node',
+      'node_field_data',
+    ];
+    _alshaya_advanced_page_convert_base_tables('advanced_page', $nids, $base_tables);
+
+    // Migrate all fields.
+    $field_tables = [
+      'node_revision__field_meta_tags',
+      'node_revision__field_product_category',
+      'node_revision__field_promo_blocks',
+      'node_revision__field_show_left_menu',
+      'node__field_meta_tags',
+      'node__field_product_category',
+      'node__field_promo_blocks',
+      'node__field_show_left_menu',
+    ];
+
+    _alshaya_advanced_page_convert_field_tables('advanced_page', $nids, $field_tables);
+
+    drush_print('Nodes have been succesfully migrated as department pages.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Merging department page with invalid categories to simple advanced page CT.
+ */
+function alshaya_advanced_page_update_8005() {
+  // Load all product categories in department page & check if they exist.
+  $nodes_exclude = [];
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'department_page')
+    ->execute();
+  $nodes = Node::loadMultiple($nids);
+  foreach ($nodes as $department_page) {
+    $category_id = $department_page->get('field_product_category')->getValue();
+    $category_id = $category_id[0]['target_id'];
+    $term = Term::load($category_id);
+    if (!isset($term)) {
+      $nodes_exclude[] = $department_page->id();
+    }
+  }
+
+  if (!empty($nodes_exclude)) {
+    $base_tables = [
+      'node',
+      'node_field_data',
+    ];
+    _alshaya_advanced_page_convert_base_tables('advanced_page', $nodes_exclude, $base_tables);
+
+    $field_tables = [
+      'node_revision__field_meta_tags',
+      'node_revision__field_promo_blocks',
+      'node__field_meta_tags',
+      'node__field_promo_blocks',
+    ];
+
+    _alshaya_advanced_page_convert_field_tables('advanced_page', $nodes_exclude, $field_tables);
+    _alshaya_advanced_page_delete_fields('node_revision__field_product_category', $nodes_exclude);
+    _alshaya_advanced_page_delete_fields('node__field_product_category', $nodes_exclude);
+    _alshaya_advanced_page_delete_fields('node_revision__field_show_left_menu', $nodes_exclude);
+    _alshaya_advanced_page_delete_fields('node__field_show_left_menu', $nodes_exclude);
+    drush_print('Following nodes have been migrated as simple advanced pages.');
+    drush_print_r($nodes_exclude);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Merging department page CT into advanced page CT.
+ */
+function alshaya_advanced_page_update_8004() {
+  $configs = [
+    'field.storage.node.field_product_category',
+    'field.storage.node.field_show_left_menu',
+    'field.storage.node.field_use_as_department_page',
+    'field.field.node.advanced_page.field_use_as_department_page',
+    'field.field.node.advanced_page.field_show_left_menu',
+    'field.field.node.advanced_page.field_product_category',
+    'core.entity_form_display.node.advanced_page.default',
+    'field.field.node.advanced_page.field_promo_blocks',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_advanced_page', 'install');
+
+  // Uninstall alshaya_department_page.
+  \Drupal::service('module_installer')->uninstall(['alshaya_department_page']);
+}
 
 /**
  * Implements hook_update_N().

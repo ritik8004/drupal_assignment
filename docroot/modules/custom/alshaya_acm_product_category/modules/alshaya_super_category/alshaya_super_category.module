@@ -88,7 +88,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
         $parent = end($parents);
       }
 
-      if (empty($parent) && !$variables['content']['site_logo']['#access']) {
+      if (!$parent instanceof TermInterface && !$variables['content']['site_logo']['#access']) {
         return;
       }
 
@@ -115,7 +115,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $variables['content']['site_logo']['#alt']    = $parent->label();
       $variables['content']['site_name']['#markup'] = $parent->label();
       // Set the site path to brand page.
-      $variables['content']['site_path']['#markup'] = $parent->toLink();
+      $variables['content']['site_path']['#markup'] = $parent->toUrl()->toString();
       break;
   }
 }

@@ -22,6 +22,19 @@
       }
     }
 
+    .delivery-type,
+    .address {
+      font-weight: 600;
+    }
+
+    .delivery-type {
+      background: $order_summary_delivery_type_bg;
+    }
+
+    .address {
+      background: $order_summary_address_bg;
+    }
+
     .right span.price-wrapper {
       font-weight: 600;
     }
