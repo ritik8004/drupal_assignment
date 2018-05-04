@@ -4,5 +4,5 @@ dependencies: {  }
 id: search_api__views_block__alshaya_product_list__block_1
 name: 'search_api:views_block__alshaya_product_list__block_1'
 filter_key: null
-url_processor: query_string
+url_processor: alshaya_query_string
 breadcrumb: {  }
