@@ -236,9 +236,6 @@ class AlshayaAcmConfigCheck {
     $this->languageManager->getLanguageConfigOverride('ar', 'acq_commerce.currency')
       ->set('currency_code', _alshaya_get_currency_code($expected_country_code, 'ar'))
       ->save();
-
-    // Set country code related config for stores finder views.
-    $this->configFactory->getEditable('views.view.stores_finder')->save();
   }
 
 }
