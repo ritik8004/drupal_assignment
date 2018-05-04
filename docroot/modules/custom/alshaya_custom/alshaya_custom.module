@@ -8,10 +8,16 @@
 /**
  * Utility function to get the site level country code.
  *
+ * @param bool $force
+ *   (optional) True to reset the static cache.
+ *
  * @return string
  *   Country code.
  */
-function _alshaya_custom_get_site_level_country_code() {
+function _alshaya_custom_get_site_level_country_code($force = FALSE) {
+  if ($force) {
+    drupal_static_reset(__FUNCTION__);
+  }
   $default_site_country = &drupal_static(__FUNCTION__);
   if (empty($default_site_country)) {
     $default_site_country = \Drupal::config('system.date')->get('country.default');
