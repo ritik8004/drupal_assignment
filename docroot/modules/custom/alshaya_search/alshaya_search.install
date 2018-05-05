@@ -14,6 +14,7 @@ use Drupal\search_api\Entity\Index;
  */
 function alshaya_search_update_8014() {
   $facets_config_promotion = [
+    'facets.facet.category_promotion',
     'facets.facet.promotion_brand_facet',
     'facets.facet.promotion_collection_facet',
     'facets.facet.promotion_color_facet',
