@@ -1,0 +1,13 @@
+#product-image-gallery-container {
+  .button__wrapper {
+    .zoomout,
+    .zoomin {
+      background-color: $pdp_popup_zoom_bg;
+      border-radius: 0;
+
+      &.disable {
+        background-color: $pdp_popup_zoom_bg;
+      }
+    }
+  }
+}
