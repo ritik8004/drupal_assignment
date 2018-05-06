@@ -2,11 +2,11 @@
   .button__wrapper {
     .zoomout,
     .zoomin {
-      background-color: $pdp_popup_zoom_bg;
+      background-color: $gallery_zoombtn_bg;
       border-radius: 0;
 
       &.disable {
-        background-color: $pdp_popup_zoom_bg;
+        background-color: $gallery_zoombtn_disabled;
       }
     }
   }
