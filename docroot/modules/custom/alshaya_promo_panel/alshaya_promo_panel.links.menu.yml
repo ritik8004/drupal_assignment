@@ -1,0 +1,6 @@
+alshaya_promo_panel.panel_config:
+  title: 'Promo panel config'
+  parent: alshaya_master.alshaya_admin
+  description: 'Manage text editor embed buttons.'
+  route_name: alshaya_promo_panel.panel_config
+  weight: 10

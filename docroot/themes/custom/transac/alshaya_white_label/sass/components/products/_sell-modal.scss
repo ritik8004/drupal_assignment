@@ -197,4 +197,12 @@
       }
     }
   }
+
+  #lightSlider {
+    .slick-slide {
+      @include breakpoint($only-tablet) {
+        width: 6rem !important;
+      }
+    }
+  }
 }

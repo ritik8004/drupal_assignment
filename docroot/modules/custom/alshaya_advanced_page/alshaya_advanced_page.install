@@ -14,7 +14,8 @@ use Drupal\Core\Database\Database;
 /**
  * Implements hook_update_N().
  *
- * Set value of 'use as department page' field..
+ * Set value of 'use as department page' field.
+ * Delete the department page CT.
  */
 function alshaya_advanced_page_update_8007() {
   $db = Database::getConnection();
@@ -26,6 +27,12 @@ function alshaya_advanced_page_update_8007() {
     $node->set('field_use_as_department_page', '1');
     $node->save();
   }
+
+  // Delete the department page CT.
+  $content_type = \Drupal::entityTypeManager()
+    ->getStorage('node_type')
+    ->load('department_page');
+  $content_type->delete();
 }
 
 /**
@@ -142,7 +149,6 @@ function alshaya_advanced_page_update_8003() {
  * Implements hook_update_N().
  *
  * Enabling translation on paragraph referenced fields.
- * Delete the department page CT.
  */
 function alshaya_advanced_page_update_8002() {
   $fields = [
@@ -201,10 +207,6 @@ function alshaya_advanced_page_update_8002() {
 
     $node->save();
   }
-
-  // Delete the department page CT.
-  $content_type = \Drupal::entityManager()->getStorage('node_type')->load('department_page');
-  $content_type->delete();
 }
 
 /**

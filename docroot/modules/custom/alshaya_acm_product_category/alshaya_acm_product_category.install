@@ -10,6 +10,15 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ *  Install config for adding extra paragraph to main menu highlight field.
+ */
+function alshaya_acm_product_category_update_8005() {
+  alshaya_config_install_configs(['field.field.taxonomy_term.acq_product_category.field_main_menu_highlight'], 'alshaya_acm_product_category', 'install');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new field for mobile navigation on top of PLP.
  */
 function alshaya_acm_product_category_update_8004() {
@@ -54,7 +63,6 @@ function alshaya_acm_product_category_update_8003() {
  * Implements hook_update_N().
  *
  * Adding new field for product category vocabulary for show/hide plp banner.
- * Install config for adding extra paragraph to main menu highlight field.
  */
 function alshaya_acm_product_category_update_8002() {
   $configs = [

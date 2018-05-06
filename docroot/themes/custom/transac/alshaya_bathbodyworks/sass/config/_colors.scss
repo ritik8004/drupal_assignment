@@ -4,6 +4,7 @@ $cool-blue: #4e8abe;
 $cool-blue-two: #b8d1ed;
 $hot-pink: #ed088c;
 $white: #fff;
+$warm-grey-four: #f9f9f9;
 $warm-grey-three: #f2f2f2;
 $warm-grey-two: #dadada;
 $warm-grey-one: #777;
@@ -85,6 +86,7 @@ $pdp_product_itemcode: $warm-grey-one;
 // Product Add to cart form.
 $pdp_sidebar_label: $peacock-blue;
 $pdp_sidebar_link: $peacock-blue;
+
 $pdp_desc_wrapper_border: $warm-grey-two;
 $pdp_popup_zoom_bg: $icon-bg;
 
@@ -97,6 +99,10 @@ $oos_pdp_text: $white;
 
 // VAT text
 $vat: $warm-grey-one;
+
+// Autocomplete
+$autocomplete_border: $warm-grey-two;
+$autocomplete_border_last: $warm-grey-two;
 
 /* ------- 6. Sections and Pages --------------- */
 
@@ -150,6 +156,7 @@ $header_my_account_icon: $peacock-blue;
 // Mega menu.
 $mm_bg: $white;
 $mm_l1_border: $warm-grey-two;
+
 $mm_l1_link_bg: $white;
 $mm_l1_link_hover: $peacock-blue;
 $mm_l1_link_hover_border_to_fill_space: $peacock-blue;
@@ -166,6 +173,27 @@ $mm_p_a_text: $black;
 //  Mini Cart.
 $primary_minicart_text: $black;
 $primary_minicart_quantity_bg: $hot-pink;
+
+// Counters.
+$primary_counter_bg: $hot-pink;
+
+// Checkout Progress.
+$checkout_current_counter_border: $hot-pink;
+$checkout_counter_border: $peacock-blue;
+
+// Checkout tabs & form.
+
+$checkout_tab_default_title: $black;
+$checkout_tab_active_title: $peacock-blue;
+$checkout_tab_active_border: $peacock-blue;
+$delivery_tab_active_bg: $warm-grey-four;
+$checkout_tab_description: $black;
+$checkout_section_titles: $black;
+$secure_checkout_back_link: $peacock-blue;
+$checkout_transaction_type_color: $peacock-blue;
+
+// Checkout mobile back link.
+$checkout_mobile_back_link_icon: $peacock-blue;
 
 // Notification popup.
 $minicart_notification_border: $peacock-blue;
