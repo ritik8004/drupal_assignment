@@ -29,6 +29,7 @@ class ProductSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_acm_product.settings');
+    $config->set('show_cart_form_in_related', $form_state->getValue('show_cart_form_in_related'));
     $config->set('related_items_size', $form_state->getValue('related_items_size'));
     $config->set('list_view_items_per_page', $form_state->getValue('list_view_items_per_page'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
@@ -51,6 +52,17 @@ class ProductSettingsForm extends ConfigFormBase {
     $form = parent::buildForm($form, $form_state);
 
     $config = $this->config('alshaya_acm_product.settings');
+
+    $form['show_cart_form_in_related'] = [
+      '#type' => 'select',
+      '#options' => [
+        0 => $this->t('no'),
+        1 => $this->t('yes'),
+      ],
+      '#default_value' => $config->get('show_cart_form_in_related'),
+      '#title' => $this->t('Show add to cart form in related item blocks'),
+      '#description' => $this->t('Show add to cart form in Up sell / Cross sell / Related products blocks.'),
+    ];
 
     $form['related_items_size'] = [
       '#type' => 'textfield',
