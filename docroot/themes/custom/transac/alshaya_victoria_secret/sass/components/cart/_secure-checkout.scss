@@ -185,4 +185,15 @@
 
 #block-checkoutsummaryblock {
   border: 0;
+
+  &.fix-block {
+    @include breakpoint($tablet) {
+      width: 32.5%;
+      padding-#{$right}: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      width: 24.76%;
+    }
+  }
 }
