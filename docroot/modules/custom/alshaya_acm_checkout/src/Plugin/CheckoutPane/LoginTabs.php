@@ -37,6 +37,10 @@ class LoginTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#markup' => '<div class="tab tab-new-customer"><span>' . $this->t('guest checkout') . '</span></div>',
     ];
 
+    $pane_form['separator'] = [
+      '#markup' => '<div class="tab tab-separator">' . $this->t('OR') . '</div>',
+    ];
+
     $pane_form['returning_customer'] = [
       '#markup' => '<div class="tab tab-returning-customer"><span>' . $this->t('returning customers') . '</span></div>',
     ];
