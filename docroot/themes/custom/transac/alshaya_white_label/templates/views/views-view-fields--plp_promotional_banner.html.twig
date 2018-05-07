@@ -11,7 +11,7 @@
               <img src="{{ fields.field_promotion_banner_mobile.content }}"/>
           {% elseif fields.field_promotion_banner_mobile is empty %}
               <source media="(min-width: 768px)" srcset="{{ fields.field_promotion_banner.content }}">
-              <source media="(mac-width: 767px)" srcset="{{ fields.field_promotion_banner.content }}">
+              <source media="(max-width: 767px)" srcset="{{ fields.field_promotion_banner.content }}">
               <img src="{{ fields.field_promotion_banner.content }}"/>
           {% endif %}
         </picture>
