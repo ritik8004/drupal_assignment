@@ -10,6 +10,25 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Updating category facet configs.
+ */
+function alshaya_search_update_8015() {
+  alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
+
+  $config = [
+    'facets.facet.plp_category_facet',
+    'facets.facet_source.search_api__views_page__search__page',
+    'facets.facet_source.search_api__views_block__alshaya_product_list__block_1',
+  ];
+  alshaya_config_install_configs($config, 'alshaya_product');
+
+  alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+  alshaya_config_install_configs(['facets.facet_source.search_api__views_block__alshaya_product_list__block_2'], 'alshaya_acm_promotion');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change sort order for facets to raw value.
  */
 function alshaya_search_update_8014() {
@@ -40,22 +59,6 @@ function alshaya_search_update_8014() {
     'facets.facet.size',
   ];
   alshaya_config_install_configs($facets_config_alshaya_search, 'alshaya_search');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Expand only one category at a time.
- * Revert hide taxonomy term from menu processor for category facets.
- */
-function alshaya_search_update_8014() {
-  $facet_configs = [
-    'facets.facet.plp_category_facet',
-    'facets.facet.category',
-  ];
-  alshaya_config_install_configs($facet_configs, 'alshaya_search');
-
-  alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
 }
 
 /**
