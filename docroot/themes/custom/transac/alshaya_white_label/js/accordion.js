@@ -102,6 +102,14 @@
         var mobileStickyHeaderHeight = $('.branding__menu').height();
 
         $('.c-pdp .short-description-wrapper', context).once('readmore').each(function () {
+          // If we don't have more content i:e only one desc-wrapper, we hide the read more links.
+          var descCount = $(this).find('.desc-wrapper').length;
+          if (descCount === 1) {
+            $(this).find('.read-more-description-link').hide();
+            $(this).find('.read-more-description-link-mobile').hide();
+            return;
+          }
+
           $(this).on('click', '.read-more-description-link-mobile', function () {
             $(this).parent().toggleClass('show-detail');
             $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
