@@ -33,7 +33,9 @@ function alshaya_transac_update_8110() {
   $content_type = \Drupal::entityTypeManager()
     ->getStorage('node_type')
     ->load('department_page');
-  $content_type->delete();
+  if (isset($content_type)) {
+    $content_type->delete();
+  }
 }
 
 /**
