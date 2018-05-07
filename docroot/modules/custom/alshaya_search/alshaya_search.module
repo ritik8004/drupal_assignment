@@ -452,13 +452,14 @@ function alshaya_search_facets_query_string_alter(FacetInterface $facet, array &
 
     // Filter alias.
     $url_alias = $facet->getUrlAlias();
-    // Get child and parents of result.
+    // Get parents of result.
     $parent_ids = $facet->getHierarchyInstance()->getParentIds($context['result']->getRawValue());
-    $child_ids = $facet->getHierarchyInstance()->getNestedChildIds($context['result']->getRawValue());
 
     if ((count($parent_ids) === $facet_count) &&
       (isset($context['active_filters'][$url_alias])) &&
       (count($context['active_filters'][$url_alias]) > 0)) {
+      // Get child ids of result.
+      $child_ids = $facet->getHierarchyInstance()->getNestedChildIds($context['result']->getRawValue());
       foreach ($filter_params as $key => $param) {
         if (strpos($param, $url_alias) === 0) {
           foreach ($child_ids as $child) {
