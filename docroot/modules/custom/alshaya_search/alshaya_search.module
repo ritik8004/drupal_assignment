@@ -13,6 +13,7 @@ use Drupal\Core\Url;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
+use Drupal\facets\FacetInterface;
 use Solarium\Core\Query\QueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -431,5 +432,44 @@ function _alshaya_search_mark_hide_chidren($result, &$hide_tids) {
 function _alshaya_search_hide_terms($hide_tids, &$results) {
   foreach ($hide_tids as $tid) {
     unset($results[$tid]);
+  }
+}
+
+/**
+ * Implements hook_facets_query_string_alter().
+ */
+function alshaya_search_facets_query_string_alter(FacetInterface $facet, array &$filter_params, array $context) {
+  // Only for the category facet.
+  if ($facet->getHierarchy() && !$context['result']->isActive()) {
+    // If we processing the URL for an L1 item, remove all category
+    // filters. Clicking on an L1 item when the active filter is something
+    // else, should return back to default state.
+    $facet_source_id = $facet->getFacetSourceId();
+
+    // We doing this as for the PLP page, we not show the L1
+    // (current active) item.
+    $facet_count = $facet_source_id == 'search_api:views_block__alshaya_product_list__block_1' ? 1 : 0;
+
+    // Filter alias.
+    $url_alias = $facet->getUrlAlias();
+    // Get child and parents of result.
+    $parent_ids = $facet->getHierarchyInstance()->getParentIds($context['result']->getRawValue());
+    $child_ids = $facet->getHierarchyInstance()->getNestedChildIds($context['result']->getRawValue());
+
+    if ((count($parent_ids) === $facet_count) &&
+      (isset($context['active_filters'][$url_alias])) &&
+      (count($context['active_filters'][$url_alias]) > 0)) {
+      foreach ($filter_params as $key => $param) {
+        if (strpos($param, $url_alias) === 0) {
+          foreach ($child_ids as $child) {
+            // If root term has any child active, then unset it.
+            if (in_array($child, $context['active_filters'][$url_alias])) {
+              unset($filter_params[$key]);
+              break;
+            }
+          }
+        }
+      }
+    }
   }
 }
