@@ -16,8 +16,7 @@
     vertical-align: middle;
   }
 
-  img,
-  svg {
+  img {
     @include breakpoint($upto-palm) {
       width: 4.5rem;
     }
@@ -32,24 +31,6 @@
       padding: 0;
       height: 6.0625rem;
       width: 100%;
-    }
-  }
-
-  svg {
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-
-    @include breakpoint($upto-palm) {
-      height: 2.938rem;
-    }
-
-    @include breakpoint($desk) {
-      height: 6.188rem;
-    }
-
-    html[lang=ar] & {
-      direction: initial;
     }
   }
 }
