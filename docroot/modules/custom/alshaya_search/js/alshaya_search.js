@@ -292,4 +292,42 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       };
     }
   };
+
+  Drupal.behaviors.convertL2ToAccordion = {
+    attach: function(context, settings) {
+      $('[data-drupal-facet-id="category"] .facet-item').each(function() {
+        if ($(this).children('a').length > 0) {
+          // Extract query string from the relative url string.
+          var facet_url_query_string = ($(this).children('a').attr('href')).match(/(\?.*)/);
+          if (facet_url_query_string) {
+            var urlParams = new URLSearchParams(facet_url_query_string[1]);
+            // Process items with no_url_l2 parameter.
+            if ((urlParams.has('no_url_l2')) &&
+              (!$(this).hasClass('l2-processed'))) {
+              // Stop click on a tag from directing users to the url.
+              $(this).children('a').off('click').click(function(e) {
+                return false;
+              });
+
+              // Remove checkbox for the selected L2 items.
+              $(this).children('input').remove();
+
+              // Attach a click listener to the L2 items to make it act like
+              // accordion.
+              $(this).off('click').click(function(e) {
+                $(this).children('ul').slideToggle();
+                $(this).addClass('l2-processed');
+                e.stopPropagation();
+              });
+
+              // Only keep the current selection expanded.
+              if (!urlParams.has('current_facet')) {
+                $(this).children('ul').once('js-event').slideToggle();
+              }
+            }
+          }
+        }
+      });
+    }
+  }
 })(jQuery);
