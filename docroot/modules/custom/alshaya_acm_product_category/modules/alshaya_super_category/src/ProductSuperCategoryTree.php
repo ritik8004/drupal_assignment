@@ -178,11 +178,10 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     }
 
     if ($term instanceof TermInterface && parent::VOCABULARY_ID == $term->bundle()) {
-      $parents = $this->getSuperCategoryMapping();
       // Get the top level parent id if parent exists.
+      $parents = $this->getSuperCategoryMapping();
       return isset($parents[$term->id()]) ? $parents[$term->id()] : NULL;
     }
-
     return NULL;
   }
 
@@ -195,7 +194,9 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   public function getCategoryTermRequired() {
     $term = $this->getCategoryTermRootParent();
     if (empty($term)) {
-      $term = $this->configFactory->get('alshaya_super_category.settings')->get('default_category_tid');
+      $parent_terms = $this->getCategoryTreeCached();
+      $tid = $this->configFactory->get('alshaya_super_category.settings')->get('default_category_tid');
+      return isset($parent_terms[$tid]) ? $parent_terms[$tid] : NULL;
     }
     return $term;
   }

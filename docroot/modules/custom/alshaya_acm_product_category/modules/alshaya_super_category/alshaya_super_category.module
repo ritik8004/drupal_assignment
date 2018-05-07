@@ -439,16 +439,11 @@ function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateI
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
 
     if (is_array($term)) {
-      $tid = $term['id'];
+      $form['brand'] = [
+        '#type' => 'hidden',
+        '#value' => $term['id'],
+      ];
     }
-    elseif (is_int($term)) {
-      $tid = $term;
-    }
-
-    $form['brand'] = [
-      '#type' => 'hidden',
-      '#value' => $tid,
-    ];
 
     $form['#cache']['contexts'][] = 'url.path';
     $form['#cache']['contexts'][] = 'url.query_args';
