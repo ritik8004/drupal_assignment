@@ -92,6 +92,11 @@ $pdp_popup_zoom_bg: $icon-bg;
 
 // product details page carousel arrow
 $pdp_carousel_arrows_blue: $peacock-blue;
+$gallary-icon-bg: rgba(242, 242, 242, 0.3);
+
+// Mobile Gallery
+$gallery_zoombtn_bg: $gallary-icon-bg;
+$gallery_zoombtn_disabled: $gallary-icon-bg;
 
 // Out of stock button.
 $oos_btn_bg: $error-red;
@@ -375,3 +380,8 @@ $basket_horizontal_recommendation_slider_dots: $peacock-blue;
 // Privilege card earn text only for the basket page.
 $privilege_earn_txt: $black;
 $privilege_earn_icon: $peacock-blue;
+
+// My Account Pages
+$user_order_help_bg: $info-blue;
+$user_order_help_text : $white;
+$user_order_help_text_links: $user_order_help_text;
