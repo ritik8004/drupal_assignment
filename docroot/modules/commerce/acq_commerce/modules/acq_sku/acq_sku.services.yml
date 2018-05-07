@@ -46,7 +46,7 @@ services:
       class: Drupal\acq_sku\AcqSkuLinkedSku
       arguments:
         - '@acq_commerce.api'
-        - '@cache.default'
+        - '@cache.linked_skus'
         - '@config.factory'
         - '@language_manager'
         - '@logger.factory'
@@ -57,3 +57,10 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [stock]
+
+  cache.linked_skus:
+    class: Drupal\Core\Cache\CacheInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: [linked_skus]
