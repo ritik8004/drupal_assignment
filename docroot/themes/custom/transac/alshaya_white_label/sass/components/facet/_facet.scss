@@ -108,6 +108,7 @@ ul[data-drupal-facet-id=category],
 ul[data-drupal-facet-id=plp_category_facet] {
   &.js-facets-checkbox-links {
     display: block;
+    max-height: none;
   }
 
   > li {
@@ -206,7 +207,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
     margin-#{$left}: 1rem;
 
     > label {
-      @include icon(chevronleft, before) {
+      @include icon(chevron#{$left}, before) {
         position: absolute;
         #{$left}: -1rem;
         font-size: 1.875rem;
@@ -224,7 +225,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
       ~ label {
         font-weight: normal;
 
-        @include icon(chevronleft, before);
+        @include icon(chevron#{$left}, before);
       }
     }
   }
@@ -234,6 +235,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
       .facet-item__count,
       .facet-item__value {
         display: inline-block;
+        line-height: 1.4;
       }
     }
   }

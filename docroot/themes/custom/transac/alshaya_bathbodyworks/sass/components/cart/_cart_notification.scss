@@ -1,0 +1,23 @@
+#cart_notification {
+  @include breakpoint($only-mobile) {
+    #{$right}: 0.15rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    top: 2.5rem;
+  }
+
+  .notification,
+  .error {
+    .col-2 {
+      font-weight: normal;
+
+      a {
+        line-height: 3.4;
+        text-transform: uppercase;
+        height: 2.5rem;
+        width: 100%;
+      }
+    }
+  }
+}

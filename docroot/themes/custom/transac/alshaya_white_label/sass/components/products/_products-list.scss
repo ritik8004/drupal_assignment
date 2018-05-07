@@ -125,6 +125,11 @@
     }
 
     .filter--mobile {
+      @include breakpoint($only-mobile) {
+        position: relative;
+        z-index: 10;
+      }
+
       @include breakpoint($tablet) {
         top: 1rem;
 
@@ -176,6 +181,12 @@
                 float: $left;
                 margin-top: 0.4375rem;
               }
+            }
+          }
+
+          .region__sidebar-first {
+            @include breakpoint($only-mobile) {
+              margin-bottom: 4rem;
             }
           }
 
@@ -547,7 +558,8 @@
     text-align: center;
     padding: 0;
     list-style: none;
-    margin-bottom: 7.1rem;
+    margin-bottom: 1.1rem;
+    margin-top: 9rem;
 
     a {
       color: $plp_pager_link;
@@ -940,6 +952,59 @@ html[lang=ar] {
     p {
       margin-bottom: 0;
       margin-top: 0;
+    }
+  }
+}
+
+.block-views-blockproduct-category-level-3-block-2 {
+  @include breakpoint($tablet) {
+    display: none;
+  }
+
+  @include breakpoint($only-mobile) {
+    .views-row {
+      a {
+        font-family: $alshaya-thin;
+        font-size: 0.75rem;
+        text-decoration: none;
+        color: $mm_l3_link;
+        display: block;
+        padding: 0.9375rem 0;
+        border-top: 1px solid $mm_l1_border;
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .c-plp {
+    .region__content {
+      display: flex;
+      flex-flow: row wrap;
+      flex-direction: column;
+
+      > div {
+        width: 100%;
+      }
+
+      #block-page-title {
+        order: -2;
+      }
+
+      .view-header {
+        &.search-count {
+          order: -1;
+          margin-bottom: 0;
+          padding-top: 0.9rem;
+          margin-top: 0;
+          border-bottom: none;
+        }
+      }
+
+      .block-views-exposed-filter-blockalshaya-product-list-block-1 {
+        padding-top: 0.9rem;
+        border-top: 1px solid $mm_l1_border;
+      }
     }
   }
 }

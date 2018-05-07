@@ -18,6 +18,8 @@ function alshaya_api_drush_command() {
     'aliases'     => ['aasc'],
     'options' => [
       'types' => 'The comma-separated list of SKUs types to check (simple, configurable)',
+      'page_size' => 'ACM page size',
+      'use_delete' => 'Hidden deletion option',
     ],
   ];
 
@@ -30,8 +32,12 @@ function alshaya_api_drush_command() {
 function drush_alshaya_api_sanity_check() {
   $types = array_map('trim', explode(',', drush_get_option('types', 'simple,configurable')));
 
+  $debug = drush_get_option('debug', FALSE);
   $verbose = drush_get_option('verbose', FALSE);
   $languages = \Drupal::languageManager()->getLanguages();
+
+  $page_size = drush_get_option('page_size', 10);
+  $use_delete = drush_get_option('use_delete', FALSE);
 
   drush_print(dt('Getting @types SKUs from Magento, please wait...', [
     '@types' => implode(dt(' and '), $types),
@@ -40,7 +46,7 @@ function drush_alshaya_api_sanity_check() {
   // Retrieve all enabled SKUs from Magento indexed by type.
   $mskus = \Drupal::service('alshaya_api.api')->getSkus($types);
 
-  if ($verbose) {
+  if ($debug) {
     foreach ($types as $type) {
       drush_print(dt("@type SKUs (@count) from Magento:\n@skus", [
         '@type' => $type,
@@ -59,7 +65,7 @@ function drush_alshaya_api_sanity_check() {
     foreach ($languages as $language) {
       $dskus[$type][$language->getId()] = \Drupal::service('alshaya_acm_product.skumanager')->getSkus($language->getId(), $type);
 
-      if ($verbose) {
+      if ($debug) {
         drush_print(dt("@type @language SKUs (@count) from Drupal:\n@skus", [
           '@type' => $type,
           '@language' => $language->getName(),
@@ -91,30 +97,30 @@ function drush_alshaya_api_sanity_check() {
       $to_be_deleted[$type]['all'] = $tall;
 
       if (!empty($missing[$type][$language->getId()])) {
-        drush_print(dt("Following @count @language @type's SKUs are missing in Drupal and must be synced:\n!skus", [
+        drush_print(dt("\n@count @language @type's SKUs are missing in Drupal and must be synced:\n!skus", [
           '@count' => count($missing[$type][$language->getId()]),
           '@language' => $language->getName(),
           '@type' => $type,
-          '!skus' => "'" . implode("','", $missing[$type][$language->getId()]) . "'",
+          '!skus' => $verbose ? "'" . implode("','", $missing[$type][$language->getId()]) . "'" : '',
         ]));
       }
       else {
-        drush_print(dt('No missing SKUs match for @language @type in Drupal.', [
+        drush_print(dt("\nNo missing SKUs match for @language @type in Drupal.", [
           '@language' => $language->getName(),
           '@type' => $type,
         ]));
       }
 
       if (!empty($to_be_deleted[$type][$language->getId()])) {
-        drush_print(dt("Following @count @language @type's SKUs are only in Drupal and must be removed:\n!skus", [
+        drush_print(dt("\n@count @language @type's SKUs are only in Drupal and must be removed:\n!skus", [
           '@count' => count($to_be_deleted[$type][$language->getId()]),
           '@language' => $language->getName(),
           '@type' => $type,
-          '!skus' => "'" . implode("','", $to_be_deleted[$type][$language->getId()]) . "'",
+          '!skus' => $verbose ? "'" . implode("','", $to_be_deleted[$type][$language->getId()]) . "'" : '',
         ]));
       }
       else {
-        drush_print(dt('No additional SKUs for @language @type found in Drupal. Nothing to delete.', [
+        drush_print(dt("\nNo additional SKUs for @language @type found in Drupal. Nothing to delete.", [
           '@language' => $language->getName(),
           '@type' => $type,
         ]));
@@ -127,6 +133,8 @@ function drush_alshaya_api_sanity_check() {
 
   drush_print(dt("\n#### SYNCHRONIZATION ####"));
 
+  $chunk_size = 100;
+
   // Retrieve missing SKUs.
   foreach ($types as $type) {
     if (!empty($missing[$type]['all']) && drush_confirm(dt('Do you want to sync the @count @type missing SKUs?', [
@@ -136,11 +144,11 @@ function drush_alshaya_api_sanity_check() {
       foreach (\Drupal::service('acq_commerce.i18n_helper')->getStoreLanguageMapping() as $langcode => $store_id) {
         // We split the list of SKUs in small chunk to avoid any issue. This is
         // only to send the request to Conductor.
-        foreach (array_chunk(str_replace("'", '', $missing[$type]['all']), 5) as $chunk) {
+        foreach (array_chunk(str_replace("'", '', $missing[$type]['all']), $chunk_size) as $chunk) {
           // @TODO: Make page size a config. It can be used in multiple places.
           // @TODO: It seems there is nothing being logged when fullSync is
           // launched.
-          \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $chunk, 2);
+          \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
         }
 
         drush_print(dt('Sync launched for the @count @language @type SKUs.', [
@@ -150,6 +158,35 @@ function drush_alshaya_api_sanity_check() {
         ]));
       }
     }
+  }
+
+  // Try to resync extra SKUs.
+  foreach ($types as $type) {
+    if (!empty($to_be_deleted[$type]['all']) && drush_confirm(dt('Do you want to sync the @count @type extra SKUs?', [
+      '@count' => count($to_be_deleted[$type]['all']),
+      '@type' => $type,
+    ]))) {
+      foreach (\Drupal::service('acq_commerce.i18n_helper')->getStoreLanguageMapping() as $langcode => $store_id) {
+        // We split the list of SKUs in small chunk to avoid any issue. This is
+        // only to send the request to Conductor.
+        foreach (array_chunk(str_replace("'", '', $to_be_deleted[$type]['all']), $chunk_size) as $chunk) {
+          // @TODO: Make page size a config. It can be used in multiple places.
+          // @TODO: It seems there is nothing being logged when fullSync is
+          // launched.
+          \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
+        }
+
+        drush_print(dt('Sync launched for the @count @language @type SKUs.', [
+          '@count' => count($to_be_deleted[$type]['all']),
+          '@language' => $languages[$langcode]->getName(),
+          '@type' => $type,
+        ]));
+      }
+    }
+  }
+
+  if ($use_delete === FALSE) {
+    return;
   }
 
   // Delete additional SKUs.

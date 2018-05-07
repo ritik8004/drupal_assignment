@@ -39,7 +39,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     <tr>
       <td class="sell--image">
         {% if content.image is not null %}
-          {{ content.image }}
+          <a href="{{ url }}" rel="bookmark">{{ content.image }}</a>
         {% endif %}
 
         {{ content.labels }}
@@ -49,7 +49,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         {{ title_prefix }}
         {% if not page %}
           <h2{{ title_attributes.addClass("c-products__item__label") }}>
-            {{ label }}
+            <a href="{{ url }}" rel="bookmark">{{ label }}</a>
           </h2>
         {% endif %}
         {{ title_suffix }}
@@ -62,9 +62,11 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
     <tr>
       <td colspan="2" class="sell-sku">
-        <article data-skuid="{{ content.sku_id }}">
-          {{ content.mobile_add_to_cart_form }}
-        </article>
+        <div class="field--name-field-skus">
+          <article data-skuid="{{ content.sku_id }}">
+            {{ content.mobile_add_to_cart_form }}
+          </article>
+        </div>
       </td>
     </tr>
 

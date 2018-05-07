@@ -366,8 +366,9 @@ class SkuManager {
     $vat_text = '';
     $this->buildPrice($build, $sku_entity);
     // Adding vat text to product page.
-    // Do not pass VAT text part of the price block for teaser modes.
-    if ($view_mode != 'teaser') {
+    // Do not pass VAT text part of the price block for teaser and
+    // product_category_carousel modes.
+    if ($view_mode != 'teaser' && $view_mode != 'product_category_carousel') {
       if ($this->currentRoute->getRouteName() == 'entity.node.canonical'
         || $this->currentRoute->getRouteName() == 'alshaya_acm_product.get_cart_form') {
         $vat_text = $this->configFactory->get('alshaya_acm_product.settings')->get('vat_text');
@@ -1197,7 +1198,7 @@ class SkuManager {
    *
    * @todo: Rename getChildSkus function to getChildSkuEntities to avoid confusion.
    */
-  public function getChildrenSkus(SKU $sku_entity) {
+  public function getChildrenSkuIds(SKU $sku_entity) {
     $child_skus = [];
 
     if ($sku_entity->getType() == 'configurable') {

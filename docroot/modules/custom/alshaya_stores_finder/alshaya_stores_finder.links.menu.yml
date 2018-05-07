@@ -1,4 +1,4 @@
 alshaya_stores_finder.configuration:
   route_name: alshaya_stores_finder.configuration
   title: 'Store finder configuration'
-  parent: system.admin_config_system
+  parent: alshaya_master.alshaya_admin

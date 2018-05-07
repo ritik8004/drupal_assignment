@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Install config for department(advanced) page block.
+ */
+function alshaya_transac_update_8107() {
+  alshaya_config_install_configs(['block.block.views_block__product_category_level_2_3_block_2'], 'alshaya_transac', 'optional');
+  // Move super category block from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_super_category.
  */
 function alshaya_transac_update_8106() {
@@ -95,7 +106,6 @@ function alshaya_transac_install() {
     'alshaya_config',
     'alshaya_contact',
     'alshaya_default_content_transac',
-    'alshaya_department_page',
     'alshaya_i18n',
     'alshaya_loyalty',
     'alshaya_main_menu',
