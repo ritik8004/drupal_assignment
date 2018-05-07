@@ -39,7 +39,7 @@ function alshaya_acm_product_category_update_8006() {
  *
  * Adding new fields Image, BG and Font color in acq_category.
  */
-function alshaya_acm_product_category_update_8005() {
+function alshaya_acm_product_category_update_8006() {
   $configs = [
     'field.storage.taxonomy_term.field_image_text_font_color',
     'field.storage.taxonomy_term.field_image_text_bg_color',
