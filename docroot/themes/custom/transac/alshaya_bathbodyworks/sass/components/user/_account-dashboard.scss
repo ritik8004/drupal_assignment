@@ -1,0 +1,10 @@
+.account--dashboard {
+  .subtitle {
+    font-family: $alshaya-thin;
+    font-weight: normal;
+
+    @include breakpoint($desktop) {
+      font-size: 1.125rem;
+    }
+  }
+}

@@ -11,8 +11,8 @@
   Drupal.behaviors.sell = {
     attach: function (context, settings) {
 
-      var plpfeaturedproduct = $('.nodetype--advanced_page .paragraph--type--product-carousel-category .owl-carousel');
-      var advancedfeaturedproduct = $('.frontpage .paragraph--type--product-carousel-category .owl-carousel');
+      var plpfeaturedproduct = $('.nodetype--advanced_page .paragraph--type--product-carousel-category .product-category-carousel');
+      var advancedfeaturedproduct = $('.frontpage .paragraph--type--product-carousel-category .product-category-carousel');
 
       var options = {
         responsiveClass: true,
@@ -73,7 +73,7 @@
       applyRtl(plpfeaturedproduct, options);
       applyRtl(advancedfeaturedproduct, optionshp);
 
-      $('.owl-carousel').owlCarousel({
+      $('.product-category-carousel').owlCarousel({
         loop: true,
         responsiveClass: true,
         dots: true,
