@@ -388,26 +388,14 @@ function alshaya_super_category_alshaya_super_category_status_update($status, $d
     return;
   }
 
-  $category_parent_index = [
-    'label' => 'Category Parent',
-    'datasource_id' => 'entity:node',
-    'property_path' => 'field_category',
-    'type' => 'integer',
-    'dependencies' => [
-      'config' => [
-        'field.storage.node.field_category',
-      ],
-    ],
-  ];
-
-  // Index attr concept data in search_api_db.
-  $config->set('field_settings.field_category_parent', $category_parent_index);
+  // Index field_cateogyr_parent data in acquia_search_index.
+  // @see \Drupal\alshaya_super_category\EventSubscriber\SolrConfigSubscriber.
   $config->save();
 
   $index = Index::load('acquia_search_index');
   // Re-index all items.
   $index->reindex();
-  // Save index to reflect new concept field.
+  // Save index to reflect new field.
   $index->save();
 }
 
