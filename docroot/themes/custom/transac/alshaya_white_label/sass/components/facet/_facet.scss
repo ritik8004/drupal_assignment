@@ -276,13 +276,16 @@ ul[data-drupal-facet-id=plp_category_facet] {
       }
     }
   }
+
   > li {
     > ul {
       > li {
         > label {
           @include icon(check-box-empty);
+
           color: $primary_checkbox_empty;
         }
+
         > input[type=checkbox]:checked {
           ~ label {
             @include icon(check-box-filled) {
@@ -293,11 +296,14 @@ ul[data-drupal-facet-id=plp_category_facet] {
       }
     }
   }
+
   > li.leaf-li {
     > label {
       @include icon(check-box-empty);
+
       color: $primary_checkbox_empty;
     }
+
     > input[type=checkbox]:checked {
       ~ label {
         @include icon(check-box-filled) {
