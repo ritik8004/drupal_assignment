@@ -1,13 +1,13 @@
 alshaya_user.user_settings_form:
   title: 'Custom account settings'
-  parent: user.admin_index
+  parent: alshaya_master.alshaya_admin
   description: 'Configure custom user account settings added for Alshaya.'
   weight: 10
   route_name: alshaya_user.user_settings_form
 
 alshaya_user.join_club_form:
   title: 'Join Club content'
-  parent: user.admin_index
+  parent: alshaya_master.alshaya_admin
   description: 'Configure Join the club block content.'
   weight: 10
   route_name: alshaya_user.join_club_form

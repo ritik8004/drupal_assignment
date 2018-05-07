@@ -1032,11 +1032,18 @@ $pdp_filter_selector_label: false;
 // Orders.
 $order_detail_order_sub_total_border: false;
 
-// Checkout.
-$checkout_progress_border: false;
-
-// From: Bath and Body Works
+// From: Bath and BodyWorks.
 // Basket.
 $basket_empty_continue_shopping_link: false;
 $basket_empty_continue_shopping_btn_bg: false;
 $privilege_earn_icon: false;
+
+// Autocomplete Dropdown.
+$autocomplete_border: false;
+
+// pdp popup
+$pdp_popup_zoom_bg: false;
+
+// Checkout.
+$checkout_current_counter_border: false;
+$checkout_counter_border: false;
