@@ -164,7 +164,7 @@
               "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-17/facets-views-ajax-2826449-8.x-alpha11-146.patch",
               "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
               "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
-              "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_url_alter.patch"
+              "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
