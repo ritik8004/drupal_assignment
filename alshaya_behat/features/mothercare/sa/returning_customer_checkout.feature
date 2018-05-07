@@ -33,7 +33,7 @@ Feature: Test various checkout scenarios as returning customer
     Then I accept terms and conditions
     When I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test"
+    Then I should see text matching "Thank you for shopping online with us, "
     And I should see text matching "Your order number is "
 
   Scenario: As a returning customer
@@ -56,7 +56,7 @@ Feature: Test various checkout scenarios as returning customer
     And I press "place order"
     When I wait for the page to load
     When I wait 10 seconds
-    Then I should see text matching "Thank you for shopping online with us, Test Test"
+    Then I should see text matching "Thank you for shopping online with us, "
     And I should see text matching "Your order number is "
 
   Scenario: As a returning customer
@@ -85,5 +85,5 @@ Feature: Test various checkout scenarios as returning customer
     When I press "place order"
     When I wait for the page to load
     When I wait 10 seconds
-    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    Then I should see text matching "Thank you for shopping online with us, "
     And I should see text matching "Your order number is "
