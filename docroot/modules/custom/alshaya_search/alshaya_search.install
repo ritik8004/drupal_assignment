@@ -14,16 +14,8 @@ use Drupal\search_api\Entity\Index;
  */
 function alshaya_search_update_8015() {
   alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
-
-  $config = [
-    'facets.facet.plp_category_facet',
-    'facets.facet_source.search_api__views_page__search__page',
-    'facets.facet_source.search_api__views_block__alshaya_product_list__block_1',
-  ];
-  alshaya_config_install_configs($config, 'alshaya_product');
-
+  alshaya_config_install_configs(['facets.facet.plp_category_facet'], 'alshaya_product');
   alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
-  alshaya_config_install_configs(['facets.facet_source.search_api__views_block__alshaya_product_list__block_2'], 'alshaya_acm_promotion');
 }
 
 /**
