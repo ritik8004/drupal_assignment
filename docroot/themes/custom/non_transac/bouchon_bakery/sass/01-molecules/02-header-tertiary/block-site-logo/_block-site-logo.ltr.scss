@@ -1,6 +1,6 @@
 .region-page-header .site__logo {
   display: table;
-  padding: 2.1875rem 0 1.25rem;
+  padding: 1.25rem 0 0.75rem;
   margin: 0;
   height: auto;
   text-align: center;
@@ -16,13 +16,13 @@
     vertical-align: middle;
   }
 
-  img {
+  img,
+  svg {
     @include breakpoint($upto-palm) {
-      width: 4.2rem;
+      width: 4.5rem;
     }
 
     @include breakpoint($lap) {
-      max-width: 8.625rem;
       max-height: none;
     }
 
@@ -31,6 +31,24 @@
       padding: 0;
       height: 6.0625rem;
       width: 100%;
+    }
+  }
+
+  svg {
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    @include breakpoint($upto-palm) {
+      height: 2.938rem;
+    }
+
+    @include breakpoint($desk) {
+      height: 6.188rem;
+    }
+
+    html[lang=ar] & {
+      direction: initial;
     }
   }
 }
@@ -45,6 +63,10 @@ header[role="banner"] {
   left: 0;
   top: 0;
   z-index: $z-9;
+
+  @include breakpoint($upto-palm) {
+    height: 3.313rem;
+  }
 }
 
 main[role="main"] {

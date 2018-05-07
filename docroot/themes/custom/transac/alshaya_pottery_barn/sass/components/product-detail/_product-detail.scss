@@ -46,3 +46,34 @@
     }
   }
 }
+
+.click-collect-form {
+  strong,
+  .google-store-location {
+    font-weight: 600;
+    color: $pdp_cc_form_highlight_txt;
+  }
+
+  .change-location-link {
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+}
+
+.click-collect-top-stores ul li {
+  .store-name,
+  .store-delivery-time em {
+    font-weight: 600 !important;
+    color: $pdp_cc_form_highlight_txt;
+  }
+
+  .store-sequence {
+    color: $pdp_cc_top_stores_list_counter;
+  }
+}
+
+.store-finder-form-wrapper .search-store button {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.75rem;
+}

@@ -2,4 +2,4 @@ alshaya_config.settings:
   title: 'Configure Alshaya features'
   description: 'View and enable/disable features for current site.'
   route_name: alshaya_config.settings
-  parent: system.admin_config_system
+  parent: alshaya_master.alshaya_admin

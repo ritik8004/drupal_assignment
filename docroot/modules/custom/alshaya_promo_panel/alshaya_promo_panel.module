@@ -47,6 +47,7 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
           ];
 
           $variables['attributes']['class'][] = 'block-promo-panel-wrapper';
+          $variables['attributes']['class'][] = 'promo__panel';
           $variables['title_attributes']['class'][] = 'promo-panel-label';
           $variables['content']['#attached']['library'][] = 'alshaya_promo_panel/promo-panel';
         }

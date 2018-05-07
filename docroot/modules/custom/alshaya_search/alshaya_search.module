@@ -11,9 +11,27 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Solarium\Core\Query\QueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Implements hook_acsf_registry().
+ *
+ * Adding our custom class to the registry that changes Alshaya configuration.
+ */
+function alshaya_search_acsf_registry() {
+  return [
+    'events' => [
+      [
+        'weight' => 15,
+        'type' => 'site_duplication_scrub',
+        'class' => '\Drupal\alshaya_search\Event\AlshayaAcsfDuplicationScrubConfigurationHandler',
+      ],
+    ],
+  ];
+}
 
 /**
  * Implements hook_views_pre_render().
@@ -357,5 +375,61 @@ function alshaya_search_alshaya_profile_installed_final_task() {
     // Enable alshaya_search_local_search to ensure config are overridden to
     // use solr in local.
     \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
+  }
+}
+
+/**
+ * Implements hook_alshaya_facet_results_alter().
+ */
+function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
+  $ids = array_keys($results);
+
+  // List of term ids that need to be hidden based on its parent's not
+  // included in menu flag.
+  $hide_tids = [];
+
+  // Process results array & mark terms for hiding.
+  if (empty($hide_tids)) {
+    // Load indexed term object.
+    $entities = \Drupal::service('entity_type.manager')
+      ->getStorage('taxonomy_term')
+      ->loadMultiple($ids);
+
+    // Check each term for include_menu flag & mark its children for hiding in
+    // case its flagged to be not in menu.
+    foreach ($results as $tid => $result) {
+      if ((($term = $entities[$tid]) instanceof TermInterface) &&
+        ($term->get('field_category_include_menu')->getString() != 1)) {
+        $hide_tids[] = $tid;
+        _alshaya_search_mark_hide_chidren($result, $hide_tids);
+      }
+    }
+
+    // Remove any duplicate term ids.
+    $hide_tids = array_unique($hide_tids);
+  }
+
+  // Process tids marked for hiding.
+  _alshaya_search_hide_terms($hide_tids, $results);
+}
+
+/**
+ * Helper function to hide all children terms.
+ */
+function _alshaya_search_mark_hide_chidren($result, &$hide_tids) {
+  if (count($children = $result->getChildren()) > 0) {
+    foreach ($children as $key => $child) {
+      $hide_tids[] = $key;
+      _alshaya_search_mark_hide_chidren($child, $hide_tids);
+    }
+  }
+}
+
+/**
+ * Helper function to hide marked terms from category facet.
+ */
+function _alshaya_search_hide_terms($hide_tids, &$results) {
+  foreach ($hide_tids as $tid) {
+    unset($results[$tid]);
   }
 }

@@ -5,6 +5,7 @@
  * Install file.
  */
 
+use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
@@ -88,7 +89,7 @@ function alshaya_addressbook_update_8001() {
 function alshaya_addressbook_install() {
   // For all the new sites we want to use DM Version 2.
   \Drupal::configFactory()->getEditable('alshaya_addressbook.settings')
-    ->set('dm_version', DM_VERSION_2)
+    ->set('dm_version', AlshayaAddressBookManagerInterface::DM_VERSION_2)
     ->save();
 
   // Save permission of address_book for authenticated user.
