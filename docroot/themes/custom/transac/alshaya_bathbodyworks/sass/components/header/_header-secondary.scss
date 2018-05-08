@@ -62,6 +62,23 @@
   }
 }
 
+.c-my-account-nav {
+  @include breakpoint($only-tablet) {
+    width: 20rem !important;
+  }
+
+  li {
+    @include icon(chevron#{$right}, after) {
+      font-size: 2rem;
+      margin-top: -1.5rem;
+    }
+  }
+
+  h3 {
+    text-transform: uppercase;
+  }
+}
+
 body {
   @include breakpoint($only-tablet) {
     html[lang=ar] & {

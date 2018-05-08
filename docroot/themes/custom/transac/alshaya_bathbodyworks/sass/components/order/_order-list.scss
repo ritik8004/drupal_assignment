@@ -1,0 +1,17 @@
+.block-alshaya-acm-customer {
+  & > .edit-account {
+    font-weight: normal;
+    text-transform: uppercase;
+    height: 2.5rem;
+    padding: 0.925rem 1.6rem;
+    font-size: 0.875rem;
+    line-height: inherit;
+    top: -5.55rem;
+  }
+
+  .no--orders {
+    & + a {
+      text-transform: uppercase;
+    }
+  }
+}
