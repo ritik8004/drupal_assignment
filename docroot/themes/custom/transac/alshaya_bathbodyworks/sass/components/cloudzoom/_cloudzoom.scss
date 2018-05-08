@@ -1,0 +1,8 @@
+@include breakpoint($desktop) {
+  #product-image-gallery,
+  #lightSlider {
+    .slick-slide {
+      height: 8.1875rem !important;
+    }
+  }
+}

@@ -1047,7 +1047,7 @@ class SkuManager {
    *   Linked SKUs for requested type.
    */
   public function getLinkedSkus(SKU $sku, $type) {
-    $linked_skus = $this->linkedSkus->getLinkedSKus($sku, $type);
+    $linked_skus = $this->linkedSkus->getLinkedSKus($sku);
 
     $linked_skus_requested = [];
 
@@ -1080,9 +1080,15 @@ class SkuManager {
    *   Linked SKUs for requested type.
    */
   public function getLinkedSkusWithFirstChild(SKU $sku, $type) {
-    $linked_skus_requested = $this->getLinkedSkus($sku, $type);
+    // First always get the parent if available.
+    /** @var \Drupal\acm_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $sku->getPluginInstance();
+    $parent = $plugin->getParentSku($sku);
+    $sku_entity = $parent instanceof SKU ? $parent : $sku;
 
-    $first_child = $this->getChildSkus($sku, TRUE);
+    $linked_skus_requested = $this->getLinkedSkus($sku_entity, $type);
+
+    $first_child = $this->getChildSkus($sku_entity, TRUE);
 
     if ($first_child) {
       $child_linked_skus_requested = $this->getLinkedSkus($first_child, $type);

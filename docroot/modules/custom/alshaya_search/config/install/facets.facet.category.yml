@@ -38,6 +38,12 @@ processor_configs:
       sort: -10
     settings:
       sort: ASC
+  term_weight_widget_order:
+    processor_id: term_weight_widget_order
+    weights:
+      sort: -10
+    settings:
+      sort: ASC
   translate_entity:
     processor_id: translate_entity
     weights:

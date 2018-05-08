@@ -9,7 +9,7 @@ Feature: Test the product detail page
     And I wait for AJAX to finish
     When I click the label for "#ui-id-2"
     Then I should see "to all areas"
-    And I should see "(Kuwait)"
+    And I should see "(Kingdom of Saudi Arabia)"
     When I click the label for "#ui-id-2"
     When I click the label for "#ui-id-4"
     And I wait for AJAX to finish
@@ -50,9 +50,9 @@ Feature: Test the product detail page
     Then I should see buttons for facebook, Twitter and Pinterest
     And I should see "delivery options"
     Then I should see "Home Delivery"
-    And I should see "delivered in 2-5 days for just kwd 1"
+    And I should see "delivered in 1-3 days ( main cities) and 1-5 (other areas) for just sar 25"
     Then I should see "click and collect"
-    And I should see "free delivery to stores across kuwait in 2-3 days"
+    And I should see "free delivery to stores across kingdom of saudi arabia in 1-3 days ( main cities) and 1-5 ( other areas)"
     When I click the label for "#ui-id-4"
     Then I should see "This service is "
     And I should see "FREE"

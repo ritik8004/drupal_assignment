@@ -16,3 +16,9 @@
 .c-page-title {
   @extend %page-title;
 }
+
+.subtitle {
+  font-family: $alshaya-thin;
+  font-size: 1.125rem;
+  text-transform: capitalize;
+}
