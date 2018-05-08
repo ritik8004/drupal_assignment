@@ -208,7 +208,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
     > label {
       @include icon(chevron#{$left}, before) {
-        position: absolute;
+        position: absolute !important;
         #{$left}: -1rem;
         font-size: 1.875rem;
         top: -0.375rem;
@@ -218,6 +218,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
       span {
         font-weight: bold;
+        color: $category_facet_active_text;
       }
     }
 
@@ -265,5 +266,51 @@ ul[data-drupal-facet-id=plp_category_facet] {
     @include icon(chevrondown, after);
 
     border-bottom: none;
+  }
+}
+
+ul[data-drupal-facet-id=plp_category_facet] {
+  li {
+    label {
+      &::before {
+        position: absolute;
+      }
+    }
+  }
+
+  > li {
+    > ul {
+      > li {
+        > label {
+          @include icon(check-box-empty);
+
+          color: $primary_checkbox_empty;
+        }
+
+        > input[type=checkbox]:checked {
+          ~ label {
+            @include icon(check-box-filled) {
+              color: $primary_checkbox_filled;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  > li.leaf-li {
+    > label {
+      @include icon(check-box-empty);
+
+      color: $primary_checkbox_empty;
+    }
+
+    > input[type=checkbox]:checked {
+      ~ label {
+        @include icon(check-box-filled) {
+          color: $primary_checkbox_filled;
+        }
+      }
+    }
   }
 }
