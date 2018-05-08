@@ -15,7 +15,7 @@ use Drupal\Core\Config\FileStorage;
 function alshaya_master_update_8013() {
   $strings = [
     'Returning customer? SIGN IN' => [
-      'ar' => 'الزبائن العائدون؟ تسجيل الدخول',
+      'ar' => 'زبون مشترك؟ سجل دخولك',
     ],
     'Sign In' => [
       'ar' => 'تسجيل الدخول',
@@ -216,7 +216,7 @@ function alshaya_master_install() {
       'ar' => 'تسجيل الدخول',
     ],
     'Returning customer? SIGN IN' => [
-      'ar' => 'الزبائن العائدون؟ تسجيل الدخول',
+      'ar' => 'زبون مشترك؟ سجل دخولك',
     ],
     'Log out' => [
       'en' => 'Sign out',
