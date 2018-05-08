@@ -42,7 +42,7 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
     }
 
     $pane_form['returning_customer'] = [
-      '#markup' => '<h2 class="selected-tab-title mobile-only-block">' . $this->t('Sign In') . '</h2>',
+      '#markup' => '<span class="selected-tab-title mobile-only-block">' . $this->t('Sign In') . '</span>',
       '#weight' => -51,
     ];
 

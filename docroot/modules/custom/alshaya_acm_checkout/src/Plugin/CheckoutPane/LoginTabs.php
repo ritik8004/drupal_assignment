@@ -43,7 +43,7 @@ class LoginTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $guest_checkout = '<div class="tab tab-new-customer">';
     $guest_checkout .= '<a href="' . $url->toString() . '" gtm-type="checkout-as-guest">';
-    $guest_checkout .= '<h2>' . $this->t('checkout as guest') . '</h2>';
+    $guest_checkout .= '<span>' . $this->t('checkout as guest') . '</span>';
     $guest_checkout .= '</a></div>';
 
     $pane_form['guest_checkout'] = [
@@ -60,7 +60,7 @@ class LoginTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $checkout_login = '<div class="tab tab-returning-customer">';
     $checkout_login .= '<a href="' . $url->toString() . '">';
-    $checkout_login .= '<h2>' . $this->t('Returning customer? SIGN IN') . '</h2>';
+    $checkout_login .= '<span>' . $this->t('Returning customer? SIGN IN') . '</span>';
     $checkout_login .= '</a></div>';
 
     $pane_form['returning_customer'] = [
