@@ -10,6 +10,7 @@ use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\facets\Result\ResultInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
@@ -404,6 +405,11 @@ function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
         $hide_tids[] = $tid;
         _alshaya_search_mark_hide_chidren($result, $hide_tids);
       }
+      // While rendering an item included in menu, check if its nested children
+      // are included. If not, remove them from child list.
+      elseif (($term = $entities[$tid]) instanceof TermInterface) {
+        _alshaya_search_hide_children_from_parent_result($result, $entities);
+      }
     }
 
     // Remove any duplicate term ids.
@@ -433,6 +439,41 @@ function _alshaya_search_hide_terms($hide_tids, &$results) {
   foreach ($hide_tids as $tid) {
     unset($results[$tid]);
   }
+}
+
+/**
+ * Helper function to clear children items from the parent result item.
+ *
+ * @param \Drupal\facets\Result\ResultInterface $result
+ *   Result item being processed.
+ * @param array $entities
+ *   Set of taxonomy terms keyed by tids.
+ */
+function _alshaya_search_hide_children_from_parent_result(ResultInterface $result, array $entities) {
+  // Return early if we are processing a leaf term.
+  if (count($children = $result->getChildren()) == 0) {
+    return;
+  }
+
+  foreach ($children as $tid => $child) {
+    if ($child->getChildren() > 0) {
+      _alshaya_search_hide_children_from_parent_result($child, $entities);
+    }
+
+    // If we land onto an empty tid, it means the term is in index, but not in
+    // Drupal anymore.
+    if (empty($entities[$tid])) {
+      unset($children[$tid]);
+    }
+    // Check if the children has the attribute set to not include in menu &
+    // remove it from the list accordingly.
+    elseif (($entities[$tid] instanceof TermInterface) &&
+      ($entities[$tid]->get('field_category_include_menu')->getString() != 1)) {
+      unset($children[$tid]);
+    }
+  }
+
+  $result->setChildren($children);
 }
 
 /**

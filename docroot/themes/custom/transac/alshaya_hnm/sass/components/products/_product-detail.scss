@@ -941,7 +941,7 @@ html[lang=ar] {
   &__main {
     .gallery-wrapper {
       @include breakpoint($mobile) {
-        min-height: 25.5625rem;
+        min-height: 31.75rem;
       }
     }
   }
