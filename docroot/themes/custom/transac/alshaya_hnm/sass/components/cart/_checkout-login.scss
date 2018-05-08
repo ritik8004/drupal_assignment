@@ -24,6 +24,13 @@
       }
     }
   }
+
+  #block-youllbeableto a {
+    @include breakpoint($only-mobile) {
+      text-transform: none;
+      letter-spacing: 0;
+    }
+  }
 }
 
 .alias--cart-checkout-login {
