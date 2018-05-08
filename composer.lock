@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b483cc34d5be817ed9ccf48cb698572b",
+    "content-hash": "ecb46f9759551a9d97834dc4f58e7fbd",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -4811,7 +4811,7 @@
                     "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-17/facets-views-ajax-2826449-8.x-alpha11-146.patch",
                     "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
                     "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
-                    "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_url_alter.patch"
+                    "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

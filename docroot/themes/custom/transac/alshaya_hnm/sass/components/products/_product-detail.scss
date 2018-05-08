@@ -937,6 +937,16 @@ html[lang=ar] {
   }
 }
 
+.content {
+  &__main {
+    .gallery-wrapper {
+      @include breakpoint($mobile) {
+        min-height: 25.5625rem;
+      }
+    }
+  }
+}
+
 .field--name-field-skus {
   .sku-base-form {
     button[type="submit"] {

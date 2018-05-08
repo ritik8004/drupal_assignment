@@ -440,9 +440,29 @@
         margin-#{$left}: -0.5rem;
         position: relative;
         top: 0;
+        float: $left;
 
         @include breakpoint($desktop) {
           margin-#{$left}: -0.5rem;
+        }
+      }
+
+      .facet-item__value {
+        display: inline;
+        margin-#{$left}: 0;
+
+        div {
+          display: inline;
+        }
+      }
+
+      .facet-item__count {
+        line-height: unset;
+        vertical-align: unset;
+        margin-top: 0;
+
+        html[lang=ar] & {
+          line-height: unset;
         }
       }
     }

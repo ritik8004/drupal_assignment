@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 var alshayaSearchActiveFacet = null;
 var alshayaSearchShowMoreOpen = 0;
 var alshayaSearchActiveFacetTimer = null;
@@ -86,7 +90,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
     attach: function (context, settings) {
       Drupal.alshayaSearchBindObserverEvents();
 
-      $.fn.replaceFacets = function(data) {
+      $.fn.replaceFacets = function (data) {
         if (data.replaceWith === '') {
           $(data.selector).html('');
         }
@@ -152,7 +156,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         if (priceCurrency) {
           var initialTitle = $finalPriceBlock.find('h3').html();
           var initialTitleSearch = finalPriceBlockSearch.find('h3').html();
-          $finalPriceBlock.find('h3').on('click', function() {
+          $finalPriceBlock.find('h3').on('click', function () {
             if ($(this).hasClass('ui-state-active')) {
               $finalPriceBlock.find('h3').html(initialTitle + ' (' + priceCurrency + ')');
             }
@@ -161,7 +165,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             }
           });
 
-          finalPriceBlockSearch.find('h3').on('click', function() {
+          finalPriceBlockSearch.find('h3').on('click', function () {
             if ($(this).hasClass('ui-state-active')) {
               finalPriceBlockSearch.find('h3').html(initialTitleSearch + ' (' + priceCurrency + ')');
             }
@@ -182,14 +186,14 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         finalPriceBlockSearch.find('li:gt(' + zeroBasedLimitSearch + ')').hide();
       }
 
-      $('.ui-autocomplete').on("touchend",function(e) {
+      $('.ui-autocomplete').on("touchend",function (e) {
         if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
           e.stopPropagation();
           e.preventDefault();
           if (e.handled !== true) {
             // Taking keyword input and suggestion from e.target, which is more reliable than class.
             var target = $(e.target);
-            // target is either a or li, use jQuery to find span inside.
+            // Target is either a or li, use jQuery to find span inside.
             var input = target.find('.autocomplete-suggestion-user-input').html()
               + target.find('.autocomplete-suggestion-suggestion-suffix').html();
             $('#edit-keywords').val(input);
@@ -210,12 +214,12 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       }
 
       // Doing this for ajax complete as dom/element we require are not available earlier.
-      $(document).ajaxComplete(function(event, xhr, settings) {
+      $(document).ajaxComplete(function (event, xhr, settings) {
         // On PLP page, we assuming that if there is no expanded and collapsed class available,
         // it means we at the leaf nodes level and thus we adding class to show for the checkboxes.
         if (jQuery('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--collapsed').length === 0
         && jQuery('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--expanded').length === 0) {
-          jQuery('ul[data-drupal-facet-id="plp_category_facet"] li').each(function(){
+          jQuery('ul[data-drupal-facet-id="plp_category_facet"] li').each(function () {
             $(this).addClass('leaf-li');
           });
         }
@@ -235,7 +239,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             item: 4,
             rtl: true,
             slideMargin: 5,
-            onSliderLoad: function() {
+            onSliderLoad: function () {
               gallery.css('height', '73px');
             }
           });
@@ -245,7 +249,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             vertical: false,
             item: 4,
             slideMargin: 5,
-            onSliderLoad: function() {
+            onSliderLoad: function () {
               gallery.css('height', '73px');
             }
           });
@@ -292,4 +296,42 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       };
     }
   };
+
+  Drupal.behaviors.convertL2ToAccordion = {
+    attach: function (context, settings) {
+      $('[data-drupal-facet-id="category"] .facet-item').each(function () {
+        if ($(this).children('a').length > 0) {
+          // Extract query string from the relative url string.
+          var facet_url_query_string = ($(this).children('a').attr('href')).match(/(\?.*)/);
+          if (facet_url_query_string) {
+            var urlParams = new URLSearchParams(facet_url_query_string[1]);
+            // Process items with no_url_l2 parameter.
+            if ((urlParams.has('no_url_l2')) &&
+              (!$(this).hasClass('l2-processed'))) {
+              // Stop click on a tag from directing users to the url.
+              $(this).children('a').off('click').click(function (e) {
+                return false;
+              });
+
+              // Remove checkbox for the selected L2 items.
+              $(this).children('input').remove();
+
+              // Attach a click listener to the L2 items to make it act like
+              // accordion.
+              $(this).off('click').click(function (e) {
+                $(this).children('ul').slideToggle();
+                $(this).addClass('l2-processed');
+                e.stopPropagation();
+              });
+
+              // Only keep the current selection expanded.
+              if (!urlParams.has('current_facet')) {
+                $(this).children('ul').once('js-event').slideToggle();
+              }
+            }
+          }
+        }
+      });
+    }
+  }
 })(jQuery);

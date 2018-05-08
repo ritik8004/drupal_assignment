@@ -37,6 +37,7 @@
       }
     }
 
+    .facet-item__count,
     .facet-item__value {
       text-transform: capitalize;
       line-height: 1.57;
@@ -82,7 +83,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
   > .facet-item--expanded {
     > label {
       &::before {
-        top: 0.125rem;
+        top: 0.125rem !important;
       }
     }
   }
