@@ -1105,10 +1105,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   }
   else {
     $form['quantity'] = [
-      '#markup' => '<div class="quantity out-of-stock">' . t('Quantity') . '<div><span class="dash">-</span><span class="arrow"></span></div></div>',
+      '#title' => '',
+      '#markup' => '',
     ];
     $form['add_to_cart'] = [
-      '#markup' => '<div class="add-to-cart out-of-stock">' . t('Out of stock') . '</div>',
+      '#markup' => '<span class="out-of-stock">' . t('out of stock') . '</span>',
     ];
   }
 }
