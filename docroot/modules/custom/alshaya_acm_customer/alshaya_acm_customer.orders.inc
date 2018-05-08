@@ -127,27 +127,12 @@ function alshaya_acm_customer_clean_sku($sku) {
  *   Item array.
  *
  * @return string
- *   Status of order, ensure string can be used directly as class too.
+ *   Status of order, ensures string can be used directly as class too.
  */
 function alshaya_acm_customer_get_order_status(array $order) {
-  $config = \Drupal::config('alshaya_acm_customer.orders_config');
-  $order_status_returned = explode(',', $config->get('order_status_returned'));
-  $order_status_delivered = explode(',', $config->get('order_status_delivered'));
-
-  $class = 'status-pending';
-
-  if (in_array($order['status'], $order_status_returned)) {
-    $class = 'status-returned';
-  }
-  elseif (in_array($order['status'], $order_status_delivered)) {
-    $class = 'status-delivered';
-  }
-
-  return [
-    'text' => $order['extension']['customer_status'],
-    'class' => $class,
-    'key' => $order['status'],
-  ];
+  /** @var \Drupal\alshaya_acm_customer\OrdersManager $manager */
+  $manager = \Drupal::service('alshaya_acm_customer.orders_manager');
+  return $manager->getOrderStatusDetails($order);
 }
 
 /**
