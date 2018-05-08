@@ -10,6 +10,24 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add new string translations.
+ */
+function alshaya_master_update_8013() {
+  $strings = [
+    'Returning customer? SIGN IN' => [
+      'ar' => 'الزبائن العائدون؟ تسجيل الدخول',
+    ],
+    'Sign In' => [
+      'ar' => 'تسجيل الدخول',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the 'checkout_guest_summary' config value.
  */
 function alshaya_master_update_8012() {
@@ -193,6 +211,12 @@ function alshaya_master_install() {
     'Log in' => [
       'en' => 'Sign in',
       'ar' => 'تسجيل الدخول',
+    ],
+    'Sign In' => [
+      'ar' => 'تسجيل الدخول',
+    ],
+    'Returning customer? SIGN IN' => [
+      'ar' => 'الزبائن العائدون؟ تسجيل الدخول',
     ],
     'Log out' => [
       'en' => 'Sign out',

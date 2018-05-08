@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\alshaya_acm_checkout\CheckoutLoginTabsTrait;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
@@ -19,6 +20,8 @@ use Drupal\Core\Url;
  */
 class LoginTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
 
+  use CheckoutLoginTabsTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -32,17 +35,36 @@ class LoginTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // @TODO: We can think of making this dynamic if time permits.
+    if ($this->getSelectedTab() === 'login') {
+      return $pane_form;
+    }
+
+    $url = Url::fromRoute('acq_checkout.form', ['step' => 'delivery']);
+
+    $guest_checkout = '<div class="tab tab-new-customer">';
+    $guest_checkout .= '<a href="' . $url->toString() . '" gtm-type="checkout-as-guest">';
+    $guest_checkout .= '<h2>' . $this->t('checkout as guest') . '</h2>';
+    $guest_checkout .= '</a></div>';
+
     $pane_form['guest_checkout'] = [
-      '#markup' => '<div class="tab tab-new-customer"><span>' . $this->t('guest checkout') . '</span></div>',
+      '#markup' => $guest_checkout,
     ];
 
     $pane_form['separator'] = [
       '#markup' => '<div class="tab tab-separator">' . $this->t('OR') . '</div>',
     ];
 
+    $url = Url::fromRoute('acq_checkout.form', ['step' => 'login']);
+    // Set login as tab in params for checkout login.
+    $url->setRouteParameter('tab', 'login');
+
+    $checkout_login = '<div class="tab tab-returning-customer">';
+    $checkout_login .= '<a href="' . $url->toString() . '">';
+    $checkout_login .= '<h2>' . $this->t('Returning customer? SIGN IN') . '</h2>';
+    $checkout_login .= '</a></div>';
+
     $pane_form['returning_customer'] = [
-      '#markup' => '<div class="tab tab-returning-customer"><span>' . $this->t('returning customers') . '</span></div>',
+      '#markup' => $checkout_login,
     ];
 
     $complete_form['actions'] = [
@@ -60,6 +82,7 @@ class LoginTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#attributes' => [
         'class' => ['back-to-basket'],
       ],
+      '#weight' => 99,
     ];
 
     return $pane_form;

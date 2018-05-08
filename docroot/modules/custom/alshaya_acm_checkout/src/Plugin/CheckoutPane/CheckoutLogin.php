@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutPane;
 
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
+use Drupal\alshaya_acm_checkout\CheckoutLoginTabsTrait;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
@@ -21,6 +22,8 @@ use Drupal\user\Entity\User;
  */
 class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
 
+  use CheckoutLoginTabsTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -34,6 +37,15 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    if ($this->getSelectedTab() !== 'login') {
+      $pane_form['#attributes']['class'][] = 'above-mobile-block';
+    }
+
+    $pane_form['returning_customer'] = [
+      '#markup' => '<h2 class="selected-tab-title mobile-only-block">' . $this->t('Sign In') . '</h2>',
+      '#weight' => -51,
+    ];
+
     $config = \Drupal::config('alshaya_acm_checkout.settings');
 
     $pane_form['summary'] = [
