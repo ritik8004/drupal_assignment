@@ -78,5 +78,17 @@
     @include breakpoint($tablet) {
       padding: 0 2.25rem;
     }
+
+    .no-carousel {
+      .views-row {
+        @include breakpoint($tablet) {
+          max-width: 12rem;
+        }
+
+        @include breakpoint($desktop) {
+          margin: 0 1rem;
+        }
+      }
+    }
   }
 }

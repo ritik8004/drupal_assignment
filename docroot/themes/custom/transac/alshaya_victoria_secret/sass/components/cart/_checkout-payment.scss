@@ -1,0 +1,158 @@
+.user-page.checkout-delivery.checkout-payment {
+  .multistep-checkout {
+    border: 1px solid $checkout_payment_form_border;
+  }
+
+  #payment_method_cybersource {
+    #payment_details {
+      border-top: 0;
+    }
+  }
+
+  #edit-checkout-terms {
+    margin-top: 0;
+  }
+}
+
+#payment_method_cybersource {
+  .card-types-wrapper {
+    .card-type {
+      &-visa {
+        background: url('../../alshaya_white_label/imgs/cards/visa-inactive.png') no-repeat;
+        background-size: 100%;
+
+        &.active {
+          background-image: url('../../alshaya_white_label/imgs/cards/visa-active.png');
+        }
+      }
+
+      &:nth-child(2) {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+      }
+
+      &-diners-club {
+        background: url('../../alshaya_white_label/imgs/cards/dinersclub-inactive.png') no-repeat;
+        background-size: 88%;
+
+        &.active {
+          background-image: url('../../alshaya_white_label/imgs/cards/dinersclub-active.png');
+        }
+      }
+    }
+  }
+}
+
+#payment_method_cybersource {
+  #payment_details {
+    padding: 1rem 1.375rem;
+  }
+}
+
+.cvv-help-text-wrapper {
+  position: static;
+
+  .mobile-tooltip-icon {
+    display: none;
+  }
+}
+
+#payment_details {
+  .cc_cvv_help_text {
+    display: block;
+    position: relative;
+    #{$left}: 0;
+    width: 100%;
+    margin-top: 1.25rem;
+    margin-bottom: 1rem;
+
+    @include breakpoint($desktop) {
+      position: absolute;
+      #{$left}: 52%;
+      width: 40%;
+      margin: 0;
+    }
+
+    &::before {
+      border-radius: 0.25rem;
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-cvv,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-number {
+    width: 100%;
+
+    @include breakpoint($desktop) {
+      width: 50%;
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year,
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month {
+    margin-#{$right}: 2%;
+    width: 49%;
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 2%;
+      width: 24%;
+    }
+
+    select {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid $primary_input_border;
+    }
+
+    .select2-container {
+      width: 100% !important;
+
+      .select2-selection {
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid $primary_input_border;
+      }
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
+    @include breakpoint($upto-desktop) {
+      width: 49%;
+      margin-#{$right}: 0;
+    }
+  }
+}
+
+#payment_details_wrapper {
+  & > .form-wrapper {
+    .payment-plugin-wrapper-div.plugin-selected {
+      &::before {
+        border-color: $secondary_border;
+      }
+    }
+  }
+}
+
+#edit-checkout-terms {
+  .form-type-checkbox {
+    .option {
+      &::before {
+        margin-#{$right}: 0;
+        margin-#{$left}: -1.125rem;
+        top: -0.875rem;
+        position: absolute;
+      }
+
+      p {
+        padding-#{$left}: 2rem;
+      }
+    }
+  }
+}
+
+.payment-return-to-delivery {
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+}

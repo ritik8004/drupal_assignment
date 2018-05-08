@@ -24,6 +24,7 @@ $cerulean-two: #ed088c;
 $icon-bg: rgba(242, 242, 242, 0.3);
 
 /* ------- 2. Primary Colors ------- */
+
 // Global elements.
 $primary_bg: $white;
 $body_bg: $primary_bg;
@@ -60,6 +61,7 @@ $primary_dropdown_option_disbled: $greyish;
 $primary_dropdown_focus: $black;
 
 /* ------- 5. Components --------------- */
+
 // Language Switcher
 $lang_switch: $peacock-blue;
 $lang_switch_active: $black;
@@ -90,6 +92,11 @@ $pdp_popup_zoom_bg: $icon-bg;
 
 // product details page carousel arrow
 $pdp_carousel_arrows_blue: $peacock-blue;
+$gallary-icon-bg: rgba(242, 242, 242, 0.3);
+
+// Mobile Gallery
+$gallery_zoombtn_bg: $gallary-icon-bg;
+$gallery_zoombtn_disabled: $gallary-icon-bg;
 
 // Out of stock button.
 $oos_btn_bg: $error-red;
@@ -243,6 +250,7 @@ $promo_white_btn_border: $black;
 $promo_white_btn_text: $black;
 
 /* ------- 7. Pages ----- */
+
 // Product listing page and search page.
 $plp_category_desc: $peacock-blue;
 $plp_facet_filter_bg: $peacock-blue;
@@ -269,6 +277,7 @@ $plp_pager_link_border: $black;
 $plp_pager_link_bg: $black;
 
 // Store finder page.
+
 // Store finder header form.
 $store_finder_header_desktop: $black;
 $store_finder_subheader: $peacock-blue;
@@ -359,6 +368,7 @@ $basket_continue_shopping_link: $peacock-blue;
 $basket_content_link_color: $peacock-blue;
 $basket_empty_continue_shopping_link: $white;
 $basket_empty_continue_shopping_btn_bg: $black;
+
 // Sec text is Size, color, item code attributes.
 $basket_td_sec_txt: $warm-grey-one;
 $basket_item_bundle: $peacock-blue;
@@ -366,6 +376,12 @@ $basket_tooltip_not_available: $warm-grey-one;
 $basket_promotion_input_border: $black;
 $basket_remove_link: $peacock-blue;
 $basket_horizontal_recommendation_slider_dots: $peacock-blue;
+
 // Privilege card earn text only for the basket page.
 $privilege_earn_txt: $black;
 $privilege_earn_icon: $peacock-blue;
+
+// My Account Pages
+$user_order_help_bg: $info-blue;
+$user_order_help_text : $white;
+$user_order_help_text_links: $user_order_help_text;
