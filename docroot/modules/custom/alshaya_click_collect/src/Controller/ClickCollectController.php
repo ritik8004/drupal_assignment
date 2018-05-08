@@ -11,11 +11,13 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -202,6 +204,17 @@ class ClickCollectController extends ControllerBase {
     $response->addCommand(new HtmlCommand('#click-and-collect-map-view .geolocation-common-map-locations', $build['map_info_window']));
     $response->addCommand(new InvokeCommand('#click-and-collect-map-view .geolocation-common-map-locations', 'hide'));
     $response->addCommand(new ClickCollectStoresCommand(['raw' => $stores]));
+
+    // If there are no stores, hide 'list view' and 'map view'.
+    if (count($stores) == 0) {
+      $response->addCommand(new InvokeCommand('.stores-list-view', 'addClass', ['hidden-important']));
+      $response->addCommand(new InvokeCommand('.stores-map-view', 'addClass', ['hidden-important']));
+    }
+    else {
+      $response->addCommand(new InvokeCommand('.stores-list-view', 'removeClass', ['hidden-important']));
+      $response->addCommand(new InvokeCommand('.stores-map-view', 'removeClass', ['hidden-important']));
+    }
+
     return $response;
   }
 
@@ -227,6 +240,18 @@ class ClickCollectController extends ControllerBase {
       '#theme' => 'click_collect_selected_store',
       '#store' => $store,
     ];
+
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (empty(cart)) {
+      $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'cc']])->toString()));
+      return $response;
+    }
+
+    $cart->setExtension('cc_selected_info', [
+      'store_code' => $store['code'],
+      'shipping_type' => $ship_type,
+    ]);
 
     $response->addCommand(new HtmlCommand('#selected-store-content', $build));
     $response->addCommand(new InvokeCommand('#selected-store-wrapper', 'show'));

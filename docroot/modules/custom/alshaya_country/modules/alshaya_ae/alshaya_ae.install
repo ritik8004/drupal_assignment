@@ -11,11 +11,4 @@
 function alshaya_ae_install() {
   // Country code and timezone for UAE.
   alshaya_country_set_default_regional_info('AE');
-
-  // Re-install config for the override to take effect.
-  $configs = [
-    'alshaya_master.mobile_number_settings',
-  ];
-
-  alshaya_config_install_configs($configs, 'alshaya_master');
 }

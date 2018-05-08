@@ -75,7 +75,10 @@
         "geerlingguy/drupal-vm": "~4.3",
         "drupal/amp": "^1.0",
         "drupal/amptheme": "^1.0",
-        "drupal/media_entity_actions": "1.x-dev"
+        "drupal/media_entity_actions": "1.x-dev",
+        "drupal/jquery_minicolors": "^1.2",
+        "claviska/jquery-minicolors": "^2.2",
+        "drupal/jsonapi": "1.15 as 1.4.0"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -96,6 +99,18 @@
                 "type": "drupal-library",
                 "dist": {
                     "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        "jquery-minicolors": {
+            "type": "package",
+            "package": {
+                "name": "claviska/jquery-minicolors",
+                "version": "2.2.6",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip",
                     "type": "zip"
                 }
             }
@@ -146,9 +161,10 @@
             },
             "drupal/facets": {
               "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
-              "Ajaxifying facet filters": "https://www.drupal.org/files/issues/facets-views-ajax-2826449-8.x-alpha11-123.patch",
+              "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-17/facets-views-ajax-2826449-8.x-alpha11-146.patch",
               "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
-              "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch"
+              "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
+              "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
@@ -172,11 +188,8 @@
                 "Alter/Override options parameter": "https://www.drupal.org/files/issues/2883264-4.patch"
             },
             "drupal/mobile_number": {
-                "Fix notices": "https://www.drupal.org/files/issues/2886786.patch"
-            },
-            "drupal/clientside_validation": {
-                "Allow jQuery Validation library to be installed outside of module folder": "https://www.drupal.org/files/issues/2895666-15-allow-library-to-be-installed-outside-module.patch",
-                "Add ife support": "patches/clientside_validation/2906132-4-custom.patch"
+                "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
+                "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
             },
             "drupal/redirect": {
                 "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch",

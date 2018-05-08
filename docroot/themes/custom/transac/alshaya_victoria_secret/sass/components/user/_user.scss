@@ -1,0 +1,158 @@
+#block-youllbeableto,
+#block-jointheclub {
+  text-transform: none;
+
+  span {
+    width: 1.5rem;
+    height: 1.5rem;
+    vertical-align: middle;
+  }
+
+  span.icon {
+    &-wish {
+      background-image: url("../imgs/icons/ic-wishlist.svg");
+      background-size: contain;
+    }
+
+    &-store {
+      background-image: url("../imgs/icons/ic-language.svg");
+      background-size: contain;
+    }
+
+    &-offer {
+      background-image: url("../imgs/icons/ic-rewards.svg");
+      background-size: contain;
+    }
+
+    &-win {
+      background-image: url("../imgs/icons/ic-delivery.svg");
+      background-size: contain;
+    }
+
+    &-reward {
+      background-image: url("../imgs/icons/ic-unlock.svg");
+      background-size: contain;
+    }
+
+    &-heart {
+      background-image: url("../imgs/icons/ic-newsletter.svg");
+      background-size: contain;
+    }
+  }
+}
+
+.user-page {
+  #block-youllbeableto {
+    a {
+      text-decoration: underline;
+    }
+  }
+
+  .c-sidebar-second {
+    font-size: 0.875rem;
+  }
+
+  .c-sidebar-second,
+  #block-youllbeableto {
+    h3 {
+      font-family: $vs-regular;
+      text-transform: none;
+    }
+
+    .c-sidebar-second__region {
+      @include breakpoint($tablet) {
+        padding-#{$left}: 3rem;
+      }
+
+      @include breakpoint($desktop) {
+        padding-#{$left}: 5.5rem;
+      }
+    }
+  }
+
+  #block-onlineexclusiveheadingovertwolinesneverthree {
+    a {
+      text-transform: none;
+    }
+  }
+
+  .user-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
+    .form-submit {
+      text-transform: uppercase;
+      font-size: 0.875rem;
+    }
+  }
+
+  .form-type-checkbox .option::before {
+    top: 0.8rem;
+    margin-#{$right}: 0;
+    #{$left}: 0.2rem;
+    font-size: 2.8125rem;
+  }
+}
+
+.c-user-register .c-sidebar-second,
+.c-user-login .c-sidebar-second,
+.order-confirmation {
+  #block-jointheclub img {
+    @include breakpoint($desktop) {
+      width: 55%;
+    }
+  }
+}
+
+.c-user-login.user-page,
+.checkout-login.user-page,
+.c-user-register {
+  .c-sidebar-second,
+  .fieldset-wrapper {
+    #block-youllbeableto {
+      span {
+        height: 1.5rem;
+      }
+
+      p .icon-store {
+        background-size: contain;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+}
+
+.c-user-password,
+.c-user-register,
+.c-user-login {
+  h1 {
+    font-family: $vs-regular;
+  }
+}
+
+#unmask_password {
+  top: 0.375rem;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+}
+
+.c-user-register,
+.c-user-register {
+  .c-content__region {
+    .user-form,
+    .change-pwd-form {
+      .field--name-field-subscribe-newsletter {
+        label {
+          padding-#{$left}: 2.125rem;
+          text-indent: -2.8rem;
+        }
+
+        p {
+          font-size: 0.875rem;
+          padding-#{$left}: 2.125rem;
+        }
+      }
+    }
+  }
+}

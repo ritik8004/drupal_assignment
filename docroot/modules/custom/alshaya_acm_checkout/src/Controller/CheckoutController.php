@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Controller;
 
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -52,6 +53,13 @@ class CheckoutController implements ContainerInjectionInterface {
   protected $mobileUtil;
 
   /**
+   * AddressBook Areas Terms helper service.
+   *
+   * @var \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper
+   */
+  protected $areasTermsHelper;
+
+  /**
    * Constructs a new CheckoutController object.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
@@ -62,12 +70,19 @@ class CheckoutController implements ContainerInjectionInterface {
    *   Address Book Manager object.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   The MobileNumber util service object.
+   * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_terms_helper
+   *   AddressBook Areas Terms helper service.
    */
-  public function __construct(CartStorageInterface $cart_storage, EntityTypeManagerInterface $entity_manager, AlshayaAddressBookManager $address_book_manager, MobileNumberUtilInterface $mobile_util) {
+  public function __construct(CartStorageInterface $cart_storage,
+                              EntityTypeManagerInterface $entity_manager,
+                              AlshayaAddressBookManager $address_book_manager,
+                              MobileNumberUtilInterface $mobile_util,
+                              AddressBookAreasTermsHelper $areas_terms_helper) {
     $this->cartStorage = $cart_storage;
     $this->entityManager = $entity_manager;
     $this->addressBookManager = $address_book_manager;
     $this->mobileUtil = $mobile_util;
+    $this->areasTermsHelper = $areas_terms_helper;
   }
 
   /**
@@ -78,7 +93,8 @@ class CheckoutController implements ContainerInjectionInterface {
       $container->get('acq_cart.cart_storage'),
       $container->get('entity_type.manager'),
       $container->get('alshaya_addressbook.manager'),
-      $container->get('mobile_number.util')
+      $container->get('mobile_number.util'),
+      $container->get('alshaya_addressbook.area_terms_helper')
     );
   }
 
@@ -122,13 +138,19 @@ class CheckoutController implements ContainerInjectionInterface {
    *   AjaxResponse object.
    */
   public function editAddress(Profile $profile) {
+    $response = new AjaxResponse();
+
     $magento_address = $this->addressBookManager->getAddressFromEntity($profile);
     $address = $this->addressBookManager->getAddressArrayFromMagentoAddress($magento_address);
+
+    if (isset($address['area_parent'])) {
+      $areas = $this->areasTermsHelper->getAllAreasWithParent($address['area_parent']);
+      $response->addCommand(new InvokeCommand(NULL, 'updateAreaList', [$areas]));
+    }
 
     $address['id'] = $magento_address['address_id'];
     $address['mobile'] = $this->mobileUtil->getMobileNumberAsString($address['mobile_number']['value']);
 
-    $response = new AjaxResponse();
     $response->addCommand(new InvokeCommand(NULL, 'editDeliveryAddress', [$address]));
     $response->addCommand(new InvokeCommand('#edit-member-delivery-home-addresses', 'hide', []));
     $response->addCommand(new InvokeCommand('#addresses-header', 'hide', []));

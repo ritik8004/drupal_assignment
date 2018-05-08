@@ -3,7 +3,7 @@ Feature: Test Checkout feature
   Background:
     Given I am on a configurable product
     And I wait for the page to load
-    When I press "Add to cart"
+    When I press "Add to basket"
     And I wait for AJAX to finish
     And I go to "/cart"
     And I wait for the page to load
@@ -75,6 +75,7 @@ Feature: Test Checkout feature
     And I fill in "Ecom_Payment_Pin_id" with "1234"
     And I press "Submit"
     And I press "Confirm"
+    And I wait 5 seconds
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
@@ -116,6 +117,7 @@ Feature: Test Checkout feature
     And I fill in "Ecom_Payment_Pin" with "1234"
     And I press "Submit"
     And I press "Confirm"
+    And I wait 5 seconds
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
@@ -145,6 +147,7 @@ Feature: Test Checkout feature
     And I press "place order"
     And I wait for the page to load
     And I press "Cancel"
+    And I wait 10 seconds
     And I wait for the page to load
     Then I should see text matching "Sorry, we are unable to process your payment. Please contact our customer service team for assistance."
     And the url should match "/cart/checkout/payment"
@@ -244,6 +247,7 @@ Feature: Test Checkout feature
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I accept terms and conditions
     And I press "place order"
+    And I wait 10 seconds
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
@@ -279,6 +283,7 @@ Feature: Test Checkout feature
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
     And I press "place order"
+    And I wait 10 seconds
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
@@ -289,7 +294,6 @@ Feature: Test Checkout feature
   and the customer service block
     When I follow "Home delivery"
     And I wait for the page to load
-    Then I should see "Standard delivery for purchases over KD 250"
     Then I should see the Order Summary block
     And I should see the Customer Service block
     When I follow "Edit"
@@ -342,9 +346,9 @@ Feature: Test Checkout feature
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div > img"
     When I wait 2 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
     And I wait for the page to load
     When I fill in "edit-cc-firstname" with "Test"
@@ -367,6 +371,7 @@ Feature: Test Checkout feature
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
     And I press "place order"
+    And I wait 10 seconds
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
 
@@ -381,9 +386,9 @@ Feature: Test Checkout feature
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div > img"
     When I wait 2 seconds
-    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
+    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
     And I wait 2 seconds
     Then I should see "Monday"
     And I should see "Sunday"

@@ -1,0 +1,282 @@
+.c-footer-primary {
+  .primary--footer--right {
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 5%;
+    }
+
+    @include breakpoint($tablet) {
+      float: $right;
+      width: 35%;
+      margin-top: 0.75rem;
+    }
+
+    @include breakpoint($desktop) {
+      width: 25%;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .footer--categories {
+      width: 35%;
+      float: $left;
+    }
+
+    .footer--abouthelp {
+      width: 65%;
+      float: $left;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .footer--categories {
+      float: $left;
+      width: 35%;
+      padding-#{$right}: 5%;
+    }
+
+    .footer--abouthelp {
+      width: 65%;
+    }
+  }
+
+  .footer--categories {
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: 0;
+      padding-#{$right}: 1.25rem;
+    }
+  }
+
+  .footer--menu {
+    @include breakpoint($tablet) {
+      width: 65%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 75%;
+    }
+  }
+}
+
+.c-footer-menu {
+  @extend %list-clear;
+
+  @include breakpoint($tablet) {
+    width: 70%;
+  }
+
+  a {
+    text-transform: capitalize;
+  }
+
+  .cols-6 & {
+    &:last-child {
+      @include breakpoint($desktop) {
+        padding-#{$left}: 0;
+      }
+    }
+  }
+}
+
+.c-footer-menu--about,
+.c-footer-menu--help,
+.c-footer-menu--category {
+  h3 {
+    font-size: 0.75rem;
+
+    @include breakpoint($tablet) {
+      text-transform: uppercase;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 1.1rem 0 0.84rem;
+      font-family: $alshaya-thin;
+      font-size: 0.875rem;
+      text-transform: capitalize;
+
+      @include icon(chevrondown, after) {
+        color: $social_links;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    border-top: 1px solid $accordion_border;
+  }
+}
+
+.c-footer-menu--help {
+  @include breakpoint($desktop) {
+    margin-#{$left}: 0;
+    padding-#{$left}: 5%;
+  }
+
+  @include breakpoint($tablet) {
+    width: 40%;
+    float: $left;
+  }
+}
+
+.alshaya-newsletter-subscribe {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 0;
+  }
+
+  @include breakpoint($only-tablet) {
+    min-width: initial;
+    margin-bottom: 1rem;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 100%;
+
+    .newsletter-block-label {
+      font-family: $alshaya-thin;
+    }
+  }
+
+  .form-item {
+    @include breakpoint($tablet) {
+      max-width: 14.5rem;
+    }
+  }
+
+  .form-email {
+    border: 1px solid $newsletter_input_border !important;
+    border-width: 1px;
+    padding-#{$left}: 0.312rem !important;
+    height: 2.5rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 0.75rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1rem;
+    }
+  }
+
+  .form-submit {
+    @extend %btn;
+
+    font-family: $alshaya-thin;
+    font-size: 0.875rem;
+    padding: 0.625rem 1.34rem;
+    line-height: 1.45;
+    text-transform: uppercase;
+
+    @include breakpoint($tablet) {
+      #{$right}: 0;
+    }
+  }
+}
+
+.c-footer-menu--help {
+  @include breakpoint($only-mobile) {
+    border-bottom: 1px solid $accordion_border;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0;
+  }
+}
+
+.c-footer-menu--about {
+  @include breakpoint($desktop) {
+    margin-#{$left}: 0;
+    padding-#{$right}: 5%;
+  }
+
+  @include breakpoint($tablet) {
+    float: $left;
+    width: 60%;
+  }
+}
+
+.newsletter-block-label {
+  font-family: $alshaya-thin;
+  color: $newsletter_block_text;
+
+  @include breakpoint($only-mobile) {
+    width: 85%;
+    margin: auto;
+  }
+}
+
+.language--switcher {
+  @include breakpoint($only-mobile) {
+    padding: 0 0.875rem 0.875rem;
+  }
+}
+
+.c-footer-primary .language-switcher-language-url,
+.only-first-time .language-switcher-language-url {
+  ul {
+    li {
+      &:first-child {
+        position: relative;
+
+        a {
+          text-transform: capitalize;
+          font-family: $alshaya-thin;
+        }
+      }
+    }
+  }
+}
+
+.language--switcher.only-first-time {
+  padding: 0;
+  background: $lang_switch_list;
+
+  ul {
+    height: 2.5rem;
+    position: relative;
+    left: 50%;
+    transform: translateX(-56%);
+
+    html[lang="ar"] & {
+      transform: translateX(-42%);
+    }
+
+    li {
+      padding: 0;
+
+      a {
+        color: $lang_switch_list;
+        background-color: $lang_switch_list_bg;
+        height: 2.5rem;
+        width: 7.75rem;
+        display: inline-block;
+        padding: 0.875rem 0;
+        line-height: 0.875rem;
+        margin: 0 0.625rem 0 0;
+        text-transform: uppercase !important;
+        text-decoration: none;
+
+        &.is-active {
+          background-color: $lang_switch_active;
+          margin: 0 0.625rem 0 0;
+        }
+      }
+
+      &:first-child {
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .language-switcher-close {
+    display: block;
+    height: 2.5rem;
+    width: 2.5rem;
+    #{$right}: 0;
+    top: 0;
+    background-color: $lang_switch_close_icon_bg;
+
+    @include icon(close, after) {
+      line-height: 2.5rem;
+    }
+  }
+}

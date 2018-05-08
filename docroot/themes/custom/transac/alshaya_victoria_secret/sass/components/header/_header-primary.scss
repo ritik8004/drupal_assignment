@@ -16,6 +16,28 @@ header {
   .block-cart-mini-block {
     .cart-link {
       background-size: contain;
+      width: 2.125rem;
+      height: 2.125rem;
+
+      @include breakpoint($desktop) {
+        top: -0.4rem;
+      }
+    }
+
+    .quantity {
+      width: 1.5rem;
+      height: 1.5rem;
+      font-family: $vs-bold;
+      font-size: 0.75rem;
+
+      @include breakpoint($upto-desktop) {
+        bottom: 0.125rem;
+        #{$left}: 39%;
+      }
+
+      @include breakpoint($upto-tablet) {
+        #{$left}: 28%;
+      }
     }
   }
 
@@ -45,9 +67,29 @@ header {
   }
 
   .region__header {
-    .block-views-exposed-filter-blocksearch-page input[type="text"] {
-      @include breakpoint($desktop) {
-        width: 12.5rem;
+    .block-views-exposed-filter-blocksearch-page {
+      .form-item-keywords {
+        display: block;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        max-width: none;
+        background-position-x: 95% !important;
+
+        html[lang="ar"] & {
+          background-position-x: 5% !important;
+        }
+
+        @include breakpoint($desktop) {
+          background-position-x: 84% !important;
+          width: 12.5rem;
+          padding-#{$right}: 3.5rem;
+
+          html[lang="ar"] & {
+            background-position-x: 16% !important;
+          }
+        }
       }
     }
   }
@@ -86,6 +128,10 @@ header {
         border-bottom: none;
         font-size: 0.875rem;
         text-transform: uppercase;
+      }
+
+      &.active a.menu--one__link {
+        border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
       }
     }
 
@@ -132,18 +178,17 @@ header {
   margin: 0 auto;
 }
 
-.mobile--overlay {
-  .c-menu-primary {
-    z-index: 9;
-  }
-}
-
 .c-menu-primary {
-  @include breakpoint($upto-desktop) {
-    height: auto;
-    position: fixed;
-    z-index: 9;
-    top: 0;
+  li:hover a {
+    @include breakpoint($upto-desktop) {
+      color: $header_my_account_mobile_link_hover;
+    }
+  }
+
+  h3 {
+    @include breakpoint($upto-desktop) {
+      color: $header_my_account_mobile_h3_title;
+    }
   }
 
   ul.menu {
@@ -202,30 +247,9 @@ header {
 
     .menu--mobile-navigation {
       @include breakpoint($upto-desktop) {
+        border-bottom: 2px solid $header_mobile_border;
         position: fixed;
-      }
-    }
-  }
-
-  .block-alshaya-main-menu .menu--one__list {
-    @include breakpoint($upto-desktop) {
-      width: 100%;
-      background: $header_top_bg;
-      position: static;
-      padding: 0;
-      transform: none;
-      font-size: 0;
-      display: block !important;
-    }
-  }
-
-  .main--menu {
-    li {
-      @include breakpoint($upto-desktop) {
-        display: inline-block;
-        margin: 0;
-        width: 33.33%;
-        border: 0;
+        z-index: 6;
       }
     }
   }

@@ -10,10 +10,53 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
- * Install config using for new key footer_menu_blocks.
+ *  Install config for adding extra paragraph to main menu highlight field.
  */
 function alshaya_acm_product_category_update_8005() {
-  alshaya_config_install_configs(['alshaya_acm_product_category.super_category.settings'], 'alshaya_acm_product_category');
+  alshaya_config_install_configs(['field.field.taxonomy_term.acq_product_category.field_main_menu_highlight'], 'alshaya_acm_product_category', 'install');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new field for mobile navigation on top of PLP.
+ */
+function alshaya_acm_product_category_update_8004() {
+  $configs = [
+    'field.storage.taxonomy_term.field_category_quicklink_plp_mob',
+    'field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+    'views.view.product_category_level_3',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
+  alshaya_config_install_configs(['block.block.views_block__product_category_level_3_block_2'], 'alshaya_acm_product_category', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new module 'jquery_minicolors' and adding two new fields for term
+ * background and font color to the 'acq_product_category' vocabulary.
+ */
+function alshaya_acm_product_category_update_8003() {
+  // Install jquery-minicolors module.
+  if (!\Drupal::moduleHandler()->moduleExists('jquery_minicolors')) {
+    \Drupal::service('module_installer')->install(['jquery_minicolors'], TRUE);
+  }
+
+  $configs = [
+    'core.entity_view_mode.paragraph.hightlight_image_186x184',
+    'core.entity_view_display.paragraph.image_title_subtitle.hightlight_image_186x184',
+    'field.storage.taxonomy_term.field_term_font_color',
+    'field.storage.taxonomy_term.field_term_background_color',
+    'field.field.taxonomy_term.acq_product_category.field_term_font_color',
+    'field.field.taxonomy_term.acq_product_category.field_term_background_color',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_acm_product_category', 'install');
 }
 
 /**
@@ -21,24 +64,16 @@ function alshaya_acm_product_category_update_8005() {
  *
  * Adding new field for product category vocabulary for show/hide plp banner.
  */
-function alshaya_acm_product_category_update_8004() {
+function alshaya_acm_product_category_update_8002() {
   $configs = [
     'field.storage.taxonomy_term.field_promo_banner_for_mobile',
     'field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile',
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
     'core.entity_view_display.taxonomy_term.acq_product_category.default',
+    'field.field.taxonomy_term.acq_product_category.field_main_menu_highlight',
   ];
-  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
-}
 
-/**
- * Implements hook_update_N().
- *
- * Install default config alshaya_acm_product_category.super_category.settings.
- */
-function alshaya_acm_product_category_update_8003() {
-  // Update config using config factory.
-  alshaya_config_install_configs(['alshaya_acm_product_category.super_category.settings'], 'alshaya_acm_product_category');
+  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
 }
 
 /**

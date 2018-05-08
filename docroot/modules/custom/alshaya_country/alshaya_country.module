@@ -5,6 +5,8 @@
  * Module file for alshaya_country.
  */
 
+use Drupal\Core\Locale\CountryManager;
+
 /**
  * Helper function to set default regional information.
  *
@@ -33,4 +35,19 @@ function alshaya_country_set_default_regional_info($country_code) {
 
   // Re-save store finder view to ensure country code is updated.
   \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
+}
+
+/**
+ * Utility function to get the country name.
+ *
+ * @return string
+ *   Country name.
+ */
+function _alshaya_country_get_site_level_country_name() {
+  $default_site_country = _alshaya_custom_get_site_level_country_code();
+  $countries = CountryManager::getStandardList();
+  if (isset($countries[$default_site_country])) {
+    $default_site_country = $countries[$default_site_country]->getUntranslatedString();
+  }
+  return $default_site_country;
 }

@@ -12,8 +12,8 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "shweta+2@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    Then I fill in "edit-checkout-login-name" with "anjali.nikumb@acquia.com"
+    And I fill in "edit-checkout-login-pass" with "password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
 
@@ -86,6 +86,7 @@ Feature: Test various checkout scenarios as returning customer
     And I accept terms and conditions
     And I wait for the page to load
     When I press "سجل الطلبية"
+    And I wait 10 seconds
     When I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
@@ -94,7 +95,7 @@ Feature: Test various checkout scenarios as returning customer
   @cc @knet
   Scenario: As a returning customer
   I should be able to place an order for Click and Collect - KNET
-    Given I follow "اختر واستلم"
+    Given I follow "الاستلام من محلاتنا"
     And I wait for the page to load
     When I select a store on arabic
     When I select a payment option "payment_method_title_knet"
@@ -117,6 +118,7 @@ Feature: Test various checkout scenarios as returning customer
     And I fill in "Ecom_Payment_Pin" with "1234"
     And I press "إرسال"
     And I press "تأكيد العملية"
+    And I wait 5 seconds
     And I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
@@ -125,7 +127,7 @@ Feature: Test various checkout scenarios as returning customer
   @cc @cs
   Scenario: As a returning customer
   I should be able to place an order for Click and Collect - Cybersource
-    Given I follow "اختر واستلم"
+    Given I follow "الاستلام من محلاتنا"
     And I wait for the page to load
     When I select a store on arabic
     When I select a payment option "payment_method_title_cybersource"

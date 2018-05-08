@@ -1,0 +1,233 @@
+.c-plp {
+  padding-top: 1rem;
+
+  .region__content {
+    position: relative;
+
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar {
+      ul {
+        @include breakpoint($tablet) {
+          border-bottom: 0;
+        }
+
+        li {
+          a {
+            font-size: 0.875rem;
+
+            span {
+              &.facet-item__value {
+                margin-#{$right}: 0;
+                text-transform: capitalize;
+                height: 2.5rem;
+                line-height: 1.7;
+              }
+
+              &.js-facet-deactivate {
+                @include icon(close, after) {
+                  top: 5.15%;
+                }
+
+                height: 2.5rem;
+              }
+            }
+          }
+
+          &.clear-all {
+            text-transform: uppercase;
+            height: 2.5rem;
+            line-height: 1.7;
+
+            a {
+              font-size: 0.875rem;
+              color: $plp_facet_clear_text;
+            }
+          }
+        }
+      }
+    }
+
+    .filter--mobile {
+      @include breakpoint($tablet) {
+        top: -3.375rem;
+
+        html[lang=ar] & {
+          top: -3.375rem;
+        }
+      }
+
+      @include breakpoint($upto-desktop) {
+        .form-type-select {
+          @include select3-style(9rem);
+        }
+      }
+
+      .c-facet__blocks__wrapper--mobile {
+        .c-facet__blocks {
+          .filter-menu-label {
+            @include breakpoint($only-mobile) {
+              .label {
+                font-family: $alshaya-thin;
+                text-transform: capitalize;
+              }
+            }
+          }
+
+          li.clear-all {
+            @include breakpoint($only-mobile) {
+              border: 2px solid $plp_facet_clear_border_mobile;
+              line-height: 1.9;
+            }
+
+            text-transform: uppercase;
+          }
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        .c-facet__blocks__wrapper--mobile {
+          .c-facet__label {
+            border-#{$right}: 0;
+          }
+        }
+      }
+    }
+
+    .view-header.search-count {
+      margin-top: 1.5rem;
+    }
+  }
+
+  .c-page-title__description,
+  .field--name-field-acq-promotion-description {
+    width: 75%;
+
+    @include breakpoint($upto-desktop) {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+
+  .c-products-list {
+    .views-infinite-scroll-content-wrapper {
+      @include breakpoint($tablet) {
+        width: 100%;
+      }
+    }
+  }
+
+  .c-products__item {
+    @include breakpoint($tablet) {
+      width: 25%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 25%;
+    }
+
+    .out-of-stock span {
+      height: 2.5rem;
+      line-height: 2.1;
+      text-transform: uppercase;
+    }
+  }
+
+  ul.js-pager__items {
+    a {
+      font-size: 0.875rem;
+      padding: 0.863rem 0.12rem 0.54rem;
+      height: 2.5rem;
+      font-family: $alshaya-thin;
+      text-transform: uppercase;
+      background: $plp_pager_link_bg;
+      display: block;
+      max-width: 13.12rem;
+      margin: auto;
+
+      @include breakpoint($only-mobile) {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+.c-facet__blocks__wrapper--mobile {
+  .c-facet__label {
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+    }
+
+    @include breakpoint($tablet) {
+      width: 6.812rem;
+    }
+
+    border-#{$right}: 0;
+
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 0.625rem;
+      font-size: 0.875rem;
+    }
+
+    &.is-active {
+      &::after {
+        border-#{$left}: 0;
+
+        @include breakpoint($only-tablet) {
+          border: none;
+          margin-#{$right}: 0.062rem;
+        }
+      }
+    }
+
+    &::after {
+      color: $plp_facet_dropdown_icon;
+      border: 1px solid $plp_facet_input_border;
+      border-#{$left}: 0;
+    }
+  }
+
+  .c-facet__blocks {
+    @include breakpoint($only-tablet) {
+      #{$right}: -10rem;
+    }
+
+    .filter-menu-label {
+      @include u-visibility(inline-block);
+
+      .label {
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .c-facet:first-child {
+    .c-facet__title {
+      border-top: 1px solid $plp_facet_border;
+    }
+  }
+}
+
+.filter--mobile {
+  @include breakpoint($tablet) {
+    position: relative;
+    float: $right;
+  }
+}
+
+.is-filter {
+  @include breakpoint($only-mobile) {
+    .apply-fake .fake-apply-button {
+      font-family: $alshaya-thin;
+      text-transform: uppercase;
+      padding-top: 0.7rem;
+    }
+  }
+
+  &.view-filters {
+    label {
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+  }
+}

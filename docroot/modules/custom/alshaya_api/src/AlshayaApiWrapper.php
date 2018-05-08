@@ -109,6 +109,13 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Function to reset context langcode for API calls.
+   */
+  public function resetStoreContext() {
+    $this->langcode = $this->languageManager->getCurrentLanguage()->getId();
+  }
+
+  /**
    * Method to provide the Language prefix for magento, per language.
    *
    * @return string
@@ -308,7 +315,11 @@ class AlshayaApiWrapper {
                 'value' => 1,
                 'condition_type' => 'eq',
               ],
-              1 => [
+            ],
+          ],
+          1 => [
+            'filters' => [
+              0 => [
                 'field' => 'type_id',
                 'condition_type' => 'eq',
               ],
@@ -330,7 +341,7 @@ class AlshayaApiWrapper {
     $mskus = [];
 
     foreach ($types as $type) {
-      $query['searchCriteria']['filterGroups'][0]['filters'][1]['value'] = $type;
+      $query['searchCriteria']['filterGroups'][1]['filters'][0]['value'] = $type;
 
       $page = 0;
       $continue = TRUE;
@@ -355,7 +366,7 @@ class AlshayaApiWrapper {
             // we test if there is any SKU in current page which was already
             // present in previous page. If yes, then we reached the end of
             // the list.
-            if (empty(array_diff($previous_page_skus, $current_page_skus))) {
+            if (!empty(array_diff($current_page_skus, $previous_page_skus))) {
               $continue = TRUE;
             }
 
@@ -448,6 +459,13 @@ class AlshayaApiWrapper {
     $filters[] = [
       'field' => 'status',
       'value' => '1',
+      'condition_type' => 'eq',
+    ];
+
+    // Filter by Country.
+    $filters[] = [
+      'field' => 'country_id',
+      'value' => strtoupper(_alshaya_custom_get_site_level_country_code()),
       'condition_type' => 'eq',
     ];
 

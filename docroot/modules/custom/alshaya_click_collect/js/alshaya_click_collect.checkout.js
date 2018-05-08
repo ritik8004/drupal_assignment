@@ -59,6 +59,14 @@
         }
       });
 
+      // Checkout click and collect near me.
+      $('#edit-guest-delivery-collect, #edit-member-delivery-collect', context).once('get-location').on('click', '.cc-near-me', function () {
+        // Start the loader.
+        $(this).showCheckoutLoader();
+        Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+        return false;
+      });
+
       $('.hours--wrapper').once('initiate-toggle').on('click', '.hours--label', function () {
         $(this).toggleClass('open');
       });
@@ -388,7 +396,11 @@
             var showMap = false;
 
             if (storeList !== null && storeList.length > 0) {
-              Drupal.click_collect.getFormattedAddress(ascoords, $('#click-and-collect-list-view').find('.selected-store-location'));
+              Drupal.click_collect.getFormattedAddress(ascoords, $('#click-and-collect-list-view').find('.selected-store-location'), 'html');
+              // Fill the input box.
+              if ($('#edit-store-location').length > 0) {
+                Drupal.click_collect.getFormattedAddress(ascoords, $('#edit-store-location'), 'val');
+              }
               var map = Drupal.checkoutClickCollect.mapCreate(true);
               Drupal.geolocation.removeMapMarker(map);
               Drupal.checkoutClickCollect.storeViewOnMapAll(storeList);
@@ -397,6 +409,11 @@
               }
             }
             $('#click-and-collect-map-view').toggle(showMap);
+
+            // If there any throbber, remove it.
+            if ($('.checkout-ajax-progress-throbber').length > 0) {
+              $('.checkout-ajax-progress-throbber').remove();
+            }
           }
         };
 

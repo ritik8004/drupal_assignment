@@ -9,6 +9,8 @@ Feature: Test generic features on the site
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
+    When I follow "English"
+    And I wait for the page to load
     Then I should be able to see the header
     And I should be able to see the footer
 
@@ -19,9 +21,6 @@ Feature: Test generic features on the site
     Given I am on homepage
     And I wait for the page to load
     When I close the popup
-    And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
     Then I should be able to see the header in Arabic
     And I should be able to see the footer in Arabic
 
@@ -30,6 +29,8 @@ Feature: Test generic features on the site
     Given I am on homepage
     And I wait for the page to load
     When I close the popup
+    And I wait for the page to load
+    When I follow "English"
     And I wait for the page to load
     When I enter a valid Email ID in field "edit-email"
     And I press "sign up"
@@ -43,8 +44,6 @@ Feature: Test generic features on the site
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I follow "عربية"
-    And I wait for the page to load
     When I enter a valid Email ID in field "edit-email"
     And I press "سجل الآن"
     And I wait for AJAX to finish
@@ -56,6 +55,8 @@ Feature: Test generic features on the site
     Given I am on homepage
     And I wait for the page to load
     When I close the popup
+    And I wait for the page to load
+    When I follow "English"
     And I wait for the page to load
     When I fill in "edit-email" with "shweta+2@axelerant.com"
     And I press "sign up"
@@ -69,8 +70,6 @@ Feature: Test generic features on the site
     Given I am on homepage
     And I wait for the page to load
     When I close the popup
-    And I wait for the page to load
-    When I follow "عربية"
     And I wait for the page to load
     When I fill in "edit-email" with "shweta+2@axelerant.com"
     And I press "سجل الآن"

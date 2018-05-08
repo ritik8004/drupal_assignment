@@ -7,12 +7,10 @@
 header {
   .region__header .block-views-exposed-filter-blocksearch-page {
     @include breakpoint($upto-desktop) {
-      z-index: 2;
-      top: -0.175rem;
-    }
-
-    @include breakpoint($upto-tablet) {
-      top: -0.08rem;
+      z-index: 8;
+      bottom: auto;
+      top: 5.3125rem;
+      position: fixed;
     }
   }
 
@@ -24,6 +22,10 @@ header {
       width: 100%;
       height: 2.5rem;
       background-size: 2.125rem;
+
+      html[lang="ar"] & {
+        margin-top: 0;
+      }
     }
 
     @include breakpoint($upto-tablet) {
@@ -70,8 +72,12 @@ header {
     top: 2.8125rem;
   }
 
-  .main--menu ul {
-    width: 100%;
+  .main--menu {
+    top: 5.625rem;
+
+    ul {
+      width: 100%;
+    }
   }
 
   .main--menu ul.menu--one__list,
@@ -115,23 +121,20 @@ header {
   }
 
   body {
-    margin-top: 5.5rem;
+    margin-top: 5.4rem;
   }
 
   body {
     html[lang="ar"] & {
-      margin-top: 5.5rem;
+      margin-top: 5.4rem;
     }
   }
 
-  .block-alshaya-main-menu-super-category {
+  .block-alshaya-super-category-menu {
     position: fixed;
     width: 100%;
     top: 0;
-
-    .main--menu {
-      position: static;
-    }
+    z-index: 7;
   }
 
   .menu--mobile-navigation {
@@ -143,6 +146,7 @@ header {
   #block-cartminiblock {
     position: fixed;
     display: block;
+    z-index: 3;
   }
 
   .block-cart-mini-block {
@@ -171,14 +175,41 @@ header {
       display: none;
     }
   }
+}
 
-  .c-my-account-nav {
-    top: 2.95rem;
+.c-my-account-nav {
+  @include breakpoint($upto-desktop) {
+    top: 5.7rem;
+  }
+
+  h3 {
+    @include breakpoint($upto-desktop) {
+      text-transform: uppercase;
+      font-family: $vs-bold;
+    }
   }
 }
 
 .mobile--overlay {
   .menu--mobile-navigation {
     background-color: transparent;
+  }
+
+  .c-menu-primary .region__menu-primary .menu--mobile-navigation {
+    border-bottom-color: transparent;
+  }
+}
+
+.block-cart-mini-block {
+  @include breakpoint($upto-desktop) {
+    border-bottom: 2px solid $header_mobile_border;
+  }
+}
+
+.toggle--sign .one {
+  width: 60.5%;
+
+  &.shop {
+    width: 39.5%;
   }
 }

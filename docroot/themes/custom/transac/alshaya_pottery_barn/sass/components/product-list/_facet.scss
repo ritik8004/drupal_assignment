@@ -1,0 +1,14 @@
+.c-facet__label {
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.c-facet {
+  label {
+    top: -3px;
+
+    .facet-item__value {
+      text-transform: capitalize;
+    }
+  }
+}

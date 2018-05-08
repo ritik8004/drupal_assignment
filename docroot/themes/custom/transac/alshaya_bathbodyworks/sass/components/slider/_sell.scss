@@ -1,0 +1,31 @@
+.subtitle {
+  &.crossell-title {
+    font-family: $alshaya-thin;
+    text-align: center;
+  }
+}
+
+.view-product-slider {
+  .owl-carousel .owl-item img {
+    max-width: 9rem;
+  }
+
+  .c-products__item__label {
+    max-width: 8rem;
+    text-transform: uppercase;
+    margin: 1.5rem auto 0.625rem;
+  }
+
+  .owl-prev::before,
+  .owl-next::before {
+    font-size: 3rem;
+  }
+}
+
+.horizontal-upell {
+  .view-product-slider {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+    }
+  }
+}

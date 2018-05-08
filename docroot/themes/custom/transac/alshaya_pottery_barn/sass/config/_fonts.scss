@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Cairo:300,400,600,700|Open+Sans:400,600,700&subset=arabic');
+@import url('https://fonts.googleapis.com/css?family=Cairo:300,400,600,700|Open+Sans:300,400,600,700&subset=arabic');
 
 // Define Fonts
 
@@ -32,6 +32,7 @@ $body_font: $primary-font;
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in current theme.
 $arial: $primary-font;
 $alshaya-bold: $primary-font;
+$alshaya-bold-nodir: $primary-font;
 $alshaya-arabic-bold: $font-arabic;
 $alshaya-thin: $primary-font;
 $alshaya-thin-nodir: $primary-font;

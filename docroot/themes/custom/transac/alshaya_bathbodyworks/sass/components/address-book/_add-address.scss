@@ -1,0 +1,29 @@
+#edit-billing-address,
+.checkout-login,
+.c-add-address,
+.alias--cart-checkout-payment,
+.c-address-book {
+  .address-book-address,
+  .profile-form {
+    .form-actions {
+      .form-submit {
+        min-width: 9.125rem;
+        padding: 0.925rem 1.6rem;
+        font-size: 0.875rem;
+        height: 2.5rem;
+      }
+    }
+  }
+}
+
+.address-book-address .form-type-select {
+  .select2-selection {
+    border-color: $primary_input_border;
+  }
+
+  &::after {
+    border: 1px solid $primary_input_border;
+    border-#{$left}: 0;
+    box-sizing: border-box;
+  }
+}

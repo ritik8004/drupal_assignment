@@ -42,7 +42,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         </div>
       </div>
 
-      <div class="content__main">
+      <div class="content__main {{ image_slider_position_pdp }}">
         {% if content.gallery is not null %}
           {{ content.gallery }}
         {% endif %}

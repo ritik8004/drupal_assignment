@@ -67,6 +67,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     ];
 
     $cart = $this->getCart();
+
+    // Once we open HD page, clear temp cc selected info.
+    $cart->setExtension('cc_selected_info', NULL);
+
     $address = (array) $cart->getShipping();
     $default_shipping = '';
 
@@ -242,6 +246,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $address_fields['selected_address']['#access'] = FALSE;
 
       $response->addCommand(new ReplaceCommand('#address_wrapper', $address_fields));
+      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['form.multistep-checkout .address-book-address', TRUE]));
     }
     else {
       // Clear the shipping method info now to ensure we set it properly again.
@@ -264,6 +269,10 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    *   Available shipping methods.
    */
   public static function generateShippingEstimates($address) {
+    if (empty($address['country_id'])) {
+      return [];
+    }
+
     /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
     return $checkout_options_manager->getHomeDeliveryShippingEstimates($address);
@@ -328,6 +337,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
       $api_wrapper = \Drupal::service('acq_commerce.api');
 
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
+      $cart_storage = \Drupal::service('acq_cart.cart_storage');
+
       try {
         $customer = [];
         $customer['firstname'] = $address['firstname'];
@@ -335,8 +347,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         $customer['email'] = $email;
         $customer = $api_wrapper->createCustomer($customer);
 
-        /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
-        $cart_storage = \Drupal::service('acq_cart.cart_storage');
         $cart_storage->associateCart($customer['customer_id'], $email);
       }
       catch (\Exception $e) {
@@ -345,6 +355,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
           $form_state->setErrorByName('custom', $e->getMessage());
           return;
         }
+
+        // Restore the cart to revert customer id and email in cart.
+        $cart_storage->restoreCart($cart->id());
 
         // @TODO: Handle create customer errors here.
         // Probably just the email error.
@@ -396,7 +409,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       datalayer_add([
         'deliveryArea' => $address_book_manager->getAddressShippingAreaValue($magento_address),
-        'deliveryCity' => $address['locality'],
+        'deliveryCity' => $address_book_manager->getAddressShippingAreaParentValue($address, $magento_address),
       ]);
     }
   }

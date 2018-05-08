@@ -1,0 +1,19 @@
+alshaya_super_category.settings:
+  type: config_object
+  label: 'Category Menu settings'
+  mapping:
+    status:
+      type: boolean
+      label: 'Enable super category feature'
+    default_category_tid:
+      type: integer
+      label: 'Default parent term id for main menu'
+    product_path_alter:
+      type: boolean
+      label: 'Alter product path alias'
+    footer_menu_blocks:
+      type: sequence
+      label: 'Menu types that needs to alter for footer'
+      sequence:
+        type: string
+        label: 'Menu type'

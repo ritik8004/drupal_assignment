@@ -5,21 +5,25 @@
 
 body {
   max-width: 80rem;
-  margin: 0 auto !important;
   font-family: $alshaya-thin;
   color: $light-grey;
 }
 
 amp-sidebar[side][open] {
   background-color: $black;
-  max-width: none !important;
   width: 100%;
   opacity: 0.8;
+  padding: 0 1.875rem 0 3.75rem;
+
+  html[lang=ar] & {
+    padding: 0 3.75rem 0 1.875rem;
+  }
 
   ul {
     text-align: center;
     padding: 3rem 0 1rem;
     margin-top: 0;
+    list-style: none;
   }
 
   li {

@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.category_promotion
+  module:
+    - ctools
+    - facets
+  theme:
+    - alshaya_white_label
+id: promotioncategoryfacet
+theme: alshaya_white_label
+region: sidebar_first
+weight: -37
+provider: null
+plugin: 'facet_block:category_promotion'
+settings:
+  id: 'facet_block:category_promotion'
+  label: Category
+  provider: facets
+  label_display: visible
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      acq_promotion: acq_promotion
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

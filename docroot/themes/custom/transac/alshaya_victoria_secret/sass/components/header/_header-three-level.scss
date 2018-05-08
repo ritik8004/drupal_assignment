@@ -13,4 +13,18 @@
       text-decoration: none;
     }
   }
+
+  .highlights {
+    top: -1rem;
+    bottom: 0;
+    background: $mm_highlight_bg;
+    margin-#{$right}: 0;
+    padding: 2.5rem;
+    padding-bottom: 0;
+
+    .title,
+    .hightlight__title {
+      text-transform: uppercase;
+    }
+  }
 }

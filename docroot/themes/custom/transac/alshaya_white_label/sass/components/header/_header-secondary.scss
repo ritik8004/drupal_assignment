@@ -289,7 +289,7 @@
   position: fixed;
   top: 0 !important;
   width: 100%;
-  z-index: 999;
+  z-index: 9999;
   background-color: $header_bg;
 }
 
@@ -398,6 +398,30 @@ body {
     .region__menu-secondary,
     ul {
       font-size: 0;
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  li {
+    &.has-bg-color {
+      margin: 0;
+      border: none;
+      margin-top: -0.125rem;
+      z-index: 2;
+
+      > .menu__link-wrapper {
+        > a {
+          padding-#{$left}: 0.625rem;
+        }
+      }
+
+      > .menu__in {
+        &::after {
+          position: absolute;
+          #{$right}: 0.625rem;
+        }
+      }
     }
   }
 }

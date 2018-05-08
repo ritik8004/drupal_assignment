@@ -9,6 +9,7 @@ use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
@@ -78,10 +79,16 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $cart = $this->getCart();
     $shipping = (array) $cart->getShipping();
 
+    $cc_selected_info = $cart->getExtension('cc_selected_info');
+
     if ($form_values = $form_state->getValue($pane_form['#parents'])) {
       $store_code = $form_values['store_code'];
       $shipping_type = $form_values['shipping_type'];
       $default_mobile = $form_values['cc_mobile'];
+    }
+    elseif ($cc_selected_info && isset($cc_selected_info['store_code'])) {
+      $store_code = $cc_selected_info['store_code'];
+      $shipping_type = $cc_selected_info['shipping_type'];
     }
     elseif ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
       // Check if value available in shipping address.
@@ -137,6 +144,21 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#markup' => '<div class="cnc-collect-from">' . $this->t('Select your preferred pickup store') . '</div>',
     ];
 
+    // Near Me.
+    $pane_form['store_finder']['near_me'] = [
+      '#type' => 'link',
+      '#title' => $this->t('Near me'),
+      '#prefix' => '<div>',
+      '#url' => Url::fromRoute('<none>', [], [
+        'fragment' => 'edit-near-me',
+        'attributes' => [
+          'class' => [
+            'cc-near-me',
+          ],
+        ],
+      ]),
+    ];
+
     $pane_form['store_finder']['store_location'] = [
       '#type' => 'textfield',
       '#title' => $this->t('find your closest collection point'),
@@ -148,11 +170,12 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     ];
 
     $pane_form['store_finder']['toggle_list_view'] = [
-      '#markup' => '<a href="#" class="stores-list-view active">' . $this->t('List view') . '</a>',
+      '#markup' => '<a href="#" class="stores-list-view active hidden-important">' . $this->t('List view') . '</a>',
     ];
 
     $pane_form['store_finder']['toggle_map_view'] = [
-      '#markup' => '<a href="#" class="stores-map-view">' . $this->t('Map view') . '</a>',
+      '#markup' => '<a href="#" class="stores-map-view hidden-important">' . $this->t('Map view') . '</a>',
+      '#suffix' => '</div>',
     ];
 
     $pane_form['store_finder']['list_view'] = [
@@ -393,6 +416,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $term = $checkout_options_manager->getClickandColectShippingMethodTerm();
 
     $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString(), $extension);
+    $cart->setExtension('cc_selected_info', NULL);
 
     // Clear the payment now.
     $cart->clearPayment();
@@ -430,7 +454,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     }
 
     if ($form_state->getErrors()) {
-      return $form['guest_delivery_collect']['selected_store']['elements'];
+      $response = new AjaxResponse();
+      $response->addCommand(new ReplaceCommand('#selected-store-elements-wrapper', $form['guest_delivery_collect']['selected_store']['elements']));
+      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['form.multistep-checkout #selected-store-elements-wrapper', TRUE]));
+      return $response;
     }
 
     $response = new AjaxResponse();

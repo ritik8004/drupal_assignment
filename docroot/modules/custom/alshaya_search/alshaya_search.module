@@ -11,9 +11,28 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Solarium\Core\Query\QueryInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Implements hook_acsf_registry().
+ *
+ * Adding our custom class to the registry that changes Alshaya configuration.
+ */
+function alshaya_search_acsf_registry() {
+  return [
+    'events' => [
+      [
+        'weight' => 15,
+        'type' => 'site_duplication_scrub',
+        'class' => '\Drupal\alshaya_search\Event\AlshayaAcsfDuplicationScrubConfigurationHandler',
+      ],
+    ],
+  ];
+}
 
 /**
  * Implements hook_views_pre_render().
@@ -357,5 +376,154 @@ function alshaya_search_alshaya_profile_installed_final_task() {
     // Enable alshaya_search_local_search to ensure config are overridden to
     // use solr in local.
     \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
+  }
+}
+
+/**
+ * Implements hook_alshaya_facet_results_alter().
+ */
+function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
+  $ids = array_keys($results);
+
+  // List of term ids that need to be hidden based on its parent's not
+  // included in menu flag.
+  $hide_tids = [];
+
+  // Process results array & mark terms for hiding.
+  if (empty($hide_tids)) {
+    // Load indexed term object.
+    $entities = \Drupal::service('entity_type.manager')
+      ->getStorage('taxonomy_term')
+      ->loadMultiple($ids);
+
+    // Check each term for include_menu flag & mark its children for hiding in
+    // case its flagged to be not in menu.
+    foreach ($results as $tid => $result) {
+      if ((($term = $entities[$tid]) instanceof TermInterface) &&
+        ($term->get('field_category_include_menu')->getString() != 1)) {
+        $hide_tids[] = $tid;
+        _alshaya_search_mark_hide_chidren($result, $hide_tids);
+      }
+    }
+
+    // Remove any duplicate term ids.
+    $hide_tids = array_unique($hide_tids);
+  }
+
+  // Process tids marked for hiding.
+  _alshaya_search_hide_terms($hide_tids, $results);
+}
+
+/**
+ * Helper function to hide all children terms.
+ */
+function _alshaya_search_mark_hide_chidren($result, &$hide_tids) {
+  if (count($children = $result->getChildren()) > 0) {
+    foreach ($children as $key => $child) {
+      $hide_tids[] = $key;
+      _alshaya_search_mark_hide_chidren($child, $hide_tids);
+    }
+  }
+}
+
+/**
+ * Helper function to hide marked terms from category facet.
+ */
+function _alshaya_search_hide_terms($hide_tids, &$results) {
+  foreach ($hide_tids as $tid) {
+    unset($results[$tid]);
+  }
+}
+
+/**
+ * Implements hook_facets_query_string_alter().
+ */
+function alshaya_search_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array $context) {
+  $facet = $context['facet'];
+
+  // If we processing the URL for an L1 item, remove all category
+  // filters. Clicking on an L1 item when the active filter is something
+  // else, should return back to default state.
+  $facet_source_id = $facet->getFacetSourceId();
+
+  // Filter alias.
+  $url_alias = $facet->getUrlAlias();
+
+  // Get parents of result.
+  $parent_ids = $facet->getHierarchyInstance()->getParentIds($context['result']->getRawValue());
+
+  // Only for the category facet.
+  if ($facet->getHierarchy() && !$context['result']->isActive()) {
+    // We doing this as for the PLP page, we not show the L1
+    // (current active) item.
+    $facet_count = $facet_source_id == 'search_api:views_block__alshaya_product_list__block_1' ? 1 : 0;
+
+    if ((count($parent_ids) === $facet_count) &&
+      (isset($context['active_filters'][$url_alias])) &&
+      (count($context['active_filters'][$url_alias]) > 0)) {
+      // Get child ids of result.
+      $child_ids = $facet->getHierarchyInstance()->getNestedChildIds($context['result']->getRawValue());
+      foreach ($filter_params as $key => $param) {
+        if (strpos($param, $url_alias) === 0) {
+          foreach ($child_ids as $child) {
+            // If root term has any child active, then unset it.
+            if (in_array($child, $context['active_filters'][$url_alias])) {
+              unset($filter_params[$key]);
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Add accordion effect to selected L2 items for SRP.
+  if (($facet->getUseHierarchy()) &&
+    ($facet_source_id == 'search_api:views_page__search__page')) {
+    // Variable to hold the parent id selected.
+    $root_parent_id = '';
+    $result = $context['result'];
+
+    // Hide root parent id post selection from all the facet items. We don't
+    // want the user to land onto L1 expanded state via any interaction post 1st
+    // expansion.
+    // Find the root parent id which has been selected from FE.
+    if ((count($parent_ids) === 0) &&
+      (!empty($context['active_filters'][$url_alias])) &&
+      (empty($root_parent_id))) {
+      $root_parent_id = $result->getRawValue();
+    }
+
+    // Remove root parent id from list of filter params.
+    if (!empty($root_parent_id)) {
+      foreach ($filter_params as $key => $param) {
+        if ((strpos($param, $url_alias) === 0) &&
+          ($param == $url_alias . ':' . $root_parent_id)) {
+          unset($filter_params[$key]);
+        }
+      }
+    }
+
+    // Get list of child ids for the current result item.
+    $child_ids = $facet->getHierarchyInstance()->getNestedChildIds($result->getRawValue());
+
+    // Handling with an L2 whose children are active. 1 parent means the
+    // item is L2 & check if one of its children is selected.
+    if ((count($parent_ids) == 1) &&
+      (!empty($context['active_filters'][$url_alias])) &&
+      ((count(array_diff($child_ids, $context['active_filters'][$url_alias])) < count($child_ids)) ||
+        (in_array($result->getRawValue(), $context['active_filters'][$url_alias])))) {
+      $result_get_params->set('no_url_l2', TRUE);
+
+      // Get the last selected item from the list of active filters.
+      $current_filter_category = end($context['active_filters'][$url_alias]);
+
+      // Add another query parameter to L2 in case on of its children is
+      // selected.
+      if (in_array($current_filter_category, $child_ids) ||
+        ($result->getRawValue() == $current_filter_category)) {
+        $result_get_params->set('current_facet', TRUE);
+      }
+    }
   }
 }

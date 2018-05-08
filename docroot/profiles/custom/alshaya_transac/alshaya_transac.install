@@ -5,6 +5,167 @@
  * Install, update and uninstall hooks for the alshaya_transac subprofile.
  */
 
+use Drupal\node\Entity\Node;
+use Drupal\Core\Database\Database;
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set value of 'use as department page' field.
+ * Delete the department page CT.
+ */
+function alshaya_transac_update_8110() {
+  // Clear cache so that 'field_use_as_department_page' gets generated.
+  drupal_flush_all_caches();
+
+  $db = Database::getConnection();
+  $results = $db->select('node__field_product_category')
+    ->fields('node__field_product_category', ['entity_id'])
+    ->execute()->fetchAll();
+  foreach ($results as $result) {
+    $node = Node::load($result->entity_id);
+    $node->set('field_use_as_department_page', '1');
+    $node->save();
+  }
+
+  // Delete the department page CT.
+  $content_type = \Drupal::entityTypeManager()
+    ->getStorage('node_type')
+    ->load('department_page');
+  if (isset($content_type)) {
+    $content_type->delete();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Migrating department pages to advanced department pages.
+ */
+function alshaya_transac_update_8109() {
+  // Load all product categories in department page & check if they exist.
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'department_page')
+    ->execute();
+
+  if (!empty($nids)) {
+    $base_tables = [
+      'node',
+      'node_field_data',
+    ];
+    _alshaya_advanced_page_convert_base_tables('advanced_page', $nids, $base_tables);
+
+    // Migrate all fields.
+    $field_tables = [
+      'node_revision__field_meta_tags',
+      'node_revision__field_product_category',
+      'node_revision__field_promo_blocks',
+      'node_revision__field_show_left_menu',
+      'node__field_meta_tags',
+      'node__field_product_category',
+      'node__field_promo_blocks',
+      'node__field_show_left_menu',
+    ];
+
+    _alshaya_advanced_page_convert_field_tables('advanced_page', $nids, $field_tables);
+
+    drush_print('Nodes have been succesfully migrated as department pages.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Migrating department page with invalid categories to simple advanced page CT.
+ */
+function alshaya_transac_update_8108() {
+  // Uninstall alshaya_department_page module.
+  \Drupal::service('module_installer')->uninstall(['alshaya_department_page']);
+
+  // Load all product categories in department page & check if they exist.
+  $nodes_exclude = [];
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'department_page')
+    ->execute();
+  $nodes = Node::loadMultiple($nids);
+  foreach ($nodes as $department_page) {
+    $category_id = $department_page->get('field_product_category')->getValue();
+    $category_id = $category_id[0]['target_id'];
+    $term = Term::load($category_id);
+    if (!isset($term)) {
+      $nodes_exclude[] = $department_page->id();
+    }
+  }
+
+  if (!empty($nodes_exclude)) {
+    $base_tables = [
+      'node',
+      'node_field_data',
+    ];
+    _alshaya_advanced_page_convert_base_tables('advanced_page', $nodes_exclude, $base_tables);
+
+    $field_tables = [
+      'node_revision__field_meta_tags',
+      'node_revision__field_promo_blocks',
+      'node__field_meta_tags',
+      'node__field_promo_blocks',
+    ];
+
+    _alshaya_advanced_page_convert_field_tables('advanced_page', $nodes_exclude, $field_tables);
+    _alshaya_advanced_page_delete_fields('node_revision__field_product_category', $nodes_exclude);
+    _alshaya_advanced_page_delete_fields('node__field_product_category', $nodes_exclude);
+    _alshaya_advanced_page_delete_fields('node_revision__field_show_left_menu', $nodes_exclude);
+    _alshaya_advanced_page_delete_fields('node__field_show_left_menu', $nodes_exclude);
+    drush_print('Following nodes have been migrated as simple advanced pages.');
+    drush_print_r($nodes_exclude);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install config for department(advanced) page block.
+ */
+function alshaya_transac_update_8107() {
+  alshaya_config_install_configs(['block.block.views_block__product_category_level_2_3_block_2'], 'alshaya_transac', 'optional');
+  // Move super category block from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable alshaya_super_category.
+ */
+function alshaya_transac_update_8106() {
+  // Delete existing super category menu block.
+  alshaya_block_delete_blocks(['supercategorymenu']);
+  \Drupal::service('module_installer')->install(['alshaya_super_category']);
+  // Move super category block from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install config for department page block.
+ */
+function alshaya_transac_update_8105() {
+  alshaya_config_install_configs(['block.block.views_block__product_category_level_2_3_block_2'], 'alshaya_transac', 'optional');
+  // Move super category block from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable alshaya_stores_finder_transac sub module of alshaya_stores_finder.
+ */
+function alshaya_transac_update_8104() {
+  \Drupal::service('module_installer')->install(['alshaya_stores_finder_transac']);
+}
+
 /**
  * Implements hook_update_n().
  *
@@ -62,7 +223,6 @@ function alshaya_transac_install() {
     'alshaya_config',
     'alshaya_contact',
     'alshaya_default_content_transac',
-    'alshaya_department_page',
     'alshaya_i18n',
     'alshaya_loyalty',
     'alshaya_main_menu',
@@ -75,6 +235,7 @@ function alshaya_transac_install() {
     'alshaya_seo_transac',
     'alshaya_stores_finder',
     'alshaya_stores_finder_transac',
+    'alshaya_super_category',
     'alshaya_user',
     'alshaya_acm_knet',
     'alshaya_static_html',
@@ -135,4 +296,14 @@ function alshaya_transac_update_8101() {
   foreach ($modules as $module) {
     \Drupal::service('module_installer')->install([$module], TRUE);
   }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_transac_update_dependencies() {
+  $dependencies['alshaya_transac'][8108] = [
+    'alshaya_advanced_page' => 8004,
+  ];
+  return $dependencies;
 }

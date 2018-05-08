@@ -9,6 +9,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Link;
 use Drupal\acq_sku\AddToCartErrorEvent;
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\node\Entity\Node;
 
 /**
  * Defines the configurable SKU type.
@@ -461,7 +462,7 @@ class Configurable extends SKUPluginBase {
   /**
    * Get attribute value from key-value field.
    *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
+   * @param int $sku_id
    *   The object of product.
    * @param string $key
    *   Name of attribute.
@@ -469,10 +470,10 @@ class Configurable extends SKUPluginBase {
    * @return string|null
    *   Value of field or null if empty.
    */
-  public function getAttributeValue(SKU $sku, $key) {
+  public function getAttributeValue($sku_id, $key) {
     $query = \Drupal::database()->select('acq_sku__attributes', 'acq_sku__attributes');
     $query->addField('acq_sku__attributes', 'attributes_value');
-    $query->condition("acq_sku__attributes.entity_id", $sku->id());
+    $query->condition("acq_sku__attributes.entity_id", $sku_id);
     $query->condition("acq_sku__attributes.attributes_key", $key);
     return $query->execute()->fetchField();
   }
@@ -493,7 +494,7 @@ class Configurable extends SKUPluginBase {
     $label_parts = [];
     foreach ($configurables as $configurable) {
       $key = $configurable['code'];
-      $attribute_value = $this->getAttributeValue($sku, $key);
+      $attribute_value = $this->getAttributeValue($sku->id(), $key);
       $label = $configurable['label'];
 
       foreach ($configurable['values'] as $value) {
@@ -516,9 +517,17 @@ class Configurable extends SKUPluginBase {
 
     if (!$asString) {
       $display_node = $this->getDisplayNode($parent_sku);
-      $url = $display_node->toUrl();
-      $link = Link::fromTextAndUrl($cartName, $url);
-      $cartName = $link->toRenderable();
+      
+      if ($display_node instanceof Node) {
+        $url = $display_node->toUrl();
+        $link = Link::fromTextAndUrl($cartName, $url);
+        $cartName = $link->toRenderable();
+      }
+      else {
+        \Drupal::logger('acq_sku')->info('Parent product for the sku: @sku seems to be unavailable.', [
+          '@sku' => $sku->getSku(),
+        ]);
+      }
     }
 
     return $cartName;

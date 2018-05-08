@@ -17,26 +17,24 @@
 
 @font-face {
   font-family: "DroidArabicKufi-Light";
-  src: url("../fonts/droidkufi-regular.eot");
+  src: url("../fonts/alshaya-arabic-thin.eot");
   src:
-    url("../fonts/droidkufi-regular.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/droidkufi-regular.svg") format("svg"),
-    url("../fonts/droidkufi-regular.ttf") format("truetype"),
-    url("../fonts/droidkufi-regular.woff") format("woff"),
-    url("../fonts/droidkufi-regular.woff2") format("woff2");
+    url("../fonts/alshaya-arabic-thin.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/alshaya-arabic-thin.svg") format("svg"),
+    url("../fonts/alshaya-arabic-thin.ttf") format("truetype"),
+    url("../fonts/alshaya-arabic-thin.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "DroidArabicKufi-Bold";
-  src: url("../fonts/droidkufi-bold.eot");
+  src: url("../fonts/alshaya-arabic-bold.eot");
   src:
-    url("../fonts/droidkufi-bold.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/droidkufi-bold.svg") format("svg"),
-    url("../fonts/droidkufi-bold.ttf") format("truetype"),
-    url("../fonts/droidkufi-bold.woff") format("woff"),
-    url("../fonts/droidkufi-bold.woff2") format("woff2");
+    url("../fonts/alshaya-arabic-bold.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/alshaya-arabic-bold.svg") format("svg"),
+    url("../fonts/alshaya-arabic-bold.ttf") format("truetype"),
+    url("../fonts/alshaya-arabic-bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
@@ -90,9 +88,9 @@ $vspromo-regular: 'BentonSans-Regular', 'GESSTwoLight-Light';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
-$vs-arabic-bold: 'BentonSans-Medium', 'DroidArabicKufi-Bold';
-$vs-arabic-regular: 'BentonSans-Regular', 'DroidArabicKufi-Light';
-$vspromo-arabic-regular: 'BentonSans-Regular', 'GESSTwoLight-Light';
+$vs-arabic-bold: 'DroidArabicKufi-Bold', 'BentonSans-Medium';
+$vs-arabic-regular: 'DroidArabicKufi-Light', 'BentonSans-Regular';
+$vspromo-arabic-regular: 'GESSTwoLight-Light', 'BentonSans-Regular';
 
 $vs-icons: 'alshaya-icons';
 $body_font: $vs-regular;
@@ -106,7 +104,9 @@ $alshaya-arabic-thin: $vs-arabic-regular;
 
 $icons: (
   login: "\e929",
+  ic_login: "\e929",
   chevrondown: "\25bd",
+  ic_chevrondown: "\25bd",
   chevronleft: "\e901",
   chevronright: "\e902",
   chevronup: "\e903",
@@ -115,8 +115,8 @@ $icons: (
   checkshape: "\e906",
   circle-stroke-shape: "\e907",
   circle-shape: "\e908",
-  check-box-empty: "\e909",
-  check-box-filled: "\e90a",
+  checkboxempty: "\e909",
+  checkboxfull: "\e90a",
   delivery: "\e90b",
   direction-fill: "\e90c",
   direction-stroke: "\e90d",
@@ -145,14 +145,16 @@ $icons: (
   newsletter: "\e924",
   rewards: "\e926",
   language: "\e927",
-  info: "\e928",
+  infomation: "\e928",
+  ic_infomation: "\e928",
   warning: "\2757",
   googleplus: "\1f576",
   facebook: "\1f575",
   twitter: "\1f425",
   pinterest: "\1f4cc",
   instagram: "\1f305",
-  youtube: "\1f4fa"
+  youtube: "\1f4fa",
+  price-tag: "\e93a"
 );
 
 @mixin iconbase() {

@@ -157,6 +157,9 @@ class CheckoutHelper {
       $this->cartStorage->clearCart();
     }
     catch (\Exception $e) {
+      // Restore the cart.
+      $this->cartStorage->restoreCart($cart->id());
+
       // Add message in logs.
       $this->logger->critical('Error occurred while placing order. Cart: @cart. Exception: @message', [
         '@cart' => json_encode($cart->getCart()),

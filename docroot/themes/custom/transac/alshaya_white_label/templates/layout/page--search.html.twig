@@ -1,8 +1,9 @@
 {{ attach_library('alshaya_white_label/convert_to_select2') }}
+{{ attach_library('alshaya_white_label/plp_hover') }}
 {% set attributes = attributes.addClass('c-search', 'c-plp', 'l-two--sf') %}
 <div>
   <!-- ______________________ MENU SECONDARY _______________________ -->
-
+  {% block header_precontent %}
   <div class="header--wrapper">
     {% if page.menu_secondary %}
       <div class="c-menu-secondary">
@@ -55,7 +56,7 @@
       </div>
     {% endif %}
   </div>
-
+  {% endblock %}
   <!-- ______________________ BREADCRUMB _______________________ -->
 
   {% if page.breadcrumb %}
@@ -175,10 +176,12 @@
 
   <!-- ______________________ FOOTER PRIMARY _______________________ -->
   <footer class="c-footer">
+  {% block primary_footer %}
     {% if page.footer_primary %}
         {% include directory ~ '/../alshaya_white_label/templates/partial/footer-primary.html.twig' %}
       <!-- /footer-primary -->
     {% endif %}
+  {% endblock %}
 
     <!-- ______________________ FOOTER SECONDARY _______________________ -->
 

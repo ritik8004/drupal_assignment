@@ -1,0 +1,48 @@
+.c-delivery-menu__tab {
+  padding: 0.657rem 0 0.35rem;
+  border: 2px solid $deliverybanner_border;
+
+  .field--name-field-title {
+    font-size: 1.125rem;
+    text-transform: uppercase;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.125rem;
+    }
+
+    html[lang='ar'] & {
+      line-height: 1.21;
+
+      @include breakpoint($only-tablet) {
+        font-size: 1.0625rem;
+      }
+
+      @include breakpoint($desktop) {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .field--name-field-sub-title {
+    font-size: 1.125rem;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.125rem;
+    }
+
+    html[lang='ar'] & {
+      font-size: 0.875rem;
+      line-height: 1.8;
+    }
+  }
+
+  .c-delivery-menu__title {
+    .c-delivery-menu__description {
+      font-size: 0.875rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}

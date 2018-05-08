@@ -89,7 +89,8 @@
     }
   }
 
-  .current-location {
+  .current-location,
+  .cc-near-me {
     @include breakpoint($only-tablet) {
       &::before {
         #{$left}: 1.5rem;
@@ -97,10 +98,13 @@
     }
   }
 
-  .current-location::before {
-    background: url('../imgs/icons/ic-mylocation.svg') no-repeat;
-    width: 1.625rem;
-    height: 1.625rem;
+  .current-location,
+  .cc-near-me {
+    &::before {
+      background: url('../imgs/icons/ic-mylocation.svg') no-repeat;
+      width: 1.625rem;
+      height: 1.625rem;
+    }
   }
 
   .label--location::before {
@@ -260,7 +264,8 @@
   }
 
   @include breakpoint($only-mobile) {
-    .current-location {
+    .current-location,
+    .cc-near-me {
       font-size: 0.75rem;
       border: 1px solid $store_finder_current_location;
       color: $store_finder_current_location;
@@ -268,16 +273,19 @@
   }
 
   @include breakpoint($only-tablet) {
-    .form--inline .current-location {
-      margin-#{$left}: 1.5rem;
-      line-height: 2;
+    .form--inline {
+      .current-location,
+      .cc-near-me {
+        margin-#{$left}: 1.5rem;
+        line-height: 2;
 
-      html[lang=ar] & {
-        line-height: 1;
-        margin-right: 0;
+        html[lang=ar] & {
+          line-height: 1;
+          margin-right: 0;
 
-        &::before {
-          right: 0;
+          &::before {
+            right: 0;
+          }
         }
       }
     }
@@ -345,13 +353,15 @@
       }
     }
 
-    .current-location {
+    .current-location,
+    .cc-near-me {
       width: 19.75%;
       color: $store_finder_current_location_tablet;
     }
   }
 
   .current-location,
+  .cc-near-me,
   .label--location {
     @include breakpoint($tablet) {
       html[lang=ar] & {

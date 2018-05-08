@@ -121,6 +121,22 @@
 // Title wrapper
 .content {
   &__title_wrapper {
+    .brand-logo-wrapper {
+      float: #{$right};
+      width: 25%;
+      text-align: $right;
+    }
+
+    h1 {
+      float: #{$left};
+      text-align: $left;
+      width: 70%;
+    }
+
+    .price-block {
+      clear: both;
+    }
+
     h1,
     h1 span {
       font-family: $alshaya-thin;
@@ -641,7 +657,7 @@
 
         font-family: $arial;
         font-size: 0.6875rem;
-        color: $accordion_title;
+        color: $accordion_sub_title;
         line-height: 1.5;
         max-width: 15rem;
 
@@ -1456,6 +1472,7 @@
             &.hide-button {
               border: none;
               height: 2.5rem;
+              box-shadow: none;
             }
 
             .ladda-label {

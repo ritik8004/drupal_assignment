@@ -1,0 +1,24 @@
+%page-title {
+  text-transform: capitalize;
+  font-family: $alshaya-thin;
+  font-weight: normal;
+  color: $page_title;
+
+  @include breakpoint($mobile) {
+    font-size: 1rem;
+  }
+
+  @include breakpoint($tablet) {
+    font-size: 1.5rem;
+  }
+}
+
+.c-page-title {
+  @extend %page-title;
+}
+
+.subtitle {
+  font-family: $alshaya-thin;
+  font-size: 1.125rem;
+  text-transform: capitalize;
+}

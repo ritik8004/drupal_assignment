@@ -22,7 +22,7 @@ select:focus::-ms-value {
   direction: $dir;
 
   @include breakpoint($tablet) {
-    background-color: transparent;
+    background-color: $primary_dropdown_bg;
     position: relative;
     z-index: 3;
   }

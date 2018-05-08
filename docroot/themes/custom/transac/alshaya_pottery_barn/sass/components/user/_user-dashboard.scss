@@ -12,10 +12,10 @@
     &.active {
       color: $my_account_nav_active;
       font-weight: 600;
+    }
 
-      &:hover {
-        color: $content_link_color;
-      }
+    &:hover {
+      color: $secondary_link;
     }
   }
 }
@@ -36,4 +36,9 @@
       color: $content_link_color;
     }
   }
+}
+
+.block-alshaya-acm-customer > .edit-account {
+  text-transform: uppercase;
+  font-weight: 600;
 }

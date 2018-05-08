@@ -151,7 +151,7 @@
 
         a {
           font-weight: bold;
-          color: $content_link_color;
+          color: $secure_checkout_back_link;
           font-size: 0.75rem;
 
           &.back-to-basket {
@@ -368,7 +368,7 @@
       display: block;
       width: 0.125rem;
       height: calc(100% - 0.3125rem);
-      background: $light-greyish;
+      background: $checkout_tab_active_head;
       position: absolute;
       top: 0.3125rem;
 
@@ -1202,7 +1202,7 @@ html[lang=ar] {
       width: 1.063rem;
       height: 1.375rem;
 
-      @include icon(chevronleft, before) {
+      @include icon(chevron#{left}, before) {
         position: absolute;
         #{$left}: -0.6875rem;
         top: 0;

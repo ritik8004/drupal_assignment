@@ -1,0 +1,38 @@
+.contact-form {
+  .form-submit {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    text-transform: uppercase;
+    font-family: $vs-bold;
+    padding: 0.725rem;
+  }
+}
+
+.alias--contact {
+  .webform-submission-alshaya-contact-form legend {
+    float: none;
+  }
+}
+
+.webform-submission-alshaya-contact-add-form {
+  .form-item {
+    &.form-type-textfield,
+    &.form-type-textarea,
+    &.form-type-email {
+      label {
+        &:last-of-type {
+          text-transform: unset;
+        }
+      }
+    }
+  }
+
+  .mobile-number-field {
+    label {
+      text-transform: unset;
+    }
+  }
+}

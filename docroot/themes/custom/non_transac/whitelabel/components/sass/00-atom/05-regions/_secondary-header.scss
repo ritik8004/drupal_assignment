@@ -13,6 +13,10 @@
     width: 40%;
   }
 
+  @include breakpoint($lap) {
+    height: 2.5625rem;
+  }
+
   html[lang=ar] & {
     line-height: 1.4;
   }

@@ -21,4 +21,9 @@ dependencies:
   - drupal:text
   - drupal:user
   - drupal:views
+  - drupal:taxonomy
+  - alshaya_permissions:alshaya_permissions
+  - ctools:ctools
+  - pathauto:pathauto
+  - views_field_view:views_field_view
 package: Alshaya
