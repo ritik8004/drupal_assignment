@@ -211,7 +211,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
         position: absolute !important;
         #{$left}: -1rem;
         font-size: 1.875rem;
-        top: -0.375rem;
+        top: 0.5rem;
         color: $category_facet_active_icon;
         transform: translateY(-50%);
       }
@@ -226,17 +226,23 @@ ul[data-drupal-facet-id=plp_category_facet] {
       ~ label {
         font-weight: normal;
 
-        @include icon(chevron#{$left}, before);
+        @include icon(chevron#{$left}, before) {
+          top: 0.5rem;
+        }
       }
     }
   }
 
   .facet-item {
     label {
+      display: flex;
+      align-items: center;
+
       .facet-item__count,
       .facet-item__value {
         display: inline-block;
-        line-height: 1.4;
+        line-height: 1.4 !important;
+        margin-top: 0;
       }
     }
   }
@@ -282,14 +288,18 @@ ul[data-drupal-facet-id=plp_category_facet] {
     > ul {
       > li {
         > label {
-          @include icon(check-box-empty);
+          @include icon(checkboxempty);
 
           color: $primary_checkbox_empty;
+
+          .facet-item__value {
+            margin-#{$left}: 2rem;
+          }
         }
 
         > input[type=checkbox]:checked {
           ~ label {
-            @include icon(check-box-filled) {
+            @include icon(checkboxfull) {
               color: $primary_checkbox_filled;
             }
           }
@@ -300,15 +310,44 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
   > li.leaf-li {
     > label {
-      @include icon(check-box-empty);
+      @include icon(checkboxempty);
 
       color: $primary_checkbox_empty;
+
+      .facet-item__value {
+        margin-#{$left}: 2rem;
+      }
     }
 
     > input[type=checkbox]:checked {
       ~ label {
-        @include icon(check-box-filled) {
+        @include icon(checkboxfull) {
           color: $primary_checkbox_filled;
+        }
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id="category"] {
+  li {
+    &.active-item {
+      > label {
+        span {
+          font-weight: bold;
+          color: $category_facet_active_text;
+        }
+      }
+    }
+  }
+}
+
+.c-facet__blocks {
+  .region__sidebar-first {
+    > div {
+      &:last-child {
+        > div {
+          border-bottom-width: 1px !important;
         }
       }
     }
