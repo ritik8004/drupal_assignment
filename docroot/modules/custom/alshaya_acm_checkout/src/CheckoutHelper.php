@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_checkout;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -41,6 +42,13 @@ class CheckoutHelper {
   protected $ordersManager;
 
   /**
+   * Cart Helper service object.
+   *
+   * @var \Drupal\alshaya_acm\CartHelper
+   */
+  protected $cartHelper;
+
+  /**
    * Current request object.
    *
    * @var null|\Symfony\Component\HttpFoundation\Request
@@ -72,6 +80,8 @@ class CheckoutHelper {
    *   Cart Storage service.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   Orders manager service object.
+   * @param \Drupal\alshaya_acm\CartHelper $cart_helper
+   *   Cart Helper service object.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
@@ -83,6 +93,7 @@ class CheckoutHelper {
                               APIWrapper $api_wrapper,
                               CartStorageInterface $cart_storage,
                               OrdersManager $orders_manager,
+                              CartHelper $cart_helper,
                               RequestStack $request_stack,
                               AccountProxyInterface $current_user,
                               LoggerChannelFactoryInterface $logger_factory) {
@@ -90,6 +101,7 @@ class CheckoutHelper {
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
     $this->ordersManager = $orders_manager;
+    $this->cartHelper = $cart_helper;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->currentUser = $current_user;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
@@ -137,7 +149,7 @@ class CheckoutHelper {
         $account = $this->entityTypeManager->getStorage('user')->load($current_user_id);
 
         if (empty($account->get('field_mobile_number')->getString())) {
-          $billing = (array) $cart->getBilling();
+          $billing = $this->cartHelper->getBilling($cart);
           $account->get('field_mobile_number')->setValue($billing['telephone']);
           $account->save();
         }

@@ -72,7 +72,11 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
 
     $cart = $this->getCart();
-    $shipping = (array) $cart->getShipping();
+
+    /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
+    $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
+
+    $shipping = $cart_helper->getShipping($cart);
 
     $cc_selected_info = $cart->getExtension('cc_selected_info');
 

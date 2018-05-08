@@ -77,7 +77,11 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $default_firstname = $default_lastname = $default_email = '';
 
     $cart = $this->getCart();
-    $shipping = (array) $cart->getShipping();
+
+    /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
+    $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
+
+    $shipping = $cart_helper->getShipping($cart);
 
     $cc_selected_info = $cart->getExtension('cc_selected_info');
 

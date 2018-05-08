@@ -58,6 +58,9 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
+    /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
+    $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
+
     /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
@@ -71,7 +74,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     // Once we open HD page, clear temp cc selected info.
     $cart->setExtension('cc_selected_info', NULL);
 
-    $address = (array) $cart->getShipping();
+    $address = $cart_helper->getShipping($cart);
     $default_shipping = '';
 
     if ($this->getCartSelectedDeliveryMethod() == 'cc') {

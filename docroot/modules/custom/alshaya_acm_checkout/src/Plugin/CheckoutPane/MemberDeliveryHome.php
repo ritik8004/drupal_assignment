@@ -67,7 +67,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     // Once we open HD page, clear temp cc selected info.
     $cart->setExtension('cc_selected_info', NULL);
 
-    $address = (array) $cart->getShipping();
+    /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
+    $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
+
+    $address = $cart_helper->getShipping($cart);
 
     $pane_form['address_form'] = [
       '#type' => 'container',
@@ -244,7 +247,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     try {
       $cart = $this->getCart();
 
-      $address = (array) $cart->getShipping();
+      /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
+      $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
+
+      $address = $cart_helper->getShipping($cart);
 
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
       $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
