@@ -497,7 +497,7 @@
         });
       });
 
-      if ($(context).find('article[data-vmode="modal"]').length === 1) {
+      if ($(context).attr('data-vmode') === 'modal') {
         var product = Drupal.alshaya_seo_gtm_get_product_values($(context).find('article[data-vmode="modal"]'));
 
         product.variant = '';
@@ -899,30 +899,31 @@
   Drupal.alshaya_seo_gtm_push_product_clicks = function (element, currencyCode, listName, position) {
     // Don't trigger product click event for items in cross-sell on Mobile.
     if (((element.closest('.owl-item').length !== 0) ||
-        (element.closest('.no-carousel').length !== 0)) &&
-      ($(window).width() > 320)) {
-
-      var product = Drupal.alshaya_seo_gtm_get_product_values(element);
-      product.variant = '';
-      if (position) {
-        product.position = position;
-      }
-
-      var data = {
-        event: 'productClick',
-        ecommerce: {
-          currencyCode: currencyCode,
-          click: {
-            actionField: {
-              list: listName
-            },
-            products: [product]
-          }
-        }
-      };
-
-      dataLayer.push(data);
+            (element.closest('.no-carousel').length == 0)) &&
+        ($(window).width() < 320)) {
+      return;
     }
+
+    var product = Drupal.alshaya_seo_gtm_get_product_values(element);
+    product.variant = '';
+    if (position) {
+      product.position = position;
+    }
+
+    var data = {
+      event: 'productClick',
+      ecommerce: {
+        currencyCode: currencyCode,
+        click: {
+          actionField: {
+            list: listName
+          },
+          products: [product]
+        }
+      }
+    };
+
+    dataLayer.push(data);
   };
 
   /**

@@ -149,6 +149,11 @@
 
         label {
           #{$left}: -3.5rem;
+          display: none;
+
+          @include breakpoint($desktop) {
+            display: block;
+          }
 
           html[lang=ar] & {
             #{$left}: -4.5rem;

@@ -10,6 +10,17 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Updating category facet configs.
+ */
+function alshaya_search_update_8015() {
+  alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
+  alshaya_config_install_configs(['facets.facet.plp_category_facet'], 'alshaya_product');
+  alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change sort order for facets to raw value.
  */
 function alshaya_search_update_8014() {
