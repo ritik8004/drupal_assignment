@@ -51,7 +51,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see "Home delivery in 2-5 days for just KWD 1"
+    Then I should see "Home delivery in 1-3 days (main cities) and 1-5 days (other areas) for just SAR 25"
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
     Then I should see "Collect the order in store within 2-3 days"
@@ -65,7 +65,7 @@ Feature: Test basket page
     When I follow "العربية"
     And I wait for the page to load
     Then I should be able to see the header in Arabic
-    And I should see the link for configurable product in Arabic
+#    And I should see the link for configurable product in Arabic
     Then I should see the button "إتمام الشراء بأمان"
     And I should see "سلة التسوق ("
     Then I should see "المنتج"
@@ -92,7 +92,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see "خدمة التوصيل للمنازل خلال 2-5 أيام فقط بـ 1 دينار"
+    Then I should see "خدمة التوصيل للمنازل خلال 1-2 أيام فقط بـ س.ر"
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
     Then I should see "إستلم طلبيتك من المحل خلال 2-3 أيام"
