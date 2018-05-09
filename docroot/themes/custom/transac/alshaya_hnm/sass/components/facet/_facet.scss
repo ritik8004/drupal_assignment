@@ -37,7 +37,6 @@
       }
     }
 
-    .facet-item__count,
     .facet-item__value {
       text-transform: capitalize;
       line-height: 1.57;
@@ -67,5 +66,35 @@
   @include breakpoint($desktop) {
     font-family: $hnm-bold;
     font-weight: normal;
+  }
+
+  .facet-item--expanded {
+    ul {
+      html[lang=ar] & {
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=category],
+ul[data-drupal-facet-id=plp_category_facet] {
+  > .facet-item--expanded {
+    > label {
+      &::before {
+        top: 0.125rem;
+      }
+    }
+  }
+}
+
+.block-facet-blockcategory,
+.block-facet-blockplp-category-facet {
+  .c-accordion__title {
+    @include icon(dropdown-collapse, after);
+  }
+
+  .ui-state-active {
+    @include icon(dropdown-expand, after);
   }
 }

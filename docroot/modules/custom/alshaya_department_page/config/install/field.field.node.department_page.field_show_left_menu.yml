@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_show_left_menu
+    - node.type.department_page
+id: node.department_page.field_show_left_menu
+field_name: field_show_left_menu
+entity_type: node
+bundle: department_page
+label: 'Show left menu'
+description: 'Uncheck this box if you do not want the left menu to be displayed.'
+required: false
+translatable: true
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: Show
+  off_label: Hide
+field_type: boolean

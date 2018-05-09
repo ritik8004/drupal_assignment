@@ -14,7 +14,7 @@
     }
 
     a {
-      color: $primary_text;
+      color: $my_account_nav;
       display: block;
       line-height: 1.9;
       text-transform: lowercase;
@@ -30,7 +30,7 @@
       }
 
       &:hover {
-        color: $content_link_color;
+        color: $my_account_nav_hover;
         text-decoration: underline;
       }
     }

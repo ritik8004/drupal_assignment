@@ -1,0 +1,9 @@
+.c-breadcrumb {
+  li {
+    text-transform: none;
+
+    &:last-of-type a {
+      font-family: $vs-bold;
+    }
+  }
+}

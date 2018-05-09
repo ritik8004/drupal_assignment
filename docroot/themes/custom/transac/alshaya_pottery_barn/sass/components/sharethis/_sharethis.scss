@@ -1,0 +1,31 @@
+.sharethis-wrapper {
+  .st_facebook_custom {
+    &:hover::before {
+      background: url("../imgs/icons/ic-facebookselect.svg") no-repeat center;
+    }
+  }
+
+  .st_twitter_custom {
+    &:hover::before {
+      background: url("../imgs/icons/ic-twitterselect.svg") no-repeat center;
+    }
+  }
+
+  .st_pinterest_custom {
+    &:hover::before {
+      background: url("../imgs/icons/ic-pinterestselect.svg") no-repeat center;
+    }
+  }
+
+  .st_instagram_custom {
+    &:hover::before {
+      background: url("../imgs/icons/ic-instagramselect.svg") no-repeat center;
+    }
+  }
+
+  .st_youtube_custom {
+    &:hover::before {
+      background: url("../imgs/icons/ic-youtubeselect.svg") no-repeat center;
+    }
+  }
+}

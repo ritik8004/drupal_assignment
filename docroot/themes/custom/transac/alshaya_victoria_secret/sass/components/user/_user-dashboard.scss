@@ -1,0 +1,43 @@
+.c-user--node.l-two--sf {
+  aside.c-sidebar-first {
+    .my-account-mobile-title1 {
+      font-family: $vs-regular;
+    }
+
+    .my-account-mobile-title2 {
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+.subtitle {
+  font-family: $vs-regular;
+  font-size: 1.125rem;
+  text-transform: capitalize;
+}
+
+.block-alshaya-acm-customer {
+  & > a {
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.path--user {
+  #block-userrecentorders {
+    h2 {
+      &.subtitle {
+        border-bottom: 0;
+      }
+    }
+  }
+}
+
+.recent__orders--list {
+  &.user__order--detail {
+    background-color: $order_detail_delivery_details_row_bg;
+  }
+}

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac;
 
+use Drupal\alshaya_acm\CartHelper;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -48,7 +49,7 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical' => 'taxonomy term',
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
-    'entity.node.canonical:department_page' => 'department page',
+    'entity.node.canonical:advanced_page' => 'advanced page',
     'entity.node.canonical:acq_promotion' => 'promotion page',
     'entity.node.canonical:static_html' => 'static page',
     'entity.user.canonical' => 'my account page',
@@ -125,6 +126,13 @@ class AlshayaGtmManager {
    * @var \Drupal\acq_cart\CartStorageInterface
    */
   protected $cartStorage;
+
+  /**
+   * Cart Helper service object.
+   *
+   * @var \Drupal\alshaya_acm\CartHelper
+   */
+  protected $cartHelper;
 
   /**
    * The current user service.
@@ -212,6 +220,8 @@ class AlshayaGtmManager {
    *   Config Factory service.
    * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
    *   Private temp store service.
+   * @param \Drupal\alshaya_acm\CartHelper $cartHelper
+   *   Cart Helper service object.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   Current User service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -236,6 +246,7 @@ class AlshayaGtmManager {
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
                               CartStorageInterface $cartStorage,
+                              CartHelper $cartHelper,
                               AccountProxyInterface $currentUser,
                               RequestStack $requestStack,
                               EntityTypeManagerInterface $entityTypeManager,
@@ -249,6 +260,7 @@ class AlshayaGtmManager {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
+    $this->cartHelper = $cartHelper;
     $this->currentUser = $currentUser;
     $this->requestStack = $requestStack;
     $this->entityTypeManager = $entityTypeManager;
@@ -615,7 +627,7 @@ class AlshayaGtmManager {
 
       $cartItems = $cart->get('items');
 
-      $address = (array) $cart->getShipping();
+      $address = $this->cartHelper->getShipping($cart);
 
       if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page') {
         // For CC we always use step 2.
@@ -624,7 +636,7 @@ class AlshayaGtmManager {
       // We receive address id in case of authenticated users & address as an
       // extension attribute for anonymous.
       elseif (((isset($address['customer_address_id']) && (!empty($address['customer_address_id']))) ||
-        (isset($address['extension'], $address['extension']['address_area_segment']))) &&
+        (isset($address['extension'], $address['extension']['area']))) &&
         ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
         // For HD we use step 3 if we have address saved.
         $attributes['step'] = 3;
@@ -950,7 +962,7 @@ class AlshayaGtmManager {
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
-      'country' => 'Kuwait',
+      'country' => _alshaya_country_get_site_level_country_name(),
       'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
@@ -1041,16 +1053,20 @@ class AlshayaGtmManager {
         $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
         break;
 
-      case 'department page':
+      case 'advanced page':
         $department_node = $current_route['route_params']['node'];
-        $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($department_node->get('field_product_category')->target_id);
-        if (!empty($taxonomy_term)) {
-          $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id()));
-          foreach ($taxonomy_parents as $taxonomy_parent) {
-            $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
-          }
+        if ($department_node->get('field_use_as_department_page')->value == 1) {
+          $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')
+            ->load($department_node->get('field_product_category')->target_id);
+          if (!empty($taxonomy_term)) {
+            $taxonomy_parents = array_reverse($this->entityTypeManager->getStorage('taxonomy_term')
+              ->loadAllParents($taxonomy_term->id()));
+            foreach ($taxonomy_parents as $taxonomy_parent) {
+              $terms[$taxonomy_parent->id()] = $taxonomy_parent->getName();
+            }
 
-          $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+            $page_dl_attributes = $this->fetchDepartmentAttributes($terms);
+          }
         }
         break;
 

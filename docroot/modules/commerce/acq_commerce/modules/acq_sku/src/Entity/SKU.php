@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -129,6 +130,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
           }
 
           $data['file'] = File::load($data['fid']);
+          if (empty($data['file'])) {
+            \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku"', ['@fid' => $data['fid'], '@sku' => $this->getSku()]);
+            continue;
+          }
 
           if (empty($data['label'])) {
             $data['label'] = $this->label();
@@ -247,10 +252,19 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Found SKU
    */
   public static function loadFromSku($sku, $langcode = '', $log_not_found = TRUE, $create_translation = FALSE) {
+    $skus_static_cache = &drupal_static(__FUNCTION__, []);
+
     $is_multilingual = \Drupal::languageManager()->isMultilingual();
 
     if ($is_multilingual && empty($langcode)) {
       $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    }
+
+    $static_cache_sku_identifier = $sku . ':' . $langcode;
+
+    // Check if data is available in static cache, return from there.
+    if (isset($skus_static_cache[$static_cache_sku_identifier])) {
+      return $skus_static_cache[$static_cache_sku_identifier];
     }
 
     $storage = \Drupal::entityTypeManager()->getStorage('acq_sku');
@@ -296,6 +310,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
         \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
     }
+
+    // Set value in static variable.
+    $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
 
     return $sku_entity;
   }
@@ -671,4 +688,20 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public static function postDelete(EntityStorageInterface $storage, array $entities) {
+    parent::postDelete($storage, $entities);
+
+    // Delete media files.
+    foreach ($entities as $entity) {
+      /** @var \Drupal\acq_sku\Entity\SKU $sku  */
+      foreach ($entity->getMedia() as $media) {
+        if ($media['file'] instanceof FileInterface) {
+          $media['file']->delete();
+        }
+      }
+    }
+  }
 }

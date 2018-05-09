@@ -51,11 +51,4 @@ function alshaya_hm_images_install() {
 
   // Save overridden configs.
   _alshaya_config_save_overridden_configs('alshaya_hm_images');
-
-  $configs = [
-    'core.entity_form_display.taxonomy_term.acq_product_category.default',
-  ];
-
-  alshaya_config_install_configs($configs, 'alshaya_hm_images', 'optional');
 }
-

@@ -108,6 +108,14 @@
       border-color: $red-error !important;
       border-width: 0 0 0.125rem !important;
     }
+
+    label.form-required:not(.error),
+    .form-type-textfield label:not(.error),
+    .field--name-field-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number2 label:not(.error) {
+      color: $primary_input_label_hnm;
+    }
   }
 
   .form-type-checkbox .option {

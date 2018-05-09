@@ -29,6 +29,7 @@ class ProductSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_acm_product.settings');
+    $config->set('show_cart_form_in_related', $form_state->getValue('show_cart_form_in_related'));
     $config->set('related_items_size', $form_state->getValue('related_items_size'));
     $config->set('list_view_items_per_page', $form_state->getValue('list_view_items_per_page'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
@@ -38,6 +39,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('not_buyable_help_text', $form_state->getValue('not_buyable_help_text'));
     $config->set('vat_text', $form_state->getValue('vat_text'));
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
+    $config->set('image_slider_position_pdp', $form_state->getValue('image_slider_position_pdp'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -50,6 +52,17 @@ class ProductSettingsForm extends ConfigFormBase {
     $form = parent::buildForm($form, $form_state);
 
     $config = $this->config('alshaya_acm_product.settings');
+
+    $form['show_cart_form_in_related'] = [
+      '#type' => 'select',
+      '#options' => [
+        0 => $this->t('no'),
+        1 => $this->t('yes'),
+      ],
+      '#default_value' => $config->get('show_cart_form_in_related'),
+      '#title' => $this->t('Show add to cart form in related item blocks'),
+      '#description' => $this->t('Show add to cart form in Up sell / Cross sell / Related products blocks.'),
+    ];
 
     $form['related_items_size'] = [
       '#type' => 'textfield',
@@ -113,6 +126,16 @@ class ProductSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('VAT disclaimer text for the footer'),
       '#default_value' => $config->get('vat_text_footer'),
+    ];
+
+    $form['image_slider_position_pdp'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Image slider position on PDP'),
+      '#default_value' => $config->get('image_slider_position_pdp'),
+      '#options' => [
+        'left' => $this->t('Left'),
+        'bottom' => $this->t('Bottom'),
+      ],
     ];
 
     return $form;

@@ -23,3 +23,40 @@
     letter-spacing: normal;
   }
 }
+
+@mixin pdp_icon_img_styles($height, $width) {
+  speak: none;
+  content: "";
+  display: inline-block;
+  height: $height;
+  width: $width;
+  background-size: contain;
+  margin: 0 0 -0.375rem 0;
+  cursor: pointer;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin pdp_icon_img($imgpath: false, $height: 0, $width: 0, $position: before, $repeat: no-repeat center, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $styles {
+      background: url($imgpath) $repeat;
+
+      @include pdp_icon_img_styles($height, $width);
+    }
+  }
+
+  &:hover::#{$position} {
+    @if $styles {
+      background: url($imgpath) $repeat;
+      opacity: 0.8;
+
+      @include pdp_icon_img_styles($height, $width);
+    }
+  }
+}

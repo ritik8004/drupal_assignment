@@ -1,0 +1,37 @@
+.select2-selection__arrow {
+  &::after {
+    font-size: 2rem;
+    color: $primary_dropdown_arrow;
+  }
+}
+
+.select2-dropdown {
+  border-color: $primary_dropdown_option_border;
+}
+
+.form-type-select {
+  &::after {
+    color: $plp_facet_dropdown_icon;
+
+    @include breakpoint ($desktop) {
+      display: none;
+    }
+  }
+}
+
+@mixin select3-style($select-width) {
+  @include select-wrapper($select-width);
+
+  @include icon(chevrondown, after) {
+    line-height: 1.2;
+    font-size: 2rem;
+    color: $plp_facet_dropdown_icon;
+  }
+
+  text-transform: none;
+
+  select {
+    line-height: 1.7;
+    font-size: 0.875rem;
+  }
+}

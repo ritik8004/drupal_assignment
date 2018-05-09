@@ -10,6 +10,25 @@ use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Implements hook_update_N().
+ *
+ * Merging department page CT into advanced page CT.
+ */
+function alshaya_advanced_page_update_8004() {
+  $configs = [
+    'field.storage.node.field_product_category',
+    'field.storage.node.field_show_left_menu',
+    'field.storage.node.field_use_as_department_page',
+    'field.field.node.advanced_page.field_use_as_department_page',
+    'field.field.node.advanced_page.field_show_left_menu',
+    'field.field.node.advanced_page.field_product_category',
+    'core.entity_form_display.node.advanced_page.default',
+    'field.field.node.advanced_page.field_promo_blocks',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_advanced_page', 'install');
+}
+
+/**
+ * Implements hook_update_N().
  */
 function alshaya_advanced_page_update_8003() {
   alshaya_config_install_configs(['field.field.node.advanced_page.field_promo_blocks'], 'alshaya_advanced_page');

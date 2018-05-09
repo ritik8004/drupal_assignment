@@ -141,7 +141,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
     $form['link_to_maintenance_page'] = [
       '#title' => $this->t('Link to put site in maintenance mode'),
       '#type' => 'link',
-      '#url' => Url::fromRoute('system.site_maintenance_mode', [], ['query' => ['destination' => 'admin/config/404-maintenance-settings']]),
+      '#url' => Url::fromRoute('system.site_maintenance_mode', [], ['query' => ['destination' => 'admin/config/alshaya/404-maintenance-settings']]),
     ];
 
     return $form;

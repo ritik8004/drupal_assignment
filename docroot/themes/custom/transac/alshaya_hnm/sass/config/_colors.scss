@@ -76,6 +76,7 @@ $primary_dark_color: $hnm-black-two;
 $primary_input: $hnm-black-two;
 $primary_input_placeholder: $grey6;
 $primary_input_label: $black-two;
+$primary_input_label_hnm: $greyish;
 
 //Buttons.
 $primary_btn_bg: $hnm-black-two;
@@ -139,13 +140,15 @@ $maintenance_mobile_body_text: $black;
 // Accordion
 $accordion_title: $hnm-black-two;
 $accordion_subtitle: $grey6;
-$accordion_border: $white-smoke-border;
+$accordion_border: $white;
+$accordion_footer_border: $white-smoke-border;
 $accordion_bg: $white-five;
 
 // Back to top
 $btt_bg: $white-three;
 
 // Breadcrumb.
+$breadcrumb_link_light: $greyish;
 $breadcrumb_link: $hnm-black-two;
 
 // Cloudzoom
@@ -158,6 +161,7 @@ $webform_contact_legend: $hnm-black-two;
 $plp_facet_filter: $black-three;
 $plp_facet_input_placeholder: $hnm-black-two;
 $plp_facet_label: $black-two;
+$category_facet_active_icon: $hnm-black-two;
 
 // Delivery Menu
 $delivery_color: $link-hover;
@@ -246,6 +250,7 @@ $primary_minicart_quantity_bg: $hnm-red;
 $header_blocksearch_border: $grey2;
 $header_blocksearch_bg: $marine-blue;
 $header_blocksearch_input: $grey-ash;
+$cart_icon_hover: $grey7;
 $mm_l1_link: $hnm-black-four;
 $mm_mobile_icon: $hnm-black-two;
 $mm_mobile_icon_active: $hnm-red;
@@ -336,7 +341,7 @@ $minicart_notification_border: $hnm-black-two;
 $minicart_notification_text: $hnm-black-two;
 $minicart_notification_name: $hnm-black-two;
 $minicart_notification_bg: $white-five;
-$primary_minicart_quantity_bg: $grey7;
+$primary_minicart_quantity_bg: $hnm-red;
 
 // Order confirmation
 $order_summary_title: $hnm-black-two;
@@ -376,6 +381,7 @@ $checkout_cc_list_delivery_time_text: $black;
 $checkout_cc_list_delivery_time_label: $hnm-black-two;
 $selected_store_content_bg: $white-five;
 $selected_store_content_border: $white-two;
+$store_finder_text: $hnm-red;
 
 // Order print.
 $order_summary_bg: $info;
@@ -478,3 +484,10 @@ $individual_store_open_hours: $grey7;
 $individual_store_address: $grey7;
 $individual_store_hours_label: $black;
 $individual_store_hours_label_border: $white;
+
+// VAT text
+$vat: $grey6;
+
+// Homepage Slider
+$hp_slider_dots: $hnm-black-two;
+$hp_slider_arrows_dark: $hnm-black-two;

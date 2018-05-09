@@ -10,6 +10,127 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Updating category facet configs.
+ */
+function alshaya_search_update_8015() {
+  alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
+  alshaya_config_install_configs(['facets.facet.plp_category_facet'], 'alshaya_product');
+  alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change sort order for facets to raw value.
+ */
+function alshaya_search_update_8014() {
+  $facets_config_promotion = [
+    'facets.facet.category_promotion',
+    'facets.facet.promotion_brand_facet',
+    'facets.facet.promotion_collection_facet',
+    'facets.facet.promotion_color_facet',
+    'facets.facet.promotion_size_facet',
+  ];
+  alshaya_config_install_configs($facets_config_promotion, 'alshaya_acm_promotion', 'optional');
+
+  $facets_config_alshaya_product = [
+    'facets.facet.plp_category_facet',
+    'facets.facet.skus_sku_reference_brand',
+    'facets.facet.skus_sku_reference_collection',
+    'facets.facet.skus_sku_reference_color',
+    'facets.facet.skus_sku_reference_size',
+  ];
+
+  alshaya_config_install_configs($facets_config_alshaya_product, 'alshaya_product');
+
+  $facets_config_alshaya_search = [
+    'facets.facet.brand',
+    'facets.facet.category',
+    'facets.facet.collection',
+    'facets.facet.color',
+    'facets.facet.size',
+  ];
+  alshaya_config_install_configs($facets_config_alshaya_search, 'alshaya_search');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Expand only one category at a time.
+ * Revert hide taxonomy term from menu processor for category facets.
+ */
+function alshaya_search_update_8013() {
+  alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
+  alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+}
+
+/**
+ * Implements hook_post_update_NAME().
+ *
+ * Re-save index to create required tables.
+ *
+ * We do this in post update hook as it doesn't work together with config update
+ * in normal hook_update.
+ */
+function alshaya_search_post_update_8012(&$sandbox) {
+  // Queue items for re-indexing. Required specifically for search_api_db to
+  // avoid creating tables with numeric prefixes when indexing content.
+  $index = Index::load('product');
+
+  // Re-index all items.
+  $index->reindex();
+
+  // Save index to reflect new category field.
+  $index->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updated facets config.
+ */
+function alshaya_search_update_8012() {
+  $config_facets_alshaya_search = [
+    'search_api.index.acquia_search_index',
+    'facets.facet.category',
+    'facets_summary.facets_summary.filter_bar',
+  ];
+
+  // Add index for category data to SOLR index & create facets, facet summary.
+  alshaya_config_install_configs($config_facets_alshaya_search, 'alshaya_search');
+
+  // Update alshaya product index to reflect category field.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+
+  $config_facets_acm_promotion = [
+    'facets.facet.category_promotion',
+    'facets_summary.facets_summary.filter_bar_promotions',
+  ];
+
+  // Create facets, facet summary for promotion facets.
+  alshaya_config_install_configs($config_facets_acm_promotion, 'alshaya_acm_promotion', 'optional');
+
+  $config_block = [
+    'block.block.category',
+    'block.block.promotioncategoryfacet',
+  ];
+
+  // Place category filter blocks on search & promotion pages.
+  alshaya_config_install_configs($config_block, 'alshaya_transac', 'optional');
+
+  // Get current default theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+
+  // Move blocks to current default theme.
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updated facets config.
  */
 function alshaya_search_update_8011() {

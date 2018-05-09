@@ -14,7 +14,8 @@
     display: block;
     height: auto;
 
-    &::before {
+    &::before,
+    &::after {
       content: none !important;
     }
   }
@@ -35,5 +36,11 @@
   .c-menu-secondary__region {
     max-width: none;
     margin: 0;
+  }
+}
+
+.header--wrapper {
+  @include breakpoint($desktop) {
+    height: 2.5rem;
   }
 }

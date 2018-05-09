@@ -1,0 +1,34 @@
+.c-user-register .c-sidebar-second,
+.c-user-login .c-sidebar-second,
+.order-confirmation {
+  #block-jointheclub {
+    margin-top: 1rem;
+    padding-top: 1rem;
+
+    @include breakpoint($tablet) {
+      margin-top: 1rem;
+      padding-top: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 1rem;
+      padding-top: 1rem;
+    }
+
+    img {
+      @include breakpoint($desktop) {
+        width: 55%;
+      }
+    }
+  }
+}
+
+.c-user-register {
+  &.user-page .c-sidebar-second .c-sidebar-second__region {
+    font-size: 0.875rem;
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: 6.5em;
+    }
+  }
+}

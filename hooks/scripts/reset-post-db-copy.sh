@@ -5,6 +5,9 @@ site="$1"
 target_env="$2"
 uri="$3"
 
+SECONDS=0
+total_seconds=0
+
 if [ $target_env = "01live" -o $target_env = "01update" ]
 then
   echo "Lets not try developer scripts on prod env :)"
@@ -24,6 +27,13 @@ echo "Disabling all search api indexes."
 drush8 @$site.$target_env --uri=$uri search-api-disable-all
 
 # Now clean all data.
+SECONDS=0
+
+# Truncate acq_sku% tables.
+# @TODO: Confirm no SKU blocking data are remaining (workflow, files, ...)."
+echo "Truncate acq_sku% tables to speed up commerce data cleaning."
+drush8 @$site.$target_env --uri=$uri sqlq "SHOW TABLES LIKE 'acq_sku%'" | xargs -I acq_sku_tables drush8 @$site.$target_env --uri=$uri sqlq "TRUNCATE table acq_sku_tables"
+
 while :
 do
   drush8 @$site.$target_env --uri=$uri clean-synced-data -y
@@ -35,6 +45,13 @@ do
     break
   fi
 done
+
+let "minutes=(SECONDS%3600)/60"
+let "seconds=(SECONDS%3600)%60"
+echo "Data cleanup completed in $minutes minute(s) and $seconds second(s)."
+
+let "total_seconds+=SECONDS"
+SECONDS=0
 
 echo "Enable the search api indexes again."
 drush8 @$site.$target_env --uri=$uri search-api-enable-all
@@ -73,7 +90,18 @@ drush8 @$site.$target_env --uri=$uri sapi-i
 drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_attach_queue
 drush8 @$site.$target_env --uri=$uri queue-run acq_promotion_detach_queue
 
+let "minutes=(SECONDS%3600)/60"
+let "seconds=(SECONDS%3600)%60"
+echo "Data import completed in $minutes minute(s) and $seconds second(s)."
+let "total_seconds+=SECONDS"
+SECONDS=0
+
 # Save the dump for later use and use in local.
 timestamp=$(date +%s)
 db_prefix=${uri//[-._]/}
 drush8 @$site.$target_env --uri=$uri sql-dump | gzip > ~/$target_env/post_db_copy_${db_prefix}_${timestamp}.sql.gz
+
+let "total_seconds+=SECONDS"
+let "minutes=(total_seconds%3600)/60"
+let "seconds=(total_seconds%3600)%60"
+echo "Entire script completed in $minutes minute(s) and $seconds second(s)."

@@ -25,7 +25,13 @@ visibility:
   'entity_bundle:node':
     id: 'entity_bundle:node'
     bundles:
-      department_page: department_page
+      advanced_page: advanced_page
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+  'left_menu_condition':
+    id: left_menu_condition
+    leftMenuActive: 1
     negate: false
     context_mapping:
       node: '@node.node_route_context:node'

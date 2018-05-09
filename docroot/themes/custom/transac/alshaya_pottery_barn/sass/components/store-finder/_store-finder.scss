@@ -1,0 +1,40 @@
+.path--store-finder,
+.nodetype--store {
+  .form-item-geolocation-geocoder-google-places-api {
+    input[type=text] {
+      &::placeholder {
+        color: $store_finder_location_search_text_placeholder;
+      }
+
+      @include breakpoint($only-mobile) {
+        border-color: $store_finder_location_search_text_input_border_mobile;
+      }
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    text-transform: none;
+  }
+
+  .label--location::before {
+    background: url(../imgs/icons/store-search.svg) no-repeat;
+  }
+
+  .list-view-locator {
+    border-left: 0;
+    border-right: 0;
+
+    .row-title {
+      font-weight: 600;
+    }
+
+    .store-row--counter {
+      line-height: 1.1;
+    }
+  }
+
+  .get--directions div {
+    color: $store_finder_get_direction_label_color;
+  }
+}

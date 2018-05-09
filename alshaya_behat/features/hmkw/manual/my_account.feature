@@ -16,7 +16,7 @@ Feature: Test the My account section for authenticated user
     And I should see the link "address book" in ".my-account-nav" section
     And I should see the link "change password" in ".my-account-nav" section
     Then the "my account" tab should be selected
-
+  @s
   Scenario:
     As an authenticated user
     I should be able to see my most recent three orders
@@ -99,6 +99,7 @@ Feature: Test the My account section for authenticated user
 #    Then I should not see "Unlock exclusive rewards"
 #    Then I should not see the link "Learn more"
 
+  @s
   Scenario: As an authenticated user
     I should be able to see most recent 10 orders
     listed on Orders tab
@@ -135,7 +136,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     Then I should see all "Processing" orders listed on orders tab
 
-  @prod
+  @prod @s
   Scenario: As an authenticated user
   I should be able to update my contact details
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
@@ -144,6 +145,7 @@ Feature: Test the My account section for authenticated user
     When I fill in "edit-field-last-name-0-value" with "Sharma"
     When I fill in "edit-field-mobile-number-0-mobile" with "55004466"
     And I press "Save"
+    And I wait 5 seconds
     And I wait for the page to load
     Then I should see "Aadya"
     And I should not see "55004455"

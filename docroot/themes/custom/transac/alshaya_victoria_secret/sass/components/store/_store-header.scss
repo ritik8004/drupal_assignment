@@ -1,0 +1,223 @@
+.path--store-finder,
+.nodetype--store {
+  .form--inline .current-location {
+    padding-top: 0.5rem;
+    padding-bottom: 0.3rem;
+
+    &::before {
+      background-size: contain;
+      position: relative;
+      top: -0.125rem;
+      margin-#{$right}: 0.1875rem;
+
+      html[lang="ar"] & {
+        position: static;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 18.5%;
+      padding-#{$left}: 1rem !important;
+    }
+
+    html[lang="ar"] & {
+      @include breakpoint($only-tablet) {
+        width: 26.5%;
+        padding-right: 0.5rem !important;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      font-family: $vs-bold;
+      padding-left: 0.875rem;
+      padding-right: 0.875rem;
+      width: 13%;
+      text-align: center;
+    }
+
+    html[lang="ar"] & {
+      @include breakpoint($desktop) {
+        width: 20%;
+        padding-top: 0.2rem;
+        padding-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .back-to-glossary,
+  .current-location {
+    border: 1px solid $store_finder_glossary_btn_border;
+    text-transform: uppercase;
+
+    @include breakpoint($tablet) {
+      font-family: $vs-bold;
+      font-size: 0.875rem;
+    }
+  }
+
+  .back-to-glossary {
+    @include breakpoint($tablet) {
+      width: 40.5%;
+      padding: 0.66rem;
+    }
+
+    @include breakpoint($desktop) {
+      width: 22.5%;
+    }
+  }
+
+  .store-finder--wrapper .form-item-geolocation-geocoder-google-places-api,
+  .back-to-glossary,
+  .current-location,
+  .label--location {
+    @include breakpoint($tablet) {
+      margin: 0;
+    }
+
+    html[lang="ar"] & {
+      @include breakpoint($tablet) {
+        margin: 0;
+      }
+    }
+  }
+
+  .label--location {
+    @include breakpoint($only-tablet) {
+      display: none;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: 2rem;
+      text-indent: 0;
+      line-height: 40px;
+      width: 22.6%;
+    }
+
+    html[lang="ar"] & {
+      @include breakpoint($desktop) {
+        width: 41.6%;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    @include breakpoint($tablet) {
+      height: 2.5rem;
+      padding: 0.6rem 0.25rem;
+    }
+  }
+
+  .block-store-finder-form__form__label__wrapper,
+  .label--location {
+    &::before {
+      content: none;
+    }
+  }
+
+  .c-content__region {
+    .views-exposed-form {
+      @include breakpoint($tablet) {
+        border-bottom: 0;
+        padding-top: 1.5rem;
+      }
+    }
+  }
+
+  .store-finder--wrapper {
+    @include breakpoint($tablet) {
+      width: 39.5%;
+
+      html[lang="ar"] & {
+        width: 33.5%;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 62.5%;
+
+      html[lang="ar"] & {
+        width: 51.5%;
+      }
+    }
+
+    .input--wrapper [id^=edit-actions] {
+      padding: 0.55rem 0.375rem;
+      height: 2.5rem;
+
+      @include breakpoint($tablet) {
+        top: 0;
+      }
+    }
+
+    .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+    .form-item-geolocation-geocoder-google-places-api {
+      @include breakpoint($only-tablet) {
+        float: $left;
+        padding-#{$left}: 0.5rem;
+        width: 100% !important;
+      }
+
+      @include breakpoint($desktop) {
+        padding-#{$left}: 0;
+        width: 76.4%;
+
+        html[lang="ar"] & {
+          width: 58.4%;
+        }
+      }
+    }
+  }
+
+  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+  .form-item-geolocation-geocoder-google-places-api {
+    [id^=edit-geolocation-geocoder-google-places-api] {
+      @include breakpoint($tablet) {
+        max-width: none;
+      }
+
+      height: 2.5rem;
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    border: 0;
+    border-bottom: 2px solid transparent;
+    text-transform: uppercase;
+
+    &:hover,
+    &.active {
+      border: 0;
+      border-bottom: 2px solid $store_finder_border_hover;
+    }
+
+    &.active {
+      font-family: $vs-bold;
+    }
+
+    @include breakpoint($tablet) {
+      width: 20.25%;
+
+      html[lang="ar"] & {
+        width: 19.25%;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 12.25%;
+
+      html[lang="ar"] & {
+        width: 14.25%;
+      }
+    }
+  }
+
+  .block-store-finder-form__input__submit__wrapper {
+    &::before {
+      content: none;
+    }
+  }
+}

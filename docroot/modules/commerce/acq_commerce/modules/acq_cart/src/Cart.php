@@ -435,7 +435,11 @@ class Cart implements CartInterface {
     // If cart is not updated yet and we are reading from session.
     if (isset($this->cart, $this->cart->carrier)) {
       $method = $this->cart->carrier;
-      return implode(',', [$method['carrier_code'], $method['method_code']]);
+
+      // V2 onwards, we will have empty structure available all the time.
+      if (!empty($method['carrier_code']) && !empty($method['method_code'])) {
+        return implode(',', [$method['carrier_code'], $method['method_code']]);
+      }
     }
 
     if (isset($this->cart, $this->cart->extension, $this->cart->extension['shipping_method'])) {

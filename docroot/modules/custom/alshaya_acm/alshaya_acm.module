@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_cart\CartInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
@@ -53,6 +54,8 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     ],
   ];
 
+  $cart_items = NULL;
+
   // Get the current cart.
   /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
   $cart_storage = \Drupal::service('acq_cart.cart_storage');
@@ -60,8 +63,19 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   /** @var \Drupal\acq_cart\Cart $cart */
   $cart = $cart_storage->getCart(FALSE);
 
-  // Get current cart items.
-  $cart_items = $cart ? $cart->items() : NULL;
+  if ($cart instanceof CartInterface) {
+    // If for any reason user comes back to basket from checkout pages, we clear
+    // API caches.
+    $tags = [
+      'acq_cart_shipping_estimate:' . $cart->id(),
+      'acq_cart_payment_methods:' . $cart->id(),
+    ];
+
+    Cache::invalidateTags($tags);
+
+    // Get current cart items.
+    $cart_items = $cart->items();
+  }
 
   if (empty($cart_items)) {
     // Add empty message wrapper container.

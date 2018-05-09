@@ -1,0 +1,66 @@
+.user-page {
+  .form-item input:focus ~ label:not(.error),
+  .form-item input:not(:focus):valid ~ label:not(.error),
+  .form-item input:active ~ label:not(.error),
+  .form-item input:not(:active):valid ~ label:not(.error),
+  .form-item input.error ~ label:not(.error) {
+    font-size: 0.875rem;
+  }
+}
+
+.path--user {
+  .c-order-help {
+    .field--name-body {
+      border: 1px solid $user_order_help_border;
+
+      &::before {
+        color: $user_order_help_text_links;
+      }
+
+      p {
+        font-family: $vs-bold;
+        font-size: 0.875rem;
+      }
+
+      ul {
+        @include breakpoint($upto-tablet) {
+          margin-#{$left}: 0;
+        }
+      }
+
+      a {
+        text-decoration: underline;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+.c-address-book .profile-form .form-submit,
+.path--user .ui-dialog .button--primary,
+.c-address-book .block-system > a,
+.order-detail .print--button,
+.block-alshaya-acm-customer > .edit-account {
+  color: $order_edit_account_link;
+  background: transparent;
+  text-decoration: none;
+  font-family: $vs-bold;
+  font-size: 0.875rem;
+  border: 1px solid $order_edit_account_link;
+  text-transform: uppercase;
+  padding: 0.75rem;
+  height: 2.5rem;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $order_edit_account_link;
+  }
+
+  &:hover {
+    opacity: 0.75;
+  }
+}

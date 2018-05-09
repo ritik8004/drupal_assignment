@@ -65,3 +65,10 @@
     }
   }
 }
+
+.views-view-unformatted__rows {
+  @include breakpoint($above-palm) {
+    display: flex;
+    flex-flow: row wrap;
+  }
+}

@@ -8,5 +8,6 @@ services:
     class: Drupal\alshaya_stores_finder\EventSubscriber\AlshayaStoresFinderConfigSubscriber
     arguments:
       - '@config.storage'
+      - '@config.factory'
     tags:
       - { name: event_subscriber }

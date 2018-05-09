@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_category_quicklink_plp_mob
+    - taxonomy.vocabulary.acq_product_category
+id: taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
+field_name: field_category_quicklink_plp_mob
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Mobile only - display as a quick link on parent PLP'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

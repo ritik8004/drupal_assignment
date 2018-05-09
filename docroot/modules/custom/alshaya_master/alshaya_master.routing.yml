@@ -6,8 +6,17 @@ alshaya_master.home:
   requirements:
   # Home page should be accessible without any restriction.
     _access: 'TRUE'
+
+alshaya_master.alshaya_admin:
+  path: '/admin/config/alshaya'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Alshaya configurations'
+  requirements:
+    _permission: 'administer site configuration'
+
 alshaya_master.404_maintenance_setting:
-  path: '/admin/config/404-maintenance-settings'
+  path: '/admin/config/alshaya/404-maintenance-settings'
   defaults:
     _form: '\Drupal\alshaya_master\Form\Alshaya404MaintenanceSettings'
     _title: 'Alshaya 404 and maintenance mode settings'

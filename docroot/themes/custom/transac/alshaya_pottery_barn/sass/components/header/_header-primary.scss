@@ -27,6 +27,10 @@ header {
 
       @include breakpoint($only-tablet) {
         bottom: -3.35rem;
+
+        html[lang=ar] & {
+          bottom: -2.0625rem;
+        }
       }
 
       @include breakpoint($only-mobile) {
@@ -48,6 +52,10 @@ header {
           margin-bottom: 0.5rem;
           margin-top: 0.625rem;
           height: 1.3125rem;
+
+          html[lang=ar] & {
+            margin-top: 0.625rem;
+          }
         }
       }
 
@@ -67,10 +75,21 @@ header {
 
         top: 0.625rem;
         #{$right}: -0.4375rem;
+
+        html[lang=ar] & {
+          top: 0;
+          left: 1px;
+        }
       }
     }
 
     .site-brand-home {
+      html[lang=ar] & {
+        @include breakpoint($only-tablet) {
+          width: 19rem;
+        }
+      }
+
       a {
         max-width: none;
 
@@ -80,6 +99,10 @@ header {
 
         @include breakpoint($only-tablet) {
           max-width: 17.5625rem;
+
+          html[lang=ar] & {
+            max-width: none;
+          }
         }
 
         @include breakpoint($only-mobile) {
@@ -87,6 +110,25 @@ header {
           max-width: none;
           font-size: 1rem;
           line-height: 2.3;
+        }
+      }
+
+      img {
+        html[lang=ar] & {
+          @include breakpoint($desktop) {
+            width: 25.94rem;
+            margin-top: -1.25rem;
+            margin-right: 0.25rem;
+          }
+
+          @include breakpoint($only-tablet) {
+            max-width: 18.1875rem;
+            width: 18.1875rem !important;
+          }
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+          }
         }
       }
     }
@@ -124,5 +166,11 @@ header {
         }
       }
     }
+  }
+}
+
+.header--fixed .branding__menu {
+  @include breakpoint($desktop) {
+    box-shadow: none;
   }
 }

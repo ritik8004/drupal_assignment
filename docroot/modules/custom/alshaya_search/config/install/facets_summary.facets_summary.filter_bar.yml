@@ -39,8 +39,19 @@ facets:
     separator: ', '
     show_count: true
     weight: 0
+  category:
+      checked: true
+      label: Category
+      separator: ', '
+      show_count: true
+      weight: 0
 facet_source_id: 'search_api:views_page__search__page'
 processor_configs:
+  alshaya_strip_l2_params:
+    processor_id: alshaya_strip_l2_params
+    weights:
+      build: '-10'
+    settings: {  }
   reset_facets:
     processor_id: reset_facets
     weights:

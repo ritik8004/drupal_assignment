@@ -130,6 +130,8 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
           '#theme' => 'products_horizontal_slider',
           '#data' => $view_skus,
           '#section_title' => '',
+          '#views_name' => 'product_slider',
+          '#views_display_id' => 'block_product_slider',
         ];
       }
     }

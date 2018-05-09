@@ -7,12 +7,17 @@
 
   .subtitle {
     font-family: $hnm-demibold;
+    border-bottom: 1px solid $content_pagetitle_border;
   }
 }
 
 .c-user-password,
 .c-user-register,
 .c-user-login {
+  &.user-page {
+    border-top: 1px solid $content_pagetitle_border;
+  }
+
   h1 {
     font-family: $hnm-demibold;
     color: $title;
@@ -52,6 +57,8 @@
 .c-user--node .block-page-title-block,
 .c-address-book .block-page-title-block,
 .order-detail .block-page-title-block {
+  border-bottom: 1px solid $content_pagetitle_border;
+
   .back-link {
     @include breakpoint($only-mobile) {
       font-size: 0;

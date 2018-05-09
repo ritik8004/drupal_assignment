@@ -1,0 +1,81 @@
+.c-user-login.user-page {
+  .user-login-form {
+    #edit-actions {
+      input {
+        font-size: 0.875rem;
+        font-family: $alshaya-thin;
+        min-width: 9.125rem;
+        padding: 0.925rem 1.6rem;
+
+        html[lang='ar'] & {
+          padding: 0 1.6rem;
+        }
+      }
+    }
+  }
+
+  .c-sidebar-second {
+    font-size: 0.875rem;
+
+    #block-youllbeableto {
+      margin-bottom: 1rem;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 1rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-bottom: 1rem;
+      }
+
+      p {
+        @include breakpoint($only-tablet) {
+          .icon-store {
+            width: 1.25rem;
+            height: 1.25rem;
+            background-size: 1rem;
+            background-position: center center;
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-user-login.user-page,
+.checkout-login.user-page,
+.c-user-register {
+  .c-sidebar-second,
+  .fieldset-wrapper {
+    #block-youllbeableto {
+      @include breakpoint($only-mobile) {
+        span {
+          height: 1.25rem;
+          background-size: 1.25rem;
+        }
+      }
+    }
+  }
+}
+
+.c-user-register {
+  .c-sidebar-second {
+    #block-youllbeableto {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: 1rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-bottom: 1rem;
+      }
+
+      p {
+        margin: 0.375rem 0;
+      }
+    }
+  }
+}

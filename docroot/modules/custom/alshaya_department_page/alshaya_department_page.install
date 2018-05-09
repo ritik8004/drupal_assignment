@@ -6,6 +6,32 @@
  */
 
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new field show_left_menu.
+ */
+function alshaya_department_page_update_8004() {
+  $configs = [
+    'field.storage.node.field_show_left_menu',
+    'field.field.node.department_page.field_show_left_menu',
+    'core.entity_form_display.node.department_page.default',
+    'core.entity_view_display.node.department_page.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_department_page', 'install');
+
+  // Set default value for 'show left menu' field on department pages.
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'department_page')
+    ->execute();
+  $nodes = Node::loadMultiple($nids);
+  foreach ($nodes as $department_page) {
+    $department_page->set('field_show_left_menu', '1');
+    $department_page->save();
+  }
+}
 
 /**
  * Implements hook_update_N().

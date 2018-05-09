@@ -140,6 +140,7 @@ class AlshayaAcmConfigCheck {
       'alshaya_acm_knet.settings',
       'recaptcha.settings',
       'geolocation.settings',
+      'google_tag.settings',
     ];
 
     // Reset the settings.
@@ -158,11 +159,6 @@ class AlshayaAcmConfigCheck {
     $config = $this->configFactory->getEditable('simple_oauth.settings');
     $config->set('public_key', Settings::get('alshaya_acm_soauth_public_key'));
     $config->set('private_key', Settings::get('alshaya_acm_soauth_private_key'));
-    $config->save();
-
-    // Always set GTM id to null on all envs (except prod) first time.
-    $config = $this->configFactory->getEditable('google_tag.settings');
-    $config->set('container_id', '');
     $config->save();
 
     // Reset :to e-mail for contact us page.
@@ -204,6 +200,15 @@ class AlshayaAcmConfigCheck {
 
     // Get the expected country code cloned for.
     $expected_country_code = Unicode::strtolower(Settings::get('country_code'));
+
+    // If the target country code does not have related country module, that
+    // means we are not using a valid country code which may be on purpose so
+    // don't do anything.
+    $modules = $this->state->get('system.module.files', []);
+    if (!isset($modules['alshaya_' . $expected_country_code])) {
+      return;
+    }
+
     // Get the actual country code cloned from.
     $actual_country_code = Unicode::strtolower(_alshaya_custom_get_site_level_country_code());
 
@@ -214,6 +219,11 @@ class AlshayaAcmConfigCheck {
       }
       if (!$this->moduleHandler->moduleExists('alshaya_' . $expected_country_code)) {
         $this->moduleInstaller->install(['alshaya_' . $expected_country_code]);
+
+        // Update config with installed brand and module names.
+        $this->configFactory->getEditable('alshaya.installed_country')
+          ->set('module', 'alshaya_' . $expected_country_code)
+          ->save();
       }
     }
 

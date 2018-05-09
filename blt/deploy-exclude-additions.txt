@@ -1,3 +1,5 @@
+/alshaya_behat
+/architecture
 /docroot/web.config
 /docroot/core/install.php
 /docroot/update.php

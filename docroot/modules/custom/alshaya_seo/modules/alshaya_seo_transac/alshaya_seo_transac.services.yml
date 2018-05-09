@@ -5,6 +5,7 @@ services:
       - '@current_route_match'
       - '@config.factory'
       - '@acq_cart.cart_storage'
+      - '@alshaya_acm.cart_helper'
       - '@current_user'
       - '@request_stack'
       - '@entity_type.manager'

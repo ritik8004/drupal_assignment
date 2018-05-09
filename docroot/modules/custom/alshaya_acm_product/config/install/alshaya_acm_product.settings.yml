@@ -1,3 +1,4 @@
+show_cart_form_in_related: 0
 related_items_size: 12
 list_view_items_per_page: 30
 pdp_gallery_pager_limit: 5
@@ -10,3 +11,4 @@ not_buyable_help_text:
   format: rich_text
   value: '<p>Please visit a <a href=":find_store">Mothercare store</a> or contact customer services for support on 182-12-12.</p>'
 langcode: en
+image_slider_position_pdp: 'left'

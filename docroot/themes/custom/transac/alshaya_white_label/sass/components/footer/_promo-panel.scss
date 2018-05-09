@@ -1,0 +1,258 @@
+.promo__panel {
+  overflow: hidden;
+  text-align: center;
+
+  @include breakpoint($upto-tablet) {
+    background-color: $promo_panel_mobile_bg;
+    padding: 0 0.5rem;
+  }
+
+  .field--name-field-paragraph-content {
+    display: none;
+
+    .field--name-field-paragraph-content {
+      display: block;
+      background-color: $promo_panel_content_bg;
+      overflow: hidden;
+      padding: 3rem 2.5rem;
+      max-width: 80.25rem;
+      margin: auto;
+
+      @include breakpoint($upto-tablet) {
+        display: none !important;
+      }
+    }
+  }
+
+  .promo-panel-label {
+    text-transform: uppercase;
+    font-weight: normal;
+    color: $promo_panel_mobile_label;
+    font-size: 0.875rem;
+    padding: 1.05rem;
+    padding-bottom: 0.9rem;
+    text-align: center;
+    margin: 0;
+    border-bottom: 1px solid $promo_panel_border;
+
+    @include breakpoint($tablet) {
+      position: fixed;
+      bottom: -1px;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      z-index: 10;
+      color: $promo_panel_label;
+      font-size: 0.875rem;
+      padding: 1rem;
+      padding-bottom: 0.8rem;
+      display: inline-block;
+      border-radius: 0.25rem 0.25rem 0 0;
+      background-color: $promo_panel_label_bg;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+      border: 1px solid $promo_panel_border;
+      cursor: pointer;
+
+      @include icon(price-tag, before) {
+        color: $promo_panel_label_icon;
+        display: inline-block;
+        margin-#{$right}: 0.5rem;
+        font-size: 1.25rem;
+        vertical-align: middle;
+
+        html[lang=ar] & {
+          transform: rotate(270deg);
+          margin-left: 0.625rem;
+        }
+      }
+    }
+
+    a {
+      color: $promo_panel_mobile_label;
+      text-decoration: none;
+      display: block;
+
+      @include breakpoint($tablet) {
+        display: inline-block;
+        color: $promo_panel_label;
+      }
+    }
+  }
+
+  .label-not-fixed {
+    @include breakpoint($tablet) {
+      position: static;
+      transform: none;
+    }
+  }
+}
+
+.active-promo-panel {
+  @include breakpoint($tablet) {
+    position: fixed;
+    bottom: 0;
+    z-index: 10;
+    width: 100%;
+  }
+
+  .promo-panel-label {
+    @include breakpoint($tablet) {
+      position: static;
+      transform: none;
+      border: 1px solid transparent;
+      box-shadow: none;
+    }
+  }
+}
+
+.region__post-content {
+  position: relative;
+}
+
+.promo-static {
+  &.active-offer {
+    @include breakpoint($tablet) {
+      position: absolute;
+    }
+  }
+}
+
+.promo-panel-fixed {
+  &.block-promo-panel-wrapper {
+    @include breakpoint($tablet) {
+      position: fixed;
+      z-index: 10;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .promo-panel-label {
+      @include breakpoint($tablet) {
+        position: static;
+        border-bottom: 0;
+        box-shadow: none;
+        transform: none;
+      }
+    }
+  }
+}
+
+.active-promo-panel-content {
+  @include breakpoint($tablet) {
+    position: fixed;
+    height: initial;
+    width: 100%;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -10.25rem;
+      bottom: -10rem;
+      right: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 7;
+    }
+  }
+}
+
+.promo__panel,
+.block-content--block-content-promo-panel {
+  .paragraph--type--offers-bordered {
+    .field--name-field-heading,
+    .field--name-field-title,
+    .field--name-field-sub-title,
+    .field--name-field-link {
+      color: $promo_panel_content;
+      font-size: 0.875rem;
+      max-width: 80%;
+      margin: auto;
+    }
+
+    .field--name-field-banner {
+      img {
+        max-height: 11.375rem;
+        width: auto;
+      }
+    }
+
+    .field--name-field-sub-title {
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    .field--name-field-heading {
+      margin-top: 0.875rem;
+      margin-bottom: 0.875rem;
+      line-height: 1;
+    }
+
+    .field--name-field-heading,
+    .field--name-field-title,
+    .field--name-field-link {
+      text-transform: uppercase;
+    }
+
+    .field--name-field-title {
+      font-size: 1.125rem;
+      font-family: $alshaya-bold;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .field--name-field-link {
+      margin-top: 1.125rem;
+      margin-bottom: 2.25rem;
+
+      a {
+        font-family: $alshaya-bold;
+        padding: 0.6875rem 1.25rem;
+        display: inline-block;
+        border: 1px solid;
+      }
+    }
+  }
+
+  .promo-panel-label {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+  }
+
+  .c-promo-1-3__items {
+    @include breakpoint($tablet) {
+      display: flex;
+    }
+
+    .c-promo-1-3__item {
+      border: 1px solid $promo_panel_border;
+
+      @include breakpoint($tablet) {
+        float: none;
+        width: auto;
+        flex-basis: calc(33.33% - 1rem);
+      }
+    }
+  }
+}
+
+.block-content--block-content-promo-panel {
+  h3 {
+    text-align: left;
+    font-size: 1rem;
+    border-bottom: 1px solid $promo_panel_border;
+  }
+
+  .paragraph--type--offers-bordered {
+    .field--name-field-link {
+      a {
+        font-size: 0.875rem;
+        line-height: 1;
+        color: $promo_panel_content;
+        position: static;
+      }
+    }
+  }
+}

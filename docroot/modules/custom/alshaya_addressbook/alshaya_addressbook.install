@@ -5,8 +5,24 @@
  * Install file.
  */
 
+use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add mapping for AE and make V2 default and sync areas.
+ * Correct the mapping to handle locality in AE without creating issue for KW.
+ */
+function alshaya_addressbook_update_8303() {
+  alshaya_config_install_configs(['alshaya_addressbook.settings'], 'alshaya_addressbook');
+
+  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $addressbook_manager */
+  $addressbook_manager = \Drupal::service('alshaya_addressbook.manager');
+  $addressbook_manager->syncAreas();
+  $addressbook_manager->resetMagentoFormFields();
+}
 
 /**
  * Implements hook_update_N().
@@ -73,7 +89,7 @@ function alshaya_addressbook_update_8001() {
 function alshaya_addressbook_install() {
   // For all the new sites we want to use DM Version 2.
   \Drupal::configFactory()->getEditable('alshaya_addressbook.settings')
-    ->set('dm_version', DM_VERSION_2)
+    ->set('dm_version', AlshayaAddressBookManagerInterface::DM_VERSION_2)
     ->save();
 
   // Save permission of address_book for authenticated user.

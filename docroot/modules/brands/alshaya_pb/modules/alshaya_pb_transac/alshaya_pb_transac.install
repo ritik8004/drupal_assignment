@@ -34,4 +34,51 @@ function alshaya_pb_transac_install() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_api.settings')
     ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
     ->save();
+
+  // Set google map marker.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
+    alshaya_stores_finder_set_default_marker_icon('alshaya_pb_transac');
+  }
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site logo path with default name.
+  $site_logo = $active_theme->getPath() . '/logo';
+
+  // Save default site logo.
+  \Drupal::configFactory()->getEditable('alshaya_pottery_barn.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '.svg',
+      ],
+    ])
+    ->save();
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'alshaya_pottery_barn.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+      ],
+    ])
+    ->save();
+
+  // Save default logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
+    ->set('email_logo_path', $site_logo . '.png')
+    ->save();
+  // Save arabic logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
+    ->set('email_logo_path', $site_logo . '-ar.png')
+    ->save();
+
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site favicon.
+  \Drupal::configFactory()->getEditable('alshaya_pottery_barn.settings')
+    ->set('favicon', ['path' => $site_favicon . '.ico'])
+    ->save();
 }

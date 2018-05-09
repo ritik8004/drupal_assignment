@@ -1,0 +1,28 @@
+.c-sidebar-first {
+  .my-account-nav {
+    a {
+      &.active {
+        font-family: $vs-bold;
+        text-transform: none;
+      }
+    }
+  }
+}
+
+.account--dashboard {
+  .subtitle {
+    text-transform: none;
+    font-family: $vs-regular;
+    font-size: 1.125rem;
+  }
+
+  .label {
+    font-family: $vs-bold;
+    font-weight: normal;
+    font-size: 0.75rem !important;
+  }
+
+  .joinclub #block-jointheclub h3 {
+    font-family: $vs-regular;
+  }
+}
