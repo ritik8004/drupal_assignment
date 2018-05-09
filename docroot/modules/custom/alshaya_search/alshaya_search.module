@@ -460,11 +460,6 @@ function _alshaya_search_hide_children_from_parent_result(ResultInterface $resul
       _alshaya_search_hide_children_from_parent_result($child, $entities);
     }
 
-    // If we land onto an empty tid, it means the term is in index, but not in
-    // Drupal anymore.
-    if (empty($entities[$tid])) {
-      unset($children[$tid]);
-    }
     // Check if the children has the attribute set to not include in menu &
     // remove it from the list accordingly.
     elseif (($entities[$tid] instanceof TermInterface) &&

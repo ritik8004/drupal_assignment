@@ -16,7 +16,6 @@ use Drupal\field\Entity\FieldConfig;
  */
 function alshaya_acm_promotion_update_8011() {
   $configs = [
-    'field.storage.taxonomy_term.field_promotion_banner',
     'field.storage.taxonomy_term.field_promotion_banner_mobile',
     'field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile',
   ];
