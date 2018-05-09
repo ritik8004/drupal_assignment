@@ -121,7 +121,7 @@
     background: $checkout_login_btn_bg;
 
     &.tab-returning-customer {
-      background: none;
+      background: $checkout_login_returning_customer_btn_bg;
 
       span {
         color: $content_link_color;
