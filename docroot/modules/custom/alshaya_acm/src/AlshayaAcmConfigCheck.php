@@ -190,6 +190,11 @@ class AlshayaAcmConfigCheck {
     $this->languageManager->getLanguageConfigOverride('ar', 'alshaya_api.settings')
       ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
       ->save();
+
+    // Reset log mode when resetting config.
+    if (function_exists('alshaya_performance_reset_log_mode')) {
+      alshaya_performance_reset_log_mode();
+    }
   }
 
   /**
