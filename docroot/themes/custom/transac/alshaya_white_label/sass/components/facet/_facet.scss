@@ -214,6 +214,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
         top: 0.5rem;
         color: $category_facet_active_icon;
         transform: translateY(-50%);
+        cursor: pointer;
       }
 
       span {
@@ -228,6 +229,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
         @include icon(chevron#{$left}, before) {
           top: 0.5rem;
+          cursor: pointer;
         }
       }
     }
