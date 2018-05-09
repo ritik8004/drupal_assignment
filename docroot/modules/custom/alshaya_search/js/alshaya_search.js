@@ -203,16 +203,14 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       });
 
       // Hide other category filter options when one of the L1 items is selected.
-      if ((($('ul[data-drupal-facet-id="category"]').children('li.facet-item--expanded')).length > 0) ||
-        ($('ul[data-drupal-facet-id="category"] > li').children('input[type=checkbox]:checked').length > 0)) {
-        $('[data-drupal-facet-id="category"]').children('li.facet-item--collapsed').hide();
+      if (($('ul[data-drupal-facet-id="category"]').children('li.facet-item--expanded')).length > 0) {
+        $('[data-drupal-facet-id="category"]').children('li:not(.facet-item--expanded)').hide();
       }
 
       // Hide other category filter options when one of the L1 items is
       // selected for the PLP category facet.
-      if ((($('ul[data-drupal-facet-id="plp_category_facet"]').children('li.facet-item--expanded')).length > 0) ||
-      ($('ul[data-drupal-facet-id="plp_category_facet"] > li').children('input[type=checkbox]:checked').length > 0)) {
-        $('[data-drupal-facet-id="plp_category_facet"]').children('li:not(.facet-item--collapsed)').hide();
+      if (($('ul[data-drupal-facet-id="plp_category_facet"]').children('li.facet-item--expanded')).length > 0) {
+        $('[data-drupal-facet-id="plp_category_facet"]').children('li:not(.facet-item--expanded)').hide();
       }
 
       // Doing this for ajax complete as dom/element we require are not available earlier.
