@@ -66,11 +66,11 @@ dom_id ? 'js-view-dom-id-' ~ dom_id,
   {% set count_rows = rows[0]['#rows'] | length %}
 
   {% if rows and count_rows > row_limit %}
-    <div class="owl-carousel">
+    <div class="owl-carousel {{ show_cart_form_class }}">
       {{ rows }}
     </div>
   {% elseif rows and count_rows <= row_limit %}
-    <div class="no-carousel">
+    <div class="no-carousel {{ show_cart_form_class }}">
       {{ rows }}
     </div>
   {% elseif empty %}
