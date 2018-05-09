@@ -1119,9 +1119,13 @@ class AlshayaGtmManager {
               }
               else {
                 $delivery_area = $this->addressBookManager->getCartShippingAreaValue($cart);
+                $delivery_city = $this->addressBookManager->getCartShippingAreaParentValue($cart);
 
                 if ($delivery_area) {
                   $page_dl_attributes['deliveryArea'] = $delivery_area;
+                }
+                if ($delivery_city) {
+                  $page_dl_attributes['deliveryCity'] = $delivery_city;
                 }
               }
 
@@ -1163,6 +1167,8 @@ class AlshayaGtmManager {
         }
 
         $deliveryArea = $this->addressBookManager->getAddressShippingAreaValue($order['shipping']['address']);
+        $address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['shipping']['address']);
+        $deliveryCity = $this->addressBookManager->getAddressShippingAreaParentValue($address, $order['shipping']['address']);
 
         foreach ($orderItems as $orderItem) {
           $productSKU[] = $orderItem['sku'];
@@ -1202,6 +1208,9 @@ class AlshayaGtmManager {
 
         if ($deliveryArea) {
           $page_dl_attributes['deliveryArea'] = $deliveryArea;
+        }
+        if ($deliveryCity) {
+          $page_dl_attributes['deliveryCity'] = $deliveryCity;
         }
 
         break;
