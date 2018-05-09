@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\alshaya_performance\Logger\AlshayaPerformanceSysLog;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Site\Settings;
@@ -25,9 +26,12 @@ function alshaya_performance_node_presave(EntityInterface $entity) {
 function alshaya_performance_reset_log_mode() {
   $mode = Settings::get('alshaya_performance_log_mode');
 
-  if ($mode) {
-    $config = \Drupal::configFactory()->getEditable('alshaya_performance.settings');
-    $config->set('mode', $mode);
-    $config->save();
+  // By default set it to production mode.
+  if (empty($mode)) {
+    $mode = AlshayaPerformanceSysLog::ALSHAYA_PERFORMANCE_PRODUCTION_MODE;
   }
+
+  $config = \Drupal::configFactory()->getEditable('alshaya_performance.settings');
+  $config->set('mode', $mode);
+  $config->save();
 }

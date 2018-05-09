@@ -20,8 +20,6 @@ elseif (getenv('TRAVIS')) {
 // Set the env in settings to allow re-using in custom code.
 $settings['env'] = $env;
 
-$settings['alshaya_performance_log_mode'] = 'developer';
-
 // Configure your hash salt here.
 // TODO: Security.
 // $settings['hash_salt'] = '';
@@ -107,6 +105,9 @@ switch ($env) {
     $config['simple_oauth.settings']['private_key'] = $settings['alshaya_acm_soauth_private_key'];
     $config['simple_oauth.settings']['public_key'] = $settings['alshaya_acm_soauth_public_key'];
 
+    // Log debug messages too.
+    $settings['alshaya_performance_log_mode'] = 'developer';
+
   // Please note there is no "break" at the end of "local" case so "travis"
   // settings are applied both on "local" and on "travis" environments.
   case 'travis':
@@ -123,12 +124,11 @@ switch ($env) {
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';
+
+    // Log debug messages too.
+    $settings['alshaya_performance_log_mode'] = 'developer';
+
     // We only debug on ACSF dev/test environments.
     $config['acq_commerce.conductor']['debug'] = TRUE;
-    break;
-
-  case '01update':
-  case '01live':
-    $settings['alshaya_performance_log_mode'] = 'production';
     break;
 }
