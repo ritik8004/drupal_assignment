@@ -127,7 +127,6 @@
     .filter--mobile {
       @include breakpoint($only-mobile) {
         position: relative;
-        z-index: 10;
       }
 
       @include breakpoint($tablet) {
