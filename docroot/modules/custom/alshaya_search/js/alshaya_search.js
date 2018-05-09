@@ -315,6 +315,8 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
               // Remove checkbox for the selected L2 items.
               $(this).children('input').remove();
+              // Adding class for active L2 items.
+              $(this).addClass('active-item');
 
               // Attach a click listener to the L2 items to make it act like
               // accordion.
