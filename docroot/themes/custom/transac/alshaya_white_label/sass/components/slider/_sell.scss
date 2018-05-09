@@ -367,6 +367,10 @@
   width: 100%;
   min-height: 22rem;
 
+  &.no-cart-form {
+    min-height: 12rem;
+  }
+
   @include breakpoint($tablet) {
     display: none;
   }
