@@ -20,6 +20,8 @@ elseif (getenv('TRAVIS')) {
 // Set the env in settings to allow re-using in custom code.
 $settings['env'] = $env;
 
+$settings['alshaya_performance_log_mode'] = 'developer';
+
 // Configure your hash salt here.
 // TODO: Security.
 // $settings['hash_salt'] = '';
@@ -123,5 +125,10 @@ switch ($env) {
     $settings['additional_modules'][] = 'purge_ui';
     // We only debug on ACSF dev/test environments.
     $config['acq_commerce.conductor']['debug'] = TRUE;
+    break;
+
+  case '01update':
+  case '01live':
+    $settings['alshaya_performance_log_mode'] = 'production';
     break;
 }
