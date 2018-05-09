@@ -186,9 +186,12 @@ function alshaya_white_label_preprocess_block(&$variables) {
  */
 function alshaya_white_label_theme_suggestions_views_view_alter(array &$suggestions, &$variables) {
   $config = \Drupal::config('alshaya_acm_product.carousel_settings');
+  $product_settings = \Drupal::config('alshaya_acm_product.settings');
+  $class = $product_settings->get('show_cart_form_in_related') == 0 ? 'no-cart-form' : '';
   if ($variables['view']->current_display == "block_product_slider") {
     $suggestions[] = 'views_view__product_slider';
     $variables['row_limit'] = $config->get('carousel_recommended_product_limit');
+    $variables['show_cart_form_class'] = $class;
   }
 
   if ($variables['view']->current_display == "category_product_slider") {
