@@ -338,7 +338,16 @@ ul[data-drupal-facet-id="category"] {
         span {
           font-weight: bold;
           color: $category_facet_active_text;
-          margin-#{$left}: 0;
+        }
+      }
+    }
+  }
+
+  > li {
+    > ul {
+      > li {
+        > ul {
+          margin-#{$left}: 1.5rem !important;
         }
       }
     }
