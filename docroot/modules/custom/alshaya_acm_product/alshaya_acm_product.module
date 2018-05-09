@@ -613,6 +613,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // Do not show add to cart form for category carousel.
         // Show add to cart form only if config says so.
         // Show add to cart form if product is buyable.
+        $class = $product_settings->get('show_cart_form_in_related') == 0 ? 'no-cart-form' : '';
+        $build['show_cart_form']['#markup'] = $class;
+
         if ($view_mode != 'product_category_carousel'
           && $product_settings->get('show_cart_form_in_related')
           && alshaya_acm_product_is_buyable($sku_entity)) {
