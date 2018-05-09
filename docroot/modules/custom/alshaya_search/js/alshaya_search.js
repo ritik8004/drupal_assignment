@@ -203,23 +203,25 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       });
 
       // Hide other category filter options when one of the L1 items is selected.
-      if ((jQuery('ul[data-drupal-facet-id="category"]').children('li.facet-item--expanded')).length > 0) {
-        jQuery('[data-drupal-facet-id="category"]').children('li:not(.facet-item--expanded)').hide();
+      if ((($('ul[data-drupal-facet-id="category"]').children('li.facet-item--expanded')).length > 0) ||
+        ($('ul[data-drupal-facet-id="category"] > li').children('input[type=checkbox]:checked').length > 0)) {
+        $('[data-drupal-facet-id="category"]').children('li.facet-item--collapsed').hide();
       }
 
       // Hide other category filter options when one of the L1 items is
       // selected for the PLP category facet.
-      if ((jQuery('ul[data-drupal-facet-id="plp_category_facet"]').children('li.facet-item--expanded')).length > 0) {
-        jQuery('[data-drupal-facet-id="plp_category_facet"]').children('li:not(.facet-item--expanded)').hide();
+      if ((($('ul[data-drupal-facet-id="plp_category_facet"]').children('li.facet-item--expanded')).length > 0) ||
+      ($('ul[data-drupal-facet-id="plp_category_facet"] > li').children('input[type=checkbox]:checked').length > 0)) {
+        $('[data-drupal-facet-id="plp_category_facet"]').children('li:not(.facet-item--collapsed)').hide();
       }
 
       // Doing this for ajax complete as dom/element we require are not available earlier.
       $(document).ajaxComplete(function (event, xhr, settings) {
         // On PLP page, we assuming that if there is no expanded and collapsed class available,
         // it means we at the leaf nodes level and thus we adding class to show for the checkboxes.
-        if (jQuery('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--collapsed').length === 0
-        && jQuery('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--expanded').length === 0) {
-          jQuery('ul[data-drupal-facet-id="plp_category_facet"] li').each(function () {
+        if ($('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--collapsed').length === 0
+        && $('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--expanded').length === 0) {
+          $('ul[data-drupal-facet-id="plp_category_facet"] li').each(function () {
             $(this).addClass('leaf-li');
           });
         }
