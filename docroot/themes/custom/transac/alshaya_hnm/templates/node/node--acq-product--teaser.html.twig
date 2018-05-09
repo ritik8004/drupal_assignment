@@ -35,7 +35,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     </div>
   {% endif %}
 
-  <table class="mobile--only--sell">
+  <table class="mobile--only--sell {{ content.show_cart_form }}">
     <tr>
       <td class="sell--image">
         {% if content.image is not null %}

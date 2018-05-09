@@ -421,7 +421,7 @@
   #product-image-gallery,
   #lightSlider {
     height: auto;
-    width: 100%;
+    width: 100% !important;
 
     .slick-slide {
       width: auto !important;

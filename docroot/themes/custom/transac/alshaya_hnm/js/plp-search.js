@@ -84,6 +84,7 @@
        */
       function closeFilterView() {
         $('body').toggleClass('filter-open-no-scroll');
+        $('#backtotop').removeClass('facet-active--hide');
         $('.c-facet__blocks__wrapper--mobile .c-facet__blocks').hide();
         $('.show-overlay').each(function () {
           $(this).removeClass('show-overlay');
@@ -253,6 +254,7 @@
               .toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
             $('body').toggleClass('filter-open-no-scroll');
+            $('#backtotop').addClass('facet-active--hide');
             facetLabel.parent().siblings('.view-filters').toggleClass('low-zindex');
             facetBlock.toggle();
           });
