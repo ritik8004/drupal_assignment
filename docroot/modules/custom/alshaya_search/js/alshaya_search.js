@@ -214,7 +214,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
       // Add Class to leaf items on page load.
       Drupal.addLeafClassToPlpLeafItems();
-
     }
   };
 
