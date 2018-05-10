@@ -367,6 +367,17 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         $this->results['created']++;
       }
 
+      // Get status of category.
+      $status = (int) $category['is_active'];
+
+      // Get the parent's status if parent available.
+      // By default we use TRUE.
+      $parent_status = $parent ? $parent->get('field_commerce_status')->getString() : TRUE;
+
+      // We set the status to true only if both parent and child are enabled.
+      $status = $status && $parent_status;
+      $term->get('field_commerce_status')->setValue((int) $status);
+
       $term->get('field_category_include_menu')->setValue($category['in_menu']);
       $term->get('description')->setValue($category['description']);
       $term->setFormat('rich_text');
