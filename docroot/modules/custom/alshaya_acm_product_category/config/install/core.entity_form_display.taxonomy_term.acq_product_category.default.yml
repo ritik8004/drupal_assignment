@@ -113,7 +113,8 @@ content:
       size: '10'
       placeholder: ''
       control: hue
-      format: hex
+      format: rgb
+      opacity: 1
       swatches: ''
       position: 'bottom left'
       theme: default
@@ -124,7 +125,6 @@ content:
       show_speed: 100
       hide_speed: 100
       keywords: ''
-      opacity: 0
       inline: 0
     third_party_settings: {  }
     type: jquery_minicolors_widget
