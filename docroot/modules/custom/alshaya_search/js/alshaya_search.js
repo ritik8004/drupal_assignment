@@ -207,12 +207,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         $('[data-drupal-facet-id="category"]').children('li:not(.facet-item--expanded)').hide();
       }
 
-      // Hide other category filter options when one of the L1 items is
-      // selected for the PLP category facet.
-      if (($('ul[data-drupal-facet-id="plp_category_facet"]').children('li.facet-item--expanded')).length > 0) {
-        $('[data-drupal-facet-id="plp_category_facet"]').children('li:not(.facet-item--expanded)').hide();
-      }
-
       // Doing this for ajax complete as dom/element we require are not available earlier.
       $(document).ajaxComplete(function (event, xhr, settings) {
         // On PLP page, we assuming that if there is no expanded and collapsed class available,
@@ -299,7 +293,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.behaviors.convertL2ToAccordion = {
     attach: function (context, settings) {
-      $('[data-drupal-facet-id="category"] .facet-item').each(function () {
+      $('[data-drupal-facet-id="category"] .facet-item, [data-drupal-facet-id="plp_category_facet"] .facet-item').each(function () {
         if ($(this).children('a').length > 0) {
           // Extract query string from the relative url string.
           var facet_url_query_string = ($(this).children('a').attr('href')).match(/(\?.*)/);

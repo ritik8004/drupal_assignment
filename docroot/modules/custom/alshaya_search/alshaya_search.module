@@ -513,11 +513,10 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     }
   }
 
-  // Add accordion effect to selected L2 items for SRP.
-  if (($facet->getUseHierarchy()) &&
-    ($facet_source_id == 'search_api:views_page__search__page')) {
+  // Add accordion effect to selected L2 items.
+  if ($facet->getUseHierarchy()) {
     // Variable to hold the parent id selected.
-    $root_parent_id = '';
+    static $root_parent_id = '';
     $result = $context['result'];
 
     // Hide root parent id post selection from all the facet items. We don't
