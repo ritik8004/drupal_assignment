@@ -8,7 +8,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.sell = {
+  Drupal.behaviors.autoSizeTextarea = {
     attach: function (context, settings) {
       var textarea = $('textarea');
       var textareaSuffix = $('.form-type-textarea .field-suffix');
