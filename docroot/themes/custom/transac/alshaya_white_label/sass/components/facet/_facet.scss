@@ -205,10 +205,6 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
   > .facet-item--expanded {
     > label {
-      font-size: 1.875rem;
-      color: $category_facet_active_icon;
-      cursor: pointer;
-
       span {
         font-weight: bold;
         color: $category_facet_active_text;
@@ -253,6 +249,8 @@ ul[data-drupal-facet-id=category] {
         font-size: 1.875rem;
         top: 0.5rem;
         transform: translateY(-50%);
+        color: $category_facet_active_icon;
+        cursor: pointer;
       }
     }
   }

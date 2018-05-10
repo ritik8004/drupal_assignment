@@ -203,9 +203,24 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       });
 
       // Hide other category filter options when one of the L1 items is selected.
-      if (($('ul[data-drupal-facet-id="category"]').children('li.facet-item--expanded')).length > 0) {
-        $('[data-drupal-facet-id="category"]').children('li:not(.facet-item--expanded)').hide();
+      if ($('ul[data-drupal-facet-id="category"]').find('input[checked="checked"]').length > 0) {
+        $('ul[data-drupal-facet-id="category"]').children('li').each(function() {
+          if ($(this).hasClass('facet-item--expanded') ||
+            ($(this).children('input[checked="checked"]').length > 0)) {
+            return;
+          }
+          else {
+            $(this).hide();
+          }
+        });
       }
+
+      // Append active-item class to L2 active items in facet category list on SRP.
+      $('ul[data-drupal-facet-id="category"] > li > ul > li > a').each(function() {
+        if ($(this).hasClass('is-active')) {
+          $(this).parent('li').addClass('active-item');
+        }
+      });
 
       // Doing this for ajax complete as dom/element we require are not available earlier.
       $(document).ajaxComplete(function (event, xhr, settings) {
@@ -315,8 +330,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
               // Remove checkbox for the selected L2 items.
               $(this).children('input').remove();
-              // Adding class for active L2 items.
-              $(this).addClass('active-item');
 
               // Attach a click listener to the L2 items to make it act like
               // accordion.
