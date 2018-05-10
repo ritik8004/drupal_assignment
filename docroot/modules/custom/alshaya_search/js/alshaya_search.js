@@ -209,16 +209,23 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
       // Doing this for ajax complete as dom/element we require are not available earlier.
       $(document).ajaxComplete(function (event, xhr, settings) {
-        // On PLP page, we assuming that if there is no expanded and collapsed class available,
-        // it means we at the leaf nodes level and thus we adding class to show for the checkboxes.
-        if ($('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--collapsed').length === 0
-        && $('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--expanded').length === 0) {
-          $('ul[data-drupal-facet-id="plp_category_facet"] li').each(function () {
-            $(this).addClass('leaf-li');
-          });
-        }
+        Drupal.addLeafClassToPlpLeafItems();
       });
 
+      // Add Class to leaf items on page load.
+      Drupal.addLeafClassToPlpLeafItems();
+
+    }
+  };
+
+  Drupal.addLeafClassToPlpLeafItems = function() {
+    // On PLP page, we assuming that if there is no expanded and collapsed class available,
+    // it means we at the leaf nodes level and thus we adding class to show for the checkboxes.
+    if ($('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--collapsed').length === 0
+      && $('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--expanded').length === 0) {
+      $('ul[data-drupal-facet-id="plp_category_facet"] li').each(function () {
+        $(this).addClass('leaf-li');
+      });
     }
   };
 
