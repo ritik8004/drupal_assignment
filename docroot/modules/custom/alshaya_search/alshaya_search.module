@@ -462,8 +462,9 @@ function _alshaya_search_hide_children_from_parent_result(ResultInterface $resul
 
     // Check if the children has the attribute set to not include in menu &
     // remove it from the list accordingly.
-    elseif (($entities[$tid] instanceof TermInterface) &&
-      ($entities[$tid]->get('field_category_include_menu')->getString() != 1)) {
+    if ((isset($entities[$tid])) &&
+      (($entities[$tid] instanceof TermInterface) &&
+      ($entities[$tid]->get('field_category_include_menu')->getString() != 1))) {
       unset($children[$tid]);
     }
   }
