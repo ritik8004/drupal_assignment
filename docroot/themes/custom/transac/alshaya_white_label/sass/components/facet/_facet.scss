@@ -191,6 +191,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
           span {
             font-weight: bold;
+            color: $category_facet_active_text;
           }
         }
       }
