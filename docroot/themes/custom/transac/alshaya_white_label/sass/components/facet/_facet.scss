@@ -194,12 +194,6 @@ ul[data-drupal-facet-id=plp_category_facet] {
           }
         }
       }
-
-      > label {
-        span {
-          font-weight: normal;
-        }
-      }
     }
   }
 
@@ -239,6 +233,16 @@ ul[data-drupal-facet-id=plp_category_facet] {
 }
 
 ul[data-drupal-facet-id=category] {
+  .facet-item--expanded {
+    &.facet-item--active-trail {
+      > label {
+        span {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+
   > .facet-item--expanded {
     margin-#{$left}: 1rem;
 
