@@ -449,6 +449,14 @@ header {
       }
     }
 
+    .mobile--menu {
+      padding-#{$right}: 0;
+
+      &::before {
+        margin-#{$right}: 0;
+      }
+    }
+
     .mobile--search {
       float: $right;
       margin-#{$right}: 1.0625rem;
