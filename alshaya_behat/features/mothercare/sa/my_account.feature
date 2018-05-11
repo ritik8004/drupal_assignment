@@ -191,7 +191,7 @@ Feature: Test the My account section for authenticated user
     I should see the options to change my password
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
     And I wait for the page to load
-    Then I should see "Change Password"
+    Then I should see "change password"
     Then I should see "current password"
     And I should see "new password"
     Then I should see the button "change password"

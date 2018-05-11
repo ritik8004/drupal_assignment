@@ -12,6 +12,24 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Update settings for the carousel limit to show carousel every-time.
+ */
+function alshaya_acm_product_update_8015() {
+  alshaya_config_install_configs(['alshaya_acm_product.carousel_settings'], 'alshaya_acm_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new setting 'show_cart_form_in_related'.
+ */
+function alshaya_acm_product_update_8014() {
+  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding settings for the carousel limit to show items.
  */
 function alshaya_acm_product_update_8013() {

@@ -87,8 +87,10 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     $blocks = $this->blockStorage->loadByProperties(['theme' => $current_theme, 'region' => 'post_content']);
 
     $options = [];
-    foreach ($blocks as $id => $block) {
-      $options[$id] = $block->label();
+    if (!empty($blocks)) {
+      foreach ($blocks as $id => $block) {
+        $options[$id] = $block->label();
+      }
     }
 
     $promo_panel_blocks = !empty($config->get('promo_panel_blocks')) ? $config->get('promo_panel_blocks') : [];
@@ -125,6 +127,9 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     }
 
     foreach ($default_blocks as $id) {
+      if (!isset($blocks[$id])) {
+        continue;
+      }
       $form['page_urls'][$id] = [
         '#type' => 'textfield',
         '#title' => $this->t('Page url for @id block', ['@id' => $blocks[$id]->label()]),

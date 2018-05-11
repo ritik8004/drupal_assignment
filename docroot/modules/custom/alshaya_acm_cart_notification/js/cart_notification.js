@@ -67,7 +67,7 @@
 
         setTimeout(function () {
           $('#cart_notification').fadeOut();
-        }, 10000);
+        }, drupalSettings.addToCartNotificationTime * 1000);
       };
 
       $.fn.cartGenericScroll = function (selector) {

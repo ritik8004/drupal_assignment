@@ -317,6 +317,7 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if (($entity->bundle() == 'acq_product')) {
     $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+    $product_settings = \Drupal::config('alshaya_acm_product.settings');
 
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
@@ -609,35 +610,42 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
-        // Not show add to cart for category carousel.
-        if ($view_mode != 'product_category_carousel') {
-          if (alshaya_acm_product_is_buyable($sku_entity)) {
-            $build['sku_id'] = [
-              '#markup' => $sku_entity->id(),
-            ];
+        // Do not show add to cart form for category carousel.
+        // Show add to cart form only if config says so.
+        // Show add to cart form if product is buyable.
+        $class = $product_settings->get('show_cart_form_in_related') == 0 ? 'no-cart-form' : '';
+        $build['show_cart_form']['#markup'] = $class;
 
-            $build['mobile_add_to_cart_form'] = [
-              '#type' => 'link',
-              '#title' => '',
-              '#url' => Url::fromRoute('alshaya_acm_product.get_cart_form', [
-                'view_mode' => 'teaser',
-                'entity' => $sku_entity->id(),
-              ]),
-              '#attributes' => [
-                'class' => [
-                  'use-ajax',
-                  'add-to-cart-form-placeholder-teaser',
-                ],
+        if ($view_mode != 'product_category_carousel'
+          && $product_settings->get('show_cart_form_in_related')
+          && alshaya_acm_product_is_buyable($sku_entity)) {
+
+          $build['sku_id'] = [
+            '#markup' => $sku_entity->id(),
+          ];
+
+          $build['mobile_add_to_cart_form'] = [
+            '#type' => 'link',
+            '#title' => '',
+            '#url' => Url::fromRoute('alshaya_acm_product.get_cart_form', [
+              'view_mode' => 'teaser',
+              'entity' => $sku_entity->id(),
+            ]),
+            '#attributes' => [
+              'class' => [
+                'use-ajax',
+                'add-to-cart-form-placeholder-teaser',
               ],
+            ],
+          ];
+
+          // In push mode check if product is out of stock here itself.
+          if ($stock_mode != 'pull' && !alshaya_acm_get_product_stock($sku_entity)) {
+            $build['stock_placeholder'] = [
+              '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
             ];
 
-            if ($stock_mode != 'pull' && !alshaya_acm_get_product_stock($sku_entity)) {
-              $build['stock_placeholder'] = [
-                '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
-              ];
-
-              $build['mobile_add_to_cart_form'] = $build['stock_placeholder'];
-            }
+            $build['mobile_add_to_cart_form'] = $build['stock_placeholder'];
           }
         }
       }
@@ -1100,10 +1108,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   }
   else {
     $form['quantity'] = [
-      '#markup' => '<div class="quantity out-of-stock">' . t('Quantity') . '<div><span class="dash">-</span><span class="arrow"></span></div></div>',
+      '#title' => '',
+      '#markup' => '',
     ];
     $form['add_to_cart'] = [
-      '#markup' => '<div class="add-to-cart out-of-stock">' . t('Out of stock') . '</div>',
+      '#markup' => '<span class="out-of-stock">' . t('out of stock') . '</span>',
     ];
   }
 }

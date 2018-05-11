@@ -572,6 +572,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     }
   }
 
+
   /**
    * @Given /^I check the "([^"]*)" radio button with "([^"]*)" value$/
    */
@@ -599,6 +600,29 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
             $this->iSelectAnElementHavingClass('.cc-action');
         } else {
             $this->iSelectFirstAutocomplete('Shuwaikh', 'edit-store-location');
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iWaitSeconds('5');
+            $select_store = $page->findLink('select this store');
+            if ($select_store->isVisible()) {
+                $select_store->click();
+            }
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iSelectAnElementHavingClass('.cc-action');
+            $this->iWaitForThePageToLoad();
+        }
+    }
+
+    /**
+     * @Given I select a store for Saudi arabia
+     */
+    public function iSelectAStoreForSaudiArabia()
+    {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('change store');
+        if ($address_button !== null && $address_button->isVisible()) {
+            $this->iSelectAnElementHavingClass('.cc-action');
+        } else {
+            $this->iSelectFirstAutocomplete('King Fahd Road, Jeddah Saudi Arabia', 'edit-store-location');
             $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
             $this->iWaitSeconds('5');
             $select_store = $page->findLink('select this store');
@@ -1786,6 +1810,20 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     }
 
     /**
+     * @When /^I enter a location in saudi arabia "([^"]*)"$/
+     */
+    public function iEnterALocationInSaudiArabia($css_location)
+    {
+        $page = $this->getSession()->getPage();
+        $change_link = $page->find('css', '.change-location-link');
+        if ($change_link !== null && $change_link->isVisible()) {
+            $change_link->click();
+
+        }
+        $this->iSelectFirstAutocomplete('King Fahd Road, Jeddah Saudi Arabia', $css_location);
+    }
+
+    /**
      * @Given /^I select a product in stock$/
      */
     public function iSelectAProductInStock() {
@@ -1835,5 +1873,29 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
             $this->iWaitForThePageToLoad();
         }
       }
+
+
+    /**
+     * @When /^I select a store on arabic for SA$/
+     */
+    public function iSelectAStoreOnArabicForSA()
+    {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('تغيير المحل');
+        if ($address_button !== null && $address_button->isVisible()) {
+            $this->iSelectAnElementHavingClass('.cc-action');
+        } else {
+            $this->iSelectFirstAutocomplete('King Fahd Road, Jeddah Saudi Arabia', 'edit-store-location');
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iWaitSeconds('5');
+            $select_store = $page->findLink('اختر هذا المحل');
+            if ($select_store->isVisible()) {
+                $select_store->click();
+            }
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iSelectAnElementHavingClass('.cc-action');
+            $this->iWaitForThePageToLoad();
+        }
+    }
 
 }

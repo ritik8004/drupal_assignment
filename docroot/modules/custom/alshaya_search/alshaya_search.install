@@ -10,12 +10,62 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Updating category facet configs.
+ */
+function alshaya_search_update_8015() {
+  alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
+  alshaya_config_install_configs(['facets.facet.plp_category_facet'], 'alshaya_product');
+  alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+  alshaya_config_install_configs(['facets_summary.facets_summary.filter_bar_plp'], 'alshaya_product', 'optional');
+  alshaya_config_install_configs(['facets_summary.facets_summary.filter_bar'], 'alshaya_search');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change sort order for facets to raw value.
+ */
+function alshaya_search_update_8014() {
+  $facets_config_promotion = [
+    'facets.facet.category_promotion',
+    'facets.facet.promotion_brand_facet',
+    'facets.facet.promotion_collection_facet',
+    'facets.facet.promotion_color_facet',
+    'facets.facet.promotion_size_facet',
+  ];
+  alshaya_config_install_configs($facets_config_promotion, 'alshaya_acm_promotion', 'optional');
+
+  $facets_config_alshaya_product = [
+    'facets.facet.plp_category_facet',
+    'facets.facet.skus_sku_reference_brand',
+    'facets.facet.skus_sku_reference_collection',
+    'facets.facet.skus_sku_reference_color',
+    'facets.facet.skus_sku_reference_size',
+  ];
+
+  alshaya_config_install_configs($facets_config_alshaya_product, 'alshaya_product');
+
+  $facets_config_alshaya_search = [
+    'facets.facet.brand',
+    'facets.facet.category',
+    'facets.facet.collection',
+    'facets.facet.color',
+    'facets.facet.size',
+  ];
+  alshaya_config_install_configs($facets_config_alshaya_search, 'alshaya_search');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Expand only one category at a time.
  * Revert hide taxonomy term from menu processor for category facets.
  */
 function alshaya_search_update_8013() {
   alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
   alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
 }
 
 /**
