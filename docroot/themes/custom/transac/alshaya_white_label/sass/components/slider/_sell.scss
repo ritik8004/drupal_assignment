@@ -103,27 +103,16 @@
     }
 
     .owl-dot {
-      width: 2.8125rem;
-      height: 0.3125rem;
-      border: 0;
-      border-radius: 0.25rem;
-      color: $sell_owl_dots;
-      display: table-cell;
-      margin: 0;
       position: relative;
       z-index: 1;
       top: 0;
-    }
-
-    &::before {
-      content: "";
-      background: $sell_owl_dots_bg;
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 2px;
-      top: 50%;
-      transform: translateY(-50%);
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin: 10px;
+      border-radius: 100%;
+      color: $hp_slider_dots;
+      border: 1px solid currentColor;
     }
   }
 
@@ -378,6 +367,9 @@
   .sell--image {
     @include breakpoint($only-mobile) {
       padding: 0.3125rem;
+      min-height: 10rem;
+      width: 100%;
+      display: block;
     }
   }
 
