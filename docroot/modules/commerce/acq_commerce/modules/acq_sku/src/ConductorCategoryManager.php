@@ -8,6 +8,7 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_commerce\Conductor\ClientFactory;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides a service for category data to taxonomy synchronization.
@@ -296,6 +297,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         }
       } while (!$lock_acquired);
 
+      // Get current language translation if available.
+      if ($parent instanceof TermInterface && $parent->hasTranslation($langcode)) {
+        $parent = $parent->getTranslation($langcode);
+      }
 
       $parent_data = ($parent) ? [$parent->id()] : [0];
       $position = (isset($category['position'])) ? (int) $category['position'] : 1;

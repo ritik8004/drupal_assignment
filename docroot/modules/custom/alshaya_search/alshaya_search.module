@@ -384,6 +384,9 @@ function alshaya_search_alshaya_profile_installed_final_task() {
  * Implements hook_alshaya_facet_results_alter().
  */
 function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
+  // Current interface langcode.
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
   $ids = array_keys($results);
 
   // List of term ids that need to be hidden based on its parent's not
@@ -399,9 +402,15 @@ function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
   // Remove all disabled terms.
   foreach ($results as $tid => $result) {
     $term = isset($entities[$tid]) ? $entities[$tid] : NULL;
-    if ($term instanceof TermInterface
-      && !$term->get('field_commerce_status')->getString()) {
-      unset($results[$tid]);
+    if ($term instanceof TermInterface) {
+      if ($term->hasTranslation($langcode)) {
+        $entities[$tid] = $term->getTranslation($langcode);
+        $term = $entities[$tid];
+      }
+
+      if (!$term->get('field_commerce_status')->getString()) {
+        unset($results[$tid]);
+      }
     }
   }
 
