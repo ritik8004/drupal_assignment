@@ -462,8 +462,9 @@ function _alshaya_search_hide_children_from_parent_result(ResultInterface $resul
 
     // Check if the children has the attribute set to not include in menu &
     // remove it from the list accordingly.
-    elseif (($entities[$tid] instanceof TermInterface) &&
-      ($entities[$tid]->get('field_category_include_menu')->getString() != 1)) {
+    if ((isset($entities[$tid])) &&
+      (($entities[$tid] instanceof TermInterface) &&
+      ($entities[$tid]->get('field_category_include_menu')->getString() != 1))) {
       unset($children[$tid]);
     }
   }
@@ -513,18 +514,34 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     }
   }
 
-  // Add accordion effect to selected L2 items for SRP.
-  if (($facet->getUseHierarchy()) &&
-    ($facet_source_id == 'search_api:views_page__search__page')) {
+  // Add accordion effect to selected L2 items.
+  if ($facet->getUseHierarchy()) {
     // Variable to hold the parent id selected.
-    $root_parent_id = '';
+    static $root_parent_id = '';
     $result = $context['result'];
+
+    // Static variable to hold the depth of parent id to be removed from facet
+    // urls.
+    static $facet_parent_term_hide_depth = 0;
+
+    // Flag to check if the current term has been processed.
+    static $facet_parent_term_depth_processed = FALSE;
+
+    // In case of PLP, hide L1 from url when on L2 & L2 parent from url when on
+    // L3. Process this only once. Fetch term object from current request & set
+    // depth for the item to be hidden from url based on its depth.
+    if (!($facet_parent_term_depth_processed) &&
+      ($facet_source_id == 'search_api:views_block__alshaya_product_list__block_1') &&
+      (($term = \Drupal::request()->attributes->get('taxonomy_term')) instanceof TermInterface)) {
+      $facet_parent_term_hide_depth = $term->get('depth_level')->getString() - 1;
+      $facet_parent_term_depth_processed = TRUE;
+    }
 
     // Hide root parent id post selection from all the facet items. We don't
     // want the user to land onto L1 expanded state via any interaction post 1st
     // expansion.
     // Find the root parent id which has been selected from FE.
-    if ((count($parent_ids) === 0) &&
+    if ((count($parent_ids) === $facet_parent_term_hide_depth) &&
       (!empty($context['active_filters'][$url_alias])) &&
       (empty($root_parent_id))) {
       $root_parent_id = $result->getRawValue();

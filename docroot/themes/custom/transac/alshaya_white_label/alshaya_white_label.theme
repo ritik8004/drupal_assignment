@@ -865,9 +865,9 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         // If there are results.
         if (!empty($results)) {
           // Prepare argument for the views.
-          $carousel_title = $paragraph->get('field_category_carousel_title')->getValue()[0]['value'];
-          $view_all_text = $paragraph->get('field_view_all_text')->getValue()[0]['value'];
-          $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getValue()[0]['value'];
+          $carousel_title = $paragraph->get('field_category_carousel_title')->getString();
+          $view_all_text = $paragraph->get('field_view_all_text')->getString();
+          $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getString();
 
           // Slice number of results that we want for the carousel.
           $results = array_slice($results, 0, $product_in_carousel);
@@ -891,14 +891,18 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             '#section_title' => $carousel_title ?: NULL,
           ];
 
-          $variables['content']['view_all'] = [
-            '#title' => $view_all_text,
-            '#type' => 'link',
-            '#attributes' => [
-              'class' => ['category-carousel-view-all'],
-            ],
-            '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
-          ];
+          if ($view_all_text) {
+            $variables['attributes']['class'][] = 'has-view-all-link';
+
+            $variables['content']['view_all'] = [
+              '#title' => $view_all_text,
+              '#type' => 'link',
+              '#attributes' => [
+                'class' => ['category-carousel-view-all'],
+              ],
+              '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+            ];
+          }
         }
       }
     }
