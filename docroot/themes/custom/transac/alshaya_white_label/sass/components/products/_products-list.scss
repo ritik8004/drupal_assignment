@@ -125,6 +125,10 @@
     }
 
     .filter--mobile {
+      @include breakpoint($only-mobile) {
+        position: relative;
+      }
+
       @include breakpoint($tablet) {
         top: 1rem;
 
@@ -144,6 +148,11 @@
 
         label {
           #{$left}: -3.5rem;
+          display: none;
+
+          @include breakpoint($desktop) {
+            display: block;
+          }
 
           html[lang=ar] & {
             #{$left}: -4.5rem;
@@ -176,6 +185,12 @@
                 float: $left;
                 margin-top: 0.4375rem;
               }
+            }
+          }
+
+          .region__sidebar-first {
+            @include breakpoint($only-mobile) {
+              margin-bottom: 4rem;
             }
           }
 

@@ -10,10 +10,12 @@ use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\facets\Result\ResultInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Solarium\Core\Query\QueryInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -403,6 +405,11 @@ function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
         $hide_tids[] = $tid;
         _alshaya_search_mark_hide_chidren($result, $hide_tids);
       }
+      // While rendering an item included in menu, check if its nested children
+      // are included. If not, remove them from child list.
+      elseif (($term = $entities[$tid]) instanceof TermInterface) {
+        _alshaya_search_hide_children_from_parent_result($result, $entities);
+      }
     }
 
     // Remove any duplicate term ids.
@@ -431,5 +438,145 @@ function _alshaya_search_mark_hide_chidren($result, &$hide_tids) {
 function _alshaya_search_hide_terms($hide_tids, &$results) {
   foreach ($hide_tids as $tid) {
     unset($results[$tid]);
+  }
+}
+
+/**
+ * Helper function to clear children items from the parent result item.
+ *
+ * @param \Drupal\facets\Result\ResultInterface $result
+ *   Result item being processed.
+ * @param array $entities
+ *   Set of taxonomy terms keyed by tids.
+ */
+function _alshaya_search_hide_children_from_parent_result(ResultInterface $result, array $entities) {
+  // Return early if we are processing a leaf term.
+  if (count($children = $result->getChildren()) == 0) {
+    return;
+  }
+
+  foreach ($children as $tid => $child) {
+    if ($child->getChildren() > 0) {
+      _alshaya_search_hide_children_from_parent_result($child, $entities);
+    }
+
+    // Check if the children has the attribute set to not include in menu &
+    // remove it from the list accordingly.
+    if ((isset($entities[$tid])) &&
+      (($entities[$tid] instanceof TermInterface) &&
+      ($entities[$tid]->get('field_category_include_menu')->getString() != 1))) {
+      unset($children[$tid]);
+    }
+  }
+
+  $result->setChildren($children);
+}
+
+/**
+ * Implements hook_facets_query_string_alter().
+ */
+function alshaya_search_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array $context) {
+  $facet = $context['facet'];
+
+  // If we processing the URL for an L1 item, remove all category
+  // filters. Clicking on an L1 item when the active filter is something
+  // else, should return back to default state.
+  $facet_source_id = $facet->getFacetSourceId();
+
+  // Filter alias.
+  $url_alias = $facet->getUrlAlias();
+
+  // Get parents of result.
+  $parent_ids = $facet->getHierarchyInstance()->getParentIds($context['result']->getRawValue());
+
+  // Only for the category facet.
+  if ($facet->getHierarchy() && !$context['result']->isActive()) {
+    // We doing this as for the PLP page, we not show the L1
+    // (current active) item.
+    $facet_count = $facet_source_id == 'search_api:views_block__alshaya_product_list__block_1' ? 1 : 0;
+
+    if ((count($parent_ids) === $facet_count) &&
+      (isset($context['active_filters'][$url_alias])) &&
+      (count($context['active_filters'][$url_alias]) > 0)) {
+      // Get child ids of result.
+      $child_ids = $facet->getHierarchyInstance()->getNestedChildIds($context['result']->getRawValue());
+      foreach ($filter_params as $key => $param) {
+        if (strpos($param, $url_alias) === 0) {
+          foreach ($child_ids as $child) {
+            // If root term has any child active, then unset it.
+            if (in_array($child, $context['active_filters'][$url_alias])) {
+              unset($filter_params[$key]);
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Add accordion effect to selected L2 items.
+  if ($facet->getUseHierarchy()) {
+    // Variable to hold the parent id selected.
+    static $root_parent_id = '';
+    $result = $context['result'];
+
+    // Static variable to hold the depth of parent id to be removed from facet
+    // urls.
+    static $facet_parent_term_hide_depth = 0;
+
+    // Flag to check if the current term has been processed.
+    static $facet_parent_term_depth_processed = FALSE;
+
+    // In case of PLP, hide L1 from url when on L2 & L2 parent from url when on
+    // L3. Process this only once. Fetch term object from current request & set
+    // depth for the item to be hidden from url based on its depth.
+    if (!($facet_parent_term_depth_processed) &&
+      ($facet_source_id == 'search_api:views_block__alshaya_product_list__block_1') &&
+      (($term = \Drupal::request()->attributes->get('taxonomy_term')) instanceof TermInterface)) {
+      $facet_parent_term_hide_depth = $term->get('depth_level')->getString() - 1;
+      $facet_parent_term_depth_processed = TRUE;
+    }
+
+    // Hide root parent id post selection from all the facet items. We don't
+    // want the user to land onto L1 expanded state via any interaction post 1st
+    // expansion.
+    // Find the root parent id which has been selected from FE.
+    if ((count($parent_ids) === $facet_parent_term_hide_depth) &&
+      (!empty($context['active_filters'][$url_alias])) &&
+      (empty($root_parent_id))) {
+      $root_parent_id = $result->getRawValue();
+    }
+
+    // Remove root parent id from list of filter params.
+    if (!empty($root_parent_id)) {
+      foreach ($filter_params as $key => $param) {
+        if ((strpos($param, $url_alias) === 0) &&
+          ($param == $url_alias . ':' . $root_parent_id)) {
+          unset($filter_params[$key]);
+        }
+      }
+    }
+
+    // Get list of child ids for the current result item.
+    $child_ids = $facet->getHierarchyInstance()->getNestedChildIds($result->getRawValue());
+
+    // Handling with an L2 whose children are active. 1 parent means the
+    // item is L2 & check if one of its children is selected.
+    if ((count($parent_ids) == 1) &&
+      (!empty($context['active_filters'][$url_alias])) &&
+      ((count(array_diff($child_ids, $context['active_filters'][$url_alias])) < count($child_ids)) ||
+        (in_array($result->getRawValue(), $context['active_filters'][$url_alias])))) {
+      $result_get_params->set('no_url_l2', TRUE);
+
+      // Get the last selected item from the list of active filters.
+      $current_filter_category = end($context['active_filters'][$url_alias]);
+
+      // Add another query parameter to L2 in case on of its children is
+      // selected.
+      if (in_array($current_filter_category, $child_ids) ||
+        ($result->getRawValue() == $current_filter_category)) {
+        $result_get_params->set('current_facet', TRUE);
+      }
+    }
   }
 }
