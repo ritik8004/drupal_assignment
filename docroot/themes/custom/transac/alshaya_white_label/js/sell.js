@@ -17,12 +17,15 @@
       var basketHR = $('.block-basket-horizontal-recommendation .owl-carousel');
 
       var options = {
+        loop: false,
+        rewind: true,
         responsiveClass: true,
-        dots: true,
+        dots: false,
         responsive: {
           0: {
-            items: 1,
+            items: 2,
             nav: false,
+            stagePadding: 25,
             mouseDrag: true
           },
           768: {
@@ -37,13 +40,15 @@
       };
 
       var optionsPdp = {
-        loop: true,
+        loop: false,
+        rewind: true,
         responsiveClass: true,
         dots: true,
         responsive: {
           0: {
-            items: 1,
+            items: 2,
             nav: false,
+            stagePadding: 25,
             mouseDrag: true
           },
           768: {
@@ -75,13 +80,15 @@
       applyRtl(relatedSell, optionsPdp);
 
       $('.owl-carousel').owlCarousel({
-        loop: true,
+        loop: false,
+        rewind: true,
         responsiveClass: true,
         dots: true,
         responsive: {
           0: {
-            items: 1,
+            items: 2,
             nav: false,
+            stagePadding: 25,
             mouseDrag: true
           },
           768: {
