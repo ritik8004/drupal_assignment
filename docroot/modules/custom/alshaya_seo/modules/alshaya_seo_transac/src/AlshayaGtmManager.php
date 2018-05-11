@@ -647,7 +647,7 @@ class AlshayaGtmManager {
           if ((!in_array('dimension8', $gtm_disabled_vars)) &&
             ($store = $this->storeFinder->getStoreFromCode($store_code))) {
             // @TODO: Check with Piyuesh on if we can use only one field now.
-            $dimension8 = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
+            $dimension8 = $this->storeFinder->getStoreAddress($store, TRUE);
           }
         }
       }
@@ -848,7 +848,7 @@ class AlshayaGtmManager {
       if ((!in_array('dimension8', $gtm_disabled_vars)) &&
         ($store = $this->storeFinder->getStoreFromCode($store_code))) {
         // @TODO: Check with Piyuesh on if we can use only one field now.
-        $dimension8 = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
+        $dimension8 = $this->storeFinder->getStoreAddress($store, TRUE);
       }
     }
 
@@ -1097,7 +1097,7 @@ class AlshayaGtmManager {
             $page_dl_attributes['cartItemsFlocktory'] = $this->formatCartFlocktory($cart_items);
           }
 
-          if (($page_type === 'checkout delivery page') || ($page_type === 'checkout payment page')) {
+          if (($page_type === 'checkout delivery page') || ($page_type === 'checkout payment page') || ($page_type === 'checkout click and collect page')) {
             if ($shipping = $cart->getShippingMethodAsString()) {
               $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($shipping);
 
@@ -1114,7 +1114,7 @@ class AlshayaGtmManager {
                 if ($store = $this->storeFinder->getStoreFromCode($cart->getExtension('store_code'))) {
                   $page_dl_attributes['storeLocation'] = $store->label();
                   // @TODO: Check with Piyuesh on if we can use only one field now.
-                  $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
+                  $page_dl_attributes['storeAddress'] = $this->storeFinder->getStoreAddress($store, TRUE);
                 }
               }
               else {
@@ -1185,7 +1185,7 @@ class AlshayaGtmManager {
         if ($store_code && ($store = $this->storeFinder->getStoreFromCode($store_code))) {
           $page_dl_attributes['storeLocation'] = $store->label();
           // @TODO: Check with Piyuesh on if we can use only one field now.
-          $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
+          $page_dl_attributes['storeAddress'] = $this->storeFinder->getStoreAddress($store, TRUE);
         }
 
         // Add cartItemsRR variable only when its not in the list of disabled
