@@ -5,8 +5,10 @@
  * Module file.
  */
 
+use Drupal\alshaya_performance\Logger\AlshayaPerformanceSysLog;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
@@ -16,4 +18,20 @@ function alshaya_performance_node_presave(EntityInterface $entity) {
   // Used for mega menu block.
   $tags = ['node_type:' . $entity->getType()];
   Cache::invalidateTags($tags);
+}
+
+/**
+ * Helper function to set log mode from settings.
+ */
+function alshaya_performance_reset_log_mode() {
+  $mode = Settings::get('alshaya_performance_log_mode');
+
+  // By default set it to production mode.
+  if (empty($mode)) {
+    $mode = AlshayaPerformanceSysLog::ALSHAYA_PERFORMANCE_PRODUCTION_MODE;
+  }
+
+  $config = \Drupal::configFactory()->getEditable('alshaya_performance.settings');
+  $config->set('mode', $mode);
+  $config->save();
 }
