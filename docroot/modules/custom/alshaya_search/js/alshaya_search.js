@@ -203,28 +203,43 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       });
 
       // Hide other category filter options when one of the L1 items is selected.
-      if (($('ul[data-drupal-facet-id="category"]').children('li.facet-item--expanded')).length > 0) {
-        $('[data-drupal-facet-id="category"]').children('li:not(.facet-item--expanded)').hide();
+      if ($('ul[data-drupal-facet-id="category"]').find('input[checked="checked"]').length > 0) {
+        $('ul[data-drupal-facet-id="category"]').children('li').each(function() {
+          if ($(this).hasClass('facet-item--expanded') ||
+            ($(this).children('input[checked="checked"]').length > 0)) {
+            return;
+          }
+          else {
+            $(this).hide();
+          }
+        });
       }
 
-      // Hide other category filter options when one of the L1 items is
-      // selected for the PLP category facet.
-      if (($('ul[data-drupal-facet-id="plp_category_facet"]').children('li.facet-item--expanded')).length > 0) {
-        $('[data-drupal-facet-id="plp_category_facet"]').children('li:not(.facet-item--expanded)').hide();
-      }
-
-      // Doing this for ajax complete as dom/element we require are not available earlier.
-      $(document).ajaxComplete(function (event, xhr, settings) {
-        // On PLP page, we assuming that if there is no expanded and collapsed class available,
-        // it means we at the leaf nodes level and thus we adding class to show for the checkboxes.
-        if ($('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--collapsed').length === 0
-        && $('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--expanded').length === 0) {
-          $('ul[data-drupal-facet-id="plp_category_facet"] li').each(function () {
-            $(this).addClass('leaf-li');
-          });
+      // Append active-item class to L2 active items in facet category list on SRP.
+      $('ul[data-drupal-facet-id="category"] > li > ul > li > a').each(function() {
+        if ($(this).hasClass('is-active')) {
+          $(this).parent('li').addClass('active-item');
         }
       });
 
+      // Doing this for ajax complete as dom/element we require are not available earlier.
+      $(document).ajaxComplete(function (event, xhr, settings) {
+        Drupal.addLeafClassToPlpLeafItems();
+      });
+
+      // Add Class to leaf items on page load.
+      Drupal.addLeafClassToPlpLeafItems();
+    }
+  };
+
+  Drupal.addLeafClassToPlpLeafItems = function() {
+    // On PLP page, we assuming that if there is no expanded and collapsed class available,
+    // it means we at the leaf nodes level and thus we adding class to show for the checkboxes.
+    if ($('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--collapsed').length === 0
+      && $('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--expanded').length === 0) {
+      $('ul[data-drupal-facet-id="plp_category_facet"] li').each(function () {
+        $(this).addClass('leaf-li');
+      });
     }
   };
 
@@ -299,7 +314,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.behaviors.convertL2ToAccordion = {
     attach: function (context, settings) {
-      $('[data-drupal-facet-id="category"] .facet-item').each(function () {
+      $('[data-drupal-facet-id="category"] .facet-item, [data-drupal-facet-id="plp_category_facet"] .facet-item').each(function () {
         if ($(this).children('a').length > 0) {
           // Extract query string from the relative url string.
           var facet_url_query_string = ($(this).children('a').attr('href')).match(/(\?.*)/);
@@ -315,8 +330,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
               // Remove checkbox for the selected L2 items.
               $(this).children('input').remove();
-              // Adding class for active L2 items.
-              $(this).addClass('active-item');
 
               // Attach a click listener to the L2 items to make it act like
               // accordion.

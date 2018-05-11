@@ -8,7 +8,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.sell = {
+  Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
 
       var plpfeaturedproduct = $('.nodetype--advanced_page .paragraph--type--product-carousel-category .product-category-carousel');
@@ -17,7 +17,8 @@
       var options = {
         responsiveClass: true,
         dots: true,
-        loop: true,
+        loop: false,
+        rewind: true,
         responsive: {
           0: {
             items: 2,
@@ -37,7 +38,8 @@
       };
 
       var optionshp = {
-        loop: true,
+        loop: false,
+        rewind: true,
         responsiveClass: true,
         dots: true,
         responsive: {
@@ -74,7 +76,8 @@
       applyRtl(advancedfeaturedproduct, optionshp);
 
       $('.product-category-carousel').owlCarousel({
-        loop: true,
+        loop: false,
+        rewind: true,
         responsiveClass: true,
         dots: true,
         responsive: {

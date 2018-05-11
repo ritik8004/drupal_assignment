@@ -16,10 +16,16 @@ class AlshayaPerformanceServiceProvider extends ServiceProviderBase implements S
    * {@inheritdoc}
    */
   public function alter(ContainerBuilder $container) {
-    // Override the syslog logger class.
-    $syslog = $container->getDefinition('logger.syslog');
-    if ($syslog) {
-      $syslog->setClass(AlshayaPerformanceSysLog::class);
+    try {
+      // Override the syslog logger class.
+      $syslog = $container->getDefinition('logger.syslog');
+      if ($syslog) {
+        $syslog->setClass(AlshayaPerformanceSysLog::class);
+      }
+    }
+    catch (\Exception $e) {
+      // Do nothing, system might still be installing or syslog module might
+      // be disabled.
     }
   }
 
