@@ -191,32 +191,15 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
           span {
             font-weight: bold;
+            color: $category_facet_active_text;
           }
-        }
-      }
-
-      > label {
-        span {
-          font-weight: normal;
         }
       }
     }
   }
 
   > .facet-item--expanded {
-    margin-#{$left}: 1rem;
-
     > label {
-      @include icon(chevron#{$left}, before) {
-        position: absolute !important;
-        #{$left}: -1rem;
-        font-size: 1.875rem;
-        top: 0.5rem;
-        color: $category_facet_active_icon;
-        transform: translateY(-50%);
-        cursor: pointer;
-      }
-
       span {
         font-weight: bold;
         color: $category_facet_active_text;
@@ -245,6 +228,34 @@ ul[data-drupal-facet-id=plp_category_facet] {
         display: inline-block;
         line-height: 1.4 !important;
         margin-top: 0;
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=category] {
+  .facet-item--expanded {
+    &.facet-item--active-trail {
+      > label {
+        span {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+
+  > .facet-item--expanded {
+    margin-#{$left}: 1rem;
+
+    > label {
+      @include icon(chevron#{$left}, before) {
+        position: absolute !important;
+        #{$left}: -1rem;
+        font-size: 1.875rem;
+        top: 0.5rem;
+        transform: translateY(-50%);
+        color: $category_facet_active_icon;
+        cursor: pointer;
       }
     }
   }
