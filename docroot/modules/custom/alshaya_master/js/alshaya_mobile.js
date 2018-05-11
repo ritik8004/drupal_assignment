@@ -24,7 +24,7 @@ Drupal.alshayaMobileNumber = Drupal.alshayaMobileNumber || {};
 
         var wrapper = element.closest('.mobile-number-field');
         $(wrapper).find('.prefix').replaceWith('<div class="prefix">'+ element.attr('mobile-prefix') +'</div>');
-        $('.form-type-select, .form-type-textfield', $(wrapper))
+        $('.form-type-select, .form-type-tel', $(wrapper))
           .once()
           .wrapAll('<div class="mobile-input--wrapper"></div>');
       });
