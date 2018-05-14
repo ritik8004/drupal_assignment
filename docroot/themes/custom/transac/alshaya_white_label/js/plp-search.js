@@ -116,7 +116,7 @@
             var facetBlocks = $('.c-facet__blocks__wrapper--mobile .c-facet__blocks');
 
             if (facetBlocks.length !== 0) {
-              var selectedFiterCount = facetBlocks.find('input:checked').length;
+              var selectedFiterCount = facetBlocks.find('a.is-active').length;
               var fakeApplyButton = $('.fake-apply-button');
               if (selectedFiterCount > 0) {
                 fakeApplyButton.parent().removeClass('inactive');
@@ -155,6 +155,11 @@
 
           if ($(mobileFilterBarSelector).length) {
             placeFilterCount();
+
+            var countFilters = $(mobileFilterBarSelector + ' ul li').length - 1;
+            if (countFilters > 0) {
+              $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').html(Drupal.t('Filter') + ' (' + countFilters + ')');
+            }
           }
           else {
             // Clone the filter block from region content.
