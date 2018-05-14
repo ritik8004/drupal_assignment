@@ -513,6 +513,7 @@ function _alshaya_master_mobile_number_process(array &$element, FormStateInterfa
   $element['country-code']['#options'] = [$default_site_country => $options[$default_site_country]];
   $element['country-code']['#attributes']['class'][] = 'hidden-important';
 
+  $element['mobile']['#type'] = 'tel';
   // Remove space to avoid issues in RTL.
   if (!empty($element['mobile']['#default_value'])) {
     $element['mobile']['#default_value'] = str_replace(' ', '', $element['mobile']['#default_value']);
