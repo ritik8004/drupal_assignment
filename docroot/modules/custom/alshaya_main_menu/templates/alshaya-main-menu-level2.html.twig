@@ -1,10 +1,14 @@
 <ul class="menu__list menu--two__list">
+<div class="menu__links__wrapper">
   <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
   {% for key, level2 in data.child %}
-    <li class="menu__list-item menu--two__list-item">
+    {% if level2.term_image is empty %}
+    <li class="menu__list-item menu--two__list-item menu--list-item--no-image">
+    {% else %}
+    <li class="menu__list-item menu--two__list-item menu--list-item--has-image">
+    {% endif %}
 
-       {#Show the term tree only when term image is not available.#}
-      {% if level2.term_image is empty %}
+    {#Show the term tree only when term image is not available.#}
         <div class="menu__link-wrapper menu-two__link-wrapper">
           <a  class="menu__link menu-two__link {{ data.sub_nav_class }}" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
             {% if level2.description|render is not empty %}
@@ -28,7 +32,6 @@
               </div>
             </ul>
           {% endif %}
-      {% endif %}
 
       {#Highlight image start#}
       {% if level2.highlight_paragraph is not empty %}
@@ -54,7 +57,9 @@
       {#Highlight image end#}
     </li>
   {% endfor %}
+  </div>
 
+<div class="term-image__wrapper">
   {#Term image starts#}
   {% for key, level2 in data.child %}
     {% if level2.term_image is not empty %}
@@ -99,6 +104,7 @@
       {% endfor %}
     </div>
   {% endif %}
+  </div>
   {#Highlight image end#}
 </ul>
 

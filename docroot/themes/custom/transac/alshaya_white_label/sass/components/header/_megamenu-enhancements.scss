@@ -1,0 +1,32 @@
+.term-image__wrapper {
+  font-size: 0;
+  float: $right;
+  display: none;
+
+  @include breakpoint($desktop) {
+    display: block;
+  }
+}
+
+.term-image {
+  display: inline-block;
+  position: relative;
+  margin-#{$right}: 1.5rem;
+
+  img {
+    display: block;
+  }
+}
+
+.block-alshaya-main-menu ul.menu--two__list {
+  .term-image a {
+    font-size: 1rem;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 0.625rem;
+    font-family: $alshaya-bold;
+    text-align: center;
+  }
+}

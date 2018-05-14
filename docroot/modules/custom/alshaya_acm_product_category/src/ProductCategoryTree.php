@@ -514,7 +514,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
             'font_color' => $result->field_image_text_font_color_value ? $result->field_image_text_font_color_value : NULL,
             'term_image' => [
               '#theme' => 'image_style',
-              '#style_name' => '186x184',
+              '#style_name' => '186x216',
               '#uri' => $image->getFileUri(),
               '#alt' => $result->field_category_image_alt ? $result->field_category_image_alt : '',
             ],
