@@ -373,7 +373,7 @@
 
       var cartId = drupalSettings.alshaya_click_collect.cart_id;
       var checkLocation = true;
-
+      console.log(lastCoords);
       if (typeof lastCoords !== 'undefined' && lastCoords !== null) {
         checkLocation = (lastCoords.lat !== ascoords.lat || lastCoords.lng !== ascoords.lng);
       }
@@ -418,6 +418,12 @@
         };
 
         storeListAjax.execute();
+      }
+      else {
+        // Remove the loader.
+        if ($('.checkout-ajax-progress-throbber').length > 0) {
+          $('.checkout-ajax-progress-throbber').remove();
+        }
       }
     }
     else {
