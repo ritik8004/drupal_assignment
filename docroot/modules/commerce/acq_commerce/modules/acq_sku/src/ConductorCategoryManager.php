@@ -374,6 +374,9 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       $term->get('description')->setValue($category['description']);
       $term->setFormat('rich_text');
 
+      // Invoke the alter hook to allow all modules to update the term.
+      \Drupal::moduleHandler()->alter('acq_sku_commerce_category', $term, $category, $parent);
+
       try {
         $term->save();
       }
