@@ -328,7 +328,6 @@ $breadcrumb_link_active: $black;
 $address_list_background: rgba(51, 51, 51, 0.06);
 $address_pp_delete_closebtn: $peacock-blue;
 $address_pp_delete_closebtn_cross: $white;
-$address_book_list_border: $warm-grey-two;
 
 // Checkout Login
 $checkout_section_titles: $black;
@@ -343,13 +342,14 @@ $checkout_securely_icon_bg: $hot-pink;
 $checkout_securely_icon_mobile_txt: $white;
 $checkout_securely_txt: $black;
 $checkout_footer_txt: $warm-grey-one;
-$checkout_default_address_color: $peacock-blue;
 $checkout_default_address_border: $peacock-blue;
 $checkout_address_edit_link: $black;
 
 // Address form.
 $address_button_border: $warm-grey-two;
 $address_button_text: $black;
+$address_book_border: $warm-grey-two;
+$address_default_color: $peacock-blue;
 
 // Tables.
 $primary_th_bg: $warm-grey-three;

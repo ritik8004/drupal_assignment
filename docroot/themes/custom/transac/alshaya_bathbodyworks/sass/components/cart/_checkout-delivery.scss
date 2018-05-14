@@ -82,7 +82,7 @@
       #edit-guest-delivery-home,
       fieldset {
         .title {
-          font-family: $bbw-thin;
+          font-family: $alshaya-thin;
           text-transform: capitalize;
           padding-bottom: 0.4375rem;
           border-bottom: 1px solid $checkout_section_title_border;
@@ -98,13 +98,8 @@
 
         #addresses-header {
           #add-address-button {
-            @include breakpoint($tablet) {
+            @include breakpoint($mobile) {
               top: -0.5rem;
-            }
-
-            @include breakpoint($mobile) { //not sure what to do here
-              top: -0.5rem;
-              display: inline;
               width: auto;
               position: absolute;
               #{$right}: 0;

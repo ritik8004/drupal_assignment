@@ -1,6 +1,4 @@
 .user__address--column {
-  border-color: $address_book_list_border;
-  font-family: $alshaya-thin;
   max-width: 20rem;
   width: 100%;
 
@@ -42,8 +40,6 @@
   }
 
   .address--options {
-    border-color: $address_book_list_border;
-
     @include breakpoint($desktop) {
       padding: 0;
     }
@@ -65,7 +61,7 @@
 
     a {
       border: 0;
-      border-#{$left}: 1px solid $address_book_list_border;
+      border-#{$left}: 1px solid $address_book_border;
       height: 2.5rem;
       padding: 0.925rem 0;
       min-width: 4.9375rem;
@@ -134,7 +130,7 @@
     &.default {
       .address--deliver-to-this-address {
         a {
-          color: $checkout_default_address_color;
+          color: $address_default_color;
           border-width: 2px;
           background-color: transparent;
           text-transform: uppercase;
