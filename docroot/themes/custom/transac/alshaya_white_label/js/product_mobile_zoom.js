@@ -141,6 +141,7 @@ function hammerIt(elm) {
           applyRtl(gallery, slickModalOptions);
 
           $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
+          hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="0"]'));
 
           $('#product-image-gallery-mob').on('swipe', function (event, slick) {
             var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img');
