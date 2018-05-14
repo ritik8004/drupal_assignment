@@ -297,11 +297,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         }
       } while (!$lock_acquired);
 
-      // Get current language translation if available.
-      if ($parent instanceof TermInterface && $parent->hasTranslation($langcode)) {
-        $parent = $parent->getTranslation($langcode);
-      }
-
       $parent_data = ($parent) ? [$parent->id()] : [0];
       $position = (isset($category['position'])) ? (int) $category['position'] : 1;
 
@@ -372,16 +367,8 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         $this->results['created']++;
       }
 
-      // Get status of category.
-      $status = (int) $category['is_active'];
-
-      // Get the parent's status if parent available.
-      // By default we use TRUE.
-      $parent_status = $parent ? $parent->get('field_commerce_status')->getString() : TRUE;
-
-      // We set the status to true only if both parent and child are enabled.
-      $status = $status && $parent_status;
-      $term->get('field_commerce_status')->setValue((int) $status);
+      // Store status of category.
+      $term->get('field_commerce_status')->setValue((int) $category['is_active']);
 
       $term->get('field_category_include_menu')->setValue($category['in_menu']);
       $term->get('description')->setValue($category['description']);
