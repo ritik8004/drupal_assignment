@@ -116,7 +116,7 @@
             var facetBlocks = $('.c-facet__blocks__wrapper--mobile .c-facet__blocks');
 
             if (facetBlocks.length !== 0) {
-              var selectedFiterCount = facetBlocks.find('input:checked').length;
+              var selectedFiterCount = facetBlocks.find('a.is-active').length;
               var fakeApplyButton = $('.fake-apply-button');
               if (selectedFiterCount > 0) {
                 fakeApplyButton.parent().removeClass('inactive');
