@@ -373,7 +373,7 @@
 
       var cartId = drupalSettings.alshaya_click_collect.cart_id;
       var checkLocation = true;
-      console.log(lastCoords);
+
       if (typeof lastCoords !== 'undefined' && lastCoords !== null) {
         checkLocation = (lastCoords.lat !== ascoords.lat || lastCoords.lng !== ascoords.lng);
       }
