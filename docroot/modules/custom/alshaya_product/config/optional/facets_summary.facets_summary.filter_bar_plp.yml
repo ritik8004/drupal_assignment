@@ -53,6 +53,11 @@ facets:
     show_count: true
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
 processor_configs:
+  alshaya_strip_l2_params:
+    processor_id: alshaya_strip_l2_params
+    weights:
+      build: '-10'
+    settings: {  }
   reset_facets:
     processor_id: reset_facets
     weights:

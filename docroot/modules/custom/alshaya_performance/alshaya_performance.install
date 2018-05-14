@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_performance module.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add performance settings.
+ */
+function alshaya_performance_update_8001() {
+  alshaya_config_install_configs(['alshaya_performance.settings'], 'alshaya_performance');
+  alshaya_performance_reset_log_mode();
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_performance_install() {
+  // Set log mode from settings.
+  alshaya_performance_reset_log_mode();
+}

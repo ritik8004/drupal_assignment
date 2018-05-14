@@ -331,11 +331,13 @@ class StoresFinderUtility {
    *
    * @param \Drupal\node\NodeInterface $store
    *   Store node.
+   * @param bool $plain_text
+   *   Return format.
    *
    * @return string
    *   Rendered string.
    */
-  public function getStoreAddress(NodeInterface $store) {
+  public function getStoreAddress(NodeInterface $store, $plain_text = FALSE) {
     $address = [];
 
     if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
@@ -357,8 +359,12 @@ class StoresFinderUtility {
         '#markup' => $store->get('field_store_address')->getString(),
       ];
     }
-
-    return $address ? render($address) : '';
+    if ($plain_text == FALSE) {
+      return $address ? render($address) : '';
+    }
+    else {
+      return $address ? $address['#address'] : '';
+    }
   }
 
 }
