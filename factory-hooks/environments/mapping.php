@@ -56,10 +56,6 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'mc_prod',
         'conductor' => 'mc_prod',
       ],
-      '01update' => [
-        'magento' => 'mc_prod',
-        'conductor' => 'mc_test',
-      ],
       // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
       'default' => [
         'magento' => 'mc_qa',
@@ -182,6 +178,14 @@ function alshaya_get_env_keys($site, $env) {
       ],
     ],
   ];
+
+  // All 01update should match 01live.
+  // Update array to set 01update if 01live is set.
+  foreach ($mapping as $site => $envs) {
+    if (isset($mapping[$site]['01live'])) {
+      $mapping[$site]['01update'] = $mapping[$site]['01live'];
+    }
+  }
 
   // Get the keys following this fallback (from the more specific to the more
   // generic one): site+env > site+default > default+env > default+default.
