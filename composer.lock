@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "ecb46f9759551a9d97834dc4f58e7fbd",
@@ -2434,25 +2434,26 @@
         },
         {
             "name": "drupal/amp",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/amp",
-                "reference": "8.x-1.0"
+                "reference": "8.x-1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/amp-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "e8eeae99be7a16dc8b0bafd865c824b8ae106aa9"
+                "url": "https://ftp.drupal.org/files/projects/amp-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "828e398e2020e3b28527b0d9f1989ca4c6f65315"
             },
             "require": {
                 "drupal/core": "*",
-                "drupal/token": "*",
+                "drupal/token": "^1.0",
                 "lullabot/amp": "^1.0.0"
             },
             "require-dev": {
-                "drupal/adsense": "*"
+                "drupal/adsense": "*",
+                "drupal/amptheme": "^1.0"
             },
             "type": "drupal-module",
             "extra": {
@@ -2460,8 +2461,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1467409439",
+                    "version": "8.x-1.1",
+                    "datestamp": "1523122157",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2473,6 +2474,10 @@
                 "GPL-2.0+"
             ],
             "authors": [
+                {
+                    "name": "KarenS",
+                    "homepage": "https://www.drupal.org/user/45874"
+                },
                 {
                     "name": "marcelovani",
                     "homepage": "https://www.drupal.org/user/854220"

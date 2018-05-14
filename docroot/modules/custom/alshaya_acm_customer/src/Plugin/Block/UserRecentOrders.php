@@ -225,9 +225,9 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
                 '#theme' => 'acq_commerce_price',
                 '#price' => $order['items'][$key]['price'],
               ];
-
-              $order['status'] = alshaya_acm_customer_get_order_status($order);
             }
+
+            $order['status'] = alshaya_acm_customer_get_order_status($order);
           }
 
           $build['recent_order'][] = [

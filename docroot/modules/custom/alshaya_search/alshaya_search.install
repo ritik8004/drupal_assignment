@@ -16,6 +16,9 @@ function alshaya_search_update_8015() {
   alshaya_config_install_configs(['facets.facet.category'], 'alshaya_search');
   alshaya_config_install_configs(['facets.facet.plp_category_facet'], 'alshaya_product');
   alshaya_config_install_configs(['facets.facet.category_promotion'], 'alshaya_acm_promotion', 'optional');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+  alshaya_config_install_configs(['facets_summary.facets_summary.filter_bar_plp'], 'alshaya_product', 'optional');
+  alshaya_config_install_configs(['facets_summary.facets_summary.filter_bar'], 'alshaya_search');
 }
 
 /**

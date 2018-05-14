@@ -67,7 +67,7 @@ Feature: Search feature
   @eng @prod
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I fill in "edit-keywords" with "tops"
     And I press "Search"
@@ -77,7 +77,7 @@ Feature: Search feature
   @arabic @prod
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     When I fill in "edit-keywords" with "من قطعتين"
     And I press "Search"
@@ -122,7 +122,7 @@ Feature: Search feature
     And I wait for the page to load
     And I follow "English"
     And I wait for the page to load
-    When I fill in "edit-keywords" with "sweatshirt"
+    When I fill in "edit-keywords" with "Leggings"
     And I press "Search"
     And I wait for the page to load
     When I select a product in stock
@@ -164,7 +164,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I fill in "edit-keywords" with "من قطعتين"
+    When I fill in "edit-keywords" with "ليغنغز"
     And I press "Search"
     And I wait for the page to load
     When I select a product in stock
@@ -235,7 +235,7 @@ Feature: Search feature
     And I follow "English"
     And I wait for the page to load
 #    When I fill in "edit-keywords" with "بكحتة"
-    When I fill in "edit-keywords" with "من قطعتين"
+    When I fill in "edit-keywords" with "ليغنغز"
     And I press "Search"
 #    Then I should see Search results page in Arabic for "بكحتة"
     And I wait for the page to load
@@ -253,7 +253,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I fill in "edit-keywords" with "sweatshirt"
+    When I fill in "edit-keywords" with "Leggings"
     And I press "Search"
     And I wait for the page to load
     When I select a product in stock
@@ -292,7 +292,7 @@ Feature: Search feature
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    When I fill in "edit-keywords" with "من قطعتين"
+    When I fill in "edit-keywords" with "ليغنغز"
     And I press "Search"
     And I wait for the page to load
     When I select a product in stock

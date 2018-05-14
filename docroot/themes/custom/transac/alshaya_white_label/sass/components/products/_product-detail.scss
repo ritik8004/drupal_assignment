@@ -64,6 +64,12 @@
       float: $left;
       min-height: 36.325rem;
     }
+
+    .gallery-wrapper {
+      @include breakpoint($mobile) {
+        min-height: 25.5625rem;
+      }
+    }
   }
 
   &__sidebar {
