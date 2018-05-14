@@ -102,7 +102,7 @@ ucfix:
 cloud_zoom_common:
   version: 1.x
   js:
-    vendor/hammer.min.js: {}
+    vendor/js/hammer.min.js: {}
     js/product_mobile_zoom.js: {}
   dependencies:
     - core/drupal.dialog
