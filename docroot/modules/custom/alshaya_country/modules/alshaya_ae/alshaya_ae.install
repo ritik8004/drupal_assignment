@@ -9,6 +9,17 @@
  * Implements hook_install().
  */
 function alshaya_ae_install() {
-  // Country code, timezone and store search placeholder for UAE.
-  alshaya_country_set_default_regional_info('AE', 'e.g. Dubai');
+  // Country code and timezone for UAE.
+  alshaya_country_set_default_regional_info('AE');
+
+  // Store finder search placeholder for UAE.
+  alshaya_country_set_default_store_search_placeholder('e.g. Dubai');
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_ae_update_8001() {
+  // Store finder search placeholder for UAE.
+  alshaya_country_set_default_store_search_placeholder('e.g. Dubai');
 }
