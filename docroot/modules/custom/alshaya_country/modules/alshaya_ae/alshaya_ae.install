@@ -9,6 +9,6 @@
  * Implements hook_install().
  */
 function alshaya_ae_install() {
-  // Country code and timezone for UAE.
-  alshaya_country_set_default_regional_info('AE');
+  // Country code, timezone and store search placeholder for UAE.
+  alshaya_country_set_default_regional_info('AE', 'e.g. Dubai');
 }

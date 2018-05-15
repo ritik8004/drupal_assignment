@@ -16,7 +16,7 @@ use Drupal\Core\Locale\CountryManager;
  * @param string $country_code
  *   The country code.
  */
-function alshaya_country_set_default_regional_info($country_code) {
+function alshaya_country_set_default_regional_info($country_code, $store_search_placeholder) {
   // Set default country for site.
   \Drupal::configFactory()->getEditable('system.date')
     ->set('country.default', $country_code)
@@ -35,6 +35,11 @@ function alshaya_country_set_default_regional_info($country_code) {
 
   // Re-save store finder view to ensure country code is updated.
   \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
+  
+  // Set Country specific placeholder for store finder search.
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+  ->set('store_search_placeholder', $store_search_placeholder)
+  ->save();
 }
 
 /**
