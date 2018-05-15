@@ -125,7 +125,9 @@
 
         // Check dynamically if looping is required and at which breakpoint.
         for (var i in options.responsive) {
-          options.responsive[i].loop = (options.responsive[i].items < itemsCount);
+          if (options.responsive[i]) {
+            options.responsive[i].loop = (options.responsive[i].items < itemsCount);
+          }
         }
 
         var transient = {};
