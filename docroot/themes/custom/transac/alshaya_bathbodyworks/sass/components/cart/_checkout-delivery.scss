@@ -81,15 +81,35 @@
     form {
       #edit-guest-delivery-home,
       fieldset {
+        .title {
+          font-family: $alshaya-thin;
+          text-transform: capitalize;
+          padding-bottom: 0.4375rem;
+          border-bottom: 1px solid $checkout_section_title_border;
+          margin-bottom: 0;
+        }
+
         @include breakpoint($tablet) {
           &.active--tab--content {
             top: -0.0625rem;
             border-width: 1px;
           }
+        }
 
-          .title {
-            font-family: $bbw-thin;
-            text-transform: capitalize;
+        #addresses-header {
+          #add-address-button {
+            @include breakpoint($mobile) {
+              top: -0.5rem;
+              width: auto;
+              position: absolute;
+              #{$right}: 0;
+            }
+          }
+        }
+
+        #edit-member-delivery-home-addresses {
+          @include breakpoint($tablet) {
+            margin: 0 1.375rem 0.75rem;
           }
         }
       }

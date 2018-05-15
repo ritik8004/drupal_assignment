@@ -12,7 +12,10 @@ use Drupal\system\Entity\Menu;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
+use Drupal\views\ViewEntityInterface;
 use Drupal\views\ViewExecutable;
+use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
+use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 
 /**
  * Implements hook_theme().
@@ -74,6 +77,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
     case 'system_branding_block':
       // Update block cache context.
       $variables['content']['#cache']['contexts'][] = 'url.path';
+      $variables['content']['#cache']['contexts'][] = 'url.query_args';
 
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
@@ -330,7 +334,59 @@ function alshaya_super_category_views_pre_view(ViewExecutable $view, $display_id
     // When super category feature is enabled, we want to allow creation of
     // page for both super-categories and second level too.
     $handler = $view->getHandler($display_id, 'filter', 'depth_level');
+    $handler['operator'] = '<=';
     $handler['value']['value'] = 2;
     $view->setHandler($display_id, 'filter', 'depth_level', $handler);
+  }
+}
+
+/**
+ * Implements hook_search_api_solr_query_alter().
+ *
+ * Alter solr query to boost result related to current super category.
+ */
+function alshaya_super_category_search_api_solr_query_alter(SolariumQueryInterface $solarium_query, SearchApiQueryInterface $query) {
+  $super_category = \Drupal::configFactory()->get('alshaya_super_category.settings');
+  if (!$super_category->get('status')) {
+    return;
+  }
+
+  $index = $query->getIndex();
+  $fields = $index->getServerInstance()->getBackend()->getSolrFieldNames($index);
+  $solr_field = !empty($fields['field_category']) ? $fields['field_category'] : '';
+  if ($solr_field) {
+    $brand = \Drupal::requestStack()->getCurrentRequest()->query->get('brand');
+    $solarium_query->addParam('bq', "{$solr_field}:$brand^" . $super_category->get('solr_boost'));
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add hidden field to pass current super category to query string.
+ */
+function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    $status = \Drupal::configFactory()->get('alshaya_super_category.settings')->get('status');
+    if (!$status) {
+      return;
+    }
+
+    $view = $form_state->get('view');
+    if (!$view instanceof ViewEntityInterface || substr($view->storage->get('base_table'), 0, 17) != 'search_api_index_') {
+      return;
+    }
+
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
+
+    if (is_array($term)) {
+      $form['brand'] = [
+        '#type' => 'hidden',
+        '#value' => $term['id'],
+      ];
+    }
+
+    $form['#cache']['contexts'][] = 'url.path';
+    $form['#cache']['contexts'][] = 'url.query_args';
   }
 }

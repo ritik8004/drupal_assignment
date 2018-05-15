@@ -137,7 +137,8 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
       $form['geolocation_geocoder_google_places_api']['#weight'] = 4;
 
       // Adding placeholder to the input field.
-      $form['geolocation_geocoder_google_places_api']['#placeholder'] = t('e.g. Salmiya');
+      $form['geolocation_geocoder_google_places_api']['#placeholder'] = t('@placeholder', ['@placeholder' => $store_finder_config->get('store_search_placeholder')]);
+      $form['geolocation_geocoder_google_places_api']['#type'] = 'search';
       $form['geolocation_geocoder_google_places_api']['#access'] = (bool) $store_finder_search_config;
       $form['geolocation_geocoder_google_places_api']['#attributes']['class'][] = 'block-store-finder-form__input__text';
       $form['actions']['#access'] = (bool) $store_finder_search_config;

@@ -37,12 +37,14 @@
         @include u-visibility(none);
       }
 
-      input[type=text] {
+      .store-location-input {
         height: 2.188rem;
         border: 1px solid $primary_search_border;
         font-size: 0.75rem;
         color: $primary_search_input;
         padding: 0.375rem;
+        box-sizing: border-box;
+        outline: transparent;
 
         @include breakpoint($only-tablet) {
           width: 100%;
@@ -1459,12 +1461,12 @@
           float: none;
         }
 
-        input[type=text] {
+        .store-location-input {
           max-width: 30.75rem;
           height: 2.5rem;
 
           @include breakpoint($only-mobile) {
-            max-width: none;
+            width: 100%;
           }
         }
       }

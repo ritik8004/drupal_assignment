@@ -1020,6 +1020,27 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   }
 
   /**
+   * Get City label for Shipping Address from Cart.
+   *
+   * This function takes care of DM V1/V2.
+   *
+   * @param \Drupal\acq_cart\CartInterface $cart
+   *   Cart object.
+   *
+   * @return string|null
+   *   String value for the area or NULL if shipping value not available.
+   */
+  public function getCartShippingAreaParentValue(CartInterface $cart) {
+    if (!$cart->getShippingMethodAsString()) {
+      return '';
+    }
+
+    $shipping = (array) $cart->getShipping();
+    $address = $this->getAddressArrayFromMagentoAddress($shipping);
+    return $this->getAddressShippingAreaParentValue($address, $shipping);
+  }
+
+  /**
    * Get Area label from Magento Address.
    *
    * This function takes care of DM V1/V2.

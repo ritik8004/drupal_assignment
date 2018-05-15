@@ -1,12 +1,22 @@
 .user__address--column {
-  border-color: $address_book_list_border;
-  font-family: $alshaya-thin;
-  max-width: 26rem;
+  max-width: 20rem;
   width: 100%;
 
   @include breakpoint($only-mobile) {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  @include breakpoint($desktop) {
+    &:nth-of-type(odd) {
+      margin-#{$right}: 1.5rem;
+    }
+  }
+}
+
+.view-address-book {
+  @include breakpoint($desktop) {
+    padding-top: 1.5rem;
   }
 }
 
@@ -30,8 +40,6 @@
   }
 
   .address--options {
-    border-color: $address_book_list_border;
-
     @include breakpoint($desktop) {
       padding: 0;
     }
@@ -47,18 +55,20 @@
 
   .address--edit,
   .address--delete {
-    width: 5rem;
+    width: 4rem;
     padding: 0;
     text-align: center;
 
     a {
       border: 0;
-      border-#{$left}: 1px solid $address_book_list_border;
+      border-#{$left}: 1px solid $address_book_border;
       height: 2.5rem;
       padding: 0.925rem 0;
+      min-width: 4.9375rem;
 
       @include breakpoint($desktop) {
         padding: 0.925rem 0;
+        font-weight: normal;
       }
     }
   }
@@ -97,5 +107,76 @@
 .address-book-address .form-type-select {
   select.select2-select.form-select {
     border-color: $primary_input_border;
+  }
+}
+
+#edit-member-delivery-home .user__address--column {
+  @include breakpoint($tablet) {
+    width: 77%;
+  }
+
+  @include breakpoint($desktop) {
+    width: 36%;
+    width: calc(37.5% - 1.5rem);
+
+    &:nth-of-type(odd) {
+      margin-#{$right}: 1.5rem;
+    }
+  }
+}
+
+#edit-member-delivery-home-addresses {
+  .address {
+    &:hover,
+    &.default {
+      .address--deliver-to-this-address {
+        a {
+          color: $address_default_color;
+          border-width: 2px;
+          background-color: transparent;
+          text-transform: uppercase;
+
+          @include breakpoint($desktop) {
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+
+    &--edit {
+      text-align: center;
+
+      @include breakpoint($desktop) {
+        width: 23%;
+      }
+
+      a {
+        text-transform: uppercase;
+        height: 0;
+        display: inline-block;
+
+        @include breakpoint($tablet) {
+          height: 1rem;
+        }
+      }
+    }
+
+    &--deliver-to-this-address {
+      @include breakpoint($desktop) {
+        width: 74%;
+      }
+
+      a {
+        border: 0;
+        border-#{$right}: 0.0625rem solid $address_button_border;
+        text-transform: uppercase;
+
+        @include breakpoint($tablet) {
+          margin: 0;
+        }
+      }
+    }
   }
 }

@@ -39,7 +39,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     </div>
   {% endif %}
 
-  <table class="mobile--only--sell">
+  <table class="mobile--only--sell {{ content.show_cart_form }}">
     <tr>
       <td class="sell--image">
         {% if content.image is not null %}
@@ -48,7 +48,9 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
         {{ content.labels }}
       </td>
+    </tr>
 
+    <tr>
       <td class="sell--description">
         {{ title_prefix }}
         {% if not page %}
@@ -65,7 +67,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     </tr>
 
     <tr>
-      <td colspan="2" class="sell-sku">
+      <td class="sell-sku">
         <div class="field--name-field-skus">
           <article data-skuid="{{ content.sku_id }}">
             {{ content.mobile_add_to_cart_form }}
@@ -76,7 +78,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
     {% if content.promotions %}
       <tr>
-        <td colspan="2" class="sell-promotions">
+        <td colspan="2" class="sell-promotions promotions">
           {{ content.promotions }}
         </td>
       </tr>

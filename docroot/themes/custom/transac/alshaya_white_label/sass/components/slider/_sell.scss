@@ -9,6 +9,10 @@
     .views-row {
       position: relative;
 
+      @include breakpoint($only-mobile) {
+        margin: 0 0.3125rem;
+      }
+
       .ajax-progress-throbber {
         position: absolute;
         #{$left}: 40%;
@@ -94,7 +98,7 @@
 
   .owl-dots {
     position: relative;
-    margin-top: 0.625rem;
+    margin-top: 1rem;
     display: table;
     width: 100%;
 
@@ -103,27 +107,16 @@
     }
 
     .owl-dot {
-      width: 2.8125rem;
-      height: 0.3125rem;
-      border: 0;
-      border-radius: 0.25rem;
-      color: $sell_owl_dots;
-      display: table-cell;
-      margin: 0;
       position: relative;
       z-index: 1;
       top: 0;
-    }
-
-    &::before {
-      content: "";
-      background: $sell_owl_dots_bg;
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 2px;
-      top: 50%;
-      transform: translateY(-50%);
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin: 10px;
+      border-radius: 100%;
+      color: $hp_slider_dots;
+      border: 1px solid currentColor;
     }
   }
 
@@ -367,13 +360,25 @@
   width: 100%;
   min-height: 22rem;
 
+  &.no-cart-form {
+    min-height: 12rem;
+  }
+
   @include breakpoint($tablet) {
     display: none;
   }
 
   .sell--image {
     @include breakpoint($only-mobile) {
-      padding: 0.3125rem;
+      min-height: 10rem;
+      width: 100%;
+      display: block;
+    }
+  }
+
+  .promotions {
+    a {
+      margin-top: 0.25rem;
     }
   }
 
@@ -383,6 +388,12 @@
     .field__items {
       @include breakpoint($only-mobile) {
         padding: 0.3125rem;
+      }
+    }
+
+    .field--name-field-skus {
+      @include breakpoint($only-mobile) {
+        border-bottom: none;
       }
     }
   }

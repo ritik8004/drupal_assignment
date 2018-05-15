@@ -10,6 +10,7 @@ use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\facets\Result\ResultInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
@@ -359,14 +360,6 @@ function _alshaya_search_translate_search_view_config() {
  * Implements hook_alshaya_profile_installed_final_task().
  */
 function alshaya_search_alshaya_profile_installed_final_task() {
-  // Disable Acquia Search View if available.
-  $view = \Drupal::configFactory()->getEditable('views.view.acquia_search');
-
-  if ($view->getRawData()) {
-    $view->set('status', FALSE);
-    $view->save();
-  }
-
   if (isset($_ENV['AH_SITE_NAME'])) {
     // Enable alshaya_search_acquia_search to ensure config are overridden to
     // use solr on cloud.
@@ -383,6 +376,9 @@ function alshaya_search_alshaya_profile_installed_final_task() {
  * Implements hook_alshaya_facet_results_alter().
  */
 function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
+  // Current interface langcode.
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
   $ids = array_keys($results);
 
   // List of term ids that need to be hidden based on its parent's not
@@ -390,24 +386,39 @@ function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
   $hide_tids = [];
 
   // Process results array & mark terms for hiding.
-  if (empty($hide_tids)) {
-    // Load indexed term object.
-    $entities = \Drupal::service('entity_type.manager')
-      ->getStorage('taxonomy_term')
-      ->loadMultiple($ids);
+  // Load indexed term object.
+  $entities = \Drupal::service('entity_type.manager')
+    ->getStorage('taxonomy_term')
+    ->loadMultiple($ids);
 
-    // Check each term for include_menu flag & mark its children for hiding in
-    // case its flagged to be not in menu.
-    foreach ($results as $tid => $result) {
-      if ((($term = $entities[$tid]) instanceof TermInterface) &&
-        ($term->get('field_category_include_menu')->getString() != 1)) {
-        $hide_tids[] = $tid;
-        _alshaya_search_mark_hide_chidren($result, $hide_tids);
+  // Remove all disabled terms.
+  foreach ($results as $tid => $result) {
+    $term = isset($entities[$tid]) ? $entities[$tid] : NULL;
+    if ($term instanceof TermInterface) {
+      if ($term->hasTranslation($langcode)) {
+        $entities[$tid] = $term->getTranslation($langcode);
+        $term = $entities[$tid];
+      }
+
+      if (!$term->get('field_commerce_status')->getString()) {
+        unset($results[$tid]);
       }
     }
+  }
 
-    // Remove any duplicate term ids.
-    $hide_tids = array_unique($hide_tids);
+  // Check each term for include_menu flag & mark its children for hiding in
+  // case its flagged to be not in menu.
+  foreach ($results as $tid => $result) {
+    if ((($term = $entities[$tid]) instanceof TermInterface) &&
+      ($term->get('field_category_include_menu')->getString() != 1)) {
+      $hide_tids[$tid] = $tid;
+      _alshaya_search_mark_hide_chidren($result, $hide_tids);
+    }
+    // While rendering an item included in menu, check if its nested children
+    // are included. If not, remove them from child list.
+    elseif (($term = $entities[$tid]) instanceof TermInterface) {
+      _alshaya_search_hide_children_from_parent_result($result, $entities);
+    }
   }
 
   // Process tids marked for hiding.
@@ -420,7 +431,7 @@ function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
 function _alshaya_search_mark_hide_chidren($result, &$hide_tids) {
   if (count($children = $result->getChildren()) > 0) {
     foreach ($children as $key => $child) {
-      $hide_tids[] = $key;
+      $hide_tids[$key] = $key;
       _alshaya_search_mark_hide_chidren($child, $hide_tids);
     }
   }
@@ -433,6 +444,37 @@ function _alshaya_search_hide_terms($hide_tids, &$results) {
   foreach ($hide_tids as $tid) {
     unset($results[$tid]);
   }
+}
+
+/**
+ * Helper function to clear children items from the parent result item.
+ *
+ * @param \Drupal\facets\Result\ResultInterface $result
+ *   Result item being processed.
+ * @param array $entities
+ *   Set of taxonomy terms keyed by tids.
+ */
+function _alshaya_search_hide_children_from_parent_result(ResultInterface $result, array $entities) {
+  // Return early if we are processing a leaf term.
+  if (count($children = $result->getChildren()) == 0) {
+    return;
+  }
+
+  foreach ($children as $tid => $child) {
+    if ($child->getChildren() > 0) {
+      _alshaya_search_hide_children_from_parent_result($child, $entities);
+    }
+
+    // Check if the children has the attribute set to not include in menu &
+    // remove it from the list accordingly.
+    if ((isset($entities[$tid])) &&
+      (($entities[$tid] instanceof TermInterface) &&
+      ($entities[$tid]->get('field_category_include_menu')->getString() != 1))) {
+      unset($children[$tid]);
+    }
+  }
+
+  $result->setChildren($children);
 }
 
 /**
@@ -477,18 +519,34 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     }
   }
 
-  // Add accordion effect to selected L2 items for SRP.
-  if (($facet->getUseHierarchy()) &&
-    ($facet_source_id == 'search_api:views_page__search__page')) {
+  // Add accordion effect to selected L2 items.
+  if ($facet->getUseHierarchy()) {
     // Variable to hold the parent id selected.
-    $root_parent_id = '';
+    static $root_parent_id = '';
     $result = $context['result'];
+
+    // Static variable to hold the depth of parent id to be removed from facet
+    // urls.
+    static $facet_parent_term_hide_depth = 0;
+
+    // Flag to check if the current term has been processed.
+    static $facet_parent_term_depth_processed = FALSE;
+
+    // In case of PLP, hide L1 from url when on L2 & L2 parent from url when on
+    // L3. Process this only once. Fetch term object from current request & set
+    // depth for the item to be hidden from url based on its depth.
+    if (!($facet_parent_term_depth_processed) &&
+      ($facet_source_id == 'search_api:views_block__alshaya_product_list__block_1') &&
+      (($term = \Drupal::request()->attributes->get('taxonomy_term')) instanceof TermInterface)) {
+      $facet_parent_term_hide_depth = $term->get('depth_level')->getString() - 1;
+      $facet_parent_term_depth_processed = TRUE;
+    }
 
     // Hide root parent id post selection from all the facet items. We don't
     // want the user to land onto L1 expanded state via any interaction post 1st
     // expansion.
     // Find the root parent id which has been selected from FE.
-    if ((count($parent_ids) === 0) &&
+    if ((count($parent_ids) === $facet_parent_term_hide_depth) &&
       (!empty($context['active_filters'][$url_alias])) &&
       (empty($root_parent_id))) {
       $root_parent_id = $result->getRawValue();

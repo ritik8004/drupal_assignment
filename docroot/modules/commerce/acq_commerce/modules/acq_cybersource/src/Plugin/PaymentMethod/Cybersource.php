@@ -45,7 +45,7 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
     ];
 
     $pane_form['payment_details']['cc_number'] = [
-      '#type' => 'textfield',
+      '#type' => 'tel',
       '#title' => $this->t('Credit Card Number'),
       '#default_value' => '',
       '#required' => TRUE,

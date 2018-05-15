@@ -20,6 +20,23 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\user\Entity\User;
 
 /**
+ * Implements hook_acsf_registry().
+ *
+ * Adding our custom class to the registry that changes Alshaya configuration.
+ */
+function alshaya_master_acsf_registry() {
+  return [
+    'events' => [
+      [
+        'weight' => 15,
+        'type' => 'site_duplication_scrub',
+        'class' => '\Drupal\alshaya_master\Event\AlshayaAcsfDuplicationScrubUsersHandler',
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_acsf_staging_scrub_admin_roles_alter().
  */
 function alshaya_master_acsf_staging_scrub_admin_roles_alter(array &$admin_roles) {
@@ -496,6 +513,7 @@ function _alshaya_master_mobile_number_process(array &$element, FormStateInterfa
   $element['country-code']['#options'] = [$default_site_country => $options[$default_site_country]];
   $element['country-code']['#attributes']['class'][] = 'hidden-important';
 
+  $element['mobile']['#type'] = 'tel';
   // Remove space to avoid issues in RTL.
   if (!empty($element['mobile']['#default_value'])) {
     $element['mobile']['#default_value'] = str_replace(' ', '', $element['mobile']['#default_value']);

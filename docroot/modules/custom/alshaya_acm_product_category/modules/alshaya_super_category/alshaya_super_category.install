@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Super category install file.
+ */
+
+/**
+ * Implements hook_update_n().
+ */
+function alshaya_super_category_update_8001() {
+  \Drupal::configFactory()
+    ->getEditable('alshaya_super_category.settings')
+    ->set('solr_boost', 21)
+    ->save(TRUE);
+}

@@ -62,7 +62,6 @@ function drush_alshaya_super_category_switch() {
     }
     $config->set('default_category_tid', $default_parent);
   }
-
   $config->save(TRUE);
 
   // Load super category menu block and change status.
