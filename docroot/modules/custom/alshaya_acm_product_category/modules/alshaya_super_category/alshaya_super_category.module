@@ -330,6 +330,7 @@ function alshaya_super_category_views_pre_view(ViewExecutable $view, $display_id
     // When super category feature is enabled, we want to allow creation of
     // page for both super-categories and second level too.
     $handler = $view->getHandler($display_id, 'filter', 'depth_level');
+    $handler['operator'] = "<=";
     $handler['value']['value'] = 2;
     $view->setHandler($display_id, 'filter', 'depth_level', $handler);
   }
