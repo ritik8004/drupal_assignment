@@ -77,9 +77,12 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $terms = $this->productCategoryTree->getCategoryRootTerms();
+    $options = [];
     // Create option array of root terms.
-    foreach ($terms as $term) {
-      $options[$term['id']] = $term['label'];
+    if (!empty($terms)) {
+      foreach ($terms as $term) {
+        $options[$term['id']] = $term['label'];
+      }
     }
 
     $super_category_status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
@@ -156,7 +159,7 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
 
     // @todo: check why this context is not working in block.
     // $term = $this->getContextValue('taxonomy_term');
-    $parent = $this->productCategoryTree->getCategoryTermRootParent();
+    $parent = $this->productCategoryTree->getCategoryTermRequired();
     if (count($parent) > 0) {
       return in_array($parent['id'], $this->configuration['categories']);
     }
