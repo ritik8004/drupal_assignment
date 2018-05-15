@@ -67,7 +67,7 @@ function alshaya_country_set_default_store_search_placeholder($store_search_plac
     ->save();
 
   // Make configuration value translatable.
-  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings');
-  $config->set('store_search_placeholder', $store_search_placeholder_ar);
-  $config->save();
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('store_search_placeholder', $store_search_placeholder_ar)
+    ->save();
 }
