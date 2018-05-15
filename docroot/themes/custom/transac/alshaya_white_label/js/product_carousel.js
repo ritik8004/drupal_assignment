@@ -13,7 +13,7 @@
 
       var optionsBasket = {
         responsiveClass: true,
-        dots: false,
+        dots: true,
         responsive: {
           0: {
             items: 2,
