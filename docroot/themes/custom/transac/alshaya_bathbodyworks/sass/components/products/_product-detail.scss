@@ -93,3 +93,24 @@
     }
   }
 }
+
+.store-finder-form-wrapper {
+  .search-store {
+    button {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.click-collect-top-stores {
+  ul {
+    li {
+      .store {
+        &-sequence {
+          line-height: 1.9;
+        }
+      }
+    }
+  }
+}
