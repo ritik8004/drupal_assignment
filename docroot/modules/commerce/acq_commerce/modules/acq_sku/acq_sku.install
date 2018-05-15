@@ -6,8 +6,42 @@
  */
 
 use Drupal\node\Entity\Node;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add field to store commerce category status.
+ */
+function acq_sku_update_8006() {
+  $config_path = drupal_get_path('module', 'acq_sku') . '/config/install/';
+
+  $storage_yaml = Yaml::parse(file_get_contents($config_path . 'field.storage.taxonomy_term.field_commerce_status.yml'));
+
+  // Some issue with array conversion in allowed values, we handle
+  // exception with workaround for now. We'll re-save it later.
+  $storage_yaml['settings']['allowed_values'] = [];
+
+  // Create field storage config.
+  FieldStorageConfig::create($storage_yaml)->save();
+
+  // Reload config from yaml.
+  $storage_yaml = Yaml::parse(file_get_contents($config_path . 'field.storage.taxonomy_term.field_commerce_status.yml'));
+
+  // Update config in DB.
+  \Drupal::configFactory()->getEditable('field.storage.taxonomy_term.field_commerce_status')->setData($storage_yaml)->save();
+
+  // Load field storage config and save again.
+  $field_storage = FieldStorageConfig::loadByName($storage_yaml['entity_type'], $storage_yaml['field_name']);
+  $field_storage->save();
+
+  // Save the Field Config.
+  $field_yaml = Yaml::parse(file_get_contents($config_path . 'field.field.taxonomy_term.acq_product_category.field_commerce_status.yml'));
+  FieldConfig::create($field_yaml)->save();
+}
 
 /**
  * Implements hook_update_N().
@@ -44,7 +78,7 @@ function acq_sku_update_8004() {
  */
 function acq_sku_update_8003() {
   $config_path = drupal_get_path('module', 'acq_sku') . '/config/install/acq_sku.configurable_form_settings.yml';
-  $data = Yaml::parse($config_path);
+  $data = Yaml::parse(file_get_contents($config_path));
   \Drupal::configFactory()->getEditable('acq_sku.configurable_form_settings')->setData($data)->save(TRUE);
 }
 

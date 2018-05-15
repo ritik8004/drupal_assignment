@@ -58,7 +58,7 @@ header {
           margin-top: -0.25rem;
         }
 
-        input[type="text"] {
+        .form-text {
           width: 7.5rem;
           font-size: 0.875rem;
         }
@@ -67,7 +67,7 @@ header {
 
     @include breakpoint($only-tablet) {
       .block-views-exposed-filter-blocksearch-page {
-        input[type="text"] {
+        .form-text {
           width: 7.5rem;
           background-color: transparent;
           font-size: 0.875rem;
@@ -85,7 +85,7 @@ header {
       #{$left}: auto;
     }
 
-    input[type="text"] {
+    .form-text {
       @include arabic-letter-spacing;
 
       font-family: $hnm-regular;
@@ -1527,7 +1527,7 @@ html {
 @include breakpoint($only-tablet) {
   .mobile--overlay {
     .block-views-exposed-filter-blocksearch-page {
-      input[type="text"] {
+      .form-text {
         &::placeholder {
           color: transparent;
         }

@@ -7,7 +7,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 %}
 
 <article{{ attributes }} {{ gtm_attributes }}>
-  <a href="{{ path('entity.node.canonical', {'node': node.id}) }}">
+  <a href="{{ path('entity.node.canonical', {'node': node.id}) }}" class="product-link">
     {% if content.image is not null %}
       {{ content.image }}
     {% endif %}
