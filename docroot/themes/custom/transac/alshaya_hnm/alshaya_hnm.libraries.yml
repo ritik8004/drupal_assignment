@@ -48,7 +48,3 @@ cloud_zoom:
     js/product_zoom.js: {}
   dependencies:
     - alshaya_white_label/cloud_zoom_common
-
-plp_search_js:
-  js:
-    js/plp-search.js: {}
