@@ -871,9 +871,24 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
           // Slice number of results that we want for the carousel.
           $results = array_slice($results, 0, $product_in_carousel);
+
+          // The stock mode.
+          $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+
           $data = [];
           foreach ($results as $result) {
-            $data[] = $result->_object->getValue()->id();
+            $data_nid = $result->_object->getValue()->id();
+            // For stock push mode.
+            if ($stock_mode != 'pull') {
+              $sku_entity = "sdfds";
+              // If product in stock for 'push' mode.
+              if (alshaya_acm_get_product_stock($sku_entity)) {
+                $data[] = $data_nid;
+              }
+            }
+            else {
+              $data[] = $data_nid;
+            }
           }
 
           // Make carousel title link.
