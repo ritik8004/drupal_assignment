@@ -21,6 +21,31 @@
       padding-top: 0;
       padding-bottom: 0.6em;
     }
+
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 2rem;
+    }
+  }
+
+  a.back-link {
+    display: none;
+
+    @include breakpoint($only-mobile) {
+      display: block;
+      position: absolute;
+      width: 2.063rem;
+      height: 2.375rem;
+      z-index: 1;
+
+      @include icon(arrowup, before) {
+        position: absolute;
+        #{$left}: -0.5rem;
+        top: -3px;
+        color: $checkout_mobile_back_link_icon;
+        font-size: 2.125rem;
+        transform: rotate(270deg);
+      }
+    }
   }
 
   .multistep-checkout {

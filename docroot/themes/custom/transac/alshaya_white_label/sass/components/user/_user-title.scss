@@ -104,15 +104,19 @@
 
   .back-link {
     @include breakpoint($only-mobile) {
-      @include icon(chevron#{$left}, before) {
-        font-size: 1.875rem;
-        margin-#{$left}: -0.75rem;
+      @include icon(arrowup, before) {
+        position: absolute;
+        #{$left}: -0.5rem;
+        top: -3px;
+        font-size: 2.125rem;
+        transform: rotate(270deg);
       }
 
       h1.c-page-title {
         display: inline-block;
         line-height: 1.5;
         vertical-align: top;
+        padding-#{$left}: 2rem;
       }
     }
   }
