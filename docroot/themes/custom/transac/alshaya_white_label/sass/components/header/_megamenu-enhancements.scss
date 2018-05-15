@@ -1,0 +1,42 @@
+.term-image__wrapper {
+  font-size: 0;
+  float: $right;
+  display: none;
+  position: relative;
+  z-index: 10;
+  max-width: 68%;
+  text-align: $right;
+
+  @include breakpoint($desktop) {
+    display: block;
+  }
+
+  .category-term-image {
+    display: inline-block;
+  }
+}
+
+.term-image {
+  display: inline-block;
+  position: relative;
+  margin-#{$right}: 1.5rem;
+  margin-bottom: 0.625rem;
+
+  img {
+    display: block;
+  }
+}
+
+.block-alshaya-main-menu ul.menu--two__list {
+  .term-image span {
+    font-size: 1rem;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 0.625rem;
+    font-family: $alshaya-bold;
+    text-align: center;
+    text-transform: none;
+  }
+}

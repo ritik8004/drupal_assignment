@@ -1,0 +1,24 @@
+<div class="category-term-image">
+    {% for key, level2 in data.child %}
+        {% if level2.term_image is not empty %}
+            <div class="term-image">
+              <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">
+                  {{ level2.term_image.term_image }}
+                  {% set image_text_style = '' %}
+                  {% if level2.term_image.bg_color %}
+                      {% set image_text_style = image_text_style ~ 'background-color:' ~ level2.term_image.bg_color ~ ';' %}
+                  {% endif %}
+                  {% if level2.term_image.font_color %}
+                      {% set image_text_style = image_text_style ~ 'color:' ~ level2.term_image.font_color ~ ';' %}
+                  {% endif %}
+                  {% if image_text_style is not empty %}
+                      <span style="{{ image_text_style }}" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</span>
+                  {% else %}
+                      <span href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</span>
+                  {% endif %}
+                  {% set image_text_style = '' %}
+                </a>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
