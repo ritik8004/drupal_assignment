@@ -79,10 +79,8 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
     $terms = $this->productCategoryTree->getCategoryRootTerms();
     $options = [];
     // Create option array of root terms.
-    if (!empty($terms)) {
-      foreach ($terms as $term) {
-        $options[$term['id']] = $term['label'];
-      }
+    foreach ($terms as $term) {
+      $options[$term['id']] = $term['label'];
     }
 
     $super_category_status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
