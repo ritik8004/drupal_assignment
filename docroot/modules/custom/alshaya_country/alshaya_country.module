@@ -35,11 +35,11 @@ function alshaya_country_set_default_regional_info($country_code, $store_search_
 
   // Re-save store finder view to ensure country code is updated.
   \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
-  
+
   // Set Country specific placeholder for store finder search.
   \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
-  ->set('store_search_placeholder', $store_search_placeholder)
-  ->save();
+    ->set('store_search_placeholder', $store_search_placeholder)
+    ->save();
 }
 
 /**
