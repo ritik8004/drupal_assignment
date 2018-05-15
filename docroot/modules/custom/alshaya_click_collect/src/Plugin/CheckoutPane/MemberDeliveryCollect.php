@@ -148,7 +148,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     ];
 
     $pane_form['store_finder']['store_location'] = [
-      '#type' => 'textfield',
+      '#type' => 'search',
       '#title' => $this->t('find your closest collection point'),
       '#prefix' => '<div class="label-store-location">' . $this->t('find your closest collection point') . '</div>',
       '#placeholder' => t('Enter a location'),

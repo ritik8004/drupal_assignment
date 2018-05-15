@@ -5,8 +5,8 @@
  *
  * @see https://docs.acquia.com/articles/using-new-relic-monitoring-multisite-environment
  */
+
 if (extension_loaded('newrelic')) {
-  $domain_fragments = explode('.', $_SERVER['HTTP_HOST']);
-  $site_name = array_shift($domain_fragments);
+  global $site_name;
   newrelic_set_appname("$site_name;alshaya.01live", '', 'true');
 }
