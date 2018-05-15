@@ -25,21 +25,8 @@ function alshaya_hnm_preprocess_page(&$variables) {
 
     // Attach the plp search js library to the promotion product listing page.
     elseif ($variables['node']->bundle() === 'acq_promotion') {
-      $variables['#attached']['library'][] = 'alshaya_hnm/plp_search_js';
+      $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
     }
-  }
-
-  // Attach the plp search js library to PLP page.
-  if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
-    $term = $routematch->getParameter('taxonomy_term');
-    if ($term->bundle() == 'acq_product_category') {
-      $variables['#attached']['library'][] = 'alshaya_hnm/plp_search_js';
-    }
-  }
-
-  // Attach the plp search js library to Search page.
-  if ($routematch->getRouteName() == 'view.search.page') {
-    $variables['#attached']['library'][] = 'alshaya_hnm/plp_search_js';
   }
 }
 
