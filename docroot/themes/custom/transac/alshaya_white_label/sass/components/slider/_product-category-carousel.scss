@@ -37,6 +37,7 @@
 
         @include breakpoint($only-mobile) {
           margin: 0 0.3125rem;
+          width: calc(100% - 0.625rem);
         }
       }
     }
