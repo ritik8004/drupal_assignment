@@ -360,14 +360,6 @@ function _alshaya_search_translate_search_view_config() {
  * Implements hook_alshaya_profile_installed_final_task().
  */
 function alshaya_search_alshaya_profile_installed_final_task() {
-  // Disable Acquia Search View if available.
-  $view = \Drupal::configFactory()->getEditable('views.view.acquia_search');
-
-  if ($view->getRawData()) {
-    $view->set('status', FALSE);
-    $view->save();
-  }
-
   if (isset($_ENV['AH_SITE_NAME'])) {
     // Enable alshaya_search_acquia_search to ensure config are overridden to
     // use solr on cloud.

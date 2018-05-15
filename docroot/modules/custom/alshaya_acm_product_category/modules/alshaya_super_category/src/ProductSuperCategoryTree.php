@@ -7,6 +7,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -34,6 +35,13 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   protected $requestStack;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
@@ -50,8 +58,11 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Route match service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
-  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection) {
+  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection, ConfigFactoryInterface $config_factory) {
+    $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
     $this->requestStack = $request_stack;
     parent::__construct($entity_type_manager, $language_manager, $cache, $route_match, $connection);
@@ -67,7 +78,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     $term = parent::getCategoryTermFromRoute();
 
     if (empty($term)) {
-      $current_uri = $this->requestStack->getCurrentRequest()->getRequestUri();
+      $request = $this->requestStack->getCurrentRequest();
+      $current_uri = $request->getRequestUri();
       $path_parts = pathinfo($current_uri);
       $term_path = explode('/', $path_parts['dirname']);
       if (!empty($term_path[2])) {
@@ -75,6 +87,10 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
         if (!empty($term->tid)) {
           $term = $this->termStorage->load($term->tid);
         }
+      }
+      elseif ($request->get('_route') == 'view.search.page') {
+        $brand = $request->query->get('brand');
+        $term = $this->termStorage->load($brand);
       }
     }
 
@@ -162,12 +178,27 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     }
 
     if ($term instanceof TermInterface && parent::VOCABULARY_ID == $term->bundle()) {
-      $parents = $this->getSuperCategoryMapping();
       // Get the top level parent id if parent exists.
+      $parents = $this->getSuperCategoryMapping();
       return isset($parents[$term->id()]) ? $parents[$term->id()] : NULL;
     }
-
     return NULL;
+  }
+
+  /**
+   * Get super category term from url.
+   *
+   * @return array|\Drupal\taxonomy\TermInterface|mixed|null
+   *   Return array of term or term object or term id.
+   */
+  public function getCategoryTermRequired() {
+    $term = $this->getCategoryTermRootParent();
+    if (empty($term)) {
+      $parent_terms = $this->getCategoryTreeCached();
+      $tid = $this->configFactory->get('alshaya_super_category.settings')->get('default_category_tid');
+      return isset($parent_terms[$tid]) ? $parent_terms[$tid] : NULL;
+    }
+    return $term;
   }
 
   /**

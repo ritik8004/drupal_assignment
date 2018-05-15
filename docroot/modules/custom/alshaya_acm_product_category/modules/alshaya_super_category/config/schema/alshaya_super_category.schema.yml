@@ -8,6 +8,9 @@ alshaya_super_category.settings:
     default_category_tid:
       type: integer
       label: 'Default parent term id for main menu'
+    solr_boost:
+      type: integer
+      label: 'Solr search boost value for super category related search'
     product_path_alter:
       type: boolean
       label: 'Alter product path alias'

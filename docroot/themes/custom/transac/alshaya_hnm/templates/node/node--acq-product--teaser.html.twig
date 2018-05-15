@@ -30,7 +30,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
   </a>
   {% if content.promotions %}
-    <div class="promotions">
+    <div class="promotions above-mobile-block">
       {{ content.promotions }}
     </div>
   {% endif %}
@@ -73,7 +73,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
     {% if content.promotions %}
       <tr>
-        <td colspan="2" class="sell-promotions">
+        <td colspan="2" class="sell-promotions promotions">
           {{ content.promotions }}
         </td>
       </tr>
