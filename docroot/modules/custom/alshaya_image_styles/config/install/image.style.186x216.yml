@@ -1,0 +1,14 @@
+uuid: 46fc9cd6-1d24-4074-80ca-7822388b591e
+langcode: en
+status: true
+dependencies: {  }
+name: 186x216
+label: 186x216
+effects:
+  dd59d67a-a13e-4e55-84c4-215882fc3120:
+    uuid: dd59d67a-a13e-4e55-84c4-215882fc3120
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 186
+      height: 216

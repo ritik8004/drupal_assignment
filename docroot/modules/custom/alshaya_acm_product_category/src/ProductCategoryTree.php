@@ -89,6 +89,20 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected $termsFontColor = [];
 
   /**
+   * File storage object.
+   *
+   * @var \Drupal\file\FileStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
+   * All terms image and image text font/bg color.
+   *
+   * @var array
+   */
+  protected $termsImagesAndColors = [];
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -113,6 +127,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $this->cache = $cache;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
+    $this->fileStorage = $entity_type_manager->getStorage('file');
   }
 
   /**
@@ -174,6 +189,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     // Initialize the font color for the term.
     $this->termsFontColor = $this->getTermsColors($langcode, self::VOCABULARY_ID, 'font');
 
+    // Initialize the image and image text font/bg color.
+    $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode, self::VOCABULARY_ID);
+
     if (empty($terms)) {
       return [];
     }
@@ -205,6 +223,11 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       // Set the font color for the term.
       if (!empty($this->termsFontColor[$term->tid])) {
         $data[$term->tid]['term_font_color'] = $this->termsFontColor[$term->tid];
+      }
+
+      // Set the term image and image text font/bg color.
+      if (!empty($this->termsImagesAndColors[$term->tid])) {
+        $data[$term->tid]['term_image'] = $this->termsImagesAndColors[$term->tid];
       }
 
     }
@@ -450,6 +473,59 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
 
     return array_unique($child_tids);
+  }
+
+  /**
+   * Get the all terms images and image text font/bg color.
+   *
+   * @param string $langcode
+   *   Language code.
+   * @param string $vid
+   *   Vocabulary name.
+   *
+   * @return array
+   *   Array of term images and image text color.
+   */
+  protected function getTermsImageAndColor($langcode, $vid) {
+    $query = $this->connection->select('taxonomy_term__field_category_image', 'ci');
+    $query->fields('ci', [
+      'field_category_image_target_id',
+      'field_category_image_alt',
+      'entity_id',
+    ]);
+    $query->leftJoin('taxonomy_term__field_image_text_bg_color', 'bg', 'ci.entity_id=bg.entity_id');
+    $query->fields('bg', ['field_image_text_bg_color_value']);
+    $query->leftJoin('taxonomy_term__field_image_text_font_color', 'fc', 'ci.entity_id=fc.entity_id');
+    $query->fields('fc', ['field_image_text_font_color_value']);
+    $query->condition('ci.langcode', $langcode);
+    $query->condition('fc.langcode', $langcode);
+    $query->condition('bg.langcode', $langcode);
+    $query->condition('ci.bundle', $vid);
+    $results = $query->execute()->fetchAll();
+
+    // If there are results.
+    if (!empty($results)) {
+      $data = [];
+      foreach ($results as $result) {
+        // If image is available, only then, we process the result.
+        if (!empty($image = $this->fileStorage->load($result->field_category_image_target_id))) {
+          $data[$result->entity_id] = [
+            'bg_color' => $result->field_image_text_bg_color_value ? $result->field_image_text_bg_color_value : NULL,
+            'font_color' => $result->field_image_text_font_color_value ? $result->field_image_text_font_color_value : NULL,
+            'term_image' => [
+              '#theme' => 'image_style',
+              '#style_name' => '186x216',
+              '#uri' => $image->getFileUri(),
+              '#alt' => $result->field_category_image_alt ? $result->field_category_image_alt : '',
+            ],
+          ];
+        }
+      }
+
+      return $data;
+    }
+
+    return [];
   }
 
 }
