@@ -8,6 +8,33 @@
 use Drupal\field\Entity\FieldConfig;
 
 /**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_acm_product_category_update_dependencies() {
+  return [
+    'alshaya_acm_product_category' => [
+      '8006' => [
+        'acq_sku' => '8006',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update form display and view display for category vocabulary.
+ */
+function alshaya_acm_product_category_update_8006() {
+  $configs = [
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
+}
+
+/**
  * Implements hook_update_N().
  *
  *  Install config for adding extra paragraph to main menu highlight field.

@@ -6,6 +6,7 @@
  */
 
 use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_theme().
@@ -58,4 +59,27 @@ function _alshaya_acm_product_category_hide_plp_banner_for_mobile(Term $term) {
   }
 
   return FALSE;
+}
+
+/**
+ * Implements hook_acq_sku_commerce_category_alter().
+ */
+function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterface $term, array $category, TermInterface $parent = NULL) {
+  // We consider status of parent category too for a particular category.
+  // If parent term not available, no additional condition required.
+  if ($parent instanceof TermInterface) {
+    /** @var \Drupal\acq_commerce\I18nHelper $i18nHelper */
+    $i18nHelper = \Drupal::service('acq_commerce.i18n_helper');
+
+    $langcode = $i18nHelper->getLangcodeFromStoreId($category['store_id']);
+
+    // Get current language translation if available.
+    if ($parent->hasTranslation($langcode)) {
+      $parent = $parent->getTranslation($langcode);
+    }
+
+    // We set status to enabled only if both parent and child are enabled.
+    $status = $parent->get('field_commerce_status')->getstring() && (int) $category['is_active'];
+    $term->get('field_commerce_status')->setValue((int) $status);
+  }
 }

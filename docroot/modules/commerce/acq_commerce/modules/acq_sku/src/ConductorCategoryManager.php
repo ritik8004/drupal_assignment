@@ -8,6 +8,7 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_commerce\Conductor\ClientFactory;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides a service for category data to taxonomy synchronization.
@@ -296,7 +297,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         }
       } while (!$lock_acquired);
 
-
       $parent_data = ($parent) ? [$parent->id()] : [0];
       $position = (isset($category['position'])) ? (int) $category['position'] : 1;
 
@@ -367,9 +367,15 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         $this->results['created']++;
       }
 
+      // Store status of category.
+      $term->get('field_commerce_status')->setValue((int) $category['is_active']);
+
       $term->get('field_category_include_menu')->setValue($category['in_menu']);
       $term->get('description')->setValue($category['description']);
       $term->setFormat('rich_text');
+
+      // Invoke the alter hook to allow all modules to update the term.
+      \Drupal::moduleHandler()->alter('acq_sku_commerce_category', $term, $category, $parent);
 
       try {
         $term->save();

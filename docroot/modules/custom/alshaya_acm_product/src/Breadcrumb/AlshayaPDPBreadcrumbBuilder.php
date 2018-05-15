@@ -142,6 +142,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
     if ($field_category = $node->get('field_category')) {
       $term_list = $field_category->getValue();
+      $term_list = $this->filterEnabled($term_list);
       $inner_term = $this->termTreeGroup($term_list);
 
       if ($inner_term) {
@@ -204,6 +205,27 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb->addCacheTags(['node:' . $node->id()]);
 
     return $breadcrumb;
+  }
+
+  /**
+   * Get only enabled terms.
+   *
+   * @param array $terms
+   *   Terms array.
+   *
+   * @return array
+   *   Filtered terms.
+   */
+  protected function filterEnabled(array $terms = []) {
+    // Remove disabled terms.
+    foreach ($terms as $index => $row) {
+      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($row['target_id']);
+      if (!$term->get('field_commerce_status')->getString()) {
+        unset($terms[$index]);
+      }
+    }
+
+    return $terms;
   }
 
   /**
