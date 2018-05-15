@@ -311,7 +311,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     // If it's a department page.
     elseif ($route_name == 'entity.node.canonical') {
       $node = $this->routeMatch->getParameter('node');
-
+      $terms = [];
       if ($node->bundle() == 'acq_product') {
         $terms = $node->get('field_category')->getValue();
       }
