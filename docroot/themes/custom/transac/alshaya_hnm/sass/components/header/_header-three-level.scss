@@ -1,8 +1,6 @@
 .has--three-levels {
   @include breakpoint($desktop) {
-    .menu--two__list {
-      column-count: 6;
-      padding-#{$right}: 7%;
+    .menu--two__list .menu__links__wrapper {
       padding-#{$left}: 6.1rem;
       padding-bottom: 2.5rem;
       padding-top: 2.5rem;
@@ -14,8 +12,12 @@
       }
     }
 
+    .term-image {
+      padding-top: 2.5rem;
+    }
+
     .highlights {
-      top: 0;
+      margin-top: -0.5rem;
       margin-#{$right}: 0;
       height: 27.5rem;
       width: auto;
@@ -63,4 +65,8 @@
       break-inside: auto;
     }
   }
+}
+
+.term-image__wrapper {
+  max-width: none;
 }
