@@ -29,7 +29,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     $steps = [];
     if (\Drupal::currentUser()->isAnonymous()) {
       $steps['login'] = [
-        'label' => $this->t('Welcome'),
+        'label' => $this->t('secure checkout'),
       ];
     }
 

@@ -672,13 +672,17 @@ $checkout_securely_icon_txt: $white-five;
 
 // Checkout Login page.
 $checkout_login_footer_actions_bg: $white-four;
-$checkout_login_tab_border: $cerulean-two;
-$checkout_login_tab_text: $cerulean-two;
-$checkout_login_tab_border_active: $marine-blue;
-$checkout_login_tab_text_active: $marine-blue;
+$checkout_login_tab_border: false; // remove.
+$checkout_login_tab_text: false; // remove.
+$checkout_login_tab_border_active: false; // remove.
+$checkout_login_tab_text_active: false; // remove.
 $checkout_login_content_mobile: $black;
 $checkout_login_guest_email_text: $grey-ash;
 $checkout_login_guest_email_text_mobile: $light-ash;
+// Checkout Login page - Mobile tabs redesign.
+$checkout_login_btn_bg: $primary_btn_bg;
+$checkout_login_btn_txt: $primary_btn_text;
+$checkout_login_returning_customer_btn_bg: $white-smoke-light;
 
 //  Checkout Confirmation.
 $checkout_confirmation_delivery_details: $white-smoke-light;
