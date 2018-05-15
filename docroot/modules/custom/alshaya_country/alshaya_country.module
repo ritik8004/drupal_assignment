@@ -57,10 +57,17 @@ function _alshaya_country_get_site_level_country_name() {
  *
  * @param string $store_search_placeholder
  *   The placeholder value.
+ * @param string $store_search_placeholder_ar
+ *   The placeholder value for arabic.
  */
-function alshaya_country_set_default_store_search_placeholder($store_search_placeholder) {
+function alshaya_country_set_default_store_search_placeholder($store_search_placeholder, $store_search_placeholder_ar) {
   // Set Country specific placeholder for store finder search.
   \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
     ->set('store_search_placeholder', $store_search_placeholder)
     ->save();
+
+  // Make configuration value translatable.
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings');
+  $config->set('store_search_placeholder', $store_search_placeholder_ar);
+  $config->save();
 }

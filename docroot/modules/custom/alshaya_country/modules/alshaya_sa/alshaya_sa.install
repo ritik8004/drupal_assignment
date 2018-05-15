@@ -20,8 +20,8 @@ function alshaya_sa_install() {
   // Country code and timezone for Saudi Arabia.
   alshaya_country_set_default_regional_info('SA');
 
-  // Store finder search placeholder for UAE.
-  alshaya_country_set_default_store_search_placeholder('e.g. Riyadh');
+  // Store finder search placeholder for Saudi Arabia.
+  alshaya_country_set_default_store_search_placeholder('e.g. Riyadh', 'مثل الرياض');
 }
 
 /**
@@ -29,5 +29,5 @@ function alshaya_sa_install() {
  */
 function alshaya_sa_update_8002() {
   // Store finder search placeholder for Saudi Arabia.
-  alshaya_country_set_default_store_search_placeholder('e.g. Riyadh');
+  alshaya_country_set_default_store_search_placeholder('e.g. Riyadh', 'مثل الرياض');
 }
