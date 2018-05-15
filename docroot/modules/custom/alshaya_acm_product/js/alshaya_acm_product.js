@@ -67,9 +67,8 @@
       // Only on mobile.
       if ($(window).width() < 768) {
         mobileStickyAddtobasketButton();
-        $(window, context).on('scroll', debounce(function () {
-          mobileStickyAddtobasketButton();
-        }, 100));
+        var scroll = ($('body').hasClass('safari')) ? 40 : 10;
+        $(window).on('scroll', debounce(function () {mobileStickyAddtobasketButton();}, scroll));
       }
     }
   };
