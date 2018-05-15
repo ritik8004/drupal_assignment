@@ -13,7 +13,7 @@
 
       var optionsBasket = {
         responsiveClass: true,
-        dots: false,
+        dots: true,
         responsive: {
           0: {
             items: 2,
@@ -59,7 +59,7 @@
         responsive: {
           0: {
             items: 2,
-            nav: true,
+            nav: false,
             stagePadding: 25,
             mouseDrag: true
           },
