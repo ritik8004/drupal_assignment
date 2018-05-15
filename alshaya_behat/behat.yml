@@ -77,10 +77,10 @@ mcuat:
               simpleurl: '/baby-boys-socks-gift-box-test'
               simpletitle: 'Baby Boys Socks Gift Box test'
               simpletitlear: 'صندوق هدية جوارب للأولاد'
-              configurl: '/pink-and-grey-marl-modesty-shorts-2-pack'
-              configtitle: 'Pink and Grey Marl Modesty Shorts - 2 Pack'
-              configtitlear: 'Pink and Grey Marl Modesty Shorts - 2 Pack'
-              configvariant: '5-6 Years'
+              configurl: '/pink-hareem-trousers'
+              configtitle: 'pink hareem trousers'
+              configtitlear: 'بنطلون hareem باللون الوردي'
+              configvariant: '2-3 Years'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -89,7 +89,7 @@ mcuat:
         output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://mckw-uat.factory.alshaya.com'
+      base_url: 'https://mcsa.factory.alshaya.com/en'
       files_path: "%paths.base%/features/mothercare/media"
 
 mcprod:
@@ -107,9 +107,9 @@ mcprod:
               simpleurl: 'lights-and-sounds-musical-buggy-bar'
               simpletitle: 'Lights And Sounds Musical Buggy Bar'
               simpletitlear: 'لوحة الموسيقى لعربة الأطفال Lights and Sounds'
-              configurl: '/animal-bodysuit-2-pack'
-              configtitle: 'Animal Bodysuit - 2 Pack'
-              configtitlear: 'لباس عادي برسمة الحيوانات - عبوة من قطعتين'
+              configurl: '/home-bodysuits-5-pack'
+              configtitle: 'home bodysuits - 5 pack'
+              configtitlear: 'لباس عادي برسمة المنزل - عبوة من 5 قطع'
               configvariant: '0-3 Months'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
@@ -155,7 +155,7 @@ hmsa:
     '': %paths.base%/features/hmkw/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/hmkw/manual ]
+      paths: [ %paths.base%/features/hmkw/common ]
       contexts:
         - FeatureContext:
             parameters:
@@ -183,7 +183,9 @@ hmuat:
     '': %paths.base%/features/hmkw/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/hmkw/manual ]
+      paths:
+          - %paths.base%/features/hmkw/common
+          - %paths.base%/features/hmkw/ae
       contexts:
         - FeatureContext:
             parameters:
@@ -194,7 +196,6 @@ hmuat:
               configtitle: 'Leggings'
               configtitlear: 'ليغنغز'
               configvariant: 'S'
-              base_url: 'https://hmkw-uat.factory.alshaya.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -211,18 +212,19 @@ hmqa:
     '': %paths.base%/features/hmkw/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/hmkw/manual ]
+      paths:
+          - %paths.base%/features/hmkw/common
+          - %paths.base%/features/hmkw/ae
       contexts:
         - FeatureContext:
             parameters:
               simpleurl: '/aq-product1'
               simpletitle: '[AQ]-Product_1'
               simpletitlear: '[AQ]-Product_1'
-              configurl: 'fine-knit-jumper-0'
-              configtitle: 'Fine-knit jumper'
-              configtitlear: ' كنزة من الصوف الناعم'
-              configvariant: 'S'
-              base_url: 'https://hmkw-test.factory.alshaya.com/en'
+              configurl: '/suit-trousers-slim-fit'
+              configtitle: 'Suit trousers Slim fit'
+              configtitlear: 'بنطلون بدلة بقصة Slim'
+              configvariant: '44'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -231,7 +233,7 @@ hmqa:
         output_path: %paths.base%/features/hmkw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://hmkw-test.factory.alshaya.com/en'
+      base_url: 'https://hmae-uat.factory.alshaya.com/en/'
       files_path: "%paths.base%/media"
 
 hmprod:
@@ -239,7 +241,9 @@ hmprod:
     '': %paths.base%/features/hmkw/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/hmkw/manual ]
+      paths:
+          - %paths.base%/features/hmkw/common
+          - %paths.base%/features/hmkw/ae
       contexts:
         - FeatureContext:
             parameters:
@@ -250,7 +254,6 @@ hmprod:
               configtitle: 'Bodycon dress'
               configtitlear: 'فستان باديكون'
               configvariant: '6'
-              base_url: 'https://kw.hm.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -288,4 +291,3 @@ vsqa:
     Behat\MinkExtension:
       base_url: 'https://alshaya_shield:AS_S@vskw.factory.alshaya.com/en'
       files_path: "%paths.base%/media"
-
