@@ -116,6 +116,7 @@
   }
 
   @include breakpoint($desktop) {
+    width: 36%;
     width: calc(37.5% - 1.5rem);
 
     &:nth-of-type(odd) {
