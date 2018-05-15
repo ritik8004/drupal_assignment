@@ -38,6 +38,12 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
         'data' => NULL,
       ],
     ],
+    'alshaya_main_menu_category_image' => [
+      'template' => 'alshaya-main-menu-category-image',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
   ];
 }
 
