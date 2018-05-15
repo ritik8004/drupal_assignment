@@ -31,26 +31,6 @@
                     </div>
                 </ul>
             {% endif %}
-            {#Highlight image start#}
-            {% if level2.highlight_paragraph is not empty %}
-                <div class="highlights">
-                    <div class="title">{{ 'highlights' | t }}</div>
-                    {% for highlight_paragraph in level2.highlight_paragraph %}
-                        <div class="highlighted" gtm-type="gtm-highlights">
-                            <a href="{{ highlight_paragraph.image_link }}">
-                                {{ highlight_paragraph.img }}
-                                {% if highlight_paragraph.title %}
-                                    <span class="hightlight__title">{{ highlight_paragraph.title }}</span>
-                                {% endif %}
-                                {% if highlight_paragraph.description %}
-                                    <span class="hightlight__description">{{ highlight_paragraph.description }}</span>
-                                {% endif %}
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            {#Highlight image end#}
             </li>
         {% endfor %}
     </div>
@@ -58,25 +38,8 @@
         {#Term image starts#}
         {{ alshaya_main_menu('alshaya_main_menu_category_image', data) }}
         {#Term image ends#}
-        {#Highlight image start#}
-        {% if data.highlight_paragraph is not empty %}
-            <div class="highlights">
-                <div class="title">{{ 'highlights' | t }}</div>
-                {% for highlight_paragraph in data.highlight_paragraph %}
-                    <div class="highlighted" gtm-type="gtm-highlights">
-                        <a href="{{ highlight_paragraph.image_link }}">
-                            {{ highlight_paragraph.img }}
-                            {% if highlight_paragraph.title %}
-                                <span class="hightlight__title">{{ highlight_paragraph.title }}</span>
-                            {% endif %}
-                            {% if highlight_paragraph.description %}
-                                <span class="hightlight__description">{{ highlight_paragraph.description }}</span>
-                            {% endif %}
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+        {#Highlight image starts#}
+        {{ alshaya_main_menu('alshaya_main_menu_highlights', data) }}
+        {#Highlight image end#}
     </div>
-    {#Highlight image end#}
 </ul>
