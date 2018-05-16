@@ -29,6 +29,7 @@ use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\ViewExecutable;
+use Drupal\Core\Template\Attribute;
 
 /**
  * Alter the items that are indexed.
@@ -768,6 +769,29 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
   if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
     $list_view_items_per_page = \Drupal::config('alshaya_acm_product.settings')->get('list_view_items_per_page');
     $view->setItemsPerPage($list_view_items_per_page);
+  }
+}
+
+/**
+ * Implements hook_preprocess_views_infinite_scroll_pager().
+ */
+function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
+  global $pager_page_array;
+
+  $element = $vars['element'];
+  $page_auto_load = \Drupal::config('alshaya_acm_product.settings')->get('list_view_auto_page_load_count');
+
+  if (isset($_REQUEST['view_name']) && in_array($_REQUEST['view_name'], ['search', 'alshaya_product_list'])) {
+    // Change infinite scroll to load after three scrolls.
+    $vars['options']['automatically_load_content'] = TRUE;
+    if (($pager_page_array[$element] + 1) % $page_auto_load == 0 && $pager_page_array[$element] !== 0) {
+      $vars['options']['automatically_load_content'] = FALSE;
+    }
+
+    $vars['attributes'] = new Attribute([
+      'class' => ['js-pager__items', 'pager'],
+      'data-drupal-views-infinite-scroll-pager' => $vars['options']['automatically_load_content'] ? 'automatic' : TRUE,
+    ]);
   }
 }
 
