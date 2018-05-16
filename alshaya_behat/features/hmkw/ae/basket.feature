@@ -1,4 +1,4 @@
-@javascript @manual @mmcpa-2325 @prod
+@javascript
 Feature: Test basket page
 
   Background:
@@ -6,10 +6,6 @@ Feature: Test basket page
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-#    Given I am on a simple product page
-#    And I wait for the page to load
-#    When I press "Add to cart"
-#    And I wait for AJAX to finish
     When I am on a configurable product
     And I wait for the page to load
     When I press "add to basket"
@@ -60,7 +56,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see "Home delivery in 1-2 days. Free on orders over KWD 25."
+    Then I should see "Home delivery in 1-3 days. Free on orders over AED 300."
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
     Then I should see "Collect the order in store from 1-2 days"
@@ -115,7 +111,7 @@ Feature: Test basket page
     And I wait for the page to load
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see ".خدمة التوصيل للمنازل خلال 1-2 أيام. التوصيل مجاني للطلبيات التي تزيد عن 25 د.ك."
+    Then I should see ".خدمة التوصيل للمنازل خلال 1-3 أيام. التوصيل مجاني للطلبيات التي تزيد عن 300 د.إ.."
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
     Then I should see "استلم طلبيتك من المحل خلال 1-2 أيام"
