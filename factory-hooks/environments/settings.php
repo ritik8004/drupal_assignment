@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file.
  *
@@ -163,16 +164,13 @@ function alshaya_get_additional_settings($site, $env) {
       'ae' => [
         'default' => [
           'store_id' => [
-            'ar' => 3,
+            'en' => 6,
+            'ar' => 5,
           ],
           'magento_lang_prefix' => [
-            'en' => 'kwt_en',
-            'ar' => 'kwt_ar',
+            'en' => 'uae_en',
+            'ar' => 'uae_ar',
           ],
-          //'magento_lang_prefix' => [
-          //  'en' => '',
-          //  'ar' => 'uae_ar',
-          //],
         ],
       ],
       'default' => [
