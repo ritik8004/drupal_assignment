@@ -113,3 +113,11 @@
 .owl-dot {
   outline: none;
 }
+
+.owl-nav {
+  button {
+    span {
+      display: none;
+    }
+  }
+}
