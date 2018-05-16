@@ -65,15 +65,34 @@
         @include breakpoint($tablet) {
           font-weight: bold;
         }
-      }
 
-      .hours--label,
-      .hours--label.open {
+        @include icon(chevronup, after) {
+          color: $checkout_cc_list_hours_label_icon;
+          font-size: 2rem;
+          top: -0.5rem;
+          #{$left}: 5.5rem;
+          position: absolute;
+        }
+
         @include breakpoint($only-mobile) {
+          &::after {
+            #{$left}: 15.5rem;
+          }
+        }
+
+        &.open {
           @include icon(chevrondown, after) {
+            color: $checkout_cc_list_hours_label_icon;
             font-size: 2rem;
             top: -0.5rem;
-            #{$left}: 15.5rem;
+            #{$left}: 5.5rem;
+            position: absolute;
+          }
+
+          @include breakpoint($only-mobile) {
+            &::after {
+              #{$left}: 15.5rem;
+            }
           }
         }
       }
@@ -81,6 +100,16 @@
 
     .selected-store-content {
       .store-actions {
+        @include breakpoint($only-tablet) {
+          #{$right}: 5%;
+        }
+
+        .store-on-map {
+          @include breakpoint($only-tablet) {
+            margin-top: 1.3125rem;
+          }
+        }
+
         .select-store,
         .store-on-map,
         .view-on-map,
@@ -94,8 +123,12 @@
         .change-store,
         .store-on-map {
           @include breakpoint($tablet) {
-            width: 13.125rem;
+            width: 10.125rem;
             height: 2.5rem;
+          }
+
+          @include breakpoint($desktop) {
+            width: 13.125rem;
           }
         }
 
