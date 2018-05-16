@@ -58,6 +58,67 @@
       }
     }
   }
+
+  #selected-store-wrapper {
+    .store-open-hours {
+      .hours--label {
+        @include breakpoint($tablet) {
+          font-weight: bold;
+        }
+      }
+
+      .hours--label,
+      .hours--label.open {
+        @include breakpoint($only-mobile) {
+          @include icon(chevrondown, after) {
+            font-size: 2rem;
+            top: -0.5rem;
+            #{$left}: 15.5rem;
+          }
+        }
+      }
+    }
+
+    .selected-store-content {
+      .store-actions {
+        .select-store,
+        .store-on-map,
+        .view-on-map,
+        .change-store {
+          font-family: $alshaya-thin;
+          text-transform: uppercase;
+          font-size: 0.875rem;
+        }
+
+        .select-store,
+        .change-store,
+        .store-on-map {
+          @include breakpoint($tablet) {
+            width: 13.125rem;
+            height: 2.5rem;
+          }
+        }
+
+        .store-on-map,
+        .view-on-map {
+          border: 1px solid $checkout_cc_list_map_link_border;
+          background-color: $checkout_cc_list_map_link_bg;
+          padding: 0.3125rem 0;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        .store-delivery-time {
+          width: 20%;
+        }
+
+        .store-open-hours {
+          width: 35%;
+          padding-#{$left}: 2.625rem;
+        }
+      }
+    }
+  }
 }
 
 .alias--cart-checkout-delivery {
