@@ -78,19 +78,11 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
    * {@inheritdoc}
    */
   public function build(FacetInterface $facet, array $results) {
-    $ids = [];
-
-    /** @var \Drupal\facets\Result\ResultInterface $result */
-    foreach ($results as $delta => $result) {
-      $ids[$delta] = $result->getRawValue();
-    }
-
-    $entity_type = '';
     $source = $facet->getFacetSource();
 
     // Support multiple entity types when using Search API.
-    if ($source instanceof SearchApiDisplay) {
-
+    if (($source instanceof SearchApiDisplay) &&
+      ($facet->getUseHierarchy())) {
       $field_id = $facet->getFieldIdentifier();
 
       // Load the index from the source, load the definition from the
@@ -104,21 +96,26 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
         ->getPropertyDefinition('entity')
         ->getTargetDefinition()
         ->getEntityTypeId();
-    }
 
-    // Process taxonomy terms & remove items not included in menu.
-    if ($entity_type == 'taxonomy_term') {
-      // Load all indexed entities of this type.
-      $entities = $this->entityTypeManager
-        ->getStorage($entity_type)
-        ->loadMultiple($ids);
+      // Process taxonomy terms & remove items not included in menu.
+      if ($entity_type == 'taxonomy_term') {
 
-      // Loop over all results.
-      foreach ($results as $i => $result) {
-        if (($entities[$ids[$i]] instanceof TermInterface) &&
-          ($entities[$ids[$i]]->get('field_included_in_menu')->getString() != 1)) {
-          unset($results[$i]);
-          continue;
+        /** @var \Drupal\facets\Result\ResultInterface $result */
+        foreach ($results as $delta => $result) {
+          $ids[$delta] = $result->getRawValue();
+        }
+
+        // Load all indexed entities of this type.
+        $entities = $this->entityTypeManager
+          ->getStorage($entity_type)
+          ->loadMultiple($ids);
+
+        // Loop over all results.
+        foreach ($results as $i => $result) {
+          if (($entities[$ids[$i]] instanceof TermInterface) &&
+            ($entities[$ids[$i]]->get('field_category_include_menu')->getString() != 1)) {
+            unset($results[$i]);
+          }
         }
       }
     }

@@ -81,5 +81,11 @@ function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterf
     // We set status to enabled only if both parent and child are enabled.
     $status = $parent->get('field_commerce_status')->getstring() && (int) $category['is_active'];
     $term->get('field_commerce_status')->setValue((int) $status);
+
+    // Set children as not included in menu if the parent is being set to be
+    // excluded from menu.
+    if ($parent->get('field_category_include_menu')->getString() == 0 && $category['in_menu'] == 1) {
+      $term->get('field_category_include_menu')->setValue($parent->get('field_category_include_menu')->getString());
+    }
   }
 }
