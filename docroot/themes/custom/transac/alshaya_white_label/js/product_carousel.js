@@ -13,10 +13,11 @@
 
       var optionsBasket = {
         responsiveClass: true,
-        dots: false,
+        dots: true,
         responsive: {
           0: {
             items: 2,
+            dragSlideBy: 2,
             nav: false,
             stagePadding: 25,
             mouseDrag: true
@@ -38,6 +39,7 @@
         responsive: {
           0: {
             items: 2,
+            dragSlideBy: 2,
             nav: false,
             stagePadding: 25,
             mouseDrag: true
@@ -59,7 +61,8 @@
         responsive: {
           0: {
             items: 2,
-            nav: true,
+            dragSlideBy: 2,
+            nav: false,
             stagePadding: 25,
             mouseDrag: true
           },
@@ -80,6 +83,7 @@
         responsive: {
           0: {
             items: 2,
+            dragSlideBy: 2,
             nav: false,
             stagePadding: 25,
             mouseDrag: true
@@ -95,30 +99,6 @@
         }
       };
 
-      // This and next function is added to swipe two items together in mobile.
-      function onDrag(event) {
-        this.initialCurrent = event.relatedTarget.current();
-      }
-
-      // This and prev function is added to swipe two items together in mobile.
-      function onDragged(event) {
-        var owl = event.relatedTarget;
-        var draggedCurrent = owl.current();
-
-        if (draggedCurrent > this.initialCurrent) {
-          owl.current(this.initialCurrent);
-          // @TODO: Make speed dynamic based on config.
-          owl.next(750);
-          owl.next(500);
-        }
-        else if (draggedCurrent < this.initialCurrent) {
-          owl.current(this.initialCurrent);
-          // @TODO: Make speed dynamic based on config.
-          owl.prev(750);
-          owl.prev(500);
-        }
-      }
-
       function applyRtl(ocObject, options) {
         // Get number of items.
         var itemsCount = ocObject.find('.views-row').length;
@@ -129,12 +109,6 @@
             options.responsive[i].loop = (options.responsive[i].items < itemsCount);
           }
         }
-
-        var transient = {};
-
-        // Slide by 2 by default.
-        options.onDrag = onDrag.bind(transient);
-        options.onDragged = onDragged.bind(transient);
 
         if (isRTL()) {
           ocObject.attr('dir', 'rtl');

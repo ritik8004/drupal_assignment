@@ -149,13 +149,9 @@ function alshaya_get_env_keys($site, $env) {
     // BathBodyWorks AE.
     'bbwae' => [
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwae_test',
       ],
-      //'default' => [
-      //  'magento' => 'bbw_qa',
-      //  'conductor' => 'bbwae_test',
-      //],
     ],
     // Pottery Barn AE.
     'pbae' => [
