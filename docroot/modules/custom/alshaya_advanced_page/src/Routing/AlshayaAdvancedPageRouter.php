@@ -35,13 +35,6 @@ class AlshayaAdvancedPageRouter extends Router {
    */
   protected function matchCollection($pathinfo, RouteCollection $routes) {
     if ($route = $routes->get('entity.node.canonical')) {
-
-      // If path in request is same as what we set for department page
-      // of original request, we do the processing.
-      if ((!empty($route->getOption('_original_path')) && $route->getOption('_original_path') === $pathinfo)) {
-        $this->isSubRequest = FALSE;
-      }
-
       // Only if full page request.
       if (!$this->isSubRequest) {
         // @see AlshayaAdvancedPageRouteProvider::getRoutesByPath().
