@@ -11,6 +11,9 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\node\Entity\Node;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Database;
 
 /**
@@ -291,4 +294,19 @@ function _alshaya_advanced_page_delete_fields($tablename, $nids) {
   $db->delete($tablename)
     ->condition('entity_id', $nids, 'IN')
     ->execute();
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_advanced_page_block_access(Block $block, $operation, AccountInterface $account) {
+  $block_plugin = $block->getPluginId();
+  // If facet block.
+  if (strpos($block_plugin, 'facet_block:') !== FALSE) {
+    // Not show block for department page.
+    return AccessResult::forbiddenIf(!empty(\Drupal::routeMatch()->getRouteObject()->getOption('_department_page_term')));
+  }
+
+  // No opinion.
+  return AccessResult::neutral();
 }
