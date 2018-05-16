@@ -8,29 +8,6 @@
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Implements hook_preprocess_page().
- */
-function alshaya_hnm_preprocess_page(&$variables) {
-  // Check if page is panel pages.
-  $routematch = \Drupal::routeMatch();
-
-  if ($routematch->getRouteName() === "acq_customer.orders" || $routematch->getRouteName() === 'acq_cart.cart') {
-    $variables['#attached']['library'][] = 'alshaya_hnm/convert_to_select2';
-  }
-
-  if (isset($variables['node']) && $variables['node'] instanceof NodeInterface) {
-    if ($variables['node']->bundle() === 'acq_product') {
-      $variables['#attached']['library'][] = 'alshaya_hnm/convert_to_select2';
-    }
-
-    // Attach the plp search js library to the promotion product listing page.
-    elseif ($variables['node']->bundle() === 'acq_promotion') {
-      $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
-    }
-  }
-}
-
-/**
  * Implements template_preprocess_block().
  */
 function alshaya_hnm_preprocess_block(&$variables) {
