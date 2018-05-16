@@ -54,11 +54,6 @@ processor_configs:
     weights:
       build: 5
     settings: {  }
-  hide_taxonomy_not_in_menu:
-    processor_id: hide_taxonomy_not_in_menu
-    weights:
-      build: 5
-    settings: {  }
   translate_entity:
     processor_id: translate_entity
     weights:
