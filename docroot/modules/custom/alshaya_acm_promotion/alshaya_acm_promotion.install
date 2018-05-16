@@ -21,12 +21,8 @@ function alshaya_acm_promotion_update_8011() {
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_acm_promotion');
-
-  $optional_config = [
-    'views.view.plp_promotional_banner',
-  ];
-
-  alshaya_config_install_configs($optional_config, 'alshaya_acm_promotion', 'optional');
+  alshaya_config_install_configs(['views.view.plp_promotional_banner'], 'alshaya_acm_promotion', 'optional');
+  alshaya_config_install_configs(['core.entity_form_display.taxonomy_term.acq_product_category.default'], 'alshaya_acm_product_category');
 }
 
 /**
