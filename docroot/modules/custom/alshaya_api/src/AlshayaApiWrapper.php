@@ -288,6 +288,58 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Function to get all the enabled SKUs from the Merchandising Report.
+   *
+   * @param array|string $types
+   *   The SKUs type to get from Magento (simple, configurable).
+   *
+   * @return array
+   *   An array of SKUs indexed by type.
+   */
+  public function getSkusFromMerchandisingReport($types = ['simple', 'configurable']) {
+    $lang_prefix = explode('_', $this->config->get('magento_lang_prefix'))[0];
+
+    $url = $this->config->get('magento_host') . '/media/reports/merchandising/merchandising-report-' . $lang_prefix . '.csv';
+
+    // We need this to avoid issue with invalid certificate.
+    $context = [
+      'ssl' => [
+        'verify_peer' => FALSE,
+        'verify_peer_name' => FALSE,
+      ],
+    ];
+
+    $handle = fopen($url, 'r', FALSE, stream_context_create($context));
+
+    $mskus = [];
+
+    // We have not been able to open the stream.
+    if (!$handle) {
+      // @TODO: Add some logs.
+      return $mskus;
+    }
+
+    // Data index in row.
+    $sku_index = 4;
+    $parent_index = 2;
+    $status_index = 6;
+
+    while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+      // We don't deal with disabled SKUs.
+      if ($data[$status_index] == 'Disabled') {
+        continue;
+      }
+
+      $type = empty($data[$parent_index]) ? 'configurable' : 'simple';
+
+      $mskus[$type][] = $data[$sku_index];
+    }
+    fclose($handle);
+
+    return $mskus;
+  }
+
+  /**
    * Function to get all the enabled SKUs from the API.
    *
    * @param array|string $types
@@ -298,7 +350,7 @@ class AlshayaApiWrapper {
    *
    * @TODO: Create appropriate endpoint on conductor and move this to commerce.
    */
-  public function getSkus($types = ['simple', 'configurable']) {
+  public function getSkusFromApi($types = ['simple', 'configurable']) {
     $endpoint = 'products?';
 
     // Query parameters to get all enabled SKUs. We only want the SKUs.
