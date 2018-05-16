@@ -1,5 +1,6 @@
 status: false
 default_category_tid: 0
+solr_boost: 21
 product_path_alter: true
 footer_menu_blocks:
   - about-brand
