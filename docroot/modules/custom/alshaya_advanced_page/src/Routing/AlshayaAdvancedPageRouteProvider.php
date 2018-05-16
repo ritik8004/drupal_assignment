@@ -30,6 +30,7 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
             // Setting options to identify the department page later.
             $route->setOption('_department_page_term', $exploded_path[3]);
             $route->setOption('_department_page_node', $department_node);
+            $route->setOption('_original_path', $path);
             $collection->add($node_route[0]['name'], $route);
             $collection->remove('entity.taxonomy_term.canonical');
           }
