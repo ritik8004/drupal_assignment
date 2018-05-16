@@ -10,7 +10,6 @@ use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\facets\Result\ResultInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
@@ -370,111 +369,6 @@ function alshaya_search_alshaya_profile_installed_final_task() {
     // use solr in local.
     \Drupal::service('module_installer')->install(['alshaya_search_local_search']);
   }
-}
-
-/**
- * Implements hook_alshaya_facet_results_alter().
- */
-function alshaya_search_alshaya_facet_hierarchial_tree_alter(&$results) {
-  // Current interface langcode.
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-
-  $ids = array_keys($results);
-
-  // List of term ids that need to be hidden based on its parent's not
-  // included in menu flag.
-  $hide_tids = [];
-
-  // Process results array & mark terms for hiding.
-  // Load indexed term object.
-  $entities = \Drupal::service('entity_type.manager')
-    ->getStorage('taxonomy_term')
-    ->loadMultiple($ids);
-
-  // Remove all disabled terms.
-  foreach ($results as $tid => $result) {
-    $term = isset($entities[$tid]) ? $entities[$tid] : NULL;
-    if ($term instanceof TermInterface) {
-      if ($term->hasTranslation($langcode)) {
-        $entities[$tid] = $term->getTranslation($langcode);
-        $term = $entities[$tid];
-      }
-
-      if (!$term->get('field_commerce_status')->getString()) {
-        unset($results[$tid]);
-      }
-    }
-  }
-
-  // Check each term for include_menu flag & mark its children for hiding in
-  // case its flagged to be not in menu.
-  foreach ($results as $tid => $result) {
-    if ((($term = $entities[$tid]) instanceof TermInterface) &&
-      ($term->get('field_category_include_menu')->getString() != 1)) {
-      $hide_tids[$tid] = $tid;
-      _alshaya_search_mark_hide_chidren($result, $hide_tids);
-    }
-    // While rendering an item included in menu, check if its nested children
-    // are included. If not, remove them from child list.
-    elseif (($term = $entities[$tid]) instanceof TermInterface) {
-      _alshaya_search_hide_children_from_parent_result($result, $entities);
-    }
-  }
-
-  // Process tids marked for hiding.
-  _alshaya_search_hide_terms($hide_tids, $results);
-}
-
-/**
- * Helper function to hide all children terms.
- */
-function _alshaya_search_mark_hide_chidren($result, &$hide_tids) {
-  if (count($children = $result->getChildren()) > 0) {
-    foreach ($children as $key => $child) {
-      $hide_tids[$key] = $key;
-      _alshaya_search_mark_hide_chidren($child, $hide_tids);
-    }
-  }
-}
-
-/**
- * Helper function to hide marked terms from category facet.
- */
-function _alshaya_search_hide_terms($hide_tids, &$results) {
-  foreach ($hide_tids as $tid) {
-    unset($results[$tid]);
-  }
-}
-
-/**
- * Helper function to clear children items from the parent result item.
- *
- * @param \Drupal\facets\Result\ResultInterface $result
- *   Result item being processed.
- * @param array $entities
- *   Set of taxonomy terms keyed by tids.
- */
-function _alshaya_search_hide_children_from_parent_result(ResultInterface $result, array $entities) {
-  // Return early if we are processing a leaf term.
-  if (count($children = $result->getChildren()) == 0) {
-    return;
-  }
-
-  foreach ($children as $tid => $child) {
-    if ($child->getChildren() > 0) {
-      _alshaya_search_hide_children_from_parent_result($child, $entities);
-    }
-
-    // Check if the children has the attribute set to not include in menu &
-    // remove it from the list accordingly.
-    if ((isset($entities[$tid])) &&
-      (($entities[$tid] instanceof TermInterface) &&
-      ($entities[$tid]->get('field_category_include_menu')->getString() != 1))) {
-      unset($children[$tid]);
-    }
-  }
-
-  $result->setChildren($children);
 }
 
 /**
