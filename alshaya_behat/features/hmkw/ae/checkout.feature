@@ -1,4 +1,4 @@
-@javascript @checkout @english @eng_checkout @mmcpa-1930 @manual
+@javascript
 Feature: Test Checkout feature
   Background:
     Given I am on a configurable product
@@ -12,7 +12,6 @@ Feature: Test Checkout feature
     And I follow "checkout as guest"
     And I wait for the page to load
 
-  @hd @cod
   Scenario:  As a Guest,
   I should be able to checkout using COD
     When I follow "Home delivery"
@@ -40,13 +39,11 @@ Feature: Test Checkout feature
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
     And I accept terms and conditions
-#    And I press "place order"
-#    And I wait for the page to load
-#    Then I should see text matching "Thank you for shopping online with us, Test Test "
-#    And I should see text matching "Your order number is "
+    And I press "place order"
+    And I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    And I should see text matching "Your order number is "
 
-
-  @cc
   Scenario: As a Guest
     I should be able to view the number of results displayed
     Buttons to toggle between list and Map view
@@ -62,7 +59,6 @@ Feature: Test Checkout feature
     And I should see the link "Map view"
     And I should see the link "Back to basket"
 
-  @cc
   Scenario: As a Guest
     I should be able to see the two tabs
     on Click and Collect
@@ -74,7 +70,6 @@ Feature: Test Checkout feature
     And I should see the link "Map view"
     But the "List view" tab should be selected
 
-  @cc
   Scenario: As a Guest
     I should be able to see various options
     for each Store on Click & Collect
@@ -88,7 +83,6 @@ Feature: Test Checkout feature
     And I should see select this store for all the listed stores
     Then I should see view on map button for all the listed stores
 
-  @cc
   Scenario: As a Guest
     I should be navigated to basket page
     On clicking 'back to basket' from checkout CC page
@@ -101,7 +95,6 @@ Feature: Test Checkout feature
     Then I should see the button "checkout securely"
     And the url should match "/cart"
 
-  @cc
   Scenario: As a Guest
     I should be able to see the store timings
     on clicking the Opening hours link and
@@ -118,7 +111,6 @@ Feature: Test Checkout feature
     When I click the label for ".hours--label.open"
     And I should not see "Tuesday"
 
-  @hd @cs
   Scenario: As a Guest
     I should be able to checkout on HD
     using Cybersource payment method
@@ -143,11 +135,11 @@ Feature: Test Checkout feature
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I accept terms and conditions
-#    And I press "place order"
-#    And I wait 10 seconds
-#    When I wait for the page to load
-#    Then I should see text matching "Thank you for shopping online with us, Test Test "
-#    And I should see text matching "Your order number is "
+    And I press "place order"
+    And I wait 10 seconds
+    When I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    And I should see text matching "Your order number is "
 
   @cc @cs
   Scenario:  As a Guest
@@ -180,13 +172,12 @@ Feature: Test Checkout feature
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
-#    And I press "place order"
-#    And I wait 10 seconds
-#    When I wait for the page to load
-#    Then I should see text matching "Thank you for shopping online with us, Test Test "
-#    And I should see text matching "Your order number is "
+    And I press "place order"
+    And I wait 10 seconds
+    When I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    And I should see text matching "Your order number is "
 
-  @hd
   Scenario: As a Guest user
   I should be able to see order summary, back to basket option
   and the customer service block
@@ -199,9 +190,6 @@ Feature: Test Checkout feature
     Then the url should match "/cart"
     And I should see the button "checkout securely"
 
-
-
-  @cc @cs
   Scenario: As a Guest user
   I should be able to search for a store on Map view
   select it and complete the checkout journey
@@ -237,12 +225,11 @@ Feature: Test Checkout feature
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
-#    And I press "place order"
-#    And I wait 10 seconds
-#    When I wait for the page to load
-#    Then I should see text matching "Thank you for shopping online with us, Test Test "
+    And I press "place order"
+    And I wait 10 seconds
+    When I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
 
-  @cc
   Scenario: As a Guest user
   whenever I click 'back to basket' link on Map view
   I should be redirected to the basket page

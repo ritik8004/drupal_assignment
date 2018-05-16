@@ -5,7 +5,6 @@ Feature: Test the PLP page
     Given I am on "/ladies/new-arrivals/clothes"
     And I wait for the page to load
 
-  @eng @prod
   Scenario: As a Guest
     I should be able to see the header and the footer
     Then I should be able to see the header
@@ -18,15 +17,14 @@ Feature: Test the PLP page
     Then I should see "Colour"
     And I should see "Price"
     Then I should see "Size"
-    
-  @eng @prod
+
   Scenario: As a Guest
     I should be able to sort in ascending and descending order the list
-#    When I select "Name A to Z" from the dropdown
-#    And I wait for AJAX to finish
-#    Then I should see results sorted in ascending order
-#    When I select "Name Z to A" from the dropdown
-#    And I wait for AJAX to finish
+    When I select "Name A to Z" from the dropdown
+    And I wait for AJAX to finish
+    Then I should see results sorted in ascending order
+    When I select "Name Z to A" from the dropdown
+    And I wait for AJAX to finish
     Then I should see results sorted in descending order
     When I select "Price High to Low" from the dropdown
     And I wait for AJAX to finish
@@ -35,7 +33,7 @@ Feature: Test the PLP page
     And I wait for AJAX to finish
     Then I should see results sorted in ascending price order
 
-  @eng
+
   Scenario: As a Guest
     I should be able to select a product in stock and
     complete the checkout journey
@@ -72,12 +70,11 @@ Feature: Test the PLP page
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
     And I accept terms and conditions
-#    And I press "place order"
-#    And I wait for the page to load
-#    Then I should see text matching "Thank you for shopping online with us, Test Test"
-#    And I should see text matching "Your order number is "
+    And I press "place order"
+    And I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
+    And I should see text matching "Your order number is "
 
-  @arabic @prod
   Scenario: As a Guest
   I should be able to see the header and the footer on Arabic site
     When I follow "عربية"
@@ -93,7 +90,7 @@ Feature: Test the PLP page
     And I should see "السعر"
     Then I should see "المقاس"
 
-  @arabic
+
   Scenario: As a Guest on Arabic site
   I should be able to select a product in stock and
   complete the checkout journey
@@ -132,10 +129,10 @@ Feature: Test the PLP page
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
     And I accept terms and conditions
-#    When I press "سجل الطلبية"
-#    And I wait for the page to load
-#    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
-#    Then I should see "رقم طلبيتك هو"
+    When I press "سجل الطلبية"
+    And I wait for the page to load
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
+    Then I should see "رقم طلبيتك هو"
 
 
 

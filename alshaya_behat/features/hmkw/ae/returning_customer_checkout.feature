@@ -15,7 +15,6 @@ Feature: Test various checkout scenarios as returning customer
     When I press "sign in"
     And I wait for the page to load
 
-  @hd @cod
   Scenario: As a returning customer
   I should be able to place an order for HD - COD
     When I follow "Home delivery"
@@ -29,13 +28,11 @@ Feature: Test various checkout scenarios as returning customer
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
     Then I accept terms and conditions
-#    When I press "place order"
-#    And I wait for the page to load
-#    Then I should see text matching "Thank you for shopping online with us, Test Test"
-#    And I should see text matching "Your order number is "
+    When I press "place order"
+    And I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
+    And I should see text matching "Your order number is "
 
-
-  @hd @cs
   Scenario: As a returning customer
     I should be able to checkout using HD - Cybersource
     When I follow "Home delivery"
@@ -52,13 +49,13 @@ Feature: Test various checkout scenarios as returning customer
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I accept terms and conditions
-#    And I press "place order"
-#    And I wait 10 seconds
-#    When I wait for the page to load
-#    Then I should see text matching "Thank you for shopping online with us, Test Test"
-#    And I should see text matching "Your order number is "
+    And I press "place order"
+    And I wait 10 seconds
+    When I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
+    And I should see text matching "Your order number is "
 
-  @cc @cs
+
   Scenario: As a returning customer
   I should be able to checkout using CC - Cybersource
     When I follow "Click & Collect"
@@ -77,8 +74,8 @@ Feature: Test various checkout scenarios as returning customer
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
-#    When I press "place order"
-#    And I wait 10 seconds
-#    When I wait for the page to load
-#    Then I should see text matching "Thank you for shopping online with us, Test Test"
-#    And I should see text matching "Your order number is "
+    When I press "place order"
+    And I wait 10 seconds
+    When I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
+    And I should see text matching "Your order number is "

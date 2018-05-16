@@ -1,7 +1,6 @@
-@mmcpa-1735 @javascript @manual
+ @javascript
 Feature: Search feature
 
-  @eng @prod
   Scenario: As a Guest user
     I should be able to search products
     Given I am on homepage
@@ -15,7 +14,6 @@ Feature: Search feature
     And I wait for the page to load
     Then I should see Search results page for "tops"
 
-  @eng @prod
   Scenario: As a Guest user
   I should be able to view filters and load more items
     Given I am on homepage
@@ -34,7 +32,6 @@ Feature: Search feature
     And I should see "Colour"
     Then I should see "Price"
 
-  @arabic @prod
   Scenario: As a Guest user on Arabic site
     I should be able to view filters and load more items
     Given I am on homepage
@@ -52,7 +49,6 @@ Feature: Search feature
     And I should see "السعر"
     Then I should see "المقاس"
 
-  @arabic @prod
   Scenario: As a Guest user on Arabic site
   I should be able to search products
     Given I am on homepage
@@ -64,7 +60,6 @@ Feature: Search feature
     And I wait for the page to load
     Then I should see Search results page in Arabic for "من قطعتين"
 
-  @eng @prod
   Scenario: As an authenticated user
   I should be able to search products
     Given I am logged in as an authenticated user "trupti@axelerant.com" with password "password@1"
@@ -74,7 +69,6 @@ Feature: Search feature
     And I wait for the page to load
     Then I should see Search results page for "tops"
 
-  @arabic @prod
   Scenario: As an authenticated user
   I should be able to search products
     Given I am logged in as an authenticated user "trupti@axelerant.com" with password "password@1"
@@ -84,7 +78,6 @@ Feature: Search feature
     And I wait for the page to load
     Then I should see Search results page for "من قطعتين"
 
-  @eng @prod
   Scenario: As an user
     I should be prompted with a correct message
     when my search yields no results
@@ -99,7 +92,6 @@ Feature: Search feature
     And I wait for the page to load
     Then I should see "Your search did not return any results."
 
-  @arabic @prod
   Scenario: As an user
   I should be prompted with a correct message
   when my search yields no results
@@ -112,7 +104,6 @@ Feature: Search feature
     And I wait for the page to load
     Then I should see "من قطعتين"
 
-  @eng
   Scenario: As a Guest
     I should be able to search for a product
     and add it to the cart
@@ -153,11 +144,10 @@ Feature: Search feature
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
     When I accept terms and conditions
-#    And I press "place order"
-#    When I wait for the page to load
-#    Then I should see text matching "Thank you for shopping online with us, Test Test"
+    And I press "place order"
+    When I wait for the page to load
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
 
-  @arabic
   Scenario: As a Guest
   I should be able to search for a product
   and add it to the cart on Arabic site
@@ -196,11 +186,11 @@ Feature: Search feature
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
     When I accept terms and conditions
-#    And I press "سجل الطلبية"
-#    When I wait for the page to load
-#    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
+    And I press "سجل الطلبية"
+    When I wait for the page to load
+    Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
 
-  @prod
+
   Scenario: As a Guest user
     I should be able to sort search results
     in ascending, descending order
@@ -226,7 +216,7 @@ Feature: Search feature
     And I wait for the page to load
     Then I should see results sorted in ascending price order
 
-  @prod
+
   Scenario: As a Guest user
     when I type an Arabic term on English site
     then I should be redirected to to the Arabic site and vice-versa
@@ -236,10 +226,8 @@ Feature: Search feature
     And I wait for the page to load
     And I follow "English"
     And I wait for the page to load
-#    When I fill in "edit-keywords" with "بكحتة"
     When I fill in "edit-keywords" with "ليغنغز"
     And I press "Search"
-#    Then I should see Search results page in Arabic for "بكحتة"
     And I wait for the page to load
     Then I should see Search results page in Arabic for "من قطعتين"
     When I fill in "edit-keywords" with "tops"
