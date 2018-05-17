@@ -19,7 +19,18 @@ target_env="$2"
 cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 
 echo "Executing updb."
+
+output="$( bash <<EOF
 drush8 acsf-tools-ml updb
+EOF
+)"
+
+##Pushing the updb logs on slack channel
+SLACK_WEBHOOK_URL="https://hooks.slack.com/services/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"
+
+if [ -n "$output" ]; then
+        curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+fi
 
 domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
 
