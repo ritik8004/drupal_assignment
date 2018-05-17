@@ -227,6 +227,8 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'data' => NULL,
       'section_title' => NULL,
+      'views_display_id' => NULL,
+      'views_name' => NULL,
     ],
   ];
 
@@ -315,6 +317,7 @@ function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if (($entity->bundle() == 'acq_product')) {
     $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+    $product_settings = \Drupal::config('alshaya_acm_product.settings');
 
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
@@ -357,6 +360,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
               '#theme' => 'products_horizontal_slider',
               '#data' => $skuManager->filterRelatedSkus(array_unique($cross_sell_skus)),
               '#section_title' => t('Customers also bought'),
+              '#views_name' => 'product_slider',
+              '#views_display_id' => 'block_product_slider',
             ];
 
             // Weight will have no effect later once template is modified.
@@ -369,6 +374,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
             '#section_title' => t('You may also like'),
+            '#views_name' => 'product_slider',
+            '#views_display_id' => 'block_product_slider',
           ];
           // Weight will have no effect later once template is modified.
           $build['up_sell']['#weight'] = 10;
@@ -379,6 +386,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($related_skus)),
             '#section_title' => t('Related'),
+            '#views_name' => 'product_slider',
+            '#views_display_id' => 'block_product_slider',
           ];
           // Weight will have no effect later once template is modified.
           $build['related']['#weight'] = 11;
@@ -555,7 +564,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
       }
-      elseif ($view_mode == 'teaser') {
+      elseif ($view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
         // Get the image.
         $build['image'] = [];
 
@@ -601,7 +610,16 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
-        if (alshaya_acm_product_is_buyable($sku_entity)) {
+        // Do not show add to cart form for category carousel.
+        // Show add to cart form only if config says so.
+        // Show add to cart form if product is buyable.
+        $class = $product_settings->get('show_cart_form_in_related') == 0 ? 'no-cart-form' : '';
+        $build['show_cart_form']['#markup'] = $class;
+
+        if ($view_mode != 'product_category_carousel'
+          && $product_settings->get('show_cart_form_in_related')
+          && alshaya_acm_product_is_buyable($sku_entity)) {
+
           $build['sku_id'] = [
             '#markup' => $sku_entity->id(),
           ];
@@ -621,6 +639,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             ],
           ];
 
+          // In push mode check if product is out of stock here itself.
           if ($stock_mode != 'pull' && !alshaya_acm_get_product_stock($sku_entity)) {
             $build['stock_placeholder'] = [
               '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
@@ -1089,10 +1108,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   }
   else {
     $form['quantity'] = [
-      '#markup' => '<div class="quantity out-of-stock">' . t('Quantity') . '<div><span class="dash">-</span><span class="arrow"></span></div></div>',
+      '#title' => '',
+      '#markup' => '',
     ];
     $form['add_to_cart'] = [
-      '#markup' => '<div class="add-to-cart out-of-stock">' . t('Out of stock') . '</div>',
+      '#markup' => '<span class="out-of-stock">' . t('out of stock') . '</span>',
     ];
   }
 }
@@ -1235,6 +1255,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $cross_sell_markup = [
         '#theme' => 'products_horizontal_slider',
         '#section_title' => t('Customers also bought'),
+        '#views_name' => 'product_slider',
+        '#views_display_id' => 'block_product_slider',
       ];
 
       if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($tree_pointer, LINKED_SKU_TYPE_CROSSSELL))) {
@@ -1387,6 +1409,6 @@ function alshaya_acm_product_is_buyable(SKU $sku_entity) {
  */
 function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) {
   if (!empty($variables['data'])) {
-    $variables['data'] = views_embed_view('product_slider', 'block_product_slider', implode(',', $variables['data']));
+    $variables['data'] = views_embed_view($variables['views_name'], $variables['views_display_id'], implode(',', $variables['data']));
   }
 }

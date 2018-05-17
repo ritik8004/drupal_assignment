@@ -106,29 +106,94 @@
   }
 }
 
-.alias--cart-checkout-delivery {
-  #edit-guest-delivery-collect,
-  #edit-member-delivery-collect {
-    #store-finder-wrapper {
-      .current-location,
-      .cc-near-me {
-        &::before {
-          background-size: contain;
-        }
-      }
-    }
-  }
-}
-
 .acq-cart-summary {
   .caption {
+    padding: 0.875rem 0;
+    font-size: 0.875rem;
+
     .title {
       font-weight: normal;
       font-family: $vs-bold;
+    }
+  }
+
+  .content {
+    .content-head {
+      padding: 1rem 0;
+      font-size: 0.875rem;
+
+      &::after {
+        #{$right}: 0;
+      }
+    }
+
+    img {
+      border: 1px solid $checkout_section_border;
+      padding: 0.125rem;
+    }
+  }
+
+  .totals {
+    font-size: 0.875rem;
+    border-bottom: 1px solid $order_summary_section_border;
+    padding: 0.75rem 0;
+
+    .sub-total,
+    .order-total {
+      & > span {
+        width: 46%;
+      }
+
+      .total--amount,
+      .price-type__wrapper {
+        width: 51%;
+      }
+    }
+
+    .order-total {
+      font-family: $vs-bold;
+    }
+
+    .status {
+      color: $ash-triplet;
+    }
+  }
+
+  .delivery-type,
+  .address {
+    font-size: 0.875rem;
+  }
+
+  .delivery-type,
+  .address,
+  li {
+    padding: 1rem 0;
+  }
+
+  .delivery-type {
+    .method {
+      margin-top: 0;
+    }
+  }
+
+  .address {
+    .delivery-address {
+      margin-top: 0;
     }
   }
 }
 
 #block-checkoutsummaryblock {
   border: 0;
+
+  &.fix-block {
+    @include breakpoint($tablet) {
+      width: 32.5%;
+      padding-#{$right}: 1rem;
+    }
+
+    @include breakpoint($desktop) {
+      width: 24.76%;
+    }
+  }
 }

@@ -47,6 +47,7 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
   $form['#attached']['library'][] = 'alshaya_master/ladda';
   $form['#attached']['library'][] = 'alshaya_acm_cart_notification/cart_notification_js';
   $form['#attached']['drupalSettings']['currency_code'] = \Drupal::config('acq_commerce.currency')->getRawData()['currency_code'];
+  $form['#attached']['drupalSettings']['addToCartNotificationTime'] = \Drupal::config('alshaya_acm_cart_notification.settings')->get('notification_time');
 }
 
 /**

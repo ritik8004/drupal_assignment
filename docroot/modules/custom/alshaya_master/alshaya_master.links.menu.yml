@@ -2,4 +2,11 @@ alshaya_master.404_maintenance_setting:
   route_name: alshaya_master.404_maintenance_setting
   title: 'Alshaya 404 and maintenance mode settings'
   description: 'Configure the 404 and maintenance mode content from here.'
-  parent: system.admin_config_development
+  parent: alshaya_master.alshaya_admin
+
+alshaya_master.alshaya_admin:
+  title: 'Alshaya configurations'
+  route_name: alshaya_master.alshaya_admin
+  parent: system.admin_config
+  description: 'Configure alshaya related settings.'
+  weight: -15

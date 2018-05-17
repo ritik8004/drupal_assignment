@@ -438,6 +438,8 @@
     input[type=checkbox] ~ label {
       &::before {
         margin-#{$left}: -0.5rem;
+        position: relative;
+        top: 0;
 
         @include breakpoint($desktop) {
           margin-#{$left}: -0.5rem;

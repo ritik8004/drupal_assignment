@@ -147,8 +147,8 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       if ($inner_term) {
         $alshaya_department_pages = [];
 
-        if ($this->moduleHandler->moduleExists('alshaya_department_page')) {
-          $alshaya_department_pages = alshaya_department_page_get_pages();
+        if ($this->moduleHandler->moduleExists('alshaya_advanced_page')) {
+          $alshaya_department_pages = alshaya_advanced_page_get_pages();
         }
 
         $parents = $this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($inner_term);
@@ -171,7 +171,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
               $node = $this->entityRepository->getTranslationFromContext($node);
 
               // Add department page to breadcrumb.
-              $breadcrumb->addLink(Link::createFromRoute(_alshaya_department_page_get_node_title($node), 'entity.node.canonical', ['node' => $node->id()]));
+              $breadcrumb->addLink(Link::createFromRoute(_alshaya_advanced_page_get_node_title($node), 'entity.node.canonical', ['node' => $node->id()]));
 
               // Add the node to cache dependency.
               $breadcrumb->addCacheableDependency($node);

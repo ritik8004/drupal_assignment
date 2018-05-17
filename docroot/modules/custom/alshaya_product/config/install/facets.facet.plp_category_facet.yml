@@ -16,7 +16,7 @@ name: Category
 url_alias: plp_category_facet
 weight: 0
 min_count: 1
-show_only_one_result: true
+show_only_one_result: false
 field_identifier: field_category
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
 widget:
@@ -27,22 +27,28 @@ widget:
 query_operator: or
 use_hierarchy: true
 expand_hierarchy: false
-enable_parent_when_child_gets_disabled: true
+enable_parent_when_child_gets_disabled: false
 hard_limit: 0
 exclude: false
 only_visible_when_facet_source_is_visible: false
 processor_configs:
-  display_value_widget_order:
-    processor_id: display_value_widget_order
+  raw_value_widget_order:
+    processor_id: raw_value_widget_order
     weights:
       sort: -10
     settings:
       sort: ASC
-  hide_taxonomy_not_in_menu:
-    processor_id: hide_taxonomy_not_in_menu
+  alshaya_remove_current_term:
+    processor_id: alshaya_remove_current_term
     weights:
       build: 5
     settings: {  }
+  term_weight_widget_order:
+    processor_id: term_weight_widget_order
+    weights:
+      sort: -10
+    settings:
+      sort: ASC
   translate_entity:
     processor_id: translate_entity
     weights:

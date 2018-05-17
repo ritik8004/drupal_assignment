@@ -1,0 +1,41 @@
+{%
+set classes = [
+'node',
+'node--type-' ~ node.bundle|clean_class,
+view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+]
+%}
+
+<article{{ attributes }} {{ gtm_attributes }}>
+  <a href="{{ path('entity.node.canonical', {'node': node.id}) }}" class="product-link">
+    {% if content.image is not null %}
+      {{ content.image }}
+    {% endif %}
+
+    {{ content.labels }}
+
+    {{ title_prefix }}
+    {% if not page %}
+      <h2{{ title_attributes.addClass("c-products__item__label") }}>
+        {{ label }}
+      </h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    <div class="price-block {{ content.price_block_identifier }}">
+      {{ content.price_block }}
+    </div>
+
+  </a>
+  {% if content.promotions %}
+    <div class="promotions above-mobile-block">
+      {{ content.promotions }}
+    </div>
+  {% endif %}
+
+  {% if content.stock_placeholder %}
+    <div class="above-mobile-block">
+      {{ content.stock_placeholder }}
+    </div>
+  {% endif %}
+</article>

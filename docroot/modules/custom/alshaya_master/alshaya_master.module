@@ -13,8 +13,28 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\views\Views;
 use Drupal\user\Entity\Role;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\TermInterface;
 use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_acsf_registry().
+ *
+ * Adding our custom class to the registry that changes Alshaya configuration.
+ */
+function alshaya_master_acsf_registry() {
+  return [
+    'events' => [
+      [
+        'weight' => 15,
+        'type' => 'site_duplication_scrub',
+        'class' => '\Drupal\alshaya_master\Event\AlshayaAcsfDuplicationScrubUsersHandler',
+      ],
+    ],
+  ];
+}
 
 /**
  * Implements hook_acsf_staging_scrub_admin_roles_alter().
@@ -702,4 +722,57 @@ function alshaya_master_library_info_alter(&$libraries, $extension) {
     // modules same and make it work without this JS.
     $libraries['jquery.validate']['dependencies'][] = 'alshaya_master/cv_ife';
   }
+}
+
+/**
+ * Get array of all child terms recursively.
+ *
+ * @param int $tid
+ *   Term id.
+ *
+ * @return array
+ *   Array of Child tid + the passed tid.
+ */
+function _alshaya_master_get_recursive_child_terms($tid) {
+  $terms = [];
+  if (($taxonomy_term = Term::load($tid)) instanceof TermInterface) {
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $term_items = $storage->loadTree($taxonomy_term->getVocabularyId(), $taxonomy_term->id(), NULL, TRUE);
+    $terms[] = $taxonomy_term->id();
+    if (!empty($term_items)) {
+      // Loop to get children term names.
+      foreach ($term_items as $term_item) {
+        $terms[] = $term_item->id();
+      }
+    }
+  }
+
+  return $terms;
+}
+
+/**
+ * Get the results from the views by name and display id.
+ *
+ * @param string $view_id
+ *   View name.
+ * @param string $display_id
+ *   View display id.
+ * @param array $args
+ *   Arguments to pass to views.
+ *
+ * @return array|\Drupal\views\ResultRow[]
+ *   Array of result.
+ */
+function _alshaya_master_get_views_result($view_id, $display_id, array $args = []) {
+  $view = Views::getView($view_id);
+  if ($view) {
+    $view->setDisplay($display_id);
+    $view->setArguments($args);
+    $view->preExecute();
+    if ($view->execute()) {
+      return $view->result;
+    }
+  }
+
+  return [];
 }

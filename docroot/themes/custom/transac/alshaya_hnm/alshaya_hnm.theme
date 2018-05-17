@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Theme specific functionality.
+ * Theme specific H&M functionality.
  */
 
 use Drupal\Core\Form\FormStateInterface;
@@ -51,16 +51,6 @@ function alshaya_hnm_preprocess_block(&$variables) {
   if (isset($variables['elements'], $variables['elements']['#id'])
     && $variables['elements']['#id'] === 'branding') {
     $variables['site_logo'] = theme_get_setting('logo.url');
-    $variables['site_name'] = theme_get_setting('name');
-  }
-}
-
-/**
- * Implements template_view_alter().
- */
-function alshaya_hnm_theme_suggestions_views_view_alter(array &$suggestions, &$variables) {
-  if ($variables['view']->current_display == "block_product_slider") {
-    $suggestions[] = 'views_view__product_slider';
   }
 }
 
@@ -80,74 +70,132 @@ function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id
 }
 
 /**
- * Implements hook_theme().
+ * Implements hook_theme_suggestions_page_alter().
  */
-function alshaya_hnm_theme() {
-  return [
-    'customer_cart_form' => [
-      'render element' => 'form',
-      'path' => drupal_get_path('theme', 'alshaya_hnm') . '/templates/form',
-    ],
-  ];
+function alshaya_hnm_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  $routmatch = \Drupal::routeMatch();
+  if ($routmatch->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $routmatch->getParameter('taxonomy_term');
+    if ($term->bundle() == 'acq_product_category') {
+      $suggestions[] = 'page__plp';
+    }
+  }
+
+  // For 404 page.
+  if ($routmatch->getRouteName() == 'system.404') {
+    $suggestions[] = 'page__404';
+  }
+
+  // Check if we are on node page.
+  if ($routmatch->getRouteName() == 'entity.node.canonical') {
+    $node = Drupal::request()->attributes->get('node');
+
+    // For now we want to update only the department_page template.
+    if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+      $suggestions[] = 'page__department';
+    }
+    elseif ($node->bundle() == 'acq_product') {
+      $suggestions[] = 'page__pdp';
+    }
+    elseif ($node->bundle() == 'acq_promotion') {
+      $suggestions[] = 'page__plp';
+    }
+  }
+
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    $suggestions[] = 'page__front';
+  }
+
+  if ($routmatch->getRouteName() == 'alshaya_acm_customer.orders_print'
+    || $routmatch->getRouteName() == 'alshaya_acm_customer.print_last_order') {
+    $suggestions[] = 'page__orderprint';
+  }
 }
 
 /**
- * Implements hook_preprocess_menu().
+ * Implements hook_page_attachments_alter().
  */
-function alshaya_hnm_preprocess_menu(&$variables) {
-  if ($variables['menu_name'] === 'account') {
-    // Get the current path.
-    $current_path_Uri = \Drupal::request()->getRequestUri();
-    $items = $variables['items'];
-    foreach ($items as $item) {
-      // If path is current_path, add active class.
-      if ($item['url']->toString() == $current_path_Uri) {
-        $attributes = $item['url']->getOption('attributes');
-        $attributes['class'][] = 'is-active';
-        $item['url']->setOption('attributes', $attributes);
+function alshaya_hnm_page_attachments_alter(array &$attachments) {
+  // Get current route.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+
+  // Routes from where we need to remove the 'back_to_top' button.
+  $skip_back_to_top_routes = [
+    'acq_checkout.form',
+  ];
+
+  if (in_array($route_name, $skip_back_to_top_routes)) {
+    // If back_to_top library is added to page, remove it.
+    if (in_array('back_to_top/back_to_top_js', $attachments['#attached']['library'])) {
+      $index = array_search('back_to_top/back_to_top_js', $attachments['#attached']['library']);
+      unset($attachments['#attached']['library'][$index]);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function alshaya_hnm_preprocess_field(&$variables, $hook) {
+  $element = $variables['element'];
+  // If 'acq_sku' entity with 'product_list' display mode.
+  if ($element['#entity_type'] == 'acq_sku' && $element['#view_mode'] == 'product_list') {
+    if (isset($element['#field_name'])) {
+      // Hide/Remove all images except first.
+      if ($element['#field_name'] == 'attr_image') {
+        if (!empty($variables['items'])) {
+          $variables['items'] = [$variables['items'][0]];
+        }
+      }
+
+      // Added the currency label.
+      if ($element['#field_name'] == 'price') {
+        if (!empty($variables['items'])) {
+          $price = $variables['items'][0]['content']['#context']['value'];
+          $variables['items'][0]['content'] = [
+            '#theme' => 'alshaya_acm_price',
+            '#price' => $price,
+          ];
+        }
       }
     }
   }
 }
 
 /**
- * Implements hook_preprocess_mimemail_messages().
+ * Implements hook_preprocess_user().
  */
-function alshaya_hnm_preprocess_mimemail_messages(&$variables) {
-  $user = user_load_by_mail($variables['recipient']);
+function alshaya_hnm_preprocess_user(&$variables) {
+  /* @var \Drupal\user\Entity\User $user */
+  $user = $variables['user'];
   if ($user) {
-    $lang = $user->getPreferredLangcode();
-  }
-  else {
-    $lang = \Drupal::currentUser()->getPreferredLangcode();
-  }
+    $variables['email'] = $user->get('mail') ? $user->get('mail')->getValue()[0]['value'] : '';
 
-  // Get logo based on user preferred language.
-  $email_logo = alshaya_master_get_email_logo('alshaya_hnm', $lang);
-  if (empty($email_logo['logo_url'])) {
-    $email_logo['logo_url'] = file_create_url($email_logo['logo_path']);
-  }
-  $variables['email_logo'] = $email_logo['logo_url'];
+    // We always initialise the variable to get no notices.
+    $variables['contact_number'] = '';
+    $variables['privilege_card'] = '';
 
-  // Add website footer block information with UUID as this is the unique id
-  // with different env.
-  $uuid = '340b823b-e16c-457a-bc03-4a096f8ae171';
-  // Get copyright block based on language.
-  $copyright_block = \Drupal::entityManager()->loadEntityByUuid('block_content', $uuid);
-  $block_view = \Drupal::entityManager()->getViewBuilder('block_content')->view($copyright_block, 'full', $lang);
-  $variables['email_footer'] = $block_view;
-  $variables['lang'] = $lang;
+    if (isset($user->field_mobile_number)) {
+      if ($mobile_number = $user->get('field_mobile_number')->getValue()) {
+        $variables['contact_number'] = \Drupal::service('mobile_number.util')->getFormattedMobileNumber($mobile_number[0]['value']);
+      }
+    }
 
-  // Social links for email template.
-  $menu_tree = \Drupal::menuTree();
-  // Build the typical default set of menu tree parameters.
-  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters('social-links');
-  $menus = $menu_tree->load('social-links', $parameters);
-  foreach ($menus as $menu) {
-    $title = $menu->link->getTitle();
-    $links[strtolower($title)] = $menu->link->getUrlObject()->setAbsolute(TRUE)->toString();
+    // Check if loyalty module is enabled.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_loyalty')) {
+      // Get loyalty settings.
+      $loyalty_settings = alshaya_loyalty_get_validation_settings();
+
+      // Check if site has loyalty enabled in config.
+      if ($loyalty_settings['enable_disable_loyalty']) {
+
+        // Check if we have some value stored for the user.
+        if ($privilege_card = $user->get('field_privilege_card_number')->getValue()) {
+          $variables['privilege_card'] = alshaya_loyalty_format_card_number($privilege_card[0]['value'], TRUE);
+        }
+      }
+    }
   }
-  $variables['links'] = $links;
 }
 
 /**

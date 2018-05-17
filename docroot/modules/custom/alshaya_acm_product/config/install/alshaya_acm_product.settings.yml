@@ -1,3 +1,4 @@
+show_cart_form_in_related: 0
 related_items_size: 12
 list_view_items_per_page: 30
 pdp_gallery_pager_limit: 5

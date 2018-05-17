@@ -1,0 +1,123 @@
+.paragraph--type--product-carousel-category {
+  &.has-view-all-link {
+    padding: 0 0 1.5rem;
+  }
+
+  .crossell-title {
+    &.subtitle {
+      margin-#{$left}: 0;
+      padding-#{$left}: 0;
+      text-align: $left;
+    }
+  }
+
+  .category-carousel-view-all {
+    position: absolute;
+    #{$left}: 50%;
+    -ms-transform: translate(-50%, 0%);
+    transform: translate(-50%, 0%);
+
+    html[lang=ar] & {
+      -ms-transform: translate(50%, 0%);
+      transform: translate(50%, 0%);
+    }
+  }
+
+  .price-wrapper,
+  .c-products__item__label,
+  .promotions {
+    line-height: 1.2;
+  }
+
+  .owl-carousel {
+    .owl-item {
+      .views-row {
+        margin: 0 auto;
+        width: 85%;
+
+        @include breakpoint($only-mobile) {
+          margin: 0 0.3125rem;
+        }
+      }
+    }
+
+    .owl-stage {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0 !important;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .owl-carousel {
+      .owl-nav {
+        display: none;
+      }
+
+      .owl-dots {
+        &::before {
+          content: unset;
+        }
+
+        .owl-dot {
+          position: relative;
+          z-index: 1;
+          top: 0;
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          margin: 10px;
+          border-radius: 100%;
+          color: $hp_slider_dots;
+          border: 1px solid currentColor;
+        }
+      }
+    }
+  }
+
+  .view-product-slider {
+    margin-bottom: 1.5rem;
+
+    @include breakpoint($tablet) {
+      padding: 0 2.25rem;
+    }
+
+    .no-carousel {
+      .views-row {
+        @include breakpoint($tablet) {
+          max-width: 12rem;
+        }
+
+        @include breakpoint($desktop) {
+          margin: 0 1rem;
+        }
+      }
+    }
+  }
+}
+
+.view-product-slider {
+  .owl-carousel {
+    .owl-stage {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0 !important;
+      }
+    }
+  }
+}
+
+.owl-prev,
+.owl-next,
+.slick-prev,
+.slick-next,
+.owl-dot {
+  outline: none;
+}
+
+.owl-nav {
+  button {
+    span {
+      display: none;
+    }
+  }
+}

@@ -45,9 +45,9 @@ slider_banner:
     - core/jquery
     - alshaya_white_label/slick
 
-sell:
+product_carousel:
   js:
-    js/sell.js: {}
+    js/product_carousel.js: {}
   dependencies:
     - core/jquery
     - alshaya_white_label/utils
@@ -77,7 +77,7 @@ owlcarousel:
     theme:
       vendor/css/owl.carousel.css: {}
   js:
-    vendor/js/owlcarousel.min.js: {}
+    vendor/js/owl.carousel.min.js: {}
 
 select2:
   css:

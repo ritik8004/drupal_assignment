@@ -687,6 +687,7 @@ $checkout_confirmation_table_pm_highlight: $solitude;
 // Checkout Click & collect.
 $checkout_cc_list_map_link_default: $cerulean-two;
 $checkout_cc_list_map_link_active: $marine-blue-two;
+$checkout_cc_list_map_link_active_border: $marine-blue-two;
 $checkout_cc_store_location_input_label: $grey-ash;
 $checkout_cc_store_location_input_label_mobile_color: $marine-blue-two;
 $checkout_cc_location_empty_txt: $grey-ash;
@@ -700,6 +701,7 @@ $checkout_cc_list_select_store_btn_border: $marine-blue-two;
 $checkout_cc_list_select_store_btn_txt: $marine-blue-two;
 $checkout_cc_store_name: $black;
 $checkout_cc_store_address: $greyish;
+$checkout_cc_list_delivery_time_label: $black;
 $checkout_cc_list_delivery_time: $black;
 $checkout_cc_list_delivery_time_tablet: $marine-blue-two;
 $checkout_cc_list_hours_label: $black;
@@ -938,97 +940,7 @@ $order_print_barcode: $grey-ash;
 
 // Facet
 $category_facet_active_icon: $windows-blue;
+$category_facet_active_text: $brownish-grey;
 
 // Block Alshaya ACM customer .block-alshaya-acm-customer
 $block_acm_customer_txt: $windows-blue;
-
-// Colors not used in MC, but added here because used in brand themes.
-// This is to standardize the variables across themes, use the below if your brand has these elements.
-// Assigning to a false value.
-
-// From: PBAE.
-// Pre content region.
-$pre_content_region_bg: false;
-$header_secondary_menu_link_border: false;
-$mm_l1_link_active: false;
-$mm_l1_link_active_bg: false;
-$mm_l1_link_active_shadow: false;
-$mm_l2_link_mobile_menu: false;
-$header_c_menu_search_icon: false;
-$store_finder_get_direction_label_color: false;
-$plp_sort_by_label: false;
-$pdp_sidebar_desc_overlay_section_border: false;
-$pdp_delivery_options_subtitle: false;
-
-// From: HMKW
-$default_msg_status_text: false;
-$maintenance_link: false;
-$maintenance_text: false;
-$maintenance_title: false;
-$maintenance_mobile_body_bg: false;
-$maintenance_mobile_body_text: false;
-$plp_facet_input_placeholder: false;
-$delivery_color: false;
-$address_tile_border: false;
-$address_content_text: false;
-$address_content_link_border: false;
-$address_content_link_bg: false;
-$address_book_mobile_prefix: false;
-$cancel_button: false;
-$gallery_zoombtn_text: false;
-$sell_label: false;
-$price_default: false;
-$promo_title: false;
-$promo_sub_title: false;
-$promo_bordered_title: false;
-$promo_bordered_border: false;
-$footer_link2: false;
-$footer_link_active: false;
-$footer_submit_text: false;
-$footer_submit_bg: false;
-$footer_input_text: false;
-$footer_input_placeholder: false;
-$footer_input_bg: false;
-$footer_newsletter_label: false;
-$footer_newsletter_success_bg: false;
-$footer_newsletter_success_text: false;
-$welcome_h3: false;
-$plp_swatch_more_link: false;
-$pdp_swatch_border: false;
-
-// From: Victoria Secret.
-// Newsletter-signup.
-$newsletter_input_bg: false;
-
-// Footer.
-$footer_text: false;
-$footer_input_text: false;
-$footer_input_border_active: false;
-
-// Header.
-$header_c_menu_store_active_icon: false;
-$header_mobile_menu_bg: false;
-$header_secondary_menu_mobile_link: false;
-$header_secondary_menu_link_mobile_hover_bg: false;
-$user_order_help_border: false;
-$header_mobile_border: false;
-$header_my_account_mobile_h3_title: false;
-$header_my_account_mobile_link_hover: false;
-$mm_highlight_bg: false;
-
-// Store.
-$store_finder_map_border: false;
-$store_finder_glossary_btn_border: false;
-
-// Messages and Errors.
-$default_msg_border: false;
-$default_msg_icon: false;
-
-// PDP.
-$pdp_filter_selector_label: false;
-
-// Orders.
-$order_detail_order_sub_total_border: false;
-
-// Checkout.
-$checkout_progress_border: false;

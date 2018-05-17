@@ -5,10 +5,14 @@ dependencies:
     - field.storage.node.field_promo_blocks
     - node.type.advanced_page
     - paragraphs.paragraphs_type.1_row_1_col
+    - paragraphs.paragraphs_type.1_row_1_col_dept
     - paragraphs.paragraphs_type.1_row_1st_col_2_row_2nd_col
     - paragraphs.paragraphs_type.1_row_2_col
+    - paragraphs.paragraphs_type.1_row_2_col_1_2_dept
+    - paragraphs.paragraphs_type.1_row_2_col_2_1_dept
     - paragraphs.paragraphs_type.1_row_2_col_dept
     - paragraphs.paragraphs_type.1_row_3_col
+    - paragraphs.paragraphs_type.1_row_3_col_dept
     - paragraphs.paragraphs_type.1_row_3_col_text
     - paragraphs.paragraphs_type.block_reference
     - paragraphs.paragraphs_type.views_reference
@@ -27,13 +31,18 @@ default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
+    negate: 0
     target_bundles:
       1_row_1st_col_2_row_2nd_col: 1_row_1st_col_2_row_2nd_col
       1_row_1_col: 1_row_1_col
-      1_row_2_col: 1_row_2_col
       1_row_3_col: 1_row_3_col
+      1_row_2_col: 1_row_2_col
       1_row_3_col_text: 1_row_3_col_text
+      1_row_1_col_dept: 1_row_1_col_dept
+      1_row_2_col_1_2_dept: 1_row_2_col_1_2_dept
+      1_row_2_col_2_1_dept: 1_row_2_col_2_1_dept
       1_row_2_col_dept: 1_row_2_col_dept
+      1_row_3_col_dept: 1_row_3_col_dept
       block_reference: block_reference
       views_reference: views_reference
     target_bundles_drag_drop:
@@ -65,25 +74,25 @@ settings:
         enabled: true
         weight: 16
       1_row_1_col_dept:
-        weight: 18
-        enabled: false
-      1_row_2_col_1_2_dept:
-        weight: 20
-        enabled: false
-      1_row_2_col_2_1_dept:
-        weight: 21
-        enabled: false
-      1_row_2_col_dept:
-        weight: 22
         enabled: true
+        weight: 18
+      1_row_2_col_1_2_dept:
+        enabled: true
+        weight: 20
+      1_row_2_col_2_1_dept:
+        enabled: true
+        weight: 21
+      1_row_2_col_dept:
+        enabled: true
+        weight: 22
       1_row_3_col_dept:
+        enabled: true
         weight: 24
+      1_row_3_col_delivery_banner:
+        weight: 25
         enabled: false
       main_menu_highlight:
         weight: 27
-        enabled: false
-      1_row_3_col_delivery_banner:
-        weight: 25
         enabled: false
       promo_block_text:
         weight: 29
@@ -94,4 +103,19 @@ settings:
       views_reference:
         enabled: true
         weight: 34
+      image_title_subtitle:
+        weight: 39
+        enabled: false
+      offers_bordered:
+        weight: 41
+        enabled: false
+      promo_block_button:
+        weight: 43
+        enabled: false
+      title_textarea:
+        weight: 46
+        enabled: false
+      video:
+        weight: 47
+        enabled: false
 field_type: entity_reference_revisions

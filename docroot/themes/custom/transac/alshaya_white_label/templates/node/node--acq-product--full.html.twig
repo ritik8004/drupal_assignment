@@ -10,7 +10,7 @@ set classes = [
 
   <article{{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
-    <div class="content__main">
+    <div class="content__main {{ image_slider_position_pdp }}">
       {{ content.gallery }}
 
       {% if content.cross_sell %}
@@ -69,9 +69,11 @@ set classes = [
             <h2 class="field__label">{{ 'Product Description'|t }}</h2>
             <div class="field__content-wrapper">
               <div class="field__content">
+                {% set descCount = 0 %}
                 {% for desc in content.description  %}
                   {% if desc.value|render %}
                     <div class="desc-wrapper">
+                      {% set descCount = descCount + 1 %}
                       {% if desc.label|render %}
                         <div class="desc-label">
                           {{ desc.label }}
@@ -85,8 +87,10 @@ set classes = [
                   {% endif %}
                 {% endfor %}
               </div>
-              <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-              <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+              {% if descCount > 1 %}
+                <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+                <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+              {% endif %}
             </div>
           </div>
         </div>

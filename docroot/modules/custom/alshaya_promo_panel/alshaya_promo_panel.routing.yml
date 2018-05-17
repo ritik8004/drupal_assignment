@@ -1,0 +1,7 @@
+alshaya_promo_panel.panel_config:
+  path: '/admin/config/alshaya/promo-panel'
+  defaults:
+    _form: '\Drupal\alshaya_promo_panel\Form\AlshayaPromoPanelForm'
+    _title: 'Promo Panel'
+  requirements:
+    _permission: 'administer site configuration'

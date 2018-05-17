@@ -178,16 +178,14 @@ header {
     }
 
     .cart-link-total {
-      margin-top: 0.3125rem;
-      margin-#{$right}: 0.125rem;
-      padding-#{$right}: 1rem;
+      margin-top: 0.81rem;
     }
 
     .quantity {
       font-size: 0.75rem;
-      font-family: $alshaya-thin-nodir;
-      bottom: -0.625rem;
+      bottom: -0.325rem;
       line-height: 1.87;
+      #{$left}: -0.2rem;
     }
   }
 
@@ -800,7 +798,7 @@ header {
   .c-menu-primary {
     @include breakpoint($only-mobile) {
       .hamburger--menu {
-        padding: 0.625rem 0.5rem;
+        padding: 0 0.625rem;
       }
     }
   }
@@ -844,13 +842,25 @@ header .region__header {
   }
 }
 
-html[lang=ar] {
-  .block-system-branding-block {
-    .site-brand-home {
-      img {
+.block-system-branding-block {
+  .site-brand-home {
+    img {
+      html[lang="ar"] & {
         width: auto;
         height: auto;
         max-width: 100%;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      img {
+        width: 11.25rem;
+        height: 1.125rem;
+
+        html[lang="ar"] & {
+          width: 9.0625rem;
+          height: 2.0625rem;
+        }
       }
     }
   }

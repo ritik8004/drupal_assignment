@@ -28,6 +28,10 @@ $_gray_five: #f2f2f2;
 $_gray_six: #fafafa;
 $_gray_seven: #f8f8f8;
 $_gray_eight: #c8c8c8;
+$_gray_nine: #555;
+$_gray_ten: #777;
+$_gray_eleven: #dadada;
+$_gray_twelve: #f9f9f9;
 
 // Overrides for variables.
 // Global elements.
@@ -270,6 +274,17 @@ $pdp_desc_wrapper_close_icon: $_black-two;
 $pdp_desc_wrapper_close_bg: $white;
 $pdp_sidebar_desc_overlay_section_border: $PB_grey_one;
 $pdp_delivery_options_subtitle: $PB_grey_two;
+$pdp_cc_form_highlight_txt: $PB_black_one;
+$pdp_cc_top_stores_list_border: $PB_deep_red;
+$pdp_cc_top_stores_list_counter: $PB_deep_red;
+$pdp_cc_btn_bg: $_black_two;
+$pdp_cc_btn_text: $white-two;
+$modal_close_icon: $_black-two;
+$modal_close_bg: $white;
+
+// PDP CS/US
+$pdp_modal_full_prodlink: $PB_grey_one;
+$pdp_modal_full_prodlink_icon: $_black_two;
 
 // Webform Contact Us.
 $webform_contact_legend: $_black_two;
@@ -305,15 +320,58 @@ $checkout_tab_default_title: $PB_grey_one;
 $checkout_tab_active_title: $PB_black_one;
 $checkout_tab_active_description: $PB_deep_red;
 $checkout_tab_separator: $PB_black_one;
+
+// Checkout progress.
 $checkout_progress_bg: $PB_white;
+$checkout_progress_complete_text: $PB_grey_one;
 
 // Order summary block.
 $order_summary_caption_bg: $PB_grey_five;
 $order_summary_content_bg: $PB_white;
 $order_summary_totals_bg: $PB_grey_five;
+$order_summary_delivery_type_bg: $PB_white;
+$order_summary_address_bg: $PB_white;
 
 // Checkout login.
 $checkout_login_tab_border: $_gray_eight;
 $checkout_login_tab_text: $PB_grey_one;
 $checkout_login_tab_border_active: $PB_deep_red;
 $checkout_login_tab_text_active: $PB_black_one;
+
+// Checkout click and collect heading cnc form.
+$checkout_cc_cnc_form_title_border: $white;
+$checkout_cc_near_me_border: $PB_deep_red;
+$checkout_cc_location_result_label: $_gray_nine;
+$checkout_cc_location_result_label_selected_location: $PB_black_one;
+// Checkout Click & collect.
+$checkout_cc_list_map_link_default: $PB_black_one;
+$checkout_cc_list_map_link_active: $PB_deep_red;
+$checkout_cc_store_name: $PB_black_one;
+$checkout_cc_store_address: $_gray_ten;
+$checkout_cc_list_hours_label: $PB_black_one;
+$checkout_cc_list_hours_label_icon: $PB_black_one;
+$checkout_cc_list_hours_content: $_gray_ten;
+$checkout_cc_list_hours_content_tablet: $_gray_ten;
+$checkout_cc_list_select_store_btn_bg: $white-two;
+$checkout_cc_list_select_store_btn_border: $PB_black_one;
+$checkout_cc_list_select_store_btn_txt: $PB_black_one;
+$checkout_cc_list_change_store_btn_bg: $_black_two;
+$checkout_cc_list_change_store_btn_txt: $white-two;
+$checkout_cc_list_select_store_btn_border: $_black_two;
+$checkout_cc_list_select_store_btn_border: $_black_two;
+$checkout_cc_list_delivery_time_label: $PB_black_one;
+$checkout_cc_list_delivery_time: $PB_deep_red;
+$checkout_cc_list_delivery_time_tablet: $PB_black_one;
+$checkout_cc_selected_store_content_border: $_gray_eleven;
+$checkout_cc_selected_store_content_bg: $white-two;
+$checkout_cc_help_text: $PB_black_one;
+$checkout_cc_help_text_content: $PB_grey_one;
+
+// Checkout payment.
+$checkout_payment_row_selected: $_gray_twelve;
+$checkout_payment_row_default: $white-two;
+$checkout_payment_row_hover: $_gray_twelve;
+$checkout_payment_method_title: $PB_black_one;
+$checkout_payment_method_icon_bg: $_gray_twelve;
+$checkout_payment_method_desc: $PB_grey_one;
+$checkout_payment_option_border: $_gray_eleven;

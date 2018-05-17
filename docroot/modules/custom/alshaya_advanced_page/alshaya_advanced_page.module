@@ -1,0 +1,314 @@
+<?php
+
+/**
+ * @file
+ * Constains hooks and alters for Alshaya Department page.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Url;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Cache\Cache;
+use Drupal\node\Entity\Node;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_form_alter().
+ */
+function alshaya_advanced_page_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'node_advanced_page_form' || $form_id == 'node_advanced_page_edit_form') {
+    $form['field_product_category']['#states'] = [
+      'visible' => [
+        ':input[name="field_use_as_department_page[value]"]' => ['checked' => TRUE],
+      ],
+      'required' => [
+        ':input[name="field_use_as_department_page[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_show_left_menu']['#states'] = [
+      'visible' => [
+        ':input[name="field_use_as_department_page[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+
+    // We will show only those categories who don't have a department page yet.
+    $tids = array_keys($form['field_product_category']['widget']['#options']);
+
+    // Get the current node and category for current department page.
+    $node = $form_state->getFormObject()->getEntity();
+
+    $category_ids = [];
+
+    if ($category = $node->get('field_product_category')->getValue()) {
+      $category_ids = array_column($category, 'target_id');
+    }
+
+    $alshaya_advanced_pages = alshaya_advanced_page_get_pages();
+
+    foreach ($tids as $tid) {
+      // Hide the term, if it's not the current node's category term.
+      if (isset($alshaya_advanced_pages[$tid]) && !in_array($tid, $category_ids)) {
+        // Unset the value.
+        unset($form['field_product_category']['widget']['#options'][$tid]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_advanced_page_node_presave(EntityInterface $entity) {
+  if ($entity->getType() == 'advanced_page' && $entity->get('field_use_as_department_page')->value == 1) {
+    Cache::invalidateTags(['route_match']);
+    // Deleting/Clearing cache on department page node save as this will not
+    // happen very often.
+    \Drupal::cache('data')->delete('advanced_page:terms:nodes');
+  }
+}
+
+/**
+ * Helper function to fetch list of advanced department pages.
+ *
+ * @return array
+ *   Nids of department pages keyed by term ids.
+ */
+function alshaya_advanced_page_get_pages() {
+  static $department_pages;
+
+  // We cache the nid-tid relationship for a single page request.
+  if (empty($department_pages)) {
+    $query = \Drupal::database()->select('node__field_product_category', 'nfpc');
+    $query->addField('nfpc', 'field_product_category_target_id', 'tid');
+    $query->addField('nfpc', 'entity_id', 'nid');
+    $department_pages = $query->execute()->fetchAllKeyed();
+  }
+
+  return $department_pages;
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function alshaya_advanced_page_preprocess_page_title(&$variables) {
+  if ($node = _alshaya_advanced_page_get_department_node()) {
+    // Change the title of the department node.
+    $variables['title'] = [
+      '#markup' => _alshaya_advanced_page_get_node_title($node),
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_advanced_page_preprocess_html(&$variables) {
+  if ($node = _alshaya_advanced_page_get_department_node()) {
+    $variables['head_title']['title'] = _alshaya_advanced_page_get_node_title($node);
+  }
+}
+
+/**
+ * Get the department node object based on current route.
+ *
+ * @return mixed|null
+ *   Return Node object if department page, else NULL.
+ */
+function _alshaya_advanced_page_get_department_node() {
+  $result = &drupal_static(__FUNCTION__);
+  // Return if the static cache is set.
+  if (isset($result)) {
+    return $result;
+  }
+
+  $result = FALSE;
+  // Route match.
+  $route_match = \Drupal::routeMatch();
+  // Load the processed parameter.
+  if ($node = $route_match->getParameter('node')) {
+    // Check if the current node type is department_page. For revision related
+    // pages $node will have nid.
+    if ($node instanceof Node && $node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+      $result = $node;
+    }
+  }
+
+  return $result;
+}
+
+/**
+ * Return the taxonomy term title based on given node object.
+ *
+ * @param object $node
+ *   The Node object.
+ *
+ * @return string
+ *   Return the term label.
+ */
+function _alshaya_advanced_page_get_node_title($node) {
+  $department_term = &drupal_static(__FUNCTION__, []);
+
+  if (isset($department_term[$node->id()])) {
+    return $department_term[$node->id()];
+  }
+
+  // Get the product category for current department page.
+  $tid = $node->get('field_product_category')->first()->target_id;
+  // Load the term object.
+  $term = Term::load($tid);
+
+  if (empty($term)) {
+    \Drupal::logger('alshaya_advanced_page')->warning('Department node contains invalid/obsolete category term reference.');
+    return '';
+  }
+
+  // Get the current language code.
+  $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+
+  // Get the translations of the term based on the current lang code.
+  if ($term->hasTranslation($langcode)) {
+    $term = $term->getTranslation($langcode);
+  }
+
+  // Set the label for drupal static.
+  $department_term[$node->id()] = $term->label();
+
+  return $department_term[$node->id()];
+}
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function alshaya_advanced_page_language_switch_links_alter(array &$links, $type, Url $url) {
+  $route = \Drupal::routeMatch()->getRouteObject();
+  // @see AlshayaAdvancedPageRouteProvider::getRoutesByPath().
+  if ($department_term = $route->getOption('_department_page_term')) {
+    $department_term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $department_term]);
+    foreach ($links as $lang => $url_object) {
+      $links[$lang]['url'] = $department_term_url;
+    }
+  }
+}
+
+/**
+ * Check for given term, department page exists.
+ *
+ * Check for given term, department page exists. If department page exists
+ * then return that department page node id or return false.
+ *
+ * @param int $tid
+ *   The term id.
+ *
+ * @return int|bool
+ *   Department page node id or false.
+ */
+function alshaya_advanced_page_is_department_page($tid) {
+  $data = [];
+  // Check for cache first.
+  if ($cache = \Drupal::cache('data')->get('department_page:terms:nodes')) {
+    $data = $cache->data;
+    // If cache hit.
+    if (!empty($data[$tid])) {
+      return $data[$tid];
+    }
+  }
+
+  // Get all department pages.
+  $department_pages = alshaya_advanced_page_get_pages();
+  // If there is department page available for given term.
+  if (isset($department_pages[$tid])) {
+    $nid = $department_pages[$tid];
+    /** @var \Drupal\node\Entity\Node $node */
+    if ($node = Node::load($nid)) {
+      if ($node->isPublished()) {
+        $data[$tid] = $nid;
+        \Drupal::cache('data')->set('department_page:terms:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
+        return $nid;
+      }
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_pathauto_pattern_alter().
+ */
+function alshaya_advanced_page_pathauto_pattern_alter(&$pattern, array $context) {
+  // Check if current context.
+  if ($context['module'] == 'node'
+    && $context['bundle'] == 'advanced_page'
+    && $context['data']['node']->get('field_use_as_department_page')->value == 1) {
+    // Set path for department page.
+    $pattern->setPattern('department-[node:title]');
+  }
+}
+
+/**
+ * Callback for converting one content type to another.
+ */
+function _alshaya_advanced_page_convert_base_tables($to_type, $nids, $base_tables) {
+  if (!isset($base_tables)) {
+    $base_tables = [
+      'node',
+      'node_field_data',
+    ];
+  }
+  $db = Database::getConnection();
+  $fields = [
+    'type' => $to_type,
+  ];
+  foreach ($base_tables as $tableName) {
+    $db->update($tableName)
+      ->fields($fields)
+      ->condition('nid', $nids, 'IN')
+      ->execute();
+  }
+}
+
+/**
+ * Callback for converting one content type to another.
+ */
+function _alshaya_advanced_page_convert_field_tables($to_type, $nids, $field_tables) {
+  $db = Database::getConnection();
+  $fields = [
+    'bundle' => $to_type,
+  ];
+  foreach ($field_tables as $tableName) {
+    $db->update($tableName)
+      ->condition('entity_id', $nids, 'IN')
+      ->fields($fields)
+      ->execute();
+  }
+}
+
+/**
+ * Callback for deleting field.
+ */
+function _alshaya_advanced_page_delete_fields($tablename, $nids) {
+  $db = Database::getConnection();
+  $db->delete($tablename)
+    ->condition('entity_id', $nids, 'IN')
+    ->execute();
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_advanced_page_block_access(Block $block, $operation, AccountInterface $account) {
+  $block_plugin = $block->getPluginId();
+
+  // Hide facet block & product content listing block in case where Drupal has
+  // been tricked into thinking the department page as a term page.
+  if (strpos($block_plugin, 'facet_block:') !== FALSE || ($block_plugin === 'views_block:alshaya_product_list-block_1')) {
+    // Not show block for department page.
+    return AccessResult::forbiddenIf(!empty(\Drupal::routeMatch()->getRouteObject()->getOption('_department_page_term')));
+  }
+
+  // No opinion.
+  return AccessResult::neutral();
+}
