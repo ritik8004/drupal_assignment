@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the alshaya_main_menu module.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding config for the mega menu highlights.
+ */
+function alshaya_main_menu_update_8401() {
+  alshaya_config_install_configs(['alshaya_main_menu.settings'], 'alshaya_main_menu');
+}
