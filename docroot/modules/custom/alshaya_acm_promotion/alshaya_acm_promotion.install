@@ -12,17 +12,10 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
- * Updated promotional banner config.
+ * Updated promotional banner view.
  */
 function alshaya_acm_promotion_update_8011() {
-  $configs = [
-    'field.storage.taxonomy_term.field_promotion_banner_mobile',
-    'field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile',
-  ];
-
-  alshaya_config_install_configs($configs, 'alshaya_acm_promotion');
   alshaya_config_install_configs(['views.view.plp_promotional_banner'], 'alshaya_acm_promotion', 'optional');
-  alshaya_config_install_configs(['core.entity_form_display.taxonomy_term.acq_product_category.default'], 'alshaya_acm_product_category');
 }
 
 /**
