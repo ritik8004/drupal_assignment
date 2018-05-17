@@ -8,6 +8,7 @@
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_acq_sku_import_alter().
@@ -295,4 +296,28 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
  */
 function alshaya_hm_images_preprocess_product_zoom(&$variables) {
   $variables['#cache']['contexts'][] = 'url.query_args:color';
+}
+
+/**
+ * Implements hook_images_media_image_sitemap_alter().
+ */
+function alshaya_hm_images_media_image_sitemap_alter(&$media, &$nid) {
+  // Load product from id.
+  $product = Node::load($nid);
+
+  if ($product instanceof Node) {
+    // Get SKU from product.
+    $skuId = $product->get('field_skus')->first()->getString();
+    if (isset($skuId)) {
+      $sku = SKU::loadFromSku($skuId);
+      $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+      if ($sku instanceof SKU) {
+        $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main']);
+        if (!empty($images)) {
+          // Changes for the image count.
+          $media = $images;
+        }
+      }
+    }
+  }
 }

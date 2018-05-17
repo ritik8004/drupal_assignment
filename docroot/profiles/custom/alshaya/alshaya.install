@@ -11,6 +11,15 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Enable 'alshaya_image_sitemap' module.
+ */
+function alshaya_update_8005() {
+  \Drupal::service('module_installer')->install(['alshaya_image_sitemap']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable 'restrict_login_by_ip' module.
  */
 function alshaya_update_8005() {
@@ -122,7 +131,9 @@ function alshaya_install() {
     ->save();
 
   // TODO: List the modules common for transac and non-transac profiles.
-  $modules = [];
+  $modules = [
+    'alshaya_image_sitemap',
+  ];
 
   global $_alshaya_modules_installed;
   $_alshaya_modules_installed = [];
