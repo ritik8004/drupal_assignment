@@ -22,10 +22,6 @@ $result = $query->execute();
 $used_fids = [];
 
 foreach ($result->fetchAll() as $row) {
-  $has_values = FALSE;
-  $query = $db->insert('temp_product_fids');
-  $query->fields(['id']);
-
   $media = unserialize($row->media__value);
   foreach ($media as $item) {
     if (isset($item['file']) && $item['file'] instanceof \Drupal\file\Entity\File) {
