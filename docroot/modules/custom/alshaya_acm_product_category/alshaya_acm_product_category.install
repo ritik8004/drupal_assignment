@@ -23,6 +23,24 @@ function alshaya_acm_product_category_update_dependencies() {
 /**
  * Implements hook_update_N().
  *
+ * Adding new field for promotion banner in mobile and related view.
+ * Update product_category_level_3 view to remove include_menu field condition.
+ */
+function alshaya_acm_product_category_update_8008() {
+  $configs = [
+    'field.storage.taxonomy_term.field_promotion_banner_mobile',
+    'field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'views.view.plp_promotional_banner',
+    'views.view.product_category_level_3',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new fields Image, BG and Font color in acq_category.
  */
 function alshaya_acm_product_category_update_8007() {
