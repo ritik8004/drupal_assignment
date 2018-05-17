@@ -1,4 +1,15 @@
 .page-standard.user-page.checkout-delivery {
+  main {
+    form {
+      .form-actions {
+        a {
+          font-weight: normal;
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+
   #edit-delivery-tabs {
     .tab {
       font-family: $alshaya-thin;
@@ -116,6 +127,22 @@
     @include breakpoint($only-mobile) {
       @include icon(chevron#{left}, before) {
         top: -0.125rem;
+      }
+    }
+  }
+}
+
+#payment_details_wrapper {
+  #payment_method_knet {
+    border-top-width: 1px;
+  }
+
+  > .form-wrapper {
+    .payment-plugin-wrapper-div {
+      &.plugin-selected {
+        .method-title {
+          font-weight: normal;
+        }
       }
     }
   }

@@ -4,8 +4,6 @@
     font-family: $alshaya-thin;
 
     &.-current {
-      font-weight: normal;
-
       &::before {
         border: 1px solid $checkout_current_counter_border;
       }
@@ -19,6 +17,17 @@
           right: 0.125rem;
         }
       }
+    }
+  }
+
+  .checkout-progress__step.-previous,
+  .checkout-progress__step:last-child.-current {
+    &::before {
+      color: $checkout_previous_counter;
+    }
+
+    a {
+      color: $checkout_previous_counter_text;
     }
   }
 }
