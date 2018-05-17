@@ -778,10 +778,9 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
 function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
   global $pager_page_array;
 
-  $element = $vars['element'];
-  $page_auto_load = \Drupal::config('alshaya_acm_product.settings')->get('list_view_auto_page_load_count');
-
-  if (isset($_REQUEST['view_name']) && in_array($_REQUEST['view_name'], ['search', 'alshaya_product_list'])) {
+  if (isset($vars['view']) && in_array($vars['view']->id(), ['search', 'alshaya_product_list'])) {
+    $element = $vars['element'];
+    $page_auto_load = \Drupal::config('alshaya_acm_product.settings')->get('list_view_auto_page_load_count');
     // Change infinite scroll to load after three scrolls.
     $vars['options']['automatically_load_content'] = TRUE;
     if (($pager_page_array[$element] + 1) % $page_auto_load == 0 && $pager_page_array[$element] !== 0) {
