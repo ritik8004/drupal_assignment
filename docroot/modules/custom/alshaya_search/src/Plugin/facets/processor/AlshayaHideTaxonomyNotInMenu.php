@@ -78,6 +78,12 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
    * {@inheritdoc}
    */
   public function build(FacetInterface $facet, array $results) {
+    // Don't do anything if results set is empty. We can face this case
+    // when search results are empty.
+    if (empty($results)) {
+      return $results;
+    }
+
     $source = $facet->getFacetSource();
 
     // Support multiple entity types when using Search API.
@@ -112,10 +118,18 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
 
         // Loop over all results.
         foreach ($results as $i => $result) {
-          if (($entities[$ids[$i]] instanceof TermInterface) &&
-            ($entities[$ids[$i]]->get('field_category_include_menu')->getString() != 1)) {
-            unset($results[$i]);
+          $term = isset($entities[$ids[$i]]) ? $entities[$ids[$i]] : NULL;
+
+          // Display the term if included in menu and status is enabled.
+          if (($term instanceof TermInterface) &&
+            ($term->get('field_category_include_menu')->getString()) &&
+            ($term->get('field_commerce_status')->getString())) {
+            continue;
           }
+
+          // Remove from results if either term load failed or not included
+          // in menu or status is disabled.
+          unset($results[$i]);
         }
       }
     }
