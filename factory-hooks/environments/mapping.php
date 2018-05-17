@@ -44,10 +44,6 @@ function alshaya_get_env_keys($site, $env) {
   $mapping = [
     // Mothercare Kuwait.
     'mckw' => [
-      '01test' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
-      ],
       '01uat' => [
         'magento' => 'mc_uat',
         'conductor' => 'mc_uat',
@@ -60,10 +56,6 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'mc_prod',
         'conductor' => 'mc_prod',
       ],
-      '01update' => [
-        'magento' => 'mc_prod',
-        'conductor' => 'mc_prod',
-      ],
       // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
       'default' => [
         'magento' => 'mc_dev',
@@ -72,10 +64,6 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Mothercare SA.
     'mcsa' => [
-      '01test' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mcsa_test',
-      ],
       '01uat' => [
         'magento' => 'mc_uat',
         'conductor' => 'mcsa_uat',
@@ -90,7 +78,7 @@ function alshaya_get_env_keys($site, $env) {
       ],
       'default' => [
         'magento' => 'mc_qa',
-        'conductor' => 'mcsa_dev',
+        'conductor' => 'mcsa_test',
       ],
     ],
     // Mothercare UAE.
@@ -110,20 +98,6 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // H&M Kuwait.
     'hmkw' => [
-      '01dev2' => [
-        // DVM2.
-        'magento' => 'hm_vat',
-        'conductor' => 'mcsa_uat',
-      ],
-      '01test' => [
-        'magento' => 'hm_qa',
-        'conductor' => 'hm_test',
-      ],
-      '01qa2' => [
-        // DVM2.
-        'magento' => 'hm_dmv2',
-        'conductor' => 'mcsa_pprod',
-      ],
       '01uat' => [
         'magento' => 'hm_uat',
         'conductor' => 'hm_uat'
@@ -139,7 +113,7 @@ function alshaya_get_env_keys($site, $env) {
       // Local, travis, 01dev, 01dev2, 01dev3.
       'default' => [
         'magento' => 'hm_qa',
-        'conductor' => 'hm_dev',
+        'conductor' => 'hm_test',
       ],
     ],
     // H&M SA.
@@ -175,13 +149,9 @@ function alshaya_get_env_keys($site, $env) {
     // BathBodyWorks AE.
     'bbwae' => [
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwae_test',
       ],
-      //'default' => [
-      //  'magento' => 'bbw_qa',
-      //  'conductor' => 'bbwae_test',
-      //],
     ],
     // Pottery Barn AE.
     'pbae' => [
@@ -204,6 +174,14 @@ function alshaya_get_env_keys($site, $env) {
       ],
     ],
   ];
+
+  // All 01update should match 01live.
+  // Update array to set 01update if 01live is set.
+  foreach ($mapping as $site => $envs) {
+    if (isset($mapping[$site]['01live'])) {
+      $mapping[$site]['01update'] = $mapping[$site]['01live'];
+    }
+  }
 
   // Get the keys following this fallback (from the more specific to the more
   // generic one): site+env > site+default > default+env > default+default.

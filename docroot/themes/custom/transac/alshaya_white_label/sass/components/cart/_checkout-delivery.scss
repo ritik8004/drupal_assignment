@@ -21,7 +21,7 @@
 
   h1.c-page-title {
     @include breakpoint($only-mobile) {
-      padding-left: 1em;
+      padding-#{$left}: 2rem;
       font-size: 1.115rem;
     }
   }
@@ -1202,12 +1202,13 @@ html[lang=ar] {
       width: 1.063rem;
       height: 1.375rem;
 
-      @include icon(chevron#{left}, before) {
+      @include icon(arrowup, before) {
         position: absolute;
-        #{$left}: -0.6875rem;
-        top: 0;
+        #{$left}: -0.5rem;
+        top: -3px;
         color: $checkout_mobile_back_link_icon;
-        font-size: 1.563rem;
+        font-size: 2.125rem;
+        transform: rotate(270deg);
       }
     }
   }
@@ -1230,5 +1231,23 @@ html[lang=ar] {
 
   @include breakpoint($desktop) {
     margin: 2rem 2rem 1rem;
+  }
+}
+
+#payment_method_title_cashondelivery {
+  &::after {
+    content: '';
+    background: url(/themes/custom/transac/alshaya_white_label/imgs/cards/cash-on-delivery.svg) no-repeat;
+    background-size: 100%;
+    height: 2.0625rem;
+    width: 3.0625rem;
+    position: absolute;
+    top: 1.25rem;
+    #{$right}: 1.125rem;
+
+    html[lang=ar] & {
+      background: url(/themes/custom/transac/alshaya_white_label/imgs/cards/cash-on-delivery-ar.svg) no-repeat;
+      left: 0.8rem;
+    }
   }
 }

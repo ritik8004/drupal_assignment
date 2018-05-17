@@ -419,6 +419,12 @@
 
         storeListAjax.execute();
       }
+      else {
+        // Remove the loader.
+        if ($('.checkout-ajax-progress-throbber').length > 0) {
+          $('.checkout-ajax-progress-throbber').remove();
+        }
+      }
     }
     else {
       $('#click-and-collect-list-view').html('');

@@ -136,7 +136,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
     // Preserve attributes before overriding the datalayer attributes.
     if (isset($data_layer['deliveryCity'])) {
-      unset($data_layer['deliveryCity']);
+      $general_dl_attributes['deliveryCity'] = $data_layer['deliveryCity'];
     }
 
     if (isset($data_layer['deliveryArea'])) {

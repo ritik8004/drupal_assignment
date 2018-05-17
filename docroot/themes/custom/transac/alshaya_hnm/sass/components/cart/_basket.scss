@@ -191,8 +191,14 @@
     }
   }
 
-  .view-product-slider .views-row {
-    min-height: 18.75rem;
+  .view-product-slider {
+    .views-row {
+      min-height: 18.75rem;
+    }
+
+    .no-cart-form .views-row {
+      min-height: auto;
+    }
   }
 }
 

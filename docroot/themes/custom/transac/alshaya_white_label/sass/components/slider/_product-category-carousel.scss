@@ -1,6 +1,7 @@
 .paragraph--type--product-carousel-category {
-  padding: 0 0 1.5rem;
-  margin: 1.5rem 0;
+  &.has-view-all-link {
+    padding: 0 0 1.5rem;
+  }
 
   .crossell-title {
     &.subtitle {
@@ -36,6 +37,7 @@
 
         @include breakpoint($only-mobile) {
           margin: 0 0.3125rem;
+          width: calc(100% - 0.625rem);
         }
       }
     }
@@ -75,6 +77,8 @@
   }
 
   .view-product-slider {
+    margin-bottom: 1.5rem;
+
     @include breakpoint($tablet) {
       padding: 0 2.25rem;
     }
@@ -89,6 +93,32 @@
           margin: 0 1rem;
         }
       }
+    }
+  }
+}
+
+.view-product-slider {
+  .owl-carousel {
+    .owl-stage {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0 !important;
+      }
+    }
+  }
+}
+
+.owl-prev,
+.owl-next,
+.slick-prev,
+.slick-next,
+.owl-dot {
+  outline: none;
+}
+
+.owl-nav {
+  button {
+    span {
+      display: none;
     }
   }
 }

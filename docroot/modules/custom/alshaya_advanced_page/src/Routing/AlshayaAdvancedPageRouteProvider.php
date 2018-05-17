@@ -31,7 +31,6 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
             $route->setOption('_department_page_term', $exploded_path[3]);
             $route->setOption('_department_page_node', $department_node);
             $collection->add($node_route[0]['name'], $route);
-            $collection->remove('entity.taxonomy_term.canonical');
           }
         }
       }

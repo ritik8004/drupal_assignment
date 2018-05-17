@@ -11,6 +11,18 @@
     .price {
       margin-bottom: 0.5rem;
     }
+
+    .content--item-code {
+      font-size: 0.625rem;
+    }
+  }
+
+  &__main {
+    &.slider-position-left {
+      div:last-of-type {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 
@@ -78,6 +90,27 @@
   .region__content {
     @include breakpoint($only-mobile) {
       margin: 0;
+    }
+  }
+}
+
+.store-finder-form-wrapper {
+  .search-store {
+    button {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.click-collect-top-stores {
+  ul {
+    li {
+      .store {
+        &-sequence {
+          line-height: 1.9;
+        }
+      }
     }
   }
 }

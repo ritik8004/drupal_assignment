@@ -77,7 +77,8 @@ header {
     @include container(1284px);
 
     @include breakpoint($only-mobile) {
-      margin: 0.625rem 0;
+      margin: 0.25rem 0;
+      margin-bottom: 0;
       padding-bottom: 0;
       padding-left: 0.5rem;
       padding-right: 0.5rem;
@@ -100,10 +101,14 @@ header {
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
         position: absolute;
-        top: 3rem;
+        top: 3.3rem;
         display: none;
         width: 100%;
         left: 0;
+
+        html[lang=ar] & {
+          top: 3.7rem;
+        }
       }
     }
 
@@ -119,9 +124,11 @@ header {
           margin-top: -4px;
         }
 
-        input[type="text"] {
+        .form-text {
           width: 272px;
           font-size: 0.75rem;
+          box-sizing: border-box;
+          outline: transparent;
 
           &::placeholder {
             font-size: 0.75rem;
@@ -140,7 +147,7 @@ header {
 
     @include breakpoint($only-tablet) {
       .block-views-exposed-filter-blocksearch-page {
-        input[type="text"] {
+        .form-text {
           width: 12rem;
           font-size: 0.875rem;
 
@@ -153,7 +160,7 @@ header {
 
     @include breakpoint($only-mobile) {
       .block-system-branding-block {
-        width: 53%;
+        width: 65%;
       }
     }
   }
@@ -193,7 +200,7 @@ header {
       }
     }
 
-    input[type="text"] {
+    .form-text {
       font-family: $alshaya-thin;
       padding: 7px;
       vertical-align: bottom;
@@ -273,7 +280,7 @@ header {
         height: 1.25rem;
 
         html[lang=ar] & {
-          margin-top: -0.25rem;
+          margin-top: -0.5rem;
         }
       }
     }
@@ -395,6 +402,7 @@ header {
         input {
           max-width: none;
           width: 100%;
+          outline: none;
         }
       }
 
@@ -407,6 +415,7 @@ header {
   input {
     color: $primary_search_input;
     font-family: $alshaya-thin;
+    box-sizing: border-box;
 
     @include breakpoint($only-mobile) {
       font-size: 0.875rem;
@@ -1306,18 +1315,10 @@ header {
 .site-brand-home {
   margin: 0;
 
-  @include breakpoint($only-mobile) {
-    max-width: 10rem;
-
-    html[lang=ar] & {
-      max-width: 8rem;
-    }
-  }
-
   a {
     display: block;
     font-size: 2rem;
-    max-width: 10.0625rem;
+    max-width: 11.875rem;
 
     .ie & {
       display: inline;
@@ -1385,7 +1386,7 @@ html[lang='ar'] {
     }
 
     .site-brand-home img {
-      width: 6.563rem;
+      width: 8.125rem;
 
       @include breakpoint($only-tablet) {
         width: auto;
@@ -1496,7 +1497,11 @@ html {
   .site-brand-home {
     a {
       margin-#{$left}: 2.5rem;
-      margin-top: 0.125rem;
+      margin-top: 0.25rem;
+
+      html[lang=ar] & {
+        margin-top: 0.125rem;
+      }
     }
   }
 

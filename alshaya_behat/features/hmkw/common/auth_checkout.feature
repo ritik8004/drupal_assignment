@@ -4,7 +4,7 @@ Feature: As an authenticated user
   using various payment options
 
   Background:
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "Alshaya123$"
     And I wait for the page to load
     Then I should see the link "My account"
     When I am on a configurable product

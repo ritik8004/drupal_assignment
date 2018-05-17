@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_image_text_bg_color
+    - taxonomy.vocabulary.acq_product_category
+id: taxonomy_term.acq_product_category.field_image_text_bg_color
+field_name: field_image_text_bg_color
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Image text background color'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -127,7 +127,6 @@
     .filter--mobile {
       @include breakpoint($only-mobile) {
         position: relative;
-        z-index: 10;
       }
 
       @include breakpoint($tablet) {
@@ -149,6 +148,11 @@
 
         label {
           #{$left}: -3.5rem;
+          display: none;
+
+          @include breakpoint($desktop) {
+            display: block;
+          }
 
           html[lang=ar] & {
             #{$left}: -4.5rem;

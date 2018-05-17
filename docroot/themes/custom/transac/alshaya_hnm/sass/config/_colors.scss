@@ -162,6 +162,7 @@ $plp_facet_filter: $black-three;
 $plp_facet_input_placeholder: $hnm-black-two;
 $plp_facet_label: $black-two;
 $category_facet_active_icon: $hnm-black-two;
+$category_facet_active_text: $hnm-black-two;
 
 // Delivery Menu
 $delivery_color: $link-hover;
@@ -358,6 +359,11 @@ $order_detail_total_tr_row_price_td_bg: $white-five;
 $order_details_table_total_bg: $whisper-light;
 $order_details_table_total_price: $hnm-black-two;
 $order_actions_checkout: $white-five;
+
+// Checkout login.
+$checkout_login_btn_bg: $primary_btn_bg;
+$checkout_login_btn_txt: $primary_btn_text;
+$checkout_mobile_back_link_icon: $black-two;
 
 // Checkout Click and Collect
 $checkout_cc_input: $hnm-black-two;

@@ -27,7 +27,7 @@ widget:
 query_operator: or
 use_hierarchy: true
 expand_hierarchy: false
-enable_parent_when_child_gets_disabled: true
+enable_parent_when_child_gets_disabled: false
 hard_limit: 0
 exclude: false
 only_visible_when_facet_source_is_visible: false
@@ -49,6 +49,11 @@ processor_configs:
       sort: -10
     settings:
       sort: ASC
+  hide_taxonomy_not_in_menu:
+    processor_id: hide_taxonomy_not_in_menu
+    weights:
+      build: 5
+    settings: {  }
   translate_entity:
     processor_id: translate_entity
     weights:

@@ -161,7 +161,13 @@ class CheckoutHelper {
       $this->ordersManager->clearLastOrderRelatedProductsCache();
 
       // Add success message in logs.
-      $this->logger->info('Placed order. Cart: @cart.', [
+      $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id.', [
+        '@cart_id' => $cart->id(),
+        '@order_id' => $order_id,
+      ]);
+
+      // While debugging we log the whole cart object.
+      $this->logger->debug('Placed order for cart: @cart', [
         '@cart' => json_encode($cart->getCart()),
       ]);
 
