@@ -8,6 +8,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_meta_tags
     - field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner
+    - field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile
     - field.field.taxonomy_term.acq_product_category.field_term_background_color
     - field.field.taxonomy_term.acq_product_category.field_term_font_color
     - image.style.thumbnail
@@ -20,6 +21,23 @@ dependencies:
     - paragraphs
     - path
     - text
+third_party_settings:
+  field_group:
+    group_category_image:
+      children:
+        - field_category_image
+        - field_image_text_bg_color
+        - field_image_text_font_color
+      parent_name: ''
+      weight: 12
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Category image'
+      region: content
 id: taxonomy_term.acq_product_category.default
 targetEntityType: taxonomy_term
 bundle: acq_product_category
@@ -41,7 +59,7 @@ content:
     type: boolean_checkbox
     region: content
   field_category_quicklink_plp_mob:
-    weight: 14
+    weight: 13
     settings:
       display_label: true
     third_party_settings: {  }
@@ -60,13 +78,13 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 11
+    weight: 9
     settings: {  }
     third_party_settings: {  }
     type: metatag_firehose
     region: content
   field_promo_banner_for_mobile:
-    weight: 10
+    weight: 8
     settings:
       display_label: true
     third_party_settings: {  }
@@ -80,8 +98,16 @@ content:
       progress_indicator: throbber
     third_party_settings: {  }
     region: content
+  field_promotion_banner_mobile:
+    type: image_image
+    weight: 14
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
   field_term_background_color:
-    weight: 12
+    weight: 11
     settings:
       size: '10'
       placeholder: ''
@@ -103,7 +129,7 @@ content:
     type: jquery_minicolors_widget
     region: content
   field_term_font_color:
-    weight: 13
+    weight: 10
     settings:
       size: '10'
       placeholder: ''
@@ -132,7 +158,7 @@ content:
     region: content
   name:
     type: string_textfield
-    weight: 0
+    weight: 1
     settings:
       size: 60
       placeholder: ''
@@ -145,7 +171,7 @@ content:
     third_party_settings: {  }
     region: content
   translation:
-    weight: 10
+    weight: 7
     region: content
 hidden:
   field_commerce_id: true
