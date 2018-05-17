@@ -1233,3 +1233,21 @@ html[lang=ar] {
     margin: 2rem 2rem 1rem;
   }
 }
+
+#payment_method_title_cashondelivery {
+  &::after {
+    content: '';
+    background: url(/themes/custom/transac/alshaya_white_label/imgs/cards/cash-on-delivery.svg) no-repeat;
+    background-size: 100%;
+    height: 2.0625rem;
+    width: 3.0625rem;
+    position: absolute;
+    top: 1.25rem;
+    #{$right}: 1.125rem;
+
+    html[lang=ar] & {
+      background: url(/themes/custom/transac/alshaya_white_label/imgs/cards/cash-on-delivery-ar.svg) no-repeat;
+      left: 0.8rem;
+    }
+  }
+}

@@ -75,6 +75,7 @@
       $('.c-menu-primary .mobile--search').off().on('click', function (e) {
         e.preventDefault();
         $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle();
+        $('.c-header__region .block-views-exposed-filter-blocksearch-page input.ui-autocomplete-input').focus();
         $(this).parent().toggleClass('search-active');
       });
 
