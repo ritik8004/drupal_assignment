@@ -11,5 +11,9 @@
  * Adding config for the mega menu highlights.
  */
 function alshaya_main_menu_update_8401() {
-  alshaya_config_install_configs(['alshaya_main_menu.settings'], 'alshaya_main_menu');
+  $configs = [
+    'alshaya_main_menu.settings',
+    'language.config.ar.alshaya_main_menu.settings',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_main_menu');
 }
