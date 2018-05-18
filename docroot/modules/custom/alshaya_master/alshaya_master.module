@@ -788,5 +788,5 @@ function _alshaya_master_get_views_result($view_id, $display_id, array $args = [
  *   Return float value.
  */
 function alshaya_master_convert_amount_to_float($amount) {
-  return floatval(str_replace(",", "", $amount));
+  return floatval(str_replace(',', '', $amount));
 }
