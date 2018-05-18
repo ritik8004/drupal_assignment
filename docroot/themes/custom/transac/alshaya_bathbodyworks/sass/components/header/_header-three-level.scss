@@ -4,21 +4,9 @@
       padding-top: 1rem;
     }
 
-    .menu--two__list .menu--two__list-item > .menu-two__link-wrapper {
-      a {
-        color: $mm_l2_link !important;
-      }
-    }
-
     .menu--three__list-item > .menu-two__link-wrapper a {
       font-size: 0.875rem !important;
-      color: $mm_l2_link !important;
-      font-family: $alshaya-thin !important;
       text-transform: capitalize;
-
-      &:hover {
-        color: $mm_l2_link_hover !important;
-      }
     }
   }
 }

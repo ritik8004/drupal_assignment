@@ -1,8 +1,6 @@
 @javascript
 Feature: Test the product detail page
 
-
-  @prod
   Scenario: As a Guest
     I should be able to see all the various sections
     on a configurable product detail page
@@ -23,7 +21,6 @@ Feature: Test the product detail page
     And I should see "Collect the order from store in 1-2 days"
     Then I should be able to see the footer
 
-  @prod
   Scenario: As a Guest user
     I should be able to expand HD and CC on a configurable PDP
     Given I am on a configurable product
@@ -41,31 +38,26 @@ Feature: Test the product detail page
     And I should see "FREE"
     Then I should see " of charge."
     And I should see "Check in-store availability"
-#    When I select the first autocomplete option for "Dubai - United Arab Emirates" on the "edit-location" field
-#    And I wait for AJAX to finish
-#    And I wait 10 seconds
-#    Then I should see "149 Dubai Mall"
-#    And I should see the link for ".change-location-link"
-#    When I click the label for ".change-location-link"
-#    Then I select the first autocomplete option for "Fujairah - United Arab Emirates" on the "store-location" field
-#    And I wait for AJAX to finish
-#    And I wait 10 seconds
-#    Then I should see "Fujairah City Centre"
-#    When I click the label for ".other-stores-link"
-#    And I wait for AJAX to finish
-#    Then I should see the inline modal for ".click-collect-all-stores.inline-modal-wrapper.desc-open"
-#    When I scroll to x "0" y "0" coordinates of page
-#    When I click the label for ".close-inline-modal"
-#    Then I should not see the inline modal for ".click-collect-all-stores.inline-modal-wrapper.desc-open"
+    Then I select the first autocomplete option for "Fujairah - United Arab Emirates" on the "edit-location" field
+    And I wait for AJAX to finish
+    And I wait 10 seconds
+    Then I should see "Fujairah City Centre"
+    And I should see the link for ".change-location-link"
+    When I click the label for ".change-location-link"
+    When I select the first autocomplete option for "Dubai - United Arab Emirates" on the "store-location" field
+    And I wait for AJAX to finish
+    And I wait 10 seconds
+    Then I should see "Dubai Mall"
+    When I click the label for ".other-stores-link"
+    And I wait for AJAX to finish
+    Then I should see the inline modal for ".click-collect-all-stores.inline-modal-wrapper.desc-open"
+    When I scroll to x "0" y "0" coordinates of page
     When I click the label for ".read-more-description-link"
     And I wait for AJAX to finish
     Then I should see the inline modal for ".description-wrapper.desc-open"
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
-
-
-  @media @prod
   Scenario Outline:
   As an User
   I should be able to connect via Social media
@@ -79,7 +71,6 @@ Feature: Test the product detail page
       |.st_facebook_custom|Log into your Facebook account to share.|
       |.st_twitter_custom|Share a link with your followers|
 
-  @arabic @prod
   Scenario: As a Guest on Arabic site
   I should be able to see all the various sections
   on a configurable product detail page
@@ -102,7 +93,6 @@ Feature: Test the product detail page
     And I should see ".التوصيل المجاني للطلبيات التي تزيد على 300 د.إ"
     Then I should be able to see the footer in Arabic
 
-  @arabic @prod
   Scenario: As a Guest user on Arabic site
   I should be able to expand HD and CC on a configurable PDP
     Given I am on a configurable product
@@ -121,21 +111,19 @@ Feature: Test the product detail page
     When I click the label for "#ui-id-4"
     Then I should see "استلم من المحل مجاناً"
     And I should see "تحقق من توفر الكمية في المحلات"
-#    When I select the first autocomplete option for "الشويخ" on the "edit-location" field
-#    And I wait for AJAX to finish
-#    And I wait 10 seconds
-#    And I should see the link for ".change-location-link"
-#    Then I should see "السالمية - شارع سالم المبارك"
-#    When I click the label for ".change-location-link"
-#    Then I select the first autocomplete option for "الكويت" on the "store-location" field
-#    And I wait for AJAX to finish
-#    And I wait 10 seconds
-#    When I click the label for ".other-stores-link"
-#    And I wait for AJAX to finish
-#    Then I should see the inline modal for ".click-collect-all-stores.inline-modal-wrapper.desc-open"
-#    And I scroll to x "0" y "0" coordinates of page
-#    When I click the label for ".close-inline-modal"
-#    Then I should not see the inline modal for ".click-collect-all-stores.inline-modal-wrapper.desc-open"
+    When I select the first autocomplete option for "Fujairah" on the "edit-location" field
+    And I wait for AJAX to finish
+    And I wait 10 seconds
+    And I should see the link for ".change-location-link"
+    Then I should see "سيتي سنتر الفجيرة"
+    When I click the label for ".change-location-link"
+    Then I select the first autocomplete option for "Dubai" on the "store-location" field
+    And I wait for AJAX to finish
+    And I wait 10 seconds
+    When I click the label for ".other-stores-link"
+    And I wait for AJAX to finish
+    Then I should see the inline modal for ".click-collect-all-stores.inline-modal-wrapper.desc-open"
+    And I scroll to x "0" y "0" coordinates of page
     When I click the label for ".read-more-description-link"
     And I wait for AJAX to finish
     Then I should see the inline modal for ".description-wrapper.desc-open"
@@ -143,7 +131,6 @@ Feature: Test the product detail page
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
 
-  @media @arabic @prod
   Scenario Outline:
   As an User on Arabic site
   I should be able to connect via Social media
@@ -164,7 +151,6 @@ Feature: Test the product detail page
       |.st_facebook_custom|Log into your Facebook account to share.|
       |.st_twitter_custom|Share a link with your followers|
 
-  @config @prod
   Scenario: As an user
   I should be able to view the size guide on a configurable PDP
     Given I am on a configurable product
@@ -176,7 +162,6 @@ Feature: Test the product detail page
     Then I should not see "Please select the category you require"
     And I should see the link "Size Guide"
 
-  @config @arabic @prod
   Scenario: As an user on Arabic site
   I should be able to view the size guide on a configurable PDP
     Given I am on a configurable product

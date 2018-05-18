@@ -119,14 +119,14 @@ $header_search_block_bg: $white;
 $header_border: $warm-grey-two;
 
 // Header mobile search.
-$header_search_border_mobile: $peacock-blue;
-$header_search_active_bg: $peacock-blue;
+$header_search_border_mobile: $warm-grey-three;
+$header_search_active_bg: false;
 $header_search_active_text: $black;
 
 // Header - Search.
 $primary_search_btn: $peacock-blue;
 $primary_search_bg: $white;
-$primary_search_btn_icon: $peacock-blue;
+$primary_search_btn_icon: transparent;
 $primary_search_input: $black;
 $primary_search_input_placeholder: $warm-grey-one;
 $primary_search_border: $warm-grey-two;
@@ -140,7 +140,7 @@ $header_toggle_sign_default: $warm-grey-three;
 $header_toggle_sign_active_tab: $black;
 $header_toggle_sign_active_tab_bg: $white;
 $header_mobile_menu_arrow: $peacock-blue;
-$header_mobile_menu_active: $warm-grey-three;
+$header_mobile_menu_active: $white;
 $header_mobile_menu_close_bg: $peacock-blue;
 $header_mobile_menu_close: $white;
 $header_mobile_menu_overlay: rgba(133, 133, 133, 0.27);
@@ -176,6 +176,10 @@ $mm_l3_link_bg: $white;
 $mm_l3_link_hover: $peacock-blue;
 $mm_highlight_label: $peacock-blue;
 $mm_p_a_text: $black;
+$mm_highlight_label: $black;
+$mm_highlight_title: $black;
+$mm_highlight_description: $warm-grey-one;
+$mm_p_a_text: $warm-grey-one;
 
 //  Mini Cart.
 $primary_minicart_text: $black;
@@ -207,6 +211,7 @@ $minicart_notification_border: $peacock-blue;
 $minicart_notification_text: $peacock-blue;
 $minicart_notification_btn_bg: $black;
 $minicart_notification_product_title: $black;
+$minicart_notification_shadow: $shadow;
 
 // Delivery tabs.
 $deliverybanner_title: $peacock-blue;
