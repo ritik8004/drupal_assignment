@@ -497,9 +497,8 @@
         });
       });
 
-      if ($(context).attr('data-vmode') === 'modal') {
-        var product = Drupal.alshaya_seo_gtm_get_product_values($(context).find('article[data-vmode="modal"]'));
-
+      if ($(context).filter('article[data-vmode="modal"]').length === 1) {
+        var product = Drupal.alshaya_seo_gtm_get_product_values($(context).filter('article[data-vmode="modal"]'));
         product.variant = '';
 
         var data = {
