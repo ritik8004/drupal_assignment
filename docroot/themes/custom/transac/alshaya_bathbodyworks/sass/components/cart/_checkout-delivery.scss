@@ -103,6 +103,12 @@
             text-transform: capitalize;
           }
         }
+
+        legend {
+          span {
+            color: $checkout_section_titles;
+          }
+        }
       }
     }
   }
@@ -144,6 +150,19 @@
           font-weight: normal;
         }
       }
+    }
+  }
+}
+
+#selected-address-wrapper {
+  .address--controls {
+    #change-address {
+      font-size: 0.875rem;
+      font-weight: normal;
+      padding: 0.875rem;
+      color: $address_book_change_link;
+      text-transform: uppercase;
+      border-#{$right}: 1px solid $address_book_border;
     }
   }
 }
