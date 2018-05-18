@@ -31,12 +31,6 @@ rtl_styles:
       css/rtl.css: {}
       css/rtl-print.css: {media: print}
 
-convert_to_select2:
-  js:
-    js/convert_to_select2.js: {}
-  dependencies:
-    - alshaya_white_label/select2
-
 sizeguide:
   js:
     js/select2Option.js: {}
