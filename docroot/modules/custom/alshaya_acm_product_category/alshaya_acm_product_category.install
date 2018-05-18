@@ -23,21 +23,9 @@ function alshaya_acm_product_category_update_dependencies() {
 /**
  * Implements hook_update_N().
  *
- * Changing container from div to h2 for dept page sidebar menu L2 category
- * title.
- */
-function alshaya_acm_product_category_update_8008() {
-  $configs = [
-    'views.view.product_category_level_2_3',
-  ];
-
-  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
-}
-
-/**
- * Implements hook_update_N().
- *
  * Adding new fields Image, BG and Font color in acq_category.
+ * Change container from div to h2 for dept page sidebar menu L2 category
+ * title.
  */
 function alshaya_acm_product_category_update_8008() {
   $configs = [
@@ -49,6 +37,7 @@ function alshaya_acm_product_category_update_8008() {
     'field.field.taxonomy_term.acq_product_category.field_category_image',
     'core.entity_view_display.taxonomy_term.acq_product_category.default',
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'views.view.product_category_level_2_3',
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
