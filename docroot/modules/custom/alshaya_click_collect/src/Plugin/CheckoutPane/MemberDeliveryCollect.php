@@ -59,12 +59,13 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (!$this->isVisible()) {
+    if ($this->getSelectedDeliveryMethod() != 'cc') {
       return $pane_form;
     }
 
-    if ($this->getSelectedDeliveryMethod() != 'cc') {
-      return $pane_form;
+    // Check if user is changing his mind, if so clear shipping info.
+    if ($this->isUserChangingHisMind()) {
+      $this->clearShippingInfo();
     }
 
     $pane_form['#attributes']['class'][] = 'active--tab--content';
@@ -85,6 +86,19 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       $store_code = $cc_selected_info['store_code'];
       $shipping_type = $cc_selected_info['shipping_type'];
     }
+    // @TODO: Move this to service once ACM V2 is merged.
+    elseif ($this->getCartSelectedDeliveryMethod() === '') {
+      $shipping = [];
+
+      // Check once in history.
+      $history = $this->getCartShipingHistory();
+      if ($history) {
+        $shipping = $history['address'];
+        $store_code = $history['store_code'];
+        $shipping_type = $history['click_and_collect_type'];
+        $default_mobile = $shipping['telephone'];
+      }
+    }
     elseif ($cart->getExtension('store_code') && $shipping) {
       // Check if value available in shipping address.
       if (!empty($shipping['telephone'])) {
@@ -94,8 +108,10 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       $shipping_type = $cart->getExtension('click_and_collect_type');
     }
 
-    // Check once in customer profile.
-    if ($account = User::load(\Drupal::currentUser()->id())) {
+    if (empty($default_mobile)) {
+      // Check once in customer profile.
+      $account = User::load(\Drupal::currentUser()->id());
+
       if ($account_phone = $account->get('field_mobile_number')->getValue()) {
         $default_mobile = $account_phone[0]['value'];
       }

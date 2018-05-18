@@ -63,12 +63,13 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (!$this->isVisible()) {
+    if ($this->getSelectedDeliveryMethod() != 'cc') {
       return $pane_form;
     }
 
-    if ($this->getSelectedDeliveryMethod() != 'cc') {
-      return $pane_form;
+    // Check if user is changing his mind, if so clear shipping info.
+    if ($this->isUserChangingHisMind()) {
+      $this->clearShippingInfo();
     }
 
     $pane_form['#attributes']['class'][] = 'active--tab--content';
@@ -89,6 +90,19 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     elseif ($cc_selected_info && isset($cc_selected_info['store_code'])) {
       $store_code = $cc_selected_info['store_code'];
       $shipping_type = $cc_selected_info['shipping_type'];
+    }
+    // @TODO: Move this to service once ACM V2 is merged.
+    elseif ($this->getCartSelectedDeliveryMethod() === '') {
+      $shipping = [];
+
+      // Check once in history.
+      $history = $this->getCartShipingHistory();
+      if ($history) {
+        $shipping = $history['address'];
+        $store_code = $history['store_code'];
+        $shipping_type = $history['click_and_collect_type'];
+        $default_mobile = $shipping['telephone'];
+      }
     }
     elseif ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
       // Check if value available in shipping address.

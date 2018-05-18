@@ -71,7 +71,7 @@ trait CheckoutDeliveryMethodTrait {
 
       self::$deliveryMethodSelectedCart = $cart_method;
 
-      // We method is not allowed (someone trying to trick the system), redirect
+      // If method is not allowed (someone trying to trick the system), redirect
       // to default or cart method.
       if ($method) {
         if (!in_array($method, $allowed_methods)) {
@@ -159,6 +159,41 @@ trait CheckoutDeliveryMethodTrait {
     }
 
     return $status;
+  }
+
+  /**
+   * Check if user is changing mind by visiting another delivery method.
+   *
+   * @return bool
+   *   TRUE if cart has delivery method and user visiting another method.
+   */
+  protected function isUserChangingHisMind() {
+    $method = $this->getSelectedDeliveryMethod();
+    $cart_method = $this->getCartSelectedDeliveryMethod();
+    return $cart_method && $cart_method != $method;
+  }
+
+  /**
+   * Wrapper function to clear shipping method info in Cart.
+   */
+  protected function clearShippingInfo() {
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+    $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    $helper->clearShippingInfo(self::$deliveryMethodSelectedCart);
+    self::$deliveryMethodSelected = NULL;
+    self::$deliveryMethodSelectedCart = NULL;
+  }
+
+  /**
+   * Wrapper function to get shipping info from history.
+   *
+   * @return array
+   *   History data if available or empty array.
+   */
+  protected function getCartShipingHistory() {
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+    $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    return $helper->getCartShipingHistory(self::$deliveryMethodSelected);
   }
 
 }

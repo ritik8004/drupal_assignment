@@ -47,12 +47,13 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (!$this->isVisible()) {
+    if ($this->getSelectedDeliveryMethod() != 'hd') {
       return $pane_form;
     }
 
-    if ($this->getSelectedDeliveryMethod() != 'hd') {
-      return $pane_form;
+    // Check if user is changing his mind, if so clear shipping info.
+    if ($this->isUserChangingHisMind()) {
+      $this->clearShippingInfo();
     }
 
     $pane_form['#attributes']['class'][] = 'active--tab--content';
@@ -68,6 +69,17 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     $cart->setExtension('cc_selected_info', NULL);
 
     $address = (array) $cart->getShipping();
+
+    // @TODO: Move this to service once ACM V2 is merged.
+    if ($this->getCartSelectedDeliveryMethod() === '') {
+      $address = [];
+
+      // Check once in history.
+      $history = $this->getCartShipingHistory();
+      if ($history) {
+        $address = $history['address'];
+      }
+    }
 
     $pane_form['address_form'] = [
       '#type' => 'container',

@@ -6,7 +6,9 @@ use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm_customer\OrdersManager;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -62,6 +64,20 @@ class CheckoutHelper {
   protected $entityTypeManager;
 
   /**
+   * Cache Backend service for storing history of user data in cart.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cacheCartHistory;
+
+  /**
+   * The date time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $dateTime;
+
+  /**
    * CheckoutOptionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -78,6 +94,10 @@ class CheckoutHelper {
    *   The current user.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_cart_history
+   *   Cache Backend service for storing history of user data in cart.
+   * @param \Drupal\Component\Datetime\TimeInterface $date_time
+   *   The date time service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               APIWrapper $api_wrapper,
@@ -85,7 +105,9 @@ class CheckoutHelper {
                               OrdersManager $orders_manager,
                               RequestStack $request_stack,
                               AccountProxyInterface $current_user,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              LoggerChannelFactoryInterface $logger_factory,
+                              CacheBackendInterface $cache_cart_history,
+                              TimeInterface $date_time) {
     $this->entityTypeManager = $entity_type_manager;
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
@@ -93,6 +115,8 @@ class CheckoutHelper {
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->currentUser = $current_user;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
+    $this->cacheCartHistory = $cache_cart_history;
+    $this->dateTime = $date_time;
   }
 
   /**
@@ -147,6 +171,7 @@ class CheckoutHelper {
 
       $this->ordersManager->clearOrderCache($email, $current_user_id);
       $this->ordersManager->clearLastOrderRelatedProductsCache();
+      $this->clearCartShippingHistory($cart->id());
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id.', [
@@ -175,6 +200,99 @@ class CheckoutHelper {
       // Throw the message for calling function too.
       throw $e;
     }
+  }
+
+  /**
+   * Function to clear shipping info in cart and store current info in cache.
+   *
+   * @param string $current_method
+   *   Current method in cart, we will store that code in cache.
+   */
+  public function clearShippingInfo($current_method) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (empty($cart)) {
+      return;
+    }
+
+    if (empty($current_method)) {
+      return;
+    }
+
+    // Get cache id.
+    $cid = $this->getCartHistoryCacheId($cart->id());
+
+    // Prepare data to store in cache as history.
+    // We will use it to restore in cart if user changes his mind again.
+    $data = [
+      'method' => $current_method,
+      'address' => $cart->getShipping(),
+      'store_code' => $cart->getExtension('store_code'),
+      'click_and_collect_type' => $cart->getExtension('click_and_collect_type'),
+    ];
+
+    // We will remember only for an hour.
+    $expire = $this->dateTime->getRequestTime() + 3600;
+    $this->cacheCartHistory->set($cid, $data, $expire);
+
+    // Clear address and info from extension.
+    $cart->setShipping([]);
+    $cart->setShippingMethod('', '');
+    $cart->setExtension('store_code', NULL);
+    $cart->setExtension('click_and_collect_type', NULL);
+    $this->cartStorage->updateCart();
+  }
+
+  /**
+   * Get shipping info from cart history.
+   *
+   * @param string $method
+   *   Method code (hd/cc) to get data for.
+   *
+   * @return array
+   *   History data if available or empty array.
+   */
+  public function getCartShipingHistory($method = 'hd') {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (!empty($cart)) {
+      // Get cache id.
+      $cid = $this->getCartHistoryCacheId($cart->id());
+      $history = $this->cacheCartHistory->get($cid);
+
+      if ($history) {
+        $data = $history->data;
+        if (!empty($data['method']) && $data['method'] === $method) {
+          return $data;
+        }
+      }
+    }
+
+    return [];
+  }
+
+  /**
+   * Clear history for a particular cart.
+   *
+   * @param int $cart_id
+   *   Cart ID to use to prepare Cache ID.
+   */
+  public function clearCartShippingHistory($cart_id) {
+    $cid = $this->getCartHistoryCacheId($cart_id);
+    $this->cacheCartHistory->delete($cid);
+  }
+
+  /**
+   * Get Cache ID for history for a particular cart.
+   *
+   * @param int $cart_id
+   *   Cart ID to use to prepare Cache ID.
+   *
+   * @return string
+   *   Cache ID.
+   */
+  private function getCartHistoryCacheId($cart_id) {
+    return 'cart_history:' . $cart_id;
   }
 
 }

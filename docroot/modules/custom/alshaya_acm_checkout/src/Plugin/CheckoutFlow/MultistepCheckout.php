@@ -73,13 +73,21 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
     $panes = $this->getPanes($this->stepId);
     foreach ($panes as $pane_id => $pane) {
+      $visible = $pane->isVisible();
+
       $form[$pane_id] = [
         '#parents' => [$pane_id],
         '#type' => $pane->getWrapperElement(),
         '#title' => $pane->getLabel(),
-        '#access' => $pane->isVisible(),
+        '#access' => $visible,
       ];
-      $form[$pane_id] = $pane->buildPaneForm($form[$pane_id], $form_state, $form);
+
+      // We will only build form if visible.
+      if ($visible) {
+        $form[$pane_id] = $pane->buildPaneForm(
+          $form[$pane_id], $form_state, $form
+        );
+      }
     }
 
     // For login we want user to start again with checkout after login.
