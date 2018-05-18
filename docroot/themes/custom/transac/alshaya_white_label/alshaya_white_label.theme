@@ -5,12 +5,14 @@
  * Theme specific functionality.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_html().
@@ -877,17 +879,22 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
           $data = [];
           foreach ($results as $result) {
-            $data_nid = $result->_object->getValue()->id();
-            // For stock push mode.
-            if ($stock_mode != 'pull') {
-              $sku_entity = "sdfds";
-              // If product in stock for 'push' mode.
-              if (alshaya_acm_get_product_stock($sku_entity)) {
-                $data[] = $data_nid;
+            /* @var \Drupal\node\Entity\Node $node*/
+            $node = $result->_object->getValue();
+            if ($node instanceof NodeInterface) {
+              // For stock push mode.
+              if ($stock_mode === 'push') {
+                // Load the sku attached to the node.
+                $sku_entity_id = $node->get('field_skus')->first()->getString();
+                $sku_entity = SKU::loadFromSku($sku_entity_id);
+                // If product in stock for 'push' mode.
+                if ($sku_entity && alshaya_acm_get_product_stock($sku_entity)) {
+                  $data[] = $node->id();
+                }
               }
-            }
-            else {
-              $data[] = $data_nid;
+              else {
+                $data[] = $node->id();
+              }
             }
           }
 
