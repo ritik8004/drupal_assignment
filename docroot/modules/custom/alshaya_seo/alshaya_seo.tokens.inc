@@ -139,6 +139,10 @@ function alshaya_seo_tokens($type, $tokens, array $data, array $options, Bubblea
 
 /**
  * Implements hook_tokens_alter().
+ *
+ * [current-page:url:absolute] is the default canonical metatag for nodes.
+ * However, for department page, we replace the url "on-the-fly" with the
+ * related category's url.
  */
 function alshaya_seo_tokens_alter(array &$replacements, array $context, BubbleableMetadata $bubbleable_metadata) {
   // Alter [current-page:url:absolute] token for canonical meta tag for
