@@ -150,7 +150,7 @@ function alshaya_seo_tokens_alter(array &$replacements, array $context, Bubbleab
         if ($node = \Drupal::routeMatch()->getParameter('node')) {
           // Department pages are now advanced pages.
           if ($node->getType() == 'advanced_page') {
-            if ($node->get('field_use_as_department_page')->getValue() && $node->get('field_product_category')->getValue() !== NULL) {
+            if ($node->get('field_use_as_department_page')->value && $node->get('field_product_category')->getValue() !== NULL) {
               $product_category = $node->get('field_product_category')->getValue();
               $url_options = ['absolute' => TRUE];
               $category_alias = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $product_category['0']['target_id']], $url_options)->toString();
