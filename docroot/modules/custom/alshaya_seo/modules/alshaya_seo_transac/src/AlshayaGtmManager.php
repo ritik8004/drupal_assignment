@@ -1284,6 +1284,11 @@ class AlshayaGtmManager {
       else {
         $sku_media_url = 'image not available';
       }
+      $sku_entity = SKU::loadFromSku($item['sku']);
+      if ($sku_entity instanceof SKU && $sku_entity->hasTranslation('en')) {
+        $sku_entity = $sku_entity->getTranslation('en');
+        $item['name'] = $sku_entity->label();
+      }
 
       $cart_items_flock[] = [
         'id' => $item['sku'],
