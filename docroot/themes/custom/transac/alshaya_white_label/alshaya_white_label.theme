@@ -304,6 +304,10 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
+    // Cross sell/ Up sell items count on caraousel on pdp page.
+    $variables['#attached']['drupalSettings']['pdp_items_mob'] = \Drupal::config('alshaya_acm_product.settings')->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
+    $variables['#attached']['drupalSettings']['pdp_items_tab'] = \Drupal::config('alshaya_acm_product.settings')->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
+    $variables['#attached']['drupalSettings']['pdp_items_desk'] = \Drupal::config('alshaya_acm_product.settings')->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();
