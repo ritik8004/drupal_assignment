@@ -4,45 +4,38 @@
     attach: function (context, settings) {
       // On product click, store the product position.
       $('.views-infinite-scroll-content-wrapper .c-products__item').on('click', function () {
-        // Set position value.
-        localStorage.setItem('list_scroll_position', $(this).position().top);
+        // Set key/value where key is url and value is position of product.
+        localStorage.setItem(window.location.href, $(this).position().top);
       });
 
       // Here we just clearing the storage.
       $(window).on('scroll', function() {
-        if (localStorage.getItem('list_scroll_position')) {
+        if (localStorage.getItem(window.location.href)) {
+          // Current scroll position.
           var y_scroll_pos = window.pageYOffset;
-          var product_position = localStorage.getItem('list_scroll_position');
+          // Position where we need to scroll.
+          var product_position = localStorage.getItem(window.location.href);
           // If windows scroll position is greater that product position, it means
           // we have reached/scrolled to the product and thus clear the storage.
           if(y_scroll_pos >= product_position) {
-            localStorage.removeItem('list_scroll_position');
+            localStorage.removeItem(window.location.href);
           }
         }
       });
 
       // If scroll position is set in storage.
-      if (localStorage.getItem('list_scroll_position')) {
+      if (localStorage.getItem(window.location.href)) {
         // Get the position.
-        var gScroltop = localStorage.getItem('list_scroll_position');
+        var gScroltop = localStorage.getItem(window.location.href);
         // Doing this on ajax complete as the load more button might not
         // available due to lazy loading.
         $(document).ajaxComplete(function (event, xhr, settings) {
-          if (triggerLoadMoreClick(gScroltop)) {
-            $('.js-pager__items a').trigger("click");
-          }
-
-          // Scroll to appropriate product.
-          if (localStorage.getItem('list_scroll_position')) {
-            scrollToProduct(gScroltop);
-          }
+          // Scroll to appropriate position.
+          checkAndScrollTo(gScroltop);
         });
 
-        // Scroll to appropriate position if no ajax call.
-        if (localStorage.getItem('list_scroll_position')) {
-          // Scroll to appropriate product.
-          scrollToProduct(gScroltop);
-        }
+        // Scroll to appropriate position.
+        checkAndScrollTo(gScroltop);
       }
 
       /**
@@ -75,8 +68,24 @@
           if (load_more_button_position.top < product_pos) {
             return true;
           }
+        }
 
-          return false;
+        return false;
+      }
+
+      /**
+       * Check and click and scroll to position.
+       *
+       * @param product_pos
+       */
+      function checkAndScrollTo(product_pos) {
+        if (triggerLoadMoreClick(product_pos)) {
+          $('.js-pager__items a').trigger("click");
+        }
+        // Scroll to appropriate position if no ajax call.
+        if (localStorage.getItem(window.location.href)) {
+          // Scroll to appropriate product.
+          scrollToProduct(product_pos);
         }
       }
     }
