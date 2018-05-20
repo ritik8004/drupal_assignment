@@ -78,18 +78,6 @@ function alshaya_config_install_configs(array $configs, $module_name, $path = 'i
 
       continue;
     }
-    // If language overridden config.
-    elseif (strpos($config, 'language.config.') === 0) {
-      $langcode = explode('.', $config)[2];
-      // If config yml name like 'language.config.ar.my_config.settings', then
-      // here we just removing 'language.config.ar' from name and thus config
-      // name will be like 'my_config.settings'.
-      $config_name = str_replace('language.config.' . $langcode . '.', '', $config);
-      $language_overriden_config = \Drupal::languageManager()->getLanguageConfigOverride($langcode, $config_name);
-      $language_overriden_config->setData($config_yaml);
-      $language_overriden_config->save();
-      continue;
-    }
 
     // Update config using config factory.
     \Drupal::configFactory()
