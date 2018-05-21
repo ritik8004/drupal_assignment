@@ -152,7 +152,7 @@ function hammerIt(elm) {
             hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentmobSlide + '"]'));
           });
 
-          $('#product-image-gallery-mob .slick-prev').on('click', function (event, slick) {
+          $('#product-image-gallery-mob .slick-prev').once().on('click', function (event, slick) {
             var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentmobSlide + '"] img');
             image.parent().siblings().each(function () {
               $(this).find('img').css('transform', 'scale(1)');
@@ -160,7 +160,7 @@ function hammerIt(elm) {
             hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentmobSlide + '"]'));
           });
 
-          $('#product-image-gallery-mob .slick-next').on('click', function (event, slick) {
+          $('#product-image-gallery-mob .slick-next').once().on('click', function (event, slick) {
             var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentmobSlide + '"] img');
             image.parent().siblings().each(function () {
               $(this).find('img').css('transform', 'scale(1)');
