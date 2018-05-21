@@ -989,7 +989,7 @@ class AlshayaGtmManager {
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 
         // Check if this product is in stock.
-        $stock_response = alshaya_acm_get_product_stock($sku_entity);
+        $stock_response = alshaya_acm_get_stock_from_sku($sku_entity);
         $stock_status = $stock_response ? 'in stock' : 'out of stock';
         $product_terms = $this->fetchProductCategories($node);
 

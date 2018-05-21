@@ -5,7 +5,6 @@
  * Theme specific functionality.
  */
 
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
@@ -884,11 +883,8 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             if ($node instanceof NodeInterface) {
               // For stock push mode.
               if ($stock_mode === 'push') {
-                // Load the sku attached to the node.
-                $sku_entity_id = $node->get('field_skus')->first()->getString();
-                $sku_entity = SKU::loadFromSku($sku_entity_id);
                 // If product in stock for 'push' mode.
-                if ($sku_entity && alshaya_acm_get_product_stock($sku_entity)) {
+                if (alshaya_acm_get_stock_from_product($node)) {
                   $data[] = $node->id();
                 }
               }
