@@ -55,6 +55,13 @@ class StoresFinderConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('store_list_label'),
     ];
 
+    $form['store_search_placeholder'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Placeholder for store search'),
+      '#description' => $this->t('Configure the placeholder for the store search textfield.'),
+      '#default_value' => $config->get('store_search_placeholder'),
+    ];
+
     $form['search_proximity_radius'] = [
       '#type' => 'number',
       '#min' => 1,
@@ -158,6 +165,7 @@ class StoresFinderConfigForm extends ConfigFormBase {
     $config->set('load_more_item_limit', $form_state->getValue('load_more_item_limit'));
     $config->set('search_proximity_radius', $form_state->getValue('search_proximity_radius'));
     $config->set('store_list_label', $form_state->getValue('store_list_label'));
+    $config->set('store_search_placeholder', $form_state->getValue('store_search_placeholder'));
     $config->set('marker.use_default', $form_state->getValue('use_default'));
     $config->set('marker.path', $marker_path);
     $config->set('marker.url', file_url_transform_relative(file_create_url($marker_path)));

@@ -935,27 +935,30 @@ html[lang=ar] {
   }
 }
 
-.term-description-mobile-only.c-page-title__description {
-  @include u-visibility(none);
+.c-content__region {
+  .term-description-mobile-only {
+    &.c-page-title__description {
+      @include u-visibility(none);
 
-  @include breakpoint($only-mobile) {
-    display: block;
-    width: 100%;
+      @include breakpoint($only-mobile) {
+        display: block;
+        width: 100%;
+        margin-top: 2rem;
 
-    .c-page-title {
-      margin-bottom: 0;
-      border-bottom: none;
-      padding-bottom: 0.5rem;
+        .c-page-title {
+          display: none;
 
-      .c-department & {
-        border-top: 1px solid $primary_border;
-        padding-top: 0.5rem;
+          .c-department & {
+            border-top: 1px solid $primary_border;
+            padding-top: 0.5rem;
+          }
+        }
+
+        p {
+          margin-bottom: 0;
+          margin-top: 0;
+        }
       }
-    }
-
-    p {
-      margin-bottom: 0;
-      margin-top: 0;
     }
   }
 }

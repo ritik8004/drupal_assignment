@@ -7,7 +7,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 %}
 
 <article{{ attributes }} {{ gtm_attributes }}>
-  <a href="{{ path('entity.node.canonical', {'node': node.id}) }}">
+  <a href="{{ path('entity.node.canonical', {'node': node.id}) }}" class="product-link">
     {% if content.image is not null %}
       {{ content.image }}
     {% endif %}
@@ -28,7 +28,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
   </a>
   {% if content.promotions %}
-    <div class="promotions above-mobile-block">
+    <div class="promotions">
       {{ content.promotions }}
     </div>
   {% endif %}

@@ -29,3 +29,14 @@ function _alshaya_custom_get_site_level_country_code($reset = FALSE) {
   }
   return $default_site_country;
 }
+
+/**
+ * Determines if the current route is amp or not.
+ *
+ * @return bool
+ *   True if amp route or FALSE.
+ */
+function _alshaya_custom_is_amp_route() {
+  return \Drupal::moduleHandler()->moduleExists('amp')
+  && \Drupal::service('router.amp_context')->isAmpRoute() ? TRUE : FALSE;
+}

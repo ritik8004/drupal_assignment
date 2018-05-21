@@ -63,21 +63,18 @@
     @include breakpoint($only-mobile) {
       font-size: 0;
 
-      @include icon(chevron#{$left}, before) {
-        font-size: 1.875rem;
+      @include icon(arrowup, before) {
         margin-#{$left}: -0.75rem;
         line-height: 0.875;
-        font-weight: bold;
-        color: $myaccount_icon;
+        font-weight: normal;
+        transform: none;
+        #{$left}: 0.4375rem;
       }
 
       h1.c-page-title {
         @include arabic-letter-spacing;
 
-        display: inline-block;
-        line-height: 1.5;
         font-size: 1.125rem;
-        vertical-align: top;
         letter-spacing: 0.8px;
       }
     }
@@ -97,6 +94,18 @@
 
     @include breakpoint($desktop) {
       padding: 0 0 1.125rem;
+    }
+  }
+}
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-payment {
+  .back-link {
+    @include breakpoint($only-mobile) {
+      @include icon(arrowup, before) {
+        color: $checkout_mobile_back_link_icon;
+        transform: none;
+      }
     }
   }
 }
