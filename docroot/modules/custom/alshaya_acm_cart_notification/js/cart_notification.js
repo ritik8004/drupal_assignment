@@ -1,6 +1,7 @@
 (function ($, Drupal, document) {
   'use strict';
 
+  // Function to start fullpage loader wherever we need.
   function spinner_start() {
     if ($('.page-standard > .checkout-ajax-progress-throbber').length === 0) {
       $('.page-standard').append('<div class="ajax-progress ajax-progress-throbber checkout-ajax-progress-throbber"><div class="throbber"></div></div>');
@@ -8,6 +9,7 @@
     $('.checkout-ajax-progress-throbber').show();
   }
 
+  // Function to stop fullpage loader wherever we need.
   function spinner_stop() {
     $('.checkout-ajax-progress-throbber').hide();
   }
