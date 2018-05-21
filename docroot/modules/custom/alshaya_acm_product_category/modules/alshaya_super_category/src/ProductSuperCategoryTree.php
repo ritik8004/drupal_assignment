@@ -89,8 +89,9 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
         }
       }
       elseif ($request->get('_route') == 'view.search.page') {
-        $brand = $request->query->get('brand');
-        $term = $this->termStorage->load($brand);
+        if ($brand = $request->query->get('brand')) {
+          $term = $this->termStorage->load($brand);
+        }
       }
     }
 
