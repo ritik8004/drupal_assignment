@@ -185,15 +185,55 @@ trait CheckoutDeliveryMethodTrait {
   }
 
   /**
-   * Wrapper function to get shipping info from history.
+   * Get checkout helper service object.
+   *
+   * @return \Drupal\alshaya_acm_checkout\CheckoutHelper
+   *   Checkout Helper service object.
+   */
+  protected function getCheckoutHelper() {
+    static $helper;
+
+    if (empty($helper)) {
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+      $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    }
+
+    return $helper;
+  }
+
+  /**
+   * Get address info from cart or history.
+   *
+   * @param string $method
+   *   Method Code - hd/cc.
    *
    * @return array
-   *   History data if available or empty array.
+   *   Address info - address + store info from extension.
    */
-  protected function getCartShipingHistory() {
-    /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
-    $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
-    return $helper->getCartShipingHistory(self::$deliveryMethodSelected);
+  protected function getAddressInfo($method = 'hd') {
+    $response = [];
+
+    $selected_method = $this->getCartSelectedDeliveryMethod();
+
+    // Use from cart if shipping method set.
+    if ($selected_method && $method === $selected_method) {
+      /** @var \Drupal\acq_cart\Cart $cart */
+      $cart = $this->getCart();
+
+      if ($selected_method === 'cc') {
+        $response['address'] = (array) $cart->getShipping();
+        $response['store_code'] = $cart->getExtension('store_code');
+        $response['click_and_collect_type'] = $cart->getExtension('click_and_collect_type');
+      }
+      else {
+        $response['address'] = (array) $cart->getShipping();
+      }
+    }
+    else {
+      $response = $this->getCheckoutHelper()->getCartShippingHistory($method);
+    }
+
+    return $response;
   }
 
 }

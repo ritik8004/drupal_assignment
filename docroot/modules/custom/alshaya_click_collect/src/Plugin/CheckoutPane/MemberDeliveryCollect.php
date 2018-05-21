@@ -60,6 +60,10 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     if ($this->getSelectedDeliveryMethod() != 'cc') {
+      // Once we open HD page, clear temp cc selected info.
+      $cart = $this->getCart();
+      $cart->setExtension('cc_selected_info', NULL);
+
       return $pane_form;
     }
 
@@ -73,7 +77,13 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
 
     $cart = $this->getCart();
-    $shipping = (array) $cart->getShipping();
+    $address_info = $this->getAddressInfo('cc');
+
+    if (!empty($address_info)) {
+      $store_code = $address_info['store_code'];
+      $shipping_type = $address_info['click_and_collect_type'];
+      $default_mobile = $address_info['address']['telephone'];
+    }
 
     $cc_selected_info = $cart->getExtension('cc_selected_info');
 
@@ -85,27 +95,6 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     elseif ($cc_selected_info && isset($cc_selected_info['store_code'])) {
       $store_code = $cc_selected_info['store_code'];
       $shipping_type = $cc_selected_info['shipping_type'];
-    }
-    // @TODO: Move this to service once ACM V2 is merged.
-    elseif ($this->getCartSelectedDeliveryMethod() === '') {
-      $shipping = [];
-
-      // Check once in history.
-      $history = $this->getCartShipingHistory();
-      if ($history) {
-        $shipping = $history['address'];
-        $store_code = $history['store_code'];
-        $shipping_type = $history['click_and_collect_type'];
-        $default_mobile = $shipping['telephone'];
-      }
-    }
-    elseif ($cart->getExtension('store_code') && $shipping) {
-      // Check if value available in shipping address.
-      if (!empty($shipping['telephone'])) {
-        $default_mobile = $shipping['telephone'];
-      }
-      $store_code = $cart->getExtension('store_code');
-      $shipping_type = $cart->getExtension('click_and_collect_type');
     }
 
     if (empty($default_mobile)) {

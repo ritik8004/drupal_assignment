@@ -64,22 +64,8 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
 
     $cart = $this->getCart();
-
-    // Once we open HD page, clear temp cc selected info.
-    $cart->setExtension('cc_selected_info', NULL);
-
-    $address = (array) $cart->getShipping();
-
-    // @TODO: Move this to service once ACM V2 is merged.
-    if ($this->getCartSelectedDeliveryMethod() === '') {
-      $address = [];
-
-      // Check once in history.
-      $history = $this->getCartShipingHistory();
-      if ($history) {
-        $address = $history['address'];
-      }
-    }
+    $address_info = $this->getAddressInfo('hd');
+    $address = !empty($address_info['address']) ? $address_info['address'] : [];
 
     $pane_form['address_form'] = [
       '#type' => 'container',

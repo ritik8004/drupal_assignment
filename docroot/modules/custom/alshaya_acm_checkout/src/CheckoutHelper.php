@@ -6,6 +6,7 @@ use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm_customer\OrdersManager;
+use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -41,6 +42,13 @@ class CheckoutHelper {
    * @var \Drupal\alshaya_acm_customer\OrdersManager
    */
   protected $ordersManager;
+
+  /**
+   * Address Book Manager service object.
+   *
+   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   */
+  protected $addressBookManager;
 
   /**
    * Current request object.
@@ -88,6 +96,8 @@ class CheckoutHelper {
    *   Cart Storage service.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   Orders manager service object.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
+   *   Address Book Manager service object.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
@@ -103,6 +113,7 @@ class CheckoutHelper {
                               APIWrapper $api_wrapper,
                               CartStorageInterface $cart_storage,
                               OrdersManager $orders_manager,
+                              AlshayaAddressBookManager $address_book_manager,
                               RequestStack $request_stack,
                               AccountProxyInterface $current_user,
                               LoggerChannelFactoryInterface $logger_factory,
@@ -112,6 +123,7 @@ class CheckoutHelper {
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
     $this->ordersManager = $orders_manager;
+    $this->addressBookManager = $address_book_manager;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->currentUser = $current_user;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
@@ -219,27 +231,23 @@ class CheckoutHelper {
       return;
     }
 
-    // Get cache id.
-    $cid = $this->getCartHistoryCacheId($cart->id());
+    $address = (array) $cart->getShipping();
 
-    // Prepare data to store in cache as history.
-    // We will use it to restore in cart if user changes his mind again.
-    $data = [
-      'method' => $current_method,
-      'address' => $cart->getShipping(),
-      'store_code' => $cart->getExtension('store_code'),
-      'click_and_collect_type' => $cart->getExtension('click_and_collect_type'),
-    ];
+    $extensions_to_remember = ['store_code', 'click_and_collect_type'];
+    foreach ($extensions_to_remember as $code) {
+      $extension[$code] = $cart->getExtension($code);
+    }
 
-    // We will remember only for an hour.
-    $expire = $this->dateTime->getRequestTime() + 3600;
-    $this->cacheCartHistory->set($cid, $data, $expire);
+    $this->setCartShippingHistory($current_method, $address, $extension);
+
+    $empty_address = $this->addressBookManager->getAddressStructureWithEmptyValues('');
 
     // Clear address and info from extension.
-    $cart->setShipping([]);
     $cart->setShippingMethod('', '');
+    $cart->setShipping($empty_address);
     $cart->setExtension('store_code', NULL);
     $cart->setExtension('click_and_collect_type', NULL);
+    $cart->clearPayment();
     $this->cartStorage->updateCart();
   }
 
@@ -247,12 +255,12 @@ class CheckoutHelper {
    * Get shipping info from cart history.
    *
    * @param string $method
-   *   Method code (hd/cc) to get data for.
+   *   Method code (hd/cc). Empty value will return whole history.
    *
    * @return array
    *   History data if available or empty array.
    */
-  public function getCartShipingHistory($method = 'hd') {
+  public function getCartShippingHistory($method = '') {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if (!empty($cart)) {
@@ -262,13 +270,55 @@ class CheckoutHelper {
 
       if ($history) {
         $data = $history->data;
-        if (!empty($data['method']) && $data['method'] === $method) {
+        if (empty($method)) {
           return $data;
+        }
+        elseif (isset($data[$method])) {
+          return $data[$method];
         }
       }
     }
 
     return [];
+  }
+
+  /**
+   * Set shipping info in cache.
+   *
+   * @param string $method
+   *   HD or CC. Method code.
+   * @param array $address
+   *   Magento address.
+   * @param array $extension
+   *   Values used from Cart extension.
+   */
+  public function setCartShippingHistory($method, array $address, array $extension = []) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (empty($cart)) {
+      return;
+    }
+
+    // Get cache id.
+    $cid = $this->getCartHistoryCacheId($cart->id());
+
+    // Current history.
+    $history = $this->getCartShippingHistory();
+
+    // Prepare data to store in cache as history.
+    // We will use it to restore in cart if user changes his mind again.
+    $history[$method] = [
+      'method' => $method,
+      'address' => $address,
+    ];
+
+    foreach ($extension as $code => $value) {
+      $history[$method][$code] = $value;
+    }
+
+    // We will remember only for an hour.
+    $expire = $this->dateTime->getRequestTime() + 3600;
+    $this->cacheCartHistory->set($cid, $history, $expire);
   }
 
   /**

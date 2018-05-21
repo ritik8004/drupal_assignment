@@ -66,7 +66,13 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form = parent::buildForm($form, $form_state);
+    $steps = $this->getVisibleSteps();
+
+    $form['#tree'] = TRUE;
+    $form['#theme'] = ['acq_checkout_form'];
+    $form['#attached']['library'][] = 'acq_checkout/form';
+    $form['#title'] = $steps[$this->stepId]['label'];
+    $form['actions'] = $this->actions($form, $form_state);
 
     // Disable autocomplete.
     $form['#attributes']['autocomplete'] = 'off';

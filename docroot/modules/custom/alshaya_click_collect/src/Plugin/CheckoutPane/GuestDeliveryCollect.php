@@ -64,6 +64,10 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     if ($this->getSelectedDeliveryMethod() != 'cc') {
+      // Once we open HD page, clear temp cc selected info.
+      $cart = $this->getCart();
+      $cart->setExtension('cc_selected_info', NULL);
+
       return $pane_form;
     }
 
@@ -78,7 +82,13 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $default_firstname = $default_lastname = $default_email = '';
 
     $cart = $this->getCart();
-    $shipping = (array) $cart->getShipping();
+    $address_info = $this->getAddressInfo('cc');
+
+    if (!empty($address_info)) {
+      $store_code = $address_info['store_code'];
+      $shipping_type = $address_info['click_and_collect_type'];
+      $default_mobile = $address_info['address']['telephone'];
+    }
 
     $cc_selected_info = $cart->getExtension('cc_selected_info');
 
@@ -90,25 +100,6 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     elseif ($cc_selected_info && isset($cc_selected_info['store_code'])) {
       $store_code = $cc_selected_info['store_code'];
       $shipping_type = $cc_selected_info['shipping_type'];
-    }
-    // @TODO: Move this to service once ACM V2 is merged.
-    elseif ($this->getCartSelectedDeliveryMethod() === '') {
-      $shipping = [];
-
-      // Check once in history.
-      $history = $this->getCartShipingHistory();
-      if ($history) {
-        $shipping = $history['address'];
-        $store_code = $history['store_code'];
-        $shipping_type = $history['click_and_collect_type'];
-        $default_mobile = $shipping['telephone'];
-      }
-    }
-    elseif ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
-      // Check if value available in shipping address.
-      $store_code = $cart->getExtension('store_code');
-      $shipping_type = $cart->getExtension('click_and_collect_type');
-      $default_mobile = $shipping['telephone'];
     }
 
     if ($store_code && $shipping_type) {
