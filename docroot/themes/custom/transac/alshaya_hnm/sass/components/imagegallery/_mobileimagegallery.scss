@@ -6,18 +6,6 @@
     width: 100% !important;
     background: $gallery_bg;
   }
-
-  .button__wrapper {
-    .zoomout {
-      background: url(../imgs/assets/ic-zoomout.svg) no-repeat;
-      background-size: contain;
-    }
-
-    .zoomin {
-      background: url(../imgs/assets/ic-zoomin.svg) no-repeat;
-      background-size: contain;
-    }
-  }
 }
 
 .mob-imagegallery__thumbnails {
