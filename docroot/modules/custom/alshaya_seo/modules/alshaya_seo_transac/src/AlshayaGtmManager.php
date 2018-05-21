@@ -896,9 +896,9 @@ class AlshayaGtmManager {
     $actionData = [
       'id' => $order['increment_id'],
       'affiliation' => 'Online Store',
-      'revenue' => (float) $order['totals']['grand'],
-      'tax' => (float) $order['totals']['tax'] ?: 0.00,
-      'shippping' => (float) $order['shipping']['method']['amount'] ?: 0.00,
+      'revenue' => alshaya_master_convert_amount_to_float($order['totals']['grand']),
+      'tax' => alshaya_master_convert_amount_to_float($order['totals']['tax']) ?: 0.00,
+      'shippping' => alshaya_master_convert_amount_to_float($order['shipping']['method']['amount']) ?: 0.00,
       'coupon' => $order['coupon'],
     ];
 
@@ -912,7 +912,7 @@ class AlshayaGtmManager {
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
-      'discountAmount' => (float) abs($order['totals']['discount']),
+      'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
@@ -1001,7 +1001,7 @@ class AlshayaGtmManager {
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 
         // Check if this product is in stock.
-        $stock_response = alshaya_acm_get_product_stock($sku_entity);
+        $stock_response = alshaya_acm_get_stock_from_sku($sku_entity);
         $stock_status = $stock_response ? 'in stock' : 'out of stock';
         $product_terms = $this->fetchProductCategories($node);
 
@@ -1295,6 +1295,11 @@ class AlshayaGtmManager {
       }
       else {
         $sku_media_url = 'image not available';
+      }
+      $sku_entity = SKU::loadFromSku($item['sku']);
+      if ($sku_entity instanceof SKU && $sku_entity->hasTranslation('en')) {
+        $sku_entity = $sku_entity->getTranslation('en');
+        $item['name'] = $sku_entity->label();
       }
 
       $cart_items_flock[] = [

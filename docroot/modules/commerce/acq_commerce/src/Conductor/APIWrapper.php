@@ -3,6 +3,7 @@
 namespace Drupal\acq_commerce\Conductor;
 
 use Drupal\acq_commerce\I18nHelper;
+use Drupal\acquia_connector\ConnectorException;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -813,21 +814,21 @@ class APIWrapper implements APIWrapperInterface {
    */
   public function getProducts($count = 100) {
     $endpoint = $this->apiVersion . "/agent/products";
-
     $doReq = function ($client, $opt) use ($endpoint, $count) {
       $opt['query']['page_size'] = $count;
+
+      // To allow hmac sign to be verified properly we need them in asc order.
+      ksort($opt['query']);
+
       return ($client->get($endpoint, $opt));
     };
-
     $products = [];
-
     try {
       $products = $this->tryAgentRequest($doReq, 'getProducts', 'products');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
-
     return $products;
   }
 

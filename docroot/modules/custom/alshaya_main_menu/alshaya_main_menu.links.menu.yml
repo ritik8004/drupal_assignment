@@ -1,0 +1,5 @@
+alshaya_main_menu.settings_form:
+  title: 'Mega menu settings'
+  parent: alshaya_master.alshaya_admin
+  route_name: alshaya_main_menu.settings_form
+  weight: 1
