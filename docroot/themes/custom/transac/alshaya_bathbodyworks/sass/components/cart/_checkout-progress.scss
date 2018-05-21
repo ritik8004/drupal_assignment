@@ -19,17 +19,6 @@
       }
     }
   }
-
-  .checkout-progress__step.-previous,
-  .checkout-progress__step:last-child.-current {
-    &::before {
-      color: $checkout_previous_counter;
-    }
-
-    a {
-      color: $checkout_previous_counter_text;
-    }
-  }
 }
 
 #block-checkoutsummaryblock {
