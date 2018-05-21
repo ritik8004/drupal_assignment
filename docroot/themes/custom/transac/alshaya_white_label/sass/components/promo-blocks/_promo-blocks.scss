@@ -437,3 +437,17 @@
     }
   }
 }
+
+.field--name-field-promo-block {
+  &.field__item {
+    margin-bottom: 0.75rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 1.5rem;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
