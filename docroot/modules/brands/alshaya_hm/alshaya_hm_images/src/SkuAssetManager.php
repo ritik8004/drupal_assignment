@@ -487,7 +487,8 @@ class SkuAssetManager {
     }
 
     foreach ($child_skus as $child_sku) {
-      if ($child_sku->get('attr_color_label')->value == $rgb_color_label) {
+      if (!empty($sku_attributes = $this->skuManager->getSkuPropertyValue($child_sku, ['attr_color_label'])) &&
+        ($sku_attributes->attr_color_label == $rgb_color_label)) {
         return $child_sku;
       }
     }
