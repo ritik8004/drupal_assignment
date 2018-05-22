@@ -22,6 +22,11 @@ class AlshayaPerformanceServiceProvider extends ServiceProviderBase implements S
       if ($syslog) {
         $syslog->setClass(AlshayaPerformanceSysLog::class);
       }
+
+      // Enable dynamic page cache for all contexts.
+      $renderer = $container->getParameter('renderer.config');
+      $renderer['auto_placeholder_conditions']['contexts'] = [];
+      $container->setParameter('renderer.config', $renderer);
     }
     catch (\Exception $e) {
       // Do nothing, system might still be installing or syslog module might

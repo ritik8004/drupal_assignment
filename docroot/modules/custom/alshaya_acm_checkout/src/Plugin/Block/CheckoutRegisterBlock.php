@@ -182,16 +182,30 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account) {
-    return AccessResult::allowedIf($account->isAnonymous() && ($this->config->get('register') != USER_REGISTER_ADMINISTRATORS_ONLY))
-      ->addCacheContexts(['user.roles'])
-      ->addCacheTags($this->config->getCacheTags());
+    return AccessResult::allowedIf($account->isAnonymous() && ($this->config->get('register') != USER_REGISTER_ADMINISTRATORS_ONLY));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCacheMaxAge() {
-    return 0;
+  public function getCacheContexts() {
+    // We will display register block based on value in session for last order.
+    return Cache::mergeContexts(parent::getCacheContexts(), [
+      'user.roles',
+      'session',
+    ]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    $cache_tags = parent::getCacheTags();
+
+    // Add cache tags related to config.
+    $cache_tags = Cache::mergeTags($cache_tags, $this->config->getCacheTags());
+
+    return $cache_tags;
   }
 
 }
