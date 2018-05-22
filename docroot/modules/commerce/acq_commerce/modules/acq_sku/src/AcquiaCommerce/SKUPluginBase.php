@@ -232,17 +232,22 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    */
   protected function getStock($sku, $reset = FALSE) {
     $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
-    $sku = ($sku instanceof SKU) ? $sku->getSku() : $sku;
+    $sku_string = ($sku instanceof SKU) ? $sku->getSku() : $sku;
 
     if (!$reset) {
       // Return from Entity field in push mode.
       if ($stock_mode == 'push') {
-        $stock = \Drupal::database()->select('acq_sku_field_data', 'asfd')
-          ->fields('asfd', ['stock'])
-          ->condition('asfd.sku', $sku)
-          ->condition('asfd.langcode', \Drupal::languageManager()->getCurrentLanguage()->getId())
-          ->execute()
-          ->fetchField();
+        if ($sku instanceof SKU) {
+          $stock = $sku->get('stock')->getString();
+        }
+        else {
+          $stock = \Drupal::database()->select('acq_sku_field_data', 'asfd')
+            ->fields('asfd', ['stock'])
+            ->condition('asfd.sku', $sku_string)
+            ->condition('asfd.langcode', \Drupal::languageManager()->getCurrentLanguage()->getId())
+            ->execute()
+            ->fetchField();
+        }
 
         // Fallback to pull mode if no value available for the SKU.
         if (!($stock === '' || $stock === NULL)) {
@@ -252,7 +257,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
       // Return from Cache in Pull mode.
       else {
         // Cache id.
-        $cid = 'stock:' . $sku;
+        $cid = 'stock:' . $sku_string;
 
         $cache = \Drupal::cache('stock')->get($cid);
 
@@ -271,12 +276,12 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
     try {
       // Get the stock.
-      $stock_info = $api_wrapper->skuStockCheck($sku);
+      $stock_info = $api_wrapper->skuStockCheck($sku_string);
     }
     catch (\Exception $e) {
       // Log the stock error, do not throw error if stock info is missing.
       \Drupal::logger('acq_sku')->warning('Unable to get the stock for @sku : @message', [
-        '@sku' => $sku,
+        '@sku' => $sku_string,
         '@message' => $e->getMessage(),
       ]);
 
@@ -293,7 +298,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
     // Save the value in SKU if we came here as fallback of push mode.
     if ($stock_mode == 'push') {
-      $sku = SKU::loadFromSku($sku);
+      $sku = SKU::loadFromSku($sku_string);
       $sku->get('stock')->setValue($stock);
       $sku->save();
     }

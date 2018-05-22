@@ -1208,16 +1208,20 @@ class SkuManager {
     $child_skus = [];
 
     if ($sku_entity->getType() == 'configurable') {
-      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs')
-        ->fields('asfcs', ['field_configured_skus_value']);
+      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs');
+      $query->fields('asfcs', ['field_configured_skus_value']);
       $query->join('acq_sku_field_data', 'asfd', 'asfd.sku=asfcs.field_configured_skus_value');
-      $result = $query->condition('asfcs.entity_id', $sku_entity->id())
-        ->distinct()
-        ->execute();
+      $query->condition('asfcs.entity_id', $sku_entity->id());
+      $query->distinct();
+
+      if ($first_only) {
+        $query->range(0, 1);
+      }
+
+      $result = $query->execute();
 
       while ($row = $result->fetchAssoc()) {
-        if (($first_only) &&
-          (!empty($row['field_configured_skus_value']))) {
+        if ($first_only) {
           return $row['field_configured_skus_value'];
         }
         $child_skus[] = $row['field_configured_skus_value'];
