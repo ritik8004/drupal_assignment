@@ -159,7 +159,8 @@
   }
 
   .totals {
-    padding: 0.75rem 0.5rem;
+    padding: 0.75rem 0.5rem 0.5rem;
+    border-bottom: 1px solid $order_summary_section_border;
 
     .sub-total {
       color: $order_summary_subtotal;

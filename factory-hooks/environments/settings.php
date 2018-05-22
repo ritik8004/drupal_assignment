@@ -164,12 +164,12 @@ function alshaya_get_additional_settings($site, $env) {
       'ae' => [
         'default' => [
           'store_id' => [
-            'en' => 6,
-            'ar' => 5,
+            'en' => 5,
+            'ar' => 6,
           ],
           'magento_lang_prefix' => [
-            'en' => 'uae_en',
-            'ar' => 'uae_ar',
+            'en' => 'are_en',
+            'ar' => 'are_ar',
           ],
         ],
       ],

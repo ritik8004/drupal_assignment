@@ -1,0 +1,237 @@
+#edit-guest-delivery-collect,
+#edit-member-delivery-collect {
+  #store-finder-wrapper {
+    .label-store-location {
+      font-size: 0.875rem;
+      font-weight: normal;
+      text-transform: capitalize;
+    }
+
+    #click-and-collect-list-view {
+      ul {
+        li {
+          .store-open-hours {
+            .hours--label {
+              @include breakpoint($tablet) {
+                color: $checkout_cc_list_hours_label;
+                font-weight: bold;
+              }
+            }
+          }
+
+          .store-actions {
+            .select-store,
+            .store-on-map,
+            .view-on-map {
+              font-family: $alshaya-thin;
+              text-transform: uppercase;
+              font-size: 0.875rem;
+            }
+
+            .select-store,
+            .store-on-map {
+              @include breakpoint($tablet) {
+                width: 13.125rem;
+                height: 2.5rem;
+              }
+            }
+
+            .store-on-map,
+            .view-on-map {
+              border: 1px solid $checkout_cc_list_map_link_border;
+              background-color: $checkout_cc_list_map_link_bg;
+              padding: 0.3125rem 0;
+            }
+          }
+
+          @include breakpoint($desktop) {
+            .store-delivery-time {
+              width: 20%;
+            }
+
+            .store-open-hours {
+              width: 35%;
+              padding-#{$left}: 2.625rem;
+            }
+          }
+        }
+      }
+    }
+
+    .geolocation-common-map-container {
+      .store-open-hours {
+        .hours--label {
+          @include breakpoint($desktop) {
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+            border-top: 1px solid $checkout_cc_individual_store_hours_label_border;
+            border-bottom: 1px solid $checkout_cc_individual_store_hours_label_border;
+            font-weight: bold;
+            padding-#{$left}: 1.875rem;
+          }
+        }
+
+        .hours--label,
+        .hours--label.open {
+          &::after {
+            color: $checkout_cc_map_hours_icon;
+            top: 0.25rem;
+            left: 9.9375rem;
+          }
+        }
+
+        .open--hours {
+          padding-#{$left}: 1.875rem;
+          padding-#{$right}: 0;
+          border-bottom: 1px solid $checkout_cc_individual_store_hours_label_border;
+        }
+      }
+
+      .store-actions {
+        padding-#{$left}: 1.875rem;
+
+        .select-store {
+          font-family: $alshaya-thin;
+          text-transform: uppercase;
+          font-size: 0.875rem;
+        }
+      }
+
+      .store-delivery-time {
+        padding-#{$left}: 1.875rem;
+      }
+
+      .store-name-and-address {
+        margin-top: 0.5rem;
+        padding-#{$left}: 1.875rem;
+
+        .store-name {
+          @include icon(shoppingbag, before) {
+            color: $checkout_cc_map_hours_icon;
+            font-size: 2rem;
+            position: absolute;
+            top: -0.375rem;
+            #{$left}: -0.1875rem;
+          }
+        }
+      }
+    }
+  }
+
+  #selected-store-wrapper {
+    .store-open-hours {
+      .hours--label {
+        @include breakpoint($tablet) {
+          font-weight: bold;
+        }
+
+        @include icon(chevrondown, after) {
+          color: $checkout_cc_list_hours_label_icon;
+          font-size: 2rem;
+          top: -0.5rem;
+          #{$left}: 5.5rem;
+          position: absolute;
+        }
+
+        @include breakpoint($only-mobile) {
+          &::after {
+            #{$left}: 15.5rem;
+          }
+        }
+
+        &.open {
+          @include icon(chevronup, after) {
+            color: $checkout_cc_list_hours_label_icon;
+            font-size: 2rem;
+            top: -0.5rem;
+            #{$left}: 5.5rem;
+            position: absolute;
+          }
+
+          @include breakpoint($only-mobile) {
+            &::after {
+              #{$left}: 15.5rem;
+            }
+          }
+        }
+      }
+
+      .open--hours {
+        @include breakpoint($desktop) {
+          color: $checkout_cc_list_hours_label;
+        }
+      }
+    }
+
+    .selected-store-content {
+      .store-actions {
+        @include breakpoint($only-tablet) {
+          #{$right}: 5%;
+        }
+
+        .store-on-map {
+          @include breakpoint($only-tablet) {
+            margin-top: 1.3125rem;
+          }
+        }
+
+        .select-store,
+        .store-on-map,
+        .view-on-map,
+        .change-store {
+          font-family: $alshaya-thin;
+          text-transform: uppercase;
+          font-size: 0.875rem;
+        }
+
+        .select-store,
+        .change-store,
+        .store-on-map {
+          @include breakpoint($tablet) {
+            width: 10.125rem;
+            height: 2.5rem;
+          }
+
+          @include breakpoint($desktop) {
+            width: 13.125rem;
+          }
+        }
+
+        .store-on-map,
+        .view-on-map {
+          border: 1px solid $checkout_cc_list_map_link_border;
+          background-color: $checkout_cc_list_map_link_bg;
+          padding: 0.3125rem 0;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        .store-delivery-time {
+          width: 20%;
+        }
+
+        .store-open-hours {
+          width: 35%;
+          padding-#{$left}: 2.625rem;
+        }
+      }
+    }
+  }
+}
+
+.alias--cart-checkout-delivery {
+  #edit-guest-delivery-collect,
+  #edit-member-delivery-collect {
+    #store-finder-wrapper {
+      .current-location,
+      .cc-near-me {
+        @include icon(mylocation, before);
+
+        &::before {
+          background: none;
+          font-size: 1.75rem;
+        }
+      }
+    }
+  }
+}
