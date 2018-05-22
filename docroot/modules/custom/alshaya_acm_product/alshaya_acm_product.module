@@ -779,18 +779,23 @@ function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
   global $pager_page_array;
 
   if (isset($vars['view']) && in_array($vars['view']->id(), ['search', 'alshaya_product_list'])) {
-    $element = $vars['element'];
-    $page_auto_load = \Drupal::config('alshaya_acm_product.settings')->get('list_view_auto_page_load_count');
-    // Change infinite scroll to load more button after x scrolls.
-    $vars['options']['automatically_load_content'] = TRUE;
-    if (($pager_page_array[$element] + 1) % $page_auto_load == 0 && $pager_page_array[$element] !== 0) {
-      $vars['options']['automatically_load_content'] = FALSE;
-    }
+    $search_page = $vars['view']->id() == 'search' && $vars['view']->current_display == 'page';
+    $product_list = $vars['view']->id() == 'alshaya_product_list' && in_array($vars['view']->current_display, ['block_1', 'block_2']);
 
-    $vars['attributes'] = new Attribute([
-      'class' => ['js-pager__items', 'pager'],
-      'data-drupal-views-infinite-scroll-pager' => $vars['options']['automatically_load_content'] ? 'automatic' : TRUE,
-    ]);
+    if ($search_page || $product_list) {
+      $element = $vars['element'];
+      $page_auto_load = \Drupal::config('alshaya_acm_product.settings')->get('list_view_auto_page_load_count');
+      // Change infinite scroll to load more button after x scrolls.
+      $vars['options']['automatically_load_content'] = TRUE;
+      if (($pager_page_array[$element] + 1) % $page_auto_load == 0 && $pager_page_array[$element] !== 0) {
+        $vars['options']['automatically_load_content'] = FALSE;
+      }
+
+      $vars['attributes'] = new Attribute([
+        'class' => ['js-pager__items', 'pager'],
+        'data-drupal-views-infinite-scroll-pager' => $vars['options']['automatically_load_content'] ? 'automatic' : TRUE,
+      ]);
+    }
   }
 }
 
