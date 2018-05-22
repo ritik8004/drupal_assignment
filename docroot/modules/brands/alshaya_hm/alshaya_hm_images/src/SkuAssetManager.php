@@ -107,14 +107,16 @@ class SkuAssetManager {
    *   Array of urls to sku assets.
    */
   public function getSkuAssets($sku, $page_type, $location_images, $style = "") {
-    $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-
-    if (!($sku instanceof SKU)) {
-      return [];
-    }
+    $sku = $sku instanceof SKU ? $sku->getSku() : $sku;
 
     $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
-    $assets = $this->sortSkuAssets($sku, $page_type, unserialize($sku->get('attr_assets')->value));
+    $sku_property_values = $this->skuManager->getSkuPropertyValue($sku, ['attr_assets__value']);
+
+    if (($sku_property_values) &&
+      !empty($unserialized_assets = unserialize($sku_property_values->attr_assets__value))) {
+      $assets = $this->sortSkuAssets($sku, $page_type, $unserialized_assets);
+    }
+
     $asset_variant_urls = [];
 
     if (empty($assets)) {
@@ -180,8 +182,8 @@ class SkuAssetManager {
   /**
    * Helper function to fetch asset attributes.
    *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU entity for which we fetching the assets.
+   * @param string $sku
+   *   SKU code for Product we fetching the assets for.
    * @param array $asset
    *   Asset array with all metadata.
    * @param string $page_type
@@ -192,7 +194,7 @@ class SkuAssetManager {
    * @return array
    *   Array of asset attributes.
    */
-  public function getAssetAttributes(SKU $sku, array $asset, $page_type, $location_image) {
+  public function getAssetAttributes($sku, array $asset, $page_type, $location_image) {
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
@@ -234,15 +236,15 @@ class SkuAssetManager {
   /**
    * Helper function to check & override assets config.
    *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   Sku for which the assets are being filtered.
+   * @param string $sku
+   *   Sku code for Product whose assets are being filtered.
    * @param string $page_type
    *   Attributes for which we checking the override.
    *
    * @return array
    *   Overridden config in context of the category product belongs to.
    */
-  public function overrideConfig(SKU $sku, $page_type) {
+  public function overrideConfig($sku, $page_type) {
     $currentRoute['route_name'] = $this->currentRouteMatch->getRouteName();
     $currentRoute['route_params'] = $this->currentRouteMatch->getParameters()->all();
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
@@ -261,6 +263,7 @@ class SkuAssetManager {
       case 'pdp':
       case 'teaser':
       case 'swatch':
+        $sku = !($sku instanceof SKU) ? SKU::loadFromSku($sku) : $sku;
         $product_node = alshaya_acm_product_get_display_node($sku);
         if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
           // Use the first term found with an override for
@@ -287,7 +290,7 @@ class SkuAssetManager {
    * @return array
    *   Array of assets sorted by their asset types & angles.
    */
-  public function sortSkuAssets(SKU $sku, $page_type, array $assets) {
+  public function sortSkuAssets($sku, $page_type, array $assets) {
     $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
     // Fetch weights of asset types based on the pagetype.
     $sku_asset_type_weights = $alshaya_hm_images_config->get('weights')[$page_type];
@@ -384,18 +387,16 @@ class SkuAssetManager {
    *   Array of sku child assets.
    */
   public function getChildSkuAssets(SKU $sku, $context, $locations, $first_only = TRUE) {
-    $child_skus = $this->skuManager->getChildSkus($sku, $first_only);
+    $child_skus = $this->skuManager->getChildrenSkuIds($sku, $first_only);
     $assets = [];
 
-    if (($first_only) && ($child_skus instanceof SKU)) {
+    if (($first_only) && (!empty($child_skus))) {
       return $this->getSkuAssets($child_skus, $context, $locations);
     }
 
     if (!empty($child_skus)) {
       foreach ($child_skus as $child_sku) {
-        if ($child_sku instanceof SKU) {
-          $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations);
-        }
+        $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations);
       }
     }
 
@@ -479,14 +480,15 @@ class SkuAssetManager {
    *   Array of SKUs or single SKU object matching the castor id.
    */
   public function getChildSkuFromColor(SKU $parent_sku, $rgb_color_label) {
-    $child_skus = $this->skuManager->getChildSkus($parent_sku);
+    $child_skus = $this->skuManager->getChildrenSkuIds($parent_sku);
 
     if (empty($child_skus)) {
       return NULL;
     }
 
     foreach ($child_skus as $child_sku) {
-      if (($child_sku instanceof SKU) && $child_sku->get('attr_color_label')->value == $rgb_color_label) {
+      if (!empty($sku_attributes = $this->skuManager->getSkuPropertyValue($child_sku, ['attr_color_label'])) &&
+        ($sku_attributes->attr_color_label == $rgb_color_label)) {
         return $child_sku;
       }
     }
