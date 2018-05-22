@@ -7,7 +7,6 @@ use Drupal\acq_commerce\Conductor\ClientFactory;
 use Drupal\acq_commerce\Conductor\ConductorException;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 
 /**
@@ -18,12 +17,10 @@ class CybersourceAPIWrapper extends APIWrapper {
   /**
    * Constructor.
    *
-   * @param \Drupal\Core\Http\ClientFactory $client_factory
+   * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
    *   ClientFactory object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   ConfigFactoryInterface object.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   LanguageManagerInterface object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
@@ -31,10 +28,9 @@ class CybersourceAPIWrapper extends APIWrapper {
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
-                              LanguageManagerInterface $language_manager,
                               LoggerChannelFactory $logger_factory,
                               I18nHelper $i18n_helper) {
-    parent::__construct($client_factory, $config_factory, $language_manager, $logger_factory, $i18n_helper);
+    parent::__construct($client_factory, $config_factory, $logger_factory, $i18n_helper);
     $this->logger = $logger_factory->get('acq_cybersource');
   }
 

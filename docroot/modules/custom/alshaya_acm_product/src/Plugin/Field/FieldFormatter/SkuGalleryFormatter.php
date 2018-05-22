@@ -190,7 +190,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
             ];
           }
           // In push mode we check stock on page load only.
-          elseif (!alshaya_acm_get_product_stock($sku)) {
+          elseif (!alshaya_acm_get_stock_from_sku($sku)) {
             $stock_placeholder = [
               '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
             ];

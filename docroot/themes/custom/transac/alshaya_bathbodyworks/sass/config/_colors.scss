@@ -202,6 +202,7 @@ $checkout_tab_description: $black;
 $checkout_section_titles: $black;
 $secure_checkout_back_link: $peacock-blue;
 $checkout_transaction_type_color: $peacock-blue;
+$checkout_form_actions_footer: $warm-grey-four;
 
 // Checkout mobile back link.
 $checkout_mobile_back_link_icon: $peacock-blue;
@@ -313,6 +314,7 @@ $store_finder_search_results_down_arrow: $peacock-blue;
 $page_title: $black;
 $block_title: $peacock-blue;
 $title: $black;
+$sub_title: $black;
 
 // User Form.
 $user_form_layout_divider_color: $warm-grey-one;
@@ -358,6 +360,24 @@ $address_button_text: $black;
 $address_book_border: $warm-grey-two;
 $address_default_color: $peacock-blue;
 
+// Checkout click and collect heading cnc form.
+$checkout_cc_cnc_form_title_border: $warm-grey-one;
+
+// Checkout Click & collect.
+$checkout_cc_list_hours_label: $black;
+$checkout_cc_list_hours_label_icon: $peacock-blue;
+$checkout_cc_list_delivery_time: $warm-grey-one;
+$checkout_cc_store_address: $warm-grey-one;
+$checkout_cc_list_select_store_btn_txt: $peacock-blue;
+$checkout_cc_list_select_store_btn_border: $peacock-blue;
+$checkout_cc_list_map_link_default: $peacock-blue;
+$checkout_cc_list_map_link_border: $warm-grey-two;
+$checkout_cc_list_map_link_bg: $white-smoke;
+$checkout_cc_store_location_input_label_mobile_color: $black;
+$checkout_cc_selected_store_content_bg: $white;
+$checkout_cc_individual_store_hours_label_border: $warm-grey-two;
+$checkout_cc_map_hours_icon: $peacock-blue;
+
 // Tables.
 $primary_th_bg: $warm-grey-three;
 $primary_th_bg_highlight: $warm-grey-two;
@@ -399,6 +419,7 @@ $privilege_earn_icon: $peacock-blue;
 $user_order_help_bg: $info-blue;
 $user_order_help_text : $white;
 $user_order_help_text_links: $user_order_help_text;
+$password_tooltip_list: $error-red;
 
 // Checkout order summary block.
 $checkout_order_summary_title_border: $warm-grey-two;

@@ -60,6 +60,31 @@
       @include breakpoint($only-tablet) {
         width: 47%;
       }
+
+      @include breakpoint($tablet) {
+        &.tab-click-collect {
+          &.active--tab--head {
+            &::before {
+              display: none;
+            }
+          }
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        &.tab-click-collect {
+          &.active--tab--head {
+            #{$right}: -1px;
+            margin-#{$left}: -1px;
+          }
+        }
+      }
+
+      &.tab-home-delivery {
+        &:not(.active--tab--head) {
+          margin-#{$left}: -1px;
+        }
+      }
     }
 
     hr {
@@ -139,4 +164,9 @@
       }
     }
   }
+}
+
+.cnc-collect-from {
+  font-family: $alshaya-thin;
+  text-transform: capitalize;
 }
