@@ -70,7 +70,7 @@ function alshaya_advanced_page_node_presave(EntityInterface $entity) {
     \Drupal::cache('data')->delete('advanced_page:terms:nodes');
   }
 
-  if ($entity->getType() == 'advanced_page' && $entity->get('field_use_as_department_page')->value == 0 && $entity->get('status')->value == TRUE) {
+  if ($entity->getType() == 'advanced_page' && $entity->get('field_use_as_department_page')->value == 0) {
     unset($entity->field_show_left_menu);
     unset($entity->field_product_category);
   }
