@@ -63,11 +63,16 @@ function alshaya_advanced_page_form_alter(&$form, FormStateInterface $form_state
  * Implements hook_ENTITY_TYPE_presave().
  */
 function alshaya_advanced_page_node_presave(EntityInterface $entity) {
-  if ($entity->getType() == 'advanced_page' && $entity->get('field_use_as_department_page')->value == 1) {
+  if ($entity->getType() == 'advanced_page') {
     Cache::invalidateTags(['route_match']);
-    // Deleting/Clearing cache on department page node save as this will not
+    // Deleting/Clearing cache on advanced page node save as this will not
     // happen very often.
     \Drupal::cache('data')->delete('advanced_page:terms:nodes');
+  }
+
+  if ($entity->getType() == 'advanced_page' && $entity->get('field_use_as_department_page')->value == 0 && $entity->get('status')->value == TRUE) {
+    unset($entity->field_show_left_menu);
+    unset($entity->field_product_category);
   }
 }
 
@@ -209,7 +214,7 @@ function alshaya_advanced_page_language_switch_links_alter(array &$links, $type,
 function alshaya_advanced_page_is_department_page($tid) {
   $data = [];
   // Check for cache first.
-  if ($cache = \Drupal::cache('data')->get('department_page:terms:nodes')) {
+  if ($cache = \Drupal::cache('data')->get('advanced_page:terms:nodes')) {
     $data = $cache->data;
     // If cache hit.
     if (!empty($data[$tid])) {
@@ -226,7 +231,7 @@ function alshaya_advanced_page_is_department_page($tid) {
     if ($node = Node::load($nid)) {
       if ($node->isPublished()) {
         $data[$tid] = $nid;
-        \Drupal::cache('data')->set('department_page:terms:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
+        \Drupal::cache('data')->set('advanced_page:terms:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
         return $nid;
       }
     }
