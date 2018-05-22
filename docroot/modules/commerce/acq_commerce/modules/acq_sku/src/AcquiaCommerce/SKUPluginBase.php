@@ -298,7 +298,10 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
     // Save the value in SKU if we came here as fallback of push mode.
     if ($stock_mode == 'push') {
-      $sku = SKU::loadFromSku($sku_string);
+      if (!$sku instanceof SKU) {
+        $sku = SKU::loadFromSku($sku_string);
+      }
+
       $sku->get('stock')->setValue($stock);
       $sku->save();
     }
