@@ -189,6 +189,29 @@ function _alshaya_config_set_default_logo_favicon() {
 }
 
 /**
+ * Set the AMP page logo and favicon icon.
+ */
+function _alshaya_config_set_default_amp_logo_favicon($theme_name) {
+  // Enable and set default amp theme.
+  \Drupal::service('theme_handler')->install([$theme_name], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', $theme_name)->save();
+
+  // Get the current theme settings.
+  $config = \Drupal::configFactory()->get(\Drupal::theme()->getActiveTheme()->getName() . '.settings')->get();
+  // Set same to installed AMP theme.
+  \Drupal::configFactory()->getEditable($theme_name . '.settings')->setData($config)->save();
+
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $theme_name . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => \Drupal::theme()->getActiveTheme()->getPath() . '/site-logo-ar.svg',
+      ],
+    ])
+    ->save();
+}
+
+/**
  * Implements hook_modules_installed().
  */
 function alshaya_config_modules_installed($modules) {

@@ -41,23 +41,7 @@ function alshaya_vs_transac_install() {
   // Save overridden configs.
   _alshaya_config_save_overridden_configs('alshaya_vs_transac');
 
-  // Enable and set default amp theme.
-  \Drupal::service('theme_handler')->install(['alshaya_amp_victoria_secret'], TRUE);
-  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_victoria_secret')->save();
-
-  // Get the current theme settings.
-  $config = \Drupal::configFactory()->get(\Drupal::theme()->getActiveTheme()->getName() . '.settings')->get();
-  // Set same to installed AMP theme.
-  \Drupal::configFactory()->getEditable('alshaya_amp_victoria_secret.settings')->setData($config)->save();
-
-  \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'alshaya_amp_victoria_secret.settings')
-    ->setData([
-      'logo' => [
-        'path' => \Drupal::theme()->getActiveTheme()->getPath() . '/site-logo-ar.svg',
-      ],
-    ])
-    ->save();
+  _alshaya_config_set_default_amp_logo_favicon('alshaya_amp_victoria_secret');
 
   // Enable super category feature and menu block with config factory.
   // Placing config in "override" folder won't work here. As we have an event
