@@ -19,7 +19,32 @@ target_env="$2"
 cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 
 echo "Executing updb."
+
+output="$( bash <<EOF
 drush8 acsf-tools-ml updb
+EOF
+)"
+
+##Pushing the updb logs on slack channel
+FILE=$HOME/slack_settings
+
+if [ -f $FILE ]; then
+  # Load the Slack webhook URL (which is not stored in this repo).
+  . $HOME/slack_settings
+
+  # Post updb done notice to Slack channel
+  errorstr="error"
+
+  if [ -n "$output" ]; then
+	 if [[ "$output" =~ "$errorstr" ]]; then
+        	curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+    	else
+        	curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed updb on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+    	fi
+  fi
+ else
+  echo "File $FILE does not exist."
+fi
 
 domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
 

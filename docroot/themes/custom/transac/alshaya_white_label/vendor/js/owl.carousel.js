@@ -16,6 +16,7 @@
  * @todo stagePadding calculate wrong active classes
  *
  * @Note: Modified to fix https://github.com/OwlCarousel2/OwlCarousel2/issues/1864
+ * @Note: Modified to fix https://github.com/OwlCarousel2/OwlCarousel2/issues/2333
  */
 ;(function($, window, document, undefined) {
 
@@ -868,10 +869,29 @@
 
 		if (delta.x !== 0 && this.is('dragging') || !this.is('valid')) {
 			this.speed(this.settings.dragEndSpeed || this.settings.smartSpeed);
-			this.current(this.closest(stage.x, delta.x !== 0 ? direction : this._drag.direction));
+
+			var currentIndex = this.current();
+			var nextIndex = this.closest(stage.x, delta.x !== 0 ? direction : this._drag.direction);
+
+			var slideBy = (this.settings.dragSlideBy === 'page')
+				? this.settings.items
+				: this.settings.dragSlideBy;
+
+			var indexDiff = nextIndex - currentIndex;
+			var mod = (Math.abs(indexDiff) % slideBy);
+
+			if (mod > 0) {
+				nextIndex = (indexDiff > 0) ? (nextIndex + mod) : (nextIndex - mod);
+			}
+
+			this.current(nextIndex);
 			this.invalidate('position');
 			this.update();
 
+      var that = this;
+      setTimeout(function () {
+          that.refresh();
+      }, (this.settings.dragEndSpeed || this.settings.smartSpeed));
 			this._drag.direction = direction;
 
 			if ((Math.abs(delta.x) > 3 || new Date().getTime() - this._drag.time > 300) && event.type === 'mouseup') {
@@ -2977,6 +2997,7 @@
 			'owl-next'
 		],
 		slideBy: 1,
+		dragSlideBy: 1,
 		dotClass: 'owl-dot',
 		dotsClass: 'owl-dots',
 		dots: true,

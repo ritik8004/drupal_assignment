@@ -81,12 +81,6 @@
   .menu-two__link-wrapper p {
     display: none;
   }
-
-  .menu--two__list .menu--list-item--has-image {
-    @include breakpoint($desktop) {
-      display: none;
-    }
-  }
 }
 
 .block-alshaya-main-menu {

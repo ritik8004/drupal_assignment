@@ -698,6 +698,29 @@ class APIWrapper {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getProducts($count = 100) {
+    $endpoint = $this->apiVersion . "/agent/products";
+    $doReq = function ($client, $opt) use ($endpoint, $count) {
+      $opt['query']['page_size'] = $count;
+
+      // To allow hmac sign to be verified properly we need them in asc order.
+      ksort($opt['query']);
+
+      return ($client->get($endpoint, $opt));
+    };
+    $products = [];
+    try {
+      $products = $this->tryAgentRequest($doReq, 'getProducts', 'products');
+    }
+    catch (ConnectorException $e) {
+      throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
+    }
+    return $products;
+  }
+
+  /**
    * Invoke product full sync through ingest.
    *
    * Surrogate method for the ingest method. This is done to not have trait

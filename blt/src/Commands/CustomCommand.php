@@ -173,9 +173,9 @@ class CustomCommand extends BltTasks {
       ->alias($drush_alias)
       ->drush('sync-commerce-cats')
       ->drush('sync-commerce-product-options')
-      ->drush('alshaya-acm-offline-products-sync')
+      ->drush('sync-commerce-products-test')
+      ->arg($limit)
       ->uri($uri)
-      ->option('limit', $limit)
       ->run();
   }
 

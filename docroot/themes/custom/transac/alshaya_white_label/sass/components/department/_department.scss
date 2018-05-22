@@ -54,6 +54,14 @@
     text-transform: lowercase;
     color: $title;
   }
+
+  &.l-two--sf,
+  .c-content__body {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 0;
+      padding-#{$right}: 0;
+    }
+  }
 }
 
 .c-promo-block-seo-text,

@@ -36,7 +36,7 @@
         "drupal/mailsystem": "^4.1",
         "drupal/mimemail": "1.x-dev",
         "drupal/search_api_solr": "^1.0-rc3",
-        "drupal/search_api_autocomplete": "1.0-alpha2",
+        "drupal/search_api_autocomplete": "^1.0",
         "drupal/acquia_connector": "1.9.0",
         "drupal/geolocation": "^1.10",
         "drupal/block_field": "^1.0@alpha",

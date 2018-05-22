@@ -78,7 +78,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
         elseif (!alshaya_acm_product_is_buyable($sku_entity)) {
           $in_stock = 2;
         }
-        elseif (alshaya_acm_get_product_stock($sku_entity)) {
+        elseif (alshaya_acm_get_stock_from_sku($sku_entity)) {
           $in_stock = 2;
         }
 
@@ -641,7 +641,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
 
           // In push mode check if product is out of stock here itself.
-          if ($stock_mode != 'pull' && !alshaya_acm_get_product_stock($sku_entity)) {
+          if ($stock_mode != 'pull' && !alshaya_acm_get_stock_from_sku($sku_entity)) {
             $build['stock_placeholder'] = [
               '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
             ];
@@ -994,7 +994,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
           if ($variation instanceof SKU) {
             $form['#cache']['tags'][] = 'acq_sku:' . $variation->id();
-            if (!($quantity = alshaya_acm_get_product_stock($variation))) {
+            if (!($quantity = alshaya_acm_get_stock_from_sku($variation))) {
               $attribute_parts = explode(':', $key);
               if (isset($form['ajax']['configurables'][$attribute_parts[0]])) {
                 $form['ajax']['configurables'][$attribute_parts[0]]['#options_attributes'][$attribute_parts[1]]['disabled'] = 'disabled';
@@ -1062,7 +1062,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
             // This is very limited, it supports only 1 configurable attribute.
             if ($sku instanceof SKU) {
               $form['#cache']['tags'][] = 'acq_sku:' . $sku->id();
-              if ($quantity = alshaya_acm_get_product_stock($sku)) {
+              if ($quantity = alshaya_acm_get_stock_from_sku($sku)) {
                 // Set the dropdown quantity options only for selected option.
                 if (
                   isset($_REQUEST['configurables'], $_REQUEST['configurables'][$configurable_key])
@@ -1126,7 +1126,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     }
   }
   // Stock check for quantity for all other products.
-  elseif ($quantity = alshaya_acm_get_product_stock($sku_entity)) {
+  elseif ($quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
   else {
@@ -1184,7 +1184,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   }
 
   if ($tree_pointer instanceof SKU) {
-    if ($quantity = alshaya_acm_get_product_stock($tree_pointer)) {
+    if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
 

@@ -73,7 +73,7 @@
             countFilters = countFilters - 1;
             // If there are filters applied, we need to show the count next to the label.
             $('<h3 class="applied-filter-count c-accordion__title ui-state-active">' + Drupal.t('applied filters')
-              + '(' + countFilters + ')</h3>')
+              + ' (' + countFilters + ')</h3>')
               .insertBefore(mobileFilterBarSelector + ' ul')
               .off()
               .on('click', function (e) {
