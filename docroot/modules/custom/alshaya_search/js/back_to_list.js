@@ -17,7 +17,7 @@
           var product_position = localStorage.getItem(window.location.href);
           // If windows scroll position is greater that product position, it means
           // we have reached/scrolled to the product and thus clear the storage.
-          if(y_scroll_pos >= product_position) {
+          if(y_scroll_pos >= parseInt(product_position)) {
             localStorage.removeItem(window.location.href);
           }
         }
