@@ -10,28 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Set default items from cross sell/up sell carausel.
- */
-function alshaya_mc_update_83013() {
-  // Set default items from cross sell/up sell carausel for mobile.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
-    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', 2)
-    ->save();
-
-  // Set default items from cross sell/up sell carausel for tablet.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
-    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', 2)
-    ->save();
-
-  // Set default items from cross sell/up sell carausel for desktop.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
-    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', 3)
-    ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Remove 'alshaya_white_label_main_menu' and 'alshaya_white_label_powered'
  * block from DB.
  */
