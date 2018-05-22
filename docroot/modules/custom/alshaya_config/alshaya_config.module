@@ -189,7 +189,7 @@ function _alshaya_config_set_default_logo_favicon() {
 }
 
 /**
- * Set the AMP page logo and favicon icon.
+ * Enable AMP theme and set AMP page logo and favicon.
  */
 function _alshaya_config_set_default_amp_logo_favicon($theme_name) {
   // Enable and set default amp theme.

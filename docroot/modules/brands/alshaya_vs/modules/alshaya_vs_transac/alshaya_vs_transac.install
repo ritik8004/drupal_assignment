@@ -41,6 +41,7 @@ function alshaya_vs_transac_install() {
   // Save overridden configs.
   _alshaya_config_save_overridden_configs('alshaya_vs_transac');
 
+  // Enable AMP theme and set AMP page logo and favicon.
   _alshaya_config_set_default_amp_logo_favicon('alshaya_amp_victoria_secret');
 
   // Enable super category feature and menu block with config factory.
