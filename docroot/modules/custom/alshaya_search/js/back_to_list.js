@@ -34,8 +34,11 @@
           checkAndScrollTo(gScroltop);
         });
 
-        // Scroll to appropriate position.
-        checkAndScrollTo(gScroltop);
+        // Doing this as back button loads page so fast causing conflict.
+        setTimeout(function() {
+          // Scroll to appropriate position.
+          checkAndScrollTo(gScroltop);
+        }, 1000);
       }
 
       /**
@@ -65,7 +68,7 @@
           var load_more_button_position = $('.js-pager__items').position();
           // If load more button position is less what than the product we clicked,
           // means we need to click the load more button.
-          if (load_more_button_position.top < product_pos) {
+          if (load_more_button_position.top <= product_pos) {
             return true;
           }
         }
