@@ -177,9 +177,9 @@ function alshaya_get_env_keys($site, $env) {
 
   // All 01update should match 01live.
   // Update array to set 01update if 01live is set.
-  foreach ($mapping as $site => $envs) {
-    if (isset($mapping[$site]['01live'])) {
-      $mapping[$site]['01update'] = $mapping[$site]['01live'];
+  foreach ($mapping as $site_code => $envs) {
+    if (isset($mapping[$site_code]['01live'])) {
+      $mapping[$site_code]['01update'] = $mapping[$site_code]['01live'];
     }
   }
 
