@@ -67,7 +67,7 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
             if ($sku instanceof SKU) {
               $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
               $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main']);
-              if (isset($images[0]['url'])) {
+              if (!empty($images[0]) && isset($images[0]['url'])) {
                 $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
               }
             }
@@ -84,21 +84,57 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
 /**
  * Implements hook_gtm_product_attributes_alter().
  */
-function alshaya_hm_gtm_product_attributes_alter($product, &$attributes, &$skuAttributes) {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
-    $skuId = $product->get('field_skus')->first()->getString();
-    if (isset($skuId)) {
-      $sku = SKU::loadFromSku($skuId);
-      $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-      if ($sku instanceof SKU) {
-        $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main']);
-        if (!empty($images)) {
-          // Changes for the image count.
-          $skuAttributes['gtm-dimension4'] = count($images);
-        }
-      }
+function alshaya_hm_gtm_product_attributes_alter($product, &$attributes) {
+  // Changes for the image count.
+  $attributes['gtm-dimension4'] = count(alshaya_hm_get_product_images($product)) ?: 'image not available';
+}
+
+/**
+ * Implements hook_gtm_pdp_attributes_alter().
+ */
+function alshaya_hm_gtm_pdp_attributes_alter($sku, &$attributes) {
+  if (empty($attributes['productPictureUrl'])) {
+    $images = alshaya_hm_get_sku_images($sku);
+    if (!empty($images[0]) && isset($images[0]['url'])) {
+      $attributes['productPictureUrl'] = $images[0]['url']->toString();
     }
   }
+}
+
+/**
+ * Get the product images from the product object.
+ *
+ * @param object $product
+ *   The product object.
+ *
+ * @return array
+ *   Return the array of images or empty array.
+ */
+function alshaya_hm_get_product_images($product) {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
+    $skuId = $product->get('field_skus')->first()->getString();
+    return alshaya_hm_get_sku_images($skuId);
+  }
+  return [];
+}
+
+/**
+ * Get the images from given sku.
+ *
+ * @param int|Object $sku
+ *   The SKU id or SKU entity object.
+ *
+ * @return array
+ *   Return the array of images or empty array.
+ */
+function alshaya_hm_get_sku_images($sku) {
+  $sku = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+  $images = [];
+  if ($sku instanceof SKU) {
+    $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+    $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main']);
+  }
+  return $images;
 }
 
 /**

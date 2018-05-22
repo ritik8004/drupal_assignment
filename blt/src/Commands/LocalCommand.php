@@ -182,7 +182,7 @@ class LocalCommand extends BltTasks {
    * Sync DB from remote and set stage file proxy.
    *
    * @param string $site
-   *   Site code.
+   *   Site code. Provide comma separated site codes to download multiple.
    * @param string $env
    *   Environment code.
    *
@@ -194,6 +194,18 @@ class LocalCommand extends BltTasks {
    * @description Syncs DB from remote and set stage file proxy.
    */
   public function downloadDb($site = '', $env = 'dev') {
+    // Download multiple sites together.
+    $sites = explode(',', $site);
+    if (count($sites) > 1) {
+      $return = TRUE;
+
+      foreach ($sites as $site) {
+        $return = $return && $this->downloadDb($site, $env);
+      }
+
+      return $return;
+    }
+
     $info = $this->validateAndPrepareInfo($site, $env);
 
     if ($env == 'live') {

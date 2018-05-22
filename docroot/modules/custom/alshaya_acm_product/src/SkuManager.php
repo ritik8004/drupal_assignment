@@ -1134,7 +1134,7 @@ class SkuManager {
         if ($stock_mode == 'pull') {
           $related[] = $node->id();
         }
-        elseif (alshaya_acm_get_product_stock($sku_entity)) {
+        elseif (alshaya_acm_get_stock_from_sku($sku_entity)) {
           $related[] = $node->id();
         }
       }

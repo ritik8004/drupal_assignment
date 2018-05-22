@@ -54,10 +54,10 @@ function hook_acq_sku_product_sku_alter(SKU $sku, array $product) {
  *   Taxonomy term to alter.
  * @param array $category
  *   Array containing details provided by API.
- * @param \Drupal\taxonomy\TermInterface $parent
- *   Parent Taxonomy term to if available.
+ * @param mixed $parent
+ *   Parent Taxonomy term if available.
  */
-function hook_acq_sku_commerce_category_alter(TermInterface $term, array $category, TermInterface $parent = NULL) {
+function hook_acq_sku_commerce_category_alter(TermInterface $term, array $category, $parent) {
 
 }
 
