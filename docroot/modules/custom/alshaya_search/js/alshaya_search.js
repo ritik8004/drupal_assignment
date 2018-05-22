@@ -2,9 +2,6 @@
  * @file
  */
 
-var alshayaSearchActiveFacet = null;
-var alshayaSearchShowMoreOpen = 0;
-var alshayaSearchActiveFacetTimer = null;
 var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
 (function ($) {
@@ -37,22 +34,13 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
     }
   };
 
-  Drupal.alshayaSearchActiveFacetObserver = function () {
-    alshayaSearchActiveFacet = null;
-    alshayaSearchShowMoreOpen = 0;
-
-    if ($('.facet-active').length) {
-      alshayaSearchActiveFacet = $('.facet-active').attr('data-block-plugin-id');
-      alshayaSearchShowMoreOpen = $('.facet-active .facets-soft-limit-link.open').length;
-    }
-
-    Drupal.alshayaSearchBindObserverEvents();
-  };
-
   Drupal.alshayaSearchActiveFacetResetAfterAjax = function () {
     // We apply soft-limit js again after ajax calls here.
     // Soft limit is feature provided by facets module but it
     // doesn't support ajax, we add code here to handle that.
+    var alshayaSearchActiveFacet = $('.current-active-facet').attr('data-block-plugin-id');
+    var alshayaSearchShowMoreOpen = $('.current-active-facet .facets-soft-limit-link.open').length;
+
     if (alshayaSearchActiveFacet) {
       if (typeof drupalSettings.facets.softLimit !== 'undefined'
         && typeof drupalSettings.facets.softLimit[alshayaSearchActiveFacet] !== 'undefined') {
@@ -71,24 +59,10 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         facetBlock.find('.facets-soft-limit-link').addClass('open').text(Drupal.t('Show less'));
       }
     }
-
-    Drupal.alshayaSearchBindObserverEvents();
-  };
-
-  Drupal.alshayaSearchBindObserverEvents = function () {
-    $('.c-facet__blocks').on('click', function () {
-      if (alshayaSearchActiveFacetTimer) {
-        clearTimeout(alshayaSearchActiveFacetTimer);
-        alshayaSearchActiveFacetTimer = null;
-      }
-
-      alshayaSearchActiveFacetTimer = setTimeout(Drupal.alshayaSearchActiveFacetObserver, 100);
-    });
   };
 
   Drupal.behaviors.alshayaFacets = {
     attach: function (context, settings) {
-      Drupal.alshayaSearchBindObserverEvents();
 
       $.fn.replaceFacets = function (data) {
         if (data.replaceWith === '') {

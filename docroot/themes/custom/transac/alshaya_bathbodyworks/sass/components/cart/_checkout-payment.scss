@@ -1,0 +1,7 @@
+.user-page.checkout-delivery.checkout-payment {
+  .multistep-checkout {
+    @include breakpoint($tablet) {
+      border-width: 1px;
+    }
+  }
+}

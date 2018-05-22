@@ -36,7 +36,7 @@
         "drupal/mailsystem": "^4.1",
         "drupal/mimemail": "1.x-dev",
         "drupal/search_api_solr": "^1.0-rc3",
-        "drupal/search_api_autocomplete": "1.0-alpha2",
+        "drupal/search_api_autocomplete": "^1.0",
         "drupal/acquia_connector": "1.9.0",
         "drupal/geolocation": "^1.10",
         "drupal/block_field": "^1.0@alpha",
@@ -228,6 +228,9 @@
                 "ACR2-2704 css linting sniff": "./patches/blt/css_lint_sniff_ACR2-2704.patch",
                 "Allow validation of frontend files": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2571.patch",
                 "Travis marked as success despite error after core update": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2578.patch"
+            },
+            "drupal/views_infinite_scroll" : {
+                "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
             }
         },
         "installer-paths": {
