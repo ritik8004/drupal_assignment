@@ -52,7 +52,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $variables['content']['#cache']['contexts'][] = 'url.path';
 
       // Default parent term id.
-      $current_category_id = alshaya_super_category_default_term();
+      $current_category_id = alshaya_super_category_get_default_term();
 
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
@@ -254,7 +254,7 @@ function alshaya_super_category_product_category_parent_alter(&$parent_id, &$con
   }
 
   // Set the default parent from settings.
-  $parent_id = alshaya_super_category_default_term();
+  $parent_id = alshaya_super_category_get_default_term();
 
   // Get the term id from the current path, and display only the related
   // second level child terms.
@@ -397,7 +397,7 @@ function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateI
  * @return int
  *   return term id.
  */
-function alshaya_super_category_default_term() {
+function alshaya_super_category_get_default_term() {
   $tid = \Drupal::configFactory()->get('alshaya_super_category.settings')->get('default_category_tid');
   if (empty($tid)) {
     $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
