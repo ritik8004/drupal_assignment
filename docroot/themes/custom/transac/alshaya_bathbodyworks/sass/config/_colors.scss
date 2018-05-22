@@ -86,11 +86,9 @@ $pdp_product_itemcode: $warm-grey-one;
 // Product Add to cart form.
 $pdp_sidebar_label: $peacock-blue;
 $pdp_sidebar_link: $peacock-blue;
-$pdp_cc_btn_bg: $black;
+
 $pdp_desc_wrapper_border: $warm-grey-two;
 $pdp_popup_zoom_bg: $icon-bg;
-$pdp_cc_storefinder_link: $peacock-blue;
-$pdp_cc_top_stores_list_border: $peacock-blue;
 
 // product details page carousel arrow
 $pdp_carousel_arrows_blue: $peacock-blue;
@@ -119,14 +117,14 @@ $header_search_block_bg: $white;
 $header_border: $warm-grey-two;
 
 // Header mobile search.
-$header_search_border_mobile: $warm-grey-three;
-$header_search_active_bg: false;
+$header_search_border_mobile: $peacock-blue;
+$header_search_active_bg: $peacock-blue;
 $header_search_active_text: $black;
 
 // Header - Search.
 $primary_search_btn: $peacock-blue;
 $primary_search_bg: $white;
-$primary_search_btn_icon: transparent;
+$primary_search_btn_icon: $peacock-blue;
 $primary_search_input: $black;
 $primary_search_input_placeholder: $warm-grey-one;
 $primary_search_border: $warm-grey-two;
@@ -140,7 +138,7 @@ $header_toggle_sign_default: $warm-grey-three;
 $header_toggle_sign_active_tab: $black;
 $header_toggle_sign_active_tab_bg: $white;
 $header_mobile_menu_arrow: $peacock-blue;
-$header_mobile_menu_active: $white;
+$header_mobile_menu_active: $warm-grey-three;
 $header_mobile_menu_close_bg: $peacock-blue;
 $header_mobile_menu_close: $white;
 $header_mobile_menu_overlay: rgba(133, 133, 133, 0.27);
@@ -160,6 +158,11 @@ $header_my_account_bg: $white;
 $header_my_account_link_hover: $peacock-blue;
 $header_my_account_icon: $peacock-blue;
 
+// Checkbox & Radio.
+$primary_radiobtn_filled: $peacock-blue;
+$primary_radiobtn_empty: $peacock-blue;
+$primary_checkbox_filled: $peacock-blue;
+
 // Mega menu.
 $mm_bg: $white;
 $mm_l1_border: $warm-grey-two;
@@ -176,10 +179,6 @@ $mm_l3_link_bg: $white;
 $mm_l3_link_hover: $peacock-blue;
 $mm_highlight_label: $peacock-blue;
 $mm_p_a_text: $black;
-$mm_highlight_label: $black;
-$mm_highlight_title: $black;
-$mm_highlight_description: $warm-grey-one;
-$mm_p_a_text: $warm-grey-one;
 
 //  Mini Cart.
 $primary_minicart_text: $black;
@@ -187,10 +186,16 @@ $primary_minicart_quantity_bg: $hot-pink;
 
 // Counters.
 $primary_counter_bg: $hot-pink;
+$secondary_counter_bg: $peacock-blue;
 
 // Checkout Progress.
+$checkout_seperator: $warm-grey-one;
 $checkout_current_counter_border: $hot-pink;
 $checkout_counter_border: $peacock-blue;
+
+// Checkout Payment.
+$checkout_payment_form_border: $peacock-blue;
+$checkout_payment_method_title: $black;
 
 // Checkout tabs & form.
 
@@ -212,7 +217,6 @@ $minicart_notification_border: $peacock-blue;
 $minicart_notification_text: $peacock-blue;
 $minicart_notification_btn_bg: $black;
 $minicart_notification_product_title: $black;
-$minicart_notification_shadow: $shadow;
 
 // Delivery tabs.
 $deliverybanner_title: $peacock-blue;
@@ -314,7 +318,6 @@ $store_finder_search_results_down_arrow: $peacock-blue;
 $page_title: $black;
 $block_title: $peacock-blue;
 $title: $black;
-$sub_title: $black;
 
 // User Form.
 $user_form_layout_divider_color: $warm-grey-one;
@@ -337,6 +340,8 @@ $breadcrumb_link_active: $black;
 $address_list_background: rgba(51, 51, 51, 0.06);
 $address_pp_delete_closebtn: $peacock-blue;
 $address_pp_delete_closebtn_cross: $white;
+$address_book_list_border: $warm-grey-two;
+$address_book_change_link: $black;
 
 // Checkout Login
 $checkout_section_titles: $black;
@@ -345,20 +350,13 @@ $checkout_login_guest_email_text_mobile: $peacock-blue;
 $checkout_login_tab_border: $warm-grey-two;
 $checkout_login_tab_text: $black;
 $checkout_login_border_active: $peacock-blue;
+$checkout_section_title_border: $warm-grey-one;
 
 //checkout layout
 $checkout_securely_icon_bg: $hot-pink;
 $checkout_securely_icon_mobile_txt: $white;
 $checkout_securely_txt: $black;
 $checkout_footer_txt: $warm-grey-one;
-$checkout_default_address_border: $peacock-blue;
-$checkout_address_edit_link: $black;
-
-// Address form.
-$address_button_border: $warm-grey-two;
-$address_button_text: $black;
-$address_book_border: $warm-grey-two;
-$address_default_color: $peacock-blue;
 
 // Checkout click and collect heading cnc form.
 $checkout_cc_cnc_form_title_border: $warm-grey-one;
@@ -419,7 +417,6 @@ $privilege_earn_icon: $peacock-blue;
 $user_order_help_bg: $info-blue;
 $user_order_help_text : $white;
 $user_order_help_text_links: $user_order_help_text;
-$password_tooltip_list: $error-red;
 
 // Checkout order summary block.
 $checkout_order_summary_title_border: $warm-grey-two;
