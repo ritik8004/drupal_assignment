@@ -232,6 +232,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    */
   protected function getStock($sku, $reset = FALSE) {
     $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+    $sku = ($sku instanceof SKU) ? $sku->getSku() : $sku;
 
     if (!$reset) {
       // Return from Entity field in push mode.
