@@ -394,3 +394,15 @@ ul.item-list__checkbox,
 .ui-helper-hidden-accessible {
   @include u-image-replacement;
 }
+
+.search-api-autocomplete-search {
+  .ui-menu-item-wrapper {
+    &.ui-state-active {
+      .search-api-autocomplete-suggestion {
+        background: transparent;
+        color: $primary_search_autocomplete_text;
+      }
+    }
+  }
+}
+
