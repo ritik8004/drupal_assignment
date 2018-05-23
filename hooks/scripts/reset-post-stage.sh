@@ -6,8 +6,7 @@ then
   exit
 fi
 
-// @TODO
-env=str_replace($target_env, '01', '')
+env=$(target_env:2)
 
 sites=$(drush8 acsf-tools-list --fields | grep " " | cut -d' ' -f6 | awk NF)
 
