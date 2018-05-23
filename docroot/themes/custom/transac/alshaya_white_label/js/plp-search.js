@@ -158,7 +158,7 @@
 
             var countFilters = $(mobileFilterBarSelector + ' ul li').length - 1;
             if (countFilters > 0) {
-              $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').html(Drupal.t('Filter') + ' (' + countFilters + ')');
+              $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').html(Drupal.t('Filter') + ' <span class="filter-count"> ' + countFilters + '</span>');
             }
           }
           else {
