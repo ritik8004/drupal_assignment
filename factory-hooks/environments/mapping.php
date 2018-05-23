@@ -155,10 +155,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Pottery Barn AE.
     'pbae' => [
-      // PBAE is connected to MCKW QA for now.
+      // PBAE is connected to MC UAT for now.
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
+        'magento' => 'mc_uat',
+        'conductor' => 'mc_uat',
       ],
       //'default' => [
       //  'magento' => 'pb_qa',
@@ -167,10 +167,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret AE.
     'vsae' => [
-      // VSAE is connected to MCKW QA for now.
+      // VSAE is connected to MC QA for now.
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
+        'magento' => 'mc_uat',
+        'conductor' => 'mc_uat',
       ],
     ],
   ];
