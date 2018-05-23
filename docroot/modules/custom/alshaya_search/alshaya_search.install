@@ -10,6 +10,29 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Update search_api_autocomplete settings, since the module update
+ * doesn't provide an update path.
+ */
+function alshaya_search_update_8017() {
+  $search_index_id = 'acquia_search_index';
+
+  // Load all search api autocomplete search entities.
+  $search_autocomplete_views = \Drupal::entityTypeManager()
+    ->getStorage('search_api_autocomplete_search')
+    ->loadByProperties([
+      'index_id' => $search_index_id,
+    ]);
+
+  // Enable serach api autocomplete on views.
+  foreach ($search_autocomplete_views as $search) {
+    $search->setStatus(TRUE);
+    $search->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updating category facet configs to attach hide term processor.
  */
 function alshaya_search_update_8016() {
