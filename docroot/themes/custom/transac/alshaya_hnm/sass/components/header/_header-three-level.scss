@@ -27,7 +27,6 @@
       .title {
         @include arabic-letter-spacing;
 
-        text-transform: uppercase;
         margin-bottom: 0.9rem;
         font-family: $hnm-demibold;
         font-size: 0.8125rem;

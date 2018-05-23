@@ -66,20 +66,34 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form = parent::buildForm($form, $form_state);
+    $steps = $this->getVisibleSteps();
+
+    $form['#tree'] = TRUE;
+    $form['#theme'] = ['acq_checkout_form'];
+    $form['#attached']['library'][] = 'acq_checkout/form';
+    $form['#title'] = $steps[$this->stepId]['label'];
+    $form['actions'] = $this->actions($form, $form_state);
 
     // Disable autocomplete.
     $form['#attributes']['autocomplete'] = 'off';
 
     $panes = $this->getPanes($this->stepId);
     foreach ($panes as $pane_id => $pane) {
+      $visible = $pane->isVisible();
+
       $form[$pane_id] = [
         '#parents' => [$pane_id],
         '#type' => $pane->getWrapperElement(),
         '#title' => $pane->getLabel(),
-        '#access' => $pane->isVisible(),
+        '#access' => $visible,
       ];
-      $form[$pane_id] = $pane->buildPaneForm($form[$pane_id], $form_state, $form);
+
+      // We will only build form if visible.
+      if ($visible) {
+        $form[$pane_id] = $pane->buildPaneForm(
+          $form[$pane_id], $form_state, $form
+        );
+      }
     }
 
     // For login we want user to start again with checkout after login.
