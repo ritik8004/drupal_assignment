@@ -15,7 +15,7 @@ function alshaya_get_additional_settings($site, $env) {
   // Like mc, hm or pb.
   $site_name = substr($site, 0, -2);
   // Like kw, sa or ae.
-  $country = substr($site, 2, 2);
+  $country = substr($site, -2, 2);
 
   $mapping = [
     'mc' => [
