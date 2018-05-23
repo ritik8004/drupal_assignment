@@ -5,11 +5,14 @@
  * Alshaya vs transac module file.
  */
 
-use Drupal\node\NodeInterface;
-
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
  */
-function alshaya_vs_transac_alshaya_stores_finder_store_update_alter(NodeInterface $node, array $store) {
-  // @todo: Get the field name from api and add it to node.
+function alshaya_vs_transac_alshaya_stores_finder_store_update_alter(&$node, array $store) {
+  if (isset($store['included_in_store'])) {
+    $brands = array_filter(array_map('trim', explode(',', $store['included_in_store'])));
+    if (!empty($brands)) {
+      $node->set('field_brand', $brands);
+    }
+  }
 }
