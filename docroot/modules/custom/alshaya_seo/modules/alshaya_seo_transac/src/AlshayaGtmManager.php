@@ -306,15 +306,7 @@ class AlshayaGtmManager {
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
     $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
-    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
-        [
-          &$product,
-          &$attributes,
-          &$skuAttributes,
-        ]
-      );
     $attributes = array_merge($attributes, $skuAttributes);
-
     return $attributes;
   }
 
@@ -404,7 +396,12 @@ class AlshayaGtmManager {
         $attributes['gtm-dimension5'] = $parent_sku->get('attr_product_collection')->getString();
       }
     }
-
+    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
+      [
+        &$product_node,
+        &$attributes,
+      ]
+    );
     return $attributes;
   }
 
@@ -677,6 +674,13 @@ class AlshayaGtmManager {
         if (($dimension8) && ($delivery_page)) {
           $attributes[$skuId]['gtm-dimension8'] = trim($dimension8);
         }
+
+        $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
+          [
+            &$productNode,
+            &$attributes[$skuId],
+          ]
+        );
       }
 
       $attributes['privilegeCustomer'] = !empty($cart->getExtension('loyalty_card')) ? 'Privilege Customer' : 'Regular Customer';
@@ -884,9 +888,9 @@ class AlshayaGtmManager {
     $actionData = [
       'id' => $order['increment_id'],
       'affiliation' => 'Online Store',
-      'revenue' => (float) $order['totals']['grand'],
-      'tax' => (float) $order['totals']['tax'] ?: 0.00,
-      'shippping' => (float) $order['shipping']['method']['amount'] ?: 0.00,
+      'revenue' => alshaya_master_convert_amount_to_float($order['totals']['grand']),
+      'tax' => alshaya_master_convert_amount_to_float($order['totals']['tax']) ?: 0.00,
+      'shippping' => alshaya_master_convert_amount_to_float($order['shipping']['method']['amount']) ?: 0.00,
       'coupon' => $order['coupon'],
     ];
 
@@ -900,7 +904,7 @@ class AlshayaGtmManager {
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
-      'discountAmount' => (float) abs($order['totals']['discount']),
+      'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
@@ -989,7 +993,7 @@ class AlshayaGtmManager {
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 
         // Check if this product is in stock.
-        $stock_response = alshaya_acm_get_product_stock($sku_entity);
+        $stock_response = alshaya_acm_get_stock_from_sku($sku_entity);
         $stock_status = $stock_response ? 'in stock' : 'out of stock';
         $product_terms = $this->fetchProductCategories($node);
 
@@ -1029,6 +1033,12 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
+        $this->moduleHandler->invokeAll('gtm_pdp_attributes_alter',
+          [
+            &$sku_entity,
+            &$page_dl_attributes,
+          ]
+        );
         break;
 
       case 'product listing page':

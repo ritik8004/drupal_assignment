@@ -1,6 +1,19 @@
 (function ($, Drupal, document) {
   'use strict';
 
+  // Function to start fullpage loader wherever we need.
+  function spinner_start() {
+    if ($('.page-standard > .checkout-ajax-progress-throbber').length === 0) {
+      $('.page-standard').append('<div class="ajax-progress ajax-progress-throbber checkout-ajax-progress-throbber"><div class="throbber"></div></div>');
+    }
+    $('.checkout-ajax-progress-throbber').show();
+  }
+
+  // Function to stop fullpage loader wherever we need.
+  function spinner_stop() {
+    $('.checkout-ajax-progress-throbber').hide();
+  }
+
   Drupal.behaviors.alshayaAcmCartNotification = {
     attach: function (context, settings) {
       var currency = drupalSettings.currency_code;
@@ -23,38 +36,37 @@
 
       // Create a new instance of ladda for the specified button
       $('.edit-add-to-cart').attr('data-style', 'zoom-in');
-      var l = $('.edit-add-to-cart').ladda();
 
       $('.edit-add-to-cart', context).on('click', function () {
         // Start loading
-        $(this).ladda('start');
+        spinner_start();
       });
 
       $('.edit-add-to-cart', context).on('mousedown', function () {
         // Start loading
-        $(this).ladda('start');
+        spinner_start();
       });
 
       $('.edit-add-to-cart', context).on('keydown', function (event) {
         if (event.keyCode === 13 || event.keyCode === 32) {
           // Start loading
-          $(this).ladda('start');
+          spinner_start();
         }
       });
 
       $('[data-drupal-selector="edit-configurables-size"], [data-drupal-selector="edit-configurables-article-castor-id"]').on('change', function () {
         // Start loading.
-        $(this).closest('.sku-base-form').find('.edit-add-to-cart').ladda('start');
+        spinner_start();
       });
 
       $(document).ajaxComplete(function (event, xhr, settings) {
         if ((settings.hasOwnProperty('extraData')) &&
           ((settings.extraData._triggering_element_name === 'configurables[size]') ||
      (settings.extraData._triggering_element_name === 'configurables[article_castor_id]'))) {
-          $(this).stopSpinner(['success']);
+          spinner_stop();
         }
         else if (!settings.hasOwnProperty('extraData')) {
-          $.ladda('stopAll');
+          spinner_stop();
         }
       });
 
@@ -79,10 +91,10 @@
       };
 
       $.fn.stopSpinner = function (data) {
-        l.ladda('stop');
+        spinner_stop();
         if (data.message === 'success') {
           $('.edit-add-to-cart', $(data.sku_css_id).parent()).find('.ladda-label').html(Drupal.t('added'));
-          var pdpAddCartButton = l;
+          var pdpAddCartButton = $('.edit-add-to-cart');
 
           if ($('.ui-dialog').length > 0) {
             pdpAddCartButton = $('.edit-add-to-cart', $('.ui-dialog'));

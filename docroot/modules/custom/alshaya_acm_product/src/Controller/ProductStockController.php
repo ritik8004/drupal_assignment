@@ -116,7 +116,7 @@ class ProductStockController extends ControllerBase {
       $build['max_quantity'] = 100;
       $build['html'] = '';
     }
-    elseif ($max_quantity = alshaya_acm_get_product_stock($sku_entity)) {
+    elseif ($max_quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
       $build['max_quantity'] = $max_quantity;
       $build['html'] = '';
     }
@@ -159,7 +159,7 @@ class ProductStockController extends ControllerBase {
     if (!alshaya_acm_product_is_buyable($entity)) {
       $response->addCommand(new HtmlCommand($wrapper, ''));
     }
-    elseif (alshaya_acm_get_product_stock($entity)) {
+    elseif (alshaya_acm_get_stock_from_sku($entity)) {
       $form = $this->fetchAddCartForm($entity, $view_mode);
       $response->addCommand(new HtmlCommand($wrapper, $form));
     }
