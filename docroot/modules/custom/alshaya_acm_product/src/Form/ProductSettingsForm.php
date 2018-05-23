@@ -113,7 +113,7 @@ class ProductSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
       '#default_value' => $config->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025'),
     ];
-    
+
     $form['list_view_auto_page_load_count'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Number of pages to load automatically'),

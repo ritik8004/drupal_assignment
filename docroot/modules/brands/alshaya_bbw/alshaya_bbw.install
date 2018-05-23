@@ -8,6 +8,28 @@
 /**
  * Implements hook_update_N().
  *
+ * Update default items from cross sell/up sell carausel.
+ */
+function alshaya_bbw_update_8104() {
+  // Set default items from cross sell/up sell carausel for mobile.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', 2)
+    ->save();
+
+  // Set default items from cross sell/up sell carausel for tablet.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', 2)
+    ->save();
+
+  // Set default items from cross sell/up sell carausel for desktop.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', 4)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable transac/non-transac specific brand module.
  */
 function alshaya_bbw_update_8103() {
@@ -38,26 +60,6 @@ function alshaya_bbw_update_8103() {
   $block_content = $block_content->getTranslation('ar');
   $block_content->__set('body', "<p>للحصول على العروض الحصرية و المنتجات الجديدة و أخر أخبار محلات الشرق الأوسط</p>\r\n<p><a href=\"/ar/email-sign-up\" class=\"use-ajax\" data-dialog-type=\"modal\">تسجيل مستخدم جديد</a></p>");
   $block_content->save();
-}
-
-/**
- * Implements hook_update_N().
- */
-function alshaya_bbw_update_8104() {
-  // Set default items from cross sell/up sell carausel for mobile.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
-    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', 2)
-    ->save();
-
-  // Set default items from cross sell/up sell carausel for tablet.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
-    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', 2)
-    ->save();
-
-  // Set default items from cross sell/up sell carausel for desktop.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
-    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', 4)
-    ->save();
 }
 
 /**
