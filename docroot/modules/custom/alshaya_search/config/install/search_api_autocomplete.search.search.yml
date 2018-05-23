@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.acquia_search_index
+    - views.view.search
+  module:
+    - views
+    - search_api_autocomplete
+id: search
+label: Search
+index_id: acquia_search_index
+suggester_settings:
+  server:
+    fields: {}
+suggester_weights: {}
+suggester_limits: {}
+search_settings:
+  views:search:
+    displays:
+      default: true
+      selected: {}
+options: {}
