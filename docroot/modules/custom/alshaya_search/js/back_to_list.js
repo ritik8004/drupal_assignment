@@ -11,15 +11,31 @@
       // Here we just clearing the storage.
       $(window).on('scroll', function() {
         if (localStorage.getItem(window.location.href)) {
-          // Current scroll position.
-          var y_scroll_pos = window.pageYOffset;
-          // Position where we need to scroll.
-          var product_position = localStorage.getItem(window.location.href);
-          // If windows scroll position is greater that product position, it means
-          // we have reached/scrolled to the product and thus clear the storage.
-          if(y_scroll_pos >= parseInt(product_position)) {
-            localStorage.removeItem(window.location.href);
-          }
+          // Doing this due to conflict.
+          setTimeout(function(){
+            // Current scroll position.
+            var y_scroll_pos = window.pageYOffset;
+            // Position where we need to scroll.
+            var product_position = localStorage.getItem(window.location.href);
+            // If windows scroll position is greater that product position, it means
+            // we have reached/scrolled to the product and thus clear the storage.
+            if(y_scroll_pos >= parseInt(product_position)) {
+              localStorage.removeItem(window.location.href);
+            }
+          }, 1000);
+        }
+      });
+
+      // On page load, check if needs to scroll to appropriate position.
+      $(window).on('load', function(event) {
+        if (localStorage.getItem(window.location.href)) {
+          // Scroll to top first for consistent behavior.
+          window.scrollTo(0, 0);
+          // Doing this as back button loads page so fast causing conflict.
+          setTimeout(function() {
+            // Scroll to appropriate position.
+            checkAndScrollTo(localStorage.getItem(window.location.href));
+          }, 1000);
         }
       });
 
@@ -33,12 +49,6 @@
           // Scroll to appropriate position.
           checkAndScrollTo(gScroltop);
         });
-
-        // Doing this as back button loads page so fast causing conflict.
-        setTimeout(function() {
-          // Scroll to appropriate position.
-          checkAndScrollTo(gScroltop);
-        }, 1000);
       }
 
       /**
