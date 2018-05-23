@@ -29,7 +29,7 @@ drush8 acsf-tools-ml updb
 EOF
 )"
 
-## Push the updb logs on Slack channel/
+## Push the updb logs on Slack channel.
 FILE=$HOME/slack_settings
 
 if [ -f $FILE ]; then
