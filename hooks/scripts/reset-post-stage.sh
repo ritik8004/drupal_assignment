@@ -9,8 +9,10 @@ fi
 // @TODO
 env=str_replace($target_env, '01', '')
 
-// @TODO
-loop $sites as $site
+sites=$(drush8 acsf-tools-list --fields | grep " " | cut -d' ' -f6 | awk NF)
+
+echo "$sites" | while IFS= read -r site
+do
   profile="$(drush8 -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_get_profile();')"
 
   if [ $profile = "alshaya_transac" ]
