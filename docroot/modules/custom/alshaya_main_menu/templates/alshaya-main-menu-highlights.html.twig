@@ -1,13 +1,16 @@
 {% set l2_image_highlight = '' %}
+
   {#Highlight image start#}
-  {% if (level2.highlight_paragraph is not empty or data.highlight_paragraph is not empty) %}
-  <div class="highlights">
+  {% if (highlight_background is not empty) %}
+    <div class="highlights">
   {% else %}
-  <div>
+    <div>
   {% endif %}
   {% for key, level2 in data.child %}
     {% if level2.highlight_paragraph is not empty %}
-      <div class="title">{{ 'highlights' | t }}</div>
+      {% if highlights_text is not empty %}
+        <div class="title">{{ highlights_text }}</div>
+      {% endif %}
         {% set l2_image_highlight = true %}
 
         {% for highlight_paragraph in level2.highlight_paragraph %}
@@ -30,7 +33,9 @@
   {#Highlight image start#}
   {% if data.highlight_paragraph is not empty %}
         {% if l2_image_highlight is empty %}
-          <div class="title">{{ 'highlights' | t }}</div>
+          {% if highlights_text is not empty %}
+            <div class="title">{{ highlights_text }}</div>
+          {% endif %}
         {% endif %}
           {% for highlight_paragraph in data.highlight_paragraph %}
               <div class="highlighted" gtm-type="gtm-highlights">

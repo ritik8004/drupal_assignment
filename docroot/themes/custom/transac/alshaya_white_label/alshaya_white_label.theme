@@ -11,6 +11,7 @@ use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_html().
@@ -875,9 +876,26 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
           // Slice number of results that we want for the carousel.
           $results = array_slice($results, 0, $product_in_carousel);
+
+          // The stock mode.
+          $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+
           $data = [];
           foreach ($results as $result) {
-            $data[] = $result->_object->getValue()->id();
+            /* @var \Drupal\node\Entity\Node $node*/
+            $node = $result->_object->getValue();
+            if ($node instanceof NodeInterface) {
+              // For stock push mode.
+              if ($stock_mode === 'push') {
+                // If product in stock for 'push' mode.
+                if (alshaya_acm_get_stock_from_product($node)) {
+                  $data[] = $node->id();
+                }
+              }
+              else {
+                $data[] = $node->id();
+              }
+            }
           }
 
           // Make carousel title link.
