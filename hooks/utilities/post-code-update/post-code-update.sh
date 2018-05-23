@@ -18,31 +18,35 @@ target_env="$2"
 
 cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 
-echo "Executing updb."
+## Restore the database dumps before applying database updates.
+echo "Restore database dumps."
+drush8 acsf-tools-restore --source-folder=~/backup/post-stage
 
+## Apply the database updates.
+echo "Executing updb."
 output="$( bash <<EOF
 drush8 acsf-tools-ml updb
 EOF
 )"
 
-##Pushing the updb logs on slack channel
+## Push the updb logs on Slack channel/
 FILE=$HOME/slack_settings
 
 if [ -f $FILE ]; then
   # Load the Slack webhook URL (which is not stored in this repo).
   . $HOME/slack_settings
 
-  # Post updb done notice to Slack channel
+  # Post updb done notice to Slack channel.
   errorstr="error"
 
   if [ -n "$output" ]; then
-	 if [[ "$output" =~ "$errorstr" ]]; then
-        	curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
-    	else
-        	curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed updb on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
-    	fi
+    if [[ "$output" =~ "$errorstr" ]]; then
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+    else
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed updb on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+    fi
   fi
- else
+else
   echo "File $FILE does not exist."
 fi
 
