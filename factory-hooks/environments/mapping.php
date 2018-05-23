@@ -158,7 +158,7 @@ function alshaya_get_env_keys($site, $env) {
       // PBAE is connected to MC UAT for now.
       'default' => [
         'magento' => 'mc_uat',
-        'conductor' => 'mc_uat',
+        'conductor' => 'mcae_uat',
       ],
       //'default' => [
       //  'magento' => 'pb_qa',
@@ -170,7 +170,7 @@ function alshaya_get_env_keys($site, $env) {
       // VSAE is connected to MC QA for now.
       'default' => [
         'magento' => 'mc_uat',
-        'conductor' => 'mc_uat',
+        'conductor' => 'mcae_uat',
       ],
     ],
   ];
