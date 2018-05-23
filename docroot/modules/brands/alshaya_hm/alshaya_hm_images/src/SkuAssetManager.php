@@ -102,11 +102,13 @@ class SkuAssetManager {
    *   Location on page e.g., main image, thumbnails etc.
    * @param string $style
    *   Style string.
+   * @param bool $first_image_only
+   *   Return only the first image.
    *
    * @return array
    *   Array of urls to sku assets.
    */
-  public function getSkuAssets($sku, $page_type, $location_images, $style = "") {
+  public function getSkuAssets($sku, $page_type, array $location_images, $style = '', $first_image_only = TRUE) {
     $sku = $sku instanceof SKU ? $sku->getSku() : $sku;
 
     $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
@@ -118,13 +120,13 @@ class SkuAssetManager {
     }
 
     $asset_variant_urls = [];
+    $asset_urls = [];
 
     if (empty($assets)) {
       return [];
     }
 
     foreach ($location_images as $location_image) {
-      $asset_urls = [];
       foreach ($assets as $asset) {
         // If style is set, it means we looking for a varaint for swatch image.
         // Avoid processing asset types that don't match the swatch style
@@ -163,7 +165,7 @@ class SkuAssetManager {
           'sortFacingType' => $asset['sortFacingType'],
         ];
 
-        if (count($location_images) === 1) {
+        if ($first_image_only) {
           return $asset_urls;
         }
 
@@ -174,6 +176,11 @@ class SkuAssetManager {
       if (!empty($asset_urls)) {
         $asset_variant_urls[$location_image] = $asset_urls;
       }
+    }
+
+    // If there is only a single location_image, we don't want the results to be grouped.
+    if (count($location_images) === 1) {
+      return $asset_urls;
     }
 
     return $asset_variant_urls;
@@ -382,21 +389,23 @@ class SkuAssetManager {
    *   Location on page e.g., main image, thumbnails etc.
    * @param bool $first_only
    *   Flag to indicate we need the assets of the first child only.
+   * @param bool $first_image_only
+   *   Return only the first image.
    *
    * @return array
    *   Array of sku child assets.
    */
-  public function getChildSkuAssets(SKU $sku, $context, $locations, $first_only = TRUE) {
+  public function getChildSkuAssets(SKU $sku, $context, array $locations, $first_only = TRUE, $first_image_only = TRUE) {
     $child_skus = $this->skuManager->getChildrenSkuIds($sku, $first_only);
     $assets = [];
 
     if (($first_only) && (!empty($child_skus))) {
-      return $this->getSkuAssets($child_skus, $context, $locations);
+      return $this->getSkuAssets($child_skus, $context, $locations, '', $first_image_only);
     }
 
     if (!empty($child_skus)) {
       foreach ($child_skus as $child_sku) {
-        $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations);
+        $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations, '', $first_image_only);
       }
     }
 
@@ -503,17 +512,19 @@ class SkuAssetManager {
    *   Type of page.
    * @param array $image_types
    *   Type of image.
+   * @param bool $first_image_only
+   *   Return only the first image.
    *
    * @return array|images
    *   Array of images for the SKU.
    */
-  public function getImagesForSku(SKU $sku, $page_type, $image_types) {
+  public function getImagesForSku(SKU $sku, $page_type, array $image_types, $first_image_only = TRUE) {
     $images = [];
     if ($sku->bundle() == 'simple') {
-      $images = $this->getSkuAssets($sku, $page_type, $image_types);
+      $images = $this->getSkuAssets($sku, $page_type, $image_types, '', $first_image_only);
     }
     elseif ($sku->bundle() == 'configurable') {
-      $images = $this->getChildSkuAssets($sku, $page_type, $image_types);
+      $images = $this->getChildSkuAssets($sku, $page_type, $image_types, TRUE, $first_image_only);
     }
     return $images;
   }
