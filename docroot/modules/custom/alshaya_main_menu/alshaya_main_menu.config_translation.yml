@@ -1,0 +1,5 @@
+alshaya_main_menu.main_menu_settings:
+  title: 'Mega menu settings'
+  base_route_name: alshaya_main_menu.settings_form
+  names:
+    - alshaya_main_menu.settings

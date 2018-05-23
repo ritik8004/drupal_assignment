@@ -1,25 +1,57 @@
 .paragraph--type--product-carousel-category {
+  padding-top: 0.75rem;
+
+  @include breakpoint($tablet) {
+    padding-top: 0.625rem;
+  }
+
+  @include breakpoint($desktop) {
+    padding-top: 1rem;
+  }
+
   &.has-view-all-link {
-    padding: 0 0 1.5rem;
+    padding-bottom: 1.75rem;
+
+    @include breakpoint($tablet) {
+      padding-bottom: 1.5rem;
+    }
+
+    .view-product-slider {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .price--discount {
+    line-height: 1.2;
   }
 
   .crossell-title {
     &.subtitle {
       margin-#{$left}: 0;
       padding-#{$left}: 0;
+      padding-bottom: 0;
+      margin-bottom: 0.875rem;
+      margin-top: 0;
+      line-height: 1.25;
       text-align: $left;
+      text-transform: unset;
+
+      @include breakpoint($tablet) {
+        font-size: 1.5rem;
+        line-height: 1.17;
+        margin-bottom: 1.625rem;
+      }
     }
   }
 
   .category-carousel-view-all {
-    position: absolute;
-    #{$left}: 50%;
-    -ms-transform: translate(-50%, 0%);
-    transform: translate(-50%, 0%);
+    display: block;
+    width: 100%;
+    line-height: 1.4;
+    text-align: center;
 
-    html[lang=ar] & {
-      -ms-transform: translate(50%, 0%);
-      transform: translate(50%, 0%);
+    @include breakpoint($tablet) {
+      padding-top: 1.125rem;
     }
   }
 
@@ -37,6 +69,7 @@
 
         @include breakpoint($only-mobile) {
           margin: 0 0.3125rem;
+          width: calc(100% - 0.625rem);
         }
       }
     }
@@ -64,9 +97,9 @@
           z-index: 1;
           top: 0;
           display: inline-block;
-          width: 10px;
-          height: 10px;
-          margin: 10px;
+          width: 0.625rem;
+          height: 0.625rem;
+          margin: 0.625rem;
           border-radius: 100%;
           color: $hp_slider_dots;
           border: 1px solid currentColor;
@@ -76,10 +109,15 @@
   }
 
   .view-product-slider {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
 
     @include breakpoint($tablet) {
       padding: 0 2.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-bottom: 1.625rem;
     }
 
     .no-carousel {

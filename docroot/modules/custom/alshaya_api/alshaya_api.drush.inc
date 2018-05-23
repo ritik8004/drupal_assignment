@@ -18,6 +18,7 @@ function alshaya_api_drush_command() {
     'aliases'     => ['aasc'],
     'options' => [
       'types' => 'The comma-separated list of SKUs types to check (simple, configurable)',
+      'magento_source' => 'The source to get the SKUs (api, report). Default is merchandising report.',
       'page_size' => 'ACM page size',
       'use_delete' => 'Hidden deletion option',
     ],
@@ -32,6 +33,7 @@ function alshaya_api_drush_command() {
 function drush_alshaya_api_sanity_check() {
   $types = array_map('trim', explode(',', drush_get_option('types', 'simple,configurable')));
 
+  $msource = drush_get_option('magento_source', 'report');
   $debug = drush_get_option('debug', FALSE);
   $verbose = drush_get_option('verbose', FALSE);
   $languages = \Drupal::languageManager()->getLanguages();
@@ -44,7 +46,12 @@ function drush_alshaya_api_sanity_check() {
   ]));
 
   // Retrieve all enabled SKUs from Magento indexed by type.
-  $mskus = \Drupal::service('alshaya_api.api')->getSkus($types);
+  if ($msource == 'report') {
+    $mskus = \Drupal::service('alshaya_api.api')->getSkusFromMerchandisingReport($types);
+  }
+  else {
+    $mskus = \Drupal::service('alshaya_api.api')->getSkusFromApi($types);
+  }
 
   if ($debug) {
     foreach ($types as $type) {

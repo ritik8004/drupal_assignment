@@ -306,15 +306,7 @@ class AlshayaGtmManager {
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
     $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
-    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
-        [
-          &$product,
-          &$attributes,
-          &$skuAttributes,
-        ]
-      );
     $attributes = array_merge($attributes, $skuAttributes);
-
     return $attributes;
   }
 
@@ -404,7 +396,12 @@ class AlshayaGtmManager {
         $attributes['gtm-dimension5'] = $parent_sku->get('attr_product_collection')->getString();
       }
     }
-
+    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
+      [
+        &$product_node,
+        &$attributes,
+      ]
+    );
     return $attributes;
   }
 
@@ -647,7 +644,7 @@ class AlshayaGtmManager {
           if ((!in_array('dimension8', $gtm_disabled_vars)) &&
             ($store = $this->storeFinder->getStoreFromCode($store_code))) {
             // @TODO: Check with Piyuesh on if we can use only one field now.
-            $dimension8 = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
+            $dimension8 = $this->storeFinder->getStoreAddress($store, TRUE);
           }
         }
       }
@@ -677,6 +674,13 @@ class AlshayaGtmManager {
         if (($dimension8) && ($delivery_page)) {
           $attributes[$skuId]['gtm-dimension8'] = trim($dimension8);
         }
+
+        $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
+          [
+            &$productNode,
+            &$attributes[$skuId],
+          ]
+        );
       }
 
       $attributes['privilegeCustomer'] = !empty($cart->getExtension('loyalty_card')) ? 'Privilege Customer' : 'Regular Customer';
@@ -848,7 +852,7 @@ class AlshayaGtmManager {
       if ((!in_array('dimension8', $gtm_disabled_vars)) &&
         ($store = $this->storeFinder->getStoreFromCode($store_code))) {
         // @TODO: Check with Piyuesh on if we can use only one field now.
-        $dimension8 = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
+        $dimension8 = $this->storeFinder->getStoreAddress($store, TRUE);
       }
     }
 
@@ -884,9 +888,9 @@ class AlshayaGtmManager {
     $actionData = [
       'id' => $order['increment_id'],
       'affiliation' => 'Online Store',
-      'revenue' => (float) $order['totals']['grand'],
-      'tax' => (float) $order['totals']['tax'] ?: 0.00,
-      'shippping' => (float) $order['shipping']['method']['amount'] ?: 0.00,
+      'revenue' => alshaya_master_convert_amount_to_float($order['totals']['grand']),
+      'tax' => alshaya_master_convert_amount_to_float($order['totals']['tax']) ?: 0.00,
+      'shippping' => alshaya_master_convert_amount_to_float($order['shipping']['method']['amount']) ?: 0.00,
       'coupon' => $order['coupon'],
     ];
 
@@ -900,7 +904,7 @@ class AlshayaGtmManager {
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
-      'discountAmount' => (float) abs($order['totals']['discount']),
+      'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
@@ -989,7 +993,7 @@ class AlshayaGtmManager {
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 
         // Check if this product is in stock.
-        $stock_response = alshaya_acm_get_product_stock($sku_entity);
+        $stock_response = alshaya_acm_get_stock_from_sku($sku_entity);
         $stock_status = $stock_response ? 'in stock' : 'out of stock';
         $product_terms = $this->fetchProductCategories($node);
 
@@ -1029,6 +1033,12 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
+        $this->moduleHandler->invokeAll('gtm_pdp_attributes_alter',
+          [
+            &$sku_entity,
+            &$page_dl_attributes,
+          ]
+        );
         break;
 
       case 'product listing page':
@@ -1097,7 +1107,7 @@ class AlshayaGtmManager {
             $page_dl_attributes['cartItemsFlocktory'] = $this->formatCartFlocktory($cart_items);
           }
 
-          if (($page_type === 'checkout delivery page') || ($page_type === 'checkout payment page')) {
+          if (($page_type === 'checkout delivery page') || ($page_type === 'checkout payment page') || ($page_type === 'checkout click and collect page')) {
             if ($shipping = $cart->getShippingMethodAsString()) {
               $shipping_method = $this->checkoutOptionsManager->loadShippingMethod($shipping);
 
@@ -1114,14 +1124,18 @@ class AlshayaGtmManager {
                 if ($store = $this->storeFinder->getStoreFromCode($cart->getExtension('store_code'))) {
                   $page_dl_attributes['storeLocation'] = $store->label();
                   // @TODO: Check with Piyuesh on if we can use only one field now.
-                  $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
+                  $page_dl_attributes['storeAddress'] = $this->storeFinder->getStoreAddress($store, TRUE);
                 }
               }
               else {
                 $delivery_area = $this->addressBookManager->getCartShippingAreaValue($cart);
+                $delivery_city = $this->addressBookManager->getCartShippingAreaParentValue($cart);
 
                 if ($delivery_area) {
                   $page_dl_attributes['deliveryArea'] = $delivery_area;
+                }
+                if ($delivery_city) {
+                  $page_dl_attributes['deliveryCity'] = $delivery_city;
                 }
               }
 
@@ -1163,6 +1177,8 @@ class AlshayaGtmManager {
         }
 
         $deliveryArea = $this->addressBookManager->getAddressShippingAreaValue($order['shipping']['address']);
+        $address = $this->addressBookManager->getAddressArrayFromMagentoAddress($order['shipping']['address']);
+        $deliveryCity = $this->addressBookManager->getAddressShippingAreaParentValue($address, $order['shipping']['address']);
 
         foreach ($orderItems as $orderItem) {
           $productSKU[] = $orderItem['sku'];
@@ -1185,7 +1201,7 @@ class AlshayaGtmManager {
         if ($store_code && ($store = $this->storeFinder->getStoreFromCode($store_code))) {
           $page_dl_attributes['storeLocation'] = $store->label();
           // @TODO: Check with Piyuesh on if we can use only one field now.
-          $page_dl_attributes['storeAddress'] = html_entity_decode(strip_tags($this->storeFinder->getStoreAddress($store)));
+          $page_dl_attributes['storeAddress'] = $this->storeFinder->getStoreAddress($store, TRUE);
         }
 
         // Add cartItemsRR variable only when its not in the list of disabled
@@ -1202,6 +1218,9 @@ class AlshayaGtmManager {
 
         if ($deliveryArea) {
           $page_dl_attributes['deliveryArea'] = $deliveryArea;
+        }
+        if ($deliveryCity) {
+          $page_dl_attributes['deliveryCity'] = $deliveryCity;
         }
 
         break;
@@ -1274,6 +1293,11 @@ class AlshayaGtmManager {
       }
       else {
         $sku_media_url = 'image not available';
+      }
+      $sku_entity = SKU::loadFromSku($item['sku']);
+      if ($sku_entity instanceof SKU && $sku_entity->hasTranslation('en')) {
+        $sku_entity = $sku_entity->getTranslation('en');
+        $item['name'] = $sku_entity->label();
       }
 
       $cart_items_flock[] = [

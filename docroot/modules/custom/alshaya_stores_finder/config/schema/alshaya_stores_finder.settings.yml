@@ -17,6 +17,9 @@ alshaya_stores_finder.settings:
     store_list_label:
       type: label
       label: 'Label for back to store list link'
+    store_search_placeholder:
+      type: label
+      label: 'Placeholder for store search'
     marker:
       type: mapping
       label: 'Marker settings'

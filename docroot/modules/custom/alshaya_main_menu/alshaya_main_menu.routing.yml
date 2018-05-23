@@ -1,0 +1,7 @@
+alshaya_main_menu.settings_form:
+  path: '/admin/config/alshaya/mega-menu-config'
+  defaults:
+    _form: '\Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm'
+    _title: 'Mega menu settings'
+  requirements:
+    _permission: 'administer site configuration'

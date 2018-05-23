@@ -38,6 +38,18 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
         'data' => NULL,
       ],
     ],
+    'alshaya_main_menu_category_image' => [
+      'template' => 'alshaya-main-menu-category-image',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
+    'alshaya_main_menu_highlights' => [
+      'template' => 'alshaya-main-menu-highlights',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
   ];
 }
 
@@ -71,5 +83,27 @@ function alshaya_main_menu_taxonomy_term_delete(TermInterface $term) {
   // using our custom cache tag.
   if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
     Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_main_menu_preprocess_alshaya_main_menu_highlights(&$variables) {
+  $variables['highlights_text'] = \Drupal::config('alshaya_main_menu.settings')->get('highlight_text');
+  $variables['highlight_background'] = FALSE;
+  if (!empty($variables['data']['highlight_paragraph'])) {
+    // If L1 highlight is available change the value.
+    $variables['highlight_background'] = TRUE;
+  }
+  else {
+    foreach ($variables['data']['child'] as $child) {
+      if (!empty($child['highlight_paragraph'])) {
+        // If L2 highlight is available on any L2 item
+        // change the value.
+        $variables['highlight_background'] = TRUE;
+        break;
+      }
+    }
   }
 }

@@ -57,6 +57,10 @@
       margin-top: 1rem;
       padding-bottom: 1.5rem;
 
+      &.form-type-tel {
+        padding-bottom: 0;
+      }
+
       @include breakpoint($tablet) {
         margin-top: 1.5rem;
         padding-bottom: 1.5rem;

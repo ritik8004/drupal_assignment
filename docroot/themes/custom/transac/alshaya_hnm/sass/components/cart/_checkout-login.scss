@@ -24,6 +24,21 @@
       }
     }
   }
+
+  #block-youllbeableto a {
+    @include breakpoint($only-mobile) {
+      text-transform: none;
+      letter-spacing: 0;
+    }
+  }
+
+  a.back-link {
+    @include breakpoint($only-mobile) {
+      @include icon(arrowup, before) {
+        transform: none;
+      }
+    }
+  }
 }
 
 .alias--cart-checkout-login {
@@ -31,25 +46,38 @@
     @inlcude arabic-letter-spacing;
 
     padding: 0.5rem 2rem;
-    border: 1px solid $grey5;
+    border: none;
     display: inline-block;
-    color: $primary_dark_color;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-
-    &.active {
-      border: 1px solid $secondary_border;
-      color: $primary_dark_color;
-      font-weight: normal;
-      font-family: $hnm-bold;
-      text-transform: uppercase;
-      background: $hnm-grey;
-    }
 
     span {
-      max-width: 4.75rem;
-      display: block;
-      margin: auto;
+      font-family: $hnm-demibold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    &.tab-returning-customer {
+      span {
+        text-transform: none;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .tab-new-customer {
+    padding: 0;
+
+    @include breakpoint($tablet) {
+      padding: 0.5rem 2rem;
+    }
+  }
+
+  .tabs--content {
+    .selected-tab-title {
+      @include breakpoint($only-mobile) {
+        text-transform: uppercase;
+        font-family: $hnm-demibold;
+        letter-spacing: 0.5px;
+      }
     }
   }
 }

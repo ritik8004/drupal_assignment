@@ -124,9 +124,11 @@ header {
           margin-top: -4px;
         }
 
-        input[type="text"] {
+        .form-text {
           width: 272px;
           font-size: 0.75rem;
+          box-sizing: border-box;
+          outline: transparent;
 
           &::placeholder {
             font-size: 0.75rem;
@@ -145,7 +147,7 @@ header {
 
     @include breakpoint($only-tablet) {
       .block-views-exposed-filter-blocksearch-page {
-        input[type="text"] {
+        .form-text {
           width: 12rem;
           font-size: 0.875rem;
 
@@ -198,7 +200,7 @@ header {
       }
     }
 
-    input[type="text"] {
+    .form-text {
       font-family: $alshaya-thin;
       padding: 7px;
       vertical-align: bottom;
@@ -400,6 +402,7 @@ header {
         input {
           max-width: none;
           width: 100%;
+          outline: none;
         }
       }
 
@@ -412,6 +415,7 @@ header {
   input {
     color: $primary_search_input;
     font-family: $alshaya-thin;
+    box-sizing: border-box;
 
     @include breakpoint($only-mobile) {
       font-size: 0.875rem;
@@ -853,6 +857,7 @@ header {
     vertical-align: top;
     display: inline-block;
     margin-top: 5px;
+    text-transform: none;
 
     div:nth-child(2) {
       margin-#{$right}: 24px;

@@ -14,13 +14,6 @@ class CheckoutPaneTitles extends ControllerBase {
    * Page title for checkout steps page.
    */
   public function checkoutPageTitle(RouteMatchInterface $route_match) {
-    // Current checkout step.
-    $current_step = $route_match->getParameter('step');
-
-    if ($current_step == 'login') {
-      return $this->t('Welcome');
-    }
-
     return $this->t('secure checkout');
   }
 

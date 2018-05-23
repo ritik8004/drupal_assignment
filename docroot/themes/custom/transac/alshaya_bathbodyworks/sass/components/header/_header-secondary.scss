@@ -9,6 +9,10 @@
 
   text-transform: uppercase;
 
+  @include breakpoint($upto-desktop) {
+    text-transform: capitalize;
+  }
+
   li {
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
@@ -36,6 +40,16 @@
       }
     }
   }
+
+  .block-language-blocklanguage-interface {
+    .ar a {
+      font-family: $alshaya-thin;
+    }
+
+    .en a {
+      font-family: $alshaya-thin;
+    }
+  }
 }
 
 .menu--three__list-item {
@@ -54,10 +68,10 @@
   }
 
   @include breakpoint($only-mobile) {
-    height: 5.625rem;
+    height: 3rem;
 
     .navbar-fixed-top {
-      height: 5.625rem;
+      height: 3rem;
     }
   }
 }
@@ -82,17 +96,17 @@
 body {
   @include breakpoint($only-tablet) {
     html[lang=ar] & {
-      margin-top: 4.15rem;
+      margin-top: 4.5rem;
     }
 
-    margin-top: 4.15rem;
+    margin-top: 4.5rem;
   }
 
   @include breakpoint($only-mobile) {
-    margin-top: 5.68rem;
+    margin-top: 3.125rem;
 
     html[lang=ar] & {
-      margin-top: 5.68rem;
+      margin-top: 3.125rem;
     }
   }
 }

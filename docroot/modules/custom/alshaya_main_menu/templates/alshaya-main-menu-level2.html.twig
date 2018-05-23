@@ -1,77 +1,41 @@
 <ul class="menu__list menu--two__list">
-  <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
-  {% for key, level2 in data.child %}
-    <li class="menu__list-item menu--two__list-item">
-      <div class="menu__link-wrapper menu-two__link-wrapper">
-        <a  class="menu__link menu-two__link {{ data.sub_nav_class }}" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
-        {% if level2.description|render is not empty %}
-          <p>{{ level2.description }}</p>
-        {% endif %}
-      </div>
-      {% if level2.child is not empty %}
-        <ul class="menu__list menu--three__list">
-        <div class="level-three__wrapper">
-        <span class="back--link"><span class="menu__back"></span> <span>{{ level2.label }}</span></span>
-        {% for key3, level3 in level2.child %}
-            <li class="menu__list-item menu--three__list-item">
-              <div class="menu__link-wrapper menu-two__link-wrapper">
-                <a class="menu__link menu--three__link {{ data.sub_nav_class }}" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
-              </div>
-              {% if level3.child is not empty %}
-                {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}
-              {% endif %}
-            </li>
-        {% endfor %}
-        </div>
-      </ul>
-      {% endif %}
-
-      {#Highlight image start#}
-      {% if level2.highlight_paragraph is not empty %}
-        <div class="highlights">
-          <div class="title">{{ 'highlights' | t }}</div>
-          {% for highlight_paragraph in level2.highlight_paragraph %}
-            <div class="highlighted" gtm-type="gtm-highlights">
-              <a href="{{ highlight_paragraph.image_link }}">
-                {{ highlight_paragraph.img }}
-
-                {% if highlight_paragraph.title %}
-                  <span class="hightlight__title">{{ highlight_paragraph.title }}</span>
+    <div class="menu__links__wrapper">
+        <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
+        {% for key, level2 in data.child %}
+          <li class="menu__list-item menu--two__list-item">
+            {#Show the term tree only when term image is not available.#}
+            <div class="menu__link-wrapper menu-two__link-wrapper">
+                <a  class="menu__link menu-two__link {{ data.sub_nav_class }}" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level2.id}) }}">{{ level2.label }}</a>
+                {% if level2.description|render is not empty %}
+                    <p>{{ level2.description }}</p>
                 {% endif %}
-
-                {% if highlight_paragraph.description %}
-                  <span class="hightlight__description">{{ highlight_paragraph.description }}</span>
-                {% endif %}
-              </a>
             </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-      {#Highlight image end#}
-    </li>
-  {% endfor %}
-
-  {#Highlight image start#}
-  {% if data.highlight_paragraph is not empty %}
-    <div class="highlights">
-      <div class="title">{{ 'highlights' | t }}</div>
-      {% for highlight_paragraph in data.highlight_paragraph %}
-        <div class="highlighted" gtm-type="gtm-highlights">
-          <a href="{{ highlight_paragraph.image_link }}">
-            {{ highlight_paragraph.img }}
-
-            {% if highlight_paragraph.title %}
-              <span class="hightlight__title">{{ highlight_paragraph.title }}</span>
+            {% if level2.child is not empty %}
+                <ul class="menu__list menu--three__list">
+                    <div class="level-three__wrapper">
+                        <span class="back--link"><span class="menu__back"></span> <span>{{ level2.label }}</span></span>
+                        {% for key3, level3 in level2.child %}
+                            <li class="menu__list-item menu--three__list-item">
+                                <div class="menu__link-wrapper menu-two__link-wrapper">
+                                    <a class="menu__link menu--three__link {{ data.sub_nav_class }}" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
+                                </div>
+                                {% if level3.child is not empty %}
+                                    {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </div>
+                </ul>
             {% endif %}
-
-            {% if highlight_paragraph.description %}
-              <span class="hightlight__description">{{ highlight_paragraph.description }}</span>
-            {% endif %}
-          </a>
-        </div>
-      {% endfor %}
+          </li>
+        {% endfor %}
     </div>
-  {% endif %}
-  {#Highlight image end#}
+    <div class="term-image__wrapper">
+        {#Term image starts#}
+        {{ alshaya_main_menu('alshaya_main_menu_category_image', data) }}
+        {#Term image ends#}
+        {#Highlight image starts#}
+        {{ alshaya_main_menu('alshaya_main_menu_highlights', data) }}
+        {#Highlight image end#}
+    </div>
 </ul>
-
