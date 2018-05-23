@@ -75,8 +75,8 @@ class ProductSettingsForm extends ConfigFormBase {
 
     $form['list_view_items_per_page'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Default Number of items to show on Listing pages'),
-      '#description' => $this->t('Number of items to show per page for Listing pages like PLP / Search pages. Please clear all caches after updating this.'),
+      '#title' => $this->t('Default Number of items to show on listing pages'),
+      '#description' => $this->t('Number of items to show per page for listing pages like PLP / Search pages. Please clear all caches after updating this.'),
       '#required' => TRUE,
       '#default_value' => $config->get('list_view_items_per_page'),
     ];
