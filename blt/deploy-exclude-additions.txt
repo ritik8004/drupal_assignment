@@ -5,3 +5,4 @@
 /docroot/update.php
 /docroot/modules/brands/*/data
 /scripts
+/factory-hooks/pre-sites-php/sites.php
