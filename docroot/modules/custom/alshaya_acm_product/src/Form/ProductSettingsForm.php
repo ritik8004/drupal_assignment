@@ -32,6 +32,9 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('show_cart_form_in_related', $form_state->getValue('show_cart_form_in_related'));
     $config->set('related_items_size', $form_state->getValue('related_items_size'));
     $config->set('list_view_items_per_page', $form_state->getValue('list_view_items_per_page'));
+    $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', $form_state->getValue('pdp_carousel_items_size_0'));
+    $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', $form_state->getValue('pdp_carousel_items_size_768'));
+    $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', $form_state->getValue('pdp_carousel_items_size_1025'));
     $config->set('list_view_auto_page_load_count', $form_state->getValue('list_view_auto_page_load_count'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('brand_logo_extension', $form_state->getValue('brand_logo_extension'));
@@ -79,6 +82,36 @@ class ProductSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Number of items to show per page for listing pages like PLP / Search pages. Please clear all caches after updating this.'),
       '#required' => TRUE,
       '#default_value' => $config->get('list_view_items_per_page'),
+    ];
+
+    $form['cross_up_sell_items_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Cross sell / Up sell carousel settings'),
+      '#open' => TRUE,
+    ];
+
+    $form['cross_up_sell_items_settings']['pdp_carousel_items_size_0'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Mobile view'),
+      '#description' => $this->t('Number of items to show in Up sell / Cross sell carousel blocks.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('cross_up_sell_items_settings.pdp_carousel_items_size_0'),
+    ];
+
+    $form['cross_up_sell_items_settings']['pdp_carousel_items_size_768'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Tablet view'),
+      '#description' => $this->t('Number of items to show in Up sell / Cross sell carousel blocks.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('cross_up_sell_items_settings.pdp_carousel_items_size_768'),
+    ];
+
+    $form['cross_up_sell_items_settings']['pdp_carousel_items_size_1025'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Desktop view'),
+      '#description' => $this->t('Number of items to show in Up sell / Cross sell carousel blocks.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025'),
     ];
 
     $form['list_view_auto_page_load_count'] = [
