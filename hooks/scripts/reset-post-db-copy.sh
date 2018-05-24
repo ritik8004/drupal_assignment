@@ -96,4 +96,8 @@ echo "Data import completed in $minutes minute(s) and $seconds second(s)."
 let "total_seconds+=SECONDS"
 SECONDS=0
 
+let "total_seconds+=SECONDS"
+let "minutes=(total_seconds%3600)/60"
+let "seconds=(total_seconds%3600)%60"
+
 echo "Entire script completed in $minutes minute(s) and $seconds second(s)."
