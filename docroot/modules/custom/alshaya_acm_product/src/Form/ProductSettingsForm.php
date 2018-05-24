@@ -78,8 +78,8 @@ class ProductSettingsForm extends ConfigFormBase {
 
     $form['list_view_items_per_page'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Default Number of items to show on Listing pages'),
-      '#description' => $this->t('Number of items to show per page for Listing pages like PLP / Search pages. Please clear all caches after updating this.'),
+      '#title' => $this->t('Number of items to show on Listing pages'),
+      '#description' => $this->t('Number of items to show on Listing pages on PLP / Search pages. Please clear all caches after updating this.'),
       '#required' => TRUE,
       '#default_value' => $config->get('list_view_items_per_page'),
     ];
@@ -116,8 +116,8 @@ class ProductSettingsForm extends ConfigFormBase {
 
     $form['list_view_auto_page_load_count'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Number of pages to load automatically'),
-      '#description' => $this->t('Number of pages to load automatically on scroll down, before showing button to load more content.'),
+      '#title' => $this->t('Number of pages to load content automatically'),
+      '#description' => $this->t('Number of pages to load automatically on scroll down, before showing button to load content.'),
       '#required' => TRUE,
       '#default_value' => $config->get('list_view_auto_page_load_count'),
     ];

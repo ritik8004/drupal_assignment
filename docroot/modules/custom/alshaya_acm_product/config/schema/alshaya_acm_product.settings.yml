@@ -7,10 +7,7 @@ alshaya_acm_product.settings:
       label: 'Number of related items to show'
     list_view_items_per_page:
       type: integer
-      label: 'Default Number of items to show on Listing pages'
-    list_view_auto_page_load_count:
-      type: integer
-      label: 'Number of pages to load automatically'
+      label: 'Number of items to show on Listing pages'
     brand_logo_base_path:
       type: string
       label: 'Base path on server for Brand Logo'
