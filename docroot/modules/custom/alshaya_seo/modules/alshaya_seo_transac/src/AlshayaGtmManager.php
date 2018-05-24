@@ -789,6 +789,10 @@ class AlshayaGtmManager {
    *   The term id.
    */
   public function getInnerDepthTerm(array $terms = []) {
+    if (!empty($terms)) {
+      return NULL;
+    }
+
     $current_langcode = $this->languageManager->getDefaultLanguage()->getId();
     $depths = $this->database->select('taxonomy_term_field_data', 'ttfd')
       ->fields('ttfd', ['tid', 'depth_level'])
