@@ -29,6 +29,10 @@ drush8 acsf-tools-ml updb
 EOF
 )"
 
+## Clear caches as it is not done if there is database updates but may still
+## be required for some frontend changes.
+drush8 acsf-tools-ml cr
+
 ## Push the updb logs on Slack channel.
 FILE=$HOME/slack_settings
 
