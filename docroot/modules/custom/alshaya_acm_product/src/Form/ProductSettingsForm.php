@@ -32,7 +32,6 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('show_cart_form_in_related', $form_state->getValue('show_cart_form_in_related'));
     $config->set('related_items_size', $form_state->getValue('related_items_size'));
     $config->set('list_view_items_per_page', $form_state->getValue('list_view_items_per_page'));
-    $config->set('list_view_auto_page_load_count', $form_state->getValue('list_view_auto_page_load_count'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('brand_logo_extension', $form_state->getValue('brand_logo_extension'));
     $config->set('all_products_buyable', $form_state->getValue('all_products_buyable'));
@@ -79,14 +78,6 @@ class ProductSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Number of items to show on Listing pages on PLP / Search pages. Please clear all caches after updating this.'),
       '#required' => TRUE,
       '#default_value' => $config->get('list_view_items_per_page'),
-    ];
-
-    $form['list_view_auto_page_load_count'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Number of pages to load content automatically'),
-      '#description' => $this->t('Number of pages to load automatically on scroll down, before showing button to load content.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('list_view_auto_page_load_count'),
     ];
 
     $form['brand_logo_base_path'] = [
