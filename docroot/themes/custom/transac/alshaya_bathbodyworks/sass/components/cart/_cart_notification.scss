@@ -14,14 +14,41 @@
 
   .notification,
   .error {
+    width: 19rem;
+    border-width: 1px;
+    box-shadow: 0 2px 4px 0 $minicart_notification_shadow;
+
+    .col-1 {
+      width: 6.25rem;
+      font-size: 0.875rem;
+      color: $minicart_notification_qty_text;
+
+      img {
+        width: 6.125rem;
+        height: 9.9375rem;
+        padding: 0.625rem;
+        border: 1px solid $order_summary_product_img_border;
+      }
+
+      .qty {
+        color: $minicart_notification_qty_text;
+        font-weight: normal;
+      }
+    }
+
     .col-2 {
       font-weight: normal;
+
+      .name {
+        text-transform: uppercase;
+      }
 
       a {
         line-height: 3.4;
         text-transform: uppercase;
         height: 2.5rem;
         width: 100%;
+        font-size: 0.875rem;
       }
     }
   }
