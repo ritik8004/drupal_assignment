@@ -54,6 +54,7 @@ else
   echo "File $FILE does not exist."
 fi
 
+## Clear varnish caches for all sites of the factory.
 domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
 
 echo "$domains" | while IFS= read -r line
