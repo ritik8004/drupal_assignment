@@ -41,3 +41,12 @@
     background-color: $order_detail_delivery_details_row_bg;
   }
 }
+
+.block-alshaya-user-recent-orders {
+  .no--orders + a {
+    text-transform: uppercase;
+    font-family: $vs-bold;
+    text-decoration: none;
+    font-size: 0.875rem;
+  }
+}
