@@ -158,7 +158,8 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
           'pdp_zoom',
           'pdp_fullscreen',
           'pdp_main',
-        ]
+        ],
+        FALSE
       );
 
       foreach ($pdp_images['pdp_thumbnail'] as $key => $thumbnail) {

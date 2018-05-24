@@ -888,6 +888,10 @@
 			this.invalidate('position');
 			this.update();
 
+      var that = this;
+      setTimeout(function () {
+          that.refresh();
+      }, (this.settings.dragEndSpeed || this.settings.smartSpeed));
 			this._drag.direction = direction;
 
 			if ((Math.abs(delta.x) > 3 || new Date().getTime() - this._drag.time > 300) && event.type === 'mouseup') {

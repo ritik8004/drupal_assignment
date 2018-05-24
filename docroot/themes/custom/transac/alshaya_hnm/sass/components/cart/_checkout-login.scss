@@ -63,6 +63,14 @@
     }
   }
 
+  .tab-new-customer {
+    padding: 0;
+
+    @include breakpoint($tablet) {
+      padding: 0.5rem 2rem;
+    }
+  }
+
   .tabs--content {
     .selected-tab-title {
       @include breakpoint($only-mobile) {

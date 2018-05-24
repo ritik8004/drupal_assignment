@@ -15,7 +15,7 @@ function alshaya_get_additional_settings($site, $env) {
   // Like mc, hm or pb.
   $site_name = substr($site, 0, -2);
   // Like kw, sa or ae.
-  $country = substr($site, 2, 2);
+  $country = substr($site, -2, 2);
 
   $mapping = [
     'mc' => [
@@ -164,12 +164,12 @@ function alshaya_get_additional_settings($site, $env) {
       'ae' => [
         'default' => [
           'store_id' => [
-            'en' => 6,
-            'ar' => 5,
+            'en' => 5,
+            'ar' => 6,
           ],
           'magento_lang_prefix' => [
-            'en' => 'uae_en',
-            'ar' => 'uae_ar',
+            'en' => 'are_en',
+            'ar' => 'are_ar',
           ],
         ],
       ],
@@ -193,28 +193,30 @@ function alshaya_get_additional_settings($site, $env) {
         //    'ar' => 'uae_ar',
         //  ],
         //],
-        // PBAE is connected to MCKW QA for now.
+        // PBAE is connected to MCAE UAT for now.
         'default' => [
           'store_id' => [
-            'ar' => 3,
+            'en' => 16,
+            'ar' => 13,
           ],
           'magento_lang_prefix' => [
-            'en' => 'kwt_en',
-            'ar' => 'kwt_ar',
+            'en' => 'uae_en',
+            'ar' => 'uae_ar',
           ],
         ],
       ],
     ],
     'vs' => [
       'ae' => [
-        // VSAE is connected to MCKW QA for now.
+        // VSAE is connected to MCAE UAT for now.
         'default' => [
           'store_id' => [
-            'ar' => 3,
+            'en' => 16,
+            'ar' => 13,
           ],
           'magento_lang_prefix' => [
-            'en' => 'kwt_en',
-            'ar' => 'kwt_ar',
+            'en' => 'uae_en',
+            'ar' => 'uae_ar',
           ],
         ],
       ],

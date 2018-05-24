@@ -24,7 +24,13 @@
   }
 
   input[type=checkbox] ~ label::before {
-    margin-#{$left}: -0.5rem;
+    margin-#{$left}: 0;
+    position: relative;
+    top: 0.3rem;
+
+    @include breakpoint($tablet) {
+      top: 0.54rem;
+    }
   }
 }
 

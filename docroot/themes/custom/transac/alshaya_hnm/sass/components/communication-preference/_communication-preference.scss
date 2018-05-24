@@ -4,7 +4,11 @@ form {
       ~ label[for=edit-communication-preference-email],
       ~ label[for=edit-communication-preference-mobile] {
         &::before {
-          top: 0.625rem;
+          top: 0.325rem;
+
+          @include breakpoint($tablet) {
+            top: 0.125rem;
+          }
         }
       }
     }

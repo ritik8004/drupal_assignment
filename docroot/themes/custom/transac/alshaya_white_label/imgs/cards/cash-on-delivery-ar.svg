@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49" height="33" viewBox="0 0 49 33">
+    <defs>
+        <rect id="a" width="49" height="33" rx="2"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <use fill="#FFF" xlink:href="#a"/>
+            <rect width="48" height="32" x=".5" y=".5" stroke="#333" rx="2"/>
+        </g>
+        <text fill="#000" font-family="MyriadArabic-It, Myriad Arabic" font-size="22" font-style="italic">
+            <tspan x="14" y="21">نقد</tspan>
+        </text>
+    </g>
+</svg>
