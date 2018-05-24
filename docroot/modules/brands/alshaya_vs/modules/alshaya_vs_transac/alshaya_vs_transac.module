@@ -10,9 +10,6 @@
  */
 function alshaya_vs_transac_alshaya_stores_finder_store_update_alter(&$node, array $store) {
   if (isset($store['included_in_store'])) {
-    $brands = array_filter(array_map('trim', explode(',', $store['included_in_store'])));
-    if (!empty($brands)) {
-      $node->set('field_brand', $brands);
-    }
+    $node->set('field_brand', trim($store['included_in_store']));
   }
 }
