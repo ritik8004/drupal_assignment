@@ -33,6 +33,18 @@ EOF
 ## be required for some frontend changes.
 drush8 acsf-tools-ml cr
 
+## Clear varnish caches for all sites of the factory.
+domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
+
+echo "$domains" | while IFS= read -r line
+do
+ echo "Clearing varnish cache for $line"
+ curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1495.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
+ curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1496.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
+ curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2295.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
+ curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2296.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
+done
+
 ## Push the updb logs on Slack channel.
 FILE=$HOME/slack_settings
 
@@ -45,23 +57,15 @@ if [ -f $FILE ]; then
 
   if [ -n "$output" ]; then
     if [[ "$output" =~ "$errorstr" ]]; then
+      echo "Sending error notification to Slack channel."
       curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
     else
+      echo "Sending success notification to Slack channel."
       curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed updb on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
     fi
+  else
+    echo "No output variable to check."
   fi
 else
   echo "File $FILE does not exist."
 fi
-
-## Clear varnish caches for all sites of the factory.
-domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
-
-echo "$domains" | while IFS= read -r line
-do
- echo "Clearing varnish cache for $line"
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1495.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1496.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2295.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2296.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
-done
