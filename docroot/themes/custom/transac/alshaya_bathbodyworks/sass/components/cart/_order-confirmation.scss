@@ -1,7 +1,7 @@
 .order-confirmation {
   .order-summary {
     @include breakpoint($tablet) {
-      background-color: $order_summary_bg;
+      background-color: $checkout_confirm_order_summary_row;
     }
   }
 
