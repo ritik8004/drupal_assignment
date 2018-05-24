@@ -35,6 +35,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', $form_state->getValue('pdp_carousel_items_size_0'));
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', $form_state->getValue('pdp_carousel_items_size_768'));
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', $form_state->getValue('pdp_carousel_items_size_1025'));
+    $config->set('list_view_auto_page_load_count', $form_state->getValue('list_view_auto_page_load_count'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('brand_logo_extension', $form_state->getValue('brand_logo_extension'));
     $config->set('all_products_buyable', $form_state->getValue('all_products_buyable'));
@@ -77,8 +78,8 @@ class ProductSettingsForm extends ConfigFormBase {
 
     $form['list_view_items_per_page'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Number of items to show on Listing pages'),
-      '#description' => $this->t('Number of items to show on Listing pages on PLP / Search pages. Please clear all caches after updating this.'),
+      '#title' => $this->t('Default Number of items to show on listing pages'),
+      '#description' => $this->t('Number of items to show per page for listing pages like PLP / Search pages. Please clear all caches after updating this.'),
       '#required' => TRUE,
       '#default_value' => $config->get('list_view_items_per_page'),
     ];
@@ -111,6 +112,14 @@ class ProductSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Number of items to show in Up sell / Cross sell carousel blocks.'),
       '#required' => TRUE,
       '#default_value' => $config->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025'),
+    ];
+
+    $form['list_view_auto_page_load_count'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Number of pages to load automatically'),
+      '#description' => $this->t('Number of pages to load automatically on scroll down, before showing button to load more content.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('list_view_auto_page_load_count'),
     ];
 
     $form['brand_logo_base_path'] = [
