@@ -790,3 +790,85 @@ function _alshaya_master_get_views_result($view_id, $display_id, array $args = [
 function alshaya_master_convert_amount_to_float($amount) {
   return floatval(str_replace(',', '', $amount));
 }
+
+/**
+ * Enable brand AMP theme and set AMP page logo and favicon.
+ *
+ * @param string $theme_name
+ *   AMP theme name to enable.
+ */
+function _alshaya_config_initialize_amp($theme_name) {
+  // Enable alshaya_amp module.
+  \Drupal::service('module_installer')->install(['alshaya_amp']);
+
+  // Enable and set default amp theme.
+  \Drupal::service('theme_handler')->install([$theme_name], TRUE);
+  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', $theme_name)->save();
+
+  // Get the current theme settings.
+  $config = \Drupal::configFactory()->get(\Drupal::theme()->getActiveTheme()->getName() . '.settings')->get();
+  // Set same to installed AMP theme.
+  \Drupal::configFactory()->getEditable($theme_name . '.settings')->setData($config)->save();
+
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $theme_name . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => \Drupal::theme()->getActiveTheme()->getPath() . '/site-logo-ar.svg',
+      ],
+    ])
+    ->save();
+}
+
+/**
+ * Enable brand theme and set the site logo, favicon icon and email logo path.
+ *
+ * @param string $brand_theme
+ *   Brand theme name to enable.
+ */
+function _alshaya_config_initialize_brand_theme($brand_theme) {
+  // Enable and set alshaya_hnm as default theme.
+  \Drupal::service('theme_handler')->install([$brand_theme], TRUE);
+  \Drupal::service('theme_handler')->setDefault($brand_theme);
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site logo path with default name.
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site logo.
+  \Drupal::configFactory()->getEditable($current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '.svg',
+      ],
+    ])
+    ->save();
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+      ],
+    ])
+    ->save();
+
+  // Save default site favicon.
+  \Drupal::configFactory()->getEditable($current_theme . '.settings')
+    ->set('favicon', ['path' => $site_favicon . '.ico'])
+    ->save();
+
+  // Save default logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
+    ->set('email_logo_path', $site_logo . '.png')
+    ->save();
+  // Save arabic logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
+    ->set('email_logo_path', $site_logo . '-ar.png')
+    ->save();
+}

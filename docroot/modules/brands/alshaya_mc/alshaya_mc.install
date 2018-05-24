@@ -47,26 +47,8 @@ function alshaya_mc_update_8311() {
  * Enable brand AMP theme and set logo and favicon.
  */
 function alshaya_mc_update_8310() {
-  // Enable and set default amp theme.
-  \Drupal::service('theme_handler')->install(['alshaya_amp_mothercare'], TRUE);
-  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_mothercare')->save();
-
-  // Get current active theme.
-  $active_theme = \Drupal::theme()->getActiveTheme();
-
-  // Get the current theme settings.
-  $config = \Drupal::configFactory()->get($active_theme->getName() . '.settings')->get();
-  // Set same to installed AMP theme.
-  \Drupal::configFactory()->getEditable('alshaya_amp_mothercare.settings')->setData($config)->save();
-
-  \Drupal::languageManager()
-    ->getLanguageConfigOverride('ar', 'alshaya_amp_mothercare.settings')
-    ->setData([
-      'logo' => [
-        'path' => \Drupal::theme()->getActiveTheme()->getPath() . '/site-logo-ar.svg',
-      ],
-    ])
-    ->save();
+  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
+  _alshaya_config_initialize_amp('alshaya_amp_mothercare');
 }
 
 /**
@@ -265,12 +247,8 @@ function alshaya_mc_update_8301() {
 function alshaya_mc_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_mc', 'inc', 'alshaya_mc.content');
 
-  // Enable and set alshaya_white_label as default theme.
-  \Drupal::service('theme_handler')->install(['alshaya_mothercare'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('alshaya_mothercare');
-
-  // Set the logo and favicon icon.
-  _alshaya_config_set_default_logo_favicon();
+  // Enable brand theme and set the site logo, favicon icon and email logo path.
+  _alshaya_config_initialize_brand_theme('alshaya_mothercare');
 
   // Translate store finder block's link title.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
@@ -308,9 +286,8 @@ function alshaya_mc_install() {
   // Create default content for mothercare.
   alshaya_mc_create_default_content();
 
-  // Enable and set default amp theme.
-  \Drupal::service('theme_handler')->install(['alshaya_amp_mothercare'], TRUE);
-  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_mothercare')->save();
+  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
+  _alshaya_config_initialize_amp('alshaya_amp_mothercare');
 }
 
 /**
