@@ -1019,7 +1019,7 @@ html[lang=ar] {
 @include breakpoint($only-mobile) {
   .filter--mobile {
     .c-facet__label {
-      &.is-active {
+      &.active-filter-count {
         padding: 0.4375rem 0.625rem;
 
         .filter-count {
