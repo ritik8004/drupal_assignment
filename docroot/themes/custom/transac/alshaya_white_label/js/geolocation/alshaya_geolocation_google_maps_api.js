@@ -404,7 +404,7 @@
       // Set the info popup text.
       var currentInfoWindow = new google.maps.InfoWindow({
         content: markerSettings.infoWindowContent,
-        maxWidth: 200,
+        maxWidth: 209,
         disableAutoPan: map.settings.google_map_settings.disableAutoPan
       });
 
