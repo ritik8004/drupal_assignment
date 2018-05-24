@@ -1325,7 +1325,9 @@
   }
 
   .scroll-fix {
-    min-width: 12rem;
+    @include breakpoint($desktop) {
+      min-width: 13.0625rem;
+    }
   }
 
   .hours--label,
