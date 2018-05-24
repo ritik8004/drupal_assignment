@@ -15,8 +15,8 @@
   .notification,
   .error {
     width: 19rem;
-    border-width: 1px;
-    box-shadow: 0 2px 4px 0 $minicart_notification_shadow;
+    border-width: 0.0625rem;
+    box-shadow: 0 0.125rem 0.25rem 0 $minicart_notification_shadow;
 
     .col-1 {
       width: 6.25rem;
@@ -27,7 +27,7 @@
         width: 6.125rem;
         height: 9.9375rem;
         padding: 0.625rem;
-        border: 1px solid $order_summary_product_img_border;
+        border: 0.0625rem solid $order_summary_product_img_border;
       }
 
       .qty {
