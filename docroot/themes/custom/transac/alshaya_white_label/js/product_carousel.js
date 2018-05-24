@@ -1,6 +1,6 @@
 /**
  * @file
- * product featured carousel.
+ * Product featured carousel.
  */
 
 /* global isRTL */
@@ -10,6 +10,9 @@
 
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
+      var pdp_items_mob = drupalSettings.pdp_items_mob;
+      var pdp_items_tab = drupalSettings.pdp_items_tab;
+      var pdp_items_desk = drupalSettings.pdp_items_desk;
 
       var optionsBasket = {
         responsiveClass: true,
@@ -38,18 +41,18 @@
         dots: true,
         responsive: {
           0: {
-            items: 2,
+            items: pdp_items_mob,
             dragSlideBy: 2,
             nav: false,
             stagePadding: 25,
             mouseDrag: true
           },
           768: {
-            items: 2,
+            items: pdp_items_tab,
             nav: true
           },
           1025: {
-            items: 3,
+            items: pdp_items_desk,
             nav: true
           }
         }

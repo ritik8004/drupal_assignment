@@ -12,6 +12,15 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_promo_panel module.
+ */
+function alshaya_transac_update_8111() {
+  \Drupal::service('module_installer')->install(['alshaya_promo_panel']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set value of 'use as department page' field.
  * Delete the department page CT.
  */
@@ -232,6 +241,7 @@ function alshaya_transac_install() {
     'alshaya_newsletter',
     'alshaya_permissions',
     'alshaya_product',
+    'alshaya_promo_panel',
     'alshaya_seo_transac',
     'alshaya_stores_finder',
     'alshaya_stores_finder_transac',

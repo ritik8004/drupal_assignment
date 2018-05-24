@@ -306,15 +306,7 @@ class AlshayaGtmManager {
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
     $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
-    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
-        [
-          &$product,
-          &$attributes,
-          &$skuAttributes,
-        ]
-      );
     $attributes = array_merge($attributes, $skuAttributes);
-
     return $attributes;
   }
 
@@ -404,7 +396,12 @@ class AlshayaGtmManager {
         $attributes['gtm-dimension5'] = $parent_sku->get('attr_product_collection')->getString();
       }
     }
-
+    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
+      [
+        &$product_node,
+        &$attributes,
+      ]
+    );
     return $attributes;
   }
 
@@ -677,6 +674,13 @@ class AlshayaGtmManager {
         if (($dimension8) && ($delivery_page)) {
           $attributes[$skuId]['gtm-dimension8'] = trim($dimension8);
         }
+
+        $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
+          [
+            &$productNode,
+            &$attributes[$skuId],
+          ]
+        );
       }
 
       $attributes['privilegeCustomer'] = !empty($cart->getExtension('loyalty_card')) ? 'Privilege Customer' : 'Regular Customer';
@@ -1029,6 +1033,12 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
+        $this->moduleHandler->invokeAll('gtm_pdp_attributes_alter',
+          [
+            &$sku_entity,
+            &$page_dl_attributes,
+          ]
+        );
         break;
 
       case 'product listing page':
