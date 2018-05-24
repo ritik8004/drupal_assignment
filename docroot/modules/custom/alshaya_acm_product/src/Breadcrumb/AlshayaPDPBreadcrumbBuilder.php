@@ -289,7 +289,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    *   The term id.
    */
   protected function getInnerDepthTerm(array $terms = []) {
-    if (!empty($terms)) {
+    if (empty($terms)) {
       return NULL;
     }
 
