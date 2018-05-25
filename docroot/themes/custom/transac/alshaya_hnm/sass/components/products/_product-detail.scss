@@ -100,6 +100,15 @@
   .short-description-wrapper {
     @include breakpoint($only-mobile) {
       text-align: center;
+
+      .content--short-description > h2 {
+        display: none;
+      }
+
+      .field__content {
+        line-height: normal;
+        padding-top: 43px;
+      }
     }
   }
 
@@ -341,6 +350,7 @@
                 font-size: 0.75rem;
                 color: $pdp_description_mobile;
                 margin-top: 1.3125rem;
+                line-height: 1.5;
               }
 
               .composition-label,
@@ -1050,6 +1060,12 @@ html[lang=ar] {
     .gallery-wrapper {
       @include breakpoint($mobile) {
         min-height: 31.75rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        .mobilegallery {
+          padding-bottom: 1.1875rem;
+        }
       }
     }
   }
