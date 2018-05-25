@@ -24,13 +24,14 @@ drush8 acsf-tools-restore --source-folder=~/backup/post-stage
 
 ## Apply the database updates.
 echo "Executing updb."
-output="$( bash <<EOF
-drush8 acsf-tools-ml updb
-EOF
-)"
+drush8 acsf-tools-ml updb 2> /tmp/temp
+output=$(cat /tmp/temp)
+rm /tmp/temp
 
 ## Clear caches as it is not done if there is database updates but may still
 ## be required for some frontend changes.
+## We may want to do it only on sites without updates.
+echo "Clearing caches."
 drush8 acsf-tools-ml cr
 
 ## Clear varnish caches for all sites of the factory.

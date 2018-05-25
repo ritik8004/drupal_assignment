@@ -323,10 +323,17 @@ class AlshayaApiWrapper {
     $sku_index = 4;
     $parent_index = 2;
     $status_index = 6;
+    $visibility_index = 7;
 
     while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
       // We don't deal with disabled SKUs.
-      if ($data[$status_index] == 'Disabled') {
+      if ($data[$status_index] !== 'Enabled') {
+        continue;
+      }
+
+      // This is a weird case where not visible SKU does not have any related
+      // configurable.
+      if (empty($data[$parent_index]) && $data[$visibility_index] == 'Not Visible Individually') {
         continue;
       }
 
