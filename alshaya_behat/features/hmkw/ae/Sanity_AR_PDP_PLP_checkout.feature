@@ -96,7 +96,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    And I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -140,7 +140,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I follow "الاستلام من محلاتنا"
     And I wait for AJAX to finish
@@ -172,7 +172,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I follow "الاستلام من محلاتنا"
     And I wait for AJAX to finish
@@ -221,7 +221,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I follow "الاستلام من محلاتنا"
     And I wait for the page to load

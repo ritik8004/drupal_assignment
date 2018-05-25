@@ -91,7 +91,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    And I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -141,7 +141,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I follow "اختر واستلم"
     And I wait for AJAX to finish
@@ -172,7 +172,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I follow "اختر واستلم"
     And I wait for AJAX to finish
@@ -202,11 +202,6 @@ Feature: As a guest user I should be able to
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "بناء C"
     When I fill in "edit-billing-address-address-billing-address-line2" with "2"
     Then I should see "أؤكد أنني قرأت وفهمت"
-#    When I accept terms and conditions
-#    And I wait for the page to load
-#    When I press "تابع للدفع"
-#    And I wait for the page to load
-#    Then I should see "إعادة"
 
   Scenario: As a Guest user
   whenever I click 'back to basket' link on Map view
@@ -225,7 +220,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I follow "اختر واستلم"
     And I wait for the page to load
