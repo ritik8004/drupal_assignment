@@ -8,6 +8,7 @@
   height: 100% !important;
   width: 100% !important;
   background: $modal_bg;
+  touch-action: none;
 
   .subtext {
     width: 100%;
@@ -52,7 +53,7 @@
 
 .mob-imagegallery__thumbnails__image {
   overflow: auto;
-  height: 85vh;
+  height: 75vh;
 
   .expand {
     max-width: initial;
