@@ -12,7 +12,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    And I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
 
   @hd @cod
@@ -293,11 +293,11 @@ Feature: Test various checkout scenarios for Arabic site
   select it and complete the checkout journey
     When I follow "اختر واستلم"
     And I wait for the page to load
-    When I follow "عرض الخريطة"
-    Then the "عرض الخريطة" tab should be selected
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
+    When I follow "عرض الخريطة"
+    Then the "عرض الخريطة" tab should be selected
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
     When I wait 5 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
@@ -333,11 +333,11 @@ Feature: Test various checkout scenarios for Arabic site
   I should be redirected to the basket page
     When I follow "اختر واستلم"
     And I wait for the page to load
-    When I follow "عرض الخريطة"
-    Then the "عرض الخريطة" tab should be selected
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
+    When I follow "عرض الخريطة"
+    Then the "عرض الخريطة" tab should be selected
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img"
     When I wait 5 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
