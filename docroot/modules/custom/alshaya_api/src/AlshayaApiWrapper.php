@@ -321,14 +321,13 @@ class AlshayaApiWrapper {
 
     // Data index in row.
     $sku_index = 4;
-    $state_index = 5;
     $parent_index = 2;
     $status_index = 6;
     $visibility_index = 7;
 
     while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
       // We don't deal with disabled SKUs.
-      if ($data[$status_index] !== 'Enabled' || $data[$state_index] !== 'Fully Web Ready') {
+      if ($data[$status_index] !== 'Enabled') {
         continue;
       }
 
