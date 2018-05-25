@@ -5,26 +5,13 @@
  * Install, uninstall, update function for alshaya_bbw.
  */
 
-use Symfony\Component\Yaml\Yaml;
-
 /**
  * Implements hook_update_N().
  *
  * Install the new fields.
- * Revert product_slider view to use nid instead of field_skus.
  */
 function alshaya_bbw_update_8105() {
-  // Reset sku_base_fields config from the YAML file.
-  $config_path = drupal_get_path('module', 'alshaya_bbw') . '/config/install/alshaya_bbw.sku_base_fields.yml';
-  $data = Yaml::parse($config_path);
-  \Drupal::configFactory()->getEditable('alshaya_bbw.sku_base_fields')->setData($data)->save(TRUE);
-
-  // Add base fields from the updated sku_base_fields config.
-  $fields = \Drupal::config('alshaya_bbw.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
-
-  $reverter = \Drupal::service('config_update.config_update');
-  $reverter->revert('view', 'product_slider');
+  alshaya_config_install_configs(['alshaya_bbw.sku_base_fields'], 'alshaya_bbw', 'install');
 }
 
 /**
