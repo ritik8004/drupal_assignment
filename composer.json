@@ -78,7 +78,7 @@
         "drupal/media_entity_actions": "1.x-dev",
         "drupal/jquery_minicolors": "^1.2",
         "claviska/jquery-minicolors": "^2.2",
-        "drupal/jsonapi": "1.15 as 1.4.0",
+        "drupal/jsonapi": "1.18 as 1.4.0",
         "drupal/restrict_role_login_by_ip": "^1.0"
     },
     "require-dev": {
