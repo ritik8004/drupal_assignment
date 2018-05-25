@@ -18,6 +18,7 @@ cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
 env=${target_env:2}
 
 # Get the list of all site names of the factory.
+echo "Fetching the list of sites."
 sites=$(drush8 acsf-tools-list --fields)
 
 # Loop on all site names.
@@ -29,7 +30,8 @@ do
   # For transac sites, we launch the commerce clean.
   if [ $profile = "alshaya_transac" ]
   then
-    ./reset-post-db-copy.sh $site $target_env $site.$env-alshaya.acsitefactory.com
+    echo "Execute data commerce clean on $site."
+    ./../hooks/scripts/reset-post-db-copy.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
   fi
 
 done
