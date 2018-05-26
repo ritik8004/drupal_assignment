@@ -16,3 +16,4 @@ services:
       - '@language_manager'
       - '@database'
       - '@logger.factory'
+      - '@module_handler'

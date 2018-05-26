@@ -6,6 +6,7 @@ use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
@@ -53,6 +54,13 @@ class StoresFinderUtility {
   protected $logger;
 
   /**
+   * Module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a new StoresFinderUtility object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -65,17 +73,21 @@ class StoresFinderUtility {
    *   The database connection.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               AlshayaAddressBookManager $address_book_manager,
                               LanguageManagerInterface $language_manager,
                               Connection $database,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              LoggerChannelFactoryInterface $logger_factory,
+                              ModuleHandlerInterface $module_handler) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->addressBookManager = $address_book_manager;
     $this->languageManager = $language_manager;
     $this->database = $database;
     $this->logger = $logger_factory->get('alshaya_stores_finder');
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -263,6 +275,8 @@ class StoresFinderUtility {
     else {
       $node->get('field_store_sts_label')->setValue('');
     }
+
+    $this->moduleHandler->alter('alshaya_stores_finder_store_update', $node, $store);
 
     // Set the status.
     $node->setPublished((bool) $store['status']);

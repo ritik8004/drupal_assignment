@@ -49,6 +49,7 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:advanced_page' => 'advanced page',
+    'entity.node.canonical:department_page' => 'department page',
     'entity.node.canonical:acq_promotion' => 'promotion page',
     'entity.node.canonical:static_html' => 'static page',
     'entity.user.canonical' => 'my account page',
@@ -306,15 +307,7 @@ class AlshayaGtmManager {
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
     $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
-    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
-        [
-          &$product,
-          &$attributes,
-          &$skuAttributes,
-        ]
-      );
     $attributes = array_merge($attributes, $skuAttributes);
-
     return $attributes;
   }
 
@@ -404,7 +397,12 @@ class AlshayaGtmManager {
         $attributes['gtm-dimension5'] = $parent_sku->get('attr_product_collection')->getString();
       }
     }
-
+    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
+      [
+        &$product_node,
+        &$attributes,
+      ]
+    );
     return $attributes;
   }
 
@@ -466,7 +464,12 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['node'])) {
             /** @var \Drupal\node\Entity\Node $node */
             $node = $currentRoute['route_params']['node'];
-            $routeIdentifier .= ':' . $node->bundle();
+            if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+              $routeIdentifier .= ':department_page';
+            }
+            else {
+              $routeIdentifier .= ':' . $node->bundle();
+            }
           }
           break;
 
@@ -677,6 +680,13 @@ class AlshayaGtmManager {
         if (($dimension8) && ($delivery_page)) {
           $attributes[$skuId]['gtm-dimension8'] = trim($dimension8);
         }
+
+        $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
+          [
+            &$productNode,
+            &$attributes[$skuId],
+          ]
+        );
       }
 
       $attributes['privilegeCustomer'] = !empty($cart->getExtension('loyalty_card')) ? 'Privilege Customer' : 'Regular Customer';
@@ -785,6 +795,10 @@ class AlshayaGtmManager {
    *   The term id.
    */
   public function getInnerDepthTerm(array $terms = []) {
+    if (empty($terms)) {
+      return NULL;
+    }
+
     $current_langcode = $this->languageManager->getDefaultLanguage()->getId();
     $depths = $this->database->select('taxonomy_term_field_data', 'ttfd')
       ->fields('ttfd', ['tid', 'depth_level'])
@@ -950,7 +964,7 @@ class AlshayaGtmManager {
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
-      'country' => _alshaya_country_get_site_level_country_name(),
+      'country' => function_exists('_alshaya_country_get_site_level_country_name') ? _alshaya_country_get_site_level_country_name() : '',
       'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
@@ -1029,6 +1043,12 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
+        $this->moduleHandler->invokeAll('gtm_pdp_attributes_alter',
+          [
+            &$sku_entity,
+            &$page_dl_attributes,
+          ]
+        );
         break;
 
       case 'product listing page':

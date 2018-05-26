@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ecb46f9759551a9d97834dc4f58e7fbd",
+    "content-hash": "d9a5f1fc37367d4affa2ed6cf20f7557",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -8242,17 +8242,17 @@
         },
         {
             "name": "drupal/search_api",
-            "version": "1.6.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/search_api",
-                "reference": "8.x-1.6"
+                "reference": "8.x-1.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "c590bfb9752f39087e66ea9ff6c98ad103508f0b"
+                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.8.zip",
+                "reference": "8.x-1.8",
+                "shasum": "04d7b3b680e84aad086a61fb9eb4ffe77dc278e4"
             },
             "require": {
                 "drupal/core": "^8.4"
@@ -8267,8 +8267,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1514109785",
+                    "version": "8.x-1.8",
+                    "datestamp": "1523872384",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8311,21 +8311,24 @@
         },
         {
             "name": "drupal/search_api_autocomplete",
-            "version": "1.0.0-alpha2",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/search_api_autocomplete",
-                "reference": "8.x-1.0-alpha2"
+                "reference": "8.x-1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_autocomplete-8.x-1.0-alpha2.zip",
-                "reference": "8.x-1.0-alpha2",
-                "shasum": "e1b444d6235aab1fa4fb7f6d16c3dae482b1c6b9"
+                "url": "https://ftp.drupal.org/files/projects/search_api_autocomplete-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "c108033611a2518904e75b894b9e0ad7a34bb053"
             },
             "require": {
                 "drupal/core": "~8.0",
-                "drupal/search_api": "*"
+                "drupal/search_api": "1.x"
+            },
+            "require-dev": {
+                "drupal/search_api_page": "@dev"
             },
             "type": "drupal-module",
             "extra": {
@@ -8333,11 +8336,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-alpha2",
-                    "datestamp": "1502711044",
+                    "version": "8.x-1.0",
+                    "datestamp": "1521362884",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -8347,14 +8350,20 @@
             ],
             "authors": [
                 {
-                    "name": "drunken monkey",
-                    "homepage": "https://www.drupal.org/user/205582"
+                    "name": "Thomas Seidl",
+                    "homepage": "https://www.drupal.org/u/drunken-monkey"
+                },
+                {
+                    "name": "See other contributors",
+                    "homepage": "https://www.drupal.org/node/1142202/committers"
                 }
             ],
             "description": "Adds autocomplete functionality to searches.",
             "homepage": "https://www.drupal.org/project/search_api_autocomplete",
             "support": {
-                "source": "http://cgit.drupalcode.org/search_api_autocomplete"
+                "source": "http://git.drupal.org/project/search_api_autocomplete.git",
+                "issues": "https://www.drupal.org/project/issues/search_api_autocomplete",
+                "irc": "irc://irc.freenode.org/drupal-search-api"
             }
         },
         {
