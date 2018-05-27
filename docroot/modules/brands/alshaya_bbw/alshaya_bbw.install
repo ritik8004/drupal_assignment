@@ -10,8 +10,12 @@
  *
  * Install the new fields.
  */
-function alshaya_bbw_update_8105() {
+function alshaya_bbw_update_8106() {
   alshaya_config_install_configs(['alshaya_bbw.sku_base_fields'], 'alshaya_bbw', 'install');
+
+  // Add base fields from the updated sku_base_fields config.
+  $fields = \Drupal::config('alshaya_bbw.sku_base_fields')->get('fields');
+  acq_sku_add_base_fields($fields);
 }
 
 /**
