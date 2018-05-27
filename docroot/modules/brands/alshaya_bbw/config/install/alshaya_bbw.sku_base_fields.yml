@@ -29,6 +29,16 @@ fields:
     visible_view: 0
     visible_form: 1
 
+  descriptive_name:
+    parent: 'attributes'
+    label: 'Description Name'
+    description: 'Description name attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
   form:
     parent: 'attributes'
     label: 'Form'
@@ -53,6 +63,16 @@ fields:
     parent: 'attributes'
     label: 'More info'
     description: 'More info attribute for the product.'
+    cardinality: -1
+    type: 'attribute'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
+  usage:
+    parent: 'attributes'
+    label: 'Usage'
+    description: 'Usage attribute for the product.'
     cardinality: -1
     type: 'attribute'
     configurable: 0
