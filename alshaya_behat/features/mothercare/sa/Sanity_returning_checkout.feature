@@ -76,9 +76,7 @@ Feature: To verify a returning customer is able to
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     When I fill in "edit-billing-address-address-billing-address-line2" with "1"
     When I accept terms and conditions
-    And I press "place order"
-    And I wait for the page to load
-    And I press "CancelAction_id"
+
 
 
 

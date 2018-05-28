@@ -34,12 +34,7 @@ Feature: To verify a returning customer is able to
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
-#    And I wait for AJAX to finish
-#    And I accept terms and conditions
-#    And I wait for the page to load
-#    When I press "سجل الطلبية"
-#    And I wait for the page to load
-#    And I press "CancelAction_id"
+
 
   Scenario: As a returning customer
   I should be able to place an order for CC - Cybersource
@@ -75,11 +70,6 @@ Feature: To verify a returning customer is able to
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "بناء C"
     When I fill in "edit-billing-address-address-billing-address-line2" with "2"
     Then I should see "أؤكد أنني قرأت وفهمت"
-#    When I accept terms and conditions
-#    And I wait for the page to load
-#    When I press "سجل الطلبية"
-#    And I wait for the page to load
-#    And I press "CancelAction_id"
 
 
 

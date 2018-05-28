@@ -410,6 +410,8 @@
       height: 2.1875rem;
       box-sizing: border-box;
       outline: transparent;
+      border-radius: 0;
+      appearance: none;
 
       @include breakpoint($only-mobile) {
         padding-#{$left}: 1.25rem;
@@ -1323,7 +1325,9 @@
   }
 
   .scroll-fix {
-    min-width: 12rem;
+    @include breakpoint($desktop) {
+      min-width: 13.0625rem;
+    }
   }
 
   .hours--label,

@@ -795,6 +795,10 @@ class AlshayaGtmManager {
    *   The term id.
    */
   public function getInnerDepthTerm(array $terms = []) {
+    if (empty($terms)) {
+      return NULL;
+    }
+
     $current_langcode = $this->languageManager->getDefaultLanguage()->getId();
     $depths = $this->database->select('taxonomy_term_field_data', 'ttfd')
       ->fields('ttfd', ['tid', 'depth_level'])
@@ -960,7 +964,7 @@ class AlshayaGtmManager {
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
-      'country' => _alshaya_country_get_site_level_country_name(),
+      'country' => function_exists('_alshaya_country_get_site_level_country_name') ? _alshaya_country_get_site_level_country_name() : '',
       'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',

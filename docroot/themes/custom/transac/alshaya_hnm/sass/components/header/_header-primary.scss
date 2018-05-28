@@ -17,6 +17,18 @@ header {
     @include breakpoint($only-mobile) {
       margin: 0.625rem 0;
       height: 2.25rem;
+
+      html[lang=ar] & {
+        height: 2.25rem;
+      }
+    }
+
+    .block-views-exposed-filter-blocksearch-page {
+      @include breakpoint($only-mobile) {
+        html[lang=ar] & {
+          top: 3rem;
+        }
+      }
     }
   }
 
