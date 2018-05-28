@@ -3,10 +3,10 @@ dependencies:
     - field.field.node.store.field_brand
 content:
   field_brand:
-    weight: 7
-    label: inline
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
+    type: string_textfield
+    weight: 20
     region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
