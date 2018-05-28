@@ -47,7 +47,6 @@ $primary_input_border: $warm-grey-one; // Global form input border
 $primary_input_disabled: $greyish;
 $primary_input_focus_border: $peacock-blue;
 $primary_input_inline_error: $red-error;
-$primary_btn_bg: $black;
 
 // Dropdown.
 $primary_dropdown_bg: $white;
@@ -360,6 +359,7 @@ $checkout_login_tab_border: $warm-grey-two;
 $checkout_login_tab_text: $black;
 $checkout_login_border_active: $peacock-blue;
 $checkout_section_title_border: $warm-grey-one;
+$checkout_login_btn_bg: $primary_btn_bg;
 
 //checkout layout
 $checkout_securely_icon_bg: $hot-pink;
