@@ -122,9 +122,7 @@ function alshaya_install() {
     ->save();
 
   // TODO: List the modules common for transac and non-transac profiles.
-  $modules = [
-    'restrict_role_login_by_ip',
-  ];
+  $modules = [];
 
   global $_alshaya_modules_installed;
   $_alshaya_modules_installed = [];
