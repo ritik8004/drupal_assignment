@@ -1,10 +1,4 @@
 .order-confirmation {
-  .order-summary {
-    @include breakpoint($tablet) {
-      background-color: $checkout_confirm_order_summary_row;
-    }
-  }
-
   .product--count {
     td {
       @include icon(chevronup, after) {
