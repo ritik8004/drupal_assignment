@@ -8,6 +8,19 @@
 /**
  * Implements hook_update_N().
  *
+ * Install the new fields.
+ */
+function alshaya_bbw_update_8105() {
+  alshaya_config_install_configs(['alshaya_bbw.sku_base_fields'], 'alshaya_bbw', 'install');
+
+  // Add base fields from the updated sku_base_fields config.
+  $fields = \Drupal::config('alshaya_bbw.sku_base_fields')->get('fields');
+  acq_sku_add_base_fields($fields);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update default items from cross sell/up sell carausel.
  */
 function alshaya_bbw_update_8104() {
@@ -66,6 +79,10 @@ function alshaya_bbw_update_8103() {
  * Implements hook_install().
  */
 function alshaya_bbw_install() {
+  // Add fields to store the values from attributes as fields.
+  $fields = \Drupal::config('alshaya_bbw.sku_base_fields')->get('fields');
+  acq_sku_add_base_fields($fields);
+
   \Drupal::moduleHandler()->loadInclude('alshaya_bbw', 'inc', 'alshaya_bbw.content');
 
   // Change region for main navigation block.
