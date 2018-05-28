@@ -17,6 +17,6 @@
  * @param string $config_name
  *   Config name for which data needs to be alter.
  */
-function hook_alshaya_config_subscriber_alter(array &$data, $config_name) {
+function hook_alshaya_config_save_alter(array &$data, $config_name) {
 
 }
