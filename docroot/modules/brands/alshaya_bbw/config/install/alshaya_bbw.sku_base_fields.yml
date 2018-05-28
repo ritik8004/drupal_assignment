@@ -9,6 +9,16 @@ fields:
     visible_view: 0
     visible_form: 1
 
+  fragrance_description:
+    parent: 'attributes'
+    label: 'Fragrance Description'
+    description: 'Fragrance description attribute for the product.'
+    cardinality: 1
+    type: 'text_long'
+    configurable: 0
+    visible_view: 0
+    visible_form: 1
+
   fragrance_category:
     parent: 'attributes'
     label: 'Fragrance Category'
@@ -45,16 +55,6 @@ fields:
     description: 'Form attribute for the product.'
     cardinality: 1
     type: 'string'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  fragrance_description:
-    parent: 'attributes'
-    label: 'Fragrance Description'
-    description: 'Fragrance description attribute for the product.'
-    cardinality: 1
-    type: 'text_long'
     configurable: 0
     visible_view: 0
     visible_form: 1
