@@ -74,6 +74,9 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     // Get recursive diff of config data with delete-overrides.
     $data = DiffArray::diffAssocRecursive($data, $override_deletions);
 
+    // Allow other modules to alter the data.
+    $this->moduleHandler->alter('alshaya_config_save', $data, $config->getName());
+
     // Re-write the config to make sure the overrides are not lost.
     $this->configStorage->write($config->getName(), $data);
     Cache::invalidateTags($config->getCacheTags());

@@ -268,3 +268,25 @@ function alshaya_stores_finder_set_default_marker_icon($name = 'alshaya_stores_f
 function alshaya_stores_finder_alshaya_master_post_drupal_install() {
   alshaya_stores_finder_set_default_marker_icon(\Drupal::config('alshaya.installed_brand')->get('module'));
 }
+
+/**
+ * Implements hook_alshaya_config_save_alter().
+ */
+function alshaya_stores_finder_alshaya_config_save_alter(array &$data, $config_name) {
+  if ($config_name == 'views.view.stores_finder') {
+    $country_code = strtolower(_alshaya_custom_get_site_level_country_code(TRUE));
+    $marker_path = \Drupal::configFactory()
+      ->get('alshaya_stores_finder.settings')
+      ->get('marker.url');
+
+    $view_displays = ['attachment_1', 'page_3', 'page_2'];
+    foreach ($view_displays as $view_display) {
+      if (isset($data['display'][$view_display]['display_options']['filters']['field_latitude_longitude_proximity'])) {
+        $data['display'][$view_display]['display_options']['filters']['field_latitude_longitude_proximity']['expose']['geocoder_plugin_settings']['settings']['component_restrictions']['country'] = $country_code;
+      }
+      if (isset($data['display'][$view_display]['display_options']['style']['options']['google_map_settings'])) {
+        $data['display'][$view_display]['display_options']['style']['options']['google_map_settings']['marker_icon_path'] = $marker_path;
+      }
+    }
+  }
+}
