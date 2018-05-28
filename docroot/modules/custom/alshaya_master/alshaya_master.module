@@ -827,7 +827,7 @@ function _alshaya_config_initialize_amp($theme_name) {
  *   Brand theme name to enable.
  */
 function _alshaya_config_initialize_brand_theme($brand_theme) {
-  // Enable and set alshaya_hnm as default theme.
+  // Enable and set brand theme as default theme.
   \Drupal::service('theme_handler')->install([$brand_theme], TRUE);
   \Drupal::service('theme_handler')->setDefault($brand_theme);
 

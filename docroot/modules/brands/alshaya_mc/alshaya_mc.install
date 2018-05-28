@@ -247,7 +247,7 @@ function alshaya_mc_update_8301() {
 function alshaya_mc_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_mc', 'inc', 'alshaya_mc.content');
 
-  // Enable brand theme and set the site logo, favicon icon and email logo path.
+  // Enable and set alshaya_mothercare as default theme and set the site logo, favicon icon and email logo path.
   _alshaya_config_initialize_brand_theme('alshaya_mothercare');
 
   // Translate store finder block's link title.
