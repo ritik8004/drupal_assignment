@@ -1245,10 +1245,17 @@ html[lang=ar] {
     position: absolute;
     top: 1.25rem;
     #{$right}: 1.125rem;
+    opacity: 0.2;
 
     html[lang=ar] & {
       background: url(/themes/custom/transac/alshaya_white_label/imgs/cards/cash-on-delivery-ar.svg) no-repeat;
       left: 0.8rem;
+    }
+  }
+
+  &.plugin-selected {
+    &::after {
+      opacity: 1;
     }
   }
 }
