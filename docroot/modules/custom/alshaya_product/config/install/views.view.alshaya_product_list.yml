@@ -640,7 +640,7 @@ display:
             title: All
           title_enable: false
           title: ''
-          default_argument_type: node
+          default_argument_type: promotion_node_id
           default_argument_options: {  }
           default_argument_skip_url: false
           summary_options: {  }
