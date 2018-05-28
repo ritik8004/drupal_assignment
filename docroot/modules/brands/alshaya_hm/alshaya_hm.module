@@ -132,7 +132,7 @@ function alshaya_hm_get_sku_images($sku) {
   $images = [];
   if ($sku instanceof SKU) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main']);
+    $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main'], FALSE);
   }
   return $images;
 }

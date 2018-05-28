@@ -12,15 +12,10 @@
     a {
       text-align: #{$right};
       width: 64%;
+      max-width: 100%;
 
       @include breakpoint($only-mobile) {
         margin-#{$left}: 2.5rem;
-      }
-
-      @include breakpoint($only-tablet) {
-        img {
-          width: 46%;
-        }
       }
     }
 

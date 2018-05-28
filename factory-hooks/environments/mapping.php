@@ -146,6 +146,20 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'hmae_prod'
       ],
     ],
+    // BathBodyWorks KW.
+    'bbwkw' => [
+      'default' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwkw_test',
+      ],
+    ],
+    // BathBodyWorks SA.
+    'bbwsa' => [
+      'default' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwsa_test',
+      ],
+    ],
     // BathBodyWorks AE.
     'bbwae' => [
       'default' => [
