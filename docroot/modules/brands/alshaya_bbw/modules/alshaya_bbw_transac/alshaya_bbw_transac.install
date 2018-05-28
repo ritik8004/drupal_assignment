@@ -6,6 +6,71 @@
  */
 
 use Drupal\Core\Site\Settings;
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add index to newly added fields.
+ */
+function alshaya_bbw_transac_update_8002() {
+  $alshaya_search_indexes = [
+    'product' => 'search_api.index.product',
+    'acquia_search_index' => 'search_api.index.acquia_search_index',
+  ];
+
+  // List of index required fields.
+  $index_config_fields = [
+    'fragrance_name' => [
+      'label' => 'Fragrance Name',
+    ],
+    'fragrance_category' => [
+      'label' => 'Fragrance Category',
+    ],
+    'collection_1' => [
+      'label' => 'Product Type',
+    ],
+    'descriptive_name' => [
+      'label' => 'Descriptive Name',
+    ],
+    'form' => [
+      'label' => 'Form',
+    ],
+  ];
+
+  foreach ($alshaya_search_indexes as $index_key => $search_index) {
+    $config = \Drupal::configFactory()->getEditable($search_index);
+
+    // Add all fields to index on both SOLR & DB.
+    foreach ($index_config_fields as $field_key => $field) {
+      $index_field = [
+        'label' => $field['label'],
+        'datasource_id' => 'entity:node',
+        'property_path' => 'field_skus:entity:attr_' . $field_key,
+        'type' => 'string',
+        'dependencies' => [
+          'config' => [
+            'field.storage.node.field_skus',
+          ],
+          'module' => [
+            'acq_sku',
+          ],
+        ],
+      ];
+
+      $config->set('field_settings.attr_' . $field_key, $index_field);
+      $config->save();
+    }
+
+    $index = Index::load($index_key);
+
+    // Re-index all items.
+    $index->reindex();
+
+    // Save index to reflect new form field.
+    $index->save();
+  }
+}
 
 /**
  * Implements hook_update_N().
@@ -25,7 +90,7 @@ function alshaya_bbw_transac_update_8001() {
  */
 function alshaya_bbw_transac_install() {
   // Add fields to store the values from attributes as fields.
-  $fields = \Drupal::config('alshaya_bbw.sku_base_fields')->get('fields');
+  $fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
 
   \Drupal::moduleHandler()->loadInclude('alshaya_bbw_transac', 'inc', 'alshaya_bbw_transac.content');
