@@ -4,29 +4,12 @@
 
 header {
   .c-header__region {
-    @include breakpoint($only-tablet) {
-      margin-top: 1.125rem;
-      padding-bottom: 1.125rem;
-    }
-
     @include breakpoint($only-mobile) {
       height: 2.25rem;
     }
   }
 
   .region__header {
-    > div {
-      @include breakpoint($desktop) {
-        width: 33.33%;
-      }
-    }
-
-    .site-branding {
-      @include breakpoint($upto-desktop) {
-        float: $left;
-      }
-    }
-
     .price {
       .price-amount {
         font-family: $alshaya-thin;
@@ -35,92 +18,92 @@ header {
     }
 
     @include breakpoint($desktop) {
-      .block-system-branding-block {
-        .site-brand-home {
-          min-width: 20.5rem;
-        }
-      }
-
       .block-views-exposed-filter-blocksearch-page {
         form {
           margin-top: -0.25rem;
         }
 
-        input[type="text"] {
+        input[type="text"],
+        input[type="search"] {
           width: 100%;
           font-size: 0.875rem;
+          padding-#{$right}: 2.1875rem;
         }
       }
     }
 
     .block-views-exposed-filter-blocksearch-page {
-      @include breakpoint($tablet) {
-        input[type="text"] {
-          padding-#{$right}: 2.5rem;
-        }
-      }
-
       @include breakpoint($only-tablet) {
-        input[type="text"] {
+        display: none;
+
+        input[type="text"],
+        input[type="search"] {
           width: 100%;
           background-color: transparent;
           font-size: 0.875rem;
         }
-
-        .form--inline {
-          border: 0;
-          border-bottom: 1px solid $primary_search_border;
-        }
       }
 
       @include breakpoint($only-mobile) {
-        top: 4.8rem;
+        top: 2.9rem;
+
+        html[lang=ar] & {
+          top: 3rem;
+        }
       }
     }
   }
 
   #block-alshaya-white-label-search,
   .block-views-exposed-filter-blocksearch-page {
-    @include breakpoint($only-tablet) {
+    @include breakpoint($upto-desktop) {
       #{$right}: 6.5625rem;
       margin-top: -3px;
       bottom: auto;
-      #{$left}: auto;
+      #{$left}: 0;
+      width: 100%;
+      top: 3.5rem;
+      display: none !important;
+
+      &.show-search {
+        display: block !important;
+      }
     }
 
     .form--inline {
       width: 12.5em;
-      height: 2.5rem;
-      border: 1px solid $primary_search_border;
       position: relative;
+      height: 2.5rem;
 
-      @include breakpoint($only-mobile) {
+      @include breakpoint($upto-desktop) {
         width: 100%;
       }
     }
 
-    input[type="text"] {
+    input[type="text"],
+    input[type="search"] {
       @include arabic-letter-spacing;
 
       padding: 0.4375rem;
       padding-#{$left}: 0.4375rem;
       padding-bottom: 0;
       max-width: 17.5rem;
-      border: none;
+      border: 1px solid $primary_search_border;
       background-image: none;
-      letter-spacing: 1px;
       color: $primary_search_input;
+      height: 2.5rem;
+      box-sizing: border-box;
+      text-transform: none;
 
-      @include breakpoint($only-mobile) {
+      @include breakpoint($upto-desktop) {
         padding: 0.6rem;
-        vertical-align: bottom;
+        vertical-align: middle;
         font-size: 0.875rem;
-        line-height: 1.36;
-        letter-spacing: 0.5px;
         max-width: 100%;
       }
 
       &::placeholder {
+        font-size: 0.875rem !important;
         color: $primary_search_input_placeholder;
         text-transform: capitalize;
       }
@@ -128,8 +111,9 @@ header {
 
     #edit-submit-search,
     #edit-submit-search--2 {
-      background: url('../imgs/icons/ic-search-store.svg') 5px 1px no-repeat;
+      background-position: 5px 3px;
       position: absolute;
+      background-color: $primary_search_btn_icon;
       #{$right}: 0;
       top: 0;
       z-index: 1;
@@ -138,8 +122,8 @@ header {
         transform: rotate(90deg);
       }
 
-      @include breakpoint($only-tablet) {
-        margin-#{$left}: -0.3125rem;
+      @include breakpoint($upto-desktop) {
+        display: none;
       }
     }
   }
@@ -166,33 +150,40 @@ header {
         top: -0.375rem;
       }
 
-      display: inline-block;
       width: 2.125rem;
       height: 2.125rem;
-      vertical-align: middle;
 
       @include breakpoint($only-mobile) {
-        background-size: 1.92rem;
-        background-position: $right;
+        width: 1.75rem;
+        height: 1.75rem;
+        background-size: contain;
+        margin-bottom: -0.25rem;
       }
     }
 
     .cart-link-total {
-      margin-top: 0.81rem;
+      margin-top: 0.8125rem;
     }
 
     .quantity {
       font-size: 0.75rem;
-      bottom: -0.325rem;
+      bottom: -0.3125rem;
       line-height: 1.87;
-      #{$left}: -0.2rem;
+      #{$left}: -0.1875rem;
+
+      @include breakpoint($only-mobile) {
+        line-height: 1.7;
+        width: 1.125rem;
+        height: 1.125rem;
+        bottom: -0.4375rem;
+      }
     }
   }
 
   @include breakpoint($only-tablet) {
     #mini-cart-wrapper {
       float: $right;
-      margin-top: -0.79rem;
+      margin-top: -0.8125rem;
 
       .cart-link-total {
         display: none;
@@ -214,12 +205,6 @@ header {
     @include breakpoint($only-tablet) {
       margin: 0;
     }
-
-    .menu--mobile-navigation {
-      @include breakpoint($upto-desktop) {
-        position: initial;
-      }
-    }
   }
 
   .block-system-menublock {
@@ -234,13 +219,18 @@ header {
 }
 
 /*
-	SITE HEADER - MOBILE MENU
+	SITE HEADER - MOBILE VIEW
 */
 
 .block-views-exposed-filter-blocksearch-page {
-  form {
-    @include breakpoint($only-mobile) {
+  @include breakpoint($upto-desktop) {
+    form {
       box-shadow: 0 0.5px 0 0 $header_branding_shadow;
+      border: 0.5rem solid $header_search_border_mobile;
+    }
+
+    .form-item-keywords {
+      width: 100%;
     }
   }
 }
@@ -254,154 +244,87 @@ header {
 
   @include breakpoint($upto-desktop) {
     a {
-      @include arabic-letter-spacing;
-
-      color: $primary_text;
-      letter-spacing: 1px;
       text-transform: capitalize;
     }
 
-    .store {
-      position: absolute;
-      top: 0.875rem;
-      #{$right}: 0.375rem;
-      font-size: 0;
-      margin-top: 0;
-      padding: 0.3125rem 0.875rem 0.664rem 0.625rem;
-
-      &:hover {
-        background: none;
-
-        &::before {
-          color: $header_c_menu_icon_color;
-        }
-      }
-
-      @include icon(mappin) {
-        color: $header_c_menu_icon_color;
-        #{$left}: -0.1rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        padding-#{$right}: 0;
-        #{$right}: 1.25rem;
-        position: relative;
-        font-size: 0.75rem;
-        top: 0;
-        #{$right}: 0;
-        padding: 0;
-      }
-
-      @include breakpoint($upto-desktop) {
-        html[lang=ar] & {
-          font-size: 1px;
-        }
-      }
-    }
-
     .mobile--menu {
-      float: $left;
-      padding: 0.625rem 0.5rem;
-      margin-top: -0.4rem;
+      padding: 0.3125rem;
       position: absolute;
-      top: 1.125rem;
+      top: 1rem;
       font-size: 0;
+      margin-#{$left}: 0.9375rem;
 
       &::before {
-        width: 1.875rem;
-        height: 1.875rem;
+        width: 2.125rem;
+        height: 2.125rem;
+        background-size: cover;
+        margin-#{$right}: 0;
       }
     }
 
-    .mobile-search {
-      float: $right;
-      margin-#{$right}: 1.5625rem;
-      position: absolute;
-      top: 1.125rem;
-      #{$right}: 2.5rem;
-      font-size: 0;
-      padding-top: 0.3125rem;
-    }
-  }
-
-  @include breakpoint($only-tablet) {
     .mobile--search {
-      display: none;
+      padding: 0.3125rem;
+      display: block;
+      font-size: 0;
+      position: absolute;
+      top: 0.6rem;
+      #{$left}: 3.8125rem;
+
+      &::before {
+        background: url('../imgs/assets/search.svg') no-repeat;
+        background-size: cover;
+        width: 2.125rem;
+        height: 2.125rem;
+        margin-#{$right}: 0;
+      }
     }
 
     .store {
-      top: 1.125rem;
-      #{$right}: 1.25rem;
-
-      html[lang='ar'] & {
-        left: 1.6rem;
-      }
-    }
-
-    .mobile--menu {
-      padding: 0.41rem 1.15rem;
-      padding-#{$right}: 0;
+      font-size: 0;
+      position: absolute;
+      #{$right}: 3.8rem;
+      top: 0.8rem;
+      padding: 0.625rem;
+      margin: 0;
     }
   }
 
   @include breakpoint($only-mobile) {
-    .store {
-      &.is-active {
-        &::before {
-          color: $header_c_menu_icon_text;
-        }
-      }
-
-      html[lang=ar] & {
-        font-size: 0.75rem;
-      }
-    }
-
-    .mobile--search {
-      float: $right;
-      position: relative;
-      font-size: 0.75rem;
-      padding: 0;
-      top: 0;
-      #{$left}: 0;
-
-      html[lang=ar] & {
-        font-size: 0.75rem;
-      }
-    }
-
     li {
-      &.search-active {
-        a.mobile--search {
-          width: 6.25rem;
-          display: block;
-          color: $primary_search_bg;
+      .mobile--menu {
+        top: 0.625rem;
+        margin-#{$left}: 0;
 
-          &::before {
-            color: $primary_search_bg;
-
-            html[lang=ar] & {
-              transform: rotate(90deg);
-            }
-          }
+        &::before {
+          width: 1.75rem;
+          height: 1.75rem;
         }
       }
 
       .mobile--search {
-        display: inline-block;
-        color: $primary_search_input;
+        top: 0.5rem;
+        #{$left}: 2.1875rem;
+        #{$right}: inherit;
 
         &::before {
-          color: $primary_search_btn_icon;
-          width: 1.875rem;
-          height: 1.875rem;
-          margin-right: 0;
-          left: 0;
-          top: -0.125rem;
+          content: '';
+          font-size: 0;
+          width: 1.75rem;
+          height: 1.75rem;
+        }
+      }
 
-          html[lang=ar] & {
-            transform: rotate(90deg);
-          }
+      .store {
+        #{$right}: 1.75rem;
+        padding: 0.5rem;
+        top: 0.5125rem;
+
+        &:hover {
+          background: none;
+        }
+
+        &::before {
+          font-size: 1.5rem;
         }
       }
     }
@@ -415,20 +338,6 @@ header {
 .menu--mobile-navigation {
   @include breakpoint($only-mobile) {
     height: 2.187rem;
-
-    .mobile--menu {
-      position: relative;
-      top: 0;
-      padding: 0 0.625rem;
-      font-size: 0.75rem;
-      color: $primary_text;
-      margin-top: 0;
-
-      &::before {
-        margin-top: -0.4rem;
-        margin-#{$right}: 0.312rem;
-      }
-    }
   }
 }
 
@@ -531,7 +440,6 @@ header {
           letter-spacing: 0.5px;
           line-height: 1.69;
           text-transform: uppercase;
-          color: $mm_l1_link !important;
         }
 
         p {
@@ -555,7 +463,6 @@ header {
         }
 
         a {
-          color: $mm_l2_link !important;
           font-size: 0.875rem;
         }
       }
@@ -590,7 +497,6 @@ header {
     @include arabic-letter-spacing;
 
     font-size: 0.875rem;
-    letter-spacing: 1px;
     color: $mm_l1_link;
   }
 
@@ -600,7 +506,6 @@ header {
     font-family: $alshaya-thin;
     text-transform: capitalize;
     font-weight: normal;
-    color: $mm_l1_link;
     display: block;
     font-size: 0.875rem;
     letter-spacing: 1px;
@@ -621,7 +526,6 @@ header {
 
   .menu--three__list-item {
     > .menu-two__link-wrapper {
-      border-bottom: 1px solid $mm_l1_border;
       margin-left: 0 !important;
       margin-right: 0 !important;
     }
@@ -638,7 +542,6 @@ header {
     margin-#{$right}: 0.51rem;
 
     @include icon(chevron#{$right}, after) {
-      color: $header_c_menu_icon_color;
       font-size: 2rem;
       display: inline-block;
     }
@@ -662,10 +565,6 @@ header {
   .menu--two__list,
   .menu--three__list,
   .menu--four__list {
-    @include breakpoint ($upto-desktop) {
-      background-color: $mm_bg;
-    }
-
     @include breakpoint ($only-tablet) {
       width: 20rem;
     }
@@ -673,8 +572,6 @@ header {
 }
 
 .mobile--close {
-  background: $header_mobile_menu_close_bg;
-
   span {
     @include icon(close) {
       width: 1.563rem;
@@ -691,7 +588,6 @@ header {
 .toggle--sign {
   @include arabic-letter-spacing;
 
-  background: $header_toggle_sign_default;
   font-size: 0.875rem;
   font-family: $alshaya-thin;
   font-weight: normal;
@@ -736,7 +632,7 @@ header {
       color: $header_c_menu_icon_text;
 
       .logged-out & {
-        padding: 0.9rem 0.25rem;
+        padding: 1rem 0.25rem;
       }
 
       html[lang=ar] & {
@@ -766,7 +662,6 @@ header {
   }
 
   .active {
-    color: $header_c_menu_icon_text;
     font-family: $alshaya-bold;
   }
 }
@@ -804,62 +699,72 @@ header {
   }
 }
 
-.site-brand-home {
-  margin: 0;
-
-  @include breakpoint($only-mobile) {
-    max-width: 100%;
-  }
-
-  a {
-    max-width: 100%;
-
-    @include breakpoint($upto-desktop) {
-      margin-#{$left}: 2.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      margin: 0 auto;
-      text-align: center;
-      padding-top: 0.5rem;
-    }
-
-    .ie & {
-      display: block;
-    }
-  }
-}
-
+/*
+	SITE HEADER - LOGO
+*/
 header .region__header {
-  @include breakpoint($only-mobile) {
-    .block-system-branding-block {
-      width: 74%;
-
-      a {
-        margin-#{$left}: 0;
-      }
-    }
-  }
-}
-
-.block-system-branding-block {
-  .site-brand-home {
-    img {
-      html[lang="ar"] & {
-        width: auto;
-        height: auto;
-        max-width: 100%;
-      }
-    }
-
+  .block-system-branding-block {
     @include breakpoint($only-mobile) {
-      img {
-        width: 11.25rem;
-        height: 1.125rem;
+      width: 100%;
+    }
+
+    .site-brand-home {
+      @include breakpoint($desktop) {
+        margin-#{$right}: 1.25rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        html[lang="ar"] & {
+          width: 100%;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin-#{$left}: 0.9375rem;
 
         html[lang="ar"] & {
-          width: 9.0625rem;
-          height: 2.0625rem;
+          margin-#{$left}: 0.5625rem;
+        }
+      }
+
+      a {
+        margin: auto;
+        max-width: 21.875rem;
+
+        @include breakpoint($only-tablet) {
+          margin-top: 0.3125rem;
+
+          html[lang="ar"] & {
+            max-width: 15.8125rem;
+            margin-top: 0;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          max-width: 11.25rem;
+          margin-top: 0.125rem;
+
+          html[lang="ar"] & {
+            max-width: 10rem;
+          }
+        }
+      }
+
+      img {
+        html[lang="ar"] & {
+          width: auto;
+          height: auto;
+          max-width: 100%;
+        }
+
+        @include breakpoint($only-tablet) {
+          width: 100%;
+
+          html[lang="ar"] & {
+            max-width: 100%;
+            margin-top: -0.625rem;
+          }
         }
       }
     }
@@ -870,43 +775,6 @@ header .region__header {
   @include breakpoint($desktop) {
     border-top: none;
     border-bottom: none;
-  }
-}
-
-html[lang='ar'] {
-  .block-system-branding-block {
-    @include breakpoint($only-mobile) {
-      width: 54%;
-
-      .site-brand-home {
-        max-width: 100%;
-
-        a {
-          margin-top: 5px;
-        }
-      }
-    }
-
-    .site-brand-home {
-      @include breakpoint($only-tablet) {
-        width: 16.94rem;
-        margin-top: -0.625rem;
-
-        img {
-          vertical-align: middle;
-        }
-      }
-    }
-  }
-
-  header {
-    .block-cart-mini-block {
-      .cart-link {
-        @include breakpoint($only-mobile) {
-          margin-top: -7px;
-        }
-      }
-    }
   }
 }
 
@@ -924,18 +792,6 @@ html[lang='ar'] {
   }
 }
 
-@include breakpoint($only-tablet) {
-  .mobile--overlay {
-    .block-views-exposed-filter-blocksearch-page {
-      input[type="text"] {
-        &::placeholder {
-          color: transparent;
-        }
-      }
-    }
-  }
-}
-
 .block-alshaya-main-menu {
   .active--menu--links {
     li {
@@ -944,7 +800,6 @@ html[lang='ar'] {
           a {
             &.menu--one__link {
               border: none;
-              color: $mm_l1_link;
               border-top: 2px solid transparent;
             }
           }
@@ -962,6 +817,22 @@ html[lang='ar'] {
           }
         }
       }
+    }
+  }
+}
+
+.highlights {
+  .title {
+    display: none;
+  }
+
+  .hightlight__title {
+    text-transform: uppercase;
+  }
+
+  .hightlight__description {
+    html[lang="ar"] & {
+      line-height: 1.4;
     }
   }
 }

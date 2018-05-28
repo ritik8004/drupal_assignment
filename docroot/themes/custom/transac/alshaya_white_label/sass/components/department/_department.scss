@@ -1,6 +1,11 @@
 .c-department {
   margin-top: 1.75rem;
 
+  @include breakpoint($only-mobile) {
+    padding-#{$left}: 0;
+    padding-#{$right}: 0;
+  }
+
   .c-content__region {
     @include breakpoint($tablet) {
       flex-direction: column-reverse;
@@ -53,6 +58,23 @@
     font-family: $alshaya-bold;
     text-transform: lowercase;
     color: $title;
+  }
+
+  @include breakpoint($only-mobile) {
+    .c-content__body {
+      padding-#{$left}: 0;
+      padding-#{$right}: 0;
+    }
+
+    .c-content__slider {
+      margin-bottom: 0.75rem;
+      min-height: auto;
+    }
+
+    .term-description-mobile-only {
+      padding-#{$left}: 0.5rem;
+      padding-#{$right}: 0.5rem;
+    }
   }
 }
 

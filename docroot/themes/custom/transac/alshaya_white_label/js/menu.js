@@ -52,7 +52,7 @@
         $(this).parents('.menu__list').first().toggleClass('menu__list--active');
       });
 
-      var $menuBackFirst = $('.menu--two__list > .back--link');
+      var $menuBackFirst = $('.menu--two__list > .menu__links__wrapper > .back--link');
       $menuBackFirst.on('click', function () {
         $('.menu--one__list-item.has-child').removeClass('not-active active-menu');
       });
@@ -75,6 +75,7 @@
       $('.c-menu-primary .mobile--search').off().on('click', function (e) {
         e.preventDefault();
         $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle().toggleClass('show-search');
+        $('.c-header__region .block-views-exposed-filter-blocksearch-page input.ui-autocomplete-input').focus();
         $(this).parent().toggleClass('search-active');
       });
 

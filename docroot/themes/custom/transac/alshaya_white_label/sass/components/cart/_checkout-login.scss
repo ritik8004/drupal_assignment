@@ -21,6 +21,31 @@
       padding-top: 0;
       padding-bottom: 0.6em;
     }
+
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 2rem;
+    }
+  }
+
+  a.back-link {
+    display: none;
+
+    @include breakpoint($only-mobile) {
+      display: block;
+      position: absolute;
+      width: 2.063rem;
+      height: 2.375rem;
+      z-index: 1;
+
+      @include icon(arrowup, before) {
+        position: absolute;
+        #{$left}: -0.5rem;
+        top: -3px;
+        color: $checkout_mobile_back_link_icon;
+        font-size: 2.125rem;
+        transform: rotate(270deg);
+      }
+    }
   }
 
   .multistep-checkout {
@@ -99,68 +124,77 @@
   }
 
   #edit-login-tabs {
-    font-size: 0;
-    margin-top: 0.6rem;
+    margin-top: 1rem;
 
     @include breakpoint($tablet) {
       display: none;
     }
   }
 
-  .tab-new-customer {
-    margin-#{$right}: 2%;
-  }
-
   .tab {
     padding: 0.5rem 1rem;
-    border: 1px solid $checkout_login_tab_border;
+    border: none;
     display: inline-block;
-    color: $checkout_login_tab_text;
-    font-size: 0.75rem;
-    width: 49%;
-    height: 3.125rem;
-    vertical-align: top;
+    font-size: 0.875rem;
+    width: 100%;
+    height: 2.5rem;
     text-align: center;
+    background: $checkout_login_btn_bg;
 
     &.tab-returning-customer {
+      background: $checkout_login_returning_customer_btn_bg;
+
+      span {
+        color: $content_link_color;
+      }
+
       html[lang=ar] & {
         line-height: 1.5;
         vertical-align: middle;
       }
     }
 
-    &.active {
-      border: 2px solid $checkout_login_tab_border_active;
-      color: $checkout_login_tab_text_active;
-      font-weight: bold;
-    }
-
-    &.active--tab--head {
-      color: $checkout_login_tab_text_active;
-      font-weight: bold;
-      border: 2px solid $checkout_login_tab_border_active;
+    &.tab-separator {
+      background: none;
+      color: $checkout_login_content_mobile;
+      font-size: 1rem;
     }
 
     span {
-      max-width: 4.75rem;
-      display: block;
-      margin: auto;
+      color: $checkout_login_btn_txt;
+      font-family: $alshaya-bold;
+      text-transform: lowercase;
+      line-height: 1.8;
+    }
+  }
 
-      html[lang=ar] & {
-        max-width: 6.75rem;
+  .tab-new-customer {
+    margin-#{$right}: 2%;
+    padding: 0;
+
+    @include breakpoint($tablet) {
+      padding: 0.5rem 1rem;
+    }
+
+    a {
+      display: block;
+      padding: 0.5rem 1rem;
+
+      @include breakpoint($tablet) {
+        padding: 0;
       }
     }
   }
 
-  .tabs--content.active {
-    @include breakpoint($only-mobile) {
-      #edit-checkout-guest,
-      #edit-checkout-login {
-        display: none;
-
-        &.active {
-          display: block;
-        }
+  .tabs--content {
+    .selected-tab-title {
+      @include breakpoint($only-mobile) {
+        font-size: 1rem;
+        border-bottom: 1px solid $checkout_section_border;
+        width: 100%;
+        display: inline-block;
+        padding-bottom: 0.5rem;
+        text-transform: lowercase;
       }
     }
   }

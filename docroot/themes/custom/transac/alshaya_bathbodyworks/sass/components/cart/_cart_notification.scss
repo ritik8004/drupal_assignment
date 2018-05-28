@@ -1,6 +1,11 @@
 #cart_notification {
   @include breakpoint($only-mobile) {
     #{$right}: 0.15rem;
+    top: 3.2rem;
+
+    &.has--notification::before {
+      #{$right}: 0.75rem;
+    }
   }
 
   @include breakpoint($only-tablet) {

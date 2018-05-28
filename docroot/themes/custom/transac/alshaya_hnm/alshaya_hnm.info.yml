@@ -27,3 +27,8 @@ libraries:
 
 ckeditor_stylesheets:
   - css/ckeditor.css
+
+libraries-override:
+  alshaya_white_label/convert_to_select2:
+    js:
+      js/convert_to_select2.js: js/convert_to_select2.js

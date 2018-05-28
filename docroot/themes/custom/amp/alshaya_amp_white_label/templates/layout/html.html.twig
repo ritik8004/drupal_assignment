@@ -42,8 +42,14 @@
     <js-placeholder token="{{ placeholder_token|raw }}">
     <script async src="https://cdn.ampproject.org/v0.js"></script>
     <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
+    {# For the AMP Analytics. #}
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
   </head>
   <body{{ attributes.addClass('amp') }}>
+    {# Google Tag Manager. #}
+    {% if gtm_id %}
+      <amp-analytics config="https://www.googletagmanager.com/amp.json?id={{ gtm_id }}&gtm.url=SOURCE_URL" data-credentials="include"></amp-analytics>
+    {% endif %}
     {{ page_top }}
     {{ page }}
     {{ page_bottom }}

@@ -9,6 +9,10 @@
     .views-row {
       position: relative;
 
+      @include breakpoint($only-mobile) {
+        margin: 0 0.3125rem;
+      }
+
       .ajax-progress-throbber {
         position: absolute;
         #{$left}: 40%;
@@ -367,10 +371,15 @@
 
   .sell--image {
     @include breakpoint($only-mobile) {
-      padding: 0.3125rem;
       min-height: 10rem;
       width: 100%;
       display: block;
+    }
+  }
+
+  .promotions {
+    a {
+      margin-top: 0.25rem;
     }
   }
 

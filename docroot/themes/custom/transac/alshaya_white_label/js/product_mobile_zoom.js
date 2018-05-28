@@ -4,31 +4,95 @@
  */
 
 /* global isRTL */
+/* global Hammer */
 
-(function ($) {
+function hammerIt(elm) {
   'use strict';
 
-  // Based on https://gist.github.com/asgeo1/1652946
-  $.fn.doubletap = $.fn.doubletap || function (handler, delay) {
-    delay = delay == null ? 300 : delay;
-    this.on('touchend', function (event) {
-      var now = new Date().getTime();
-      // The first time this will make delta a negative number.
-      var lastTouch = $(this).data('lastTouch') || now + 1;
-      var delta = now - lastTouch;
-      if (delta < delay && delta > 0) {
-        // After we detect a doubletap, start over.
-        $(this).data('lastTouch', null);
-        if (handler !== null && typeof handler === 'function') {
-          handler(event);
+  var hammertime = new Hammer(elm, {});
+  hammertime.get('pinch').set({
+    enable: true
+  });
+  var posX = 0;
+  var posY = 0;
+  var scale = 1;
+  var last_scale = 1;
+  var last_posX = 0;
+  var last_posY = 0;
+  var max_pos_x = 0;
+  var max_pos_y = 0;
+  var transform = '';
+  var el = elm;
+
+  hammertime.on('doubletap pan pinch panend pinchend', function (ev) {
+    if (ev.type === 'doubletap') {
+      transform =
+          'translate3d(0, 0, 0) ' +
+          'scale3d(2, 2, 1) ';
+      scale = 2;
+      last_scale = 2;
+      try {
+        if (window.getComputedStyle(el, null).getPropertyValue('-webkit-transform').toString() !== 'matrix(1, 0, 0, 1, 0, 0)') {
+          transform =
+              'translate3d(0, 0, 0) ' +
+              'scale3d(1, 1, 1) ';
+          scale = 1;
+          last_scale = 1;
         }
       }
-      else {
-        $(this).data('lastTouch', now);
+      catch (err) {
+        throw (err);
       }
-    });
-  };
-})(jQuery);
+      el.style.webkitTransform = transform;
+      transform = '';
+    }
+
+    // pan
+    if (scale !== 1) {
+      posX = last_posX + ev.deltaX;
+      posY = last_posY + ev.deltaY;
+      max_pos_x = Math.ceil((scale - 1) * el.clientWidth / 2);
+      max_pos_y = Math.ceil((scale - 1) * el.clientHeight / 2);
+      if (posX > max_pos_x) {
+        posX = max_pos_x;
+      }
+      if (posX < -max_pos_x) {
+        posX = -max_pos_x;
+      }
+      if (posY > max_pos_y) {
+        posY = max_pos_y;
+      }
+      if (posY < -max_pos_y) {
+        posY = -max_pos_y;
+      }
+    }
+
+
+    // pinch
+    if (ev.type === 'pinch') {
+      scale = Math.max(.999, Math.min(last_scale * (ev.scale), 4));
+    }
+    if (ev.type === 'pinchend') {
+      last_scale = scale;
+    }
+
+    // panend
+    if (ev.type === 'panend') {
+      last_posX = posX < max_pos_x ? posX : max_pos_x;
+      last_posY = posY < max_pos_y ? posY : max_pos_y;
+    }
+
+    if (scale !== 1) {
+      transform =
+          'translate3d(' + posX + 'px,' + posY + 'px, 0) ' +
+          'scale3d(' + scale + ', ' + scale + ', 1)';
+    }
+
+    if (transform) {
+      el.style.webkitTransform = transform;
+    }
+  });
+}
 
 (function ($) {
   'use strict';
@@ -62,8 +126,7 @@
         height: 768,
         dialogClass: 'dialog-product-image-gallery-container-mobile',
         open: function () {
-          var img_scale = 1;
-
+          var currentmobSlide = parseInt($('#product-image-gallery-mobile .slick-current').attr('data-slick-index'));
           var slickModalOptions = {
             slidesToShow: 1,
             vertical: false,
@@ -72,74 +135,37 @@
             centerMode: false,
             infinite: false,
             focusOnSelect: true,
-            initialSlide: 0
+            initialSlide: currentmobSlide
           };
 
           var gallery = $('#product-image-gallery-mob');
           applyRtl(gallery, slickModalOptions);
 
           $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
-          $('#product-image-gallery-mob .mob-imagegallery__thumbnails__image img').doubletap(function (e) {
-            $(this).parent().siblings().find('img.expand').each(function () {
-              $(this).removeClass('expand');
-              gallery.slick('slickSetOption', 'accessibility', true);
-              gallery.slick('slickSetOption', 'draggable', true);
-              gallery.slick('slickSetOption', 'swipe', true);
-              gallery.slick('slickSetOption', 'touchMove', true);
-            });
-            if ($(e.target).hasClass('expand')) {
-              $(e.target).removeClass('expand');
-              gallery.slick('slickSetOption', 'accessibility', true);
-              gallery.slick('slickSetOption', 'draggable', true);
-              gallery.slick('slickSetOption', 'swipe', true);
-              gallery.slick('slickSetOption', 'touchMove', true);
-            }
-            else {
-              $(e.target).addClass('expand');
-              gallery.slick('slickSetOption', 'accessibility', false);
-              gallery.slick('slickSetOption', 'draggable', false);
-              gallery.slick('slickSetOption', 'swipe', false);
-              gallery.slick('slickSetOption', 'touchMove', false);
-            }
-          });
-
-          $('.zoomin').removeClass('disabled');
-          $('.zoomout').removeClass('disabled');
-
-          $('.zoomin').on('click', function () {
-            var image = $('#product-image-gallery-mob .mob-imagegallery__thumbnails__image.slick-current img');
-            if (img_scale < 1.75) {
-              img_scale = img_scale + 0.25;
-
-              image.css({transform: 'scale(' + img_scale + ')', transition: 'transform 300ms ease-out'});
-              $('.zoomout').removeClass('disabled');
-            }
-            else {
-              $(this).addClass('disabled');
-            }
-
-          });
-          $('.zoomout').on('click', function () {
-            var image = $('#product-image-gallery-mob .mob-imagegallery__thumbnails__image.slick-current img');
-            if (img_scale <= 1) {
-              $(this).addClass('disabled');
-              return;
-            }
-            else {
-              img_scale = img_scale - 0.25;
-              $('.zoomin').removeClass('disabled');
-              image.css({transform: 'scale(' + img_scale + ')', transition: 'transform 300ms ease-out'});
-            }
-          });
+          hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="' + currentmobSlide + '"]'));
 
           $('#product-image-gallery-mob').on('swipe', function (event, slick) {
-            var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img');
-            img_scale = 1;
-            $('.zoomin').removeClass('disabled');
-            $('.zoomout').removeClass('disabled');
+            var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentmobSlide + '"] img');
             image.parent().siblings().each(function () {
               $(this).find('img').css('transform', 'scale(1)');
             });
+            hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentmobSlide + '"]'));
+          });
+
+          $('#product-image-gallery-mob .slick-prev').once().on('click', function (event, slick) {
+            var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentmobSlide + '"] img');
+            image.parent().siblings().each(function () {
+              $(this).find('img').css('transform', 'scale(1)');
+            });
+            hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentmobSlide + '"]'));
+          });
+
+          $('#product-image-gallery-mob .slick-next').once().on('click', function (event, slick) {
+            var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentmobSlide + '"] img');
+            image.parent().siblings().each(function () {
+              $(this).find('img').css('transform', 'scale(1)');
+            });
+            hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentmobSlide + '"]'));
           });
 
           $('.dialog-product-image-gallery-container-mobile button.ui-dialog-titlebar-close').on('mousedown', function () {

@@ -27,21 +27,18 @@
     </div>
 
     <div class="clearfix page-wrapper">
-        <div{{ attributes.addClass('l-container') }}>
-            <main>
-
-                <div class="c-content">
-                    <div class="c-content__region">
-                        {{ page.content }}
-                    </div>
-                </div>
-
-                {{ feed_icons }}
-
-            </main>
-            <!-- /content-inner /content -->
-
-        </div>
+      <div{{ attributes.addClass('l-container') }}>
+        <main>
+          <div class="c-content">
+            <a class="back-link" href="javascript:window.history.back()"></a>
+            <div class="c-content__region">
+                {{ page.content }}
+            </div>
+          </div>
+          {{ feed_icons }}
+        </main>
+        <!-- /content-inner /content -->
+      </div>
     </div>
     <!-- /main -->
 

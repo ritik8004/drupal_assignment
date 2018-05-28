@@ -172,6 +172,7 @@ $plp_filterbar_clearall_border: $hnm-black-two;
 $plp_filterbar_clearall_text: $hnm-black-two;
 $autocomplete_hover: $search-hover;
 $autocomplete_text: $hnm-black-two;
+$primary_search_autocomplete_text: $hnm-black-two;
 
 // Sharethis
 $sharethis_icon: $hnm-black-two;
@@ -359,6 +360,11 @@ $order_detail_total_tr_row_price_td_bg: $white-five;
 $order_details_table_total_bg: $whisper-light;
 $order_details_table_total_price: $hnm-black-two;
 $order_actions_checkout: $white-five;
+
+// Checkout login.
+$checkout_login_btn_bg: $primary_btn_bg;
+$checkout_login_btn_txt: $primary_btn_text;
+$checkout_mobile_back_link_icon: $black-two;
 
 // Checkout Click and Collect
 $checkout_cc_input: $hnm-black-two;

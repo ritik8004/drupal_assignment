@@ -140,10 +140,6 @@
     display: none;
   }
 
-  .sell-promotions {
-    display: none;
-  }
-
   .sell-sku {
     .field__items {
       @include breakpoint($only-mobile) {
