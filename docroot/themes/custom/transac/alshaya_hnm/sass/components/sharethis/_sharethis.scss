@@ -21,10 +21,22 @@
   }
 
   & > span {
+    @include breakpoint($only-mobile) {
+      margin: 0.3125rem 0.25rem 0.625rem 0;
+
+      &:last-child {
+        margin-top: 0.3125rem;
+      }
+    }
+
     &::before {
       cursor: pointer;
       color: $sharethis_text;
       font-size: 1.938rem;
+
+      @include breakpoint($only-mobile) {
+        color: $sharethis_icon;
+      }
     }
   }
 

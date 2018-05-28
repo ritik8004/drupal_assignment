@@ -771,6 +771,16 @@ header .region__header {
   }
 }
 
+.site-brand-home {
+  a {
+    max-width: 11.875rem;
+
+    @include breakpoint($tablet) {
+      max-width: 22rem;
+    }
+  }
+}
+
 .c-pre-content__region {
   @include breakpoint($desktop) {
     border-top: none;
