@@ -38,10 +38,21 @@
             text-transform: uppercase;
             height: 2.5rem;
             line-height: 1.7;
+            cursor: pointer;
+            border-color: $primary_brand_button;
 
             a {
               font-size: 0.875rem;
-              color: $plp_facet_clear_text;
+              color: $primary_brand_button;
+            }
+
+            &:hover {
+              opacity: 1;
+              background-color: $primary_brand_button;
+
+              a {
+                color: $primary_btn_text;
+              }
             }
           }
         }
@@ -147,6 +158,20 @@
 
       @include breakpoint($only-mobile) {
         max-width: 100%;
+      }
+    }
+  }
+
+  .c-products__item {
+    @include breakpoint($desktop) {
+      &:hover {
+        article::after {
+          display: none;
+        }
+
+        .alshaya_search_slider {
+          display: none;
+        }
       }
     }
   }
