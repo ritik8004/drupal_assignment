@@ -44,6 +44,10 @@
         color: $checkout_mobile_back_link_icon;
         font-size: 2.125rem;
         transform: rotate(270deg);
+
+        html[lang=ar] & {
+          transform: rotate(90deg);
+        }
       }
     }
   }
@@ -389,7 +393,7 @@
         color: $checkout_login_guest_email_text;
         margin-bottom: 1.4rem;
         font-weight: bold;
-        font-size: 13px;
+        font-size: 0.8125rem;
         width: 80%;
       }
 
@@ -432,6 +436,12 @@
     #block-youllbeableto {
       @include breakpoint($only-mobile) {
         text-align: center;
+        margin-top: 1rem;
+        margin-bottom: 0;
+
+        h3 {
+          margin-top: 0;
+        }
       }
 
       @include breakpoint($only-tablet) {
