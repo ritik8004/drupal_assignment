@@ -17,7 +17,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 function alshaya_paragraphs_update_8115() {
   $configs = [
-    'paragraphs.paragraphs_type.section_divider.yml',
+    'paragraphs.paragraphs_type.section_divider',
     'field.storage.paragraph.field_section_divider_text',
     'field.field.paragraph.section_divider.field_section_divider_text',
     'core.entity_view_display.paragraph.section_divider.default',
