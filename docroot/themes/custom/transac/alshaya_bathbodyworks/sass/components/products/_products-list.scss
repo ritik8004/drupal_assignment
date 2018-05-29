@@ -165,10 +165,7 @@
   .c-products__item {
     @include breakpoint($desktop) {
       &:hover {
-        article::after {
-          display: none;
-        }
-
+        article::after,
         .alshaya_search_slider {
           display: none;
         }
