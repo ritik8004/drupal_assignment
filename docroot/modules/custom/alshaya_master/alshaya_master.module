@@ -797,7 +797,7 @@ function alshaya_master_convert_amount_to_float($amount) {
  * @param string $theme_name
  *   AMP theme name to enable.
  */
-function _alshaya_config_initialize_amp($theme_name) {
+function _alshaya_master_initialize_amp($theme_name) {
   // Enable alshaya_amp module.
   \Drupal::service('module_installer')->install(['alshaya_amp']);
 
@@ -826,7 +826,7 @@ function _alshaya_config_initialize_amp($theme_name) {
  * @param string $brand_theme
  *   Brand theme name to enable.
  */
-function _alshaya_config_initialize_brand_theme($brand_theme) {
+function _alshaya_master_initialize_brand_theme($brand_theme) {
   // Enable and set brand theme as default theme.
   \Drupal::service('theme_handler')->install([$brand_theme], TRUE);
   \Drupal::service('theme_handler')->setDefault($brand_theme);

@@ -12,7 +12,7 @@ use Drupal\Core\Site\Settings;
  */
 function alshaya_pb_transac_install() {
   // Enable and set alshaya_pottery_barn as default theme and set the site logo, favicon icon and email logo path.
-  _alshaya_config_initialize_brand_theme('alshaya_pottery_barn');
+  _alshaya_master_initialize_brand_theme('alshaya_pottery_barn');
 
   // Set store id - EN.
   \Drupal::configFactory()->getEditable('acq_commerce.store')

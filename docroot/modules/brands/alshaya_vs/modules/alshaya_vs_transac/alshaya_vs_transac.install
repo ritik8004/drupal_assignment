@@ -12,7 +12,7 @@ use Drupal\Core\Site\Settings;
  */
 function alshaya_vs_transac_install() {
   // Enable and set alshaya_victoria_secret as default theme and set the site logo, favicon icon and email logo path.
-  _alshaya_config_initialize_brand_theme('alshaya_victoria_secret');
+  _alshaya_master_initialize_brand_theme('alshaya_victoria_secret');
 
   // Set store id - EN.
   \Drupal::configFactory()->getEditable('acq_commerce.store')
@@ -38,7 +38,7 @@ function alshaya_vs_transac_install() {
   _alshaya_config_save_overridden_configs('alshaya_vs_transac');
 
   // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
-  _alshaya_config_initialize_amp('alshaya_amp_victoria_secret');
+  _alshaya_master_initialize_amp('alshaya_amp_victoria_secret');
 
   // Enable super category feature and menu block with config factory.
   // Placing config in "override" folder won't work here. As we have an event
