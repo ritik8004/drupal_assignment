@@ -4,7 +4,7 @@ dependencies:
   config:
     - block_content.type.paragraph_block
     - field.storage.block_content.field_paragraph_content
-    - paragraphs.paragraphs_type.1_row_3_col
+    - paragraphs.paragraphs_type.offers_bordered
   module:
     - entity_reference_revisions
 id: block_content.paragraph_block.field_paragraph_content
@@ -20,8 +20,9 @@ default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
+    negate: 0
     target_bundles:
-      1_row_3_col: 1_row_3_col
+      offers_bordered: offers_bordered
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         weight: 20
@@ -42,13 +43,16 @@ settings:
         weight: 25
         enabled: false
       1_row_3_col:
-        enabled: true
         weight: 26
+        enabled: false
       1_row_3_col_delivery_banner:
         weight: 27
         enabled: false
       1_row_3_col_dept:
         weight: 28
+        enabled: false
+      1_row_2_col:
+        weight: 29
         enabled: false
       1_row_3_col_text:
         weight: 29
@@ -66,8 +70,8 @@ settings:
         weight: 33
         enabled: false
       offers_bordered:
+        enabled: true
         weight: 34
-        enabled: false
       promo_block:
         weight: 35
         enabled: false
@@ -79,5 +83,20 @@ settings:
         enabled: false
       views_reference:
         weight: 38
+        enabled: false
+      main_menu_highlight:
+        weight: 41
+        enabled: false
+      product_carousel_category:
+        weight: 43
+        enabled: false
+      promo_block_button:
+        weight: 45
+        enabled: false
+      title_textarea:
+        weight: 48
+        enabled: false
+      video:
+        weight: 49
         enabled: false
 field_type: entity_reference_revisions
