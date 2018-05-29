@@ -13,7 +13,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Adding new paragraph type 'Section Divider'.
+ * Adding new paragraph type 'Section Divider' and adding it to advanced page.
  */
 function alshaya_paragraphs_update_8115() {
   $configs = [
@@ -22,6 +22,19 @@ function alshaya_paragraphs_update_8115() {
     'field.field.paragraph.section_divider.field_section_divider_text',
     'core.entity_view_display.paragraph.section_divider.default',
     'core.entity_form_display.paragraph.section_divider.default',
+    'field.field.paragraph.1_row_1_col.field_promo_block',
+    'field.field.paragraph.1_row_1_col_dept.field_promo_block',
+    'field.field.paragraph.1_row_1st_col_2_row_2nd_col.field_1st_col_promo_block',
+    'field.field.paragraph.1_row_1st_col_2_row_2nd_col.field_2nd_col_promo_block',
+    'field.field.paragraph.1_row_2_col.field_1_row_2_col',
+    'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_1',
+    'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_2',
+    'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_1',
+    'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_2',
+    'field.field.paragraph.1_row_2_col_dept.field_1_row_2_col',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    'field.field.paragraph.1_row_3_col_dept.field_1_row_promo_block',
+    'field.field.paragraph.1_row_3_col_text.field_promo_block',
   ];
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
 
