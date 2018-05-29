@@ -322,5 +322,35 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         }
       });
     }
-  }
+  };
+
+  /**
+   * Helper function to convert full-screen loader to throbber for infinite
+   * scroll.
+   */
+  Drupal.changeProgressBarToThrobber = function() {
+    Drupal.ajax.instances.forEach(function (ajax_instance, key) {
+      if ($(ajax_instance.element).hasClass('c-products-list') ||
+        ($(ajax_instance.element).parents('ul[data-drupal-views-infinite-scroll-pager="automatic"]').length > 0)) {
+        Drupal.ajax.instances[key].progress.type = 'throbber';
+      }
+    });
+  };
+
+  /**
+   * Drupal behaviors to update progressBars.
+   */
+  Drupal.behaviors.processProgressBarsForAjax = {
+    attach: function (context, settings) {
+      // Update only when all DOM elements are loaded & AJAX is attached to them.
+      $(window).on('load', function () {
+        Drupal.changeProgressBarToThrobber();
+      });
+
+      // Update on Ajax complete to take care of AJAX instance updates.
+      $(document).ajaxComplete(function() {
+        Drupal.changeProgressBarToThrobber();
+      });
+    }
+  };
 })(jQuery);
