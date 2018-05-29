@@ -161,6 +161,30 @@ function alshaya_get_additional_settings($site, $env) {
       ],
     ],
     'bbw' => [
+      'kw' => [
+        'default' => [
+          'store_id' => [
+            'en' => 1,
+            'ar' => 2,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'kwt_en',
+            'ar' => 'kwt_ar',
+          ],
+        ],
+      ],
+      'sa' => [
+        'default' => [
+          'store_id' => [
+            'en' => 3,
+            'ar' => 4,
+          ],
+          'magento_lang_prefix' => [
+            'en' => 'sau_en',
+            'ar' => 'sau_ar',
+          ],
+        ],
+      ],
       'ae' => [
         'default' => [
           'store_id' => [

@@ -411,6 +411,7 @@
 
           @include breakpoint($desktop) {
             padding-top: 0.95rem;
+            padding-bottom: 0.95rem;
             margin-top: 0.95rem;
 
             @include icon(dropdown-expand, after) {
@@ -429,6 +430,7 @@
             color: $checkout_cc_view_text;
             font-weight: bold;
             padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
             margin-top: 0.5rem;
 
             @include icon(dropdown-expand, after) {

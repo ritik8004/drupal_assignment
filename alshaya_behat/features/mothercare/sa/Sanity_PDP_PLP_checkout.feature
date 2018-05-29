@@ -111,10 +111,10 @@ Feature: As a guest user I should be able to
     When I go to "/cart"
     And I wait for the page to load
     And I wait 10 seconds
-    When I go to "/cart/checkout/login"
-#    And I press "checkout securely"
+#    When I go to "/cart/checkout/login"
+    And I press "checkout securely"
     And I wait for the page to load
-    And I follow "checkout as guest"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I go to "/cart/checkout/delivery"
     And I wait for the page to load
     And I should be able to see the header for checkout
@@ -159,11 +159,10 @@ Feature: As a guest user I should be able to
     When I go to "/cart"
     And I wait for the page to load
     And I wait 10 seconds
-    When I go to "/cart/checkout/login"
-#    And I press "checkout securely"
+#    When I go to "/cart/checkout/login"
+    And I press "checkout securely"
     And I wait for the page to load
-#    And I follow "checkout as guest"
-    And I go to "/cart/checkout/delivery"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     And I should be able to see the header for checkout
     When I follow "click & collect"

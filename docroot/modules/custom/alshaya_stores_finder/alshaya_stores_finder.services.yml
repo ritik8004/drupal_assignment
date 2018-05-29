@@ -3,11 +3,3 @@ services:
     class: Drupal\alshaya_stores_finder\Breadcrumb\AlshayaStoresFinderBreadcrumbBuilder
     tags:
       - { name: breadcrumb_builder, priority: 100 }
-
-  alshaya_stores_finder.config_subscriber:
-    class: Drupal\alshaya_stores_finder\EventSubscriber\AlshayaStoresFinderConfigSubscriber
-    arguments:
-      - '@config.storage'
-      - '@config.factory'
-    tags:
-      - { name: event_subscriber }
