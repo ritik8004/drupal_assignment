@@ -86,6 +86,21 @@ html[dir=rtl] {
         #{direction(right)}: -2.875rem;
       }
     }
+
+    @include breakpoint($upto-palm) {
+      display: flex;
+      flex-flow: row wrap;
+
+      .form-item-mobile-number-mobile {
+        display: flex;
+        flex: 1;
+
+        .input--textual__container,
+        .local-number {
+          width: 100%;
+        }
+      }
+    }
   }
 }
 
