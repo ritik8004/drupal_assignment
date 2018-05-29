@@ -5,3 +5,50 @@
     }
   }
 }
+
+#payment_details {
+  #payment_method_cybersource & {
+    border: 1px solid $checkout_payment_option_border;
+    border-top: 0;
+  }
+
+  .cc_cvv_help_text {
+    &::before {
+      background: $white url(../../alshaya_white_label/imgs/cards/back-card.png) no-repeat;
+      background-size: 100%;
+    }
+  }
+}
+
+#payment_method_cybersource {
+  .card-types-wrapper {
+    .card-type {
+      &-visa {
+        background: url('../../alshaya_white_label/imgs/cards/visa-inactive.png') no-repeat;
+        background-size: 100%;
+
+        &.active {
+          background-image: url('../../alshaya_white_label/imgs/cards/visa-active.png');
+        }
+      }
+
+      &-mastercard {
+        background: url('../../alshaya_white_label/imgs/cards/mastercard-inactive.png') no-repeat;
+        background-size: 100%;
+
+        &.active {
+          background-image: url('../../alshaya_white_label/imgs/cards/mastercard-active.png');
+        }
+      }
+
+      &-diners-club {
+        background: url('../../alshaya_white_label/imgs/cards/dinersclub-inactive.png') no-repeat;
+        background-size: 88%;
+
+        &.active {
+          background-image: url('../../alshaya_white_label/imgs/cards/dinersclub-active.png');
+        }
+      }
+    }
+  }
+}
