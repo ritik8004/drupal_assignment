@@ -1,0 +1,108 @@
+<?php
+
+/**
+ * @file
+ * The Module file.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\acq_sku\Entity\SKU;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if (($entity->bundle() == 'acq_product')) {
+    $sku = $entity->get('field_skus')->first()->getString();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if ($view_mode == 'full') {
+      if ($product_brand = $sku_entity->get('attr_product_brand')->getValue()) {
+        $build['product_brand']['#markup'] = $product_brand;
+      }
+
+      if ($fragrance_name = $sku_entity->get('attr_fragrance_name')->getValue()) {
+        $build['product_name']['#markup'] = $fragrance_name[0]['value'];
+      }
+      elseif ($descriptive_name = $sku_entity->get('attr_descriptive_name')->getString()) {
+        $build['product_name']['#markup'] = $descriptive_name[0]['value'];
+      }
+
+      if ($form = $sku_entity->get('attr_form')->getValue()) {
+        $build['form']['#markup'] = $form;
+      }
+
+      if ($size_volume = $sku_entity->get('attr_size')->getValue()) {
+        $build['size_volume']['#markup'] = $size_volume[0]['value'];
+      }
+
+      $fragrance_desc = '';
+      $more_inf = '';
+      $usag = '';
+
+      if ($fragrance_description = $sku_entity->get('attr_fragrance_description')->getString()) {
+        $fragrance_desc['label'] = [
+          '#markup' => t('Fragrance Description'),
+        ];
+        $fragrance_desc['value'] = [
+          '#markup' => $fragrance_description,
+        ];
+      }
+
+      if ($more_info = $sku_entity->get('attr_more_info')->getString()) {
+        $more_inf['label'] = [
+          '#markup' => t('More info'),
+        ];
+        $more_inf['value'] = [
+          '#markup' => $more_info,
+        ];
+      }
+
+      if ($usage = $sku_entity->get('attr_usage')->getString()) {
+        $usag['label'] = [
+          '#markup' => t('Usage'),
+        ];
+        $usag['value'] = [
+          '#markup' => $usage,
+        ];
+      }
+
+      $build['description'][] = $fragrance_desc;
+      $build['description'][] = $more_inf;
+      $build['description'][] = $usag;
+    }
+    elseif ($view_mode == 'modal') {
+      if ($product_brand = $sku_entity->get('attr_product_brand')->getValue()) {
+        $build['product_brand']['#markup'] = $product_brand;
+      }
+
+      if ($fragrance_name = $sku_entity->get('attr_fragrance_name')->getValue()) {
+        $build['product_name']['#markup'] = $fragrance_name[0]['value'];
+      }
+      elseif ($descriptive_name = $sku_entity->get('attr_descriptive_name')->getString()) {
+        $build['product_name']['#markup'] = $descriptive_name[0]['value'];
+      }
+
+      if ($form = $sku_entity->get('attr_form')->getValue()) {
+        $build['form']['#markup'] = $form;
+      }
+
+      if ($size_volume = $sku_entity->get('attr_size')->getValue()) {
+        $build['size_volume']['#markup'] = $size_volume[0]['value'];
+      }
+    }
+    elseif ($view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
+      if ($fragrance_name = $sku_entity->get('attr_fragrance_name')->getValue()) {
+        $build['product_name']['#markup'] = $fragrance_name[0]['value'];
+      }
+      elseif ($descriptive_name = $sku_entity->get('attr_descriptive_name')->getString()) {
+        $build['product_name']['#markup'] = $descriptive_name[0]['value'];
+      }
+
+      if ($form = $sku_entity->get('attr_form')->getValue()) {
+        $build['form']['#markup'] = $form;
+      }
+    }
+  }
+}
