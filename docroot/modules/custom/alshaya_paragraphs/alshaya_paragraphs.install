@@ -13,6 +13,18 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Adding new paragraph type 'Section Divider'.
+ */
+function alshaya_paragraphs_update_8115() {
+  $configs = [
+    'paragraphs.paragraphs_type.section_divider.yml',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new paragraph type 'product category carousel'.
  */
 function alshaya_paragraphs_update_8114() {
