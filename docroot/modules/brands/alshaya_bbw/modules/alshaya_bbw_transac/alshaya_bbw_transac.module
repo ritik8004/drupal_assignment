@@ -8,7 +8,6 @@
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Entity\Entity;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -18,8 +17,8 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
     $sku = $entity->get('field_skus')->first()->getString();
     $sku_entity = SKU::loadFromSku($sku);
 
-    if ($sku_entity instanceof Entity || $sku_entity instanceof SKU) {
-      if ($view_mode == 'full' || $view_mode == 'modal' || ($view_mode == 'teaser' || $view_mode == 'product_category_carousel')) {
+    if ($sku_entity instanceof SKU) {
+      if ($view_mode == 'full' || $view_mode == 'modal' || $view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
         if ($fragrance_name = $sku_entity->get('attr_fragrance_name')->getValue()) {
           $build['product_name']['#markup'] = $fragrance_name[0]['value'];
         }
