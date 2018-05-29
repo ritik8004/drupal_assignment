@@ -6,6 +6,7 @@
  */
 
 use Drupal\search_api\Entity\Index;
+use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_update_N().
@@ -330,6 +331,6 @@ function alshaya_search_update_8001() {
  */
 function alshaya_search_install() {
   // Allow anonymous and authenticated users to use autocomplete.
-  user_role_grant_permissions('anonymous', ['use search_api_autocomplete for search_api_views_search']);
-  user_role_grant_permissions('authenticated', ['use search_api_autocomplete for search_api_views_search']);
+  user_role_grant_permissions(Role::ANONYMOUS_ID, ['use search_api_autocomplete for search']);
+  user_role_grant_permissions(Role::AUTHENTICATED_ID, ['use search_api_autocomplete for search']);
 }
