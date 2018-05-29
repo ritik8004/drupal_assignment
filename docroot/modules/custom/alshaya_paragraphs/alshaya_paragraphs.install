@@ -24,6 +24,8 @@ function alshaya_paragraphs_update_8115() {
     'core.entity_form_display.paragraph.section_divider.default',
   ];
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  alshaya_config_install_configs(['field.field.node.advanced_page.field_promo_blocks'], 'alshaya_advanced_page');
 }
 
 /**
