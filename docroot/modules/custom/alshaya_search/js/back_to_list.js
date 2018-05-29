@@ -7,7 +7,7 @@
         // Prepare object to store details.
         var storage_details = {
           nid: $(this).find('article:first').attr('data-nid'),
-          filter: $('.block-views-exposed-filter-blockalshaya-product-list-block-1 form .facets-hidden-container').html(),
+          filter: $('div.views-exposed-form.bef-exposed-form form .facets-hidden-container').html(),
           sort: $('select[name="sort_bef_combine"]').val(),
           facet_summary: $('.block-facets-summary').html()
         };
@@ -81,7 +81,7 @@
         if (typeof storage_value !== 'undefined' && storage_value !== null) {
           if (typeof storage_value.filter !== 'undefined' && storage_value.filter.length > 0) {
             // Fill facet hidden input.
-            $('.block-views-exposed-filter-blockalshaya-product-list-block-1 form .facets-hidden-container').append(storage_value.filter);
+            $('div.views-exposed-form.bef-exposed-form form .facets-hidden-container').append(storage_value.filter);
             // Fill facet summary block.
             $('.block-facets-summary').append(storage_value.facet_summary);
             // Fill sort value.
@@ -90,7 +90,7 @@
             // If desktop device.
             if (!checkNotDesktop()) {
               // Apply sort here.
-              $('#edit-sort-bef-combine').val(storage_value['sort']);
+              $('select[name="sort_bef_combine"]').val(storage_value['sort']);
               var sort_text = $('select[name="sort_bef_combine"][value="' + storage_value['sort'] + '"]').text();
               $('.select2-selection__rendered').html(sort_text);
               $('.select2-selection__rendered').attr('title', sort_text);
@@ -104,14 +104,14 @@
             // Update storage value.
             localStorage.setItem(window.location.href, JSON.stringify(storage_value));
             // Trigger apply button click.
-            $('#edit-submit-alshaya-product-list').trigger('click');
+            $('div.views-exposed-form.bef-exposed-form form input[type="submit"]').trigger('click');
           }
           // Only if sort is selected.
           else if (typeof storage_value.sort !== 'undefined' && storage_value.sort.length > 0) {
             // If desktop device.
             if (!checkNotDesktop()) {
               // Apply sort here.
-              $('#edit-sort-bef-combine').val(storage_value['sort']);
+              $('select[name="sort_bef_combine"]').val(storage_value['sort']);
               var sort_text = $('select[name="sort_bef_combine"][value="' + storage_value['sort'] + '"]').text();
               $('.select2-selection__rendered').html(sort_text);
               $('.select2-selection__rendered').attr('title', sort_text);
@@ -123,7 +123,7 @@
             // Update storage value.
             localStorage.setItem(window.location.href, JSON.stringify(storage_value));
             // Trigger apply button click.
-            $('#edit-submit-alshaya-product-list').trigger('click');
+            $('div.views-exposed-form.bef-exposed-form form input[type="submit"]').trigger('click');
           }
         }
       }
