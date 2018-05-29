@@ -19,8 +19,8 @@ function alshaya_search_update_8017() {
   alshaya_config_install_configs(['search_api_autocomplete.search.search'], 'alshaya_search');
 
   // Allow anonymous and authenticated users to use autocomplete.
-  user_role_grant_permissions('anonymous', ['use search_api_autocomplete for search']);
-  user_role_grant_permissions('authenticated', ['use search_api_autocomplete for search']);
+  user_role_grant_permissions(Role::ANONYMOUS_ID, ['use search_api_autocomplete for search']);
+  user_role_grant_permissions(Role::AUTHENTICATED_ID, ['use search_api_autocomplete for search']);
 }
 
 /**
