@@ -6,6 +6,34 @@
  */
 
 use Drupal\Core\Site\Settings;
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add index to newly added fields.
+ */
+function alshaya_bbw_transac_update_8002() {
+  // Invoke source config save for the override to be saved.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product', 'install');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'install');
+
+  $alshaya_search_indexes = [
+    'product' => 'search_api.index.product',
+    'acquia_search_index' => 'search_api.index.acquia_search_index',
+  ];
+
+  foreach ($alshaya_search_indexes as $index_key => $search_index) {
+    // Load both index.
+    $index = Index::load($index_key);
+
+    // Re-index all items.
+    $index->reindex();
+
+    // Save index to reflect new form field.
+    $index->save();
+  }
+}
 
 /**
  * Implements hook_update_N().
