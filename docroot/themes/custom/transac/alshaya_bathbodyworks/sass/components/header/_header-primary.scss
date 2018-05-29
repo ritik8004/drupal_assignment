@@ -361,7 +361,6 @@ header {
         font-size: 0.9375rem;
         text-transform: uppercase;
         font-family: $alshaya-thin;
-        letter-spacing: 1px;
         height: 2.5rem;
       }
 
@@ -437,7 +436,6 @@ header {
         a {
           @include arabic-letter-spacing;
 
-          letter-spacing: 0.5px;
           line-height: 1.69;
           text-transform: uppercase;
         }
@@ -508,7 +506,6 @@ header {
     font-weight: normal;
     display: block;
     font-size: 0.875rem;
-    letter-spacing: 1px;
     border-bottom: 1px solid $mm_l1_border;
   }
 
@@ -591,7 +588,6 @@ header {
   font-size: 0.875rem;
   font-family: $alshaya-thin;
   font-weight: normal;
-  letter-spacing: 1px;
   text-transform: uppercase;
   display: flex;
 
@@ -784,7 +780,6 @@ header .region__header {
 .c-pre-content__region {
   @include breakpoint($desktop) {
     border-top: none;
-    border-bottom: none;
   }
 }
 
