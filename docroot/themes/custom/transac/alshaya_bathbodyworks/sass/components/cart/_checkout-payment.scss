@@ -23,31 +23,23 @@
 #payment_method_cybersource {
   .card-types-wrapper {
     .card-type {
-      &-visa {
-        background: url('../../alshaya_white_label/imgs/cards/visa-inactive.png') no-repeat;
-        background-size: 100%;
+      opacity: 0.3;
+      background-size: contain !important;
 
-        &.active {
-          background-image: url('../../alshaya_white_label/imgs/cards/visa-active.png');
-        }
+      &.active {
+        opacity: 1;
+      }
+
+      &-visa {
+        background-image: url('../../alshaya_white_label/imgs/cards/visa-active.png');
       }
 
       &-mastercard {
-        background: url('../../alshaya_white_label/imgs/cards/mastercard-inactive.png') no-repeat;
-        background-size: 100%;
-
-        &.active {
-          background-image: url('../../alshaya_white_label/imgs/cards/mastercard-active.png');
-        }
+        background-image: url('../../alshaya_white_label/imgs/cards/mastercard-active.png');
       }
 
       &-diners-club {
-        background: url('../../alshaya_white_label/imgs/cards/dinersclub-inactive.png') no-repeat;
-        background-size: 88%;
-
-        &.active {
-          background-image: url('../../alshaya_white_label/imgs/cards/dinersclub-active.png');
-        }
+        background-image: url('../../alshaya_white_label/imgs/cards/dinersclub-active.png');
       }
     }
   }
