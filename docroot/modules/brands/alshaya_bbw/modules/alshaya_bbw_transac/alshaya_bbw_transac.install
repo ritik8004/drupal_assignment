@@ -25,7 +25,7 @@ function alshaya_bbw_transac_update_8001() {
  */
 function alshaya_bbw_transac_install() {
   // Add fields to store the values from attributes as fields.
-  $fields = \Drupal::config('alshaya_bbw.sku_base_fields')->get('fields');
+  $fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
 
   \Drupal::moduleHandler()->loadInclude('alshaya_bbw_transac', 'inc', 'alshaya_bbw_transac.content');
