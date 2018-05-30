@@ -15,7 +15,7 @@ Feature: To verify a returning customer is able to
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "trupti@axelerant"
-    And I fill in "edit-checkout-login-pass" with "password@1"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
     When I follow "خدمة التوصيل للمنزل"
@@ -57,8 +57,8 @@ Feature: To verify a returning customer is able to
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "trupti@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "password@1"
+    Then I fill in "edit-checkout-login-name" with "kanchan.patil+test@qed42.com"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
     And I follow "الاستلام من محلاتنا"
