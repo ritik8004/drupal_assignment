@@ -55,8 +55,8 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "place order"
     And I wait for the page to load
-    Then I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     When I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     When I fill in "Ecom_Payment_Pin_id" with "1234"
@@ -89,8 +89,8 @@ Feature: Test various checkout scenarios as returning customer
     When I accept terms and conditions
     Then I press "place order"
     And I wait for the page to load
-    When I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     When I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     When I fill in "Ecom_Payment_Pin" with "1234"
