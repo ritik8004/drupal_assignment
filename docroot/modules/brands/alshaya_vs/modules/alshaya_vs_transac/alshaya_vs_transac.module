@@ -5,39 +5,11 @@
  * Alshaya vs transac module file.
  */
 
-use Drupal\views\ViewExecutable;
-
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
  */
 function alshaya_vs_transac_alshaya_stores_finder_store_update_alter(&$node, array $store) {
   if (isset($store['included_in_store'])) {
     $node->get('field_brand')->setValue(trim($store['included_in_store']));
-  }
-}
-
-/**
- * Implements hook_views_pre_render().
- */
-function alshaya_vs_transac_views_pre_render(ViewExecutable $view) {
-  if ($view->id() == 'stores_finder'
-      && in_array($view->current_display, ['attachment_1', 'page_1', 'page_3'])) {
-
-    $fields = $view->field;
-
-    if (isset($fields['field_brand'])) {
-      $brand = $fields['field_brand'];
-      unset($fields['field_brand']);
-    }
-
-    $new_fields = [];
-    foreach ($fields as $field_name => $field) {
-      $new_fields[$field_name] = $field;
-      if ($field_name === 'field_store_open_hours') {
-        $new_fields['field_brand'] = $brand;
-      }
-    }
-
-    $view->field = $new_fields;
   }
 }
