@@ -7,8 +7,8 @@ Feature: To verify Signin and Breadcrumbs
   reset my password
     Given I go to "/user/login"
     And I follow "عربية"
-    When I fill in "edit-name" with "anjali.nikumb@acquia.com"
-    And I fill in "edit-pass" with "password@1"
+    When I fill in "edit-name" with "kanchan.patil+test@qed42.com"
+    And I fill in "edit-pass" with "Password@1"
     And I press "تسجيل الدخول"
     Then I should see the link "حسابي"
     And I should see the link "تسجيل الخروج"
@@ -19,7 +19,7 @@ Feature: To verify Signin and Breadcrumbs
     And the url should match "/user/login"
     And I follow "هل نسيت كلمة السر؟"
     And the url should match "/user/password"
-    When I fill in "edit-name" with "anjali.nikumb@acquia.com"
+    When I fill in "edit-name" with "kanchan.patil+test@qed42.com"
     And I press "إرسال"
     Then I should see "تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني"
     And the url should match "/user/login"
@@ -63,7 +63,7 @@ Feature: To verify Signin and Breadcrumbs
   @arabic
   Scenario: As an authenticated user on Arabic site
   I should be able to view breadcrumbs on My Account section
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load

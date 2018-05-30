@@ -12,8 +12,8 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "anjali.nikumb@acquia.com"
-    And I fill in "edit-checkout-login-pass" with "password@1"
+    Then I fill in "edit-checkout-login-name" with "kanchan.patil+test@qed42.com"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
 

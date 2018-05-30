@@ -9,8 +9,8 @@
       When I close the popup
       And I wait for the page to load
       And I go to "/user/login"
-      When I fill in "edit-name" with "anjali.nikumb@acquia.com"
-      And I fill in "edit-pass" with "password@1"
+      When I fill in "edit-name" with "kanchan.patil+test@qed42.com"
+      And I fill in "edit-pass" with "Password@1"
       And I press "sign in"
       Then I should see the link "My account"
       And I should see the link "Sign out"
@@ -21,7 +21,7 @@
       And the url should match "/user/login"
       And I follow "Forgot password?"
       And the url should match "/user/password"
-      When I fill in "edit-name" with "anjali.nikumb@acquia.com"
+      When I fill in "edit-name" with "kanchan.patil+test@qed42.com"
       And I press "Submit"
       Then I should see "Further instructions have been sent to your email address."
       And the url should match "/user/login"
@@ -49,7 +49,7 @@
     As an authenticated user
     I should be able to see all the sections
     after logging in
-      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+      Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
       And I wait for the page to load
       Then I should see the link "my account" in ".my-account-nav" section
       And I should see the link "orders" in ".my-account-nav" section
@@ -62,7 +62,7 @@
     As an authenticated user
     I should be able to view the Need help section
     and access the links under Need help
-      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+      Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
       And I wait for the page to load
       When I see the text "Need help with your order?"
       Then I should see the link "Contact customer services"
@@ -81,7 +81,7 @@
 
     Scenario: As an authenticated user
     I should be able to update my contact details
-      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+      Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
       And I wait for the page to load
       When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(3) > a"
       And I wait for the page to load
@@ -101,7 +101,7 @@
     Scenario: As an authenticated user
     I should be able to add a new address
     to my address book
-      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+      Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
       When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
       And I wait for the page to load
       Then I get the total count of address blocks
@@ -124,7 +124,7 @@
 
     Scenario: As an authenticated user
     I should be able to perform Cancel action on add/edit address pages
-      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+      Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
       When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
       And I wait for the page to load
       When I follow "Add new Address"
@@ -141,7 +141,7 @@
 
     Scenario: As an authenticated user
     I should be able to edit an address
-      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+      Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
       When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
       And I wait for the page to load
       When I click Edit Address
@@ -155,7 +155,7 @@
 
     Scenario: As an authenticated user
     I should be able to set my communication preferences
-      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+      Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
       When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(5) > a"
       And I wait for the page to load
       When I check "Email"
@@ -166,7 +166,7 @@
 
     Scenario: As an authenticated user
     I should see the options to change my password
-      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+      Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
       When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(6) > a"
       And I wait for the page to load
       Then I should see "Change Password"
@@ -186,7 +186,7 @@
 
     Scenario: As an authenticated user
     I should be able to view breadcrumbs on My Account section
-      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+      Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
       And I wait for the page to load
       Then the breadcrumb "Home > My Account" should be displayed
       When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
@@ -222,7 +222,7 @@
     Scenario: As an authenticated user
     I should not be able to delete my primary address
     but I should be able to delete any other address
-      Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+      Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
       When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(4) > a"
       And I wait for the page to load
       Then I should not see the delete button for primary address

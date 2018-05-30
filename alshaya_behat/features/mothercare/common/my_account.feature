@@ -6,7 +6,7 @@ Feature: Test the My account section for authenticated user
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    When I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+    When I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
 
   @prod
