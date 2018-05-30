@@ -10,6 +10,13 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
+ * Implements hook_theme_registry_alter().
+ */
+function alshaya_bbw_transac_theme_registry_alter(&$theme_registry) {
+  $theme_registry['sku_teaser']['path'] = drupal_get_path('module', 'alshaya_bbw_transac') . '/templates';
+}
+
+/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
@@ -18,14 +25,7 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU) {
-      if ($view_mode == 'full' || $view_mode == 'modal' || $view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
-        if ($fragrance_name = $sku_entity->get('attr_fragrance_name')->getValue()) {
-          $build['product_name']['#markup'] = $fragrance_name[0]['value'];
-        }
-        elseif ($descriptive_name = $sku_entity->get('attr_descriptive_name')->getString()) {
-          $build['product_name']['#markup'] = $descriptive_name;
-        }
-
+      if ($view_mode == 'full' || $view_mode == 'modal' || $view_mode == 'teaser' || $view_mode == 'product_category_carousel' || $view_mode == 'search_result') {
         if ($form = $sku_entity->get('attr_form')->getValue()) {
           $build['form']['#markup'] = $form[0]['value'];
         }
