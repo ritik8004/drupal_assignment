@@ -17,7 +17,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     {{ title_prefix }}
     {% if not page %}
       <h2{{ title_attributes.addClass("c-products__item__label") }}>
-        {{ content.product_name }}
+        {{ label }}
       </h2>
     {% endif %}
     {{ title_suffix }}
