@@ -1,0 +1,11 @@
+restrict_role_login_by_ip_header: REMOTE_ADDR
+restrict_role_login_by_ip_header_restriction: ''
+restrict_role_login_by_ip_header_roles:
+  administrator: 0
+  media_creator: 0
+  media_manager: 0
+  webmaster: 0
+  reviewer: 0
+  acq_commerce_sync: 0
+  seo_admin: 0
+  site_builder: 0

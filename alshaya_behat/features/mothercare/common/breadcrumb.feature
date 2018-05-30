@@ -69,7 +69,7 @@ Feature: Test breadcrumbs displayed across the site
 
   Scenario: As an authenticated user
     I should be able to view breadcrumbs on My account section
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     Then the breadcrumb "home > my account" should be displayed
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li:nth-child(2) > a"
@@ -88,7 +88,7 @@ Feature: Test breadcrumbs displayed across the site
   @arabic
   Scenario: As an authenticated user on Arabic site
   I should be able to view breadcrumbs on My account section
-    Given I am logged in as an authenticated user "shweta+3@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load
