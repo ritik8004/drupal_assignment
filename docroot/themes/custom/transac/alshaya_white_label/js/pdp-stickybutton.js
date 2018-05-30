@@ -8,7 +8,7 @@
 
   /**
    * Helper function to compute height of add to cart button and make it sticky.
-   * @param direction The scroll direction
+   * @param {String} direction The scroll direction
    */
   function mobileStickyAddtobasketButton(direction) {
     // Button top.
