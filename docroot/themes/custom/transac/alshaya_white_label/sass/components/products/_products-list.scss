@@ -1071,7 +1071,6 @@ html[lang=ar] {
     }
 
     @include breakpoint($only-mobile) {
-      top: 2.4375rem;
       margin-#{$left}: 0;
     }
   }
