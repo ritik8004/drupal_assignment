@@ -49,13 +49,13 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       return $pane_form;
     }
 
+    $pane_form['#attributes']['class'][] = 'active--tab--content';
+
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
     /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-
-    $pane_form['#attributes']['class'][] = 'active--tab--content';
 
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
     $pane_form['guest_delivery_home']['title'] = [
@@ -335,7 +335,12 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $cart_storage = \Drupal::service('acq_cart.cart_storage');
 
       try {
-        $customer = $api_wrapper->createCustomer($address['firstname'], $address['lastname'], $email);
+        $customer = [];
+        $customer['firstname'] = $address['firstname'];
+        $customer['lastname'] = $address['lastname'];
+        $customer['email'] = $email;
+        $customer = $api_wrapper->createCustomer($customer);
+
         $cart_storage->associateCart($customer['customer_id'], $email);
       }
       catch (\Exception $e) {

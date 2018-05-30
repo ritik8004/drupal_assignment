@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac;
 
+use Drupal\alshaya_acm\CartHelper;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -128,6 +129,13 @@ class AlshayaGtmManager {
   protected $cartStorage;
 
   /**
+   * Cart Helper service object.
+   *
+   * @var \Drupal\alshaya_acm\CartHelper
+   */
+  protected $cartHelper;
+
+  /**
    * The current user service.
    *
    * @var \Drupal\Core\Session\AccountProxyInterface
@@ -213,6 +221,8 @@ class AlshayaGtmManager {
    *   Config Factory service.
    * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
    *   Private temp store service.
+   * @param \Drupal\alshaya_acm\CartHelper $cartHelper
+   *   Cart Helper service object.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   Current User service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -237,6 +247,7 @@ class AlshayaGtmManager {
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
                               CartStorageInterface $cartStorage,
+                              CartHelper $cartHelper,
                               AccountProxyInterface $currentUser,
                               RequestStack $requestStack,
                               EntityTypeManagerInterface $entityTypeManager,
@@ -250,6 +261,7 @@ class AlshayaGtmManager {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
+    $this->cartHelper = $cartHelper;
     $this->currentUser = $currentUser;
     $this->requestStack = $requestStack;
     $this->entityTypeManager = $entityTypeManager;
@@ -618,7 +630,7 @@ class AlshayaGtmManager {
 
       $cartItems = $cart->get('items');
 
-      $address = (array) $cart->getShipping();
+      $address = $this->cartHelper->getShipping($cart);
 
       if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page') {
         // For CC we always use step 2.
