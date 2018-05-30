@@ -47,6 +47,7 @@
         'product listing page',
         'product detail page',
         'advanced page',
+        'department page',
         'promotion page'
       ];
 
