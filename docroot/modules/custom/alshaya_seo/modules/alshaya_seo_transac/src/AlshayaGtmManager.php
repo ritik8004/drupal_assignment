@@ -1062,6 +1062,7 @@ class AlshayaGtmManager {
         break;
 
       case 'advanced page':
+      case 'department page':
         $department_node = $current_route['route_params']['node'];
         if ($department_node->get('field_use_as_department_page')->value == 1) {
           $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')
