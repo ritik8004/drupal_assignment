@@ -390,7 +390,12 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       $api_wrapper = \Drupal::service('acq_commerce.api');
 
       try {
-        $customer = $api_wrapper->createCustomer($values['cc_firstname'], $values['cc_lastname'], $values['cc_email']);
+        $customer = [];
+        $customer['firstname'] = $values['cc_firstname'];
+        $customer['lastname'] = $values['cc_lastname'];
+        $customer['email'] = $values['cc_email'];
+
+        $customer = $api_wrapper->createCustomer($customer);
       }
       catch (\Exception $e) {
         // @TODO: Handle create customer errors here.
