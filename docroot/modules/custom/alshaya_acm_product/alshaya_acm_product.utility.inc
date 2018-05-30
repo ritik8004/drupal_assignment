@@ -231,30 +231,20 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       }
       elseif (isset($media_item['media_type']) && $media_item['media_type'] == 'external-video') {
         // @TODO:
-        // Receiving video_provider as NULL, should be set to youtube or
-        // vimeo so that we can avoid the strpos in URL.
-        if (strpos($media_item['video_url'], 'youtube')) {
-          $thumbnails[] = [
-            'thumburl' => $media_item['file'],
-            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], 'youtube'),
-            'type' => 'youtube',
-            // @TODO: should this be config?
-            'width' => 81,
-            // @TODO: should this be config?
-            'height' => 81,
-          ];
-        }
-        else {
-          $thumbnails[] = [
-            'thumburl' => $media_item['file'],
-            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], 'vimeo'),
-            'type' => 'vimeo',
-            // @TODO: should this be config?
-            'width' => 81,
-            // @TODO: should this be config?
-            'height' => 81,
-          ];
-        }
+        // Receiving video_provider as NULL, should be set to youtube or vimeo.
+        // Till then using $type as provider flag.
+        $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+        $thumbnails[] = [
+          'thumburl' => $media_item['file'],
+          'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+          'video_title' => $media_item['video_title'],
+          'video_desc' => $media_item['video_description'],
+          'type' => $type,
+          // @TODO: should this be config?
+          'width' => 81,
+          // @TODO: should this be config?
+          'height' => 81,
+        ];
       }
     }
   }
@@ -729,24 +719,15 @@ function alshaya_acm_product_update_field_cardinality_from_unlimited_to_unique($
  */
 function alshaya_acm_product_generate_video_embed_url($url, $provider) {
   $embed_url = '';
-  // Vimeo videos.
-  if ($provider == 'vimeo') {
-    $video_id = explode('vimeo.com/', $url)[1];
-    if (strpos($video_id, '&') !== FALSE) {
-      $video_id = explode('&', $video_id)[0];
-    }
-    $embed_url .= 'https://player.vimeo.com/video/' . $video_id;
+  if (strpos($url, 'youtube.com/') == FALSE && strpos($url, 'vimeo.com/') == FALSE) {
+    return '';
   }
-  // Youtube videos.
-  if ($provider == 'youtube') {
-    // Youtube long URL.
-    if (strpos($url, 'youtube.com/') !== FALSE) {
-      $video_id = explode('v=', $url)[1];
-      if (strpos($video_id, '&') !== FALSE) {
-        $video_id = explode('&', $video_id)[0];
-      }
-      $embed_url .= 'https://www.youtube.com/embed/' . $video_id;
-    }
+
+  $video_id = $provider == 'youtube' ? explode('v=', $url)[1] : explode('vimeo.com/', $url)[1];
+
+  if ($video_id) {
+    $embed_url = ($provider == 'youtube') ? 'https://www.youtube.com/embed/' : 'https://player.vimeo.com/video/';
+    $embed_url .= explode('&', $video_id)[0];
   }
   return $embed_url;
 }

@@ -19,11 +19,11 @@
       {% for thumbs in thumbnails %}
         {% if thumbs.type == 'youtube' %}
           <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video youtube">
-            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" />
+            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
           </li>
         {% elseif thumbs.type == 'vimeo' %}
           <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video vimeo">
-            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" />
+            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
           </li>
         {% else %}
           <li>

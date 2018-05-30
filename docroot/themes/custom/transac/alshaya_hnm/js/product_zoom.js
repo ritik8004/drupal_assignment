@@ -309,7 +309,7 @@
       // For Desktop slider, we add a iframe on click on the image.
       $('#lightSlider li', context).on('click', function (e) {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
-          var wrap = $('#cloud-zoom-wrap');
+          var wrap = $('.cloudzoom__herocontainer');
           // Get width & height of wrap.
           var width = wrap.width();
           var height = wrap.height();
