@@ -65,6 +65,7 @@
           .html()).length === 0) {
           $(mobileFilterBarSelector).addClass('empty');
         }
+
         else {
           if (countFilters > 0) {
             // Removing the element before adding again.
@@ -80,6 +81,11 @@
                 Drupal.alshayaAccordion(this);
               });
           }
+        }
+
+        if (countFilters === 0) {
+          // Removing the filter count added next to the label.
+          $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').removeClass('active-filter-count').html(Drupal.t('Filter'));
         }
       }
 
@@ -158,7 +164,7 @@
 
             var countFilters = $(mobileFilterBarSelector + ' ul li').length - 1;
             if (countFilters > 0) {
-              $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').html(Drupal.t('Filter') + ' (' + countFilters + ')');
+              $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').addClass('active-filter-count').html(Drupal.t('Filter') + ' <span class="filter-count"> ' + countFilters + '</span>');
             }
           }
           else {

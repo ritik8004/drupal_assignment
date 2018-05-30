@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.section_divider.field_section_divider_text
+    - paragraphs.paragraphs_type.section_divider
+id: paragraph.section_divider.default
+targetEntityType: paragraph
+bundle: section_divider
+mode: default
+content:
+  field_section_divider_text:
+    weight: 0
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden: {  }

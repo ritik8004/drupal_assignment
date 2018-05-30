@@ -32,3 +32,16 @@ alshaya_acm_product.settings:
     langcode:
       type: string
       label: 'Language code'
+    cross_up_sell_items_settings:
+      type: mapping
+      label: 'Cross sell / Up sell carousel settings'
+      mapping:
+        pdp_carousel_items_size_0:
+          type: integer
+          label: 'Mobile view'
+        pdp_carousel_items_size_768:
+          type: integer
+          label: 'Tablet view'
+        pdp_carousel_items_size_1025:
+          type: integer
+          label: 'Desktop view'

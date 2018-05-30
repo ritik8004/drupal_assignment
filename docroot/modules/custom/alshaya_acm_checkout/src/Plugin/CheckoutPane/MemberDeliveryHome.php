@@ -47,12 +47,13 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (!$this->isVisible()) {
+    if ($this->getSelectedDeliveryMethod() != 'hd') {
       return $pane_form;
     }
 
-    if ($this->getSelectedDeliveryMethod() != 'hd') {
-      return $pane_form;
+    // Check if user is changing his mind, if so clear shipping info.
+    if ($this->isUserChangingHisMind()) {
+      $this->clearShippingInfo();
     }
 
     $pane_form['#attributes']['class'][] = 'active--tab--content';
@@ -63,14 +64,8 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
 
     $cart = $this->getCart();
-
-    // Once we open HD page, clear temp cc selected info.
-    $cart->setExtension('cc_selected_info', NULL);
-
-    /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
-    $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
-
-    $address = $cart_helper->getShipping($cart);
+    $address_info = $this->getAddressInfo('hd');
+    $address = !empty($address_info['address']) ? $address_info['address'] : [];
 
     $pane_form['address_form'] = [
       '#type' => 'container',

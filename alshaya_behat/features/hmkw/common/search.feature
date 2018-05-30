@@ -135,7 +135,7 @@ Feature: Search feature
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    When I follow "checkout as guest"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -177,7 +177,7 @@ Feature: Search feature
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -266,7 +266,7 @@ Feature: Search feature
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    When I follow "checkout as guest"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -305,7 +305,7 @@ Feature: Search feature
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"

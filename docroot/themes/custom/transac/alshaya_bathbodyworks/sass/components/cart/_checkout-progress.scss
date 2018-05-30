@@ -4,8 +4,6 @@
     font-family: $alshaya-thin;
 
     &.-current {
-      font-weight: normal;
-
       &::before {
         border: 1px solid $checkout_current_counter_border;
       }

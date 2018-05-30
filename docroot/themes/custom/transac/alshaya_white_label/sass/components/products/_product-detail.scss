@@ -1900,3 +1900,12 @@ html[lang=ar] {
     height: 2.5rem;
   }
 }
+
+.path--cart,
+.nodetype--acq_product {
+  .select2-container--open {
+    .select2-dropdown {
+      z-index: 1001;
+    }
+  }
+}

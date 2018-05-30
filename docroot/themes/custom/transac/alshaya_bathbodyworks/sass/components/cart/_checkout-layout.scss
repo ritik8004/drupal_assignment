@@ -12,15 +12,10 @@
     a {
       text-align: #{$right};
       width: 64%;
+      max-width: 100%;
 
       @include breakpoint($only-mobile) {
         margin-#{$left}: 2.5rem;
-      }
-
-      @include breakpoint($only-tablet) {
-        img {
-          width: 46%;
-        }
       }
     }
 
@@ -74,5 +69,12 @@
     .light {
       font-family: $alshaya-thin;
     }
+  }
+}
+
+.block-checkout-summary-block {
+  .delivery-type,
+  .address {
+    padding: 1rem 0.5rem;
   }
 }

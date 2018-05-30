@@ -209,9 +209,20 @@ header {
   }
 
   .store {
+    @include breakpoint($upto-desktop) {
+      background: url("../imgs/icons/ic-mappin.svg") no-repeat center;
+      background-size: 2.125rem;
+      font-size: 0;
+    }
+
+    &::before {
+      content: none;
+    }
+
     &.is-active {
-      &::before {
-        color: $header_c_menu_store_active_icon;
+      @include breakpoint($upto-desktop) {
+        background: url("../imgs/icons/ic-mappin-active.svg") no-repeat center;
+        background-size: 2.125rem;
       }
     }
   }
