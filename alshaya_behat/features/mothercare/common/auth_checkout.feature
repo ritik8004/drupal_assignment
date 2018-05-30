@@ -4,7 +4,7 @@ Feature: As an authenticated user
   using various payment options
 
   Background:
-    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+    Given I am logged in as an authenticated user "newuser14may@mailinator.com" with password "tester@123"
     And I wait for the page to load
     Then I should see the link "My account"
     When I am on a configurable product
@@ -39,7 +39,7 @@ Feature: As an authenticated user
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
-  @hd @knet
+  @hd @knet @key
   Scenario: As an authenticated user
     I should be able to checkout using Home delivery
     and pay by KNET
@@ -58,8 +58,8 @@ Feature: As an authenticated user
       And I wait for the page to load
       And I press "place order"
       And I wait for the page to load
-      And I select "Knet Test Card [KNET1]" from "bank"
-      And I fill in "cardN" with "0000000001"
+      And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+      And I fill in an element having class ".paymentinput" with "0000000001"
       And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
       And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
       And I fill in "Ecom_Payment_Pin_id" with "1234"
@@ -87,8 +87,8 @@ Feature: As an authenticated user
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
@@ -99,7 +99,7 @@ Feature: As an authenticated user
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
-  @hd @cs
+  @hd @cs @cs1
   Scenario: As an authenticated user
     I should be able to checkout on HD
     using Cybersource payment method

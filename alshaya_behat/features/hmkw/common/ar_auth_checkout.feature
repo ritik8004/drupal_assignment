@@ -56,8 +56,8 @@ Feature: As an authenticated user
     When I accept terms and conditions
     And I press "سجل الطلبية"
     When I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    When I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     When I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
@@ -112,8 +112,8 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
@@ -125,7 +125,7 @@ Feature: As an authenticated user
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "
     Then I should see "رقم طلبيتك هو"
 
-  @cc @cs @dd
+  @cc @cs
   Scenario: As an authenticated user
   I should be able to checkout using Click and Collect
   and pay by Cybersource on Arabic site
