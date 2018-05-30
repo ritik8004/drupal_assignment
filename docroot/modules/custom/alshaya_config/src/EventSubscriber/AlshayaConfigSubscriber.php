@@ -62,20 +62,21 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    */
   public function onConfigSave(ConfigCrudEvent $event) {
     $config = $event->getConfig();
+    $config_name = $config->getName();
     $data = $config->getRawData();
     $override_deletions = [];
 
     // Override the config data with module overrides.
-    $this->fetchOverrides($data, 'override', $config->getName());
+    $this->fetchOverrides($data, 'override', $config_name);
 
     // Get delete-overrides from enabled modules.
-    $this->fetchOverrides($override_deletions, 'override-delete', $config->getName());
+    $this->fetchOverrides($override_deletions, 'override-delete', $config_name);
 
     // Get recursive diff of config data with delete-overrides.
     $data = DiffArray::diffAssocRecursive($data, $override_deletions);
 
     // Allow other modules to alter the data.
-    $this->moduleHandler->alter('alshaya_config_save', $data, $config->getName());
+    $this->moduleHandler->alter('alshaya_config_save', $data, $config_name);
 
     // Re-write the config to make sure the overrides are not lost.
     $this->configStorage->write($config->getName(), $data);

@@ -220,13 +220,13 @@ trait CheckoutDeliveryMethodTrait {
       /** @var \Drupal\acq_cart\Cart $cart */
       $cart = $this->getCart();
 
+      /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
+      $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
+      $response['address'] = $cart_helper->getShipping($cart);
+
       if ($selected_method === 'cc') {
-        $response['address'] = (array) $cart->getShipping();
         $response['store_code'] = $cart->getExtension('store_code');
         $response['click_and_collect_type'] = $cart->getExtension('click_and_collect_type');
-      }
-      else {
-        $response['address'] = (array) $cart->getShipping();
       }
     }
     else {

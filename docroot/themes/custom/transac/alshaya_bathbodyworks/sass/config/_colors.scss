@@ -115,7 +115,7 @@ $autocomplete_border_last: $warm-grey-two;
 // Header.
 $header_bg: $white;
 $header_search_block_bg: $white;
-$header_border: $warm-grey-two;
+$header_border: $warm-grey-three;
 
 // Header mobile search.
 $header_search_border_mobile: $warm-grey-three;
@@ -338,6 +338,10 @@ $webform_contact_legend: $black;
 
 // Buttons.
 $primary_btn_bg: $black;
+$primary_btn_text: $white;
+$primary_empty_btn: $black;
+$primary_empty_btn_border: $black;
+$primary_brand_button: $peacock-blue;
 
 // Breadcrumb.
 $breadcrumb_link: $black;
@@ -367,6 +371,7 @@ $checkout_securely_icon_bg: $hot-pink;
 $checkout_securely_icon_mobile_txt: $white;
 $checkout_securely_txt: $black;
 $checkout_footer_txt: $warm-grey-one;
+$checkout_delivery_options_border: $warm-grey-two;
 $checkout_default_address_border: $peacock-blue;
 $checkout_address_edit_link: $black;
 

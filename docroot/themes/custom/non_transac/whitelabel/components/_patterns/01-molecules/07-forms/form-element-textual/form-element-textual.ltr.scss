@@ -93,6 +93,12 @@
   transition: left 0.25s ease-in-out, width 0.25s ease-in-out, background 0.25s ease-in-out;
 }
 
+.input__inner-container {
+  .input__line {
+    width: auto;
+  }
+}
+
 /* Input with Label */
 .input--label .input::placeholder {
   color: transparent;
@@ -175,7 +181,7 @@ input:active ~ .input__label label {
   .local-number ~ .input__label label {
     height: auto;
     width: auto;
-    clip: unset;
+    clip: inherit;
   }
 
   .mobile-input--wrapper .form-item {
@@ -194,10 +200,10 @@ input:active ~ .input__label label {
 .mobile-input--wrapper {
   direction: ltr;
 
-  .form-type-textfield {
+  .form-item-mobile-number-mobile {
     label {
       font-size: 0.75rem;
-      #{direction(left)}: -2.875rem;
+      #{direction(left)}: -3.1875rem;
       top: -0.875rem;
     }
   }
