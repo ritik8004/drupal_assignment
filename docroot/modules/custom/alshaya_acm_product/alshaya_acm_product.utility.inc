@@ -229,11 +229,14 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
           'type' => 'image',
         ];
       }
-      elseif (isset($media_item['media_type']) && $media_item['media_type'] == 'video') {
-        if (strpos($media_item['video_provider'], 'youtube')) {
+      elseif (isset($media_item['media_type']) && $media_item['media_type'] == 'external-video') {
+        // @TODO:
+        // Receiving video_provider as NULL, should be set to youtube or
+        // vimeo so that we can avoid the strpos in URL.
+        if (strpos($media_item['video_url'], 'youtube')) {
           $thumbnails[] = [
-            'thumburl' => 'https://img.youtube.com/vi/' . alshaya_product_zoom_getyoutubeid($media_item['video_url']) . '/hqdefault.jpg',
-            'url' => $media_item['video_url'],
+            'thumburl' => $media_item['file'],
+            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], 'youtube'),
             'type' => 'youtube',
             // @TODO: should this be config?
             'width' => 81,
@@ -243,7 +246,8 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
         }
         else {
           $thumbnails[] = [
-            'url' => $media_item['video_url'],
+            'thumburl' => $media_item['file'],
+            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], 'vimeo'),
             'type' => 'vimeo',
             // @TODO: should this be config?
             'width' => 81,
@@ -710,4 +714,39 @@ function alshaya_acm_product_update_field_cardinality_from_unlimited_to_unique($
       ->condition('langcode', $value->langcode)
       ->execute();
   }
+}
+
+/**
+ * Utility function to return Youtube and Vimeo player URLs from web URls.
+ *
+ * @param string $url
+ *   The URL received from MDC.
+ * @param string $provider
+ *   The video provider, expecting youtube/vimeo.
+ *
+ * @return string
+ *   The player URL for embedding video in iframe.
+ */
+function alshaya_acm_product_generate_video_embed_url($url, $provider) {
+  $embed_url = '';
+  // Vimeo videos.
+  if ($provider == 'vimeo') {
+    $video_id = explode('vimeo.com/', $url)[1];
+    if (strpos($video_id, '&') !== FALSE) {
+      $video_id = explode('&', $video_id)[0];
+    }
+    $embed_url .= 'https://player.vimeo.com/video/' . $video_id;
+  }
+  // Youtube videos.
+  if ($provider == 'youtube') {
+    // Youtube long URL.
+    if (strpos($url, 'youtube.com/') !== FALSE) {
+      $video_id = explode('v=', $url)[1];
+      if (strpos($video_id, '&') !== FALSE) {
+        $video_id = explode('&', $video_id)[0];
+      }
+      $embed_url .= 'https://www.youtube.com/embed/' . $video_id;
+    }
+  }
+  return $embed_url;
 }

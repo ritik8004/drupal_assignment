@@ -296,30 +296,15 @@
       });
 
       // Handling videos inside sliders.
-      // Swapping the containers or Inserting video iframes inside containers on click of video thumbnails.
-      // Fetch Vimeo thumbnail via a GET call. Vimeo doesnot give thumbnails via URL like YT.
-      // @TODO: Can we do this in PHP
-      $('#lightSlider li.cloudzoom__thumbnails__video.vimeo, #product-image-gallery li.vimeo, #product-image-gallery-mobile li.vimeo').each(function () {
-        var vimeoVideoUrl = $(this).attr('data-iframe');
-        var match = /vimeo.*\/(\d+)/i.exec(vimeoVideoUrl);
-        var self = $(this);
-        if (match) {
-          var vimeoVideoID = match[1];
-          $.getJSON('https://www.vimeo.com/api/v2/video/' + vimeoVideoID + '.json?callback=?', {format: 'json'}, function (data) {
-            var featuredImg = data[0].thumbnail_large;
-            self.find('img').attr('src', featuredImg);
-          });
-        }
-      });
-
-      // Support Youtube & Vimeo videos in slider.
       // For Mobile slider we only insert, no need to remove it.
       $('#product-image-gallery-mobile li', context).on('click', function () {
-        if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
-          var href = $(this).attr('data-iframe');
-          $(this).children('img').hide();
-          $(this).children('iframe').remove();
-          appendVideoIframe($(this), href, 320, 320);
+        if ($(window).width() > 767) {
+          if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
+            var href = $(this).attr('data-iframe');
+            $(this).children('img').hide();
+            $(this).children('iframe').remove();
+            appendVideoIframe($(this), href, 320, 320);
+          }
         }
       });
 
@@ -328,7 +313,8 @@
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
           var wrap = $('#cloud-zoom-wrap');
           // Get width & height of wrap.
-          var width = wrap.width();
+          // Reducing 3% width.
+          var width = wrap.width() - wrap.width() * 0.03;
           var height = wrap.height();
           var URL = $(this).attr('data-iframe');
           $('#yt-vi-container iframe').remove();

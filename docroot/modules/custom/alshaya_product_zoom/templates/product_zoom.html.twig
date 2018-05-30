@@ -7,12 +7,12 @@
           <span class="hover-text">{{ 'Hover over image to zoom'|t }}</span><span class="mobile-hover-text">{{ 'Double tap image to zoom'|t }}</span>
         </a>
       </div>
+      <div id="yt-vi-container" class= "cloudzoom__video"></div>
       {%  if labels|length > 0 %}
         <div class="product-labels">
           {{ labels }}
         </div>
       {% endif %}
-      <div id="yt-vi-container" class= "cloudzoom__video"></div>
     </div>
     <div class="cloudzoom__thumbnails">
       <ul id="lightSlider" class="{{ pager_flag }}">
@@ -23,7 +23,7 @@
           </li>
         {% elseif thumbs.type == 'vimeo' %}
           <li data-iframe="{{ thumbs.url }}" class="cloudzoom__thumbnails__video vimeo">
-            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="" />
+            <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" />
           </li>
         {% else %}
           <li>
@@ -44,8 +44,9 @@
             <img src="{{ thumbs.thumburl }}"/>
           </li>
         {% elseif thumbs.type == 'vimeo' %}
-          <li data-iframe="{{ thumbs.url }}" class="mobilegallery__thumbnails__video vimeo">
-            <img src=""/>
+          <li class="mobilegallery__thumbnails__video vimeo">
+            <iframe class="mobileplayer" width="100%" src={{ thumbs.url }} frameborder="0" allowfullscreen>
+            </iframe>
           </li>
         {% else %}
           <li>
@@ -81,7 +82,7 @@
             </li>
           {% elseif thumbs.type == 'vimeo' %}
             <li data-iframe="{{ thumbs.url }}" class="imagegallery__thumbnails__video vimeo">
-              <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src=""/>
+              <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
             </li>
           {% else %}
             <li>
@@ -107,7 +108,7 @@
             </li>
           {% elseif thumbs.type == 'vimeo' %}
             <li data-iframe="{{ thumbs.url }}" class="mob-imagegallery__thumbnails__video vimeo">
-              <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src=""/>
+              <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
             </li>
           {% else %}
             <li class="mob-imagegallery__thumbnails__image">
