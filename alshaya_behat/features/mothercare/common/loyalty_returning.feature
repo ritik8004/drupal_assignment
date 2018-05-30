@@ -13,7 +13,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "checkout securely"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "sign in"
     And I wait for the page to load
     When I follow "Home delivery"
@@ -33,7 +33,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
     PC number from the basket should be displayed on Order confirmation page when my account is null
     and my account field for PC should remain null after placing order
-    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Password@1"
     And I wait for the page to load
     When I follow "edit account details"
     And I wait for the page to load
@@ -58,7 +58,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "checkout securely"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "sign in"
     And I wait for the page to load
     When I follow "Home delivery"
@@ -83,7 +83,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
     no PC number should be displayed on order confirmation page when basket PC number is null
     and my account PC number is not null
-    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Password@1"
     And I wait for the page to load
     When I follow "edit account details"
     And I wait for the page to load
@@ -108,7 +108,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "checkout securely"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "sign in"
     And I wait for the page to load
     When I follow "Home delivery"
@@ -128,7 +128,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
   PC number on basket should get updated with My account number (basket = null)
   when user returns to basket page from any of the checkout pages
-    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Password@1"
     And I wait for the page to load
     When I follow "edit account details"
     And I wait for the page to load
@@ -153,7 +153,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "checkout securely"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "sign in"
     And I wait for the page to load
     When I follow "Home delivery"
@@ -167,7 +167,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
     value from basket page should be displayed on Order confirmation page
     even when user has different PC number in his account
-    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Password@1"
     And I wait for the page to load
     When I follow "edit account details"
     And I wait for the page to load
@@ -193,7 +193,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "checkout securely"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "sign in"
     And I wait for the page to load
     When I follow "Home delivery"
@@ -213,7 +213,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
   value on the basket should prevail when user returns to basket from checkout pages
   and user had a different value in my account section
-    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Password@1"
     And I wait for the page to load
     When I follow "edit account details"
     And I wait for the page to load
@@ -239,7 +239,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "checkout securely"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "sign in"
     And I wait for the page to load
     When I follow "Home delivery"
@@ -263,7 +263,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
     When I follow "توصيل إلى هذا العنوان"
@@ -282,7 +282,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
   PC number from the basket should be displayed on Order confirmation page when my account is null
   and my account field for PC should remain null after placing order
-    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Password@1"
     And I wait for the page to load
     When I follow "edit account details"
     And I wait for the page to load
@@ -307,7 +307,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
     When I follow "خدمة التوصيل للمنزل"
@@ -333,7 +333,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
   no PC number should be displayed on order confirmation page when basket PC number is null
   and my account PC number is not null
-    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Password@1"
     And I wait for the page to load
     When I follow "edit account details"
     And I wait for the page to load
@@ -358,7 +358,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
     When I follow "خدمة التوصيل للمنزل"
@@ -379,7 +379,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
   PC number on basket should get updated with My account number (basket = null)
   when user returns to basket page from any of the checkout pages
-    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Password@1"
     And I wait for the page to load
     When I follow "edit account details"
     And I wait for the page to load
@@ -404,7 +404,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
     When I follow "خدمة التوصيل للمنزل"
@@ -419,7 +419,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
   value from basket page should be displayed on Order confirmation page
   even when user has different PC number in his account
-    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Password@1"
     And I wait for the page to load
     When I follow "edit account details"
     And I wait for the page to load
@@ -445,7 +445,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
     When I follow "خدمة التوصيل للمنزل"
@@ -466,7 +466,7 @@ Feature: Test the privilege card functionality for returning customer
   Scenario: As a returning customer
   value on the basket should prevail when user returns to basket from checkout pages
   and user had a different value in my account section
-    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+5@axelerant.com" with password "Password@1"
     And I wait for the page to load
     When I follow "edit account details"
     And I wait for the page to load
@@ -492,7 +492,7 @@ Feature: Test the privilege card functionality for returning customer
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "shweta+5@axelerant.com"
-    And I fill in "edit-checkout-login-pass" with "Alshaya123$"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
     When I follow "خدمة التوصيل للمنزل"

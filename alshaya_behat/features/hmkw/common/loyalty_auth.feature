@@ -3,7 +3,7 @@ Feature:
   Test all the scenarios related to privilege card number for authenticated user
 
   Background:
-    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "shweta+2@axelerant.com" with password "Password@1"
     And I wait for the page to load
 
   Scenario: As an authenticated user
