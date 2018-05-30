@@ -225,7 +225,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       }
     }
 
-    return $terms;
+    return array_values($terms);
   }
 
   /**
