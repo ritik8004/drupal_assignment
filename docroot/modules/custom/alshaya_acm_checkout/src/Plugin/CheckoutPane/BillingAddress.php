@@ -118,7 +118,9 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     ];
 
     if ($same_as_shipping !== self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
-      $billing_address = (array) $cart->getBilling();
+      /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
+      $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
+      $billing_address = $cart_helper->getBilling($cart);
 
       if (!empty($billing_address['country_id'])) {
         /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */

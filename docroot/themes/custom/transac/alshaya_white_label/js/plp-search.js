@@ -66,11 +66,6 @@
           $(mobileFilterBarSelector).addClass('empty');
         }
 
-        else if (countFilters === 0) {
-          // Removing the filter count added next to the label.
-          $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').removeClass('active-filter-count').html(Drupal.t('Filter'));
-        }
-
         else {
           if (countFilters > 0) {
             // Removing the element before adding again.
@@ -86,6 +81,11 @@
                 Drupal.alshayaAccordion(this);
               });
           }
+        }
+
+        if (countFilters === 0) {
+          // Removing the filter count added next to the label.
+          $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').removeClass('active-filter-count').html(Drupal.t('Filter'));
         }
       }
 

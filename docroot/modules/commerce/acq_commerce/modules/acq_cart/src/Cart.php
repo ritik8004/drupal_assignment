@@ -12,7 +12,7 @@ use Drupal\acq_sku\Entity\SKU;
 class Cart implements CartInterface {
 
   /**
-   * The magento cart object.
+   * The cart object.
    *
    * @var object
    */
@@ -40,6 +40,13 @@ class Cart implements CartInterface {
   protected $cartTotalCount = 0;
 
   /**
+   * The cart's guest email address.
+   *
+   * @var string
+   */
+  protected $guestCartEmail;
+
+  /**
    * Constructor.
    *
    * @param object $cart
@@ -61,6 +68,14 @@ class Cart implements CartInterface {
    *   The cart.
    */
   public function updateCartObject($cart) {
+    // Some ecommerce backends, like hybris, don't save the billing like they
+    // do with shipping. So if a billing was set we don't want it to be
+    // overwritten when the API response comes back.
+    $current_billing = $this->getBilling();
+    if (!empty($current_billing) && empty($cart->billing)) {
+      $cart->billing = $current_billing;
+    }
+
     $this->cart = $cart;
     $this->updateCartItemsCount();
   }
@@ -169,7 +184,7 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
-  public function addItemToCart($sku, $quantity) {
+  public function addItemToCart($sku, $quantity, array $extension = []) {
     $items = $this->items();
 
     // Check if cart contains the same item.
@@ -190,7 +205,7 @@ class Cart implements CartInterface {
       }
     }
 
-    $items[] = ['sku' => $sku, 'qty' => $quantity];
+    $items[] = ['sku' => $sku, 'qty' => $quantity, 'extension' => $extension];
 
     $this->cart->items = $items;
 
@@ -244,7 +259,12 @@ class Cart implements CartInterface {
         $item['qty'] = 1;
       }
 
-      $this->addItemToCart($item['sku'], $item['qty']);
+      $extension = [];
+      if (isset($item['extension'])) {
+        $extension = $item['extension'];
+      }
+
+      $this->addItemToCart($item['sku'], $item['qty'], $extension);
     }
   }
 
@@ -315,10 +335,30 @@ class Cart implements CartInterface {
   }
 
   /**
+   * Address normalizer.
+   *
+   * @param object $address
+   *   Object of address.
+   *
+   * @return object
+   *   Normalized address.
+   */
+  private function normalizeAddress($address) {
+    if (isset($address->extension)) {
+      if (!is_object($address->extension)) {
+        $anObject = (object) $address->extension;
+        $address->extension = $anObject;
+      }
+    }
+    return $address;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function setBilling($address) {
-    $this->cart->billing = (object) $address;
+    $normalizedAddress = $this->normalizeAddress((object) $address);
+    $this->cart->billing = $normalizedAddress;
 
     if (isset($this->cart->billing->first_name)) {
       $this->cart->billing->firstname = $this->cart->billing->first_name;
@@ -346,7 +386,8 @@ class Cart implements CartInterface {
    * {@inheritdoc}
    */
   public function setShipping($address) {
-    $this->cart->shipping = (object) $address;
+    $normalizedAddress = $this->normalizeAddress((object) $address);
+    $this->cart->shipping = $normalizedAddress;
 
     if (isset($this->cart->shipping->first_name)) {
       $this->cart->shipping->firstname = $this->cart->shipping->first_name;
@@ -363,6 +404,7 @@ class Cart implements CartInterface {
    * {@inheritdoc}
    */
   public function setShippingMethod($carrier, $method, array $extension = []) {
+
     $this->cart->carrier = [
       'carrier_code' => $carrier,
       'method_code' => $method,
@@ -393,7 +435,11 @@ class Cart implements CartInterface {
     // If cart is not updated yet and we are reading from session.
     if (isset($this->cart, $this->cart->carrier)) {
       $method = $this->cart->carrier;
-      return implode(',', [$method['carrier_code'], $method['method_code']]);
+
+      // V2 onwards, we will have empty structure available all the time.
+      if (!empty($method['carrier_code']) && !empty($method['method_code'])) {
+        return implode(',', [$method['carrier_code'], $method['method_code']]);
+      }
     }
 
     if (isset($this->cart, $this->cart->extension, $this->cart->extension['shipping_method'])) {
@@ -537,13 +583,23 @@ class Cart implements CartInterface {
     if (isset($this->cart)) {
       $cart = $this->cart;
 
-      // Don't set blank addresses, Magento doesn't like this.
-      if (isset($cart->shipping) && empty($cart->shipping->country_id)) {
-        unset($cart->shipping);
+      if (isset($cart->shipping)) {
+        // Don't set blank addresses, Magento doesn't like this.
+        if (is_object($cart->shipping) && empty($cart->shipping->country_id)) {
+          unset($cart->shipping);
+        }
+        elseif (is_array($cart->shipping) && empty($cart->shipping['country_id'])) {
+          unset($cart->shipping);
+        }
       }
 
-      if (isset($cart->billing) && empty($cart->billing->country_id)) {
+      if (isset($cart->billing)) {
+        if (is_object($cart->billing) && empty($cart->billing->country_id)) {
         unset($cart->billing);
+      }
+        elseif (is_array($cart->billing) && empty($cart->billing['country_id'])) {
+          unset($cart->billing);
+        }
       }
 
       return $this->cart;
@@ -557,9 +613,23 @@ class Cart implements CartInterface {
   public function convertToCustomerCart(array $cart) {
     $this->cart->cart_id = $cart['cart_id'];
     $this->cart->customer_id = $cart['customer_id'];
-    if (!empty($cart['customer_email'])) {
+    if (isset($cart['customer_email'])) {
       $this->cart->customer_email = $cart['customer_email'];
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGuestCartEmail() {
+    return $this->guestCartEmail;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setGuestCartEmail($email) {
+    $this->guestCartEmail = $email;
   }
 
   /**

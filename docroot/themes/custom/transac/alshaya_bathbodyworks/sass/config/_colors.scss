@@ -115,7 +115,7 @@ $autocomplete_border_last: $warm-grey-two;
 // Header.
 $header_bg: $white;
 $header_search_block_bg: $white;
-$header_border: $warm-grey-two;
+$header_border: $warm-grey-three;
 
 // Header mobile search.
 $header_search_border_mobile: $warm-grey-three;
@@ -223,6 +223,7 @@ $minicart_notification_text: $peacock-blue;
 $minicart_notification_btn_bg: $black;
 $minicart_notification_product_title: $black;
 $minicart_notification_shadow: $shadow;
+$minicart_notification_qty_text: $warm-grey-one;
 
 // Delivery tabs.
 $deliverybanner_title: $peacock-blue;
@@ -337,6 +338,10 @@ $webform_contact_legend: $black;
 
 // Buttons.
 $primary_btn_bg: $black;
+$primary_btn_text: $white;
+$primary_empty_btn: $black;
+$primary_empty_btn_border: $black;
+$primary_brand_button: $peacock-blue;
 
 // Breadcrumb.
 $breadcrumb_link: $black;
@@ -366,6 +371,7 @@ $checkout_securely_icon_bg: $hot-pink;
 $checkout_securely_icon_mobile_txt: $white;
 $checkout_securely_txt: $black;
 $checkout_footer_txt: $warm-grey-one;
+$checkout_delivery_options_border: $warm-grey-two;
 $checkout_default_address_border: $peacock-blue;
 $checkout_address_edit_link: $black;
 
@@ -444,3 +450,9 @@ $order_summary_section_border: $warm-grey-two;
 $order_summary_subtotal: $black;
 $order_summary_order_status: $warm-grey-one;
 $order_summary_product_img_border: $warm-grey-two;
+
+// Order Print
+$checkout_confirm_order_summary_row: $info-blue;
+$order_print_btn_bg: $info-blue;
+$order_print_btn_border: $white;
+$order_print_btn_text: $white;

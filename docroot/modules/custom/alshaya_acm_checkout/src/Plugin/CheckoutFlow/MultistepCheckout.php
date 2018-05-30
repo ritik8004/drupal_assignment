@@ -98,7 +98,13 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
     // For login we want user to start again with checkout after login.
     if ($this->stepId == 'login') {
-      $form['#action'] = Url::fromRoute('<current>', [], ['query' => $this->getDestinationArray(), 'external' => FALSE])->toString();
+      // Todo: This needs to be changed from hardcode value.
+      // This is happening because in url, we have not correctly formed query
+      // string. Its like '/cart/checkout/login?cart/checkout/login?tab=login'
+      // We can change/replace and adjust url again but then,
+      // UrlHelper::buildQuery() called by Url()->toString() encodes the url.
+      $destination = ['tab' => 'login'];
+      $form['#action'] = Url::fromRoute('<current>', [], ['query' => $destination, 'external' => FALSE])->toString();
     }
 
     $form['#attached']['library'][] = 'alshaya_acm_checkout/checkout_flow';

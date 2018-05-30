@@ -76,6 +76,12 @@ deploy:
      script: "$BLT_DIR/scripts/travis/deploy_branch"
      skip_cleanup: true
      on:
+       branch: acm-v2-ps
+       php: 5.6
+   - provider: script
+     script: "$BLT_DIR/scripts/travis/deploy_branch"
+     skip_cleanup: true
+     on:
        branch: qa
        php: 5.6
    - provider: script

@@ -59,7 +59,7 @@ function alshaya_get_env_keys($site, $env) {
       // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
       'default' => [
         'magento' => 'mc_qa',
-        'conductor' => 'mc_dev'
+        'conductor' => 'mc_test',
       ],
     ],
     // Mothercare SA.
@@ -144,6 +144,20 @@ function alshaya_get_env_keys($site, $env) {
       '01live' => [
         'magento' => 'hm_prod',
         'conductor' => 'hmae_prod'
+      ],
+    ],
+    // BathBodyWorks KW.
+    'bbwkw' => [
+      'default' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwkw_test',
+      ],
+    ],
+    // BathBodyWorks SA.
+    'bbwsa' => [
+      'default' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwsa_test',
       ],
     ],
     // BathBodyWorks AE.

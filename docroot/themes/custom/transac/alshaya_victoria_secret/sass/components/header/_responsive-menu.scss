@@ -12,6 +12,12 @@ header {
       top: 5.3125rem;
       position: fixed;
     }
+
+    html[lang=ar] & {
+      @include breakpoint($upto-tablet) {
+        top: 5.3rem;
+      }
+    }
   }
 
   .block-cart-mini-block .cart-link {
@@ -173,6 +179,23 @@ header {
   .c-header__region .block-system-branding-block {
     @include breakpoint($upto-desktop) {
       display: none;
+    }
+
+    .site-brand-home {
+      img {
+        @include breakpoint($desktop) {
+          max-width: 21.875rem;
+          width: auto;
+          margin: auto;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  &.navbar-fixed-top {
+    @include breakpoint($upto-desktop) {
+      z-index: 1;
     }
   }
 }

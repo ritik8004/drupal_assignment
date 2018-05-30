@@ -11,4 +11,11 @@
       text-transform: capitalize;
     }
   }
+
+  input[type=checkbox] ~ label::before {
+    @include breakpoint($only-mobile) {
+      position: relative;
+      top: -0.125rem;
+    }
+  }
 }
