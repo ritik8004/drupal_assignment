@@ -12,7 +12,7 @@ Feature: Test various checkout scenarios for Arabic site
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
 
   Scenario: As a Guest on Arabic site

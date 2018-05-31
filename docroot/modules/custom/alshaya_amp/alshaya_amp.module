@@ -125,3 +125,26 @@ function _alshaya_amp_body_prerender(array $element) {
 
   return $element;
 }
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_amp_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'page_top') {
+    $group = $implementations['alshaya_amp'];
+    unset($implementations['alshaya_amp']);
+    $implementations['alshaya_amp'] = $group;
+  }
+}
+
+/**
+ * Implements hook_page_top().
+ */
+function alshaya_amp_page_top(&$page) {
+  // If amp page, remove GTM <noscript> tag.
+  if (\Drupal::service('router.amp_context')->isAmpRoute()) {
+    if (!empty($page['google_tag_noscript_tag'])) {
+      unset($page['google_tag_noscript_tag']);
+    }
+  }
+}

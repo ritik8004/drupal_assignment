@@ -2,10 +2,6 @@ input[type=checkbox] ~ label {
   @include icon(check-box-empty);
 
   color: $primary_checkbox_empty;
-
-  &::before {
-    font-size: 2.125rem;
-  }
 }
 
 input[type=checkbox]:checked ~ label {

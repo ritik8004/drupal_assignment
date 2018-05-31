@@ -202,7 +202,7 @@
         top: 0 !important;
         color: $user_confirmation_newsletter_label;
         font-size: 0.875rem;
-        padding-#{$left}: 1.6875rem;
+        padding-#{$left}: 1.875rem;
       }
     }
   }
@@ -241,13 +241,7 @@
 
 .alias--cart-checkout-confirmation .block-alshaya-acm-checkout .form-type-checkbox .option::before {
   position: relative;
-  top: 0.6rem;
-  #{$left}: -0.1875rem;
-  font-size: 2rem;
-
-  @include breakpoint($tablet) {
-    font-size: 2.125rem;
-  }
+  #{$left}: 0.125rem;
 }
 
 html[lang=ar] {

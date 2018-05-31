@@ -17,6 +17,18 @@ header {
     @include breakpoint($only-mobile) {
       margin: 0.625rem 0;
       height: 2.25rem;
+
+      html[lang=ar] & {
+        height: 2.25rem;
+      }
+    }
+
+    .block-views-exposed-filter-blocksearch-page {
+      @include breakpoint($only-mobile) {
+        html[lang=ar] & {
+          top: 3rem;
+        }
+      }
     }
   }
 
@@ -128,6 +140,10 @@ header {
       @include breakpoint($only-tablet) {
         margin-#{$left}: -0.3125rem;
         background-position-y: 0.4375rem;
+
+        html[lang=ar] & {
+          background-position-x: 0.625rem;
+        }
       }
     }
   }
@@ -425,7 +441,8 @@ header {
 
     .store {
       top: 1.125rem;
-      #{$right}: 2.25rem;
+      #{$right}: 2rem;
+      padding-#{$right}: 0;
     }
 
     .mobile--menu {

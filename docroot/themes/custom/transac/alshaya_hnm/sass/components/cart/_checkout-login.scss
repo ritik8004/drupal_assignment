@@ -36,6 +36,10 @@
     @include breakpoint($only-mobile) {
       @include icon(arrowup, before) {
         transform: none;
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
       }
     }
   }
@@ -167,14 +171,11 @@
 
     .checkout-guest-email-usage {
       color: $primary_dark_color;
-      margin-bottom: 1.85rem;
       font-family: $hnm-bold;
       font-weight: normal;
 
       @include breakpoint($tablet) {
         color: $primary_dark_color;
-        margin-bottom: 1.4rem;
-        font-size: 13px;
         width: 80%;
       }
     }

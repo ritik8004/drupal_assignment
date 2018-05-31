@@ -89,8 +89,9 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
         }
       }
       elseif ($request->get('_route') == 'view.search.page') {
-        $brand = $request->query->get('brand');
-        $term = $this->termStorage->load($brand);
+        if ($brand = $request->query->get('brand')) {
+          $term = $this->termStorage->load($brand);
+        }
       }
     }
 
@@ -195,7 +196,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     $term = $this->getCategoryTermRootParent();
     if (empty($term)) {
       $parent_terms = $this->getCategoryTreeCached();
-      $tid = $this->configFactory->get('alshaya_super_category.settings')->get('default_category_tid');
+      $tid = alshaya_super_category_get_default_term();
       return isset($parent_terms[$tid]) ? $parent_terms[$tid] : NULL;
     }
     return $term;

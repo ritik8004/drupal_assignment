@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: section_divider
+label: 'Section Divider'
+icon_uuid: null
+description: ''
+behavior_plugins: {  }

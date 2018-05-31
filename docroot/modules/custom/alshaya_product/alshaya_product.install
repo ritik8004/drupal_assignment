@@ -12,6 +12,15 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Updating promotion list views to use custom contextual filter.
+ */
+function alshaya_product_update_8017() {
+  alshaya_config_install_configs(['views.view.alshaya_product_list'], 'alshaya_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new view mode for acq_product node bundle and a new views.
  */
 function alshaya_product_update_8016() {

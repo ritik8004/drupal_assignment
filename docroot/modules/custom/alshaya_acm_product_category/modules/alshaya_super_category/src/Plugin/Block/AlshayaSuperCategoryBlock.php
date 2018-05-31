@@ -115,7 +115,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     }
 
     // Set the default parent from settings.
-    $parent_id = $this->configFactory->get('alshaya_super_category.settings')->get('default_category_tid');
+    $parent_id = alshaya_super_category_get_default_term();
 
     // Set default category link to redirect to home page.
     // Default category is set to active, while we are on home page, But the

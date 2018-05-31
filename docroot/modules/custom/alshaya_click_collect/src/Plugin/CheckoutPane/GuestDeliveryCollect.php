@@ -63,12 +63,17 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (!$this->isVisible()) {
+    if ($this->getSelectedDeliveryMethod() != 'cc') {
+      // Once we open HD page, clear temp cc selected info.
+      $cart = $this->getCart();
+      $cart->setExtension('cc_selected_info', NULL);
+
       return $pane_form;
     }
 
-    if ($this->getSelectedDeliveryMethod() != 'cc') {
-      return $pane_form;
+    // Check if user is changing his mind, if so clear shipping info.
+    if ($this->isUserChangingHisMind()) {
+      $this->clearShippingInfo();
     }
 
     $pane_form['#attributes']['class'][] = 'active--tab--content';
@@ -77,7 +82,13 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $default_firstname = $default_lastname = $default_email = '';
 
     $cart = $this->getCart();
-    $shipping = (array) $cart->getShipping();
+    $address_info = $this->getAddressInfo('cc');
+
+    if (!empty($address_info)) {
+      $store_code = $address_info['store_code'];
+      $shipping_type = $address_info['click_and_collect_type'];
+      $default_mobile = $address_info['address']['telephone'];
+    }
 
     $cc_selected_info = $cart->getExtension('cc_selected_info');
 
@@ -89,12 +100,6 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     elseif ($cc_selected_info && isset($cc_selected_info['store_code'])) {
       $store_code = $cc_selected_info['store_code'];
       $shipping_type = $cc_selected_info['shipping_type'];
-    }
-    elseif ($cart->getExtension('store_code') && $shipping && !empty($shipping['telephone'])) {
-      // Check if value available in shipping address.
-      $store_code = $cart->getExtension('store_code');
-      $shipping_type = $cart->getExtension('click_and_collect_type');
-      $default_mobile = $shipping['telephone'];
     }
 
     if ($store_code && $shipping_type) {
@@ -385,7 +390,12 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       $api_wrapper = \Drupal::service('acq_commerce.api');
 
       try {
-        $customer = $api_wrapper->createCustomer($values['cc_firstname'], $values['cc_lastname'], $values['cc_email']);
+        $customer = [];
+        $customer['firstname'] = $values['cc_firstname'];
+        $customer['lastname'] = $values['cc_lastname'];
+        $customer['email'] = $values['cc_email'];
+
+        $customer = $api_wrapper->createCustomer($customer);
       }
       catch (\Exception $e) {
         // @TODO: Handle create customer errors here.

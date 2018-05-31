@@ -598,6 +598,36 @@ function _alshaya_addressbook_array_insert(array $array, array $pairs, $key, $po
 }
 
 /**
+ * Implements hook_acq_commerce_update_customer_api_request_alter().
+ */
+function alshaya_addressbook_acq_commerce_update_customer_api_request_alter(array &$request_options) {
+  if (isset($request_options['json'], $request_options['json']['customer']['email'])
+    && empty($request_options['json']['customer']['addresses'])) {
+    /** @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($request_options['json']['customer']['email']);
+
+    if (!empty($user)) {
+      /** @var \Drupal\profile\ProfileStorageInterface $storage */
+      $storage = \Drupal::entityTypeManager()->getStorage('profile');
+
+      $profiles = $storage->loadByProperties([
+        'type' => 'address_book',
+        'uid' => $user->id(),
+      ]);
+
+      if ($profiles) {
+        /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $manager */
+        $manager = \Drupal::service('alshaya_addressbook.manager');
+
+        foreach ($profiles as $profile) {
+          $request_options['json']['customer']['addresses'][] = $manager->getAddressFromEntity($profile);
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_alshaya_acm_customer_update_account_alter().
  */
 function alshaya_addressbook_alshaya_acm_customer_update_account_alter(AccountInterface $user, array $customer) {
