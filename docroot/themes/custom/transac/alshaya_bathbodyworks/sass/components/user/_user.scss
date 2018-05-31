@@ -46,6 +46,10 @@
       height: 2.5rem !important;
     }
   }
+
+  .form-type-checkbox .option::before {
+    font-size: 20px;
+  }
 }
 
 .user-login-form {
