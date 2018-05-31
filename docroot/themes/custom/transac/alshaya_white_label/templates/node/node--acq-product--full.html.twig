@@ -45,10 +45,8 @@ set classes = [
 
       <h1>{{ label }}</h1>
 
-      {{ title_prefix }}
-      {% block productForm %}
+      {% block pricePrefix %}
       {% endblock %}
-      {{ title_suffix }}
 
       <div class="price-block {{ content.price_block_identifier }}">
         {{ content.price_block }}
