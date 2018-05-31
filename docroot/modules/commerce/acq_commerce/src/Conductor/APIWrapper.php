@@ -205,6 +205,10 @@ class APIWrapper implements APIWrapperInterface {
         }
       }
     }
+    else {
+      // Removing shipping address if carrier not set.
+      unset($cart->shipping);
+    }
 
     // Cart constructor sets cart to any object passed in,
     // circumventing ->setBilling() so trap any wayward extension[] here.

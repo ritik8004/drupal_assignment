@@ -52,38 +52,3 @@ function alshaya_product_zoom_get_rel_cloudzoom(array $settings) {
   $string .= ",smoothMove:'" . $settings['smooth_move'] . "'";
   return $string;
 }
-
-/**
- * Get the youtube video ID from URL.
- *
- * @param string $url
- *   Youtube URLs.
- *
- * @return string
- *   The youtube video id.
- */
-function alshaya_product_zoom_getyoutubeid($url) {
-  $video_id = FALSE;
-  $url = parse_url($url);
-  if (strcasecmp($url['host'], 'youtu.be') === 0) {
-    // Format: https://youtu.be/<video id>.
-    $video_id = substr($url['path'], 1);
-  }
-  elseif (strcasecmp($url['host'], 'www.youtube.com') === 0) {
-    if (isset($url['query'])) {
-      parse_str($url['query'], $url['query']);
-      if (isset($url['query']['v'])) {
-        // Format: https://www.youtube.com/(dontcare)?v=<video id>.
-        $video_id = $url['query']['v'];
-      }
-    }
-    if ($video_id == FALSE) {
-      $url['path'] = explode('/', substr($url['path'], 1));
-      if (in_array($url['path'][0], ['e', 'embed', 'v'])) {
-        // Format: https://www.youtube.com/(whitelist)/<video id>.
-        $video_id = $url['path'][1];
-      }
-    }
-  }
-  return $video_id;
-}

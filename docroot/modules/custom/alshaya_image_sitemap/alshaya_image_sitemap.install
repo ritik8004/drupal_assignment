@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_image_sitemap module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_image_sitemap_install() {
+  alshaya_config_install_configs(['alshaya_image_sitemap.settings'], 'alshaya_image_sitemap');
+}
