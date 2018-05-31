@@ -35,17 +35,17 @@ function drush_alshaya_addressbook_sync_areas() {
 
   // DM Version check.
   if ($addressbook_manager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-    drush_print(dt('Incorrect DM version for this command.'));
+    \Drupal::logger('alshaya_addressbook')->notice('Incorrect DM version for this command.');
     return;
   }
 
   // Update the area list.
-  drush_print(dt('Synchronizing all areas, please wait...'));
+  \Drupal::logger('alshaya_addressbook')->notice('Synchronizing all areas, please wait...');
 
   // Import DM data.
   $addressbook_manager->syncAreas();
 
-  drush_print(dt('Done.'));
+  \Drupal::logger('alshaya_addressbook')->notice('Done.');
 }
 
 /**
@@ -57,11 +57,11 @@ function drush_alshaya_addressbook_sync_form_fields() {
 
   // DM Version check.
   if ($addressbook_manager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-    drush_print(dt('Incorrect DM version for this command.'));
+    \Drupal::logger('alshaya_addressbook')->notice('Incorrect DM version for this command.');
     return;
   }
 
   // Reset magento form fields cache.
   $addressbook_manager->resetMagentoFormFields();
-  drush_print(dt('Form fields cache reset.'));
+  \Drupal::logger('alshaya_addressbook')->notice('Form fields cache reset.');
 }
