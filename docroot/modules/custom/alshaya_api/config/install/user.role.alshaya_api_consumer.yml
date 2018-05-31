@@ -1,0 +1,9 @@
+langcode: en
+status: true
+id: alshaya_api_consumer
+label: 'Alshaya API Consumer'
+weight: 19
+is_admin: null
+permissions:
+  - 'access content'
+  - 'restful post sku_images'

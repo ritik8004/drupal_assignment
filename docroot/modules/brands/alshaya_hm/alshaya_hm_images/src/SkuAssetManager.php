@@ -7,6 +7,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
 
@@ -64,6 +65,13 @@ class SkuAssetManager {
   protected $termStorage;
 
   /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -78,17 +86,21 @@ class SkuAssetManager {
    *   Sku Plugin Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   Module Handler service object.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
                               SkuManager $skuManager,
                               SKUPluginManager $skuPluginManager,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ModuleHandlerInterface $moduleHandler) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
     $this->skuPluginManager = $skuPluginManager;
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -253,6 +265,8 @@ class SkuAssetManager {
    *   Overridden config in context of the category product belongs to.
    */
   public function overrideConfig($sku, $page_type) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
     $currentRoute['route_name'] = $this->currentRouteMatch->getRouteName();
     $currentRoute['route_params'] = $this->currentRouteMatch->getParameters()->all();
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
