@@ -10,7 +10,6 @@
  *
  * Update default items from cross sell/up sell carausel.
  */
-
 function alshaya_bbw_update_8104() {
   // Set default items from cross sell/up sell carausel for mobile.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
@@ -97,7 +96,6 @@ function alshaya_bbw_install() {
   ];
 
   alshaya_i18n_save_translations($strings);
-
 }
 
 /**
