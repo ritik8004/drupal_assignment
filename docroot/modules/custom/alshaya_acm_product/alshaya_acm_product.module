@@ -781,10 +781,12 @@ function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
   if (isset($vars['view']) && in_array($vars['view']->id(), ['search', 'alshaya_product_list'])) {
     $search_page = $vars['view']->id() == 'search' && $vars['view']->current_display == 'page';
     $product_list = $vars['view']->id() == 'alshaya_product_list' && in_array($vars['view']->current_display, ['block_1', 'block_2']);
+    $page_auto_load = \Drupal::config('alshaya_acm_product.settings')->get('list_view_auto_page_load_count');
 
-    if ($search_page || $product_list) {
+    // Load content automatically only if the auto load page count is > 0.
+    if (($search_page || $product_list) && ($page_auto_load)) {
       $element = $vars['element'];
-      $page_auto_load = \Drupal::config('alshaya_acm_product.settings')->get('list_view_auto_page_load_count');
+
       // Change infinite scroll to load more button after x scrolls.
       $vars['options']['automatically_load_content'] = TRUE;
       if (($pager_page_array[$element] + 1) % $page_auto_load == 0 && $pager_page_array[$element] !== 0) {
