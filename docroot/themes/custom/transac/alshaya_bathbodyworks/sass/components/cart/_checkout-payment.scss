@@ -11,36 +11,4 @@
     border: 1px solid $checkout_payment_option_border;
     border-top: 0;
   }
-
-  .cc_cvv_help_text {
-    &::before {
-      background: $white url(../../alshaya_white_label/imgs/cards/back-card.png) no-repeat;
-      background-size: 100%;
-    }
-  }
-}
-
-#payment_method_cybersource {
-  .card-types-wrapper {
-    .card-type {
-      opacity: 0.3;
-      background-size: contain !important;
-
-      &.active {
-        opacity: 1;
-      }
-
-      &-visa {
-        background-image: url('../../alshaya_white_label/imgs/cards/visa-active.png');
-      }
-
-      &-mastercard {
-        background-image: url('../../alshaya_white_label/imgs/cards/mastercard-active.png');
-      }
-
-      &-diners-club {
-        background-image: url('../../alshaya_white_label/imgs/cards/dinersclub-active.png');
-      }
-    }
-  }
 }
