@@ -19,6 +19,8 @@ use Drupal\Core\State\StateInterface;
  */
 class AlshayaImageSitemapGenerator {
 
+  use StringTranslationTrait;
+
   /**
    * The database service.
    *
@@ -53,8 +55,6 @@ class AlshayaImageSitemapGenerator {
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
-
-  use StringTranslationTrait;
 
   /**
    * The language manager interface.
