@@ -18,6 +18,7 @@ dependencies:
   - drupal:syslog
   - twig_tweak:twig_tweak
   - drupal:restrict_role_login_by_ip
+  - alshaya_image_sitemap:alshaya_image_sitemap
 
 themes:
   - bartik
