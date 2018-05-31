@@ -53,23 +53,23 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
         }
 
         if ($more_info = $sku_entity->get('attr_more_info')->getString()) {
-          $more_inf['label'] = [
+          $more_info_desc['label'] = [
             '#markup' => t('More info'),
           ];
-          $more_inf['value'] = [
+          $more_info_desc['value'] = [
             '#markup' => $more_info,
           ];
-          $build['description'][] = $more_inf;
+          $build['description'][] = $more_info_desc;
         }
 
         if ($usage = $sku_entity->get('attr_usage')->getString()) {
-          $usag['label'] = [
+          $usage_desc['label'] = [
             '#markup' => t('Usage'),
           ];
-          $usag['value'] = [
+          $usage_desc['value'] = [
             '#markup' => $usage,
           ];
-          $build['description'][] = $usag;
+          $build['description'][] = $usage_desc;
         }
       }
     }

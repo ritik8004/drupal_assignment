@@ -1,77 +1,13 @@
-{{ attach_library('alshaya_white_label/sizeguide') }}
-{{ attach_library('alshaya_white_label/cloud_zoom') }}
+{% extends "@alshaya_white_label/node/node--acq-product--modal.html.twig" %}
 
-{%
-set classes = [
-'node',
-'node--type-' ~ node.bundle|clean_class,
-view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
-]
-%}
+{% block productBrand %}
+  {{ parent() }}
+{% endblock %}
 
-<article{{ attributes }} {{ gtm_attributes }}>
-  <div class="acq-content-product-modal">
-    <div class="content__title_wrapper">
+{% block form %}
+  {{ parent() }}
+{% endblock %}
 
-      {% if content.brand_logo %}
-        <div class="brand-logo-wrapper">
-          {{ content.brand_logo }}
-        </div>
-      {% endif %}
-
-      <div class="content--brand">
-        {{ content.product_brand }}
-      </div>
-      
-      {{ title_prefix }}
-      {% if not page %}
-        <h2{{ title_attributes.addClass("c-products__item__label") }}>
-          {{ label }}
-        </h2>
-      {% endif %}
-      {{ title_suffix }}
-
-      <div class="content--form">
-        {{ content.form }}
-      </div>
-
-      <div class="price-block {{ content.price_block_identifier }}">
-        {{ content.price_block }}
-      </div>
-
-        {% if content.promotions %}
-          <div class="promotions">
-            {{ content.promotions }}
-          </div>
-        {% endif %}
-
-        <div class="content--item-code">
-          <span class="field__label">{{ 'Item Code'|t }}:</span>
-          {{ content.item_code }}
-        </div>
-      </div>
-
-      <div class="content__main {{ image_slider_position_pdp }}">
-        {% if content.gallery is not null %}
-          {{ content.gallery }}
-        {% endif %}
-      </div>
-
-      <div class="content__sidebar">
-        <div class="content--size-volume">
-          <span class="field__label">{{ 'Size/Volume'|t }}:</span>
-          {{ content.size_volume }}
-        </div>
-        <div class="basic-details-wrapper">
-          {{ content.field_skus }}
-        </div>
-
-        {% if sku_out_of_stock %}
-          <div class="out-of-stock {{ sku_out_of_stock }}"></div>
-        {% endif %}
-
-        <a class="full-prod-link" href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ "View Full Product Details"|t }}</a>
-
-      </div>
-    </div>
-</article>
+{% block sizeVolume %}
+  {{ parent() }}
+{% endblock %}
