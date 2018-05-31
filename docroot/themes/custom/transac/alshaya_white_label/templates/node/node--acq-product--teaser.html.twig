@@ -23,9 +23,6 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     {{ title_suffix }}
 
     {% block form %}
-      <div class="content--form">
-        {{ content.form }}
-      </div>
     {% endblock %}
 
     <div class="price-block {{ content.price_block_identifier }}">

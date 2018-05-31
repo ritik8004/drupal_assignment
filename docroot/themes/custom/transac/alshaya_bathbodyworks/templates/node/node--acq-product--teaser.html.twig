@@ -1,5 +1,9 @@
 {% extends "@alshaya_white_label/node/node--acq-product--teaser.html.twig" %}
 
 {% block form %}
-  {{ parent() }}
+  {% if content.form %}
+    <div class="content--form">
+      {{ content.form }}
+    </div>
+  {% endif %} 
 {% endblock %}
