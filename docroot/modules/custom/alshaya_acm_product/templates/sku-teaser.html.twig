@@ -4,6 +4,9 @@
     <a href="{{ product_url }}">{{ product_label }}</a>
   </h2>
 
+  {% block form %}
+  {% endblock %}
+
   <div class="price-block {{ price_block_identifier }}">
     {{ price_block }}
   </div>
