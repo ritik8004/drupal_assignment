@@ -127,6 +127,7 @@ class SkuAssetManager {
     }
 
     foreach ($location_images as $location_image) {
+      $asset_urls = [];
       foreach ($assets as $asset) {
         // If style is set, it means we looking for a varaint for swatch image.
         // Avoid processing asset types that don't match the swatch style

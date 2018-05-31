@@ -400,11 +400,21 @@
       @include breakpoint($desktop) {
         width: 58%;
       }
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+        font-size: 0.875rem;
+      }
     }
   }
 
   .checkout-guest-summary {
     line-height: 1.6;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+      font-size: 0.875rem;
+    }
 
     @include breakpoint($tablet) {
       font-size: 0.8125rem;

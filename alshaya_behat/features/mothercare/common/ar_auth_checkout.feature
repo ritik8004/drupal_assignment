@@ -4,7 +4,7 @@ Feature: As an authenticated user
   using various payment options on Arabic site
 
   Background:
-    When I am logged in as an authenticated user "trupti@axelerant.com" with password "password@1"
+    When I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     Then I should see the link "My account"
     Given I am on a configurable product
@@ -53,8 +53,8 @@ Feature: As an authenticated user
     When I accept terms and conditions
     And I press "سجل الطلبية"
     When I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    When I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     When I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
@@ -113,8 +113,8 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"

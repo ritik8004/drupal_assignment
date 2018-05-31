@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_checkout;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Datetime\TimeInterface;
@@ -42,6 +43,13 @@ class CheckoutHelper {
    * @var \Drupal\alshaya_acm_customer\OrdersManager
    */
   protected $ordersManager;
+
+  /**
+   * Cart Helper service object.
+   *
+   * @var \Drupal\alshaya_acm\CartHelper
+   */
+  protected $cartHelper;
 
   /**
    * Address Book Manager service object.
@@ -96,6 +104,8 @@ class CheckoutHelper {
    *   Cart Storage service.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   Orders manager service object.
+   * @param \Drupal\alshaya_acm\CartHelper $cart_helper
+   *   Cart Helper service object.
    * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
    *   Address Book Manager service object.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
@@ -113,6 +123,7 @@ class CheckoutHelper {
                               APIWrapper $api_wrapper,
                               CartStorageInterface $cart_storage,
                               OrdersManager $orders_manager,
+                              CartHelper $cart_helper,
                               AlshayaAddressBookManager $address_book_manager,
                               RequestStack $request_stack,
                               AccountProxyInterface $current_user,
@@ -123,6 +134,7 @@ class CheckoutHelper {
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
     $this->ordersManager = $orders_manager;
+    $this->cartHelper = $cart_helper;
     $this->addressBookManager = $address_book_manager;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->currentUser = $current_user;
@@ -173,7 +185,7 @@ class CheckoutHelper {
         $account = $this->entityTypeManager->getStorage('user')->load($current_user_id);
 
         if (empty($account->get('field_mobile_number')->getString())) {
-          $billing = (array) $cart->getBilling();
+          $billing = $this->cartHelper->getBilling($cart);
           $account->get('field_mobile_number')->setValue($billing['telephone']);
           $account->save();
         }

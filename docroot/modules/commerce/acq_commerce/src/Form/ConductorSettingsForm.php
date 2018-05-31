@@ -68,7 +68,10 @@ class ConductorSettingsForm extends ConfigFormBase {
       '#title' => $this->t('API version'),
       '#required' => TRUE,
       '#default_value' => $config->get('api_version'),
-      '#options' => ['v1' => 'V1'],
+      '#options' => [
+        'v1' => 'V1',
+        'v2' => 'V2',
+      ],
     ];
 
     $form['basic']['timeout'] = [

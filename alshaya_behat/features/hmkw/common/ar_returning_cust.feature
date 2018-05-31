@@ -12,8 +12,8 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "anjali.nikumb@acquia.com"
-    And I fill in "edit-checkout-login-pass" with "password@1"
+    Then I fill in "edit-checkout-login-name" with "kanchan.patil+test@qed42.com"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "تسجيل الدخول"
     And I wait for the page to load
 
@@ -55,8 +55,8 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
@@ -111,8 +111,8 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "سجل الطلبية"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"

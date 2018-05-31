@@ -68,6 +68,8 @@ function alshaya_addressbook_save_ajax_callback(&$form, FormStateInterface $form
     $response = new AjaxResponse();
     $response->addCommand(new HtmlCommand('.address-book-form-ajax-wrapper', $form));
     $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['.address-book-form-ajax-wrapper', TRUE]));
+    // Adds mobile number prefix on validation fail as it lost in ajax call.
+    $response->addCommand(new InvokeCommand(NULL, 'mobileNumberPrefixAjax'));
     return $response;
   }
 
@@ -595,6 +597,36 @@ function _alshaya_addressbook_array_insert(array $array, array $pairs, $key, $po
     $result = array_merge($array, $pairs);
   }
   return $result;
+}
+
+/**
+ * Implements hook_acq_commerce_update_customer_api_request_alter().
+ */
+function alshaya_addressbook_acq_commerce_update_customer_api_request_alter(array &$request_options) {
+  if (isset($request_options['json'], $request_options['json']['customer']['email'])
+    && empty($request_options['json']['customer']['addresses'])) {
+    /** @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($request_options['json']['customer']['email']);
+
+    if (!empty($user)) {
+      /** @var \Drupal\profile\ProfileStorageInterface $storage */
+      $storage = \Drupal::entityTypeManager()->getStorage('profile');
+
+      $profiles = $storage->loadByProperties([
+        'type' => 'address_book',
+        'uid' => $user->id(),
+      ]);
+
+      if ($profiles) {
+        /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $manager */
+        $manager = \Drupal::service('alshaya_addressbook.manager');
+
+        foreach ($profiles as $profile) {
+          $request_options['json']['customer']['addresses'][] = $manager->getAddressFromEntity($profile);
+        }
+      }
+    }
+  }
 }
 
 /**

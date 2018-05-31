@@ -29,7 +29,7 @@ Feature: Search feature
   @prod
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "socks"
     And I press "Search"
@@ -39,7 +39,7 @@ Feature: Search feature
   @arabic @prod
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     And I follow "عربية"
     When I wait for the page to load

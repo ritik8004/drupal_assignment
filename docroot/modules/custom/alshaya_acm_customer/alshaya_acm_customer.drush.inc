@@ -43,7 +43,10 @@ function drush_alshaya_acm_customer_customer_create($firstname, $lastname, $mail
       'email' => $mail,
     ];
 
-    $customer = $api_wrapper->updateCustomer($customer, $password);
+    $customer = $api_wrapper->updateCustomer($customer, [
+      'password' => $password,
+    ]);
+
     drush_print_r($customer);
   }
   catch (\Exception $e) {
