@@ -56,12 +56,14 @@ class AlshayaImageSitemapController extends ControllerBase {
    */
   public function listImageSitemap() {
     $output = '';
+  
     $header = [
       $this->t('SITEMAP URL'),
       $this->t('CREATED DATE'),
       $this->t('TOTAL LINKS'),
       $this->t('ACTIONS'),
     ];
+  
     $rows = [];
     $url = 'public://alshaya_image_sitemap/image_sitemap.xml';
     $url = file_create_url($url);
@@ -79,13 +81,12 @@ class AlshayaImageSitemapController extends ControllerBase {
       ];
     }
 
-    $output = [
+    return [
       '#theme' => 'table',
       '#header' => $header,
       '#rows' => $rows,
       '#empty' => Link::fromTextAndUrl($this->t('Add a new image sitemap'), Url::fromRoute('alshaya_image_sitemap.alshaya_image_sitemap_batch_controller_generate')),
     ];
-    return $output;
   }
 
   /**
@@ -147,12 +148,10 @@ class AlshayaImageSitemapController extends ControllerBase {
         ->sitemapGenerateFinished();
       \Drupal::state()->set('alshaya_image_sitemap.last_generated', REQUEST_TIME);
       // @codingStandardsIgnoreEnd
-      $message = ('Image Sitemap Generated Successfully.');
-      drupal_set_message($message, 'success');
+      drupal_set_message($this->t('Image Sitemap Generated Successfully.'), 'success');
     }
     else {
-      $message = t('There was some error while importing redirects.');
-      drupal_set_message($message, 'error');
+      drupal_set_message($this->t('There was some error while importing redirects.'), 'error');
     }
   }
 
