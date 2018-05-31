@@ -53,6 +53,10 @@
     font-weight: normal;
     font-size: 0.875rem;
 
+    &:hover {
+      text-decoration: underline;
+    }
+
     @include breakpoint($tablet) {
       #{$left}: 13em;
 
