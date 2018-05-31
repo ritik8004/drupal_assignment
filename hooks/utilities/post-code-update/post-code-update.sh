@@ -27,6 +27,7 @@ echo "Executing updb."
 drush8 acsf-tools-ml updb 2> /tmp/temp
 output=$(cat /tmp/temp)
 rm /tmp/temp
+echo $output
 
 ## Clear caches as it is not done if there is database updates but may still
 ## be required for some frontend changes.
