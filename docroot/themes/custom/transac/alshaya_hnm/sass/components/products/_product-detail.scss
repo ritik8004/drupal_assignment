@@ -28,8 +28,7 @@
       @include breakpoint($only-mobile) {
         font-size: 1.3125rem;
         width: 100%;
-        letter-spacing: -0.6px;
-        margin-bottom: -0.1875rem;
+        margin-bottom: 0.125rem;
       }
     }
 
