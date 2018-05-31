@@ -97,6 +97,12 @@
         @include arabic-letter-spacing;
       }
     }
+
+    .size-guide-link {
+      @include breakpoint($only-mobile) {
+        z-index: 4;
+      }
+    }
   }
 
   .short-description-wrapper {
