@@ -10,6 +10,7 @@
  *
  * Update default items from cross sell/up sell carausel.
  */
+
 function alshaya_bbw_update_8104() {
   // Set default items from cross sell/up sell carausel for mobile.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
@@ -78,14 +79,25 @@ function alshaya_bbw_install() {
   // Array of language translation strings.
   $strings = [
     'find your nearest store' => [
+      'en' => 'find your nearest store',
       'ar' => 'اختر محلاً للتعرف على التفاصيل',
     ],
-    "today's offer" => [
-      'ar' => "عروض اليوم",
+    'Discover' => [
+      'en' => 'Discover',
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'Customer care' => [
+      'en' => 'Customer care',
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Connect with us' => [
+      'en' => 'Connect with us',
+      'ar' => ' تواصلي معنا ',
     ],
   ];
 
   alshaya_i18n_save_translations($strings);
+
 }
 
 /**
