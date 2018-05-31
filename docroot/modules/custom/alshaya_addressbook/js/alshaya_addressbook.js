@@ -40,12 +40,8 @@
    * as its added by the JS. Here we just adding that again.
    */
   $.fn.mobileNumberPrefixAjax = function() {
-    $('.mobile-number-field .country').once('field-setup').each(function () {
-      var $input = $(this);
-      var val = $input.val();
-      $input.data('value', val);
-      $input.wrap('<div class="country-select"></div>').before('<div class="mobile-number-flag"></div><span class="arrow"></span><div class="prefix"></div>');
-    });
+    // Re-attaching the behaviors so that it applies the dom change again.
+    Drupal.attachBehaviors(document, Drupal.settings);
   }
 
 })(jQuery, Drupal);
