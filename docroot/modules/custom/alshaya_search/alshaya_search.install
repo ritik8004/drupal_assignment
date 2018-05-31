@@ -11,6 +11,15 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Update search_api_autocomplete settings after module update.
+ */
+function alshaya_search_update_8018() {
+  alshaya_config_install_configs(['search_api_autocomplete.search.search'], 'alshaya_search');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update search_api_autocomplete settings, since the module update
  * doesn't provide an update path.
  */
