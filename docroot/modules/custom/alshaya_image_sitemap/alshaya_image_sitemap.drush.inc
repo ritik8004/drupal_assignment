@@ -38,7 +38,8 @@ function drush_alshaya_image_sitemap_create_img_sitemap() {
   ];
 
   $nids = \Drupal::service('alshaya_image_sitemap.generator')->getNodes();
-  $nid_chunks = array_chunk($nids, 500);
+  $batch_size = \Drupal::config('alshaya_image_sitemap.settings')->get('image_sitemap_batch_chunk_size');
+  $nid_chunks = array_chunk($nids, $batch_size);
   foreach ($nid_chunks as $nid_chunk) {
     $batch['operations'][] = [
       'batch_start_callback',
@@ -78,11 +79,9 @@ function batch_end_callback($success, array $results = [], array $operations = [
     \Drupal::service('alshaya_image_sitemap.generator')
       ->sitemapGenerateFinished();
     \Drupal::state()->set('alshaya_image_sitemap.last_generated', REQUEST_TIME);
-    $message = t('Image Sitemap Generated Successfully.');
-    drush_print($message);
+    drush_print(dt('Image Sitemap Generated Successfully.'));
   }
   else {
-    $message = t('There was some error while importing redirects.');
-    drush_print($message);
+    drush_print(dt('There was some error while importing redirects.'));
   }
 }

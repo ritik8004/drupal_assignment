@@ -18,7 +18,7 @@
  * @param int $nid
  *   Nid of the product.
  */
-function hook_media_image_sitemap_alter(array &$media, &$nid) {
+function hook_image_sitemap_get_product_media(array &$media, &$nid) {
 
 }
 

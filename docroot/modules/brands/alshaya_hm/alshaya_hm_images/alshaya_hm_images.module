@@ -299,9 +299,9 @@ function alshaya_hm_images_preprocess_product_zoom(&$variables) {
 }
 
 /**
- * Implements hook_images_media_image_sitemap_alter().
+ * Implements hook_image_sitemap_get_product_media().
  */
-function alshaya_hm_images_media_image_sitemap_alter(&$media, &$nid) {
+function alshaya_hm_images_image_sitemap_get_product_media(&$media, &$nid) {
   // Load product from id.
   $product = Node::load($nid);
 

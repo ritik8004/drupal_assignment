@@ -6,12 +6,9 @@
  */
 
 /**
- * Add image sitemap to the sitemap.
- *
- * @param array &$arbitrary_links
- *   Pramater link.
+ * Implements hook_simple_sitemap_arbitrary_links_alter().
  */
-function alshaya_image_sitemap_simple_sitemap_arbitrary_links_alter(array &$arbitrary_links) {
+function alshaya_image_sitemap_simple_sitemap_arbitrary_links_alter(&$arbitrary_links) {
   $url = 'public://alshaya_image_sitemap/image_sitemap.xml';
   $url = file_create_url($url);
   $arbitrary_links[] = [

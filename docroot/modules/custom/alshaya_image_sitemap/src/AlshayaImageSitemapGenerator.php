@@ -31,7 +31,7 @@ class AlshayaImageSitemapGenerator {
    *
    * @var Drupal\Core\State\StateInterface
    */
-  protected $stateInt;
+  protected $state;
 
   /**
    * File system object.
@@ -57,7 +57,7 @@ class AlshayaImageSitemapGenerator {
   use StringTranslationTrait;
 
   /**
-   * The language interface.
+   * The language manager interface.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
@@ -68,7 +68,7 @@ class AlshayaImageSitemapGenerator {
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $database
    *   Database service.
-   * @param \Drupal\Core\State\StateInterface $stateInt
+   * @param \Drupal\Core\State\StateInterface $state
    *   State interface service object.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   File system object.
@@ -82,14 +82,14 @@ class AlshayaImageSitemapGenerator {
    *   The language manager service.
    */
   public function __construct(Connection $database,
-                              StateInterface $stateInt,
+                              StateInterface $state,
                               FileSystemInterface $fileSystem,
                               EntityTypeManagerInterface $entity_manager,
                               ModuleHandlerInterface $module_handler,
                               TranslationInterface $string_translation,
                               LanguageManagerInterface $language_manager) {
     $this->database = $database;
-    $this->stateInt = $stateInt;
+    $this->state = $state;
     $this->fileSystem = $fileSystem;
     $this->entityTypeManager = $entity_manager;
     $this->moduleHandler = $module_handler;
@@ -101,8 +101,7 @@ class AlshayaImageSitemapGenerator {
    * First function to run for sitemap generation.
    */
   public function getSitemapReady() {
-    $output = "";
-    $output .= '<?xml version="1.0" encoding="UTF-8"?>';
+    $output = '<?xml version="1.0" encoding="UTF-8"?>';
     $output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
     $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://alshaya_image_sitemap"));
     if (!is_dir($path)) {
@@ -111,7 +110,7 @@ class AlshayaImageSitemapGenerator {
     $filename = 'image_sitemap.xml';
     $output = $this->formatXmlString($output);
     file_put_contents($path . '/' . $filename, print_r($output, TRUE));
-    $this->stateInt->set('alshaya_image_sitemap.url_count', 0);
+    $this->state->set('alshaya_image_sitemap.url_count', 0);
   }
 
   /**
@@ -119,10 +118,9 @@ class AlshayaImageSitemapGenerator {
    */
   public function getNodes() {
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
-    $nids = $query->condition('type', 'acq_product')
+    return $query->condition('type', 'acq_product')
       ->condition('status', NODE_PUBLISHED)
       ->execute();
-    return $nids;
   }
 
   /**
@@ -130,7 +128,7 @@ class AlshayaImageSitemapGenerator {
    */
   public function process($nids) {
     $output = '';
-    $total_urls = $this->stateInt->get('alshaya_image_sitemap.url_count');
+    $total_urls = $this->state->get('alshaya_image_sitemap.url_count');
     $this->moduleHandler
       ->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
@@ -138,10 +136,8 @@ class AlshayaImageSitemapGenerator {
       foreach ($nids as $nid) {
         // Fetch list of media files for each nid.
         $media = [];
-        if ($this->moduleHandler->moduleExists('alshaya_hm_images')) {
-          $this->moduleHandler->invokeAll('media_image_sitemap_alter', [&$media, &$nid]);
-        }
-        else {
+        $this->moduleHandler->invokeAll('image_sitemap_get_product_media', [&$media, &$nid]);
+        if (empty($media)) {
           $media = alshaya_acm_product_get_product_media($nid);
         }
 
@@ -149,14 +145,13 @@ class AlshayaImageSitemapGenerator {
           $languages = $this->languageManager->getLanguages();
           $country_code = _alshaya_custom_get_site_level_country_code();
           $output .= '<url><loc>' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE])->toString() . '</loc>';
-          $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'language' => $languages['en']])->toString() . '" hreflang="en-' . strtolower($country_code) . '"/>';
-          $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'language' => $languages['ar']])->toString() . '" hreflang="ar-' . strtolower($country_code) . '"/>';
-
+          foreach ($languages as $language) {
+            $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'language' => $language])->toString() . '" hreflang="' . $language->getId() . '-' . strtolower($country_code) . '"/>';
+          }
           foreach ($media as $media_item) {
             if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
               $output .= '<image:image><image:loc>' . file_create_url($media_item['file']->getFileUri()) . '</image:loc><image:title>' . $media_item['file']->getFilename() . '</image:title></image:image>';
             }
-
             elseif (isset($media_item['url'])) {
               $output .= '<image:image><image:loc>' . str_replace('&', '%26', $media_item['url']->toString()) . '</image:loc></image:image>';
             }
@@ -166,7 +161,7 @@ class AlshayaImageSitemapGenerator {
         }
       }
     }
-    $this->stateInt->set('alshaya_image_sitemap.url_count', $total_urls);
+    $this->state->set('alshaya_image_sitemap.url_count', $total_urls);
     $output = $this->formatXmlString($output);
     $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://alshaya_image_sitemap"));
     $filename = 'image_sitemap.xml';
@@ -182,7 +177,7 @@ class AlshayaImageSitemapGenerator {
     $filename = 'image_sitemap.xml';
     $output = $this->formatXmlString($output);
     file_put_contents($path . '/' . $filename, $output, FILE_APPEND);
-    $this->stateInt->set('alshaya_image_sitemap.last_generated', REQUEST_TIME);
+    $this->state->set('alshaya_image_sitemap.last_generated', REQUEST_TIME);
   }
 
   /**

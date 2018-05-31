@@ -8,7 +8,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_image_sitemap\AlshayaImageSitemapGenerator;
 use Drupal\Core\State\StateInterface;
-
+use Drupal\Core\Config\ConfigFactory;
 /**
  * Class AlshayaImageSitemapController.
  *
@@ -21,7 +21,7 @@ class AlshayaImageSitemapController extends ControllerBase {
    *
    * @var Drupal\Core\State\StateInterface
    */
-  protected $stateInt;
+  protected $state;
 
   /**
    * Drupal\alshaya_image_sitemap\AlshayaImageSitemapGenerator.
@@ -31,11 +31,19 @@ class AlshayaImageSitemapController extends ControllerBase {
   protected $generator;
 
   /**
+   * Drupal\Core\Config\ConfigFactory definition.
+   *
+   * @var Drupal\Core\Config\ConfigFactory
+   */
+  protected $config_factory;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(StateInterface $stateInt, AlshayaImageSitemapGenerator $generator) {
-    $this->stateInt = $stateInt;
+  public function __construct(StateInterface $state, AlshayaImageSitemapGenerator $generator, ConfigFactory $config_factory) {
+    $this->state = $state;
     $this->generator = $generator;
+    $this->config_factory = $config_factory;
   }
 
   /**
@@ -44,7 +52,8 @@ class AlshayaImageSitemapController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('state'),
-      $container->get('alshaya_image_sitemap.generator')
+      $container->get('alshaya_image_sitemap.generator'),
+      $container->get('config.factory')
     );
   }
 
@@ -67,8 +76,8 @@ class AlshayaImageSitemapController extends ControllerBase {
     $url = file_create_url($url);
 
     // Rows of table.
-    $image_sitemap_created = $this->stateInt->get('alshaya_image_sitemap.last_generated');
-    $image_sitemap_number_of_urls = $this->stateInt->get('alshaya_image_sitemap.url_count');
+    $image_sitemap_created = $this->state->get('alshaya_image_sitemap.last_generated');
+    $image_sitemap_number_of_urls = $this->state->get('alshaya_image_sitemap.url_count');
     if (isset($image_sitemap_created) && isset($image_sitemap_number_of_urls)) {
       $rows[] = [
         Link::fromTextAndUrl($url, Url::fromUri($url)),
@@ -103,7 +112,8 @@ class AlshayaImageSitemapController extends ControllerBase {
     ];
 
     $nids = $this->generator->getNodes();
-    $nid_chunks = array_chunk($nids, 500);
+    $batch_size = $this->config('alshaya_image_sitemap.settings')->get('image_sitemap_batch_chunk_size');
+    $nid_chunks = array_chunk($nids, $batch_size);
     foreach ($nid_chunks as $nid_chunk) {
       $batch['operations'][] = [
         [__CLASS__, 'batchStartCallback'],
