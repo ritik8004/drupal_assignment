@@ -1,0 +1,13 @@
+alshaya_image_sitemap.alshaya_image_sitemap_controller_list:
+  path: 'admin/config/search/alshaya_image_sitemap'
+  defaults:
+    _controller: '\Drupal\alshaya_image_sitemap\Controller\AlshayaImageSitemapController::listImageSitemap'
+  requirements:
+    _permission: 'administer alshaya image sitemap'
+
+alshaya_image_sitemap.alshaya_image_sitemap_batch_controller_generate:
+  path: 'admin/config/search/alshaya_image_sitemap/generate'
+  defaults:
+    _controller: '\Drupal\alshaya_image_sitemap\Controller\AlshayaImageSitemapController::generate'
+  requirements:
+    _permission: 'administer alshaya image sitemap'

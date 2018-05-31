@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * The Module file.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\acq_sku\Entity\SKU;
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function alshaya_bbw_transac_theme_registry_alter(&$theme_registry) {
+  $theme_registry['sku_teaser']['path'] = drupal_get_path('module', 'alshaya_bbw_transac') . '/templates';
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product') {
+    $sku = $entity->get('field_skus')->first()->getString();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if ($sku_entity instanceof SKU) {
+      if ($view_mode == 'full' || $view_mode == 'modal' || $view_mode == 'teaser' || $view_mode == 'product_category_carousel' || $view_mode == 'search_result') {
+        if ($form = $sku_entity->get('attr_form')->getValue()) {
+          $build['form']['#markup'] = $form[0]['value'];
+        }
+      }
+
+      if ($view_mode == 'full' || $view_mode == 'modal') {
+        if ($product_brand = $sku_entity->get('attr_product_brand')->getValue()) {
+          $build['product_brand']['#markup'] = $product_brand[0]['value'];
+        }
+
+        if ($size_volume = $sku_entity->get('attr_size')->getValue()) {
+          $build['size_volume']['#markup'] = $size_volume[0]['value'];
+        }
+      }
+
+      if ($view_mode == 'full') {
+        if ($fragrance_description = $sku_entity->get('attr_fragrance_description')->getString()) {
+          $fragrance_desc['label'] = [
+            '#markup' => t('Fragrance Description'),
+          ];
+          $fragrance_desc['value'] = [
+            '#markup' => $fragrance_description,
+          ];
+          $build['description'][] = $fragrance_desc;
+        }
+
+        if ($more_info = $sku_entity->get('attr_more_info')->getString()) {
+          $more_info_desc['label'] = [
+            '#markup' => t('More info'),
+          ];
+          $more_info_desc['value'] = [
+            '#markup' => $more_info,
+          ];
+          $build['description'][] = $more_info_desc;
+        }
+
+        if ($usage = $sku_entity->get('attr_usage')->getString()) {
+          $usage_desc['label'] = [
+            '#markup' => t('Usage'),
+          ];
+          $usage_desc['value'] = [
+            '#markup' => $usage,
+          ];
+          $build['description'][] = $usage_desc;
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,13 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_n().
+ */
+function alshaya_vs_transac_update_8101() {
+  \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_vs_transac_install() {

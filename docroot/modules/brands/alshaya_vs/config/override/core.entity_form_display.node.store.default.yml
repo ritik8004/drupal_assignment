@@ -1,0 +1,12 @@
+dependencies:
+  config:
+    - field.field.node.store.field_brand
+content:
+  field_brand:
+    type: string_textfield
+    weight: 20
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }

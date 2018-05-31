@@ -8,7 +8,7 @@ id: node.store.field_brand
 field_name: field_brand
 entity_type: node
 bundle: store
-label: Brand
+label: 'Store Includes'
 description: ''
 required: false
 translatable: false

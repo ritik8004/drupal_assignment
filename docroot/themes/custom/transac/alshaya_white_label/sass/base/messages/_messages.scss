@@ -63,13 +63,9 @@
     font-weight: 700;
 
     @include breakpoint($upto-tablet) {
-      padding-left: 3.8125rem;
+      padding-#{$left}: 3.8125rem;
       text-indent: -2.725rem;
       line-height: 1.5;
-
-      html[lang=ar] & {
-        text-indent: 0;
-      }
     }
 
     &::before {
@@ -123,6 +119,10 @@
 
     @include breakpoint($tablet) {
       width: 80%;
+    }
+
+    @include breakpoint($upto-desktop) {
+      float: $right;
     }
   }
 }
