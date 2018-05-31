@@ -8,7 +8,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_image_sitemap\AlshayaImageSitemapGenerator;
 use Drupal\Core\State\StateInterface;
-use Drupal\Core\Config\ConfigFactory;
+
 /**
  * Class AlshayaImageSitemapController.
  *
@@ -31,19 +31,11 @@ class AlshayaImageSitemapController extends ControllerBase {
   protected $generator;
 
   /**
-   * Drupal\Core\Config\ConfigFactory definition.
-   *
-   * @var Drupal\Core\Config\ConfigFactory
-   */
-  protected $config_factory;
-
-  /**
    * {@inheritdoc}
    */
-  public function __construct(StateInterface $state, AlshayaImageSitemapGenerator $generator, ConfigFactory $config_factory) {
+  public function __construct(StateInterface $state, AlshayaImageSitemapGenerator $generator) {
     $this->state = $state;
     $this->generator = $generator;
-    $this->config_factory = $config_factory;
   }
 
   /**
