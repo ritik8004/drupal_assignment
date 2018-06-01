@@ -68,6 +68,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $steps = $this->getVisibleSteps();
 
+    $form['#cache'] = ['max-age' => 0];
     $form['#tree'] = TRUE;
     $form['#theme'] = ['acq_checkout_form'];
     $form['#attached']['library'][] = 'acq_checkout/form';
