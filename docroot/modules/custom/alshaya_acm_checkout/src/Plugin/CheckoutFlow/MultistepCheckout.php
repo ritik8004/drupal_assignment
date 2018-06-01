@@ -68,7 +68,15 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $steps = $this->getVisibleSteps();
 
+    // Never cache the checkout form. We never know, anything can change here.
     $form['#cache'] = ['max-age' => 0];
+
+    $cart = $this->getCart();
+
+    // We always want this cache context and tag.
+    $form['#cache']['contexts'][] = 'cookies:Drupal_visitor_acq_cart_id';
+    $form['#cache']['tags'][] = 'cart:' . $cart->id();
+
     $form['#tree'] = TRUE;
     $form['#theme'] = ['acq_checkout_form'];
     $form['#attached']['library'][] = 'acq_checkout/form';

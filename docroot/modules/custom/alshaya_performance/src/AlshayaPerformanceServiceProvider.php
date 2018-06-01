@@ -25,7 +25,7 @@ class AlshayaPerformanceServiceProvider extends ServiceProviderBase implements S
 
       // Enable dynamic page cache for all contexts.
       $renderer = $container->getParameter('renderer.config');
-      $renderer['auto_placeholder_conditions']['contexts'] = [];
+      $renderer['auto_placeholder_conditions']['contexts'][] = 'cookies:Drupal_visitor_acq_cart_id';
       $container->setParameter('renderer.config', $renderer);
     }
     catch (\Exception $e) {
