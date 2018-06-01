@@ -31,7 +31,7 @@ Feature: to verify search functionality , basket and checkout
   Scenario: On arabic site as an authenticated user
   I should be able to search product, add product to basket
   and verify the fields on basket
-    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "password@1"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I follow "عربية"
     When I wait for the page to load
@@ -62,7 +62,7 @@ Feature: to verify search functionality , basket and checkout
   I should be able to search for a product
   and add it to the cart, select Home Delivery and see COD, KNET and Cybersource
   Payment methods
-    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "password@1"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I follow "عربية"
     When I wait for the page to load
@@ -110,7 +110,7 @@ Feature: to verify search functionality , basket and checkout
   I should be able to search for a product
   and add it to the cart, select Click & Collect and see  KNET and Cybersource
   Payment methods
-    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "password@1"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I follow "عربية"
     When I wait for the page to load

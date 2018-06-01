@@ -2,7 +2,7 @@
 Feature: Test the My account section for authenticated user
 
   Background:
-    Given I am logged in as an authenticated user "anjali.nikumb@acquia.com" with password "password@1"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I follow "عربية"
     And I wait for the page to load
@@ -87,7 +87,7 @@ Feature: Test the My account section for authenticated user
 #    Then I should see "تم حفظ ببيانات الاتصال"
 #    When I click the label for "#block-alshayamyaccountlinks > div > ul > li.my-account > a"
 #    And I wait for the page to load
-#    Then I should see "shweta+3@axelerant.com"
+#    Then I should see "kanchan.patil+test@qed42.com"
 #    Then I should see "6362 - 5440 - 0013 - 5844"
 #    And I should not see "اربح جوائز مدهشة"
 #    Then I should not see "احصل على مكافآت حصرية"

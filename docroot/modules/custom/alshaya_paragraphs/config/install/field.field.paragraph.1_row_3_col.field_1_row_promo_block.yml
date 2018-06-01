@@ -7,6 +7,7 @@ dependencies:
     - paragraphs.paragraphs_type.image_title_subtitle
     - paragraphs.paragraphs_type.offers_bordered
     - paragraphs.paragraphs_type.product_carousel_category
+    - paragraphs.paragraphs_type.section_divider
     - paragraphs.paragraphs_type.promo_block
   module:
     - entity_reference_revisions
@@ -28,6 +29,7 @@ settings:
       image_title_subtitle: image_title_subtitle
       offers_bordered: offers_bordered
       product_carousel_category: product_carousel_category
+      section_divider: section_divider
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         weight: 8
@@ -89,4 +91,7 @@ settings:
       product_carousel_category:
         enabled: true
         weight: 43
+      section_divider:
+        enabled: true
+        weight: 49
 field_type: entity_reference_revisions

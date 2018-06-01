@@ -56,16 +56,17 @@ trait AgentRequestTrait {
    *   Action name for logging.
    * @param string $reskey
    *   Result data key (or NULL)
+   * @param string $acm_uuid
+   *   The acm_uuid used to create the client.
    *
    * @return mixed
    *   API response.
    *
-   * @throws ConductorException
-   * @throws ConductorResultException
+   * @throws \Exception
    */
-  protected function tryAgentRequest(callable $doReq, $action, $reskey = NULL) {
+  protected function tryAgentRequest(callable $doReq, $action, $reskey = NULL, $acm_uuid = "") {
 
-    $client = $this->clientFactory->createClient();
+    $client = $this->clientFactory->createClient($acm_uuid);
     $reqOpts = [];
     $logger = ($this->logger) ?: \Drupal::logger('acq_commerce');
 
@@ -77,8 +78,8 @@ trait AgentRequestTrait {
         function (TransferStats $stats) use ($logger, $action) {
           $code =
             ($stats->hasResponse()) ?
-            $stats->getResponse()->getStatusCode() :
-            0;
+              $stats->getResponse()->getStatusCode() :
+              0;
 
           $logger->info(sprintf(
             '%s: Requested %s in %.4f [%d].',
@@ -90,8 +91,14 @@ trait AgentRequestTrait {
         };
     }
 
-    // This can be overridden in doReq function or using updateStoreContext.
-    $reqOpts['query']['store_id'] = $this->storeId;
+    if ($acm_uuid) {
+      // This can be overridden in doReq function or using updateStoreContext.
+      $reqOpts['query']['store_id'] = $acm_uuid;
+    }
+    else {
+      // This can be overridden in doReq function or using updateStoreContext.
+      $reqOpts['query']['store_id'] = $this->storeId;
+    }
 
     // Make Request.
     try {
@@ -125,7 +132,7 @@ trait AgentRequestTrait {
     }
 
     $response = json_decode($result->getBody(), TRUE);
-    if (($response === NULL) || (!isset($response['success']))) {
+    if (($response === NULL) || ($this->apiVersion === 'v1' && !isset($response['success']))) {
       $mesg = sprintf(
         '%s: Invalid / Unrecognized Conductor response: %s',
         $action,
@@ -136,7 +143,7 @@ trait AgentRequestTrait {
       throw new ConductorException($mesg);
     }
 
-    if (!$response['success']) {
+    if ($this->apiVersion === 'v1' && !$response['success']) {
       $logger->info(sprintf(
         '%s: Conductor request unsuccessful: %s',
         $action,
@@ -163,7 +170,7 @@ trait AgentRequestTrait {
       throw new ConductorResultException($response);
     }
 
-    if (strlen($reskey)) {
+    if ($this->apiVersion === 'v1' && strlen($reskey)) {
       if (!isset($response[$reskey])) {
         throw new ConductorResultException($response);
       }
@@ -171,6 +178,9 @@ trait AgentRequestTrait {
       return ($response[$reskey]);
     }
     else {
+      if ($this->debug) {
+        $logger->debug("Response: " . nl2br(print_r($response, TRUE)));
+      }
       return ($response);
     }
   }
