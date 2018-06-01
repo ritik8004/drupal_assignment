@@ -23,8 +23,9 @@ function alshaya_bbw_transac_theme_registry_alter(&$theme_registry) {
 function alshaya_bbw_transac_acq_sku_gallery_view_alter(&$elements, $skus) {
   foreach ($elements as $delta => $element) {
     $sku = $skus[$delta];
-    $form = $sku->get('attr_form')->getValue();
-    $elements[$delta]['#form'] = $form[0]['value'];
+    if ($form = $sku->get('attr_form')->getValue()) {
+      $elements[$delta]['#form'] = $form[0]['value'];
+    }
   }
 }
 
