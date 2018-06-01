@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9fa000dbca1ddd047cfe1e00bab286a",
+    "content-hash": "f01acd6563812f261bbb18449b1a5d76",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -6246,7 +6246,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha5",
-                    "datestamp": "1508351413",
+                    "datestamp": "1508351344",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
