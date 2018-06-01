@@ -12,10 +12,14 @@ use Drupal\node\Entity\NodeType;
  * Implements hook_update_N().
  *
  * Enable 'restrict_login_by_ip' module.
+ * Enable 'alshay_image_sitemap' module.
  */
 function alshaya_update_8005() {
   \Drupal::service('module_installer')->install(['restrict_role_login_by_ip']);
   alshaya_config_install_configs(['restrict_role_login_by_ip.settings'], 'alshaya', 'optional');
+
+  // Install Alshaya Image Sitemap.
+  \Drupal::service('module_installer')->install(['alshaya_image_sitemap']);
 }
 
 /**

@@ -260,7 +260,7 @@ class SkuManager {
         ];
 
         // Get discount if discounted price available.
-        $discount = floor((($price - $final_price) * 100) / $price);
+        $discount = round((($price - $final_price) * 100) / $price, 2);
         $build['discount'] = [
           '#markup' => $this->t('Save @discount%', ['@discount' => $discount]),
         ];

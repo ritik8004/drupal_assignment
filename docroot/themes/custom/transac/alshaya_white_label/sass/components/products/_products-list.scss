@@ -900,6 +900,10 @@ body {
   &.filter-open-no-scroll {
     @include breakpoint($only-mobile) {
       overflow: hidden;
+
+      .branding__menu.show-overlay {
+        z-index: 2;
+      }
     }
   }
 }

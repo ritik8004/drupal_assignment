@@ -1,0 +1,5 @@
+alshaya_image_sitemap.admin:
+  title: Alshaya Image Sitemap
+  description: 'Create and configure image sitemap.'
+  route_name: alshaya_image_sitemap.alshaya_image_sitemap_controller_list
+  parent: alshaya_master.alshaya_admin

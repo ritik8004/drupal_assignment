@@ -1,0 +1,26 @@
+{% extends "@alshaya_white_label/node/node--acq-product--modal.html.twig" %}
+
+{% block productBrand %}
+  {% if content.product_brand %}
+    <div class="content--brand">
+      {{ content.product_brand }}
+   </div>
+  {% endif %}
+{% endblock %}
+
+{% block form %}
+  {% if content.form %}
+    <div class="content--form">
+      {{ content.form }}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block sizeVolume %}
+  {% if content.size_volume %}
+    <div class="content--size-volume">
+      <span class="field__label">{{ 'Size/Volume'|t }}:</span>
+      {{ content.size_volume }}
+    </div>
+  {% endif %}
+{% endblock %}

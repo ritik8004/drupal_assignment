@@ -1177,8 +1177,6 @@ html[lang=ar] {
   .page-standard.user-page.checkout-delivery {
     h1.c-page-title {
       @include breakpoint($only-mobile) {
-        padding-right: 1em;
-
         @include icon(chevronright, before) {
           right: -0.6875rem;
         }
