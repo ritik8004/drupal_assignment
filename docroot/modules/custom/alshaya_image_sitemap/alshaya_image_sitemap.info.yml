@@ -1,0 +1,6 @@
+name: Alshaya Image Sitemap
+description: This module is used for creating image sitemap.
+core: 8.x
+package: Alshaya
+configure: alshaya_image_sitemap.alshay_image_sitemap_controller_list
+type: module

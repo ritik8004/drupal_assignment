@@ -296,23 +296,6 @@
       });
 
       // Handling videos inside sliders.
-      // Swapping the containers or Inserting video iframes inside containers on click of video thumbnails.
-      // Fetch Vimeo thumbnail via a GET call. Vimeo doesnot give thumbnails via URL like YT.
-      // @TODO: Can we do this in PHP
-      $('#lightSlider li.cloudzoom__thumbnails__video.vimeo, #product-image-gallery li.vimeo, #product-image-gallery-mobile li.vimeo').each(function () {
-        var vimeoVideoUrl = $(this).attr('data-iframe');
-        var match = /vimeo.*\/(\d+)/i.exec(vimeoVideoUrl);
-        var self = $(this);
-        if (match) {
-          var vimeoVideoID = match[1];
-          $.getJSON('https://www.vimeo.com/api/v2/video/' + vimeoVideoID + '.json?callback=?', {format: 'json'}, function (data) {
-            var featuredImg = data[0].thumbnail_large;
-            self.find('img').attr('src', featuredImg);
-          });
-        }
-      });
-
-      // Support Youtube & Vimeo videos in slider.
       // For Mobile slider we only insert, no need to remove it.
       $('#product-image-gallery-mobile li', context).on('click', function () {
         if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
@@ -326,7 +309,7 @@
       // For Desktop slider, we add a iframe on click on the image.
       $('#lightSlider li', context).on('click', function (e) {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
-          var wrap = $('#cloud-zoom-wrap');
+          var wrap = $('.cloudzoom__herocontainer');
           // Get width & height of wrap.
           var width = wrap.width();
           var height = wrap.height();

@@ -21,7 +21,8 @@ env=${target_env:2}
 echo "Fetching the list of sites."
 sites=$(drush8 acsf-tools-list --fields)
 
-# Loop on all site names.
+
+###### CLEAR + SYNC.
 echo "$sites" | while IFS= read -r site
 do
   # Get the installed profile on the given site.
@@ -30,11 +31,47 @@ do
   # For transac sites, we launch the commerce clean.
   if [ $profile = "alshaya_transac" ]
   then
-    echo "Execute data commerce clean on $site."
-    ./../hooks/scripts/reset-post-db-copy.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
+    echo "Execute data commerce clean + initiate commerce sync on $site."
+    ./../hooks/scripts/prepare-site-for-reset.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
+    ./../hooks/scripts/clean-commerce-data.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
+    ./../hooks/scripts/prepare-site-for-reset.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
+    ./../hooks/scripts/sync-commerce-data-step-1.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
   fi
 
 done
+
+###### WAIT PRODUCTS.
+echo "$sites" | while IFS= read -r site
+do
+  # Get the installed profile on the given site.
+  profile="$(drush8 -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_get_profile();')"
+
+  # For transac sites, we check the product sync status.
+  if [ $profile = "alshaya_transac" ]
+  then
+    echo "Check product sync status on $site."
+    ./../hooks/scripts/check-product-sync-status.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
+    echo "Product sync is finished on $site."
+  fi
+
+done
+
+###### FINALIZE SYNC.
+echo "$sites" | while IFS= read -r site
+do
+  # Get the installed profile on the given site.
+  profile="$(drush8 -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_get_profile();')"
+
+  # For transac sites, we finalize commence data sync and reset some config.
+  if [ $profile = "alshaya_transac" ]
+  then
+    echo "Check product sync status on $site."
+    ./../hooks/scripts/sync-commerce-data-step-2.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
+    echo "Product sync is finished on $site."
+  fi
+
+done
+
 
 # Take dumps of all the sites.
 drush8 acsf-tools-dump --result-folder=~/backup/post-stage --gzip

@@ -105,6 +105,7 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
 
       // Process taxonomy terms & remove items not included in menu.
       if ($entity_type == 'taxonomy_term') {
+        $ids = [];
 
         /** @var \Drupal\facets\Result\ResultInterface $result */
         foreach ($results as $delta => $result) {
