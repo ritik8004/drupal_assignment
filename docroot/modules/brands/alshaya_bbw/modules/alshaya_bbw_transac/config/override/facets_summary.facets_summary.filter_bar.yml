@@ -1,0 +1,16 @@
+facets:
+  fragrancecat:
+    checked: true
+    label: Fragrance Category
+    separator: ", "
+    show_count: true
+    show_label: false
+    weight: 0
+
+  collection1:
+    checked: true
+    label: Product Type
+    separator: ", "
+    show_count: true
+    show_label: false
+    weight: 0

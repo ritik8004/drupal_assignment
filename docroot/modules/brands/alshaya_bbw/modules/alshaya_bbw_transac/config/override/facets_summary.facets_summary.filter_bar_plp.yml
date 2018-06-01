@@ -1,0 +1,16 @@
+facets:
+  plp_fragrancecat:
+    checked: true
+    label: PLP Fragrance Category
+    separator: ", "
+    show_count: true
+    show_label: false
+    weight: 0
+
+  plp_collection1:
+    checked: true
+    label: PLP Product Type
+    separator: ", "
+    show_count: true
+    show_label: false
+    weight: 0
