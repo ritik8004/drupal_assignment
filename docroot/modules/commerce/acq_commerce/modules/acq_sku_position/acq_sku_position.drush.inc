@@ -53,7 +53,7 @@ function drush_acq_sku_position_position_sync($position_type = 'position') {
       }
     }
     catch (\Exception $e) {
-      \Drupal::logger('acq_sku_position_position')->notice('Exception while fetching position for category @name (tid: @tid). The category probably does not exist in commerce backend', [
+      \Drupal::logger('acq_sku_position_position')->error('Exception while fetching position for category @name (tid: @tid). The category probably does not exist in commerce backend', [
         '@name' => $term->name,
         '@tid' => $term->tid,
       ]);
@@ -62,7 +62,7 @@ function drush_acq_sku_position_position_sync($position_type = 'position') {
 
     // Skip sync if error is found in the response for a particular category.
     if (is_array($response) && isset($response['message'])) {
-      \Drupal::logger('acq_sku_position_position')->notice('Error in position sync for @name (tid: @tid). Response: @message', [
+      \Drupal::logger('acq_sku_position_position')->error('Error in position sync for @name (tid: @tid). Response: @message', [
         '@name' => $term->name,
         '@tid' => $term->tid,
         '@message' => $response['message'],

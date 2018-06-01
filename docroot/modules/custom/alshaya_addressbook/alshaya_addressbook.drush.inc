@@ -35,7 +35,7 @@ function drush_alshaya_addressbook_sync_areas() {
 
   // DM Version check.
   if ($addressbook_manager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-    \Drupal::logger('alshaya_addressbook')->notice('Incorrect DM version for this command.');
+    \Drupal::logger('alshaya_addressbook')->error('Incorrect DM version for this command.');
     return;
   }
 
@@ -57,7 +57,7 @@ function drush_alshaya_addressbook_sync_form_fields() {
 
   // DM Version check.
   if ($addressbook_manager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-    \Drupal::logger('alshaya_addressbook')->notice('Incorrect DM version for this command.');
+    \Drupal::logger('alshaya_addressbook')->error('Incorrect DM version for this command.');
     return;
   }
 
