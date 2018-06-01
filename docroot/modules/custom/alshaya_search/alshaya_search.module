@@ -55,9 +55,6 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
     // Override the 'result summary' header.
     $format_plural = new PluralTranslatableMarkup($view->total_rows, '1 item', '@count items');
     $view->header['result']->options['content'] = $format_plural;
-
-    // For the back button functionality.
-    $view->element['#attached']['library'][] = 'alshaya_search/back_to_list';
   }
 }
 
