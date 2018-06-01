@@ -145,6 +145,7 @@ function hammerIt(elm) {
 
           $('#product-image-gallery-mob').on('swipe', function (event, slick) {
             var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img');
+            image.css('transform', 'scale3d(1, 1, 1)');
             $.each(image.parent().siblings(), function () {
               $(this).find('img').css('transform', 'scale3d(1, 1, 1)');
             });
