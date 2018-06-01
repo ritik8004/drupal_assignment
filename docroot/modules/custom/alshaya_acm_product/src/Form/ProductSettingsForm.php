@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -44,6 +45,14 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('vat_text', $form_state->getValue('vat_text'));
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
     $config->set('image_slider_position_pdp', $form_state->getValue('image_slider_position_pdp'));
+
+    if (!empty($default_image = $form_state->getValue('product_default_image'))) {
+      $fid = $this->storeDefaultFileInSystem($default_image);
+      if ($fid) {
+        $config->set('product_default_image', $fid);
+      }
+    }
+
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -188,7 +197,59 @@ class ProductSettingsForm extends ConfigFormBase {
       ],
     ];
 
+    $form['product_default_image'] = [
+      '#type' => 'managed_file',
+      '#title' => $this->t('Product default image'),
+      '#description' => $this->t('Default product image that will be shown when there is no image for product.'),
+      '#upload_location' => 'public://product_default_image/',
+      '#upload_validators'  => [
+        'file_validate_extensions' => ['png gif jpg jpeg svg'],
+      ],
+      '#default_value' => !empty($config->get('product_default_image')) ? [$config->get('product_default_image')] : [],
+    ];
+
     return $form;
+  }
+
+  /**
+   * Stores the default image in system.
+   *
+   * @param array $default_image
+   *   Default image value.
+   *
+   * @return int|null|string
+   *   Image fid.
+   */
+  protected function storeDefaultFileInSystem($default_image) {
+    if (!empty($default_image)) {
+      $file = \Drupal::entityTypeManager()->getStorage('file')->load($default_image[0]);
+      if ($file) {
+        $file->setPermanent();
+        $file->save();
+        // Add file usage or file will be gone in next garbage collection.
+        \Drupal::service('file.usage')->add($file, 'alshaya_acm_product', 'product_default_image', 1);
+        // Create image style derivative.
+        $this->createImageStyle('1284x424', $file->getFileUri());
+
+        return $file->id();
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Creates the image style.
+   *
+   * @param string $image_style
+   *   Image style name.
+   * @param string $uri
+   *   Image uri name.
+   */
+  protected function createImageStyle($image_style, $uri) {
+    $style = ImageStyle::load($image_style);
+    $destination = $style->buildUri($uri);
+    $style->createDerivative($uri, $destination);
   }
 
 }

@@ -26,6 +26,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\file\Entity\File;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\ViewExecutable;
@@ -1441,4 +1442,22 @@ function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) 
   if (!empty($variables['data'])) {
     $variables['data'] = views_embed_view($variables['views_name'], $variables['views_display_id'], implode(',', $variables['data']));
   }
+}
+
+/**
+ * Get the default image url for the product.
+ *
+ * @return null|string
+ *   Image url.
+ */
+function _alshaya_acm_product_get_product_default_main_image() {
+  $product_default_image = \Drupal::config('alshaya_acm_product.settings')->get('product_default_image');
+  if (!empty($product_default_image)) {
+    $file = File::load($product_default_image);
+    if ($file) {
+      return file_create_url($file->getFileUri());
+    }
+  }
+
+  return NULL;
 }
