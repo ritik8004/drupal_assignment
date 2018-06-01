@@ -1445,6 +1445,24 @@ function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) 
 }
 
 /**
+ * Implements hook_acq_sku_cart_media_alter().
+ */
+function alshaya_acm_product_acq_sku_cart_media_alter($sku, &$sku_image) {
+  if (empty($sku_image)) {
+    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+      $sku_image = [
+        '#theme' => 'image',
+        '#attributes' => [
+          'src' => $default_image,
+          'title' => $sku->label(),
+          'alt' => $sku->label(),
+        ],
+      ];
+    }
+  }
+}
+
+/**
  * Get the default image url for the product.
  *
  * @return null|string
