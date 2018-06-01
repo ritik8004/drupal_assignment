@@ -444,9 +444,9 @@
 
       @include breakpoint($only-mobile) {
         margin-#{$right}: 0.5rem;
-        top: 0.4rem;
-        font-size: 1.25rem;
-        padding: 0.125rem;
+        top: 0;
+        font-size: 1.5rem;
+        float: $left;
       }
     }
   }
