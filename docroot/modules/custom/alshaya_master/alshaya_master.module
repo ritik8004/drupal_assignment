@@ -563,7 +563,7 @@ function _alshaya_master_mobile_number_validate(array &$element, FormStateInterf
   // Get user input as validation function is using the input value to validate.
   // @see \Drupal\mobile_number\Element\MobileNumber::mobileNumberValidate
   $input = $form_state->getUserInput();
-  $pp = NestedArray::getValue($form_state->getUserInput(), $tree_parents);
+  $pp = NestedArray::getValue($input, $tree_parents);
   // Remove country code from the value, as we are using a single input for
   // country code and mobile number or local number.
   if (!empty($pp['local_number'])) {
