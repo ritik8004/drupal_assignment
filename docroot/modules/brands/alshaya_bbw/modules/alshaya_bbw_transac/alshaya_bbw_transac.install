@@ -13,7 +13,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Add Facet to newly added fields.
  */
-function alshaya_bbw_transac_update_8003() {
+function alshaya_bbw_transac_update_8008() {
   $facet_configs = [
     'facets.facet.fragrancecat',
     'facets.facet.plp_fragrancecat',
@@ -22,58 +22,27 @@ function alshaya_bbw_transac_update_8003() {
     'facets.facet.plp_collection1',
     'facets.facet.promotion_collection1',
   ];
-
-  // Create facet for Fragrance category and collection 1 field.
   alshaya_config_install_configs($facet_configs, 'alshaya_bbw_transac', 'install');
 
-  $filter_bar_add_fragrance_category = [
-    'checked' => TRUE,
-    'label' => 'Fragrance Category',
-    'separator' => ', ',
-    'show_count' => TRUE,
-    'show_label' => FALSE,
-    'weight' => 0,
+  // Facet search to update config.
+  $facet_search_configs = [
+    'facets_summary.facets_summary.filter_bar',
   ];
+  alshaya_config_install_configs($facet_search_configs, 'alshaya_search');
 
-  // Add filter bars to show the selected Fragrance category facets.
-  $filter_summary_facets = [
-    'plp_fragrancecat' => 'facets_summary.facets_summary.filter_bar_plp',
-    'fragrancecat' => 'facets_summary.facets_summary.filter_bar',
-    'promotion_fragrancecat' => 'facets_summary.facets_summary.filter_bar_promotions',
+  // Facet promotion to update config.
+  $facets_config_promotion = [
+    'facets_summary.facets_summary.filter_bar_promotions',
   ];
+  alshaya_config_install_configs($facets_config_promotion, 'alshaya_acm_promotion', 'optional');
 
-  foreach ($filter_summary_facets as $key => $filter_summary_facet) {
-    $config = \Drupal::configFactory()->getEditable($filter_summary_facet);
-
-    // Index attr fragrance category data in search_api_db.
-    $config->set('facets.' . $key, $filter_bar_add_fragrance_category);
-    $config->save();
-  }
-
-  // Add filter bars to show the selected product type facets.
-  $filter_bar_add_collection_1 = [
-    'checked' => TRUE,
-    'label' => 'Product Type',
-    'separator' => ', ',
-    'show_count' => TRUE,
-    'show_label' => FALSE,
-    'weight' => 0,
+  // Facet summary to update config.
+  $facet_summary_config = [
+    'facets_summary.facets_summary.filter_bar_plp',
   ];
+  alshaya_config_install_configs($facet_summary_config, 'alshaya_product', 'optional');
 
-  $filter_summary_facets = [
-    'plp_collection1' => 'facets_summary.facets_summary.filter_bar_plp',
-    'collection1' => 'facets_summary.facets_summary.filter_bar',
-    'promotion_collection1' => 'facets_summary.facets_summary.filter_bar_promotions',
-  ];
-
-  foreach ($filter_summary_facets as $key => $filter_summary_facet) {
-    $config = \Drupal::configFactory()->getEditable($filter_summary_facet);
-
-    // Index attr fragrance category data in search_api_db.
-    $config->set('facets.' . $key, $filter_bar_add_collection_1);
-    $config->save();
-  }
-
+  // Facet new blocks.
   $facet_block_configs = [
     'block.block.fragrancecat',
     'block.block.plpfragrancecat',
