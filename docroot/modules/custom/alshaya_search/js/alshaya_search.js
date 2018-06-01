@@ -70,15 +70,10 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         }
         else {
           $(data.selector).replaceWith(data.replaceWith);
-
-          if (alshayaSearchActiveFacetAfterAjaxTimer) {
-            clearTimeout(alshayaSearchActiveFacetAfterAjaxTimer);
-            alshayaSearchActiveFacetAfterAjaxTimer = null;
-          }
-
-          alshayaSearchActiveFacetAfterAjaxTimer = setTimeout(Drupal.alshayaSearchActiveFacetResetAfterAjax, 100);
         }
       };
+
+      Drupal.alshayaSearchActiveFacetResetAfterAjax();
 
       var facetsDisplayTextbox = settings.alshaya_search_facets_display_textbox;
       if (facetsDisplayTextbox) {

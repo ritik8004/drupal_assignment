@@ -338,50 +338,21 @@
         closeFilterView();
       });
 
-      // Poll the DOM to check if the show more/less link is available, before placing it inside the ul.
-      var i = setInterval(function () {
-        if ($('.block-facet--checkbox a.facets-soft-limit-link').length) {
-          clearInterval(i);
-          $('.block-facet--checkbox').each(function () {
-            var softLink = $(this).find('a.facets-soft-limit-link');
-            var blockPlugin = $(this).attr('data-block-plugin-id');
-            var facet_id = blockPlugin.replace('facet_block:', '');
-            var softLimitSettings = settings.facets.softLimit;
-            var softItemsLimit = softLimitSettings[facet_id] - 1;
-            if (!isNaN(parseInt(softItemsLimit))) {
-              // Facets module would hide all instances of list items in the
-              // second instance of the facet block. This is to support same
-              // facet block twice on a page.
-              $(this).find('ul li:lt(' + (parseInt(softItemsLimit) + 1) + ')').show();
-              $(this).find('ul li:gt(' + parseInt(softItemsLimit) + ')').hide();
-              softLink.insertAfter($(this).find('ul'));
-            }
-          });
-
-          // Function defined in mobile and called here.
-          // Don't want to refactor a lot to fix during UAT stage.
-          if (typeof Drupal.alshayaSearchActiveFacetResetAfterAjax !== 'undefined') {
-            Drupal.alshayaSearchActiveFacetResetAfterAjax();
-          }
+      $('.block-facet--checkbox', context).each(function () {
+        var softLink = $(this).find('a.facets-soft-limit-link');
+        var blockPlugin = $(this).attr('data-block-plugin-id');
+        var facet_id = blockPlugin.replace('facet_block:', '');
+        var softLimitSettings = settings.facets.softLimit;
+        var softItemsLimit = softLimitSettings[facet_id] - 1;
+        if (!isNaN(parseInt(softItemsLimit))) {
+          // Facets module would hide all instances of list items in the
+          // second instance of the facet block. This is to support same
+          // facet block twice on a page.
+          $(this).find('ul li:lt(' + (parseInt(softItemsLimit) + 1) + ')').show();
+          $(this).find('ul li:gt(' + parseInt(softItemsLimit) + ')').hide();
+          softLink.insertAfter($(this).find('ul'));
         }
-      }, 100);
-
-      var j = setInterval(function () {
-        if ($('.region__content .block-facet--checkbox a.facets-soft-limit-link').length) {
-          clearInterval(j);
-          $('.region__content .block-facet--checkbox').each(function () {
-            var softLink = $(this).find('a.facets-soft-limit-link');
-            softLink.addClass('processed');
-            softLink.insertAfter($(this).find('ul'));
-          });
-
-          // Function defined in mobile and called here.
-          // Don't want to refactor a lot to fix during UAT stage.
-          if (typeof Drupal.alshayaSearchActiveFacetResetAfterAjax !== 'undefined') {
-            Drupal.alshayaSearchActiveFacetResetAfterAjax();
-          }
-        }
-      }, 100);
+      });
     }
   };
 })(jQuery);
