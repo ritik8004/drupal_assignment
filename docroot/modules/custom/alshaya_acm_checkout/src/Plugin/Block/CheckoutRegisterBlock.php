@@ -190,10 +190,7 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
    */
   public function getCacheContexts() {
     // We will display register block based on value in session for last order.
-    return Cache::mergeContexts(parent::getCacheContexts(), [
-      'user.roles',
-      'session',
-    ]);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['session']);
   }
 
   /**
