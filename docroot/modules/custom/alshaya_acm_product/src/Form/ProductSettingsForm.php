@@ -122,6 +122,14 @@ class ProductSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('list_view_auto_page_load_count'),
     ];
 
+    $form['auto_load_trigger_offset'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Distance away from load more button where we need to trigger auto-loading.'),
+      '#description' => $this->t('This is the scoll offset where we want to start pre-loading the next page items. Values should be in integer without any units e.g., 800.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('auto_load_trigger_offset'),
+    ];
+
     $form['brand_logo_base_path'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Base path on server for Brand Logo'),
