@@ -4,6 +4,10 @@
     border-top: 0;
     border-right: 0;
     border-left: 0;
+
+    .row-title {
+      color: $store_finder_search_results_label;
+    }
   }
 
   .get--directions a::after {
@@ -19,6 +23,14 @@
       font-size: 0.625rem;
     }
   }
+
+  .back-link,
+  .mobile-only-back-to-glossary {
+    a::after {
+      font-size: 2.5rem;
+      top: -0.25rem;
+    }
+  }
 }
 
 .geolocation-common-map-container {
@@ -28,5 +40,58 @@
     border-top: 1px solid $store_finder_map_border;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
+  }
+
+  .location-content {
+    .views-field-title {
+      font-family: $vs-bold;
+      margin-bottom: 0.875rem;
+    }
+  }
+}
+
+.field--name-field-brand {
+  .field__label,
+  .field__item {
+    display: inline;
+  }
+
+  .field__label::after {
+    content: ':';
+  }
+}
+
+.geolocation-common-map-container {
+  .views-field-field-store-address {
+    margin-bottom: 0;
+  }
+}
+
+.view-stores-finder {
+  .views-field-field-store-open-hours {
+    margin-top: 0.5rem;
+  }
+
+  .views-field-field-brand {
+    .views-label-field-brand,
+    .field-content {
+      display: inline;
+    }
+  }
+
+  .hours--label {
+    & .open {
+      border-bottom: 0;
+    }
+  }
+}
+
+.individual--store {
+  .row-title {
+    margin-bottom: 0.5rem;
+
+    span {
+      font-family: $vs-bold;
+    }
   }
 }
