@@ -247,7 +247,6 @@ class APIWrapper implements APIWrapperInterface {
 
     try {
       $cart = $this->tryAgentRequest($doReq, 'updateCart', 'cart');
-      Cache::invalidateTags(['mini_cart:' . $cart_id]);
       Cache::invalidateTags(['cart:' . $cart_id]);
     }
     catch (ConductorException $e) {
