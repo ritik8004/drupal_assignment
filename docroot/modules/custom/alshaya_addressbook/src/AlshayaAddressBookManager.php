@@ -4,6 +4,7 @@ namespace Drupal\alshaya_addressbook;
 
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -106,6 +107,13 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   protected $areasTermsHelper;
 
   /**
+   * Cart Helper service object.
+   *
+   * @var \Drupal\alshaya_acm\CartHelper
+   */
+  protected $cartHelper;
+
+  /**
    * AlshayaAddressBookManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -130,6 +138,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Module Handler service object.
    * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_terms_helper
    *   AddressBook Areas Terms helper service.
+   * @param \Drupal\alshaya_acm\CartHelper $cart_helper
+   *   Cart Helper service object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
@@ -141,7 +151,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
                               ConfigFactoryInterface $config_factory,
                               CacheBackendInterface $cache,
                               ModuleHandlerInterface $module_handler,
-                              AddressBookAreasTermsHelper $areas_terms_helper) {
+                              AddressBookAreasTermsHelper $areas_terms_helper,
+                              CartHelper $cart_helper) {
     $this->entityRepository = $entity_repository;
     $this->profileStorage = $entity_type_manager->getStorage('profile');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
@@ -155,6 +166,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $this->cache = $cache;
     $this->moduleHandler = $module_handler;
     $this->areasTermsHelper = $areas_terms_helper;
+    $this->cartHelper = $cart_helper;
   }
 
   /**
@@ -654,25 +666,31 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   /**
    * Helper function to get magento address structure.
    *
+   * @param string|null $empty_value
+   *   Empty value to set in address fields. Leave this empty to use invisible
+   *   character.
+   *
    * @return array
    *   Magento address array with empty values.
    */
-  public function getAddressStructureWithEmptyValues() {
+  public function getAddressStructureWithEmptyValues($empty_value = NULL) {
+    $empty_value = isset($empty_value) ? $empty_value : self::INVISIBLE_CHARACTER;
+
     $magento_address = [];
 
-    $magento_address['firstname'] = self::INVISIBLE_CHARACTER;
-    $magento_address['lastname'] = self::INVISIBLE_CHARACTER;
-    $magento_address['telephone'] = self::INVISIBLE_CHARACTER;
-    $magento_address['street'] = self::INVISIBLE_CHARACTER;
-    $magento_address['extension']['address_apartment_segment'] = self::INVISIBLE_CHARACTER;
-    $magento_address['extension']['address_area_segment'] = self::INVISIBLE_CHARACTER;
-    $magento_address['extension']['address_building_segment'] = self::INVISIBLE_CHARACTER;
-    $magento_address['extension']['address_block_segment'] = self::INVISIBLE_CHARACTER;
-    $magento_address['extension']['area'] = self::INVISIBLE_CHARACTER;
-    $magento_address['extension']['governate'] = self::INVISIBLE_CHARACTER;
-    $magento_address['extension']['address_city_segment'] = self::INVISIBLE_CHARACTER;
+    $magento_address['firstname'] = $empty_value;
+    $magento_address['lastname'] = $empty_value;
+    $magento_address['telephone'] = $empty_value;
+    $magento_address['street'] = $empty_value;
+    $magento_address['extension']['address_apartment_segment'] = $empty_value;
+    $magento_address['extension']['address_area_segment'] = $empty_value;
+    $magento_address['extension']['address_building_segment'] = $empty_value;
+    $magento_address['extension']['address_block_segment'] = $empty_value;
+    $magento_address['extension']['area'] = $empty_value;
+    $magento_address['extension']['governate'] = $empty_value;
+    $magento_address['extension']['address_city_segment'] = $empty_value;
     $magento_address['country_id'] = _alshaya_custom_get_site_level_country_code();
-    $magento_address['city'] = self::INVISIBLE_CHARACTER;
+    $magento_address['city'] = $empty_value;
 
     return $magento_address;
   }
@@ -1003,7 +1021,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       return '';
     }
 
-    $shipping = (array) $cart->getShipping();
+    $shipping = $this->cartHelper->getShipping($cart);
     return $this->getAddressShippingAreaValue($shipping);
   }
 
@@ -1042,6 +1060,10 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   String value for the area or NULL.
    */
   public function getAddressShippingAreaValue(array $magento_address, $langcode = 'en') {
+    if (isset($magento_address['extension']) && is_object($magento_address['extension'])) {
+      $magento_address['extension'] = (array) $magento_address['extension'];
+    }
+
     $field = 'address_area_segment';
 
     if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {

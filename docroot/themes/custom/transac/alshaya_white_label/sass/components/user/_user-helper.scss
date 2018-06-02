@@ -417,8 +417,11 @@
         position: static;
         width: 100%;
         display: block;
-        text-indent: -2rem;
-        padding-#{$left}: 1.9rem;
+
+        @include breakpoint($tablet) {
+          text-indent: -2rem;
+          padding-#{$left}: 1.9rem;
+        }
       }
     }
 

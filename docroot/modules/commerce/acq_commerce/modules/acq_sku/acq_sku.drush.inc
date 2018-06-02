@@ -7,6 +7,7 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\rest\resource\ProductSyncResource;
 
 const DELETE_BATCH_COUNT = 200;
 
@@ -114,6 +115,18 @@ function acq_sku_drush_command() {
     ],
   ];
 
+
+  $commands['sync-commerce-products-test'] = [
+    'description' => 'Run a partial synchronization of commerce product records synchronously for testing / dev.',
+    'aliases'     => ['acdsp'],
+    'arguments'   => [
+      'count' => 'Number of product records to sync.',
+    ],
+    'examples'    => [
+      'drush acdsp' => 'Run a partial synchronization of commerce product records synchronously for testing / dev.',
+    ],
+  ];
+
   return ($commands);
 }
 
@@ -161,6 +174,17 @@ function drush_acq_sku_sync_commerce_products($langcode, $page_size) {
   $container = \Drupal::getContainer();
   $container->get('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $category_id, $page_size);
   drush_print(dt('Done.'));
+}
+
+/**
+ * Implements drush product sync test / dev command.
+ */
+function drush_acq_sku_sync_commerce_products_test($count = 100) {
+  drush_print(dt('Synchronizing @count commerce products for testing / dev...', ['@count' => $count]));
+  $container = \Drupal::getContainer();
+  $products = \Drupal::service('acq_commerce.api')->getProducts($count);
+  $product_sync_resource = ProductSyncResource::create($container, [], NULL, NULL);
+  $product_sync_resource->post($products);
 }
 
 /**

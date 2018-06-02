@@ -225,7 +225,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       }
     }
 
-    return $terms;
+    return array_values($terms);
   }
 
   /**
@@ -289,6 +289,10 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    *   The term id.
    */
   protected function getInnerDepthTerm(array $terms = []) {
+    if (empty($terms)) {
+      return NULL;
+    }
+
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     $depths = $this->connection->select('taxonomy_term_field_data', 'ttfd')
       ->fields('ttfd', ['tid', 'depth_level'])

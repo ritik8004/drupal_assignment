@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Alshaya vs transac module file.
+ */
+
+/**
+ * Implements hook_alshaya_stores_finder_store_update_alter().
+ */
+function alshaya_vs_transac_alshaya_stores_finder_store_update_alter(&$node, array $store) {
+  if (isset($store['included_in_store'])) {
+    $node->get('field_brand')->setValue(trim($store['included_in_store']));
+  }
+}

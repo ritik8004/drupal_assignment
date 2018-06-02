@@ -6,6 +6,7 @@
 function alshaya_get_magento_host_data() {
   return [
     // Mothercare.
+    'mc_dev' => 'https://develop2-56rwroy-z3gmkbwmwrl4g.eu.magentosite.cloud',
     'mc_qa' => 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',
     'mc_uat' => 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud',
     'mc_prod' => 'https://mcmena.store.alshaya.com',

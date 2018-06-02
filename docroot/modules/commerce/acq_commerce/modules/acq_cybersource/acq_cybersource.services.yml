@@ -4,6 +4,5 @@ services:
     arguments:
       - '@acq_commerce.client_factory'
       - '@config.factory'
-      - '@language_manager'
       - '@logger.factory'
       - '@acq_commerce.i18n_helper'

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac;
 
+use Drupal\alshaya_acm\CartHelper;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -49,6 +50,7 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:advanced_page' => 'advanced page',
+    'entity.node.canonical:department_page' => 'department page',
     'entity.node.canonical:acq_promotion' => 'promotion page',
     'entity.node.canonical:static_html' => 'static page',
     'entity.user.canonical' => 'my account page',
@@ -125,6 +127,13 @@ class AlshayaGtmManager {
    * @var \Drupal\acq_cart\CartStorageInterface
    */
   protected $cartStorage;
+
+  /**
+   * Cart Helper service object.
+   *
+   * @var \Drupal\alshaya_acm\CartHelper
+   */
+  protected $cartHelper;
 
   /**
    * The current user service.
@@ -212,6 +221,8 @@ class AlshayaGtmManager {
    *   Config Factory service.
    * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
    *   Private temp store service.
+   * @param \Drupal\alshaya_acm\CartHelper $cartHelper
+   *   Cart Helper service object.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   Current User service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -236,6 +247,7 @@ class AlshayaGtmManager {
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
                               CartStorageInterface $cartStorage,
+                              CartHelper $cartHelper,
                               AccountProxyInterface $currentUser,
                               RequestStack $requestStack,
                               EntityTypeManagerInterface $entityTypeManager,
@@ -249,6 +261,7 @@ class AlshayaGtmManager {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
+    $this->cartHelper = $cartHelper;
     $this->currentUser = $currentUser;
     $this->requestStack = $requestStack;
     $this->entityTypeManager = $entityTypeManager;
@@ -306,15 +319,7 @@ class AlshayaGtmManager {
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
     $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
-    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
-        [
-          &$product,
-          &$attributes,
-          &$skuAttributes,
-        ]
-      );
     $attributes = array_merge($attributes, $skuAttributes);
-
     return $attributes;
   }
 
@@ -404,7 +409,12 @@ class AlshayaGtmManager {
         $attributes['gtm-dimension5'] = $parent_sku->get('attr_product_collection')->getString();
       }
     }
-
+    $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
+      [
+        &$product_node,
+        &$attributes,
+      ]
+    );
     return $attributes;
   }
 
@@ -466,7 +476,12 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['node'])) {
             /** @var \Drupal\node\Entity\Node $node */
             $node = $currentRoute['route_params']['node'];
-            $routeIdentifier .= ':' . $node->bundle();
+            if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+              $routeIdentifier .= ':department_page';
+            }
+            else {
+              $routeIdentifier .= ':' . $node->bundle();
+            }
           }
           break;
 
@@ -615,7 +630,7 @@ class AlshayaGtmManager {
 
       $cartItems = $cart->get('items');
 
-      $address = (array) $cart->getShipping();
+      $address = $this->cartHelper->getShipping($cart);
 
       if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page') {
         // For CC we always use step 2.
@@ -677,6 +692,13 @@ class AlshayaGtmManager {
         if (($dimension8) && ($delivery_page)) {
           $attributes[$skuId]['gtm-dimension8'] = trim($dimension8);
         }
+
+        $this->moduleHandler->invokeAll('gtm_product_attributes_alter',
+          [
+            &$productNode,
+            &$attributes[$skuId],
+          ]
+        );
       }
 
       $attributes['privilegeCustomer'] = !empty($cart->getExtension('loyalty_card')) ? 'Privilege Customer' : 'Regular Customer';
@@ -785,6 +807,10 @@ class AlshayaGtmManager {
    *   The term id.
    */
   public function getInnerDepthTerm(array $terms = []) {
+    if (empty($terms)) {
+      return NULL;
+    }
+
     $current_langcode = $this->languageManager->getDefaultLanguage()->getId();
     $depths = $this->database->select('taxonomy_term_field_data', 'ttfd')
       ->fields('ttfd', ['tid', 'depth_level'])
@@ -884,9 +910,9 @@ class AlshayaGtmManager {
     $actionData = [
       'id' => $order['increment_id'],
       'affiliation' => 'Online Store',
-      'revenue' => (float) $order['totals']['grand'],
-      'tax' => (float) $order['totals']['tax'] ?: 0.00,
-      'shippping' => (float) $order['shipping']['method']['amount'] ?: 0.00,
+      'revenue' => alshaya_master_convert_amount_to_float($order['totals']['grand']),
+      'tax' => alshaya_master_convert_amount_to_float($order['totals']['tax']) ?: 0.00,
+      'shippping' => alshaya_master_convert_amount_to_float($order['shipping']['method']['amount']) ?: 0.00,
       'coupon' => $order['coupon'],
     ];
 
@@ -900,7 +926,7 @@ class AlshayaGtmManager {
       'deliveryOption' => $deliveryOption,
       'deliveryType' => $deliveryType,
       'paymentOption' => $this->checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code'], '', FALSE)->getName(),
-      'discountAmount' => (float) abs($order['totals']['discount']),
+      'discountAmount' => alshaya_master_convert_amount_to_float($order['totals']['discount']),
       'transactionID' => $order['increment_id'],
       'firstTimeTransaction' => count($orders) > 1 ? 'False' : 'True',
       'privilegesCardNumber' => $loyalty_card,
@@ -950,7 +976,7 @@ class AlshayaGtmManager {
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
-      'country' => _alshaya_country_get_site_level_country_name(),
+      'country' => function_exists('_alshaya_country_get_site_level_country_name') ? _alshaya_country_get_site_level_country_name() : '',
       'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
@@ -989,7 +1015,7 @@ class AlshayaGtmManager {
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 
         // Check if this product is in stock.
-        $stock_response = alshaya_acm_get_product_stock($sku_entity);
+        $stock_response = alshaya_acm_get_stock_from_sku($sku_entity);
         $stock_status = $stock_response ? 'in stock' : 'out of stock';
         $product_terms = $this->fetchProductCategories($node);
 
@@ -1029,6 +1055,12 @@ class AlshayaGtmManager {
         }
 
         $page_dl_attributes = array_merge($page_dl_attributes, $this->fetchDepartmentAttributes($product_terms));
+        $this->moduleHandler->invokeAll('gtm_pdp_attributes_alter',
+          [
+            &$sku_entity,
+            &$page_dl_attributes,
+          ]
+        );
         break;
 
       case 'product listing page':
@@ -1042,6 +1074,7 @@ class AlshayaGtmManager {
         break;
 
       case 'advanced page':
+      case 'department page':
         $department_node = $current_route['route_params']['node'];
         if ($department_node->get('field_use_as_department_page')->value == 1) {
           $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')
@@ -1283,6 +1316,11 @@ class AlshayaGtmManager {
       }
       else {
         $sku_media_url = 'image not available';
+      }
+      $sku_entity = SKU::loadFromSku($item['sku']);
+      if ($sku_entity instanceof SKU && $sku_entity->hasTranslation('en')) {
+        $sku_entity = $sku_entity->getTranslation('en');
+        $item['name'] = $sku_entity->label();
       }
 
       $cart_items_flock[] = [

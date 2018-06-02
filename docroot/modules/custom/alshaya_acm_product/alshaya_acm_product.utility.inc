@@ -37,7 +37,9 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
       ->getValue();
 
     // Get the processed media data for the SKU.
-    return alshaya_acm_product_get_sku_media($sku_entity, $first_image_only);
+    if ($sku_entity instanceof SKU) {
+      return alshaya_acm_product_get_sku_media($sku_entity, $first_image_only);
+    }
   }
 
   return NULL;
@@ -229,28 +231,22 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
           'type' => 'image',
         ];
       }
-      elseif (isset($media_item['media_type']) && $media_item['media_type'] == 'video') {
-        if (strpos($media_item['video_provider'], 'youtube')) {
-          $thumbnails[] = [
-            'thumburl' => 'https://img.youtube.com/vi/' . alshaya_product_zoom_getyoutubeid($media_item['video_url']) . '/hqdefault.jpg',
-            'url' => $media_item['video_url'],
-            'type' => 'youtube',
-            // @TODO: should this be config?
-            'width' => 81,
-            // @TODO: should this be config?
-            'height' => 81,
-          ];
-        }
-        else {
-          $thumbnails[] = [
-            'url' => $media_item['video_url'],
-            'type' => 'vimeo',
-            // @TODO: should this be config?
-            'width' => 81,
-            // @TODO: should this be config?
-            'height' => 81,
-          ];
-        }
+      elseif (isset($media_item['media_type']) && $media_item['media_type'] == 'external-video') {
+        // @TODO:
+        // Receiving video_provider as NULL, should be set to youtube or vimeo.
+        // Till then using $type as provider flag.
+        $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+        $thumbnails[] = [
+          'thumburl' => $media_item['file'],
+          'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+          'video_title' => $media_item['video_title'],
+          'video_desc' => $media_item['video_description'],
+          'type' => $type,
+          // @TODO: should this be config?
+          'width' => 81,
+          // @TODO: should this be config?
+          'height' => 81,
+        ];
       }
     }
   }
@@ -710,4 +706,30 @@ function alshaya_acm_product_update_field_cardinality_from_unlimited_to_unique($
       ->condition('langcode', $value->langcode)
       ->execute();
   }
+}
+
+/**
+ * Utility function to return Youtube and Vimeo player URLs from web URls.
+ *
+ * @param string $url
+ *   The URL received from MDC.
+ * @param string $provider
+ *   The video provider, expecting youtube/vimeo.
+ *
+ * @return string
+ *   The player URL for embedding video in iframe.
+ */
+function alshaya_acm_product_generate_video_embed_url($url, $provider) {
+  $embed_url = '';
+  if (strpos($url, 'youtube.com/') == FALSE && strpos($url, 'vimeo.com/') == FALSE) {
+    return '';
+  }
+
+  $video_id = $provider == 'youtube' ? explode('v=', $url)[1] : explode('vimeo.com/', $url)[1];
+
+  if ($video_id) {
+    $embed_url = ($provider == 'youtube') ? 'https://www.youtube.com/embed/' : 'https://player.vimeo.com/video/';
+    $embed_url .= explode('&', $video_id)[0];
+  }
+  return $embed_url;
 }

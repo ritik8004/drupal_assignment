@@ -1,4 +1,15 @@
 .page-standard.user-page.checkout-delivery {
+  main {
+    form {
+      .form-actions {
+        a {
+          font-weight: normal;
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+
   #edit-delivery-tabs {
     .tab {
       font-family: $alshaya-thin;
@@ -60,10 +71,56 @@
       @include breakpoint($only-tablet) {
         width: 47%;
       }
+
+      @include breakpoint($tablet) {
+        &.tab-click-collect {
+          &.active--tab--head {
+            &::before {
+              display: none;
+            }
+          }
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        &.tab-click-collect {
+          &.active--tab--head {
+            #{$right}: -1px;
+            margin-#{$left}: -1px;
+          }
+        }
+      }
+
+      &.tab-home-delivery {
+        &:not(.active--tab--head) {
+          margin-#{$left}: -1px;
+        }
+      }
     }
 
     hr {
       display: none;
+    }
+  }
+
+  #edit-guest-delivery-home-address-shipping-methods {
+    padding: 0 1.375rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 0;
+    }
+  }
+}
+
+#edit-guest-delivery-home-address-shipping-methods--wrapper,
+#edit-member-delivery-home-address-shipping-methods--wrapper,
+.shipping-methods-container {
+  .form-type-radio {
+    border: 1px solid $checkout_delivery_options_border;
+    border-top: 0;
+
+    &:first-child {
+      border: 1px solid $checkout_delivery_options_border;
     }
   }
 }
@@ -112,6 +169,12 @@
             margin: 0 1.375rem 0.75rem;
           }
         }
+
+        legend {
+          span {
+            color: $checkout_section_titles;
+          }
+        }
       }
     }
   }
@@ -139,4 +202,38 @@
       }
     }
   }
+}
+
+#payment_details_wrapper {
+  #payment_method_knet {
+    border-top-width: 1px;
+  }
+
+  > .form-wrapper {
+    .payment-plugin-wrapper-div {
+      &.plugin-selected {
+        .method-title {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
+
+#selected-address-wrapper {
+  .address--controls {
+    #change-address {
+      font-size: 0.875rem;
+      font-weight: normal;
+      padding: 0.875rem;
+      color: $address_book_change_link;
+      text-transform: uppercase;
+      border-#{$right}: 1px solid $address_book_border;
+    }
+  }
+}
+
+.cnc-collect-from {
+  font-family: $alshaya-thin;
+  text-transform: capitalize;
 }

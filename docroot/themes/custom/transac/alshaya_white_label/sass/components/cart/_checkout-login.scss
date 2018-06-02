@@ -44,6 +44,10 @@
         color: $checkout_mobile_back_link_icon;
         font-size: 2.125rem;
         transform: rotate(270deg);
+
+        html[lang=ar] & {
+          transform: rotate(90deg);
+        }
       }
     }
   }
@@ -131,10 +135,6 @@
     }
   }
 
-  .tab-new-customer {
-    margin-#{$right}: 2%;
-  }
-
   .tab {
     padding: 0.5rem 1rem;
     border: none;
@@ -169,6 +169,24 @@
       font-family: $alshaya-bold;
       text-transform: lowercase;
       line-height: 1.8;
+    }
+  }
+
+  .tab-new-customer {
+    margin-#{$right}: 2%;
+    padding: 0;
+
+    @include breakpoint($tablet) {
+      padding: 0.5rem 1rem;
+    }
+
+    a {
+      display: block;
+      padding: 0.5rem 1rem;
+
+      @include breakpoint($tablet) {
+        padding: 0;
+      }
     }
   }
 
@@ -375,18 +393,30 @@
         color: $checkout_login_guest_email_text;
         margin-bottom: 1.4rem;
         font-weight: bold;
-        font-size: 13px;
+        font-size: 0.8125rem;
         width: 80%;
       }
 
       @include breakpoint($desktop) {
         width: 58%;
       }
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+        font-size: 0.875rem;
+        line-height: 1.29;
+      }
     }
   }
 
   .checkout-guest-summary {
     line-height: 1.6;
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+      font-size: 0.875rem;
+      line-height: 1.29;
+    }
 
     @include breakpoint($tablet) {
       font-size: 0.8125rem;
@@ -418,6 +448,12 @@
     #block-youllbeableto {
       @include breakpoint($only-mobile) {
         text-align: center;
+        margin-top: 1rem;
+        margin-bottom: 0;
+
+        h3 {
+          margin-top: 0;
+        }
       }
 
       @include breakpoint($only-tablet) {

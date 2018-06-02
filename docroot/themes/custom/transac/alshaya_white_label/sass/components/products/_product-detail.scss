@@ -1611,6 +1611,10 @@
     margin-bottom: 0.5rem;
   }
 
+  &:empty {
+    display: none !important;
+  }
+
   .error {
     background: $primary_input_inline_error;
     padding: 0.625rem;
@@ -1898,5 +1902,14 @@ html[lang=ar] {
     font-size: 0.875rem !important;
     margin: 0;
     height: 2.5rem;
+  }
+}
+
+.path--cart,
+.nodetype--acq_product {
+  .select2-container--open {
+    .select2-dropdown {
+      z-index: 1001;
+    }
   }
 }

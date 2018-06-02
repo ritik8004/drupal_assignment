@@ -260,7 +260,7 @@ class SkuManager {
         ];
 
         // Get discount if discounted price available.
-        $discount = floor((($price - $final_price) * 100) / $price);
+        $discount = round((($price - $final_price) * 100) / $price, 2);
         $build['discount'] = [
           '#markup' => $this->t('Save @discount%', ['@discount' => $discount]),
         ];
@@ -1134,7 +1134,7 @@ class SkuManager {
         if ($stock_mode == 'pull') {
           $related[] = $node->id();
         }
-        elseif (alshaya_acm_get_product_stock($sku_entity)) {
+        elseif (alshaya_acm_get_stock_from_sku($sku_entity)) {
           $related[] = $node->id();
         }
       }
@@ -1198,27 +1198,63 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   Configurable SKU for which the child SKUs need to be fetched.
+   * @param bool $first_only
+   *   Flag to indicate we need to fetch only the first item.
    *
    * @return array
    *   Array of SKU texts.
-   *
-   * @todo: Rename getChildSkus function to getChildSkuEntities to avoid confusion.
    */
-  public function getChildrenSkuIds(SKU $sku_entity) {
+  public function getChildrenSkuIds(SKU $sku_entity, $first_only = FALSE) {
     $child_skus = [];
 
     if ($sku_entity->getType() == 'configurable') {
-      $result = $this->connection->select('acq_sku__field_configured_skus', 'asfcs')
-        ->fields('asfcs', ['field_configured_skus_value'])
-        ->condition('asfcs.entity_id', $sku_entity->id())
-        ->execute();
+      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs');
+      $query->fields('asfcs', ['field_configured_skus_value']);
+      $query->join('acq_sku_field_data', 'asfd', 'asfd.sku=asfcs.field_configured_skus_value');
+      $query->condition('asfcs.entity_id', $sku_entity->id());
+      $query->distinct();
+
+      if ($first_only) {
+        $query->range(0, 1);
+      }
+
+      $result = $query->execute();
 
       while ($row = $result->fetchAssoc()) {
+        if ($first_only) {
+          return $row['field_configured_skus_value'];
+        }
         $child_skus[] = $row['field_configured_skus_value'];
       }
     }
 
-    return $child_skus;
+    return array_filter($child_skus);
+  }
+
+  /**
+   * Helper function to fetch SKU's property value.
+   *
+   * @param string $sku
+   *   SKU code for the product.
+   * @param array $properties
+   *   Property name that needs to be fetched.
+   *
+   * @return \stdClass
+   *   Result object keyed with the list of properties.
+   */
+  public function getSkuPropertyValue($sku, array $properties) {
+    $result = $this->connection->select('acq_sku_field_data', 'asfd')
+      ->fields('asfd', $properties)
+      ->condition('asfd.sku', $sku)
+      ->condition('asfd.langcode', $this->languageManager->getCurrentLanguage()->getId())
+      ->range(0, 1)
+      ->execute()->fetchAll();
+
+    if (!empty($result)) {
+      return array_shift($result);
+    }
+
+    return NULL;
   }
 
 }

@@ -99,6 +99,10 @@ ucfix:
   js:
     js/ucfix.js: {}
 
+stickybutton:
+  js:
+    js/pdp-stickybutton.js: {}
+
 cloud_zoom_common:
   version: 1.x
   js:

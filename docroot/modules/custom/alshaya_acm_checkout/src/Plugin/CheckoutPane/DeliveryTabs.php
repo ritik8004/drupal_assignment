@@ -35,6 +35,9 @@ class DeliveryTabs extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    // Clear payment info as soon as we are back on delivery page.
+    $cart = $this->getCart();
+    $cart->clearPayment();
 
     $show_only_buttons_mobile = $this->isMethodParamAvailable() ? 'show-form' : 'show-only-buttons';
     $complete_form['#attributes']['class'][] = $show_only_buttons_mobile;

@@ -44,11 +44,11 @@ set classes = [
         {{ content.price_block }}
       </div>
 
-      <div class="promotions">
-        {% if content.promotions %}
+      {% if content.promotions %}
+        <div class="promotions">
           {{ content.promotions }}
-        {% endif %}
-      </div>
+        </div>
+      {% endif %}
 
       <div class="content--item-code">
         <span class="field__label">{{ 'Item Code'|t }}:</span>
@@ -118,6 +118,12 @@ set classes = [
           <div class="gradient-holder"></div>
         </div>
 
+        <div class="content--item-code mobile-only">
+          <span class="field__label">{{ 'Item Code'|t }}:</span>
+          {{ content.item_code }}
+        </div>
+
+          <div class="sharethis-label mobile-only">{{ 'Share'|t }}</div>
           {{ content.sharethis }}
 
           {% if content.home_delivery or content.click_and_collect %}

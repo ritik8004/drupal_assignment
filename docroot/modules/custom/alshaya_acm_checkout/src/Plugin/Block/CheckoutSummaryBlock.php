@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\address\Repository\CountryRepository;
+use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Plugin\PluginManagerInterface;
@@ -38,6 +39,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
    */
   protected $addressBookManager;
+
+  /**
+   * Cart Helper service object.
+   *
+   * @var \Drupal\alshaya_acm\CartHelper
+   */
+  protected $cartHelper;
 
   /**
    * Stores the configuration factory.
@@ -103,6 +111,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The cart session.
    * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
    *   Address book manager.
+   * @param \Drupal\alshaya_acm\CartHelper $cart_helper
+   *   Cart Helper service object.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager
    *   Checkout Options Manager service object.
    * @param \Drupal\address\Repository\CountryRepository $address_country_repository
@@ -122,6 +132,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
                               ConfigFactoryInterface $config_factory,
                               CartStorageInterface $cart_storage,
                               AlshayaAddressBookManager $address_book_manager,
+                              CartHelper $cart_helper,
                               CheckoutOptionsManager $checkout_options_manager,
                               CountryRepository $address_country_repository,
                               PluginManagerInterface $plugin_manager,
@@ -132,6 +143,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->configFactory = $config_factory;
     $this->cartStorage = $cart_storage;
     $this->addressBookManager = $address_book_manager;
+    $this->cartHelper = $cart_helper;
     $this->checkoutOptionsManager = $checkout_options_manager;
     $this->addressCountryRepository = $address_country_repository;
     $this->pluginManager = $plugin_manager;
@@ -159,6 +171,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $container->get('config.factory'),
       $container->get('acq_cart.cart_storage'),
       $container->get('alshaya_addressbook.manager'),
+      $container->get('alshaya_acm.cart_helper'),
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('address.country_repository'),
       $container->get('plugin.manager.acq_checkout_flow'),
@@ -276,7 +289,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
         $delivery['address_label'] = $this->t('Delivery Address');
 
         // Delivery address.
-        $shipping_address = (array) $cart->getShipping();
+        $shipping_address = $this->cartHelper->getShipping($cart);
 
         // Loading address from address book if customer_address_id is available
         // even if other values are set.

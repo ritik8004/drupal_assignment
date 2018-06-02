@@ -17,6 +17,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -682,7 +683,7 @@ function _alshaya_acm_get_cart_quantity_options($max = NULL, $selected = NULL) {
  * @return int
  *   Return quantity of stock.
  */
-function alshaya_acm_get_product_stock(SKU $sku_entity, $reset = FALSE) {
+function alshaya_acm_get_stock_from_sku(SKU $sku_entity, $reset = FALSE) {
   static $stock = [];
 
   if (isset($stock[$sku_entity->getSku()])) {
@@ -694,6 +695,25 @@ function alshaya_acm_get_product_stock(SKU $sku_entity, $reset = FALSE) {
   $stock[$sku_entity->getSku()] = $plugin->getProcessedStock($sku_entity, $reset);
 
   return $stock[$sku_entity->getSku()];
+}
+
+/**
+ * Get the stock of product node.
+ *
+ * @param \Drupal\node\Entity\Node $node
+ *   Node object.
+ *
+ * @return bool|mixed
+ *   Stock of the product.
+ */
+function alshaya_acm_get_stock_from_product(Node $node) {
+  $sku_entity_id = $node->get('field_skus')->first()->getString();
+  $sku = SKU::loadFromSku($sku_entity_id);
+  if ($sku) {
+    return alshaya_acm_get_stock_from_sku($sku);
+  }
+
+  return FALSE;
 }
 
 /**
@@ -855,7 +875,7 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
   $selected_quantity = $item['quantity']['#default_value'];
 
   // If item is not available in stock.
-  if ($quantity = alshaya_acm_get_product_stock($sku_entity)) {
+  if ($quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
     if ($selected_quantity > $quantity) {
       Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
       $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');

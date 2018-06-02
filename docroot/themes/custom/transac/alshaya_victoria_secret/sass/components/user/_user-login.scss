@@ -11,20 +11,25 @@
         padding: 0.75rem 2.85rem;
 
         html[lang="ar"] & {
-          padding: 0.75rem 1.5rem;
+          padding: 0.4rem 1.5rem;
         }
       }
 
       & > a {
         font-size: 0.875rem;
+        font-weight: normal;
+
+        @include breakpoint($only-mobile) {
+          bottom: -3em;
+        }
 
         @include breakpoint($tablet) {
-          #{$left}: 10rem;
+          #{$left}: 9.875rem;
         }
 
         html[lang="ar"] & {
           @include breakpoint($tablet) {
-            right: 10rem;
+            right: 9.875rem;
           }
         }
       }
@@ -44,6 +49,14 @@
       input[type=submit] {
         width: auto;
       }
+    }
+  }
+}
+
+.alias--user-login {
+  #block-youllbeableto {
+    @include breakpoint($only-mobile) {
+      margin-top: 5.5rem;
     }
   }
 }

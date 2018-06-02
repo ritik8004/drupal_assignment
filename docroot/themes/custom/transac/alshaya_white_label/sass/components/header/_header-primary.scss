@@ -56,6 +56,14 @@ header {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
 
+    @include breakpoint($only-mobile) {
+      height: 3.3rem;
+
+      html[lang=ar] & {
+        height: 3.7rem;
+      }
+    }
+
     @include breakpoint($desktop) {
       padding-bottom: 2rem;
       padding-top: 2.125rem;
@@ -402,6 +410,7 @@ header {
         input {
           max-width: none;
           width: 100%;
+          outline: none;
         }
       }
 
@@ -856,6 +865,7 @@ header {
     vertical-align: top;
     display: inline-block;
     margin-top: 5px;
+    text-transform: none;
 
     div:nth-child(2) {
       margin-#{$right}: 24px;

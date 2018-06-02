@@ -59,7 +59,7 @@ function alshaya_get_env_keys($site, $env) {
       // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
       'default' => [
         'magento' => 'mc_qa',
-        'conductor' => 'mc_dev'
+        'conductor' => 'mc_test',
       ],
     ],
     // Mothercare SA.
@@ -146,6 +146,20 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'hmae_prod'
       ],
     ],
+    // BathBodyWorks KW.
+    'bbwkw' => [
+      'default' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwkw_test',
+      ],
+    ],
+    // BathBodyWorks SA.
+    'bbwsa' => [
+      'default' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwsa_test',
+      ],
+    ],
     // BathBodyWorks AE.
     'bbwae' => [
       'default' => [
@@ -155,10 +169,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Pottery Barn AE.
     'pbae' => [
-      // PBAE is connected to MCKW QA for now.
+      // PBAE is connected to MC UAT for now.
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
+        'magento' => 'mc_uat',
+        'conductor' => 'mcae_uat',
       ],
       //'default' => [
       //  'magento' => 'pb_qa',
@@ -167,19 +181,19 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret AE.
     'vsae' => [
-      // VSAE is connected to MCKW QA for now.
+      // VSAE is connected to MC QA for now.
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
+        'magento' => 'mc_uat',
+        'conductor' => 'mcae_uat',
       ],
     ],
   ];
 
   // All 01update should match 01live.
   // Update array to set 01update if 01live is set.
-  foreach ($mapping as $site => $envs) {
-    if (isset($mapping[$site]['01live'])) {
-      $mapping[$site]['01update'] = $mapping[$site]['01live'];
+  foreach ($mapping as $site_code => $envs) {
+    if (isset($mapping[$site_code]['01live'])) {
+      $mapping[$site_code]['01update'] = $mapping[$site_code]['01live'];
     }
   }
 

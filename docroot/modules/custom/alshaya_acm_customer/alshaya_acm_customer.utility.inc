@@ -40,7 +40,9 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
     'email' => $user->getEmail(),
   ];
 
-  $customer = $api_wrapper->updateCustomer($customer_array, $password);
+  $customer = $api_wrapper->updateCustomer($customer_array, [
+    'password' => $password,
+  ]);
 
   return $customer;
 }

@@ -1,0 +1,13 @@
+.order-confirmation {
+  .product--count {
+    td {
+      @include icon(chevronup, after) {
+        font-size: 2.483rem;
+      }
+    }
+
+    &.expanded-row td {
+      @include icon(chevrondown, after);
+    }
+  }
+}
