@@ -61,8 +61,7 @@
         var mobileFilterBarSelector = getFilterBarSelector();
 
         var countFilters = $(mobileFilterBarSelector + ' ul li').length;
-        if (countFilters === 0 && $.trim($(mobileFilterBarSelector)
-            .html()).length === 0) {
+        if (countFilters === 0 && $.trim($(mobileFilterBarSelector).html()).length === 0) {
           $(mobileFilterBarSelector).addClass('empty');
         }
         else {
