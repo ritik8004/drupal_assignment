@@ -131,6 +131,12 @@ cleave:
 plp_search_js:
   js:
     js/plp-search.js: {}
+<<<<<<< Updated upstream
+=======
+  dependencies:
+    - facets/soft-limit
+    - facets/drupal.facets.checkbox-widget
+>>>>>>> Stashed changes
 
 jquery_mobile_touch_swipe:
   js:
