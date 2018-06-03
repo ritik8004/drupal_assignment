@@ -161,7 +161,7 @@ class CheckoutHelper {
       $response = $this->apiWrapper->placeOrder($cart->id());
 
       // Once we reach here, we clear cart related cache.
-      Cache::invalidateTags(['cart_' . $cart->id()]);
+      Cache::invalidateTags(['cart:' . $cart->id()]);
 
       // @TODO: Remove the fix when we get the full order details.
       $order_id = str_replace('"', '', $response['order']['id']);

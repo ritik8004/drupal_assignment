@@ -59,6 +59,11 @@
     .facet-item__value {
       font-size: 0.875rem;
       text-transform: lowercase;
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0.125rem;
+        display: inline-block;
+      }
     }
 
     .facet-item__count {
@@ -235,6 +240,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
         display: inline-block;
         line-height: 1.4 !important;
         margin-top: 0;
+        vertical-align: top;
       }
     }
   }
@@ -299,7 +305,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
   li {
     label {
       &::before {
-        position: absolute;
+        position: relative;
       }
     }
   }
@@ -313,7 +319,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
           color: $primary_checkbox_empty;
 
           .facet-item__value {
-            margin-#{$left}: 2rem;
+            margin-#{$left}: 1rem;
           }
         }
 
@@ -335,7 +341,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
       color: $primary_checkbox_empty;
 
       .facet-item__value {
-        margin-#{$left}: 2rem;
+        margin-#{$left}: 1rem;
       }
     }
 

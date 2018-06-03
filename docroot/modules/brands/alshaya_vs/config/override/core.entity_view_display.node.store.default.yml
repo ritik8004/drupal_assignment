@@ -4,7 +4,7 @@ dependencies:
 content:
   field_brand:
     weight: 7
-    label: hidden
+    label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
