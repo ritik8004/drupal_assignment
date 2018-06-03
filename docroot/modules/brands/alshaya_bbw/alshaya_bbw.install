@@ -78,19 +78,15 @@ function alshaya_bbw_install() {
   // Array of language translation strings.
   $strings = [
     'find your nearest store' => [
-      'en' => 'find your nearest store',
       'ar' => 'اختر محلاً للتعرف على التفاصيل',
     ],
     'Discover' => [
-      'en' => 'Discover',
       'ar' => ' تعرفي إلينا ',
     ],
     'Customer care' => [
-      'en' => 'Customer care',
       'ar' => ' خدمة الزبائن ',
     ],
     'Connect with us' => [
-      'en' => 'Connect with us',
       'ar' => ' تواصلي معنا ',
     ],
   ];
