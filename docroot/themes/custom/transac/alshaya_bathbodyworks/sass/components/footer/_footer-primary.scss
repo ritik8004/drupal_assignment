@@ -222,6 +222,10 @@
           font-family: $alshaya-thin;
         }
       }
+
+      &.en.is-active a {
+        font-family: $alshaya-thin;
+      }
     }
   }
 }
