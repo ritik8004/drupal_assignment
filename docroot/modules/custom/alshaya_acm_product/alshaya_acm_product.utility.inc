@@ -37,7 +37,9 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
       ->getValue();
 
     // Get the processed media data for the SKU.
-    return alshaya_acm_product_get_sku_media($sku_entity, $first_image_only);
+    if ($sku_entity instanceof SKU) {
+      return alshaya_acm_product_get_sku_media($sku_entity, $first_image_only);
+    }
   }
 
   return NULL;

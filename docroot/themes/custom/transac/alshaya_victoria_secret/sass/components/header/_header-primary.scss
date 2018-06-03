@@ -215,7 +215,14 @@ header {
       font-size: 0;
     }
 
-    &::before {
+    &:hover {
+      @include breakpoint($upto-desktop) {
+        background-color: $header_search_active_bg;
+      }
+    }
+
+    &::before,
+    &:hover::before {
       content: none;
     }
 
