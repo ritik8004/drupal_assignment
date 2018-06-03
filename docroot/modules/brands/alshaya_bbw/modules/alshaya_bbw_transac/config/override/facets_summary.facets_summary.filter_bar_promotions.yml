@@ -14,3 +14,11 @@ facets:
     show_count: true
     show_label: false
     weight: 0
+
+  promotion_fragrancename:
+    checked: true
+    label: Promotion Fragrance Name
+    separator: ", "
+    show_count: true
+    show_label: false
+    weight: 0

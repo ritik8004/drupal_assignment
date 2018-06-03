@@ -14,3 +14,11 @@ facets:
     show_count: true
     show_label: false
     weight: 0
+
+  plp_fragrancename:
+    checked: true
+    label: PLP Fragrance Name
+    separator: ", "
+    show_count: true
+    show_label: false
+    weight: 0

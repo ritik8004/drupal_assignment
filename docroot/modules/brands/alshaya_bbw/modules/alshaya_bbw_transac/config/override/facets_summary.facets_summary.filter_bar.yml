@@ -14,3 +14,11 @@ facets:
     show_count: true
     show_label: false
     weight: 0
+
+  fragrancename:
+    checked: true
+    label: Fragrance Name
+    separator: ", "
+    show_count: true
+    show_label: false
+    weight: 0
