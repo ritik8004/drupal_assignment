@@ -101,6 +101,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
 }
 
 .c-plp {
+  .block-facet-blockcategory,
   .block-facet-blockplp-category-facet {
     .facet-item {
       input[type=checkbox] ~ label::before {
