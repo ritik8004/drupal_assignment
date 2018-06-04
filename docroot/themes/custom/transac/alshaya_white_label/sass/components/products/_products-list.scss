@@ -1038,6 +1038,10 @@ html[lang=ar] {
           width: 1.25rem;
           height: 1.25rem;
           margin-#{$left}: 0.3125rem;
+
+          html[lang=ar] & {
+            line-height: 2;
+          }
         }
       }
     }
