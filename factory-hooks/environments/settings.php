@@ -159,6 +159,13 @@ function alshaya_get_additional_settings($site, $env) {
           ],
         ],
       ],
+      'default' => [
+        'default' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-NQ4JXJP',
+          ],
+        ],
+      ],
     ],
     'bbw' => [
       'kw' => [
@@ -212,13 +219,6 @@ function alshaya_get_additional_settings($site, $env) {
           'store_id' => [
             'en' => 13,
             'ar' => 16,
-          ],
-        ],
-      ],
-      'default' => [
-        'default' => [
-          'google_tag.settings' => [
-            'container_id' => 'GTM-NQ4JXJP',
           ],
         ],
       ],
