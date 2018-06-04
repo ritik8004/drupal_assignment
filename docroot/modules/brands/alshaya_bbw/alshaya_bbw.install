@@ -12,9 +12,6 @@
  */
 function alshaya_bbw_update_8105() {
   $strings = [
-    'find your nearest store' => [
-      'ar' => 'اختر محلاً للتعرف على التفاصيل',
-    ],
     'Discover' => [
       'ar' => ' تعرفي إلينا ',
     ],
