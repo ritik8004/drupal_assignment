@@ -33,8 +33,10 @@ function alshaya_get_commerce_third_party_settings($site, $env) {
     $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']]['url'];
 
     $country_code = substr($site, -2);
+
+    $settings += $magentos['default'][$country_code];
     if (isset($magentos[$env_keys['magento']][$country_code])) {
-      $settings += $magentos[$env_keys['magento']][$country_code];
+      $settings = array_replace_recursive($settings, $magentos[$env_keys['magento']][$country_code]);
     }
   }
 
