@@ -178,7 +178,9 @@
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
                 "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
                 "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
-                "Fixing extra div insert on ajax requests": "https://www.drupal.org/files/issues/736066-324.patch"
+                "Fixing extra div insert on ajax requests": "https://www.drupal.org/files/issues/736066-324.patch",
+                "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
+                "Missing contexts prevent caching of block access": "https://www.drupal.org/files/issues/missing_contexts-2521956-32.patch"
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",

@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de582dcf4baccc5b5d6fe2de39f33002",
+    "content-hash": "4275f0fb8b11ae72579ea5a513f61be9",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -3679,6 +3679,8 @@
                     "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
                     "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
                     "Fixing extra div insert on ajax requests": "https://www.drupal.org/files/issues/736066-324.patch",
+                    "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
+                    "Missing contexts prevent caching of block access": "https://www.drupal.org/files/issues/missing_contexts-2521956-32.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/2752961-90.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-408--8.4.4.patch",
                     "2880374 - Experimental modules should not have warnings after being installed": "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
@@ -6244,7 +6246,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha5",
-                    "datestamp": "1508351413",
+                    "datestamp": "1508351344",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -9472,7 +9474,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
