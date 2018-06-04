@@ -30,6 +30,14 @@
 
   .mob-imagegallery__wrapper {
     position: relative;
+
+    .slick-dots {
+      @include breakpoint($only-mobile) {
+        position: absolute;
+        width: 100%;
+        bottom: 0.75rem;
+      }
+    }
   }
 
   .button__wrapper {
