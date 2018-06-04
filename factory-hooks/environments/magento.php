@@ -185,6 +185,29 @@ function alshaya_get_magento_host_data() {
         ],
       ],
     ],
+    // Victoria Secret.
+    'vs_qa' => [
+      'url' => 'https://qa-vs-mcf5nmy-kpwgmbven7d7y.eu-3.magentosite.cloud',
+      'kw' => [
+        'store_id' => [
+          'en' => 1,
+          'ar' => 6,
+        ],
+      ],
+      'sa' => [
+        'store_id' => [
+          'en' => 3,
+          'ar' => 4,
+        ],
+      ],
+      // VSAE is connected to MCAE UAT for now.
+      'ae' => [
+        'store_id' => [
+          'en' => 16,
+          'ar' => 13,
+        ],
+      ],
+    ],
     // BathBodyWorks.
     'bbw_qa' => [
       'url' => 'https://integration-5ojmyuq-bbk3lvknero4c.eu-3.magentosite.cloud',

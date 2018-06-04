@@ -1,0 +1,33 @@
+field_settings:
+  attr_color_description:
+    label: Color Description
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_description
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+
+  attr_band_size:
+    label: Band Size
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_band_size
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+
+  attr_cup_size:
+    label: Cup Size
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_cup_size
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
