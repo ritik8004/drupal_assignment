@@ -240,14 +240,16 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     \Drupal::moduleHandler()->alter('acq_sku_gallery_view', $elements, $skus);
 
     foreach ($elements as $delta => $element) {
+      // If main image is empty.
       if (empty($element['#gallery']['#mainImage'])) {
         if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
-          $elements[$delta]['#gallery']['#mainImage'] = [
-            '#theme' => 'image',
-            '#attributes' => [
-              'src' => $default_image,
-            ],
-          ];
+          $main_image = $this->skuManager->getSkuImage(['file' => $default_image], '291x288');
+          $main_image['#attributes']['class'] = ['product-default-image'];
+          $elements[$delta]['#gallery']['#mainImage'] = $main_image;
+
+          if (empty($element['#gallery']['#thumbnails'])) {
+            $elements[$delta]['#gallery']['#thumbnails'][] = $this->skuManager->getSkuImage(['file' => $default_image], '59x60', '291x288');
+          }
         }
       }
     }

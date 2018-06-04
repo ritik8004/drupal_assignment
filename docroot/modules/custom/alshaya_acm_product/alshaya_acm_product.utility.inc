@@ -257,18 +257,25 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   // If no main image, use default image.
   if (empty($main_image)) {
     if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
-      $main_image['zoomurl'] = $default_image;
-      $main_image['mediumurl'] = $default_image;
-      $main_image['label'] = $sku_entity->label();
+      $image_small = ImageStyle::load($thumbnail_style)->buildUrl($default_image->getFileUri());
+      $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
+      $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
 
-      // If thumbnails also empty, use main image for thumbnail.
+      $main_image = [
+        'zoomurl' => $image_zoom,
+        'mediumurl' => $image_medium,
+        'label' => $sku_entity->label(),
+      ];
+
       if (empty($thumbnails)) {
-        $thumbnails[]['zoomurl'] = $default_image;
-        $thumbnails[]['thumburl'] = $default_image;
-        $thumbnails[]['mediumurl'] = $default_image;
-        $thumbnails[]['type'] = 'image';
-        $thumbnails[]['fullurl'] = $default_image;
-        $thumbnails[]['label'] = $sku_entity->label();
+        $thumbnails[] = [
+          'thumburl' => $image_small,
+          'mediumurl' => $image_medium,
+          'zoomurl' => $image_zoom,
+          'fullurl' => file_create_url($default_image->getFileUri()),
+          'label' => $sku_entity->label(),
+          'type' => 'image',
+        ];
       }
     }
   }
@@ -377,7 +384,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
       $image = [
         '#theme' => 'image',
         '#attributes' => [
-          'src' => $default_image,
+          'src' => file_create_url($default_image->getFileUri()),
           'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
           'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
         ],

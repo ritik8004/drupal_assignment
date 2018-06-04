@@ -583,14 +583,13 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // If no main image, then use default main image.
         if (empty($build['image'])) {
           if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
-            $build['image'] = [
-              '#theme' => 'image',
-              '#attributes' => [
-                'src' => $default_image,
-                'title' => $sku_entity->label(),
-                'alt' => $sku_entity->label(),
-              ],
+            $sku_media = [
+              'file' => $default_image,
+              'label' => $sku_entity->label(),
             ];
+            $default_sku_image = $skuManager->getSkuImage($sku_media, '192x168');
+            $default_sku_image['#attributes']['class'][] = 'product-default-image';
+            $build['image'] = $default_sku_image;
           }
         }
 
@@ -1467,10 +1466,7 @@ function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) 
 function _alshaya_acm_product_get_product_default_main_image() {
   $product_default_image = \Drupal::config('alshaya_acm_product.settings')->get('product_default_image');
   if (!empty($product_default_image)) {
-    $file = File::load($product_default_image);
-    if ($file) {
-      return file_create_url($file->getFileUri());
-    }
+    return File::load($product_default_image);
   }
 
   return NULL;
