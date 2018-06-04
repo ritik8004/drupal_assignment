@@ -5298,17 +5298,17 @@
         },
         {
             "name": "drupal/imagemagick",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/imagemagick",
-                "reference": "8.x-2.2"
+                "reference": "8.x-2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/imagemagick-8.x-2.2.zip",
-                "reference": "8.x-2.2",
-                "shasum": "6ecfdb59581fb2d05fcbf62cd4ac2469fe037086"
+                "url": "https://ftp.drupal.org/files/projects/imagemagick-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "8359921d4700e954364c2633332c20579bb75a34"
             },
             "require": {
                 "drupal/core": "^8.3",
@@ -5321,8 +5321,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.2",
-                    "datestamp": "1507050544",
+                    "version": "8.x-2.3",
+                    "datestamp": "1517856050",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5331,7 +5331,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -5500,25 +5500,25 @@
         },
         {
             "name": "drupal/jsonapi",
-            "version": "1.15.0",
+            "version": "1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/jsonapi",
-                "reference": "8.x-1.15"
+                "reference": "8.x-1.18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jsonapi-8.x-1.15.zip",
-                "reference": "8.x-1.15",
-                "shasum": "6fd6f2efd1b117e21f44a8857cfca42ff460d455"
+                "url": "https://ftp.drupal.org/files/projects/jsonapi-8.x-1.18.zip",
+                "reference": "8.x-1.18",
+                "shasum": "eb412bc11d45fd2ccc5a1883fa33b1cad067495e"
             },
             "require": {
-                "drupal/core": "^8.3"
+                "drupal/core": "^8.4.3"
             },
             "require-dev": {
                 "drupal/schemata": "1.x-dev#8325d172e1d6880aa24073f8f751ef089282cf9a",
                 "drupal/schemata_json_schema": "*",
-                "justinrainbow/json-schema": "^4.1"
+                "justinrainbow/json-schema": "^5.2"
             },
             "type": "drupal-module",
             "extra": {
@@ -5526,8 +5526,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.15",
-                    "datestamp": "1522558384",
+                    "version": "8.x-1.18",
+                    "datestamp": "1527880980",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -17116,7 +17116,7 @@
         {
             "alias": "1.4.0",
             "alias_normalized": "1.4.0.0",
-            "version": "1.15.0.0",
+            "version": "1.18.0.0",
             "package": "drupal/jsonapi"
         }
     ],

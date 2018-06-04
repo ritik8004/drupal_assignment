@@ -18,5 +18,6 @@ function alshaya_get_magento_host_data() {
     'pb_qa' => 'https://qa-h47ppbq-rfuu4sicyisyw.eu.magentosite.cloud',
     // BathBodyWorks.
     'bbw_qa' => 'https://integration-5ojmyuq-bbk3lvknero4c.eu-3.magentosite.cloud',
+    'bbw_uat' => 'https://staging-bbw.store.alshaya.com.c.bbk3lvknero4c.ent.magento.cloud',
   ];
 }

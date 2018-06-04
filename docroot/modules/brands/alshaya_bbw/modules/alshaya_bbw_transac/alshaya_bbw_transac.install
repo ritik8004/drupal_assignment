@@ -11,6 +11,60 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Add Facet to newly added fields.
+ */
+function alshaya_bbw_transac_update_8003() {
+  $facet_configs = [
+    'facets.facet.fragrancecat',
+    'facets.facet.plp_fragrancecat',
+    'facets.facet.promotion_fragrancecat',
+    'facets.facet.collection1',
+    'facets.facet.plp_collection1',
+    'facets.facet.promotion_collection1',
+    'facets.facet.fragrancename',
+    'facets.facet.plp_fragrancename',
+    'facets.facet.promotion_fragrancename',
+  ];
+  alshaya_config_install_configs($facet_configs, 'alshaya_bbw_transac', 'install');
+
+  // Facet search to update config.
+  $facet_search_configs = [
+    'facets_summary.facets_summary.filter_bar',
+  ];
+  alshaya_config_install_configs($facet_search_configs, 'alshaya_search');
+
+  // Facet promotion to update config.
+  $facets_config_promotion = [
+    'facets_summary.facets_summary.filter_bar_promotions',
+  ];
+  alshaya_config_install_configs($facets_config_promotion, 'alshaya_acm_promotion', 'optional');
+
+  // Facet summary to update config.
+  $facet_summary_config = [
+    'facets_summary.facets_summary.filter_bar_plp',
+  ];
+  alshaya_config_install_configs($facet_summary_config, 'alshaya_product', 'optional');
+
+  // Facet new blocks.
+  $facet_block_configs = [
+    'block.block.fragrancecat',
+    'block.block.plpfragrancecat',
+    'block.block.promotionfragrancecat',
+    'block.block.collection1',
+    'block.block.plpcollection1',
+    'block.block.promotioncollection1',
+    'block.block.fragrancename',
+    'block.block.plpfragrancename',
+    'block.block.promotionfragrancename',
+  ];
+
+  // Create facet blocks & place them appropriately.
+  alshaya_config_install_configs($facet_block_configs, 'alshaya_bbw_transac', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add index to newly added fields.
  */
 function alshaya_bbw_transac_update_8002() {

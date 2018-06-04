@@ -254,6 +254,7 @@
           .c-facet__label {
             width: 100%;
             border: 1px solid $plp_facet_label_border_mobile;
+            line-height: 1;
           }
         }
 
@@ -480,6 +481,7 @@
       article:hover {
         z-index: 1;
         position: relative;
+        height: auto !important;
 
         article .content {
           position: absolute;
@@ -591,7 +593,7 @@
   .c-facet__label {
     @include breakpoint($only-mobile) {
       width: 6.75rem;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
 
       @include icon(chevron#{$right}, after) {
         #{$right}: -2.188rem;
@@ -1025,6 +1027,12 @@ html[lang=ar] {
     .c-facet__label {
       &.active-filter-count {
         padding: 0.4375rem 0.625rem;
+        display: flex;
+        align-items: center;
+
+        html[lang=ar] & {
+          padding-left: 0;
+        }
 
         .filter-count {
           font-size: 0.6875rem;
@@ -1037,7 +1045,11 @@ html[lang=ar] {
           line-height: 1.9;
           width: 1.25rem;
           height: 1.25rem;
-          margin-#{$left}: 0.3125rem;
+          margin-#{$left}: 0.625rem;
+
+          html[lang=ar] & {
+            margin-right: 0.3125rem;
+          }
         }
       }
     }

@@ -125,6 +125,17 @@
   }
 }
 
+#edit-acm-payment-methods-payment-options--wrapper {
+  height: auto;
+
+  legend {
+    display: block;
+    padding-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-top: 1px solid $checkout_payment_form_border;
+  }
+}
+
 // Checkout delivery address theming.
 .user-page.c-delivery-checkout {
   main {
@@ -205,12 +216,17 @@
 }
 
 #payment_details_wrapper {
+  padding: 0 1rem;
+
   #payment_method_knet {
-    border-top-width: 1px;
+    border-top: 1px solid $checkout_payment_option_border;
   }
 
   > .form-wrapper {
     .payment-plugin-wrapper-div {
+      border: 1px solid $checkout_payment_option_border;
+      border-bottom: 0;
+
       &.plugin-selected {
         .method-title {
           font-weight: normal;

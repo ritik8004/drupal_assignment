@@ -496,6 +496,8 @@ header {
 
     font-size: 0.875rem;
     color: $mm_l1_link;
+    height: 3rem;
+    line-height: 1.5;
   }
 
   .menu__list-item {
@@ -626,10 +628,6 @@ header {
     @include breakpoint($only-mobile) {
       width: 100%;
       color: $header_c_menu_icon_text;
-
-      .logged-out & {
-        padding: 1rem 0.25rem;
-      }
 
       html[lang=ar] & {
         padding: 0.9rem 0;

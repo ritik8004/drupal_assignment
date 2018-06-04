@@ -100,7 +100,6 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
       '#description' => $this->t('Select block(s) which should displayed as promo panel.'),
       '#options' => $options,
       '#multiple' => TRUE,
-      '#required' => TRUE,
       '#default_value' => array_keys($promo_panel_blocks),
       '#ajax' => [
         'callback' => [$this, 'buildAjaxConfigForm'],
@@ -109,33 +108,40 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
       ],
     ];
 
-    $form['page_urls'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Configure page urls for selected blocks'),
-      '#description' => $this->t('Add page urls, user will navigate to this page while accessing from mobile.'),
-      '#prefix' => '<div id="page-urls">',
-      '#suffix' => '</div>',
-      '#tree' => TRUE,
-    ];
-
     $allvalues = $form_state->getValues();
-    if (!empty($allvalues['blocks']) && $filtered_blocks = array_filter($allvalues['blocks'])) {
-      $default_blocks = $filtered_blocks;
+    if (!empty($allvalues['blocks'])) {
+      $default_blocks = array_filter($allvalues['blocks']);
     }
     elseif (count($promo_panel_blocks) > 0) {
       $default_blocks = array_keys($promo_panel_blocks);
     }
 
-    foreach ($default_blocks as $id) {
-      if (!isset($blocks[$id])) {
-        continue;
-      }
-      $form['page_urls'][$id] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('Page url for @id block', ['@id' => $blocks[$id]->label()]),
-        '#required' => TRUE,
-        '#default_value' => !empty($promo_panel_blocks) ? $promo_panel_blocks[$id] : '',
+    $form['urls'] = [
+      '#type' => 'container',
+      '#tree' => FALSE,
+      '#prefix' => '<div id="page-urls">',
+      '#suffix' => '</div>',
+    ];
+
+    if (!empty($default_blocks)) {
+      $form['urls']['page_urls'] = [
+        '#type' => 'fieldset',
+        '#title' => $this->t('Configure page urls for selected blocks'),
+        '#description' => $this->t('Add page urls, user will navigate to this page while accessing from mobile.'),
+        '#tree' => TRUE,
       ];
+
+      foreach ($default_blocks as $id) {
+        if (!isset($blocks[$id])) {
+          continue;
+        }
+        $form['urls']['page_urls'][$id] = [
+          '#type' => 'textfield',
+          '#title' => $this->t('Page url for @id block', ['@id' => $blocks[$id]->label()]),
+          '#required' => TRUE,
+          '#default_value' => !empty($promo_panel_blocks) ? $promo_panel_blocks[$id] : '',
+        ];
+      }
     }
 
     return parent::buildForm($form, $form_state);
@@ -145,17 +151,18 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
    * Ajax callback method to render textfield to add urls.
    */
   public function buildAjaxConfigForm(&$form, FormStateInterface $form_state) {
-    return $form['page_urls'];
+    return $form['urls'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $blocks = $form_state->getValue('page_urls');
+    $blocks = array_filter($form_state->getValue('blocks'));
+    $promo_panel_blocks = !empty($blocks) ? $form_state->getValue('page_urls') : [];
 
     $promo_config = $this->config('alshaya_promo_panel.settings');
-    $promo_config->set('promo_panel_blocks', $blocks);
+    $promo_config->set('promo_panel_blocks', $promo_panel_blocks);
     $promo_config->save();
 
     parent::submitForm($form, $form_state);
@@ -165,14 +172,16 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    $blocks = array_filter($form_state->getValue('blocks'));
     $page_urls = $form_state->getValue('page_urls');
 
-    foreach ($page_urls as $block => $page_url) {
-      if (is_string($page_url) && !$this->pathValidator->isValid($page_url)) {
-        $form_state->setError($form['page_urls'][$block], $this->t('Value is not a valid path.'));
+    if (!empty($blocks)) {
+      foreach ($page_urls as $block => $page_url) {
+        if (is_string($page_url) && !$this->pathValidator->isValid($page_url)) {
+          $form_state->setError($form['page_urls'][$block], $this->t('Value is not a valid path.'));
+        }
       }
     }
-
     parent::validateForm($form, $form_state);
   }
 
