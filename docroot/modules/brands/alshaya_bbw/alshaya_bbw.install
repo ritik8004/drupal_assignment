@@ -8,6 +8,30 @@
 /**
  * Implements hook_update_N().
  *
+ * Add new string translations.
+ */
+function alshaya_bbw_update_8105() {
+  $strings = [
+    'find your nearest store' => [
+      'ar' => 'اختر محلاً للتعرف على التفاصيل',
+    ],
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Connect with us' => [
+      'ar' => ' تواصلي معنا ',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update default items from cross sell/up sell carausel.
  */
 function alshaya_bbw_update_8104() {
