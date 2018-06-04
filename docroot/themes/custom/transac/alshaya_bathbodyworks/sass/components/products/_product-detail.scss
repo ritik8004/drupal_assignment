@@ -144,3 +144,12 @@
     }
   }
 }
+
+.basic-details-wrapper .field--name-field-skus {
+  .form-item-quantity {
+    label {
+      color: $pdp_product_qty_text;
+      font-size: 0.875rem;
+    }
+  }
+}
