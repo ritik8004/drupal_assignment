@@ -254,6 +254,25 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   // Invoke the alter hook to allow all modules to update the element.
   \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
 
+  // If no main image, use default image.
+  if (empty($main_image)) {
+    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+      $main_image['zoomurl'] = $default_image;
+      $main_image['mediumurl'] = $default_image;
+      $main_image['label'] = $sku_entity->label();
+
+      // If thumbnails also empty, use main image for thumbnail.
+      if (empty($thumbnails)) {
+        $thumbnails[]['zoomurl'] = $default_image;
+        $thumbnails[]['thumburl'] = $default_image;
+        $thumbnails[]['mediumurl'] = $default_image;
+        $thumbnails[]['type'] = 'image';
+        $thumbnails[]['fullurl'] = $default_image;
+        $thumbnails[]['label'] = $sku_entity->label();
+      }
+    }
+  }
+
   if (empty($main_image)) {
     return [];
   }
@@ -351,6 +370,20 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
 
   // Alter cart product image found in child sku in case of config products.
   \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
+
+  // If still image is not available, set default one.
+  if (empty($image)) {
+    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+      $image = [
+        '#theme' => 'image',
+        '#attributes' => [
+          'src' => $default_image,
+          'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
+          'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
+        ],
+      ];
+    }
+  }
 
   return $image;
 }

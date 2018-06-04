@@ -239,6 +239,19 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     // Invoke the alter hook to allow all modules to update the element.
     \Drupal::moduleHandler()->alter('acq_sku_gallery_view', $elements, $skus);
 
+    foreach ($elements as $delta => $element) {
+      if (empty($element['#gallery']['#mainImage'])) {
+        if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+          $elements[$delta]['#gallery']['#mainImage'] = [
+            '#theme' => 'image',
+            '#attributes' => [
+              'src' => $default_image,
+            ],
+          ];
+        }
+      }
+    }
+
     return $elements;
   }
 

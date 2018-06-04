@@ -580,6 +580,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // being rendered for teaser.
         \Drupal::moduleHandler()->alter('acq_sku_teaser_media', $build, $sku_entity);
 
+        // If no main image, then use default main image.
+        if (empty($build['image'])) {
+          if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+            $build['image'] = [
+              '#theme' => 'image',
+              '#attributes' => [
+                'src' => $default_image,
+                'title' => $sku_entity->label(),
+                'alt' => $sku_entity->label(),
+              ],
+            ];
+          }
+        }
+
         $promotion_types = ['cart'];
 
         // Get promotions for the product.
@@ -1441,82 +1455,6 @@ function alshaya_acm_product_is_buyable(SKU $sku_entity) {
 function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) {
   if (!empty($variables['data'])) {
     $variables['data'] = views_embed_view($variables['views_name'], $variables['views_display_id'], implode(',', $variables['data']));
-  }
-}
-
-/**
- * Implements hook_acq_sku_cart_media_alter().
- */
-function alshaya_acm_product_acq_sku_cart_media_alter($sku, &$sku_image) {
-  if (empty($sku_image)) {
-    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
-      $sku_image = [
-        '#theme' => 'image',
-        '#attributes' => [
-          'src' => $default_image,
-          'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
-          'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
-        ],
-      ];
-    }
-  }
-}
-
-/**
- * Implements hook_acq_sku_gallery_view_alter().
- */
-function alshaya_acm_product_acq_sku_gallery_view_alter(&$elements, $skus) {
-  if (empty($element['#gallery']['#mainImage'])) {
-    if (!empty($default_image_url = _alshaya_acm_product_get_product_default_main_image())) {
-      foreach ($elements as $delta => $element) {
-        $elements[$delta]['#gallery']['#mainImage'] = [
-          '#theme' => 'image',
-          '#attributes' => [
-            'src' => $default_image_url,
-            'title' => $skus[$delta]->label(),
-            'alt' => $skus[$delta]->label(),
-          ],
-        ];
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_acq_sku_pdp_gallery_media_alter().
- */
-function alshaya_acm_product_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb_images, $sku) {
-  if (empty($main_image) && ($sku instanceof SKU)) {
-    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
-      $main_image['zoomurl'] = $default_image;
-      $main_image['mediumurl'] = $default_image;
-      $main_image['label'] = $sku->label();
-      // Set for thumbnail.
-      $thumb_images[0]['zoomurl'] = $default_image;
-      $thumb_images[0]['thumburl'] = $default_image;
-      $thumb_images[0]['mediumurl'] = $default_image;
-      $thumb_images[0]['type'] = 'image';
-      $thumb_images[0]['fullurl'] = $default_image;
-      $thumb_images[0]['label'] = $sku->label();
-    }
-  }
-}
-
-/**
- * Implements hook_acq_sku_teaser_media_alter().
- */
-function alshaya_acm_product_acq_sku_teaser_media_alter(&$build, $sku_entity) {
-  if (empty($build['image'])) {
-    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
-      $build['image'] = [
-        '#theme' => 'image',
-        '#attributes' => [
-          'src' => $default_image,
-          'title' => $sku_entity->label(),
-          'alt' => $sku_entity->label(),
-        ],
-      ];
-    }
   }
 }
 
