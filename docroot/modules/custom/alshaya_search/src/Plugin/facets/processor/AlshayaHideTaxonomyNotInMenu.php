@@ -122,10 +122,11 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
           $term = isset($entities[$ids[$i]]) ? $entities[$ids[$i]] : NULL;
 
           // Display the term if included in menu and status is enabled.
-          if (($term instanceof TermInterface) &&
-            ($term->get('field_category_include_menu')->getString()) &&
-            ($term->get('field_commerce_status')->getString())) {
-            continue;
+          if (($term instanceof TermInterface)) {
+            if ($term->get('field_category_include_menu')->getString() &&
+              $term->get('field_commerce_status')->getString()) {
+              continue;
+            }
           }
 
           // Remove from results if either term load failed or not included
