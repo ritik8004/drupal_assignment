@@ -6,7 +6,7 @@
 function alshaya_get_magento_host_data() {
   return [
     // Mothercare.
-    'mc_dev' => [ #OK
+    'mc_dev' => [
       'url' => 'https://develop2-56rwroy-z3gmkbwmwrl4g.eu.magentosite.cloud',
       'kw' => [
         'store_id' => [
@@ -39,7 +39,7 @@ function alshaya_get_magento_host_data() {
         ],
       ],
     ],
-    'mc_qa' => [ #OK
+    'mc_qa' => [
       'url' => 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',
       'kw' => [
         'store_id' => [
@@ -72,7 +72,7 @@ function alshaya_get_magento_host_data() {
         ],
       ],
     ],
-    'mc_uat' => [ #OK
+    'mc_uat' => [
       'url' => 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud',
       'kw' => [
         'store_id' => [
@@ -105,7 +105,7 @@ function alshaya_get_magento_host_data() {
         ],
       ],
     ],
-    'mc_prod' => [ #OK
+    'mc_prod' => [
       'url' => 'https://mcmena.store.alshaya.com',
       'kw' => [
         'store_id' => [
@@ -139,7 +139,7 @@ function alshaya_get_magento_host_data() {
       ],
     ],
     // H&M.
-    'hm_qa' => [ #OK
+    'hm_qa' => [
       'url' => 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud',
       'kw' => [
         'store_id' => [
@@ -172,7 +172,7 @@ function alshaya_get_magento_host_data() {
         ],
       ],
     ],
-    'hm_uat' => [ #OK
+    'hm_uat' => [
       'url' => 'https://hm-uat.store.alshaya.com',
       'kw' => [
         'store_id' => [
@@ -205,7 +205,7 @@ function alshaya_get_magento_host_data() {
         ],
       ],
     ],
-    'hm_prod' => [ #OK
+    'hm_prod' => [
       'url' => 'https://hm.store.alshaya.com',
       'kw' => [
         'store_id' => [
@@ -239,7 +239,7 @@ function alshaya_get_magento_host_data() {
       ],
     ],
     // Pottery Barn.
-    'pb_qa' => [ #OK
+    'pb_qa' => [
       'url' => 'https://qa-h47ppbq-rfuu4sicyisyw.eu.magentosite.cloud',
       /*'kw' => [
         'store_id' => [
