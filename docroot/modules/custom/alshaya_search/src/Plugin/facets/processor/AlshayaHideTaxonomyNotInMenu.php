@@ -123,6 +123,7 @@ class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildP
 
           // Display the term if included in menu and status is enabled.
           if (($term instanceof TermInterface) &&
+            ($term->bundle() == 'acq_product_category') &&
             ($term->get('field_category_include_menu')->getString()) &&
             ($term->get('field_commerce_status')->getString())) {
             continue;
