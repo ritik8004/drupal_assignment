@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9fa000dbca1ddd047cfe1e00bab286a",
+    "content-hash": "7288f8a593e16596f6016ad00c0eed3c",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -5498,25 +5498,25 @@
         },
         {
             "name": "drupal/jsonapi",
-            "version": "1.15.0",
+            "version": "1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/jsonapi",
-                "reference": "8.x-1.15"
+                "reference": "8.x-1.18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jsonapi-8.x-1.15.zip",
-                "reference": "8.x-1.15",
-                "shasum": "6fd6f2efd1b117e21f44a8857cfca42ff460d455"
+                "url": "https://ftp.drupal.org/files/projects/jsonapi-8.x-1.18.zip",
+                "reference": "8.x-1.18",
+                "shasum": "eb412bc11d45fd2ccc5a1883fa33b1cad067495e"
             },
             "require": {
-                "drupal/core": "^8.3"
+                "drupal/core": "^8.4.3"
             },
             "require-dev": {
                 "drupal/schemata": "1.x-dev#8325d172e1d6880aa24073f8f751ef089282cf9a",
                 "drupal/schemata_json_schema": "*",
-                "justinrainbow/json-schema": "^4.1"
+                "justinrainbow/json-schema": "^5.2"
             },
             "type": "drupal-module",
             "extra": {
@@ -5524,8 +5524,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.15",
-                    "datestamp": "1524679677",
+                    "version": "8.x-1.18",
+                    "datestamp": "1527880980",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -17114,7 +17114,7 @@
         {
             "alias": "1.4.0",
             "alias_normalized": "1.4.0.0",
-            "version": "1.15.0.0",
+            "version": "1.18.0.0",
             "package": "drupal/jsonapi"
         }
     ],
