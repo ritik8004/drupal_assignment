@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_product\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -226,30 +225,11 @@ class ProductSettingsForm extends ConfigFormBase {
       if ($file) {
         $file->setPermanent();
         $file->save();
-        // Add file usage or file will be gone in next garbage collection.
-        \Drupal::service('file.usage')->add($file, 'alshaya_acm_product', 'product_default_image', 1);
-        // Create image style derivative.
-        $this->createImageStyle('1284x424', $file->getFileUri());
-
         return $file->id();
       }
     }
 
     return NULL;
-  }
-
-  /**
-   * Creates the image style.
-   *
-   * @param string $image_style
-   *   Image style name.
-   * @param string $uri
-   *   Image uri name.
-   */
-  protected function createImageStyle($image_style, $uri) {
-    $style = ImageStyle::load($image_style);
-    $destination = $style->buildUri($uri);
-    $style->createDerivative($uri, $destination);
   }
 
 }
