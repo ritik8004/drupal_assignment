@@ -26,9 +26,7 @@ function alshaya_bbw_transac_acq_sku_gallery_view_alter(&$elements, $skus) {
     if ($form = $sku->get('attr_form')->getValue()) {
       $elements[$delta]['#form'] = $form[0]['value'];
     }
-    if (($fragrance_name = $sku->get('attr_fragrance_name')->getString()) || ($descriptive_name = $sku->get('attr_descriptive_name')->getString())) {
-      $elements[$delta]['#product_label'] = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
-    }
+    $elements[$delta]['#product_label'] = _alshaya_bbw_transac_get_product_title($sku);
   }
 }
 
