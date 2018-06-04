@@ -481,6 +481,7 @@
       article:hover {
         z-index: 1;
         position: relative;
+        height: auto !important;
 
         article .content {
           position: absolute;
