@@ -387,6 +387,9 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
           'src' => file_create_url($default_image->getFileUri()),
           'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
           'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
+          'class' => [
+            'product-default-image',
+          ],
         ],
       ];
     }
