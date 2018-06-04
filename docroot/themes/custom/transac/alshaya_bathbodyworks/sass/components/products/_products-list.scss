@@ -81,6 +81,7 @@
               .label {
                 font-family: $alshaya-thin;
                 text-transform: capitalize;
+                font-size: 0.875rem;
               }
             }
           }
@@ -192,6 +193,9 @@
     }
 
     &.is-active {
+      padding-#{$left}: 0.6875rem;
+      padding-top: 0.6875rem;
+
       &::after {
         border-#{$left}: 0;
 
@@ -212,6 +216,7 @@
   .c-facet__blocks {
     @include breakpoint($only-tablet) {
       #{$right}: -10rem;
+      padding: 0 0.625rem !important;
     }
 
     .filter-menu-label {
@@ -226,6 +231,10 @@
   .c-facet:first-child {
     .c-facet__title {
       border-top: 1px solid $plp_facet_border;
+
+      @include breakpoint($only-tablet) {
+        border-top: none;
+      }
     }
   }
 }
