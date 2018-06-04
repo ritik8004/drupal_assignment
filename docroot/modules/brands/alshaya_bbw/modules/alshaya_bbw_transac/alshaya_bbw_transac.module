@@ -37,7 +37,10 @@ function alshaya_bbw_transac_acq_sku_gallery_view_alter(&$elements, $skus) {
  */
 function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    if ($sku_entity = _alshaya_bbw_transac_get_attribute_value($entity)) {
+    $sku = $entity->get('field_skus')->first()->getString();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if ($sku_entity instanceof SKU) {
       if ($view_mode == 'full' || $view_mode == 'modal' || $view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
         if ($form = $sku_entity->get('attr_form')->getValue()) {
           $build['form']['#markup'] = $form[0]['value'];
@@ -94,25 +97,22 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
  */
 function alshaya_bbw_transac_preprocess_node(&$variables) {
   if ($variables['node']->bundle() == 'acq_product') {
-    if ($sku_entity = _alshaya_bbw_transac_get_attribute_value($variables['node'])) {
-      if (($fragrance_name = $sku_entity->get('attr_fragrance_name')->getString()) || ($descriptive_name = $sku_entity->get('attr_descriptive_name')->getString())) {
-        $variables['label'] = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
-      }
-    }
+    $sku = $variables['node']->get('field_skus')->first()->getString();
+    $sku_entity = SKU::loadFromSku($sku);
+    $variables['label'] = _alshaya_bbw_transac_get_product_title($sku_entity);
   }
 }
 
 /**
- * A helper function get the sku objet.
+ * A helper function to get the product title.
  *
- * @param object $sku_entity
+ * @param Drupal\acq_sku\Entity\SKU $sku
  *   A object contains values for attributes.
  */
-function _alshaya_bbw_transac_get_attribute_value($sku_entity) {
-  $sku = $sku_entity->get('field_skus')->first()->getString();
-  $sku_entity = SKU::loadFromSku($sku);
-  if ($sku_entity instanceof SKU) {
-    return $sku_entity;
+function _alshaya_bbw_transac_get_product_title(SKU $sku) {
+  $title = '';
+  if (($fragrance_name = $sku->get('attr_fragrance_name')->getString()) || ($descriptive_name = $sku->get('attr_descriptive_name')->getString())) {
+    $title = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
   }
-  return NULL;
+  return $title;
 }
