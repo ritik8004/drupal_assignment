@@ -25,8 +25,9 @@
 
   a {
     @include breakpoint($upto-desktop) {
-      color: $black;
       font-size: 0.875rem;
+      line-height: 1.5;
+      height: 3rem;
     }
 
     @include breakpoint($desktop) {
@@ -39,6 +40,8 @@
         display: none;
       }
     }
+
+    text-decoration: none;
   }
 
   .block-language-blocklanguage-interface {
