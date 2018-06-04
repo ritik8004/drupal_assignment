@@ -628,7 +628,7 @@
       #{$right}: 0;
       top: 0;
       z-index: 100;
-      background: url(../imgs/icons/MC-loader.svg) center no-repeat !important;
+      background: url(#{$base_theme_loader_img_directory_path}) center no-repeat !important;
       background-size: 5.5rem !important;
       padding-#{$left}: 0.625rem;
       padding-#{$right}: 0.625rem;
