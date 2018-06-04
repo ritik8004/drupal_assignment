@@ -1,4 +1,10 @@
 /**
+  * Image path
+ */
+$base_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/imgs';
+$base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_white_label/imgs/icons/MC-loader.svg';
+
+/**
   * ALIGNMENT
  */
 @mixin u-center {
@@ -120,7 +126,7 @@
     right: 0;
     left: 0;
     transform: translateY(-50%);
-    background-image: url("../imgs/icons/MC-loader.svg");
+    background-image: url(#{$base_theme_loader_img_directory_path});
     background-repeat: no-repeat;
     background-size: contain;
     margin: 0 auto;
@@ -192,5 +198,3 @@
   box-shadow: 0 -1px 20px 9px $sticky-btn;
   transition-property: none !important;
 }
-
-$base_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/imgs';
