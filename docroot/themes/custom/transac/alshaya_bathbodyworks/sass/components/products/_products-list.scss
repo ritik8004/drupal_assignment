@@ -61,10 +61,10 @@
 
     .filter--mobile {
       @include breakpoint($tablet) {
-        top: -3.375rem;
+        top: 2rem;
 
         html[lang=ar] & {
-          top: -3.375rem;
+          top: 2rem;
         }
       }
 
@@ -164,6 +164,8 @@
   }
 
   .c-products__item {
+    font-size: 0.875rem;
+
     @include breakpoint($desktop) {
       &:hover {
         article::after,
@@ -171,6 +173,11 @@
           display: none;
         }
       }
+    }
+
+    .field--name-name {
+      margin-bottom: 0.3125rem;
+      text-transform: uppercase;
     }
   }
 }
@@ -236,13 +243,6 @@
         border-top: none;
       }
     }
-  }
-}
-
-.filter--mobile {
-  @include breakpoint($tablet) {
-    position: relative;
-    float: $right;
   }
 }
 
