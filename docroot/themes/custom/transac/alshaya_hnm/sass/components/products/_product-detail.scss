@@ -78,6 +78,13 @@
         font-size: 0.75rem;
         text-align: center;
         margin-top: 1.4375rem;
+        color: $pdp_product_itemcode_mobile;
+      }
+    }
+
+    .sharethis-wrapper {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1.5rem;
       }
     }
 
