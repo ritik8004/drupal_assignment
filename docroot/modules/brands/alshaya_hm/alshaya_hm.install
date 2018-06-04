@@ -43,17 +43,8 @@ function alshaya_hm_update_8019() {
  * Enable brand AMP theme and set logo and favicon.
  */
 function alshaya_hm_update_8018() {
-  // Enable and set default amp theme.
-  \Drupal::service('theme_handler')->install(['alshaya_amp_hnm'], TRUE);
-  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_hnm')->save();
-
-  // Get current active theme.
-  $active_theme = \Drupal::theme()->getActiveTheme();
-
-  // Get the current theme settings.
-  $config = \Drupal::configFactory()->get($active_theme->getName() . '.settings')->get();
-  // Set same to installed AMP theme.
-  \Drupal::configFactory()->getEditable('alshaya_amp_hnm.settings')->setData($config)->save();
+  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
+  _alshaya_master_initialize_amp('alshaya_amp_hnm');
 }
 
 /**
@@ -400,9 +391,9 @@ function alshaya_hm_update_8001() {
  */
 function alshaya_hm_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_hm', 'inc', 'alshaya_hm.content');
-  // Enable and set alshaya_hnm as default theme.
-  \Drupal::service('theme_handler')->install(['alshaya_hnm'], TRUE);
-  \Drupal::service('theme_handler')->setDefault('alshaya_hnm');
+
+  // Enable and set alshaya_hnm as default theme and set the site logo, favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_hnm');
 
   // Set store id - EN.
   \Drupal::configFactory()->getEditable('acq_commerce.store')
@@ -459,9 +450,6 @@ function alshaya_hm_install() {
   $config->set('sort_options', $sort_options);
   $config->save();
 
-  // Set site logo and favicon.
-  _alshaya_config_set_default_logo_favicon();
-
   // Disable loyalty.
   \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')
     ->set('enable_disable_loyalty', FALSE)
@@ -492,9 +480,8 @@ function alshaya_hm_install() {
 
   alshaya_config_install_configs($configs, 'alshaya_hm', 'optional');
 
-  // Enable and set default amp theme.
-  \Drupal::service('theme_handler')->install(['alshaya_amp_hnm'], TRUE);
-  \Drupal::configFactory()->getEditable('amp.theme')->set('amptheme', 'alshaya_amp_hnm')->save();
+  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
+  _alshaya_master_initialize_amp('alshaya_amp_hnm');
 }
 
 /**
