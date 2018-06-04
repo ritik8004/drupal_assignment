@@ -16,13 +16,6 @@
       font-size: 0.625rem;
     }
 
-    .content--form {
-      float: $left;
-      font-size: 0.75rem;
-      margin-bottom: 0.9375rem;
-      color: $pdp_product_form_text;
-    }
-
     .content--brand {
       font-size: 0.75rem;
       color: $pdp_product_brand_text;
@@ -48,6 +41,15 @@
       }
     }
   }
+}
+
+.content--form,
+.product--form {
+  float: $left;
+  font-size: 0.75rem;
+  margin-bottom: 0.9375rem;
+  color: $pdp_product_form_text;
+  width: 100%;
 }
 
 .description-wrapper {
