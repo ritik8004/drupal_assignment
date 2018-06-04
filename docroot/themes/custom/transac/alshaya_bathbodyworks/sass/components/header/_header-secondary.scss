@@ -25,11 +25,9 @@
 
   a {
     @include breakpoint($upto-desktop) {
-      color: $black;
       font-size: 0.875rem;
-      padding-top: 0.9375rem;
-      padding-bottom: 0.9375rem;
-      line-height: 1.3;
+      line-height: 1.5;
+      height: 3rem;
     }
 
     @include breakpoint($desktop) {
