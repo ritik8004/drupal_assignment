@@ -38,10 +38,6 @@
 
         $('.acq-content-product .form-item-configurables-article-castor-id, .acq-content-product-modal .form-item-configurables-article-castor-id, .block-basket-horizontal-recommendation .form-item-configurables-article-castor-id').once('bind-events').each(function () {
           $('select', $(this)).select2Option();
-
-          var clickedOption = $('.select2Option li a.picked', $(this));
-          $('.select2Option', $(this)).find('.list-title .selected-text').remove();
-          $('.select2Option', $(this)).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
         });
       }
     }
