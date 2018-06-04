@@ -97,7 +97,9 @@ function alshaya_bbw_transac_preprocess_node(&$variables) {
   if ($variables['node']->bundle() == 'acq_product') {
     $sku = $variables['node']->get('field_skus')->first()->getString();
     $sku_entity = SKU::loadFromSku($sku);
-    $variables['label'] = _alshaya_bbw_transac_get_product_title($sku_entity);
+    if ($sku_entity instanceof SKU) {
+      $variables['label'] = _alshaya_bbw_transac_get_product_title($sku_entity);
+    }
   }
 }
 
