@@ -66,7 +66,6 @@ jQuery.fn.select2Option = function (options) {
       });
       buttonsHtml.prepend(labeltext);
       buttonsHtml.append(ulHtml);
-      Drupal.alshaya_hm_images_update_selected_label();
     };
 
     var optGroups = select.children('optgroup');
@@ -80,7 +79,7 @@ jQuery.fn.select2Option = function (options) {
     }
 
     select.after(buttonsHtml);
-
+    Drupal.alshaya_hm_images_update_selected_label();
     buttonsHtml.find('a').on('click', function (e) {
       e.preventDefault();
       var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
@@ -116,7 +115,6 @@ jQuery.fn.select2Option = function (options) {
       var selectedText = $(this).attr('class').replace(' picked', '');
 
       var selectedTextSelector = $(this).closest('ul').siblings('h4.list-title').find('.selected-text');
-
       if ($(this).attr('data-color-label')) {
         selectedText = $(this).attr('data-color-label');
       }
