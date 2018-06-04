@@ -172,7 +172,7 @@
       }
 
       /**
-       * Scroll to appropriate product.
+       * Scroll to the appropriate product.
        */
       function scrollToProduct() {
         var storage_value = getStorageValues();
