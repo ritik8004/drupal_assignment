@@ -3,12 +3,45 @@
 namespace Drupal\alshaya_acm_product\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ProductSettingsForm.
  */
 class ProductSettingsForm extends ConfigFormBase {
+
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * ProductSettingsForm constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
+    parent::__construct($config_factory);
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -45,11 +78,15 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
     $config->set('image_slider_position_pdp', $form_state->getValue('image_slider_position_pdp'));
 
+    // Product default image.
     if (!empty($default_image = $form_state->getValue('product_default_image'))) {
-      $fid = $this->storeDefaultFileInSystem($default_image);
+      $fid = $this->storeDefaultImageInSystem($default_image);
       if ($fid) {
         $config->set('product_default_image', $fid);
       }
+    }
+    else {
+      $config->set('product_default_image', NULL);
     }
 
     $config->save();
@@ -219,9 +256,9 @@ class ProductSettingsForm extends ConfigFormBase {
    * @return int|null|string
    *   Image fid.
    */
-  protected function storeDefaultFileInSystem($default_image) {
+  protected function storeDefaultImageInSystem(array $default_image) {
     if (!empty($default_image)) {
-      $file = \Drupal::entityTypeManager()->getStorage('file')->load($default_image[0]);
+      $file = $this->entityTypeManager->getStorage('file')->load($default_image[0]);
       if ($file) {
         $file->setPermanent();
         $file->save();

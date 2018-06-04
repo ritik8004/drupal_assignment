@@ -1460,7 +1460,7 @@ function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) 
 /**
  * Get the default image url for the product.
  *
- * @return EntityInterface|null|static
+ * @return \Drupal\file\Entity\File|null|static
  *   File object.
  */
 function _alshaya_acm_product_get_product_default_main_image() {
