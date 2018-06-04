@@ -30,7 +30,12 @@ function alshaya_get_commerce_third_party_settings($site, $env) {
     $settings['acq_commerce.conductor'] = $conductors[$env_keys['conductor']];
   }
   if (isset($env_keys['magento']) && isset($magentos[$env_keys['magento']])) {
-    $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']];
+    $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']]['url'];
+
+    $country_code = substr($site, -2);
+    if (isset($magentos[$env_keys['magento']][$country_code])) {
+      $settings += $magentos[$env_keys['magento']][$country_code];
+    }
   }
 
   return $settings;
