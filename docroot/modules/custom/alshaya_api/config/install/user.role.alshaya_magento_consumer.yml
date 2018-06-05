@@ -1,7 +1,7 @@
 langcode: en
 status: true
-id: alshaya_api_consumer
-label: 'Alshaya API Consumer'
+id: alshaya_magento_consumer
+label: 'Alshaya Magento Consumer'
 weight: 19
 is_admin: null
 permissions:

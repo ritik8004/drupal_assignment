@@ -122,7 +122,7 @@ class SKUImagesResource extends ResourceBase {
         $node = $plugin->getDisplayNode($sku_entity);
         $response[$sku]['product_url'] = $node->toUrl()->setAbsolute()->toString();
 
-        $gallery = $this->skuImagesManager->getGallery($sku_entity);
+        $gallery = $this->skuImagesManager->getAllMedia($sku_entity);
         $response[$sku]['images'] = array_values(array_merge($gallery['images'], $gallery['videos']));
       }
     }

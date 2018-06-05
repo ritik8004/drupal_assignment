@@ -16,7 +16,7 @@ use Drupal\user\Entity\User;
  */
 function alshaya_api_update_8001() {
   $configs = [
-    'user.role.alshaya_api_consumer',
+    'user.role.alshaya_magento_consumer',
     'rest.resource.sku_images',
   ];
 
@@ -49,24 +49,24 @@ function alshaya_api_install() {
  * Wrapper function create alshaya api user if not exists.
  */
 function _alshaya_api_create_user() {
-  $user = user_load_by_name(Settings::get('alshaya_api_user_username'));
+  $user = user_load_by_name(Settings::get('alshaya_magento_user_username'));
 
   if ($user instanceof User) {
     // User is already created. Log message and return.
     \Drupal::logger('alshaya_api')->warning('User already created with name @name.', [
-      '@name' => Settings::get('alshaya_api_user_username'),
+      '@name' => Settings::get('alshaya_magento_user_username'),
     ]);
     return;
   }
 
   // Create a user that will be used by Alshaya API Consumers.
   $user = User::create();
-  $user->setPassword(Settings::get('alshaya_api_user_password'));
+  $user->setPassword(Settings::get('alshaya_magento_user_password'));
   $user->enforceIsNew();
-  $user->setEmail(Settings::get('alshaya_api_user_email'));
-  $user->setUsername(Settings::get('alshaya_api_user_username'));
+  $user->setEmail(Settings::get('alshaya_magento_user_email'));
+  $user->setUsername(Settings::get('alshaya_magento_user_username'));
   $user->activate();
-  $user->addRole('alshaya_api_consumer');
+  $user->addRole('alshaya_magento_consumer');
   $user->save();
 }
 
@@ -81,7 +81,7 @@ function _alshaya_api_create_consumer() {
   if ($consumer instanceof Consumer) {
     // Consumer is already created. Log message and return.
     \Drupal::logger('alshaya_api')->warning('Consumer already created for uuid @uuid.', [
-      '@uuid' => Settings::get('alshaya_api_soauth_client_uuid'),
+      '@uuid' => Settings::get('alshaya_magento_soauth_client_uuid'),
     ]);
 
     return;
@@ -89,9 +89,9 @@ function _alshaya_api_create_consumer() {
 
   // Add Simple Oauth - Consumer client.
   $client = Consumer::create([]);
-  $client->set('label', 'Alshaya API Consumer');
-  $client->set('secret', Settings::get('alshaya_api_soauth_client_secret'));
-  $client->set('roles', ['alshaya_api_consumer']);
-  $client->set('uuid', Settings::get('alshaya_api_soauth_client_uuid'));
+  $client->set('label', 'Alshaya Magento Consumer');
+  $client->set('secret', Settings::get('alshaya_magento_soauth_client_secret'));
+  $client->set('roles', ['alshaya_magento_consumer']);
+  $client->set('uuid', Settings::get('alshaya_magento_soauth_client_uuid'));
   $client->save();
 }
