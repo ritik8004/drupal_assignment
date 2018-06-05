@@ -505,17 +505,3 @@
     }
   }
 }
-
-@include breakpoint($only-mobile) {
-  .filter--mobile {
-    .c-facet__label {
-      &.active-filter-count {
-        .filter-count {
-          html[lang=ar] & {
-            line-height: 1.9;
-          }
-        }
-      }
-    }
-  }
-}

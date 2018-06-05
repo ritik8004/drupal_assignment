@@ -6,7 +6,7 @@ language: php
 dist: trusty
 
 php:
-  - 5.6
+  - 7.1
 
 matrix:
   fast_finish: true
@@ -71,40 +71,40 @@ deploy:
      skip_cleanup: true
      on:
        branch: develop
-       php: 5.6
+       php: 7.1
    - provider: script
      script: "$BLT_DIR/scripts/travis/deploy_branch"
      skip_cleanup: true
      on:
        branch: acm-v2-ps
-       php: 5.6
+       php: 7.1
    - provider: script
      script: "$BLT_DIR/scripts/travis/deploy_branch"
      skip_cleanup: true
      on:
        branch: pwa
-       php: 5.6
+       php: 7.1
    - provider: script
      script: "$BLT_DIR/scripts/travis/deploy_branch"
      skip_cleanup: true
      on:
        branch: qa
-       php: 5.6
+       php: 7.1
    - provider: script
      script: "$BLT_DIR/scripts/travis/deploy_branch"
      skip_cleanup: true
      on:
        branch: uat
-       php: 5.6  
+       php: 7.1
    - provider: script
      script: "$BLT_DIR/scripts/travis/deploy_branch"
      skip_cleanup: true
      on:
        branch: master
-       php: 5.6
+       php: 7.1
    - provider: script
      script: "$BLT_DIR/scripts/travis/deploy_tag"
      skip_cleanup: true
      on:
        tags: true
-       php: 5.6
+       php: 7.1

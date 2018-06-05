@@ -44,6 +44,10 @@ header {
       margin: 0;
       padding-bottom: 0;
       height: auto;
+
+      html[lang=ar] & {
+        height: auto;
+      }
     }
   }
 

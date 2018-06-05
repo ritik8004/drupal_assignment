@@ -354,7 +354,7 @@
       });
 
       // Process facet checbox softlimits on page load.
-      $('.block-facet--checkbox', context).each(function () {
+      $('.block-facet--checkbox, .block-facet--range-checkbox', context).each(function () {
         processSoftLiniks($(this));
       });
 
