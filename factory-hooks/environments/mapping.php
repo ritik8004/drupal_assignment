@@ -13,7 +13,9 @@
 /**
  * Get commerce third party settings for specific site + environment combination.
  */
-function alshaya_get_commerce_third_party_settings($site, $env) {
+function alshaya_get_commerce_third_party_settings($site_code, $country_code, $env) {
+  $site = $site_code . $country_code;
+
   // From the given site and environment, get the magento and conductor
   // environments keys.
   $env_keys = alshaya_get_env_keys($site, $env);

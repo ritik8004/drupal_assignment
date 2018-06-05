@@ -11,12 +11,7 @@
 /**
  * Get settings which are environment and/or site dependent.
  */
-function alshaya_get_additional_settings($site, $env) {
-  // Like mc, hm or pb.
-  $site_name = substr($site, 0, -2);
-  // Like kw, sa or ae.
-  $country = substr($site, -2, 2);
-
+function alshaya_get_additional_settings($site_code, $country_code, $env) {
   $mapping = [
     'mc' => [
       'default' => [
@@ -67,17 +62,17 @@ function alshaya_get_additional_settings($site, $env) {
   if (isset($mapping['default']['default'][$env])) {
     $settings = array_replace_recursive($settings, $mapping['default']['default'][$env]);
   }
-  if (isset($mapping['default'][$country]['default'])) {
-    $settings = array_replace_recursive($settings, $mapping['default'][$country]['default']);
+  if (isset($mapping['default'][$country_code]['default'])) {
+    $settings = array_replace_recursive($settings, $mapping['default'][$country_code]['default']);
   }
-  if (isset($mapping[$site_name]['default']['default'])) {
-    $settings = array_replace_recursive($settings, $mapping[$site_name]['default']['default']);
+  if (isset($mapping[$site_code]['default']['default'])) {
+    $settings = array_replace_recursive($settings, $mapping[$site_code]['default']['default']);
   }
-  if (isset($mapping[$site_name][$country]['default'])) {
-    $settings = array_replace_recursive($settings, $mapping[$site_name][$country]['default']);
+  if (isset($mapping[$site_code][$country_code]['default'])) {
+    $settings = array_replace_recursive($settings, $mapping[$site_code][$country_code]['default']);
   }
-  if (isset($mapping[$site_name][$country][$env])) {
-    $settings = array_replace_recursive($settings, $mapping[$site_name][$country][$env]);
+  if (isset($mapping[$site_code][$country_code][$env])) {
+    $settings = array_replace_recursive($settings, $mapping[$site_code][$country_code][$env]);
   }
 
   return $settings;
