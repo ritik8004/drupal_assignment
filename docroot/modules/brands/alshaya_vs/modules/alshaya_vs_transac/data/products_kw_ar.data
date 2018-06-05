@@ -1,0 +1,4 @@
+<?php
+global $_alshaya_acm_products;
+
+$_alshaya_acm_products = array();
