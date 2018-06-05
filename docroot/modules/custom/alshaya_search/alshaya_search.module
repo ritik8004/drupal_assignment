@@ -10,6 +10,7 @@ use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
