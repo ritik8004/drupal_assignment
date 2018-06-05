@@ -31,17 +31,15 @@ function acq_promotion_drush_command() {
  */
 function drush_acq_promotion_sync_commerce_promotions() {
   if ($types = drush_get_option('types')) {
-    drush_print(dt('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]));
+    \Drupal::logger('acq_promotion')->notice('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]);
     $types = explode(',', $types);
     $types = array_map('trim', $types);
     \Drupal::service('acq_promotion.promotions_manager')->syncPromotions($types);
   }
   else {
-    drush_print(dt('Synchronizing all commerce promotions, this usually takes some time...'));
+    \Drupal::logger('acq_promotion')->notice('Synchronizing all commerce promotions, this usually takes some time...');
     \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
   }
 
   \Drupal::logger('acq_promotion')->notice('Promotion sync completed.');
-
-  drush_print(dt('Done.'));
 }
