@@ -176,9 +176,9 @@
        */
       function scrollToProduct() {
         var storage_value = getStorageValues();
-        var ee = $('.views-infinite-scroll-content-wrapper article[data-nid="' + storage_value.nid + '"]:visible:first');
+        var first_visible_product = $('.views-infinite-scroll-content-wrapper article[data-nid="' + storage_value.nid + '"]:visible:first');
         $('html, body').animate({
-          scrollTop: ($(ee).offset().top)
+          scrollTop: ($(first_visible_product).offset().top)
         }, 100);
 
         // Once scroll to product, clear the storage.
