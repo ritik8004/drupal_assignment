@@ -194,6 +194,26 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       // Doing this for ajax complete as dom/element we require are not available earlier.
       $(document).ajaxComplete(function (event, xhr, settings) {
         Drupal.addLeafClassToPlpLeafItems();
+
+        if ($(window).width() < 768) {
+          // Finding the active facet and showing/hidding category facets accordingly.
+          var alshayaPlpSearchActiveFacet = $('.current-active-facet').attr('data-block-plugin-id');
+          var alshayaPlpSearchActiveCategoryFacet = $('.current-active-facet.block-facet-blockplp-category-facet, .current-active-facet.block-facet-blockcategory');
+          var alshayaPlpSearchCategoryFacet = $('ul[data-drupal-facet-id=category].js-facets-checkbox-links, ul[data-drupal-facet-id=plp_category_facet].js-facets-checkbox-links');
+          var alshayaPlpSearchCategoryFacetTitle = $('.block-facet-blockplp-category-facet .c-accordion__title, .block-facet-blockcategory .c-accordion__title');
+
+          if (alshayaPlpSearchActiveFacet) {
+            if (alshayaPlpSearchActiveCategoryFacet.length > 0) {
+              alshayaPlpSearchCategoryFacet.show();
+              alshayaPlpSearchCategoryFacetTitle.removeClass('ui-state-active');
+            }
+
+            else {
+              alshayaPlpSearchCategoryFacet.hide();
+              alshayaPlpSearchCategoryFacetTitle.addClass('ui-state-active');
+            }
+          }
+        }
       });
 
       // Add Class to leaf items on page load.
