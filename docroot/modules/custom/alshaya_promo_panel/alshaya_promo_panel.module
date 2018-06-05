@@ -74,3 +74,16 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
       break;
   }
 }
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function alshaya_promo_panel_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  if (isset($variables['elements']) && isset($variables['elements']['#base_plugin_id'])) {
+    if ($variables['elements']['#base_plugin_id'] == 'block_content') {
+      if (isset($variables['elements']['content']) && !empty($variables['elements']['#id'])) {
+        $suggestions[] = 'block__block_content__alshaya_promo_panel';
+      }
+    }
+  }
+}
