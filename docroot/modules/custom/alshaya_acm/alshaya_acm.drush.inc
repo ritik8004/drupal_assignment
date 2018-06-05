@@ -45,6 +45,7 @@ function alshaya_acm_drush_command() {
     'options' => [
       'acm' => 'The ACM key to connect Drupal to (ex: mcsa_dev, hmkw_qa, hmsa_uat, ...).',
       'mdc' => 'The MDC key to connect Drupal to (ex: mc_dev, hm_qa, vs_uat, ...).',
+      // @TODO: Add an option to override the default country_code and connect to different langcode on MDC.
     ],
     'examples' => [
       'drush asc --acm=mcsa_dev --mdc=mc_dev' => 'Connect Drupal to mcsa_dev ACM and mc_dev MDC.',
@@ -58,7 +59,7 @@ function alshaya_acm_drush_command() {
 /**
  * Implements drush switch config command.
  */
-function drush_alshaya_switch_config() {
+function drush_alshaya_acm_alshaya_switch_config() {
   $acm = drush_get_option('acm', '');
   $mdc = drush_get_option('mdc', '');
 
@@ -67,14 +68,44 @@ function drush_alshaya_switch_config() {
     return;
   }
 
+  $configFactory = \Drupal::configFactory();
+
+  // Update the conductor config.
   if (!empty($acm)) {
     include_once DRUPAL_ROOT . '/../factory-hooks/environments/conductor.php';
     $acms = alshaya_get_conductor_host_data();
+
+    if (isset($acms[$acm])) {
+      $config = $configFactory->getEditable('acq_commerce.conductor');
+
+      foreach ($acms[$acm] as $key => $value) {
+        $config->set($key, $value);
+      }
+
+      $config->save();
+    }
+    else {
+      drush_print(dt('Unknown ACM @acm.', ['@acm' => $acm]));
+    }
   }
 
   if (!empty($mdc)) {
     include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
     $mdcs = alshaya_get_magento_host_data();
+
+    if (isset($mdcs[$mdc])) {
+      $config = $configFactory->getEditable('alshaya_api.settings');
+      $config->set('magento_host', $acms[$acm]['url']);
+      $config->save();
+
+      // @TODO:
+      // Get the current country code
+      // Get the store_ids and lang_prefix from $acms[$acm][$country_code].
+      // Update configs for both en and ar.
+    }
+    else {
+      drush_print(dt('Unknown MDC @mdc.', ['@mdc' => $mdc]));
+    }
   }
 }
 
