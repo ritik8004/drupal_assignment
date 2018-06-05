@@ -39,7 +39,43 @@ function alshaya_acm_drush_command() {
     'description' => 'Reset all config from settings.',
   ];
 
+  $commands['alshaya-switch-config'] = [
+    'description' => 'Switch some config to connect Drupal to specific ACM and MDC.',
+    'alias' => ['asc'],
+    'options' => [
+      'acm' => 'The ACM key to connect Drupal to (ex: mcsa_dev, hmkw_qa, hmsa_uat, ...).',
+      'mdc' => 'The MDC key to connect Drupal to (ex: mc_dev, hm_qa, vs_uat, ...).',
+    ],
+    'examples' => [
+      'drush asc --acm=mcsa_dev --mdc=mc_dev' => 'Connect Drupal to mcsa_dev ACM and mc_dev MDC.',
+      'drush asc --acm=hmkw_qa' => 'Connect Drupal to hmkw_qa ACM.',
+    ],
+  ];
+
   return $commands;
+}
+
+/**
+ * Implements drush switch config command.
+ */
+function drush_alshaya_switch_config() {
+  $acm = drush_get_option('acm', '');
+  $mdc = drush_get_option('mdc', '');
+
+  if (empty($acm) && empty($mdc)) {
+    drush_print(dt('Please provide an ACM or a MDC key to switch the config.'));
+    return;
+  }
+
+  if (!empty($acm)) {
+    include_once DRUPAL_ROOT . '/../factory-hooks/environments/conductor.php';
+    $acms = alshaya_get_conductor_host_data();
+  }
+
+  if (!empty($mdc)) {
+    include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
+    $mdcs = alshaya_get_magento_host_data();
+  }
 }
 
 /**
