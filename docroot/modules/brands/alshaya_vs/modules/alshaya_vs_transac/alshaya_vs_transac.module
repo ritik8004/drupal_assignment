@@ -13,3 +13,23 @@ function alshaya_vs_transac_alshaya_stores_finder_store_update_alter(&$node, arr
     $node->get('field_brand')->setValue(trim($store['included_in_store']));
   }
 }
+
+/**
+ * Implements hook_preprocess_views_view_fields().
+ */
+function alshaya_vs_transac_preprocess_views_view_fields__stores_finder(&$variables) {
+  $view = $variables['view'];
+  // @codingStandardsIgnoreLine
+  if (in_array($view->current_display, ['attachment_1', 'page_3', 'page_2', 'page_1'])) {
+    $fields = $variables['fields'];
+    unset($fields['field_brand']);
+    $new_fields = [];
+    foreach ($fields as $field => $field_object) {
+      $new_fields[$field] = $field_object;
+      if ($field == 'field_store_address') {
+        $new_fields['field_brand'] = $variables['fields']['field_brand'];
+      }
+    }
+    $variables['fields'] = $new_fields;
+  }
+}

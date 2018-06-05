@@ -32,7 +32,8 @@ function alshaya_vs_transac_update_8101() {
  * Implements hook_install().
  */
 function alshaya_vs_transac_install() {
-  // Enable and set alshaya_victoria_secret as default theme and set the site logo, favicon icon and email logo path.
+  // Enable and set alshaya_victoria_secret as default theme and set the site
+  // logo, favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_victoria_secret');
 
   // Set store id - EN.
