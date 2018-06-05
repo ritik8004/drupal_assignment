@@ -76,7 +76,7 @@
 }
 
 .c-footer__logo--verisign {
-  background-image: url("../imgs/cards/card-verisign.png");
+  background-image: url(#{$base_theme_img_directory_path}/cards/card-verisign.png);
   background-size: contain;
   background-repeat: no-repeat;
   height: 34px;
@@ -84,7 +84,7 @@
 }
 
 .c-footer__logo--visa {
-  background-image: url("../imgs/cards/card-visa.png");
+  background-image: url(#{$base_theme_img_directory_path}/cards/card-visa.png);
   background-size: contain;
   background-repeat: no-repeat;
   height: 25px;
@@ -92,7 +92,7 @@
 }
 
 .c-footer__logo--mastercard {
-  background-image: url("../imgs/cards/card-mastercard.png");
+  background-image: url(#{$base_theme_img_directory_path}/cards/card-mastercard.png);
   height: 24px;
   width: 66px;
 }

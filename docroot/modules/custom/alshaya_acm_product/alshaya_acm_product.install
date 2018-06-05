@@ -10,6 +10,34 @@ use Symfony\Component\Yaml\Yaml;
 use Drupal\node\Entity\Node;
 
 /**
+ * Implements hook_post_update_NAME().
+ *
+ * Re-save index to create required tables.
+ *
+ * We do this in post update hook as it doesn't work together with config update
+ * in normal hook_update.
+ */
+function alshaya_acm_product_post_update_8017(&$sandbox) {
+  _alshaya_search_resave_indexes();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add color_description attribute in SKU and index it.
+ */
+function alshaya_acm_product_update_8017() {
+  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+  $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+  acq_sku_add_base_fields($fields);
+
+  // Since we know we will have both alshaya_product and alshaya_search enabled
+  // for all transact sites, we do it here - one common place.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+}
+
+/**
  * Implements hook_update_N().
  *
  * Update default items from cross sell/up sell carausel.

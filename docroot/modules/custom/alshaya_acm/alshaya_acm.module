@@ -612,7 +612,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
 function alshaya_acm_price_format($price, $promotions = []) {
   $output = [
     '#theme' => 'acq_commerce_price',
-    '#price' => $price,
+    '#price' => acq_commerce_get_clean_price($price),
   ];
 
   if ($promotions) {

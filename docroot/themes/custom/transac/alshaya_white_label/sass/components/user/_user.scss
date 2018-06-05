@@ -532,28 +532,28 @@
 
   span.icon {
     &-wish {
-      background-image: url("../imgs/icons/ic-wishlish.svg");
+      background-image: url(#{$base_theme_img_directory_path}/icons/ic-wishlish.svg);
     }
 
     &-store {
-      background-image: url("../imgs/icons/ic-language.svg");
+      background-image: url(#{$base_theme_img_directory_path}/icons/ic-language.svg);
     }
 
     &-offer {
-      background-image: url("../imgs/icons/ic-shopping-bag.svg");
+      background-image: url(#{$base_theme_img_directory_path}/icons/ic-shopping-bag.svg);
     }
 
     &-win {
-      background-image: url("../imgs/icons/ic-trophy.svg");
+      background-image: url(#{$base_theme_img_directory_path}/icons/ic-trophy.svg);
     }
 
     &-reward {
-      background-image: url("../imgs/icons/ic-like.svg");
+      background-image: url(#{$base_theme_img_directory_path}/icons/ic-like.svg);
       background-size: contain;
     }
 
     &-heart {
-      background-image: url("../imgs/icons/ic-speech-bubble.svg");
+      background-image: url(#{$base_theme_img_directory_path}/icons/ic-speech-bubble.svg);
       position: relative;
       top: 0.1875rem;
 

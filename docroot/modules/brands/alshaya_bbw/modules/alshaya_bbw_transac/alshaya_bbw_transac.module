@@ -46,7 +46,7 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
       }
 
       if ($view_mode == 'full' || $view_mode == 'modal') {
-        if ($product_brand = $sku_entity->get('attr_product_brand')->getValue()) {
+        if ($product_brand = $sku_entity->get('attr_brand')->getValue()) {
           $build['product_brand']['#markup'] = $product_brand[0]['value'];
         }
 
