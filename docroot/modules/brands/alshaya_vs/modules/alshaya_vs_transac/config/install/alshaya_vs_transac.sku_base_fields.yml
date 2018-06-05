@@ -1,15 +1,4 @@
 fields:
-  color_description:
-    parent: 'attributes'
-    label: 'Color Description'
-    description: 'Color Description attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 1
-    index: 1
-    visible_view: 0
-    visible_form: 1
-
   band_size:
     parent: 'attributes'
     label: 'Band Size'
