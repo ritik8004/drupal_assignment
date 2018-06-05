@@ -1,0 +1,9 @@
+langcode: en
+status: true
+id: alshaya_magento_consumer
+label: 'Alshaya Magento Consumer'
+weight: 19
+is_admin: null
+permissions:
+  - 'access content'
+  - 'restful post sku_images'
