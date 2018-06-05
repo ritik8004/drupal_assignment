@@ -16,7 +16,7 @@ use Drupal\search_api\Entity\Index;
  * We do this in post update hook as it doesn't work together with config update
  * in normal hook_update.
  */
-function alshaya_bbw_transac_post_update_8005(&$sandbox) {
+function alshaya_bbw_transac_post_update_8004(&$sandbox) {
   $alshaya_search_indexes = [
     'product',
     'acquia_search_index',
