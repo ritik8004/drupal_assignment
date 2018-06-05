@@ -13,7 +13,9 @@
 /**
  * Get commerce third party settings for specific site + environment combination.
  */
-function alshaya_get_commerce_third_party_settings($site, $env) {
+function alshaya_get_commerce_third_party_settings($site_code, $country_code, $env) {
+  $site = $site_code . $country_code;
+
   // From the given site and environment, get the magento and conductor
   // environments keys.
   $env_keys = alshaya_get_env_keys($site, $env);
@@ -30,7 +32,12 @@ function alshaya_get_commerce_third_party_settings($site, $env) {
     $settings['acq_commerce.conductor'] = $conductors[$env_keys['conductor']];
   }
   if (isset($env_keys['magento']) && isset($magentos[$env_keys['magento']])) {
-    $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']];
+    $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']]['url'];
+
+    $settings += $magentos['default'][$country_code];
+    if (isset($magentos[$env_keys['magento']][$country_code])) {
+      $settings = array_replace_recursive($settings, $magentos[$env_keys['magento']][$country_code]);
+    }
   }
 
   return $settings;
