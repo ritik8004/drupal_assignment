@@ -76,7 +76,7 @@ function _alshaya_api_create_user() {
 function _alshaya_api_create_consumer() {
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $repository */
   $repository = \Drupal::service('entity.repository');
-  $consumer = $repository->loadEntityByUuid('consumer', Settings::get('alshaya_api_soauth_client_uuid'));
+  $consumer = $repository->loadEntityByUuid('consumer', Settings::get('alshaya_magento_soauth_client_uuid'));
 
   if ($consumer instanceof Consumer) {
     // Consumer is already created. Log message and return.
