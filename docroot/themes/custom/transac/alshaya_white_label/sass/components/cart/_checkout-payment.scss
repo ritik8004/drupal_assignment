@@ -152,6 +152,10 @@
     color: $content_link_color;
   }
 
+  .form-checkbox.error {
+    display: none;
+  }
+
   .form-type-checkbox {
     .option {
       top: 0;
@@ -168,7 +172,7 @@
 
       @include breakpoint($upto-desktop) {
         margin-#{$left}: 0;
-        width: 87%;
+        width: 85%;
       }
     }
   }

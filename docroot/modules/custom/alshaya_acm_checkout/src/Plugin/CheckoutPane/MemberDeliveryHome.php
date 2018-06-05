@@ -47,12 +47,13 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (!$this->isVisible()) {
+    if ($this->getSelectedDeliveryMethod() != 'hd') {
       return $pane_form;
     }
 
-    if ($this->getSelectedDeliveryMethod() != 'hd') {
-      return $pane_form;
+    // Check if user is changing his mind, if so clear shipping info.
+    if ($this->isUserChangingHisMind()) {
+      $this->clearShippingInfo();
     }
 
     $pane_form['#attributes']['class'][] = 'active--tab--content';
@@ -63,11 +64,8 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     $pane_form['#suffix'] = '<div class="fieldsets-separator">' . $this->t('OR') . '</div>';
 
     $cart = $this->getCart();
-
-    // Once we open HD page, clear temp cc selected info.
-    $cart->setExtension('cc_selected_info', NULL);
-
-    $address = (array) $cart->getShipping();
+    $address_info = $this->getAddressInfo('hd');
+    $address = !empty($address_info['address']) ? $address_info['address'] : [];
 
     $pane_form['address_form'] = [
       '#type' => 'container',
@@ -244,7 +242,8 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     try {
       $cart = $this->getCart();
 
-      $address = (array) $cart->getShipping();
+      $address_info = $this->getAddressInfo('hd');
+      $address = $address_info['address'];
 
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
       $address_book_manager = \Drupal::service('alshaya_addressbook.manager');

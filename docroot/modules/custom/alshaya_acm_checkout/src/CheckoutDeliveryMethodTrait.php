@@ -71,7 +71,7 @@ trait CheckoutDeliveryMethodTrait {
 
       self::$deliveryMethodSelectedCart = $cart_method;
 
-      // We method is not allowed (someone trying to trick the system), redirect
+      // If method is not allowed (someone trying to trick the system), redirect
       // to default or cart method.
       if ($method) {
         if (!in_array($method, $allowed_methods)) {
@@ -159,6 +159,81 @@ trait CheckoutDeliveryMethodTrait {
     }
 
     return $status;
+  }
+
+  /**
+   * Check if user is changing mind by visiting another delivery method.
+   *
+   * @return bool
+   *   TRUE if cart has delivery method and user visiting another method.
+   */
+  protected function isUserChangingHisMind() {
+    $method = $this->getSelectedDeliveryMethod();
+    $cart_method = $this->getCartSelectedDeliveryMethod();
+    return $cart_method && $cart_method != $method;
+  }
+
+  /**
+   * Wrapper function to clear shipping method info in Cart.
+   */
+  protected function clearShippingInfo() {
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+    $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    $helper->clearShippingInfo(self::$deliveryMethodSelectedCart);
+    self::$deliveryMethodSelected = NULL;
+    self::$deliveryMethodSelectedCart = NULL;
+  }
+
+  /**
+   * Get checkout helper service object.
+   *
+   * @return \Drupal\alshaya_acm_checkout\CheckoutHelper
+   *   Checkout Helper service object.
+   */
+  protected function getCheckoutHelper() {
+    static $helper;
+
+    if (empty($helper)) {
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+      $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    }
+
+    return $helper;
+  }
+
+  /**
+   * Get address info from cart or history.
+   *
+   * @param string $method
+   *   Method Code - hd/cc.
+   *
+   * @return array
+   *   Address info - address + store info from extension.
+   */
+  protected function getAddressInfo($method = 'hd') {
+    $response = [];
+
+    $selected_method = $this->getCartSelectedDeliveryMethod();
+
+    // Use from cart if shipping method set.
+    if ($selected_method && $method === $selected_method) {
+      /** @var \Drupal\acq_cart\Cart $cart */
+      $cart = $this->getCart();
+
+      /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
+      $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
+      $response['address'] = $cart_helper->getShipping($cart);
+
+      if ($selected_method === 'cc') {
+        $response['store_code'] = $cart->getExtension('store_code');
+        $response['click_and_collect_type'] = $cart->getExtension('click_and_collect_type');
+      }
+    }
+    else {
+      $response = $this->getCheckoutHelper()->getCartShippingHistory($method);
+    }
+
+    return $response;
   }
 
 }

@@ -47,6 +47,7 @@ $grey6: #b3b3b3;
 $grey7: #777;
 $grey8: #555;
 $grey9: #efefef;
+$grey10: #828282;
 $white-smoke-border: #2b2b2b;
 $link-hover: #1f1f1f;
 $hnm-black-two: #000;
@@ -163,6 +164,7 @@ $plp_facet_input_placeholder: $hnm-black-two;
 $plp_facet_label: $black-two;
 $category_facet_active_icon: $hnm-black-two;
 $category_facet_active_text: $hnm-black-two;
+$plp_facet_filter_count_background: $hnm-red;
 
 // Delivery Menu
 $delivery_color: $link-hover;
@@ -299,6 +301,7 @@ $plp__label_active_bg: $white-five;
 $pdp_modal_full_prodlink: $hnm-black-two;
 $pdp_product_price: $black-two;
 $pdp_product_itemcode: $grey7;
+$pdp_product_itemcode_mobile: $grey10;
 $pdp_swatch_border: $white-five;
 $pdp_swatch_hover: $hnm-black-two-50;
 $pdp_swatch_selected_border: $hnm-black-two;
@@ -313,6 +316,9 @@ $pdp_select_hover: $hnm-black-two-50;
 $pdp_oos_text: $white-five;
 $pdp_oos_bg: $error;
 $fake_apply_btn: $white-five;
+$pdp_color_swatch_mobile_bg: $hnm-grey;
+$pdp_share_this_label_mobile: $hnm-black-two;
+$pdp_description_mobile: $hnm-black-two;
 
 // User my account
 $password_tooltip_list: $cerulean-two;
@@ -498,3 +504,7 @@ $vat: $grey6;
 // Homepage Slider
 $hp_slider_dots: $hnm-black-two;
 $hp_slider_arrows_dark: $hnm-black-two;
+
+// Section divider
+$section_divider_border: $hnm-black-two;
+$section_divider_text: $hnm-black-two;

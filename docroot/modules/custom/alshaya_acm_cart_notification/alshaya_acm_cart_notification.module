@@ -148,7 +148,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   $response->addCommand(new InvokeCommand(NULL, 'stopSpinner', [$data]));
 
   if ($output['#theme'] == 'add_to_cart_error') {
-    $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id . ':visible', $html));
+    $response->addCommand(new HtmlCommand('.error-container-' . $sku_css_id, $html));
     $response->addCommand(new InvokeCommand(NULL, 'cartGenericScroll', ['.error-container-' . $sku_css_id]));
   }
   else {

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_seo_transac;
 
+use Drupal\alshaya_acm\CartHelper;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -49,6 +50,7 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'product listing page',
     'entity.node.canonical:acq_product' => 'product detail page',
     'entity.node.canonical:advanced_page' => 'advanced page',
+    'entity.node.canonical:department_page' => 'department page',
     'entity.node.canonical:acq_promotion' => 'promotion page',
     'entity.node.canonical:static_html' => 'static page',
     'entity.user.canonical' => 'my account page',
@@ -125,6 +127,13 @@ class AlshayaGtmManager {
    * @var \Drupal\acq_cart\CartStorageInterface
    */
   protected $cartStorage;
+
+  /**
+   * Cart Helper service object.
+   *
+   * @var \Drupal\alshaya_acm\CartHelper
+   */
+  protected $cartHelper;
 
   /**
    * The current user service.
@@ -212,6 +221,8 @@ class AlshayaGtmManager {
    *   Config Factory service.
    * @param \Drupal\acq_cart\CartStorageInterface $cartStorage
    *   Private temp store service.
+   * @param \Drupal\alshaya_acm\CartHelper $cartHelper
+   *   Cart Helper service object.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   Current User service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -236,6 +247,7 @@ class AlshayaGtmManager {
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
                               CartStorageInterface $cartStorage,
+                              CartHelper $cartHelper,
                               AccountProxyInterface $currentUser,
                               RequestStack $requestStack,
                               EntityTypeManagerInterface $entityTypeManager,
@@ -249,6 +261,7 @@ class AlshayaGtmManager {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
+    $this->cartHelper = $cartHelper;
     $this->currentUser = $currentUser;
     $this->requestStack = $requestStack;
     $this->entityTypeManager = $entityTypeManager;
@@ -463,7 +476,12 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['node'])) {
             /** @var \Drupal\node\Entity\Node $node */
             $node = $currentRoute['route_params']['node'];
-            $routeIdentifier .= ':' . $node->bundle();
+            if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+              $routeIdentifier .= ':department_page';
+            }
+            else {
+              $routeIdentifier .= ':' . $node->bundle();
+            }
           }
           break;
 
@@ -612,7 +630,7 @@ class AlshayaGtmManager {
 
       $cartItems = $cart->get('items');
 
-      $address = (array) $cart->getShipping();
+      $address = $this->cartHelper->getShipping($cart);
 
       if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page') {
         // For CC we always use step 2.
@@ -958,7 +976,7 @@ class AlshayaGtmManager {
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
-      'country' => _alshaya_country_get_site_level_country_name(),
+      'country' => function_exists('_alshaya_country_get_site_level_country_name') ? _alshaya_country_get_site_level_country_name() : '',
       'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
@@ -1056,6 +1074,7 @@ class AlshayaGtmManager {
         break;
 
       case 'advanced page':
+      case 'department page':
         $department_node = $current_route['route_params']['node'];
         if ($department_node->get('field_use_as_department_page')->value == 1) {
           $taxonomy_term = $this->entityTypeManager->getStorage('taxonomy_term')

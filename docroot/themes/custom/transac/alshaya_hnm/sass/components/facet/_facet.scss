@@ -100,6 +100,17 @@ ul[data-drupal-facet-id=plp_category_facet] {
   }
 }
 
+.c-plp {
+  .block-facet-blockcategory,
+  .block-facet-blockplp-category-facet {
+    .facet-item {
+      input[type=checkbox] ~ label::before {
+        top: 0;
+      }
+    }
+  }
+}
+
 ul[data-drupal-facet-id=plp_category_facet] {
   > li {
     > ul {
@@ -127,18 +138,27 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
   > li.leaf-li {
     > label {
-      @include icon(check-box-empty);
+      @include icon(check-box-filled);
 
       color: $primary_checkbox_empty;
+
+      &::before {
+        position: relative;
+        font-size: 1.5rem;
+
+        @include breakpoint($tablet) {
+          font-size: 1rem;
+        }
+      }
 
       .facet-item__value {
         margin-#{$left}: 0.5rem;
       }
     }
 
-    > input[type=checkbox]:checked {
+    > input[type=checkbox] {
       ~ label {
-        @include icon(check-box-filled) {
+        @include icon(check-box-empty) {
           color: $primary_checkbox_filled;
         }
       }

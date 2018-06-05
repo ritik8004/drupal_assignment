@@ -481,9 +481,8 @@ class Configurable extends SKUPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function cartName($sku, array $cart) {
+  public function cartName(SKU $sku, array $cart, $asString = FALSE) {
     $parent_sku = $this->getParentSku($sku);
-
     if (empty($parent_sku)) {
       return $sku->label();
     }
@@ -493,7 +492,6 @@ class Configurable extends SKUPluginBase {
     );
 
     $label_parts = [];
-
     foreach ($configurables as $configurable) {
       $key = $configurable['code'];
       $attribute_value = $this->getAttributeValue($sku->id(), $key);
@@ -510,21 +508,29 @@ class Configurable extends SKUPluginBase {
       }
     }
 
-    $label = sprintf(
+    // Create name from label parts.
+    $cartName = sprintf(
       '%s (%s)',
       $cart['name'],
       implode(', ', $label_parts)
     );
 
-    $display_node = $this->getDisplayNode($parent_sku);
-    if ($display_node instanceof Node) {
-      $url = $display_node->toUrl();
-      $link = Link::fromTextAndUrl($label, $url)->toRenderable();
-      return render($link);
+    if (!$asString) {
+      $display_node = $this->getDisplayNode($parent_sku);
+      
+      if ($display_node instanceof Node) {
+        $url = $display_node->toUrl();
+        $link = Link::fromTextAndUrl($cartName, $url);
+        $cartName = $link->toRenderable();
+      }
+      else {
+        \Drupal::logger('acq_sku')->info('Parent product for the sku: @sku seems to be unavailable.', [
+          '@sku' => $sku->getSku(),
+        ]);
+      }
     }
 
-    \Drupal::logger('acq_sku')->info('Parent product for the sku: @sku seems to be unavailable.', ['@sku' => $sku->getSku()]);
-    return $sku->label();
+    return $cartName;
   }
 
   /**
@@ -541,13 +547,9 @@ class Configurable extends SKUPluginBase {
 
     foreach ($sku->get('field_configured_skus') as $child_sku) {
       try {
-        $child_sku_entity = SKU::loadFromSku($child_sku->getString());
-
-        if ($child_sku_entity instanceof SKU) {
-          $child_stock = (int) $this->getStock($child_sku_entity, $reset);
-
-          $quantities[$child_sku_entity->getSku()] = $child_stock;
-        }
+        $child_sku = $child_sku->getString();
+        $child_stock = (int) $this->getStock($child_sku, $reset);
+        $quantities[$child_sku] = $child_stock;
       }
       catch (\Exception $e) {
         // Child SKU might be deleted or translation not available.

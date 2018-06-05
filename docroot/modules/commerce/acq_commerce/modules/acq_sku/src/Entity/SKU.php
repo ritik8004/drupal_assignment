@@ -95,13 +95,15 @@ class SKU extends ContentEntityBase implements SKUInterface {
   /**
    * Function to return media files for a SKU.
    *
+   * @param bool $download_media
+   *   Whether to download media or not.
    * @param bool $reset
    *   Flag to reset cache and generate array again from serialized string.
    *
    * @return array
    *   Array of media files.
    */
-  public function getMedia($reset = FALSE) {
+  public function getMedia($download_media = TRUE, $reset = FALSE) {
     if (!$reset && !empty($this->mediaData)) {
       return $this->mediaData;
     }
@@ -117,7 +119,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
       foreach ($media_data as &$data) {
         if (isset($data['media_type']) && $data['media_type'] == 'image') {
-          if (empty($data['fid'])) {
+          if (empty($data['fid']) && $download_media) {
             try {
               // Prepare the File object when we access it the first time.
               $data['fid'] = $this->downloadMediaImage($data);
@@ -263,7 +265,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $static_cache_sku_identifier = $sku . ':' . $langcode;
 
     // Check if data is available in static cache, return from there.
-    if (isset($skus_static_cache[$static_cache_sku_identifier])) {
+    // If create translation is true, it means we are doing product sync.
+    // For this case we don't want to use any static cache.
+    if (isset($skus_static_cache[$static_cache_sku_identifier]) && !$create_translation) {
       return $skus_static_cache[$static_cache_sku_identifier];
     }
 
@@ -306,7 +310,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
       elseif ($create_translation) {
         $sku_entity = $sku_entity->addTranslation($langcode, ['sku' => $sku]);
       }
-      else {
+      // Don't log for missing translation if flag is set to false.
+      elseif ($log_not_found) {
         \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
     }
@@ -696,8 +701,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Delete media files.
     foreach ($entities as $entity) {
-      /** @var \Drupal\acq_sku\Entity\SKU $sku  */
-      foreach ($entity->getMedia() as $media) {
+      /** @var \Drupal\acq_sku\Entity\SKU $entity  */
+      foreach ($entity->getMedia(FALSE) as $media) {
         if ($media['file'] instanceof FileInterface) {
           $media['file']->delete();
         }

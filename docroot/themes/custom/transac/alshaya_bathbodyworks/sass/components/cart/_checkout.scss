@@ -174,5 +174,7 @@
     .status {
       color: $order_summary_order_status;
     }
+
+    @include clearfix;
   }
 }

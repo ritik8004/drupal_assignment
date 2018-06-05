@@ -12,8 +12,8 @@ Feature: To verify a returning customer is able to
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "anjali.nikumb@acquia.com"
-    And I fill in "edit-checkout-login-pass" with "password@1"
+    Then I fill in "edit-checkout-login-name" with "kanchan.patil+test@qed42.com"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "sign in"
     And I wait for the page to load
     When I follow "Home delivery"
@@ -55,8 +55,8 @@ Feature: To verify a returning customer is able to
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "anjali.nikumb@acquia.com"
-    And I fill in "edit-checkout-login-pass" with "password@1"
+    Then I fill in "edit-checkout-login-name" with "kanchan.patil+test@qed42.com"
+    And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "sign in"
     And I wait for the page to load
     And I follow "Click & Collect"

@@ -61,10 +61,10 @@
         var mobileFilterBarSelector = getFilterBarSelector();
 
         var countFilters = $(mobileFilterBarSelector + ' ul li').length;
-        if (countFilters === 0 && $.trim($(mobileFilterBarSelector)
-          .html()).length === 0) {
+        if (countFilters === 0 && $.trim($(mobileFilterBarSelector).html()).length === 0) {
           $(mobileFilterBarSelector).addClass('empty');
         }
+
         else {
           if (countFilters > 0) {
             // Removing the element before adding again.
@@ -80,6 +80,11 @@
                 Drupal.alshayaAccordion(this);
               });
           }
+        }
+
+        if (countFilters === 0) {
+          // Removing the filter count added next to the label.
+          $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').removeClass('active-filter-count').html(Drupal.t('Filter'));
         }
       }
 
@@ -158,7 +163,7 @@
 
             var countFilters = $(mobileFilterBarSelector + ' ul li').length - 1;
             if (countFilters > 0) {
-              $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').html(Drupal.t('Filter') + ' (' + countFilters + ')');
+              $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').addClass('active-filter-count').html(Drupal.t('Filter') + ' <span class="filter-count"> ' + countFilters + '</span>');
             }
           }
           else {
@@ -220,6 +225,22 @@
             viewHeader.insertBefore(selector);
           }
           searchCount.addClass('tablet');
+        }
+      }
+
+      function processSoftLiniks(element) {
+        var softLink = element.find('a.facets-soft-limit-link');
+        var blockPlugin = element.attr('data-block-plugin-id');
+        var facet_id = blockPlugin.replace('facet_block:', '');
+        var softLimitSettings = settings.facets.softLimit;
+        var softItemsLimit = softLimitSettings[facet_id] - 1;
+        if (!isNaN(parseInt(softItemsLimit))) {
+          // Facets module would hide all instances of list items in the
+          // second instance of the facet block. This is to support same
+          // facet block twice on a page.
+          element.find('ul li:lt(' + (parseInt(softItemsLimit) + 1) + ')').show();
+          element.find('ul li:gt(' + parseInt(softItemsLimit) + ')').hide();
+          softLink.insertAfter(element.find('ul'));
         }
       }
 
@@ -332,50 +353,15 @@
         closeFilterView();
       });
 
-      // Poll the DOM to check if the show more/less link is available, before placing it inside the ul.
-      var i = setInterval(function () {
-        if ($('.block-facet--checkbox a.facets-soft-limit-link').length) {
-          clearInterval(i);
-          $('.block-facet--checkbox').each(function () {
-            var softLink = $(this).find('a.facets-soft-limit-link');
-            var blockPlugin = $(this).attr('data-block-plugin-id');
-            var facet_id = blockPlugin.replace('facet_block:', '');
-            var softLimitSettings = settings.facets.softLimit;
-            var softItemsLimit = softLimitSettings[facet_id] - 1;
-            if (!isNaN(parseInt(softItemsLimit))) {
-              // Facets module would hide all instances of list items in the
-              // second instance of the facet block. This is to support same
-              // facet block twice on a page.
-              $(this).find('ul li:lt(' + (parseInt(softItemsLimit) + 1) + ')').show();
-              $(this).find('ul li:gt(' + parseInt(softItemsLimit) + ')').hide();
-              softLink.insertAfter($(this).find('ul'));
-            }
-          });
+      // Process facet checbox softlimits on page load.
+      $('.block-facet--checkbox', context).each(function () {
+        processSoftLiniks($(this));
+      });
 
-          // Function defined in mobile and called here.
-          // Don't want to refactor a lot to fix during UAT stage.
-          if (typeof Drupal.alshayaSearchActiveFacetResetAfterAjax !== 'undefined') {
-            Drupal.alshayaSearchActiveFacetResetAfterAjax();
-          }
-        }
-      }, 100);
-
-      var j = setInterval(function () {
-        if ($('.region__content .block-facet--checkbox a.facets-soft-limit-link').length) {
-          clearInterval(j);
-          $('.region__content .block-facet--checkbox').each(function () {
-            var softLink = $(this).find('a.facets-soft-limit-link');
-            softLink.addClass('processed');
-            softLink.insertAfter($(this).find('ul'));
-          });
-
-          // Function defined in mobile and called here.
-          // Don't want to refactor a lot to fix during UAT stage.
-          if (typeof Drupal.alshayaSearchActiveFacetResetAfterAjax !== 'undefined') {
-            Drupal.alshayaSearchActiveFacetResetAfterAjax();
-          }
-        }
-      }, 100);
+      // Process facet checbox softlimits while rebuilding facets post AJAX.
+      if ($(context).hasClass('block-facet--checkbox')) {
+        processSoftLiniks($(context));
+      }
     }
   };
 })(jQuery);

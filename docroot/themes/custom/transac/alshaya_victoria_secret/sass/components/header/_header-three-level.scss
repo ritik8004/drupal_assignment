@@ -8,9 +8,17 @@
 }
 
 .menu--two__list {
-  .menu--two__list-item .menu--three__list {
-    li a:hover {
-      text-decoration: none;
+  .menu--two__list-item {
+    .menu-two__link {
+      @include breakpoint($desktop) {
+        font-size: 0.75rem;
+      }
+    }
+
+    .menu--three__list {
+      li a:hover {
+        text-decoration: none;
+      }
     }
   }
 

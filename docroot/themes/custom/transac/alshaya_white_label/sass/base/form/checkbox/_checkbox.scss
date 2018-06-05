@@ -6,7 +6,11 @@ input[type=checkbox] ~ label {
   @include icon(checkboxempty);
 
   &::before {
-    font-size: 1rem;
+    font-size: 1.5rem;
+
+    @include breakpoint($tablet) {
+      font-size: 1rem;
+    }
   }
 }
 
@@ -23,6 +27,11 @@ input[type=checkbox]:checked ~ label {
   input[type=checkbox] ~ label {
     &::before {
       float: $left;
+      position: relative;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1.5rem;
+      }
     }
   }
 }

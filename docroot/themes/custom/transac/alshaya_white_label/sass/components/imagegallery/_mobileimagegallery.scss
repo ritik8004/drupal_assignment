@@ -8,6 +8,7 @@
   height: 100% !important;
   width: 100% !important;
   background: $modal_bg;
+  touch-action: none;
 
   .subtext {
     width: 100%;
@@ -29,6 +30,14 @@
 
   .mob-imagegallery__wrapper {
     position: relative;
+
+    .slick-dots {
+      @include breakpoint($only-mobile) {
+        position: absolute;
+        width: 100%;
+        bottom: 0.75rem;
+      }
+    }
   }
 
   .button__wrapper {
@@ -52,7 +61,6 @@
 
 .mob-imagegallery__thumbnails__image {
   overflow: auto;
-  height: 85vh;
 
   .expand {
     max-width: initial;
