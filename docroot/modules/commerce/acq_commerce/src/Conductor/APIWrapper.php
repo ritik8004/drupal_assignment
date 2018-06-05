@@ -2,8 +2,9 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\acq_commerce\Connector\ConnectorException;
+use Drupal\acq_commerce\Connector\CustomerNotFoundException;
 use Drupal\acq_commerce\I18nHelper;
-use Drupal\acquia_connector\ConnectorException;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -90,7 +91,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $cart = $this->tryAgentRequest($doReq, 'createCart', 'cart');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -111,7 +112,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       return $this->tryAgentRequest($doReq, 'skuStockCheck', 'stock');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -136,7 +137,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $cart = $this->tryAgentRequest($doReq, 'getCart', 'cart');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -249,7 +250,7 @@ class APIWrapper implements APIWrapperInterface {
       $cart = $this->tryAgentRequest($doReq, 'updateCart', 'cart');
       Cache::invalidateTags(['cart:' . $cart_id]);
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       // Restore cart structure.
       if ($items) {
         foreach ($items as $key => &$item) {
@@ -285,7 +286,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $response = $this->tryAgentRequest($doReq, 'associateCart');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -311,7 +312,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $result = $this->tryAgentRequest($doReq, 'placeOrder');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -333,7 +334,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $methods = $this->tryAgentRequest($doReq, 'getShippingMethods', 'methods');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -376,7 +377,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $methods = $this->tryAgentRequest($doReq, 'getShippingEstimates', 'methods');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -398,7 +399,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $methods = $this->tryAgentRequest($doReq, 'getPaymentMethods', 'methods');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -467,7 +468,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $customer = $this->tryAgentRequest($doReq, 'updateCustomer', 'customer');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -494,7 +495,7 @@ class APIWrapper implements APIWrapperInterface {
         $deleted = (bool) $response['deleted'];
       }
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -517,7 +518,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $response = $this->tryAgentRequest($doReq, 'validateCustomerAddress');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -544,7 +545,7 @@ class APIWrapper implements APIWrapperInterface {
         $success = (bool) $response['success'];
       }
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -568,7 +569,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $customer = $this->tryAgentRequest($doReq, 'authenticateCustomer', 'customer');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -578,7 +579,7 @@ class APIWrapper implements APIWrapperInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCustomer($email, $throwRouteException = TRUE) {
+  public function getCustomer($email, $throwCustomerNotFound = TRUE) {
     $endpoint = $this->apiVersion . "/agent/customer/$email";
 
     $doReq = function ($client, $opt) use ($endpoint) {
@@ -586,26 +587,27 @@ class APIWrapper implements APIWrapperInterface {
     };
 
     $customer = [];
+    $exception = NULL;
 
     try {
       $customer = $this->tryAgentRequest($doReq, 'getCustomer', 'customer');
     }
-    catch (ConductorException $e) {
-      if ($throwRouteException) {
-        throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
+    catch (CustomerNotFoundException $e) {
+      if ($throwCustomerNotFound) {
+        throw $e;
       }
       else {
         // Implies we are testing if a customer email address exists
         // in the ecommerce app.
         // In which case we prevent exceptions being re-thrown.
-        // because a) It most likely means the customer doesn't exist and
-        // b) We can't throw RouteException because acq_exception is listening
-        // for RouteException events which notifies the end user (undesirable)
-        // TODO: Consider tighter logic by analysing $e->getMessage()
-        // because other exceptions are possible here. Alternatively consider
-        // a different Commerce Connector response for 'customer does not
-        // exist yet' ("loadCustomer: No results found.").
+        // Instead we just return the initial $customer = [].
       }
+    }
+    catch (ConnectorException $e) {
+      throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
+    }
+    catch (\Exception $e) {
+      throw new \Exception($e->getMessage(), $e->getCode(), $e);
     }
 
     return $customer;
@@ -629,7 +631,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $orders = $this->tryAgentRequest($doReq, 'getCustomerOrders', 'orders');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -654,7 +656,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $customer = $this->tryAgentRequest($doReq, 'getCustomerToken', 'customer');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -677,7 +679,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $customer = $this->tryAgentRequest($doReq, 'getCurrentCustomer', 'customer');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -700,7 +702,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       return $this->tryAgentRequest($doReq, 'updateOrderStatus', 'status');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -730,7 +732,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $categories = $this->tryAgentRequest($doReq, 'getCategories', 'categories', $acm_uuid);
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -754,7 +756,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $options = $this->tryAgentRequest($doReq, 'getAttributeOptions', 'options', $acm_uuid);
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -782,7 +784,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $result = $this->tryAgentRequest($doReq, 'getPromotions', 'promotions');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -805,7 +807,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $products = $this->tryAgentRequest($doReq, 'getProductsByUpdatedDates', 'products');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -862,7 +864,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $products = $this->tryAgentRequest($doReq, 'productFullSync', 'products', $skus, $acm_uuid);
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -884,7 +886,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $result = $this->tryAgentRequest($doReq, 'getPaymentToken', 'token');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -906,7 +908,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       return $this->tryAgentRequest($doReq, 'subscribeNewsletter');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
   }
@@ -926,7 +928,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $result = $this->tryAgentRequest($doReq, 'systemWatchdog');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -959,7 +961,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       $result = $this->tryAgentRequest($doReq, 'linkedSkus', 'related');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       throw new RouteException(__FUNCTION__, $e->getMessage(), $e->getCode(), $this->getRouteEvents());
     }
 
@@ -1054,7 +1056,7 @@ class APIWrapper implements APIWrapperInterface {
         try {
             $result = $this->tryAgentRequest($doReq, 'productPosition', 'position');
         }
-        catch (ConductorException $e) {
+        catch (ConnectorException $e) {
             throw new \Exception($e->getMessage(), $e->getCode());
         }
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\acq_commerce\Connector\ConnectorException;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
@@ -85,7 +86,7 @@ class IngestAPIWrapper {
     try {
       $this->tryIngestRequest($doReq, 'productFullSync', 'products');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
     }
   }
 
