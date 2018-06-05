@@ -95,13 +95,15 @@ class SKU extends ContentEntityBase implements SKUInterface {
   /**
    * Function to return media files for a SKU.
    *
+   * @param bool $download_media
+   *   Whether to download media or not.
    * @param bool $reset
    *   Flag to reset cache and generate array again from serialized string.
    *
    * @return array
    *   Array of media files.
    */
-  public function getMedia($reset = FALSE) {
+  public function getMedia($download_media = TRUE, $reset = FALSE) {
     if (!$reset && !empty($this->mediaData)) {
       return $this->mediaData;
     }
@@ -117,7 +119,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
       foreach ($media_data as &$data) {
         if (isset($data['media_type']) && $data['media_type'] == 'image') {
-          if (empty($data['fid'])) {
+          if (empty($data['fid']) && $download_media) {
             try {
               // Prepare the File object when we access it the first time.
               $data['fid'] = $this->downloadMediaImage($data);
@@ -699,8 +701,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Delete media files.
     foreach ($entities as $entity) {
-      /** @var \Drupal\acq_sku\Entity\SKU $sku  */
-      foreach ($entity->getMedia() as $media) {
+      /** @var \Drupal\acq_sku\Entity\SKU $entity  */
+      foreach ($entity->getMedia(FALSE) as $media) {
         if ($media['file'] instanceof FileInterface) {
           $media['file']->delete();
         }
