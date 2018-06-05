@@ -9,6 +9,20 @@ use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update sort order in PLP page to newly added facets.
+ */
+function alshaya_bbw_transac_update_8005() {
+  $facet_block_configs = [
+    'block.block.plpfragrancecat',
+    'block.block.plpcollection1',
+    'block.block.plpfragrancename',
+  ];
+  alshaya_config_install_configs($facet_block_configs, 'alshaya_bbw_transac', 'optional');
+}
+
+/**
  * Implements hook_post_update_NAME().
  *
  * Re-save index to create required tables.
