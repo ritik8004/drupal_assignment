@@ -45,10 +45,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (!$this->isVisible()) {
-      return $pane_form;
-    }
-
     if ($this->getSelectedDeliveryMethod() != 'hd') {
       return $pane_form;
     }
@@ -58,9 +54,6 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
-    /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
-    $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
-
     /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
@@ -69,17 +62,15 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#markup' => '<div class="title">' . $this->t('delivery information') . '</div>',
     ];
 
+    // Check if user is changing his mind, if so clear shipping info.
+    if ($this->isUserChangingHisMind()) {
+      $this->clearShippingInfo();
+    }
+
     $cart = $this->getCart();
 
-    // Once we open HD page, clear temp cc selected info.
-    $cart->setExtension('cc_selected_info', NULL);
-
-    $address = $cart_helper->getShipping($cart);
-    $default_shipping = '';
-
-    if ($this->getCartSelectedDeliveryMethod() == 'cc') {
-      $address = [];
-    }
+    $address_info = $this->getAddressInfo('hd');
+    $address = !empty($address_info['address']) ? $address_info['address'] : [];
 
     if (empty($address['country_id'])) {
       $address_default_value = [
@@ -375,7 +366,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       return;
     }
 
-    $cart->setShipping(_alshaya_acm_checkout_clean_address($address));
+    $this->getCheckoutHelper()->setCartShippingHistory('hd', _alshaya_acm_checkout_clean_address($address));
 
     $shipping_method = NULL;
 
@@ -387,6 +378,8 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
     if (empty($shipping_method) || $shipping_method == $checkout_options_manager->getClickandColectShippingMethod()) {
       return;
     }
+
+    $cart->setShipping(_alshaya_acm_checkout_clean_address($address));
 
     $term = $checkout_options_manager->loadShippingMethod($shipping_method);
 

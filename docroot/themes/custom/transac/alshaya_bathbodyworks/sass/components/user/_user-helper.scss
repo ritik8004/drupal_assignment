@@ -78,4 +78,16 @@
       }
     }
   }
+
+  .c-content__region {
+    .user-form,
+    .change-pwd-form {
+      .field--name-field-subscribe-newsletter {
+        p,
+        label {
+          font-size: 0.875rem !important;
+        }
+      }
+    }
+  }
 }

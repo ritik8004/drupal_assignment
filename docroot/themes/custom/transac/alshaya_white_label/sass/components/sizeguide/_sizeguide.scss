@@ -41,7 +41,7 @@
     }
 
     .throbber {
-      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
       background-position: $right center !important;
       background-repeat: no-repeat !important;
       background-size: 1.5rem;
@@ -59,7 +59,7 @@
   left: 0 !important;
   background: rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  z-index: 999;
+  z-index: 1000;
 
   .ui-dialog-title {
     @include u-visibility(none);

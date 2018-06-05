@@ -6,6 +6,31 @@
  */
 
 use Drupal\search_api\Entity\Index;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update search_api_autocomplete settings after module update.
+ */
+function alshaya_search_update_8018() {
+  alshaya_config_install_configs(['search_api_autocomplete.search.search'], 'alshaya_search');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update search_api_autocomplete settings, since the module update
+ * doesn't provide an update path.
+ */
+function alshaya_search_update_8017() {
+  alshaya_config_delete_configs(['search_api_autocomplete.search_api_autocomplete.search_api_views_search']);
+  alshaya_config_install_configs(['search_api_autocomplete.search.search'], 'alshaya_search');
+
+  // Allow anonymous and authenticated users to use autocomplete.
+  user_role_grant_permissions(Role::ANONYMOUS_ID, ['use search_api_autocomplete for search']);
+  user_role_grant_permissions(Role::AUTHENTICATED_ID, ['use search_api_autocomplete for search']);
+}
 
 /**
  * Implements hook_update_N().
@@ -315,6 +340,6 @@ function alshaya_search_update_8001() {
  */
 function alshaya_search_install() {
   // Allow anonymous and authenticated users to use autocomplete.
-  user_role_grant_permissions('anonymous', ['use search_api_autocomplete for search_api_views_search']);
-  user_role_grant_permissions('authenticated', ['use search_api_autocomplete for search_api_views_search']);
+  user_role_grant_permissions(Role::ANONYMOUS_ID, ['use search_api_autocomplete for search']);
+  user_role_grant_permissions(Role::AUTHENTICATED_ID, ['use search_api_autocomplete for search']);
 }

@@ -273,7 +273,7 @@
       border: 1px solid $plp_facet_border;
       border-#{$right}: none;
 
-      @include icon(dropdown-expand, after) {
+      @include icon(chevron#{$right}, after) {
         #{$right}: -2.188rem;
         height: 2.1875rem;
         width: 2.1875rem;
@@ -437,12 +437,12 @@
   .facet-item {
     input[type=checkbox] ~ label {
       &::before {
-        margin-#{$left}: -0.5rem;
+        margin-#{$left}: 0;
         position: relative;
-        top: 0;
+        top: 0.3rem;
 
-        @include breakpoint($desktop) {
-          margin-#{$left}: -0.5rem;
+        @include breakpoint($tablet) {
+          top: 0.54rem;
         }
       }
     }
@@ -452,6 +452,18 @@
     .applied-filter-count {
       @include breakpoint($only-mobile) {
         display: none;
+      }
+    }
+  }
+}
+
+.c-search {
+  .facet-item {
+    input[type=checkbox] ~ label {
+      &::before {
+        @include breakpoint($tablet) {
+          top: 0.6rem;
+        }
       }
     }
   }

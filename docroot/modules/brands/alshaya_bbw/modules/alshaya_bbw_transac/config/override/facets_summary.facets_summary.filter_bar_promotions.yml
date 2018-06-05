@@ -1,0 +1,24 @@
+facets:
+  promotion_fragrancecat:
+    checked: true
+    label: Promotion Fragrance Category
+    separator: ", "
+    show_count: true
+    show_label: false
+    weight: 0
+
+  promotion_collection1:
+    checked: true
+    label: Promotion Product Type
+    separator: ", "
+    show_count: true
+    show_label: false
+    weight: 0
+
+  promotion_fragrancename:
+    checked: true
+    label: Promotion Fragrance Name
+    separator: ", "
+    show_count: true
+    show_label: false
+    weight: 0

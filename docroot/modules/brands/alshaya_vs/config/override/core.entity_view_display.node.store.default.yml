@@ -1,0 +1,12 @@
+dependencies:
+  config:
+    - field.field.node.store.field_brand
+content:
+  field_brand:
+    weight: 7
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content

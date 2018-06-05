@@ -142,6 +142,15 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
     if ($field_category = $node->get('field_category')) {
       $term_list = $field_category->getValue();
+      $breadcrumb_cache_tags = [];
+      // Build cache dependency on all terms this Product is tagged with. We
+      // need to make the breadcrumb dependent on all categories product is
+      // tagged with since, enabling/disabling the category on MDC would make it
+      // dependent on new categories.
+      foreach ($term_list as $term) {
+        $breadcrumb_cache_tags[] = 'taxonomy_term:' . $term['target_id'];
+      }
+
       $term_list = $this->filterEnabled($term_list);
       $inner_term = $this->termTreeGroup($term_list);
 
@@ -202,7 +211,8 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     }
 
     // Cacheability data of the node.
-    $breadcrumb->addCacheTags(['node:' . $node->id()]);
+    $breadcrumb_cache_tags[] = 'node:' . $node->id();
+    $breadcrumb->addCacheTags($breadcrumb_cache_tags);
 
     return $breadcrumb;
   }
@@ -225,7 +235,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       }
     }
 
-    return $terms;
+    return array_values($terms);
   }
 
   /**
@@ -289,6 +299,10 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    *   The term id.
    */
   protected function getInnerDepthTerm(array $terms = []) {
+    if (empty($terms)) {
+      return NULL;
+    }
+
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     $depths = $this->connection->select('taxonomy_term_field_data', 'ttfd')
       ->fields('ttfd', ['tid', 'depth_level'])

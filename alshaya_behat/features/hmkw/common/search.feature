@@ -67,7 +67,7 @@ Feature: Search feature
   @eng @prod
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "tops"
     And I press "Search"
@@ -77,7 +77,7 @@ Feature: Search feature
   @arabic @prod
   Scenario: As an authenticated user
   I should be able to search products
-    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "Alshaya123$"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "من قطعتين"
     And I press "Search"
@@ -135,7 +135,7 @@ Feature: Search feature
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    When I follow "checkout as guest"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -177,7 +177,7 @@ Feature: Search feature
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -266,7 +266,7 @@ Feature: Search feature
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    When I follow "checkout as guest"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -305,7 +305,7 @@ Feature: Search feature
     And I wait for the page to load
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
-    When I follow "إتمام عملية الشراء كزبون زائر"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"

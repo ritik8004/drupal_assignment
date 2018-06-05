@@ -64,12 +64,13 @@ installed_extras:
   - pimpmylog
 
 # PHP 5.6 (PHP 7.1 is being tested, see: https://docs.acquia.com/node/25726).
-php_version: "5.6"
+php_version: "7.1"
 php_packages_extra:
   - "php{{ php_version }}-bz2"
   - "php{{ php_version }}-bcmath"
   - "php{{ php_version }}-zip"
   - "php{{ php_version }}-imagick"
+  - "php{{ php_version }}-xml"
   - imagemagick
 
 # Solr Configuration.
@@ -151,6 +152,14 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-bbwkw.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-bbwsa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
   - servername: "local.alshaya-bbwae.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
@@ -201,6 +210,14 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_mcsa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_bbwkw
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_bbwsa
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 

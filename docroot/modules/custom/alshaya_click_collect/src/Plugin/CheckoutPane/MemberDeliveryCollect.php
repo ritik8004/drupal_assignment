@@ -59,12 +59,17 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if (!$this->isVisible()) {
+    if ($this->getSelectedDeliveryMethod() != 'cc') {
+      // Once we open HD page, clear temp cc selected info.
+      $cart = $this->getCart();
+      $cart->setExtension('cc_selected_info', NULL);
+
       return $pane_form;
     }
 
-    if ($this->getSelectedDeliveryMethod() != 'cc') {
-      return $pane_form;
+    // Check if user is changing his mind, if so clear shipping info.
+    if ($this->isUserChangingHisMind()) {
+      $this->clearShippingInfo();
     }
 
     $pane_form['#attributes']['class'][] = 'active--tab--content';
@@ -72,11 +77,13 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $default_mobile = $shipping_type = $store_code = $selected_store_data = $store = '';
 
     $cart = $this->getCart();
+    $address_info = $this->getAddressInfo('cc');
 
-    /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
-    $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
-
-    $shipping = $cart_helper->getShipping($cart);
+    if (!empty($address_info)) {
+      $store_code = $address_info['store_code'];
+      $shipping_type = $address_info['click_and_collect_type'];
+      $default_mobile = $address_info['address']['telephone'];
+    }
 
     $cc_selected_info = $cart->getExtension('cc_selected_info');
 
@@ -89,17 +96,11 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
       $store_code = $cc_selected_info['store_code'];
       $shipping_type = $cc_selected_info['shipping_type'];
     }
-    elseif ($cart->getExtension('store_code') && $shipping) {
-      // Check if value available in shipping address.
-      if (!empty($shipping['telephone'])) {
-        $default_mobile = $shipping['telephone'];
-      }
-      $store_code = $cart->getExtension('store_code');
-      $shipping_type = $cart->getExtension('click_and_collect_type');
-    }
 
-    // Check once in customer profile.
-    if ($account = User::load(\Drupal::currentUser()->id())) {
+    if (empty($default_mobile)) {
+      // Check once in customer profile.
+      $account = User::load(\Drupal::currentUser()->id());
+
       if ($account_phone = $account->get('field_mobile_number')->getValue()) {
         $default_mobile = $account_phone[0]['value'];
       }

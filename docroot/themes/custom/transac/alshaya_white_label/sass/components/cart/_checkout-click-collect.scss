@@ -45,6 +45,8 @@
         padding: 0.375rem;
         box-sizing: border-box;
         outline: transparent;
+        border-radius: 0;
+        appearance: none;
 
         @include breakpoint($only-tablet) {
           width: 100%;
@@ -464,7 +466,7 @@
               }
 
               &.ajax-ladda-spinner {
-                background: $white-five url(../imgs/icons/MC-loader.svg) center center no-repeat !important;
+                background: $white-five url(#{$base_theme_loader_img_directory_path}) center center no-repeat !important;
                 background-size: 1.95rem !important;
                 color: rgba(0, 0, 0, 0) !important;
                 border-color: $checkout_cc_list_select_store_btn_border !important;
@@ -783,7 +785,7 @@
           border-radius: 0;
 
           &.ajax-ladda-spinner {
-            background: $checkout_cc_list_select_store_btn_bg url(../imgs/icons/MC-loader.svg) center center no-repeat !important;
+            background: $checkout_cc_list_select_store_btn_bg url(#{$base_theme_loader_img_directory_path}) center center no-repeat !important;
             background-size: 1.95rem !important;
             color: rgba(0, 0, 0, 0) !important;
             border-color: $checkout_cc_list_select_store_btn_border !important;
@@ -1463,6 +1465,7 @@
 
         .store-location-input {
           max-width: 30.75rem;
+          width: 100%;
           height: 2.5rem;
 
           @include breakpoint($only-mobile) {

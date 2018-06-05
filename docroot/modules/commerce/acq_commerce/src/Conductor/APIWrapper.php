@@ -76,8 +76,8 @@ class APIWrapper implements APIWrapperInterface {
     $doReq = function ($client, $opt) use ($endpoint, $customer_id, $versionInClosure) {
       if (!empty($customer_id)) {
         if ($versionInClosure === 'v1') {
-        $opt['form_params']['customer_id'] = $customer_id;
-      }
+          $opt['form_params']['customer_id'] = $customer_id;
+        }
         else {
           $opt['json']['customer_id'] = (int) $customer_id;
         }
@@ -205,6 +205,10 @@ class APIWrapper implements APIWrapperInterface {
         }
       }
     }
+    else {
+      // Removing shipping address if carrier not set.
+      unset($cart->shipping);
+    }
 
     // Cart constructor sets cart to any object passed in,
     // circumventing ->setBilling() so trap any wayward extension[] here.
@@ -243,7 +247,6 @@ class APIWrapper implements APIWrapperInterface {
 
     try {
       $cart = $this->tryAgentRequest($doReq, 'updateCart', 'cart');
-      Cache::invalidateTags(['mini_cart:' . $cart_id]);
       Cache::invalidateTags(['cart:' . $cart_id]);
     }
     catch (ConductorException $e) {

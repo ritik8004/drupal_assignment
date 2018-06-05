@@ -1,0 +1,66 @@
+field_settings:
+  attr_fragrance_name:
+    label: Fragrance Name
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_fragrance_name
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+
+  attr_fragrance_category:
+    label: Fragrance Category
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_fragrance_category
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+
+  attr_collection_1:
+    label: Product Type
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_collection_1
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+
+  attr_descriptive_name:
+    label: Descriptive Name
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_descriptive_name
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+
+  attr_form:
+    label: Form
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_form
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+
+  attr_brand:
+    label: Brand
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_brand
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku

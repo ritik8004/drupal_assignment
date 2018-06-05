@@ -23,7 +23,7 @@ function alshaya_stores_finder_transac_drush_command() {
  * Implements drush store sync command.
  */
 function drush_alshaya_stores_finder_transac_sync_stores() {
-  drush_print(dt('Synchronizing all stores, please wait...'));
+  \Drupal::logger('alshaya_stores_finder')->info('Synchronizing all stores, please wait...');
 
   /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderManager $manager */
   $manager = \Drupal::service('alshaya_stores_finder_transac.manager');

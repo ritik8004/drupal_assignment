@@ -434,7 +434,7 @@
     .sub-total,
     .order-total {
       > span {
-        width: 50%;
+        width: 47%;
       }
 
       .total--amount,
@@ -442,7 +442,7 @@
         width: 48%;
 
         @include breakpoint($upto-desktop) {
-          width: 47%;
+          width: 50%;
         }
       }
     }
@@ -877,7 +877,7 @@ body.alias--cart {
           }
 
           .throbber {
-            background-image: url(../imgs/icons/MC-loader.svg) !important;
+            background-image: url(#{$base_theme_loader_img_directory_path}) !important;
             background-position: $right center !important;
             background-repeat: no-repeat !important;
             background-size: 1.5rem;

@@ -40,7 +40,13 @@ set classes = [
         </div>
       {% endif %}
 
+      {% block productBrand %}
+      {% endblock %}
+
       <h1>{{ label }}</h1>
+
+      {% block pricePrefix %}
+      {% endblock %}
 
       <div class="price-block {{ content.price_block_identifier }}">
         {{ content.price_block }}
@@ -59,6 +65,9 @@ set classes = [
     </div>
 
     <div class="content__sidebar">
+      {% block sizeVolume %}
+      {% endblock %}
+
       <div class="mobile-content-wrapper">
         <div class="basic-details-wrapper">
           {{ content.field_skus }}

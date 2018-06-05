@@ -96,12 +96,8 @@ echo "Data import completed in $minutes minute(s) and $seconds second(s)."
 let "total_seconds+=SECONDS"
 SECONDS=0
 
-# Save the dump for later use and use in local.
-timestamp=$(date +%s)
-db_prefix=${uri//[-._]/}
-drush8 @$site.$target_env --uri=$uri sql-dump | gzip > ~/$target_env/post_db_copy_${db_prefix}_${timestamp}.sql.gz
-
 let "total_seconds+=SECONDS"
 let "minutes=(total_seconds%3600)/60"
 let "seconds=(total_seconds%3600)%60"
+
 echo "Entire script completed in $minutes minute(s) and $seconds second(s)."

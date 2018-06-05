@@ -8,6 +8,49 @@
 /**
  * Implements hook_update_N().
  *
+ * Add new string translations.
+ */
+function alshaya_bbw_update_8105() {
+  $strings = [
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Connect with us' => [
+      'ar' => ' تواصلي معنا ',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update default items from cross sell/up sell carausel.
+ */
+function alshaya_bbw_update_8104() {
+  // Set default items from cross sell/up sell carausel for mobile.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', 2)
+    ->save();
+
+  // Set default items from cross sell/up sell carausel for tablet.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', 2)
+    ->save();
+
+  // Set default items from cross sell/up sell carausel for desktop.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', 4)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable transac/non-transac specific brand module.
  */
 function alshaya_bbw_update_8103() {
@@ -58,8 +101,14 @@ function alshaya_bbw_install() {
     'find your nearest store' => [
       'ar' => 'اختر محلاً للتعرف على التفاصيل',
     ],
-    "today's offer" => [
-      'ar' => "عروض اليوم",
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Connect with us' => [
+      'ar' => ' تواصلي معنا ',
     ],
   ];
 

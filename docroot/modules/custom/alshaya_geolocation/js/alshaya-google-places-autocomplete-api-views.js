@@ -24,7 +24,7 @@
 
         // First load the library from google.
         Drupal.geolocation.loadGoogle(function () {
-          $('.geolocation-geocoder-google-places-api[type="text"]', context).once('bind-events').each(function () {
+          $('.geolocation-geocoder-google-places-api[type="search"]', context).once('bind-events').each(function () {
             var field = $(this).get(0);
             // Create autocomplete object for places.
             new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.alshayaClickCollectPlacesApi.storePlacesDetails], componentRestrictions, field);

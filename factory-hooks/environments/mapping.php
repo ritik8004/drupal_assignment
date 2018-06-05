@@ -13,7 +13,9 @@
 /**
  * Get commerce third party settings for specific site + environment combination.
  */
-function alshaya_get_commerce_third_party_settings($site, $env) {
+function alshaya_get_commerce_third_party_settings($site_code, $country_code, $env) {
+  $site = $site_code . $country_code;
+
   // From the given site and environment, get the magento and conductor
   // environments keys.
   $env_keys = alshaya_get_env_keys($site, $env);
@@ -30,7 +32,12 @@ function alshaya_get_commerce_third_party_settings($site, $env) {
     $settings['acq_commerce.conductor'] = $conductors[$env_keys['conductor']];
   }
   if (isset($env_keys['magento']) && isset($magentos[$env_keys['magento']])) {
-    $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']];
+    $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']]['url'];
+
+    $settings += $magentos['default'][$country_code];
+    if (isset($magentos[$env_keys['magento']][$country_code])) {
+      $settings = array_replace_recursive($settings, $magentos[$env_keys['magento']][$country_code]);
+    }
   }
 
   return $settings;
@@ -59,7 +66,7 @@ function alshaya_get_env_keys($site, $env) {
       // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
       'default' => [
         'magento' => 'mc_dev',
-        'conductor' => 'mc_v2'
+        'conductor' => 'mc_v2',
       ],
     ],
     // Mothercare SA.
@@ -146,19 +153,45 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'hmae_prod'
       ],
     ],
+    // BathBodyWorks KW.
+    'bbwkw' => [
+      'default' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwkw_test',
+      ],
+      '01uat' => [
+        'magento' => 'bbw_uat',
+        'conductor' => 'bbwkw_uat',
+      ],
+    ],
+    // BathBodyWorks SA.
+    'bbwsa' => [
+      'default' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwsa_test',
+      ],
+      '01uat' => [
+        'magento' => 'bbw_uat',
+        'conductor' => 'bbwsa_uat',
+      ],
+    ],
     // BathBodyWorks AE.
     'bbwae' => [
       'default' => [
         'magento' => 'bbw_qa',
         'conductor' => 'bbwae_test',
       ],
+      '01uat' => [
+        'magento' => 'bbw_uat',
+        'conductor' => 'bbwae_uat',
+      ],
     ],
     // Pottery Barn AE.
     'pbae' => [
-      // PBAE is connected to MCKW QA for now.
+      // PBAE is connected to MC UAT for now.
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
+        'magento' => 'mc_uat',
+        'conductor' => 'mcae_uat',
       ],
       //'default' => [
       //  'magento' => 'pb_qa',
@@ -167,19 +200,19 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret AE.
     'vsae' => [
-      // VSAE is connected to MCKW QA for now.
+      // VSAE is connected to MC QA for now.
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
+        'magento' => 'mc_uat',
+        'conductor' => 'mcae_uat',
       ],
     ],
   ];
 
   // All 01update should match 01live.
   // Update array to set 01update if 01live is set.
-  foreach ($mapping as $site => $envs) {
-    if (isset($mapping[$site]['01live'])) {
-      $mapping[$site]['01update'] = $mapping[$site]['01live'];
+  foreach ($mapping as $site_code => $envs) {
+    if (isset($mapping[$site_code]['01live'])) {
+      $mapping[$site_code]['01update'] = $mapping[$site_code]['01live'];
     }
   }
 

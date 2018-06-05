@@ -38,10 +38,21 @@
             text-transform: uppercase;
             height: 2.5rem;
             line-height: 1.7;
+            cursor: pointer;
+            border-color: $primary_brand_button;
 
             a {
               font-size: 0.875rem;
-              color: $plp_facet_clear_text;
+              color: $primary_brand_button;
+            }
+
+            &:hover {
+              opacity: 1;
+              background-color: $primary_brand_button;
+
+              a {
+                color: $primary_btn_text;
+              }
             }
           }
         }
@@ -50,10 +61,10 @@
 
     .filter--mobile {
       @include breakpoint($tablet) {
-        top: -3.375rem;
+        top: 2rem;
 
         html[lang=ar] & {
-          top: -3.375rem;
+          top: 2rem;
         }
       }
 
@@ -70,6 +81,7 @@
               .label {
                 font-family: $alshaya-thin;
                 text-transform: capitalize;
+                font-size: 0.875rem;
               }
             }
           }
@@ -150,6 +162,24 @@
       }
     }
   }
+
+  .c-products__item {
+    font-size: 0.875rem;
+
+    @include breakpoint($desktop) {
+      &:hover {
+        article::after,
+        .alshaya_search_slider {
+          display: none;
+        }
+      }
+    }
+
+    .field--name-name {
+      margin-bottom: 0.3125rem;
+      text-transform: uppercase;
+    }
+  }
 }
 
 .c-facet__blocks__wrapper--mobile {
@@ -170,6 +200,9 @@
     }
 
     &.is-active {
+      padding-#{$left}: 0.6875rem;
+      padding-top: 0.6875rem;
+
       &::after {
         border-#{$left}: 0;
 
@@ -190,6 +223,7 @@
   .c-facet__blocks {
     @include breakpoint($only-tablet) {
       #{$right}: -10rem;
+      padding: 0 0.625rem !important;
     }
 
     .filter-menu-label {
@@ -204,14 +238,11 @@
   .c-facet:first-child {
     .c-facet__title {
       border-top: 1px solid $plp_facet_border;
-    }
-  }
-}
 
-.filter--mobile {
-  @include breakpoint($tablet) {
-    position: relative;
-    float: $right;
+      @include breakpoint($only-tablet) {
+        border-top: none;
+      }
+    }
   }
 }
 

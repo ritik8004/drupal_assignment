@@ -110,7 +110,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
-    And I follow "checkout as guest"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
@@ -158,7 +158,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
-    And I follow "checkout as guest"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
     And I should be able to see the header for checkout
     When I follow "click & collect"

@@ -1,12 +1,19 @@
 .paragraph--type--offers-bordered {
-  .field--name-field-sub-title {
+  .field--name-field-heading {
+    margin: 0.625rem 0;
+    text-transform: uppercase;
+    font-family: $alshaya-bold;
+  }
+
+  .field--name-field-sub-title,
+  .field--name-field-title {
     font-family: $alshaya-thin;
     font-size: 1.125rem;
     margin: 1rem auto;
     width: 75%;
     text-align: center;
     color: $promo_text;
-    line-height: 1.25rem;
+    line-height: 1.25;
 
     @include breakpoint($desktop) {
       min-height: 2.5rem;
@@ -20,17 +27,23 @@
       font-family: $alshaya-thin;
       font-size: 0.875rem;
       text-transform: uppercase;
-      color: $promo_white_btn_text;
-      border: 2px solid $promo_white_btn_border;
+      color: $primary_empty_btn;
+      border: 2px solid $primary_empty_btn;
       padding: 0.79rem 1rem 0.589rem;
       max-width: 10.625rem;
-      line-height: 0.875rem;
+      line-height: 1;
       margin: auto;
+
+      &:hover {
+        background-color: $primary_empty_btn;
+        color: $primary_btn_text;
+      }
     }
   }
 
   @include breakpoint($only-mobile) {
-    .field--name-field-sub-title {
+    .field--name-field-sub-title,
+    .field--name-field-title {
       font-size: 0.875rem;
     }
 
@@ -51,9 +64,10 @@
         float: $left;
         margin-bottom: 1rem;
 
-        .field--name-field-sub-title {
+        .field--name-field-sub-title,
+        .field--name-field-title {
           width: 100%;
-          font-size: 0.8125rem;
+          font-size: 0.875rem;
         }
       }
 
@@ -74,7 +88,8 @@
           width: 100%;
           margin-bottom: 0;
 
-          .field--name-field-sub-title {
+          .field--name-field-sub-title,
+          .field--name-field-title {
             width: 55%;
           }
         }
@@ -83,9 +98,9 @@
 
     @include breakpoint($only-tablet) {
       .paragraph--type--offers-bordered {
-        .field--name-field-sub-title {
+        .field--name-field-sub-title,
+        .field--name-field-title {
           width: 90%;
-          font-size: 1rem;
         }
       }
     }
@@ -105,6 +120,7 @@
       font-size: 1.125rem;
       text-transform: uppercase;
       font-family: $alshaya-thin;
+      color: $promo_text;
 
       &::before,
       &::after {
@@ -127,6 +143,8 @@
       }
 
       @include breakpoint($only-mobile) {
+        font-size: 1rem;
+
         &::before {
           margin-#{$right}: 1.5rem;
         }

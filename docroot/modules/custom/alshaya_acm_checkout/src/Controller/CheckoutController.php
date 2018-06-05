@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_checkout\Controller;
 
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\alshaya_acm_checkout\CheckoutHelper;
 use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Utility\NestedArray;
@@ -60,6 +61,13 @@ class CheckoutController implements ContainerInjectionInterface {
   protected $areasTermsHelper;
 
   /**
+   * Checkout Helper service object.
+   *
+   * @var \Drupal\alshaya_acm_checkout\CheckoutHelper
+   */
+  protected $checkoutHelper;
+
+  /**
    * Constructs a new CheckoutController object.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
@@ -72,17 +80,21 @@ class CheckoutController implements ContainerInjectionInterface {
    *   The MobileNumber util service object.
    * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_terms_helper
    *   AddressBook Areas Terms helper service.
+   * @param \Drupal\alshaya_acm_checkout\CheckoutHelper $checkout_helper
+   *   Checkout Helper service object.
    */
   public function __construct(CartStorageInterface $cart_storage,
                               EntityTypeManagerInterface $entity_manager,
                               AlshayaAddressBookManager $address_book_manager,
                               MobileNumberUtilInterface $mobile_util,
-                              AddressBookAreasTermsHelper $areas_terms_helper) {
+                              AddressBookAreasTermsHelper $areas_terms_helper,
+                              CheckoutHelper $checkout_helper) {
     $this->cartStorage = $cart_storage;
     $this->entityManager = $entity_manager;
     $this->addressBookManager = $address_book_manager;
     $this->mobileUtil = $mobile_util;
     $this->areasTermsHelper = $areas_terms_helper;
+    $this->checkoutHelper = $checkout_helper;
   }
 
   /**
@@ -94,7 +106,8 @@ class CheckoutController implements ContainerInjectionInterface {
       $container->get('entity_type.manager'),
       $container->get('alshaya_addressbook.manager'),
       $container->get('mobile_number.util'),
-      $container->get('alshaya_addressbook.area_terms_helper')
+      $container->get('alshaya_addressbook.area_terms_helper'),
+      $container->get('alshaya_acm_checkout.checkout_helper')
     );
   }
 
@@ -117,7 +130,7 @@ class CheckoutController implements ContainerInjectionInterface {
     $update['country_id'] = $address['country_id'];
     $update['customer_id'] = $cart->customerId();
 
-    $cart->setShipping($update);
+    $this->checkoutHelper->setCartShippingHistory('hd', $update);
 
     // Clear the shipping method info now to ensure we set it properly again.
     $this->cartStorage->clearShippingMethodSession();
@@ -175,9 +188,14 @@ class CheckoutController implements ContainerInjectionInterface {
       throw new NotFoundHttpException();
     }
 
+    $request_params = $request->request->all();
+    if (!is_array($request_params)) {
+      throw new NotFoundHttpException();
+    }
+
     // Get governate value dynamically to ensure it doesn't depend on form
     // structure.
-    $selected_payment_method = NestedArray::getValue($request->request->all(), explode('[', str_replace(']', '', $element)));
+    $selected_payment_method = NestedArray::getValue($request_params, explode('[', str_replace(']', '', $element)));
 
     // Check if we have value available for payment method.
     if (empty($selected_payment_method)) {

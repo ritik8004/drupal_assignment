@@ -361,7 +361,6 @@ header {
         font-size: 0.9375rem;
         text-transform: uppercase;
         font-family: $alshaya-thin;
-        letter-spacing: 1px;
         height: 2.5rem;
       }
 
@@ -437,7 +436,6 @@ header {
         a {
           @include arabic-letter-spacing;
 
-          letter-spacing: 0.5px;
           line-height: 1.69;
           text-transform: uppercase;
         }
@@ -498,6 +496,8 @@ header {
 
     font-size: 0.875rem;
     color: $mm_l1_link;
+    height: 3rem;
+    line-height: 1.5;
   }
 
   .menu__list-item {
@@ -508,7 +508,6 @@ header {
     font-weight: normal;
     display: block;
     font-size: 0.875rem;
-    letter-spacing: 1px;
     border-bottom: 1px solid $mm_l1_border;
   }
 
@@ -591,7 +590,6 @@ header {
   font-size: 0.875rem;
   font-family: $alshaya-thin;
   font-weight: normal;
-  letter-spacing: 1px;
   text-transform: uppercase;
   display: flex;
 
@@ -630,10 +628,6 @@ header {
     @include breakpoint($only-mobile) {
       width: 100%;
       color: $header_c_menu_icon_text;
-
-      .logged-out & {
-        padding: 1rem 0.25rem;
-      }
 
       html[lang=ar] & {
         padding: 0.9rem 0;
@@ -771,10 +765,19 @@ header .region__header {
   }
 }
 
+.site-brand-home {
+  a {
+    max-width: 11.875rem;
+
+    @include breakpoint($tablet) {
+      max-width: 22rem;
+    }
+  }
+}
+
 .c-pre-content__region {
   @include breakpoint($desktop) {
     border-top: none;
-    border-bottom: none;
   }
 }
 

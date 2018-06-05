@@ -27,6 +27,11 @@ html[lang=ar] {
   .tab {
     text-transform: capitalize;
 
+    span {
+      font-family: $alshaya-thin;
+      text-transform: uppercase;
+    }
+
     &.active {
       border-width: 1px;
     }
@@ -35,5 +40,16 @@ html[lang=ar] {
   .tabs--content {
     margin: 0;
     max-width: 100%;
+  }
+}
+
+.user-page.checkout-login {
+  a.back-link {
+    @include breakpoint($only-mobile) {
+      @include icon(chevronleft, before) {
+        top: -0.375rem;
+        transform: rotate(0deg);
+      }
+    }
   }
 }

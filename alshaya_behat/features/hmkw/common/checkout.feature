@@ -9,7 +9,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
-    And I follow "checkout as guest"
+    When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
 
   @hd @cod
@@ -68,8 +68,8 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I press "place order"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
@@ -110,8 +110,8 @@ Feature: Test Checkout feature
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "0000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "0000000001"
     And I select "8" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin" with "1234"
@@ -174,6 +174,9 @@ Feature: Test Checkout feature
     on Click and Collect
     When I follow "Click & Collect"
     And I wait for the page to load
+    When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
+    And I wait for AJAX to finish
+    And I wait 10 seconds
     Then I should see the link "List view"
     And I should see the link "Map view"
     But the "List view" tab should be selected
@@ -325,8 +328,8 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I press "place order"
     And I wait for the page to load
-    And I select "Knet Test Card [KNET1]" from "bank"
-    And I fill in "cardN" with "000000001"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I fill in an element having class ".paymentinput" with "00000001"
     And I select "1" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"
@@ -341,11 +344,11 @@ Feature: Test Checkout feature
   select it and complete the checkout journey
     When I follow "Click & Collect"
     And I wait for the page to load
-    When I follow "Map view"
-    Then the "Map view" tab should be selected
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
+    When I follow "Map view"
+    Then the "Map view" tab should be selected
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div > img"
     When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
@@ -381,11 +384,11 @@ Feature: Test Checkout feature
   I should be redirected to the basket page
     When I follow "Click & Collect"
     And I wait for the page to load
-    When I follow "Map view"
-    Then the "Map view" tab should be selected
     When I select the first autocomplete option for "shuwaikh" on the "edit-store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
+    When I follow "Map view"
+    Then the "Map view" tab should be selected
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div > img"
     When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"

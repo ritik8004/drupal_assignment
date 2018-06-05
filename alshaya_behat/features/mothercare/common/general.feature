@@ -57,7 +57,7 @@ Feature: Test generic features on the site
     When I close the popup
     And I wait 2 seconds
     When I follow "English"
-    And I fill in "edit-email" with "shweta+3@axelerant.com"
+    And I fill in "edit-email" with "kanchan.patil+test@qed42.com"
     And I press "sign up"
     And I wait for AJAX to finish
     Then I should see "This email address is already subscribed."
@@ -70,7 +70,7 @@ Feature: Test generic features on the site
     And I wait for the page to load
     When I close the popup
     And I wait 2 seconds
-    When I fill in "edit-email" with "shweta+3@axelerant.com"
+    When I fill in "edit-email" with "kanchan.patil+test@qed42.com"
     And I press "سجل الآن"
     And I wait for AJAX to finish
     Then I should see "هذا العنوان البريد الإلكتروني مستعمل مسبقاً"

@@ -46,12 +46,20 @@
       height: 2.5rem !important;
     }
   }
+
+  .form-type-checkbox .option::before {
+    font-size: 1.125rem;
+  }
 }
 
 .user-login-form {
   & > a {
     font-weight: normal;
     font-size: 0.875rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
 
     @include breakpoint($tablet) {
       #{$left}: 13em;

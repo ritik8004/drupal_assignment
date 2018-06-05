@@ -22,6 +22,9 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     {% endif %}
     {{ title_suffix }}
 
+    {% block pricePrefix %}
+    {% endblock %}
+
     <div class="price-block {{ content.price_block_identifier }}">
       {{ content.price_block }}
     </div>

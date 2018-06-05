@@ -24,12 +24,41 @@
       font-size: 1.125rem;
       color: $page_title;
       margin-top: 0;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1.3125rem;
+        width: 100%;
+        margin-bottom: 0.125rem;
+      }
+    }
+
+    .vat-text {
+      @include breakpoint($only-mobile) {
+        display: inline-block;
+      }
+    }
+
+    .price--discount {
+      @include breakpoint($only-mobile) {
+        font-size: 0.6875rem;
+        font-family: $hnm-demibold;
+      }
+    }
+
+    .content--item-code {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
     }
 
     .price {
       color: $pdp_product_price;
       font-family: $hnm-demibold;
       font-size: 0.9375rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.875rem;
+      }
     }
 
     .content--item-code {
@@ -39,6 +68,75 @@
 }
 
 // SideBar content theming
+.content__sidebar {
+  .mobile-content-wrapper {
+    .content--item-code.mobile-only {
+      display: none;
+
+      @include breakpoint($only-mobile) {
+        display: block;
+        font-size: 0.75rem;
+        text-align: center;
+        margin-top: 1.4375rem;
+        color: $pdp_product_itemcode_mobile;
+      }
+    }
+
+    .sharethis-wrapper {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    .sharethis-label.mobile-only {
+      display: none;
+
+      @include breakpoint($only-mobile) {
+        display: block;
+        font-size: 0.8125rem;
+        letter-spacing: 1px;
+        font-family: $hnm-bold;
+        text-align: center;
+        color: $pdp_share_this_label_mobile;
+        text-transform: uppercase;
+        margin-top: 2.5rem;
+
+        @include arabic-letter-spacing;
+      }
+    }
+
+    .size-guide-link {
+      @include breakpoint($only-mobile) {
+        z-index: 4;
+      }
+    }
+  }
+
+  .short-description-wrapper {
+    @include breakpoint($only-mobile) {
+      text-align: center;
+
+      .content--short-description > h2 {
+        display: none;
+      }
+
+      .field__content {
+        line-height: normal;
+        padding-top: 2.6875rem;
+      }
+    }
+  }
+
+  .form-item-configurables-article-castor-id {
+    @include breakpoint($only-mobile) {
+      background: $pdp_color_swatch_mobile_bg;
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+      padding: 0 0.5rem !important;
+      margin-bottom: 2.375rem;
+    }
+  }
+}
 
 .form-item-configurables-article-castor-id {
   .select2Option .select-buttons li {
@@ -87,7 +185,7 @@
       min-height: 2.188rem;
 
       &::after {
-        top: 0.25rem;
+        top: 0.875rem;
         z-index: 1;
       }
 
@@ -253,6 +351,35 @@
           font-size: 0.875rem;
           margin-top: 0;
           margin-bottom: 0;
+        }
+
+        @include breakpoint($only-mobile) {
+          &:first-child {
+            .desc-value {
+              font-size: 1.125rem;
+
+              .composition-wrapper,
+              .care-instructions-wrapper,
+              .warning-wrapper,
+              .concept-wrapper {
+                font-size: 0.75rem;
+                color: $pdp_description_mobile;
+                margin-top: 1.3125rem;
+                line-height: 1.5;
+              }
+
+              .composition-label,
+              .care-instructions-label,
+              .warning-label,
+              .concept-label {
+                font-family: $hnm-bold;
+                letter-spacing: 1px;
+                font-size: 0.8125rem;
+
+                @include arabic-letter-spacing;
+              }
+            }
+          }
         }
       }
     }
@@ -737,12 +864,14 @@
   }
 }
 
-.errors-container:not(:empty) {
-  margin-top: 0.5rem;
+.errors-container {
+  &:not(:empty) {
+    margin-top: 0.5rem;
 
-  @include breakpoint($only-mobile) {
-    margin-top: 0.625rem;
-    margin-bottom: 0.5rem;
+    @include breakpoint($only-mobile) {
+      margin-top: 0.625rem;
+      margin-bottom: 0.5rem;
+    }
   }
 }
 
@@ -942,6 +1071,12 @@ html[lang=ar] {
     .gallery-wrapper {
       @include breakpoint($mobile) {
         min-height: 31.75rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        .mobilegallery {
+          padding-bottom: 1.1875rem;
+        }
       }
     }
   }

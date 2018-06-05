@@ -1,0 +1,14 @@
+.user-page.checkout-delivery.checkout-payment {
+  .multistep-checkout {
+    @include breakpoint($tablet) {
+      border-width: 1px;
+    }
+  }
+}
+
+#payment_details {
+  #payment_method_cybersource & {
+    border: 1px solid $checkout_payment_option_border;
+    border-top: 0;
+  }
+}
