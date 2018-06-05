@@ -48,6 +48,10 @@
       margin-bottom: 0.875rem;
     }
   }
+
+  .hours--label::after {
+    margin-top: 0.375rem;
+  }
 }
 
 .field--name-field-brand {
@@ -57,11 +61,9 @@
   }
 
   .field__label::after {
-    content: ':';
+    content: '\003A';
   }
-}
 
-.geolocation-common-map-container {
   .views-field-field-store-address {
     margin-bottom: 0;
   }
