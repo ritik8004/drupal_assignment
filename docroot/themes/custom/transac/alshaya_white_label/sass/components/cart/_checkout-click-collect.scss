@@ -61,7 +61,7 @@
         }
 
         @include breakpoint($only-mobile) {
-          background: url(../imgs/icons/store-search.svg) $right 1.063rem center no-repeat;
+          background: url(#{$base_theme_img_directory_path}/icons/store-search.svg) $right 1.063rem center no-repeat;
         }
       }
     }
@@ -1289,7 +1289,7 @@
           display: inline-block;
           vertical-align: middle;
           margin-#{$right}: 0.6875rem;
-          background: url('../imgs/icons/current.svg') no-repeat;
+          background: url(#{$base_theme_img_directory_path}/icons/current.svg) no-repeat;
           width: 1.625rem;
           height: 1.625rem;
 
