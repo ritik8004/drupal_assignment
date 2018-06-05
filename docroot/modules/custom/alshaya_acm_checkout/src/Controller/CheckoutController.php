@@ -188,9 +188,14 @@ class CheckoutController implements ContainerInjectionInterface {
       throw new NotFoundHttpException();
     }
 
+    $request_params = $request->request->all();
+    if (!is_array($request_params)) {
+      throw new NotFoundHttpException();
+    }
+
     // Get governate value dynamically to ensure it doesn't depend on form
     // structure.
-    $selected_payment_method = NestedArray::getValue($request->request->all(), explode('[', str_replace(']', '', $element)));
+    $selected_payment_method = NestedArray::getValue($request_params, explode('[', str_replace(']', '', $element)));
 
     // Check if we have value available for payment method.
     if (empty($selected_payment_method)) {

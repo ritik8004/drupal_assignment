@@ -457,6 +457,18 @@
   }
 }
 
+.c-search {
+  .facet-item {
+    input[type=checkbox] ~ label {
+      &::before {
+        @include breakpoint($tablet) {
+          top: 0.6rem;
+        }
+      }
+    }
+  }
+}
+
 .alshaya_search_hoverimage {
   position: absolute;
   top: 0;
@@ -488,6 +500,20 @@
         &.search-count {
           border-bottom: none;
           margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .filter--mobile {
+    .c-facet__label {
+      &.active-filter-count {
+        .filter-count {
+          html[lang=ar] & {
+            line-height: 1.9;
+          }
         }
       }
     }
