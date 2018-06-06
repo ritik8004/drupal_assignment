@@ -5,6 +5,9 @@
 
 target_env="$1"
 
+# Take dumps of all the sites before start.
+drush8 acsf-tools-dump --result-folder=~/backup/pre-stage --gzip
+
 if [ $target_env = "01live" -o $target_env = "01update" ]
 then
   echo "Lets not try developer scripts on prod env :)"
