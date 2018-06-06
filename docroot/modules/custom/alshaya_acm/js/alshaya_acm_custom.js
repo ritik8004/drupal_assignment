@@ -2,8 +2,6 @@
   Drupal.behaviors.alshaya_acm_js = {
     attach: function (context, settings) {
       $('.acq-cart-summary').once('bind-events').each(function () {
-        $('.content-items', $(this)).slideUp();
-
         $('.content-head', $(this)).on('click', function () {
           $(this).parent().toggleClass('active--accordion');
           $(this).next().slideToggle();
