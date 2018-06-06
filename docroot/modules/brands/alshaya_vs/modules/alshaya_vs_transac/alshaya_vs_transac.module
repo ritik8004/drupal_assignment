@@ -23,7 +23,7 @@ function alshaya_vs_transac_preprocess_views_view_fields__stores_finder(&$variab
   if (!in_array($view->current_display, ['attachment_1', 'page_3', 'page_2', 'page_1'])) {
     return;
   }
-
+  // Change the position of the field brand, to display it after store address.
   if (isset($variables['fields']['field_brand'])) {
     $fields = $variables['fields'];
     unset($fields['field_brand']);
