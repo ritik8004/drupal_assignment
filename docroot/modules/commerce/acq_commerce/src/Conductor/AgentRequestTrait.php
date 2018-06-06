@@ -3,6 +3,8 @@
 namespace Drupal\acq_commerce\Conductor;
 
 use Acquia\Hmac\Exception\MalformedResponseException;
+use Drupal\acq_commerce\Connector\ConnectorException;
+use Drupal\acq_commerce\Connector\CustomerNotFoundException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\TransferStats;
 use GuzzleHttp\Exception\RequestException;
@@ -118,19 +120,22 @@ trait AgentRequestTrait {
 
       $logger->error($mesg);
 
+      // REDUNDANT at 20180531 because now we set http_errors = false.
       if ($e->getCode() == 404
         || $e instanceof MalformedResponseException
         || $e instanceof ConnectException) {
         throw new \Exception(acq_commerce_api_down_global_error_message(), APIWrapper::API_DOWN_ERROR_CODE);
       }
       elseif ($e instanceof RequestException) {
-        throw new ConductorException($mesg, $e->getCode(), $e);
+        throw new ConnectorException($mesg, $e->getCode(), $e);
       }
       else {
         throw $e;
       }
     }
 
+    // This code means we must always return valid JSON for every HTTP status.
+    // Is that what we want to enforce? Probably yes.
     $response = json_decode($result->getBody(), TRUE);
     if (($response === NULL) || ($this->apiVersion === 'v1' && !isset($response['success']))) {
       $mesg = sprintf(
@@ -140,7 +145,37 @@ trait AgentRequestTrait {
       );
 
       $logger->error($mesg);
-      throw new ConductorException($mesg);
+      throw new ConnectorException($mesg);
+    }
+
+    // Earlier we set http_errors = false during client-creation so now
+    // we need to handle all response statuses here.
+    // For now (at 20180531) we simply handle http 500 'customer not found'
+    // And revert to the previous behaviour for all other non-200 responses.
+    $exception = NULL;
+    switch ($result->getStatusCode()) {
+      case 200:
+        // Continue.
+        break;
+
+      case 500:
+        if (array_key_exists('code', $response) &&
+            $response['code'] == CustomerNotFoundException::CUSTOMER_NOT_FOUND_CODE) {
+          // Are we logging here? CustomerNotFound is routine so
+          // we choose not to log this exception.
+          $exception = new CustomerNotFoundException($response['message'], $response['code']);
+        }
+        else {
+          $exception = new ConnectorException($result->getBody(), $result->getStatusCode());
+        }
+        break;
+
+      default:
+        throw new ConnectorException($result->getBody(), $result->getStatusCode());
+    }
+
+    if ($exception) {
+      throw $exception;
     }
 
     if ($this->apiVersion === 'v1' && !$response['success']) {

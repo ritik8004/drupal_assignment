@@ -4,8 +4,8 @@ namespace Drupal\acq_cybersource;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\Conductor\ClientFactory;
-use Drupal\acq_commerce\Conductor\ConductorException;
 use Drupal\acq_commerce\Conductor\RouteException;
+use Drupal\acq_commerce\Connector\ConnectorException;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\Cache;
@@ -67,7 +67,7 @@ class CybersourceAPIWrapper extends APIWrapper {
     try {
       return $this->tryAgentRequest($doReq, 'cybersourceTokenRequest', 'token');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       $this->logger->warning('Error occurred while getting cybersource token for cart id: %cart_id and card type: %card_type: %message', [
         '%cart_id' => $cart_id,
         '%card_type' => $card_type,
@@ -182,7 +182,7 @@ class CybersourceAPIWrapper extends APIWrapper {
       $response = $this->tryAgentRequest($doReq, 'updateCart');
       Cache::invalidateTags(['cart:' . $cart_id]);
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       // Restore cart structure.
       if ($items) {
         foreach ($items as $key => &$item) {
