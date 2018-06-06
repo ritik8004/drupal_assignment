@@ -47,7 +47,7 @@
     @include icon(facebook);
 
     &:hover::before {
-      background: url(#{$base_theme_img_directory_path}/social-icons/pdp/ic-facebookselect.png) no-repeat center;
+      background: url("../imgs/social-icons/pdp/ic-facebookselect.png") no-repeat center;
       background-size: 1.5rem;
     }
   }
@@ -56,7 +56,7 @@
     @include icon(instagram);
 
     &:hover::before {
-      background: url(#{$base_theme_img_directory_path}/social-icons/pdp/ic-instagramselect.png) no-repeat center;
+      background: url("../imgs/social-icons/pdp/ic-instagramselect.png") no-repeat center;
       background-size: 1.5rem;
     }
   }
@@ -65,7 +65,7 @@
     @include icon(youtube);
 
     &:hover::before {
-      background: url(#{$base_theme_img_directory_path}/social-icons/pdp/ic-youtubeselect.png) no-repeat center;
+      background: url("../imgs/social-icons/pdp/ic-youtubeselect.png") no-repeat center;
       background-size: 1.5rem;
     }
   }
@@ -82,7 +82,7 @@
     @include icon(twitter);
 
     &:hover::before {
-      background: url(#{$base_theme_img_directory_path}/social-icons/pdp/ic-twitterselect.png) no-repeat center;
+      background: url("../imgs/social-icons/pdp/ic-twitterselect.png") no-repeat center;
       background-size: 1.5rem;
     }
   }
@@ -91,7 +91,7 @@
     @include icon(pinterest);
 
     &:hover::before {
-      background: url(#{$base_theme_img_directory_path}/social-icons/pdp/ic-pinterestselect.png) no-repeat center;
+      background: url("../imgs/social-icons/pdp/ic-pinterestselect.png") no-repeat center;
       background-size: 1.5rem;
     }
   }
