@@ -301,45 +301,54 @@ function drush_alshaya_acm_alshaya_reset_config() {
  * Implements drush alshaya-sku-media-missing.
  */
 function drush_alshaya_acm_alshaya_sku_media_missing($langcode = 'en') {
-  drush_print(dt("Checking skus for the langcode @langcode", ["@langcode" => $langcode]));
-
-  $skus = [];
+  drush_print(dt('Checking skus for the langcode @langcode', ['@langcode' => $langcode]));
 
   $connection = \Drupal::database();
-  $query = $connection->select("acq_sku_field_data", "acq");
-  $query->fields("acq", ["sku", "media__value"]);
-  $query->condition("acq.media__value", "a:0:{}", "<>");
-  $query->condition("acq.langcode", $langcode);
+  $query = $connection->select('acq_sku_field_data', 'acq');
+  $query->fields('acq', ['sku', 'media__value']);
+  $query->condition('acq.media__value', 'a:0:{}', '<>');
+  $query->condition('acq.langcode', $langcode);
   $result = $query->execute()->fetchAll();
+
+  $fids = [];
+  $missing_fids = [];
 
   // If there are any results.
   if ($result) {
+
+    // Prepare fid array.
     foreach ($result as $key => $rs) {
       $media_data = unserialize($rs->media__value);
       foreach ($media_data as $data) {
-        if (!empty($data['fid'])) {
-          $query = $connection->select("file_managed", "fm");
-          $query->fields("fm", ["fid"]);
-          $query->condition("fm.fid", $data["fid"]);
-          $fid = $query->execute()->fetchField();
-          if (!$fid) {
-            // File not exists in drupal system.
-            $skus[$key] = [
-              'sku' => $rs->sku,
-              'fid' => $data['fid'],
-            ];
-          }
-        }
+        $fids[$data['fid']] = $rs->sku;
       }
+    }
+
+    // If there are ids.
+    if (!empty($fids)) {
+      $query = $connection->select('file_managed', 'fm');
+      $query->fields('fm', ['fid']);
+      $query->condition('fm.fid', array_keys($fids), 'IN');
+      $existing_fids = $query->execute()->fetchCol();
+      $missing_fids = array_diff(array_keys($fids), $existing_fids);
     }
   }
 
   // If there are no skus.
-  if (empty($skus)) {
-    drush_print(dt("There are no skus."));
+  if (empty($missing_fids)) {
+    drush_print(dt('There are no skus.'));
   }
   else {
-    array_unshift($skus, ["SKU", "File ID"]);
-    drush_print_table($skus, TRUE);
+    $rows = [];
+    // Prepare the row.
+    foreach ($missing_fids as $key => $value) {
+      $rows[$key] = [
+        'sku' => $fids[$value],
+        'fid' => $value,
+      ];
+    }
+
+    array_unshift($rows, ['SKU', 'File ID']);
+    drush_print_table($rows, TRUE);
   }
 }
