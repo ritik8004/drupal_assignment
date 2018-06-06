@@ -15,6 +15,13 @@
       }
     }
 
+    & > .menu-two__link-wrapper {
+      &:hover::after,
+      &::after {
+        content: none;
+      }
+    }
+
     .menu--three__list {
       li a:hover {
         text-decoration: none;
@@ -29,5 +36,11 @@
     padding-bottom: 0;
     height: 25.5rem;
     margin-top: -1.5rem;
+  }
+}
+
+.first--child_open {
+  & > .menu-two__link-wrapper::after {
+    content: none;
   }
 }
