@@ -15,7 +15,7 @@ use Drupal\Core\Site\Settings;
  * Re-saving indexes and updating index configs will be taken care of in
  * alshaya_acm_product_update_8017().
  */
-function alshaya_vs_transac_update_8102() {
+function alshaya_vs_transac_update_8103() {
   alshaya_config_install_configs(['alshaya_vs_transac.sku_base_fields'], 'alshaya_vs_transac');
   $fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
@@ -36,6 +36,7 @@ function alshaya_vs_transac_update_8102() {
   alshaya_config_install_configs([
     'core.entity_form_display.node.store.default',
     'core.entity_view_display.node.store.default',
+    'views.view.stores_finder',
   ], 'alshaya_stores_finder');
 }
 
