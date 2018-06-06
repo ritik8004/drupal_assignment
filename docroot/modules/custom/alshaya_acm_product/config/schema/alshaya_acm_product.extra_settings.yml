@@ -1,0 +1,10 @@
+alshaya_acm_product.extra_settings:
+  type: config_object
+  label: 'Alshaya ACM Product extra settings'
+  mapping:
+    image_thumb_gallery:
+      type: boolean
+      label: 'Number of related items to show'
+    color_swatches:
+      type: boolean
+      label: 'Number of items to show on Listing pages'
