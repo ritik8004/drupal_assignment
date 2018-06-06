@@ -199,12 +199,19 @@ function alshaya_get_magento_host_data() {
           'en' => 3,
           'ar' => 4,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'sau_en',
+          'ar' => 'sau_ar',
+        ],
       ],
-      // VSAE is connected to MCAE UAT for now.
       'ae' => [
         'store_id' => [
-          'en' => 16,
-          'ar' => 13,
+          'en' => 5,
+          'ar' => 2,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'are_en',
+          'ar' => 'are_ar',
         ],
       ],
     ],
