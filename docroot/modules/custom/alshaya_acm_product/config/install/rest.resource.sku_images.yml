@@ -3,6 +3,7 @@ status: true
 dependencies:
   module:
     - alshaya_api
+    - alshaya_acm_product
     - serialization
     - simple_oauth
 id: sku_images

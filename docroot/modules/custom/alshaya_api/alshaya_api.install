@@ -15,12 +15,8 @@ use Drupal\user\Entity\User;
  * Create role, enable resource, create user and consumer for Alshaya API.
  */
 function alshaya_api_update_8001() {
-  $configs = [
-    'user.role.alshaya_magento_consumer',
-    'rest.resource.sku_images',
-  ];
-
-  alshaya_config_install_configs($configs, 'alshaya_api');
+  alshaya_config_install_configs(['user.role.alshaya_magento_consumer'], 'alshaya_api');
+  alshaya_config_install_configs(['rest.resource.sku_images'], 'alshaya_acm_product');
 
   _alshaya_api_create_user();
   _alshaya_api_create_consumer();
