@@ -3,9 +3,9 @@
 .slick-prev,
 .slick-next {
   &::before {
-    height: 3.25rem;
-    width: 3.25rem;
+    height: 2.125rem;
+    width: 2.125rem;
     color: $pdp_carousel_arrows_blue;
-    font-size: 2.75rem;
+    font-size: 2.125rem;
   }
 }
