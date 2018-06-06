@@ -14,6 +14,7 @@ use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -220,9 +221,13 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     // Remove disabled terms.
     foreach ($terms as $index => $row) {
       $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($row['target_id']);
-      if (!$term->get('field_commerce_status')->getString()) {
-        unset($terms[$index]);
+
+      if ($term instanceof TermInterface && $term->get('field_commerce_status')->getString()) {
+        continue;
       }
+
+      // If term not found or not enabled, we unset it.
+      unset($terms[$index]);
     }
 
     return array_values($terms);
