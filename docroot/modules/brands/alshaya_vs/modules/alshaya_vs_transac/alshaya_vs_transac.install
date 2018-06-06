@@ -19,8 +19,10 @@ function alshaya_vs_transac_update_8102() {
   ], 'alshaya_vs_transac');
 
   // Save form and view display mode for store content type.
-  \Drupal::configFactory()->getEditable('core.entity_form_display.node.store.default')->save();
-  \Drupal::configFactory()->getEditable('core.entity_view_display.node.store.default')->save();
+  alshaya_config_install_configs([
+    'core.entity_form_display.node.store.default',
+    'core.entity_view_display.node.store.default',
+  ], 'alshaya_stores_finder');
 }
 
 /**
