@@ -8,25 +8,11 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_update_N().
- *
- * Add SKU base fields specific to VS.
- *
- * Re-saving indexes and updating index configs will be taken care of in
- * alshaya_acm_product_update_8017().
- */
-function alshaya_vs_transac_update_8103() {
-  alshaya_config_install_configs(['alshaya_vs_transac.sku_base_fields'], 'alshaya_vs_transac');
-  $fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
-}
-
-/**
  * Implements hook_update_n().
  *
  * Install brand field for store node.
  */
-function alshaya_vs_transac_update_8102() {
+function alshaya_vs_transac_update_8103() {
   alshaya_config_install_configs([
     'field.storage.node.field_brand',
     'field.field.node.store.field_brand',
@@ -38,6 +24,20 @@ function alshaya_vs_transac_update_8102() {
     'core.entity_view_display.node.store.default',
     'views.view.stores_finder',
   ], 'alshaya_stores_finder');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add SKU base fields specific to VS.
+ *
+ * Re-saving indexes and updating index configs will be taken care of in
+ * alshaya_acm_product_update_8017().
+ */
+function alshaya_vs_transac_update_8102() {
+  alshaya_config_install_configs(['alshaya_vs_transac.sku_base_fields'], 'alshaya_vs_transac');
+  $fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
+  acq_sku_add_base_fields($fields);
 }
 
 /**
