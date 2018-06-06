@@ -147,12 +147,12 @@
     }
 
     .zoomout {
-      background: url(#{$base_theme_img_directory_path}/assets/ic-zoomout.png) no-repeat;
+      background: url(../imgs/assets/ic-zoomout.png) no-repeat;
       background-size: contain;
     }
 
     .zoomin {
-      background: url(#{$base_theme_img_directory_path}/assets/ic-zoomin.png) no-repeat;
+      background: url(../imgs/assets/ic-zoomin.png) no-repeat;
       background-size: contain;
     }
   }
