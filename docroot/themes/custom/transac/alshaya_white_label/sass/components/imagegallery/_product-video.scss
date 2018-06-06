@@ -11,10 +11,6 @@
       @include breakpoint($desktop) {
         width: 37.5rem;
         height: 31.25rem;
-
-        iframe .vp-player-layout {
-          top: 0 !important;
-        }
       }
 
       @include breakpoint($only-tablet) {
