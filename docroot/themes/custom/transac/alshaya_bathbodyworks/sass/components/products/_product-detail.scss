@@ -6,6 +6,8 @@
       font-weight: normal;
       color: $pdp_product_title;
       margin: 0.3125rem 0;
+      text-transform: uppercase;
+      font-size: 1rem;
     }
 
     .price {
@@ -14,13 +16,6 @@
 
     .content--item-code {
       font-size: 0.625rem;
-    }
-
-    .content--form {
-      float: $left;
-      font-size: 0.75rem;
-      margin-bottom: 0.9375rem;
-      color: $pdp_product_form_text;
     }
 
     .content--brand {
@@ -48,6 +43,15 @@
       }
     }
   }
+}
+
+.content--form,
+.product--form {
+  float: $left;
+  font-size: 0.75rem;
+  margin-bottom: 0.9375rem;
+  color: $pdp_product_form_text;
+  width: 100%;
 }
 
 .description-wrapper {
@@ -139,6 +143,15 @@
           line-height: 1.9;
         }
       }
+    }
+  }
+}
+
+.basic-details-wrapper .field--name-field-skus {
+  .form-item-quantity {
+    label {
+      color: $pdp_product_qty_text;
+      font-size: 0.875rem;
     }
   }
 }
