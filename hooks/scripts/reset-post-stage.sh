@@ -14,6 +14,9 @@ fi
 # Move to proper directory to get access to drush acsf-tools commands.
 cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
 
+# Take dumps of all the sites before start.
+drush8 acsf-tools-dump --result-folder=~/backup/pre-stage --gzip
+
 # Get the environment without the "01" prefix.
 env=${target_env:2}
 
