@@ -8,6 +8,25 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_n().
+ *
+ * Install brand field for store node.
+ */
+function alshaya_vs_transac_update_8103() {
+  alshaya_config_install_configs([
+    'field.storage.node.field_brand',
+    'field.field.node.store.field_brand',
+  ], 'alshaya_vs_transac');
+
+  // Save form and view display mode for store content type.
+  alshaya_config_install_configs([
+    'core.entity_form_display.node.store.default',
+    'core.entity_view_display.node.store.default',
+    'views.view.stores_finder',
+  ], 'alshaya_stores_finder');
+}
+
+/**
  * Implements hook_update_N().
  *
  * Add SKU base fields specific to VS.
@@ -32,7 +51,8 @@ function alshaya_vs_transac_update_8101() {
  * Implements hook_install().
  */
 function alshaya_vs_transac_install() {
-  // Enable and set alshaya_victoria_secret as default theme and set the site logo, favicon icon and email logo path.
+  // Enable and set alshaya_victoria_secret as default theme and set the site
+  // logo, favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_victoria_secret');
 
   // Set store id - EN.
