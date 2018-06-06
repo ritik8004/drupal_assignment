@@ -11,7 +11,7 @@ dependencies:
 id: plpfragrancecat
 theme: alshaya_bathbodyworks
 region: sidebar_first
-weight: -34
+weight: -38
 provider: null
 plugin: 'facet_block:plp_fragrancecat'
 settings:
