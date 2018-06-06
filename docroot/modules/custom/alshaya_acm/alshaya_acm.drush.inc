@@ -45,10 +45,10 @@ function alshaya_acm_drush_command() {
     'options' => [
       'acm' => 'The ACM key to connect Drupal to (ex: mcsa_dev, hmkw_qa, hmsa_uat, ...).',
       'mdc' => 'The MDC key to connect Drupal to (ex: mc_dev, hm_qa, vs_uat, ...).',
-      // @TODO: Add an option to override the default country_code and connect to different langcode on MDC.
+      'country_code' => 'The country code to be used with MDC communication (store_ids, ...) - Default is current site country code.',
     ],
     'examples' => [
-      'drush asc --acm=mcsa_dev --mdc=mc_dev' => 'Connect Drupal to mcsa_dev ACM and mc_dev MDC.',
+      'drush asc --acm=mcsa_dev --mdc=mc_dev --country_code=sa' => 'Connect Drupal to mcsa_dev ACM and mc_dev MDC using the SA store ids.',
       'drush asc --acm=hmkw_qa' => 'Connect Drupal to hmkw_qa ACM.',
     ],
   ];
@@ -80,31 +80,78 @@ function drush_alshaya_acm_alshaya_switch_config() {
 
       foreach ($acms[$acm] as $key => $value) {
         $config->set($key, $value);
+
+        drush_print(dt('Configuring acq_commerce.conductor.@key to @value.', [
+          '@key' => $key,
+          '@value' => $value,
+        ]));
       }
 
       $config->save();
     }
     else {
-      drush_print(dt('Unknown ACM @acm.', ['@acm' => $acm]));
+      drush_print(dt('Unknown ACM "@acm".', ['@acm' => $acm]));
     }
   }
 
+  // Update the magento config.
   if (!empty($mdc)) {
     include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
     $mdcs = alshaya_get_magento_host_data();
 
     if (isset($mdcs[$mdc])) {
+      // Update the magento host.
       $config = $configFactory->getEditable('alshaya_api.settings');
-      $config->set('magento_host', $acms[$acm]['url']);
+      $config->set('magento_host', $mdcs[$mdc]['url']);
       $config->save();
 
-      // @TODO:
-      // Get the current country code
-      // Get the store_ids and lang_prefix from $acms[$acm][$country_code].
-      // Update configs for both en and ar.
+      drush_print(dt('Configuring alshaya_api.settings.magento_host to @value.', [
+        '@value' => $mdcs[$mdc]['url'],
+      ]));
+
+      // Determine the langcode to use.
+      $country_code = Unicode::strtolower(Settings::get('country_code'));
+      $country_code = drush_get_option('country_code', $country_code);
+
+      if (!isset($mdcs[$mdc][$country_code])) {
+        drush_print(dt('Unknown "@country_code" country code for "@mdc" MDC. Using the current site\'s country code "@current_country_code".', [
+          '@country_code' => $country_code,
+          '@mdc' => $mdc,
+          '@current_country_code' => $country_code = Unicode::strtolower(Settings::get('country_code')),
+        ]));
+      }
+
+      $langManager = \Drupal::service('language_manager');
+
+      $configs = [
+        'acq_commerce.store' => 'store_id',
+        'alshaya_api.settings' => 'magento_lang_prefix',
+      ];
+
+      // Update the magento store ids and lang_prefix.
+      foreach ($configs as $name => $key) {
+        foreach ($langManager->getLanguages() as $lang => $language) {
+          if ($lang == $langManager->getDefaultLanguage()->getId()) {
+            $config = $configFactory->getEditable($name);
+          }
+          else {
+            $config = $langManager->getLanguageConfigOverride($lang, $name);
+          }
+
+          // Use specific config if it exists, use default one otherwise.
+          $value = isset($mdcs[$mdc][$country_code][$key][$lang]) ? $mdcs[$mdc][$country_code][$key][$lang] : $mdcs['default'][$country_code][$key][$lang];
+          $config->set($key, $value)->save();
+
+          drush_print(dt('Configuring @name.@key to @value.', [
+            '@name' => $name,
+            '@key' => $key . ' ' . $lang,
+            '@value' => $value,
+          ]));
+        }
+      }
     }
     else {
-      drush_print(dt('Unknown MDC @mdc.', ['@mdc' => $mdc]));
+      drush_print(dt('Unknown MDC "@mdc".', ['@mdc' => $mdc]));
     }
   }
 }
