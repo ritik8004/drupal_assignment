@@ -30,10 +30,13 @@ if (empty($site_name) && $settings['env'] == 'local') {
   }
 }
 
+$site_code = substr($site_name, 0, -2);
+$country_code = substr($site_name, -2);
+
 // Calculate country code for current site name.
 // Country code is based on ISO 3166-1 alpha-2.
-$settings['country_code'] = strtoupper(substr($site_name, -2));
+$settings['country_code'] = strtoupper($country_code);
 
 // We merge the entire settings with the specific ones.
 include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
-$settings = array_replace_recursive($settings, alshaya_get_specific_settings($site_name, $settings['env']));
+$settings = array_replace_recursive($settings, alshaya_get_specific_settings($site_code, $country_code, $settings['env']));

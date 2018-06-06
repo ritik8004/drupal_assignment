@@ -40,7 +40,7 @@ use Drupal\views\ViewExecutable;
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
   // Get the configurable fields we want to capture separately as fields.
-  $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+  $fields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
   $indexFields = array_filter($fields, function ($field) {
     return !empty($field['index']);
   });

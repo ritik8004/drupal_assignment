@@ -20,6 +20,10 @@
     z-index: 3;
   }
 
+  @include breakpoint($only-mobile) {
+    font-size: 0.875rem;
+  }
+
   // Arabic font is longer so it gets clipped from bottom.
   html[lang=ar] & {
     line-height: 1.2;
@@ -76,6 +80,10 @@
     border-radius: 0;
     outline: none;
 
+    @include breakpoint($only-mobile) {
+      font-size: 0.875;
+    }
+
     .select2-selection__rendered {
       @include arabic-letter-spacing;
 
@@ -130,6 +138,10 @@
       text-transform: uppercase;
       font-family: $hnm-regular;
       letter-spacing: 1px;
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.875rem;
+      }
     }
   }
 }

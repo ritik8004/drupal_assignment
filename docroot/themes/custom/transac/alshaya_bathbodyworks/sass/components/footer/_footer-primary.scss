@@ -140,11 +140,12 @@
     }
   }
 
-  .form-email {
+  #edit-email {
     border: 1px solid $newsletter_input_border !important;
     border-width: 1px;
-    padding-#{$left}: 0.312rem !important;
+    padding-#{$left}: 0.3125rem !important;
     height: 2.5rem;
+    padding-top: 0.4rem;
 
     @include breakpoint($tablet) {
       margin-top: 0.75rem;
@@ -161,7 +162,8 @@
     font-family: $alshaya-thin;
     font-size: 0.875rem;
     padding: 0.625rem 1.34rem;
-    line-height: 1.45;
+    line-height: 1.8;
+    height: 2.5rem;
     text-transform: uppercase;
 
     @include breakpoint($tablet) {
@@ -219,6 +221,10 @@
           text-transform: capitalize;
           font-family: $alshaya-thin;
         }
+      }
+
+      &.en.is-active a {
+        font-family: $alshaya-thin;
       }
     }
   }

@@ -221,9 +221,10 @@ class CustomerController extends ControllerBase {
       '#attached' => [
         'library' => ['alshaya_acm_customer/orders-list'],
       ],
-      // @TODO: We may want to set it to cache time limit of API call.
-      '#cache' => ['max-age' => 0],
     ];
+
+    $cache_time_limit = $this->config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
+    $build['#cache'] = ['max-age' => $cache_time_limit];
 
     return $build;
   }
@@ -293,7 +294,9 @@ class CustomerController extends ControllerBase {
       $build['#vat_text'] = $vat_text;
     }
     $build['#theme'] = 'user_order_detail';
-    $build['#cache'] = ['max-age' => 0];
+
+    $cache_time_limit = $this->config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
+    $build['#cache'] = ['max-age' => $cache_time_limit];
 
     return $build;
   }

@@ -273,7 +273,7 @@
       border: 1px solid $plp_facet_border;
       border-#{$right}: none;
 
-      @include icon(dropdown-expand, after) {
+      @include icon(chevron#{$right}, after) {
         #{$right}: -2.188rem;
         height: 2.1875rem;
         width: 2.1875rem;
@@ -500,20 +500,6 @@
         &.search-count {
           border-bottom: none;
           margin-top: 0;
-        }
-      }
-    }
-  }
-}
-
-@include breakpoint($only-mobile) {
-  .filter--mobile {
-    .c-facet__label {
-      &.active-filter-count {
-        .filter-count {
-          html[lang=ar] & {
-            line-height: 1.9;
-          }
         }
       }
     }
