@@ -43,6 +43,7 @@
     z-index: 1;
 
     &::before {
+      background-color: transparent;
       font-size: 4rem;
       width: auto;
       height: auto;

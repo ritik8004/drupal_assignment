@@ -7,6 +7,60 @@
 
     .row-title {
       color: $store_finder_search_results_label;
+      padding-bottom: 1rem;
+    }
+
+    .store-row--counter {
+      top: 0.75rem;
+      #{$left}: 1.25rem;
+      width: 1.5rem;
+      height: 1.5rem;
+
+      @include breakpoint($tablet) {
+        padding-top: 0.4rem;
+      }
+    }
+
+    .views-field-field-store-address {
+      letter-spacing: 0.3px;
+      line-height: 1.33;
+    }
+
+    .views-field-field-store-address {
+      padding-bottom: 0;
+      border-bottom: 0;
+
+      .views-field-field-brand {
+        padding: 0;
+      }
+    }
+
+    .views-field-field-brand {
+      padding: 0 3.25rem;
+      padding-right: 2.5rem;
+    }
+
+    .views-field-field-store-open-hours .hours--wrapper {
+      border-bottom: 1px solid $store_finder_search_results_border;
+
+      .open--hours,
+      .hours--label {
+        border-bottom: 0;
+      }
+
+      .open--hours {
+        padding-top: 0.4rem;
+      }
+    }
+
+    .hours--label {
+      @include icon(chevrondown, after);
+    }
+
+    &.selected {
+      .row-title {
+        font-family: $vs-bold;
+      }
     }
   }
 
@@ -31,6 +85,10 @@
       top: -0.25rem;
     }
   }
+
+  .hours--wrapper .hours--label.open::after {
+    transform: rotate(180deg);
+  }
 }
 
 .geolocation-common-map-container {
@@ -52,6 +110,10 @@
   .hours--label::after {
     margin-top: 0.375rem;
   }
+
+  .views-field-field-store-address {
+    margin-bottom: 0;
+  }
 }
 
 .field--name-field-brand {
@@ -63,15 +125,12 @@
   .field__label::after {
     content: '\003A';
   }
-
-  .views-field-field-store-address {
-    margin-bottom: 0;
-  }
 }
 
 .view-stores-finder {
   .views-field-field-store-open-hours {
-    margin-top: 0.5rem;
+    margin-top: 1rem;
+    border-top: 1px solid $store_finder_search_results_border;
   }
 
   .views-field-field-brand {
@@ -86,6 +145,12 @@
       border-bottom: 0;
     }
   }
+
+  .geolocation-common-map-container {
+    .views-field-field-store-open-hours {
+      border-top: 0;
+    }
+  }
 }
 
 .individual--store {
@@ -95,5 +160,15 @@
     span {
       font-family: $vs-bold;
     }
+  }
+
+  .list-view-locator {
+    .views-field-field-store-address {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  .views-field-field-store-open-hours {
+    margin-top: 0.5rem;
   }
 }
