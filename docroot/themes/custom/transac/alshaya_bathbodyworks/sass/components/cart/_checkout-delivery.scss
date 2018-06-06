@@ -227,6 +227,10 @@
       border: 1px solid $checkout_payment_option_border;
       border-bottom: 0;
 
+      &::before {
+        margin-#{$right}: 0;
+      }
+
       &.plugin-selected {
         .method-title {
           font-weight: normal;

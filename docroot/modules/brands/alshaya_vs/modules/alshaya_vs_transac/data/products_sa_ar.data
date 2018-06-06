@@ -1,0 +1,1050 @@
+<?php
+global $_alshaya_acm_products;
+
+$_alshaya_acm_products = array(
+array (
+  'product_id' => 43,
+  'store_id' => 4,
+  'attribute_set_id' => 13,
+  'attribute_set_label' => 'BRAS',
+  'sku' => 'DE-359-881',
+  'name' => 'Perfect Shape Full Coverage Bra',
+  'type' => 'configurable',
+  'price' => '0',
+  'special_price' => '0',
+  'final_price' => '0',
+  'status' => 1,
+  'visibility' => 1,
+  'attributes' =>
+  array (
+    'description' => '<p><span>The sexy lift of a push-up meets the&nbsp;coverage you want in a supersoft bra you&rsquo;ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.</span><br /><br /><span>Lift &amp; Lining</span></p>
+<p>&nbsp;</p>
+<ul>
+<li>Uplift with cushioned padding for shape</li>
+<li>Full coverage underwire cups</li>
+</ul>
+<p>&nbsp;<br />Straps &amp; Hooks</p>
+<ul>
+<li>Adjustable straps can convert to crossback and snap into place for a secure hold</li>
+<li>Front closure or back closure</li>
+<li>Back-close chocies feature a double row of hook and eye closures; Sizes 36DD &amp; 38D-38DD have triple row of closures for a secure, comfortable fit</li>
+<li>Back-close choices feature 4 settings to ensure a perfect fit</li>
+</ul>
+<p>&nbsp;<br />Details &amp; Fabric</p>
+<ul>
+<li>Front-close choices feature a racerback</li>
+<li>Back-close choices feature a U-shaped ballet back that prevents band from riding up and offers more coverage</li>
+<li>Supersoft, double-lined sides for the smoothest shape</li>
+<li>Hand wash</li>
+<li>Imported nylon/spandex</li>
+</ul>',
+    'meta_title' => 'Perfect Shape Full Coverage Bra',
+    'meta_keyword' => 'Perfect Shape Full Coverage Bra',
+    'meta_description' => 'Perfect Shape Full Coverage Bra The sexy lift of a push-up meets the coverage you want in a supersoft bra you’ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.Lift & Lining
+
+
+Uplift',
+    'category_ids' =>
+    array (
+    ),
+    'options_container' => 'container2',
+    'required_options' => '1',
+    'has_options' => '1',
+    'url_key' => 'perfect-shape-full-coverage-bra',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+    'product_activation_date' => '2018-05-25 11:38:20',
+    'product_state' => '14',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'stylecode' => 'SC',
+    'brand' => '18',
+    'collection' => '24',
+    'home_delivery' => '0',
+    'ignore_price_update' => '0',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 47,
+      'product_id' => 43,
+      'stock_id' => 2,
+      'qty' => 0,
+      'is_in_stock' => true,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => true,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => NULL,
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 0,
+    ),
+    'labels' =>
+    array (
+    ),
+    'configurable_product_options' =>
+    array (
+      0 =>
+      array (
+        'attribute_id' => '196',
+        'code' => 'color_description',
+        'label' => 'Color Description',
+        'position' => '2',
+        'values' =>
+        array (
+          0 =>
+          array (
+            'value_id' => '173',
+            'label' => 'VS White',
+          ),
+          1 =>
+          array (
+            'value_id' => '174',
+            'label' => 'Black Garden Lace',
+          ),
+        ),
+      ),
+      1 =>
+      array (
+        'attribute_id' => '231',
+        'code' => 'band_size',
+        'label' => 'Band Size',
+        'position' => '0',
+        'values' =>
+        array (
+          0 =>
+          array (
+            'value_id' => '163',
+            'label' => '32',
+          ),
+          1 =>
+          array (
+            'value_id' => '164',
+            'label' => '34',
+          ),
+        ),
+      ),
+      2 =>
+      array (
+        'attribute_id' => '232',
+        'code' => 'cup_size',
+        'label' => 'Cup Size',
+        'position' => '1',
+        'values' =>
+        array (
+          0 =>
+          array (
+            'value_id' => '167',
+            'label' => 'A',
+          ),
+          1 =>
+          array (
+            'value_id' => '168',
+            'label' => 'B',
+          ),
+        ),
+      ),
+    ),
+    'configurable_product_links' =>
+    array (
+      0 =>
+      array (
+        'id' => '35',
+        'sku' => 'DE-359-881-32-A-VS White',
+      ),
+      1 =>
+      array (
+        'id' => '36',
+        'sku' => 'DE-359-881-32-A-Black Garden Lace',
+      ),
+      2 =>
+      array (
+        'id' => '37',
+        'sku' => 'DE-359-881-32-B-VS White',
+      ),
+      3 =>
+      array (
+        'id' => '38',
+        'sku' => 'DE-359-881-32-B-Black Garden Lace',
+      ),
+      4 =>
+      array (
+        'id' => '39',
+        'sku' => 'DE-359-881-34-A-VS White',
+      ),
+      5 =>
+      array (
+        'id' => '40',
+        'sku' => 'DE-359-881-34-A-Black Garden Lace',
+      ),
+      6 =>
+      array (
+        'id' => '41',
+        'sku' => 'DE-359-881-34-B-VS White',
+      ),
+      7 =>
+      array (
+        'id' => '42',
+        'sku' => 'DE-359-881-34-B-Black Garden Lace',
+      ),
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 35,
+  'store_id' => 4,
+  'attribute_set_id' => 13,
+  'attribute_set_label' => 'BRAS',
+  'sku' => 'DE-359-881-32-A-VS White',
+  'name' => 'DE-359-881-32-A-VS White',
+  'type' => 'simple',
+  'price' => '20.0000',
+  'special_price' => '0',
+  'final_price' => '20',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'description' => '<p><span>The sexy lift of a push-up meets the&nbsp;coverage you want in a supersoft bra you&rsquo;ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.</span><br /><br /><span>Lift &amp; Lining</span></p>
+<p>&nbsp;</p>
+<ul>
+<li>Uplift with cushioned padding for shape</li>
+<li>Full coverage underwire cups</li>
+</ul>
+<p>&nbsp;<br />Straps &amp; Hooks</p>
+<ul>
+<li>Adjustable straps can convert to crossback and snap into place for a secure hold</li>
+<li>Front closure or back closure</li>
+<li>Back-close chocies feature a double row of hook and eye closures; Sizes 36DD &amp; 38D-38DD have triple row of closures for a secure, comfortable fit</li>
+<li>Back-close choices feature 4 settings to ensure a perfect fit</li>
+</ul>
+<p>&nbsp;<br />Details &amp; Fabric</p>
+<ul>
+<li>Front-close choices feature a racerback</li>
+<li>Back-close choices feature a U-shaped ballet back that prevents band from riding up and offers more coverage</li>
+<li>Supersoft, double-lined sides for the smoothest shape</li>
+<li>Hand wash</li>
+<li>Imported nylon/spandex</li>
+</ul>',
+    'meta_title' => 'Perfect Shape Full Coverage Bra',
+    'meta_keyword' => 'Perfect Shape Full Coverage Bra',
+    'meta_description' => 'Perfect Shape Full Coverage Bra The sexy lift of a push-up meets the coverage you want in a supersoft bra you’ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.Lift & Lining
+
+
+Uplift',
+    'category_ids' =>
+    array (
+    ),
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'url_key' => 'de-359-881-32-a-vs-white',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+    'product_activation_date' => '2018-05-25 11:38:05',
+    'product_state' => '14',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'stylecode' => 'SC',
+    'brand' => '18',
+    'collection' => '24',
+    'color_description' => '173',
+    'band_size' => '163',
+    'cup_size' => '167',
+    'home_delivery' => '0',
+    'ignore_price_update' => '0',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 48,
+      'product_id' => 35,
+      'stock_id' => 2,
+      'qty' => NULL,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => true,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2018-06-04 08:13:26',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 36,
+  'store_id' => 4,
+  'attribute_set_id' => 13,
+  'attribute_set_label' => 'BRAS',
+  'sku' => 'DE-359-881-32-A-Black Garden Lace',
+  'name' => 'DE-359-881-32-A-Black Garden Lace',
+  'type' => 'simple',
+  'price' => '20.0000',
+  'special_price' => '0',
+  'final_price' => '20',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'description' => '<p><span>The sexy lift of a push-up meets the&nbsp;coverage you want in a supersoft bra you&rsquo;ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.</span><br /><br /><span>Lift &amp; Lining</span></p>
+<p>&nbsp;</p>
+<ul>
+<li>Uplift with cushioned padding for shape</li>
+<li>Full coverage underwire cups</li>
+</ul>
+<p>&nbsp;<br />Straps &amp; Hooks</p>
+<ul>
+<li>Adjustable straps can convert to crossback and snap into place for a secure hold</li>
+<li>Front closure or back closure</li>
+<li>Back-close chocies feature a double row of hook and eye closures; Sizes 36DD &amp; 38D-38DD have triple row of closures for a secure, comfortable fit</li>
+<li>Back-close choices feature 4 settings to ensure a perfect fit</li>
+</ul>
+<p>&nbsp;<br />Details &amp; Fabric</p>
+<ul>
+<li>Front-close choices feature a racerback</li>
+<li>Back-close choices feature a U-shaped ballet back that prevents band from riding up and offers more coverage</li>
+<li>Supersoft, double-lined sides for the smoothest shape</li>
+<li>Hand wash</li>
+<li>Imported nylon/spandex</li>
+</ul>',
+    'meta_title' => 'Perfect Shape Full Coverage Bra',
+    'meta_keyword' => 'Perfect Shape Full Coverage Bra',
+    'meta_description' => 'Perfect Shape Full Coverage Bra The sexy lift of a push-up meets the coverage you want in a supersoft bra you’ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.Lift & Lining
+
+
+Uplift',
+    'category_ids' =>
+    array (
+    ),
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'url_key' => 'de-359-881-32-a-black-garden-lace',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+    'product_activation_date' => '2018-05-25 11:38:07',
+    'product_state' => '14',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'stylecode' => 'SC',
+    'brand' => '18',
+    'collection' => '24',
+    'color_description' => '174',
+    'band_size' => '163',
+    'cup_size' => '167',
+    'home_delivery' => '0',
+    'ignore_price_update' => '0',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 49,
+      'product_id' => 36,
+      'stock_id' => 2,
+      'qty' => NULL,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => true,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2018-06-04 08:13:49',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 38,
+  'store_id' => 4,
+  'attribute_set_id' => 13,
+  'attribute_set_label' => 'BRAS',
+  'sku' => 'DE-359-881-32-B-Black Garden Lace',
+  'name' => 'DE-359-881-32-B-Black Garden Lace',
+  'type' => 'simple',
+  'price' => '20.0000',
+  'special_price' => '0',
+  'final_price' => '20',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'description' => '<p><span>The sexy lift of a push-up meets the&nbsp;coverage you want in a supersoft bra you&rsquo;ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.</span><br /><br /><span>Lift &amp; Lining</span></p>
+<p>&nbsp;</p>
+<ul>
+<li>Uplift with cushioned padding for shape</li>
+<li>Full coverage underwire cups</li>
+</ul>
+<p>&nbsp;<br />Straps &amp; Hooks</p>
+<ul>
+<li>Adjustable straps can convert to crossback and snap into place for a secure hold</li>
+<li>Front closure or back closure</li>
+<li>Back-close chocies feature a double row of hook and eye closures; Sizes 36DD &amp; 38D-38DD have triple row of closures for a secure, comfortable fit</li>
+<li>Back-close choices feature 4 settings to ensure a perfect fit</li>
+</ul>
+<p>&nbsp;<br />Details &amp; Fabric</p>
+<ul>
+<li>Front-close choices feature a racerback</li>
+<li>Back-close choices feature a U-shaped ballet back that prevents band from riding up and offers more coverage</li>
+<li>Supersoft, double-lined sides for the smoothest shape</li>
+<li>Hand wash</li>
+<li>Imported nylon/spandex</li>
+</ul>',
+    'meta_title' => 'Perfect Shape Full Coverage Bra',
+    'meta_keyword' => 'Perfect Shape Full Coverage Bra',
+    'meta_description' => 'Perfect Shape Full Coverage Bra The sexy lift of a push-up meets the coverage you want in a supersoft bra you’ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.Lift & Lining
+
+
+Uplift',
+    'category_ids' =>
+    array (
+    ),
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'url_key' => 'de-359-881-32-b-black-garden-lace',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+    'product_activation_date' => '2018-05-25 11:38:11',
+    'product_state' => '14',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'stylecode' => 'SC',
+    'brand' => '18',
+    'collection' => '24',
+    'color_description' => '174',
+    'band_size' => '163',
+    'cup_size' => '168',
+    'home_delivery' => '0',
+    'ignore_price_update' => '0',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 50,
+      'product_id' => 38,
+      'stock_id' => 2,
+      'qty' => NULL,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => true,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2018-06-04 08:14:43',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 39,
+  'store_id' => 4,
+  'attribute_set_id' => 13,
+  'attribute_set_label' => 'BRAS',
+  'sku' => 'DE-359-881-34-A-VS White',
+  'name' => 'DE-359-881-34-A-VS White',
+  'type' => 'simple',
+  'price' => '20.0000',
+  'special_price' => '0',
+  'final_price' => '20',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'description' => '<p><span>The sexy lift of a push-up meets the&nbsp;coverage you want in a supersoft bra you&rsquo;ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.</span><br /><br /><span>Lift &amp; Lining</span></p>
+<p>&nbsp;</p>
+<ul>
+<li>Uplift with cushioned padding for shape</li>
+<li>Full coverage underwire cups</li>
+</ul>
+<p>&nbsp;<br />Straps &amp; Hooks</p>
+<ul>
+<li>Adjustable straps can convert to crossback and snap into place for a secure hold</li>
+<li>Front closure or back closure</li>
+<li>Back-close chocies feature a double row of hook and eye closures; Sizes 36DD &amp; 38D-38DD have triple row of closures for a secure, comfortable fit</li>
+<li>Back-close choices feature 4 settings to ensure a perfect fit</li>
+</ul>
+<p>&nbsp;<br />Details &amp; Fabric</p>
+<ul>
+<li>Front-close choices feature a racerback</li>
+<li>Back-close choices feature a U-shaped ballet back that prevents band from riding up and offers more coverage</li>
+<li>Supersoft, double-lined sides for the smoothest shape</li>
+<li>Hand wash</li>
+<li>Imported nylon/spandex</li>
+</ul>',
+    'meta_title' => 'Perfect Shape Full Coverage Bra',
+    'meta_keyword' => 'Perfect Shape Full Coverage Bra',
+    'meta_description' => 'Perfect Shape Full Coverage Bra The sexy lift of a push-up meets the coverage you want in a supersoft bra you’ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.Lift & Lining
+
+
+Uplift',
+    'category_ids' =>
+    array (
+    ),
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'url_key' => 'de-359-881-34-a-vs-white',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+    'product_activation_date' => '2018-05-25 11:38:12',
+    'product_state' => '14',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'stylecode' => 'SC',
+    'brand' => '18',
+    'collection' => '24',
+    'color_description' => '173',
+    'band_size' => '164',
+    'cup_size' => '167',
+    'home_delivery' => '0',
+    'ignore_price_update' => '0',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 51,
+      'product_id' => 39,
+      'stock_id' => 2,
+      'qty' => NULL,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => true,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2018-06-04 08:15:24',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+),
+array (
+  'product_id' => 40,
+  'store_id' => 4,
+  'attribute_set_id' => 13,
+  'attribute_set_label' => 'BRAS',
+  'sku' => 'DE-359-881-34-A-Black Garden Lace',
+  'name' => 'DE-359-881-34-A-Black Garden Lace',
+  'type' => 'simple',
+  'price' => '20.0000',
+  'special_price' => '0',
+  'final_price' => '20',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'description' => '<p><span>The sexy lift of a push-up meets the&nbsp;coverage you want in a supersoft bra you&rsquo;ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.</span><br /><br /><span>Lift &amp; Lining</span></p>
+<p>&nbsp;</p>
+<ul>
+<li>Uplift with cushioned padding for shape</li>
+<li>Full coverage underwire cups</li>
+</ul>
+<p>&nbsp;<br />Straps &amp; Hooks</p>
+<ul>
+<li>Adjustable straps can convert to crossback and snap into place for a secure hold</li>
+<li>Front closure or back closure</li>
+<li>Back-close chocies feature a double row of hook and eye closures; Sizes 36DD &amp; 38D-38DD have triple row of closures for a secure, comfortable fit</li>
+<li>Back-close choices feature 4 settings to ensure a perfect fit</li>
+</ul>
+<p>&nbsp;<br />Details &amp; Fabric</p>
+<ul>
+<li>Front-close choices feature a racerback</li>
+<li>Back-close choices feature a U-shaped ballet back that prevents band from riding up and offers more coverage</li>
+<li>Supersoft, double-lined sides for the smoothest shape</li>
+<li>Hand wash</li>
+<li>Imported nylon/spandex</li>
+</ul>',
+    'meta_title' => 'Perfect Shape Full Coverage Bra',
+    'meta_keyword' => 'Perfect Shape Full Coverage Bra',
+    'meta_description' => 'Perfect Shape Full Coverage Bra The sexy lift of a push-up meets the coverage you want in a supersoft bra you’ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.Lift & Lining
+
+
+Uplift',
+    'category_ids' =>
+    array (
+    ),
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'url_key' => 'de-359-881-34-a-black-garden-lace',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+    'product_activation_date' => '2018-05-25 11:38:14',
+    'product_state' => '14',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'stylecode' => 'SC',
+    'brand' => '18',
+    'collection' => '24',
+    'color_description' => '174',
+    'band_size' => '164',
+    'cup_size' => '167',
+    'home_delivery' => '0',
+    'ignore_price_update' => '0',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 52,
+      'product_id' => 40,
+      'stock_id' => 2,
+      'qty' => NULL,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => true,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2018-06-04 08:16:12',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+),array (
+  'product_id' => 41,
+  'store_id' => 4,
+  'attribute_set_id' => 13,
+  'attribute_set_label' => 'BRAS',
+  'sku' => 'DE-359-881-34-B-VS White',
+  'name' => 'DE-359-881-34-B-VS White',
+  'type' => 'simple',
+  'price' => '20.0000',
+  'special_price' => '0',
+  'final_price' => '20',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'description' => '<p><span>The sexy lift of a push-up meets the&nbsp;coverage you want in a supersoft bra you&rsquo;ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.</span><br /><br /><span>Lift &amp; Lining</span></p>
+<p>&nbsp;</p>
+<ul>
+<li>Uplift with cushioned padding for shape</li>
+<li>Full coverage underwire cups</li>
+</ul>
+<p>&nbsp;<br />Straps &amp; Hooks</p>
+<ul>
+<li>Adjustable straps can convert to crossback and snap into place for a secure hold</li>
+<li>Front closure or back closure</li>
+<li>Back-close chocies feature a double row of hook and eye closures; Sizes 36DD &amp; 38D-38DD have triple row of closures for a secure, comfortable fit</li>
+<li>Back-close choices feature 4 settings to ensure a perfect fit</li>
+</ul>
+<p>&nbsp;<br />Details &amp; Fabric</p>
+<ul>
+<li>Front-close choices feature a racerback</li>
+<li>Back-close choices feature a U-shaped ballet back that prevents band from riding up and offers more coverage</li>
+<li>Supersoft, double-lined sides for the smoothest shape</li>
+<li>Hand wash</li>
+<li>Imported nylon/spandex</li>
+</ul>',
+    'meta_title' => 'Perfect Shape Full Coverage Bra',
+    'meta_keyword' => 'Perfect Shape Full Coverage Bra',
+    'meta_description' => 'Perfect Shape Full Coverage Bra The sexy lift of a push-up meets the coverage you want in a supersoft bra you’ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.Lift & Lining
+
+
+Uplift',
+    'category_ids' =>
+    array (
+    ),
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'url_key' => 'de-359-881-34-b-vs-white',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+    'product_activation_date' => '2018-05-25 11:38:15',
+    'product_state' => '14',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'stylecode' => 'SC',
+    'brand' => '18',
+    'collection' => '24',
+    'color_description' => '173',
+    'band_size' => '164',
+    'cup_size' => '168',
+    'home_delivery' => '0',
+    'ignore_price_update' => '0',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 53,
+      'product_id' => 41,
+      'stock_id' => 2,
+      'qty' => NULL,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => true,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2018-06-04 08:17:23',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+),array (
+  'product_id' => 42,
+  'store_id' => 4,
+  'attribute_set_id' => 13,
+  'attribute_set_label' => 'BRAS',
+  'sku' => 'DE-359-881-34-B-Black Garden Lace',
+  'name' => 'DE-359-881-34-B-Black Garden Lace',
+  'type' => 'simple',
+  'price' => '20.0000',
+  'special_price' => '0',
+  'final_price' => '20',
+  'status' => 1,
+  'visibility' => 2,
+  'attributes' =>
+  array (
+    'description' => '<p><span>The sexy lift of a push-up meets the&nbsp;coverage you want in a supersoft bra you&rsquo;ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.</span><br /><br /><span>Lift &amp; Lining</span></p>
+<p>&nbsp;</p>
+<ul>
+<li>Uplift with cushioned padding for shape</li>
+<li>Full coverage underwire cups</li>
+</ul>
+<p>&nbsp;<br />Straps &amp; Hooks</p>
+<ul>
+<li>Adjustable straps can convert to crossback and snap into place for a secure hold</li>
+<li>Front closure or back closure</li>
+<li>Back-close chocies feature a double row of hook and eye closures; Sizes 36DD &amp; 38D-38DD have triple row of closures for a secure, comfortable fit</li>
+<li>Back-close choices feature 4 settings to ensure a perfect fit</li>
+</ul>
+<p>&nbsp;<br />Details &amp; Fabric</p>
+<ul>
+<li>Front-close choices feature a racerback</li>
+<li>Back-close choices feature a U-shaped ballet back that prevents band from riding up and offers more coverage</li>
+<li>Supersoft, double-lined sides for the smoothest shape</li>
+<li>Hand wash</li>
+<li>Imported nylon/spandex</li>
+</ul>',
+    'meta_title' => 'Perfect Shape Full Coverage Bra',
+    'meta_keyword' => 'Perfect Shape Full Coverage Bra',
+    'meta_description' => 'Perfect Shape Full Coverage Bra The sexy lift of a push-up meets the coverage you want in a supersoft bra you’ll love to wear. With lighter Memory Fit for extra support as it conforms to your curves and a smoothing U-shaped back.Lift & Lining
+
+
+Uplift',
+    'category_ids' =>
+    array (
+    ),
+    'options_container' => 'container2',
+    'required_options' => '0',
+    'has_options' => '0',
+    'url_key' => 'de-359-881-34-b-black-garden-lace',
+    'tax_class_id' => '2',
+    'gift_message_available' => '0',
+    'gift_wrapping_available' => '1',
+    'is_returnable' => '2',
+    'product_activation_date' => '2018-05-25 11:38:17',
+    'product_state' => '14',
+    'ship_to_store' => '1',
+    'reserve_and_collect' => '1',
+    'is_buyable' => '1',
+    'stylecode' => 'SC',
+    'brand' => '18',
+    'collection' => '24',
+    'color_description' => '174',
+    'band_size' => '164',
+    'cup_size' => '168',
+    'home_delivery' => '0',
+    'ignore_price_update' => '0',
+  ),
+  'linked' =>
+  array (
+  ),
+  'categories' =>
+  array (
+  ),
+  'extension' =>
+  array (
+    'stock_item' =>
+    array (
+      'item_id' => 54,
+      'product_id' => 42,
+      'stock_id' => 2,
+      'qty' => NULL,
+      'is_in_stock' => false,
+      'is_qty_decimal' => false,
+      'show_default_notification_message' => true,
+      'use_config_min_qty' => true,
+      'min_qty' => 0,
+      'use_config_min_sale_qty' => 1,
+      'min_sale_qty' => 1,
+      'use_config_max_sale_qty' => true,
+      'max_sale_qty' => 10000,
+      'use_config_backorders' => true,
+      'backorders' => 0,
+      'use_config_notify_stock_qty' => true,
+      'notify_stock_qty' => 1,
+      'use_config_qty_increments' => true,
+      'qty_increments' => 0,
+      'use_config_enable_qty_inc' => true,
+      'enable_qty_increments' => false,
+      'use_config_manage_stock' => true,
+      'manage_stock' => true,
+      'low_stock_date' => '2018-06-04 08:17:59',
+      'is_decimal_divided' => false,
+      'stock_status_changed_auto' => 1,
+    ),
+    'labels' =>
+    array (
+    ),
+    'media' =>
+    array (
+      0 =>
+      array (
+      ),
+      1 =>
+      array (
+      ),
+    ),
+  ),
+)
+);

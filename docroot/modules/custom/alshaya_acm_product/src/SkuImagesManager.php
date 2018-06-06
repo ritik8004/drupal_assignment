@@ -81,7 +81,7 @@ class SkuImagesManager {
           $url = $media_item['file']->url();
           $return['images'][$url] = $url;
         }
-        elseif ($media_item['media_type'] == 'video') {
+        elseif ($media_item['media_type'] == 'external-video') {
           $return['videos'][$media_item['video_url']] = $media_item['video_url'];
         }
       }

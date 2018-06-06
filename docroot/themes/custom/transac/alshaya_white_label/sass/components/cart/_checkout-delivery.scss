@@ -794,8 +794,12 @@
           #{$right}: 0.8rem;
           top: 54%;
 
-          @include breakpoint($tablet) {
-            #{$right}: 18px;
+          @include breakpoint($desktop) {
+            #{$right}: 1.5rem;
+          }
+
+          @include breakpoint($upto-desktop) {
+            #{$right}: 1rem;
           }
         }
 
@@ -1242,12 +1246,18 @@ html[lang=ar] {
     width: 3.0625rem;
     position: absolute;
     top: 1.25rem;
-    #{$right}: 1.125rem;
     opacity: 0.2;
+
+    @include breakpoint($desktop) {
+      #{$right}: 1.5rem;
+    }
+
+    @include breakpoint($upto-desktop) {
+      #{$right}: 1rem;
+    }
 
     html[lang=ar] & {
       background: url(#{$base_theme_img_directory_path}/cards/cash-on-delivery-ar.svg) no-repeat;
-      left: 0.8rem;
     }
   }
 

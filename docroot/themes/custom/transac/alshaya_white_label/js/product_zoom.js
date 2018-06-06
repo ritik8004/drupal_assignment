@@ -81,7 +81,7 @@
       });
 
       // Modal view on image click in desktop and tablet.
-      // Modal view for Slider-2 when clicking on big image - Image Gallery.
+      // Modal view for PDP Slider, when clicking on main image.
       var element = document.getElementById('product-image-gallery-container');
       var dialogsettings = {
         autoOpen: true,
@@ -219,19 +219,22 @@
                 top: 0
               });
 
+              // Video Handling for PDP Modal.
               if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
                 var href = $(this).attr('data-iframe');
-                $('#full-image-wrapper img').hide();
-                $('#full-image-wrapper iframe').remove();
-                appendVideoIframe($('#full-image-wrapper'), href, 480, 480);
+                $('#full-image-wrapper').hide();
+                $('.cloudzoom__video_modal').show();
+                $('.cloudzoom__video_modal iframe').remove();
+                appendVideoIframe($('.cloudzoom__video_modal'), href);
               }
               else {
                 var bigImage = $(this).children('a').attr('href');
                 // Put the big image in our main container.
                 $('#full-image-wrapper img').attr('src', bigImage);
                 $('#full-image-wrapper img').css('transform', 'scale(1)');
-                $('#full-image-wrapper iframe').remove();
-                $('#full-image-wrapper img').show();
+                $('.cloudzoom__video_modal iframe').remove();
+                $('.cloudzoom__video_modal').hide();
+                $('#full-image-wrapper').show();
               }
               // Stop the browser from loading the image in a new tab.
               return false;
@@ -295,33 +298,26 @@
         myDialog.showModal();
       });
 
-      // Handling videos inside sliders.
-      // For Mobile slider we only insert, no need to remove it.
-      $('#product-image-gallery-mobile li', context).on('click', function () {
-        if ($(window).width() > 767) {
-          if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
-            var href = $(this).attr('data-iframe');
-            $(this).children('img').hide();
-            $(this).children('iframe').remove();
-            appendVideoIframe($(this), href, 320, 320);
-          }
-        }
-      });
-
+      // Videos inside main PDP slider.
       // For Desktop slider, we add a iframe on click on the image.
       $('#lightSlider li', context).on('click', function (e) {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
-          var wrap = $('.cloudzoom__herocontainer');
-          // Get width & height of wrap.
-          // Reducing 3% width.
-          var width = wrap.width() - wrap.width() * 0.03;
-          var height = wrap.height();
           var URL = $(this).attr('data-iframe');
-          $('#yt-vi-container iframe').remove();
-          appendVideoIframe($('#yt-vi-container'), URL, width, height);
+          $('.cloudzoom__video_main iframe').remove();
+          appendVideoIframe($('.cloudzoom__video_main'), URL);
           $('#cloud-zoom-wrap').hide();
           $(this).siblings('.slick-slide').removeClass('slick-current');
           $(this).addClass('slick-current');
+        }
+      });
+
+      // For Desktop slider, we remove the video iframe if user clicks on image thumbnail..
+      $('#lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
+        var playerIframe = $('.cloudzoom__video_main iframe');
+        // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
+        if (playerIframe.length > 0) {
+          playerIframe.remove();
+          $('#cloud-zoom-wrap').show();
         }
       });
 
@@ -355,27 +351,13 @@
 
       $('.acq-content-product-modal #lightSlider li').on('click', function () {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
-          var wrap = $('.acq-content-product-modal #cloud-zoom-wrap');
-          // Get width & height of wrap.
-          var width = wrap.width();
-          var height = wrap.height();
           var URL = $(this).attr('data-iframe');
-          $('.acq-content-product-modal #yt-vi-container iframe').remove();
-          appendVideoIframe($('.acq-content-product-modal #yt-vi-container'), URL, width, height);
+          $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
+          appendVideoIframe($('.acq-content-product-modal .cloudzoom__video_main'), URL);
           $('#cloud-zoom-wrap').hide();
         }
         // Stop the browser from loading the image in a new tab.
         return false;
-      });
-
-      // For Desktop slider, we remove the iframe when we want to zoom another image.
-      $('#lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
-        var playerIframe = $('#yt-vi-container iframe');
-        // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
-        if (playerIframe.length > 0) {
-          playerIframe.remove();
-          $('#cloud-zoom-wrap').show();
-        }
       });
 
       $('#lightSlider .slick-prev').on('click', function () {
@@ -438,14 +420,10 @@
        *   The HTML element inside which we want iframe.
        * @param {string} href
        *   The URL of video.
-       * @param {number} width
-       *   The width of iframe/video.
-       * @param {number} height
-       *   The height of the iframe/video.
        */
-      function appendVideoIframe(element, href, width, height) {
-        element.append('<iframe id="player" width="' + width + '" height="' + height + '" src="' + href
-            + '" frameborder="0" allowfullscreen></iframe>');
+      function appendVideoIframe(element, href) {
+        element.append('<iframe id="player" src="' + href
+          + '" frameborder="0" style="position:absolute;top:0;left:0;width:100%;height:100%;" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
       }
     }
   };

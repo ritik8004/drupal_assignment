@@ -198,6 +198,20 @@ function alshaya_get_env_keys($site, $env) {
       //  'conductor' => 'pbae_test',
       //],
     ],
+    // Victoria Secret KW.
+    'vskw' => [
+      'default' => [
+        'magento' => 'vs_qa',
+        'conductor' => 'pbae_test',
+      ],
+    ],
+    // Victoria Secret SA.
+    'vssa' => [
+      'default' => [
+        'magento' => 'vs_qa',
+        'conductor' => 'pbae_test',
+      ],
+    ],
     // Victoria Secret AE.
     'vsae' => [
       // VSAE is connected to MC QA for now.
