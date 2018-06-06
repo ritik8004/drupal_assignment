@@ -82,7 +82,10 @@ function alshaya_promo_panel_theme_suggestions_alter(array &$suggestions, array 
   if (isset($variables['elements']) && isset($variables['elements']['#base_plugin_id'])) {
     if ($variables['elements']['#base_plugin_id'] == 'block_content') {
       if (isset($variables['elements']['content']) && !empty($variables['elements']['#id'])) {
-        $suggestions[] = 'block__block_content__alshaya_promo_panel';
+        $promo_panel_blocks = \Drupal::config('alshaya_promo_panel.settings')->get('promo_panel_blocks');
+        if (in_array($variables['elements']['#id'], array_keys($promo_panel_blocks))) {
+          $suggestions[] = 'block__block_content__alshaya_promo_panel';
+        }
       }
     }
   }
