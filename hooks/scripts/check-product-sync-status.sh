@@ -2,7 +2,11 @@ site="$1"
 target_env="$2"
 uri="$3"
 
+# Sleep duration (seconds) between counts.
 sleepd=15
+
+# Maximum number of loop to execute.
+max_loop_count=180
 
 if [ $target_env = "01live" -o $target_env = "01update" ]
 then
@@ -11,6 +15,7 @@ then
 fi
 
 new_count="0"
+loop_count=0
 while :
 do
   sleep $sleepd
@@ -20,8 +25,16 @@ do
 
   if [ $old_count != "0" -a $old_count == $new_count ]
   then
+    echo "SKUs count has not changed since $sleepd seconds. Considering the sync done."
     break
   fi
 
+  if [ $max_loop_count == $loop_count ]
+  then
+    echo "We have been waiting for SKUs to sync too long now. There is probably an issue with sync on $uri. Break!"
+    break
+   fi
+
   echo "Waiting $sleepd seconds for more SKUs to come."
+  loop_count=$((loop_count+1))
 done
