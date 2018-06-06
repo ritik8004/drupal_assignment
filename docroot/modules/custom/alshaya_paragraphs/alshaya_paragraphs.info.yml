@@ -27,4 +27,5 @@ dependencies:
   - drupal:views
   - field_group:field_group
   - viewsreference:viewsreference
+  - jquery_minicolors:jquery_minicolors
 package: Alshaya

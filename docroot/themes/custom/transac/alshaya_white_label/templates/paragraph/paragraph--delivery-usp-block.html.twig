@@ -1,0 +1,18 @@
+{%
+set classes = [
+'paragraph',
+'paragraph--type--' ~ paragraph.bundle|clean_class,
+view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+]
+%}
+{% block paragraph %}
+    <div class="{{ paragraph.field_arrow_color.value }}">
+        {% if content.field_usp_text_background %}
+            <div class="usp-text" style="background-color: {{ paragraph.field_usp_text_background.value }}">
+        {% else %}
+            <div class="usp-text">
+        {% endif %}
+                {{ content.field_usp_text }}
+            </div>
+    </div>
+{% endblock paragraph %}

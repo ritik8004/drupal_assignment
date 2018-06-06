@@ -13,6 +13,45 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Adding new paragraph type 'Delivery USP Block'.
+ */
+function alshaya_paragraphs_update_8117() {
+  // If module not already installed, then install it.
+  if (!\Drupal::moduleHandler()->moduleExists('ckeditor_font')) {
+    \Drupal::service('module_installer')->install(['ckeditor_font']);
+  }
+
+  $configs = [
+    'paragraphs.paragraphs_type.delivery_usp_block',
+    'field.storage.paragraph.field_usp_timer',
+    'field.storage.paragraph.field_usp_text_background',
+    'field.storage.paragraph.field_usp_text',
+    'field.storage.paragraph.field_arrow_color',
+    'field.field.paragraph.delivery_usp_block.field_usp_text_background',
+    'field.field.paragraph.delivery_usp_block.field_usp_text',
+    'field.field.paragraph.delivery_usp_block.field_usp_timer',
+    'field.field.paragraph.delivery_usp_block.field_arrow_color',
+    'core.entity_view_display.paragraph.delivery_usp_block.default',
+    'core.entity_form_display.paragraph.delivery_usp_block.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  $configs = [
+    'field.field.node.advanced_page.field_slider',
+    'field.field.node.advanced_page.field_promo_blocks',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_advanced_page');
+
+  $configs = [
+    'filter.format.limited_options',
+    'editor.editor.limited_options',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_master');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new fields for margin override in paragraph promo block.
  */
 function alshaya_paragraphs_update_8116() {

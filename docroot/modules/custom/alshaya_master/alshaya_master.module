@@ -499,6 +499,43 @@ function alshaya_master_element_info_alter(array &$info) {
     $info['mobile_number']['#value_callback'] = '_alshaya_master_mobile_number_value_callback';
     array_unshift($info['mobile_number']['#element_validate'], '_alshaya_master_mobile_number_validate');
   }
+
+  if (isset($info['text_format']['#process'])) {
+    $info['text_format']['#process'][] = '_alshaya_master_text_format_process';
+  }
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function alshaya_master_field_widget_entity_reference_paragraphs_form_alter(array &$element, FormStateInterface $form_state, array $context) {
+  if (isset($element['subform']) && isset($element['subform']['field_usp_text'])) {
+    // We just adding this custom option so that we uniquely identify the field
+    // as there is no way currently to do this.
+    // @see _alshaya_master_text_format_process().
+    foreach ($element['subform']['field_usp_text']['widget'] as $key => $value) {
+      // Doing this numeric check as 'field_usp_text' has cardinality 3 and
+      // therefor we need to do this for all  delta.
+      if (is_numeric($key)) {
+        $element['subform']['field_usp_text']['widget'][$key]['#only_filter'] = 'limited_options';
+      }
+    }
+  }
+}
+
+/**
+ * Processor for the 'text_format' field to remove unwanted filter options.
+ */
+function _alshaya_master_text_format_process(array &$element, FormStateInterface $form_state) {
+  // We have set this custom option to identify the field.
+  // @see alshaya_master_field_widget_entity_reference_paragraphs_form_alter().
+  if (isset($element['#only_filter']) && !empty($filter = $element['#only_filter'])) {
+    $filter_name = $element['format']['format']['#options'][$filter];
+    $element['format']['format']['#options'] = [$filter => $filter_name];
+    $element['format']['format']['#default_value'] = $filter;
+  }
+
+  return $element;
 }
 
 /**
