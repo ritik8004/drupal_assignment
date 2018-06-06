@@ -47,8 +47,10 @@
     }
   }
 
-  .form-type-checkbox .option::before {
-    font-size: 1.125rem;
+  @include breakpoint($tablet) {
+    .form-type-checkbox .option::before {
+      font-size: 1.125rem;
+    }
   }
 }
 

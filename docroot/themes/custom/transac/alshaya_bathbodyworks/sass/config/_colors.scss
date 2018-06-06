@@ -86,6 +86,9 @@ $pdp_product_form_text: $warm-grey-one;
 $pdp_product_volume_label: $warm-grey-one;
 $pdp_product_volume_value: $black;
 $pdp_sidebar_description: $black;
+$pdp_sell_title: $black;
+$pdp_product_qty_text: $warm-grey-one;
+$pdp_cross_sell_title: $peacock-blue;
 
 // Product Add to cart form.
 $pdp_sidebar_label: $peacock-blue;
@@ -224,6 +227,7 @@ $checkout_mobile_back_link_icon: $peacock-blue;
 
 // Notification popup.
 $minicart_notification_border: $peacock-blue;
+$minicart_notification_background: $white;
 $minicart_notification_text: $peacock-blue;
 $minicart_notification_btn_bg: $black;
 $minicart_notification_product_title: $black;
@@ -272,6 +276,7 @@ $promo_white_amperserif: $white;
 $promo_white_btn: $white;
 $promo_white_btn_border: $black;
 $promo_white_btn_text: $black;
+$section_divider_border: $black;
 
 /* ------- 7. Pages ----- */
 
@@ -289,7 +294,7 @@ $plp_facet_border: $warm-grey-two;
 $plp_facet_summary_filter_icon: $white;
 $plp_item_label: $black;
 $plp_promotion_description: $warm-grey-one;
-$plp_promotion_link: $peacock-blue;
+$plp_promotion_link: $error-red;
 
 // PLP Product tile.
 $plp_tile_product_title: $black;

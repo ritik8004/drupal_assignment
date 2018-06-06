@@ -23,6 +23,24 @@ function alshaya_vs_transac_update_8102() {
 
 /**
  * Implements hook_update_n().
+ *
+ * Install brand field for store node.
+ */
+function alshaya_vs_transac_update_8102() {
+  alshaya_config_install_configs([
+    'field.storage.node.field_brand',
+    'field.field.node.store.field_brand',
+  ], 'alshaya_vs_transac');
+
+  // Save form and view display mode for store content type.
+  alshaya_config_install_configs([
+    'core.entity_form_display.node.store.default',
+    'core.entity_view_display.node.store.default',
+  ], 'alshaya_stores_finder');
+}
+
+/**
+ * Implements hook_update_n().
  */
 function alshaya_vs_transac_update_8101() {
   \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
