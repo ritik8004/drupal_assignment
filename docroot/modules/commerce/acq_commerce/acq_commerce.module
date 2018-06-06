@@ -73,14 +73,30 @@ function template_preprocess_acq_commerce_price(array &$variables) {
   // Fetch the currency code position.
   $variables['currency_code_position'] = $config->get('currency_code_position');
 
-  // Remove the comma coming from Magento, we will add while formatting.
+  $variables['price'] = acq_commerce_get_clean_price($variables['price']);
+
+  $variables['price'] = number_format($variables['price'], $config->get('decimal_points'));
+}
+
+/**
+ * Helper function to clean commerce price.
+ *
+ * For now we encounter only one issue - comma in price when value is more than
+ * thousand. We might encounter more issues later.
+ *
+ * @param mixed $price
+ *   Price received from commerce.
+ *
+ * @return mixed
+ *   Cleaned price value.
+ */
+function acq_commerce_get_clean_price($price) {
+  // Remove the comma coming from Commerce, we will add while formatting.
   // Casting to float or using floatval stops at comma and doesn't return
   // whole value.
   // NumberFormatter.parse requires locale, we don't have expected value
   // available anywhere in the system for now (kw_AR) so not using it.
-  $variables['price'] = str_replace(',', '', $variables['price']);
-
-  $variables['price'] = number_format($variables['price'], $config->get('decimal_points'));
+  return str_replace(',', '', $price);
 }
 
 /**

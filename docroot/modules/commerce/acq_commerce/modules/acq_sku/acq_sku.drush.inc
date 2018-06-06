@@ -201,11 +201,10 @@ function drush_acq_sku_sync_commerce_cats() {
  * Implements drush product attribute sync command.
  */
 function drush_acq_sku_sync_commerce_product_options() {
-  drush_print(dt('Synchronizing all commerce product options, please wait...'));
+  \Drupal::logger('acq_sku')->notice('Synchronizing all commerce product options, please wait...');
   $container = \Drupal::getContainer();
   $container->get('acq_sku.product_options_manager')->synchronizeProductOptions();
   \Drupal::logger('acq_sku')->notice('Product attribute sync completed.');
-  drush_print(dt('Done.'));
 }
 
 /**

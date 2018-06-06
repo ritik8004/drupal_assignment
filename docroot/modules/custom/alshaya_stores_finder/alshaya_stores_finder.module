@@ -279,7 +279,7 @@ function alshaya_stores_finder_alshaya_config_save_alter(array &$data, $config_n
       ->get('alshaya_stores_finder.settings')
       ->get('marker.url');
 
-    $view_displays = ['attachment_1', 'page_3', 'page_2'];
+    $view_displays = ['attachment_1', 'page_3', 'page_2', 'page_1'];
     foreach ($view_displays as $view_display) {
       if (isset($data['display'][$view_display]['display_options']['filters']['field_latitude_longitude_proximity'])) {
         $data['display'][$view_display]['display_options']['filters']['field_latitude_longitude_proximity']['expose']['geocoder_plugin_settings']['settings']['component_restrictions']['country'] = $country_code;
