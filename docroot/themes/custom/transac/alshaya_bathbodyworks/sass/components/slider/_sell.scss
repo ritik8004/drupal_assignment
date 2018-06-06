@@ -2,6 +2,7 @@
   &.crossell-title {
     font-family: $alshaya-thin;
     text-align: center;
+    color: $pdp_cross_sell_title;
   }
 }
 
@@ -14,6 +15,7 @@
     max-width: 8rem;
     text-transform: uppercase;
     margin: 1.5rem auto 0.625rem;
+    font-size: 0.875rem;
   }
 
   .owl-prev::before,
