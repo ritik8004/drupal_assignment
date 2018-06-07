@@ -23,6 +23,10 @@
       padding: 0.25rem 0.5rem;
       width: 13rem;
       margin-bottom: 1.313rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.875rem;
+      }
     }
 
     li {
