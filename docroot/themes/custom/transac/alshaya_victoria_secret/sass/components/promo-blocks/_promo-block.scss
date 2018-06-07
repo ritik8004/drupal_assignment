@@ -1,0 +1,15 @@
+.nodetype--advanced_page {
+  .node--type-advanced-page {
+    .c-content__container {
+      @include breakpoint($desktop) {
+        @include container(1026px);
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .c-content__body {
+      padding: 0;
+    }
+  }
+}
