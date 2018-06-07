@@ -1048,9 +1048,11 @@ html[lang=ar] {
           height: 1.25rem;
           margin-#{$left}: 0.625rem;
           letter-spacing: normal;
+          line-height: 2;
 
           html[lang=ar] & {
             margin-right: 0.3125rem;
+            align-items: start;
           }
         }
       }
