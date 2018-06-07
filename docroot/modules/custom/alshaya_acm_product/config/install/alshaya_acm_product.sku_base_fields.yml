@@ -27,6 +27,7 @@ fields:
     label: 'Color'
     cardinality: -1
     index: 1
+    facet: 1
 
   rgb_color:
     label: 'RGB color'
@@ -53,6 +54,7 @@ fields:
     cardinality: -1
     configurable: 1
     index: 1
+    facet: 1
 
   bullet_points:
     label: 'Bullet points'
@@ -76,10 +78,12 @@ fields:
   product_collection:
     label: 'Collection'
     description: 'Part of description.'
+    facet: 1
 
   product_brand:
     label: 'Brand'
     description: 'Part of description.'
+    facet: 1
 
   brand_logo:
     label: 'Brand Logo'
@@ -97,6 +101,7 @@ fields:
   concept:
     label: 'Concept'
     cardinality: -1
+    facet: 1
 
   washing_instructions:
     label: 'Washing Instructions'

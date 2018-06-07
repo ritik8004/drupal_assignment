@@ -5,21 +5,26 @@ dependencies:
     - search_api.index.acquia_search_index
     - views.view.search
   module:
+    - alshaya_search
     - search_api
-id: color
-name: Color
-url_alias: color
+third_party_settings:
+  alshaya_search:
+    display_textbox: 1
+    display_textbox_item_count: '1'
+id: product_brand
+name: Brand
+url_alias: product_brand
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: color
+field_identifier: attr_product_brand
 facet_source_id: 'search_api:views_page__search__page'
 widget:
   type: checkbox
   config:
     show_numbers: true
     soft_limit: 5
-query_operator: or
+query_operator: and
 use_hierarchy: false
 expand_hierarchy: false
 enable_parent_when_child_gets_disabled: true

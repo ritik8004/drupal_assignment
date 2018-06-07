@@ -40,19 +40,3 @@ function alshaya_hm_images_update_8001() {
     ->set('weights.cart.STILL_LIFE_FRONT_URL', 5)
     ->save();
 }
-
-/**
- * Implements hook_install().
- */
-function alshaya_hm_images_install() {
-  // Add fields to store the values from attributes as fields.
-  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
-  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
-
-  $sku_fields_manager->updateFieldMetaInfo('color_label', [
-    'configurable' => 1,
-    'label' => 'Color',
-  ]);
-
-  $sku_fields_manager->addFields();
-}

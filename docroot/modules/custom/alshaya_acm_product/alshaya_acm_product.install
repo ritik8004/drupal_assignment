@@ -289,9 +289,6 @@ function alshaya_acm_product_update_8001() {
  * Implements hook_install().
  */
 function alshaya_acm_product_install() {
-  // Add fields to store the values from attributes as fields.
-  \Drupal::service('acq_sku.fields_manager')->addFields();
-
   // Make meta tags visible in form of acq_product.
   $product_config_factory = Drupal::configFactory()->getEditable('core.entity_form_display.node.acq_product.default');
   $content = $product_config_factory->get('content');

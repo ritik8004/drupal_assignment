@@ -127,7 +127,4 @@ function alshaya_vs_transac_install() {
   $block = reset($blocks);
   $block->setStatus(TRUE);
   $block->save();
-
-  // Add SKU base fields specific to VS.
-  \Drupal::service('acq_sku.fields_manager')->addFields();
 }

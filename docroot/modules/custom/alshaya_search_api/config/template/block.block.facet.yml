@@ -1,27 +1,27 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - facets.facet.skus_sku_reference_collection
+  config: {  }
   module:
+    - ctools
     - facets
     - system
   theme:
     - alshaya_white_label
-id: skusskureferencecollection
+id: brand
 theme: alshaya_white_label
 region: sidebar_first
-weight: -32
+weight: -20
 provider: null
-plugin: 'facet_block:skus_sku_reference_collection'
+plugin: 'facet_block:field'
 settings:
-  id: 'facet_block:skus_sku_reference_collection'
-  label: Collection
+  id: 'facet_block:field'
+  label: Label
   provider: facets
   label_display: visible
 visibility:
   request_path:
     id: request_path
-    pages: '/taxonomy/term/*'
+    pages: /search
     negate: false
     context_mapping: {  }

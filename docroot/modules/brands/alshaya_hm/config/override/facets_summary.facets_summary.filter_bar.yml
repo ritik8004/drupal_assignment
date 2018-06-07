@@ -1,8 +1,0 @@
-facets:
-  concept:
-    checked: true
-    label: Concept
-    separator: ", "
-    show_count: true
-    show_label: false
-    weight: 0

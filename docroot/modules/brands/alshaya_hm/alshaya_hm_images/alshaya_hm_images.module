@@ -359,3 +359,17 @@ function alshaya_hm_images_acq_sku_base_field_additions_alter(array &$fields = [
   $alshaya_acm_product_fields = \Drupal::config('alshaya_hm_images.sku_base_fields')->get('fields');
   $fields = array_merge($fields, $alshaya_acm_product_fields);
 }
+
+/**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_hm_images_alshaya_master_post_drupal_install() {
+  // Add fields to store the values from attributes as fields.
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+
+  $sku_fields_manager->updateFieldMetaInfo('color_label', [
+    'configurable' => 1,
+    'label' => 'Color',
+  ]);
+}

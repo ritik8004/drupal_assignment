@@ -6,7 +6,7 @@ dependencies:
   - alshaya_acm_product_position:alshaya_acm_product_position
   - alshaya_acm_promotion:alshaya_acm_promotion
   - alshaya_image_styles:alshaya_image_styles
-  - alshaya_search:alshaya_search
+  - alshaya_search_api:alshaya_search_api
   - better_exposed_filters:better_exposed_filters
   - drupal:block
   - facets:facets

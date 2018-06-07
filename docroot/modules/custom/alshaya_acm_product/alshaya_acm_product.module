@@ -1504,3 +1504,11 @@ function alshaya_acm_product_acq_sku_base_field_additions_alter(array &$fields =
   $alshaya_acm_product_fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
   $fields = array_merge($fields, $alshaya_acm_product_fields);
 }
+
+/**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_acm_product_alshaya_master_post_drupal_install() {
+  // Add fields to store the values from attributes as fields.
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}

@@ -127,9 +127,6 @@ function alshaya_bbw_transac_update_8001() {
  * Implements hook_install().
  */
 function alshaya_bbw_transac_install() {
-  // Add fields to store the values from attributes as fields.
-  \Drupal::service('acq_sku.fields_manager')->addFields();
-
   // Enable sort options.
   $sort_options = [
     'created' => 'created',
