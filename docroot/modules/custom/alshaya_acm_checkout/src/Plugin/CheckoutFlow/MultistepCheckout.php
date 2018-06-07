@@ -71,11 +71,14 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     // Never cache the checkout form. We never know, anything can change here.
     $form['#cache'] = ['max-age' => 0];
 
-    $cart = $this->getCart();
-
     // We always want this cache context and tag.
     $form['#cache']['contexts'][] = 'cookies:Drupal_visitor_acq_cart_id';
-    $form['#cache']['tags'][] = 'cart:' . $cart->id();
+
+    // On final step we won't have cart to add the cache tag.
+    if ($this->stepId != 'confirmation') {
+      $cart = $this->getCart();
+      $form['#cache']['tags'][] = 'cart:' . $cart->id();
+    }
 
     $form['#tree'] = TRUE;
     $form['#theme'] = ['acq_checkout_form'];
