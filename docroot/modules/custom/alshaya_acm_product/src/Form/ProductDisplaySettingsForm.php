@@ -6,29 +6,29 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class ProductExtraSettingsForm.
+ * Class ProductDisplaySettingsForm.
  */
-class ProductExtraSettingsForm extends ConfigFormBase {
+class ProductDisplaySettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'product_extra_settings_form';
+    return 'product_display_settings_form';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return ['alshaya_acm_product.extra_settings'];
+    return ['alshaya_acm_product.display_settings'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_acm_product.extra_settings');
+    $config = $this->config('alshaya_acm_product.display_settings');
     $config->set('image_thumb_gallery', $form_state->getValue('image_thumb_gallery'));
     $config->set('color_swatches', $form_state->getValue('color_swatches'));
     $config->save();
@@ -42,7 +42,7 @@ class ProductExtraSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
-    $config = $this->config('alshaya_acm_product.extra_settings');
+    $config = $this->config('alshaya_acm_product.display_settings');
 
     $form['image_thumb_gallery'] = [
       '#type' => 'checkbox',

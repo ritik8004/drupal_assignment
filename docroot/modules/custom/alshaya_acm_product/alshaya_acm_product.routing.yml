@@ -70,10 +70,10 @@ alshaya_acm_product.get_cart_form:
       entity:
         type: entity:acq_sku
 
-alshaya_acm_product.product_extra_settings:
+alshaya_acm_product.product_display_settings:
   path: '/admin/config/alshaya/product-extra'
   defaults:
-    _form: '\Drupal\alshaya_acm_product\Form\ProductExtraSettingsForm'
-    _title: 'Product extra settings'
+    _form: '\Drupal\alshaya_acm_product\Form\ProductDisplaySettingsForm'
+    _title: 'Product display settings'
   requirements:
     _permission: 'administer alshaya config'
