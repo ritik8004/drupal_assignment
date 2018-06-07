@@ -261,8 +261,6 @@ class SKUFieldsManager {
       'visible_view' => 0,
       // Whether the field should be visible in form.
       'visible_form' => 1,
-      // Whether the fields value copied to parent SKU when indexing.
-      'index' => 0,
     ];
   }
 
