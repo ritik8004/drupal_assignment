@@ -17,6 +17,8 @@ global_styles:
     - core/jquery
     - core/jquery.once
     - core/jquery.ui.accordion
+    - core/jquery.ui.core
+    - core/jquery.ui.effects.core
     - core/jquery.ui.tabs
     - core/jquery.cookie
     - mobile_number/element
