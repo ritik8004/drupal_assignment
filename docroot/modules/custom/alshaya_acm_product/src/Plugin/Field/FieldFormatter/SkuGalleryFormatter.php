@@ -145,7 +145,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       }
     }
 
-    $thumbnails_display_status = $this->configFactory->get('alshaya_acm_product.extra_settings')->get('image_thumb_gallery');
+    $thumbnails_display_status = $this->configFactory->get('alshaya_acm_product.display_settings')->get('image_thumb_gallery');
     foreach ($items as $delta => $item) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku */
       $sku = $this->viewValue($item);
