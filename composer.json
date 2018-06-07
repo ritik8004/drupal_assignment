@@ -8,7 +8,7 @@
         "acquia/blt": "^8.9.7",
         "acquia/lightning": "^2.2.0",
         "drupal/address": "^1.0-rc4",
-        "drupal/acsf": "^1.33.0",
+        "drupal/acsf": "^1.48.0",
         "drupal/key_value_field": "^1.0-beta1",
         "drupal/restui": "^1.13",
         "drush/drush": "^8.1.15",
