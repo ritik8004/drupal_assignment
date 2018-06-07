@@ -1,26 +1,29 @@
 @font-face {
-  font-family: 'Cairo';
+  font-family: "DroidArabicKufi-Light";
+  src: url("/themes/custom/transac/alshaya_victoria_secret/fonts/alshaya-arabic-thin.eot");
   src:
-    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-regular.eot?#iefix") format("embedded-opentype"),
-    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-regular.woff") format("woff"),
-    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-regular.ttf") format("truetype"),
-    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-regular.svg#NotoKufiArabic-Bold") format("svg");
+    url("/themes/custom/transac/alshaya_victoria_secret/fonts/alshaya-arabic-thin.eot?#iefix") format("embedded-opentype"),
+    url("/themes/custom/transac/alshaya_victoria_secret/fonts/alshaya-arabic-thin.svg") format("svg"),
+    url("/themes/custom/transac/alshaya_victoria_secret/fonts/alshaya-arabic-thin.ttf") format("truetype"),
+    url("/themes/custom/transac/alshaya_victoria_secret/fonts/alshaya-arabic-thin.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Cairo-bold';
+  font-family: "BentonSans-Regular";
+  src: url("/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Light.eot");
   src:
-    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-bold.eot?#iefix") format("embedded-opentype"),
-    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-bold.woff") format("woff"),
-    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-bold.ttf") format("truetype"),
-    url("/themes/custom/non_transac/whitelabel/components/fonts/alshaya-cairo-bold.svg#NotoKufiArabic-Bold") format("svg");
+    url("/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Light.eot?#iefix") format("embedded-opentype"),
+    url("/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Light.otf") format("opentype"),
+    url("/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Light.svg") format("svg"),
+    url("/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Light.ttf") format("truetype"),
+    url("/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Light.woff") format("woff"),
+    url("/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Light.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
-
 // Font Family
-$alshaya-regular: 'Cairo', sans-serif;
+$alshaya-regular: 'BentonSans-Regular', 'DroidArabicKufi-Light';
 
-$arial: 'arialmt', arial, sans-serif;
+$alshaya--arabic-regular: 'DroidArabicKufi-Light', 'BentonSans-Regular';

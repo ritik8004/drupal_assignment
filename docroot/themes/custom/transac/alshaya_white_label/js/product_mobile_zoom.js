@@ -144,11 +144,8 @@ function hammerIt(elm) {
           hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="' + currentmobSlide + '"] img'));
 
           $('#product-image-gallery-mob').on('swipe', function (event, slick) {
-            var image = $(this).find('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img');
-            $.each(image.parent().siblings(), function () {
-              $(this).find('img').css('transform', 'scale3d(1, 1, 1)');
-            });
-            hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img'));
+            var image = '.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img';
+            hammerIt(document.querySelector(image));
           });
 
           $('.dialog-product-image-gallery-container-mobile button.ui-dialog-titlebar-close').on('mousedown', function () {
@@ -157,7 +154,7 @@ function hammerIt(elm) {
             $('body').removeClass('pdp-modal-overlay');
             var image = $('#product-image-gallery-mob').find('.mob-imagegallery__thumbnails__image img');
             image.parent().siblings().each(function () {
-              $('#product-image-gallery-mob').find('img').css('transform', 'scale3d(1, 1, 1)');
+              $('#product-image-gallery-mob').find('img').css('transform', 'none');
             });
           });
 
@@ -166,9 +163,11 @@ function hammerIt(elm) {
       // Open Gallery modal when we click on the zoom image.
       var mobileDialog = Drupal.dialog(element, dialogsettings);
       $('#product-image-gallery-mobile .slick-slide').off().on('click', function () {
-        $('body').addClass('pdp-modal-overlay');
-        mobileDialog.show();
-        mobileDialog.showModal();
+        if (!$(this).hasClass('mobilegallery__thumbnails__video')) {
+          $('body').addClass('pdp-modal-overlay');
+          mobileDialog.show();
+          mobileDialog.showModal();
+        }
       });
     }
   };

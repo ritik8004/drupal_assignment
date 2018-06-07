@@ -285,7 +285,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
 
     // It depends on cart id of the user.
     if ($cart = $this->cartStorage->getCart(FALSE)) {
-      $cacheTags[] = 'cart_' . $cart->id();
+      $cacheTags[] = 'cart:' . $cart->id();
     }
 
     // It depends on promotions content.

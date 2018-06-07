@@ -11,7 +11,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class AcqPromotionsManager.
+ * Class AlshayaApiWrapper.
  */
 class AlshayaApiWrapper {
 

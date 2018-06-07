@@ -5,7 +5,9 @@
     h1 span {
       font-weight: normal;
       color: $pdp_product_title;
-      margin-bottom: 0;
+      margin: 0.3125rem 0;
+      text-transform: uppercase;
+      font-size: 1rem;
     }
 
     .price {
@@ -14,6 +16,11 @@
 
     .content--item-code {
       font-size: 0.625rem;
+    }
+
+    .content--brand {
+      font-size: 0.75rem;
+      color: $pdp_product_brand_text;
     }
   }
 
@@ -24,9 +31,32 @@
       }
     }
   }
+
+  &__sidebar {
+    .content--size-volume {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: $pdp_product_volume_value;
+
+      .field__label {
+        color: $pdp_product_volume_label;
+      }
+    }
+  }
+}
+
+.content--form,
+.product--form {
+  float: $left;
+  font-size: 0.75rem;
+  margin-bottom: 0.9375rem;
+  color: $pdp_product_form_text;
+  width: 100%;
 }
 
 .description-wrapper {
+  color: $pdp_sidebar_description;
+
   .field {
     &__label {
       font-weight: normal;
@@ -39,6 +69,8 @@
 }
 
 .short-description-wrapper {
+  color: $pdp_sidebar_description;
+
   .field {
     &__label {
       font-weight: normal;
@@ -111,6 +143,15 @@
           line-height: 1.9;
         }
       }
+    }
+  }
+}
+
+.basic-details-wrapper .field--name-field-skus {
+  .form-item-quantity {
+    label {
+      color: $pdp_product_qty_text;
+      font-size: 0.875rem;
     }
   }
 }

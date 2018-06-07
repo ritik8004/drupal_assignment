@@ -27,6 +27,10 @@ select:focus::-ms-value {
     z-index: 3;
   }
 
+  @include breakpoint($only-mobile) {
+    font-size: 0.875rem;
+  }
+
   // Arabic font is longer so it gets clipped from bottom.
   html[lang=ar] & {
     line-height: 1.2;
@@ -84,6 +88,10 @@ select:focus::-ms-value {
 
     .select2-selection__rendered {
       color: $primary_dropdown_text;
+
+      @include breakpoint($only-mobile) {
+        line-height: 1.5rem;
+      }
     }
   }
 

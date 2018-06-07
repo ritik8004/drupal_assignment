@@ -30,6 +30,14 @@
 
   .mob-imagegallery__wrapper {
     position: relative;
+
+    .slick-dots {
+      @include breakpoint($only-mobile) {
+        position: absolute;
+        width: 100%;
+        bottom: 0.75rem;
+      }
+    }
   }
 
   .button__wrapper {
@@ -53,7 +61,6 @@
 
 .mob-imagegallery__thumbnails__image {
   overflow: auto;
-  height: 75vh;
 
   .expand {
     max-width: initial;

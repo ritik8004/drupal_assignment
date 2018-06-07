@@ -9,8 +9,5 @@ $dir: rtl;
 // Config file that contains centralized variables.
 @import "config/**/*";
 
-// Utilities for building multilingual websites.
-@import "directional";
-
 // custom styles.
 @import "component/**/*";

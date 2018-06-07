@@ -26,11 +26,6 @@
       width: calc(100% - (5.75rem + 1rem));
       float: $right;
     }
-
-    #yt-vi-container {
-      position: relative;
-      overflow: hidden;
-    }
   }
 
   #cloud-zoom-wrap {
@@ -397,7 +392,7 @@
   font-size: 0;
   text-indent: 9999em;
   color: transparent;
-  background: transparent url(../imgs/icons/MC-loader.svg) center no-repeat;
+  background: transparent url(#{$base_theme_loader_img_directory_path}) center no-repeat;
   background-size: 2rem 2rem;
   border: none;
   width: 2rem !important;

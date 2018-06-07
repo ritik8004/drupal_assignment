@@ -152,6 +152,10 @@
     color: $content_link_color;
   }
 
+  .form-checkbox.error {
+    display: none;
+  }
+
   .form-type-checkbox {
     .option {
       top: 0;
@@ -299,7 +303,7 @@
       content: "";
       height: 2rem;
       width: 3rem;
-      background: $white url(../imgs/cards/back-card.png) no-repeat;
+      background: $white url(/themes/custom/transac/alshaya_white_label/imgs/cards/back-card.png) no-repeat;
       background-size: 100%;
       margin-#{$right}: 0.5rem;
       position: absolute;
@@ -313,10 +317,11 @@
   .card-types-wrapper {
     position: absolute;
     top: 1.25rem;
-    #{$right}: 0.8rem;
+    #{$right}: 1.5rem;
+    font-size: 0;
 
-    @include breakpoint($tablet) {
-      #{$right}: 0.8rem;
+    @include breakpoint($upto-desktop) {
+      #{$right}: 1rem;
     }
 
     .card-type {
@@ -324,31 +329,33 @@
       height: 2rem;
       width: 3rem;
       background: $checkout_payment_method_icon_bg;
+      margin-#{$left}: 0.5625rem;
 
       &-visa {
-        background: url('../imgs/cards/visa-inactive.png') no-repeat;
+        background: url(#{$base_theme_img_directory_path}/cards/visa-inactive.png) no-repeat;
         background-size: 100%;
 
         &.active {
-          background-image: url('../imgs/cards/visa-active.png');
+          background-image: url(#{$base_theme_img_directory_path}/cards/visa-active.png);
         }
       }
 
       &-mastercard {
-        background: url('../imgs/cards/mastercard-inactive.png') no-repeat;
+        background: url(#{$base_theme_img_directory_path}/cards/mastercard-inactive.png) no-repeat;
         background-size: 100%;
 
         &.active {
-          background-image: url('../imgs/cards/mastercard-active.png');
+          background-image: url(#{$base_theme_img_directory_path}/cards/mastercard-active.png);
         }
       }
 
       &-diners-club {
-        background: url('../imgs/cards/dinersclub-inactive.png') no-repeat;
-        background-size: 88%;
+        background: url(#{$base_theme_img_directory_path}/cards/diner-club-active.svg) no-repeat;
+        background-size: 100%;
+        opacity: 0.3;
 
         &.active {
-          background-image: url('../imgs/cards/dinersclub-active.png');
+          opacity: 1;
         }
       }
     }

@@ -14,6 +14,7 @@ use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -142,6 +143,15 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
     if ($field_category = $node->get('field_category')) {
       $term_list = $field_category->getValue();
+      $breadcrumb_cache_tags = [];
+      // Build cache dependency on all terms this Product is tagged with. We
+      // need to make the breadcrumb dependent on all categories product is
+      // tagged with since, enabling/disabling the category on MDC would make it
+      // dependent on new categories.
+      foreach ($term_list as $term) {
+        $breadcrumb_cache_tags[] = 'taxonomy_term:' . $term['target_id'];
+      }
+
       $term_list = $this->filterEnabled($term_list);
       $inner_term = $this->termTreeGroup($term_list);
 
@@ -202,7 +212,8 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     }
 
     // Cacheability data of the node.
-    $breadcrumb->addCacheTags(['node:' . $node->id()]);
+    $breadcrumb_cache_tags[] = 'node:' . $node->id();
+    $breadcrumb->addCacheTags($breadcrumb_cache_tags);
 
     return $breadcrumb;
   }
@@ -220,9 +231,13 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     // Remove disabled terms.
     foreach ($terms as $index => $row) {
       $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($row['target_id']);
-      if (!$term->get('field_commerce_status')->getString()) {
-        unset($terms[$index]);
+
+      if ($term instanceof TermInterface && $term->get('field_commerce_status')->getString()) {
+        continue;
       }
+
+      // If term not found or not enabled, we unset it.
+      unset($terms[$index]);
     }
 
     return array_values($terms);

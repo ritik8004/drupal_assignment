@@ -412,7 +412,7 @@ class SkuManager {
       }
       else {
         $sku_cart_price['final_price'] = number_format($final_price, 3);
-        $discount = floor((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
+        $discount = round((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price'], 2);
         $sku_cart_price['discount']['prefix'] = $this->t('Save', [], ['context' => 'discount']);
         $sku_cart_price['discount']['value'] = $discount . '%';
       }

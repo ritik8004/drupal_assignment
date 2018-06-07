@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_api
+    - alshaya_acm_product
+    - serialization
+    - simple_oauth
+id: sku_images
+plugin_id: sku_images
+granularity: method
+configuration:
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - oauth2
