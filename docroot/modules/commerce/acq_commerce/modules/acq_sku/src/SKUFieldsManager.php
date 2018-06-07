@@ -101,11 +101,87 @@ class SKUFieldsManager {
 
   /**
    * Function to update field definitions for the additional SKU base fields.
+   *
+   * @param array $fields
+   *   Fields to update.
    */
-  public function updateFields(arrya $fields) {
+  public function updateFields(array $fields) {
     // 1. Do we need this?
     // 2. Should we handle existing data issue here or let developer do that
     // from where it is called?
+  }
+
+  /**
+   * Function to update field definitions for the additional SKU base fields.
+   *
+   * This will not update the actual field but only additional information used
+   * in custom code like field is configurable or not, indexable or not.
+   *
+   * It will not do anything except updating the config. Be very careful when
+   * using this.
+   *
+   * @param $field_code
+   *   Field code.
+   * @param array $field
+   *   Field definition.
+   *
+   * @throws \Exception
+   *   Throws exception if field doesn't exist in config.
+   */
+  public function updateFieldMetaInfo($field_code, array $field) {
+    $config = $this->configFactory->getEditable(self::BASE_FIELD_ADDITIONS_CONFIG);
+    $existing_fields = $config->getRawData();
+
+    if (empty($existing_fields[$field_code])) {
+      throw new \Exception('Field not available, try adding it first.');
+    }
+
+    // Checks to avoid errors.
+    $field_structure_info = [
+      'type',
+      'cardinality',
+    ];
+
+    foreach ($field_structure_info as $info) {
+      if (isset($field[$info]) && $field['type'] != $existing_fields[$field_code]['type']) {
+        throw new \Exception('Can not modify field structure.');
+      }
+    }
+
+    // Need to apply entity updates for following.
+    $apply_updates = FALSE;
+    $field_labels_info = [
+      'label',
+      'description',
+      'visible_view',
+      'visible_form',
+      'weight',
+    ];
+
+    foreach ($field_labels_info as $info) {
+      if (isset($field[$info]) && $field['type'] != $existing_fields[$field_code]['type']) {
+        $apply_updates = TRUE;
+        break;
+      }
+    }
+
+    $existing_fields[$field_code] = array_replace($existing_fields[$field_code], $field);
+    $config->setData($existing_fields)->save();
+
+    if ($apply_updates) {
+      $this->entityDefinitionUpdateManager->applyUpdates();
+    }
+  }
+
+  /**
+   * Get all existing field additions.
+   *
+   * @return array
+   *   Existing field additions.
+   */
+  public function getFieldAdditions() {
+    $config = $this->configFactory->getEditable(self::BASE_FIELD_ADDITIONS_CONFIG);
+    return $config->getRawData();
   }
 
   /**

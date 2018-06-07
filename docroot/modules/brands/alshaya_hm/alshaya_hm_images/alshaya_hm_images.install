@@ -46,8 +46,13 @@ function alshaya_hm_images_update_8001() {
  */
 function alshaya_hm_images_install() {
   // Add fields to store the values from attributes as fields.
-  \Drupal::service('acq_sku.fields_manager')->addFields();
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
 
-  // Save overridden configs.
-  _alshaya_config_save_overridden_configs('alshaya_hm_images');
+  $sku_fields_manager->updateFieldMetaInfo('color_label', [
+    'configurable' => 1,
+    'label' => 'Color',
+  ]);
+
+  $sku_fields_manager->addFields();
 }

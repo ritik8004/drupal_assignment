@@ -540,7 +540,7 @@ class ProductSyncResource extends ResourceBase {
    *   The product attributes/extensions to get value from.
    */
   private function updateFields($parent, SKU $sku, array $values) {
-    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+    $additionalFields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
 
     // Loop through all the attributes available for this particular SKU.
     foreach ($values as $key => $value) {

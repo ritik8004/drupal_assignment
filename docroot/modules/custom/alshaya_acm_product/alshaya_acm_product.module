@@ -42,7 +42,7 @@ use Drupal\Core\Template\Attribute;
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
   // Get the configurable fields we want to capture separately as fields.
-  $fields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   $indexFields = array_filter($fields, function ($field) {
     return !empty($field['index']);
   });
@@ -93,7 +93,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
           $child_sku_found = FALSE;
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
             try {
-              $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode);
+              $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode, FALSE);
             }
             catch (\Exception $e) {
               // Do nothing, child sku might not be available or deleted.
