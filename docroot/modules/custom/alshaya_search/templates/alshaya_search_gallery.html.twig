@@ -1,4 +1,8 @@
+{% if class is not empty %}
+<div class="alshaya_search_gallery {{ class }}">
+{% else %}
 <div class="alshaya_search_gallery">
+{% endif %}
   <div class="alshaya_search_mainimage">
     {{ mainImage }}
   </div>

@@ -8,6 +8,7 @@
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 
 /**
@@ -124,6 +125,34 @@ function alshaya_hm_images_acq_sku_gallery_view_alter(&$elements, $skus) {
           $elements[$delta]['#gallery'] = $sku_gallery;
           if ($swatches_display_status) {
             $swatches = array_filter($sku_assets_manager->getColorsForSku($sku));
+            if ($swatches) {
+              $elements[$delta]['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit);
+              $elements[$delta]['#swatch_more_text'] = count($swatches) > $swatch_plp_limit ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit]) : FALSE;
+            }
+          }
+        }
+        else {
+          if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+            $sku_gallery = [
+              '#theme' => 'alshaya_assets_gallery',
+              '#mainImage' => [
+                'url' => Url::fromUri(file_create_url($default_image->getFileUri())),
+                'class' => 'product-default-image',
+              ],
+              '#label' => $sku->label(),
+              '#attached' => [
+                'library' => [
+                  'alshaya_hm_images/hm_images',
+                ],
+              ],
+            ];
+
+            if (empty($plp_hover_image)) {
+              $sku_gallery['#hoverImage'] = ['url' => Url::fromUri(file_create_url($default_image->getFileUri()))];
+            }
+
+            $elements[$delta]['#gallery'] = $sku_gallery;
+
             if ($swatches) {
               $elements[$delta]['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit);
               $elements[$delta]['#swatch_more_text'] = count($swatches) > $swatch_plp_limit ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit]) : FALSE;

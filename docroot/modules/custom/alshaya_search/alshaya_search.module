@@ -149,6 +149,7 @@ function alshaya_search_theme($existing, $type, $theme, $path) {
       'variables' => [
         'mainImage' => [],
         'thumbnails' => [],
+        'class' => NULL,
       ],
       'template' => 'alshaya_search_gallery',
     ],
