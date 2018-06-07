@@ -1496,3 +1496,11 @@ function _alshaya_acm_product_get_product_default_main_image() {
 
   return NULL;
 }
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_acm_product_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_acm_product_fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+  $fields = array_merge($fields, $alshaya_acm_product_fields);
+}

@@ -56,8 +56,7 @@ function alshaya_vs_transac_update_8103() {
  */
 function alshaya_vs_transac_update_8102() {
   alshaya_config_install_configs(['alshaya_vs_transac.sku_base_fields'], 'alshaya_vs_transac');
-  $fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 }
 
 /**
@@ -130,6 +129,5 @@ function alshaya_vs_transac_install() {
   $block->save();
 
   // Add SKU base fields specific to VS.
-  $fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 }

@@ -1,22 +1,12 @@
 fields:
   band_size:
-    parent: 'attributes'
     label: 'Band Size'
-    description: 'Band Size attribute for the product.'
     cardinality: -1
-    type: 'attribute'
     configurable: 1
     index: 1
-    visible_view: 0
-    visible_form: 1
 
   cup_size:
-    parent: 'attributes'
     label: 'Cup Size'
-    description: 'Cup Size attribute for the product.'
     cardinality: -1
-    type: 'attribute'
     configurable: 1
     index: 1
-    visible_view: 0
-    visible_form: 1

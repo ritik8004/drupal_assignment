@@ -116,3 +116,11 @@ function _alshaya_bbw_transac_get_product_title(SKU $sku) {
   }
   return $title;
 }
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_bbw_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_bbw_transac_fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
+  $fields = array_merge($fields, $alshaya_bbw_transac_fields);
+}

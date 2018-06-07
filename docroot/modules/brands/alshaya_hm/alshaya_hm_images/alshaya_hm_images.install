@@ -46,8 +46,7 @@ function alshaya_hm_images_update_8001() {
  */
 function alshaya_hm_images_install() {
   // Add fields to store the values from attributes as fields.
-  $fields = \Drupal::config('alshaya_hm_images.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 
   // Save overridden configs.
   _alshaya_config_save_overridden_configs('alshaya_hm_images');

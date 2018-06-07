@@ -351,3 +351,11 @@ function alshaya_hm_images_image_sitemap_get_product_media(&$media, &$nid) {
     }
   }
 }
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_hm_images_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_acm_product_fields = \Drupal::config('alshaya_hm_images.sku_base_fields')->get('fields');
+  $fields = array_merge($fields, $alshaya_acm_product_fields);
+}
