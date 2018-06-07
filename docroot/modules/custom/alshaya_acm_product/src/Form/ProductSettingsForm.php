@@ -236,7 +236,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $form['product_default_image'] = [
       '#type' => 'managed_file',
       '#title' => $this->t('Product default image'),
-      '#description' => $this->t('Default product image that will be shown when there is no image for product.'),
+      '#description' => $this->t('Please upload image of resolution of 797X647 or more.'),
       '#upload_location' => 'public://product_default_image/',
       '#upload_validators'  => [
         'file_validate_extensions' => ['png gif jpg jpeg svg'],
