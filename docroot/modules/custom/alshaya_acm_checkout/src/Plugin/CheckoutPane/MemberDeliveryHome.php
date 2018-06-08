@@ -248,22 +248,30 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
       $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
       $entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id']);
-      $address = $address_book_manager->getAddressFromEntity($entity);
+      if ($entity instanceof Profile) {
+        $address = $address_book_manager->getAddressFromEntity($entity);
 
-      $update = [];
-      $update['customer_address_id'] = $address['customer_address_id'];
-      $update['country_id'] = $address['country_id'];
-      $update['customer_id'] = $cart->customerId();
+        $update = [];
+        $update['customer_address_id'] = $address['customer_address_id'];
+        $update['country_id'] = $address['country_id'];
+        $update['customer_id'] = $cart->customerId();
 
-      $cart->setShipping($update);
+        $cart->setShipping($update);
 
-      /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-      $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-      $term = $checkout_options_manager->loadShippingMethod($shipping_method);
-      $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
+        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+        $term = $checkout_options_manager->loadShippingMethod($shipping_method);
+        $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
 
-      // Clear the payment now.
-      $cart->clearPayment();
+        // Clear the payment now.
+        $cart->clearPayment();
+      }
+      else {
+        \Drupal::logger('alshaya_acm_checkout')->error('Address in address book is not available for the user @user having address info @address_info', [
+          '@user' => \Drupal::currentUser()->id(),
+          '@address_info' => json_encode($address_info),
+        ]);
+      }
     }
     catch (\Exception $e) {
       drupal_set_message($e->getMessage(), 'error');
