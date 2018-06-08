@@ -33,5 +33,19 @@
     @include breakpoint($desktop) {
       margin-bottom: 2rem;
     }
+
+    li {
+      &:not(:last-child) {
+        margin-#{$right}: 1.125rem;
+
+        @include breakpoint($tablet) {
+          margin-#{$right}: 0.875rem;
+        }
+
+        @include breakpoint($desktop) {
+          margin-#{$right}: 0.75rem;
+        }
+      }
+    }
   }
 }
