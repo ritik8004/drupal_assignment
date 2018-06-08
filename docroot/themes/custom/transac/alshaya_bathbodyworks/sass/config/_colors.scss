@@ -59,6 +59,11 @@ $primary_dropdown_option_border: $warm-grey-two;
 $primary_dropdown_option_disbled: $greyish;
 $primary_dropdown_focus: $black;
 
+/* ------- 3. Secondary color  ----- */
+// Global elements.
+$secondary_text: $warm-grey-one;
+$secondary_link: $black;
+
 /* ------- 5. Components --------------- */
 
 // Language Switcher
@@ -117,6 +122,9 @@ $vat: $warm-grey-one;
 // Autocomplete
 $autocomplete_border: $warm-grey-two;
 $autocomplete_border_last: $warm-grey-two;
+
+// Department page
+$department_category_list_hover: $peacock-blue;
 
 /* ------- 6. Sections and Pages --------------- */
 
