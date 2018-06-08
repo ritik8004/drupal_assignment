@@ -267,9 +267,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
         $cart->clearPayment();
       }
       else {
-        \Drupal::logger('alshaya_acm_checkout')->error('Address in address book is not available for the user @user having address info @address_info', [
+        \Drupal::logger('alshaya_acm_checkout')->error('Address in address book is not available for the user @user having address info @address_info for cart @cart', [
           '@user' => \Drupal::currentUser()->id(),
           '@address_info' => json_encode($address_info),
+          '@cart' => json_encode((array) $cart->getShipping()),
         ]);
       }
     }
