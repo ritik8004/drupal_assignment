@@ -176,5 +176,23 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '358452cd036a4c2a9a782eeb1ee8fb25',
       'hmac_secret' => 'm9DwvS0XwtPVpeiNLNk6hQ',
     ],
+    // VictoriaSecret KW.
+    'vskw_test' => [
+      'url' => 'https://alshaya-vskw-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '43d835c683544f16ae02b6738bd30246',
+      'hmac_secret' => 'mkvCzZn8C70jN8TdKJT6ww',
+    ],
+    // VictoriaSecret SA.
+    'vssa_test' => [
+      'url' => 'https://alshaya-vssa-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '8f0cca86f92c4d4899c0cefd69c3ab80',
+      'hmac_secret' => 'vUGB9pW4Wif8Kuqu_Wa3DA',
+    ],
+    // VictoriaSecret AE.
+    'vsae_test' => [
+      'url' => 'https://alshaya-vsae-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '814e195c622042219be0c36566078bec',
+      'hmac_secret' => 'rboHiF67oDbiBjtCKufN3g',
+    ],
   ];
 }
