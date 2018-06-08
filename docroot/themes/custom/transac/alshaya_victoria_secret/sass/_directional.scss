@@ -1,6 +1,7 @@
 $vs-bold: if-ltr($vs-bold, $vs-arabic-bold);
 $vs-arabic-bold: if-ltr($vs-arabic-bold, $vs-bold);
 $vs-regular: if-ltr($vs-regular, $vs-arabic-regular);
+$vspromo: if-ltr($vspromo, $vspromo-arabic);
 $vs-arabic-regular: if-ltr($vs-arabic-regular, $vs-regular);
 $vspromo-regular: if-ltr($vspromo-regular, $vspromo-arabic-regular);
 $vspromo-arabic-regular: if-ltr($vspromo-arabic-regular, $vspromo-regular);
