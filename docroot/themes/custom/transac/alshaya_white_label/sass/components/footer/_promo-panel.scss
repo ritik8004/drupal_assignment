@@ -236,6 +236,10 @@
 
 .promo__panel,
 .block__reference--block-promo-panel-wrapper {
+  html[lang=ar] & {
+    direction: rtl;
+  }
+
   .paragraph--type--offers-bordered {
     .field--name-field-heading,
     .field--name-field-title,
