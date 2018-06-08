@@ -850,80 +850,89 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $paragraph = $variables['elements']['#paragraph'];
     if ($paragraph) {
+
       // If category value is filled.
       if (!empty($category = $paragraph->get('field_category_carousel'))) {
         // Fetch values from the paragraph.
         $category_id = $category->getValue()[0]['target_id'];
 
-        // Prepare argument for the views.
-        $terms = _alshaya_master_get_recursive_child_terms($category_id);
-        $arguments = [
-          'tid' => implode('+', $terms),
-        ];
-
-        // Get views result.
-        $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
+        $is_accordion = $paragraph->get('field_use_as_accordion')->getValue()[0]['value'];
 
         // By default we don't show any carousel content.
         $variables['content'] = [];
 
-        // If there are results.
-        if (!empty($results)) {
+        if ($is_accordion) {
           // Prepare argument for the views.
-          $carousel_title = $paragraph->get('field_category_carousel_title')->getString();
-          $view_all_text = $paragraph->get('field_view_all_text')->getString();
-          $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getString();
+          $terms = _alshaya_master_get_recursive_child_terms($category_id, 1);
+        }
+        else {
+          // Prepare argument for the views.
+          $terms = _alshaya_master_get_recursive_child_terms($category_id);
+          $arguments = [
+            'tid' => implode('+', $terms),
+          ];
 
-          // Slice number of results that we want for the carousel.
-          $results = array_slice($results, 0, $product_in_carousel);
+          // Get views result.
+          $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
 
-          // The stock mode.
-          $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+          // If there are results.
+          if (!empty($results)) {
+            // Prepare argument for the views.
+            $carousel_title = $paragraph->get('field_category_carousel_title')->getString();
+            $view_all_text = $paragraph->get('field_view_all_text')->getString();
+            $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getString();
 
-          $data = [];
-          foreach ($results as $result) {
-            /* @var \Drupal\node\Entity\Node $node*/
-            $node = $result->_object->getValue();
-            if ($node instanceof NodeInterface) {
-              // For stock push mode.
-              if ($stock_mode === 'push') {
-                // If product in stock for 'push' mode.
-                if (alshaya_acm_get_stock_from_product($node)) {
+            // Slice number of results that we want for the carousel.
+            $results = array_slice($results, 0, $product_in_carousel);
+
+            // The stock mode.
+            $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+
+            $data = [];
+            foreach ($results as $result) {
+              /* @var \Drupal\node\Entity\Node $node*/
+              $node = $result->_object->getValue();
+              if ($node instanceof NodeInterface) {
+                // For stock push mode.
+                if ($stock_mode === 'push') {
+                  // If product in stock for 'push' mode.
+                  if (alshaya_acm_get_stock_from_product($node)) {
+                    $data[] = $node->id();
+                  }
+                }
+                else {
                   $data[] = $node->id();
                 }
               }
-              else {
-                $data[] = $node->id();
-              }
             }
-          }
 
-          // Make carousel title link.
-          $carousel_title = [
-            '#title' => $carousel_title,
-            '#type' => 'link',
-            '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
-          ];
-
-          $variables['content']['product_category_carousel'] = [
-            '#theme' => 'products_horizontal_slider',
-            '#data' => $data,
-            '#views_display_id' => 'category_product_slider',
-            '#views_name' => 'product_slider',
-            '#section_title' => $carousel_title ?: NULL,
-          ];
-
-          if ($view_all_text) {
-            $variables['attributes']['class'][] = 'has-view-all-link';
-
-            $variables['content']['view_all'] = [
-              '#title' => $view_all_text,
+            // Make carousel title link.
+            $carousel_title = [
+              '#title' => $carousel_title,
               '#type' => 'link',
-              '#attributes' => [
-                'class' => ['category-carousel-view-all'],
-              ],
               '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
             ];
+
+            $variables['content']['product_category_carousel'] = [
+              '#theme' => 'products_horizontal_slider',
+              '#data' => $data,
+              '#views_display_id' => 'category_product_slider',
+              '#views_name' => 'product_slider',
+              '#section_title' => $carousel_title ?: NULL,
+            ];
+
+            if ($view_all_text) {
+              $variables['attributes']['class'][] = 'has-view-all-link';
+
+              $variables['content']['view_all'] = [
+                '#title' => $view_all_text,
+                '#type' => 'link',
+                '#attributes' => [
+                  'class' => ['category-carousel-view-all'],
+                ],
+                '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+              ];
+            }
           }
         }
       }
