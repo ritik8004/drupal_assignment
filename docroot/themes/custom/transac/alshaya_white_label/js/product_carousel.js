@@ -10,25 +10,14 @@
 
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
-      var pdp_items_mob = drupalSettings.pdp_items_mob;
-      var pdp_items_tab = drupalSettings.pdp_items_tab;
+      // var pdp_items_mob = drupalSettings.pdp_items_mob;
+      // var pdp_items_tab = drupalSettings.pdp_items_tab;
       var pdp_items_desk = drupalSettings.pdp_items_desk;
 
       var optionsBasket = {
         responsiveClass: true,
         dots: true,
         responsive: {
-          0: {
-            items: 2,
-            dragSlideBy: 2,
-            nav: false,
-            stagePadding: 25,
-            mouseDrag: true
-          },
-          768: {
-            items: 4,
-            nav: true
-          },
           1025: {
             items: 5,
             nav: true
@@ -40,17 +29,6 @@
         responsiveClass: true,
         dots: true,
         responsive: {
-          0: {
-            items: pdp_items_mob,
-            dragSlideBy: 2,
-            nav: false,
-            stagePadding: 25,
-            mouseDrag: true
-          },
-          768: {
-            items: pdp_items_tab,
-            nav: true
-          },
           1025: {
             items: pdp_items_desk,
             nav: true
@@ -62,17 +40,6 @@
         responsiveClass: true,
         dots: true,
         responsive: {
-          0: {
-            items: 2,
-            dragSlideBy: 2,
-            nav: false,
-            stagePadding: 25,
-            mouseDrag: true
-          },
-          768: {
-            items: 4,
-            nav: true
-          },
           1025: {
             items: 5,
             nav: true
@@ -84,17 +51,6 @@
         responsiveClass: true,
         dots: true,
         responsive: {
-          0: {
-            items: 2,
-            dragSlideBy: 2,
-            nav: false,
-            stagePadding: 25,
-            mouseDrag: true
-          },
-          768: {
-            items: 4,
-            nav: true
-          },
           1025: {
             items: 6,
             nav: true
@@ -103,6 +59,10 @@
       };
 
       function applyRtl(ocObject, options) {
+        // For tablets and mobile we don't want to apply OwlCarousel.
+        if ($(window).width() < 1024) {
+          return;
+        }
         // Get number of items.
         var itemsCount = ocObject.find('.views-row').length;
 
