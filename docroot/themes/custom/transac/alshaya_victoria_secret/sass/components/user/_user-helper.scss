@@ -4,7 +4,20 @@
   .form-item input:active ~ label:not(.error),
   .form-item input:not(:active):valid ~ label:not(.error),
   .form-item input.error ~ label:not(.error) {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
+  }
+
+  .user-form,
+  .change-pwd-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
+    .form-email,
+    .form-text,
+    .form-tel,
+    .text-full {
+      font-size: 0.875rem;
+    }
   }
 }
 
