@@ -250,6 +250,7 @@ class APIWrapper implements APIWrapperInterface {
       Cache::invalidateTags(['cart:' . $cart_id]);
     }
     catch (ConductorException $e) {
+      Cache::invalidateTags(['cart:' . $cart_id]);
       // Restore cart structure.
       if ($items) {
         foreach ($items as $key => &$item) {
