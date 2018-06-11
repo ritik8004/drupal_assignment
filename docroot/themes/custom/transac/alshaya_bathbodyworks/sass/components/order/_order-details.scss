@@ -1,0 +1,19 @@
+.user__order--detail {
+  background-color: none;
+
+  .order-item-row {
+    border-bottom: 1px solid $checkout_order_details_product_count_border;
+  }
+
+  td div,
+  .dark {
+    line-height: 1.29;
+  }
+
+  .order-details-row .mobile-only.delivery--method {
+    @include breakpoint($only-mobile) {
+      border: none;
+      margin-top: 0;
+    }
+  }
+}
