@@ -442,6 +442,13 @@ function alshaya_white_label_theme() {
       'render element' => 'form',
       'path' => drupal_get_path('theme', 'alshaya_white_label') . '/templates/form',
     ],
+    'alshaya_white_label_accordion' => [
+      'variables' => [
+        'title' => NULL,
+        'content' => NULL,
+      ],
+      'path' => drupal_get_path('theme', 'alshaya_white_label') . '/templates',
+    ],
   ];
 }
 
@@ -861,9 +868,27 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         // By default we don't show any carousel content.
         $variables['content'] = [];
 
+        $section_title = $paragraph->get('field_category_carousel_title')->getString();
+
         if ($is_accordion) {
-          // Prepare argument for the views.
-          $terms = _alshaya_master_get_recursive_child_terms($category_id, 1);
+          if (empty($section_title)) {
+            $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($category_id);
+            $section_title = $term->label();
+          }
+
+          // Create accordion title link.
+          $accordion_title = [
+            '#type' => 'link',
+            '#title' => $section_title,
+            '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+          ];
+
+          // Theme content as accordion.
+          $variables['content']['product_category_carousel'] = [
+            '#theme' => 'alshaya_white_label_accordion',
+            '#title' => $accordion_title ?: NULL,
+            '#content' => alshaya_acm_product_category_child_terms($category_id),
+          ];
         }
         else {
           // Prepare argument for the views.
@@ -878,7 +903,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
           // If there are results.
           if (!empty($results)) {
             // Prepare argument for the views.
-            $carousel_title = $paragraph->get('field_category_carousel_title')->getString();
             $view_all_text = $paragraph->get('field_view_all_text')->getString();
             $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getString();
 
@@ -908,7 +932,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
             // Make carousel title link.
             $carousel_title = [
-              '#title' => $carousel_title,
+              '#title' => $section_title,
               '#type' => 'link',
               '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
             ];
