@@ -29,4 +29,20 @@
     margin-#{$right}: 0;
     text-align: $right;
   }
+
+  @include breakpoint($only-mobile) {
+    padding: 1.4375rem 0.875rem;
+  }
+}
+
+.c-footer__logos {
+  line-height: 4rem;
+
+  li {
+    &:not(:last-child) {
+      @include breakpoint($tablet) {
+        margin-#{$right}: 1.5rem;
+      }
+    }
+  }
 }

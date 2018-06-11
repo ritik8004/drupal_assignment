@@ -25,7 +25,7 @@ drush8 acsf-tools-restore --source-folder=~/backup/post-stage --gzip
 ## Apply the database updates.
 echo "Executing updb."
 drush8 acsf-tools-ml updb 2> /tmp/temp
-output=$(cat /tmp/temp)
+output=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g')
 rm /tmp/temp
 echo $output
 
@@ -58,7 +58,7 @@ if [ -f $FILE ]; then
   errorstr="error"
 
   if [ -n "$output" ]; then
-    if [[ "$output" =~ "$errorstr" ]]; then
+    if echo $output | grep -q $errorstr; then
       echo "Sending error notification to Slack channel."
       curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
     else

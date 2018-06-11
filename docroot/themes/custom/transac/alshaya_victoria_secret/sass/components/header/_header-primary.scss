@@ -198,6 +198,12 @@ header {
     }
   }
 
+  .mobile--menu::before {
+    @include breakpoint($upto-desktop) {
+      margin-#{$left}: 0.75rem;
+    }
+  }
+
   .search-active {
     background-color: $header_search_active_bg;
 

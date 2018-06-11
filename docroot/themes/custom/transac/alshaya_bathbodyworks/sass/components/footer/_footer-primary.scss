@@ -170,6 +170,12 @@
       #{$right}: 0;
     }
   }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    .ladda-spinner {
+      top: 1.25rem;
+    }
+  }
 }
 
 .c-footer-menu--help {
@@ -197,6 +203,7 @@
 .newsletter-block-label {
   font-family: $alshaya-thin;
   color: $newsletter_block_text;
+  text-transform: initial;
 
   @include breakpoint($only-mobile) {
     width: 85%;
