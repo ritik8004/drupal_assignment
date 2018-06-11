@@ -9,7 +9,7 @@ field_name: field_use_as_accordion
 entity_type: paragraph
 bundle: product_carousel_category
 label: 'Use as Accordion'
-description: ''
+description: 'Check this if you want to display this paragraph item as accordion.'
 required: false
 translatable: false
 default_value:
