@@ -355,6 +355,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
       elseif ($view_mode == 'full') {
+        $context = 'pdp';
+
         // Get cross sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
           if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_CROSSSELL))) {
@@ -567,6 +569,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
       }
       elseif ($view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
+        $context = 'teaser';
+
         // Get the image.
         $build['image'] = [];
 
@@ -578,6 +582,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // Invoke the alter hook to allow all modules to override the images
         // being rendered for teaser.
+        // @TODO: Move this to hook_alshaya_acm_product_build_alter.
         \Drupal::moduleHandler()->alter('acq_sku_teaser_media', $build, $sku_entity);
 
         // If no main image, then use default main image.
@@ -665,6 +670,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
       }
       elseif ($view_mode == 'modal') {
+        $context = 'modal';
+
         alshaya_acm_product_get_gallery($build, $sku_entity);
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
@@ -692,6 +699,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       $build['#attached']['library'][] = 'alshaya_acm_product/stock_check';
+
+      if (isset($context)) {
+        \Drupal::moduleHandler()->alter('alshaya_acm_product_build', $build, $sku_entity, $context);
+      }
     }
   }
 }

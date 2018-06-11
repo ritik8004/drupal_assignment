@@ -8,18 +8,29 @@
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
- * Implements hook_acq_sku_gallery_view_alter().
+ * Implements hook_alshaya_acm_product_build_alter().
  */
-function alshaya_bbw_transac_acq_sku_gallery_view_alter(&$elements, $skus) {
-  foreach ($elements as $delta => $element) {
-    $sku = $skus[$delta];
-    $form = $sku->get('attr_form')->getString();
-    if ($form) {
-      $form = '<span class="content--form">' . $form . '</span>';
-    }
-    $elements[$delta]['#product_label'] = ['#markup' => _alshaya_bbw_transac_get_product_title($sku) . $form];
+function alshaya_bbw_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  $form = $sku->get('attr_form')->getString();
+
+  if ($form) {
+    $form = '<span class="content--form">' . $form . '</span>';
+  }
+
+  $title = _alshaya_bbw_transac_get_product_title($sku) . $form;
+
+  if ($context == 'search') {
+    $build['#product_label'] = [
+      '#markup' => $title,
+    ];
+  }
+  else {
+    $build['title'] = [
+      '#markup' => $title,
+    ];
   }
 }
 
@@ -32,12 +43,6 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU) {
-      if ($view_mode == 'full' || $view_mode == 'modal' || $view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
-        if ($form = $sku_entity->get('attr_form')->getValue()) {
-          $build['form']['#markup'] = $form[0]['value'];
-        }
-      }
-
       if ($view_mode == 'full' || $view_mode == 'modal') {
         if ($product_brand = $sku_entity->get('attr_brand')->getValue()) {
           $build['product_brand']['#markup'] = $product_brand[0]['value'];
@@ -84,28 +89,13 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
 }
 
 /**
- * Implements hook_preprocess_node().
- */
-function alshaya_bbw_transac_preprocess_node(&$variables) {
-  // Combine attr_form value into title label for H1, H2 SEO.
-  if ($variables['node']->bundle() == 'acq_product') {
-    $sku = $variables['node']->get('field_skus')->first()->getString();
-    $sku_entity = SKU::loadFromSku($sku);
-    if ($sku_entity instanceof SKU) {
-      $form = $sku_entity->get('attr_form')->getString();
-      if ($form) {
-        $form = '<span class="content--form">' . $form . '</span>';
-      }
-      $variables['label']['#markup'] = _alshaya_bbw_transac_get_product_title($sku_entity) . $form;
-    }
-  }
-}
-
-/**
  * A helper function to get the product title.
  *
  * @param Drupal\acq_sku\Entity\SKU $sku
  *   A object contains values for attributes.
+ *
+ * @return string
+ *   Title value.
  */
 function _alshaya_bbw_transac_get_product_title(SKU $sku) {
   $title = '';
