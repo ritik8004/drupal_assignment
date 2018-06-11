@@ -1,0 +1,55 @@
+.path--user {
+  .ui-dialog {
+    padding-#{$left}: 0.75rem;
+    padding-bottom: 0;
+    width: 94% !important;
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: 1.5rem;
+      padding-bottom: 2rem;
+      width: 29.8rem !important;
+    }
+
+    @include breakpoint($desktop) {
+      padding-bottom: 1.4rem;
+    }
+
+    .ui-dialog-content {
+      margin-bottom: 1rem;
+
+      @include breakpoint($only-tablet) {
+        margin-bottom: 2rem;
+        padding-#{$right}: 44%;
+      }
+    }
+
+    .ui-dialog-buttonpane {
+      .button--primary {
+        padding: 0.75rem 0.875rem;
+      }
+    }
+
+    .ui-dialog-titlebar-close::after {
+      padding: 0.5rem 0.75rem;
+    }
+  }
+
+  .ui-dialog-buttonset {
+    .dialog-cancel {
+      padding: 0.75rem 1.5rem;
+
+      @include breakpoint($tablet) {
+        padding: 0.4rem 1.875rem;
+      }
+    }
+  }
+
+  .ui-dialog-title {
+    margin-bottom: 1rem;
+    margin-top: 1.125rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 1.75rem;
+    }
+  }
+}

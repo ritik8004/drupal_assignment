@@ -3,3 +3,22 @@ input[type=checkbox] ~ label::before {
   position: relative;
   top: -0.125rem;
 }
+
+.c-content {
+  .form-item {
+    input:focus:not(.error):focus,
+    input:active:not(.error):active {
+      & ~ .c-input__bar {
+        &::after,
+        &::before {
+          background: $primary_input_focus_border;
+        }
+      }
+    }
+  }
+
+  .c-input__bar::before,
+  .c-input__bar::after {
+    background: $primary_input_border;
+  }
+}

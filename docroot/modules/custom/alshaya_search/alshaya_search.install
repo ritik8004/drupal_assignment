@@ -11,6 +11,16 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Update search_api_autocomplete permission.
+ */
+function alshaya_search_update_8019() {
+  user_role_grant_permissions(Role::ANONYMOUS_ID, ['use search_api_autocomplete for search']);
+  user_role_grant_permissions(Role::AUTHENTICATED_ID, ['use search_api_autocomplete for search']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update search_api_autocomplete settings after module update.
  */
 function alshaya_search_update_8018() {
