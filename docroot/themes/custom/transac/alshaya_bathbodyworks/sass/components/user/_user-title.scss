@@ -9,7 +9,10 @@
 .c-change-password {
   .block-page-title-block {
     padding-bottom: 0.5rem;
-    z-index: 10;
     padding-top: 0.75rem;
+
+    @include breakpoint($only-mobile) {
+      z-index: 10;
+    }
   }
 }
