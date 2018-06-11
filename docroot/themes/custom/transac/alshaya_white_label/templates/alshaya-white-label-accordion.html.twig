@@ -4,6 +4,7 @@
       {{ title }}
     {% endif %}
   </h3>
+  {% if content is not empty %}
   <div class="c-accordion_content">
     <ul>
     {% for term in content %}
@@ -13,4 +14,5 @@
     {% endfor %}
     </ul>
   </div>
+  {% endif %}
 </div>
