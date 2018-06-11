@@ -48,6 +48,66 @@
           text-decoration: none;
         }
       }
+
+      li:last-child {
+        @include breakpoint($desktop) {
+          padding-#{$right}: 1.25rem;
+        }
+      }
+    }
+  }
+
+  .l-two--sf {
+    padding-bottom: 5.625rem;
+
+    @include breakpoint($only-tablet) {
+      padding-bottom: 7.5rem;
+    }
+
+    &.c-user--node {
+      @include breakpoint($only-tablet) {
+        margin-top: 0;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      padding-bottom: 9rem;
+      margin-top: 1.3rem;
+    }
+  }
+}
+
+.c-user--node {
+  .c-sidebar-first {
+    .my-account-nav a {
+      @include breakpoint($upto-tablet) {
+        padding: 1rem 0;
+      }
+    }
+  }
+
+  &.l-two--sf {
+    aside.c-sidebar-first {
+      li a::after {
+        #{$right}: 0;
+      }
+
+      .my-account-mobile-title1 {
+        text-transform: capitalize;
+
+        @include breakpoint($upto-tablet) {
+          font-size: 1rem;
+          padding-top: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .c-page-title {
+    font-size: 1rem;
+
+    @include breakpoint($tablet) {
+      font-size: 1.5rem;
     }
   }
 }
@@ -75,5 +135,43 @@
 
   &:hover {
     opacity: 0.75;
+  }
+}
+
+.block-alshaya-acm-customer > .edit-account {
+  padding: 0.75rem 1.25rem;
+}
+
+.c-page-title,
+.path--user .ui-dialog-title,
+.c-related-info .c-related-info__label,
+.c-content__title,
+.c-content__secondary .c-related-info__label,
+.c-user-password h1,
+.c-user-register h1,
+.c-user-login h1 {
+  @include breakpoint($upto-tablet) {
+    font-size: 0.875rem;
+  }
+}
+
+.order-detail,
+.c-change-password,
+.c-communication-preferences,
+.c-user-edit,
+.c-address-book {
+  .c-order-list,
+  .c-user--node,
+  .block-page-title-block {
+    @include breakpoint($upto-tablet) {
+      padding: 0.875rem 0 0.5rem;
+    }
+
+    .back-link::before {
+      @include breakpoint($upto-tablet) {
+        top: 0;
+        font-size: 2.875rem;
+      }
+    }
   }
 }
