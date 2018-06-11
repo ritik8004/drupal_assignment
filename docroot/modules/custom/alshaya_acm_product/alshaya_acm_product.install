@@ -17,7 +17,7 @@ use Drupal\node\Entity\Node;
  * We do this in post update hook as it doesn't work together with config update
  * in normal hook_update.
  */
-function alshaya_acm_product_post_update_8018(&$sandbox) {
+function alshaya_acm_product_post_update_8017(&$sandbox) {
   _alshaya_search_resave_indexes();
 }
 
@@ -25,8 +25,9 @@ function alshaya_acm_product_post_update_8018(&$sandbox) {
  * Implements hook_update_N().
  *
  * Add color_description attribute in SKU and index it.
+ * Add new setting 'list_view_auto_page_load_count'.
  */
-function alshaya_acm_product_update_8018() {
+function alshaya_acm_product_update_8017() {
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
   $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
@@ -35,14 +36,8 @@ function alshaya_acm_product_update_8018() {
   // for all transact sites, we do it here - one common place.
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
-}
 
-/**
- * Implements hook_update_N().
- *
- * Add new setting 'list_view_auto_page_load_count'.
- */
-function alshaya_acm_product_update_8017() {
+  // Update page load more count for SRP/PLP.
   alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product');
 }
 
