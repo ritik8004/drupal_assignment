@@ -47,4 +47,14 @@
       }
     }
   }
+
+  .form-item-filter {
+    label {
+      display: none;
+    }
+
+    @include breakpoint($desktop) {
+      width: auto;
+    }
+  }
 }

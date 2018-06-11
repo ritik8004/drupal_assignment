@@ -26,6 +26,10 @@
     border-#{$right}-width: 2.3rem;
     overflow-x: hidden;
 
+    html[lang=ar] & {
+      padding-right: 0.125rem;
+    }
+
     @include breakpoint($desktop) {
       border-#{$right}-width: 2.5rem;
     }
@@ -41,6 +45,11 @@
   .slick-arrow {
     top: 40% !important;
     z-index: 1;
+    background: transparent;
+
+    html[lang=ar] & {
+      transform: rotate(180deg);
+    }
 
     &::before {
       background-color: transparent;
@@ -52,10 +61,19 @@
 
   .slick-prev {
     #{$left}: -0.5rem;
+
+    html[lang=ar] & {
+      right: -0.875rem;
+      left: auto;
+    }
   }
 
   .slick-next {
     #{$right}: -0.875rem;
+
+    html[lang=ar] & {
+      left: -0.875rem;
+    }
   }
 
   .slick-track {
@@ -218,6 +236,10 @@
 
 .promo__panel,
 .block__reference--block-promo-panel-wrapper {
+  html[lang=ar] & {
+    direction: rtl;
+  }
+
   .paragraph--type--offers-bordered {
     .field--name-field-heading,
     .field--name-field-title,
@@ -313,6 +335,10 @@
 }
 
 .block__reference--block-promo-panel-wrapper {
+  .mobile-back-link {
+    display: none;
+  }
+
   h3 {
     text-align: $left;
     font-size: 1rem;

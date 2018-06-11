@@ -25,7 +25,7 @@ drush8 acsf-tools-restore --source-folder=~/backup/post-stage --gzip
 ## Apply the database updates.
 echo "Executing updb."
 drush8 acsf-tools-ml updb 2> /tmp/temp
-output=$(cat /tmp/temp)
+output=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g')
 rm /tmp/temp
 echo $output
 
