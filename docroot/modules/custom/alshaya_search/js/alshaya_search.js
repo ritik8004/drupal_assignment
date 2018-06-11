@@ -337,5 +337,40 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         }
       });
     }
-  }
+  };
+
+  /**
+   * Helper function to convert full-screen loader to throbber for infinite
+   * scroll.
+   */
+  Drupal.changeProgressBarToThrobber = function(context) {
+    Drupal.ajax.instances.forEach(function (ajax_instance, key) {
+      if ($(ajax_instance.element, context).hasClass('c-products-list') ||
+        ($(ajax_instance.element, context).parents('ul[data-drupal-views-infinite-scroll-pager="automatic"]').length > 0)) {
+        Drupal.ajax.instances[key].progress.type = 'throbber';
+      }
+    });
+  };
+
+  /**
+   * Drupal behaviors to update progressBars.
+   */
+  Drupal.behaviors.processProgressBarsForAjax = {
+    attach: function (context, settings) {
+      // Avoid auto scroll on the listing from the state that browser remembers.
+      // This at times leads to trigger of infinite scroll before updating the
+      // progress bar.
+      history.scrollRestoration = 'manual';
+
+      // Update only when all DOM elements are loaded & AJAX is attached to them.
+      $(window).on('load', function () {
+        Drupal.changeProgressBarToThrobber(context);
+      });
+
+      // Update on Ajax complete to take care of AJAX instance updates.
+      if (context !== document){
+        Drupal.changeProgressBarToThrobber(context);
+      }
+    }
+  };
 })(jQuery);
