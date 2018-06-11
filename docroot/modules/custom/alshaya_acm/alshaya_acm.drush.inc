@@ -320,7 +320,9 @@ function drush_alshaya_acm_alshaya_sku_media_missing($langcode = 'en') {
     foreach ($result as $key => $rs) {
       $media_data = unserialize($rs->media__value);
       foreach ($media_data as $data) {
-        $fids[$data['fid']] = $rs->sku;
+        if (isset($data['fid'])) {
+          $fids[$data['fid']] = $rs->sku;
+        }
       }
     }
 

@@ -203,7 +203,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
           '#markup' => $term->description__value,
         ],
         'id' => $term->tid,
-        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid, 'language' => $langcode])->toString(),
+        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
       ];
 
