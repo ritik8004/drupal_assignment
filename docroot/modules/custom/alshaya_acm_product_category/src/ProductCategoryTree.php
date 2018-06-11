@@ -181,16 +181,16 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $data = [];
 
     // Get all child terms for the given parent.
-    $terms = $this->allChildTerms($langcode, self::VOCABULARY_ID, $parent_tid);
+    $terms = $this->allChildTerms($langcode, $parent_tid, FALSE);
 
     // Initialize the background color for term.
-    $this->termsBackgroundColor = $this->getTermsColors($langcode, self::VOCABULARY_ID, 'background');
+    $this->termsBackgroundColor = $this->getTermsColors($langcode, 'background');
 
     // Initialize the font color for the term.
-    $this->termsFontColor = $this->getTermsColors($langcode, self::VOCABULARY_ID, 'font');
+    $this->termsFontColor = $this->getTermsColors($langcode, 'font');
 
     // Initialize the image and image text font/bg color.
-    $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode, self::VOCABULARY_ID);
+    $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode);
 
     if (empty($terms)) {
       return [];
@@ -379,17 +379,18 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *
    * @param string $langcode
    *   Language code.
-   * @param string $vid
-   *   Vocabulary id.
    * @param int $parent_tid
    *   Parent term id.
    * @param bool $exclude_not_in_menu
    *   Indicates if the result should have items that are excluded from menu.
+   * @param string $vid
+   *   Vocabulary id.
    *
    * @return array
    *   Child term array.
    */
-  public function allChildTerms($langcode, $vid, $parent_tid, $exclude_not_in_menu = TRUE) {
+  public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $vid = NULL) {
+    $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name', 'description__value']);
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
@@ -429,15 +430,16 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *
    * @param string $langcode
    *   Language code.
-   * @param string $vid
-   *   Vocabulary id.
    * @param string $type
    *   Color type background/font.
+   * @param string $vid
+   *   (optional) Vocabulary id.
    *
    * @return array
    *   Array of colors keyed by term id.
    */
-  protected function getTermsColors($langcode, $vid, $type) {
+  protected function getTermsColors($langcode, $type, $vid = NULL) {
+    $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term__field_term_' . $type . '_color', 'ttbc');
     $query->fields('ttbc', ['entity_id', 'field_term_' . $type . '_color_value']);
     $query->condition('ttbc.langcode', $langcode);
@@ -460,7 +462,6 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
     // Process further only if the term has children.
     if (count($child_terms = $this->allChildTerms($term->language()->getId(),
-        'acq_product_category',
         $term->id(), FALSE)) > 0) {
 
       // Push child term ids into an array & re-lookup for the child if it has
@@ -481,12 +482,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @param string $langcode
    *   Language code.
    * @param string $vid
-   *   Vocabulary name.
+   *   (optional) Vocabulary name.
    *
    * @return array
    *   Array of term images and image text color.
    */
-  protected function getTermsImageAndColor($langcode, $vid) {
+  protected function getTermsImageAndColor($langcode, $vid = NULL) {
+    $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term__field_category_image', 'ci');
     $query->fields('ci', [
       'field_category_image_target_id',
