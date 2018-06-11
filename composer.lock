@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "835113bcfb302a189cc32ebd36a7a972",
+    "content-hash": "b2a628c3ec265c2e64e3d17eeb8531ff",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -6246,7 +6246,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha5",
-                    "datestamp": "1508351413",
+                    "datestamp": "1508351344",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -6768,6 +6768,7 @@
                 },
                 "patches_applied": {
                     "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
+                    "Fix more notices": "patches/mobile_number/2978729-custom.patch",
                     "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
                 }
             },
@@ -9474,7 +9475,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {

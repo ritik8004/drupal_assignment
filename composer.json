@@ -192,6 +192,7 @@
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
+                "Fix more notices": "patches/mobile_number/2978729-custom.patch",
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
             },
             "drupal/redirect": {
