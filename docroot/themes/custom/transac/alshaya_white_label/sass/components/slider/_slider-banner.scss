@@ -106,7 +106,9 @@
     width: 2.25rem;
     color: $hp_slider_arrows_dark;
     font-size: 2rem;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -117,7 +119,7 @@
   }
 
   @include icon(chevronleft) {
-    padding-#{$right}: 0.1875rem;
+    padding-right: 0.1875rem;
   }
 
   left: 0.5rem;
@@ -130,7 +132,7 @@
   }
 
   @include icon(chevronright) {
-    padding-#{$left}: 0.1875rem;
+    padding-left: 0.1875rem;
   }
 
   right: 0.5rem;
