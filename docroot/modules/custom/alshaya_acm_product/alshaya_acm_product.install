@@ -17,7 +17,7 @@ use Drupal\node\Entity\Node;
  * We do this in post update hook as it doesn't work together with config update
  * in normal hook_update.
  */
-function alshaya_acm_product_post_update_8017(&$sandbox) {
+function alshaya_acm_product_post_update_8019(&$sandbox) {
   _alshaya_search_resave_indexes();
 }
 
@@ -26,7 +26,7 @@ function alshaya_acm_product_post_update_8017(&$sandbox) {
  *
  * Add color_description attribute in SKU and index it.
  */
-function alshaya_acm_product_update_8017() {
+function alshaya_acm_product_update_8018() {
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
   $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
@@ -40,9 +40,18 @@ function alshaya_acm_product_update_8017() {
 /**
  * Implements hook_update_N().
  *
+ * Add new setting 'list_view_auto_page_load_count'.
+ */
+function alshaya_acm_product_update_8017() {
+  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update default items from cross sell/up sell carausel.
  */
-function alshaya_acm_product_8017() {
+function alshaya_acm_product_update_8016() {
   // Set default items from cross sell/up sell carausel for mobile.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', 2)
@@ -57,15 +66,6 @@ function alshaya_acm_product_8017() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', 3)
     ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add new setting 'list_view_auto_page_load_count'.
- */
-function alshaya_acm_product_update_8016() {
-  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product');
 }
 
 /**
