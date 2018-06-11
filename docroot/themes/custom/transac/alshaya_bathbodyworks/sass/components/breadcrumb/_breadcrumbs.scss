@@ -1,6 +1,11 @@
 .c-breadcrumb {
   ol {
     height: 2.5rem;
+    line-height: 1.2;
+
+    html[lang=ar] & {
+      line-height: 0.8;
+    }
   }
 
   li {
