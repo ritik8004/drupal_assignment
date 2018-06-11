@@ -1,6 +1,16 @@
 .c-footer-primary {
   color: $footer_text;
 
+  @include breakpoint($only-mobile) {
+    padding-top: 0;
+    padding-bottom: 2rem;
+    border-top: none;
+  }
+
+  @include breakpoint($only-tablet) {
+    padding-bottom: 0.875rem;
+  }
+
   .footer--menu {
     @include breakpoint($tablet) {
       display: flex;
@@ -25,7 +35,11 @@
 
   .footer__categories {
     @include breakpoint($only-tablet) {
-      flex-basis: 18%;
+      flex-basis: 17%;
+    }
+
+    @include breakpoint($desktop) {
+      flex-basis: 23%;
     }
   }
 
@@ -33,12 +47,34 @@
     @include breakpoint($only-tablet) {
       flex-basis: 22%;
     }
+
+    @include breakpoint($desktop) {
+      flex-basis: 24%;
+
+      .c-footer-menu--help {
+        html[lang=ar] & {
+          width: auto;
+        }
+      }
+    }
+  }
+
+  .footer__about {
+    @include breakpoint($desktop) {
+      flex-basis: 26%;
+    }
+  }
+
+  .footer_primary-right-block {
+    @include breakpoint($desktop) {
+      flex-basis: 27%;
+    }
   }
 
   .footer__about,
   .footer_primary-right-block {
     @include breakpoint($only-tablet) {
-      flex-basis: 30%;
+      flex-basis: 27%;
     }
   }
 
@@ -64,6 +100,14 @@
     @include breakpoint($only-tablet) {
       padding-top: 3.3rem;
       padding-bottom: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 0.875rem 0;
+
+      li {
+        line-height: 1;
+      }
     }
   }
 }
@@ -93,6 +137,18 @@
     @include breakpoint($tablet) {
       font-size: 0.75rem;
     }
+
+    @include breakpoint($only-mobile) {
+      &::after {
+        #{$right}: 0;
+      }
+    }
+  }
+}
+
+.c-footer-menu--help {
+  @include breakpoint ($only-mobile) {
+    margin-bottom: 1.5rem;
   }
 }
 
@@ -108,9 +164,11 @@
 
 .alshaya-newsletter-subscribe {
   @include breakpoint($only-mobile) {
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 2rem;
+    margin: 0 0 2rem;
+
+    #edit-email {
+      margin-top: 0;
+    }
   }
 
   h3 {
@@ -122,6 +180,10 @@
     text-transform: none;
     text-align: $left;
     padding: 0;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.375rem;
+    }
   }
 
   @include breakpoint($only-tablet) {
@@ -140,9 +202,9 @@
     color: $newsletter_submit_btn_text;
     text-transform: uppercase;
     font-family: $vs-bold;
+    padding: 0.6875rem 1.125rem;
 
     @include breakpoint($only-tablet) {
-      padding: 0.75rem 1rem;
       #{$right}: 0;
     }
   }
@@ -156,6 +218,12 @@
   .c-input__bar::before,
   .c-input__bar::after {
     background-color: $footer_input_border_active;
+  }
+
+  .ladda-label {
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.29;
   }
 }
 

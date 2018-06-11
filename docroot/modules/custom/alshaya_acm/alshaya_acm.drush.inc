@@ -53,6 +53,16 @@ function alshaya_acm_drush_command() {
     ],
   ];
 
+  $commands['alshaya-sku-media-missing'] = [
+    'description' => 'Print the skus for which media is attached to SKU but not available in drupal.',
+    'arguments'     => [
+      'langcode' => 'Language code for which we want to get skus.',
+    ],
+    'examples'    => [
+      'drush alshaya-sku-media-missing en' => 'Print the skus for en language.',
+    ],
+  ];
+
   return $commands;
 }
 
@@ -285,4 +295,60 @@ function drush_alshaya_acm_alshaya_reset_config() {
 
   // Reset country specific settings.
   \Drupal::service('alshaya_acm.config_check')->resetCountrySpecificSettings();
+}
+
+/**
+ * Implements drush alshaya-sku-media-missing.
+ */
+function drush_alshaya_acm_alshaya_sku_media_missing($langcode = 'en') {
+  drush_print(dt('Checking skus for the langcode @langcode', ['@langcode' => $langcode]));
+
+  $connection = \Drupal::database();
+  $query = $connection->select('acq_sku_field_data', 'acq');
+  $query->fields('acq', ['sku', 'media__value']);
+  $query->condition('acq.media__value', 'a:0:{}', '<>');
+  $query->condition('acq.langcode', $langcode);
+  $result = $query->execute()->fetchAll();
+
+  $fids = [];
+  $missing_fids = [];
+
+  // If there are any results.
+  if ($result) {
+
+    // Prepare fid array.
+    foreach ($result as $key => $rs) {
+      $media_data = unserialize($rs->media__value);
+      foreach ($media_data as $data) {
+        $fids[$data['fid']] = $rs->sku;
+      }
+    }
+
+    // If there are ids.
+    if (!empty($fids)) {
+      $query = $connection->select('file_managed', 'fm');
+      $query->fields('fm', ['fid']);
+      $query->condition('fm.fid', array_keys($fids), 'IN');
+      $existing_fids = $query->execute()->fetchCol();
+      $missing_fids = array_diff(array_keys($fids), $existing_fids);
+    }
+  }
+
+  // If there are no skus.
+  if (empty($missing_fids)) {
+    drush_print(dt('There are no skus.'));
+  }
+  else {
+    $rows = [];
+    // Prepare the row.
+    foreach ($missing_fids as $key => $value) {
+      $rows[$key] = [
+        'sku' => $fids[$value],
+        'fid' => $value,
+      ];
+    }
+
+    array_unshift($rows, ['SKU', 'File ID']);
+    drush_print_table($rows, TRUE);
+  }
 }
