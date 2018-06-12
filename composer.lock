@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2a628c3ec265c2e64e3d17eeb8531ff",
+    "content-hash": "e3bea8984efbfab2521ee10dcf969b2e",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -2000,7 +2000,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -9471,6 +9471,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
