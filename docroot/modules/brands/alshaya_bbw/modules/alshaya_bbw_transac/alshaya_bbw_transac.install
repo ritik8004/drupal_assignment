@@ -90,6 +90,8 @@ function alshaya_bbw_transac_update_8003() {
       'sort_options' => [
         'created' => 'created',
         'nid' => 'nid',
+        'name_1' => 'name_1',
+        'final_price' => 'final_price',
       ],
     ])
     ->save();
