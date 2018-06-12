@@ -26,6 +26,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\file\Entity\File;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\ViewExecutable;
@@ -578,6 +579,19 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // Invoke the alter hook to allow all modules to override the images
         // being rendered for teaser.
         \Drupal::moduleHandler()->alter('acq_sku_teaser_media', $build, $sku_entity);
+
+        // If no main image, then use default main image.
+        if (empty($build['image'])) {
+          if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+            $sku_media = [
+              'file' => $default_image,
+              'label' => $sku_entity->label(),
+            ];
+            $default_sku_image = $skuManager->getSkuImage($sku_media, '192x168');
+            $default_sku_image['#attributes']['class'][] = 'product-default-image';
+            $build['image'] = $default_sku_image;
+          }
+        }
 
         $promotion_types = ['cart'];
 
@@ -1441,4 +1455,19 @@ function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) 
   if (!empty($variables['data'])) {
     $variables['data'] = views_embed_view($variables['views_name'], $variables['views_display_id'], implode(',', $variables['data']));
   }
+}
+
+/**
+ * Get the default image url for the product.
+ *
+ * @return \Drupal\file\Entity\File|null|static
+ *   File object.
+ */
+function _alshaya_acm_product_get_product_default_main_image() {
+  $product_default_image = \Drupal::config('alshaya_acm_product.settings')->get('product_default_image');
+  if (!empty($product_default_image)) {
+    return File::load($product_default_image);
+  }
+
+  return NULL;
 }
