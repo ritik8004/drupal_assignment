@@ -3,12 +3,58 @@
 namespace Drupal\alshaya_acm_product\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\file\FileInterface;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ProductSettingsForm.
  */
 class ProductSettingsForm extends ConfigFormBase {
+
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Cache Backend service.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * ProductSettingsForm constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache) {
+    parent::__construct($config_factory);
+    $this->entityTypeManager = $entity_type_manager;
+    $this->cache = $cache;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('entity_type.manager'),
+      $container->get('cache.default')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -44,6 +90,28 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('vat_text', $form_state->getValue('vat_text'));
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
     $config->set('image_slider_position_pdp', $form_state->getValue('image_slider_position_pdp'));
+
+    // Product default image.
+    $product_default_image = NULL;
+
+    // Product default image.
+    if (!empty($default_image = $form_state->getValue('product_default_image'))) {
+      $file = $this->storeDefaultImageInSystem($default_image);
+      if ($file instanceof FileInterface) {
+        $config->set('product_default_image', $file->id());
+        $product_default_image = $file;
+      }
+      else {
+        $config->set('product_default_image', NULL);
+      }
+    }
+    else {
+      $config->set('product_default_image', NULL);
+    }
+
+    // Set the cache for default product image.
+    $this->cache->set('product_default_image', $product_default_image);
+
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -188,7 +256,40 @@ class ProductSettingsForm extends ConfigFormBase {
       ],
     ];
 
+    $form['product_default_image'] = [
+      '#type' => 'managed_file',
+      '#title' => $this->t('Product default image'),
+      '#description' => $this->t('Please upload image of resolution of 797X647 or more.'),
+      '#upload_location' => 'public://product_default_image/',
+      '#upload_validators'  => [
+        'file_validate_extensions' => ['png gif jpg jpeg svg'],
+      ],
+      '#default_value' => !empty($config->get('product_default_image')) ? [$config->get('product_default_image')] : [],
+    ];
+
     return $form;
+  }
+
+  /**
+   * Stores the default image in system.
+   *
+   * @param array $default_image
+   *   Default image value.
+   *
+   * @return null|\Drupal\file\Entity\File
+   *   File object.
+   */
+  protected function storeDefaultImageInSystem(array $default_image) {
+    if (!empty($default_image)) {
+      $file = $this->entityTypeManager->getStorage('file')->load($default_image[0]);
+      if ($file) {
+        $file->setPermanent();
+        $file->save();
+        return $file;
+      }
+    }
+
+    return NULL;
   }
 
 }
