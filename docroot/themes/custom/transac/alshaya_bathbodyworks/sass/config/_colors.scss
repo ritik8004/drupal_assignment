@@ -1,6 +1,6 @@
 /* ------- 1. Brand Colors ------- */
 $peacock-blue: #005699;
-$cool-blue: #4e8abe;
+$cool-blue: #a8c6e7;
 $cool-blue-two: #b8d1ed;
 $hot-pink: #ed088c;
 $white: #fff;
@@ -468,6 +468,20 @@ $order_summary_section_border: $warm-grey-two;
 $order_summary_subtotal: $black;
 $order_summary_order_status: $warm-grey-one;
 $order_summary_product_img_border: $warm-grey-two;
+
+// Order Confirmation
+$order_detail_table_bg: $white;
+$checkout_confirm_order_message: $warm-grey-one;
+$checkout_confirm_order_summary_row_text: $white;
+$checkout_order_print_btn_bg: false;
+$checkout_order_print_btn_text: $white;
+$checkout_order_print_btn_border: $white;
+$order_detail_order_details_row: $cool-blue-two;
+$checkout_order_details_label: $black;
+$checkout_order_details_product_count_border: $warm-grey-two;
+$checkout_order_details_icon: $peacock-blue;
+$checkout_confirm_discount_row: $white;
+$order_detail_order_details_row_td_blend: $cool-blue;
 
 // Order Print
 $checkout_confirm_order_summary_row: $info-blue;

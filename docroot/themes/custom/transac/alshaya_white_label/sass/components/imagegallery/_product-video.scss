@@ -54,10 +54,6 @@
     height: 5rem;
     position: absolute;
 
-    html[lang=ar] & {
-      transform: rotate(180deg);
-    }
-
     @include breakpoint($only-tablet) {
       background: url(#{$base_theme_img_directory_path}/icons/ic-video.svg) 64% 69% no-repeat;
     }

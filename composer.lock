@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f653673dd068e86a0f3ba5b43e5f1258",
+    "content-hash": "e3bea8984efbfab2521ee10dcf969b2e",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -2000,7 +2000,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -6768,6 +6768,7 @@
                 },
                 "patches_applied": {
                     "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
+                    "Fix more notices": "patches/mobile_number/2978729-custom.patch",
                     "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
                 }
             },
