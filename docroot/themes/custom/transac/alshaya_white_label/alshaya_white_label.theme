@@ -994,14 +994,15 @@ function _alshaya_white_label_get_banner_margin_override($mobile_margin, $deskto
   $unique_class = uniqid('c-');
 
   if (!empty($mobile_margin)) {
-    $mobile_margin_value = '@media (max-width: 767px) and (min-width: 0) {';
+    $mobile_margin_value = '@media ' . _alshaya_white_label_get_media_query('alshaya_white_label.palm') . '{';
     $mobile_margin_value .= ' .' . $unique_class . '{';
     $mobile_margin_value .= 'margin: ' . _alshaya_white_label_get_margin_value($mobile_margin) . ';';
     $mobile_margin_value .= '}}';
   }
 
   if (!empty($desktop_tablet_margin)) {
-    $desktop_tablet_margin_value = '@media (min-width: 768px) {';
+    $desktop_tablet_margin_value = '@media ' . _alshaya_white_label_get_media_query('alshaya_white_label.lap');
+    $desktop_tablet_margin_value .= ',' . _alshaya_white_label_get_media_query('alshaya_white_label.desk') . '{';
     $desktop_tablet_margin_value .= ' .' . $unique_class . '{';
     $desktop_tablet_margin_value .= 'margin: ' . _alshaya_white_label_get_margin_value($desktop_tablet_margin) . ';';
     $desktop_tablet_margin_value .= '}}';
@@ -1019,5 +1020,34 @@ function _alshaya_white_label_get_banner_margin_override($mobile_margin, $deskto
         'override_class' => $selector_override,
       ],
     ];
+  }
+}
+
+/**
+ * Helper function to get media query from alshaya_white_label.breakpoints.yml.
+ *
+ * @param string $resolution
+ *   The plugin id as per breakpoints.yml.
+ *
+ * @return string
+ *   The media query string without @media or NULL if invalid input.
+ */
+function _alshaya_white_label_get_media_query($resolution) {
+  $accepted_resolutions = [
+    'alshaya_white_label.palm',
+    'alshaya_white_label.lap',
+    'alshaya_white_label.desk',
+  ];
+
+  if (!in_array($resolution, $accepted_resolutions, TRUE)) {
+    return NULL;
+  }
+
+  $breakpoints = \Drupal::service('breakpoint.manager')->getBreakpointsByGroup('alshaya_white_label');
+  foreach ($breakpoints as $breakpoint_id => $breakpoint) {
+    if ($resolution == $breakpoint_id) {
+      $media_query = $breakpoint->getMediaQuery();
+      return $media_query;
+    }
   }
 }
