@@ -151,12 +151,14 @@
     }
   }
 }
+
 .nodetype--acq_product,
 .path--cart {
-    span.out-of-stock {
-      text-transform: uppercase;
-    }
+  span.out-of-stock {
+    text-transform: uppercase;
+  }
 }
+
 .basic-details-wrapper .field--name-field-skus {
   .form-item-quantity {
     label {
