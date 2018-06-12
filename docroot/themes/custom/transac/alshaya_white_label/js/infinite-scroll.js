@@ -10,7 +10,7 @@
   var $window = $(window);
 
   // The threshold for how far to the bottom you should reach before reloading.
-  var scrollThreshold = 200;
+  var scrollThreshold = drupalSettings.views_infinite_scroll.auto_load_offset;
 
   // The selector for the automatic pager.
   var automaticPagerSelector = '[data-drupal-views-infinite-scroll-pager="automatic"]';

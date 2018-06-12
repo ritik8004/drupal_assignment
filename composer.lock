@@ -6246,7 +6246,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha5",
-                    "datestamp": "1508351344",
+                    "datestamp": "1508351413",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -9471,6 +9471,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
