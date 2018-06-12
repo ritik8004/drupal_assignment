@@ -576,6 +576,11 @@
       text-transform: lowercase;
     }
   }
+
+  .product-default-image img {
+    max-width: 18rem;
+    max-height: 18rem;
+  }
 }
 
 .c-facet__blocks__wrapper--mobile {
