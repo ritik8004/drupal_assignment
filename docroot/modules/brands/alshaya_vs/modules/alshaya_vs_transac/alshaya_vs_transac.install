@@ -8,6 +8,26 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add new string translations.
+ */
+function alshaya_vs_transac_update_8104() {
+  $strings = [
+    'Corporate Info' => [
+      'ar' => 'خدمة الزبائن',
+    ],
+    'Customer care' => [
+      'ar' => 'خدمة الزبائن',
+    ],
+    'Connect with us' => [
+      'ar' => 'تواصلي معنا',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_update_n().
  *
  * Install brand field for store node.
@@ -80,6 +100,20 @@ function alshaya_vs_transac_install() {
 
   // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
   _alshaya_master_initialize_amp('alshaya_amp_victoria_secret');
+
+  // Add string translations.
+  $strings = [
+    'Corporate Info' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Connect with us' => [
+      'ar' => ' تواصلي معنا ',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 
   // Enable super category feature and menu block with config factory.
   // Placing config in "override" folder won't work here. As we have an event
