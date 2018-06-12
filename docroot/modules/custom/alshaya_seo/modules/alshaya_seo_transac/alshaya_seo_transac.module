@@ -18,6 +18,10 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
     $variables['attributes']['gtm-currency'] = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
     $variables['attributes']['gtm-container'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
     $variables['attributes']['gtm-list-name'] = $gtm_manager->convertCurrentRouteToGtmListName($gtm_manager->getGtmContainer());
+    if ($variables['attributes']['gtm-list-name'] == 'PDP' || $variables['attributes']['gtm-list-name'] == 'CartPage') {
+      $variables['attributes']['gtm-list-name'] = $variables['attributes']['gtm-list-name'] . '-placeholder';
+    }
+    \Drupal::moduleHandler()->invokeAll('gtm_list_name_alter', [&$variables['attributes']['gtm-list-name']]);
   }
 }
 

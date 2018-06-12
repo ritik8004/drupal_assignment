@@ -161,7 +161,7 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
       // Custom cache tag here will be cleared in API Wrapper after every
       // update cart call.
       $cache_tags = Cache::mergeTags($cache_tags, [
-        'cart_' . $cart->id(),
+        'cart:' . $cart->id(),
       ]);
     }
 
