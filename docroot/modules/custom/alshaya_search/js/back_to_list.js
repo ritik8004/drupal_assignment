@@ -177,15 +177,39 @@
       function scrollToProduct() {
         var storage_value = getStorageValues();
         var first_visible_product = $('.views-infinite-scroll-content-wrapper article[data-nid="' + storage_value.nid + '"]:visible:first');
-        $('html, body').animate({
-          scrollTop: ($(first_visible_product).offset().top)
-        }, 100);
+
+        var elementVisible = isElementInViewPort(first_visible_product);
+        // If element is not visible, only then scroll.
+        if (elementVisible === false) {
+          $('html, body').animate({
+            scrollTop: ($(first_visible_product).offset().top)
+          }, 100);
+        }
 
         // Once scroll to product, clear the storage.
         localStorage.removeItem(window.location.href);
         // Sometimes loader is not hiding, just hide it.
         $('.ajax-progress').hide();
       }
+
+      /**
+       * Check if element is fully visible in viewport or not.
+       *
+       * @param element
+       * @returns {boolean}
+       */
+      function isElementInViewPort(element) {
+        // Get element top and bottom.
+        var elementTop = $(element).offset().top;
+        var elementBottom = elementTop + $(element).outerHeight();
+
+        // Get window top and bottom.
+        var viewportTop = $(window).scrollTop();
+        var viewportBottom = viewportTop + $(window).height();
+
+        return elementTop >= viewportTop && elementBottom <= viewportBottom;
+      }
+
     }
   }
 
