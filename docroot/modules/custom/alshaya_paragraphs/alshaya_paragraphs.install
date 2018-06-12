@@ -17,12 +17,12 @@ use Symfony\Component\Yaml\Yaml;
  */
 function alshaya_paragraphs_update_8116() {
   $configs = [
-    'field.field.paragraph.promo_block.field_margin_d_t',
-    'field.field.paragraph.promo_block.field_margin_mobile',
     'field.storage.paragraph.field_margin_d_t',
     'field.storage.paragraph.field_margin_mobile',
-    'core.entity_form_display.paragraph.promo_block.default',
+    'field.field.paragraph.promo_block.field_margin_d_t',
+    'field.field.paragraph.promo_block.field_margin_mobile',
     'core.entity_view_display.paragraph.promo_block.default',
+    'core.entity_form_display.paragraph.promo_block.default',
   ];
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
 }
