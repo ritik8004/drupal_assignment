@@ -500,6 +500,14 @@
   }
 }
 
-.c-promo__item__override_processed.c-promo__item {
-  margin: 0 !important;
+.c-promo__item__override_processed {
+  &.c-promo__item,
+  .c-promo-1-3__item {
+    margin: 0 !important;
+  }
+
+  .field--name-field-1-row-2-col .field__items > .field__item:last-child,
+  .c-promo-1-1--eq__item:last-child {
+    float: $left !important;
+  }
 }
