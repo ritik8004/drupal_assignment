@@ -79,7 +79,8 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
 
     // Maintaining the weight.
     $weight = 0;
-    foreach ($sort_options as $id => $option) {
+    foreach ($options as $id => $title) {
+      $option = isset($sort_options[$id]) ? $sort_options[$id] : 0;
       $form['sort_options'][$id]['#attributes']['class'][] = 'draggable';
       $form['sort_options'][$id]['#weight'] = $weight;
 
@@ -89,12 +90,12 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       ];
 
       $form['sort_options'][$id]['label'] = [
-        '#plain_text' => $options[$id],
+        '#plain_text' => $title,
       ];
 
       $form['sort_options'][$id]['weight'] = [
         '#type' => 'weight',
-        '#title' => $this->t('Weight for @title', ['@title' => $options[$id]]),
+        '#title' => $this->t('Weight for @title', ['@title' => $title]),
         '#title_display' => 'invisible',
         '#default_value' => $weight,
         '#attributes' => ['class' => ['plp_sort_options-order-weight']],
