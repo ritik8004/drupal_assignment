@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_margin_d_t
+    - paragraphs.paragraphs_type.promo_block
+id: paragraph.promo_block.field_margin_d_t
+field_name: field_margin_d_t
+entity_type: paragraph
+bundle: promo_block
+label: 'Margin - Desktop/Tablet'
+description: "The margin for Desktop/Tablet in shorthand format: top right bottom left. ex: 10px 10x 10px 10px.\r\n"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
