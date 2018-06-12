@@ -34,9 +34,17 @@
 
   &__sidebar {
     .content--size-volume {
-      margin-top: 1rem;
       font-size: 0.875rem;
       color: $pdp_product_volume_value;
+
+      @include breakpoint($desktop) {
+        margin-top: 1rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+        padding: 0 0.5rem;
+      }
 
       .field__label {
         color: $pdp_product_volume_label;
@@ -146,7 +154,12 @@
     }
   }
 }
-
+.nodetype--acq_product,
+.path--cart {
+    span.out-of-stock {
+      text-transform: uppercase;
+    }
+}
 .basic-details-wrapper .field--name-field-skus {
   .form-item-quantity {
     label {
