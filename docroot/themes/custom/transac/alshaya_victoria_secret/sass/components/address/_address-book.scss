@@ -5,8 +5,32 @@
     float: none;
   }
 
+  @include breakpoint($desktop) {
+    margin-bottom: 1.5rem;
+  }
+
   .address--label {
     font-family: $vs-bold;
+  }
+}
+
+.c-address-book {
+  .block-system > a.use-ajax {
+    padding: 0.75rem 2.25rem;
+
+    @include breakpoint($desktop) {
+      top: -0.75rem;
+    }
+  }
+
+  .profile-form .form-actions .form-submit {
+    padding: 0.125rem 1rem;
+  }
+}
+
+.view-address-book {
+  @include breakpoint($tablet) {
+    padding-top: 1.5rem;
   }
 }
 
@@ -15,13 +39,30 @@
     min-height: 0;
 
     @include breakpoint($desktop) {
-      min-height: 10.5rem;
+      min-height: 10rem;
+      padding: 1rem;
     }
+  }
+
+  .address--content {
+    font-size: 0.875rem;
+    padding-bottom: 0.125rem;
+
+    @include breakpoint($tablet) {
+      padding-bottom: 0.0625rem;
+    }
+  }
+
+  .address--contact {
+    margin-top: 2.375rem;
   }
 
   .address--edit,
   .address--delete {
     a {
+      padding: 0.625rem 0.8rem;
+      min-width: 4.75rem;
+
       @include breakpoint($desktop) {
         border: 0;
         display: block;
@@ -32,25 +73,58 @@
   .address--options {
     @include breakpoint($desktop) {
       padding: 0;
-      padding-#{$left}: 1.5rem;
+      padding-#{$left}: 0.675rem;
+    }
+  }
+
+  .address--userinfo {
+    @include breakpoint($only-tablet) {
+      width: 63%;
+    }
+  }
+
+  .address--delivery {
+    @include breakpoint($only-tablet) {
+      width: 37%;
     }
   }
 
   .address--controls {
-    @include breakpoint($only-tablet) {
+    font-size: 0.875rem;
+    text-transform: capitalize;
+
+    @include breakpoint($upto-desktop) {
       width: auto;
-      padding: 0.84rem 0.875rem;
+      padding: 0;
     }
 
     &.address--primary {
-      @include breakpoint($only-tablet) {
+      width: 78%;
+
+      @include breakpoint($upto-desktop) {
         padding-#{$left}: 2.4rem;
+      }
+
+      span,
+      a {
+        &::before {
+          height: 1rem;
+          width: 1rem;
+
+          @include breakpoint($upto-desktop) {
+            #{$left}: 0.675rem;
+          }
+        }
       }
     }
 
     @include breakpoint($desktop) {
       border-#{$right}: 0.0625rem solid $address_book_border;
       padding-#{$right}: 0;
+    }
+
+    &:last-child {
+      border-#{$right}: 0;
     }
   }
 

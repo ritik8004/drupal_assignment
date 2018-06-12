@@ -1,9 +1,11 @@
 .c-sidebar-first {
   .my-account-nav {
     a {
+      text-transform: capitalize;
+      line-height: 2;
+
       &.active {
         font-family: $vs-bold;
-        text-transform: none;
       }
     }
   }
@@ -24,5 +26,17 @@
 
   .joinclub #block-jointheclub h3 {
     font-family: $vs-regular;
+  }
+}
+
+.path--user .my-account-nav {
+  margin-top: 0;
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0.75rem;
+  }
+
+  a {
+    font-size: 0.875rem;
   }
 }

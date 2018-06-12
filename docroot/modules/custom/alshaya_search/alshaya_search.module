@@ -10,6 +10,7 @@ use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
@@ -55,6 +56,9 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
     // Override the 'result summary' header.
     $format_plural = new PluralTranslatableMarkup($view->total_rows, '1 item', '@count items');
     $view->header['result']->options['content'] = $format_plural;
+
+    // Add 'back to list' library to search/plp/promo page.
+    $view->element['#attached']['library'][] = 'alshaya_search/back_to_list';
   }
 }
 
@@ -492,5 +496,26 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
         $filter_params[] = $url_alias . ':' . $parent_id;
       }
     }
+  }
+}
+
+/**
+ * Helper function to clear all indexed items resave indexes.
+ *
+ * Since we will add/update lot of attributes, best to re-use the code.
+ */
+function _alshaya_search_resave_indexes() {
+  $indexes = ['product', 'acquia_search_index'];
+
+  foreach ($indexes as $index_name) {
+    // Queue items for re-indexing. Required specifically for search_api_db to
+    // avoid creating tables with numeric prefixes when indexing content.
+    $index = Index::load($index_name);
+
+    // Re-index all items.
+    $index->reindex();
+
+    // Save index to reflect new category field.
+    $index->save();
   }
 }

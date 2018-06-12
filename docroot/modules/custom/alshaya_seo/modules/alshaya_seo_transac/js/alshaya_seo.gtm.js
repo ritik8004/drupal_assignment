@@ -249,14 +249,16 @@
           var upSellCrossSellSelector = $(this).closest('.view-product-slider').parent('.views-element-container').parent();
           if (!$(this).closest('.owl-item').hasClass('cloned') && !upSellCrossSellSelector.hasClass('mobile-only-block')) {
             // Check whether the product is in US or CS region & update list accordingly.
-            if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
-              pdpListName = listName + '-CS';
-            }
-            else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
-              pdpListName = listName + '-US';
-            }
-            else if (upSellCrossSellSelector.hasClass('horizontal-related')) {
-              pdpListName = listName + '-RELATED';
+            if (listName.includes('placeholder')) {
+              if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
+                pdpListName = listName.replace('placeholder', 'CS');
+              }
+              else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
+                pdpListName = listName.replace('placeholder', 'US');
+              }
+              else if (upSellCrossSellSelector.hasClass('horizontal-related')) {
+                pdpListName = listName.replace('placeholder', 'RELATED');
+              }
             }
 
             impression.list = pdpListName;
@@ -521,15 +523,16 @@
         $(this).once('js-event').on('click', function (e) {
           var that = $(this).closest('article[data-vmode="teaser"]');
           var position = '';
-
-          if (that.closest('.horizontal-crossell').length > 0) {
-            subListName = listName + '-CS';
-          }
-          else if (that.closest('.horizontal-upell').length > 0) {
-            subListName = listName + '-US';
-          }
-          else if (that.closest('.horizontal-related').length > 0) {
-            subListName = listName + '-RELATED';
+          if (listName.includes('placeholder')) {
+            if (that.closest('.horizontal-crossell').length > 0) {
+              subListName = listName.replace('placeholder', 'CS');
+            }
+            else if (that.closest('.horizontal-upell').length > 0) {
+              subListName = listName.replace('placeholder', 'US');
+            }
+            else if (that.closest('.horizontal-related').length > 0) {
+              subListName = listName.replace('placeholder', 'RELATED');
+            }
           }
 
           // position = $('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;

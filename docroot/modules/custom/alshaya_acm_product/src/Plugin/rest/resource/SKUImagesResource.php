@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_api\Plugin\rest\resource;
+namespace Drupal\alshaya_acm_product\Plugin\rest\resource;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -122,7 +122,7 @@ class SKUImagesResource extends ResourceBase {
         $node = $plugin->getDisplayNode($sku_entity);
         $response[$sku]['product_url'] = $node->toUrl()->setAbsolute()->toString();
 
-        $gallery = $this->skuImagesManager->getAllMedia($sku_entity);
+        $gallery = $this->skuImagesManager->getAllMedia($sku_entity, TRUE);
         $response[$sku]['images'] = array_values(array_merge($gallery['images'], $gallery['videos']));
       }
     }

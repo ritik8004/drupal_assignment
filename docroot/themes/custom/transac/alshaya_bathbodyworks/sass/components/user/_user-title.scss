@@ -5,3 +5,24 @@
     font-family: $alshaya-thin;
   }
 }
+
+.order-detail,
+.c-change-password,
+.c-communication-preferences,
+.c-user-edit,
+.c-order-list,
+.c-user--node,
+.c-address-book {
+  .block-page-title-block {
+    padding-bottom: 0.5rem;
+    padding-top: 0.75rem;
+
+    @include breakpoint($only-mobile) {
+      z-index: 10;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
+}

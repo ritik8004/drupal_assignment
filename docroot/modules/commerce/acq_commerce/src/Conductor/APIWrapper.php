@@ -247,8 +247,9 @@ class APIWrapper implements APIWrapperInterface {
     $cart = [];
 
     try {
-      $cart = $this->tryAgentRequest($doReq, 'updateCart', 'cart');
+      // First invalidate so even if we get exception, all blocks are updated.
       Cache::invalidateTags(['cart:' . $cart_id]);
+      $cart = $this->tryAgentRequest($doReq, 'updateCart', 'cart');
     }
     catch (ConnectorException $e) {
       // Restore cart structure.

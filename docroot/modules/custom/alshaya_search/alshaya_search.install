@@ -11,6 +11,16 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Update search_api_autocomplete permission.
+ */
+function alshaya_search_update_8019() {
+  user_role_grant_permissions(Role::ANONYMOUS_ID, ['use search_api_autocomplete for search']);
+  user_role_grant_permissions(Role::AUTHENTICATED_ID, ['use search_api_autocomplete for search']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update search_api_autocomplete settings after module update.
  */
 function alshaya_search_update_8018() {
@@ -113,15 +123,7 @@ function alshaya_search_update_8013() {
  * in normal hook_update.
  */
 function alshaya_search_post_update_8012(&$sandbox) {
-  // Queue items for re-indexing. Required specifically for search_api_db to
-  // avoid creating tables with numeric prefixes when indexing content.
-  $index = Index::load('product');
-
-  // Re-index all items.
-  $index->reindex();
-
-  // Save index to reflect new category field.
-  $index->save();
+  _alshaya_search_resave_indexes();
 }
 
 /**

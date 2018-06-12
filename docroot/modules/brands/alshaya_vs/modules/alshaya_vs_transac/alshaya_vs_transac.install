@@ -8,6 +8,59 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add new string translations.
+ */
+function alshaya_vs_transac_update_8104() {
+  $strings = [
+    'Corporate Info' => [
+      'ar' => 'خدمة الزبائن',
+    ],
+    'Customer care' => [
+      'ar' => 'خدمة الزبائن',
+    ],
+    'Connect with us' => [
+      'ar' => 'تواصلي معنا',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_n().
+ *
+ * Install brand field for store node.
+ */
+function alshaya_vs_transac_update_8103() {
+  alshaya_config_install_configs([
+    'field.storage.node.field_brand',
+    'field.field.node.store.field_brand',
+  ], 'alshaya_vs_transac');
+
+  // Save form and view display mode for store content type.
+  alshaya_config_install_configs([
+    'core.entity_form_display.node.store.default',
+    'core.entity_view_display.node.store.default',
+    'views.view.stores_finder',
+  ], 'alshaya_stores_finder');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add SKU base fields specific to VS.
+ *
+ * Re-saving indexes and updating index configs will be taken care of in
+ * alshaya_acm_product_update_8017().
+ */
+function alshaya_vs_transac_update_8102() {
+  alshaya_config_install_configs(['alshaya_vs_transac.sku_base_fields'], 'alshaya_vs_transac');
+  $fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
+  acq_sku_add_base_fields($fields);
+}
+
+/**
  * Implements hook_update_n().
  */
 function alshaya_vs_transac_update_8101() {
@@ -18,7 +71,8 @@ function alshaya_vs_transac_update_8101() {
  * Implements hook_install().
  */
 function alshaya_vs_transac_install() {
-  // Enable and set alshaya_victoria_secret as default theme and set the site logo, favicon icon and email logo path.
+  // Enable and set alshaya_victoria_secret as default theme and set the site
+  // logo, favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_victoria_secret');
 
   // Set store id - EN.
@@ -47,6 +101,20 @@ function alshaya_vs_transac_install() {
   // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
   _alshaya_master_initialize_amp('alshaya_amp_victoria_secret');
 
+  // Add string translations.
+  $strings = [
+    'Corporate Info' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Connect with us' => [
+      'ar' => ' تواصلي معنا ',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
   // Enable super category feature and menu block with config factory.
   // Placing config in "override" folder won't work here. As we have an event
   // subscriber written for config save, which will always override the value
@@ -61,4 +129,7 @@ function alshaya_vs_transac_install() {
   $block->setStatus(TRUE);
   $block->save();
 
+  // Add SKU base fields specific to VS.
+  $fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
+  acq_sku_add_base_fields($fields);
 }

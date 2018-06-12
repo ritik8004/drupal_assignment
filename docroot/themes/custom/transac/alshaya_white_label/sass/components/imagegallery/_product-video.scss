@@ -1,0 +1,61 @@
+.yt-vi-container {
+  position: relative;
+  overflow: hidden;
+
+  &.cloudzoom__video {
+    &_main {
+      &:empty {
+        display: none;
+      }
+
+      @include breakpoint($desktop) {
+        width: 37.5rem;
+        height: 31.25rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 27rem;
+        height: 25rem;
+      }
+    }
+
+    &_modal {
+      &:empty {
+        display: none;
+      }
+
+      @include breakpoint($desktop) {
+        width: calc(100% - (6.75rem)) !important;
+        height: 30.5rem !important;
+        float: $right;
+        margin-top: 0.5rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 100%;
+        height: 30rem !important;
+      }
+    }
+  }
+}
+
+.mobileplayer-wrapper {
+  width: 100%;
+  position: relative;
+  height: 25rem;
+}
+
+.cloudzoom__thumbnails__video,
+.imagegallery__thumbnails__video {
+  &::before {
+    content: '';
+    background: url(#{$base_theme_img_directory_path}/icons/ic-video.svg) 58% 50% no-repeat;
+    width: 5rem;
+    height: 5rem;
+    position: absolute;
+
+    @include breakpoint($only-tablet) {
+      background: url(#{$base_theme_img_directory_path}/icons/ic-video.svg) 64% 69% no-repeat;
+    }
+  }
+}

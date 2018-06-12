@@ -5,6 +5,8 @@
  * The Module file.
  */
 
+use Drupal\taxonomy\TermInterface;
+
 /**
  * Implements hook_module_implements_alter().
  */
@@ -12,5 +14,39 @@ function alshaya_vs_module_implements_alter(&$implementations, $hook) {
   // Alter page_attachments implementation for alshaya_vs to call at last.
   if ($hook == 'page_attachments') {
     unset($implementations['back_to_top']);
+  }
+}
+
+/**
+ * Implements hook_gtm_list_name_alter().
+ */
+function alshaya_vs_gtm_list_name_alter(&$listName) {
+  $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+  $term = $product_category_tree->getCategoryTermFromRoute();
+  $super_cat = $product_category_tree->getCategoryTermRequired();
+  $super_cat_name = $super_cat['label'];
+  $major_cat_name = '';
+  if ($term instanceof TermInterface) {
+    if ($term->getName() != $super_cat_name) {
+      $major_cat_name = $term->getName();
+    }
+  }
+
+  if ($listName == 'PLP') {
+    $listName = $listName . '|' . $super_cat_name . '|' . $major_cat_name;
+  }
+
+  elseif ($listName == 'PDP') {
+    $listName = $listName . '|' . $super_cat_name;
+  }
+
+  elseif ($listName == 'Search Results Page') {
+    $keywords = \Drupal::request()->get('keywords');
+    if ($keywords) {
+      $listName = 'SRP|' . $super_cat_name . '|' . strtolower($keywords);
+    }
+    else {
+      $listName = 'SRP|' . $super_cat_name;
+    }
   }
 }

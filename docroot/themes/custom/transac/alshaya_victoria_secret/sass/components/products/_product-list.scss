@@ -57,6 +57,10 @@
         bottom: auto;
         top: -3.4rem;
       }
+
+      @include breakpoint($only-mobile) {
+        z-index: 7;
+      }
     }
 
     .view-header.search-count {
@@ -70,7 +74,7 @@
         height: 2.5rem;
         margin-bottom: 0.75rem;
         padding-bottom: 0;
-        border: 2px solid $plp_facet_clear_border;
+        border: 1px solid $plp_facet_clear_border;
 
         &:hover {
           opacity: 0.75;

@@ -34,8 +34,6 @@ drupal_db_name: drupal
 # Set this to 'false' if you don't need to install drupal (using the drupal_*
 # settings below), but instead copy down a database (e.g. using drush sql-sync).
 drupal_build_makefile: false
-drupal_build_composer: false
-drupal_build_composer_project: false
 drupal_install_site: false
 
 # Drupal VM automatically creates a drush alias file in your ~/.drush folder if
@@ -172,6 +170,10 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-vssa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
   - servername: "local.alshaya-bbme.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
@@ -230,6 +232,10 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_vsae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_vssa
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
