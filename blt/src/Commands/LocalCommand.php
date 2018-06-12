@@ -277,10 +277,10 @@ class LocalCommand extends BltTasks {
    *   Fully prepared array or 0.
    */
   private function validateAndPrepareInfo($site, $env) {
-    static $info;
+    static $static;
 
-    if (isset($info)) {
-      return $info;
+    if (isset($static[$env][$site])) {
+      return $static[$env][$site];
     }
 
     $sites = $this->getConfig()->get('sites');
@@ -314,6 +314,8 @@ class LocalCommand extends BltTasks {
     }
 
     $info['archive'] = realpath('..') . "/tmp/alshaya_${site}_${env}.sql";
+
+    $static[$env][$site] = $info;
 
     return $info;
   }

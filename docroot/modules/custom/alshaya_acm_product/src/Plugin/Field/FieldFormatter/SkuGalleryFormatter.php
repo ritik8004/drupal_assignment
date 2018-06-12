@@ -246,6 +246,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           $main_image = $this->skuManager->getSkuImage(['file' => $default_image], '291x288');
           $elements[$delta]['#gallery']['#mainImage'] = $main_image;
           $elements[$delta]['#gallery']['#class'] = 'product-default-image';
+
           // If no thumbnail, then use main image for thumbnail.
           if (isset($element['#gallery']['#thumbnails']) && empty($element['#gallery']['#thumbnails'])) {
             $elements[$delta]['#gallery']['#thumbnails'][] = $this->skuManager->getSkuImage(['file' => $default_image], '59x60', '291x288');

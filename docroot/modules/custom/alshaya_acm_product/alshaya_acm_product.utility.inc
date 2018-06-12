@@ -260,11 +260,13 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       $image_small = ImageStyle::load($thumbnail_style)->buildUrl($default_image->getFileUri());
       $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
       $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
+
       $main_image = [
         'zoomurl' => $image_zoom,
         'mediumurl' => $image_medium,
         'label' => $sku_entity->label(),
       ];
+
       if (empty($thumbnails)) {
         $thumbnails[] = [
           'thumburl' => $image_small,
