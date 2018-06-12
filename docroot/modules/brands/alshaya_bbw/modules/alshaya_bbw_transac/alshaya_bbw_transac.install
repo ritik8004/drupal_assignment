@@ -83,6 +83,16 @@ function alshaya_bbw_transac_update_8003() {
   // Update search indexes to index new Brand field.
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+
+  // Add new sorting filters(Position and New in) on PLP.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
+    ->setData([
+      'sort_options' => [
+        'created' => 'created',
+        'nid' => 'nid',
+      ],
+    ])
+    ->save();
 }
 
 /**
