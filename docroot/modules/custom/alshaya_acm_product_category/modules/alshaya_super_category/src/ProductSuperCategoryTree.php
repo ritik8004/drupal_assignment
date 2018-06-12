@@ -206,7 +206,10 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * Cache super category term mapping.
    */
   protected function getSuperCategoryMapping() {
-    if ($cache_terms = $this->cache->get('super_category_map')) {
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $cid = 'super_category_map_' . $langcode;
+
+    if ($cache_terms = $this->cache->get($cid)) {
       return $cache_terms->data;
     }
 
@@ -221,7 +224,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       }
     }
 
-    $this->cache->set('super_category_map', $cache_terms, Cache::PERMANENT, [
+    $this->cache->set($cid, $cache_terms, Cache::PERMANENT, [
       ProductCategoryTree::CACHE_TAG,
       ProductCategoryTree::VOCABULARY_ID,
     ]);
