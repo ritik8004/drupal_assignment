@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\acq_commerce\APIHelper;
 use Drupal\acq_commerce\Connector\ConnectorException;
 use Drupal\acq_commerce\Connector\CustomerNotFoundException;
 use Drupal\acq_commerce\I18nHelper;
@@ -37,6 +38,13 @@ class APIWrapper implements APIWrapperInterface {
   private $routeEvents = TRUE;
 
   /**
+   * API Helper service object.
+   *
+   * @var \Drupal\acq_commerce\APIHelper
+   */
+  private $helper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
@@ -47,11 +55,14 @@ class APIWrapper implements APIWrapperInterface {
    *   LoggerChannelFactory object.
    * @param \Drupal\acq_commerce\I18nHelper $i18nHelper
    *   I18nHelper object.
+   * @param \Drupal\acq_commerce\APIHelper $api_helper
+   *   API Helper service object.
    */
-  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18nHelper) {
+  public function __construct(ClientFactory $client_factory, ConfigFactoryInterface $config_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18nHelper, APIHelper $api_helper) {
     $this->clientFactory = $client_factory;
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->logger = $logger_factory->get('acq_sku');
+    $this->helper = $api_helper;
 
     // We always use the current language id to get store id. If required
     // function calling the api wrapper will pass different store id to
@@ -440,11 +451,6 @@ class APIWrapper implements APIWrapperInterface {
     $endpoint = $this->apiVersion . "/agent/customer";
 
     $doReq = function ($client, $opt) use ($endpoint, $customer, $options) {
-      // Keep data type consistent for customer_id.
-      if (isset($customer['customer_id'])) {
-        $customer['customer_id'] = (string) $customer['customer_id'];
-      }
-
       $opt['json']['customer'] = $customer;
 
       if (isset($options['password']) && !empty($options['password'])) {
@@ -465,6 +471,9 @@ class APIWrapper implements APIWrapperInterface {
 
       // Invoke the alter hook to allow all modules to update the customer data.
       \Drupal::moduleHandler()->alter('acq_commerce_update_customer_api_request', $opt);
+
+      // Do some cleanup.
+      $opt['json']['customer'] = $this->helper->cleanCustomerData($opt['json']['customer']);
 
       return ($client->post($endpoint, $opt));
     };

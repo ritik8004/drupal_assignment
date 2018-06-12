@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_cybersource;
 
+use Drupal\acq_commerce\APIHelper;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\Conductor\ClientFactory;
 use Drupal\acq_commerce\Conductor\RouteException;
@@ -28,12 +29,15 @@ class CybersourceAPIWrapper extends APIWrapper {
    *   LoggerChannelFactory object.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Drupal\acq_commerce\APIHelper $api_helper
+   *   API Helper service object.
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
                               LoggerChannelFactory $logger_factory,
-                              I18nHelper $i18n_helper) {
-    parent::__construct($client_factory, $config_factory, $logger_factory, $i18n_helper);
+                              I18nHelper $i18n_helper,
+                              APIHelper $api_helper) {
+    parent::__construct($client_factory, $config_factory, $logger_factory, $i18n_helper, $api_helper);
     $this->logger = $logger_factory->get('acq_cybersource');
   }
 
