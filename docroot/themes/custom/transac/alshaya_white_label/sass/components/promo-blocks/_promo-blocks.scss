@@ -492,3 +492,14 @@
     }
   }
 }
+
+.c-promo__item__override {
+  .field--name-field-margin-d-t,
+  .field--name-field-margin-mobile {
+    display: none;
+  }
+}
+
+.c-promo__item__override_processed.c-promo__item {
+  margin: 0 !important;
+}

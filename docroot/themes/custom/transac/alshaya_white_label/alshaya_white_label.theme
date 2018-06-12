@@ -8,6 +8,7 @@
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
+use Drupal\Core\Field\FieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
@@ -831,6 +832,17 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     $desktop_image = !empty($variables['elements']['field_banner']['#items']) ? $variables['elements']['field_banner']['#items'] : '';
     $default_image = !empty($desktop_image) ? $desktop_image : $mobile_image;
 
+    // Inline style to override margins for banners.
+    $mobile_margin = !empty($variables['elements']['field_margin_mobile']['#items']) ? $variables['elements']['field_margin_mobile']['#items'] : '';
+    $desktop_tablet_margin = !empty($variables['elements']['field_margin_d_t']['#items']) ? $variables['elements']['field_margin_d_t']['#items'] : '';
+
+    $style_data = _alshaya_white_label_get_banner_margin_override($mobile_margin, $desktop_tablet_margin);
+
+    if (!empty($style_data)) {
+      $variables['style_tag'] = $style_data['style_tag'];
+      $variables['selector_class'] = $style_data['selector_class'];
+    }
+
     if (!empty($default_image)) {
       $variables['mobile_image'] = !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image);
       $variables['desktop_image'] = !empty($desktop_image) ? _alshaya_white_label_get_image_url($desktop_image) : _alshaya_white_label_get_image_url($mobile_image);
@@ -946,5 +958,66 @@ function _alshaya_white_label_get_image_url(FileFieldItemList $file_item_list) {
     foreach ($images as $image) {
       return $image->getFileUri();
     }
+  }
+}
+
+/**
+ * Helper function to return margin value from FieldItemList object.
+ *
+ * @param \Drupal\Core\Field\FieldItemList $item_list
+ *   The FieldItemList object.
+ *
+ * @return string
+ *   The margin shorthand value.
+ */
+function _alshaya_white_label_get_margin_value(FieldItemList $item_list) {
+  if (!empty($item_list)) {
+    if (!empty($items = $item_list->getValue())) {
+      return $items[0]['value'];
+    }
+  }
+}
+
+/**
+ * Helper function to generate style tag for overriding margin for banner.
+ *
+ * @param object $mobile_margin
+ *   FieldItemList for mobile margin field.
+ * @param object $desktop_tablet_margin
+ *   FieldItemList for desktop margin field.
+ *
+ * @return array
+ *   Array containing unique selector and style tag.
+ */
+function _alshaya_white_label_get_banner_margin_override($mobile_margin, $desktop_tablet_margin) {
+  // Generate a random string to be used as a selector.
+  $unique_class = uniqid('c-');
+
+  if (!empty($mobile_margin)) {
+    $mobile_margin_value = '@media (max-width: 767px) and (min-width: 0) {';
+    $mobile_margin_value .= ' .' . $unique_class . '{';
+    $mobile_margin_value .= 'margin: ' . _alshaya_white_label_get_margin_value($mobile_margin) . ';';
+    $mobile_margin_value .= '}}';
+  }
+
+  if (!empty($desktop_tablet_margin)) {
+    $desktop_tablet_margin_value = '@media (min-width: 768px) {';
+    $desktop_tablet_margin_value .= ' .' . $unique_class . '{';
+    $desktop_tablet_margin_value .= 'margin: ' . _alshaya_white_label_get_margin_value($desktop_tablet_margin) . ';';
+    $desktop_tablet_margin_value .= '}}';
+  }
+
+  if (isset($desktop_tablet_margin_value) || isset($mobile_margin_value)) {
+    $selector_override = 'c-promo__item__override';
+    $style_tag = '';
+    $style_tag .= isset($mobile_margin_value) ? $mobile_margin_value : NULL;
+    $style_tag .= isset($desktop_tablet_margin_value) ? $desktop_tablet_margin_value : NULL;
+    return [
+      'style_tag' => $style_tag,
+      'selector_class' => [
+        'unique_class' => $unique_class,
+        'override_class' => $selector_override,
+      ],
+    ];
   }
 }
