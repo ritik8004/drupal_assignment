@@ -440,6 +440,11 @@ class APIWrapper implements APIWrapperInterface {
     $endpoint = $this->apiVersion . "/agent/customer";
 
     $doReq = function ($client, $opt) use ($endpoint, $customer, $options) {
+      // Keep data type consistent for customer_id.
+      if (isset($customer['customer_id'])) {
+        $customer['customer_id'] = (string) $customer['customer_id'];
+      }
+
       $opt['json']['customer'] = $customer;
 
       if (isset($options['password']) && !empty($options['password'])) {
