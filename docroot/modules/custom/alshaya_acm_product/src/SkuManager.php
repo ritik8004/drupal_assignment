@@ -260,7 +260,7 @@ class SkuManager {
         ];
 
         // Get discount if discounted price available.
-        $discount = round((($price - $final_price) * 100) / $price, 2);
+        $discount = round((($price - $final_price) * 100) / $price);
         $build['discount'] = [
           '#markup' => $this->t('Save @discount%', ['@discount' => $discount]),
         ];
@@ -412,7 +412,7 @@ class SkuManager {
       }
       else {
         $sku_cart_price['final_price'] = number_format($final_price, 3);
-        $discount = round((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price'], 2);
+        $discount = round((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
         $sku_cart_price['discount']['prefix'] = $this->t('Save', [], ['context' => 'discount']);
         $sku_cart_price['discount']['value'] = $discount . '%';
       }
