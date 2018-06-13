@@ -38,6 +38,11 @@
       font-size: 0.875rem;
       color: $pdp_product_volume_value;
 
+      @include breakpoint($only-mobile) {
+        padding: 0 0.5rem;
+        margin: 0.5rem 0 1rem;
+      }
+
       .field__label {
         color: $pdp_product_volume_label;
       }
@@ -144,6 +149,13 @@
         }
       }
     }
+  }
+}
+
+.nodetype--acq_product,
+.path--cart {
+  span.out-of-stock {
+    text-transform: uppercase;
   }
 }
 
