@@ -226,6 +226,8 @@
                 $('.cloudzoom__video_modal').show();
                 $('.cloudzoom__video_modal iframe').remove();
                 appendVideoIframe($('.cloudzoom__video_modal'), href);
+                // Hide zoom buttons when watching video.
+                $(this).parents('.imagegallery__wrapper').siblings('.button__wrapper').hide();
               }
               else {
                 var bigImage = $(this).children('a').attr('href');
@@ -234,6 +236,7 @@
                 $('#full-image-wrapper img').css('transform', 'scale(1)');
                 $('.cloudzoom__video_modal iframe').remove();
                 $('.cloudzoom__video_modal').hide();
+                $(this).parents('.imagegallery__wrapper').siblings('.button__wrapper').show();
                 $('#full-image-wrapper').show();
               }
               // Stop the browser from loading the image in a new tab.
