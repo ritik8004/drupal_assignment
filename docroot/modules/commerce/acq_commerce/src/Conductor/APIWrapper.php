@@ -915,7 +915,7 @@ class APIWrapper implements APIWrapperInterface {
     $endpoint = $this->apiVersion . '/agent/newsletter/subscribe';
 
     $doReq = function ($client, $opt) use ($endpoint, $email) {
-      $opt['form_params']['email'] = $email;
+      $opt['json']['customer']['email'] = $email;
 
       return ($client->post($endpoint, $opt));
     };
