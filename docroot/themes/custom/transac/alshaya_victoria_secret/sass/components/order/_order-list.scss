@@ -60,11 +60,27 @@
   }
 
   .form-type-select {
+    @include breakpoint($tablet) {
+      width: 10.3125rem;
+    }
+
+    select {
+      height: 2.5rem;
+
+      @include breakpoint($tablet) {
+        width: 10.3125rem;
+      }
+    }
+
     .select2-container {
-      width: 10.3125rem !important;
+      @include breakpoint($tablet) {
+        width: 10.3125rem !important;
+      }
 
       .select2-selection {
-        width: 10.3125rem;
+        @include breakpoint($tablet) {
+          width: 10.3125rem;
+        }
       }
     }
   }
@@ -78,7 +94,10 @@
 
     input {
       height: 2.5rem;
-      width: 7.8125rem;
+
+      @include breakpoint($tablet) {
+        width: 7.8125rem;
+      }
     }
   }
 
@@ -117,6 +136,20 @@
 
     @include breakpoint($upto-tablet) {
       padding-bottom: 0.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: 0.9rem;
+    }
+
+    @include breakpoint($desktop) {
+      top: -0.5rem;
+    }
+
+    .form-item {
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: 1.25rem;
+      }
     }
   }
 }
