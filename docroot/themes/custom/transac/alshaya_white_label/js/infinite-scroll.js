@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Override infinite scroll library.
+ */
 (function ($, Drupal, debounce) {
   'use strict';
 
