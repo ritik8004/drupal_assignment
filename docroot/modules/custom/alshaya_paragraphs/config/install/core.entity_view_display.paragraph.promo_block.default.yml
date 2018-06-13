@@ -4,6 +4,8 @@ dependencies:
   config:
     - field.field.paragraph.promo_block.field_banner
     - field.field.paragraph.promo_block.field_link
+    - field.field.paragraph.promo_block.field_margin_d_t
+    - field.field.paragraph.promo_block.field_margin_mobile
     - field.field.paragraph.promo_block.field_promo_block_button
     - field.field.paragraph.promo_block.field_promo_block_seo_text
     - field.field.paragraph.promo_block.field_promo_block_seo_title
@@ -40,6 +42,22 @@ content:
     third_party_settings: {  }
     type: link
     region: content
+  field_margin_d_t:
+    type: string
+    weight: 6
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_margin_mobile:
+    type: string
+    weight: 7
+    region: content
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
   field_promo_block_button:
     type: entity_reference_revisions_entity_view
     weight: 3

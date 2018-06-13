@@ -13,6 +13,23 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Adding new fields for margin override in paragraph promo block.
+ */
+function alshaya_paragraphs_update_8116() {
+  $configs = [
+    'field.storage.paragraph.field_margin_d_t',
+    'field.storage.paragraph.field_margin_mobile',
+    'field.field.paragraph.promo_block.field_margin_d_t',
+    'field.field.paragraph.promo_block.field_margin_mobile',
+    'core.entity_view_display.paragraph.promo_block.default',
+    'core.entity_form_display.paragraph.promo_block.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new paragraph type 'Section Divider' and adding it to advanced page.
  */
 function alshaya_paragraphs_update_8115() {
