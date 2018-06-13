@@ -11,11 +11,22 @@
       @include breakpoint($desktop) {
         width: 37.5rem;
         height: 31.25rem;
+
+        .acq-content-product-modal & {
+          height: 26.31rem;
+          width: calc(29.9rem - 29.9rem * 0.03);
+        }
       }
 
       @include breakpoint($only-tablet) {
         width: 27rem;
         height: 25rem;
+
+        .acq-content-product-modal & {
+          height: 24rem;
+          margin-bottom: 1rem;
+          width: calc(25.9rem - 25.9rem * 0.03);
+        }
       }
     }
 

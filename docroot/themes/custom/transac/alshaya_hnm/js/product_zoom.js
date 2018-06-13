@@ -303,24 +303,24 @@
 
       // Videos inside main PDP slider.
       // For Desktop slider, we add a iframe on click on the image.
-      $('#lightSlider li', context).on('click', function (e) {
+      $('.acq-content-product #lightSlider li', context).on('click', function (e) {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
           var URL = $(this).attr('data-iframe');
-          $('.cloudzoom__video_main iframe').remove();
-          appendVideoIframe($('.cloudzoom__video_main'), URL);
-          $('#cloud-zoom-wrap').hide();
+          $('.acq-content-product .cloudzoom__video_main iframe').remove();
+          appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), URL);
+          $('.acq-content-product #cloud-zoom-wrap').hide();
           $(this).siblings('.slick-slide').removeClass('slick-current');
           $(this).addClass('slick-current');
         }
       });
 
       // For Desktop slider, we remove the video iframe if user clicks on image thumbnail..
-      $('#lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
-        var playerIframe = $('.cloudzoom__video_main iframe');
+      $('.acq-content-product #lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
+        var playerIframe = $('.acq-content-product .cloudzoom__video_main iframe');
         // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
         if (playerIframe.length > 0) {
           playerIframe.remove();
-          $('#cloud-zoom-wrap').show();
+          $('.acq-content-product #cloud-zoom-wrap').show();
         }
       });
 
@@ -348,8 +348,8 @@
         // Put the big image in our main container.
         $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', bigImage);
         $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
-        $('.acq-content-product-modal #cloud-zoom-wrap iframe').remove();
-        $('.acq-content-product-modal #cloud-zoom-wrap img').show();
+        $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
+        $('.acq-content-product-modal #cloud-zoom-wrap').show();
       });
 
       $('.acq-content-product-modal #lightSlider li').on('click', function () {
@@ -357,7 +357,7 @@
           var URL = $(this).attr('data-iframe');
           $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
           appendVideoIframe($('.acq-content-product-modal .cloudzoom__video_main'), URL);
-          $('#cloud-zoom-wrap').hide();
+          $('.acq-content-product-modal #cloud-zoom-wrap').hide();
         }
         // Stop the browser from loading the image in a new tab.
         return false;
