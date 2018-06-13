@@ -67,6 +67,6 @@ $settings['bootstrap_container_definition'] = [
 $settings['cache']['bins']['stock'] = 'cache.backend.permanent_memcache';
 
 // Fix for PHP 7.1, see https://backlog.acquia.com/browse/PF-1118.
-$conf['memcache_options'] = [
+$settings['memcache']['options'] = [
   Memcached::OPT_COMPRESSION => TRUE,
 ];
