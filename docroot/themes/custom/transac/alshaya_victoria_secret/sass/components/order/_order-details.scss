@@ -45,4 +45,10 @@
       border-bottom: 0;
     }
   }
+
+  .c-page-title {
+    @include breakpoint($desktop) {
+      margin-bottom: 0.75rem;
+    }
+  }
 }

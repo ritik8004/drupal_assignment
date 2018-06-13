@@ -58,7 +58,11 @@
 
           a {
             color: $plp_facet_filter_link;
-            font-size: 12px;
+            font-size: 0.75rem;
+
+            @include breakpoint($only-mobile) {
+              font-size: 0.875rem;
+            }
 
             span {
               &.facet-item__value {

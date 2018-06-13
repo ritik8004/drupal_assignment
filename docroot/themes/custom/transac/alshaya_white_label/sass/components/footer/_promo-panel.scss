@@ -308,10 +308,6 @@
   }
 
   & > .field--name-field-paragraph-content {
-    @include breakpoint($tablet) {
-      display: none;
-    }
-
     .slick-slide {
       float: $left;
       border: 1px solid $promo_panel_border;
@@ -335,6 +331,8 @@
 }
 
 .block__reference--block-promo-panel-wrapper {
+  padding-top: 0.25rem;
+
   .mobile-back-link {
     display: none;
   }
@@ -344,7 +342,9 @@
     font-size: 1rem;
     border-bottom: 1px solid $promo_panel_border;
     padding-bottom: 0.375rem;
+    margin-top: 0.875rem;
     margin-bottom: 0.5rem;
+    line-height: 1;
   }
 
   .paragraph--type--offers-bordered {
@@ -356,6 +356,12 @@
   & .field--name-field-paragraph-content {
     border: 1px solid $promo_panel_border;
     margin-bottom: 2rem;
+
+    &:last-child {
+      @include breakpoint($upto-tablet) {
+        margin-bottom: 0;
+      }
+    }
 
     @include breakpoint($tablet) {
       flex-basis: calc(33% - 1.25rem);
