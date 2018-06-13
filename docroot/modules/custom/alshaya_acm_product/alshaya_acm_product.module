@@ -811,6 +811,9 @@ function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
         'class' => ['js-pager__items', 'pager'],
         'data-drupal-views-infinite-scroll-pager' => $vars['options']['automatically_load_content'] ? 'automatic' : TRUE,
       ]);
+
+      // Expose offset settings to JS.
+      $vars['#attached']['drupalSettings']['views_infinite_scroll'] = ['auto_load_offset' => \Drupal::config('alshaya_acm_product.settings')->get('auto_load_trigger_offset')];
     }
   }
 }
@@ -1464,9 +1467,31 @@ function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) 
  *   File object.
  */
 function _alshaya_acm_product_get_product_default_main_image() {
-  $product_default_image = \Drupal::config('alshaya_acm_product.settings')->get('product_default_image');
+  static $product_default_image;
+
+  // If default image available in static cache, then use it.
   if (!empty($product_default_image)) {
-    return File::load($product_default_image);
+    return $product_default_image;
+  }
+
+  // If cached version available.
+  if ($cached_default_product_image = \Drupal::cache()->get('product_default_image')) {
+    // Set in static cache.
+    $product_default_image = $cached_default_product_image->data;
+    return $product_default_image;
+  }
+
+  // Get file id from config.
+  $default_image_fid = \Drupal::config('alshaya_acm_product.settings')->get('product_default_image');
+  if (!empty($default_image_fid)) {
+    $file = File::load($default_image_fid);
+    if ($file instanceof File) {
+      // Set the cache.
+      \Drupal::cache()->set('product_default_image', $file);
+      // Set the static cache.
+      $product_default_image = $file;
+      return $product_default_image;
+    }
   }
 
   return NULL;
