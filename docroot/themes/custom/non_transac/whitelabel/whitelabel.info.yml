@@ -31,7 +31,7 @@ libraries-override:
   geolocation/geolocation.googlemapsapi:
     js:
       js/geolocation-google-maps-api.js: components/dist/js/geolocation/alshaya_geolocation_google_maps_api.js
-  views-infinite-scroll/views-infinite-scroll:
+  views_infinite_scroll/views-infinite-scroll:
     js:
       js/infinite-scroll.js : components/dist/js/infinite-scroll.js
 
