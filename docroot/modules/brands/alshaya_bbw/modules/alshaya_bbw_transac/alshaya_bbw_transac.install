@@ -133,6 +133,16 @@ function alshaya_bbw_transac_install() {
   $fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
   acq_sku_add_base_fields($fields);
 
+  // Enable sort options.
+  $sort_options = [
+    'created' => 'created',
+    'nid' => 'nid',
+    'name_1' => 'name_1',
+    'final_price' => 'final_price',
+  ];
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
+  $config->set('sort_options', $sort_options)->save();
+
   \Drupal::moduleHandler()->loadInclude('alshaya_bbw_transac', 'inc', 'alshaya_bbw_transac.content');
 
   // Enable and set bath_body_works as default theme.

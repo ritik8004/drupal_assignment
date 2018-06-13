@@ -14,6 +14,7 @@
       var $body = $('body');
 
       $($offer_toggler).once().on('click', function () {
+        $('.slick-disabled').trigger('click');
         $(this).parent().toggleClass('active-promo-panel');
         $($offer_content).slideToggle('800');
         $($body).toggleClass('active-promo-panel-content');

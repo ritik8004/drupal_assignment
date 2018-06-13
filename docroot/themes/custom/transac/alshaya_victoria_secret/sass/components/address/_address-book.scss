@@ -38,6 +38,10 @@
   .address--data {
     min-height: 0;
 
+    @include breakpoint($tablet) {
+      padding: 1.125rem;
+    }
+
     @include breakpoint($desktop) {
       min-height: 10rem;
       padding: 1rem;
@@ -102,7 +106,7 @@
       width: 78%;
 
       @include breakpoint($upto-desktop) {
-        padding-#{$left}: 2.4rem;
+        padding-#{$left}: 2rem;
       }
 
       span,
@@ -113,6 +117,10 @@
 
           @include breakpoint($upto-desktop) {
             #{$left}: 0.675rem;
+          }
+
+          @include breakpoint($upto-tablet) {
+            top: 47%;
           }
         }
       }

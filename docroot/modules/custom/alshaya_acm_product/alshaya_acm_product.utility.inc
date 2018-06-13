@@ -254,6 +254,32 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   // Invoke the alter hook to allow all modules to update the element.
   \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
 
+  // If no main image, use default image.
+  if (empty($main_image)) {
+    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+      $image_small = ImageStyle::load($thumbnail_style)->buildUrl($default_image->getFileUri());
+      $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
+      $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
+
+      $main_image = [
+        'zoomurl' => $image_zoom,
+        'mediumurl' => $image_medium,
+        'label' => $sku_entity->label(),
+      ];
+
+      if (empty($thumbnails)) {
+        $thumbnails[] = [
+          'thumburl' => $image_small,
+          'mediumurl' => $image_medium,
+          'zoomurl' => $image_zoom,
+          'fullurl' => file_create_url($default_image->getFileUri()),
+          'label' => $sku_entity->label(),
+          'type' => 'image',
+        ];
+      }
+    }
+  }
+
   if (empty($main_image)) {
     return [];
   }
@@ -351,6 +377,23 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
 
   // Alter cart product image found in child sku in case of config products.
   \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
+
+  // If still image is not available, set default one.
+  if (empty($image)) {
+    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+      $image = [
+        '#theme' => 'image',
+        '#attributes' => [
+          'src' => file_create_url($default_image->getFileUri()),
+          'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
+          'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
+          'class' => [
+            'product-default-image',
+          ],
+        ],
+      ];
+    }
+  }
 
   return $image;
 }
