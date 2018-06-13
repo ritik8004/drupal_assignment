@@ -164,7 +164,15 @@ class CheckoutHelper {
       Cache::invalidateTags(['cart:' . $cart->id()]);
 
       // @TODO: Remove the fix when we get the full order details.
-      $order_id = str_replace('"', '', $response['order']['id']);
+      if (isset($response['order_id'])) {
+        $order_id = $response['order_id'];
+      }
+      elseif (isset($response['order']['id'])) {
+        $order_id = str_replace('"', '', $response['order']['id']);
+      }
+      else {
+        throw new \Exception('Place order returned success in response but order id not returned in response.');
+      }
 
       $session = $this->currentRequest->getSession();
       $session->set('last_order_id', $order_id);

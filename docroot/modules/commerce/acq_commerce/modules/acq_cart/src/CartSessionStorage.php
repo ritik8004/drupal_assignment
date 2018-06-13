@@ -296,8 +296,17 @@ class CartSessionStorage implements CartStorageInterface {
     $cart->convertToCustomerCart($data);
     $this->session->set(self::STORAGE_KEY, $cart);
 
-    // Then we notify the commerce backend about the association.
-    $this->apiWrapper->associateCart($cart->id(), $cart->customerId());
+    try {
+      // Then we notify the commerce backend about the association.
+      $this->apiWrapper->associateCart($cart->id(), $cart->customerId());
+    }
+    catch (\Exception $e) {
+      // @TODO: remove this once we have it working properly in MDC.
+      // We are getting 500 with code 120 for success.
+      if ($e->getCode() != '120') {
+        throw $e;
+      }
+    }
   }
 
   /**

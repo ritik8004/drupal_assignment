@@ -91,7 +91,7 @@ class APIWrapper implements APIWrapperInterface {
           $opt['form_params']['customer_id'] = $customer_id;
         }
         else {
-          $opt['json']['customer_id'] = (int) $customer_id;
+          $opt['json']['customer_id'] = $customer_id;
         }
       }
       return ($client->post($endpoint, $opt));
@@ -181,6 +181,8 @@ class APIWrapper implements APIWrapperInterface {
     $items = $cart->items;
     if ($items) {
       foreach ($items as $key => &$item) {
+        $cart->items[$key]['qty'] = (int) $item['qty'];
+
         if (array_key_exists('name', $item)) {
           $originalItemsNames[$key] = $item['name'];
 
@@ -189,22 +191,25 @@ class APIWrapper implements APIWrapperInterface {
             continue;
           }
 
-          $plugin_manager = \Drupal::service('plugin.manager.sku');
-          $plugin = $plugin_manager->pluginInstanceFromType($item['product_type']);
           $sku = SKU::loadFromSku($item['sku']);
 
-          if (empty($sku) || empty($plugin)) {
-            $cart->items[$key]['name'] = "";
+          if ($sku instanceof SKU) {
+            $plugin = $sku->getPluginInstance();
+            $cart->items[$key]['name'] = $plugin->cartName($sku, $item, TRUE);
             continue;
           }
 
-          $cart->items[$key]['name'] = $plugin->cartName($sku, $item, TRUE);
+          $cart->items[$key]['name'] = "";
         }
       }
     }
 
     // Cart extensions must always be objects and not arrays.
     // @TODO: Move this normalization to \Drupal\acq_cart\Cart::__construct and \Drupal\acq_cart\Cart::updateCartObject.
+    // Removing shipping address if carrier not set.
+    if (empty($cart->carrier) || (empty($cart->carrier['carrier_code']) && empty($cart->carrier->carrier_code))) {
+      unset($cart->carrier, $cart->shipping);
+    }
     if (isset($cart->carrier)) {
       if (isset($cart->carrier->extension)) {
         if (!is_object($cart->carrier->extension)) {
@@ -216,10 +221,6 @@ class APIWrapper implements APIWrapperInterface {
           $cart->carrier['extension'] = (object) $cart->carrier['extension'];
         }
       }
-    }
-    else {
-      // Removing shipping address if carrier not set.
-      unset($cart->shipping);
     }
 
     // Cart constructor sets cart to any object passed in,
@@ -287,8 +288,8 @@ class APIWrapper implements APIWrapperInterface {
 
     $doReq = function ($client, $opt) use ($endpoint, $customer_id, $cart_id) {
       $opt['json'] = [
-        'customer_id' => $customer_id,
-        'cart_id' => $cart_id,
+        'customer_id' => (int) $customer_id,
+        'cart_id' => (string) $cart_id,
       ];
       return ($client->post($endpoint, $opt));
     };
@@ -912,10 +913,16 @@ class APIWrapper implements APIWrapperInterface {
    * {@inheritdoc}
    */
   public function subscribeNewsletter($email) {
+    $versionInClosure = $this->apiVersion;
     $endpoint = $this->apiVersion . '/agent/newsletter/subscribe';
 
-    $doReq = function ($client, $opt) use ($endpoint, $email) {
-      $opt['json']['customer']['email'] = $email;
+    $doReq = function ($client, $opt) use ($endpoint, $email, $versionInClosure) {
+      if ($versionInClosure === 'v1') {
+        $opt['form_params']['email'] = $email;
+      }
+      else {
+        $opt['json']['customer']['email'] = $email;
+      }
 
       return ($client->post($endpoint, $opt));
     };
