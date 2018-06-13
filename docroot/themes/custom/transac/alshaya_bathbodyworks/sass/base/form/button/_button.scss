@@ -1,6 +1,21 @@
 %button-wide,
 .button-wide {
   font-size: 0.875rem;
-  padding: 0.925rem 1.6rem;
+  padding: 0.3125rem 1.5625rem;
   height: 2.5rem;
+  text-transform: uppercase;
+}
+
+.button {
+  &.status-pending,
+  &.status-delivered,
+  &.status-complete,
+  &.status-processing,
+  &.status-returned {
+    text-transform: uppercase;
+
+    @include breakpoint($desktop) {
+      padding: 0.5rem 0;
+    }
+  }
 }
