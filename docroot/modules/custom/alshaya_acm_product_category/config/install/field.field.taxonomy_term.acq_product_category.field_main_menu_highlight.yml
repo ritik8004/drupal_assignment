@@ -23,7 +23,6 @@ settings:
   handler_settings:
     target_bundles:
       main_menu_highlight: main_menu_highlight
-      image_title_subtitle: image_title_subtitle
     target_bundles_drag_drop:
       main_menu_highlight:
         enabled: true
@@ -77,7 +76,7 @@ settings:
         weight: 38
         enabled: false
       image_title_subtitle:
-        enabled: true
+        enabled: false
         weight: 39
       offers_bordered:
         weight: 41
