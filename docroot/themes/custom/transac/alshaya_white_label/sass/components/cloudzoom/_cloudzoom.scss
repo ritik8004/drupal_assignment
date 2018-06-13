@@ -314,7 +314,8 @@
 
   #drupal-modal #lightSlider.pager-yes {
     .slick-slide {
-      width: 6.5rem !important;
+      width: 6.3rem !important;
+      margin-#{$left}: 0.125rem;
     }
   }
 }
