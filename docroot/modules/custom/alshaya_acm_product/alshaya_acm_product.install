@@ -38,7 +38,7 @@ function alshaya_acm_product_update_8017() {
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
 
   // Update page load more count for SRP/PLP.
-  alshaya_config_install_configs(['alshaya_acm_product.display_settings'], 'alshaya_acm_product');
+  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product');
 }
 
 /**
