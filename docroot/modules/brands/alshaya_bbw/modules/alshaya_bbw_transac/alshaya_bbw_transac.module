@@ -94,11 +94,16 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
  * Implements hook_preprocess_node().
  */
 function alshaya_bbw_transac_preprocess_node(&$variables) {
+  // Combine attr_form value into title label for H1, H2 SEO.
   if ($variables['node']->bundle() == 'acq_product') {
     $sku = $variables['node']->get('field_skus')->first()->getString();
     $sku_entity = SKU::loadFromSku($sku);
     if ($sku_entity instanceof SKU) {
-      $variables['label'] = _alshaya_bbw_transac_get_product_title($sku_entity);
+      $form = $sku_entity->get('attr_form')->getString();
+      if ($form) {
+        $form = '<span class="content--form">' . $form . '</span>';
+      }
+      $variables['label']['#markup'] = _alshaya_bbw_transac_get_product_title($sku_entity) . $form;
     }
   }
 }

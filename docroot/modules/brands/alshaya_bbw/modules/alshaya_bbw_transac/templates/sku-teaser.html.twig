@@ -1,9 +1,35 @@
-{% extends "@alshaya_acm_product/sku-teaser.html.twig" %}
+<a href="{{ product_url }}">{{ gallery }}</a>
+<div class="product-plp-detail-wrapper">
+  <h2 class="field--name-name">
+    <a href="{{ product_url }}">{{ product_label }}</a>
+    {% block pricePrefix %}
+      {% if form %}
+        <span class="product--form">
+          {{ form }}
+        </span>
+      {% endif %}
+    {% endblock %}
+  </h2>
 
-{% block pricePrefix %}
-  {% if form %}
-    <div class="product--form">
-      {{ form }}
+  <div class="price-block {{ price_block_identifier }}">
+    {{ price_block }}
+  </div>
+
+  {% if promotions %}
+    <div class="promotions">
+      {% for id, promotion in promotions %}
+        <span class="sku-promotion-item">
+          {% if (promotion.render_link) %}
+            <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
+              {{ promotion.text }}
+            </a>
+          {% else %}
+            {{ promotion.text }}
+          {% endif %}
+        </span>
+      {% endfor %}
     </div>
-  {% endif %} 
-{% endblock %}
+  {% endif %}
+</div>
+
+{{ stock_placeholder }}
