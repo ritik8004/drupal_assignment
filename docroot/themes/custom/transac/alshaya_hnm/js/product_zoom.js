@@ -395,6 +395,10 @@
         imgTag.show();
       });
 
+      // Stop video playback if slide is changed.
+      pauseVideos($('#product-image-gallery-mobile'), 'mobilegallery__thumbnails__video');
+      pauseVideos($('#product-image-gallery-mob'), 'mob-imagegallery__thumbnails__video');
+
       // Preventing click on image.
       $('.acq-content-product-modal #cloud-zoom-wrap a, .acq-content-product #cloud-zoom-wrap a').on('click', function (event) {
         event.stopPropagation();
@@ -402,6 +406,49 @@
       });
 
       // Helper functions.
+      /**
+       * Use the beforeChange event of slick to pause videos when scrolling from video slides.
+       *
+       * @param {object} slickSelector
+       *   Slick slider selcetor.
+       * @param {object} videoSlideSelector
+       *   Slide slider slide selector for video slides.
+       */
+      function pauseVideos(slickSelector, videoSlideSelector) {
+        slickSelector.on('beforeChange', function (event, slick) {
+          var currentSlide;
+          var slideType;
+          var player;
+          var command;
+
+          // Find the current slide element and decide which player API we need to use.
+          currentSlide = $(slick.$slider).find('.slick-current');
+          if (currentSlide.hasClass(videoSlideSelector)) {
+            // Determine which type of slide this is.
+            slideType = currentSlide.hasClass('vimeo') === true ? 'vimeo' : 'youtube';
+            // Get the iframe inside this slide.
+            player = currentSlide.find('iframe').get(0);
+            if (slideType === 'vimeo') {
+              command = {
+                method: 'pause',
+                value: 'true'
+              };
+            }
+            else {
+              command = {
+                event: 'command',
+                func: 'pauseVideo'
+              };
+            }
+            // Check if the player exists.
+            if (player !== 'undefined') {
+              // Post our command to the iframe.
+              player.contentWindow.postMessage(JSON.stringify(command), '*');
+            }
+          }
+        });
+      }
+
       /**
        * Toggles the product gallery based on screen width [between tab and mobile].
        */
