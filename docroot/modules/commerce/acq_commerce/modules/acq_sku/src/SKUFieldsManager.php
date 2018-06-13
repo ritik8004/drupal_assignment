@@ -102,18 +102,6 @@ class SKUFieldsManager {
   /**
    * Function to update field definitions for the additional SKU base fields.
    *
-   * @param array $fields
-   *   Fields to update.
-   */
-  public function updateFields(array $fields) {
-    // 1. Do we need this?
-    // 2. Should we handle existing data issue here or let developer do that
-    // from where it is called?
-  }
-
-  /**
-   * Function to update field definitions for the additional SKU base fields.
-   *
    * This will not update the actual field but only additional information used
    * in custom code like field is configurable or not, indexable or not.
    *
