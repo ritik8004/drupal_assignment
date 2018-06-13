@@ -10,8 +10,6 @@
 
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
-      // var pdp_items_mob = drupalSettings.pdp_items_mob;
-      // var pdp_items_tab = drupalSettings.pdp_items_tab;
       var pdp_items_desk = drupalSettings.pdp_items_desk;
 
       var optionsBasket = {
