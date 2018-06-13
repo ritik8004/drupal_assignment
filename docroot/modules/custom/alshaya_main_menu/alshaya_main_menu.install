@@ -8,6 +8,28 @@
 /**
  * Implements hook_update_N().
  *
+ * Adding 'title' and 'subtitle' field to the highlight menu paragraph.
+ */
+function alshaya_main_menu_update_8402() {
+  $configs = [
+    'field.storage.paragraph.field_highlight_title',
+    'field.storage.paragraph.field_highlight_subtitle',
+    'field.field.paragraph.main_menu_highlight.field_highlight_title',
+    'field.field.paragraph.main_menu_highlight.field_highlight_subtitle',
+    'core.entity_view_display.paragraph.main_menu_highlight.default',
+    'core.entity_form_display.paragraph.main_menu_highlight.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_main_menu');
+
+  $configs = [
+    'field.field.taxonomy_term.acq_product_category.field_main_menu_highlight',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding config for the mega menu highlights.
  */
 function alshaya_main_menu_update_8401() {
