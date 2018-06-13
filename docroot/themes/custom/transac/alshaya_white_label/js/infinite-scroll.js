@@ -39,6 +39,10 @@
     // Remove once so that the exposed form and pager are processed on
     // behavior attach.
     view.$view.removeOnce('ajax-pager');
+
+    // Detach ajax handler from the submit button before re-attaching it below.
+    $('input[type=submit], input[type=image]', view.$exposed_form).off();
+
     view.$exposed_form.removeOnce('exposed-form');
     // Make sure infinite scroll can be reinitialized.
     var $existingPager = view.$view.find(pagerSelector);
