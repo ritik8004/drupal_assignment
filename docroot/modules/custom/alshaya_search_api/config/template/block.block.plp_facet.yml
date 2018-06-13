@@ -1,27 +1,26 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - facets.facet.size
+  config: {  }
   module:
     - facets
     - system
   theme:
     - alshaya_white_label
-id: size
+id: brand
 theme: alshaya_white_label
 region: sidebar_first
-weight: -26
+weight: -20
 provider: null
-plugin: 'facet_block:size'
+plugin: 'facet_block:field'
 settings:
-  id: 'facet_block:size'
-  label: Size
+  id: 'facet_block:field'
+  label: Label
   provider: facets
   label_display: visible
 visibility:
   request_path:
     id: request_path
-    pages: /search
+    pages: '/taxonomy/term/*'
     negate: false
     context_mapping: {  }

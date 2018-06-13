@@ -42,7 +42,7 @@ use Drupal\Core\Template\Attribute;
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
   // Get the configurable fields we want to capture separately as fields.
-  $fields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   $indexFields = array_filter($fields, function ($field) {
     return !empty($field['index']);
   });
@@ -93,7 +93,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
           $child_sku_found = FALSE;
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
             try {
-              $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode);
+              $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode, FALSE);
             }
             catch (\Exception $e) {
               // Do nothing, child sku might not be available or deleted.
@@ -1495,4 +1495,20 @@ function _alshaya_acm_product_get_product_default_main_image() {
   }
 
   return NULL;
+}
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_acm_product_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_acm_product_fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+  $fields = array_merge($fields, $alshaya_acm_product_fields);
+}
+
+/**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_acm_product_alshaya_master_post_drupal_install() {
+  // Add fields to store the values from attributes as fields.
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 }

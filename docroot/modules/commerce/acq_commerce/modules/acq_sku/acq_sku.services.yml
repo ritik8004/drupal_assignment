@@ -43,13 +43,25 @@ services:
       - '@csrf_token'
 
   acq_sku.linked_sku:
-      class: Drupal\acq_sku\AcqSkuLinkedSku
-      arguments:
-        - '@acq_commerce.api'
-        - '@cache.linked_skus'
-        - '@config.factory'
-        - '@language_manager'
-        - '@logger.factory'
+    class: Drupal\acq_sku\AcqSkuLinkedSku
+    arguments:
+      - '@acq_commerce.api'
+      - '@cache.linked_skus'
+      - '@config.factory'
+      - '@language_manager'
+      - '@logger.factory'
+
+  acq_sku.fields_manager:
+    class: Drupal\acq_sku\SKUFieldsManager
+    arguments:
+      - '@config.factory'
+      - '@module_handler'
+      - '@entity.definition_update_manager'
+      - '@logger.channel.acq_sku'
+
+  logger.channel.acq_sku:
+    parent: logger.channel_base
+    arguments: ['acq_sku']
 
   cache.stock:
     class: Drupal\Core\Cache\CacheBackendInterface

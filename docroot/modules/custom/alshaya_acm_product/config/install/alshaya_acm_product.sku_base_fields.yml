@@ -1,324 +1,157 @@
 fields:
-  color:
-    parent: 'attributes'
-    label: 'Color'
-    description: 'Color attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    index: 1
-    visible_view: 0
-    visible_form: 1
-
-  size:
-    parent: 'attributes'
-    label: 'Size'
-    description: 'Size attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 1
-    index: 1
-    visible_view: 0
-    visible_form: 1
-
-  bullet_points:
-    parent: 'attributes'
-    label: 'Bullet points'
-    description: 'Part of description.'
-    cardinality: 1
-    type: 'text_long'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  at_glance:
-    parent: 'attributes'
-    label: 'At a glance'
-    description: 'Part of description.'
-    cardinality: 1
-    type: 'text_long'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  style:
-     parent: 'attributes'
-     label: 'Style'
-     description: 'Part of description.'
-     cardinality: 1
-     type: 'string'
-     configurable: 0
-     visible_view: 0
-     visible_form: 1
-
-  season:
-    parent: 'attributes'
-    label: 'Season'
-    description: 'Part of description.'
-    cardinality: 1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  product_collection:
-    parent: 'attributes'
-    label: 'Collection'
-    description: 'Used in facets.'
-    cardinality: 1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  product_brand:
-    parent: 'attributes'
-    label: 'Brand'
-    description: 'Part of description.'
-    cardinality: 1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  brand_logo:
-    parent: 'attributes'
-    label: 'Brand Logo'
-    description: 'Part of description.'
-    cardinality: 1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  collection:
-    parent: 'attributes'
-    label: 'Collection'
-    description: 'Part of description.'
-    cardinality: 1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  whats_in_the_box:
-    parent: 'attributes'
-    label: 'Whats in the box'
-    description: 'Part of description.'
-    cardinality: 1
-    type: 'text_long'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  reserve_and_collect:
-    parent: 'attributes'
-    label: 'Reserve and Collect'
-    description: 'Flag to check if product is available for reserve and collect.'
-    cardinality: 1
-    type: 'string'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  ship_to_store:
-    parent: 'attributes'
-    label: 'Ship to Store'
-    description: 'Flag to check if product is available for ship to store.'
-    cardinality: 1
-    type: 'string'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
   labels:
     serialize: 1
     parent: 'extension'
     label: 'Product Labels'
     description: 'Product Labels.'
-    cardinality: 1
     type: 'text_long'
-    configurable: 0
-    visible_view: 0
     visible_form: 0
 
-  concept:
-    parent: 'attributes'
-    label: 'Concept'
-    description: 'Concept attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  washing_instructions:
-    parent: 'attributes'
-    label: 'Washing Instructions'
-    description: 'Washing instructions attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  dry_cleaning_instructions:
-    parent: 'attributes'
-    label: 'Dry Cleaning Instructions'
-    description: 'Dry cleaning instructions attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  rgb_color:
-    parent: 'attributes'
-    label: 'RGB color'
-    description: 'RGB color code.'
-    cardinality: 1
-    type: 'string'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  color_label:
-    parent: 'attributes'
-    label: 'Color label'
-    description: 'Color label.'
-    cardinality: 1
-    type: 'string'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  article_visual_description:
-    parent: 'attributes'
-    label: 'Visual description'
-    description: 'A visual description of the article.'
-    cardinality: 1
-    type: 'string'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  product_designer_collection:
-    parent: 'attributes'
-    label: 'Product Designer Collection'
-    description: 'Product designer collection attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  product_feature:
-    parent: 'attributes'
-    label: 'Product Feature'
-    description: 'Product feature attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  product_environment:
-    parent: 'attributes'
-    label: 'Product Environment'
-    description: 'Product environment attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  product_quality:
-    parent: 'attributes'
-    label: 'Product Quality'
-    description: 'Product quality attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  article_pattern:
-    parent: 'attributes'
-    label: 'Article Pattern'
-    description: 'Article pattern attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  article_license_company:
-    parent: 'attributes'
-    label: 'Article License Company'
-    description: 'Article license company attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  article_license_item:
-    parent: 'attributes'
-    label: 'Article License Item'
-    description: 'Article license item attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  article_fragrance_description:
-    parent: 'attributes'
-    label: 'Article Fragrance Description'
-    description: 'Article fragrance description attribute for the product.'
-    cardinality: -1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  article_warning:
-    parent: 'attributes'
-    label: 'Article Warning'
-    description: 'Article warning attribute for the product.'
-    cardinality: 1
-    type: 'attribute'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
-  composition:
-    parent: 'attributes'
-    label: 'Composition'
-    description: 'Product Composition.'
-    cardinality: 1
-    type: 'text_long'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
-
   is_buyable:
-    parent: 'attributes'
     label: 'Is Buyable'
     description: 'Flag to check if product is available for purchase or not.'
     cardinality: 1
     type: 'string'
-    configurable: 0
-    visible_view: 0
-    visible_form: 1
+
+  reserve_and_collect:
+    label: 'Reserve and Collect'
+    description: 'Flag to check if product is available for reserve and collect.'
+    type: 'string'
+
+  ship_to_store:
+    label: 'Ship to Store'
+    description: 'Flag to check if product is available for ship to store.'
+    type: 'string'
+
+  color:
+    label: 'Color'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  rgb_color:
+    label: 'RGB color'
+    type: 'string'
+
+  color_label:
+    label: 'Color label'
+    type: 'string'
 
   color_description:
-    parent: 'attributes'
     label: 'Color Description'
-    description: 'Color Description attribute for the product.'
     cardinality: -1
-    type: 'attribute'
     configurable: 1
     index: 1
-    visible_view: 0
-    visible_form: 1
+
+  color_family:
+    label: 'Color Family'
+    cardinality: -1
+    index: 1
+    facet: 1
+
+  size:
+    label: 'Size'
+    cardinality: -1
+    configurable: 1
+    index: 1
+    facet: 1
+
+  bullet_points:
+    label: 'Bullet points'
+    description: 'Part of description.'
+    type: 'text_long'
+
+  at_glance:
+    label: 'At a glance'
+    description: 'Part of description.'
+    type: 'text_long'
+
+  style:
+     label: 'Style'
+     description: 'Part of description.'
+     type: 'string'
+
+  season:
+    label: 'Season'
+    description: 'Part of description.'
+
+  product_collection:
+    label: 'Collection'
+    description: 'Part of description.'
+    facet: 1
+
+  product_brand:
+    label: 'Brand'
+    description: 'Part of description.'
+    facet: 1
+
+  brand_logo:
+    label: 'Brand Logo'
+    description: 'Part of description.'
+
+  collection:
+    label: 'Collection'
+    description: 'Part of description.'
+
+  whats_in_the_box:
+    label: 'Whats in the box'
+    description: 'Part of description.'
+    type: 'text_long'
+
+  concept:
+    label: 'Concept'
+    cardinality: -1
+    facet: 1
+
+  washing_instructions:
+    label: 'Washing Instructions'
+    cardinality: -1
+
+  dry_cleaning_instructions:
+    label: 'Dry Cleaning Instructions'
+    cardinality: -1
+
+  article_visual_description:
+    label: 'Visual description'
+    description: 'A visual description of the article.'
+    type: 'string'
+
+  product_designer_collection:
+    label: 'Product Designer Collection'
+    cardinality: -1
+
+  product_feature:
+    label: 'Product Feature'
+    cardinality: -1
+
+  product_environment:
+    label: 'Product Environment'
+    cardinality: -1
+
+  product_quality:
+    label: 'Product Quality'
+    cardinality: -1
+
+  article_pattern:
+    label: 'Article Pattern'
+    cardinality: -1
+
+  article_license_company:
+    label: 'Article License Company'
+    cardinality: -1
+
+  article_license_item:
+    label: 'Article License Item'
+    cardinality: -1
+
+  article_fragrance_description:
+    label: 'Article Fragrance Description'
+    cardinality: -1
+
+  article_warning:
+    label: 'Article Warning'
+
+  composition:
+    label: 'Composition'
+    description: 'Product Composition.'
+    type: 'text_long'

@@ -127,7 +127,7 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
   if ($sku_entity) {
-    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+    $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
     $configurableFields = array_filter($fields, function ($field) {
       return (bool) $field['configurable'];
     });
