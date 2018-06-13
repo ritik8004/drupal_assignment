@@ -48,13 +48,102 @@
     }
   }
 
+  .form-actions {
+    height: 2.5rem;
+    width: 2.5rem;
+
+    &::after {
+      height: 2.5rem;
+      width: 2.5rem;
+      line-height: 31px;
+    }
+  }
+
+  .form-type-select {
+    .select2-container {
+      width: 10.3125rem !important;
+
+      .select2-selection {
+        width: 10.3125rem;
+      }
+    }
+  }
+
+  .form-item {
+    label {
+      @include breakpoint($only-tablet) {
+        display: none;
+      }
+    }
+
+    input {
+      height: 2.5rem;
+      width: 7.8125rem;
+    }
+  }
+
   .form-item-filter {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 0.75rem;
+    }
+
     label {
       display: none;
     }
 
     @include breakpoint($desktop) {
       width: auto;
+    }
+  }
+
+  .form-actions,
+  .form-item {
+    font-size: 0.875rem;
+  }
+}
+
+.c-order-list {
+  .subtitle {
+    font-size: 1.125rem;
+    border-bottom: 0;
+
+    @include breakpoint($upto-desktop) {
+      padding-top: 1.4rem;
+    }
+  }
+
+  .order-search-form {
+    border-bottom: 0;
+
+    @include breakpoint($upto-tablet) {
+      padding-bottom: 0.25rem;
+    }
+  }
+}
+
+#block-content {
+  .order-items li {
+    a {
+      .dark {
+        letter-spacing: 0;
+        font-size: 0.875rem;
+      }
+
+      .light {
+        font-size: 0.75rem;
+      }
+
+      .first-second .dark {
+        font-family: $vs-bold;
+      }
+
+      .date {
+        margin-top: 0;
+      }
+
+      &::after {
+        background: transparent;
+      }
     }
   }
 }
