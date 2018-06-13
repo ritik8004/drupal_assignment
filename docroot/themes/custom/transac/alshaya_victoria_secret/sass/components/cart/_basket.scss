@@ -220,9 +220,26 @@ body.alias--cart {
     }
   }
 
-  &.path--cart h1 {
-    @include breakpoint($desktop) {
-      margin-bottom: 1.6875rem;
+  &.path--cart {
+    h1 {
+      @include breakpoint($desktop) {
+        margin-bottom: 1.6875rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        font-size: 1.5rem;
+        margin-bottom: 1.4375rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        font-size: 1rem;
+      }
+    }
+
+    .page-standard.l-container {
+      @include breakpoint($only-tablet) {
+        margin-top: 2.125rem;
+      }
     }
   }
 
