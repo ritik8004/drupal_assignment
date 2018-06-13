@@ -5,6 +5,8 @@ namespace Drupal\alshaya_acm_product\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\file\FileInterface;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -21,16 +23,26 @@ class ProductSettingsForm extends ConfigFormBase {
   protected $entityTypeManager;
 
   /**
+   * Cache Backend service.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * ProductSettingsForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache) {
     parent::__construct($config_factory);
     $this->entityTypeManager = $entity_type_manager;
+    $this->cache = $cache;
   }
 
   /**
@@ -39,7 +51,8 @@ class ProductSettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('cache.default')
     );
   }
 
@@ -65,6 +78,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('show_cart_form_in_related', $form_state->getValue('show_cart_form_in_related'));
     $config->set('related_items_size', $form_state->getValue('related_items_size'));
     $config->set('list_view_items_per_page', $form_state->getValue('list_view_items_per_page'));
+    $config->set('auto_load_trigger_offset', $form_state->getValue('auto_load_trigger_offset'));
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', $form_state->getValue('pdp_carousel_items_size_0'));
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', $form_state->getValue('pdp_carousel_items_size_768'));
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', $form_state->getValue('pdp_carousel_items_size_1025'));
@@ -79,15 +93,25 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('image_slider_position_pdp', $form_state->getValue('image_slider_position_pdp'));
 
     // Product default image.
+    $product_default_image = NULL;
+
+    // Product default image.
     if (!empty($default_image = $form_state->getValue('product_default_image'))) {
-      $fid = $this->storeDefaultImageInSystem($default_image);
-      if ($fid) {
-        $config->set('product_default_image', $fid);
+      $file = $this->storeDefaultImageInSystem($default_image);
+      if ($file instanceof FileInterface) {
+        $config->set('product_default_image', $file->id());
+        $product_default_image = $file;
+      }
+      else {
+        $config->set('product_default_image', NULL);
       }
     }
     else {
       $config->set('product_default_image', NULL);
     }
+
+    // Set the cache for default product image.
+    $this->cache->set('product_default_image', $product_default_image);
 
     $config->save();
 
@@ -124,9 +148,25 @@ class ProductSettingsForm extends ConfigFormBase {
     $form['list_view_items_per_page'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default Number of items to show on listing pages'),
-      '#description' => $this->t('Number of items to show per page for listing pages like PLP / Search pages. Please clear all caches after updating this. Set this to 0 to disable this feature.'),
+      '#description' => $this->t('Number of items to show per page for listing pages like PLP / Search pages. Please clear all caches after updating this.'),
       '#required' => TRUE,
       '#default_value' => $config->get('list_view_items_per_page'),
+    ];
+
+    $form['list_view_auto_page_load_count'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Number of pages to load automatically'),
+      '#description' => $this->t('Number of pages to load automatically on scroll down, before showing button to load more content. Set this to 0 to disable this feature.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('list_view_auto_page_load_count'),
+    ];
+
+    $form['auto_load_trigger_offset'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Distance away from load more button where we need to trigger auto-loading.'),
+      '#description' => $this->t('This is the scoll offset where we want to start pre-loading the next page items. Values should be in integer without any units e.g., 800.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('auto_load_trigger_offset'),
     ];
 
     $form['cross_up_sell_items_settings'] = [
@@ -157,22 +197,6 @@ class ProductSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Number of items to show in Up sell / Cross sell carousel blocks.'),
       '#required' => TRUE,
       '#default_value' => $config->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025'),
-    ];
-
-    $form['list_view_auto_page_load_count'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Number of pages to load automatically'),
-      '#description' => $this->t('Number of pages to load automatically on scroll down, before showing button to load more content.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('list_view_auto_page_load_count'),
-    ];
-
-    $form['auto_load_trigger_offset'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Distance away from load more button where we need to trigger auto-loading.'),
-      '#description' => $this->t('This is the scoll offset where we want to start pre-loading the next page items. Values should be in integer without any units e.g., 800.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('auto_load_trigger_offset'),
     ];
 
     $form['brand_logo_base_path'] = [
@@ -253,8 +277,8 @@ class ProductSettingsForm extends ConfigFormBase {
    * @param array $default_image
    *   Default image value.
    *
-   * @return int|null|string
-   *   Image fid.
+   * @return null|\Drupal\file\Entity\File
+   *   File object.
    */
   protected function storeDefaultImageInSystem(array $default_image) {
     if (!empty($default_image)) {
@@ -262,7 +286,7 @@ class ProductSettingsForm extends ConfigFormBase {
       if ($file) {
         $file->setPermanent();
         $file->save();
-        return $file->id();
+        return $file;
       }
     }
 
