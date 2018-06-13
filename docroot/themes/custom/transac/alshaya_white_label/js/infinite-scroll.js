@@ -1,8 +1,3 @@
-/**
- * @file
- * Override infinite scroll library.
- */
-
 (function ($, Drupal, debounce) {
   'use strict';
 
@@ -31,16 +26,15 @@
    *   New content detached from the DOM.
    */
   $.fn.infiniteScrollInsertView = function ($newView) {
-    var currentViewId = this.selector.replace('.js-view-dom-id-', 'views_dom_id:');
+    // Extract the view DOM ID from the view classes.
+    var matches = /(js-view-dom-id-\w+)/.exec(this.attr('class'));
+    var currentViewId = matches[1].replace('js-view-dom-id-', 'views_dom_id:');
+
     // Get the existing ajaxViews object.
     var view = Drupal.views.instances[currentViewId];
     // Remove once so that the exposed form and pager are processed on
     // behavior attach.
     view.$view.removeOnce('ajax-pager');
-
-    // Detach ajax handler from the submit button before re-attaching it below.
-    $('input[type=submit], input[type=image]', view.$exposed_form).off();
-
     view.$exposed_form.removeOnce('exposed-form');
     // Make sure infinite scroll can be reinitialized.
     var $existingPager = view.$view.find(pagerSelector);
