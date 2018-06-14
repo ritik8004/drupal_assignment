@@ -773,6 +773,7 @@ function alshaya_acm_product_generate_video_embed_url($url, $provider) {
   if ($video_id) {
     $embed_url = ($provider == 'youtube') ? 'https://www.youtube.com/embed/' : 'https://player.vimeo.com/video/';
     $embed_url .= explode('&', $video_id)[0];
+    $embed_url .= ($provider == 'youtube') ? '?enablejsapi=1' : '';
   }
   return $embed_url;
 }
