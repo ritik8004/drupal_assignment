@@ -58,7 +58,9 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
     $view->header['result']->options['content'] = $format_plural;
 
     // Add 'back to list' library to search/plp/promo page.
-    $view->element['#attached']['library'][] = 'alshaya_search/back_to_list';
+    if (\Drupal::config('alshaya_acm_product.settings')->get('back_to_list')) {
+      $view->element['#attached']['library'][] = 'alshaya_search/back_to_list';
+    }
   }
 }
 
