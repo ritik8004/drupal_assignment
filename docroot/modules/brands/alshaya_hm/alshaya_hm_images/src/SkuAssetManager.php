@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_hm_images;
 
+use Detection\MobileDetect;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -141,14 +142,7 @@ class SkuAssetManager {
     foreach ($location_images as $location_image) {
       $asset_urls = [];
       foreach ($assets as $asset) {
-        // If style is set, it means we looking for a varaint for swatch image.
-        // Avoid processing asset types that don't match the swatch style
-        // requested.
-        if (($style) && ($asset['sortAssetType'] !== $style)) {
-          continue;
-        }
-
-        list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image);
+        list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image, $style);
 
         // Prepare query options for image url.
         if (isset($set['url'])) {
@@ -182,9 +176,6 @@ class SkuAssetManager {
           return $asset_urls;
         }
 
-        if ($style) {
-          return array_shift($asset_urls);
-        }
       }
       if (!empty($asset_urls)) {
         $asset_variant_urls[$location_image] = $asset_urls;
@@ -214,7 +205,7 @@ class SkuAssetManager {
    * @return array
    *   Array of asset attributes.
    */
-  public function getAssetAttributes($sku, array $asset, $page_type, $location_image) {
+  public function getAssetAttributes($sku, array $asset, $page_type, $location_image, $style = '') {
     $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
     $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
 
@@ -228,8 +219,22 @@ class SkuAssetManager {
       $set['origin'] = "origin[" . $origin . "]";
       $set['type'] = "type[" . $asset['sortAssetType'] . "]";
       $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
-      $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
-      $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
+
+      // Use res attribute in place of width & height while calculating images
+      // for swatches.
+      if (empty($style)) {
+        $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
+        $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
+      }
+      else {
+        $detect = new MobileDetect();
+        $set['res'] = "res[z]";
+
+        if ($detect->isMobile()) {
+          $set['res'] = "res[y]";
+        }
+      }
+
 
       // Check for overrides for style identifiers & dimensions.
       $config_overrides = $this->overrideConfig($sku, $page_type);
@@ -240,11 +245,11 @@ class SkuAssetManager {
           $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
         }
 
-        if (isset($config_overrides['dimensions'][$location_image]['width'])) {
+        if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['width'])) {
           $set['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
         }
 
-        if (isset($config_overrides['dimensions'][$location_image]['height'])) {
+        if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['height'])) {
           $set['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
         }
       }
