@@ -13,8 +13,16 @@ use Drupal\node\Entity\Node;
  *
  * Install config for product display settings.
  */
-function alshaya_acm_product_update_8018() {
+function alshaya_acm_product_update_8019() {
   alshaya_config_install_configs(['alshaya_acm_product.display_settings'], 'alshaya_acm_product');
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_acm_product_update_8018() {
+  // Adding configuration for back_to_list.
+  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product');
 }
 
 /**
