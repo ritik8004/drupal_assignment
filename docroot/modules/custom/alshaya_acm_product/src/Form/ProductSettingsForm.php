@@ -91,6 +91,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('vat_text', $form_state->getValue('vat_text'));
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
     $config->set('image_slider_position_pdp', $form_state->getValue('image_slider_position_pdp'));
+    $config->set('back_to_list', $form_state->getValue('back_to_list'));
 
     // Product default image.
     $product_default_image = NULL;
@@ -167,6 +168,13 @@ class ProductSettingsForm extends ConfigFormBase {
       '#description' => $this->t('This is the scoll offset where we want to start pre-loading the next page items. Values should be in integer without any units e.g., 800.'),
       '#required' => TRUE,
       '#default_value' => $config->get('auto_load_trigger_offset'),
+    ];
+
+    $form['back_to_list'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable back to list'),
+      '#description' => $this->t('This will enable the back button feature on search/plp/promo pages.'),
+      '#default_value' => $config->get('back_to_list'),
     ];
 
     $form['cross_up_sell_items_settings'] = [
