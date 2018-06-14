@@ -26,6 +26,10 @@ services:
       - '@cache.alshaya'
       - '@cache.product_labels'
       - '@cache.configurable_price'
+  alshaya_acm_product.sku_images_manager:
+    class: Drupal\alshaya_acm_product\SkuImagesManager
+    arguments:
+      - '@module_handler'
   cache.alshaya:
     class: Drupal\Core\Cache\CacheInterface
     tags:

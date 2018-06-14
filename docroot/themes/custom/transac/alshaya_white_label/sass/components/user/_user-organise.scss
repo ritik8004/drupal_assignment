@@ -51,7 +51,7 @@
     top: 1rem;
 
     .throbber {
-      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
       background-position: right center !important;
       background-repeat: no-repeat !important;
       background-size: 2.5rem;
@@ -198,7 +198,7 @@
             }
 
             .throbber {
-              background-image: url(../imgs/icons/MC-loader.svg) !important;
+              background-image: url(#{$base_theme_loader_img_directory_path}) !important;
               background-position: $right center !important;
               background-repeat: no-repeat !important;
               background-size: 2.5rem;

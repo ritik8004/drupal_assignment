@@ -39,7 +39,131 @@ function alshaya_acm_drush_command() {
     'description' => 'Reset all config from settings.',
   ];
 
+  $commands['alshaya-switch-config'] = [
+    'description' => 'Switch some config to connect Drupal to specific ACM and MDC.',
+    'alias' => ['asc'],
+    'options' => [
+      'acm' => 'The ACM key to connect Drupal to (ex: mcsa_dev, hmkw_qa, hmsa_uat, ...).',
+      'mdc' => 'The MDC key to connect Drupal to (ex: mc_dev, hm_qa, vs_uat, ...).',
+      'country_code' => 'The country code to be used with MDC communication (store_ids, ...) - Default is current site country code.',
+    ],
+    'examples' => [
+      'drush asc --acm=mcsa_dev --mdc=mc_dev --country_code=sa' => 'Connect Drupal to mcsa_dev ACM and mc_dev MDC using the SA store ids.',
+      'drush asc --acm=hmkw_qa' => 'Connect Drupal to hmkw_qa ACM.',
+    ],
+  ];
+
+  $commands['alshaya-sku-media-missing'] = [
+    'description' => 'Print the skus for which media is attached to SKU but not available in drupal.',
+    'arguments'     => [
+      'langcode' => 'Language code for which we want to get skus.',
+    ],
+    'examples'    => [
+      'drush alshaya-sku-media-missing en' => 'Print the skus for en language.',
+    ],
+  ];
+
   return $commands;
+}
+
+/**
+ * Implements drush switch config command.
+ */
+function drush_alshaya_acm_alshaya_switch_config() {
+  $acm = drush_get_option('acm', '');
+  $mdc = drush_get_option('mdc', '');
+
+  if (empty($acm) && empty($mdc)) {
+    drush_print(dt('Please provide an ACM or a MDC key to switch the config.'));
+    return;
+  }
+
+  $configFactory = \Drupal::configFactory();
+
+  // Update the conductor config.
+  if (!empty($acm)) {
+    include_once DRUPAL_ROOT . '/../factory-hooks/environments/conductor.php';
+    $acms = alshaya_get_conductor_host_data();
+
+    if (isset($acms[$acm])) {
+      $config = $configFactory->getEditable('acq_commerce.conductor');
+
+      foreach ($acms[$acm] as $key => $value) {
+        $config->set($key, $value);
+
+        drush_print(dt('Configuring acq_commerce.conductor.@key to @value.', [
+          '@key' => $key,
+          '@value' => $value,
+        ]));
+      }
+
+      $config->save();
+    }
+    else {
+      drush_print(dt('Unknown ACM "@acm".', ['@acm' => $acm]));
+    }
+  }
+
+  // Update the magento config.
+  if (!empty($mdc)) {
+    include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
+    $mdcs = alshaya_get_magento_host_data();
+
+    if (isset($mdcs[$mdc])) {
+      // Update the magento host.
+      $config = $configFactory->getEditable('alshaya_api.settings');
+      $config->set('magento_host', $mdcs[$mdc]['url']);
+      $config->save();
+
+      drush_print(dt('Configuring alshaya_api.settings.magento_host to @value.', [
+        '@value' => $mdcs[$mdc]['url'],
+      ]));
+
+      // Determine the langcode to use.
+      $country_code = Unicode::strtolower(Settings::get('country_code'));
+      $country_code = drush_get_option('country_code', $country_code);
+
+      if (!isset($mdcs[$mdc][$country_code])) {
+        drush_print(dt('Unknown "@country_code" country code for "@mdc" MDC. Using the current site\'s country code "@current_country_code".', [
+          '@country_code' => $country_code,
+          '@mdc' => $mdc,
+          '@current_country_code' => $country_code = Unicode::strtolower(Settings::get('country_code')),
+        ]));
+      }
+
+      $langManager = \Drupal::service('language_manager');
+
+      $configs = [
+        'acq_commerce.store' => 'store_id',
+        'alshaya_api.settings' => 'magento_lang_prefix',
+      ];
+
+      // Update the magento store ids and lang_prefix.
+      foreach ($configs as $name => $key) {
+        foreach ($langManager->getLanguages() as $lang => $language) {
+          if ($lang == $langManager->getDefaultLanguage()->getId()) {
+            $config = $configFactory->getEditable($name);
+          }
+          else {
+            $config = $langManager->getLanguageConfigOverride($lang, $name);
+          }
+
+          // Use specific config if it exists, use default one otherwise.
+          $value = isset($mdcs[$mdc][$country_code][$key][$lang]) ? $mdcs[$mdc][$country_code][$key][$lang] : $mdcs['default'][$country_code][$key][$lang];
+          $config->set($key, $value)->save();
+
+          drush_print(dt('Configuring @name.@key to @value.', [
+            '@name' => $name,
+            '@key' => $key . ' ' . $lang,
+            '@value' => $value,
+          ]));
+        }
+      }
+    }
+    else {
+      drush_print(dt('Unknown MDC "@mdc".', ['@mdc' => $mdc]));
+    }
+  }
 }
 
 /**
@@ -171,4 +295,62 @@ function drush_alshaya_acm_alshaya_reset_config() {
 
   // Reset country specific settings.
   \Drupal::service('alshaya_acm.config_check')->resetCountrySpecificSettings();
+}
+
+/**
+ * Implements drush alshaya-sku-media-missing.
+ */
+function drush_alshaya_acm_alshaya_sku_media_missing($langcode = 'en') {
+  drush_print(dt('Checking skus for the langcode @langcode', ['@langcode' => $langcode]));
+
+  $connection = \Drupal::database();
+  $query = $connection->select('acq_sku_field_data', 'acq');
+  $query->fields('acq', ['sku', 'media__value']);
+  $query->condition('acq.media__value', 'a:0:{}', '<>');
+  $query->condition('acq.langcode', $langcode);
+  $result = $query->execute()->fetchAll();
+
+  $fids = [];
+  $missing_fids = [];
+
+  // If there are any results.
+  if ($result) {
+
+    // Prepare fid array.
+    foreach ($result as $key => $rs) {
+      $media_data = unserialize($rs->media__value);
+      foreach ($media_data as $data) {
+        if (isset($data['fid'])) {
+          $fids[$data['fid']] = $rs->sku;
+        }
+      }
+    }
+
+    // If there are ids.
+    if (!empty($fids)) {
+      $query = $connection->select('file_managed', 'fm');
+      $query->fields('fm', ['fid']);
+      $query->condition('fm.fid', array_keys($fids), 'IN');
+      $existing_fids = $query->execute()->fetchCol();
+      $missing_fids = array_diff(array_keys($fids), $existing_fids);
+    }
+  }
+
+  // If there are no skus.
+  if (empty($missing_fids)) {
+    drush_print(dt('There are no skus.'));
+  }
+  else {
+    $rows = [];
+    // Prepare the row.
+    foreach ($missing_fids as $key => $value) {
+      $rows[$key] = [
+        'sku' => $fids[$value],
+        'fid' => $value,
+      ];
+    }
+
+    array_unshift($rows, ['SKU', 'File ID']);
+    drush_print_table($rows, TRUE);
+  }
 }

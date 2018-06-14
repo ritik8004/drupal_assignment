@@ -13,7 +13,9 @@
 /**
  * Get commerce third party settings for specific site + environment combination.
  */
-function alshaya_get_commerce_third_party_settings($site, $env) {
+function alshaya_get_commerce_third_party_settings($site_code, $country_code, $env) {
+  $site = $site_code . $country_code;
+
   // From the given site and environment, get the magento and conductor
   // environments keys.
   $env_keys = alshaya_get_env_keys($site, $env);
@@ -30,7 +32,12 @@ function alshaya_get_commerce_third_party_settings($site, $env) {
     $settings['acq_commerce.conductor'] = $conductors[$env_keys['conductor']];
   }
   if (isset($env_keys['magento']) && isset($magentos[$env_keys['magento']])) {
-    $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']];
+    $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']]['url'];
+
+    $settings += $magentos['default'][$country_code];
+    if (isset($magentos[$env_keys['magento']][$country_code])) {
+      $settings = array_replace_recursive($settings, $magentos[$env_keys['magento']][$country_code]);
+    }
   }
 
   return $settings;
@@ -152,6 +159,10 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'bbw_qa',
         'conductor' => 'bbwkw_test',
       ],
+      '01uat' => [
+        'magento' => 'bbw_uat',
+        'conductor' => 'bbwkw_uat',
+      ],
     ],
     // BathBodyWorks SA.
     'bbwsa' => [
@@ -159,12 +170,20 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'bbw_qa',
         'conductor' => 'bbwsa_test',
       ],
+      '01uat' => [
+        'magento' => 'bbw_uat',
+        'conductor' => 'bbwsa_uat',
+      ],
     ],
     // BathBodyWorks AE.
     'bbwae' => [
       'default' => [
         'magento' => 'bbw_qa',
         'conductor' => 'bbwae_test',
+      ],
+      '01uat' => [
+        'magento' => 'bbw_uat',
+        'conductor' => 'bbwae_uat',
       ],
     ],
     // Pottery Barn AE.
@@ -178,6 +197,20 @@ function alshaya_get_env_keys($site, $env) {
       //  'magento' => 'pb_qa',
       //  'conductor' => 'pbae_test',
       //],
+    ],
+    // Victoria Secret KW.
+    'vskw' => [
+      'default' => [
+        'magento' => 'vs_qa',
+        'conductor' => 'pbae_test',
+      ],
+    ],
+    // Victoria Secret SA.
+    'vssa' => [
+      'default' => [
+        'magento' => 'vs_qa',
+        'conductor' => 'pbae_test',
+      ],
     ],
     // Victoria Secret AE.
     'vsae' => [

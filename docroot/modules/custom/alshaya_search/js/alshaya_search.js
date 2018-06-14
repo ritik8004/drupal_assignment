@@ -194,6 +194,26 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       // Doing this for ajax complete as dom/element we require are not available earlier.
       $(document).ajaxComplete(function (event, xhr, settings) {
         Drupal.addLeafClassToPlpLeafItems();
+
+        if ($(window).width() < 768) {
+          // Finding the active facet and showing/hidding category facets accordingly.
+          var alshayaPlpSearchActiveFacet = $('.current-active-facet').attr('data-block-plugin-id');
+          var alshayaPlpSearchActiveCategoryFacet = $('.current-active-facet.block-facet-blockplp-category-facet, .current-active-facet.block-facet-blockcategory');
+          var alshayaPlpSearchCategoryFacet = $('ul[data-drupal-facet-id=category].js-facets-checkbox-links, ul[data-drupal-facet-id=plp_category_facet].js-facets-checkbox-links');
+          var alshayaPlpSearchCategoryFacetTitle = $('.block-facet-blockplp-category-facet .c-accordion__title, .block-facet-blockcategory .c-accordion__title');
+
+          if (alshayaPlpSearchActiveFacet) {
+            if (alshayaPlpSearchActiveCategoryFacet.length > 0) {
+              alshayaPlpSearchCategoryFacet.show();
+              alshayaPlpSearchCategoryFacetTitle.removeClass('ui-state-active');
+            }
+
+            else {
+              alshayaPlpSearchCategoryFacet.hide();
+              alshayaPlpSearchCategoryFacetTitle.addClass('ui-state-active');
+            }
+          }
+        }
       });
 
       // Add Class to leaf items on page load.
@@ -317,5 +337,40 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         }
       });
     }
-  }
+  };
+
+  /**
+   * Helper function to convert full-screen loader to throbber for infinite
+   * scroll.
+   */
+  Drupal.changeProgressBarToThrobber = function(context) {
+    Drupal.ajax.instances.forEach(function (ajax_instance, key) {
+      if ($(ajax_instance.element, context).hasClass('c-products-list') ||
+        ($(ajax_instance.element, context).parents('ul[data-drupal-views-infinite-scroll-pager="automatic"]').length > 0)) {
+        Drupal.ajax.instances[key].progress.type = 'throbber';
+      }
+    });
+  };
+
+  /**
+   * Drupal behaviors to update progressBars.
+   */
+  Drupal.behaviors.processProgressBarsForAjax = {
+    attach: function (context, settings) {
+      // Avoid auto scroll on the listing from the state that browser remembers.
+      // This at times leads to trigger of infinite scroll before updating the
+      // progress bar.
+      history.scrollRestoration = 'manual';
+
+      // Update only when all DOM elements are loaded & AJAX is attached to them.
+      $(window).on('load', function () {
+        Drupal.changeProgressBarToThrobber(context);
+      });
+
+      // Update on Ajax complete to take care of AJAX instance updates.
+      if (context !== document){
+        Drupal.changeProgressBarToThrobber(context);
+      }
+    }
+  };
 })(jQuery);

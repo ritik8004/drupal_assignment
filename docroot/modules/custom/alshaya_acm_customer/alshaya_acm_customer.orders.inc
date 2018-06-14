@@ -415,6 +415,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
   $products = [];
   foreach ($order['items'] as $item) {
+    $item['price'] = acq_commerce_get_clean_price($item['price']);
     $product = $item;
     $product['price'] = alshaya_acm_price_format($item['price']);
     $product['total'] = alshaya_acm_price_format($item['ordered'] * $item['price']);

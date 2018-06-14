@@ -8,3 +8,9 @@ services:
       - '@cache.data'
       - '@logger.factory'
       - '@acq_commerce.i18n_helper'
+
+  alshaya_api.i18n_helper:
+    class: Drupal\alshaya_api\AlshayaI18nHelper
+    arguments:
+      - '@config.factory'
+      - '@language_manager'

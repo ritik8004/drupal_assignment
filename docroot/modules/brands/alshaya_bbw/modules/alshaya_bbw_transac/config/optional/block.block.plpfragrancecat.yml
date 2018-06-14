@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.plp_fragrancecat
+  module:
+    - facets
+    - system
+  theme:
+    - alshaya_bathbodyworks
+id: plpfragrancecat
+theme: alshaya_bathbodyworks
+region: sidebar_first
+weight: -38
+provider: null
+plugin: 'facet_block:plp_fragrancecat'
+settings:
+  id: 'facet_block:plp_fragrancecat'
+  label: Fragrance Category
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: '/taxonomy/term/*'
+    negate: false
+    context_mapping: {  }

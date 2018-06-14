@@ -7,7 +7,7 @@
           <span class="hover-text">{{ 'Hover over image to zoom'|t }}</span><span class="mobile-hover-text">{{ 'Double tap image to zoom'|t }}</span>
         </a>
       </div>
-      <div id="yt-vi-container" class= "cloudzoom__video"></div>
+      <div class="yt-vi-container cloudzoom__video_main"></div>
       {%  if labels|length > 0 %}
         <div class="product-labels">
           {{ labels }}
@@ -40,13 +40,16 @@
     <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails {{ pager_flag }}">
       {% for thumbs in thumbnails %}
         {% if thumbs.type == 'youtube' %}
-          <li data-iframe="{{ thumbs.url }}" class="mobilegallery__thumbnails__video youtube">
-            <img src="{{ thumbs.thumburl }}"/>
+          <li class="mobilegallery__thumbnails__video youtube">
+            <div class="mobileplayer-wrapper">
+              <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            </div>
           </li>
         {% elseif thumbs.type == 'vimeo' %}
           <li class="mobilegallery__thumbnails__video vimeo">
-            <iframe class="mobileplayer" width="100%" src={{ thumbs.url }} frameborder="0" allowfullscreen>
-            </iframe>
+            <div class="mobileplayer-wrapper">
+              <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            </div>
           </li>
         {% else %}
           <li>
@@ -74,6 +77,7 @@
           <img class="imagegallery__full__image" style="max-width: none;" id="full-image" src="{{ firstItem.fullurl }}"  alt="{{ firstItem.label }}" title="{{ firstItem.label }}" />
         {% endif %}
       </div>
+      <div class="yt-vi-container cloudzoom__video_modal"></div>
       <ul id="product-image-gallery" class="imagegallery__thumbnails {{ pager_flag }}">
         {% for thumbs in thumbnails %}
           {% if thumbs.type == 'youtube' %}
@@ -103,12 +107,16 @@
       <ul id="product-image-gallery-mob" class="mob-imagegallery__thumbnails {{ pager_flag }}">
         {% for thumbs in thumbnails %}
           {% if thumbs.type == 'youtube' %}
-            <li data-iframe="{{ thumbs.url }}" class="mob-imagegallery__thumbnails__video youtube">
-              <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+            <li class="mob-imagegallery__thumbnails__video youtube">
+              <div class="mobileplayer-wrapper">
+                <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+              </div>
             </li>
           {% elseif thumbs.type == 'vimeo' %}
             <li data-iframe="{{ thumbs.url }}" class="mob-imagegallery__thumbnails__video vimeo">
-              <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}"/>
+              <div class="mobileplayer-wrapper">
+                <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+              </div>
             </li>
           {% else %}
             <li class="mob-imagegallery__thumbnails__image">

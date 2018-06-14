@@ -31,6 +31,11 @@
     h2 {
       &.subtitle {
         border-bottom: 0;
+        font-size: 1.125rem;
+
+        @include breakpoint($only-tablet) {
+          padding-top: 1.4rem;
+        }
       }
     }
   }
@@ -39,6 +44,31 @@
 .recent__orders--list {
   &.user__order--detail {
     background-color: $order_detail_delivery_details_row_bg;
+
+    .order-summary-row {
+      td.order-transaction {
+        font-size: 0.75rem;
+
+        div,
+        .light.order--date--time {
+          margin-top: 0;
+          margin-bottom: 0;
+        }
+
+        .dark {
+          font-family: $vs-bold;
+          font-size: 0.875rem;
+        }
+      }
+
+      .above-mobile {
+        font-size: 0.875rem;
+
+        .light {
+          font-size: 0.75rem;
+        }
+      }
+    }
   }
 }
 
@@ -48,5 +78,11 @@
     font-family: $vs-bold;
     text-decoration: none;
     font-size: 0.875rem;
+  }
+}
+
+.account--dashboard {
+  .subtitle {
+    text-transform: capitalize;
   }
 }

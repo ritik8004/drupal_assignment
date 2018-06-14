@@ -13,26 +13,23 @@ use Drupal\Core\Url;
 function alshaya_promo_panel_preprocess_block(&$variables) {
   switch ($variables['base_plugin_id']) {
     case 'block_content':
-      $block_id = $variables['elements']['#id'];
-      $promo_panel_blocks = \Drupal::config('alshaya_promo_panel.settings')->get('promo_panel_blocks');
-      if (!in_array($block_id, array_keys($promo_panel_blocks))) {
-        return;
-      }
-
-      $variables['#cache']['contexts'][] = 'url.path';
       // Get current language object.
       $lang = \Drupal::languageManager()->getCurrentLanguage();
-      // Get the language code.
-      $lang_code = $lang->getId();
+      // If the block is placed in "Block Layout".
+      if (!empty($variables['elements']['#id'])) {
+        $block_id = $variables['elements']['#id'];
+        $promo_panel_blocks = \Drupal::config('alshaya_promo_panel.settings')->get('promo_panel_blocks');
+        if (!in_array($block_id, array_keys($promo_panel_blocks))) {
+          return;
+        }
 
-      if ($variables['content']) {
-        // If the block is placed in "Block Layout".
-        if (!empty($variables['elements']['#id'])) {
+        if ($variables['content']) {
+          $variables['#cache']['contexts'][] = 'url.path';
+
           // Make label a link to redirect to Promo panel page on mobile.
-          $label = $variables['label'];
           $element['label'] = [
             '#type' => 'link',
-            '#title' => $label,
+            '#title' => $variables['label'],
             '#url' => Url::fromUri('internal:' . $promo_panel_blocks[$block_id], ['language' => $lang]),
             '#options' => [
               'attributes' => [
@@ -51,26 +48,47 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
           $variables['title_attributes']['class'][] = 'promo-panel-label';
           $variables['content']['#attached']['library'][] = 'alshaya_promo_panel/promo-panel';
         }
-        // If the block is added to "block reference" paragraph type.
-        else {
-          // Get the referer path.
-          $referrer_path = parse_url(\Drupal::request()->headers->get('referer'))['path'];
-          $referrer_path = preg_replace('/^(\/' . $lang_code . ')(.*)/g', '', $referrer_path);
-          $empty = !empty($referrer_path) ? $referrer_path : 'home';
+      }
+      // If the block is added to "block reference" paragraph type.
+      else {
+        $variables['attributes']['class'][] = 'block__reference--block-promo-panel-wrapper';
+        // Get the referer path.
+        $referrer_path = parse_url(\Drupal::request()->headers->get('referer'))['path'];
+        $referrer_path = preg_replace('/^(\/' . $lang->getId() . ')(.*)/g', '', $referrer_path);
+        $internal_uri = !empty($referrer_path) ? $referrer_path : 'home';
 
-          // Create the back link.
-          $element['back'] = [
-            '#type' => 'link',
-            '#title' => t('Back'),
-            '#url' => Url::fromUri('internal:/' . $empty, ['language' => $lang]),
-            '#options' => [
-              'attributes' => [
-                'class' => ['mobile-back-link'],
-              ],
+        // Create the back link.
+        $element['back'] = [
+          '#type' => 'link',
+          '#title' => t('Back'),
+          '#url' => Url::fromUri('internal:/' . $internal_uri, ['language' => $lang]),
+          '#options' => [
+            'attributes' => [
+              'class' => ['mobile-back-link'],
             ],
-          ];
-        }
+          ],
+        ];
+        // Change default label with link.
+        $variables['label'] = [
+          '#markup' => \Drupal::service('renderer')->render($element) . $variables['label'],
+        ];
       }
       break;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function alshaya_promo_panel_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  if (isset($variables['elements']) && isset($variables['elements']['#base_plugin_id'])) {
+    if ($variables['elements']['#base_plugin_id'] == 'block_content') {
+      if (isset($variables['elements']['content']) && !empty($variables['elements']['#id'])) {
+        $promo_panel_blocks = \Drupal::config('alshaya_promo_panel.settings')->get('promo_panel_blocks');
+        if (in_array($variables['elements']['#id'], array_keys($promo_panel_blocks))) {
+          $suggestions[] = 'block__block_content__alshaya_promo_panel';
+        }
+      }
+    }
   }
 }

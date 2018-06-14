@@ -35,6 +35,10 @@ $settings['alshaya_acm_user_username'] = 'alshaya_acm';
 $settings['alshaya_acm_user_email'] = 'noreply-acm@alshaya.com';
 $settings['alshaya_acm_user_password'] = 'AlShAyA_AcM';
 
+$settings['alshaya_magento_user_username'] = 'alshaya_magento';
+$settings['alshaya_magento_user_email'] = 'noreply-magento@alshaya.com';
+$settings['alshaya_magento_user_password'] = 'AlShAyA_MaGeNtO';
+
 // Simple Oauth.
 // TODO: Security.
 $soauth_key_dir = '';
@@ -53,6 +57,9 @@ $settings['alshaya_acm_soauth_public_key'] = $soauth_key_dir . $soauth_key_name 
 $settings['alshaya_acm_soauth_private_key'] = $soauth_key_dir . $soauth_key_name;
 $settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
 $settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b6549e';
+
+$settings['alshaya_magento_soauth_client_uuid'] = '4cacd535-3b24-434e-9d32-d6e843f7b91a';
+$settings['alshaya_magento_soauth_client_secret'] = 'AlShAyA';
 
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;
