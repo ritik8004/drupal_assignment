@@ -301,11 +301,8 @@ class CartSessionStorage implements CartStorageInterface {
       $this->apiWrapper->associateCart($cart->id(), $cart->customerId());
     }
     catch (\Exception $e) {
-      // @TODO: remove this once we have it working properly in MDC.
-      // We are getting 500 with code 120 for success.
-      if ($e->getCode() != '120') {
-        throw $e;
-      }
+      $this->restoreCart($cart->id());
+      throw $e;
     }
   }
 
