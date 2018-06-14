@@ -107,3 +107,11 @@
     line-height: 1.2;
   }
 }
+
+.select2-container--default {
+  .select2-selection--single {
+    .select2-selection__rendered {
+      color: $primary_dropdown_text;
+    }
+  }
+}

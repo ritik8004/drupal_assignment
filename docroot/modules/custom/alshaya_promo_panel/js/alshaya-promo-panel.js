@@ -44,6 +44,8 @@
         }
       }
 
+      checkOffset();
+
       $(window, context).scroll(function () {
         checkOffset();
       });
