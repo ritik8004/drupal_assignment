@@ -1,4 +1,7 @@
 fields:
+  sku_definition:
+    label: 'SKU Definition'
+
   band_size:
     label: 'Band Size'
     cardinality: -1
