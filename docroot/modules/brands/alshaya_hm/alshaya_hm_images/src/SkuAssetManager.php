@@ -355,11 +355,19 @@ class SkuAssetManager {
       // Sort items based on the angle config.
       foreach ($grouped_assets as $key => $asset) {
         if (!empty($asset)) {
+          $sort_angle_weights = array_flip($sort_angle_weights);
           uasort($asset, function ($a, $b) use ($sort_angle_weights) {
             // If weight is set in config, use that else use a default high
             // weight to push the items to bottom of the list.
             $weight_a = isset($sort_angle_weights[$a['sortFacingType']]) ? $sort_angle_weights[$a['sortFacingType']] : self::LP_DEFAULT_WEIGHT;
             $weight_b = isset($sort_angle_weights[$b['sortFacingType']]) ? $sort_angle_weights[$b['sortFacingType']] : self::LP_DEFAULT_WEIGHT;
+
+            // Use number for sorting in case we land onto 2 images with same
+            // asset type & facing type.
+            if (($weight_a - $weight_b) === 0) {
+              $weight_a = $a['Data']['Angle']['Number'];
+              $weight_b = $b['Data']['Angle']['Number'];
+            }
 
             return $weight_a - $weight_b < 0 ? -1 : 1;
           });
