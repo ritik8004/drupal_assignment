@@ -1,5 +1,10 @@
 <div class="highlights">
   {% if data.highlight_paragraph is not empty %}
+      {% if is_promo_block is not empty %}
+          <div class="highlight-para">
+      {% else %}
+          <div class="no-highlight-para">
+      {% endif %}
       {% for highlight_paragraph in data.highlight_paragraph %}
           <div class="highlighted {{ highlight_paragraph.highlight_type }}" gtm-type="gtm-highlights">
               {% if highlight_paragraph.highlight_type == 'highlight' %}
@@ -20,5 +25,6 @@
               </a>
           </div>
       {% endfor %}
+          </div>
   {% endif %}
 </div>
