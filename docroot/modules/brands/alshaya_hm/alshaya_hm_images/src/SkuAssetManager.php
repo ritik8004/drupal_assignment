@@ -176,6 +176,13 @@ class SkuAssetManager {
           return $asset_urls;
         }
 
+        // Return specific image in case a match has been found for the swatch
+        // type.
+        if (($style) && ($asset['sortAssetType'] === $style)) {
+          $swatch_asset_url[] = $asset_urls[count($asset_urls) - 1];
+          return $swatch_asset_url;
+        }
+
       }
       if (!empty($asset_urls)) {
         $asset_variant_urls[$location_image] = $asset_urls;
