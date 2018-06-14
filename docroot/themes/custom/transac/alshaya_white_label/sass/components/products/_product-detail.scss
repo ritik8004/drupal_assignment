@@ -181,6 +181,10 @@
     .promotions {
       margin-bottom: 1rem;
 
+      &:empty {
+        display: none;
+      }
+
       a {
         font-size: 0.9375rem;
         color: $pdp_product_discount_text;
