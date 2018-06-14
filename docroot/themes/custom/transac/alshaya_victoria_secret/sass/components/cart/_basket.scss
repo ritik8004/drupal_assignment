@@ -29,16 +29,35 @@
     table {
       font-family: $vs-regular;
 
+      tr {
+        td {
+          .dark a {
+            font-size: 0.875rem;
+          }
+        }
+      }
+
       thead tr {
         border-bottom: none;
 
         th {
           font-family: $vs-bold;
+
+          &:last-child {
+            @include breakpoint($desktop) {
+              padding-#{$left}: 2.5rem;
+              text-align: $left;
+            }
+          }
         }
       }
     }
 
-    td {
+    tr td {
+      @include breakpoint($desktop) {
+        padding-#{$left}: 1.5rem;
+      }
+
       &.quantity {
         @include breakpoint($only-mobile) {
           padding-#{$left}: 0 !important;
@@ -100,6 +119,16 @@
 
           .discount-value {
             padding-#{$left}: 0;
+          }
+        }
+      }
+
+      &.delivery-option {
+        @include breakpoint($desktop) {
+          padding-#{$left}: 2.5rem !important;
+
+          .delivery-options-tooltip-wrapper .tooltip--wrap {
+            margin-bottom: 1rem;
           }
         }
       }
@@ -188,18 +217,6 @@
 
         @include breakpoint($desktop) {
           font-size: 1.5rem;
-        }
-      }
-    }
-  }
-
-  #table-cart-items {
-    table {
-      tr {
-        td {
-          .dark a {
-            font-size: 0.875rem;
-          }
         }
       }
     }
