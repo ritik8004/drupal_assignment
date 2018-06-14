@@ -1,0 +1,5 @@
+.ui-autocomplete-loading {
+  @include breakpoint($desktop) {
+    background-position: $right 1.875rem center !important;
+  }
+}

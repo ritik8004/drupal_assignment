@@ -263,7 +263,7 @@ ul.item-list__checkbox,
 }
 
 .ajax-progress.ajax-progress-fullscreen {
-  background-image: url(../imgs/icons/MC-loader.svg) !important;
+  background-image: url(#{$base_theme_loader_img_directory_path}) !important;
   background-repeat: no-repeat !important;
   background-color: rgba(255, 255, 255, 0.5) !important;
   background-size: 4.5rem;
@@ -405,4 +405,3 @@ ul.item-list__checkbox,
     }
   }
 }
-

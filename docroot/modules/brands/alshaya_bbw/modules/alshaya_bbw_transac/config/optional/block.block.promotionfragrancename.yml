@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.promotion_fragrancename
+  module:
+    - ctools
+    - facets
+  theme:
+    - alshaya_bathbodyworks
+id: promotionfragrancename
+theme: alshaya_bathbodyworks
+region: sidebar_first
+weight: -25
+provider: null
+plugin: 'facet_block:promotion_fragrancename'
+settings:
+  id: 'facet_block:promotion_fragrancename'
+  label: Fragrance Name
+  provider: facets
+  label_display: visible
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      acq_promotion: acq_promotion
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

@@ -6,6 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Block\BlockBase;
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -142,8 +143,29 @@ class BasketHorizontalRecommedation extends BlockBase implements ContainerFactor
   /**
    * {@inheritdoc}
    */
-  public function getCacheMaxAge() {
-    return 0;
+  public function getCacheContexts() {
+    // Vary based on cart id.
+    return Cache::mergeContexts(parent::getCacheContexts(), ['cookies:Drupal_visitor_acq_cart_id']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    $cache_tags = parent::getCacheTags();
+
+    // As soon as we have cart, we have session.
+    // As soon as we have session, varnish is disabled.
+    // We are good to have no cache tag based on cart if there is none.
+    if ($cart = $this->cartStorage->getCart(FALSE)) {
+      // Custom cache tag here will be cleared in API Wrapper after every
+      // update cart call.
+      $cache_tags = Cache::mergeTags($cache_tags, [
+        'cart:' . $cart->id(),
+      ]);
+    }
+
+    return $cache_tags;
   }
 
 }

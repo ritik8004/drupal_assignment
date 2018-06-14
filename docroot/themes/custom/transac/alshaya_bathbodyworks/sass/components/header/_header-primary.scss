@@ -351,6 +351,7 @@ header {
 
     li.menu--one__list-item {
       display: inline-block;
+      vertical-align: middle;
 
       a.menu--one__link {
         @include arabic-letter-spacing;
@@ -474,6 +475,14 @@ header {
       margin: 0 0.625rem;
     }
   }
+
+  .block-alshaya-main-menu {
+    text-align: center;
+
+    .main--menu {
+      display: inline-block !important;
+    }
+  }
 }
 
 @include breakpoint($upto-desktop) {
@@ -496,6 +505,8 @@ header {
 
     font-size: 0.875rem;
     color: $mm_l1_link;
+    height: 3rem;
+    line-height: 1.5;
   }
 
   .menu__list-item {
@@ -626,10 +637,6 @@ header {
     @include breakpoint($only-mobile) {
       width: 100%;
       color: $header_c_menu_icon_text;
-
-      .logged-out & {
-        padding: 1rem 0.25rem;
-      }
 
       html[lang=ar] & {
         padding: 0.9rem 0;

@@ -91,15 +91,21 @@ $path-social-icons: "../../alshaya_white_label/imgs/social-icons/pdp";
       padding-bottom: 2rem;
     }
 
-    li:not(:last-child) {
-      margin-#{$right}: 1rem;
+    li {
+      &:not(:last-child) {
+        margin-#{$right}: 1rem;
 
-      @include breakpoint($only-mobile) {
-        margin-#{$right}: 2.4rem;
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: 2.4rem;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-#{$right}: 0.75rem;
+        }
       }
 
-      @include breakpoint($only-tablet) {
-        margin-#{$right}: 0.75rem;
+      a:hover {
+        opacity: 0.8;
       }
     }
   }

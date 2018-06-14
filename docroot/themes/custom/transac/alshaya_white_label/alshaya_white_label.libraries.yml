@@ -11,12 +11,15 @@ global_styles:
     js/form.js: {}
     js/address_book.js: {}
     js/one_time_language_slider.js: {}
+    js/banner_margin_override.js: {}
     vendor/js/details-polyfill.js: {}
   dependencies:
     - core/modernizr
     - core/jquery
     - core/jquery.once
     - core/jquery.ui.accordion
+    - core/jquery.ui.core
+    - core/jquery.ui.effects.core
     - core/jquery.ui.tabs
     - core/jquery.cookie
     - mobile_number/element

@@ -11,6 +11,16 @@
     }
   }
 
+  @include breakpoint($only-mobile) {
+    .field--name-field-title {
+      font-size: 1.125rem;
+    }
+
+    .field--name-field-sub-title {
+      font-size: 0.875rem;
+    }
+  }
+
   .field--name {
     &-field-title {
       text-transform: uppercase;
@@ -19,5 +29,11 @@
     &-field-sub-title {
       text-transform: initial;
     }
+  }
+}
+
+.c-delivery-menu {
+  @include breakpoint($tablet) {
+    margin: 1.5rem auto;
   }
 }

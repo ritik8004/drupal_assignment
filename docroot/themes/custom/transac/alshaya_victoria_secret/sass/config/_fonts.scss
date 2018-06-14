@@ -68,6 +68,20 @@
 }
 
 @font-face {
+  font-family: "HarrietDisplay";
+  src: url("../fonts/HarrietDisplay.eot");
+  src:
+    url("../fonts/HarrietDisplay.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/HarrietDisplay.otf") format("opentype"),
+    url("../fonts/HarrietDisplay.svg") format("svg"),
+    url("../fonts/HarrietDisplay.ttf") format("truetype"),
+    url("../fonts/HarrietDisplay.woff") format("woff"),
+    url("../fonts/HarrietDisplay.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'alshaya-icons';
   src: url('../fonts/alshaya-icons.eot?yy6ec8');
   src:
@@ -84,12 +98,14 @@
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
 $vs-bold: 'BentonSans-Bold', 'DroidArabicKufi-Bold';
 $vs-regular: 'BentonSans-Book', 'DroidArabicKufi';
+$vspromo: 'HarrietDisplay', 'DroidArabicKufi';
 $vspromo-regular: 'BentonSans-Book', 'GESSTwoLight-Light';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
 $vs-arabic-bold: 'DroidArabicKufi-Bold', 'BentonSans-Bold';
 $vs-arabic-regular: 'DroidArabicKufi', 'BentonSans-Book';
+$vspromo-arabic: 'DroidArabicKufi', 'HarrietDisplay';
 $vspromo-arabic-regular: 'GESSTwoLight-Light', 'BentonSans-Book';
 
 $vs-icons: 'alshaya-icons';
@@ -100,7 +116,17 @@ $arial: $vs-regular;
 $alshaya-bold: $vs-bold;
 $alshaya-arabic-bold: $vs-arabic-bold;
 $alshaya-thin: $vs-regular;
+$alshaya-thin-nodir: $vs-regular;
+$alshaya-bold-nodir: $vs-bold;
 $alshaya-arabic-thin: $vs-arabic-regular;
+
+.cario-font {
+  font-family: $vs-arabic-regular;
+}
+
+.cario-font-bold {
+  font-family: $vs-arabic-bold;
+}
 
 $icons: (
   login: "\e929",
@@ -110,6 +136,7 @@ $icons: (
   chevronleft: "\e901",
   chevronright: "\e902",
   chevronup: "\e903",
+  arrowup: "\e903",
   check: "\e904",
   close: "\e905",
   checkshape: "\e906",
