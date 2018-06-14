@@ -12,7 +12,7 @@ id: taxonomy_term.acq_product_category.field_main_menu_highlight
 field_name: field_main_menu_highlight
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'Main menu highlight'
+label: 'Promo block'
 description: ''
 required: false
 translatable: false

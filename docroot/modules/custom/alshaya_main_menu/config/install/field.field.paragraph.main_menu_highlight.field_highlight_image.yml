@@ -17,7 +17,7 @@ id: paragraph.main_menu_highlight.field_highlight_image
 field_name: field_highlight_image
 entity_type: paragraph
 bundle: main_menu_highlight
-label: 'Highlight image'
+label: 'Image'
 description: ''
 required: true
 translatable: true

@@ -12,10 +12,13 @@
  */
 function alshaya_main_menu_update_8402() {
   $configs = [
+    'paragraphs.paragraphs_type.main_menu_highlight',
     'field.storage.paragraph.field_highlight_title',
     'field.storage.paragraph.field_highlight_subtitle',
     'field.field.paragraph.main_menu_highlight.field_highlight_title',
     'field.field.paragraph.main_menu_highlight.field_highlight_subtitle',
+    'field.field.paragraph.main_menu_highlight.field_highlight_image',
+    'field.field.paragraph.main_menu_highlight.field_highlight_link',
     'core.entity_view_display.paragraph.main_menu_highlight.default',
     'core.entity_form_display.paragraph.main_menu_highlight.default',
   ];
