@@ -7,7 +7,6 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
-use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -50,13 +49,6 @@ class CheckoutHelper {
    * @var \Drupal\alshaya_acm\CartHelper
    */
   protected $cartHelper;
-
-  /**
-   * Address Book Manager service object.
-   *
-   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
-   */
-  protected $addressBookManager;
 
   /**
    * Current request object.
@@ -106,8 +98,6 @@ class CheckoutHelper {
    *   Orders manager service object.
    * @param \Drupal\alshaya_acm\CartHelper $cart_helper
    *   Cart Helper service object.
-   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
-   *   Address Book Manager service object.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
@@ -124,7 +114,6 @@ class CheckoutHelper {
                               CartStorageInterface $cart_storage,
                               OrdersManager $orders_manager,
                               CartHelper $cart_helper,
-                              AlshayaAddressBookManager $address_book_manager,
                               RequestStack $request_stack,
                               AccountProxyInterface $current_user,
                               LoggerChannelFactoryInterface $logger_factory,
@@ -135,7 +124,6 @@ class CheckoutHelper {
     $this->cartStorage = $cart_storage;
     $this->ordersManager = $orders_manager;
     $this->cartHelper = $cart_helper;
-    $this->addressBookManager = $address_book_manager;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->currentUser = $current_user;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
@@ -260,11 +248,8 @@ class CheckoutHelper {
 
     $this->setCartShippingHistory($current_method, $address, $extension);
 
-    $empty_address = $this->addressBookManager->getAddressStructureWithEmptyValues('');
-
     // Clear address and info from extension.
     $cart->setShippingMethod('', '');
-    $cart->setShipping($empty_address);
     $cart->setExtension('store_code', NULL);
     $cart->setExtension('click_and_collect_type', NULL);
     $cart->clearPayment();

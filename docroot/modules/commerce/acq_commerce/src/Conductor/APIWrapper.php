@@ -91,7 +91,7 @@ class APIWrapper implements APIWrapperInterface {
           $opt['form_params']['customer_id'] = $customer_id;
         }
         else {
-          $opt['json']['customer_id'] = $customer_id;
+          $opt['json']['customer_id'] = (int) $customer_id;
         }
       }
       return ($client->post($endpoint, $opt));
@@ -165,6 +165,9 @@ class APIWrapper implements APIWrapperInterface {
     if (isset($cart->customer_id) && empty($cart->customer_id)) {
       unset($cart->customer_id);
     }
+    else {
+      $cart->customer_id = (int) $cart->customer_id;
+    }
 
     // Check if there's a customer email and remove it if it's empty.
     if (isset($cart->customer_email) && empty($cart->customer_email)) {
@@ -206,10 +209,6 @@ class APIWrapper implements APIWrapperInterface {
 
     // Cart extensions must always be objects and not arrays.
     // @TODO: Move this normalization to \Drupal\acq_cart\Cart::__construct and \Drupal\acq_cart\Cart::updateCartObject.
-    // Removing shipping address if carrier not set.
-    if (empty($cart->carrier) || (empty($cart->carrier['carrier_code']) && empty($cart->carrier->carrier_code))) {
-      unset($cart->carrier, $cart->shipping);
-    }
     if (isset($cart->carrier)) {
       if (isset($cart->carrier->extension)) {
         if (!is_object($cart->carrier->extension)) {
@@ -221,6 +220,10 @@ class APIWrapper implements APIWrapperInterface {
           $cart->carrier['extension'] = (object) $cart->carrier['extension'];
         }
       }
+    }
+    // Remove shipping address if carrier not set.
+    else {
+      unset($cart->shipping);
     }
 
     // Cart constructor sets cart to any object passed in,

@@ -76,6 +76,16 @@ class Cart implements CartInterface {
       $cart->billing = $current_billing;
     }
 
+    if (isset($cart->carrier)) {
+      // We use it as array internally everywhere, even set as array.
+      $cart->carrier = (array) $cart->carrier;
+
+      // If carrier is with empty structure, we remove it.
+      if (empty($cart->carrier['carrier_code'])) {
+        unset($cart->carrier);
+      }
+    }
+
     $this->cart = $cart;
     $this->updateCartItemsCount();
   }
@@ -418,12 +428,7 @@ class Cart implements CartInterface {
   public function getShippingMethod() {
     // If cart is not updated yet and we are reading from session.
     if (isset($this->cart, $this->cart->carrier)) {
-      $method = (array) $this->cart->carrier;
-
-      // V2 onwards, we will have empty structure available all the time.
-      if (!empty($method['carrier_code']) && !empty($method['method_code'])) {
-        return $method;
-      }
+      return $this->cart->carrier;
     }
 
     if (isset($this->cart, $this->cart->extension, $this->cart->extension['shipping_method'])) {
@@ -439,12 +444,8 @@ class Cart implements CartInterface {
   public function getShippingMethodAsString() {
     // If cart is not updated yet and we are reading from session.
     if (isset($this->cart, $this->cart->carrier)) {
-      $method = (array) $this->cart->carrier;
-
-      // V2 onwards, we will have empty structure available all the time.
-      if (!empty($method['carrier_code']) && !empty($method['method_code'])) {
-        return implode(',', [$method['carrier_code'], $method['method_code']]);
-      }
+      $method = $this->cart->carrier;
+      return implode(',', [$method['carrier_code'], $method['method_code']]);
     }
 
     if (isset($this->cart, $this->cart->extension, $this->cart->extension['shipping_method'])) {
