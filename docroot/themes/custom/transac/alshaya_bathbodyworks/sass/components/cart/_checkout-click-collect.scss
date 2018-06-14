@@ -2,9 +2,8 @@
 #edit-member-delivery-collect {
   #store-finder-wrapper {
     .label-store-location {
-      font-size: 0.875rem;
       font-weight: normal;
-      text-transform: capitalize;
+      text-transform: none;
     }
 
     #click-and-collect-list-view {
@@ -94,6 +93,7 @@
           font-family: $alshaya-thin;
           text-transform: uppercase;
           font-size: 0.875rem;
+          padding-top: 0.3125rem;
         }
       }
 
@@ -110,7 +110,7 @@
             color: $checkout_cc_map_hours_icon;
             font-size: 2rem;
             position: absolute;
-            top: -0.375rem;
+            top: -0.1875rem;
             #{$left}: -0.1875rem;
           }
         }
@@ -225,11 +225,50 @@
     #store-finder-wrapper {
       .current-location,
       .cc-near-me {
+        height: 2.5rem;
+        text-transform: uppercase;
+
+        @include breakpoint($tablet) {
+          padding-top: 0.6875rem;
+        }
+
         @include icon(mylocation, before);
 
         &::before {
           background: none;
           font-size: 1.75rem;
+          line-height: 0.8;
+        }
+
+        @include breakpoint($only-tablet) {
+          width: 3rem;
+
+          &::before {
+            #{$left}: 0.625rem;
+          }
+        }
+      }
+
+      .stores-list-view,
+      .stores-map-view {
+        height: 2.5rem;
+        vertical-align: middle;
+        line-height: 1.6;
+        padding: 0.625rem;
+        text-transform: uppercase;
+
+        &::before {
+          font-size: 1.875rem;
+          line-height: 0.6;
+          vertical-align: top;
+
+          @include breakpoint($only-tablet) {
+            #{$left}: 1.0625rem;
+          }
+        }
+
+        &.active {
+          border: 2px solid $checkout_cc_list_map_link_default;
         }
       }
     }
