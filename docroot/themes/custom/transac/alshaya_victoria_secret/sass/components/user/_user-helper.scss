@@ -192,3 +192,15 @@
     }
   }
 }
+
+.c-user-password h1,
+.c-user-register h1,
+.c-user-login h1 {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+
+  @include breakpoint($tablet) {
+    font-size: 1.5rem;
+    margin-top: 0;
+  }
+}
