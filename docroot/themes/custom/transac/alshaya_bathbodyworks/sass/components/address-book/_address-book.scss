@@ -1,5 +1,10 @@
 .user__address--column {
-  max-width: 20rem;
+  font-size: 0.875rem;
+
+  @include breakpoint($tablet) {
+    max-width: 20rem;
+  }
+
   width: 100%;
 
   @include breakpoint($only-mobile) {
@@ -23,6 +28,11 @@
 .c-address-book {
   .block-system > a {
     text-transform: uppercase;
+    margin-bottom: 1rem;
+
+    @include breakpoint($only-tablet) {
+      top: -1.625rem;
+    }
   }
 }
 
@@ -96,10 +106,20 @@
     }
   }
 
+  .address--primary {
+    font-weight: normal;
+    letter-spacing: normal;
+  }
+
   &:hover,
   &.default {
     .address--data {
       background-color: $address_list_background;
+    }
+
+    .address--primary {
+      font-weight: normal;
+      color: $address_button_text;
     }
   }
 }
@@ -175,6 +195,8 @@
 
         @include breakpoint($tablet) {
           margin: 0;
+          border: 0.125rem solid transparent;
+          border-right: 0.0625rem solid $address_button_border;
         }
       }
     }

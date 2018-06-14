@@ -1,0 +1,9 @@
+.user__order--detail {
+  .price-currency {
+    margin-#{$right}: 0.5625rem;
+
+    @include breakpoint($only-tablet) {
+      margin-#{$right}: 0.5625rem;
+    }
+  }
+}
