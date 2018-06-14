@@ -10,23 +10,16 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
- * Implements hook_theme_registry_alter().
- */
-function alshaya_bbw_transac_theme_registry_alter(&$theme_registry) {
-  $theme_registry['sku_teaser']['path'] = drupal_get_path('module', 'alshaya_bbw_transac') . '/templates';
-  $theme_registry['sku_teaser']['variables']['form'] = NULL;
-}
-
-/**
  * Implements hook_acq_sku_gallery_view_alter().
  */
 function alshaya_bbw_transac_acq_sku_gallery_view_alter(&$elements, $skus) {
   foreach ($elements as $delta => $element) {
     $sku = $skus[$delta];
-    if ($form = $sku->get('attr_form')->getValue()) {
-      $elements[$delta]['#form'] = $form[0]['value'];
+    $form = $sku->get('attr_form')->getString();
+    if ($form) {
+      $form = '<span class="content--form">' . $form . '</span>';
     }
-    $elements[$delta]['#product_label'] = _alshaya_bbw_transac_get_product_title($sku);
+    $elements[$delta]['#product_label'] = ['#markup' => _alshaya_bbw_transac_get_product_title($sku) . $form];
   }
 }
 
@@ -94,11 +87,16 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
  * Implements hook_preprocess_node().
  */
 function alshaya_bbw_transac_preprocess_node(&$variables) {
+  // Combine attr_form value into title label for H1, H2 SEO.
   if ($variables['node']->bundle() == 'acq_product') {
     $sku = $variables['node']->get('field_skus')->first()->getString();
     $sku_entity = SKU::loadFromSku($sku);
     if ($sku_entity instanceof SKU) {
-      $variables['label'] = _alshaya_bbw_transac_get_product_title($sku_entity);
+      $form = $sku_entity->get('attr_form')->getString();
+      if ($form) {
+        $form = '<span class="content--form">' . $form . '</span>';
+      }
+      $variables['label']['#markup'] = _alshaya_bbw_transac_get_product_title($sku_entity) . $form;
     }
   }
 }
