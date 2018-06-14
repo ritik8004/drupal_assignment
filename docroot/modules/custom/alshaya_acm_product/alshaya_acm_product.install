@@ -6,7 +6,6 @@
  */
 
 use Drupal\acq_sku\ProductOptionsManager;
-use Symfony\Component\Yaml\Yaml;
 use Drupal\node\Entity\Node;
 
 /**
@@ -38,8 +37,7 @@ function alshaya_acm_product_post_update_8017(&$sandbox) {
  */
 function alshaya_acm_product_update_8017() {
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
-  $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 
   // Since we know we will have both alshaya_product and alshaya_search enabled
   // for all transact sites, we do it here - one common place.
@@ -217,14 +215,10 @@ function alshaya_acm_product_update_8006() {
  * Revert product_slider view to use nid instead of field_skus.
  */
 function alshaya_acm_product_update_8005() {
-  // Reset sku_base_fields config from the YAML file.
-  $config_path = drupal_get_path('module', 'alshaya_acm_product') . '/config/install/alshaya_acm_product.sku_base_fields.yml';
-  $data = Yaml::parse($config_path);
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields')->setData($data)->save(TRUE);
+  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
 
   // Add base fields from the updated sku_base_fields config.
-  $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 
   $reverter = \Drupal::service('config_update.config_update');
   $reverter->revert('view', 'product_slider');
@@ -295,10 +289,6 @@ function alshaya_acm_product_update_8001() {
  * Implements hook_install().
  */
 function alshaya_acm_product_install() {
-  // Add fields to store the values from attributes as fields.
-  $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
-
   // Make meta tags visible in form of acq_product.
   $product_config_factory = Drupal::configFactory()->getEditable('core.entity_form_display.node.acq_product.default');
   $content = $product_config_factory->get('content');

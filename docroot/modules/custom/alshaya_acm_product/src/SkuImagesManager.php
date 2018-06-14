@@ -61,7 +61,7 @@ class SkuImagesManager {
     if ($check_parent && empty($media) && empty($main)) {
       /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
       $plugin = $sku->getPluginInstance();
-      $parent = $plugin->getParentSku();
+      $parent = $plugin->getParentSku($sku);
 
       // Check once if there is parent SKU available, use media files of parent.
       if ($parent instanceof SKUInterface) {

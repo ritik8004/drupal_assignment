@@ -1,32 +1,22 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - search_api.index.product
-    - views.view.alshaya_product_list
+  config: {  }
   module:
-    - alshaya_search
-    - search_api
-third_party_settings:
-  alshaya_search:
-    display_textbox: 0
-    display_textbox_item_count: ''
-id: promotion_collection1
-name: 'Promotion Product Type'
-url_alias: promotion_collection1
+    - alshaya_search_api
+id: size
+name: Size
+url_alias: size
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: attr_collection_1
-facet_source_id: 'search_api:views_block__alshaya_product_list__block_2'
+field_identifier: attr_size
+facet_source_id: 'search_api:views_page__search__page'
 widget:
   type: checkbox
   config:
     show_numbers: true
-    soft_limit: 0
-    soft_limit_settings:
-      show_less_label: 'Show less'
-      show_more_label: 'Show more'
+    soft_limit: 5
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false

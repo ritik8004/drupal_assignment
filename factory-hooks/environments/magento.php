@@ -187,11 +187,11 @@ function alshaya_get_magento_host_data() {
     ],
     // Victoria Secret.
     'vs_qa' => [
-      'url' => 'https://qa-vs-mcf5nmy-kpwgmbven7d7y.eu-3.magentosite.cloud',
+      'url' => 'https://integration-5ojmyuq-kpwgmbven7d7y.eu-3.magentosite.cloud',
       'kw' => [
         'store_id' => [
           'en' => 1,
-          'ar' => 6,
+          'ar' => 2,
         ],
       ],
       'sa' => [
@@ -207,7 +207,7 @@ function alshaya_get_magento_host_data() {
       'ae' => [
         'store_id' => [
           'en' => 5,
-          'ar' => 2,
+          'ar' => 6,
         ],
         'magento_lang_prefix' => [
           'en' => 'are_en',
