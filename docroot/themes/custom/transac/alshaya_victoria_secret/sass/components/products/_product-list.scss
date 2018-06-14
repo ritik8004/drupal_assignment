@@ -46,13 +46,22 @@
     }
 
     .filter--mobile {
-      .c-facet__blocks__wrapper--mobile .c-facet__label {
-        border-#{$right}: 0;
-        color: $plp_facet_filter_label;
+      .c-facet__blocks__wrapper--mobile {
+        .c-facet__label {
+          border-#{$right}: 0;
+          color: $plp_facet_filter_label;
 
-        &::after {
-          border: 1px solid $plp_facet_label_border_mobile;
-          border-#{$left}: 0;
+          &::after {
+            border: 1px solid $plp_facet_label_border_mobile;
+            border-#{$left}: 0;
+          }
+
+          &.is-active {
+            &::after {
+              #{$right}: -2.125rem;
+              border: none;
+            }
+          }
         }
       }
 
@@ -81,8 +90,14 @@
       }
     }
 
-    .view-header.search-count {
-      padding-bottom: 1rem;
+    .view-header {
+      &.search-count {
+        padding-bottom: 1rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 1.5625rem;
+        }
+      }
     }
 
     .block-facets-summary-blockfilter-bar-promotions,
@@ -140,7 +155,9 @@
   .block-facet-blockplp-category-facet {
     .facet-item {
       input[type=checkbox] ~ label::before {
-        top: 0;
+        @include breakpoint($only-mobile) {
+          top: 0;
+        }
       }
     }
   }
@@ -189,6 +206,14 @@
           align-items: start;
         }
       }
+    }
+  }
+}
+
+.is-filter {
+  &.view-filters {
+    label {
+      font-size: 0.875rem;
     }
   }
 }
