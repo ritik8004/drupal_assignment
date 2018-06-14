@@ -25,12 +25,12 @@
               font-family: $alshaya-thin;
               text-transform: uppercase;
               font-size: 0.875rem;
+              padding-top: 0.3125rem;
             }
 
             .select-store,
             .store-on-map {
               @include breakpoint($tablet) {
-                width: 13.125rem;
                 height: 2.5rem;
               }
             }
@@ -39,7 +39,11 @@
             .view-on-map {
               border: 1px solid $checkout_cc_list_map_link_border;
               background-color: $checkout_cc_list_map_link_bg;
-              padding: 0.3125rem 0;
+              padding: 0.5rem 0 0.3125rem;
+
+              html[lang=ar] & {
+                padding: 0.3125rem 0;
+              }
             }
           }
 
@@ -238,6 +242,12 @@
           background: none;
           font-size: 1.75rem;
           line-height: 0.8;
+
+          @include breakpoint($desktop) {
+            html[lang=ar] & {
+              top: 0.5rem;
+            }
+          }
         }
 
         @include breakpoint($only-tablet) {
