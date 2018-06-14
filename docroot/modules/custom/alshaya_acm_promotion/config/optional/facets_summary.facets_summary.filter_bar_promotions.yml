@@ -9,39 +9,9 @@ dependencies:
 id: filter_bar_promotions
 name: 'Filter bar Promotions'
 facets:
-  promotion_brand_facet:
-    checked: true
-    label: Brand
-    separator: ', '
-    show_count: true
-    weight: 0
-  promotion_color_:
-    checked: true
-    label: Color
-    separator: ', '
-    show_count: true
-    weight: 0
   promotion_price_facet:
     checked: true
     label: Price
-    separator: ', '
-    show_count: true
-    weight: 0
-  promotion_size_facet:
-    checked: true
-    label: Size
-    separator: ', '
-    show_count: true
-    weight: 0
-  promotion_collection_facet:
-    checked: true
-    label: 'Promotion collection facet'
-    separator: ', '
-    show_count: true
-    weight: 0
-  promotion_color_facet:
-    checked: true
-    label: 'Promotion color facet'
     separator: ', '
     show_count: true
     weight: 0

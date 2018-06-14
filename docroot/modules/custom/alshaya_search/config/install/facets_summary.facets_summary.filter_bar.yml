@@ -9,42 +9,18 @@ dependencies:
 id: filter_bar
 name: 'Filter Bar'
 facets:
-  color:
-    checked: true
-    label: Color
-    separator: ', '
-    show_count: true
-    weight: 0
   final_price:
     checked: true
     label: Price
     separator: ', '
     show_count: true
     weight: 0
-  brand:
-    checked: true
-    label: Brand
-    separator: ', '
-    show_count: true
-    weight: 0
-  collection:
-    checked: true
-    label: Collection
-    separator: ', '
-    show_count: true
-    weight: 0
-  size:
-    checked: true
-    label: Size
-    separator: ', '
-    show_count: true
-    weight: 0
   category:
-      checked: true
-      label: Category
-      separator: ', '
-      show_count: true
-      weight: 0
+    checked: true
+    label: Category
+    separator: ', '
+    show_count: true
+    weight: 0
 facet_source_id: 'search_api:views_page__search__page'
 processor_configs:
   alshaya_strip_l2_params:

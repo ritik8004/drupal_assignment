@@ -77,8 +77,7 @@ function alshaya_bbw_transac_update_8003() {
   // Add new Brand field from the updated sku_base_fields config.
   alshaya_config_install_configs(['alshaya_bbw_transac.sku_base_fields'], 'alshaya_bbw_transac');
 
-  $fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 
   // Update search indexes to index new Brand field.
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
@@ -121,18 +120,13 @@ function alshaya_bbw_transac_update_8001() {
   alshaya_config_install_configs(['alshaya_bbw_transac.sku_base_fields'], 'alshaya_bbw_transac', 'install');
 
   // Add base fields from the updated sku_base_fields config.
-  $fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 }
 
 /**
  * Implements hook_install().
  */
 function alshaya_bbw_transac_install() {
-  // Add fields to store the values from attributes as fields.
-  $fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
-
   // Enable sort options.
   $sort_options = [
     'created' => 'created',

@@ -127,7 +127,7 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
   if ($sku_entity) {
-    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+    $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
     $configurableFields = array_filter($fields, function ($field) {
       return (bool) $field['configurable'];
     });
@@ -773,6 +773,7 @@ function alshaya_acm_product_generate_video_embed_url($url, $provider) {
   if ($video_id) {
     $embed_url = ($provider == 'youtube') ? 'https://www.youtube.com/embed/' : 'https://player.vimeo.com/video/';
     $embed_url .= explode('&', $video_id)[0];
+    $embed_url .= ($provider == 'youtube') ? '?enablejsapi=1' : '';
   }
   return $embed_url;
 }

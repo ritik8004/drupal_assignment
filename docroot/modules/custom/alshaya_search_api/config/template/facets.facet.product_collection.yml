@@ -2,31 +2,28 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.product
-    - views.view.alshaya_product_list
+    - search_api.index.acquia_search_index
+    - views.view.search
   module:
     - alshaya_search
     - search_api
 third_party_settings:
   alshaya_search:
-    display_textbox: 0
-    display_textbox_item_count: ''
-id: plp_concept
-name: 'PLP Concept'
-url_alias: plp_concept
+    display_textbox: 1
+    display_textbox_item_count: '1'
+id: product_collection
+name: Collection
+url_alias: product_collection
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: attr_concept
-facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
+field_identifier: attr_product_collection
+facet_source_id: 'search_api:views_page__search__page'
 widget:
   type: checkbox
   config:
     show_numbers: true
     soft_limit: 0
-    soft_limit_settings:
-      show_less_label: 'Show less'
-      show_more_label: 'Show more'
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false

@@ -8,6 +8,11 @@
   td div,
   .dark {
     line-height: 1.29;
+    font-weight: normal;
+  }
+
+  .light {
+    font-size: 0.75rem;
   }
 
   .order-details-row .mobile-only.delivery--method {
