@@ -8,7 +8,7 @@ id: paragraph.main_menu_highlight.field_highlight_subtitle
 field_name: field_highlight_subtitle
 entity_type: paragraph
 bundle: main_menu_highlight
-label: 'Highlight subtitle'
+label: 'Subtitle'
 description: ''
 required: false
 translatable: true
