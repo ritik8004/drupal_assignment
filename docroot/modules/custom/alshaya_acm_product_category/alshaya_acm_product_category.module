@@ -103,7 +103,7 @@ function alshaya_acm_product_category_form_alter(&$form, FormStateInterface $for
       if ($term = Term::load($form['tid']['#value'])) {
         // If term is greater that L1 level, then not show highlight field.
         if ($term->get('depth_level')->getString() > 1) {
-          $form['field_main_menu_highlight']['#access'] = FALSE;
+          unset($form['field_main_menu_highlight']);
         }
       }
     }
