@@ -908,7 +908,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
               ],
               '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
             ];
-            // $link = \Drupal::service('renderer')->render($link);
           }
 
           // Theme content as accordion.
