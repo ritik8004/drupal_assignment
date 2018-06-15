@@ -296,8 +296,14 @@ class CartSessionStorage implements CartStorageInterface {
     $cart->convertToCustomerCart($data);
     $this->session->set(self::STORAGE_KEY, $cart);
 
-    // Then we notify the commerce backend about the association.
-    $this->apiWrapper->associateCart($cart->id(), $cart->customerId());
+    try {
+      // Then we notify the commerce backend about the association.
+      $this->apiWrapper->associateCart($cart->id(), $cart->customerId());
+    }
+    catch (\Exception $e) {
+      $this->restoreCart($cart->id());
+      throw $e;
+    }
   }
 
   /**
