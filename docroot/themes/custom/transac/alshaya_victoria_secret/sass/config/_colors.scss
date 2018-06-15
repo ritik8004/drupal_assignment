@@ -157,7 +157,7 @@ $primary_full_page_overlay_bg: rgba(255, 255, 255, 0.7);
 // Dropdown.
 $primary_dropdown_bg: $white-five;
 $primary_dropdown_arrow_bg: transparent;
-$primary_dropdown_text: $nero;
+$primary_dropdown_text: $black;
 $primary_dropdown_border: $gainsboro;
 $primary_dropdown_option_hover: $white-four;
 $primary_dropdown_option_border: $white;
@@ -213,8 +213,9 @@ $tertiary_counter_border: $brilliant-rose;
 $page_title: $black;
 $block_title: $black;
 $title: $black;
-$sub_title: $nero;
+$sub_title: $black;
 $label_black: $black;
+$label_dark: $black;
 $user_sidebar_block_title: $nero;
 
 // Messages and Errors
@@ -693,6 +694,7 @@ $checkout_login_guest_email_text_mobile: $nero;
 $multistep_checkout_text: $nero;
 $checkout_request_password_link: $nero;
 $checkout_login_form_action: $black;
+$checkout_login_btn_bg: $brilliant-rose;
 
 //  Checkout Confirmation.
 $checkout_confirmation_delivery_details: $white-smoke-light;
@@ -813,14 +815,14 @@ $address_book_delete_close_bg: $nero;
 $user_account_wrapper_light: $black;
 $password_tooltip_list: $red-error;
 $user_nav_link: $marine-blue-two;
-$user_nav_mobile_title2: $black;
-$user_nav_mobile_link: $grey-ash;
+$user_nav_mobile_title2: $ash-triplet;
+$user_nav_mobile_link: $nero;
 $user_order_list_text: $black;
 $user_order_list_border: $whisper-dark;
 $user_order_list_bg: $white-five;
 $user_order_list_hover_bg: $white-four;
 $user_order_list_hover_link_bg: $white-smoke;
-$user_order_list_light: $greyish;
+$user_order_list_light: $ash-triplet;
 $user_order_list_dark: $black;
 $user_order_help_text: $brilliant-rose;
 $user_order_help_text_links: $nero;
@@ -850,8 +852,8 @@ $user_block_link: $nero;
 
 // joinclubblock
 $joinclubblock_title: $dark-sand;
-$joinclubblock_text: $grey-ash;
-$joinclubblock_link: $black;
+$joinclubblock_text: $black;
+$joinclubblock_link: $nero;
 
 // Privilege Card
 $privilege_card_title: $dark-sand;
@@ -956,4 +958,4 @@ $order_print_barcode: $nero;
 $category_facet_active_icon: $nero;
 
 // Block Alshaya ACM customer .block-alshaya-acm-customer
-$block_acm_customer_txt: $nero;
+$block_acm_customer_txt: $black;

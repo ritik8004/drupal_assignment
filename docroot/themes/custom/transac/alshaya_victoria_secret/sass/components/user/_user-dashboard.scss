@@ -69,6 +69,12 @@
         }
       }
     }
+
+    .order__details--summary {
+      .light {
+        font-size: 0.75rem;
+      }
+    }
   }
 }
 
@@ -84,5 +90,20 @@
 .account--dashboard {
   .subtitle {
     text-transform: capitalize;
+  }
+
+  .joinclub {
+    @include breakpoint($desktop) {
+      width: 54%;
+    }
+
+    #block-jointheclub {
+      h3,
+      p,
+      a {
+        font-size: 0.875rem;
+        text-transform: none;
+      }
+    }
   }
 }
