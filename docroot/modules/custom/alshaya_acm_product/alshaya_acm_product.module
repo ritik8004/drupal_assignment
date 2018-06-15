@@ -33,6 +33,18 @@ use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
+  // To call the alshaya_acm_product_build at the end for final changes.
+  if ($hook == 'alshaya_acm_product_build') {
+    $group = $implementations['alshaya_acm_product_build'];
+    unset($implementations['alshaya_acm_product_build']);
+    $implementations['alshaya_acm_product_build'] = $group;
+  }
+}
+
+/**
  * Alter the items that are indexed.
  *
  * @param \Drupal\search_api\IndexInterface $index
@@ -580,24 +592,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
         }
 
-        // Invoke the alter hook to allow all modules to override the images
-        // being rendered for teaser.
-        // @TODO: Move this to hook_alshaya_acm_product_build_alter.
-        \Drupal::moduleHandler()->alter('acq_sku_teaser_media', $build, $sku_entity);
-
-        // If no main image, then use default main image.
-        if (empty($build['image'])) {
-          if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
-            $sku_media = [
-              'file' => $default_image,
-              'label' => $sku_entity->label(),
-            ];
-            $default_sku_image = $skuManager->getSkuImage($sku_media, '192x168');
-            $default_sku_image['#attributes']['class'][] = 'product-default-image';
-            $build['image'] = $default_sku_image;
-          }
-        }
-
         $promotion_types = ['cart'];
 
         // Get promotions for the product.
@@ -704,6 +698,31 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         \Drupal::moduleHandler()->alter('alshaya_acm_product_build', $build, $sku_entity, $context);
       }
     }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_acm_product_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  switch ($context) {
+    case 'teaser':
+      // If no main image, then use default main image.
+      if (empty($build['image'])) {
+        if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+          /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+          $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+          $sku_media = [
+            'file' => $default_image,
+            'label' => $sku->label(),
+          ];
+          $default_sku_image = $skuManager->getSkuImage($sku_media, '192x168');
+          $default_sku_image['#attributes']['class'][] = 'product-default-image';
+          $build['image'] = $default_sku_image;
+        }
+      }
+      break;
   }
 }
 
