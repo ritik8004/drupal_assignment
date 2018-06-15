@@ -444,9 +444,11 @@ function alshaya_white_label_theme() {
       'path' => drupal_get_path('theme', 'alshaya_white_label') . '/templates/form',
     ],
     'alshaya_white_label_accordion' => [
+      'render element' => 'elements',
       'variables' => [
         'title' => NULL,
         'content' => NULL,
+        'view_all' => NULL,
       ],
       'path' => drupal_get_path('theme', 'alshaya_white_label') . '/templates',
     ],
@@ -876,6 +878,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         $category_id = $category->getValue()[0]['target_id'];
 
         $is_accordion = $paragraph->get('field_use_as_accordion')->getValue()[0]['value'];
+        $view_all_text = $paragraph->get('field_view_all_text')->getString();
 
         // By default we don't show any carousel content.
         $variables['content'] = [];
@@ -895,11 +898,24 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
           ];
 
+          $link = [];
+          if ($view_all_text) {
+            $link = [
+              '#title' => $view_all_text,
+              '#type' => 'link',
+              '#attributes' => [
+                'class' => ['category-accordion-view-all'],
+              ],
+              '#url' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]),
+            ];
+          }
+
           // Theme content as accordion.
           $variables['content']['product_category_carousel'] = [
             '#theme' => 'alshaya_white_label_accordion',
             '#title' => $accordion_title ?: NULL,
             '#content' => alshaya_acm_product_category_child_terms($category_id),
+            '#view_all' => $link,
           ];
         }
         else {
@@ -915,7 +931,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
           // If there are results.
           if (!empty($results)) {
             // Prepare argument for the views.
-            $view_all_text = $paragraph->get('field_view_all_text')->getString();
             $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getString();
 
             // Slice number of results that we want for the carousel.

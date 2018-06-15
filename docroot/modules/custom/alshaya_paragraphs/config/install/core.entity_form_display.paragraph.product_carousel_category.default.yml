@@ -17,9 +17,8 @@ third_party_settings:
     group_carousel_settings:
       children:
         - field_category_carousel_limit
-        - field_view_all_text
       parent_name: ''
-      weight: 4
+      weight: 5
       format_type: details
       format_settings:
         id: ''
@@ -72,7 +71,7 @@ content:
     type: boolean_checkbox
     region: content
   field_view_all_text:
-    weight: 6
+    weight: 4
     settings:
       size: 60
       placeholder: ''
@@ -87,7 +86,7 @@ content:
     third_party_settings: {  }
   scheduled_publication:
     type: datetime_default
-    weight: 20
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
