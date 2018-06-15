@@ -1,0 +1,85 @@
+.page-standard.l-container.l-two--sf.checkout {
+  &.c-delivery-checkout {
+    @include breakpoint($tablet) {
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+    }
+  }
+
+  .c-sidebar-second {
+    @include breakpoint($desktop) {
+      width: 22.9%;
+      max-width: 17.6875rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 31.1%;
+    }
+  }
+
+  &.checkout-delivery {
+    #edit-delivery-tabs {
+      @include breakpoint($only-tablet) {
+        margin-top: 0;
+      }
+
+      .tab {
+        @include breakpoint($desktop) {
+          width: 45.6%;
+          padding-bottom: 1.5rem;
+
+          h2 {
+            padding-top: 0.5625rem;
+            font-size: 0.875rem;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          padding-top: 1.6875rem;
+          padding-bottom: 1.5625rem;
+          width: 45.5%;
+
+          h2 {
+            font-size: 0.875rem;
+          }
+
+          &.tab-click-collect.active--tab--head {
+            margin-#{$left}: 2px;
+          }
+        }
+
+        &:not(.active--tab--head) {
+          margin-top: -1px;
+        }
+      }
+
+      .tab-separator {
+        @include breakpoint($tablet) {
+          width: 9.1%;
+        }
+      }
+    }
+  }
+}
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-payment,
+.alias--cart-checkout-confirmation {
+  .block-page-title-block {
+    @include breakpoint($tablet) {
+      padding-top: 0.75rem !important;
+    }
+  }
+
+  ol.checkout-progress {
+    @include breakpoint($desktop) {
+      margin-top: 1.4375rem;
+      padding-#{$left}: 0.75rem;
+      margin-bottom: 0.6875rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 0;
+    }
+  }
+}
