@@ -15,11 +15,7 @@
       });
 
       if ($(window).width() < 1025) {
-        $('.acq-content-product .form-item-configurables-size select').on('change', function () {
-          $(this).closest('.sku-base-form').find('.error').remove();
-        });
-
-        $('.acq-content-product-modal .form-item-configurables-size select').on('change', function () {
+        $('.form-item-configurable-select').on('change', function () {
           $(this).closest('.sku-base-form').find('.error').remove();
         });
       }
@@ -27,12 +23,13 @@
       // JS for converting select list for size to unformatted list on PDP pages.
       function select2OptionConvert() {
         if ($(window).width() > 1024) {
-          $('.acq-content-product .form-item-configurables-size, .acq-content-product-modal .form-item-configurables-size').once('bind-events').each(function () {
-            $('select', $(this)).select2Option();
+          $('.form-item-configurable-select').once('bind-events').each(function () {
+            var that = $(this).parent();
+            $('select', that).select2Option();
 
-            var clickedOption = $('.select2Option li a.picked', $(this));
-            $('.select2Option', $(this)).find('.list-title .selected-text').remove();
-            $('.select2Option', $(this)).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+            var clickedOption = $('.select2Option li a.picked', that);
+            $('.select2Option', that).find('.list-title .selected-text').remove();
+            $('.select2Option', that).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
           });
         }
       }
