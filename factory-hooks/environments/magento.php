@@ -191,13 +191,13 @@ function alshaya_get_magento_host_data() {
       'kw' => [
         'store_id' => [
           'en' => 1,
-          'ar' => 2,
+          'ar' => 6,
         ],
       ],
       'sa' => [
         'store_id' => [
-          'en' => 3,
-          'ar' => 4,
+          'en' => 2,
+          'ar' => 3,
         ],
         'magento_lang_prefix' => [
           'en' => 'sau_en',
@@ -206,8 +206,8 @@ function alshaya_get_magento_host_data() {
       ],
       'ae' => [
         'store_id' => [
-          'en' => 5,
-          'ar' => 6,
+          'en' => 4,
+          'ar' => 5,
         ],
         'magento_lang_prefix' => [
           'en' => 'are_en',

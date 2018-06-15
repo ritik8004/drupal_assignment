@@ -56,10 +56,10 @@ weights:
     STILL_LIFE_FRONT_URL: 4
     DETAIL_IMAGE: 5
   swatch:
-    Lookbook: 1
-    DescriptiveStillLife: 2
-    MODEL_IMAGE: 3
-    STILL_LIFE_FRONT_URL: 4
+    DescriptiveStillLife: 1
+    STILL_LIFE_FRONT_URL: 2
+    Lookbook: 3
+    MODEL_IMAGE: 4
     DETAIL_IMAGE: 5
   cart:
     Lookbook: 1
