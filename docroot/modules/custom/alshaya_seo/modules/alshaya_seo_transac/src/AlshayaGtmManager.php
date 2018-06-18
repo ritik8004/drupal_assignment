@@ -661,7 +661,6 @@ class AlshayaGtmManager {
           // ensure the variable is not in list of disabled vars.
           if ((!in_array('dimension8', $gtm_disabled_vars)) &&
             ($store = $this->storeFinder->getStoreFromCode($store_code))) {
-            // @TODO: Check with Piyuesh on if we can use only one field now.
             $storeAddress = $this->storeFinder->getStoreAddress($store, TRUE);
             $dimension8 = $storeAddress['address_line1'] . ' ' . $storeAddress['administrative_area_display'];
           }
@@ -874,7 +873,6 @@ class AlshayaGtmManager {
       // ensure the variable is not in list of disabled vars.
       if ((!in_array('dimension8', $gtm_disabled_vars)) &&
         ($store = $this->storeFinder->getStoreFromCode($store_code))) {
-        // @TODO: Check with Piyuesh on if we can use only one field now.
         $storeAddress = $this->storeFinder->getStoreAddress($store, TRUE);
         $dimension8 = $storeAddress['address_line1'] . ' ' . $storeAddress['administrative_area_display'];
       }
@@ -1148,7 +1146,6 @@ class AlshayaGtmManager {
 
                 if ($store = $this->storeFinder->getStoreFromCode($cart->getExtension('store_code'))) {
                   $page_dl_attributes['storeLocation'] = $store->label();
-                  // @TODO: Check with Piyuesh on if we can use only one field now.
                   $storeAddress = $this->storeFinder->getStoreAddress($store, TRUE);
                   $page_dl_attributes['storeAddress'] = $storeAddress['address_line1'] . ' ' . $storeAddress['administrative_area_display'];
                 }
@@ -1226,7 +1223,6 @@ class AlshayaGtmManager {
         // ensure the variable is not in list of disabled vars.
         if ($store_code && ($store = $this->storeFinder->getStoreFromCode($store_code))) {
           $page_dl_attributes['storeLocation'] = $store->label();
-          // @TODO: Check with Piyuesh on if we can use only one field now.
           $storeAddress = $this->storeFinder->getStoreAddress($store, TRUE);
           $page_dl_attributes['storeAddress'] = $storeAddress['address_line1'] . ' ' . $storeAddress['administrative_area_display'];
         }
