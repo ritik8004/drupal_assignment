@@ -537,6 +537,7 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
         $form['ajax']['configurables'][$key]['#options_attributes']['']['disabled'] = 'disabled';
         $form['ajax']['configurables'][$key]['#empty_option'] = t('Select @title', ['@title' => $form_item['#title']]);
         $form['ajax']['configurables'][$key]['#attributes']['data-default-title'] = $form_item['#title'];
+        $form['ajax']['configurables'][$key]['#attributes']['class'][] = 'form-item-configurable-select';
       }
     }
   }

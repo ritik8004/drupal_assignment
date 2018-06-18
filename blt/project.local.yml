@@ -47,7 +47,7 @@ sites:
     country: ae
   vskw:
     module: alshaya_vs
-    type: alshaya_non_transac
+    type: alshaya_transac
     country: kw
   vsae:
     module: alshaya_vs

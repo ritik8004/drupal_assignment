@@ -100,8 +100,6 @@ fields:
 
   concept:
     label: 'Concept'
-    cardinality: -1
-    facet: 1
 
   washing_instructions:
     label: 'Washing Instructions'
