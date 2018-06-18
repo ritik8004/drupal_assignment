@@ -6,12 +6,12 @@
           <div class="no-highlight-para">
       {% endif %}
       {% for highlight_paragraph in data.highlight_paragraph %}
-          <div class="highlighted {{ highlight_paragraph.highlight_type }}" gtm-type="gtm-highlights">
-              {% if highlight_paragraph.highlight_type == 'highlight' %}
-                  {% if highlight_paragraph.title is not empty %}
-                      <div class="title">{{ highlight_paragraph.title }}</div>
-                  {% endif %}
+          {% if highlight_paragraph.highlight_type == 'highlight' %}
+              {% if highlight_paragraph.title is not empty %}
+                  <div class="title">{{ highlight_paragraph.title }}</div>
               {% endif %}
+          {% endif %}
+          <div class="highlighted {{ highlight_paragraph.highlight_type }}" gtm-type="gtm-highlights">
               <a href="{{ highlight_paragraph.image_link }}">
                   {{ highlight_paragraph.img }}
                   {% if highlight_paragraph.highlight_type == 'title_subtitle' %}
