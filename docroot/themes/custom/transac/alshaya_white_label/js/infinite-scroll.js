@@ -56,6 +56,11 @@
     // Replace the pager link with the new link and ajaxPageState values.
     $existingPager.replaceWith($newPager);
 
+    // Hide load more link on click as we are displaying ajax loader.
+    $newPager.find('a').on('click', function () {
+      $(this).hide();
+    });
+
     // Run views and VIS behaviors.
     Drupal.attachBehaviors(view.$view[0]);
   };
