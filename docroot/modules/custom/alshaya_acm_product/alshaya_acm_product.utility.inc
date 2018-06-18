@@ -187,6 +187,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity)) {
       // Give preference to child products to alter before checking for image in
       // parent. Alter hook to allow all modules to update the element.
+      // @TODO: Move this to hook_alshaya_acm_product_build_alter.
       \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
       if (!$main_image) {
         return alshaya_acm_product_get_gallery($build, $parent_sku);
@@ -252,6 +253,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   }
 
   // Invoke the alter hook to allow all modules to update the element.
+  // @TODO: Move this to hook_alshaya_acm_product_build_alter.
   \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
 
   // If no main image, use default image.
@@ -368,6 +370,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   elseif ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
     // Fire alter hook for cart image before looking for the image in the
     // parent product.
+    // @TODO: Add in api.php file.
     \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
 
     if (!$image) {
@@ -376,6 +379,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   }
 
   // Alter cart product image found in child sku in case of config products.
+  // @TODO: Add in api.php file.
   \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
 
   // If still image is not available, set default one.
