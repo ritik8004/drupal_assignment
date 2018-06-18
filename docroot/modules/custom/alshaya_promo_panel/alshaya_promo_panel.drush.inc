@@ -5,6 +5,8 @@
  * Provides Drush commands for alshaya_promo_panel.
  */
 
+use Drupal\block\BlockInterface;
+
 /**
  * Implements hook_drush_command().
  */
@@ -36,10 +38,18 @@ function drush_alshaya_promo_panel_set($blocks) {
 
   // Clean input and parse comma-separated input items into array.
   $block_names = explode(',', $blocks);
+  $block_storage = \Drupal::entityTypeManager()->getStorage('block');
   $new_array = [];
-  array_map(function ($block_name) use (&$new_array) {
+  array_map(function ($block_name) use (&$new_array, $block_storage) {
     list($block, $url) = explode(':', $block_name);
-    $new_array[$block] = $url;
+    $blocks_array = $block_storage->loadByProperties(['id' => $block]);
+    $block_obj = reset($blocks_array);
+    if ($block_obj instanceof BlockInterface) {
+      $new_array[$block] = [
+        'mobile_path' => $url,
+        'plugin_id' => $block_obj->getPluginId(),
+      ];
+    }
   }, $block_names);
 
   $config = \Drupal::configFactory()->getEditable('alshaya_promo_panel.settings');
