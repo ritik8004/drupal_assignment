@@ -7,6 +7,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\node\NodeInterface;
 use Drupal\Core\Url;
 
 /**
@@ -111,7 +112,8 @@ function alshaya_hm_gtm_pdp_attributes_alter($sku, &$attributes) {
  *   Return the array of images or empty array.
  */
 function alshaya_hm_get_product_images($product) {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')
+  && $product instanceof NodeInterface) {
     $skuId = $product->get('field_skus')->first()->getString();
     return alshaya_hm_get_sku_images($skuId);
   }
