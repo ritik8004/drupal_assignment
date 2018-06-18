@@ -10,6 +10,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Configurable product option settings.
+ */
+function alshaya_vs_transac_update_8106() {
+  alshaya_config_install_configs(['acq_sku.configurable_form_settings'], 'alshaya_vs_transac', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add more SKU base fields specific to VS.
  */
 function alshaya_vs_transac_update_8105() {

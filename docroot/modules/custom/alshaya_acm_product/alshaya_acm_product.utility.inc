@@ -674,15 +674,22 @@ function alshaya_acm_product_update_config_options(array &$form_parts, FormState
   foreach ($tree_pointer_parent as $key => $value) {
     $attribute = explode(':', $key);
     $attribute_code = $attribute[0];
-    $enabled_options[] = $attribute[1];
+    $enabled_options[$attribute_code][] = $attribute[1];
   }
 
-  $options = $form_parts['configurables'][$attribute_code]['#options'];
+  // Loop over all configurable attributes & disable all options that are not
+  // in the list of enabled options.
+  foreach ($form_parts['configurables'] as $key => $configurable) {
+    if ($key === '#tree') {
+      continue;
+    }
 
-  // Disable options which don't exist for the choosen config.
-  foreach ($options as $key => $value) {
-    if ($key && !in_array($key, $enabled_options)) {
-      unset($form_parts['configurables'][$attribute_code]['#options'][$key]);
+    $options = $configurable['#options'];
+    // Disable options which don't exist for the choosen config.
+    foreach ($options as $option_key => $value) {
+      if (isset($enabled_options[$key]) && $option_key && !in_array($option_key, $enabled_options[$key])) {
+        unset($form_parts['configurables'][$key]['#options'][$option_key]);
+      }
     }
   }
 
