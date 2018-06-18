@@ -5,6 +5,9 @@
  * Alshaya vs transac module file.
  */
 
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\Entity\SKU;
+
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
  */
@@ -36,4 +39,71 @@ function alshaya_vs_transac_preprocess_views_view_fields__stores_finder(&$variab
     }
     $variables['fields'] = $new_fields;
   }
+}
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_vs_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_bbw_transac_fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
+  $fields = array_merge($fields, $alshaya_bbw_transac_fields);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_load() for node entities.
+ */
+function alshaya_vs_transac_node_load($nodes) {
+  /** @var \Drupal\node\NodeInterface $node */
+  foreach ($nodes as $nid => $node) {
+    if ($node->bundle() === 'acq_product') {
+      $sku = SKU::loadFromSku($node->get('field_skus')->first()->getString());
+      // This is done for all Meta title, Page title.
+      $node->setTitle(_alshaya_vs_transac_get_title($sku, 'meta'));
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  $title = _alshaya_vs_transac_get_title($sku, $context);
+
+  if ($context == 'search') {
+    $build['#product_label'] = [
+      '#markup' => $title,
+    ];
+  }
+  else {
+    $build['title'] = [
+      '#markup' => $title,
+    ];
+  }
+}
+
+/**
+ * Get the concatenated title based on context.
+ *
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   SKU Entity.
+ * @param string $context
+ *   Context to get the title for.
+ *
+ * @return string
+ *   Title.
+ */
+function _alshaya_vs_transac_get_title(SKUInterface $sku, $context = 'pdp') {
+  $new = $sku->get('attr_sku_definition')->getString();
+  $collection = $sku->get('attr_collection')->getString();
+  $short_description = $sku->label();
+
+  if ($context === 'pdp') {
+    $title = '<span class="title--sub">' . $collection . '</span>';
+    $title .= '<span class="title--main">' . $new . ' ' . $short_description . '</span>';
+  }
+  else {
+    $title = implode(' ', [$new, $collection, $short_description]);
+  }
+
+  return $title;
 }
