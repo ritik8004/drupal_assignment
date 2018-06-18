@@ -1,30 +1,41 @@
 <div class="highlights">
   {% if data.highlight_paragraph is not empty %}
-      {% if is_promo_block is not empty %}
-          <div class="highlight-para">
-      {% else %}
-          <div class="no-highlight-para">
+    {% for highlight_paragraph in data.highlight_paragraph %}
+
+     {#Only if all items of highlight type.#}
+     {% if is_only_highlight is not empty %}
+     {#This only renders when both the items renders is of highlight type.#}
+     <div class="only-highlight">
+     {% endif %}
+
+      {#If its highlight, then only we render the title.#}
+      {% if highlight_paragraph.highlight_type == 'highlight' %}
+        {% if highlight_paragraph.title is not empty %}
+          <div class="title">{{ highlight_paragraph.title }}</div>
+        {% endif %}
       {% endif %}
-      {% for highlight_paragraph in data.highlight_paragraph %}
-          {% if highlight_paragraph.highlight_type == 'highlight' %}
-              {% if highlight_paragraph.title is not empty %}
-                  <div class="title">{{ highlight_paragraph.title }}</div>
-              {% endif %}
+
+      {#Render highlight image and other data.#}
+      <div class="highlighted {{ highlight_paragraph.highlight_type }}" gtm-type="gtm-highlights">
+        <a href="{{ highlight_paragraph.image_link }}">
+          {{ highlight_paragraph.img }}
+          {% if highlight_paragraph.highlight_type == 'title_subtitle' %}
+            {% if highlight_paragraph.title %}
+              <span class="hightlight__title">{{ highlight_paragraph.title }}</span>
+            {% endif %}
+            {% if highlight_paragraph.description %}
+              <span class="hightlight__description">{{ highlight_paragraph.description }}</span>
+            {% endif %}
           {% endif %}
-          <div class="highlighted {{ highlight_paragraph.highlight_type }}" gtm-type="gtm-highlights">
-              <a href="{{ highlight_paragraph.image_link }}">
-                  {{ highlight_paragraph.img }}
-                  {% if highlight_paragraph.highlight_type == 'title_subtitle' %}
-                      {% if highlight_paragraph.title %}
-                          <span class="hightlight__title">{{ highlight_paragraph.title }}</span>
-                      {% endif %}
-                      {% if highlight_paragraph.description %}
-                          <span class="hightlight__description">{{ highlight_paragraph.description }}</span>
-                      {% endif %}
-                  {% endif %}
-              </a>
-          </div>
-      {% endfor %}
-          </div>
+        </a>
+      </div>
+
+      {#Only if all items of highlight type.#}
+      {% if is_only_highlight is not empty %}
+      {#This only renders when both the items renders is of highlight type.#}
+      </div>
+      {% endif %}
+
+    {% endfor %}
   {% endif %}
 </div>
