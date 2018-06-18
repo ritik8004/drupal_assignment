@@ -1,0 +1,5 @@
+.form-type-radio {
+  input[type=radio]:checked ~ label::before {
+    border-width: 0.25rem;
+  }
+}

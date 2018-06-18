@@ -20,8 +20,6 @@
 /* ------- 1. Brand Colors ------- */
 // Colors from Zeplin pallete for the site.
 // $black: #000;
-// @todo remove variable $black-two, use $black instead, declared below.
-$black-two: #333;
 $brownish-grey: #666;
 $white-three: #ebebeb;
 $cherry: #c60c30;
@@ -94,6 +92,9 @@ $smoke-light: #fafafa;
 $medium-green: #39b54a;
 $tomato: #e6591b;
 
+// Custom colors with no names in VS design.
+$_grey-51-6: rgba(51, 51, 51, 0.06);
+
 /* ------- 2. Primary Colors ------- */
 // Global elements.
 $primary_bg: $white-five;
@@ -140,7 +141,7 @@ $primary_checkbox_empty: $ash-triplet;
 $primary_checkbox_filled: $black;
 $primary_radiobtn_label: $grey-ash;
 $primary_radiobtn_empty: $greyish;
-$primary_radiobtn_filled: $brilliant-rose;
+$primary_radiobtn_filled: $nero;
 
 // Tables.
 $primary_th_bg: $white-smoke-light;
@@ -775,8 +776,14 @@ $checkout_transaction_type_color: $black;
 $checkout_payment_CVV_tooltip_image_bg: $white-smoke;
 
 // Checkout Home delivery.
-$checkout_hd_selected_add_wrapper_border: $white;
-$checkout_hd_selected_add_bg: $white-four;
+$checkout_hd_selected_add_wrapper_border: $gainsboro;
+$checkout_hd_selected_add_bg: $_grey-51-6;
+$checkout_hd_selected_add_change_link: $black;
+$checkout_hd_selected_add_label: $black;
+$checkout_hd_delivery_options_default_bg: $vanilla;
+$checkout_hd_delivery_options_selected_bg: $_grey-51-6;
+$checkout_hd_delivery_options_shipping_desc: $black;
+$checkout_hd_delivery_options_shipping_price: $nero;
 
 // Checkout HD or CC options screen for mobile.
 $checkout_method_choice_tab_separator: $black;

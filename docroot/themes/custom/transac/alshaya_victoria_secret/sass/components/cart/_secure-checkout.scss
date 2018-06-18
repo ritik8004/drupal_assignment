@@ -101,8 +101,16 @@
     color: $checkout_progress_current_text;
   }
 
-  .checkout-progress__step.-current {
+  .checkout-progress__step.-current,
+  .checkout-progress__step.-current::before {
     font-family: $vs-bold;
+    font-weight: normal;
+  }
+
+  .checkout-progress__step {
+    @include breakpoint($only-tablet) {
+      font-size: 0.875rem;
+    }
   }
 }
 
@@ -151,6 +159,7 @@
     }
 
     .order-total {
+      font-weight: normal;
       font-family: $vs-bold;
     }
 
@@ -193,7 +202,9 @@
     }
 
     @include breakpoint($desktop) {
-      width: 24.76%;
+      width: 22.9%;
+      max-width: 17.6875rem;
+      padding-#{$right}: 0;
     }
   }
 }
