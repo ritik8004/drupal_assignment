@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Setting stock mode to 'push'
+ */
+function alshaya_bbw_update_8106() {
+  \Drupal::configFactory()->getEditable('acq_sku.settings')
+    ->set('stock_mode', 'push')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new string translations.
  */
 function alshaya_bbw_update_8105() {
