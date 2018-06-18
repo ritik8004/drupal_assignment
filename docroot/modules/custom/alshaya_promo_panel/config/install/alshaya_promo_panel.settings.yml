@@ -1,2 +1,3 @@
 promo_panel_blocks:
-  alshaya_promo_panel: '/todays-offer'
+  alshaya_promo_panel:
+    mobile_path: '/todays-offer'
