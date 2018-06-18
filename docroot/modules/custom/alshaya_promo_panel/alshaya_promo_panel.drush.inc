@@ -41,12 +41,12 @@ function drush_alshaya_promo_panel_set($blocks) {
   $block_storage = \Drupal::entityTypeManager()->getStorage('block');
   $promo_panel_blocks = [];
   array_map(function ($block_name) use (&$promo_panel_blocks, $block_storage) {
-    list($block_machine_name, $url) = explode(':', $block_name);
+    list($block_machine_name, $mobile_path) = explode(':', $block_name);
     $block_results = $block_storage->loadByProperties(['id' => $block_machine_name]);
     $block = reset($block_results);
     if ($block instanceof BlockInterface) {
       $promo_panel_blocks[$block_machine_name] = [
-        'mobile_path' => $url,
+        'mobile_path' => $mobile_path,
         'plugin_id' => $block->getPluginId(),
       ];
     }
