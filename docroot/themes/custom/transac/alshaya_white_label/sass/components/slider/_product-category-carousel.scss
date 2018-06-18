@@ -160,3 +160,98 @@
     }
   }
 }
+
+// No carousel for touch devices (Mobile & Tablets).
+// Replace carousel with horizontal scroll.
+.paragraph--type--product-carousel-category,
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell,
+.block-basket-horizontal-recommendation {
+  .view-product-slider {
+    @include breakpoint($upto-desktop) {
+      .ajax-progress-throbber .throbber {
+        background-position: center center !important;
+      }
+
+      .owl-carousel {
+        display: block;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        overflow-y: hidden;
+        white-space: nowrap;
+
+        .views-row {
+          display: inline-block;
+          white-space: normal;
+          vertical-align: top;
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .owl-carousel {
+        .views-row {
+          width: 43%;
+          min-height: 16rem;
+          margin-#{$left}: 0;
+          margin-#{$right}: 0.625rem;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: 0;
+
+      .owl-carousel {
+        .views-row {
+          width: 40%;
+          min-height: 16rem;
+          padding-#{$left}: 0;
+          padding-#{$right}: 1rem;
+        }
+      }
+    }
+  }
+}
+
+.block-basket-horizontal-recommendation {
+  .view-product-slider {
+    @include breakpoint($only-mobile) {
+      .owl-carousel {
+        .views-row {
+          min-height: 17rem !important;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .owl-carousel {
+        .views-row {
+          width: 22%;
+          height: 21rem !important;
+        }
+      }
+    }
+  }
+}
+
+.paragraph--type--product-carousel-category {
+  .view-product-slider {
+    @include breakpoint($only-mobile) {
+      .owl-carousel {
+        .views-row {
+          width: 42%;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .owl-carousel {
+        .views-row {
+          width: 19%;
+        }
+      }
+    }
+  }
+}

@@ -45,8 +45,19 @@ set classes = [
 view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
 ]
 %}
+
+{% if selector_class %}
+  {% set classes = classes|merge([selector_class.unique_class]) %}
+  {% set classes = classes|merge([selector_class.override_class]) %}
+{% endif %}
+
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
+    {% if style_tag %}
+      <style>
+        {{ style_tag }}
+      </style>
+    {% endif %}
     {% block content %}
       {% if promo_link == 1 %}
         <a href="{{ button_link }}">

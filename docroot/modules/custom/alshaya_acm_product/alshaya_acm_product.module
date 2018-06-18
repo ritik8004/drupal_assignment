@@ -26,10 +26,23 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\file\Entity\File;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
+  // To call the alshaya_acm_product_build at the end for final changes.
+  if ($hook == 'alshaya_acm_product_build') {
+    $group = $implementations['alshaya_acm_product_build'];
+    unset($implementations['alshaya_acm_product_build']);
+    $implementations['alshaya_acm_product_build'] = $group;
+  }
+}
 
 /**
  * Alter the items that are indexed.
@@ -41,7 +54,7 @@ use Drupal\Core\Template\Attribute;
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
   // Get the configurable fields we want to capture separately as fields.
-  $fields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
+  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   $indexFields = array_filter($fields, function ($field) {
     return !empty($field['index']);
   });
@@ -92,7 +105,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
           $child_sku_found = FALSE;
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
             try {
-              $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode);
+              $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode, FALSE);
             }
             catch (\Exception $e) {
               // Do nothing, child sku might not be available or deleted.
@@ -354,6 +367,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
       elseif ($view_mode == 'full') {
+        $context = 'pdp';
+
         // Get cross sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
           if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_CROSSSELL))) {
@@ -566,6 +581,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
       }
       elseif ($view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
+        $context = 'teaser';
+
         // Get the image.
         $build['image'] = [];
 
@@ -574,10 +591,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         if ($sku_media) {
           $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
         }
-
-        // Invoke the alter hook to allow all modules to override the images
-        // being rendered for teaser.
-        \Drupal::moduleHandler()->alter('acq_sku_teaser_media', $build, $sku_entity);
 
         $promotion_types = ['cart'];
 
@@ -651,6 +664,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
       }
       elseif ($view_mode == 'modal') {
+        $context = 'modal';
+
         alshaya_acm_product_get_gallery($build, $sku_entity);
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
@@ -678,7 +693,36 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
 
       $build['#attached']['library'][] = 'alshaya_acm_product/stock_check';
+
+      if (isset($context)) {
+        \Drupal::moduleHandler()->alter('alshaya_acm_product_build', $build, $sku_entity, $context);
+      }
     }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_acm_product_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  switch ($context) {
+    case 'teaser':
+      // If no main image, then use default main image.
+      if (empty($build['image'])) {
+        if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+          /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+          $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+          $sku_media = [
+            'file' => $default_image,
+            'label' => $sku->label(),
+          ];
+          $default_sku_image = $skuManager->getSkuImage($sku_media, '192x168');
+          $default_sku_image['#attributes']['class'][] = 'product-default-image';
+          $build['image'] = $default_sku_image;
+        }
+      }
+      break;
   }
 }
 
@@ -797,6 +841,9 @@ function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
         'class' => ['js-pager__items', 'pager'],
         'data-drupal-views-infinite-scroll-pager' => $vars['options']['automatically_load_content'] ? 'automatic' : TRUE,
       ]);
+
+      // Expose offset settings to JS.
+      $vars['#attached']['drupalSettings']['views_infinite_scroll'] = ['auto_load_offset' => \Drupal::config('alshaya_acm_product.settings')->get('auto_load_trigger_offset')];
     }
   }
 }
@@ -1441,4 +1488,57 @@ function alshaya_acm_product_preprocess_products_horizontal_slider(&$variables) 
   if (!empty($variables['data'])) {
     $variables['data'] = views_embed_view($variables['views_name'], $variables['views_display_id'], implode(',', $variables['data']));
   }
+}
+
+/**
+ * Get the default image url for the product.
+ *
+ * @return \Drupal\file\Entity\File|null|static
+ *   File object.
+ */
+function _alshaya_acm_product_get_product_default_main_image() {
+  static $product_default_image;
+
+  // If default image available in static cache, then use it.
+  if (!empty($product_default_image)) {
+    return $product_default_image;
+  }
+
+  // If cached version available.
+  if ($cached_default_product_image = \Drupal::cache()->get('product_default_image')) {
+    // Set in static cache.
+    $product_default_image = $cached_default_product_image->data;
+    return $product_default_image;
+  }
+
+  // Get file id from config.
+  $default_image_fid = \Drupal::config('alshaya_acm_product.settings')->get('product_default_image');
+  if (!empty($default_image_fid)) {
+    $file = File::load($default_image_fid);
+    if ($file instanceof File) {
+      // Set the cache.
+      \Drupal::cache()->set('product_default_image', $file);
+      // Set the static cache.
+      $product_default_image = $file;
+      return $product_default_image;
+    }
+  }
+
+  return NULL;
+}
+
+/**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_acm_product_acq_sku_base_field_additions_alter(array &$fields = []) {
+  $alshaya_acm_product_fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+  $fields = array_merge($fields, $alshaya_acm_product_fields);
+}
+
+/**
+ * Implements hook_alshaya_master_post_drupal_install().
+ */
+function alshaya_acm_product_alshaya_master_post_drupal_install() {
+  // Add fields to store the values from attributes as fields.
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 }

@@ -65,3 +65,8 @@ $settings['bootstrap_container_definition'] = [
 
 // Use pcb_memcache for stock.
 $settings['cache']['bins']['stock'] = 'cache.backend.permanent_memcache';
+
+// Fix for PHP 7.1, see https://backlog.acquia.com/browse/PF-1118.
+$settings['memcache']['options'] = [
+  Memcached::OPT_COMPRESSION => TRUE,
+];

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -115,6 +116,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    * @throws \InvalidArgumentException
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
+    $skus = [];
     $stock_mode = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
 
     $promotion_page_nid = NULL;
@@ -236,8 +238,34 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       }
     }
 
-    // Invoke the alter hook to allow all modules to update the element.
-    \Drupal::moduleHandler()->alter('acq_sku_gallery_view', $elements, $skus);
+    $context = 'search';
+
+    foreach ($elements as $delta => &$element) {
+      $sku = $skus[$delta];
+
+      if ($sku instanceof SKUInterface) {
+        // Invoke the alter hook to allow all modules to update the element.
+        \Drupal::moduleHandler()->alter(
+          'alshaya_acm_product_build', $element, $sku, $context
+        );
+      }
+    }
+
+    foreach ($elements as $delta => $element) {
+      // If main image is empty.
+      if (empty($element['#gallery']['#mainImage'])) {
+        if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+          $main_image = $this->skuManager->getSkuImage(['file' => $default_image], '291x288');
+          $elements[$delta]['#gallery']['#mainImage'] = $main_image;
+          $elements[$delta]['#gallery']['#class'] = 'product-default-image';
+
+          // If no thumbnail, then use main image for thumbnail.
+          if (isset($element['#gallery']['#thumbnails']) && empty($element['#gallery']['#thumbnails'])) {
+            $elements[$delta]['#gallery']['#thumbnails'][] = $this->skuManager->getSkuImage(['file' => $default_image], '59x60', '291x288');
+          }
+        }
+      }
+    }
 
     return $elements;
   }

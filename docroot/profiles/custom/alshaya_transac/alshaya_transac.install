@@ -12,6 +12,15 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_search_api module.
+ */
+function alshaya_transac_update_8112() {
+  \Drupal::service('module_installer')->install(['alshaya_search_api']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_promo_panel module.
  */
 function alshaya_transac_update_8111() {
@@ -242,6 +251,7 @@ function alshaya_transac_install() {
     'alshaya_permissions',
     'alshaya_product',
     'alshaya_promo_panel',
+    'alshaya_search',
     'alshaya_seo_transac',
     'alshaya_stores_finder',
     'alshaya_stores_finder_transac',

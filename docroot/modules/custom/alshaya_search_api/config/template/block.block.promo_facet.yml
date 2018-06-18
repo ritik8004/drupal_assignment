@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config: {  }
+  module:
+    - facets
+    - system
+  theme:
+    - alshaya_white_label
+id: brand
+theme: alshaya_white_label
+region: sidebar_first
+weight: -20
+provider: null
+plugin: 'facet_block:field'
+settings:
+  id: 'facet_block:field'
+  label: Label
+  provider: facets
+  label_display: visible
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      acq_promotion: acq_promotion
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

@@ -2,7 +2,6 @@
  * @file
  * Override infinite scroll library.
  */
-
 (function ($, Drupal, debounce) {
   'use strict';
 
@@ -10,7 +9,7 @@
   var $window = $(window);
 
   // The threshold for how far to the bottom you should reach before reloading.
-  var scrollThreshold = drupalSettings.views_infinite_scroll.auto_load_offset;
+  var scrollThreshold = ((typeof drupalSettings.views_infinite_scroll !== 'undefined') && (drupalSettings.views_infinite_scroll.auto_load_offset)) ? drupalSettings.views_infinite_scroll.auto_load_offset : 200;
 
   // The selector for the automatic pager.
   var automaticPagerSelector = '[data-drupal-views-infinite-scroll-pager="automatic"]';
@@ -31,7 +30,10 @@
    *   New content detached from the DOM.
    */
   $.fn.infiniteScrollInsertView = function ($newView) {
-    var currentViewId = this.selector.replace('.js-view-dom-id-', 'views_dom_id:');
+    // Extract the view DOM ID from the view classes.
+    var matches = /(js-view-dom-id-\w+)/.exec(this.attr('class'));
+    var currentViewId = matches[1].replace('js-view-dom-id-', 'views_dom_id:');
+
     // Get the existing ajaxViews object.
     var view = Drupal.views.instances[currentViewId];
     // Remove once so that the exposed form and pager are processed on
@@ -53,6 +55,11 @@
     view.$view.find(contentWrapperSelector).append($newRows);
     // Replace the pager link with the new link and ajaxPageState values.
     $existingPager.replaceWith($newPager);
+
+    // Hide load more link on click as we are displaying ajax loader.
+    $newPager.find('a').on('click', function () {
+      $(this).hide();
+    });
 
     // Run views and VIS behaviors.
     Drupal.attachBehaviors(view.$view[0]);

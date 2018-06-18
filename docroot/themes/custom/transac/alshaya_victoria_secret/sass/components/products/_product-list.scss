@@ -1,4 +1,8 @@
 .c-plp {
+  @include breakpoint($tablet) {
+    padding-top: 1.5rem;
+  }
+
   .c-page-title__description,
   .field--name-field-acq-promotion-description {
     text-transform: none;
@@ -26,6 +30,14 @@
         }
       }
     }
+
+    .alshaya_search_gallery {
+      .alshaya_search_mainimage {
+        @include breakpoint($only-tablet) {
+          height: auto;
+        }
+      }
+    }
   }
 
   .region__content {
@@ -34,13 +46,28 @@
     }
 
     .filter--mobile {
-      .c-facet__blocks__wrapper--mobile .c-facet__label {
-        border-#{$right}: 0;
-        color: $plp_facet_filter_label;
+      .c-facet__blocks__wrapper--mobile {
+        .c-facet__label {
+          border-#{$right}: 0;
+          color: $plp_facet_filter_label;
 
-        &::after {
-          border: 1px solid $plp_facet_label_border_mobile;
-          border-#{$left}: 0;
+          &::after {
+            border: 1px solid $plp_facet_label_border_mobile;
+            border-#{$left}: 0;
+          }
+
+          &.is-active {
+            &::after {
+              #{$right}: -2.125rem;
+              border: none;
+            }
+          }
+        }
+      }
+
+      @include breakpoint($tablet) {
+        html[lang=ar] & {
+          top: -3.4rem;
         }
       }
     }
@@ -63,8 +90,14 @@
       }
     }
 
-    .view-header.search-count {
-      padding-bottom: 1rem;
+    .view-header {
+      &.search-count {
+        padding-bottom: 1rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 1.5625rem;
+        }
+      }
     }
 
     .block-facets-summary-blockfilter-bar-promotions,
@@ -85,6 +118,7 @@
           padding: 0;
           text-transform: uppercase;
           font-family: $vs-bold;
+          border-width: 1px;
 
           a {
             padding: 0.75rem 1.45rem;
@@ -93,9 +127,20 @@
         }
 
         a {
-          span.facet-item__value {
-            text-transform: none;
-            padding: 0.75rem 1rem;
+          span {
+            &.facet-item__value {
+              text-transform: none;
+              padding: 0.75rem 1rem;
+              height: 2.5rem;
+            }
+
+            &.facet-item__status {
+              height: 2.5rem;
+
+              &::after {
+                top: 0.125rem;
+              }
+            }
           }
         }
       }
@@ -104,6 +149,37 @@
 
   .term-description-mobile-only {
     display: none;
+  }
+
+  .block-facet-blockcategory,
+  .block-facet-blockplp-category-facet {
+    .facet-item {
+      input[type=checkbox] ~ label::before {
+        @include breakpoint($only-mobile) {
+          top: 0;
+        }
+      }
+    }
+  }
+
+  .region__content {
+    .filter--mobile {
+      .c-facet__blocks__wrapper--mobile {
+        .c-facet__blocks {
+          li {
+            &.clear-all {
+              @include breakpoint($only-mobile) {
+                height: 2.5rem;
+                padding: 0;
+                text-transform: uppercase;
+                font-family: $vs-bold;
+                border-width: 1px;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -119,5 +195,25 @@
 .alshaya_search_slider {
   .lslide img {
     min-height: 3.7rem;
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .filter--mobile {
+    .c-facet__label {
+      &.active-filter-count {
+        .filter-count {
+          align-items: start;
+        }
+      }
+    }
+  }
+}
+
+.is-filter {
+  &.view-filters {
+    label {
+      font-size: 0.875rem;
+    }
   }
 }

@@ -226,6 +226,8 @@
                 $('.cloudzoom__video_modal').show();
                 $('.cloudzoom__video_modal iframe').remove();
                 appendVideoIframe($('.cloudzoom__video_modal'), href);
+                // Hide zoom buttons when watching video.
+                $(this).parents('.imagegallery__wrapper').siblings('.button__wrapper').hide();
               }
               else {
                 var bigImage = $(this).children('a').attr('href');
@@ -234,6 +236,7 @@
                 $('#full-image-wrapper img').css('transform', 'scale(1)');
                 $('.cloudzoom__video_modal iframe').remove();
                 $('.cloudzoom__video_modal').hide();
+                $(this).parents('.imagegallery__wrapper').siblings('.button__wrapper').show();
                 $('#full-image-wrapper').show();
               }
               // Stop the browser from loading the image in a new tab.
@@ -300,24 +303,24 @@
 
       // Videos inside main PDP slider.
       // For Desktop slider, we add a iframe on click on the image.
-      $('#lightSlider li', context).on('click', function (e) {
+      $('.acq-content-product #lightSlider li', context).on('click', function (e) {
         if ($(this).hasClass('cloudzoom__thumbnails__video')) {
           var URL = $(this).attr('data-iframe');
-          $('.cloudzoom__video_main iframe').remove();
-          appendVideoIframe($('.cloudzoom__video_main'), URL);
-          $('#cloud-zoom-wrap').hide();
+          $('.acq-content-product .cloudzoom__video_main iframe').remove();
+          appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), URL);
+          $('.acq-content-product #cloud-zoom-wrap').hide();
           $(this).siblings('.slick-slide').removeClass('slick-current');
           $(this).addClass('slick-current');
         }
       });
 
       // For Desktop slider, we remove the video iframe if user clicks on image thumbnail..
-      $('#lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
-        var playerIframe = $('.cloudzoom__video_main iframe');
+      $('.acq-content-product #lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
+        var playerIframe = $('.acq-content-product .cloudzoom__video_main iframe');
         // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
         if (playerIframe.length > 0) {
           playerIframe.remove();
-          $('#cloud-zoom-wrap').show();
+          $('.acq-content-product #cloud-zoom-wrap').show();
         }
       });
 
@@ -345,8 +348,8 @@
         // Put the big image in our main container.
         $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', bigImage);
         $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
-        $('.acq-content-product-modal #cloud-zoom-wrap iframe').remove();
-        $('.acq-content-product-modal #cloud-zoom-wrap img').show();
+        $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
+        $('.acq-content-product-modal #cloud-zoom-wrap').show();
       });
 
       $('.acq-content-product-modal #lightSlider li').on('click', function () {
@@ -354,7 +357,7 @@
           var URL = $(this).attr('data-iframe');
           $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
           appendVideoIframe($('.acq-content-product-modal .cloudzoom__video_main'), URL);
-          $('#cloud-zoom-wrap').hide();
+          $('.acq-content-product-modal #cloud-zoom-wrap').hide();
         }
         // Stop the browser from loading the image in a new tab.
         return false;
@@ -392,6 +395,10 @@
         imgTag.show();
       });
 
+      // Stop video playback if slide is changed.
+      pauseVideos($('#product-image-gallery-mobile'), 'mobilegallery__thumbnails__video');
+      pauseVideos($('#product-image-gallery-mob'), 'mob-imagegallery__thumbnails__video');
+
       // Preventing click on image.
       $('.acq-content-product-modal #cloud-zoom-wrap a, .acq-content-product #cloud-zoom-wrap a').on('click', function (event) {
         event.stopPropagation();
@@ -399,6 +406,49 @@
       });
 
       // Helper functions.
+      /**
+       * Use the beforeChange event of slick to pause videos when scrolling from video slides.
+       *
+       * @param {object} slickSelector
+       *   Slick slider selcetor.
+       * @param {object} videoSlideSelector
+       *   Slide slider slide selector for video slides.
+       */
+      function pauseVideos(slickSelector, videoSlideSelector) {
+        slickSelector.on('beforeChange', function (event, slick) {
+          var currentSlide;
+          var slideType;
+          var player;
+          var command;
+
+          // Find the current slide element and decide which player API we need to use.
+          currentSlide = $(slick.$slider).find('.slick-current');
+          if (currentSlide.hasClass(videoSlideSelector)) {
+            // Determine which type of slide this is.
+            slideType = currentSlide.hasClass('vimeo') === true ? 'vimeo' : 'youtube';
+            // Get the iframe inside this slide.
+            player = currentSlide.find('iframe').get(0);
+            if (slideType === 'vimeo') {
+              command = {
+                method: 'pause',
+                value: 'true'
+              };
+            }
+            else {
+              command = {
+                event: 'command',
+                func: 'pauseVideo'
+              };
+            }
+            // Check if the player exists.
+            if (player !== 'undefined') {
+              // Post our command to the iframe.
+              player.contentWindow.postMessage(JSON.stringify(command), '*');
+            }
+          }
+        });
+      }
+
       /**
        * Toggles the product gallery based on screen width [between tab and mobile].
        */

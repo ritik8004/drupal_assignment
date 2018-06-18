@@ -56,51 +56,11 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  attr_color:
-    label: 'SKUs » SKU Reference » Color'
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_color'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
-  attr_color_description:
-    label: Color Description
-    datasource_id: entity:node
-    property_path: field_skus:entity:attr_color_description
-    type: string
-    dependencies:
-      config:
-      - field.storage.node.field_skus
-      module:
-      - acq_sku
-  attr_size:
-    label: 'SKUs » SKU Reference » Size'
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_size'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
   title:
     label: Title
     datasource_id: 'entity:node'
     property_path: title
     type: text
-  brand:
-    label: 'SKUs » SKU Reference » Brand'
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_product_brand'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
   field_skus:
     label: SKUs
     datasource_id: 'entity:node'
@@ -109,16 +69,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_skus
-  attr_product_collection:
-    label: 'SKUs » SKU Reference » Collection'
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_product_collection'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
   nid:
     label: ID
     datasource_id: 'entity:node'
@@ -164,6 +114,66 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_category
+  attr_product_brand:
+    label: 'SKUs » SKU Reference » Brand'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_product_brand'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_color:
+    label: 'SKUs » SKU Reference » Color'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_color'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_color_family:
+    label: Color
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_family
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+  attr_color_description:
+    label: Color Description
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_description
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+  attr_size:
+    label: 'SKUs » SKU Reference » Size'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_size'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_product_collection:
+    label: 'SKUs » SKU Reference » Collection'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_product_collection'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
 datasource_settings:
   'entity:node':
     bundles:

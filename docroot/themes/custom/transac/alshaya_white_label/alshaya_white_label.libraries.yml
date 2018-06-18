@@ -11,6 +11,7 @@ global_styles:
     js/form.js: {}
     js/address_book.js: {}
     js/one_time_language_slider.js: {}
+    js/banner_margin_override.js: {}
     vendor/js/details-polyfill.js: {}
   dependencies:
     - core/modernizr

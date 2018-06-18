@@ -58,7 +58,9 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
     $view->header['result']->options['content'] = $format_plural;
 
     // Add 'back to list' library to search/plp/promo page.
-    $view->element['#attached']['library'][] = 'alshaya_search/back_to_list';
+    if (\Drupal::config('alshaya_acm_product.settings')->get('back_to_list')) {
+      $view->element['#attached']['library'][] = 'alshaya_search/back_to_list';
+    }
   }
 }
 
@@ -149,6 +151,7 @@ function alshaya_search_theme($existing, $type, $theme, $path) {
       'variables' => [
         'mainImage' => [],
         'thumbnails' => [],
+        'class' => NULL,
       ],
       'template' => 'alshaya_search_gallery',
     ],
@@ -517,5 +520,26 @@ function _alshaya_search_resave_indexes() {
 
     // Save index to reflect new category field.
     $index->save();
+  }
+}
+
+/**
+ * Implements hook_acq_sku_base_fields_updated().
+ */
+function alshaya_search_acq_sku_base_fields_updated(array $fields) {
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+
+  $facet_source_id = 'search_api:views_page__search__page';
+  $filter_bar_id = 'facets_summary.facets_summary.filter_bar';
+  $prefix = '';
+
+  /** @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $facet_manager */
+  $facet_manager = \Drupal::service('alshaya_search_api.facets_manager');
+  foreach ($fields as $field_code => $field) {
+    if (empty($field['facet'])) {
+      continue;
+    }
+
+    $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix);
   }
 }

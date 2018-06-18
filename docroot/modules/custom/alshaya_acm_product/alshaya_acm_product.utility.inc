@@ -127,7 +127,7 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
   if ($sku_entity) {
-    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+    $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
     $configurableFields = array_filter($fields, function ($field) {
       return (bool) $field['configurable'];
     });
@@ -187,6 +187,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity)) {
       // Give preference to child products to alter before checking for image in
       // parent. Alter hook to allow all modules to update the element.
+      // @TODO: Move this to hook_alshaya_acm_product_build_alter.
       \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
       if (!$main_image) {
         return alshaya_acm_product_get_gallery($build, $parent_sku);
@@ -252,7 +253,34 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   }
 
   // Invoke the alter hook to allow all modules to update the element.
+  // @TODO: Move this to hook_alshaya_acm_product_build_alter.
   \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
+
+  // If no main image, use default image.
+  if (empty($main_image)) {
+    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+      $image_small = ImageStyle::load($thumbnail_style)->buildUrl($default_image->getFileUri());
+      $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
+      $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
+
+      $main_image = [
+        'zoomurl' => $image_zoom,
+        'mediumurl' => $image_medium,
+        'label' => $sku_entity->label(),
+      ];
+
+      if (empty($thumbnails)) {
+        $thumbnails[] = [
+          'thumburl' => $image_small,
+          'mediumurl' => $image_medium,
+          'zoomurl' => $image_zoom,
+          'fullurl' => file_create_url($default_image->getFileUri()),
+          'label' => $sku_entity->label(),
+          'type' => 'image',
+        ];
+      }
+    }
+  }
 
   if (empty($main_image)) {
     return [];
@@ -342,6 +370,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   elseif ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
     // Fire alter hook for cart image before looking for the image in the
     // parent product.
+    // @TODO: Add in api.php file.
     \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
 
     if (!$image) {
@@ -350,7 +379,25 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   }
 
   // Alter cart product image found in child sku in case of config products.
+  // @TODO: Add in api.php file.
   \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
+
+  // If still image is not available, set default one.
+  if (empty($image)) {
+    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+      $image = [
+        '#theme' => 'image',
+        '#attributes' => [
+          'src' => file_create_url($default_image->getFileUri()),
+          'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
+          'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
+          'class' => [
+            'product-default-image',
+          ],
+        ],
+      ];
+    }
+  }
 
   return $image;
 }
@@ -730,6 +777,7 @@ function alshaya_acm_product_generate_video_embed_url($url, $provider) {
   if ($video_id) {
     $embed_url = ($provider == 'youtube') ? 'https://www.youtube.com/embed/' : 'https://player.vimeo.com/video/';
     $embed_url .= explode('&', $video_id)[0];
+    $embed_url .= ($provider == 'youtube') ? '?enablejsapi=1' : '';
   }
   return $embed_url;
 }

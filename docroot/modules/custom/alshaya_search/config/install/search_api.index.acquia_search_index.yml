@@ -16,96 +16,12 @@ name: 'Acquia Search Solr Index'
 description: ''
 read_only: false
 field_settings:
-  color:
-    label: Color
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_color'
-    type: string
-    boost: 0.5
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
-  attr_color_description:
-    label: Color Description
-    datasource_id: entity:node
-    property_path: field_skus:entity:attr_color_description
-    type: string
-    dependencies:
-      config:
-      - field.storage.node.field_skus
-      module:
-      - acq_sku
   title:
     label: Title
     datasource_id: 'entity:node'
     property_path: title
     type: text
     boost: !!float 3
-  brand:
-    label: Brand
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_product_brand'
-    type: string
-    boost: 0.3
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
-  final_price:
-    label: 'Final Price'
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:final_price'
-    type: decimal
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
-  attr_size:
-    label: Size
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_size'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
-  attr_product_collection:
-    label: Collection
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_product_collection'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
-  attr_at_glance:
-    label: 'At a glance'
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_at_glance'
-    type: text
-    boost: 0.8
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
-  attr_style:
-    label: Style
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:attr_style'
-    type: text
-    boost: 0.2
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
   sku:
     label: SKU
     datasource_id: 'entity:node'
@@ -159,6 +75,100 @@ field_settings:
         - field.storage.node.field_category
       module:
         - taxonomy
+  final_price:
+    label: 'Final Price'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:final_price'
+    type: decimal
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_product_brand:
+    label: Brand
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_product_brand'
+    type: string
+    boost: 0.3
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_color:
+    label: Color
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_color'
+    type: string
+    boost: 0.5
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_color_family:
+    label: Color
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_family
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+  attr_color_description:
+    label: Color Description
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_description
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+  attr_size:
+    label: Size
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_size'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_product_collection:
+    label: Collection
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_product_collection'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_at_glance:
+    label: 'At a glance'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_at_glance'
+    type: text
+    boost: 0.8
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_style:
+    label: Style
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_style'
+    type: text
+    boost: 0.2
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
 datasource_settings:
   'entity:node':
     bundles:
