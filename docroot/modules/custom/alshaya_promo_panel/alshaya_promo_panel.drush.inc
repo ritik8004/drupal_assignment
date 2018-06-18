@@ -39,26 +39,26 @@ function drush_alshaya_promo_panel_set($blocks) {
   // Clean input and parse comma-separated input items into array.
   $block_names = explode(',', $blocks);
   $block_storage = \Drupal::entityTypeManager()->getStorage('block');
-  $new_array = [];
-  array_map(function ($block_name) use (&$new_array, $block_storage) {
-    list($block, $url) = explode(':', $block_name);
-    $blocks_array = $block_storage->loadByProperties(['id' => $block]);
-    $block_obj = reset($blocks_array);
-    if ($block_obj instanceof BlockInterface) {
-      $new_array[$block] = [
+  $promo_panel_blocks = [];
+  array_map(function ($block_name) use (&$promo_panel_blocks, $block_storage) {
+    list($block_machine_name, $url) = explode(':', $block_name);
+    $block_results = $block_storage->loadByProperties(['id' => $block_machine_name]);
+    $block = reset($block_results);
+    if ($block instanceof BlockInterface) {
+      $promo_panel_blocks[$block_machine_name] = [
         'mobile_path' => $url,
-        'plugin_id' => $block_obj->getPluginId(),
+        'plugin_id' => $block->getPluginId(),
       ];
     }
   }, $block_names);
 
   $config = \Drupal::configFactory()->getEditable('alshaya_promo_panel.settings');
-  $config->set('promo_panel_blocks', $new_array);
+  $config->set('promo_panel_blocks', $promo_panel_blocks);
   $config->save();
 
   // Enable the blocks if disabled.
   $storage = \Drupal::entityTypeManager()->getStorage('block');
-  $query = $storage->getQuery()->condition('id', array_keys($new_array), 'IN');
+  $query = $storage->getQuery()->condition('id', array_keys($promo_panel_blocks), 'IN');
   $blocks = $storage->loadMultiple($query->execute());
   foreach ($blocks as $block) {
     if ($block->status()) {
