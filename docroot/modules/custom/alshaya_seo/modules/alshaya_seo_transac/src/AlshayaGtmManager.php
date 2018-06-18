@@ -662,7 +662,8 @@ class AlshayaGtmManager {
           if ((!in_array('dimension8', $gtm_disabled_vars)) &&
             ($store = $this->storeFinder->getStoreFromCode($store_code))) {
             // @TODO: Check with Piyuesh on if we can use only one field now.
-            $dimension8 = $this->storeFinder->getStoreAddress($store, TRUE);
+            $storeAddress = $this->storeFinder->getStoreAddress($store, TRUE);
+            $dimension8 = $storeAddress['address_line1'] . ' ' . $storeAddress['administrative_area_display'];
           }
         }
       }
@@ -874,7 +875,8 @@ class AlshayaGtmManager {
       if ((!in_array('dimension8', $gtm_disabled_vars)) &&
         ($store = $this->storeFinder->getStoreFromCode($store_code))) {
         // @TODO: Check with Piyuesh on if we can use only one field now.
-        $dimension8 = $this->storeFinder->getStoreAddress($store, TRUE);
+        $storeAddress = $this->storeFinder->getStoreAddress($store, TRUE);
+        $dimension8 = $storeAddress['address_line1'] . ' ' . $storeAddress['administrative_area_display'];
       }
     }
 
