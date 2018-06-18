@@ -87,7 +87,7 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
  */
 function alshaya_hm_gtm_product_attributes_alter($product, &$attributes) {
   // Changes for the image count.
-  $attributes['gtm-dimension4'] = count(alshaya_hm_get_product_images($product)) ?: 'image not available';
+  $attributes['gtm-dimension4'] = ($product instanceof NodeInterface) ? (count(alshaya_hm_get_product_images($product)) ?: 'image not available') : 'image not available';
 }
 
 /**
@@ -105,15 +105,14 @@ function alshaya_hm_gtm_pdp_attributes_alter($sku, &$attributes) {
 /**
  * Get the product images from the product object.
  *
- * @param object $product
- *   The product object.
+ * @param \Drupal\node\NodeInterface $product
+ *   The product node object.
  *
  * @return array
  *   Return the array of images or empty array.
  */
-function alshaya_hm_get_product_images($product) {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')
-  && $product instanceof NodeInterface) {
+function alshaya_hm_get_product_images(NodeInterface $product) {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
     $skuId = $product->get('field_skus')->first()->getString();
     return alshaya_hm_get_sku_images($skuId);
   }
