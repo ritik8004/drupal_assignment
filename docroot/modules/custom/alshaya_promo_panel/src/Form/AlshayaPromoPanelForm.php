@@ -139,7 +139,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
           '#type' => 'textfield',
           '#title' => $this->t('Page url for @id block', ['@id' => $blocks[$id]->label()]),
           '#required' => TRUE,
-          '#default_value' => !empty($promo_panel_blocks) ? $promo_panel_blocks[$id] : '',
+          '#default_value' => !empty($promo_panel_blocks) ? $promo_panel_blocks[$id]['mobile_path'] : '',
         ];
       }
     }
@@ -159,7 +159,18 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $blocks = array_filter($form_state->getValue('blocks'));
-    $promo_panel_blocks = !empty($blocks) ? $form_state->getValue('page_urls') : [];
+    $block_values = !empty($blocks) ? $form_state->getValue('page_urls') : [];
+
+    $promo_panel_blocks = [];
+    foreach ($block_values as $machine_name => $link) {
+      $block_load = $this->blockStorage->loadByProperties(['id' => $machine_name]);
+      if ($block = reset($block_load)) {
+        $promo_panel_blocks[$machine_name] = [
+          'mobile_path' => $link,
+          'plugin_id' => $block->getPluginId(),
+        ];
+      }
+    }
 
     $promo_config = $this->config('alshaya_promo_panel.settings');
     $promo_config->set('promo_panel_blocks', $promo_panel_blocks);
@@ -178,7 +189,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     if (!empty($blocks)) {
       foreach ($page_urls as $block => $page_url) {
         if (is_string($page_url) && !$this->pathValidator->isValid($page_url)) {
-          $form_state->setError($form['page_urls'][$block], $this->t('Value is not a valid path.'));
+          $form_state->setError($form['urls']['page_urls'][$block], $this->t('Value is not a valid path.'));
         }
       }
     }
