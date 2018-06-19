@@ -382,14 +382,16 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @param int $parent_tid
    *   Parent term id.
    * @param bool $exclude_not_in_menu
-   *   Indicates if the result should have items that are excluded from menu.
+   *   (optional) If the result should contain items excluded from menu.
+   * @param bool $mobile_only
+   *   (optional) If the result should have items only for mobile.
    * @param string $vid
-   *   Vocabulary id.
+   *   (optional) Vocabulary id.
    *
    * @return array
    *   Child term array.
    */
-  public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $vid = NULL) {
+  public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $mobile_only = FALSE, $vid = NULL) {
     $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name', 'description__value']);
@@ -398,6 +400,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
     if ($exclude_not_in_menu) {
       $query->condition('ttim.field_category_include_menu_value', 1);
+    }
+    if ($mobile_only) {
+      $query->innerJoin('taxonomy_term__field_category_quicklink_plp_mob', 'ttmo', 'ttmo.entity_id = tfd.tid AND ttmo.langcode = tfd.langcode');
+      $query->condition('ttmo.field_category_quicklink_plp_mob_value', 1);
     }
     $query->condition('ttcs.field_commerce_status_value', 1);
     $query->condition('tth.parent', $parent_tid);
