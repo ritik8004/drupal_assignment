@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_promo_panel\Form;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -188,7 +189,12 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
 
     if (!empty($blocks)) {
       foreach ($page_urls as $block => $page_url) {
-        if (is_string($page_url) && !$this->pathValidator->isValid($page_url)) {
+        if (is_string($page_url) && $this->pathValidator->isValid($page_url)) {
+          if (Unicode::substr($page_url, 0, 1) !== '/') {
+            $form_state->setError($form['urls']['page_urls'][$block], $this->t('The path should start with /.'));
+          }
+        }
+        else {
           $form_state->setError($form['urls']['page_urls'][$block], $this->t('Value is not a valid path.'));
         }
       }
