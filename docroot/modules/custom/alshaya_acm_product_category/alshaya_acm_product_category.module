@@ -99,7 +99,7 @@ function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterf
  */
 function alshaya_acm_product_category_child_terms($tid) {
   $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
-  $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->allChildTerms($langcode, $tid, FALSE);
+  $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->allChildTerms($langcode, $tid, FALSE, TRUE);
 
   $data = [];
   foreach ($terms as $term) {
