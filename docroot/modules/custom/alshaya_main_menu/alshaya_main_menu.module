@@ -110,14 +110,16 @@ function alshaya_main_menu_form_alter(&$form, FormStateInterface $form_state, $f
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_main_menu_preprocess_alshaya_main_menu_highlights(&$variables) {
-  $variables['is_only_highlight'] = FALSE;
+  $variables['title_class'] = '';
   foreach ($variables['data']['highlight_paragraph'] as $highlight_paragraph) {
-    if ($highlight_paragraph['highlight_type'] == 'highlight') {
-      $variables['is_only_highlight'] = TRUE;
+    if ($highlight_paragraph['highlight_type'] == 'promo_block' || $highlight_paragraph['highlight_type'] == 'title_subtitle') {
+      // Adding the class only if promo block or combination of
+      // image + title + subtitle is added.
+      $variables['title_class'] = 'empty-highlight-title';
     }
     else {
-      $variables['is_only_highlight'] = FALSE;
-      // If not highlight, we know now and we don't need to process further.
+      // Breaking condition if highlight paragraph is added.
+      $variables['title_class'] = '';
       break;
     }
   }
