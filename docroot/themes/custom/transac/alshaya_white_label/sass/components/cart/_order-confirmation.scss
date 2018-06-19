@@ -596,6 +596,17 @@
       }
     }
   }
+
+  &.user-page {
+    .field--name-field-subscribe-newsletter {
+      .option::before {
+        @include breakpoint($only-mobile) {
+          top: 0.625rem;
+          float: none;
+        }
+      }
+    }
+  }
 }
 
 .order-confirmation .continue--shopping--mobile a,

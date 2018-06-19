@@ -34,6 +34,18 @@
         }
       }
     }
+
+    .block-system-main-block {
+      @include breakpoint($desktop) {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+
+  h1 {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 0;
+    }
   }
 
   .c-sidebar-second #block-youllbeableto {
@@ -47,7 +59,10 @@
   .user-page {
     .user-pass {
       input[type=submit] {
-        width: auto;
+        @include breakpoint($tablet) {
+          width: auto;
+          padding: 0.72rem 1rem;
+        }
       }
     }
   }

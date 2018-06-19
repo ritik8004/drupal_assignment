@@ -30,6 +30,10 @@
       padding-right: 0.125rem;
     }
 
+    @include breakpoint($tablet) {
+      padding-#{$left}: 0 !important;
+    }
+
     @include breakpoint($desktop) {
       border-#{$right}-width: 2.5rem;
     }
