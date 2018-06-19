@@ -684,9 +684,8 @@ function alshaya_acm_product_update_config_options(array &$form_parts, FormState
       continue;
     }
 
-    $options = $configurable['#options'];
     // Disable options which don't exist for the choosen config.
-    foreach ($options as $option_key => $value) {
+    foreach ($configurable['#options'] as $option_key => $value) {
       if (isset($enabled_options[$key]) && $option_key && !in_array($option_key, $enabled_options[$key])) {
         unset($form_parts['configurables'][$key]['#options'][$option_key]);
       }
