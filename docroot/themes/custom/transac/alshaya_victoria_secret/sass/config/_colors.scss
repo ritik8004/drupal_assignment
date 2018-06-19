@@ -97,7 +97,7 @@ $_grey-51-6: rgba(51, 51, 51, 0.06);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
-$primary_bg: $white-five;
+$primary_bg: $nero;
 $body_bg: $primary_bg;
 $content_pagetitle: $marine-blue;
 $content_pagetitle_border: $gainsboro;
@@ -113,7 +113,7 @@ $primary_form_selector_border: $black;
 $primary_form_selector: $black;
 $primary_form_link: $nero;
 $primary_input: $black;
-$primary_input_label: $ash-triplet;
+$primary_input_label: $white-five;
 $primary_input_border: $ash-triplet;
 $primary_input_disabled: $greyish;
 $primary_input_focus_border: $nero;
@@ -458,6 +458,7 @@ $newsletter_submit_btn: $vanilla;
 $newsletter_submit_btn_text: $black;
 $footer_input_text: $vanilla;
 $footer_input_border_active: $vanilla;
+$newsletter_success: $brilliant-rose;
 
 // Checkout Progress.
 $checkout_seperator: $ash-triplet;
