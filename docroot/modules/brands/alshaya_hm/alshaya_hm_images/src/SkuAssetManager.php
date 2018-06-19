@@ -462,14 +462,15 @@ class SkuAssetManager {
     $product_node = alshaya_acm_product_get_display_node($sku);
 
     if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
-      // Use the first term found with an override for
-      // location identifier.
-      $tid = $terms[0]['target_id'];
-      $term = $this->termStorage->load($tid);
-
-      // If term object.
-      if ($term instanceof TermInterface) {
-        $swatch_type = ($term->get('field_swatch_type')->first()) ? $term->get('field_swatch_type')->getString() : self::LP_SWATCH_DEFAULT;
+      if (!empty($terms)) {
+        foreach ($terms as $key => $value) {
+          $tid = $value['target_id'];
+          $term = $this->termStorage->load($tid);
+          if ($term instanceof TermInterface) {
+            $swatch_type = ($term->get('field_swatch_type')->first()) ? $term->get('field_swatch_type')->getString() : self::LP_SWATCH_DEFAULT;
+            break;
+          }
+        }
       }
     }
 
