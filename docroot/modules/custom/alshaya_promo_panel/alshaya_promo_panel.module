@@ -13,15 +13,15 @@ use Drupal\Core\Url;
 function alshaya_promo_panel_preprocess_block(&$variables) {
   switch ($variables['base_plugin_id']) {
     case 'block_content':
+      $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();
+      if (!in_array($variables['elements']['#plugin_id'], array_keys($promo_panel_blocks))) {
+        return;
+      }
       // Get current language object.
       $lang = \Drupal::languageManager()->getCurrentLanguage();
       // If the block is placed in "Block Layout".
       if (!empty($variables['elements']['#id'])) {
-        $block_id = $variables['elements']['#id'];
-        $promo_panel_blocks = \Drupal::config('alshaya_promo_panel.settings')->get('promo_panel_blocks');
-        if (!in_array($block_id, array_keys($promo_panel_blocks))) {
-          return;
-        }
+        $block_plugin_id = $variables['elements']['#plugin_id'];
 
         if ($variables['content']) {
           $variables['#cache']['contexts'][] = 'url.path';
@@ -30,7 +30,7 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
           $element['label'] = [
             '#type' => 'link',
             '#title' => $variables['label'],
-            '#url' => Url::fromUri('internal:' . $promo_panel_blocks[$block_id], ['language' => $lang]),
+            '#url' => Url::fromUri('internal:' . $promo_panel_blocks[$block_plugin_id], ['language' => $lang]),
             '#options' => [
               'attributes' => [
                 'class' => ['mobile-link'],
@@ -54,7 +54,7 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
         $variables['attributes']['class'][] = 'block__reference--block-promo-panel-wrapper';
         // Get the referer path.
         $referrer_path = parse_url(\Drupal::request()->headers->get('referer'))['path'];
-        $referrer_path = preg_replace('/^(\/' . $lang->getId() . ')(.*)/g', '', $referrer_path);
+        $referrer_path = preg_replace('/^(\/' . $lang->getId() . ')(.*)/', '', $referrer_path);
         $internal_uri = !empty($referrer_path) ? $referrer_path : 'home';
 
         // Create the back link.
@@ -75,6 +75,24 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
       }
       break;
   }
+}
+
+/**
+ * Get promo panel blocks as assoc array in reference to plugin ids.
+ */
+function alshaya_promo_panel_blocks_get_plugin_ids() {
+  $data = &drupal_static(__FUNCTION__);
+  if (isset($data)) {
+    return $data;
+  }
+
+  $data = [];
+  $promo_panel_blocks = \Drupal::config('alshaya_promo_panel.settings')->get('promo_panel_blocks');
+  foreach ($promo_panel_blocks as $info) {
+    $data[$info['plugin_id']] = $info['mobile_path'];
+  }
+
+  return $data;
 }
 
 /**

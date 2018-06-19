@@ -23,15 +23,23 @@
   width: 5.375rem;
 }
 
-.c-footer__copy {
-  @include breakpoint($tablet) {
-    width: 55%;
-    margin-#{$right}: 0;
-    text-align: $right;
-  }
+.c-footer-secondary {
+  .c-footer__copy {
+    @include breakpoint($tablet) {
+      width: 55%;
+      margin-#{$right}: 0;
+      text-align: $right;
+    }
 
-  @include breakpoint($only-mobile) {
-    padding: 1.4375rem 0.875rem;
+    @include breakpoint($only-mobile) {
+      padding: 1.4375rem 0.875rem;
+    }
+
+    .field--name-body {
+      p {
+        font-size: 0.75rem;
+      }
+    }
   }
 }
 

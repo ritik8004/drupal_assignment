@@ -102,6 +102,11 @@
 
   p {
     color: $checkout_footer_light_txt;
+    margin: 0.5625rem 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
 
     &:last-child .light {
       font-family: $vs-regular;
@@ -185,6 +190,12 @@
   a.back-link {
     @include breakpoint($only-mobile) {
       top: -3px;
+    }
+  }
+
+  .block-customer-service-block {
+    @include breakpoint($desktop) {
+      padding-top: 0.875rem;
     }
   }
 }
