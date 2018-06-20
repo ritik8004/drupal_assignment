@@ -190,7 +190,6 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     if (!empty($blocks)) {
       foreach ($page_urls as $block => $page_url) {
         $url = $this->pathValidator->getUrlIfValid($page_url);
-
         if ($url->isExternal()) {
           $form_state->setError($form['urls']['page_urls'][$block], $this->t('External url is not allowed.'));
         }
@@ -200,7 +199,6 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
         elseif (!(bool) $url) {
           $form_state->setError($form['urls']['page_urls'][$block], $this->t('Value is not a valid path.'));
         }
-
       }
     }
     parent::validateForm($form, $form_state);
