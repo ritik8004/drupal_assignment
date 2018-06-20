@@ -167,7 +167,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
       $block_load = $this->blockStorage->loadByProperties(['id' => $machine_name]);
       if ($block = reset($block_load)) {
         $promo_panel_blocks[$machine_name] = [
-          'mobile_path' => $link,
+          'mobile_path' => Unicode::substr($link, 0, 1) !== '/' ? '/' . $link : $link,
           'plugin_id' => $block->getPluginId(),
         ];
       }
@@ -192,9 +192,6 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
         $url = $this->pathValidator->getUrlIfValid($page_url);
         if ($url->isExternal()) {
           $form_state->setError($form['urls']['page_urls'][$block], $this->t('External url is not allowed.'));
-        }
-        elseif (Unicode::substr($page_url, 0, 1) !== '/' && (bool) $url) {
-          $form_state->setError($form['urls']['page_urls'][$block], $this->t('The path should start with /.'));
         }
         elseif (!(bool) $url) {
           $form_state->setError($form['urls']['page_urls'][$block], $this->t('Value is not a valid path.'));
