@@ -10,6 +10,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update default items from cross sell/up sell carousel.
+ */
+function alshaya_vs_transac_update_8106() {
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add more SKU base fields specific to VS.
  */
 function alshaya_vs_transac_update_8105() {
