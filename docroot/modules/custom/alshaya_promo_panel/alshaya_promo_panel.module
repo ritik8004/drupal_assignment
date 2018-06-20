@@ -30,7 +30,7 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
           $element['label'] = [
             '#type' => 'link',
             '#title' => $variables['label'],
-            '#url' => Url::fromUri('internal:' . $promo_panel_blocks[$block_plugin_id], ['language' => $lang]),
+            '#url' => Url::fromUserInput($promo_panel_blocks[$block_plugin_id], ['language' => $lang]),
             '#options' => [
               'attributes' => [
                 'class' => ['mobile-link'],
