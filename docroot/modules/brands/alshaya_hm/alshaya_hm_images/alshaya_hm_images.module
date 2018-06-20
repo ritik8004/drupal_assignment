@@ -13,9 +13,9 @@ use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 
 /**
- * Implements hook_acq_sku_import_alter().
+ * Implements hook_acq_sku_product_sku_alter().
  */
-function alshaya_hm_images_acq_sku_product_sku_alter(&$sku, $product) {
+function alshaya_hm_images_acq_sku_product_sku_alter(SKU $sku, array $product) {
   // Process assets data & create attributes which are needed for sorting
   // the assets while displaying them.
   $sku->attr_assets = _alshaya_hm_images_acq_sku_process_assets($product);

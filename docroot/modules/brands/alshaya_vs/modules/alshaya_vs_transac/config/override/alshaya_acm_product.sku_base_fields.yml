@@ -1,0 +1,3 @@
+fields:
+  product_brand:
+    source: 'brand'
