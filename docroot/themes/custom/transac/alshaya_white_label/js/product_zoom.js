@@ -309,7 +309,11 @@
       // Adding class if there is no slider.
       if ($(window).width() < 1024) {
         if ($('#drupal-modal #lightSlider .slick-track > li').length < 4) {
-          $('#drupal-modal #lightSlider').addClass('no-slick-pager');
+          $('#drupal-modal #lightSlider').addClass('pager-no');
+        }
+
+        else {
+          $('#drupal-modal #lightSlider').addClass('pager-yes');
         }
       }
 
