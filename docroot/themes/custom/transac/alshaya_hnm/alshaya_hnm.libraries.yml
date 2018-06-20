@@ -35,10 +35,3 @@ sizeguide:
   js:
     js/select2Option.js: {}
     js/sizeguide.js: {}
-
-cloud_zoom:
-  version: 1.x
-  js:
-    js/product_zoom.js: {}
-  dependencies:
-    - alshaya_white_label/cloud_zoom_common
