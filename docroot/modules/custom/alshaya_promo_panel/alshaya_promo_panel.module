@@ -89,9 +89,10 @@ function alshaya_promo_panel_blocks_get_plugin_ids() {
   $data = [];
   $promo_panel_blocks = \Drupal::config('alshaya_promo_panel.settings')->get('promo_panel_blocks');
   foreach ($promo_panel_blocks as $info) {
-    $data[$info['plugin_id']] = $info['mobile_path'];
+    if (isset($info['plugin_id'])) {
+      $data[$info['plugin_id']] = $info['mobile_path'];
+    }
   }
-
   return $data;
 }
 
