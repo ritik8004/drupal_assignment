@@ -1,0 +1,42 @@
+.order--print {
+  .order-item-row {
+    color: $order_detail_td_light_content;
+    font-size: 0.75rem;
+
+    .dark {
+      font-size: 0.875rem;
+    }
+  }
+
+  .order-details-row {
+    width: 100%;
+  }
+
+  .order-item-row {
+    &:nth-of-type(even) {
+      background-color: $order_detail_order_details_row_bg;
+    }
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+}
+
+.c-order-print {
+  .delivery-details strong,
+  .dark--text {
+    font-family: $vs-bold;
+    font-weight: normal;
+  }
+
+  .user__order--detail {
+    .order-item-row .blend {
+      background: transparent;
+    }
+  }
+}
+
+body.logged-in[class*='-print'] {
+  margin-top: 0;
+}

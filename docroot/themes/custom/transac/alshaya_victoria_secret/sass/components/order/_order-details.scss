@@ -114,6 +114,10 @@
         @include breakpoint($tablet) {
           background-color: transparent;
         }
+
+        @include breakpoint($only-tablet) {
+          vertical-align: bottom;
+        }
       }
     }
 
@@ -123,6 +127,12 @@
 
     .light {
       font-size: 0.75rem;
+    }
+
+    td:last-child {
+      @include breakpoint($tablet) {
+        display: table-cell !important;
+      }
     }
   }
 
@@ -134,6 +144,12 @@
 .order-detail {
   .user__order--detail {
     .order-item-row {
+      font-size: 0.75rem;
+
+      .dark {
+        font-size: 0.875rem;
+      }
+
       &:nth-of-type(odd) {
         background-color: $order_detail_order_details_row_bg;
       }
