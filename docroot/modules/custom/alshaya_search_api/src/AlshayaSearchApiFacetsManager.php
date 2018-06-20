@@ -89,6 +89,8 @@ class AlshayaSearchApiFacetsManager {
       ? 'block.block.' . $prefix . '_facet'
       : 'block.block.facet';
 
+    // @see FacetBlockAjaxController::ajaxFacetBlockView().
+    $id = str_replace('_', '', $id);
     $block_id = 'block.block.' . $id;
 
     $block_data = $this->getFromTemplate($template_id);
