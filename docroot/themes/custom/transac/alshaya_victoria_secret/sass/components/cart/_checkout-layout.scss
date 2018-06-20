@@ -1,5 +1,6 @@
 .page-standard.l-container.l-two--sf.checkout {
-  &.c-delivery-checkout {
+  &.c-delivery-checkout,
+  &.checkout-payment {
     @include breakpoint($tablet) {
       margin-top: 0.5rem;
       padding-top: 0.5rem;
@@ -80,6 +81,29 @@
 
     @include breakpoint($only-tablet) {
       padding-#{$left}: 0;
+    }
+  }
+}
+
+.block-checkout-summary-block {
+  .delivery-type {
+    border-top: none;
+  }
+
+  .delivery-type,
+  .address {
+    font-family: $vs-bold;
+    font-weight: normal;
+
+    .method,
+    .delivery-address {
+      line-height: 1.33;
+    }
+
+    .method,
+    .delivery-address,
+    a {
+      font-family: $vs-regular;
     }
   }
 }

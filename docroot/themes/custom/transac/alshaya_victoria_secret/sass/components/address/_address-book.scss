@@ -51,6 +51,7 @@
   .address--content {
     font-size: 0.875rem;
     padding-bottom: 0.125rem;
+    word-break: break-all;
 
     @include breakpoint($tablet) {
       padding-bottom: 0.0625rem;

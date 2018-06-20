@@ -8,7 +8,7 @@ id: taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
 field_name: field_category_quicklink_plp_mob
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'Mobile only - display as a quick link on parent PLP'
+label: 'Mobile only - display as a quick link'
 description: ''
 required: false
 translatable: false

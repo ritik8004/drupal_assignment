@@ -192,7 +192,7 @@
     @include breakpoint($only-mobile) {
       .owl-carousel {
         .views-row {
-          width: 43%;
+          width: 38%;
           min-height: 16rem;
           margin-#{$left}: 0;
           margin-#{$right}: 0.625rem;
