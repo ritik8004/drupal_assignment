@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.storage.paragraph.field_promo_block
     - paragraphs.paragraphs_type.1_row_3_col_text
-    - paragraphs.paragraphs_type.product_carousel_category
     - paragraphs.paragraphs_type.section_divider
     - paragraphs.paragraphs_type.promo_block_text
   module:
@@ -24,7 +23,6 @@ settings:
   handler_settings:
     target_bundles:
       promo_block_text: promo_block_text
-      product_carousel_category: product_carousel_category
       section_divider: section_divider
     target_bundles_drag_drop:
       1_row_3_col_text:
@@ -72,9 +70,6 @@ settings:
       related_info_one_column:
         weight: 30
         enabled: false
-      product_carousel_category:
-        enabled: true
-        weight: 43
       section_divider:
         enabled: true
         weight: 49
