@@ -573,20 +573,20 @@ class ProductSyncResource extends ResourceBase {
 
     // Loop through all the fields we want to read from product data.
     foreach ($additionalFields as $key => $field) {
-      $read_from = isset($field['read_from']) ? $field['read_from'] : $key;
+      $source = isset($field['source']) ? $field['source'] : $key;
 
-      if (!isset($values[$read_from])) {
+      if (!isset($values[$source])) {
         continue;
       }
 
-      $value = $values[$read_from];
+      $value = $values[$source];
       $field_key = 'attr_' . $key;
 
       switch ($field['type']) {
         case 'attribute':
           $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
           foreach ($value as $index => $val) {
-            if ($term = $this->productOptionsManager->loadProductOptionByOptionId($read_from, $val, $sku->language()->getId())) {
+            if ($term = $this->productOptionsManager->loadProductOptionByOptionId($source, $val, $sku->language()->getId())) {
               $sku->{$field_key}->set($index, $term->getName());
             }
             else {

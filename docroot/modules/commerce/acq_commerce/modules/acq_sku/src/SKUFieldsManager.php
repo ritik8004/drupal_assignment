@@ -203,8 +203,8 @@ class SKUFieldsManager {
   private function applyDefaults($field_code, array $field) {
     $defaults = $this->getDefaults();
 
-    if (empty($field['read_from'])) {
-      $field['read_from'] = $field_code;
+    if (empty($field['source'])) {
+      $field['source'] = $field_code;
     }
 
     // We will always have label, still we do a check to avoid errors.
@@ -234,8 +234,8 @@ class SKUFieldsManager {
     return [
       // (Required) Label to be used for admin forms and display.
       'label' => '',
-      // Field code to use for reading from product data.
-      'read_from' => '',
+      // Soruce field code to use for reading from product data.
+      'source' => '',
       // Description of the field to be used in admin forms.
       'description' => '[label] attribute for the product.',
       // (Required) Parent key in the array where to look for data.
