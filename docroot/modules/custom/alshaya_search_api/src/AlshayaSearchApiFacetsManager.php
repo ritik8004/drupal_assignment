@@ -90,11 +90,11 @@ class AlshayaSearchApiFacetsManager {
       : 'block.block.facet';
 
     // @see FacetBlockAjaxController::ajaxFacetBlockView().
-    $id = str_replace('_', '', $id);
-    $block_id = 'block.block.' . $id;
+    $formatted_id = str_replace('_', '', $id);
+    $block_id = 'block.block.' . $formatted_id;
 
     $block_data = $this->getFromTemplate($template_id);
-    $block_data['id'] = $id;
+    $block_data['id'] = $formatted_id;
     $block_data['theme'] = $this->themeManager->getActiveTheme()->getName();
     $block_data['plugin'] = 'facet_block:' . $id;
     $block_data['settings']['id'] = $block_data['plugin'];
