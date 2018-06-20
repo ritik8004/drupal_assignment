@@ -8,84 +8,6 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_update_N().
- *
- * Update default items from cross sell/up sell carousel.
- */
-function alshaya_vs_transac_update_8106() {
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')->save();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add more SKU base fields specific to VS.
- */
-function alshaya_vs_transac_update_8105() {
-  alshaya_config_install_configs(['alshaya_vs_transac.sku_base_fields'], 'alshaya_vs_transac');
-  \Drupal::service('acq_sku.fields_manager')->addFields();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add new string translations.
- */
-function alshaya_vs_transac_update_8104() {
-  $strings = [
-    'Corporate Info' => [
-      'ar' => 'خدمة الزبائن',
-    ],
-    'Customer care' => [
-      'ar' => 'خدمة الزبائن',
-    ],
-    'Connect with us' => [
-      'ar' => 'تواصلي معنا',
-    ],
-  ];
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Implements hook_update_n().
- *
- * Install brand field for store node.
- */
-function alshaya_vs_transac_update_8103() {
-  alshaya_config_install_configs([
-    'field.storage.node.field_brand',
-    'field.field.node.store.field_brand',
-  ], 'alshaya_vs_transac');
-
-  // Save form and view display mode for store content type.
-  alshaya_config_install_configs([
-    'core.entity_form_display.node.store.default',
-    'core.entity_view_display.node.store.default',
-    'views.view.stores_finder',
-  ], 'alshaya_stores_finder');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add SKU base fields specific to VS.
- *
- * Re-saving indexes and updating index configs will be taken care of in
- * alshaya_acm_product_update_8017().
- */
-function alshaya_vs_transac_update_8102() {
-  alshaya_config_install_configs(['alshaya_vs_transac.sku_base_fields'], 'alshaya_vs_transac');
-  \Drupal::service('acq_sku.fields_manager')->addFields();
-}
-
-/**
- * Implements hook_update_n().
- */
-function alshaya_vs_transac_update_8101() {
-  \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_vs_transac_install() {
@@ -146,4 +68,13 @@ function alshaya_vs_transac_install() {
   $block = reset($blocks);
   $block->setStatus(TRUE);
   $block->save();
+
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    // Set default items from cross sell/up sell carausel for mobile.
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', 2)
+    // Set default items from cross sell/up sell carausel for tablet.
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', 2)
+    // Set default items from cross sell/up sell carausel for desktop.
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', 4)
+    ->save();
 }

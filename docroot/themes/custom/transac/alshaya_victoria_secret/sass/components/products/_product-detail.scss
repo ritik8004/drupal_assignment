@@ -71,3 +71,17 @@
     }
   }
 }
+
+.content__title_wrapper {
+  .price {
+    margin-bottom: 0.75rem;
+  }
+
+  .content--item-code {
+    padding-bottom: 0.625rem;
+  }
+
+  .price--discount {
+    display: inline;
+  }
+}

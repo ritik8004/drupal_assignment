@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_promo_panel\Form;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -166,7 +167,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
       $block_load = $this->blockStorage->loadByProperties(['id' => $machine_name]);
       if ($block = reset($block_load)) {
         $promo_panel_blocks[$machine_name] = [
-          'mobile_path' => $link,
+          'mobile_path' => Unicode::substr($link, 0, 1) !== '/' ? '/' . $link : $link,
           'plugin_id' => $block->getPluginId(),
         ];
       }
@@ -188,7 +189,11 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
 
     if (!empty($blocks)) {
       foreach ($page_urls as $block => $page_url) {
-        if (is_string($page_url) && !$this->pathValidator->isValid($page_url)) {
+        $url = $this->pathValidator->getUrlIfValid($page_url);
+        if ($url->isExternal()) {
+          $form_state->setError($form['urls']['page_urls'][$block], $this->t('External url is not allowed.'));
+        }
+        elseif (!(bool) $url) {
           $form_state->setError($form['urls']['page_urls'][$block], $this->t('Value is not a valid path.'));
         }
       }
