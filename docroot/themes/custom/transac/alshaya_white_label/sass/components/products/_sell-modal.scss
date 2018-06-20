@@ -4,7 +4,7 @@
     position: static;
   }
 
-  .pager-no {
+  .no-slick-pager {
     &.slick-slider {
       @include breakpoint($only-tablet) {
         padding: 0 2rem;

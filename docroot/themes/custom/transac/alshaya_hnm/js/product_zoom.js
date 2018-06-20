@@ -301,6 +301,13 @@
         myDialog.showModal();
       });
 
+      // Adding class if there is no slider.
+      if ($(window).width() < 1024) {
+        if ($('#drupal-modal #lightSlider .slick-track > li').length < 4) {
+          $('#drupal-modal #lightSlider').addClass('no-slick-pager');
+        }
+      }
+
       // Videos inside main PDP slider.
       // For Desktop slider, we add a iframe on click on the image.
       $('.acq-content-product #lightSlider li', context).on('click', function (e) {
