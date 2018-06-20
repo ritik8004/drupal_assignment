@@ -55,5 +55,8 @@ libraries-override:
   views_infinite_scroll/views-infinite-scroll:
     js:
       js/infinite-scroll.js : js/infinite-scroll.js
+  facets/soft-limit:
+    js:
+      js/soft-limit.js: js/soft-limit.js
 ckeditor_stylesheets:
   - css/ckeditor.css

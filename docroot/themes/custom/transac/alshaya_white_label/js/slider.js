@@ -17,6 +17,7 @@
         autoplay: true,
         autoplaySpeed: 15000,
         dots: true,
+        touchThreshold: 1000,
         // Fixes the blink issue:
         // https://github.com/kenwheeler/slick/issues/1890
         useTransform: false

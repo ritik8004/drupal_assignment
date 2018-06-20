@@ -18,11 +18,13 @@
         focusOnSelect: false,
         centerMode: true,
         infinite: false,
+        touchThreshold: 1000,
         responsive: [
           {
             breakpoint: 1025,
             settings: {
               slidesToShow: 3,
+              touchThreshold: 1000,
               vertical: false,
               centerMode: false
             }
@@ -71,6 +73,7 @@
         centerMode: false,
         infinite: false,
         focusOnSelect: true,
+        touchThreshold: 1000,
         initialSlide: 0
       };
       var mobilegallery = $('#product-image-gallery-mobile', context);
@@ -107,6 +110,7 @@
             centerMode: true,
             infinite: false,
             focusOnSelect: false,
+            touchThreshold: 1000,
             initialSlide: currentSlide,
             responsive: [
               {
@@ -114,6 +118,7 @@
                 settings: {
                   slidesToShow: 5,
                   vertical: false,
+                  touchThreshold: 1000,
                   centerMode: false
                 }
               }
@@ -302,6 +307,13 @@
         myDialog.show();
         myDialog.showModal();
       });
+
+      // Adding class if there is no slider.
+      if ($(window).width() < 1024) {
+        if ($('#drupal-modal #lightSlider .slick-track > li').length < 4) {
+          $('#drupal-modal #lightSlider').addClass('no-slick-pager');
+        }
+      }
 
       // Videos inside main PDP slider.
       // For Desktop slider, we add a iframe on click on the image.

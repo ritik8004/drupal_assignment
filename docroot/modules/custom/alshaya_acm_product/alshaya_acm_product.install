@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  * Set the number of items to show in a gallery on PDP.
  */
 function alshaya_acm_product_update_8020() {
-  // Set default items from cross sell/up sell carausel for mobile.
+  // Set default number of image items need to show in slider on PDP..
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('pdp_slider_items_settings.pdp_slider_items_number', 5)
     ->save();
