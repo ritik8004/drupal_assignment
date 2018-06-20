@@ -6,5 +6,9 @@
     @include breakpoint($desktop) {
       margin: 0.625rem 0;
     }
+
+    @include breakpoint($only-tablet) {
+      width: 7rem !important;
+    }
   }
 }
