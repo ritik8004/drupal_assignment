@@ -28,6 +28,20 @@
     #edit-account {
       padding-top: 0;
     }
+
+    input.form-text {
+      display: inline-block;
+    }
+
+    .form-item {
+      input:not(:focus):valid ~ label.error,
+      input:not(:active):valid ~ label.error,
+      label.error {
+        position: absolute;
+        top: 100%;
+        line-height: 1;
+      }
+    }
   }
 
   .c-content .messages--error {

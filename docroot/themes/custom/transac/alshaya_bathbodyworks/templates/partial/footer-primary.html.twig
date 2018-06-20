@@ -9,20 +9,29 @@
     {{ page.footer_primary.languageswitcher_2 }}
   </div>
 
-  <div class="footer--social above-mobile-block">
+  <div class="footer--menu mobile-only-block">
+    <div class="footer--categories">
+      {{ page.footer_primary.shopby }}
+    </div>
+
+    <div class="footer--abouthelp">
+      {{ page.footer_primary.aboutbrand }}
+      {{ page.footer_primary.alshaya_help}}
+    </div>
+  </div>
+
+  <div class="footer--social">
     {{ page.footer_primary.sociallinks }}
   </div>
 
-  <div class="above-mobile-block">
-    {{ page.footer_primary.alshayanewslettersubscription}}
-  </div>
+  {{ page.footer_primary.alshayanewslettersubscription}}
 
   <div class="language--switcher tablet-only-block">
     {{ page.footer_primary.languageswitcher_2 }}
   </div>
 </div>
 
-<div class="footer--menu">
+<div class="footer--menu above-mobile-block">
   <div class="footer--categories">
     {{ page.footer_primary.shopby }}
   </div>
@@ -30,14 +39,6 @@
   <div class="footer--abouthelp">
     {{ page.footer_primary.aboutbrand }}
     {{ page.footer_primary.alshaya_help}}
-  </div>
-
-  <div class="footer--social mobile-only-block">
-    {{ page.footer_primary.sociallinks }}
-  </div>
-
-  <div class="mobile-only-block">
-    {{ page.footer_primary.alshayanewslettersubscription}}
   </div>
 </div>
 {% endblock %}

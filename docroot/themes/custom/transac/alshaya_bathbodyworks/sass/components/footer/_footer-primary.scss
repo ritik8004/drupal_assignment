@@ -123,7 +123,13 @@
 
   @include breakpoint($only-tablet) {
     min-width: initial;
-    margin-bottom: 1rem;
+    margin-bottom: 2.8125rem;
+  }
+
+  @include breakpoint($tablet) {
+    #footer-newsletter-form-wrapper {
+      width: auto;
+    }
   }
 
   @include breakpoint($desktop) {
@@ -172,6 +178,8 @@
   }
 
   .edit-newsletter[data-style=zoom-in][data-loading] {
+    background-color: $primary_btn_bg;
+
     .ladda-spinner {
       top: 1.25rem;
     }
@@ -232,6 +240,13 @@
 
       &.en.is-active a {
         font-family: $alshaya-thin;
+      }
+
+      &.en.is-active a,
+      &.ar.is-active a {
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0;
+        }
       }
     }
   }

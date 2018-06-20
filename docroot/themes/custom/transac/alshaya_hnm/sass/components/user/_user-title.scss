@@ -69,6 +69,10 @@
         font-weight: normal;
         transform: none;
         #{$left}: 0.4375rem;
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
       }
 
       h1.c-page-title {

@@ -1,6 +1,7 @@
 fields:
   sku_definition:
     label: 'SKU Definition'
+    type: 'string'
 
   band_size:
     label: 'Band Size'
