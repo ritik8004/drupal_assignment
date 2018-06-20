@@ -16,11 +16,13 @@
         focusOnSelect: false,
         centerMode: true,
         infinite: false,
+        touchThreshold: 1000,
         responsive: [
           {
             breakpoint: 1025,
             settings: {
               slidesToShow: 3,
+              touchThreshold: 1000,
               vertical: false,
               centerMode: false
             }
@@ -69,6 +71,7 @@
         centerMode: false,
         infinite: false,
         focusOnSelect: true,
+        touchThreshold: 1000,
         initialSlide: 0
       };
       var mobilegallery = $('#product-image-gallery-mobile', context);
@@ -105,6 +108,7 @@
             centerMode: true,
             infinite: false,
             focusOnSelect: false,
+            touchThreshold: 1000,
             initialSlide: currentSlide,
             responsive: [
               {
@@ -112,6 +116,7 @@
                 settings: {
                   slidesToShow: 5,
                   vertical: false,
+                  touchThreshold: 1000,
                   centerMode: false
                 }
               }
