@@ -69,6 +69,7 @@ class AlshayaSearchApiFacetsManager {
 
     $data['id'] = $id;
     $data['facet_source_id'] = $facet_source_id;
+    $data['url_alias'] = $id;
     $data = array_replace_recursive($data, $overrides);
     $this->configFactory->getEditable($facet_id)->setData($data)->save();
 
@@ -89,10 +90,12 @@ class AlshayaSearchApiFacetsManager {
       ? 'block.block.' . $prefix . '_facet'
       : 'block.block.facet';
 
-    $block_id = 'block.block.' . $id;
+    // @see FacetBlockAjaxController::ajaxFacetBlockView().
+    $formatted_id = str_replace('_', '', $id);
+    $block_id = 'block.block.' . $formatted_id;
 
     $block_data = $this->getFromTemplate($template_id);
-    $block_data['id'] = $id;
+    $block_data['id'] = $formatted_id;
     $block_data['theme'] = $this->themeManager->getActiveTheme()->getName();
     $block_data['plugin'] = 'facet_block:' . $id;
     $block_data['settings']['id'] = $block_data['plugin'];
