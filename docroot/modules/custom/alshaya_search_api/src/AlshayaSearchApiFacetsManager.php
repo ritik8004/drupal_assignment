@@ -69,6 +69,7 @@ class AlshayaSearchApiFacetsManager {
 
     $data['id'] = $id;
     $data['facet_source_id'] = $facet_source_id;
+    $data['url_alias'] = $id;
     $data = array_replace_recursive($data, $overrides);
     $this->configFactory->getEditable($facet_id)->setData($data)->save();
 
