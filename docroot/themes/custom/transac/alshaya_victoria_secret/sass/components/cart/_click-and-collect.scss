@@ -64,6 +64,11 @@
             background-position: $right;
             max-width: none;
             width: 100%;
+
+            @include breakpoint($only-mobile) {
+              background-size: 1.125rem;
+              background-position: 97% center;
+            }
           }
         }
       }
@@ -169,7 +174,10 @@
 
       .selected-store-content {
         background: none;
-        border-top: none;
+
+        @include breakpoint($tablet) {
+          border-top: none;
+        }
 
         .store-actions {
           .change-store,
