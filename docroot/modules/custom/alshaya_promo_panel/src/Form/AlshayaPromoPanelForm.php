@@ -189,14 +189,18 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
 
     if (!empty($blocks)) {
       foreach ($page_urls as $block => $page_url) {
-        if (is_string($page_url) && $this->pathValidator->isValid($page_url)) {
-          if (Unicode::substr($page_url, 0, 1) !== '/') {
-            $form_state->setError($form['urls']['page_urls'][$block], $this->t('The path should start with /.'));
-          }
+        $url = $this->pathValidator->getUrlIfValid($page_url);
+
+        if ($url->isExternal()) {
+          $form_state->setError($form['urls']['page_urls'][$block], $this->t('External url is not allowed.'));
         }
-        else {
+        elseif (Unicode::substr($page_url, 0, 1) !== '/' && (bool) $url) {
+          $form_state->setError($form['urls']['page_urls'][$block], $this->t('The path should start with /.'));
+        }
+        elseif (!(bool) $url) {
           $form_state->setError($form['urls']['page_urls'][$block], $this->t('Value is not a valid path.'));
         }
+
       }
     }
     parent::validateForm($form, $form_state);
