@@ -31,10 +31,6 @@
   #cloud-zoom-wrap {
     text-align: center;
 
-    @include breakpoint($only-tablet) {
-      height: 25rem;
-    }
-
     #wrap {
       display: inline-block !important;
       z-index: 4 !important;
