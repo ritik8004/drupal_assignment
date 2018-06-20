@@ -1,0 +1,10 @@
+#product-image-gallery,
+#lightSlider {
+  .slick-slide {
+    height: 8.125rem !important;
+
+    @include breakpoint($desktop) {
+      margin: 0.625rem 0;
+    }
+  }
+}

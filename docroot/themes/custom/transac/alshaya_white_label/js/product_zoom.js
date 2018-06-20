@@ -9,8 +9,10 @@
   'use strict';
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
+      var pdp_slider_items = drupalSettings.pdp_slider_items;
+
       var slickOptions = {
-        slidesToShow: 5,
+        slidesToShow: pdp_slider_items,
         vertical: getPDPSliderPosition(),
         arrows: true,
         focusOnSelect: false,
@@ -99,7 +101,7 @@
           }
 
           var slickModalOptions = {
-            slidesToShow: 5,
+            slidesToShow: pdp_slider_items,
             vertical: getPDPSliderPosition(),
             arrows: true,
             centerMode: true,
