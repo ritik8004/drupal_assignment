@@ -110,6 +110,10 @@
   .checkout-progress__step {
     @include breakpoint($only-tablet) {
       font-size: 0.875rem;
+
+      &.-complete {
+        line-height: normal;
+      }
     }
   }
 }

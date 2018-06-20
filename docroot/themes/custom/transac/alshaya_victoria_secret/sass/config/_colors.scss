@@ -651,7 +651,7 @@ $order_summary_product_price: $black;
 $order_summary_sec_text: $greyish;
 
 // Color for delivery method and address.
-$order_summary_ter_text: $grey-ash;
+$order_summary_ter_text: $black;
 
 // Checkout Global.
 $checkout_footer_bg: $white-five;
@@ -765,7 +765,7 @@ $checkout_delivery_optn_odd_row: $white-four;
 $checkout_delivery_optn_shipping_method_title: $black;
 
 // Checkout Payment.
-$checkout_payment_form_border: $gainsboro;
+$checkout_payment_form_border: $black;
 $checkout_payment_option_border: $gainsboro;
 $checkout_payment_row_selected: $vanilla;
 $checkout_payment_row_default: $vanilla;
@@ -775,6 +775,7 @@ $checkout_payment_method_icon_bg: $white;
 $checkout_payment_method_desc: $nero;
 $checkout_transaction_type_color: $black;
 $checkout_payment_CVV_tooltip_image_bg: $white-smoke;
+$checkout_payment_terms_text: $black;
 
 // Checkout Home delivery.
 $checkout_hd_selected_add_wrapper_border: $gainsboro;
