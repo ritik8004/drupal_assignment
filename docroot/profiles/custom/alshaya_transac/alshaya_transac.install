@@ -7,7 +7,20 @@
 
 use Drupal\node\Entity\Node;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Site\Settings;
 use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change stock mode based on settings.
+ */
+function alshaya_transac_update_8113() {
+  // Set stock mode.
+  \Drupal::configFactory()->getEditable('acq_sku.settings')
+    ->set('stock_mode', Settings::get('stock_mode'))
+    ->save();
+}
 
 /**
  * Implements hook_update_N().

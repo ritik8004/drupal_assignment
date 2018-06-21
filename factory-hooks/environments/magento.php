@@ -29,7 +29,6 @@ function alshaya_get_magento_host_data() {
     ],
     'mc_qa' => [
       'url' => 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',
-      'stock_mode' => 'pull',
       'kw' => [
         'store_id' => [
           'en' => 1,
@@ -94,7 +93,6 @@ function alshaya_get_magento_host_data() {
     // H&M.
     'hm_qa' => [
       'url' => 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud',
-      'stock_mode' => 'pull',
       'kw' => [
         'store_id' => [
           'en' => 1,
@@ -168,7 +166,6 @@ function alshaya_get_magento_host_data() {
     // Pottery Barn.
     'pb_qa' => [
       'url' => 'https://qa-h47ppbq-rfuu4sicyisyw.eu.magentosite.cloud',
-      'stock_mode' => 'pull',
       /*'kw' => [
         'store_id' => [
           'en' => 1,
@@ -191,7 +188,6 @@ function alshaya_get_magento_host_data() {
     // Victoria Secret.
     'vs_qa' => [
       'url' => 'https://integration-5ojmyuq-kpwgmbven7d7y.eu-3.magentosite.cloud',
-      'stock_mode' => 'pull',
       'kw' => [
         'store_id' => [
           'en' => 1,
@@ -222,7 +218,6 @@ function alshaya_get_magento_host_data() {
     // BathBodyWorks.
     'bbw_qa' => [
       'url' => 'https://integration-5ojmyuq-bbk3lvknero4c.eu-3.magentosite.cloud',
-      'stock_mode' => 'pull',
       'kw' => [
         'store_id' => [
           'en' => 1,
