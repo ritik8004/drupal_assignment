@@ -168,8 +168,7 @@ class SKUFieldsManager {
    *   Existing field additions.
    */
   public function getFieldAdditions() {
-    $config = $this->configFactory->getEditable(self::BASE_FIELD_ADDITIONS_CONFIG);
-    return $config->getRawData();
+    return $this->configFactory->get(self::BASE_FIELD_ADDITIONS_CONFIG)->getRawData();
   }
 
   /**
@@ -204,6 +203,10 @@ class SKUFieldsManager {
   private function applyDefaults($field_code, array $field) {
     $defaults = $this->getDefaults();
 
+    if (empty($field['source'])) {
+      $field['source'] = $field_code;
+    }
+
     // We will always have label, still we do a check to avoid errors.
     if (empty($field['label'])) {
       $field['label'] = $field_code;
@@ -231,6 +234,8 @@ class SKUFieldsManager {
     return [
       // (Required) Label to be used for admin forms and display.
       'label' => '',
+      // Soruce field code to use for reading from product data.
+      'source' => '',
       // Description of the field to be used in admin forms.
       'description' => '[label] attribute for the product.',
       // (Required) Parent key in the array where to look for data.
