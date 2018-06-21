@@ -1,5 +1,17 @@
 .path--store-finder,
 .nodetype--store {
+  .by--alphabet {
+    .rows a {
+      color: $store_finder_glossary_title !important;
+    }
+  }
+
+  .label--location {
+    .block-store-finder-form__form__label__wrapper {
+      color: $store_finder_label_location !important;
+    }
+  }
+
   .list-view-locator {
     border-top: 0;
     border-right: 0;
