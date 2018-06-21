@@ -4,13 +4,13 @@ dependencies:
   config: {  }
   module:
     - alshaya_search_api
-id: color_family
-name: Color
-url_alias: color_family
+id: actual_color_label_code
+name: 'Actual Color Label Code'
+url_alias: actual_color_label_code
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: attr_color_family
+field_identifier: attr_actual_color_label_code
 facet_source_id: 'search_api:views_page__search__page'
 widget:
   type: checkbox

@@ -3,7 +3,5 @@ fields:
     source: 'brand'
   product_collection:
     facet: 0
-  color_family:
-    source: 'actual_color_label_code'
   collection:
     facet: 1
