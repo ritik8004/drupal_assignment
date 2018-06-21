@@ -4,6 +4,7 @@ namespace Drupal\acq_sku;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -29,6 +30,13 @@ class SKUFieldsManager {
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   private $moduleHandler;
+
+  /**
+   * The Entity Type Manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  private $entityTypeManager;
 
   /**
    * The Entity Definition Update Manager service.
@@ -58,10 +66,12 @@ class SKUFieldsManager {
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleHandlerInterface $module_handler,
+                              EntityTypeManagerInterface $entity_type_manager,
                               EntityDefinitionUpdateManagerInterface $entity_definition_update_manager,
                               LoggerInterface $logger) {
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
+    $this->entityTypeManager = $entity_type_manager;
     $this->entityDefinitionUpdateManager = $entity_definition_update_manager;
     $this->logger = $logger;
   }
@@ -91,12 +101,42 @@ class SKUFieldsManager {
       $this->entityDefinitionUpdateManager->applyUpdates();
 
       // Allow other modules to take some action after the fields are added.
-      $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields]);
+      $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields, 'add']);
     }
     else {
       $this->logger->warning('No new fields found to add.');
     }
 
+  }
+
+  /**
+   * Remove base field from SKU entity.
+   *
+   * Note: Calling function needs to take care of clearing data.
+   *
+   * @param string $field_code
+   *   Field code to remove.
+   */
+  public function removeField($field_code) {
+    $config = $this->configFactory->getEditable(self::BASE_FIELD_ADDITIONS_CONFIG);
+    $fields = $config->getRawData();
+
+    if (!isset($fields[$field_code])) {
+      return;
+    }
+
+    $field = $fields[$field_code];
+    unset($fields[$field_code]);
+    $config->setData($fields)->save();
+
+    $this->entityTypeManager->clearCachedDefinitions();
+    $this->entityDefinitionUpdateManager->applyUpdates();
+
+    $fields_removed = [
+      $field_code => $field,
+    ];
+
+    $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields_removed, 'remove']);
   }
 
   /**
