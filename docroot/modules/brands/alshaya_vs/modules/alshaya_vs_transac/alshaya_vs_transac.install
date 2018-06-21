@@ -69,6 +69,14 @@ function alshaya_vs_transac_install() {
   $block->setStatus(TRUE);
   $block->save();
 
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    // Set default items from cross sell/up sell carausel for mobile.
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', 2)
+    // Set default items from cross sell/up sell carausel for tablet.
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', 2)
+    // Set default items from cross sell/up sell carausel for desktop.
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', 4)
+
   // Set the number of items to show in a gallery on PDP.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('pdp_slider_items_settings.pdp_slider_items_number', 3)
