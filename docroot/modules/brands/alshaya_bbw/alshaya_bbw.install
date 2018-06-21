@@ -5,14 +5,17 @@
  * Install, uninstall, update function for alshaya_bbw.
  */
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_update_N().
  *
  * Setting stock mode to 'push'
  */
 function alshaya_bbw_update_8106() {
+  // Set stock mode.
   \Drupal::configFactory()->getEditable('acq_sku.settings')
-    ->set('stock_mode', 'push')
+    ->set('stock_mode', Settings::get('stock_mode'))
     ->save();
 }
 
