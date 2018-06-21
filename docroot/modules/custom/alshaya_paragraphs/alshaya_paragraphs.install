@@ -13,56 +13,23 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Enable alshaya_paragraphs_transac module.
- */
-function alshaya_paragraphs_update_8120() {
-  // Set status of alshaya_paragraphs_transac module enabled for active transac
-  // site to avoid config file installation conflict.
-  \Drupal::configFactory()
-    ->getEditable('core.extension')
-    ->set('module.alshaya_paragraphs_transac', 0)->save();
-
-  \Drupal::moduleHandler()->addModule('alshaya_paragraphs_transac', drupal_get_path('module', 'alshaya_paragraphs_transac'));
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update name of product_carousel_category form display to change weights.
- */
-function alshaya_paragraphs_update_8119() {
-  $configs = [
-    'core.entity_form_display.paragraph.product_carousel_category.default',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update name of product_carousel_category and field descriptions.
- */
-function alshaya_paragraphs_update_8118() {
-  $configs = [
-    'paragraphs.paragraphs_type.product_carousel_category',
-    'field.field.paragraph.product_carousel_category.field_category_carousel_title',
-    'field.field.paragraph.product_carousel_category.field_use_as_accordion',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add a field to "use as accordion" for product_carousel_category.
+ * Install alshaya_paragraphs_transac module and update
+ * product_carousel_category paragraph type and its fields.
  */
 function alshaya_paragraphs_update_8117() {
+  // Install alshaya_paragraphs_transac module.
+  \Drupal::service('module_installer')->install(['alshaya_paragraphs_transac']);
+
+  // Update name of product_carousel_category, field descriptions, weights and
+  // add a new field "use as accordion".
   $configs = [
+    'paragraphs.paragraphs_type.product_carousel_category',
     'field.storage.paragraph.field_use_as_accordion',
     'field.field.paragraph.product_carousel_category.field_use_as_accordion',
+    'field.field.paragraph.product_carousel_category.field_category_carousel_title',
     'core.entity_form_display.paragraph.product_carousel_category.default',
   ];
-  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs_transac', 'optional');
 }
 
 /**
