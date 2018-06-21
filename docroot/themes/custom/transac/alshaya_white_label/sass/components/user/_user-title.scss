@@ -110,6 +110,10 @@
         top: 0.3125rem;
         font-size: 2.125rem;
         transform: rotate(270deg);
+
+        html[lang=ar] & {
+          transform: rotate(90deg);
+        }
       }
 
       h1.c-page-title {

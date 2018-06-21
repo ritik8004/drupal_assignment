@@ -71,3 +71,33 @@
     }
   }
 }
+
+.content__title_wrapper {
+  .price {
+    margin-bottom: 0.75rem;
+  }
+
+  .content--item-code {
+    padding-bottom: 0.625rem;
+  }
+
+  .price--discount {
+    display: inline;
+  }
+}
+
+.basic-details-wrapper {
+  .field--name-field-skus {
+    .form-item-quantity {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+
+        select {
+          &.form-select {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

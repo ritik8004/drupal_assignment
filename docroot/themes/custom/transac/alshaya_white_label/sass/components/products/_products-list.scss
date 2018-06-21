@@ -677,6 +677,7 @@
       bottom: 0;
       width: 100%;
       overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
 
       .filter-close {
         float: $right;
@@ -911,6 +912,7 @@ body {
   &.filter-open-no-scroll {
     @include breakpoint($only-mobile) {
       overflow: hidden;
+      position: fixed;
 
       .branding__menu.show-overlay {
         z-index: 2;

@@ -10,17 +10,19 @@
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
       var slickOptions = {
-        slidesToShow: 5,
-        vertical: getPDPSliderPosition(),
+        slidesToShow: getPDPSliderParameter('slidesToShow'),
+        vertical: getPDPSliderParameter('vertical'),
         arrows: true,
         focusOnSelect: false,
         centerMode: true,
         infinite: false,
+        touchThreshold: 1000,
         responsive: [
           {
             breakpoint: 1025,
             settings: {
               slidesToShow: 3,
+              touchThreshold: 1000,
               vertical: false,
               centerMode: false
             }
@@ -69,6 +71,7 @@
         centerMode: false,
         infinite: false,
         focusOnSelect: true,
+        touchThreshold: 1000,
         initialSlide: 0
       };
       var mobilegallery = $('#product-image-gallery-mobile', context);
@@ -99,12 +102,13 @@
           }
 
           var slickModalOptions = {
-            slidesToShow: 5,
-            vertical: getPDPSliderPosition(),
+            slidesToShow: getPDPSliderParameter('slidesToShow'),
+            vertical: getPDPSliderParameter('vertical'),
             arrows: true,
             centerMode: true,
             infinite: false,
             focusOnSelect: false,
+            touchThreshold: 1000,
             initialSlide: currentSlide,
             responsive: [
               {
@@ -112,6 +116,7 @@
                 settings: {
                   slidesToShow: 5,
                   vertical: false,
+                  touchThreshold: 1000,
                   centerMode: false
                 }
               }
@@ -301,6 +306,17 @@
         myDialog.showModal();
       });
 
+      // Adding class if there is no slider.
+      if ($(window).width() < 1024) {
+        if ($('#drupal-modal #lightSlider .slick-track > li').length < 4) {
+          $('#drupal-modal #lightSlider').addClass('pager-no');
+        }
+
+        else {
+          $('#drupal-modal #lightSlider').addClass('pager-yes');
+        }
+      }
+
       // Videos inside main PDP slider.
       // For Desktop slider, we add a iframe on click on the image.
       $('.acq-content-product #lightSlider li', context).on('click', function (e) {
@@ -364,35 +380,11 @@
       });
 
       $('#lightSlider .slick-prev').on('click', function () {
-        var previndex = $(this).parent().slick('slickCurrentSlide');
-        $(this).parent().slick('slickGoTo', previndex);
-        var prevImage = $(this).parent().find('li[data-slick-index = "' + previndex + '"] a.cloudzoom__thumbnails__image').attr('href');
-        var imgTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap img');
-        var bigimgTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap a#cloud-zoom');
-        var cloudzoomBig = $(this).parent().parent().parent().find('#cloud-zoom-wrap #cloud-zoom-big');
-        var iframeTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap iframe');
-        cloudzoomBig.css('background-image', 'url(' + prevImage + ')');
-        bigimgTag.attr('href', prevImage);
-        imgTag.attr('src', prevImage);
-        imgTag.css('transform', 'scale(1)');
-        iframeTag.remove();
-        imgTag.show();
+        triggerClickOnThumbGalleryImage($(this));
       });
 
       $('#lightSlider .slick-next').on('click', function () {
-        var nextindex = $(this).parent().slick('slickCurrentSlide');
-        $(this).parent().slick('slickGoTo', nextindex);
-        var nextImage = $(this).parent().find('li[data-slick-index = "' + nextindex + '"] a.cloudzoom__thumbnails__image').attr('href');
-        var bigimgTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap a#cloud-zoom');
-        var cloudzoomBig = $(this).parent().parent().parent().find('#cloud-zoom-wrap #cloud-zoom-big');
-        var imgTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap img');
-        var iframeTag = $(this).parent().parent().parent().find('#cloud-zoom-wrap iframe');
-        cloudzoomBig.css('background-image', 'url(' + nextImage + ')');
-        bigimgTag.attr('href', nextImage);
-        imgTag.attr('src', nextImage);
-        imgTag.css('transform', 'scale(1)');
-        iframeTag.remove();
-        imgTag.show();
+        triggerClickOnThumbGalleryImage($(this));
       });
 
       // Stop video playback if slide is changed.
@@ -406,6 +398,20 @@
       });
 
       // Helper functions.
+      /**
+       * Trigger click on product thumb to change product zoom image.
+       *
+       * @param {object} $element
+       *   The clicked link to change gallery image (Next / Prev).
+       */
+      function triggerClickOnThumbGalleryImage($element) {
+        var upcomingindex = $element.parent().slick('slickCurrentSlide');
+        $element
+          .parent()
+          .find('li[data-slick-index = "' + upcomingindex + '"] > a.cloudzoom__thumbnails__image')
+          .trigger('click');
+      }
+
       /**
        * Use the beforeChange event of slick to pause videos when scrolling from video slides.
        *
@@ -482,11 +488,27 @@
    * Get the vertical parameter for slick slider on the basis of the drupalsetting
    * image_slider_position_pdp.
    *
+   * Get the slidesToShow parameter for slick slider on the basis of the drupalsetting
+   * pdp_slider_items.
+   *
    * @return {boolean} vertical
    *   The vertical paramerter for slick slider.
+   *
+   * @return {integer} slidesToShow
+   *   The slidesToShow paramerter for slick slider.
+   *
+   * @param {string} slick_slider_setting
+   *   The setting of slick slider.
    */
-  function getPDPSliderPosition() {
-    var pdp_slider_position = drupalSettings.alshaya_white_label.image_slider_position_pdp;
-    return !(pdp_slider_position === 'slider-position-bottom');
+  function getPDPSliderParameter(slick_slider_setting) {
+    if (slick_slider_setting === 'vertical') {
+      var pdp_slider_position = drupalSettings.alshaya_white_label.image_slider_position_pdp;
+      return !(pdp_slider_position === 'slider-position-bottom');
+    }
+
+    else if (slick_slider_setting === 'slidesToShow') {
+      var pdp_slider_items = drupalSettings.pdp_slider_items;
+      return pdp_slider_items;
+    }
   }
 })(jQuery, Drupal, drupalSettings);

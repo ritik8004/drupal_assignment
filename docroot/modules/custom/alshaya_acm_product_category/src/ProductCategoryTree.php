@@ -280,6 +280,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       if ($paragraph && $paragraph->getType() == 'main_menu_highlight' && !empty($paragraph->get('field_highlight_image'))) {
         $image = $paragraph->get('field_highlight_image')->getValue();
         $image_link = $paragraph->get('field_highlight_link')->getValue();
+        $title = $paragraph->get('field_highlight_title')->getString();
+        $subtitle = $paragraph->get('field_highlight_subtitle')->getString();
+        $highlight_type = (empty($title) && empty($subtitle)) ? 'promo_block' : ((!empty($title) && !empty($subtitle)) ? 'title_subtitle' : 'highlight');
         $renderable_image = $paragraph->get('field_highlight_image')
           ->view('default');
         $paragraph_type = $paragraph->getType();
@@ -288,26 +291,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
           $highlight_paragraphs[] = [
             'image_link' => $url->toString(),
             'img' => $renderable_image,
-            'paragraph_type' => $paragraph_type,
-          ];
-        }
-      }
-
-      elseif ($paragraph && $paragraph->getType() == 'image_title_subtitle') {
-        $image = $paragraph->get('field_banner')->getValue();
-        $image_link = $paragraph->get('field_link')->getValue();
-        $renderable_image = $paragraph->get('field_banner')
-          ->view('hightlight_image_186x184');
-        $image_title = $paragraph->get('field_title')->value;
-        $image_description = $paragraph->get('field_sub_title')->value;
-        $paragraph_type = $paragraph->getType();
-        if (!empty($image)) {
-          $url = Url::fromUri($image_link[0]['uri']);
-          $highlight_paragraphs[] = [
-            'image_link' => $url->toString(),
-            'img' => $renderable_image,
-            'title' => $image_title,
-            'description' => $image_description,
+            'title' => $title,
+            'description' => $subtitle,
+            'highlight_type' => $highlight_type,
             'paragraph_type' => $paragraph_type,
           ];
         }
@@ -382,14 +368,16 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @param int $parent_tid
    *   Parent term id.
    * @param bool $exclude_not_in_menu
-   *   Indicates if the result should have items that are excluded from menu.
+   *   (optional) If the result should contain items excluded from menu.
+   * @param bool $mobile_only
+   *   (optional) If the result should have items only for mobile.
    * @param string $vid
-   *   Vocabulary id.
+   *   (optional) Vocabulary id.
    *
    * @return array
    *   Child term array.
    */
-  public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $vid = NULL) {
+  public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $mobile_only = FALSE, $vid = NULL) {
     $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name', 'description__value']);
@@ -398,6 +386,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
     if ($exclude_not_in_menu) {
       $query->condition('ttim.field_category_include_menu_value', 1);
+    }
+    if ($mobile_only) {
+      $query->innerJoin('taxonomy_term__field_category_quicklink_plp_mob', 'ttmo', 'ttmo.entity_id = tfd.tid AND ttmo.langcode = tfd.langcode');
+      $query->condition('ttmo.field_category_quicklink_plp_mob_value', 1);
     }
     $query->condition('ttcs.field_commerce_status_value', 1);
     $query->condition('tth.parent', $parent_tid);

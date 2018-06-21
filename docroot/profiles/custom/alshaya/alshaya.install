@@ -11,6 +11,15 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Update header for 'restrict_login_by_ip' module.
+ */
+function alshaya_update_8006() {
+  alshaya_config_install_configs(['restrict_role_login_by_ip.settings'], 'alshaya', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable 'restrict_login_by_ip' module.
  * Enable 'alshay_image_sitemap' module.
  */

@@ -203,6 +203,14 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 
   // Create our thumbnails to be rendered for zoom.
   if (!empty($media)) {
+    // Sort media items so that videos are at the end.
+    $order = ['image', 'external-video'];
+    usort($media, function ($item1, $item2) use ($order) {
+      $pos_1 = array_search($item1['media_type'], $order);
+      $pos_2 = array_search($item2['media_type'], $order);
+      return $pos_1 - $pos_2;
+    });
+
     foreach ($media as $media_item) {
       if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
 

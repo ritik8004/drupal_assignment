@@ -1,13 +1,17 @@
 alshaya_promo_panel.settings:
   type: config_object
-  label: 'Category Menu settings'
+  label: 'Promo panel block configuration'
   mapping:
     promo_panel_blocks:
       type: sequence
       label: 'Promo panel blocks'
       sequence:
-        type: alshaya_promo_panel.blocks.[%key]
-
-alshaya_promo_panel.blocks:*:
-  type: string
-  label: 'Mobile path'
+        type: mapping
+        label: 'Promo panel block configuration'
+        mapping:
+          mobile_path:
+            type: string
+            label: 'Mobile path'
+          plugin_id:
+            type: string
+            label: 'Plugin Id'

@@ -581,14 +581,19 @@
         Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'Top Navigation', 'promotionClick');
       });
 
-      if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
+      // If both promo block and body field images exist make sure promotionImpression is fired only once.
+      if ($('.paragraph--type--promo-block').length > 0 && $('.field--name-body').length > 0 && (context === document)) {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block, .field--name-body'), gtmPageType, 'promotionImpression');
       }
 
-      // Tracking promotion image view inside body field.
-      if ($('.field--name-body').length > 0 && (context === document)) {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.field--name-body'), gtmPageType, 'promotionImpression');
-      }
+      else if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
+        }
+
+        // Tracking promotion image view inside body field.
+      else if ($('.field--name-body').length > 0 && (context === document)) {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($('.field--name-body'), gtmPageType, 'promotionImpression');
+        }
 
       // Tracking of homepage banner.
       $('.c-content__slider .field--name-field-banner').each(function () {

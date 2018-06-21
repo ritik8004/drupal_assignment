@@ -1,6 +1,44 @@
 .user-page.checkout-delivery.checkout-payment {
   .multistep-checkout {
     border: 1px solid $checkout_payment_form_border;
+    border-top: 1px solid !important;
+
+    @include breakpoint($only-mobile) {
+      border: none !important;
+    }
+
+    fieldset#edit-acm-payment-methods {
+      > legend {
+        display: block;
+        padding: 0 1.5rem;
+        padding-top: 0.9375rem;
+
+        @include breakpoint($only-mobile) {
+          padding: 0;
+        }
+
+        .fieldset-legend {
+          padding: 0.4375rem 0;
+          font-size: 1rem;
+
+          @include breakpoint($only-mobile) {
+            padding-top: 0;
+            padding-bottom: 0.5625rem;
+          }
+        }
+      }
+
+      > .fieldset-wrapper {
+        @include clearfix;
+
+        margin: 1.5rem 1.5rem 0;
+        border: 1px solid $checkout_section_border;
+
+        @include breakpoint($only-mobile) {
+          margin: 0;
+        }
+      }
+    }
   }
 
   #payment_method_cybersource {
@@ -30,15 +68,6 @@
         margin-left: 0.5rem;
         margin-right: 0.5rem;
       }
-
-      &-diners-club {
-        background: url('../../alshaya_white_label/imgs/cards/dinersclub-inactive.png') no-repeat;
-        background-size: 88%;
-
-        &.active {
-          background-image: url('../../alshaya_white_label/imgs/cards/dinersclub-active.png');
-        }
-      }
     }
   }
 }
@@ -46,6 +75,10 @@
 #payment_method_cybersource {
   #payment_details {
     padding: 1rem 1.375rem;
+  }
+
+  .card-types-wrapper .card-type {
+    margin-#{$left}: 0;
   }
 }
 
@@ -124,28 +157,72 @@
 
 #payment_details_wrapper {
   & > .form-wrapper {
-    .payment-plugin-wrapper-div.plugin-selected {
-      &::before {
-        border-color: $secondary_border;
+    .payment-plugin-wrapper-div {
+      &.plugin-selected {
+        &::before {
+          border-color: $secondary_border;
+          border-width: 0.25rem;
+        }
+      }
+
+      .payment-method-name {
+        @include breakpoint($only-tablet) {
+          width: 89.5%;
+        }
+      }
+
+      .method-title {
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+        }
       }
     }
+
+    &:last-child {
+      .payment-plugin-wrapper-div:not(.plugin-selected) {
+        border-bottom: none;
+      }
+    }
+  }
+
+  #payment_method_knet {
+    border-top: 0;
   }
 }
 
 #edit-checkout-terms {
+  padding: 1rem 2rem;
+
+  @include breakpoint($only-mobile) {
+    padding: 1.6875rem 0.5625rem 0;
+  }
+
   .form-type-checkbox {
     .option {
       &::before {
-        margin-#{$right}: 0;
-        margin-#{$left}: -1.125rem;
         top: 0;
         position: absolute;
+        #{$left}: 0;
       }
 
       p {
         padding-#{$left}: 2rem;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
       }
     }
+
+    label {
+      font-size: 0.875rem;
+    }
+  }
+
+  a {
+    color: $checkout_payment_terms_text;
+    font-family: $vs-bold;
+    font-weight: normal;
   }
 }
 
@@ -154,5 +231,33 @@
 
   &:hover {
     text-decoration: none;
+  }
+}
+
+#edit-billing-address {
+  .fieldset-wrapper {
+    font-size: 0.875rem;
+    padding: 1rem 2rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 0 0.5625rem;
+    }
+
+    #edit-billing-address-same-as-shipping {
+      display: block;
+      padding-top: 0.75rem;
+      padding-#{$left}: 0;
+
+      .form-item-billing-address-same-as-shipping {
+        label {
+          font-size: 0.875rem;
+        }
+
+        @include breakpoint($upto-desktop) {
+          margin-top: 0.3125rem;
+          margin-#{$right}: 1.75rem;
+        }
+      }
+    }
   }
 }

@@ -31,8 +31,10 @@ $windows-blue: #3680cb;
 $very-light-blue: #d9efff;
 $marine-blue: #003773;
 $grey-shade: #c1c1c1;
+$grey-light: #777;
 // Mothercare
 $warm-grey: #9b9b9b;
+$warm-grey-two: #dadada;
 $black: #333;
 $pumpkin-orange: #ff6d22;
 $tealish: #3ad6c5;
@@ -416,6 +418,7 @@ $promo_panel_label_icon: $marine-blue-two;
 $footer_bg: $white-five;
 $footer_border_top: $peacock-blue;
 $footer_title_h3: $marine-blue-two;
+$primary_footer_input_label: $greyish;
 $footer_link_mobile: $black;
 $footer_link: $grey-ash;
 $footer_link_hover: $cerulean-two;
@@ -581,6 +584,11 @@ $sell_owl_dots_bg: $whisper-light;
 
 // Department page
 $department_category_list_hover: $cerulean-two;
+$department_category_accordion_title: $black-two;
+$department_category_accordion_link: $grey-light;
+$department_category_accordion_border: $warm-grey-two;
+$department_category_accordion_title_arrow: $peacock-blue;
+$department_category_accordion_link_arrow: $warm-grey-two;
 
 // Promo Blocks
 $promo_link: $peacock-blue;

@@ -20,8 +20,6 @@
 /* ------- 1. Brand Colors ------- */
 // Colors from Zeplin pallete for the site.
 // $black: #000;
-// @todo remove variable $black-two, use $black instead, declared below.
-$black-two: #333;
 $brownish-grey: #666;
 $white-three: #ebebeb;
 $cherry: #c60c30;
@@ -94,9 +92,12 @@ $smoke-light: #fafafa;
 $medium-green: #39b54a;
 $tomato: #e6591b;
 
+// Custom colors with no names in VS design.
+$_grey-51-6: rgba(51, 51, 51, 0.06);
+
 /* ------- 2. Primary Colors ------- */
 // Global elements.
-$primary_bg: $white-five;
+$primary_bg: $nero;
 $body_bg: $primary_bg;
 $content_pagetitle: $marine-blue;
 $content_pagetitle_border: $gainsboro;
@@ -140,7 +141,7 @@ $primary_checkbox_empty: $ash-triplet;
 $primary_checkbox_filled: $black;
 $primary_radiobtn_label: $grey-ash;
 $primary_radiobtn_empty: $greyish;
-$primary_radiobtn_filled: $brilliant-rose;
+$primary_radiobtn_filled: $nero;
 
 // Tables.
 $primary_th_bg: $white-smoke-light;
@@ -225,10 +226,12 @@ $default_msg_border: $gainsboro;
 $default_msg_icon: $nero;
 $default_msg_info_bg: $message-info;
 $default_msg_info_text: $black;
-$content_error_msg_bg: $red-error;
+$content_error_msg_bg: $vanilla;
 $content_error_msg_txt: $red-error;
+$content_error_border: $red-error;
+$content_error_icon: $black;
 $content_error_input_border: $red-error;
-$content_error_msg_text: $white-five;
+$content_error_msg_text: $red-error;
 $formitem_error: $black;
 $formitem_error_label: $red-error;
 
@@ -334,7 +337,7 @@ $header_search_active_text: $vanilla;
 $primary_search_btn: transparent;
 $primary_search_bg: $white-smoke-light;
 $primary_search_btn_icon: transparent;
-$primary_search_input: $grey-ash;
+$primary_search_input: $black;
 $primary_search_input_placeholder: $ash-triplet;
 $primary_search_border: $white;
 $primary_search_result_hover: $white-smoke-light;
@@ -388,7 +391,7 @@ $mm_l1_link_active_border: transparent;
 $mm_l2_link: $black;
 $mm_l2_link_hover: $brilliant-rose;
 $mm_l2_p: $brownish-grey;
-$mm_l3_link: $grey-ash;
+$mm_l3_link: $nero;
 $mm_l3_link_2: $peacock-blue; // possible old markup.
 $mm_l3_link_bg: $white-five;
 $mm_l3_link_hover: $brilliant-rose;
@@ -434,6 +437,7 @@ $promo_panel_label_icon: $brilliant-rose;
 $footer_bg: $nero;
 $footer_text: $vanilla;
 $footer_border_top: $nero;
+$primary_footer_input_label: $vanilla;
 $footer_title_h3: $vanilla;
 $footer_link_mobile: $vanilla;
 $footer_link: $vanilla;
@@ -457,6 +461,7 @@ $newsletter_submit_btn: $vanilla;
 $newsletter_submit_btn_text: $black;
 $footer_input_text: $vanilla;
 $footer_input_border_active: $vanilla;
+$newsletter_success: $brilliant-rose;
 
 // Checkout Progress.
 $checkout_seperator: $ash-triplet;
@@ -539,7 +544,7 @@ $pdp_modal_full_prodlink: $brilliant-rose;
 $pdp_modal_full_prodlink_border: $gainsboro;
 
 // Product Add to cart form.
-$pdp_sizeguide_link: $brilliant-rose;
+$pdp_sizeguide_link: $nero;
 $pdp_form_item_label: $brilliant-rose;
 $pdp_size_selected_text: $black;
 $pdp_size_option_bg: $black;
@@ -649,7 +654,7 @@ $order_summary_product_price: $black;
 $order_summary_sec_text: $greyish;
 
 // Color for delivery method and address.
-$order_summary_ter_text: $grey-ash;
+$order_summary_ter_text: $black;
 
 // Checkout Global.
 $checkout_footer_bg: $white-five;
@@ -763,7 +768,7 @@ $checkout_delivery_optn_odd_row: $white-four;
 $checkout_delivery_optn_shipping_method_title: $black;
 
 // Checkout Payment.
-$checkout_payment_form_border: $gainsboro;
+$checkout_payment_form_border: $black;
 $checkout_payment_option_border: $gainsboro;
 $checkout_payment_row_selected: $vanilla;
 $checkout_payment_row_default: $vanilla;
@@ -773,10 +778,17 @@ $checkout_payment_method_icon_bg: $white;
 $checkout_payment_method_desc: $nero;
 $checkout_transaction_type_color: $black;
 $checkout_payment_CVV_tooltip_image_bg: $white-smoke;
+$checkout_payment_terms_text: $black;
 
 // Checkout Home delivery.
-$checkout_hd_selected_add_wrapper_border: $white;
-$checkout_hd_selected_add_bg: $white-four;
+$checkout_hd_selected_add_wrapper_border: $gainsboro;
+$checkout_hd_selected_add_bg: $_grey-51-6;
+$checkout_hd_selected_add_change_link: $black;
+$checkout_hd_selected_add_label: $black;
+$checkout_hd_delivery_options_default_bg: $vanilla;
+$checkout_hd_delivery_options_selected_bg: $_grey-51-6;
+$checkout_hd_delivery_options_shipping_desc: $black;
+$checkout_hd_delivery_options_shipping_price: $nero;
 
 // Checkout HD or CC options screen for mobile.
 $checkout_method_choice_tab_separator: $black;
@@ -873,7 +885,7 @@ $address_tile_content: $black;
 $address_tile_radio_label: $black;
 $address_tile_selected_radio_label: $grey-ash;
 $address_pp_delete_title: $marine-blue;
-$address_pp_delete_closebtn: $black;
+$address_pp_delete_closebtn: $nero;
 $address_pp_delete_closebtn_icon: $black;
 
 // Basket
@@ -921,12 +933,13 @@ $order_detail_total_tr_row: $vanilla;
 $order_detail_total_tr_row_price_td: $vanilla;
 $order_detail_total_tr_row_price_td_tablet: $vanilla;
 $order_detail_delivery_details_row_border: $vanilla;
-$order_detail_delivery_details_row_bg: $smoke-light;
-$order_detail_delivery_details_row_td_blend: $smoke-light;
+$order_detail_delivery_details_row_bg: $white-smoke-light;
+$order_detail_delivery_details_row_td_blend: $white-smoke-light;
 $order_detail_delivery_details_row_content: $black;
 $order_detail_order_summary_row_bg: $whisper-dark;
 $order_detail_order_summary_row_td_blend: $whisper-dark;
 $order_detail_order_details_row: $vanilla;
+$order_detail_order_details_row_bg: $smoke-light;
 $order_detail_order_sub_total_border: $gainsboro;
 $order_detail_order_details_row_td_blend: $vanilla;
 $order_detail_warm_white: $vanilla;

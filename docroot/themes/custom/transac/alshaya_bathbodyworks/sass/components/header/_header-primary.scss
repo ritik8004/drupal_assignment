@@ -222,7 +222,7 @@ header {
 	SITE HEADER - MOBILE VIEW
 */
 
-.block-views-exposed-filter-blocksearch-page {
+header .block-views-exposed-filter-blocksearch-page {
   @include breakpoint($upto-desktop) {
     form {
       box-shadow: 0 0.5px 0 0 $header_branding_shadow;

@@ -8,6 +8,76 @@
     }
   }
 
+  .price,
+  .order-summary-row .dark,
+  .delivery-details-row,
+  .total-row {
+    font-size: 0.875rem;
+  }
+
+  .total-row .warm--white {
+    position: static;
+  }
+
+  .sub-total-row,
+  .delivery-charge-row,
+  .total-row,
+  .discount-row {
+    td {
+      padding: 0.625rem 1rem;
+    }
+  }
+
+  .sub-total-row td {
+    padding-top: 1.125rem;
+  }
+
+  .order-transaction > .dark {
+    font-weight: normal;
+    font-family: $vs-bold;
+  }
+
+  .order-details-row {
+    font-size: 0.875rem;
+
+    .label {
+      font-size: 0.75rem;
+    }
+
+    .delivery--method {
+      &.mobile-only {
+        margin-top: 0;
+      }
+
+      .label {
+        font-family: $vs-bold;
+      }
+    }
+  }
+
+  .order__delivery-details {
+    .label {
+      font-family: $vs-bold;
+    }
+  }
+
+  .delivery-charge-row,
+  .sub-total-row {
+    font-size: 0.875rem;
+
+    .right--align {
+      color: $order_detail_td_light_content;
+    }
+  }
+
+  .address--contact {
+    font-size: 0.75rem;
+
+    .no-direction {
+      font-size: 0.875rem;
+    }
+  }
+
   .delivery-details-row {
     @include breakpoint($desktop) {
       border: 0;
@@ -37,18 +107,68 @@
       padding-top: 1.125rem;
     }
   }
+
+  .order-item-row {
+    td.above-mobile {
+      &.blend {
+        @include breakpoint($tablet) {
+          background-color: transparent;
+        }
+
+        @include breakpoint($only-tablet) {
+          vertical-align: bottom;
+        }
+      }
+    }
+
+    .dark {
+      margin-bottom: 1.5625rem;
+    }
+
+    .light {
+      font-size: 0.75rem;
+    }
+  }
+
+  .delivery--method {
+    word-break: break-all;
+  }
 }
 
 .order-detail {
   .user__order--detail {
     .order-item-row {
-      border-bottom: 0;
+      font-size: 0.75rem;
+
+      .dark {
+        font-size: 0.875rem;
+      }
+
+      &:nth-of-type(odd) {
+        background-color: $order_detail_order_details_row_bg;
+      }
+
+      &:last-child {
+        border-bottom: 0;
+      }
+
+      td:last-child {
+        @include breakpoint($tablet) {
+          display: table-cell !important;
+        }
+      }
     }
   }
 
   .c-page-title {
     @include breakpoint($desktop) {
       margin-bottom: 0.75rem;
+    }
+  }
+
+  .print--button {
+    @include breakpoint($tablet) {
+      min-width: 13rem;
     }
   }
 }

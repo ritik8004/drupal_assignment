@@ -863,15 +863,14 @@ header {
     vertical-align: top;
     display: inline-block;
 
-    .highlighted {
-      display: inline-block;
-      max-width: 11.5rem;
-      vertical-align: top;
-      margin: 0 0.625rem;
+    > div:nth-child(1) {
+      margin-#{$right}: 0.625rem;
     }
 
-    img {
-      max-width: 11.625rem;
+    .highlighted {
+      display: inline-block;
+      vertical-align: top;
+      margin: 0 0.625rem;
     }
   }
 

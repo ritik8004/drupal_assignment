@@ -17,6 +17,69 @@
     &.messages--error {
       font-family: $vs-regular;
       font-size: 0.875rem;
+
+      @include breakpoint($upto-tablet) {
+        padding: 0.8rem 1.5625rem;
+        padding-#{$left}: 3.25rem;
+        position: relative;
+        text-indent: 0;
+        line-height: 1.4;
+      }
+
+      @include breakpoint($tablet) {
+        padding: 0.66rem 0.4rem;
+      }
+
+      &::before {
+        margin-#{$right}: 0.4rem;
+        height: auto;
+        width: auto;
+        font-size: 2rem;
+
+        @include breakpoint($upto-tablet) {
+          position: absolute;
+          #{$left}: 0.625rem;
+          top: 0.375rem;
+        }
+      }
+    }
+
+    .backtrace {
+      font-family: $vs-regular;
+      font-size: 0.875rem;
+    }
+
+    &.messages--warning,
+    &.messages--error {
+      border: 1px solid $content_error_border;
+
+      &::before {
+        color: $content_error_icon;
+
+        @include breakpoint($only-tablet) {
+          padding-bottom: 0.875rem;
+        }
+
+        @include breakpoint($upto-tablet) {
+          top: 0.75rem;
+        }
+      }
+
+      ul {
+        margin-top: 0.375rem;
+      }
+
+      &.messages--error > div {
+        padding-top: 0.25rem;
+
+        @include breakpoint($only-tablet) {
+          float: none;
+        }
+
+        @include breakpoint($tablet) {
+          padding-top: 0.5rem;
+        }
+      }
     }
   }
 }

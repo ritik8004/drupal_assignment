@@ -1,0 +1,64 @@
+.c-delivery-checkout {
+  #selected-address-wrapper {
+    .address--controls #change-address {
+      text-transform: uppercase;
+      text-decoration: underline;
+      color: $checkout_hd_selected_add_change_link;
+      font-size: 0.875rem;
+    }
+
+    .address--label {
+      font-family: $vs-bold;
+      color: $checkout_hd_selected_add_label;
+    }
+  }
+
+  .shipping-methods-container {
+    .form-type-radio {
+      background-color: $checkout_hd_delivery_options_default_bg !important;
+
+      &.selected {
+        background-color: $checkout_hd_delivery_options_selected_bg !important;
+      }
+    }
+
+    label.option {
+      .shipping-method-title {
+        font-family: $vs-bold !important;
+      }
+
+      .shipping-method-description {
+        color: $checkout_hd_delivery_options_shipping_desc;
+      }
+
+      .shipping-method-price {
+        color: $checkout_hd_delivery_options_shipping_price;
+      }
+    }
+  }
+
+  #edit-member-delivery-home-addresses {
+    .address--controls {
+      &.address--deliver-to-this-address a {
+        text-transform: uppercase;
+      }
+    }
+
+    .address:hover,
+    .address.default {
+      .address--data {
+        background: $checkout_hd_selected_add_bg;
+      }
+
+      .address--controls {
+        &.address--deliver-to-this-address a {
+          font-family: $vs-bold;
+        }
+      }
+    }
+  }
+
+  main form .form-actions a {
+    font-size: 0.875rem !important;
+  }
+}
