@@ -446,6 +446,7 @@
       opacity: 1;
       font-size: 0.75rem !important;
       color: $greyish;
+      top: 7px !important;
 
       &.error {
         position: absolute;
@@ -732,7 +733,7 @@
   .form-item.form-type-textfield {
     label:last-of-type {
       font-size: 1rem;
-      color: $greyish;
+      color: $primary_input_label;
       position: absolute;
       #{$left}: 0;
       top: -0.125rem;
@@ -756,7 +757,7 @@
   .form-item-member-delivery-home-address-form-form-address-line2 {
     input[type=text] ~ label:not(.active-label) {
       font-size: 1rem !important;
-      color: $greyish !important;
+      color: $primary_input_label !important;
       position: absolute !important;
       #{$left}: 0 !important;
       top: -0.125rem !important;

@@ -157,6 +157,7 @@
 
           td.blend {
             background: $order_conf_order_products_odd_row_highlight;
+            vertical-align: top;
           }
         }
 
@@ -165,6 +166,7 @@
 
           td.blend {
             background: $order_conf_order_products_even_row_highlight;
+            vertical-align: top;
           }
         }
 
@@ -173,6 +175,10 @@
 
           td {
             padding: 0.875rem 0.5rem;
+
+            @include breakpoint($only-tablet) {
+              font-size: 0.875rem;
+            }
           }
         }
 
@@ -190,6 +196,10 @@
             div {
               margin-bottom: 0;
             }
+
+            &:nth-child(3) {
+              padding-#{$left}: 0 !important;
+            }
           }
         }
 
@@ -204,12 +214,16 @@
             div {
               margin-bottom: 0;
             }
+
+            &:nth-child(3) {
+              padding-#{$left}: 0 !important;
+            }
           }
         }
 
         td {
           .price-wrapper .price {
-            max-width: none;
+            max-width: none !important;
           }
         }
       }
@@ -222,6 +236,10 @@
       font-family: $vs-regular;
       font-weight: normal;
       text-decoration: underline;
+
+      @include breakpoint($only-tablet) {
+        padding: 0;
+      }
     }
   }
 
@@ -229,5 +247,12 @@
     text-transform: capitalize;
     font-family: $vs-regular;
     font-weight: normal;
+  }
+
+  .user-register-form {
+    .form-type-checkbox .option::before {
+      margin-#{$right}: inherit;
+      #{$left}: 0;
+    }
   }
 }
