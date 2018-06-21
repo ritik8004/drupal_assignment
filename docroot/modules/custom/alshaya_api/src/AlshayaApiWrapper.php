@@ -324,6 +324,7 @@ class AlshayaApiWrapper {
     $parent_index = 2;
     $status_index = 6;
     $visibility_index = 7;
+    $sku_type_index = 23;
 
     while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
       // We don't deal with disabled SKUs.
@@ -337,7 +338,7 @@ class AlshayaApiWrapper {
         continue;
       }
 
-      $type = empty($data[$parent_index]) ? 'configurable' : 'simple';
+      $type = $data[$sku_type_index] == 'Simple Product' ? 'simple' : 'configurable';
 
       $mskus[$type][] = $data[$sku_index];
     }
