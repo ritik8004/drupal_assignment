@@ -49,14 +49,26 @@
           }
         }
 
+        @include breakpoint($only-mobile) {
+          &.active--tab--head {
+            border: 1px solid $checkout_tab_active_border !important;
+          }
+        }
+
         &:not(.active--tab--head) {
-          margin-top: -1px;
+          @include breakpoint($tablet) {
+            margin-top: -1px;
+          }
         }
       }
 
       .tab-separator {
         @include breakpoint($tablet) {
           width: 9.1%;
+        }
+
+        @include breakpoint($only-mobile) {
+          margin-top: 0.5rem;
         }
       }
     }
@@ -106,4 +118,10 @@
       font-family: $vs-regular;
     }
   }
+}
+
+.select-transaction-type {
+  font-family: $vs-regular;
+  font-weight: normal;
+  text-transform: capitalize;
 }
