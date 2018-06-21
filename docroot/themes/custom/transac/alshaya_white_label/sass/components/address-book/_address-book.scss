@@ -445,8 +445,8 @@
     label {
       opacity: 1;
       font-size: 0.75rem !important;
-      color: $greyish;
-      top: 7px !important;
+      color: $primary_input_label;
+      top: 0.4375rem !important;
 
       &.error {
         position: absolute;
