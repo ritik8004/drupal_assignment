@@ -60,13 +60,9 @@
 .imagegallery__thumbnails__video {
   &::before {
     content: '';
-    background: url(#{$base_theme_img_directory_path}/icons/ic-video.svg) 58% 50% no-repeat;
-    width: 5rem;
-    height: 5rem;
+    background: url(#{$base_theme_img_directory_path}/icons/ic-video.svg) 50% 50% no-repeat;
+    width: inherit;
+    height: inherit;
     position: absolute;
-
-    @include breakpoint($only-tablet) {
-      background: url(#{$base_theme_img_directory_path}/icons/ic-video.svg) 64% 69% no-repeat;
-    }
   }
 }

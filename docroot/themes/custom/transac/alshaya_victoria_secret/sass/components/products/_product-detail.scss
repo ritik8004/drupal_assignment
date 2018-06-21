@@ -85,3 +85,19 @@
     display: inline;
   }
 }
+
+.basic-details-wrapper {
+  .field--name-field-skus {
+    .form-item-quantity {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+
+        select {
+          &.form-select {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

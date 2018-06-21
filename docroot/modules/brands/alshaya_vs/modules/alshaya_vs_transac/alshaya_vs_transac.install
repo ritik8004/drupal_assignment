@@ -68,4 +68,9 @@ function alshaya_vs_transac_install() {
   $block = reset($blocks);
   $block->setStatus(TRUE);
   $block->save();
+
+  // Set the number of items to show in a gallery on PDP.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('pdp_slider_items_settings.pdp_slider_items_number', 3)
+    ->save();
 }
