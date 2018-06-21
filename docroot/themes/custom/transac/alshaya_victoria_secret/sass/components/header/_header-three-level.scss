@@ -11,6 +11,9 @@
       @include breakpoint($desktop) {
         column-width: 13.2rem;
         padding-#{$left}: 5.75rem;
+        padding-bottom: 2.5rem;
+        height: 17rem;
+        min-height: 0;
       }
     }
   }
@@ -43,16 +46,52 @@
     margin-#{$right}: 0;
     padding: 2.5rem;
     padding-bottom: 0;
-    height: 25.5rem;
-    margin-top: -1.5rem;
+    height: 18.4rem;
+    margin-top: -2.55rem;
+  }
+}
+
+.highlights {
+  img {
+    @include breakpoint($desktop) {
+      max-width: 9.75rem;
+      display: block;
+    }
+  }
+
+  .highlighted {
+    @include breakpoint($desktop) {
+      margin-#{$right}: 1.5rem;
+    }
+
+    &:last-child {
+      @include breakpoint($desktop) {
+        margin-#{$right}: 0;
+      }
+    }
   }
 }
 
 .block-alshaya-main-menu {
-  li.menu--one__list-item:hover {
-    & > ul.menu--two__list {
+  li.menu--one__list-item {
+    &:hover > ul.menu--two__list {
       @include breakpoint($desktop) {
         padding-top: 1.5rem;
+        height: 20.5rem !important;
+        min-height: 0;
+      }
+    }
+
+    & > ul.menu--two__list {
+      @include breakpoint($desktop) {
+        &::before {
+          content: " ";
+          display: block;
+          height: 2px;
+          background: $mm_top_border;
+          position: relative;
+          top: -2.55rem;
+        }
       }
     }
   }

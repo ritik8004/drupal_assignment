@@ -141,8 +141,8 @@ $complete_btn_bg: $medium-green;
 // Checkbox & Radio.
 $primary_checkbox_empty: $ash-triplet;
 $primary_checkbox_filled: $black;
-$primary_radiobtn_label: $grey-ash;
-$primary_radiobtn_empty: $greyish;
+$primary_radiobtn_label: $black;
+$primary_radiobtn_empty: $ash-triplet;
 $primary_radiobtn_filled: $nero;
 
 // Tables.
@@ -383,6 +383,7 @@ $header_my_account_icon: $black;
 
 // Mega menu.
 $mm_bg: $white-five;
+$mm_top_border: $white-smoke-light;
 $mm_body_overlay: rgba(0, 0, 0, 0.48);
 $mm_l1_border: $gainsboro;
 $mm_l1_link: $black;
