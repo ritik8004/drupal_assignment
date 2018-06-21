@@ -10,6 +10,10 @@
 
 .c-pre-content__region {
   border-top: 0;
+
+  @include breakpoint($desktop) {
+    height: 2.6rem;
+  }
 }
 
 header {
@@ -45,11 +49,9 @@ header {
         width: 1.125rem;
         height: 1.125rem;
         bottom: 0.25rem;
-        #{$left}: 38%;
-      }
-
-      @include breakpoint($upto-tablet) {
-        #{$left}: 28%;
+        #{$left}: -1.5rem;
+        #{$right}: 0;
+        margin: 0 auto;
       }
     }
   }
@@ -145,13 +147,14 @@ header {
       vertical-align: top;
       list-style: none;
       text-align: center;
-      height: 2.6875rem;
+      height: 2.5rem;
 
       a.menu--one__link {
         border-bottom: none;
         font-size: 0.875rem;
         text-transform: uppercase;
         padding: 0.625rem 0.9375rem;
+        height: 2.5rem;
       }
 
       &.active a.menu--one__link {
@@ -365,5 +368,13 @@ header {
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
     padding-#{$right}: 0.5rem;
+  }
+
+  .cart-link-total {
+    display: none;
+
+    @include breakpoint($desktop) {
+      display: block;
+    }
   }
 }
