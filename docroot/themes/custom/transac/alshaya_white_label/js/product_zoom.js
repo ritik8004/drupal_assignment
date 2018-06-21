@@ -10,8 +10,8 @@
   Drupal.behaviors.alshaya_product_zoom = {
     attach: function (context, settings) {
       var slickOptions = {
-        slidesToShow: 5,
-        vertical: getPDPSliderPosition(),
+        slidesToShow: getPDPSliderParameter('slidesToShow'),
+        vertical: getPDPSliderParameter('vertical'),
         arrows: true,
         focusOnSelect: false,
         centerMode: true,
@@ -102,8 +102,8 @@
           }
 
           var slickModalOptions = {
-            slidesToShow: 5,
-            vertical: getPDPSliderPosition(),
+            slidesToShow: getPDPSliderParameter('slidesToShow'),
+            vertical: getPDPSliderParameter('vertical'),
             arrows: true,
             centerMode: true,
             infinite: false,
@@ -309,7 +309,11 @@
       // Adding class if there is no slider.
       if ($(window).width() < 1024) {
         if ($('#drupal-modal #lightSlider .slick-track > li').length < 4) {
-          $('#drupal-modal #lightSlider').addClass('no-slick-pager');
+          $('#drupal-modal #lightSlider').addClass('pager-no');
+        }
+
+        else {
+          $('#drupal-modal #lightSlider').addClass('pager-yes');
         }
       }
 
@@ -484,11 +488,27 @@
    * Get the vertical parameter for slick slider on the basis of the drupalsetting
    * image_slider_position_pdp.
    *
+   * Get the slidesToShow parameter for slick slider on the basis of the drupalsetting
+   * pdp_slider_items.
+   *
    * @return {boolean} vertical
    *   The vertical paramerter for slick slider.
+   *
+   * @return {integer} slidesToShow
+   *   The slidesToShow paramerter for slick slider.
+   *
+   * @param {string} slick_slider_setting
+   *   The setting of slick slider.
    */
-  function getPDPSliderPosition() {
-    var pdp_slider_position = drupalSettings.alshaya_white_label.image_slider_position_pdp;
-    return !(pdp_slider_position === 'slider-position-bottom');
+  function getPDPSliderParameter(slick_slider_setting) {
+    if (slick_slider_setting === 'vertical') {
+      var pdp_slider_position = drupalSettings.alshaya_white_label.image_slider_position_pdp;
+      return !(pdp_slider_position === 'slider-position-bottom');
+    }
+
+    else if (slick_slider_setting === 'slidesToShow') {
+      var pdp_slider_items = drupalSettings.pdp_slider_items;
+      return pdp_slider_items;
+    }
   }
 })(jQuery, Drupal, drupalSettings);

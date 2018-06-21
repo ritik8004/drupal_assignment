@@ -310,6 +310,8 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['#attached']['drupalSettings']['pdp_items_mob'] = \Drupal::config('alshaya_acm_product.settings')->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
     $variables['#attached']['drupalSettings']['pdp_items_tab'] = \Drupal::config('alshaya_acm_product.settings')->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
     $variables['#attached']['drupalSettings']['pdp_items_desk'] = \Drupal::config('alshaya_acm_product.settings')->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
+    // Number of items to show in a slider on PDP.
+    $variables['#attached']['drupalSettings']['pdp_slider_items'] = \Drupal::config('alshaya_acm_product.settings')->get('pdp_slider_items_settings.pdp_slider_items_number');
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();

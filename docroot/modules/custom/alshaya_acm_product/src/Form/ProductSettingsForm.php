@@ -215,6 +215,14 @@ class ProductSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('brand_logo_base_path'),
     ];
 
+    $form['pdp_slider_items_settings']['pdp_slider_items_number'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('slider items'),
+      '#description' => $this->t('Number of items to show in a slider on PDP.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('pdp_slider_items_settings.pdp_slider_items_number'),
+    ];
+
     $form['brand_logo_extension'] = [
       '#type' => 'textfield',
       '#title' => $this->t('File extension for Brand Logo'),
