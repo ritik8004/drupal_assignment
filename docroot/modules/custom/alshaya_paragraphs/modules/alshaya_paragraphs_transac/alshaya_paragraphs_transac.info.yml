@@ -1,0 +1,7 @@
+name: 'Alshaya Paragraphs transac'
+type: module
+core: 8.x
+description: 'All the paragraphs types required for transac site.'
+dependencies:
+  - alshaya_paragraphs:alshaya_paragraphs
+package: Alshaya
