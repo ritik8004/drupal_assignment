@@ -107,26 +107,6 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  attr_color_family:
-    label: Color
-    datasource_id: entity:node
-    property_path: field_skus:entity:attr_color_family
-    type: string
-    dependencies:
-      config:
-      - field.storage.node.field_skus
-      module:
-      - acq_sku
-  attr_color_description:
-    label: Color Description
-    datasource_id: entity:node
-    property_path: field_skus:entity:attr_color_description
-    type: string
-    dependencies:
-      config:
-      - field.storage.node.field_skus
-      module:
-      - acq_sku
   attr_size:
     label: Size
     datasource_id: 'entity:node'

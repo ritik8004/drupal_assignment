@@ -24,15 +24,28 @@ header {
       }
     }
 
-    .quantity {
-      width: 1.5rem;
-      height: 1.5rem;
-      font-family: $vs-bold;
-      font-size: 0.75rem;
+    .cart-link-total {
+      padding-#{$right}: 0.675rem;
 
       @include breakpoint($upto-desktop) {
-        bottom: 0.125rem;
-        #{$left}: 39%;
+        display: none;
+      }
+    }
+
+    .quantity {
+      width: 1.25rem;
+      height: 1.25rem;
+      font-family: $vs-bold;
+      font-size: 0.75rem;
+      bottom: -0.45rem;
+      #{$left}: -0.125rem;
+      line-height: 20px;
+
+      @include breakpoint($upto-desktop) {
+        width: 1.125rem;
+        height: 1.125rem;
+        bottom: 0.25rem;
+        #{$left}: 38%;
       }
 
       @include breakpoint($upto-tablet) {
@@ -91,6 +104,16 @@ header {
           }
         }
       }
+
+      input {
+        color: $primary_search_input;
+
+        &::placeholder {
+          color: $primary_search_input_placeholder;
+          font-size: 0.875rem;
+          text-transform: capitalize;
+        }
+      }
     }
   }
 
@@ -128,6 +151,7 @@ header {
         border-bottom: none;
         font-size: 0.875rem;
         text-transform: uppercase;
+        padding: 0.625rem 0.9375rem;
       }
 
       &.active a.menu--one__link {
@@ -139,7 +163,7 @@ header {
       li.menu--one__list-item {
         &:hover {
           a.menu--one__link {
-            border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
+            border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
           }
         }
       }
@@ -249,6 +273,11 @@ header {
       position: relative;
       top: -0.3125rem;
       #{$left}: -0.375rem;
+
+      @include breakpoint($only-tablet) {
+        font-size: 2.25rem;
+        top: -0.35rem;
+      }
     }
   }
 
@@ -329,5 +358,12 @@ header {
   @include breakpoint($upto-desktop) {
     color: $header_secondary_menu_mobile_link;
     background: $header_secondary_menu_link_mobile_hover_bg;
+  }
+}
+
+#block-cartminiblock {
+  @include breakpoint($desktop) {
+    padding-top: 0.75rem;
+    padding-#{$right}: 0.5rem;
   }
 }

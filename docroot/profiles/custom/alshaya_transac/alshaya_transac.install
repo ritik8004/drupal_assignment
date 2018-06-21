@@ -34,10 +34,15 @@ function alshaya_transac_update_8113() {
 /**
  * Implements hook_update_N().
  *
- * Enable alshaya_search_api module.
+ * Enable alshaya_search_api module. Remove color_family and color_description.
  */
 function alshaya_transac_update_8112() {
   \Drupal::service('module_installer')->install(['alshaya_search_api']);
+
+  /** @var \Drupal\acq_sku\SKUFieldsManager $manager */
+  $manager = \Drupal::service('acq_sku.fields_manager');
+  $manager->removeField('color_description');
+  $manager->removeField('color_family');
 }
 
 /**

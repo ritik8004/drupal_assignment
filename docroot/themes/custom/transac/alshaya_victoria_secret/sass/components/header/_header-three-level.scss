@@ -5,6 +5,15 @@
       text-transform: none;
     }
   }
+
+  .menu--two__list {
+    .menu__links__wrapper {
+      @include breakpoint($desktop) {
+        column-width: 13.2rem;
+        padding-#{$left}: 5.75rem;
+      }
+    }
+  }
 }
 
 .menu--two__list {
@@ -36,6 +45,16 @@
     padding-bottom: 0;
     height: 25.5rem;
     margin-top: -1.5rem;
+  }
+}
+
+.block-alshaya-main-menu {
+  li.menu--one__list-item:hover {
+    & > ul.menu--two__list {
+      @include breakpoint($desktop) {
+        padding-top: 1.5rem;
+      }
+    }
   }
 }
 
