@@ -26,6 +26,10 @@ header {
 
     .cart-link-total {
       padding-#{$right}: 0.675rem;
+
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
     }
 
     .quantity {

@@ -94,6 +94,8 @@ $tomato: #e6591b;
 
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
+$_grey_one: #f8f8f8;
+$_grey_two: #f3f3f3;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -121,7 +123,7 @@ $primary_input_inline_error: $red-error;
 $online_exclusive_link: $nero;
 
 // Form Items
-$formitem_label: $greyish;
+$formitem_label: $ash-triplet;
 $formitem_input: $black;
 
 //Buttons.
@@ -147,9 +149,9 @@ $primary_radiobtn_filled: $nero;
 $primary_th_bg: $white-smoke-light;
 $primary_th_bg_highlight: $white-two;
 $primary_td_highlight2: $whisper-light; // used on order total (basket).
-$primary_td_highlight3: #f8f8f8; // used on blend class.
+$primary_td_highlight3: $_grey_one; // used on blend class.
 $primary_th_bg_order_highlight: $pale-grey;
-$primary_td_bg_highlight: #f8f8f8;
+$primary_td_bg_highlight: $_grey_one;
 $primary_td_bg: $white-five;
 $primary_tr_hover: rgba(247, 247, 247, 0.72);
 $primary_table_border: $white;
@@ -704,6 +706,18 @@ $checkout_login_btn_bg: $brilliant-rose;
 //  Checkout Confirmation.
 $checkout_confirmation_delivery_details: $white-smoke-light;
 $checkout_confirmation_table_pm_highlight: $solitude;
+$checkout_confirmation_barcode_text: $ash-triplet;
+// Checkout Confirmation order page.
+$order_conf_order_details_row: $white-smoke-light;
+$order_conf_order_details_row_highlight: rgba(35, 35, 35, 0.15);
+$order_conf_order_details_labels_text: $black;
+$order_conf_order_products_odd_row: $vanilla;
+$order_conf_order_products_odd_row_highlight: $_grey_one;
+$order_conf_order_products_even_row: $smoke-light;
+$order_conf_order_products_even_row_highlight: $_grey_two;
+$order_conf_order_product_count_row: $checkout_section_border;
+$order_conf_order_subtotal: $white-smoke-light;
+$order_conf_order_total: $gainsboro;
 
 // Checkout Click & collect.
 $checkout_cc_list_map_link_default: $black;
@@ -804,10 +818,12 @@ $checkout_confirm_discount_row: $white-five;
 $checkout_confirm_discount_row_td_4th_child: $white-smoke-light;
 $checkout_confirm_continue_shopping_bg: $white-five;
 $checkout_confirm_continue_shopping_border: $marine-blue;
-$checkout_confirm_order_summary_row: $pale-grey;
-$checkout_confirm_order_summary_row_text: $cerulean-two;
-$checkout_order_print_btn_bg: $white-five;
-$checkout_order_print_btn_border: $marine-blue;
+$checkout_confirm_order_summary_row: $vanilla;
+$checkout_confirm_order_summary_row_text: $brilliant-rose;
+$checkout_order_print_btn_bg: $vanilla;
+$checkout_order_print_btn_border: $nero;
+$checkout_order_print_btn_txt: $nero;
+$checkout_confirm_info_icon: $nero;
 $checkout_order_details_label: $cerulean-two;
 $checkout_order_details_product_count_border: $white-five;
 
