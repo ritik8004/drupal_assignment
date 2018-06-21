@@ -11,7 +11,7 @@ namespace Drupal\acq_commerce\Connector;
  */
 class CustomerNotFoundException extends ConnectorException {
 
-  const CUSTOMER_NOT_FOUND_CODE = 32;
+  const CUSTOMER_NOT_FOUND_CODE = 102;
   const CUSTOMER_NOT_FOUND_MESSAGE = "Customer not found";
 
 }
