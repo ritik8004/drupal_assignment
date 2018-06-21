@@ -43,11 +43,43 @@
         }
       }
     }
-  }
-}
 
-.messages__wrapper {
-  max-width: 65.35rem;
-  margin-left: auto;
-  margin-right: auto;
+    .backtrace {
+      font-family: $vs-regular;
+      font-size: 0.875rem;
+    }
+
+    &.messages--warning,
+    &.messages--error {
+      border: 1px solid $content_error_border;
+
+      &::before {
+        color: $content_error_icon;
+
+        @include breakpoint($only-tablet) {
+          padding-bottom: 0.875rem;
+        }
+
+        @include breakpoint($upto-tablet) {
+          top: 0.75rem;
+        }
+      }
+
+      ul {
+        margin-top: 0.375rem;
+      }
+
+      &.messages--error > div {
+        padding-top: 0.25rem;
+
+        @include breakpoint($only-tablet) {
+          float: none;
+        }
+
+        @include breakpoint($tablet) {
+          padding-top: 0.5rem;
+        }
+      }
+    }
+  }
 }

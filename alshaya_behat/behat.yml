@@ -60,7 +60,7 @@ mcqa:
   extensions:
     Behat\MinkExtension:
       base_url: 'https://mckw-test.factory.alshaya.com/'
-      files_path: "%paths.base%/media"
+      files_path: "%paths.base%/images"
 
 mcuat:
   autoload:
@@ -120,7 +120,7 @@ mcprod:
   extensions:
     Behat\MinkExtension:
       base_url: 'https://www.mothercare.com.kw/en'
-      files_path: "%paths.base%/media"
+      files_path: "%paths.base%/images"
 
 mcae:
   autoload:
@@ -148,7 +148,7 @@ mcae:
   extensions:
     Behat\MinkExtension:
       base_url: 'https://mcae.test-alshaya.acsitefactory.com/en'
-      files_path: "%paths.base%/features/mothercare/media"
+      files_path: "%paths.base%/images"
 
 hmsa:
   autoload:
@@ -176,7 +176,7 @@ hmsa:
   extensions:
     Behat\MinkExtension:
       base_url: 'https://hmsa.dev3-alshaya.acsitefactory.com/en'
-      files_path: "%paths.base%/media"
+      files_path: "%paths.base%/images"
 
 hmuat:
   autoload:
@@ -205,7 +205,7 @@ hmuat:
   extensions:
     Behat\MinkExtension:
       base_url: 'https://hmkw-uat.factory.alshaya.com'
-      files_path: "%paths.base%/media"
+      files_path: "%paths.base%/images"
 
 hmqa:
   autoload:
@@ -234,7 +234,7 @@ hmqa:
   extensions:
     Behat\MinkExtension:
       base_url: 'https://hmae-uat.factory.alshaya.com/en/'
-      files_path: "%paths.base%/media"
+      files_path: "%paths.base%/images"
 
 hmprod:
   autoload:
@@ -263,7 +263,7 @@ hmprod:
   extensions:
     Behat\MinkExtension:
       base_url: 'https://kw.hm.com/en'
-      files_path: "%paths.base%/media"
+      files_path: "%paths.base%/images"
 
 vsqa:
   autoload:
@@ -290,4 +290,4 @@ vsqa:
   extensions:
     Behat\MinkExtension:
       base_url: 'https://alshaya_shield:AS_S@vskw.factory.alshaya.com/en'
-      files_path: "%paths.base%/media"
+      files_path: "%paths.base%/images"

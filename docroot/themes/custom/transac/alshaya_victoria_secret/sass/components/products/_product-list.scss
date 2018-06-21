@@ -54,12 +54,18 @@
           &::after {
             border: 1px solid $plp_facet_label_border_mobile;
             border-#{$left}: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5625rem;
           }
 
           &.is-active {
             &::after {
-              #{$right}: -2.125rem;
-              border: none;
+              @include breakpoint($only-tablet) {
+                #{$right}: -2.125rem;
+                border: none;
+              }
             }
           }
         }
@@ -214,6 +220,31 @@
   &.view-filters {
     label {
       font-size: 0.875rem;
+    }
+
+    .form-type-select {
+      @include breakpoint($upto-desktop) {
+        select {
+          height: 2.1875rem;
+          padding: 0.625rem 0.5rem;
+        }
+
+        &::after {
+          height: auto;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          line-height: 2.1875rem;
+        }
+      }
+    }
+  }
+}
+
+.view-plp-promotional-banner {
+  img {
+    &:empty {
+      display: none;
     }
   }
 }
