@@ -153,6 +153,12 @@
       }
     }
   }
+
+  .second-third .order-name {
+    @include breakpoint($desktop) {
+      margin-bottom: 0.25rem;
+    }
+  }
 }
 
 #block-content {
@@ -172,7 +178,9 @@
       }
 
       .date {
-        margin-top: 0;
+        @include breakpoint($desktop) {
+          margin-top: 0.3125rem;
+        }
       }
 
       &::after {
