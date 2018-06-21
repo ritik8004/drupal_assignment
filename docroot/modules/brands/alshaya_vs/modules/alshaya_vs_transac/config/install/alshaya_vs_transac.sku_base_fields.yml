@@ -7,21 +7,24 @@ fields:
     label: 'Band Size'
     cardinality: -1
     configurable: 1
-    index: 1
 
   cup_size:
     label: 'Cup Size'
     cardinality: -1
     configurable: 1
-    index: 1
 
-  web_display_size:
-    label: 'Size'
+  fragrance:
+    label: 'Fragrance'
+    cardinality: -1
+    configurable: 1
+
+  product_search_category:
+    label: 'Category'
     cardinality: -1
     index: 1
     facet: 1
 
-  product_search_category:
+  category:
     label: 'Category'
     cardinality: -1
     index: 1

@@ -99,9 +99,7 @@ class AlshayaSearchApiFacetsManager {
     $block_data['theme'] = $this->themeManager->getActiveTheme()->getName();
     $block_data['plugin'] = 'facet_block:' . $id;
     $block_data['settings']['id'] = $block_data['plugin'];
-    $block_data['settings']['label'] = $prefix
-      ? ucfirst($prefix) . ' ' . $data['name']
-      : $data['name'];
+    $block_data['settings']['label'] = $data['name'];
     $this->configFactory->getEditable($block_id)->setData($block_data)->save();
   }
 
