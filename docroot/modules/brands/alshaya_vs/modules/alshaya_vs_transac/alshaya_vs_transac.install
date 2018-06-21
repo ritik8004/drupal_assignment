@@ -35,6 +35,11 @@ function alshaya_vs_transac_install() {
     ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
     ->save();
 
+  // Set stock mode.
+  \Drupal::configFactory()->getEditable('acq_sku.settings')
+    ->set('stock_mode', Settings::get('stock_mode'))
+    ->save();
+
   // Save overridden configs.
   _alshaya_config_save_overridden_configs('alshaya_vs_transac');
 
