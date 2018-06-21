@@ -191,6 +191,7 @@ header {
 
     html[lang=ar] & {
       right: 0;
+      top: 1rem;
     }
   }
 
@@ -368,6 +369,11 @@ header {
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
     padding-#{$right}: 0.5rem;
+
+    html[lang=ar] & {
+      padding-top: 1.25rem;
+      padding-left: 0.75rem;
+    }
   }
 
   .cart-link-total {
