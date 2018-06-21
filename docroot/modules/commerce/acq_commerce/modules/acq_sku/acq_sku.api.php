@@ -31,8 +31,10 @@ function hook_acq_sku_base_field_additions_alter(array &$fields = []) {
  *
  * @param array $fields
  *   Fields array.
+ * @param string $op
+ *   Operation performed on fields.
  */
-function acq_sku_base_fields_updated(array $fields) {
+function acq_sku_base_fields_updated(array $fields, $op = 'add') {
 
 }
 

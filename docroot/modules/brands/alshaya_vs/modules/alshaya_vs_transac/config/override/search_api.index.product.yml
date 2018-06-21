@@ -9,22 +9,10 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
-
-  attr_category:
-    label: Category
+  attr_actual_color_label_code:
+    label: 'Actual Color Label Code'
     datasource_id: entity:node
-    property_path: field_skus:entity:attr_category
-    type: string
-    dependencies:
-      config:
-      - field.storage.node.field_skus
-      module:
-      - acq_sku
-
-  attr_product_search_category:
-    label: Category
-    datasource_id: entity:node
-    property_path: field_skus:entity:attr_product_search_category
+    property_path: field_skus:entity:attr_actual_color_label_code
     type: string
     dependencies:
       config:

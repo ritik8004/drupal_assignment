@@ -18,14 +18,8 @@ fields:
     cardinality: -1
     configurable: 1
 
-  product_search_category:
-    label: 'Category'
-    cardinality: -1
-    index: 1
-    facet: 1
-
-  category:
-    label: 'Category'
+  actual_color_label_code:
+    label: 'Actual Color Label Code'
     cardinality: -1
     index: 1
     facet: 1

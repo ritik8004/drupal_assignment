@@ -216,7 +216,7 @@ function alshaya_get_env_keys($site, $env) {
     'vsae' => [
       'default' => [
         'magento' => 'vs_qa',
-        'conductor' => 'vsae_uat',
+        'conductor' => 'vsae_test',
       ],
     ],
   ];
