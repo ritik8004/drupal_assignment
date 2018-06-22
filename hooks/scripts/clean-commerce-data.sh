@@ -30,3 +30,6 @@ drush8 @$site.$target_env --uri=$uri search-api-enable-all
 
 echo "Clearing all indexed data."
 drush8 @$site.$target_env --uri=$uri search-api-clear
+
+echo "Reset purge queue"
+drush8 @$site.$target_env --uri=$uri p-queue-empty
