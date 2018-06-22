@@ -314,6 +314,7 @@
 
         else {
           $('#drupal-modal #lightSlider').addClass('pager-yes');
+          $('#drupal-modal #lightSlider').removeClass('pager-no');
         }
       }
 
