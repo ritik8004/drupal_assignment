@@ -91,6 +91,7 @@ $white-smoke-fog: #f9f9f9;
 $smoke-light: #fafafa;
 $medium-green: #39b54a;
 $tomato: #e6591b;
+$alabaster: #fcfcfc;
 
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
@@ -654,6 +655,11 @@ $order_summary_dropdown_icon: $black;
 $order_summary_section_border: $gainsboro;
 $order_summary_product_title: $black;
 $order_summary_product_price: $black;
+$order_print_secondary_section_border: $ash-triplet;
+$order_print_delivery_detail_bg: $vanilla;
+$order_print_total_bg: $white-smoke-light;
+$order_print_item_blend: $alabaster;
+$order_print_address_blend: $gainsboro;
 
 // Color for attributes and qty.
 $order_summary_sec_text: $greyish;
