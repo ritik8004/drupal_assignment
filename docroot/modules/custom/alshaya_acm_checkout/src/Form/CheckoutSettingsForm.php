@@ -37,7 +37,6 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $config->set('click_collect_method_method_code', $form_state->getValue('click_collect_method_method_code'));
     $config->set('click_collect_method_carrier_code', $form_state->getValue('click_collect_method_carrier_code'));
     $config->set('checkout_display_magento_error', $form_state->getValue('checkout_display_magento_error'));
-    $config->set('cod_surcharge', $form_state->getValue('cod_surcharge'));
     $config->set('cod_surcharge_label', $form_state->getValue('cod_surcharge_label'));
     $config->set('cod_surcharge_short_description', $form_state->getValue('cod_surcharge_short_description'));
     $config->set('cod_surcharge_description', $form_state->getValue('cod_surcharge_description'));
@@ -119,17 +118,6 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Display error message from magento'),
       '#required' => TRUE,
       '#default_value' => $config->get('checkout_display_magento_error'),
-    ];
-
-    $form['cod_surcharge'] = [
-      '#type' => 'select',
-      '#options' => [
-        0 => $this->t('Disabled'),
-        1 => $this->t('Enabled'),
-      ],
-      '#title' => $this->t('COD Surcharge status'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('cod_surcharge'),
     ];
 
     $form['cod_surcharge_label'] = [

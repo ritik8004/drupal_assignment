@@ -26,9 +26,6 @@ alshaya_acm_checkout.settings:
     checkout_display_magento_error:
       type: integer
       label: 'Display error message from magento'
-    cod_surcharge:
-      type: integer
-      label: 'COD Surcharge status'
     cod_surcharge_label:
       type: label
       label: 'COD Surcharge Label'
