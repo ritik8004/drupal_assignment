@@ -154,9 +154,17 @@
     }
   }
 
-  .second-third .order-name {
-    @include breakpoint($desktop) {
-      margin-bottom: 0.25rem;
+  .second-third {
+    .second {
+      @include breakpoint($desktop) {
+        vertical-align: middle;
+      }
+    }
+
+    .order-name {
+      @include breakpoint($desktop) {
+        margin-bottom: 0.25rem;
+      }
     }
   }
 }
