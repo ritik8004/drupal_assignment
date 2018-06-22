@@ -128,20 +128,37 @@ function alshaya_product_search_api_db_query_alter(SelectInterface &$db_query, Q
 /**
  * Implements hook_acq_sku_base_fields_updated().
  */
-function alshaya_product_acq_sku_base_fields_updated(array $fields) {
-  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+function alshaya_product_acq_sku_base_fields_updated(array $fields, $op = 'add') {
+  /** @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $facet_manager */
+  $facet_manager = \Drupal::service('alshaya_search_api.facets_manager');
 
   $facet_source_id = 'search_api:views_block__alshaya_product_list__block_1';
   $filter_bar_id = 'facets_summary.facets_summary.filter_bar_plp';
   $prefix = 'plp';
 
-  /** @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $facet_manager */
-  $facet_manager = \Drupal::service('alshaya_search_api.facets_manager');
-  foreach ($fields as $field_code => $field) {
-    if (empty($field['facet'])) {
-      continue;
-    }
+  switch ($op) {
+    case 'add':
+      alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
 
-    $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix);
+      foreach ($fields as $field_code => $field) {
+        if (empty($field['facet'])) {
+          continue;
+        }
+
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix);
+      }
+      break;
+
+    case 'remove';
+      foreach ($fields as $field_code => $field) {
+        $index_field_code = 'attr_' . $field_code;
+        _alshaya_search_api_remove_field_from_indexes($index_field_code, 'product');
+
+        // Remove from facets if facet is 1.
+        if (!empty($field['facet'])) {
+          $facet_manager->removeFacet($field_code, $filter_bar_id, $prefix);
+        }
+      }
+      break;
   }
 }

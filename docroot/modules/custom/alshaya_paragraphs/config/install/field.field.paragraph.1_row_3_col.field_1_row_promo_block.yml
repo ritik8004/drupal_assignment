@@ -6,7 +6,6 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_3_col
     - paragraphs.paragraphs_type.image_title_subtitle
     - paragraphs.paragraphs_type.offers_bordered
-    - paragraphs.paragraphs_type.product_carousel_category
     - paragraphs.paragraphs_type.section_divider
     - paragraphs.paragraphs_type.promo_block
   module:
@@ -28,7 +27,6 @@ settings:
       promo_block: promo_block
       image_title_subtitle: image_title_subtitle
       offers_bordered: offers_bordered
-      product_carousel_category: product_carousel_category
       section_divider: section_divider
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
@@ -88,9 +86,6 @@ settings:
       views_reference:
         weight: 36
         enabled: false
-      product_carousel_category:
-        enabled: true
-        weight: 43
       section_divider:
         enabled: true
         weight: 49

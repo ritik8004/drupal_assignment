@@ -4,19 +4,23 @@ dependencies:
   config: {  }
   module:
     - alshaya_search_api
-id: color_family
-name: Color
-url_alias: color_family
+third_party_settings:
+  alshaya_search:
+    display_textbox: 1
+    display_textbox_item_count: '1'
+id: collection
+name: Collection
+url_alias: collection
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: attr_color_family
+field_identifier: attr_collection
 facet_source_id: 'search_api:views_page__search__page'
 widget:
   type: checkbox
   config:
     show_numbers: true
-    soft_limit: 5
+    soft_limit: 0
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false

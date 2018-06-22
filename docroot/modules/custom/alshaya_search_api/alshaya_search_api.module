@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Wrapper function, removes a field from Index and trigger re-index.
+ *
+ * @param string $field_code
+ *   Index field code to be removed.
+ * @param string $index
+ *   Index name from which field needs to be removed.
+ */
+function _alshaya_search_api_remove_field_from_indexes($field_code, $index) {
+  /* @var \Drupal\search_api\Entity\Index $index */
+  $index = Index::load($index);
+
+  if ($index->getField($field_code)) {
+    // Removing field.
+    $index->removeField($field_code);
+    $index->save();
+
+    // Re-indexing the content.
+    $index->reindex();
+  }
+}

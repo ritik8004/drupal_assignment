@@ -22,3 +22,13 @@ input[type=checkbox] ~ label::before {
     background: $primary_input_border;
   }
 }
+
+form {
+  .password-tooltip {
+    margin-top: 0.625rem;
+
+    ul {
+      font-size: 0.75rem;
+    }
+  }
+}

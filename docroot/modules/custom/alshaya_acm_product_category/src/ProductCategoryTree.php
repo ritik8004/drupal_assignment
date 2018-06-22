@@ -280,6 +280,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       if ($paragraph && $paragraph->getType() == 'main_menu_highlight' && !empty($paragraph->get('field_highlight_image'))) {
         $image = $paragraph->get('field_highlight_image')->getValue();
         $image_link = $paragraph->get('field_highlight_link')->getValue();
+        $title = $paragraph->get('field_highlight_title')->getString();
+        $subtitle = $paragraph->get('field_highlight_subtitle')->getString();
+        $highlight_type = (empty($title) && empty($subtitle)) ? 'promo_block' : ((!empty($title) && !empty($subtitle)) ? 'title_subtitle' : 'highlight');
         $renderable_image = $paragraph->get('field_highlight_image')
           ->view('default');
         $paragraph_type = $paragraph->getType();
@@ -288,26 +291,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
           $highlight_paragraphs[] = [
             'image_link' => $url->toString(),
             'img' => $renderable_image,
-            'paragraph_type' => $paragraph_type,
-          ];
-        }
-      }
-
-      elseif ($paragraph && $paragraph->getType() == 'image_title_subtitle') {
-        $image = $paragraph->get('field_banner')->getValue();
-        $image_link = $paragraph->get('field_link')->getValue();
-        $renderable_image = $paragraph->get('field_banner')
-          ->view('hightlight_image_186x184');
-        $image_title = $paragraph->get('field_title')->value;
-        $image_description = $paragraph->get('field_sub_title')->value;
-        $paragraph_type = $paragraph->getType();
-        if (!empty($image)) {
-          $url = Url::fromUri($image_link[0]['uri']);
-          $highlight_paragraphs[] = [
-            'image_link' => $url->toString(),
-            'img' => $renderable_image,
-            'title' => $image_title,
-            'description' => $image_description,
+            'title' => $title,
+            'description' => $subtitle,
+            'highlight_type' => $highlight_type,
             'paragraph_type' => $paragraph_type,
           ];
         }

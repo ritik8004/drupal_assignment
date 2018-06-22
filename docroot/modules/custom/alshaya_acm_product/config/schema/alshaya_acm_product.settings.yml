@@ -51,3 +51,10 @@ alshaya_acm_product.settings:
         pdp_carousel_items_size_1025:
           type: integer
           label: 'Desktop view'
+    pdp_slider_items_settings:
+      type: mapping
+      label: 'pdp slider settings'
+      mapping:
+        pdp_slider_items_number:
+          type: integer
+          label: 'Image item for slider'
