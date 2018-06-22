@@ -5,6 +5,7 @@
  * Theme specific functionality.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
@@ -312,6 +313,13 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['#attached']['drupalSettings']['pdp_items_desk'] = \Drupal::config('alshaya_acm_product.settings')->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
     // Number of items to show in a slider on PDP.
     $variables['#attached']['drupalSettings']['pdp_slider_items'] = \Drupal::config('alshaya_acm_product.settings')->get('pdp_slider_items_settings.pdp_slider_items_number');
+
+    if ($variables['elements']['#view_mode'] == 'full') {
+      $sku = $variables['node']->get('field_skus')->first()->getString();
+      $sku_entity = SKU::loadFromSku($sku);
+      $variables['#attached']['drupalSettings']['stock_status'] = alshaya_acm_get_stock_from_sku($sku_entity) > 0 ? TRUE : FALSE;
+    }
+
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();
