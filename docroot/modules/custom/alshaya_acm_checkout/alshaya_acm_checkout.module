@@ -24,6 +24,21 @@ function alshaya_acm_checkout_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['checkout_summary'] = [
+    'variables' => [
+      'cart_link' => '',
+      'number_of_items' => '',
+      'products' => '',
+      'totals' => [],
+      'currency_format' => '',
+      'currency_code_position' => '',
+      'delivery' => [],
+      'vat_text' => '',
+      'surcharge_label' => '',
+    ],
+    'template' => 'block--checkout-summary',
+  ];
+
   $items['checkout_selected_address'] = [
     'render element' => 'elements',
     'variables' => [

@@ -130,6 +130,11 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     $payment_has_descriptions = [];
     $payment_translations = [];
 
+    $languageManager = \Drupal::languageManager();
+
+    $current_language_id = $languageManager->getCurrentLanguage()->getId();
+    $default_language_id = $languageManager->getDefaultLanguage()->getId();
+
     foreach ($payment_methods as $plugin_id) {
       if (!isset($plugins[$plugin_id])) {
         continue;
@@ -142,20 +147,43 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         $description = $description_value[0]['value'];
       }
 
-      $current_language_id = \Drupal::languageManager()->getCurrentLanguage()->getId();
-      $default_language_id = \Drupal::languageManager()->getDefaultLanguage()->getId();
-
       if ($current_language_id !== $default_language_id) {
         if ($payment_term->hasTranslation($default_language_id)) {
           $default_language_payment_term = $payment_term->getTranslation($default_language_id);
           $payment_translations[$payment_term->getName()] = $default_language_payment_term->getName();
         }
+
+        if ($plugin_id === 'cashondelivery') {
+          $config = $languageManager->getLanguageConfigOverride(
+            $current_language_id, 'alshaya_acm_checkout.settings'
+          );
+        }
       }
+      elseif ($plugin_id === 'cashondelivery') {
+        $config = \Drupal::config('alshaya_acm_checkout.settings');
+      }
+
+      $sub_title = '';
+
+      if ($plugin_id === 'cashondelivery') {
+        $surcharge = $cart->getExtension('surcharge');
+
+        if ($surcharge) {
+          $surcharge_value = alshaya_acm_price_get_formatted_price($surcharge['amount']);
+          $sub_title = $config->get('cod_surcharge_short_description');
+          $description = $config->get('cod_surcharge_description');
+
+          $sub_title = str_replace('[surcharge]', $surcharge_value, $sub_title);
+          $description = str_replace('[surcharge]', $surcharge_value, $description);
+        }
+      }
+
       $payment_has_descriptions[$plugin_id] = (bool) $description;
 
       $method_name = '
         <div class="payment-method-name">
           <div class="method-title">' . $payment_term->getName() . '</div>
+          <div class="method-sub-title">' . $sub_title . '</div>
           <div class="method-side-info method-' . $plugin_id . '"></div>
           <div class="method-description">' . $description . '</div>
         </div>

@@ -568,19 +568,6 @@ function alshaya_acm_form_multistep_default_alter(&$form, FormStateInterface $fo
  */
 function alshaya_acm_theme($existing, $type, $theme, $path) {
   return [
-    'checkout_summary' => [
-      'variables' => [
-        'cart_link' => '',
-        'number_of_items' => '',
-        'products' => '',
-        'totals' => [],
-        'currency_format' => '',
-        'currency_code_position' => '',
-        'delivery' => [],
-        'vat_text' => '',
-      ],
-      'template' => 'block--checkout-summary',
-    ],
     'alshaya_cart_product_name' => [
       'variables' => [
         'sku_attributes' => '',
