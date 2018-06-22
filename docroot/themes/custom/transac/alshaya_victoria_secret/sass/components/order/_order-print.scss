@@ -30,15 +30,47 @@
 }
 
 .c-order-print {
-  .delivery-details strong,
+  .delivery-details,
   .dark--text {
     font-family: $vs-bold;
     font-weight: normal;
   }
 
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .delivery-details {
+    background: $order_print_delivery_detail_bg;
+    border: 1px solid $order_summary_section_border;
+    padding-top: 0.42rem;
+    padding-bottom: 0.4rem;
+    font-size: 0.875rem;
+  }
+
+  .product--count {
+    border-bottom: 1px solid $order_summary_section_border;
+  }
+
   .user__order--detail {
-    .order-item-row .blend {
-      background: transparent;
+    .sub-total-row {
+      border-top: 0;
     }
+
+    .order-item-row {
+      border-bottom: 1px solid $order_print_secondary_section_border;
+
+      .blend {
+        background-color: $order_print_item_blend;
+      }
+    }
+
+    td.above-mobile.blend {
+      background-color: $order_print_address_blend;
+    }
+  }
+
+  .total-row .warm--white {
+    background-color: $order_print_total_bg;
   }
 }

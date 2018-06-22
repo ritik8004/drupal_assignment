@@ -99,10 +99,45 @@ class AlshayaSearchApiFacetsManager {
     $block_data['theme'] = $this->themeManager->getActiveTheme()->getName();
     $block_data['plugin'] = 'facet_block:' . $id;
     $block_data['settings']['id'] = $block_data['plugin'];
-    $block_data['settings']['label'] = $prefix
-      ? ucfirst($prefix) . ' ' . $data['name']
-      : $data['name'];
+    $block_data['settings']['label'] = $data['name'];
     $this->configFactory->getEditable($block_id)->setData($block_data)->save();
+  }
+
+  /**
+   * Remove facet, block and filter bar entry for a field.
+   *
+   * @param string $field_key
+   *   Field code, without attr_.
+   * @param string $filter_bar_id
+   *   Filter bar config id.
+   * @param string $prefix
+   *   Prefix to use blank, plp, promo.
+   */
+  public function removeFacet($field_key, $filter_bar_id, $prefix = '') {
+    $id = $prefix ? $prefix . '_' . $field_key : $field_key;
+
+    $facet_id = 'facets.facet.' . $id;
+    $facet = $this->configFactory->getEditable($facet_id);
+    if ($facet) {
+      $facet->delete();
+    }
+
+    $formatted_id = str_replace('_', '', $id);
+    $block_id = 'block.block.' . $formatted_id;
+    $block = $this->configFactory->getEditable($block_id);
+    if ($block) {
+      $block->delete();
+    }
+
+    // Update the filter bar (summary).
+    $filter_bar = $this->configFactory->getEditable($filter_bar_id);
+    $facets = $filter_bar->get('facets');
+
+    if (isset($facets[$id])) {
+      unset($facets[$id]);
+      $filter_bar->set('facets', $facets);
+      $filter_bar->save();
+    }
   }
 
   /**

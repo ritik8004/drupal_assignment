@@ -71,9 +71,10 @@
 
       &.messages--error > div {
         padding-top: 0.25rem;
+        float: none;
 
-        @include breakpoint($only-tablet) {
-          float: none;
+        @include breakpoint($upto-tablet) {
+          width: 100%;
         }
 
         @include breakpoint($tablet) {

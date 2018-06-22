@@ -11,6 +11,18 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Set the number of items to show in a gallery on PDP.
+ */
+function alshaya_acm_product_update_8020() {
+  // Set default number of image items need to show in slider on PDP..
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('pdp_slider_items_settings.pdp_slider_items_number', 5)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install config for product display settings.
  */
 function alshaya_acm_product_update_8019() {

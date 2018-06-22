@@ -13,46 +13,6 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Update name of product_carousel_category form display to change weights.
- */
-function alshaya_paragraphs_update_8119() {
-  $configs = [
-    'core.entity_form_display.paragraph.product_carousel_category.default',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update name of product_carousel_category and field descriptions.
- */
-function alshaya_paragraphs_update_8118() {
-  $configs = [
-    'paragraphs.paragraphs_type.product_carousel_category',
-    'field.field.paragraph.product_carousel_category.field_category_carousel_title',
-    'field.field.paragraph.product_carousel_category.field_use_as_accordion',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add a field to "use as accordion" for product_carousel_category.
- */
-function alshaya_paragraphs_update_8117() {
-  $configs = [
-    'field.storage.paragraph.field_use_as_accordion',
-    'field.field.paragraph.product_carousel_category.field_use_as_accordion',
-    'core.entity_form_display.paragraph.product_carousel_category.default',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
-}
-
-/**
- * Implements hook_update_N().
- *
  * Adding new fields for margin override in paragraph promo block.
  */
 function alshaya_paragraphs_update_8116() {

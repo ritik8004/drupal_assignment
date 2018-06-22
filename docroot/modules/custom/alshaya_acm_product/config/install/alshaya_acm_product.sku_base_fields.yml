@@ -37,18 +37,6 @@ fields:
     label: 'Color label'
     type: 'string'
 
-  color_description:
-    label: 'Color Description'
-    cardinality: -1
-    configurable: 1
-    index: 1
-
-  color_family:
-    label: 'Color Family'
-    cardinality: -1
-    index: 1
-    facet: 1
-
   size:
     label: 'Size'
     cardinality: -1

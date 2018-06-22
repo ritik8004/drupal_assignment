@@ -12,10 +12,37 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Enable alshaya_search_api module.
+ * Install alshaya_paragraphs_transac module and update
+ * product_carousel_category paragraph type and its fields.
+ */
+function alshaya_transac_update_8113() {
+  // Install alshaya_paragraphs_transac module.
+  \Drupal::service('module_installer')->install(['alshaya_paragraphs_transac']);
+
+  // Update name of product_carousel_category, field descriptions, weights and
+  // add a new field "use as accordion".
+  $configs = [
+    'paragraphs.paragraphs_type.product_carousel_category',
+    'field.storage.paragraph.field_use_as_accordion',
+    'field.field.paragraph.product_carousel_category.field_use_as_accordion',
+    'field.field.paragraph.product_carousel_category.field_category_carousel_title',
+    'core.entity_form_display.paragraph.product_carousel_category.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs_transac', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable alshaya_search_api module. Remove color_family and color_description.
  */
 function alshaya_transac_update_8112() {
   \Drupal::service('module_installer')->install(['alshaya_search_api']);
+
+  /** @var \Drupal\acq_sku\SKUFieldsManager $manager */
+  $manager = \Drupal::service('acq_sku.fields_manager');
+  $manager->removeField('color_description');
+  $manager->removeField('color_family');
 }
 
 /**
@@ -248,6 +275,7 @@ function alshaya_transac_install() {
     'alshaya_menus',
     'alshaya_acm_cart_notification',
     'alshaya_newsletter',
+    'alshaya_paragraphs_transac',
     'alshaya_permissions',
     'alshaya_product',
     'alshaya_promo_panel',
