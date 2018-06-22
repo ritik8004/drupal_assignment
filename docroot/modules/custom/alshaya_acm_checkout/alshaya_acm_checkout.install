@@ -5,6 +5,24 @@
  * Contains install, update, uninstall hooks for alshaya_acm_checkout module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add default settings for cod_surcharge.
+ */
+function alshaya_acm_checkout_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_checkout.settings'],
+    'alshaya_acm_checkout',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
 /**
  * Implements hook_update_N().
  *
