@@ -1,5 +1,5 @@
-<div class="highlights">
-  {% if data.highlight_paragraph is not empty %}
+{% if data.highlight_paragraph is not empty %}
+  <div class="highlights">
     {% for highlight_paragraph in data.highlight_paragraph %}
 
       {#Render highlight image and other data.#}
@@ -27,5 +27,5 @@
       </div>
 
     {% endfor %}
-  {% endif %}
-</div>
+  </div>
+{% endif %}
