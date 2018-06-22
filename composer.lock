@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbe080c4884437c926531a6800cff212",
+    "content-hash": "148e12ab38445592cac96ffead64e260",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -10648,6 +10648,17 @@
                 "url"
             ],
             "time": "2017-03-20T17:10:46+00:00"
+        },
+        {
+            "name": "hgoebl/mobile-detect",
+            "version": "1.4.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "drupal-library"
         },
         {
             "name": "j7mbo/twitter-api-php",
