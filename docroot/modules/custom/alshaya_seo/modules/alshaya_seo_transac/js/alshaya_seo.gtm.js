@@ -583,7 +583,7 @@
 
       // If both promo block and body field images exist make sure promotionImpression is fired only once.
       if ($('.paragraph--type--promo-block').length > 0 && $('.field--name-body').length > 0 && (context === document)) {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block, .field--name-body'), gtmPageType, 'promotionImpression');
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block, .field--name-body, .field--name-body > div[class^="rectangle"]:visible'), gtmPageType, 'promotionImpression');
       }
 
       else if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
@@ -611,6 +611,13 @@
 
       // Tracking view of promotions.
       $('.paragraph--type--promo-block').each(function () {
+        $(this).once('js-event').on('click', function () {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
+        });
+      });
+
+      // Tracking images in rectangle on homepage.
+      $('.field--name-body > div[class^="rectangle"]:visible').each(function () {
         $(this).once('js-event').on('click', function () {
           Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
         });
