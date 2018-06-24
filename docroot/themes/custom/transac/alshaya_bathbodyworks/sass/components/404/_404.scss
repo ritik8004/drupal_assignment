@@ -5,7 +5,7 @@
   padding-top: 0;
   max-width: 100%;
   margin: 0 auto;
-  background-color: #f08c7b;
+  background-color: $page_not_found_mobile_bg;
 
   &__image {
     @include breakpoint($upto-desktop) {
@@ -18,20 +18,21 @@
   }
 
   .not-found__body {
-    #{$left}: 25%;
-    top: 3%;
     color: $page_not_found_text;
     font-size: 1rem;
     text-align: $left;
-    width: 26%;
-    bottom: 0;
+
+    @include breakpoint($desktop) {
+      #{$left}: 25%;
+      top: 3%;
+      width: 26%;
+    }
 
     @include breakpoint($tablet) {
       position: absolute;
     }
 
     @include breakpoint($only-tablet) {
-      #{$left}: 0;
       #{$right}: 29%;
       bottom: 53%;
       width: 38%;
@@ -39,8 +40,6 @@
     }
 
     @include breakpoint($only-mobile) {
-      #{$left}: 0;
-      bottom: 0;
       width: 72%;
       #{$right}: 0;
       text-align: center;
