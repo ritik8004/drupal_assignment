@@ -347,11 +347,13 @@ class StoresFinderUtility {
    *   Store node.
    * @param bool $plain_text
    *   Return format.
+   * @param bool $default_lang
+   *   If true, return address in english.
    *
    * @return string
    *   Rendered string.
    */
-  public function getStoreAddress(NodeInterface $store, $plain_text = FALSE) {
+  public function getStoreAddress(NodeInterface $store, $plain_text = FALSE, $default_lang = FALSE) {
     $address = [];
 
     if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
@@ -361,7 +363,7 @@ class StoresFinderUtility {
         // This conversions are required to ensure we populate term names
         // and process it properly before using in template.
         $store_address = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
-        $store_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($store_address);
+        $store_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($store_address, $default_lang);
         $address = [
           '#theme' => 'store_address',
           '#address' => $store_address,

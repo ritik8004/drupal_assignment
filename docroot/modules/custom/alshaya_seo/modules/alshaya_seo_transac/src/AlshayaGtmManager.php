@@ -661,7 +661,7 @@ class AlshayaGtmManager {
           // ensure the variable is not in list of disabled vars.
           if ((!in_array('dimension8', $gtm_disabled_vars)) &&
             ($store = $this->storeFinder->getStoreFromCode($store_code))) {
-            $storeAddress = $this->storeFinder->getStoreAddress($store, TRUE);
+            $storeAddress = $this->storeFinder->getStoreAddress($store, TRUE, TRUE);
             $dimension8 = $storeAddress['address_line1'] . ' ' . $storeAddress['administrative_area_display'];
           }
         }
