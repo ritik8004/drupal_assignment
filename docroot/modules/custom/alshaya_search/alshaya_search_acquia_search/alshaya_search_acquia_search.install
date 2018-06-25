@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Custom installation for Alshaya Search Acquia Search.
+ */
+
+use Drupal\acquia_connector\Subscription;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the Acquia Search data to discover new cores.
+ */
+function alshaya_search_acquia_search_update_8001() {
+  $subscription = new Subscription();
+  $subscription->update();
+}
