@@ -101,12 +101,8 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
 
     $config = \Drupal::config('alshaya_click_collect.settings');
 
-    $stock = alshaya_acm_get_stock_from_sku($sku_entity);
-    $state = FALSE;
-    if ($stock > 0) {
-      // Click and collect availability for given sku.
-      $state = alshaya_acm_product_available_click_collect($sku);
-    }
+    // Click and collect availability for given sku.
+    $state = alshaya_acm_product_available_click_collect($sku);
 
     // Here we just show static text, we will get stores info using ajax.
     // We need lat/lon info of user to get stores.

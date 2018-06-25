@@ -132,12 +132,4 @@
     }
   };
 
-  Drupal.behaviors.pdpNode = {
-    attach: function (context, settings) {
-      if (!settings.stock_status) {
-        $('.acq-content-product .sharethis-wrapper', context).once('pdp').addClass('disabled');
-      }
-    }
-  };
-
 })(jQuery, Drupal);

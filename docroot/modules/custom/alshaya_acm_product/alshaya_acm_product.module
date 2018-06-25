@@ -171,7 +171,6 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
   $items['pdp_delivery_option'] = [
     'render element' => 'elements',
     'variables' => [
-      'state' => NULL,
       'title' => NULL,
       'title_price' => NULL,
       'subtitle' => NULL,
@@ -564,15 +563,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             // @TODO: Next day delivery not done for now.
             $build['home_delivery'] = [
               '#theme' => 'pdp_delivery_option',
-              '#state' => alshaya_acm_get_stock_from_sku($sku_entity) > 0 ? 'enabled' : 'disabled',
               '#title' => $home_delivery_config->get('title'),
               '#subtitle' => $home_delivery_config->get('subtitle'),
               '#options' => $home_delivery_options,
-              '#attached' => [
-                'library' => [
-                  'alshaya_acm_product/pdp_home_delivery',
-                ],
-              ],
             ];
           }
         }
