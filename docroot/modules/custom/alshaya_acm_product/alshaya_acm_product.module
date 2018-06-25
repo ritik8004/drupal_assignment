@@ -1544,3 +1544,19 @@ function alshaya_acm_product_alshaya_master_post_drupal_install() {
   // Add fields to store the values from attributes as fields.
   \Drupal::service('acq_sku.fields_manager')->addFields();
 }
+
+/**
+ * Implements hook_alshaya_acm_product_ajax_cart_form_alter().
+ */
+function alshaya_acm_product_alshaya_acm_product_ajax_cart_form_alter(AjaxResponse &$response, $entity, $stock) {
+  if ($stock <= 0) {
+    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery .c-accordion_content", 'addClass', ['hidden-important']));
+    // @codingStandardsIgnoreLine
+    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery", 'accordion', ['option', 'disabled', TRUE]));
+  }
+  else {
+    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery .c-accordion_content", 'removeClass', ['hidden-important']));
+    // @codingStandardsIgnoreLine
+    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery", 'accordion', ['option', 'disabled', FALSE]));
+  }
+}
