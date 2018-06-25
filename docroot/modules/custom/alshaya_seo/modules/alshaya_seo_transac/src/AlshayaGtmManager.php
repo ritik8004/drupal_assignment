@@ -22,7 +22,6 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Mobile_Detect;
 
 /**
  * Class AlshayaGtmManager.
@@ -949,19 +948,6 @@ class AlshayaGtmManager {
     $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
     $current_user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
 
-    // Detect platform from headers.
-    $request_headers = $this->requestStack->getCurrentRequest()->headers->all();
-    $request_ua = $this->requestStack->getCurrentRequest()->headers->get('HTTP_USER_AGENT');
-    $mobile_detect = new Mobile_Detect($request_headers, $request_ua);
-    $platform = 'Desktop';
-
-    if ($mobile_detect->isMobile()) {
-      $platform = 'Mobile';
-    }
-    elseif ($mobile_detect->isTablet()) {
-      $platform = 'Tablet';
-    }
-
     if ($data_layer['userUid'] !== 0) {
       $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) > 1 ? 'Repeat Customer' : 'New Customer';
     }
@@ -975,7 +961,6 @@ class AlshayaGtmManager {
     }
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
-      'platformType' => $platform,
       'country' => function_exists('_alshaya_country_get_site_level_country_name') ? _alshaya_country_get_site_level_country_name() : '',
       'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
       'userID' => $data_layer['userUid'] ?: '' ,

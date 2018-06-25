@@ -40,6 +40,24 @@
       var ccPaymentsClicked = false;
       var footerNewsletterSubmiClicked = false;
 
+      // Set platformType.
+      var md = new MobileDetect(window.navigator.userAgent);
+      if (md.tablet !== null) {
+        dataLayer.push({
+          platformType: 'tablet',
+        });
+      }
+      else if (md.mobile) {
+        dataLayer.push({
+          platformType: 'mobile',
+        });
+      }
+      else {
+        dataLayer.push({
+          platformType: 'desktop',
+        });
+      }
+
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
         'home page',
