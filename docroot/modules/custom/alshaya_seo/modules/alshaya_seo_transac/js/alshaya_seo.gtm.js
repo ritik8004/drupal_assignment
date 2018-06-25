@@ -816,13 +816,11 @@
       }
       else if(gtmPageType === 'home page') {
         var imgSrc = $(highlight).find('picture img').attr('src');
-        if (typeof imgSrc !== 'undefined') {
-          position = parseInt($('.slick-track').index($(highlight).parent('c-slider-promo__item'))) + 1;
-        }
-        else {
+        if (typeof imgSrc === 'undefined') {
           imgSrc = $(highlight).find('img').attr('src');
         }
         creative = Drupal.url(imgSrc);
+        position = key;
       }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));
