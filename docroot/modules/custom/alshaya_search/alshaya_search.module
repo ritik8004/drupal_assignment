@@ -566,9 +566,8 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
  */
 function alshaya_search_acquia_search_get_list_of_possible_cores_alter(&$possible_core_ids, $core_service) {
   // @codingStandardsIgnoreLine
-  global $site_name;
+  global $site_code;
 
-  $site_code = substr($site_name, 0, -2);
   $ah_env = preg_replace('@[^a-zA-Z0-9]+@', '', $core_service->ah_env);
 
   array_unshift($possible_core_ids, $core_service->acquia_identifier . '.' . $ah_env . '.' . $site_code);
