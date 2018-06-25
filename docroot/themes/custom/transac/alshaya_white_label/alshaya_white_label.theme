@@ -879,7 +879,12 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         // Fetch values from the paragraph.
         $category_id = $category->getValue()[0]['target_id'];
 
-        $is_accordion = $paragraph->get('field_use_as_accordion')->getValue()[0]['value'];
+        $is_accordion = FALSE;
+        if ($paragraph->hasField('field_use_as_accordion')
+            && $accordion = $paragraph->get('field_use_as_accordion')->getValue()) {
+          $is_accordion = $accordion[0]['value'];
+        }
+
         $view_all_text = $paragraph->get('field_view_all_text')->getString();
 
         // By default we don't show any carousel content.
