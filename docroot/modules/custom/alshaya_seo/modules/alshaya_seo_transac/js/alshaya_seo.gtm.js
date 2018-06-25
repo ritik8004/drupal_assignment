@@ -249,14 +249,16 @@
           var upSellCrossSellSelector = $(this).closest('.view-product-slider').parent('.views-element-container').parent();
           if (!$(this).closest('.owl-item').hasClass('cloned') && !upSellCrossSellSelector.hasClass('mobile-only-block')) {
             // Check whether the product is in US or CS region & update list accordingly.
-            if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
-              pdpListName = listName + '-CS';
-            }
-            else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
-              pdpListName = listName + '-US';
-            }
-            else if (upSellCrossSellSelector.hasClass('horizontal-related')) {
-              pdpListName = listName + '-RELATED';
+            if (listName.includes('placeholder')) {
+              if (upSellCrossSellSelector.hasClass('horizontal-crossell')) {
+                pdpListName = listName.replace('placeholder', 'CS');
+              }
+              else if (upSellCrossSellSelector.hasClass('horizontal-upell')) {
+                pdpListName = listName.replace('placeholder', 'US');
+              }
+              else if (upSellCrossSellSelector.hasClass('horizontal-related')) {
+                pdpListName = listName.replace('placeholder', 'RELATED');
+              }
             }
 
             impression.list = pdpListName;
@@ -521,15 +523,16 @@
         $(this).once('js-event').on('click', function (e) {
           var that = $(this).closest('article[data-vmode="teaser"]');
           var position = '';
-
-          if (that.closest('.horizontal-crossell').length > 0) {
-            subListName = listName + '-CS';
-          }
-          else if (that.closest('.horizontal-upell').length > 0) {
-            subListName = listName + '-US';
-          }
-          else if (that.closest('.horizontal-related').length > 0) {
-            subListName = listName + '-RELATED';
+          if (listName.includes('placeholder')) {
+            if (that.closest('.horizontal-crossell').length > 0) {
+              subListName = listName.replace('placeholder', 'CS');
+            }
+            else if (that.closest('.horizontal-upell').length > 0) {
+              subListName = listName.replace('placeholder', 'US');
+            }
+            else if (that.closest('.horizontal-related').length > 0) {
+              subListName = listName.replace('placeholder', 'RELATED');
+            }
           }
 
           // position = $('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
@@ -578,14 +581,19 @@
         Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), 'Top Navigation', 'promotionClick');
       });
 
-      if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
+      // If both promo block and body field images exist make sure promotionImpression is fired only once.
+      if ($('.paragraph--type--promo-block').length > 0 && $('.field--name-body').length > 0 && (context === document)) {
+        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block, .field--name-body, .field--name-body > div[class^="rectangle"]:visible'), gtmPageType, 'promotionImpression');
       }
 
-      // Tracking promotion image view inside body field.
-      if ($('.field--name-body').length > 0 && (context === document)) {
-        Drupal.alshaya_seo_gtm_push_promotion_impressions($('.field--name-body'), gtmPageType, 'promotionImpression');
-      }
+      else if ($('.paragraph--type--promo-block').length > 0 && (context === document)) {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($('.paragraph--type--promo-block'), gtmPageType, 'promotionImpression');
+        }
+
+        // Tracking promotion image view inside body field.
+      else if ($('.field--name-body').length > 0 && (context === document)) {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($('.field--name-body'), gtmPageType, 'promotionImpression');
+        }
 
       // Tracking of homepage banner.
       $('.c-content__slider .field--name-field-banner').each(function () {
@@ -603,6 +611,13 @@
 
       // Tracking view of promotions.
       $('.paragraph--type--promo-block').each(function () {
+        $(this).once('js-event').on('click', function () {
+          Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
+        });
+      });
+
+      // Tracking images in rectangle on homepage.
+      $('.field--name-body > div[class^="rectangle"]:visible').each(function () {
         $(this).once('js-event').on('click', function () {
           Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
         });

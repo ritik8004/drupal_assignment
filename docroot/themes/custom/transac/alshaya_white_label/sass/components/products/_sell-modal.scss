@@ -3,6 +3,18 @@
   .contextual-region {
     position: static;
   }
+
+  .pager-no {
+    &.slick-slider {
+      @include breakpoint($only-tablet) {
+        padding: 0 2rem;
+
+        .slick-track {
+          width: auto !important;
+        }
+      }
+    }
+  }
 }
 
 .acq-content-product-modal {
@@ -31,7 +43,7 @@
       @include breakpoint($tablet) {
         width: 35%;
         float: $right;
-        margin: 0 1rem;
+        margin: 0.625rem 1rem 0;
       }
 
       @include breakpoint($desktop) {
@@ -202,6 +214,7 @@
     .slick-slide {
       @include breakpoint($only-tablet) {
         width: 6rem !important;
+        margin-#{$left}: 1rem;
       }
     }
   }

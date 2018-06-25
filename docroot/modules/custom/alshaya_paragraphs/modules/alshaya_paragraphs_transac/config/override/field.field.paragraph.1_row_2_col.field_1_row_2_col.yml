@@ -1,0 +1,13 @@
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.product_carousel_category
+  module:
+    - entity_reference_revisions
+settings:
+  handler_settings:
+    target_bundles:
+      product_carousel_category: product_carousel_category
+    target_bundles_drag_drop:
+      product_carousel_category:
+        enabled: true
+        weight: 43

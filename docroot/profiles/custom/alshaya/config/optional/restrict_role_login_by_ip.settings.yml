@@ -1,4 +1,4 @@
-restrict_role_login_by_ip_header: REMOTE_ADDR
+restrict_role_login_by_ip_header: HTTP_CF_CONNECTING_IP
 restrict_role_login_by_ip_header_restriction: ''
 restrict_role_login_by_ip_header_roles:
   administrator: 0

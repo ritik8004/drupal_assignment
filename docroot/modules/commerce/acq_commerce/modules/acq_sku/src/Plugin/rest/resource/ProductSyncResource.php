@@ -6,6 +6,7 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\CategoryRepositoryInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -75,6 +76,13 @@ class ProductSyncResource extends ResourceBase {
   private $i18nHelper;
 
   /**
+   * SKU Fields Manager.
+   *
+   * @var \Drupal\acq_sku\SKUFieldsManager
+   */
+  private $skuFieldsManager;
+
+  /**
    * Construct.
    *
    * @param array $configuration
@@ -99,8 +107,21 @@ class ProductSyncResource extends ResourceBase {
    *   Product Options Manager service instance.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
+   *   SKU Fields Manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory, QueryFactory $query_factory, CategoryRepositoryInterface $cat_repo, ProductOptionsManager $product_options_manager, I18nHelper $i18n_helper) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              array $serializer_formats,
+                              LoggerInterface $logger,
+                              ConfigFactoryInterface $config_factory,
+                              QueryFactory $query_factory,
+                              CategoryRepositoryInterface $cat_repo,
+                              ProductOptionsManager $product_options_manager,
+                              I18nHelper $i18n_helper,
+                              SKUFieldsManager $sku_fields_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityManager = $entity_type_manager;
     $this->configFactory = $config_factory;
@@ -108,6 +129,7 @@ class ProductSyncResource extends ResourceBase {
     $this->categoryRepo = $cat_repo;
     $this->productOptionsManager = $product_options_manager;
     $this->i18nHelper = $i18n_helper;
+    $this->skuFieldsManager = $sku_fields_manager;
   }
 
   /**
@@ -125,7 +147,8 @@ class ProductSyncResource extends ResourceBase {
       $container->get('entity.query'),
       $container->get('acq_sku.category_repo'),
       $container->get('acq_sku.product_options_manager'),
-      $container->get('acq_commerce.i18n_helper')
+      $container->get('acq_commerce.i18n_helper'),
+      $container->get('acq_sku.fields_manager')
     );
   }
 
@@ -315,7 +338,7 @@ class ProductSyncResource extends ResourceBase {
         $plugin = $sku->getPluginInstance();
         $plugin->processImport($sku, $product);
 
-        // Invoke the alter hook to allow all modules to update the node.
+        // Invoke the alter hook to allow all modules to update the sku.
         \Drupal::moduleHandler()->alter('acq_sku_product_sku', $sku, $product);
 
         $sku->save();
@@ -540,43 +563,47 @@ class ProductSyncResource extends ResourceBase {
    *   The product attributes/extensions to get value from.
    */
   private function updateFields($parent, SKU $sku, array $values) {
-    $additionalFields = \Drupal::config('acq_sku.base_field_additions')->getRawData();
 
-    // Loop through all the attributes available for this particular SKU.
-    foreach ($values as $key => $value) {
-      // Check if attribute is required by us.
-      if (isset($additionalFields[$key])) {
-        $field = $additionalFields[$key];
+    $additionalFields = $this->skuFieldsManager->getFieldAdditions();
 
-        if ($field['parent'] != $parent) {
-          continue;
-        }
+    // Filter fields for the parent requested.
+    $additionalFields = array_filter($additionalFields, function ($field) use ($parent) {
+      return ($field['parent'] == $parent);
+    });
 
-        $field_key = 'attr_' . $key;
+    // Loop through all the fields we want to read from product data.
+    foreach ($additionalFields as $key => $field) {
+      $source = isset($field['source']) ? $field['source'] : $key;
 
-        switch ($field['type']) {
-          case 'attribute':
-            $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
-            foreach ($value as $index => $val) {
-              if ($term = $this->productOptionsManager->loadProductOptionByOptionId($key, $val, $sku->language()->getId())) {
-                $sku->{$field_key}->set($index, $term->getName());
-              }
-              else {
-                $sku->{$field_key}->set($index, $val);
-              }
+      if (!isset($values[$source])) {
+        continue;
+      }
+
+      $value = $values[$source];
+      $field_key = 'attr_' . $key;
+
+      switch ($field['type']) {
+        case 'attribute':
+          $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
+          foreach ($value as $index => $val) {
+            if ($term = $this->productOptionsManager->loadProductOptionByOptionId($source, $val, $sku->language()->getId())) {
+              $sku->{$field_key}->set($index, $term->getName());
             }
-            break;
+            else {
+              $sku->{$field_key}->set($index, $val);
+            }
+          }
+          break;
 
-          case 'string':
-            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
-            $sku->{$field_key}->setValue($value);
-            break;
+        case 'string':
+          $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+          $sku->{$field_key}->setValue($value);
+          break;
 
-          case 'text_long':
-            $value = isset($field['serialize']) ? serialize($value) : $value;
-            $sku->{$field_key}->setValue($value);
-            break;
-        }
+        case 'text_long':
+          $value = isset($field['serialize']) ? serialize($value) : $value;
+          $sku->{$field_key}->setValue($value);
+          break;
       }
     }
   }

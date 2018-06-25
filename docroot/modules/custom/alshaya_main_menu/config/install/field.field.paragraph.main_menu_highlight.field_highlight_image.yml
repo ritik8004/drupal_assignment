@@ -17,8 +17,8 @@ id: paragraph.main_menu_highlight.field_highlight_image
 field_name: field_highlight_image
 entity_type: paragraph
 bundle: main_menu_highlight
-label: 'Highlight image'
-description: ''
+label: 'Image'
+description: 'Please upload the image of the correct size. Image size - <b>Highlights - 186X186</b>, <b>Image+Title+Subtitle - 156X156</b>, <b>Promo - 396X210</b>'
 required: true
 translatable: true
 default_value: {  }

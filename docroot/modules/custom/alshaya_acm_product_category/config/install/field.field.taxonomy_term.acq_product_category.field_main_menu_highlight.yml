@@ -12,7 +12,7 @@ id: taxonomy_term.acq_product_category.field_main_menu_highlight
 field_name: field_main_menu_highlight
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'Main menu highlight'
+label: 'Promo block'
 description: ''
 required: false
 translatable: false
@@ -23,7 +23,6 @@ settings:
   handler_settings:
     target_bundles:
       main_menu_highlight: main_menu_highlight
-      image_title_subtitle: image_title_subtitle
     target_bundles_drag_drop:
       main_menu_highlight:
         enabled: true
@@ -77,7 +76,7 @@ settings:
         weight: 38
         enabled: false
       image_title_subtitle:
-        enabled: true
+        enabled: false
         weight: 39
       offers_bordered:
         weight: 41

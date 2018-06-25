@@ -445,6 +445,7 @@
       vertical-align: middle;
       font-weight: bold;
       font-size: 1rem;
+      color: $tooltip_icon;
 
       @include breakpoint($desktop) {
         margin-#{$left}: 0.75rem;

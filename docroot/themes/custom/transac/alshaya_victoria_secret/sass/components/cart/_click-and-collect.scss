@@ -26,6 +26,7 @@
         }
 
         &::before {
+          background: url('../imgs/icons/current.svg') no-repeat;
           background-size: contain;
         }
       }
@@ -63,6 +64,11 @@
             background-position: $right;
             max-width: none;
             width: 100%;
+
+            @include breakpoint($only-mobile) {
+              background-size: 1.125rem;
+              background-position: 97% center;
+            }
           }
         }
       }
@@ -102,11 +108,17 @@
           }
         }
 
-        ul li {
-          .store-on-map,
-          .store-actions,
-          .view-on-map {
-            text-transform: uppercase;
+        ul {
+          li {
+            .store-on-map,
+            .store-actions,
+            .view-on-map {
+              text-transform: uppercase;
+            }
+
+            &:last-child {
+              border-bottom: none;
+            }
           }
         }
       }
@@ -121,10 +133,52 @@
           border-bottom: 2px solid $checkout_cc_list_map_link_active_border;
         }
       }
+
+      .store-name,
+      .label--delivery-time {
+        font-family: $vs-bold;
+        font-weight: normal !important;
+      }
     }
 
     #selected-store-wrapper {
+      @include breakpoint($desktop) {
+        margin-top: 0.9375rem;
+        padding-bottom: 1.5625rem;
+      }
+
+      .mobile-number-field {
+        label.error {
+          top: 1.625rem !important;
+          color: $formitem_error_label;
+        }
+
+        .form-item-cc-mobile-number-country-code {
+          width: 2.5rem;
+        }
+
+        .form-item-cc-mobile-number-mobile {
+          margin-top: 0;
+        }
+
+        .mobile-input--wrapper {
+          align-items: flex-start;
+
+          .prefix {
+            font-size: 0.875rem;
+            line-height: 1.8;
+            min-width: 2.5rem;
+          }
+        }
+      }
+
       .selected-store-content {
+        background: none;
+
+        @include breakpoint($tablet) {
+          border-top: none;
+        }
+
         .store-actions {
           .change-store,
           .store-on-map,
@@ -132,6 +186,12 @@
             text-transform: uppercase;
             font-size: 0.875rem;
           }
+        }
+
+        .store-name,
+        .label--delivery-time {
+          font-family: $vs-bold;
+          font-weight: normal !important;
         }
       }
     }

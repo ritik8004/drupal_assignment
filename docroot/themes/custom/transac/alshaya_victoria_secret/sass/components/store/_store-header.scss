@@ -1,5 +1,11 @@
 .path--store-finder,
 .nodetype--store {
+  .region__content {
+    @include breakpoint($only-mobile) {
+      margin-top: 1.438rem;
+    }
+  }
+
   .form--inline .current-location {
     padding-top: 0.5rem;
     padding-bottom: 0.3rem;
@@ -24,6 +30,7 @@
       @include breakpoint($only-tablet) {
         width: 26.5%;
         padding-right: 0.5rem !important;
+        max-height: 2.5rem;
       }
     }
 
@@ -31,7 +38,7 @@
       font-family: $vs-bold;
       padding-left: 0.875rem;
       padding-right: 0.875rem;
-      width: 13%;
+      width: 10.7%;
       text-align: center;
     }
 
@@ -41,6 +48,12 @@
         padding-top: 0.2rem;
         padding-bottom: 0.5rem;
       }
+    }
+
+    @include breakpoint($only-mobile) {
+      font-family: $vs-bold;
+      font-weight: normal;
+      font-size: 0.875rem;
     }
   }
 
@@ -59,6 +72,14 @@
     @include breakpoint($tablet) {
       width: 40.5%;
       padding: 0.66rem;
+      height: 2.5rem;
+      max-height: 2.5rem;
+    }
+
+    html[lang=ar] & {
+      @include breakpoint($only-tablet) {
+        width: 38.5%;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -82,6 +103,8 @@
   }
 
   .label--location {
+    text-transform: capitalize;
+
     @include breakpoint($only-tablet) {
       display: none;
     }
@@ -90,7 +113,7 @@
       padding-#{$left}: 2rem;
       text-indent: 0;
       line-height: 40px;
-      width: 22.6%;
+      width: 17.7%;
     }
 
     html[lang="ar"] & {
@@ -107,6 +130,20 @@
     @include breakpoint($tablet) {
       height: 2.5rem;
       padding: 0.6rem 0.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.875rem;
+    }
+  }
+
+  .map-view-link {
+    @include breakpoint($only-tablet) {
+      &::before {
+        font-size: 1.5rem;
+        margin-top: -2px;
+        vertical-align: top;
+      }
     }
   }
 
@@ -136,7 +173,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 62.5%;
+      width: 66.5%;
 
       html[lang="ar"] & {
         width: 51.5%;
@@ -162,7 +199,7 @@
 
       @include breakpoint($desktop) {
         padding-#{$left}: 0;
-        width: 76.4%;
+        width: 81%;
 
         html[lang="ar"] & {
           width: 58.4%;
@@ -207,7 +244,7 @@
     }
 
     @include breakpoint($desktop) {
-      width: 12.25%;
+      width: 11%;
 
       html[lang="ar"] & {
         width: 14.25%;
@@ -218,6 +255,18 @@
   .block-store-finder-form__input__submit__wrapper {
     &::before {
       content: none;
+    }
+  }
+
+  .c-page-title {
+    @include breakpoint($tablet) {
+      margin-top: 1.625rem;
+      margin-bottom: 0.5625rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      font-size: 1rem;
+      margin-bottom: 1rem;
     }
   }
 }

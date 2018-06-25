@@ -37,7 +37,6 @@ do
     echo "Execute data commerce clean + initiate commerce sync on $site."
     ./../hooks/scripts/prepare-site-for-reset.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
     ./../hooks/scripts/clean-commerce-data.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
-    ./../hooks/scripts/prepare-site-for-reset.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
     ./../hooks/scripts/sync-commerce-data-step-1.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
   fi
 

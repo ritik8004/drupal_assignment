@@ -867,18 +867,17 @@ header {
     margin-top: 5px;
     text-transform: none;
 
-    div:nth-child(2) {
-      margin-#{$right}: 24px;
+    > div:nth-child(1) {
+      margin-#{$right}: 1.5rem;
     }
 
     .highlighted {
       display: inline-block;
-      max-width: 11.5rem;
       vertical-align: top;
-    }
 
-    img {
-      max-width: 11.625rem;
+      .title {
+        margin-#{$left}: 0;
+      }
     }
 
     .title {
@@ -888,12 +887,18 @@ header {
       font-size: 0.875rem;
       color: $mm_highlight_label;
       margin-bottom: 0.8rem;
+      min-height: 1rem;
+
+      &.empty-highlight-title {
+        min-height: auto;
+        margin: 0 !important;
+      }
     }
 
     .hightlight__title {
       display: block;
       font-family: $alshaya-bold;
-      margin-top: 0.625rem;
+      margin-top: 1rem;
       font-size: 0.75rem;
       color: $mm_highlight_title;
     }
@@ -901,7 +906,7 @@ header {
     .hightlight__description {
       font-size: 0.875rem;
       color: $mm_highlight_description;
-      margin-top: 0.25rem;
+      margin-top: 0.5rem;
       display: block;
     }
   }

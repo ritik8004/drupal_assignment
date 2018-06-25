@@ -31,10 +31,6 @@
   #cloud-zoom-wrap {
     text-align: center;
 
-    @include breakpoint($only-tablet) {
-      height: 25rem;
-    }
-
     #wrap {
       display: inline-block !important;
       z-index: 4 !important;
@@ -314,7 +310,8 @@
 
   #drupal-modal #lightSlider.pager-yes {
     .slick-slide {
-      width: 6.5rem !important;
+      width: 6.3rem !important;
+      margin-#{$left}: 0.125rem;
     }
   }
 }
@@ -351,7 +348,7 @@
       }
 
       &-prev {
-        top: 0;
+        top: 0 !important;
         bottom: auto;
 
         @include icon(chevronup) {
@@ -361,7 +358,7 @@
 
       &-next {
         bottom: 0;
-        top: auto;
+        top: auto !important;
 
         @include icon(chevrondown) {
           margin: 0 auto;

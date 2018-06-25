@@ -502,12 +502,24 @@
 
 .c-promo__item__override_processed {
   &.c-promo__item,
-  .c-promo-1-3__item {
+  .c-promo-1-3__item,
+  .c-promo-1-2--one,
+  .c-promo-1-2--two,
+  .c-promo-1-2--two .c-promo-1-2__item:first-child {
     margin: 0 !important;
   }
 
   .field--name-field-1-row-2-col .field__items > .field__item:last-child,
-  .c-promo-1-1--eq__item:last-child {
+  .c-promo-1-1--eq__item:last-child,
+  .c-promo-1-2--two {
     float: $left !important;
+  }
+
+  .c-promo-1-2--two {
+    .c-promo-1-2__item {
+      .c-promo__item__override {
+        display: inline-block;
+      }
+    }
   }
 }

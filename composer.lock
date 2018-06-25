@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f653673dd068e86a0f3ba5b43e5f1258",
+    "content-hash": "dbe080c4884437c926531a6800cff212",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -2000,7 +2000,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -6768,6 +6768,7 @@
                 },
                 "patches_applied": {
                     "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
+                    "Fix more notices": "patches/mobile_number/2978729-custom.patch",
                     "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
                 }
             },
@@ -7926,6 +7927,9 @@
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

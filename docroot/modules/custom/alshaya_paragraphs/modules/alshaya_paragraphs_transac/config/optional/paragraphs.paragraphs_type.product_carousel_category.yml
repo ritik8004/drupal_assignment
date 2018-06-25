@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: product_carousel_category
+label: 'Product category carousel / accordion'
+icon_uuid: null
+description: ''
+behavior_plugins: {  }

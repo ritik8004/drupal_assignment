@@ -22,3 +22,8 @@ alshaya_acm_product.size_guide_settings_form:
   description: 'Size guide settings.'
   weight: 12
   route_name: alshaya_acm_product.size_guide_settings_form
+alshaya_acm_product.product_display_settings:
+  title: 'Product display settings'
+  description: 'Configuration form to manage display custom fields for product view.'
+  route_name: alshaya_acm_product.product_display_settings
+  parent: alshaya_master.alshaya_admin

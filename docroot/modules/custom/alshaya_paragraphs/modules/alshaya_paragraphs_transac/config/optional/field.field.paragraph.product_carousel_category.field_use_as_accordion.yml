@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_use_as_accordion
+    - paragraphs.paragraphs_type.product_carousel_category
+id: paragraph.product_carousel_category.field_use_as_accordion
+field_name: field_use_as_accordion
+entity_type: paragraph
+bundle: product_carousel_category
+label: 'Use as Accordion'
+description: 'Check this if you want to display this paragraph item as accordion.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

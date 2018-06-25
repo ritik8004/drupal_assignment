@@ -1,0 +1,44 @@
+.user__order--detail {
+  background-color: none;
+
+  .order-item-row {
+    border-bottom: 1px solid $checkout_order_details_product_count_border;
+  }
+
+  td div,
+  .dark {
+    line-height: 1.29;
+    font-weight: normal;
+  }
+
+  .light {
+    font-size: 0.75rem;
+  }
+
+  .order-details-row .mobile-only.delivery--method {
+    @include breakpoint($only-mobile) {
+      border: none;
+      margin-top: 0;
+    }
+  }
+
+  .label {
+    font-family: $alshaya-bold;
+  }
+
+  .delivery-details-row {
+    color: $order_detail_delivery_details_row_text;
+
+    td {
+      @include breakpoint($tablet) {
+        padding: 0.5rem 1.375rem 0.625rem;
+        padding-#{$left}: 3.5rem;
+      }
+
+      .icon-ic_infomation {
+        top: 0.25rem;
+        position: relative;
+      }
+    }
+  }
+}

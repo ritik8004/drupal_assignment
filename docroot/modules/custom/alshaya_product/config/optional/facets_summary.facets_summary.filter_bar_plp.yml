@@ -9,39 +9,9 @@ dependencies:
 id: filter_bar_plp
 name: 'Filter bar PLP'
 facets:
-  skus_sku_reference_color:
-    checked: true
-    label: Color
-    separator: ', '
-    show_count: true
-    weight: 0
-  skus_sku_reference_display_price:
-    checked: true
-    label: Price
-    separator: ', '
-    show_count: true
-    weight: 0
-  skus_sku_reference_size:
-    checked: true
-    label: Size
-    separator: ', '
-    show_count: true
-    weight: 0
-  skus_sku_reference_brand:
-    checked: true
-    label: 'SKUs » SKU Reference » Brand'
-    separator: ', '
-    show_count: true
-    weight: 0
   skus_sku_reference_final_price:
     checked: true
     label: 'SKUs » SKU Reference » Final Price'
-    separator: ', '
-    show_count: true
-    weight: 0
-  skus_sku_reference_collection:
-    checked: true
-    label: 'SKUs » SKU Reference » Collection'
     separator: ', '
     show_count: true
     weight: 0
