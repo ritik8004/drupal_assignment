@@ -429,11 +429,13 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *
    * @param array $magento_address
    *   Magento address.
+   * @param bool $default_lang
+   *   If true, return address in english.
    *
    * @return array
    *   Drupal address.
    */
-  public function getAddressArrayFromMagentoAddress(array $magento_address) {
+  public function getAddressArrayFromMagentoAddress(array $magento_address, $default_lang = FALSE) {
     $address = [];
 
     if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
@@ -483,8 +485,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
               $term = $this->areasTermsHelper->getLocationTermFromLocationId($value);
 
               if ($term) {
-                $term = $this->entityRepository->getTranslationFromContext($term);
-
+                if (!$default_lang) {
+                  $term = $this->entityRepository->getTranslationFromContext($term);
+                }
                 $address[$mapping[$attribute_code]] = $term->id();
                 $address[$mapping[$attribute_code] . '_display'] = $term->label();
               }
