@@ -25,29 +25,34 @@ function hammerIt(elm) {
   var el = elm;
 
   hammertime.on('doubletap pan pinch panend pinchend', function (ev) {
+    // Handling for double tap event for zooming image 2x.
     if (ev.type === 'doubletap') {
-      transform =
+      var currentTransform = window.getComputedStyle(el, null).getPropertyValue('-webkit-transform').toString();
+      // No zoom applied, so add zoom, this case happens when 1st attempt.
+      if (currentTransform === 'none') {
+        transform =
           'translate3d(0, 0, 0) ' +
           'scale3d(2, 2, 1) ';
-      scale = 2;
-      last_scale = 2;
-      try {
-        if (window.getComputedStyle(el, null).getPropertyValue('-webkit-transform').toString() !== 'matrix(1, 0, 0, 1, 0, 0)') {
-          transform =
-              'translate3d(0, 0, 0) ' +
-              'scale3d(1, 1, 1) ';
-          scale = 1;
-          last_scale = 1;
-        }
       }
-      catch (err) {
-        throw (err);
+      // Transform exists so zoom active, in this case reset.
+      else if (currentTransform !== 'matrix(1, 0, 0, 1, 0, 0)' && currentTransform !== 'matrix(0.999, 0, 0, 0.999, 0, 0)') {
+        transform =
+          'translate3d(0, 0, 0) ' +
+          'scale3d(1, 1, 1) ';
       }
+      // Apply zoom on double tap.
+      else {
+        transform =
+          'translate3d(0, 0, 0) ' +
+          'scale3d(2, 2, 1) ';
+      }
+
       el.style.webkitTransform = transform;
       transform = '';
+      return;
     }
 
-    // pan
+    // Pan
     if (scale !== 1) {
       posX = last_posX + ev.deltaX;
       posY = last_posY + ev.deltaY;
@@ -67,8 +72,7 @@ function hammerIt(elm) {
       }
     }
 
-
-    // pinch
+    // Pinch
     if (ev.type === 'pinch') {
       scale = Math.max(.999, Math.min(last_scale * (ev.scale), 4));
     }
@@ -76,7 +80,7 @@ function hammerIt(elm) {
       last_scale = scale;
     }
 
-    // panend
+    // Panend
     if (ev.type === 'panend') {
       last_posX = posX < max_pos_x ? posX : max_pos_x;
       last_posY = posY < max_pos_y ? posY : max_pos_y;
@@ -141,6 +145,7 @@ function hammerIt(elm) {
           var gallery = $('#product-image-gallery-mob');
           applyRtl(gallery, slickModalOptions);
 
+          $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
           hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="' + currentmobSlide + '"] img'));
 
           $('#product-image-gallery-mob').on('swipe', function (event, slick) {
