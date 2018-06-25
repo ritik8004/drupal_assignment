@@ -1,6 +1,6 @@
 /* ------- 1. Brand Colors ------- */
 $peacock-blue: #005699;
-$cool-blue: #4e8abe;
+$cool-blue: #a8c6e7;
 $cool-blue-two: #b8d1ed;
 $hot-pink: #ed088c;
 $white: #fff;
@@ -174,6 +174,8 @@ $header_my_account_h3_title: $black;
 $header_my_account_bg: $white;
 $header_my_account_link_hover: $peacock-blue;
 $header_my_account_icon: $peacock-blue;
+$my_account_nav_active : $peacock-blue;
+$my_account_nav_hover: $peacock-blue;
 
 // Checkbox & Radio.
 $primary_radiobtn_filled: $peacock-blue;
@@ -469,8 +471,37 @@ $order_summary_subtotal: $black;
 $order_summary_order_status: $warm-grey-one;
 $order_summary_product_img_border: $warm-grey-two;
 
+// Order Confirmation
+$order_detail_table_bg: $white;
+$checkout_confirm_order_message: $warm-grey-one;
+$checkout_confirm_order_summary_row_text: $white;
+$checkout_order_print_btn_bg: false;
+$checkout_order_print_btn_text: $white;
+$checkout_order_print_btn_border: $white;
+$order_detail_order_details_row: $cool-blue-two;
+$checkout_order_details_label: $black;
+$checkout_order_details_product_count_border: $warm-grey-two;
+$checkout_order_details_icon: $peacock-blue;
+$checkout_confirm_discount_row: $white;
+$order_detail_order_details_row_td_blend: $cool-blue;
+
 // Order Print
 $checkout_confirm_order_summary_row: $info-blue;
 $order_print_btn_bg: $info-blue;
 $order_print_btn_border: $white;
 $order_print_btn_text: $white;
+$order_recent_order_order_detail_link_bg: $warm-grey-three;
+$recent_order_table_row_border: $warm-grey-two;
+$order_accordion_open_bg: $warm-grey-four;
+$order_detail_delivery_details_row_bg: $info-blue;
+$order_detail_delivery_details_row_td_blend: $info-blue;
+$order_detail_delivery_details_row_text: $white;
+$order_detail_delivery_details_row_content: $black;
+$order_print_delivery_details_row: $white;
+$order_print_delivery_details_row_text: $peacock-blue;
+$order_print_delivery_details_row_border: $peacock-blue;
+$order_print_order_details_row_bg_blend: rgba(218, 218, 218, 0.15);
+$order_print_order_details_row_bg_td_blend: rgba(242, 242, 242, 0.27);
+$order_print_product_count_row_border: $warm-grey-two;
+$order_print_delivery_subtotal_row_blend: $white;
+$order_print_total_row: $warm-grey-three;

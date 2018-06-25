@@ -4,6 +4,8 @@ dependencies:
   config:
     - field.field.paragraph.main_menu_highlight.field_highlight_image
     - field.field.paragraph.main_menu_highlight.field_highlight_link
+    - field.field.paragraph.main_menu_highlight.field_highlight_subtitle
+    - field.field.paragraph.main_menu_highlight.field_highlight_title
     - image.style.thumbnail
     - paragraphs.paragraphs_type.main_menu_highlight
   module:
@@ -29,6 +31,22 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
+    region: content
+  field_highlight_subtitle:
+    weight: 102
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_highlight_title:
+    weight: 101
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   translation:
     weight: 2

@@ -1,0 +1,21 @@
+--- docroot/modules/contrib/mobile_number/src/Element/MobileNumber.php	(revision )
++++ docroot/modules/contrib/mobile_number/src/Element/MobileNumber.php	(revision )
+@@ -272,7 +272,7 @@
+     $input = $input ? $input : array();
+     $mobile_number = NULL;
+     $countries = $util->getCountryOptions(array(), TRUE);
+-    if ($input) {
++    if (!empty($input['mobile'])) {
+       $input += count($settings['allowed_countries']) == 1 ? array('country-code' => key($settings['allowed_countries'])) : array();
+       try {
+         $mobile_number = $util->testMobileNumber($input['mobile'], $input['country-code']);
+@@ -305,9 +305,7 @@
+             break;
+         }
+       }
+-    }
+ 
+-    if (!empty($input['mobile'])) {
+       $input += count($settings['allowed_countries']) == 1 ? array('country-code' => key($settings['allowed_countries'])) : array();
+       if ($mobile_number = $util->getMobileNumber($input['mobile'], $input['country-code'])) {
+         $country = $util->getCountry($mobile_number);

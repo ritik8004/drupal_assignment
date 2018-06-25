@@ -304,7 +304,7 @@ html[lang=ar] {
     .user-form {
       .field--name-field-first-name,
       .field--name-field-last-name {
-        margin-top: -1rem;
+        margin-top: 0.5rem;
       }
 
       .mobile-number-field {
@@ -314,6 +314,7 @@ html[lang=ar] {
       .field--type-mobile-number {
         position: relative;
         top: 1.3rem;
+        clear: both;
       }
     }
   }

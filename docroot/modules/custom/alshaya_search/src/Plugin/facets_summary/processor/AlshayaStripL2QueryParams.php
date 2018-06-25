@@ -33,9 +33,11 @@ class AlshayaStripL2QueryParams extends ProcessorPluginBase implements BuildProc
       foreach ($build['#items'] as $item) {
         $item_url = $item['#url'];
         $item_query_options = $item_url->getOption('query');
-        unset($item_query_options['no_url_l2']);
-        unset($item_query_options['current_facet']);
-        $item_url->setOption('query', $item_query_options);
+        if ($item_query_options) {
+          unset($item_query_options['no_url_l2']);
+          unset($item_query_options['current_facet']);
+          $item_url->setOption('query', $item_query_options);
+        }
       }
     }
 

@@ -146,10 +146,10 @@ class AlshayaImageSitemapController extends ControllerBase {
         ->sitemapGenerateFinished();
       \Drupal::state()->set('alshaya_image_sitemap.last_generated', REQUEST_TIME);
       // @codingStandardsIgnoreEnd
-      drupal_set_message($this->t('Image Sitemap Generated Successfully.'), 'success');
+      drupal_set_message(t('Image Sitemap Generated Successfully.'), 'success');
     }
     else {
-      drupal_set_message($this->t('There was some error while importing redirects.'), 'error');
+      drupal_set_message(t('There was some error while importing redirects.'), 'error');
     }
   }
 

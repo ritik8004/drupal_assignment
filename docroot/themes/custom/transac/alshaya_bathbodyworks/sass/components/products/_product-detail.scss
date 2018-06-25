@@ -1,13 +1,20 @@
 // Title wrapper
 .content {
   &__title_wrapper {
-    h1,
-    h1 span {
+    h1 {
       font-weight: normal;
       color: $pdp_product_title;
       margin: 0.3125rem 0;
       text-transform: uppercase;
       font-size: 1rem;
+      width: 100%;
+
+      span {
+        text-transform: lowercase;
+        font-size: 0.75rem;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+      }
     }
 
     .price {
@@ -38,6 +45,11 @@
       font-size: 0.875rem;
       color: $pdp_product_volume_value;
 
+      @include breakpoint($only-mobile) {
+        padding: 0 0.5rem;
+        margin: 0.5rem 0 1rem;
+      }
+
       .field__label {
         color: $pdp_product_volume_label;
       }
@@ -49,9 +61,10 @@
 .product--form {
   float: $left;
   font-size: 0.75rem;
-  margin-bottom: 0.9375rem;
+  margin-bottom: 0.5rem;
   color: $pdp_product_form_text;
   width: 100%;
+  text-transform: initial;
 }
 
 .description-wrapper {
@@ -144,6 +157,13 @@
         }
       }
     }
+  }
+}
+
+.nodetype--acq_product,
+.path--cart {
+  span.out-of-stock {
+    text-transform: uppercase;
   }
 }
 

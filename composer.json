@@ -192,6 +192,7 @@
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
+                "Fix more notices": "patches/mobile_number/2978729-custom.patch",
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
             },
             "drupal/redirect": {
@@ -237,6 +238,9 @@
             },
             "acquia/acsf-tools" : {
                 "Create an acsf-tools-restore command to restore dumps.": "https://patch-diff.githubusercontent.com/raw/acquia/acsf-tools/pull/12.patch"
+            },
+            "drupal/restrict_role_login_by_ip" : {
+                "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch"
             }
         },
         "installer-paths": {

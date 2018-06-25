@@ -222,7 +222,7 @@ header {
 	SITE HEADER - MOBILE VIEW
 */
 
-.block-views-exposed-filter-blocksearch-page {
+header .block-views-exposed-filter-blocksearch-page {
   @include breakpoint($upto-desktop) {
     form {
       box-shadow: 0 0.5px 0 0 $header_branding_shadow;
@@ -303,7 +303,7 @@ header {
 
       .mobile--search {
         top: 0.5rem;
-        #{$left}: 2.1875rem;
+        #{$left}: 2.5rem;
         #{$right}: inherit;
 
         &::before {
@@ -315,7 +315,7 @@ header {
       }
 
       .store {
-        #{$right}: 1.75rem;
+        #{$right}: 2rem;
         padding: 0.5rem;
         top: 0.5125rem;
 
@@ -334,12 +334,6 @@ header {
 /*
 	SITE HEADER - MAIN NAVIGATION
 */
-
-.menu--mobile-navigation {
-  @include breakpoint($only-mobile) {
-    height: 2.187rem;
-  }
-}
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
@@ -696,7 +690,7 @@ header {
   .c-menu-primary {
     @include breakpoint($only-mobile) {
       .hamburger--menu {
-        padding: 0 0.625rem;
+        padding: 0.3125rem;
       }
     }
   }

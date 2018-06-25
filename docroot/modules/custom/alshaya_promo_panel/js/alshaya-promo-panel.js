@@ -14,8 +14,9 @@
       var $body = $('body');
 
       $($offer_toggler).once().on('click', function () {
+        $(window).trigger('resize');
         $(this).parent().toggleClass('active-promo-panel');
-        $($offer_content).slideToggle('800');
+        $($offer_content).slideToggle('1000');
         $($body).toggleClass('active-promo-panel-content');
       });
 
@@ -42,6 +43,8 @@
           $('.block-promo-panel-wrapper').addClass('promo-panel-fixed').removeClass('promo-static');
         }
       }
+
+      checkOffset();
 
       $(window, context).scroll(function () {
         checkOffset();

@@ -1,8 +1,10 @@
 body {
   font-family: $alshaya-thin;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-a:hover,
-a:active {
-  text-decoration: underline;
+table {
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
 }

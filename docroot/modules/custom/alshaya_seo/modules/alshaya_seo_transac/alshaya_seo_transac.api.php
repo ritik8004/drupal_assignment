@@ -33,5 +33,14 @@ function hook_gtm_pdp_attributes_alter(array &$product, array &$attributes) {
 }
 
 /**
+ * Alter GTM list name attribute.
+ *
+ * @param string $listName
+ *   Page attibute for GTM.
+ */
+function hook_gtm_list_name_alter(&$listName) {
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

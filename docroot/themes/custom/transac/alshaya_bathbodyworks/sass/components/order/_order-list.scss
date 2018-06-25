@@ -6,12 +6,40 @@
     padding: 0.925rem 1.6rem;
     font-size: 0.875rem;
     line-height: inherit;
-    top: -5.55rem;
+    top: -5.5rem;
+
+    @include breakpoint($only-tablet) {
+      top: -4.125rem;
+    }
   }
 
   .no--orders {
     & + a {
       text-transform: uppercase;
     }
+  }
+}
+
+.recent__orders--list {
+  .order__detail--link {
+    td {
+      border-top: 1px solid $recent_order_table_row_border;
+    }
+  }
+
+  &.user__order--detail {
+    .order-summary-row {
+      td.order-transaction {
+        .dark {
+          font-family: $alshaya-bold;
+        }
+      }
+    }
+  }
+}
+
+.open--accordion {
+  .order-summary-row td {
+    border-bottom: 1px solid $recent_order_table_row_border;
   }
 }

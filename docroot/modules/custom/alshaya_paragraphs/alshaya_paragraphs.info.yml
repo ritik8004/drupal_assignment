@@ -25,5 +25,6 @@ dependencies:
   - drupal:text
   - drupal:user
   - drupal:views
+  - field_group:field_group
   - viewsreference:viewsreference
 package: Alshaya

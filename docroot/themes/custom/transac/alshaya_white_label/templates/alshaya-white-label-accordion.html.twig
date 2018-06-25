@@ -1,0 +1,21 @@
+<div class="c-accordion-delivery-options">
+  <h3 class="c-accordion__title">
+    {% if title %}
+      {{ title }}
+    {% endif %}
+  </h3>
+  {% if content is not empty %}
+  <div class="c-accordion_content">
+    <ul>
+    {% for term in content %}
+      <li>
+        <a href="{{ term.path }}" class="{{ term.active_class }}">{{ term.label }}</a>
+      </li>
+    {% endfor %}
+    {% if view_all is not empty %}
+      <li>{{ view_all }}</li>
+    {% endif %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
