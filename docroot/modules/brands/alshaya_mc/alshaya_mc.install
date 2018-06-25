@@ -265,11 +265,6 @@ function alshaya_mc_install() {
     ->set('store_id', Settings::get('store_id')['ar'])
     ->save();
 
-  // Set stock mode.
-  \Drupal::configFactory()->getEditable('acq_sku.settings')
-    ->set('stock_mode', Settings::get('stock_mode'))
-    ->save();
-
   \Drupal::configFactory()->getEditable('alshaya_api.settings')
     ->set('magento_lang_prefix', 'kwt_en')
     ->save();
