@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_free_skus
+    - node.type.acq_promotion
+id: node.acq_promotion.field_free_skus
+field_name: field_free_skus
+entity_type: node
+bundle: acq_promotion
+label: Free Gift SKUs
+description: 'SKUs to be added to cart as free items once this promotion is applied.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text
