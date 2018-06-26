@@ -153,7 +153,9 @@
     }
   }
 
-  @include breakpoint($tablet) {
-    display: none;
+  .c-accordion-delivery-options {
+    @include breakpoint($tablet) {
+      display: none;
+    }
   }
 }
