@@ -5,7 +5,6 @@
  * Install, update and uninstall hooks for the alshaya_non_transac subprofile.
  */
 
-
 /**
  * Implements hook_update_N().
  *
@@ -71,6 +70,7 @@ function alshaya_non_transac_install() {
     'alshaya_master',
     'alshaya_menus',
     'alshaya_non_transac_product',
+    'alshaya_paragraph_block',
     'alshaya_password_policy',
     'alshaya_permissions',
     'alshaya_seo',

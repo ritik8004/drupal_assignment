@@ -288,6 +288,7 @@ function alshaya_transac_install() {
     'alshaya_menus',
     'alshaya_acm_cart_notification',
     'alshaya_newsletter',
+    'alshaya_paragraph_block',
     'alshaya_paragraphs_transac',
     'alshaya_permissions',
     'alshaya_product',
