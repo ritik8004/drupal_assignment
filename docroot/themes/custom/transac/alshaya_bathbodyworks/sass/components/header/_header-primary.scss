@@ -4,6 +4,11 @@
 
 header {
   .c-header__region {
+    @include breakpoint($desktop) {
+      padding-bottom: 1.5rem;
+      padding-top: 2rem;
+    }
+
     @include breakpoint($only-mobile) {
       height: 2.25rem;
     }
@@ -303,7 +308,8 @@ header .block-views-exposed-filter-blocksearch-page {
 
       .mobile--search {
         top: 0.5rem;
-        #{$left}: 2.5rem;
+        //#{$left}: 2.5rem;
+        #{$left}: 12.5%;
         #{$right}: inherit;
 
         &::before {
@@ -315,7 +321,8 @@ header .block-views-exposed-filter-blocksearch-page {
       }
 
       .store {
-        #{$right}: 2rem;
+        //#{$right}: 2rem;
+        #{$right}: 10%;
         padding: 0.5rem;
         top: 0.5125rem;
 
@@ -341,6 +348,7 @@ header .block-views-exposed-filter-blocksearch-page {
       display: block !important;
       text-align: center;
       font-size: 0;
+      margin-top: -0.25rem;
     }
 
     li.menu--one__list-item {
@@ -352,23 +360,51 @@ header .block-views-exposed-filter-blocksearch-page {
 
         border-top: 2px solid transparent !important;
         border-bottom: none;
-        margin-top: 3px;
-        font-size: 0.9375rem;
+        margin-top: 0.3125rem;
+        font-size: 0.875rem;
         text-transform: uppercase;
         font-family: $alshaya-thin;
         height: 2.5rem;
+        margin-#{$left}: 1.5625rem;
+        margin-#{$right}: 1.5625rem;
+        padding-#{$left}: 1.125rem;
+        padding-#{$right}: 1.125rem;
       }
 
-      &:hover,
-      &.active {
+      &:hover {
         a.menu--one__link {
           &::after {
             content: '';
-            height: 2px;
+            height: 3px;
             background: $primary_link-hover !important;
             display: inherit;
             width: 100%;
-            margin-top: 0.425rem;
+            margin-top: 0.375rem;
+            position: absolute;
+            #{$left}: 0;
+
+            html[lang='ar'] & {
+              margin-top: 0.5625rem;
+            }
+          }
+        }
+      }
+
+      .menu--one__link {
+        &.active {
+          &::after {
+            content: '';
+            height: 3px;
+            background: $primary_link-hover !important;
+            display: inherit;
+            width: 100%;
+            margin-top: 0.375rem;
+            position: absolute;
+            #{$left}: 0;
+
+            html[lang='ar'] & {
+              margin-top: 0.5625rem;
+            }
           }
         }
       }
@@ -411,11 +447,17 @@ header .block-views-exposed-filter-blocksearch-page {
           a.menu--one__link {
             &::after {
               content: '';
-              height: 2px;
+              height: 3px;
               background: $mm_l1_link_bg;
               display: inherit;
               width: 100%;
-              margin-top: 0.425rem;
+              margin-top: 0.375rem;
+              position: absolute;
+              #{$left}: 0;
+
+              html[lang='ar'] & {
+                margin-top: 0.5625rem;
+              }
             }
           }
         }
@@ -452,7 +494,7 @@ header .block-views-exposed-filter-blocksearch-page {
 
       .menu--three__list {
         li {
-          padding: 0.19rem 0;
+          padding: 0.3125rem 0;
         }
 
         a {
@@ -781,6 +823,7 @@ header .region__header {
 .c-pre-content__region {
   @include breakpoint($desktop) {
     border-top: none;
+    height: 2.5rem;
   }
 }
 
@@ -807,6 +850,10 @@ header .region__header {
             &.menu--one__link {
               border: none;
               border-top: 2px solid transparent;
+
+              @include breakpoint($desktop) {
+                color: $header_c_menu_text;
+              }
             }
           }
         }
