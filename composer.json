@@ -79,7 +79,8 @@
         "drupal/jquery_minicolors": "^1.2",
         "claviska/jquery-minicolors": "^2.2",
         "drupal/jsonapi": "1.18 as 1.4.0",
-        "drupal/restrict_role_login_by_ip": "^1.0"
+        "drupal/restrict_role_login_by_ip": "^1.0",
+        "hgoebl/mobile-detect": "^1.4.2"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -123,6 +124,18 @@
         "asset-packagist": {
             "type": "composer",
             "url": "https://asset-packagist.org"
+        },
+        "mobile-detect": {
+            "type": "package",
+            "package": {
+                "name": "hgoebl/mobile-detect",
+                "version": "1.4.2",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
+                    "type": "zip"
+                }
+            }
         }
     },
     "autoload-dev": {
@@ -155,7 +168,8 @@
             },
             "drupal/acquia_connector": {
                 "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
-                "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch"
+                "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch",
+                "Provide a way to alter list possible cores": "https://www.drupal.org/files/issues/2018-06-25/2981513-add_alter_hook_for_possible_core_ids-2.patch"
             },
             "drupal/search_api": {
                 "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"

@@ -523,3 +523,28 @@
     }
   }
 }
+
+.c-promo__items {
+  .field--name-field-1-row-2-col {
+    .field__label {
+      display: none;
+    }
+
+    .field__items {
+      & > .field__item {
+        float: $left;
+        width: calc(50% - 0.375rem);
+        margin-#{$right}: 0.75rem;
+
+        @include breakpoint($tablet) {
+          width: calc(50% - 0.75rem);
+          margin-#{$right}: 1.5rem;
+        }
+
+        &:last-child {
+          margin-#{$right}: 0;
+        }
+      }
+    }
+  }
+}

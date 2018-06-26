@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbe080c4884437c926531a6800cff212",
+    "content-hash": "5e6b6fc58cdff72b0eb315061a1a3003",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -1995,7 +1995,8 @@
                 },
                 "patches_applied": {
                     "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
-                    "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch"
+                    "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch",
+                    "Provide a way to alter list possible cores": "https://www.drupal.org/files/issues/2018-06-25/2981513-add_alter_hook_for_possible_core_ids-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2758,7 +2759,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-11-03T01:51:12+00:00"
+            "time": "2017-11-03 01:51:12"
         },
         {
             "name": "drupal/block_content_machine_name",
@@ -3046,7 +3047,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/clientside_validation"
             },
-            "time": "2018-01-30T07:21:06+00:00"
+            "time": "2018-01-30 07:21:06"
         },
         {
             "name": "drupal/coder",
@@ -5218,7 +5219,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/google_tag"
             },
-            "time": "2018-01-02T23:43:05+00:00"
+            "time": "2018-01-02 23:43:05"
         },
         {
             "name": "drupal/image_widget_crop",
@@ -5711,7 +5712,7 @@
                 "issues": "http://drupal.org/project/issues/libraries",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2017-03-15T17:04:08+00:00"
+            "time": "2017-03-15 17:04:08"
         },
         {
             "name": "drupal/machine_name_widget",
@@ -5983,7 +5984,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/media_entity_actions"
             },
-            "time": "2017-11-13T15:49:17+00:00"
+            "time": "2017-11-13 15:49:17"
         },
         {
             "name": "drupal/media_entity_document",
@@ -6034,7 +6035,7 @@
                 "source": "https://www.drupal.org/project/media_entity_document",
                 "issues": "https://www.drupal.org/project/issues/media_entity_document"
             },
-            "time": "2017-10-24T14:14:45+00:00"
+            "time": "2017-10-24 14:14:45"
         },
         {
             "name": "drupal/media_entity_image",
@@ -6094,7 +6095,7 @@
                 "source": "https://www.drupal.org/project/media_entity_image",
                 "issues": "https://www.drupal.org/project/issues/media_entity_image"
             },
-            "time": "2017-10-24T13:23:24+00:00"
+            "time": "2017-10-24 13:23:24"
         },
         {
             "name": "drupal/media_entity_instagram",
@@ -6730,7 +6731,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/mimemail"
             },
-            "time": "2017-05-14T15:11:59+00:00"
+            "time": "2017-05-14 15:11:59"
         },
         {
             "name": "drupal/mobile_number",
@@ -7778,7 +7779,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/r4032login"
             },
-            "time": "2017-02-08T04:20:19+00:00"
+            "time": "2017-02-08 04:20:19"
         },
         {
             "name": "drupal/recaptcha",
@@ -7841,7 +7842,7 @@
                 "source": "http://git.drupal.org/project/recaptcha.git",
                 "issues": "https://www.drupal.org/project/issues/recaptcha"
             },
-            "time": "2017-04-02T21:15:08+00:00"
+            "time": "2017-04-02 21:15:08"
         },
         {
             "name": "drupal/redirect",
@@ -8606,7 +8607,7 @@
             "support": {
                 "issues": "http://drupal.org/"
             },
-            "time": "2017-03-02T15:34:04+00:00"
+            "time": "2017-03-02 15:34:04"
         },
         {
             "name": "drupal/seckit",
@@ -8715,7 +8716,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/security_review"
             },
-            "time": "2016-10-20T15:43:48+00:00"
+            "time": "2016-10-20 15:43:48"
         },
         {
             "name": "drupal/sharethis",
@@ -9000,7 +9001,7 @@
                 "issues": "https://drupal.org/project/issues/simple_sitemap",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2018-01-01T23:13:47+00:00"
+            "time": "2018-01-01 23:13:47"
         },
         {
             "name": "drupal/taxonomy_access_fix",
@@ -9096,7 +9097,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/taxonomy_term_depth"
             },
-            "time": "2017-02-10T12:17:57+00:00"
+            "time": "2017-02-10 12:17:57"
         },
         {
             "name": "drupal/token",
@@ -9380,7 +9381,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/views_block_filter_block"
             },
-            "time": "2017-10-13T06:53:22+00:00"
+            "time": "2017-10-13 06:53:22"
         },
         {
             "name": "drupal/views_field_view",
@@ -9656,7 +9657,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/wbm2cm"
             },
-            "time": "2018-01-10T00:31:21+00:00"
+            "time": "2018-01-10 00:31:21"
         },
         {
             "name": "drupal/webform",
@@ -10648,6 +10649,17 @@
                 "url"
             ],
             "time": "2017-03-20T17:10:46+00:00"
+        },
+        {
+            "name": "hgoebl/mobile-detect",
+            "version": "1.4.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "drupal-library"
         },
         {
             "name": "j7mbo/twitter-api-php",

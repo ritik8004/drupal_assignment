@@ -40,6 +40,24 @@
       var ccPaymentsClicked = false;
       var footerNewsletterSubmiClicked = false;
 
+      // Set platformType.
+      var md = new MobileDetect(window.navigator.userAgent);
+      if (md.tablet !== null) {
+        dataLayer.push({
+          platformType: 'tablet',
+        });
+      }
+      else if (md.mobile) {
+        dataLayer.push({
+          platformType: 'mobile',
+        });
+      }
+      else {
+        dataLayer.push({
+          platformType: 'desktop',
+        });
+      }
+
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
         'home page',
@@ -816,13 +834,11 @@
       }
       else if(gtmPageType === 'home page') {
         var imgSrc = $(highlight).find('picture img').attr('src');
-        if (typeof imgSrc !== 'undefined') {
-          position = parseInt($('.slick-track').index($(highlight).parent('c-slider-promo__item'))) + 1;
-        }
-        else {
+        if (typeof imgSrc === 'undefined') {
           imgSrc = $(highlight).find('img').attr('src');
         }
         creative = Drupal.url(imgSrc);
+        position = key;
       }
       else if ($(highlight).find('.field--name-field-banner img', '.field--name-field-banner picture img').attr('src') !== undefined) {
         creative = Drupal.url($(highlight).find('.field--name-field-banner img').attr('src'));

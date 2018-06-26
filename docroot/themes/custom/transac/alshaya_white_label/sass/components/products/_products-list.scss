@@ -25,6 +25,10 @@
     .block-views-exposed-filter-blocksearch-page form.views-exposed-form-search-page {
       @include breakpoint($only-mobile) {
         border: none;
+
+        .form--inline::after {
+          content: none;
+        }
       }
     }
 
