@@ -144,7 +144,9 @@ function alshaya_install() {
     ->save();
 
   // TODO: List the modules common for transac and non-transac profiles.
-  $modules = [];
+  $modules = [
+    'alshaya_paragraph_block',
+  ];
 
   global $_alshaya_modules_installed;
   $_alshaya_modules_installed = [];
