@@ -64,6 +64,10 @@ function alshaya_advanced_page_form_alter(&$form, FormStateInterface $form_state
 /**
  * Validate product category field when "use as department page" is checked.
  *
+ * There is a core issue with states library, Because of that states "required"
+ * is not working for select list field. That is why we had to write this
+ * validate callback. https://www.drupal.org/project/drupal/issues/2855139
+ *
  * @param array $form
  *   Node form elements array.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
