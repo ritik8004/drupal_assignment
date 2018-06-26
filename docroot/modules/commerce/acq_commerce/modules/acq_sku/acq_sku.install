@@ -14,6 +14,21 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Adding index on 'acq_sku__field_configured_skus' table for performance.
+ */
+function acq_sku_update_8007() {
+  foreach (_acq_sku_indexes() as $index => $data) {
+    if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
+      \Drupal::database()
+        ->schema()
+        ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add field to store commerce category status.
  */
 function acq_sku_update_8006() {
@@ -249,6 +264,23 @@ function _acq_sku_indexes() {
           'default' => '',
         ],
         'attributes_value' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ],
+  ];
+
+  // Add index for 'field_skus on acq_sku__field_configured_skus' table.
+  $indexes['acq_sku__field_configured_skus'] = [
+    'table' => 'acq_sku__field_configured_skus',
+    'fields' => [
+      ['field_configured_skus_value', 64],
+    ],
+    'spec' => [
+      'fields' => [
+        'field_configured_skus_value' => [
           'type' => 'varchar',
           'length' => 255,
           'default' => '',
