@@ -21,7 +21,7 @@ use Drupal\Core\Database\Database;
  */
 function alshaya_advanced_page_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'node_advanced_page_form' || $form_id == 'node_advanced_page_edit_form') {
-    $form['field_product_category']['#states'] = [
+    $form['field_product_category']['widget']['#states'] = [
       'visible' => [
         ':input[name="field_use_as_department_page[value]"]' => ['checked' => TRUE],
       ],
@@ -55,6 +55,24 @@ function alshaya_advanced_page_form_alter(&$form, FormStateInterface $form_state
         // Unset the value.
         unset($form['field_product_category']['widget']['#options'][$tid]);
       }
+    }
+  }
+
+  array_unshift($form['#validate'], 'alshaya_advanced_page_node_form_validate');
+}
+
+/**
+ * Validate product category field when "use as department page" is checked.
+ *
+ * @param array $form
+ *   Node form elements array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The FormState object.
+ */
+function alshaya_advanced_page_node_form_validate(array &$form, FormStateInterface $form_state) {
+  if ($form_state->getValue('field_use_as_department_page')['value']) {
+    if (empty($form_state->getValue('field_product_category'))) {
+      $form_state->setErrorByName('field_product_category', t('@title is required', ['@title' => $form['field_product_category']['widget']['#title']]));
     }
   }
 }
