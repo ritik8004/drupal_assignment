@@ -11,6 +11,15 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Install alshaya_paragraph_block module.
+ */
+function alshaya_update_8007() {
+  \Drupal::service('module_installer')->install(['alshaya_paragraph_block']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update header for 'restrict_login_by_ip' module.
  */
 function alshaya_update_8006() {
