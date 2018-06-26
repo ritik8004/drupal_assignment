@@ -1,5 +1,5 @@
 diff --git a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install
-index 635bcaa43..77a2c8bad 100644
+index 635bcaa43..380cc6a63 100644
 --- a/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install
 +++ b/docroot/modules/commerce/acq_commerce/modules/acq_sku/acq_sku.install
 @@ -11,6 +11,21 @@
@@ -12,12 +12,12 @@ index 635bcaa43..77a2c8bad 100644
 + * Adding index on 'acq_sku__field_configured_skus' table for performance.
 + */
 +function acq_sku_update_8007() {
-+  foreach (_acq_sku_indexes() as $index => $data) {
-+    if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
-+      \Drupal::database()
-+        ->schema()
-+        ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
-+    }
++  $index = 'acq_sku__field_configured_skus';
++  $data = _acq_sku_indexes()[$index];
++  if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
++    \Drupal::database()
++      ->schema()
++      ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
 +  }
 +}
 +
