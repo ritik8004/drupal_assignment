@@ -60,6 +60,24 @@
             margin-top: -1px;
           }
         }
+
+        &.tab-click-collect.active--tab--head {
+          html[lang=ar] & {
+            margin-right: -2px;
+
+            @include breakpoint($only-tablet) {
+              margin-right: 2px;
+            }
+          }
+        }
+
+        p {
+          @include breakpoint($only-tablet) {
+            html[lang=ar] & {
+              min-height: 1.75rem;
+            }
+          }
+        }
       }
 
       .tab-separator {
