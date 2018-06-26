@@ -362,6 +362,50 @@
   }
 }
 
+#payment_method_cashondelivery {
+  .method-title,
+  .method-sub-title,
+  .method-sub-title .price-type__wrapper {
+    display: inline-block;
+  }
+
+  .method-sub-title {
+    font-size: 0.875rem;
+    color: $checkout_payment_method_subtitle;
+    margin-#{$left}: 0.5rem;
+
+    @include breakpoint($upto-desktop) {
+      margin-#{$left}: 0;
+      display: block;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 0.5625rem;
+      width: 85%;
+    }
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.75rem;
+      margin-top: 0.625rem;
+      width: 78%;
+    }
+  }
+
+  .method-description {
+    color: $checkout_payment_method_cod_desc !important;
+    margin-top: 0.5rem;
+
+    @include breakpoint($upto-desktop) {
+      margin-top: 0.25rem;
+      width: 100%;
+    }
+
+    .price-type__wrapper {
+      display: inline-block;
+    }
+  }
+}
+
 .cvv-help-text-wrapper {
   @include breakpoint($only-mobile) {
     display: block;
