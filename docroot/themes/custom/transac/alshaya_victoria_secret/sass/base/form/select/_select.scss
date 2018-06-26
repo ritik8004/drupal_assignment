@@ -65,7 +65,7 @@
     &::after {
       // IE10 needs this in px.
       line-height: 40px;
-      font-size: 2.5625rem;
+      font-size: 2rem;
       top: 0;
       #{$left}: auto;
       width: 2.1875rem;
@@ -115,3 +115,4 @@
     }
   }
 }
+

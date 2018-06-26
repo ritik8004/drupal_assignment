@@ -28,6 +28,14 @@
   }
 }
 
+#address_wrapper,
+#address-book-form-open,
+.address_wrapper {
+  .address-book-address .country-name {
+    font-size: 0.875rem;
+  }
+}
+
 .view-address-book {
   @include breakpoint($tablet) {
     padding-top: 1.5rem;
@@ -181,9 +189,20 @@
   .form-type-select {
     .select2-selection__arrow {
       &::after {
-        font-size: 2.5625rem;
-        top: -1px;
+        font-size: 2rem;
+        top: 0;
         #{$left}: 0;
+      }
+    }
+
+    &::after {
+      line-height: 1.2;
+      font-size: 2rem;
+      top: 0;
+      #{$right}: 1px;
+
+      @include breakpoint($desktop) {
+        line-height: 1;
       }
     }
   }
