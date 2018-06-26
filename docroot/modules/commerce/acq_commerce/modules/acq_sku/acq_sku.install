@@ -17,12 +17,12 @@ use Symfony\Component\Yaml\Yaml;
  * Adding index on 'acq_sku__field_configured_skus' table for performance.
  */
 function acq_sku_update_8007() {
-  foreach (_acq_sku_indexes() as $index => $data) {
-    if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
-      \Drupal::database()
-        ->schema()
-        ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
-    }
+  $index = 'acq_sku__field_configured_skus';
+  $data = _acq_sku_indexes()[$index];
+  if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
+    \Drupal::database()
+      ->schema()
+      ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
   }
 }
 
