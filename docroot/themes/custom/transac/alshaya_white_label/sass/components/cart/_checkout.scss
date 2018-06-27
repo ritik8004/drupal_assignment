@@ -1258,12 +1258,17 @@ body.alias--cart {
   }
 
   #edit-continue-shopping-mobile,
-  .edit-continue-shopping-mobile,
-  #edit-continue-shopping {
+  .edit-continue-shopping-mobile {
     color: $mobile_continue_shopping_btn_text;
     background-color: $mobile_continue_shopping_btn_bg;
     border: 1px solid $mobile_continue_shopping_btn_border;
     font-weight: normal;
+  }
+
+  #edit-continue-shopping {
+    color: $desktop_continue_shopping_btn_text;
+    background-color: $desktop_continue_shopping_btn_bg;
+    border: 1px solid $desktop_continue_shopping_btn_border;
   }
 }
 
