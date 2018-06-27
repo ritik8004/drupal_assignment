@@ -160,6 +160,11 @@ class ProductSyncResource extends ResourceBase {
 
         // Magento might have stores that what we don't support.
         if (empty($langcode)) {
+          $this->logger->error('Langcode not found for product @sku with store id @store_id.', [
+            '@store_id' => $product['store_id'],
+            '@sku' => $product['sku'],
+          ]);
+          $ignored++;
           continue;
         }
 
