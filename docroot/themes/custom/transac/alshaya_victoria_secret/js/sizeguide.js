@@ -41,7 +41,7 @@
           convertSelectListtoUnformattedList($('.form-item-configurables-band-size, .form-item-configurables-cup-size, .form-item-configurables-size'));
         }
 
-        convertSelectListtoUnformattedList($('.form-item-configurables-color-description'));
+        convertSelectListtoUnformattedList($('.form-item-configurables-color'));
       }
     }
   };

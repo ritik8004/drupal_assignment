@@ -147,6 +147,11 @@
             }
           }
         }
+
+        span.empty {
+          float: $left;
+          width: 100%;
+        }
       }
 
       .stores-list-view,
@@ -194,6 +199,15 @@
             font-size: 0.875rem;
             line-height: 1.8;
             min-width: 2.5rem;
+          }
+        }
+      }
+
+      #selected-store-elements-wrapper {
+        .cc_mobile_number {
+          .form-item-cc-mobile-number-country-code,
+          .form-item-cc-mobile-number-mobile {
+            margin-top: 1.5rem !important;
           }
         }
       }
