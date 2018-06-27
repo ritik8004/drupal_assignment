@@ -152,7 +152,6 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
     $cache_tags = [
       self::CACHE_TAG,
-      'node_type:advanced_page',
     ];
 
     $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
