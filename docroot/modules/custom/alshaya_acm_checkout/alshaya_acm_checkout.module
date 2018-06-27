@@ -53,6 +53,13 @@ function alshaya_acm_checkout_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_theme_registry_alter().
+ */
+function alshaya_acm_checkout_theme_registry_alter(&$theme_registry) {
+  $theme_registry['acq_commerce_price']['variables']['tooltip'] = '';
+}
+
+/**
  * Format price value with currency.
  *
  * Default template: acq-commerce-price.html.twig.

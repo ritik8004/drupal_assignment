@@ -375,10 +375,12 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     $surcharge = $cart->getExtension('surcharge');
     if ($surcharge && isset($surcharge['applied']) && $surcharge['applied']) {
-      $surcharge_label = $acm_config->get('cod_surcharge_label');
-      $totals['surcharge'] = (float) $surcharge['amount'] > 0
-        ? alshaya_acm_price_format($surcharge['amount'])
-        : NULL;
+      if ((float) $surcharge['amount'] > 0) {
+        $surcharge_label = $acm_config->get('cod_surcharge_label');
+
+        $surcharge_tooltip = $acm_config->get('cod_surcharge_tooltip');
+        $totals['surcharge']['#markup'] = alshaya_acm_price_format($surcharge['amount'], [], $surcharge_tooltip);
+      }
     }
 
     // Grand Total or Order total.

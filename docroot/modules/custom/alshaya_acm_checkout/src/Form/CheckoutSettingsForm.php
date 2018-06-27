@@ -120,33 +120,39 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('checkout_display_magento_error'),
     ];
 
-    $form['cod_surcharge_label'] = [
+    $form['cod_surcharge'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('COD Surcharge'),
+      '#tree' => FALSE,
+    ];
+
+    $form['cod_surcharge']['cod_surcharge_label'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('COD Surcharge Label'),
+      '#title' => $this->t('Label'),
       '#description' => $this->t('Label to use in totals section.'),
       '#required' => TRUE,
       '#default_value' => $config->get('cod_surcharge_label'),
     ];
 
-    $form['cod_surcharge_short_description'] = [
+    $form['cod_surcharge']['cod_surcharge_short_description'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('COD Surcharge Short Description'),
+      '#title' => $this->t('Short Description'),
       '#description' => $this->t('Description to display on payment methods section. Use [surcharge] as placeholder where you want to display amount with currency code.'),
       '#required' => TRUE,
       '#default_value' => $config->get('cod_surcharge_short_description'),
     ];
 
-    $form['cod_surcharge_description'] = [
+    $form['cod_surcharge']['cod_surcharge_description'] = [
       '#type' => 'textarea',
-      '#title' => $this->t('COD Surcharge Description'),
+      '#title' => $this->t('Description'),
       '#description' => $this->t('Description to display on payment methods section with CoD is selected. Use [surcharge] as placeholder where you want to display amount with currency code.'),
       '#required' => TRUE,
       '#default_value' => $config->get('cod_surcharge_description'),
     ];
 
-    $form['cod_surcharge_tooltip'] = [
+    $form['cod_surcharge']['cod_surcharge_tooltip'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('COD Surcharge Tooltip'),
+      '#title' => $this->t('Tooltip'),
       '#description' => $this->t('Description to show as tooltip.'),
       '#required' => TRUE,
       '#default_value' => $config->get('cod_surcharge_tooltip'),

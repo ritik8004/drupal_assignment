@@ -63,4 +63,18 @@
       </div>
   </div>
 {% endif %}
+
+{% if tooltip is not empty %}
+  <div class="simple-tooltip-wrap">
+    <div class="tooltip-wrap">
+      <div class="contains--tooltip">
+        <div class="tooltip--head">
+        </div>
+        <div class="tooltip">
+          {{ tooltip }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
 </div>

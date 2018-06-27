@@ -593,11 +593,15 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
  *
  * @param float $price
  *   Price value.
+ * @param array $promotions
+ *   Promotions if available to display as tooltip.
+ * @param string $tooltip
+ *   Simple tooltip to display along with price.
  *
  * @return mixed|null
  *   Return rendered theme with html for price.
  */
-function alshaya_acm_price_format($price, $promotions = []) {
+function alshaya_acm_price_format($price, array $promotions = [], $tooltip = '') {
   $output = [
     '#theme' => 'acq_commerce_price',
     '#price' => acq_commerce_get_clean_price($price),
@@ -605,6 +609,10 @@ function alshaya_acm_price_format($price, $promotions = []) {
 
   if ($promotions) {
     $output['#promotions'] = $promotions;
+  }
+
+  if ($tooltip) {
+    $output['#tooltip'] = $tooltip;
   }
 
   return render($output);
