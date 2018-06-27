@@ -8,7 +8,7 @@
   Drupal.behaviors.alshayaPLPSearch = {
     attach: function (context, settings) {
       // Close the mobile filter menu on tablet if clicked anywhere else.
-      $(document).once().on('click touchstart', function (e) {
+      $(document).once().on('click', function (e) {
         // Run only on PLP and Search page.
         if ($('.page-wrapper > .page-standard').hasClass('c-plp')) {
           if ($(window).width() >= 768) {

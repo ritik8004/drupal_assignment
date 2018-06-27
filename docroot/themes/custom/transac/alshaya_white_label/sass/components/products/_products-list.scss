@@ -1106,3 +1106,9 @@ html[lang=ar] {
     }
   }
 }
+
+body {
+  &.filter-open-no-scroll {
+    cursor: pointer;
+  }
+}
