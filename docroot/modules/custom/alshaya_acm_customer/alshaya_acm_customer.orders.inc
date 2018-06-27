@@ -337,6 +337,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       [],
       $surcharge_tooltip
     );
+    $orderDetails['surcharge_print']['#markup'] = alshaya_acm_price_format($order['extension']['surcharge_incl_tax']);
   }
 
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
