@@ -163,6 +163,10 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'bbw_uat',
         'conductor' => 'bbwkw_uat',
       ],
+      '01live' => [
+        'magento' => 'bbw_prod',
+        'conductor' => 'bbwkw_prod'
+      ],
     ],
     // BathBodyWorks SA.
     'bbwsa' => [
@@ -174,6 +178,10 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'bbw_uat',
         'conductor' => 'bbwsa_uat',
       ],
+      '01live' => [
+        'magento' => 'bbw_prod',
+        'conductor' => 'bbwsa_prod'
+      ],
     ],
     // BathBodyWorks AE.
     'bbwae' => [
@@ -184,6 +192,10 @@ function alshaya_get_env_keys($site, $env) {
       '01uat' => [
         'magento' => 'bbw_uat',
         'conductor' => 'bbwae_uat',
+      ],
+      '01live' => [
+        'magento' => 'bbw_prod',
+        'conductor' => 'bbwae_prod'
       ],
     ],
     // Pottery Barn AE.

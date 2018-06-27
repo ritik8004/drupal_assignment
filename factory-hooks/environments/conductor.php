@@ -154,6 +154,11 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '73da80ec6fc04d179a3380ae12b16047',
       'hmac_secret' => 'XBnwM9YaG8HKXXUkYmG6bA',
     ],
+    'bbwkw_prod' => [
+      'url' => 'https://alshaya-bbwkw-prod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd8a71262da2740b6b9f56638f4a7a3a8',
+      'hmac_secret' => '3oj9IfqBOCauQSH6Ig86og',
+    ],
     // BathBodyWorks SA.
     'bbwsa_test' => [
       'url' => 'https://alshaya-bbwsa-test.eu-west-1.prod.acm.acquia.io/',
@@ -165,6 +170,11 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '4fb55a1e29254823b3a8236f8a454f3a',
       'hmac_secret' => 'bMZJXWBEYxO15bjrgg1Gmg',
     ],
+    'bbwsa_prod' => [
+      'url' => 'https://alshaya-bbwsa-prod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '4484e41f3b7c4783a41d9a0d36ad858e',
+      'hmac_secret' => 'gHyLRfMO86zarwkP_nG1Hw',
+    ],
     // BathBodyWorks AE.
     'bbwae_test' => [
       'url' => 'https://alshaya-bbwae-test.eu-west-1.prod.acm.acquia.io/',
@@ -175,6 +185,11 @@ function alshaya_get_conductor_host_data() {
       'url' => 'https://alshaya-bbwae-uat.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '358452cd036a4c2a9a782eeb1ee8fb25',
       'hmac_secret' => 'm9DwvS0XwtPVpeiNLNk6hQ',
+    ],
+    'bbwae_prod' => [
+      'url' => 'https://alshaya-bbwae-prod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '0272644d5be84efb9dd246478367e947',
+      'hmac_secret' => 'a0EQYgy8zDRm6aNW7FyPrQ',
     ],
     // VictoriaSecret KW.
     'vskw_test' => [
