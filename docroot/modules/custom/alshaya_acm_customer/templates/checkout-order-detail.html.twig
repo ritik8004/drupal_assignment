@@ -277,6 +277,20 @@
       </tr>
       {% endblock %}
 
+      {% block surchargeRow %}
+        {% if order_details.surcharge %}
+          <tr class="surcharge-row collapse-row">
+            <td class="above-mobile">&nbsp;</td>
+            <td class="above-mobile">&nbsp;</td>
+            <td class="right--align">{{ order_details.surcharge_label }}</td>
+            <td class="blend">
+              {{ order_details.surcharge }}
+            </td>
+            <td class="above-mobile empty--cell">&nbsp;</td>
+          </tr>
+        {% endif %}
+      {% endblock %}
+
       {% block totalRow %}
       <tr class="total-row collapse-row">
         <td class="above-mobile">&nbsp;</td>

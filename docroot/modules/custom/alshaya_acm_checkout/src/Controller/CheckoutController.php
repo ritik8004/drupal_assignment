@@ -193,7 +193,7 @@ class CheckoutController implements ContainerInjectionInterface {
       throw new NotFoundHttpException();
     }
 
-    // Get governate value dynamically to ensure it doesn't depend on form
+    // Get payment method value dynamically to ensure it doesn't depend on form
     // structure.
     $selected_payment_method = NestedArray::getValue($request_params, explode('[', str_replace(']', '', $element)));
 
@@ -205,6 +205,12 @@ class CheckoutController implements ContainerInjectionInterface {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if ($cart instanceof CartInterface) {
+      $cart->setPaymentMethod($selected_payment_method);
+
+      // Inform Magento about payment method selection.
+      $this->cartStorage->updateCart(FALSE);
+
+      // Do again, we don't get selected payment method back from Magento.
       $cart->setPaymentMethod($selected_payment_method);
     }
 
