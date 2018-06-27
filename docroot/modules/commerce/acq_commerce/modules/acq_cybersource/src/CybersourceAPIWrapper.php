@@ -19,6 +19,13 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 class CybersourceAPIWrapper extends APIWrapper {
 
   /**
+   * API Helper service object.
+   *
+   * @var \Drupal\acq_commerce\APIHelper
+   */
+  private $helper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
@@ -38,6 +45,9 @@ class CybersourceAPIWrapper extends APIWrapper {
                               I18nHelper $i18n_helper,
                               APIHelper $api_helper) {
     parent::__construct($client_factory, $config_factory, $logger_factory, $i18n_helper, $api_helper);
+    // To avoid issues in merging ACM code, not changing from private to
+    // protected in base class.
+    $this->helper = $api_helper;
     $this->logger = $logger_factory->get('acq_cybersource');
   }
 
@@ -88,16 +98,6 @@ class CybersourceAPIWrapper extends APIWrapper {
   public function updateCart($cart_id, $cart) {
     $endpoint = $this->apiVersion . "/agent/cart/$cart_id";
 
-    // Check if there's a customer ID and remove it if it's empty.
-    if (isset($cart->customer_id) && empty($cart->customer_id)) {
-      unset($cart->customer_id);
-    }
-
-    // Check if there's a customer email and remove it if it's empty.
-    if (isset($cart->customer_email) && empty($cart->customer_email)) {
-      unset($cart->customer_email);
-    }
-
     // Check $item['name'] is a string because in the cart we
     // store name as a 'renderable link object' with a type,
     // a url, and a title. We only want to pass title to the
@@ -130,52 +130,7 @@ class CybersourceAPIWrapper extends APIWrapper {
       }
     }
 
-    // Cart extensions must always be objects and not arrays.
-    // @TODO: Move this normalization to \Drupal\acq_cart\Cart::__construct and \Drupal\acq_cart\Cart::updateCartObject.
-    if (isset($cart->carrier)) {
-      if (isset($cart->carrier->extension)) {
-        if (!is_object($cart->carrier->extension)) {
-          $cart->carrier->extension = (object) $cart->carrier->extension;
-        }
-      }
-      elseif (array_key_exists('extension', $cart->carrier)) {
-        if (!is_object($cart->carrier['extension'])) {
-          $cart->carrier['extension'] = (object) $cart->carrier['extension'];
-        }
-      }
-    }
-    else {
-      // Removing shipping address if carrier not set.
-      unset($cart->shipping);
-    }
-
-    // Cart constructor sets cart to any object passed in,
-    // circumventing ->setBilling() so trap any wayward extension[] here.
-    // @TODO: Move this normalization to \Drupal\acq_cart\Cart::__construct and \Drupal\acq_cart\Cart::updateCartObject.
-    if (isset($cart->billing)) {
-      if (isset($cart->billing->extension)) {
-        if (!is_object($cart->billing->extension)) {
-          $cart->billing->extension = (object) $cart->billing->extension;
-        }
-      }
-      elseif (array_key_exists('extension', $cart->billing)) {
-        if (!is_object($cart->billing['extension'])) {
-          $cart->billing['extension'] = (object) $cart->billing['extension'];
-        }
-      }
-    }
-    if (isset($cart->shipping)) {
-      if (isset($cart->shipping->extension)) {
-        if (!is_object($cart->shipping->extension)) {
-          $cart->shipping->extension = (object) $cart->shipping->extension;
-        }
-      }
-      elseif (array_key_exists('extension', $cart->shipping)) {
-        if (!is_object($cart->shipping['extension'])) {
-          $cart->shipping['extension'] = (object) $cart->shipping['extension'];
-        }
-      }
-    }
+    $cart = $this->helper->cleanCart($cart);
 
     $doReq = function ($client, $opt) use ($endpoint, $cart) {
       $opt['json'] = $cart;
@@ -183,8 +138,8 @@ class CybersourceAPIWrapper extends APIWrapper {
     };
 
     try {
-      $response = $this->tryAgentRequest($doReq, 'updateCart');
       Cache::invalidateTags(['cart:' . $cart_id]);
+      $response = $this->tryAgentRequest($doReq, 'updateCart');
     }
     catch (ConnectorException $e) {
       // Restore cart structure.
