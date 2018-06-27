@@ -18,6 +18,10 @@
 
     .view-product-slider {
       margin-bottom: 1.5rem;
+
+      @include breakpoint($upto-desktop) {
+        margin-bottom: 1rem;
+      }
     }
   }
 
@@ -51,6 +55,10 @@
     text-align: center;
 
     @include breakpoint($tablet) {
+      padding-top: 0.625rem;
+    }
+
+    @include breakpoint($desktop) {
       padding-top: 1.125rem;
     }
   }
@@ -180,11 +188,13 @@
         -webkit-overflow-scrolling: touch;
         overflow-y: hidden;
         white-space: nowrap;
+        padding-bottom: 1.5rem;
 
         .views-row {
           display: inline-block;
           white-space: normal;
           vertical-align: top;
+          position: relative;
         }
       }
     }
@@ -192,8 +202,7 @@
     @include breakpoint($only-mobile) {
       .owl-carousel {
         .views-row {
-          width: 38%;
-          min-height: 17.5rem;
+          width: 37%;
           margin-#{$left}: 0;
           margin-#{$right}: 0.625rem;
         }
@@ -206,7 +215,6 @@
       .owl-carousel {
         .views-row {
           width: 40%;
-          min-height: 22rem;
           padding-#{$left}: 0;
           padding-#{$right}: 1rem;
         }
@@ -220,7 +228,7 @@
     @include breakpoint($only-mobile) {
       .owl-carousel {
         .views-row {
-          min-height: 17rem !important;
+          min-height: auto !important;
         }
       }
     }
@@ -229,7 +237,7 @@
       .owl-carousel {
         .views-row {
           width: 22%;
-          height: 21rem !important;
+          height: auto !important;
         }
       }
     }
@@ -238,18 +246,10 @@
 
 .paragraph--type--product-carousel-category {
   .view-product-slider {
-    @include breakpoint($only-mobile) {
-      .owl-carousel {
-        .views-row {
-          width: 42%;
-        }
-      }
-    }
-
     @include breakpoint($only-tablet) {
       .owl-carousel {
         .views-row {
-          width: 19%;
+          width: 22.2%;
         }
       }
     }
