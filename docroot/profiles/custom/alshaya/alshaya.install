@@ -11,6 +11,15 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Install alshaya_paragraph_block module.
+ */
+function alshaya_update_8007() {
+  \Drupal::service('module_installer')->install(['alshaya_paragraph_block']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update header for 'restrict_login_by_ip' module.
  */
 function alshaya_update_8006() {
@@ -135,7 +144,9 @@ function alshaya_install() {
     ->save();
 
   // TODO: List the modules common for transac and non-transac profiles.
-  $modules = [];
+  $modules = [
+    'alshaya_paragraph_block',
+  ];
 
   global $_alshaya_modules_installed;
   $_alshaya_modules_installed = [];
