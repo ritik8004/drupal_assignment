@@ -14,17 +14,17 @@ use Drupal\field\Entity\FieldConfig;
  *
  * Updated facets config.
  */
-function alshaya_acm_promotion_update_8012() {
+function alshaya_acm_promotion_update_8013() {
   $field_storage_configs = [
-    'field.storage.node.field_free_skus',
     'field.storage.node.field_coupon_code',
+    'field.storage.node.field_free_gift_skus',
   ];
 
   alshaya_config_install_configs($field_storage_configs, 'alshaya_acm_promotion');
 
   $field_configs = [
     'field.field.node.acq_promotion.field_coupon_code',
-    'field.field.node.acq_promotion.field_free_skus',
+    'field.field.node.acq_promotion.field_free_gift_skus',
   ];
 
   alshaya_config_install_configs($field_configs, 'alshaya_acm_promotion', 'optional');
