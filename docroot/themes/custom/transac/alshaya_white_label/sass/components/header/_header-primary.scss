@@ -672,8 +672,7 @@ header {
         width: 100%;
         transform: translateY(-3.625rem);
         z-index: -1;
-        transition: all 0.5s ease-in 0s, visibility 0.2s linear 0.4s, z-index 0s linear 0.1s;
-        transition-delay: 0.3s;
+        transition: all 0.25s ease-in 0s, visibility 0.15s linear 0.4s, z-index 0s linear 0.1s;
         border-top: 3rem solid transparent;
       }
     }

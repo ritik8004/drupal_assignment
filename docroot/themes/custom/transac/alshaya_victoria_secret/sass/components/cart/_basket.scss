@@ -53,6 +53,12 @@
       }
     }
 
+    td .form-type-select {
+      &::after {
+        font-size: 2rem;
+      }
+    }
+
     tr td {
       @include breakpoint($desktop) {
         padding-#{$left}: 1.5rem;

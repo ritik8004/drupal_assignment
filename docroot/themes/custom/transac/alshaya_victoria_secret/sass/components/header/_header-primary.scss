@@ -157,8 +157,8 @@ header {
         height: 2.5rem;
       }
 
-      &.active a.menu--one__link {
-        border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
+      a.menu--one__link.active {
+        border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
       }
     }
 
@@ -166,6 +166,14 @@ header {
       li.menu--one__list-item {
         &:hover {
           a.menu--one__link {
+            border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
+          }
+        }
+      }
+
+      &:hover {
+        li.menu--one__list-item {
+          a.menu--one__link.active {
             border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
           }
         }
