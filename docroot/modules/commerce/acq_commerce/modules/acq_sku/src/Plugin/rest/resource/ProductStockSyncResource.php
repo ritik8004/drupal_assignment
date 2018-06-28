@@ -150,13 +150,17 @@ class ProductStockSyncResource extends ResourceBase {
 
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     if ($sku = SKU::loadFromSku($stock['sku'], $langcode)) {
-      $this->logger->info('Updating stock for SKU @sku.', ['@sku' => $stock['sku']]);
-
       if (isset($stock['is_in_stock']) && empty($stock['is_in_stock'])) {
         $stock['qty'] = 0;
       }
 
       $quantity = isset($stock['qty']) ? $stock['qty'] : 0;
+
+      $this->logger->info('Updating stock for SKU @sku. New quantity: @quantity. Debug info @info.', [
+        '@sku' => $stock['sku'],
+        '@quantity' => $quantity,
+        '@info' => json_encode($stock),
+      ]);
 
       if ($quantity != $sku->get('stock')->getString()) {
         $sku->get('stock')->setValue($quantity);
