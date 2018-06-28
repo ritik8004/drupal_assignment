@@ -183,6 +183,18 @@
       margin-top: 0.125rem;
     }
   }
+
+  .mobile-input--wrapper {
+    label.error {
+      margin-top: -0.175rem;
+      border-top-width: 0.125rem;
+      padding-top: 0.5rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 0.32rem;
+      }
+    }
+  }
 }
 
 .address-book-address {
