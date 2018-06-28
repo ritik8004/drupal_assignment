@@ -146,7 +146,7 @@ header {
 
     .one {
       width: 50.5%;
-      padding: 1.125rem 0.5rem;
+      padding: 1.1rem 0.5rem;
     }
 
     .one.shop {
@@ -205,9 +205,14 @@ header {
     padding-top: 0.5rem;
   }
 
+  .c-menu-secondary,
   .toggle--sign,
   .main--menu ul.menu--one__list {
     width: 16.875rem;
+  }
+
+  .c-my-account-nav {
+    width: 16.875rem !important;
   }
 }
 

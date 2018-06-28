@@ -1259,10 +1259,16 @@ body.alias--cart {
 
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    color: $primary_brand_button_text;
-    background: $primary_brand_button;
-    border: 1px solid $primary_brand_button;
+    color: $mobile_continue_shopping_btn_text;
+    background-color: $mobile_continue_shopping_btn_bg;
+    border: 1px solid $mobile_continue_shopping_btn_border;
     font-weight: normal;
+  }
+
+  #edit-continue-shopping {
+    color: $desktop_continue_shopping_btn_text;
+    background-color: $desktop_continue_shopping_btn_bg;
+    border: 1px solid $desktop_continue_shopping_btn_border;
   }
 }
 

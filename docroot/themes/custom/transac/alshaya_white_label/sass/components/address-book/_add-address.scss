@@ -145,3 +145,17 @@
     }
   }
 }
+
+.c-address-book {
+  .address-book-address {
+    .mobile-number-field {
+      label.error {
+        margin-top: -0.2rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 0.3rem;
+        }
+      }
+    }
+  }
+}

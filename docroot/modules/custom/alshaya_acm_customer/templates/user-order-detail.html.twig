@@ -255,6 +255,18 @@
         <td class="above-mobile empty--cell">&nbsp;</td>
       </tr>
 
+      {% if order_details.surcharge %}
+        <tr class="surcharge-row collapse-row">
+          <td class="above-mobile">&nbsp;</td>
+          <td class="above-mobile">&nbsp;</td>
+          <td class="right--align">{{ order_details.surcharge_label }}</td>
+          <td class="blend">
+            {{ order_details.surcharge }}
+          </td>
+          <td class="above-mobile empty--cell">&nbsp;</td>
+        </tr>
+      {% endif %}
+
       <tr class="total-row">
         <td class="desktop-only">&nbsp;</td>
         <td class="above-mobile">&nbsp;</td>

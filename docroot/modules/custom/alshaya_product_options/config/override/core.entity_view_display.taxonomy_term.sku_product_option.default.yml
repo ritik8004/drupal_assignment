@@ -1,0 +1,6 @@
+hidden:
+  field_attribute_swatch_color: true
+  field_attribute_swatch_image: true
+  field_attribute_swatch_text: true
+  field_attribute_swatch_type: true
+  field_attribute_swatch_value: true
