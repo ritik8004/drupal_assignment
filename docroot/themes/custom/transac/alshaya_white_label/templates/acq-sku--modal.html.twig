@@ -22,7 +22,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
       {% if not page %}
         <h2{{ title_attributes.addClass("c-products__free__item__label") }}>
-          {{ 'FREE GIFT ITEM'|t }}
+          {{ 'FREE GIFT'|t }}
         </h2>
         <h2{{ title_attributes.addClass("c-products__item__label") }}>
           {{ sku.name }}
@@ -44,6 +44,14 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     <div class="content__sidebar">
       {% block sizeVolume %}
       {% endblock %}
+      <div class="content__description__wrapper">
+        <div class="label">
+          {{ 'Product Description'|t }}
+        </div>
+        <div class="content">
+          {{ sku.description }}
+        </div>
+      </div>
     </div>
   </div>
 </article>

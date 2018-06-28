@@ -478,7 +478,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           // For free gift promotions, the promo needs to be rendered in a
           // different way.
           foreach ($free_gift_promotions as $free_gift_promotion) {
-            /** @var SKU $sku_entity */
             $free_sku_entity = SKU::loadFromSku($free_gift_promotion['skus'][0]['value']);
 
             // Get sku title & image.
@@ -619,6 +618,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
   }
 }
 
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
 function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($view_mode == 'modal') {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
@@ -628,6 +630,8 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     $build['price_block']['#markup'] = '<div class="free-price-markup">' . t('FREE') . '</div>';
 
     $build['item_code']['#markup'] = $entity->getSku();
+
+    $build['description']['#markup'] = $entity->get('attr_description')->getValue()[0]['value'];
 
     $build['brand_logo'] = alshaya_acm_product_get_brand_logo($entity);
 

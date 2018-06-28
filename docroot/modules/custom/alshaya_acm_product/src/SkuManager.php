@@ -506,8 +506,8 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   The SKU Entity, for which linked promotions need to be fetched.
-   * @param bool $getLinks
-   *   Boolen to identify if Links are required.
+   * @param string $view_mode
+   *   View mode around how the promotion needs to be rendered.
    * @param array $types
    *   Type of promotion to filter on.
    *
@@ -515,7 +515,7 @@ class SkuManager {
    *   blank array, if no promotions found, else Array of promotion entities.
    */
   public function getPromotionsFromSkuId(SKU $sku,
-                                         $view_mode,
+                                         string $view_mode,
                                          array $types = ['cart', 'category']) {
 
     $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
