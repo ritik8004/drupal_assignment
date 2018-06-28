@@ -230,15 +230,34 @@ class CybersourceController implements ContainerInjectionInterface {
       // Set the payment method.
       $cart->setPaymentMethod('cybersource');
 
+      // For V2 we send in Cart extension.
+      // Set the token info into update cart object.
+      $cart->setExtension('cybersource_token', $post_data);
+
       // Get update cart array, we will call the API here directly.
       $cart_update = $cart->getCart();
 
+      // For V2 we send at root level in Cart.
       // Set the token info into update cart object.
       $cart_update->cybersource_token = $post_data;
 
       try {
-        // Call the API to pass the token info.
-        $updated_cart = $this->apiWrapper->updateCart($cart->id(), $cart_update);
+        try {
+          // Call the API to pass the token info.
+          $updated_cart = $this->apiWrapper->updateCart($cart->id(), $cart_update);
+
+          // This is to allow V1 and V2 work together.
+          if (!isset($updated_cart['cart'])) {
+            $updated_cart['cart'] = $updated_cart;
+
+            // V2 will throw exception if it fails.
+            $updated_cart['cybersource_result'] = TRUE;
+          }
+        }
+        catch (\Exception $e) {
+          // @TODO: Get exception code and act based on the code.
+          throw new \Exception('Invalid response from Magento API while processing token.');
+        }
 
         // Check if we have the result set.
         if ($updated_cart['cybersource_result']) {
