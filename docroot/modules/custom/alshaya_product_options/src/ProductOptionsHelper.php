@@ -101,6 +101,7 @@ class ProductOptionsHelper {
         try {
           // First get attribute info.
           $attribute = $this->apiWrapper->getProductAttributeWithSwatches($attribute_code);
+          $attribute = json_decode($attribute, TRUE);
         }
         catch (\Exception $e) {
           // For now we have many fields in sku_base_fields which are not
@@ -111,8 +112,6 @@ class ProductOptionsHelper {
         if (empty($attribute) || empty($attribute['options'])) {
           continue;
         }
-
-        $attribute = json_decode($attribute, TRUE);
 
         $swatches = [];
         foreach ($attribute['swatches'] as $swatch) {

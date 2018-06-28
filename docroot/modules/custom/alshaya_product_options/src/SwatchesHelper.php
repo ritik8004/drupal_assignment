@@ -94,7 +94,9 @@ class SwatchesHelper {
       if ($term->get('field_attribute_swatch_image')->first()) {
         $file_value = $term->get('field_attribute_swatch_image')->first()->getValue();
         $file = $this->fileStorage->load($file_value['target_id']);
-        $file->delete();
+        if ($file) {
+          $file->delete();
+        }
       }
 
       // Reset all current values.
