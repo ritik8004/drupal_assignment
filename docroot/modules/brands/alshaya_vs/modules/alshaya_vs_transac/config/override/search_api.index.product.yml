@@ -10,7 +10,7 @@ field_settings:
       module:
         - acq_sku
   attr_actual_color_label_code:
-    label: 'Actual Color Label Code'
+    label: 'Color'
     datasource_id: entity:node
     property_path: field_skus:entity:attr_actual_color_label_code
     type: string
