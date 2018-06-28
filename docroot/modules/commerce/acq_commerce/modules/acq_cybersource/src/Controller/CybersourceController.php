@@ -6,8 +6,10 @@ use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_cybersource\CybersourceAPIWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -63,6 +65,20 @@ class CybersourceController implements ContainerInjectionInterface {
   protected $logger;
 
   /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * ACM API Version.
+   *
+   * @var string
+   */
+  protected $apiVersion;
+
+  /**
    * Constructs a new CybersourceController object.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
@@ -73,12 +89,20 @@ class CybersourceController implements ContainerInjectionInterface {
    *   The factory for configuration objects.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger channel factory object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
    */
-  public function __construct(CartStorageInterface $cart_storage, CybersourceAPIWrapper $api_wrapper, ConfigFactoryInterface $config_factory, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(CartStorageInterface $cart_storage,
+                              CybersourceAPIWrapper $api_wrapper,
+                              ConfigFactoryInterface $config_factory,
+                              LoggerChannelFactoryInterface $logger_factory,
+                              ModuleHandlerInterface $module_handler) {
     $this->cartStorage = $cart_storage;
     $this->apiWrapper = $api_wrapper;
     $this->config = $config_factory->get('acq_cybersource.settings');
+    $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->logger = $logger_factory->get('acq_cybersource');
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -89,22 +113,26 @@ class CybersourceController implements ContainerInjectionInterface {
       $container->get('acq_cart.cart_storage'),
       $container->get('acq_cybersource.api'),
       $container->get('config.factory'),
-      $container->get('logger.factory')
+      $container->get('logger.factory'),
+      $container->get('module_handler')
     );
   }
 
   /**
    * Page callback to get cybersource token.
    *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
    * @return \Symfony\Component\HttpFoundation\Response
    *   Response object.
    */
-  public function getToken() {
+  public function getToken(Request $request) {
     $response = new Response();
     $response->headers->set('Content-Type', 'application/json');
 
-    $type = \Drupal::request()->request->get('card_type');
-    $form_data = \Drupal::request()->request->all();
+    $type = $request->request->get('card_type');
+    $form_data = $request->request->all();
 
     // Get the code from value provided by JS.
     $cc_type = isset(self::$ccTypeMap[$type]) ? self::$ccTypeMap[$type] : '';
@@ -126,7 +154,7 @@ class CybersourceController implements ContainerInjectionInterface {
 
     // Allow all modules to validate and update cart data before doing getToken.
     $errors = [];
-    \Drupal::moduleHandler()->alter('acq_cybersource_before_get_token_cart', $cart, $form_data, $errors);
+    $this->moduleHandler->alter('acq_cybersource_before_get_token_cart', $cart, $form_data, $errors);
 
     if ($errors) {
       $response->setContent(json_encode(['errors' => $errors]));
@@ -150,7 +178,7 @@ class CybersourceController implements ContainerInjectionInterface {
       }
 
       // Save transaction_uuid in session to compare later for better security.
-      $session = \Drupal::request()->getSession();
+      $session = $request->getSession();
       $session->set('cybersource_transaction_uuid', $token_info['transaction_uuid']);
       $session->save();
 
@@ -178,11 +206,14 @@ class CybersourceController implements ContainerInjectionInterface {
   /**
    * Page callback to process cybersource response.
    *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object.
+   *
    * @return \Symfony\Component\HttpFoundation\Response
    *   Response object
    */
-  public function processToken() {
-    $post_data = \Drupal::request()->request->all();
+  public function processToken(Request $request) {
+    $post_data = $request->request->all();
 
     // Sanity check.
     if (empty($post_data) || empty($post_data['signature'])) {
@@ -190,7 +221,7 @@ class CybersourceController implements ContainerInjectionInterface {
     }
 
     // Get transaction_uuid from session to check if request is secure.
-    $session = \Drupal::request()->getSession();
+    $session = $request->getSession();
     $transaction_uuid = $session->get('cybersource_transaction_uuid');
 
     // Check if transaction_uuid is not empty.
@@ -230,16 +261,18 @@ class CybersourceController implements ContainerInjectionInterface {
       // Set the payment method.
       $cart->setPaymentMethod('cybersource');
 
-      // For V2 we send in Cart extension.
-      // Set the token info into update cart object.
-      $cart->setExtension('cybersource_token', $post_data);
+      if ($this->apiVersion !== 'v1') {
+        // V2 onwards set the token info into update cart object.
+        $cart->setExtension('cybersource_token', $post_data);
+      }
 
       // Get update cart array, we will call the API here directly.
       $cart_update = $cart->getCart();
 
-      // For V2 we send at root level in Cart.
-      // Set the token info into update cart object.
-      $cart_update->cybersource_token = $post_data;
+      if ($this->apiVersion === 'v1') {
+        // V1 - Set the token info into update cart object.
+        $cart_update->cybersource_token = $post_data;
+      }
 
       try {
         try {
@@ -247,7 +280,7 @@ class CybersourceController implements ContainerInjectionInterface {
           $updated_cart = $this->apiWrapper->updateCart($cart->id(), $cart_update);
 
           // This is to allow V1 and V2 work together.
-          if (!isset($updated_cart['cart'])) {
+          if ($this->apiVersion !== 'v1') {
             $updated_cart['cart'] = $updated_cart;
 
             // V2 will throw exception if it fails.
