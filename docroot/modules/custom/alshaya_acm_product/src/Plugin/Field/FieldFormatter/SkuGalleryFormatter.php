@@ -175,7 +175,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         }
 
         $promotion_types = ['cart'];
-        $promotions = $this->skuManager->getPromotionsFromSkuId($sku, FALSE, $promotion_types);
+        $promotions = $this->skuManager->getPromotionsFromSkuId($sku, 'default', $promotion_types);
 
         foreach ($promotions as $key => $promotion) {
           $promotions[$key]['render_link'] = TRUE;

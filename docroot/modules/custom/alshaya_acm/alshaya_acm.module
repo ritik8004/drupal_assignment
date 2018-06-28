@@ -772,7 +772,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   // Get parent sku of the sku.
   $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity);
   $promotion_types = ['cart'];
-  $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, FALSE, $promotion_types);
+  $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, 'default', $promotion_types);
 
   // @TODO: Remove this once we have products appearing correclty with cart promotions.
   // Currently the only way to display cart promotion is to check cart_rules
