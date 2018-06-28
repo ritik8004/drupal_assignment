@@ -2,7 +2,7 @@ services:
   alshaya_product_options.helper:
     class: Drupal\alshaya_product_options\ProductOptionsHelper
     arguments:
-      - '@config.factory'
+      - '@acq_sku.fields_manager'
       - '@acq_commerce.i18n_helper'
       - '@acq_sku.product_options_manager'
       - '@alshaya_api.api'

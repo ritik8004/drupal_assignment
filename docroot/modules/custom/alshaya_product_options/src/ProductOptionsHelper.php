@@ -4,8 +4,8 @@ namespace Drupal\alshaya_product_options;
 
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class ProductOptionsHelper.
@@ -15,11 +15,11 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 class ProductOptionsHelper {
 
   /**
-   * Config Factory service object.
+   * SKU Fields Manager.
    *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   * @var \Drupal\acq_sku\SKUFieldsManager
    */
-  private $configFactory;
+  private $skuFieldsManager;
 
   /**
    * I18nHelper object.
@@ -52,8 +52,8 @@ class ProductOptionsHelper {
   /**
    * ProductOptionsHelper constructor.
    *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config Factory service object.
+   * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
+   *   SKU Fields Manager.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
    * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
@@ -63,12 +63,12 @@ class ProductOptionsHelper {
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches
    *   Swatches Helper service object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
+  public function __construct(SKUFieldsManager $sku_fields_manager,
                               I18nHelper $i18n_helper,
                               ProductOptionsManager $product_options_manager,
                               AlshayaApiWrapper $api_wrapper,
                               SwatchesHelper $swatches) {
-    $this->configFactory = $config_factory;
+    $this->skuFieldsManager = $sku_fields_manager;
     $this->i18nHelper = $i18n_helper;
     $this->productOptionsManager = $product_options_manager;
     $this->apiWrapper = $api_wrapper;
@@ -79,11 +79,21 @@ class ProductOptionsHelper {
    * Synchronize all product options.
    */
   public function synchronizeProductOptions() {
-    $sync_options = $this->configFactory->get('alshaya_product_options.settings')->get('sync_options');
+    $fields = $this->skuFieldsManager->getFieldAdditions();
 
-    if (empty($sync_options)) {
-      return $this->productOptionsManager->synchronizeProductOptions();
-    }
+    // We only want to sync which are in attributes (not in extension).
+    $fields = array_filter($fields, function ($field) {
+      return ($field['parent'] == 'attributes');
+    });
+
+    // For existing live sites we might have source empty.
+    array_walk($fields, function (&$field, $field_code) {
+      if (empty($field['source'])) {
+        $field['source'] = $field_code;
+      }
+    });
+
+    $sync_options = array_column($fields, 'source');
 
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       $this->apiWrapper->updateStoreContext($langcode);
@@ -91,7 +101,7 @@ class ProductOptionsHelper {
         // First get attribute info.
         $attribute = $this->apiWrapper->getProductAttributeWithSwatches($attribute_code);
 
-        if (empty($attribute)) {
+        if (empty($attribute) || empty($attribute['options'])) {
           continue;
         }
 
