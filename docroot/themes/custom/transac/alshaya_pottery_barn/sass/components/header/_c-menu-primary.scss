@@ -37,6 +37,10 @@
   a {
     color: $header_c_menu_text;
     text-transform: uppercase;
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.75rem;
+    }
   }
 }
 
