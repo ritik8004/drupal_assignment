@@ -45,9 +45,13 @@ function _alshaya_super_category_configure_facet_processor() {
 
   $facet_processor_config = \Drupal::configFactory()->getEditable('facets.facet.plp_category_facet')->get('processor_configs');
   $facet_processor_config['alshaya_remove_supercategory_term'] = $facet_config;
-  \Drupal::configFactory()->getEditable('facets.facet.plp_category_facet')->set('processor_configs', $facet_processor_config);
+  \Drupal::configFactory()->getEditable('facets.facet.plp_category_facet')
+    ->set('processor_configs', $facet_processor_config)
+    ->save();
 
-  $facet_processor_config = \Drupal::configFactory()->getEditable('facets.facet.plp_category')->get('processor_configs');
+  $facet_processor_config = \Drupal::configFactory()->getEditable('facets.facet.category')->get('processor_configs');
   $facet_processor_config['alshaya_remove_supercategory_term'] = $facet_config;
-  \Drupal::configFactory()->getEditable('facets.facet.plp_category')->set('processor_configs', $facet_processor_config);
+  \Drupal::configFactory()->getEditable('facets.facet.category')
+    ->set('processor_configs', $facet_processor_config)
+    ->save();
 }

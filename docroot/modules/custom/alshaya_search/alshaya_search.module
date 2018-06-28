@@ -403,7 +403,8 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
 
     // If super_category module is enabled, root, terms become super category
     // and L2 level terms become L1.
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')) {
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')
+    && \Drupal::config('alshaya_super_category.settings')->get('status')) {
       $facet_count = $facet_count + 1;
     }
 
@@ -478,7 +479,8 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
 
     // If super_category module is enabled, root, terms become super category
     // and L2 level terms become L1.
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')) {
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')
+      && \Drupal::config('alshaya_super_category.settings')->get('status')) {
       $parent_id_count = 2;
     }
 
