@@ -81,9 +81,9 @@ class ProductOptionsHelper {
   public function synchronizeProductOptions() {
     $fields = $this->skuFieldsManager->getFieldAdditions();
 
-    // We only want to sync which are in attributes (not in extension).
+    // We only want to sync which are of type attribute.
     $fields = array_filter($fields, function ($field) {
-      return ($field['parent'] == 'attributes');
+      return ($field['type'] == 'attribute');
     });
 
     // For existing live sites we might have source empty.
@@ -98,8 +98,15 @@ class ProductOptionsHelper {
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       $this->apiWrapper->updateStoreContext($langcode);
       foreach ($sync_options as $attribute_code) {
-        // First get attribute info.
-        $attribute = $this->apiWrapper->getProductAttributeWithSwatches($attribute_code);
+        try {
+          // First get attribute info.
+          $attribute = $this->apiWrapper->getProductAttributeWithSwatches($attribute_code);
+        }
+        catch (\Exception $e) {
+          // For now we have many fields in sku_base_fields which are not
+          // available in all brands.
+          continue;
+        }
 
         if (empty($attribute) || empty($attribute['options'])) {
           continue;
