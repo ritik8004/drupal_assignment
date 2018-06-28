@@ -388,8 +388,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       $query->condition('ttim.field_category_include_menu_value', 1);
     }
     if ($mobile_only) {
-      $query->innerJoin('taxonomy_term__field_category_quicklink_plp_mob', 'ttmo', 'ttmo.entity_id = tfd.tid AND ttmo.langcode = tfd.langcode');
-      $query->condition('ttmo.field_category_quicklink_plp_mob_value', 1);
+      $query->innerJoin('taxonomy_term__field_mobile_only_dpt_page_link', 'ttmo', 'ttmo.entity_id = tfd.tid');
+      $query->condition('ttmo.field_mobile_only_dpt_page_link_value', 1);
     }
     $query->condition('ttcs.field_commerce_status_value', 1);
     $query->condition('tth.parent', $parent_tid);
