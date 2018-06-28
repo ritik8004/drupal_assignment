@@ -1,18 +1,18 @@
-diff --git a/.htaccess b/.htaccess
-index 91bb98a..7b93e45 100644
+ diff --git a/.htaccess b/.htaccess
+index 91bb98aeb..dcd85eb13 100644
 --- a/.htaccess
 +++ b/.htaccess
-@@ -80,6 +80,11 @@ AddEncoding gzip svgz
-  RewriteRule ^ - [E=protossl:s]
-  RewriteCond %{HTTP:X-Forwarded-Proto} https
-  RewriteRule ^ - [E=protossl:s]
-+
+@@ -76,6 +76,13 @@ AddEncoding gzip svgz
+   RewriteCond %{HTTPS} on
+   RewriteRule ^ - [E=protossl:s]
+
 +  # Remove trailing slash from all URLs (except home which is practically not possible).
 +  # We also don't remove it from /forwarded/* URLs as these are redirects from
 +  # H&M and we loose access to the HMCORP cookie after redirect.
 +  RewriteCond %{REQUEST_FILENAME} !-d
 +  RewriteCond %{REQUEST_URI} !(/forwarded) [NC]
 +  RewriteRule ^(.*)/$ http%{ENV:protossl}://%{HTTP_HOST}/$1 [L,R=301]
-
-  # Make sure Authorization HTTP header is available to PHP
-  # even when running as CGI or FastCGI.
++
+   # Make sure Authorization HTTP header is available to PHP
+   # even when running as CGI or FastCGI.
+   RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
