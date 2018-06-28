@@ -7,6 +7,11 @@ fields:
     type: 'text_long'
     visible_form: 0
 
+  description:
+    label: 'Description'
+    description: 'Descripton about the product.'
+    type: 'text_long'
+
   is_buyable:
     label: 'Is Buyable'
     description: 'Flag to check if product is available for purchase or not.'

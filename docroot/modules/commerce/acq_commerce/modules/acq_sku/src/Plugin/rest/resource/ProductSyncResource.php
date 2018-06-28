@@ -298,6 +298,10 @@ class ProductSyncResource extends ResourceBase {
         $sku->special_price->value = $product['special_price'];
         $sku->final_price->value = $product['final_price'];
         $sku->attributes = $this->formatProductAttributes($product['attributes']);
+        $sku->get('attr_description')->setValue([
+          'value' => (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '',
+          'format' => 'rich_text',
+        ]);
 
         // Set default value of stock to 0.
         $stock = 0;
