@@ -475,7 +475,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
 
     // Handling with an L2 whose children are active. 1 parent means the
     // item is L2 & check if one of its children is selected.
-    $parent_id_count = 2;
+    $parent_id_count = 1;
 
     // If super_category module is enabled, root, terms become super category
     // and L2 level terms become L1.
