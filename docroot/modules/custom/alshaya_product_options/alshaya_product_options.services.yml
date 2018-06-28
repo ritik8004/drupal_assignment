@@ -1,0 +1,19 @@
+services:
+  alshaya_product_options.helper:
+    class: Drupal\alshaya_product_options\ProductOptionsHelper
+    arguments:
+      - '@acq_sku.fields_manager'
+      - '@acq_commerce.i18n_helper'
+      - '@acq_sku.product_options_manager'
+      - '@alshaya_api.api'
+      - '@alshaya_product_options.swatches'
+
+  alshaya_product_options.swatches:
+    class: Drupal\alshaya_product_options\SwatchesHelper
+    arguments:
+      - '@entity_type.manager'
+      - '@logger.channel.alshaya_product_options'
+
+  logger.channel.alshaya_product_options:
+    parent: logger.channel_base
+    arguments: ['alshaya_product_options']
