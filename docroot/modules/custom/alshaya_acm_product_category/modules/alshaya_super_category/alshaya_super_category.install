@@ -6,6 +6,17 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Adding 'alshaya_remove_supercategory_term' processor to srp category facet.
+ */
+function alshaya_super_category_update_8002() {
+  \Drupal::configFactory()
+    ->getEditable('facets.facet.category')
+    ->save();
+}
+
+/**
  * Implements hook_update_n().
  */
 function alshaya_super_category_update_8001() {
