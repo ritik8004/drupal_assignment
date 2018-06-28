@@ -156,9 +156,10 @@ class ProductStockSyncResource extends ResourceBase {
 
       $quantity = isset($stock['qty']) ? $stock['qty'] : 0;
 
-      $this->logger->info('Updating stock for SKU @sku. New quantity: @quantity', [
+      $this->logger->info('Updating stock for SKU @sku. New quantity: @quantity. Debug info @info.', [
         '@sku' => $stock['sku'],
         '@quantity' => $quantity,
+        '@info' => json_encode($stock),
       ]);
 
       if ($quantity != $sku->get('stock')->getString()) {
