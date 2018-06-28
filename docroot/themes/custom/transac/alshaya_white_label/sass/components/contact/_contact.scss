@@ -232,6 +232,21 @@
   }
 }
 
+.alias--contact {
+  .webform-submission-alshaya-contact-form {
+    &.webform-submission-form {
+      legend {
+        float: none;
+        margin-#{$left}: 0;
+      }
+
+      fieldset {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+}
+
 .c-user-edit .user-form {
   #edit-account {
     margin-top: 2.813rem;

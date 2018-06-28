@@ -38,6 +38,15 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
     ],
+    'bbw' => [
+      'default' => [
+        'default' => [
+          'google_tag.settings' => [
+            'container_id' => 'GTM-KXQ8P3S',
+          ],
+        ],
+      ],
+    ],
     'default' => [
       'default' => [
         'default' => [
