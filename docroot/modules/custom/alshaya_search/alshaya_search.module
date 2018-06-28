@@ -401,6 +401,12 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     // (current active) item.
     $facet_count = $facet_source_id == 'search_api:views_block__alshaya_product_list__block_1' ? 1 : 0;
 
+    // If super_category module is enabled, root, terms become super category
+    // and L2 level terms become L1.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')) {
+      $facet_count = $facet_count + 1;
+    }
+
     if ((count($parent_ids) === $facet_count) &&
       (isset($context['active_filters'][$url_alias])) &&
       (count($context['active_filters'][$url_alias]) > 0)) {
@@ -468,7 +474,15 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
 
     // Handling with an L2 whose children are active. 1 parent means the
     // item is L2 & check if one of its children is selected.
-    if ((count($parent_ids) == 1) &&
+    $parent_id_count = 2;
+
+    // If super_category module is enabled, root, terms become super category
+    // and L2 level terms become L1.
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')) {
+      $parent_id_count = 2;
+    }
+
+    if ((count($parent_ids) == $parent_id_count) &&
       (!empty($context['active_filters'][$url_alias])) &&
       ((count(array_diff($child_ids, $context['active_filters'][$url_alias])) < count($child_ids)) ||
         (in_array($result->getRawValue(), $context['active_filters'][$url_alias])))) {
