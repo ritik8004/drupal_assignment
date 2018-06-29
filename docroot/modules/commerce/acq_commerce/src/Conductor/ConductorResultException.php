@@ -2,6 +2,8 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\acq_commerce\Connector\ConnectorException;
+
 /**
  * Class ConductorResultException.
  *
@@ -9,7 +11,7 @@ namespace Drupal\acq_commerce\Conductor;
  *
  * @ingroup acq_commerce
  */
-class ConductorResultException extends ConductorException {
+class ConductorResultException extends ConnectorException {
 
   /**
    * Conductor Reported Success.
