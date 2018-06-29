@@ -20,6 +20,7 @@ fields:
 
   actual_color_label_code:
     label: 'Color'
+    type: 'string'
     cardinality: -1
     index: 1
     facet: 1
