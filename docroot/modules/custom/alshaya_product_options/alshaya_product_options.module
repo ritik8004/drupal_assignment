@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_product_options_theme() {
+  $items = [];
+
+  $items['facets_result_item_with_swatch'] = [
+    'variables' => [
+      'value' => '',
+      'show_count' => FALSE,
+      'count' => NULL,
+      'is_active' => FALSE,
+      'swatch_image' => NULL,
+      'swatch_text' => NULL,
+      'swatch_color' => NULL,
+    ],
+    'template' => 'facets-result-item-with-swatch',
+  ];
+
+  return $items;
+}

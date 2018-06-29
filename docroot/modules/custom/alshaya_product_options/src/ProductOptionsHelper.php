@@ -81,9 +81,9 @@ class ProductOptionsHelper {
   public function synchronizeProductOptions() {
     $fields = $this->skuFieldsManager->getFieldAdditions();
 
-    // We only want to sync which are of type attribute.
+    // We only want to sync attributes.
     $fields = array_filter($fields, function ($field) {
-      return ($field['type'] == 'attribute');
+      return ($field['parent'] == 'attributes');
     });
 
     // For existing live sites we might have source empty.
