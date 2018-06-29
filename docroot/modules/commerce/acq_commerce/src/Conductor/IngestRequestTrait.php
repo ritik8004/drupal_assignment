@@ -51,7 +51,7 @@ trait IngestRequestTrait {
    *
    * @throws ConnectorException
    */
-  protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL, $acm_uuid = "") {
+  protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL, $acm_uuid = '') {
 
     $client = $this->clientFactory->createClient($acm_uuid);
     $reqOpts = [];
