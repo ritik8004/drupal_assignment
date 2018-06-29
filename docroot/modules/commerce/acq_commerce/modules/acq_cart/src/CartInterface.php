@@ -139,7 +139,7 @@ interface CartInterface {
   /**
    * Gets the shipping method.
    *
-   * @return array
+   * @return array|NULL
    *   The current shipping method.
    */
   public function getShippingMethod();
