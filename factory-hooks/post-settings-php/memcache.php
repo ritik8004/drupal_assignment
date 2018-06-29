@@ -65,6 +65,8 @@ $settings['bootstrap_container_definition'] = [
 
 // Use pcb_memcache for stock.
 $settings['cache']['bins']['stock'] = 'cache.backend.permanent_memcache';
+// Use pcb_memcache for category tree.
+$settings['cache']['bins']['product_category_tree'] = 'cache.backend.permanent_memcache';
 
 // Fix for PHP 7.1, see https://backlog.acquia.com/browse/PF-1118.
 $settings['memcache']['options'] = [

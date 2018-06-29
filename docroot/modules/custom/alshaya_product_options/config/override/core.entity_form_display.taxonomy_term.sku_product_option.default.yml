@@ -1,0 +1,86 @@
+dependencies:
+  config:
+    - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_color
+    - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_image
+    - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_text
+    - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_type
+    - field.field.taxonomy_term.sku_product_option.field_attribute_swatch_value
+    - field.field.taxonomy_term.sku_product_option.field_sku_attribute_code
+    - field.field.taxonomy_term.sku_product_option.field_sku_attribute_id
+    - field.field.taxonomy_term.sku_product_option.field_sku_option_id
+    - image.style.thumbnail
+    - taxonomy.vocabulary.sku_product_option
+  module:
+    - image
+    - jquery_minicolors
+    - path
+    - text
+content:
+  field_attribute_swatch_color:
+    weight: 8
+    settings:
+      size: '60'
+      placeholder: ''
+      control: hue
+      format: hex
+      opacity: 0
+      swatches: ''
+      position: 'bottom left'
+      theme: default
+      animation_speed: 50
+      animation_easing: swing
+      change_delay: 0
+      letter_case: lowercase
+      show_speed: 100
+      hide_speed: 100
+      keywords: ''
+      inline: 0
+    third_party_settings: {  }
+    type: jquery_minicolors_widget
+    region: content
+  field_attribute_swatch_image:
+    type: image_image
+    weight: 7
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_attribute_swatch_text:
+    weight: 9
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_attribute_swatch_type:
+    weight: 5
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_attribute_swatch_value:
+    weight: 6
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_sku_attribute_code:
+    weight: 3
+  field_sku_attribute_id:
+    weight: 2
+  field_sku_option_id:
+    weight: 4
+  langcode:
+    weight: 10
+  name:
+    weight: 0
+  path:
+    weight: 11
+  translation:
+    weight: 12

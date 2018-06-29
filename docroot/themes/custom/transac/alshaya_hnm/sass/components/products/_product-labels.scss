@@ -37,6 +37,7 @@
     &.bottom {
       &-left {
         left: 0.5rem;
+        bottom: 8.5rem;
 
         @include breakpoint($only-tablet) {
           left: 0.9375rem;
@@ -49,6 +50,7 @@
 
       &-right {
         right: 0.5rem;
+        bottom: 8.5rem;
 
         @include breakpoint($only-tablet) {
           right: 0.9375rem;
@@ -56,6 +58,45 @@
 
         @include breakpoint($desktop) {
           right: 1rem;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-plp {
+    .c-products__item {
+      article {
+        &:hover {
+          position: unset;
+
+          .labels-container {
+            .label {
+              &.bottom {
+                &-left,
+                &-right {
+                  bottom: 8.5rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.sell--image,
+.view-product-slider {
+  .labels-container {
+    .label {
+      &.bottom {
+        &-left,
+        &-right {
+          @include breakpoint($tablet) {
+            bottom: 4rem;
+          }
         }
       }
     }
