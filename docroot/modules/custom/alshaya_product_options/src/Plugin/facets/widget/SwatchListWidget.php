@@ -56,7 +56,7 @@ class SwatchListWidget extends LinksWidget {
         if ($term instanceof TermInterface) {
           $swatchType = $term->get('field_attribute_swatch_type')->getString();
 
-          // 0 is valid type, chech specifically for empty/null values.
+          // 0 is valid type, check specifically for empty/null values.
           if ($swatchType === NULL or $swatchType === '') {
             continue;
           }
