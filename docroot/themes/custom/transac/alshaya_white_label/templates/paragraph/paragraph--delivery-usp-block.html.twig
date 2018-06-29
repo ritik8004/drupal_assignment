@@ -11,7 +11,9 @@
     <div{{ attributes.addClass(classes) }} style="background-color: {{ paragraph.field_usp_text_background.value }}">
       {% if content.field_usp_text %}
         <div class="usp_list {{ 'arrow--' ~ paragraph.field_arrow_color.value }}">
-          {{ content.field_usp_text }}
+          <div style="color: {{ paragraph.field_usp_text_font_color.value }}">
+              {{ content.field_usp_text }}
+          </div>
         </div>
       {% endif %}
     </div>

@@ -5,6 +5,7 @@ dependencies:
     - field.field.paragraph.delivery_usp_block.field_arrow_color
     - field.field.paragraph.delivery_usp_block.field_usp_text_background
     - field.field.paragraph.delivery_usp_block.field_usp_text
+    - field.field.paragraph.delivery_usp_block.field_usp_text_font_color
     - field.field.paragraph.delivery_usp_block.field_usp_timer
     - paragraphs.paragraphs_type.delivery_usp_block
   module:
@@ -22,14 +23,12 @@ content:
     third_party_settings: {  }
     type: list_default
     region: content
-  field_usp_timer:
-    weight: 0
+  field_usp_text:
+    weight: 1
     label: hidden
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
+    settings: {  }
     third_party_settings: {  }
-    type: number_integer
+    type: text_default
     region: content
   field_usp_text_background:
     weight: 2
@@ -39,11 +38,21 @@ content:
     third_party_settings: {  }
     type: string
     region: content
-  field_usp_text:
-    weight: 1
+  field_usp_text_font_color:
+    weight: 3
     label: hidden
-    settings: {  }
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
-    type: text_default
+    type: string
+    region: content
+  field_usp_timer:
+    weight: 0
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
     region: content
 hidden: {  }

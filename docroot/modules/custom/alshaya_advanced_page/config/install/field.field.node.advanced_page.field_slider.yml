@@ -12,7 +12,7 @@ id: node.advanced_page.field_slider
 field_name: field_slider
 entity_type: node
 bundle: advanced_page
-label: Slider
+label: 'Slider/Deliver USP'
 description: ''
 required: false
 translatable: true

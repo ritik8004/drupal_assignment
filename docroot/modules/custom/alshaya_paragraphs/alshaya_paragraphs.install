@@ -27,6 +27,8 @@ function alshaya_paragraphs_update_8117() {
     'field.storage.paragraph.field_usp_text_background',
     'field.storage.paragraph.field_usp_text',
     'field.storage.paragraph.field_arrow_color',
+    'field.storage.paragraph.field_usp_text_font_color',
+    'field.field.paragraph.delivery_usp_block.field_usp_text_font_color',
     'field.field.paragraph.delivery_usp_block.field_usp_text_background',
     'field.field.paragraph.delivery_usp_block.field_usp_text',
     'field.field.paragraph.delivery_usp_block.field_usp_timer',
