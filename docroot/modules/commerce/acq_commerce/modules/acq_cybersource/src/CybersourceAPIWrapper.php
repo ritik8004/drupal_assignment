@@ -2,10 +2,11 @@
 
 namespace Drupal\acq_cybersource;
 
+use Drupal\acq_commerce\APIHelper;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\Conductor\ClientFactory;
-use Drupal\acq_commerce\Conductor\ConductorException;
 use Drupal\acq_commerce\Conductor\RouteException;
+use Drupal\acq_commerce\Connector\ConnectorException;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\Cache;
@@ -18,6 +19,13 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 class CybersourceAPIWrapper extends APIWrapper {
 
   /**
+   * API Helper service object.
+   *
+   * @var \Drupal\acq_commerce\APIHelper
+   */
+  private $helper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
@@ -28,12 +36,18 @@ class CybersourceAPIWrapper extends APIWrapper {
    *   LoggerChannelFactory object.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Drupal\acq_commerce\APIHelper $api_helper
+   *   API Helper service object.
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
                               LoggerChannelFactory $logger_factory,
-                              I18nHelper $i18n_helper) {
-    parent::__construct($client_factory, $config_factory, $logger_factory, $i18n_helper);
+                              I18nHelper $i18n_helper,
+                              APIHelper $api_helper) {
+    parent::__construct($client_factory, $config_factory, $logger_factory, $i18n_helper, $api_helper);
+    // To avoid issues in merging ACM code, not changing from private to
+    // protected in base class.
+    $this->helper = $api_helper;
     $this->logger = $logger_factory->get('acq_cybersource');
   }
 
@@ -67,7 +81,7 @@ class CybersourceAPIWrapper extends APIWrapper {
     try {
       return $this->tryAgentRequest($doReq, 'cybersourceTokenRequest', 'token');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       $this->logger->warning('Error occurred while getting cybersource token for cart id: %cart_id and card type: %card_type: %message', [
         '%cart_id' => $cart_id,
         '%card_type' => $card_type,
@@ -83,16 +97,6 @@ class CybersourceAPIWrapper extends APIWrapper {
    */
   public function updateCart($cart_id, $cart) {
     $endpoint = $this->apiVersion . "/agent/cart/$cart_id";
-
-    // Check if there's a customer ID and remove it if it's empty.
-    if (isset($cart->customer_id) && empty($cart->customer_id)) {
-      unset($cart->customer_id);
-    }
-
-    // Check if there's a customer email and remove it if it's empty.
-    if (isset($cart->customer_email) && empty($cart->customer_email)) {
-      unset($cart->customer_email);
-    }
 
     // Check $item['name'] is a string because in the cart we
     // store name as a 'renderable link object' with a type,
@@ -126,52 +130,7 @@ class CybersourceAPIWrapper extends APIWrapper {
       }
     }
 
-    // Cart extensions must always be objects and not arrays.
-    // @TODO: Move this normalization to \Drupal\acq_cart\Cart::__construct and \Drupal\acq_cart\Cart::updateCartObject.
-    if (isset($cart->carrier)) {
-      if (isset($cart->carrier->extension)) {
-        if (!is_object($cart->carrier->extension)) {
-          $cart->carrier->extension = (object) $cart->carrier->extension;
-        }
-      }
-      elseif (array_key_exists('extension', $cart->carrier)) {
-        if (!is_object($cart->carrier['extension'])) {
-          $cart->carrier['extension'] = (object) $cart->carrier['extension'];
-        }
-      }
-    }
-    else {
-      // Removing shipping address if carrier not set.
-      unset($cart->shipping);
-    }
-
-    // Cart constructor sets cart to any object passed in,
-    // circumventing ->setBilling() so trap any wayward extension[] here.
-    // @TODO: Move this normalization to \Drupal\acq_cart\Cart::__construct and \Drupal\acq_cart\Cart::updateCartObject.
-    if (isset($cart->billing)) {
-      if (isset($cart->billing->extension)) {
-        if (!is_object($cart->billing->extension)) {
-          $cart->billing->extension = (object) $cart->billing->extension;
-        }
-      }
-      elseif (array_key_exists('extension', $cart->billing)) {
-        if (!is_object($cart->billing['extension'])) {
-          $cart->billing['extension'] = (object) $cart->billing['extension'];
-        }
-      }
-    }
-    if (isset($cart->shipping)) {
-      if (isset($cart->shipping->extension)) {
-        if (!is_object($cart->shipping->extension)) {
-          $cart->shipping->extension = (object) $cart->shipping->extension;
-        }
-      }
-      elseif (array_key_exists('extension', $cart->shipping)) {
-        if (!is_object($cart->shipping['extension'])) {
-          $cart->shipping['extension'] = (object) $cart->shipping['extension'];
-        }
-      }
-    }
+    $cart = $this->helper->cleanCart($cart);
 
     $doReq = function ($client, $opt) use ($endpoint, $cart) {
       $opt['json'] = $cart;
@@ -179,10 +138,10 @@ class CybersourceAPIWrapper extends APIWrapper {
     };
 
     try {
-      $response = $this->tryAgentRequest($doReq, 'updateCart');
       Cache::invalidateTags(['cart:' . $cart_id]);
+      $response = $this->tryAgentRequest($doReq, 'updateCart');
     }
-    catch (ConductorException $e) {
+    catch (ConnectorException $e) {
       // Restore cart structure.
       if ($items) {
         foreach ($items as $key => &$item) {

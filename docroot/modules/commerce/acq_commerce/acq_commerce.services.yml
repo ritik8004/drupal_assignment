@@ -12,9 +12,17 @@ services:
     factory: acq_commerce.api_wrapper_factory:get
     arguments: ['@service_container']
 
+  acq_commerce.api_helper:
+    class: Drupal\acq_commerce\APIHelper
+
   acq_commerce.agent_api:
     class: Drupal\acq_commerce\Conductor\APIWrapper
-    arguments: ['@acq_commerce.client_factory', '@config.factory', '@logger.factory', '@acq_commerce.i18n_helper']
+    arguments:
+      - '@acq_commerce.client_factory'
+      - '@config.factory'
+      - '@logger.factory'
+      - '@acq_commerce.i18n_helper'
+      - '@acq_commerce.api_helper'
 
   acq_commerce.ingest_api:
     class: Drupal\acq_commerce\Conductor\IngestAPIWrapper
