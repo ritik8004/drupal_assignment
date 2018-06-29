@@ -15,7 +15,7 @@ facet_source_id: 'search_api:views_page__search__page'
 widget:
   type: swatch_list
   config:
-    show_numbers: false
+    show_numbers: true
     soft_limit: '0'
 query_operator: or
 use_hierarchy: false
