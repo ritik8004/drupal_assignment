@@ -81,7 +81,11 @@
       &.bottom {
         &-left,
         &-right {
-          bottom: 3.5rem;
+          bottom: 0.5rem;
+
+          @include breakpoint($tablet) {
+            bottom: 8.5rem;
+          }
         }
       }
     }

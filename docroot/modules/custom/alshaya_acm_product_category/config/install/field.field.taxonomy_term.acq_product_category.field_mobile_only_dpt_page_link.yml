@@ -2,13 +2,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_category_quicklink_plp_mob
+    - field.storage.taxonomy_term.field_mobile_only_dpt_page_link
     - taxonomy.vocabulary.acq_product_category
-id: taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
-field_name: field_category_quicklink_plp_mob
+id: taxonomy_term.acq_product_category.field_mobile_only_dpt_page_link
+field_name: field_mobile_only_dpt_page_link
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'Mobile only - display as a quick link on parent PLP'
+label: 'Mobile only - display as a quick link in department page dropdown'
 description: ''
 required: false
 translatable: false
