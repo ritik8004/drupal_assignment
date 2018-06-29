@@ -19,6 +19,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\views\ViewExecutable;
 use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Implements hook_theme().
@@ -393,6 +394,18 @@ function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateI
 
     $form['#cache']['contexts'][] = 'url.path';
     $form['#cache']['contexts'][] = 'url.query_args';
+  }
+}
+
+/**
+ * Implements hook_facets_query_string_alter().
+ */
+function alshaya_super_category_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array &$context) {
+  // For super category, L2 becomes L1 (as L1 are super categories), so we need
+  // to adjust the parents for the category facet.
+  if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    $context['facet_count'] = 1;
+    $context['parent_id_count'] = 1;
   }
 }
 

@@ -379,9 +379,20 @@ function alshaya_search_alshaya_profile_installed_final_task() {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_search_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'facets_query_string_alter') {
+    $group = $implementations['alshaya_search'];
+    unset($implementations['alshaya_search']);
+    $implementations['alshaya_search'] = $group;
+  }
+}
+
+/**
  * Implements hook_facets_query_string_alter().
  */
-function alshaya_search_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array $context) {
+function alshaya_search_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array &$context) {
   $facet = $context['facet'];
 
   // If we processing the URL for an L1 item, remove all category
@@ -400,13 +411,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     // We doing this as for the PLP page, we not show the L1
     // (current active) item.
     $facet_count = $facet_source_id == 'search_api:views_block__alshaya_product_list__block_1' ? 1 : 0;
-
-    // If super_category module is enabled, root, terms become super category
-    // and L2 level terms become L1.
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')
-    && \Drupal::config('alshaya_super_category.settings')->get('status')) {
-      $facet_count = $facet_count + 1;
-    }
+    $facet_count += isset($context['facet_count']) ? $context['facet_count'] : 0;
 
     if ((count($parent_ids) === $facet_count) &&
       (isset($context['active_filters'][$url_alias])) &&
@@ -476,13 +481,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     // Handling with an L2 whose children are active. 1 parent means the
     // item is L2 & check if one of its children is selected.
     $parent_id_count = 1;
-
-    // If super_category module is enabled, root, terms become super category
-    // and L2 level terms become L1.
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')
-      && \Drupal::config('alshaya_super_category.settings')->get('status')) {
-      $parent_id_count = 2;
-    }
+    $parent_id_count += isset($context['parent_id_count']) ? $context['parent_id_count'] : 0;
 
     if ((count($parent_ids) == $parent_id_count) &&
       (!empty($context['active_filters'][$url_alias])) &&
