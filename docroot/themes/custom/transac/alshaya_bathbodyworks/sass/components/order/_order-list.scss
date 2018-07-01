@@ -27,6 +27,10 @@
     }
   }
 
+  .recent__orders--body td {
+    border-top: 1px solid $recent_order_table_row_border;
+  }
+
   &.user__order--detail {
     .order-summary-row {
       td.order-transaction {
@@ -38,8 +42,24 @@
   }
 }
 
-.open--accordion {
-  .order-summary-row td {
-    border-bottom: 1px solid $recent_order_table_row_border;
+.c-order-list {
+  .order-search-form {
+    @include breakpoint($tablet) {
+      top: 0;
+    }
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  .form-actions {
+    @include icon(search, after) {
+      line-height: 24px;
+    }
+  }
+}
+
+.block-alshaya-user-recent-orders + .c-order-help {
+  @include breakpoint($tablet) {
+    border-top: 1px solid $recent_order_table_row_border;
   }
 }
