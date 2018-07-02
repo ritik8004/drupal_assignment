@@ -180,7 +180,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $data = [];
 
     // Get all child terms for the given parent.
-    $terms = $this->allChildTerms($langcode, $parent_tid, FALSE);
+    $terms = $this->allChildTerms($langcode, $parent_tid);
 
     // Initialize the background color for term.
     $this->termsBackgroundColor = $this->getTermsColors($langcode, 'background');
