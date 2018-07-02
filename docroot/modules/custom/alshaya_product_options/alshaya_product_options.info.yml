@@ -1,0 +1,8 @@
+name: 'Alshaya Product Options'
+type: module
+description: 'All custom code around product options.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - acq_commerce:acq_sku
+  - alshaya_api:alshaya_api

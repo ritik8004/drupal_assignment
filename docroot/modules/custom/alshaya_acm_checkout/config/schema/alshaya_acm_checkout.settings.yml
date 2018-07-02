@@ -26,3 +26,15 @@ alshaya_acm_checkout.settings:
     checkout_display_magento_error:
       type: integer
       label: 'Display error message from magento'
+    cod_surcharge_label:
+      type: label
+      label: 'COD Surcharge Label'
+    cod_surcharge_short_description:
+      type: label
+      label: 'COD Surcharge Short Description'
+    cod_surcharge_description:
+      type: text
+      label: 'COD Surcharge Description'
+    cod_surcharge_tooltip:
+      type: label
+      label: 'COD Surcharge Tooltip'

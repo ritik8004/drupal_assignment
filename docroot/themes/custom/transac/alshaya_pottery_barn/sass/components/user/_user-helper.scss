@@ -1,0 +1,14 @@
+.c-page-title,
+.path--user .ui-dialog-title,
+.c-related-info .c-related-info__label,
+.c-content__title,
+.c-content__secondary .c-related-info__label,
+.c-user-password h1,
+.c-user-register h1,
+.c-user-login h1 {
+  font-size: 1.125rem;
+
+  @include breakpoint($tablet) {
+    font-size: 1.375rem;
+  }
+}
