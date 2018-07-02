@@ -45,12 +45,12 @@ class ProductCategoryRequestSubscriber implements EventSubscriberInterface {
     }
 
     if ($this->routeMatch->getRouteName() !== 'entity.taxonomy_term.canonical') {
-      return [];
+      return;
     }
 
     if ($taxonomy_term = $this->routeMatch->getParameter('taxonomy_term')) {
       if ($taxonomy_term->bundle() !== 'acq_product_category') {
-        return [];
+        return;
       }
 
       if ($taxonomy_term->get('field_commerce_status')->getString() !== '1') {
