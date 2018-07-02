@@ -100,32 +100,48 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       }
     }
 
-    $selected_plugin_id = $cart->getPaymentMethod(FALSE);
+    $cart_payment_method = $cart->getPaymentMethod(FALSE);
 
-    if ($form_values = $form_state->getValue($pane_form['#parents'])) {
+    // By default we use payment method in cart as selected plugin.
+    $selected_plugin_id = $cart_payment_method;
+
+    // Show payment method selected in form values if available as default.
+    $form_values = $form_state->getValue($pane_form['#parents']);
+    if ($form_values['payment_options']) {
       $selected_plugin_id = $form_values['payment_options'];
     }
 
     // Avoid warnings because of empty array from getPaymentMethod.
     if (is_array($selected_plugin_id) && empty($selected_plugin_id)) {
-      $selected_plugin_id = NULL;
+      $selected_plugin_id = '';
     }
 
     // If selected method is no longer available, we start fresh.
     if ($selected_plugin_id && !in_array($selected_plugin_id, $payment_methods)) {
       $selected_plugin_id = '';
+      $cart_payment_method = '';
       $cart->setPaymentMethod(NULL, []);
     }
 
-    // If there is no plugin selected, we select the default one.
-    if (empty($selected_plugin_id) && $default_plugin_id) {
+    // If there is no plugin selected, we select the first one.
+    if (empty($selected_plugin_id)) {
       $selected_plugin_id = reset($payment_methods);
     }
 
+    // Since introduction of Surcharge, we inform Magento about selected
+    // payment method even before user does place order. By default we select
+    // a payment method, we inform Magento about that here.
+    if (empty($cart_payment_method) && $selected_plugin_id) {
+      $cart->setPaymentMethod($selected_plugin_id, []);
+      $cart = $this->checkoutFlow->updateCart();
+
+      // We don't get payment method back in Cart object.
+      $cart->setPaymentMethod($selected_plugin_id, []);
+    }
+
     // More than one payment method available, so build a form to let the user
-    // chose the option they want. Once they select an option, an ajax callback
-    // will rebuild the payment details and show the selected payment method
-    // plugin form instead.
+    // chose the option they want. Once they select an option, on reload the
+    // page and we show the full form for that particular method.
     $payment_options = [];
     $payment_has_descriptions = [];
     $payment_translations = [];
