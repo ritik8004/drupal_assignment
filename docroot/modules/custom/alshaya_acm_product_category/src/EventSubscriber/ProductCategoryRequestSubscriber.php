@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product_category\EventSubscriber;
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -48,7 +49,7 @@ class ProductCategoryRequestSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    if ($taxonomy_term = $this->routeMatch->getParameter('taxonomy_term')) {
+    if (($taxonomy_term = $this->routeMatch->getParameter('taxonomy_term')) && $taxonomy_term instanceof TermInterface) {
       if ($taxonomy_term->bundle() !== 'acq_product_category') {
         return;
       }
