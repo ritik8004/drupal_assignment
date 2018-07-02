@@ -56,6 +56,16 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   }
 
   /**
+   * Update Cart using Cart Storage service.
+   *
+   * @return \Drupal\acq_cart\Cart
+   *   Updated Cart object.
+   */
+  public function updateCart() {
+    return $this->cartStorage->updateCart(FALSE);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function processForm(array $form, FormStateInterface $form_state) {
