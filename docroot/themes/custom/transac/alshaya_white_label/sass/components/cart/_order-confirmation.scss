@@ -80,8 +80,21 @@
     .price-currency {
       margin-#{$right}: 1.5625rem;
 
-      @include breakpoint($only-tablet) {
+      @include breakpoint($tablet) {
         margin-#{$right}: 0.5625rem;
+      }
+    }
+
+    .sub-total-row,
+    .delivery-charge-row {
+      .price-currency {
+        @include breakpoint($tablet) {
+          margin-#{$right}: 0.75rem;
+        }
+
+        @include breakpoint($desktop) {
+          margin-#{$right}: 1.125rem;
+        }
       }
     }
 

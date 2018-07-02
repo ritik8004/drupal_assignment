@@ -227,8 +227,21 @@ body.path--confirmation.alias--confirmation-print {
   .price-currency {
     margin-#{$right}: 1.5625rem;
 
-    @include breakpoint($only-ptablet) {
+    @include breakpoint($ptablet) {
       margin-#{$right}: 0.5625rem;
+    }
+  }
+
+  .sub-total-row,
+  .delivery-charge-row {
+    .price-currency {
+      @include breakpoint($tablet) {
+        margin-#{$right}: 0.75rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-#{$right}: 1.125rem;
+      }
     }
   }
 }
@@ -341,9 +354,15 @@ html[lang="ar"] {
   }
 }
 
-.user__order--detail .total-row {
+.user__order--detail .vat-row {
   @include breakpoint($only-mobile) {
     position: relative;
+  }
+
+  .above-mobile:first-child {
+    @include breakpoint($only-tablet) {
+      display: none;
+    }
   }
 
   .warm--white {
