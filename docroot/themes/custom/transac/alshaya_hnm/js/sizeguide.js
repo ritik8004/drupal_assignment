@@ -6,6 +6,7 @@
 (function ($, Drupal) {
   'use strict';
 
+  // From Nik: Can we remove this file?
   Drupal.behaviors.sizeguide = {
     attach: function (context, settings) {
       // Show mobile slider only on mobile resolution.

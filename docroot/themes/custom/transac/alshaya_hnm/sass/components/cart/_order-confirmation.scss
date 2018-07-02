@@ -191,6 +191,16 @@
     }
   }
 
+  &.user-page {
+    .field--name-field-subscribe-newsletter {
+      .option::before {
+        @include breakpoint($only-mobile) {
+          top: 0.5rem;
+        }
+      }
+    }
+  }
+
   .mobile-only.print--barcode {
     .value {
       @include arabic-letter-spacing;
@@ -248,7 +258,7 @@
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 7.5rem;
+      margin-#{$right}: 7.5rem !important;
     }
   }
 

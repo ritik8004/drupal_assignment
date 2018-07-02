@@ -1,8 +1,0 @@
-facets:
-  plp_concept:
-    checked: true
-    label: Promotion Concept
-    separator: ", "
-    show_count: true
-    show_label: false
-    weight: 0

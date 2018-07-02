@@ -140,6 +140,15 @@
             active: false
           });
         });
+
+        // Accordion for department page category for mobile.
+        $('.paragraph--type--product-carousel-category').find('.c-accordion-delivery-options').each(function () {
+          $(this).once('accordion-init').accordion({
+            heightStyle: 'content',
+            collapsible: true,
+            active: false
+          });
+        });
       }
 
       $('.c-facet__blocks')

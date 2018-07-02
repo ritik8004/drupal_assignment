@@ -321,9 +321,9 @@ class AlshayaApiWrapper {
 
     // Data index in row.
     $sku_index = 4;
-    $parent_index = 2;
     $status_index = 6;
     $visibility_index = 7;
+    $sku_type_index = 23;
 
     while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
       // We don't deal with disabled SKUs.
@@ -333,11 +333,11 @@ class AlshayaApiWrapper {
 
       // This is a weird case where not visible SKU does not have any related
       // configurable.
-      if (empty($data[$parent_index]) && $data[$visibility_index] == 'Not Visible Individually') {
+      if (empty($data[$sku_type_index]) && $data[$visibility_index] == 'Not Visible Individually') {
         continue;
       }
 
-      $type = empty($data[$parent_index]) ? 'configurable' : 'simple';
+      $type = $data[$sku_type_index] == 'Simple Product' ? 'simple' : 'configurable';
 
       $mskus[$type][] = $data[$sku_index];
     }
@@ -418,7 +418,7 @@ class AlshayaApiWrapper {
           if ($decode_response = json_decode($response, TRUE)) {
             $current_page_skus = array_column($decode_response['items'], 'sku');
 
-            $skus = array_merge($skus, $current_page_skus);
+            $skus = array_unique(array_merge($skus, $current_page_skus));
 
             // We don't have any way to know we reached the latest page as
             // Magento keep continue returning the same latest result. For this

@@ -7,16 +7,14 @@ dependencies:
   - alshaya_acm_product:alshaya_acm_product
   - alshaya_image_styles:alshaya_image_styles
   - alshaya_product_zoom:alshaya_product_zoom
+  - alshaya_search_api:alshaya_search_api
   - better_exposed_filters:better_exposed_filters
   - drupal:block
   - ctools:ctools
-  - facets:facets
-  - facets:facets_summary
   - drupal:file
   - drupal:image
   - lightning:lightning_core
   - drupal:node
-  - search_api:search_api
   - search_api_autocomplete:search_api_autocomplete
   - search_api_solr_multilingual:search_api_solr_multilingual
   - search_api_spellcheck:search_api_spellcheck

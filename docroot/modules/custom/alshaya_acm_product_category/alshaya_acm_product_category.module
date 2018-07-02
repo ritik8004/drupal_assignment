@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 
@@ -88,4 +89,29 @@ function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterf
       $term->get('field_category_include_menu')->setValue(0);
     }
   }
+}
+
+/**
+ * Get all the children of given terms.
+ *
+ * @param int $tid
+ *   The term id.
+ */
+function alshaya_acm_product_category_child_terms($tid) {
+  $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+  $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->allChildTerms($langcode, $tid, FALSE, TRUE);
+
+  $data = [];
+  foreach ($terms as $term) {
+    $data[$term->tid] = [
+      'label' => $term->name,
+      'description'  => [
+        '#markup' => $term->description__value,
+      ],
+      'id' => $term->tid,
+      'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
+      'active_class' => '',
+    ];
+  }
+  return $data;
 }

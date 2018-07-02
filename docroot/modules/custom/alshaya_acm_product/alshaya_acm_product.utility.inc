@@ -127,7 +127,7 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
   if ($sku_entity) {
-    $fields = \Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields');
+    $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
     $configurableFields = array_filter($fields, function ($field) {
       return (bool) $field['configurable'];
     });
@@ -187,6 +187,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
     if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity)) {
       // Give preference to child products to alter before checking for image in
       // parent. Alter hook to allow all modules to update the element.
+      // @TODO: Move this to hook_alshaya_acm_product_build_alter.
       \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
       if (!$main_image) {
         return alshaya_acm_product_get_gallery($build, $parent_sku);
@@ -202,6 +203,14 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 
   // Create our thumbnails to be rendered for zoom.
   if (!empty($media)) {
+    // Sort media items so that videos are at the end.
+    $order = ['image', 'external-video'];
+    usort($media, function ($item1, $item2) use ($order) {
+      $pos_1 = array_search($item1['media_type'], $order);
+      $pos_2 = array_search($item2['media_type'], $order);
+      return $pos_1 - $pos_2;
+    });
+
     foreach ($media as $media_item) {
       if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
 
@@ -252,6 +261,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   }
 
   // Invoke the alter hook to allow all modules to update the element.
+  // @TODO: Move this to hook_alshaya_acm_product_build_alter.
   \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
 
   // If no main image, use default image.
@@ -260,11 +270,13 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       $image_small = ImageStyle::load($thumbnail_style)->buildUrl($default_image->getFileUri());
       $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
       $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
+
       $main_image = [
         'zoomurl' => $image_zoom,
         'mediumurl' => $image_medium,
         'label' => $sku_entity->label(),
       ];
+
       if (empty($thumbnails)) {
         $thumbnails[] = [
           'thumburl' => $image_small,
@@ -366,6 +378,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   elseif ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
     // Fire alter hook for cart image before looking for the image in the
     // parent product.
+    // @TODO: Add in api.php file.
     \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
 
     if (!$image) {
@@ -374,6 +387,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   }
 
   // Alter cart product image found in child sku in case of config products.
+  // @TODO: Add in api.php file.
   \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
 
   // If still image is not available, set default one.
@@ -668,15 +682,21 @@ function alshaya_acm_product_update_config_options(array &$form_parts, FormState
   foreach ($tree_pointer_parent as $key => $value) {
     $attribute = explode(':', $key);
     $attribute_code = $attribute[0];
-    $enabled_options[] = $attribute[1];
+    $enabled_options[$attribute_code][] = $attribute[1];
   }
 
-  $options = $form_parts['configurables'][$attribute_code]['#options'];
+  // Loop over all configurable attributes & disable all options that are not
+  // in the list of enabled options.
+  foreach ($form_parts['configurables'] as $key => $configurable) {
+    if ($key === '#tree') {
+      continue;
+    }
 
-  // Disable options which don't exist for the choosen config.
-  foreach ($options as $key => $value) {
-    if ($key && !in_array($key, $enabled_options)) {
-      unset($form_parts['configurables'][$attribute_code]['#options'][$key]);
+    // Disable options which don't exist for the choosen config.
+    foreach ($configurable['#options'] as $option_key => $value) {
+      if (isset($enabled_options[$key]) && $option_key && !in_array($option_key, $enabled_options[$key])) {
+        unset($form_parts['configurables'][$key]['#options'][$option_key]);
+      }
     }
   }
 
@@ -771,6 +791,7 @@ function alshaya_acm_product_generate_video_embed_url($url, $provider) {
   if ($video_id) {
     $embed_url = ($provider == 'youtube') ? 'https://www.youtube.com/embed/' : 'https://player.vimeo.com/video/';
     $embed_url .= explode('&', $video_id)[0];
+    $embed_url .= ($provider == 'youtube') ? '?enablejsapi=1' : '';
   }
   return $embed_url;
 }

@@ -11,11 +11,22 @@
       @include breakpoint($desktop) {
         width: 37.5rem;
         height: 31.25rem;
+
+        .acq-content-product-modal & {
+          height: 26.31rem;
+          width: calc(29.9rem - 29.9rem * 0.03);
+        }
       }
 
       @include breakpoint($only-tablet) {
         width: 27rem;
         height: 25rem;
+
+        .acq-content-product-modal & {
+          height: 24rem;
+          margin-bottom: 1rem;
+          width: calc(25.9rem - 25.9rem * 0.03);
+        }
       }
     }
 
@@ -49,17 +60,9 @@
 .imagegallery__thumbnails__video {
   &::before {
     content: '';
-    background: url(#{$base_theme_img_directory_path}/icons/ic-video.svg) 58% 50% no-repeat;
-    width: 5rem;
-    height: 5rem;
+    background: url(#{$base_theme_img_directory_path}/icons/ic-video.svg) 50% 50% no-repeat;
+    width: inherit;
+    height: inherit;
     position: absolute;
-
-    html[lang=ar] & {
-      transform: rotate(180deg);
-    }
-
-    @include breakpoint($only-tablet) {
-      background: url(#{$base_theme_img_directory_path}/icons/ic-video.svg) 64% 69% no-repeat;
-    }
   }
 }

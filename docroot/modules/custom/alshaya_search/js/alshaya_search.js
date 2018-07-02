@@ -345,8 +345,9 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
    */
   Drupal.changeProgressBarToThrobber = function(context) {
     Drupal.ajax.instances.forEach(function (ajax_instance, key) {
-      if ($(ajax_instance.element, context).hasClass('c-products-list') ||
-        ($(ajax_instance.element, context).parents('ul[data-drupal-views-infinite-scroll-pager="automatic"]').length > 0)) {
+      if ((ajax_instance.hasOwnProperty('element')) &&
+        ($(ajax_instance.element, context).hasClass('c-products-list') ||
+        ($(ajax_instance.element, context).parents('ul[data-drupal-views-infinite-scroll-pager="automatic"]').length > 0))) {
         Drupal.ajax.instances[key].progress.type = 'throbber';
       }
     });

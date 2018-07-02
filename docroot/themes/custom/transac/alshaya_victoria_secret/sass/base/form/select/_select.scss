@@ -5,3 +5,113 @@
     }
   }
 }
+
+@mixin select-wrapper($wrapper-width) {
+  width: $wrapper-width;
+  margin-bottom: 0.75rem;
+  position: relative;
+
+  @include icon(chevrondown, after) {
+    font-size: 2.5625rem;
+    line-height: 40px;
+    pointer-events: none;
+    position: absolute;
+    #{$right}: 0;
+    top: 0;
+    text-align: center;
+    background-color: $primary_dropdown_arrow_bg;
+    width: 2.1875rem;
+    height: 40px;
+    height: 2.5rem;
+
+    @include breakpoint($tablet) {
+      z-index: 3;
+    }
+  }
+}
+
+@mixin select2-style($select-width) {
+  width: $select-width !important;
+
+  .select2-selection {
+    font-size: 0.875rem;
+    height: 2.5rem;
+    padding: 0.25rem 0.2rem;
+    text-align: $left;
+    width: $select-width;
+    border: 1px solid $primary_dropdown_border;
+    border-radius: 0;
+    outline: none;
+
+    .select2-selection__rendered {
+      color: $primary_dropdown_text;
+      line-height: 30px;
+    }
+  }
+
+  html[lang=ar] & {
+    .select2-selection--single .select2-selection__rendered {
+      width: 94%;
+    }
+  }
+
+  .select2-selection__arrow {
+    top: 0;
+    #{$right}: 0;
+    width: 2.1875rem;
+    height: 2.5rem;
+    background: $primary_dropdown_arrow_bg;
+
+    &::after {
+      // IE10 needs this in px.
+      line-height: 40px;
+      font-size: 2.5625rem;
+      top: 0;
+      #{$left}: auto;
+      width: 2.1875rem;
+      height: 2.5rem;
+      #{$right}: 0;
+      text-align: center;
+      display: inline-block;
+      background: $primary_dropdown_arrow_bg;
+    }
+  }
+}
+
+@mixin select-style($select-width) {
+  appearance: none;
+  border: 1px solid $primary_dropdown_border;
+  border-radius: 0;
+  background-color: $primary_dropdown_bg;
+  padding: 0.5rem;
+  padding-#{$left}: 0.35rem;
+  padding-#{$right}: 1.5rem;
+  width: $select-width;
+  height: 2.5rem;
+  font-size: 0.75rem;
+  outline: none;
+  direction: $dir;
+
+  @include breakpoint($tablet) {
+    background-color: $primary_dropdown_bg;
+    position: relative;
+    z-index: 3;
+  }
+
+  @include breakpoint($only-mobile) {
+    font-size: 0.875rem;
+  }
+
+  // Arabic font is longer so it gets clipped from bottom.
+  html[lang=ar] & {
+    line-height: 1.2;
+  }
+}
+
+.select2-container--default {
+  .select2-selection--single {
+    .select2-selection__rendered {
+      color: $primary_dropdown_text;
+    }
+  }
+}

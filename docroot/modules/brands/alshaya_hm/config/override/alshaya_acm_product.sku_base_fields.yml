@@ -1,0 +1,4 @@
+fields:
+  concept:
+    cardinality: -1
+    facet: 1

@@ -187,7 +187,7 @@ function alshaya_get_magento_host_data() {
     ],
     // Victoria Secret.
     'vs_qa' => [
-      'url' => 'https://qa-vs-mcf5nmy-kpwgmbven7d7y.eu-3.magentosite.cloud',
+      'url' => 'https://integration-5ojmyuq-kpwgmbven7d7y.eu-3.magentosite.cloud',
       'kw' => [
         'store_id' => [
           'en' => 1,
@@ -196,8 +196,8 @@ function alshaya_get_magento_host_data() {
       ],
       'sa' => [
         'store_id' => [
-          'en' => 3,
-          'ar' => 4,
+          'en' => 2,
+          'ar' => 3,
         ],
         'magento_lang_prefix' => [
           'en' => 'sau_en',
@@ -206,8 +206,8 @@ function alshaya_get_magento_host_data() {
       ],
       'ae' => [
         'store_id' => [
-          'en' => 5,
-          'ar' => 2,
+          'en' => 4,
+          'ar' => 5,
         ],
         'magento_lang_prefix' => [
           'en' => 'are_en',

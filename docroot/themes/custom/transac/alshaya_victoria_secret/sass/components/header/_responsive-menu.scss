@@ -6,6 +6,8 @@
 
 header {
   .region__header .block-views-exposed-filter-blocksearch-page {
+    top: 0.5rem;
+
     @include breakpoint($upto-desktop) {
       z-index: 8;
       bottom: auto;
@@ -47,6 +49,15 @@ header {
 
       html[lang=ar] & {
         height: auto;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      padding-top: 2rem;
+
+      html[lang=ar] & {
+        padding-top: 1.5rem;
+        padding-bottom: 2.5rem;
       }
     }
   }
@@ -106,6 +117,14 @@ header {
     text-transform: uppercase;
     font-size: 0.875rem;
     font-family: $vs-regular;
+
+    a {
+      padding-bottom: 0.875rem;
+    }
+  }
+
+  .menu__in::after {
+    font-size: 1.5rem;
   }
 
   .menu__back {
@@ -123,6 +142,15 @@ header {
       padding-top: 1.1rem;
       padding-bottom: 1.1rem;
       font-size: 0.75rem;
+    }
+
+    .one {
+      width: 50.5%;
+      padding: 1.125rem 0.5rem;
+    }
+
+    .one.shop {
+      width: 49.5%;
     }
   }
 
@@ -167,6 +195,19 @@ header {
     z-index: 1;
     text-align: center;
     background-color: $header_mobile_menu_bg;
+  }
+
+  .menu--active .mobile--close {
+    #{$left}: 16.875rem;
+    top: 2.8125rem;
+    height: 2.8125rem;
+    width: 2.8125rem;
+    padding-top: 0.5rem;
+  }
+
+  .toggle--sign,
+  .main--menu ul.menu--one__list {
+    width: 16.875rem;
   }
 }
 
@@ -231,13 +272,5 @@ header {
 .block-cart-mini-block {
   @include breakpoint($upto-desktop) {
     border-bottom: 2px solid $header_mobile_border;
-  }
-}
-
-.toggle--sign .one {
-  width: 60.5%;
-
-  &.shop {
-    width: 39.5%;
   }
 }

@@ -5,9 +5,11 @@
  * Module file.
  */
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\taxonomy\TermInterface;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_theme().
@@ -87,23 +89,35 @@ function alshaya_main_menu_taxonomy_term_delete(TermInterface $term) {
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_main_menu_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Only for the term edit page.
+  if (isset($form['tid']) && !empty($form['tid']['#value'])) {
+    if ($term = Term::load($form['tid']['#value'])) {
+      // If term is greater that L1 level, then not show highlight field.
+      if ($term->get('depth_level')->getString() > 1) {
+        unset($form['field_main_menu_highlight']);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_main_menu_preprocess_alshaya_main_menu_highlights(&$variables) {
-  $variables['highlights_text'] = \Drupal::config('alshaya_main_menu.settings')->get('highlight_text');
-  $variables['highlight_background'] = FALSE;
-  if (!empty($variables['data']['highlight_paragraph'])) {
-    // If L1 highlight is available change the value.
-    $variables['highlight_background'] = TRUE;
-  }
-  else {
-    foreach ($variables['data']['child'] as $child) {
-      if (!empty($child['highlight_paragraph'])) {
-        // If L2 highlight is available on any L2 item
-        // change the value.
-        $variables['highlight_background'] = TRUE;
-        break;
-      }
+  $variables['title_class'] = '';
+  foreach ($variables['data']['highlight_paragraph'] as $highlight_paragraph) {
+    if ($highlight_paragraph['highlight_type'] == 'promo_block' || $highlight_paragraph['highlight_type'] == 'title_subtitle') {
+      // Adding the class only if promo block or combination of
+      // image + title + subtitle is added.
+      $variables['title_class'] = 'empty-highlight-title';
+    }
+    else {
+      // Breaking condition if highlight paragraph is added.
+      $variables['title_class'] = '';
+      break;
     }
   }
 }

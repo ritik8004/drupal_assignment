@@ -1,0 +1,29 @@
+.view-stores-finder {
+  &.view-display-id-page_2 {
+    .view-header {
+      &::first-letter {
+        text-transform: capitalize;
+      }
+
+      font-family: $vs-bold;
+      font-weight: normal;
+
+      @include breakpoint($desktop) {
+        margin-bottom: 0.8125rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  &.view-display-id-page_1 {
+    .view-header {
+      strong {
+        font-family: $vs-bold;
+        font-weight: normal;
+      }
+    }
+  }
+}

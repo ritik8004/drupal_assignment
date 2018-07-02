@@ -5,7 +5,6 @@ dependencies:
     - field.storage.paragraph.field_1_row_2_col
     - paragraphs.paragraphs_type.1_row_2_col_dept
     - paragraphs.paragraphs_type.image_title_subtitle
-    - paragraphs.paragraphs_type.product_carousel_category
     - paragraphs.paragraphs_type.section_divider
     - paragraphs.paragraphs_type.promo_block
   module:
@@ -26,7 +25,6 @@ settings:
     target_bundles:
       promo_block: promo_block
       image_title_subtitle: image_title_subtitle
-      product_carousel_category: product_carousel_category
       section_divider: section_divider
     target_bundles_drag_drop:
       1_row_2_col_dept:
@@ -89,9 +87,6 @@ settings:
       promo_block_button:
         weight: 43
         enabled: false
-      product_carousel_category:
-        enabled: true
-        weight: 43
       promo_block_text:
         weight: 44
         enabled: false

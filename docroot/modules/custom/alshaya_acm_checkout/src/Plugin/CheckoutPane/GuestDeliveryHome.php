@@ -88,6 +88,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       $address_default_value['organization'] = $cart->customerEmail();
     }
 
+    $default_shipping = '';
     if ($form_values = $form_state->getValue($pane_form['#parents'])) {
       $address = $address_book_manager->getMagentoAddressFromAddressArray($form_values['address']['shipping']);
 

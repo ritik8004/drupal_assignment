@@ -8,11 +8,11 @@
   Drupal.behaviors.alshayaPLPSearch = {
     attach: function (context, settings) {
       // Close the mobile filter menu on tablet if clicked anywhere else.
-      $(window).once().on('click', function (e) {
+      $(document).once().on('click', function (e) {
         // Run only on PLP and Search page.
         if ($('.page-wrapper > .page-standard').hasClass('c-plp')) {
           if ($(window).width() >= 768) {
-            if ($(e.target).is('.c-facet__label')) {
+            if ($(e.target).is('.c-facet__label') || $(e.target).is('.facets-search-input')) {
               // Do nothing in this case, we already have a handler for this.
             }
             else if ($(e.target).is('.c-facet__title')) {

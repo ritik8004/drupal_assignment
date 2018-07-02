@@ -18,6 +18,10 @@
 
     .view-product-slider {
       margin-bottom: 1.5rem;
+
+      @include breakpoint($upto-desktop) {
+        margin-bottom: 1rem;
+      }
     }
   }
 
@@ -51,6 +55,10 @@
     text-align: center;
 
     @include breakpoint($tablet) {
+      padding-top: 0.625rem;
+    }
+
+    @include breakpoint($desktop) {
       padding-top: 1.125rem;
     }
   }
@@ -157,6 +165,93 @@
   button {
     span {
       display: none;
+    }
+  }
+}
+
+// No carousel for touch devices (Mobile & Tablets).
+// Replace carousel with horizontal scroll.
+.paragraph--type--product-carousel-category,
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell,
+.block-basket-horizontal-recommendation {
+  .view-product-slider {
+    @include breakpoint($upto-desktop) {
+      .ajax-progress-throbber .throbber {
+        background-position: center center !important;
+      }
+
+      .owl-carousel {
+        display: block;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding-bottom: 1.5rem;
+
+        .views-row {
+          display: inline-block;
+          white-space: normal;
+          vertical-align: top;
+          position: relative;
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .owl-carousel {
+        .views-row {
+          width: 37%;
+          margin-#{$left}: 0;
+          margin-#{$right}: 0.625rem;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: 0;
+
+      .owl-carousel {
+        .views-row {
+          width: 40%;
+          padding-#{$left}: 0;
+          padding-#{$right}: 1rem;
+        }
+      }
+    }
+  }
+}
+
+.block-basket-horizontal-recommendation {
+  .view-product-slider {
+    @include breakpoint($only-mobile) {
+      .owl-carousel {
+        .views-row {
+          min-height: auto !important;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .owl-carousel {
+        .views-row {
+          width: 22%;
+          height: auto !important;
+        }
+      }
+    }
+  }
+}
+
+.paragraph--type--product-carousel-category {
+  .view-product-slider {
+    @include breakpoint($only-tablet) {
+      .owl-carousel {
+        .views-row {
+          width: 22.2%;
+        }
+      }
     }
   }
 }

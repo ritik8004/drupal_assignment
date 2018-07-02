@@ -1,0 +1,10 @@
+alshaya_acm_product.display_settings:
+  type: config_object
+  label: 'Alshaya ACM Product display settings'
+  mapping:
+    image_thumb_gallery:
+      type: boolean
+      label: 'Display image thumb gallery on product node'
+    color_swatches:
+      type: boolean
+      label: 'Display color swatches on product node'

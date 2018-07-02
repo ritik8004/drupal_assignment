@@ -1,22 +1,25 @@
 fields:
+  sku_definition:
+    label: 'SKU Definition'
+    type: 'string'
+
   band_size:
-    parent: 'attributes'
     label: 'Band Size'
-    description: 'Band Size attribute for the product.'
     cardinality: -1
-    type: 'attribute'
     configurable: 1
-    index: 1
-    visible_view: 0
-    visible_form: 1
 
   cup_size:
-    parent: 'attributes'
     label: 'Cup Size'
-    description: 'Cup Size attribute for the product.'
     cardinality: -1
-    type: 'attribute'
     configurable: 1
+
+  fragrance:
+    label: 'Fragrance'
+    cardinality: -1
+    configurable: 1
+
+  actual_color_label_code:
+    label: 'Actual Color Label Code'
+    cardinality: -1
     index: 1
-    visible_view: 0
-    visible_form: 1
+    facet: 1

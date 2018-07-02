@@ -8,46 +8,6 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_update_n().
- *
- * Install brand field for store node.
- */
-function alshaya_vs_transac_update_8103() {
-  alshaya_config_install_configs([
-    'field.storage.node.field_brand',
-    'field.field.node.store.field_brand',
-  ], 'alshaya_vs_transac');
-
-  // Save form and view display mode for store content type.
-  alshaya_config_install_configs([
-    'core.entity_form_display.node.store.default',
-    'core.entity_view_display.node.store.default',
-    'views.view.stores_finder',
-  ], 'alshaya_stores_finder');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add SKU base fields specific to VS.
- *
- * Re-saving indexes and updating index configs will be taken care of in
- * alshaya_acm_product_update_8017().
- */
-function alshaya_vs_transac_update_8102() {
-  alshaya_config_install_configs(['alshaya_vs_transac.sku_base_fields'], 'alshaya_vs_transac');
-  $fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
-}
-
-/**
- * Implements hook_update_n().
- */
-function alshaya_vs_transac_update_8101() {
-  \Drupal::configFactory()->getEditable('views.view.stores_finder')->save();
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_vs_transac_install() {
@@ -81,6 +41,32 @@ function alshaya_vs_transac_install() {
   // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
   _alshaya_master_initialize_amp('alshaya_amp_victoria_secret');
 
+  // Add string translations.
+  $strings = [
+    'Corporate Info' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Connect with us' => [
+      'ar' => ' تواصلي معنا ',
+    ],
+    'Store Includes' => [
+      'ar' => 'المحل يشمل',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
+  $view_store_finder = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.stores_finder');
+  $view_store_finder->set('display.attachment_1.display_options.fields.field_brand.label', 'المحل يشمل');
+  $view_store_finder->set('display.page_1.display_options.fields.field_brand.label', 'المحل يشمل');
+  $view_store_finder->set('display.page_3.display_options.fields.field_brand.label', 'المحل يشمل');
+  $view_store_finder->save();
+
+  $field_brand = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.node.store.field_brand');
+  $field_brand->set('label', 'المحل يشمل');
+  $field_brand->save();
   // Enable super category feature and menu block with config factory.
   // Placing config in "override" folder won't work here. As we have an event
   // subscriber written for config save, which will always override the value
@@ -95,7 +81,17 @@ function alshaya_vs_transac_install() {
   $block->setStatus(TRUE);
   $block->save();
 
-  // Add SKU base fields specific to VS.
-  $fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
-  acq_sku_add_base_fields($fields);
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    // Set default items from cross sell/up sell carausel for mobile.
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', 2)
+    // Set default items from cross sell/up sell carausel for tablet.
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', 2)
+    // Set default items from cross sell/up sell carausel for desktop.
+    ->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', 4)
+    // Set the number of items to show in a gallery on PDP.
+    ->set('pdp_slider_items_settings.pdp_slider_items_number', 3)
+    ->save();
+
+  // Configurable product option settings.
+  alshaya_config_install_configs(['acq_sku.configurable_form_settings'], 'acq_sku');
 }

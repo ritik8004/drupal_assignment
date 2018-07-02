@@ -5,8 +5,8 @@ dependencies:
     - search_api.index.product
     - views.view.alshaya_product_list
   module:
-    - alshaya_search
     - search_api
+    - alshaya_search_api
 third_party_settings:
   alshaya_search:
     display_textbox: 0

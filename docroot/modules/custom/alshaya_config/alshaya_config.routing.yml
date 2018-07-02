@@ -1,5 +1,5 @@
 alshaya_config.settings:
-  path: '/admin/config/system/alshaya-config'
+  path: '/admin/config/alshaya/alshaya-config'
   defaults:
     _title: 'Configure Alshaya features'
     _form: '\Drupal\alshaya_config\Form\AlshayaConfigFeaturesForm'

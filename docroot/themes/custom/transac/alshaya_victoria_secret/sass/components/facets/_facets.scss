@@ -17,31 +17,27 @@
 
   .facet-item .facet-item__value,
   .facet-item .facet-item__count {
-    line-height: 1.57;
-    vertical-align: middle;
-    margin-top: 0.125rem;
-    display: inline-block;
+    @include breakpoint($only-mobile) {
+      vertical-align: middle;
+    }
   }
 
   input[type=checkbox] ~ label::before {
-    margin-#{$left}: 0;
-    position: relative;
-    top: 0.3rem;
+    @include breakpoint($only-mobile) {
+      top: 0.3rem;
+
+      html[lang=ar] & {
+        top: 0.125rem;
+      }
+    }
 
     @include breakpoint($tablet) {
-      top: 0.54rem;
+      font-size: 1.25rem;
     }
   }
-}
 
-.c-facet__blocks__wrapper--mobile {
-  .c-facet__label {
-    border-#{$right}: 0;
-
-    &::after {
-      border: 1px solid $plp_facet_label_border_mobile;
-      border-#{$left}: 0;
-    }
+  .item-list__checkbox {
+    max-height: 18.375rem;
   }
 }
 
@@ -57,6 +53,14 @@
       content: "";
       display: block;
       height: 0.625rem;
+    }
+  }
+
+  ul {
+    li {
+      @include breakpoint($desktop) {
+        margin-bottom: 1.25rem;
+      }
     }
   }
 }

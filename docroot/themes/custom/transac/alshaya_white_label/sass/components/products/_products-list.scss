@@ -58,7 +58,11 @@
 
           a {
             color: $plp_facet_filter_link;
-            font-size: 12px;
+            font-size: 0.75rem;
+
+            @include breakpoint($only-mobile) {
+              font-size: 0.875rem;
+            }
 
             span {
               &.facet-item__value {
@@ -673,6 +677,7 @@
       bottom: 0;
       width: 100%;
       overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
 
       .filter-close {
         float: $right;
@@ -907,6 +912,7 @@ body {
   &.filter-open-no-scroll {
     @include breakpoint($only-mobile) {
       overflow: hidden;
+      position: fixed;
 
       .branding__menu.show-overlay {
         z-index: 2;
@@ -1083,7 +1089,7 @@ html[lang=ar] {
     }
 
     .throbber {
-      background-image: url(../imgs/icons/MC-loader.svg) !important;
+      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
       background-position: $right center !important;
       background-repeat: no-repeat !important;
       background-size: 2.5rem;
@@ -1098,5 +1104,11 @@ html[lang=ar] {
     @include breakpoint($only-mobile) {
       margin-#{$left}: 0;
     }
+  }
+}
+
+body {
+  &.filter-open-no-scroll {
+    cursor: pointer;
   }
 }

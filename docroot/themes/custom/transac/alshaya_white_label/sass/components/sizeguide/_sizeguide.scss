@@ -13,6 +13,10 @@
     top: -0.125rem;
   }
 
+  @include breakpoint($only-tablet) {
+    top: 0.5rem;
+  }
+
   .sell-sku & {
     padding-top: 0.625rem;
   }
