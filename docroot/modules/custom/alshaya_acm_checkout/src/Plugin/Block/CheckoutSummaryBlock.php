@@ -374,7 +374,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $surcharge_label = '';
 
     $surcharge = $cart->getExtension('surcharge');
-    if ($surcharge && isset($surcharge['applied']) && $surcharge['applied']) {
+    if ($surcharge && isset($surcharge['is_applied']) && $surcharge['is_applied']) {
       if ((float) $surcharge['amount'] > 0) {
         $surcharge_label = $acm_config->get('cod_surcharge_label');
 
