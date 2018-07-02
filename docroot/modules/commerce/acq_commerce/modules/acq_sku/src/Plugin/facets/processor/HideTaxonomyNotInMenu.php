@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_search\Plugin\facets\processor;
+namespace Drupal\acq_sku\Plugin\facets\processor;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   }
  * )
  */
-class AlshayaHideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildProcessorInterface, ContainerFactoryPluginInterface {
+class HideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildProcessorInterface, ContainerFactoryPluginInterface {
 
   /**
    * The language manager.
