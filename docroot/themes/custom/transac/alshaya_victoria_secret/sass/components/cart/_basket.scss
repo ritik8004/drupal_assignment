@@ -232,6 +232,20 @@
   .error .col-2 a {
     text-transform: uppercase;
   }
+
+  @include breakpoint($desktop) {
+    #{$right}: 0.5rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    #{$right}: 5.1rem;
+    top: 3rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    #{$right}: 2.0625rem;
+    top: 3.1rem;
+  }
 }
 
 body.alias--cart {
