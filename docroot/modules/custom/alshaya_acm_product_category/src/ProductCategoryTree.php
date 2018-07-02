@@ -152,7 +152,6 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
     $cache_tags = [
       self::CACHE_TAG,
-      'node_type:advanced_page',
     ];
 
     $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
@@ -181,7 +180,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $data = [];
 
     // Get all child terms for the given parent.
-    $terms = $this->allChildTerms($langcode, $parent_tid, FALSE);
+    $terms = $this->allChildTerms($langcode, $parent_tid);
 
     // Initialize the background color for term.
     $this->termsBackgroundColor = $this->getTermsColors($langcode, 'background');
@@ -388,8 +387,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       $query->condition('ttim.field_category_include_menu_value', 1);
     }
     if ($mobile_only) {
-      $query->innerJoin('taxonomy_term__field_category_quicklink_plp_mob', 'ttmo', 'ttmo.entity_id = tfd.tid AND ttmo.langcode = tfd.langcode');
-      $query->condition('ttmo.field_category_quicklink_plp_mob_value', 1);
+      $query->innerJoin('taxonomy_term__field_mobile_only_dpt_page_link', 'ttmo', 'ttmo.entity_id = tfd.tid');
+      $query->condition('ttmo.field_mobile_only_dpt_page_link_value', 1);
     }
     $query->condition('ttcs.field_commerce_status_value', 1);
     $query->condition('tth.parent', $parent_tid);

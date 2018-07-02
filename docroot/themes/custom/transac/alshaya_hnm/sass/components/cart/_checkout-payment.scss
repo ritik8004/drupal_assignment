@@ -25,6 +25,11 @@
         top: 2.25rem;
         #{$left}: 0;
         padding-top: 0.375rem;
+        margin-top: -0.1875rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 0;
+        }
       }
     }
   }
@@ -191,6 +196,18 @@
       &::before {
         border-color: rgba(0, 132, 204, 0);
         border-bottom-color: $tooltip_border_2;
+      }
+    }
+  }
+}
+
+.checkout-payment {
+  #edit-checkout-terms {
+    .form-type-checkbox {
+      .option::before {
+        @include breakpoint($upto-tablet) {
+          #{$left}: 0;
+        }
       }
     }
   }

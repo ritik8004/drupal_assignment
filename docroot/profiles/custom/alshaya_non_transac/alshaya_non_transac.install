@@ -5,7 +5,6 @@
  * Install, update and uninstall hooks for the alshaya_non_transac subprofile.
  */
 
-
 /**
  * Implements hook_update_N().
  *

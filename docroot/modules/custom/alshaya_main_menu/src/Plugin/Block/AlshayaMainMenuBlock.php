@@ -139,11 +139,6 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    // Add advanced page node type cache tag.
-    // This is custom cache tag and cleared in hook_presave in advanced
-    // module.
-    $this->cacheTags[] = 'node_type:advanced_page';
-
     // Discard cache for the block once a term gets updated.
     $this->cacheTags[] = ProductCategoryTree::CACHE_TAG;
 

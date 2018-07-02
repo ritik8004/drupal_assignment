@@ -42,12 +42,12 @@
 
       // Set platformType.
       var md = new MobileDetect(window.navigator.userAgent);
-      if (md.tablet !== null) {
+      if (md.tablet() !== null) {
         dataLayer.push({
           platformType: 'tablet',
         });
       }
-      else if (md.mobile) {
+      else if (md.mobile()) {
         dataLayer.push({
           platformType: 'mobile',
         });
@@ -238,7 +238,7 @@
         }
       }
 
-      $('input[data-drupal-selector="edit-actions-ccnext"]').click(function () {
+      $('input[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
         ccPaymentsClicked = true;
       });
 

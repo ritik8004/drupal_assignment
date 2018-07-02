@@ -1110,3 +1110,29 @@ html[lang=ar] {
     }
   }
 }
+
+@include breakpoint($only-tablet) {
+  .c-plp {
+    .c-products-list {
+      .views-infinite-scroll-content-wrapper {
+        display: flex;
+        align-items: stretch;
+        flex-wrap: wrap;
+      }
+    }
+
+    .c-products__item {
+      width: calc((100% - 3rem) / 3);
+
+      &:nth-child(3n+2) {
+        margin: 0 1.5rem 1rem;
+      }
+    }
+  }
+}
+
+body {
+  &.filter-open-no-scroll {
+    cursor: pointer;
+  }
+}

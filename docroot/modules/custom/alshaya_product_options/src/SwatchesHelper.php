@@ -1,0 +1,347 @@
+<?php
+
+namespace Drupal\alshaya_product_options;
+
+use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\taxonomy\TermInterface;
+
+/**
+ * Class SwatchesHelper.
+ *
+ * @package Drupal\alshaya_product_options
+ */
+class SwatchesHelper {
+
+  /**
+   * Constant for identifying textual swatch type.
+   */
+  const SWATCH_TYPE_TEXTUAL = '0';
+
+  /**
+   * Constant for identifying visual swatch type with color number value.
+   */
+  const SWATCH_TYPE_VISUAL_COLOR = '1';
+
+  /**
+   * Constant for identifying visual swatch type with color number value.
+   */
+  const SWATCH_TYPE_VISUAL_IMAGE = '2';
+
+  /**
+   * Constant for identifying empty swatch type.
+   */
+  const SWATCH_TYPE_EMPTY = '3';
+
+  /**
+   * Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * File Storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
+   * Production Options Manager service object.
+   *
+   * @var \Drupal\acq_sku\ProductOptionsManager
+   */
+  protected $productOptionsManager;
+
+  /**
+   * Cache Backend service for product_options.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * SwatchesHelper constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   Logger.
+   * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
+   *   Production Options Manager service object.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service for product_options.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              LoggerChannelInterface $logger,
+                              ProductOptionsManager $product_options_manager,
+                              CacheBackendInterface $cache,
+                              LanguageManagerInterface $language_manager) {
+    $this->entityTypeManager = $entity_type_manager;
+    $this->fileStorage = $this->entityTypeManager->getStorage('file');
+    $this->logger = $logger;
+    $this->productOptionsManager = $product_options_manager;
+    $this->cache = $cache;
+    $this->languageManager = $language_manager;
+  }
+
+  /**
+   * Update Term with Attribute option value if changed.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Taxonomy term.
+   * @param array $swatch_info
+   *   Swatch info array received from API.
+   */
+  public function updateAttributeOptionSwatch(TermInterface $term, array $swatch_info) {
+    $save_term = FALSE;
+
+    // Save again if type changed.
+    if ($swatch_info['swatch_type'] != $term->get('field_attribute_swatch_type')->getString()) {
+      $save_term = TRUE;
+    }
+    // Save again if value changed.
+    elseif ($term->get('field_attribute_swatch_value')->getString() != $swatch_info['swatch']) {
+      $save_term = TRUE;
+    }
+
+    if ($save_term) {
+      // Delete existing file first.
+      if ($term->get('field_attribute_swatch_image')->first()) {
+        $file_value = $term->get('field_attribute_swatch_image')->first()->getValue();
+        $file = $this->fileStorage->load($file_value['target_id']);
+        if ($file) {
+          $file->delete();
+        }
+      }
+
+      // Reset all current values.
+      $term->get('field_attribute_swatch_text')->setValue(NULL);
+      $term->get('field_attribute_swatch_color')->setValue(NULL);
+      $term->get('field_attribute_swatch_image')->setValue(NULL);
+
+      // Saving in separate field to validate next time for change.
+      $term->get('field_attribute_swatch_value')->setValue($swatch_info['swatch']);
+      $term->get('field_attribute_swatch_type')->setValue($swatch_info['swatch_type']);
+
+      switch ($swatch_info['swatch_type']) {
+        case self::SWATCH_TYPE_TEXTUAL:
+          $term->get('field_attribute_swatch_text')->setValue(
+            $swatch_info['swatch']
+          );
+          break;
+
+        case self::SWATCH_TYPE_VISUAL_COLOR:
+          $term->get('field_attribute_swatch_color')->setValue(
+            $swatch_info['swatch']
+          );
+          break;
+
+        case self::SWATCH_TYPE_VISUAL_IMAGE:
+          try {
+            $file = $this->downloadSwatchImage($swatch_info['swatch']);
+          }
+          catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            return;
+          }
+
+          $term->get('field_attribute_swatch_image')->setValue($file);
+          break;
+
+        default:
+          // Swatch type not known.
+          return;
+      }
+    }
+
+    if ($save_term) {
+      $term->save();
+    }
+
+    // We might not save the term for multiple languages but we store cache
+    // per language. Lets update cache.
+    $attribute_code = $term->get('field_sku_attribute_code')->getString();
+    $option_id = $term->get('field_sku_option_id')->getString();
+    $langcode = $term->language()->getId();
+    $tid = $term->id();
+
+    $cache = $this->getSwatchDataFromTerm($term);
+    $this->updateCache($attribute_code, $option_id, $langcode, $tid, $cache);
+  }
+
+  /**
+   * Get swatch data for particular attribute option.
+   *
+   * @param string $attribute_code
+   *   Attribute code.
+   * @param string $option_id
+   *   Attribute option id.
+   * @param string $langcode
+   *   Language code to get data for particular language.
+   *
+   * @return array
+   *   Swatch data.
+   */
+  public function getSwatch($attribute_code, $option_id, $langcode = '') {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    $cid = implode('_', [$attribute_code, $option_id, $langcode]);
+    $cache = $this->cache->get($cid);
+
+    // Try once to load the term and check for cache.
+    // If memcache went down or someone edited term directly in Drupal.
+    if (empty($cache)) {
+      $data = [];
+      $term = $this->productOptionsManager->loadProductOptionByOptionId($attribute_code, $option_id, $langcode);
+      if ($term instanceof TermInterface) {
+        $data = $this->getSwatchDataFromTerm($term);
+        $this->updateCache($attribute_code, $option_id, $langcode, $term->id(), $data);
+      }
+    }
+    else {
+      $data = $cache->data;
+    }
+
+    return $data;
+  }
+
+  /**
+   * Wrapper function to store data in cache.
+   *
+   * @param string $attribute_code
+   *   Attribute code.
+   * @param string $option_id
+   *   Attribute option id.
+   * @param string $langcode
+   *   Language code to build unique cache id per language.
+   * @param int $tid
+   *   Term id to use for cache tag.
+   * @param array $data
+   *   Data to cache.
+   */
+  private function updateCache($attribute_code, $option_id, $langcode, $tid, array $data) {
+    $cid = implode('_', [$attribute_code, $option_id, $langcode]);
+    $this->cache->set($cid, $data, Cache::PERMANENT, ['taxonomy_term:' . $tid]);
+  }
+
+  /**
+   * Download swatch image to Drupal and create File entity.
+   *
+   * @param string $url
+   *   Swatch image url.
+   *
+   * @return \Drupal\file\Entity\File
+   *   File entity.
+   *
+   * @throws \Exception
+   */
+  private function downloadSwatchImage($url) {
+    // Preparing args for all info/error messages.
+    $args = ['@file' => $url];
+
+    // Download the file contents.
+    $file_data = file_get_contents($url);
+
+    // Check to ensure errors like 404, 403, etc. are catched and empty file
+    // not saved in SKU.
+    if (empty($file_data)) {
+      throw new \Exception(new FormattableMarkup('Failed to download file "@file".', $args));
+    }
+
+    // Get the path part in the url, remove hostname.
+    $path = parse_url($url, PHP_URL_PATH);
+
+    // Remove slashes from start and end.
+    $path = trim($path, '/');
+
+    // Get the file name.
+    $file_name = basename($path);
+
+    // Prepare the directory path.
+    $directory = 'public://swatches/' . str_replace('/' . $file_name, '', $path);
+
+    // Prepare the directory.
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+
+    // Save the file as file entity.
+    /** @var \Drupal\file\Entity\File $file */
+    if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
+      return $file;
+    }
+    else {
+      throw new \Exception(new FormattableMarkup('Failed to save file "@file".', $args));
+    }
+  }
+
+  /**
+   * Wrapper function to get array containing only the required swatch data.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Product option Term.
+   *
+   * @return array
+   *   Swatch data.
+   */
+  private function getSwatchDataFromTerm(TermInterface $term) {
+    $data = [];
+    $data['type'] = $term->get('field_attribute_swatch_type')->getString();
+    $data['name'] = $term->getName();
+
+    // 0 is valid type, chech specifically for empty/null values.
+    if ($data['type'] === NULL or $data['type'] === '') {
+      return [];
+    }
+
+    switch ($data['type']) {
+      case self::SWATCH_TYPE_TEXTUAL:
+        $data['swatch'] = $term->get('field_attribute_swatch_text')->getString();
+        break;
+
+      case self::SWATCH_TYPE_VISUAL_COLOR:
+        $data['swatch'] = $term->get('field_attribute_swatch_color')->getString();
+        break;
+
+      case self::SWATCH_TYPE_VISUAL_IMAGE:
+        if ($term->get('field_attribute_swatch_image')->first()) {
+          $file_value = $term->get('field_attribute_swatch_image')
+            ->first()
+            ->getValue();
+
+          /** @var \Drupal\file\Entity\File $file */
+          $file = $this->fileStorage->load($file_value['target_id']);
+          $data['swatch'] = file_create_url($file->getFileUri());
+        }
+        break;
+
+      default:
+        return [];
+    }
+
+    return $data;
+  }
+
+}

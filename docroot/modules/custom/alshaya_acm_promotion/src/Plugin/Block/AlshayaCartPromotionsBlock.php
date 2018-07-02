@@ -13,6 +13,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Driver\Exception\Exception;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 
@@ -172,7 +173,7 @@ class AlshayaCartPromotionsBlock extends BlockBase implements ContainerFactoryPl
         if ($promotion_rule_id) {
           $node = $this->alshayaAcmPromotionManager->getPromotionByRuleId($promotion_rule_id);
 
-          if ($node) {
+          if ($node instanceof NodeInterface && $node->isPublished()) {
             // Get translation if available.
             $node = $this->entityRepository->getTranslationFromContext($node);
 

@@ -53,6 +53,12 @@
       }
     }
 
+    td .form-type-select {
+      &::after {
+        font-size: 2rem;
+      }
+    }
+
     tr td {
       @include breakpoint($desktop) {
         padding-#{$left}: 1.5rem;
@@ -170,8 +176,6 @@
   .edit-continue-shopping-mobile,
   #edit-continue-shopping {
     border: 0;
-    background-color: $primary_btn_bg;
-    color: $primary_btn_text;
     font-size: 0.875rem;
     text-transform: uppercase;
     font-family: $vs-bold;
@@ -227,6 +231,20 @@
   .notification .col-2 a,
   .error .col-2 a {
     text-transform: uppercase;
+  }
+
+  @include breakpoint($desktop) {
+    #{$right}: 0.5rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    #{$right}: 5.1rem;
+    top: 3rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    #{$right}: 2.0625rem;
+    top: 3.1rem;
   }
 }
 
