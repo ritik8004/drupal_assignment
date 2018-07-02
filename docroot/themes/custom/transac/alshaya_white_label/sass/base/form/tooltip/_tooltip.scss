@@ -28,7 +28,7 @@
   .simple-tooltip-wrap {
     display: inline;
     position: absolute;
-    #{$right}: -1.5rem;
+    #{$right}: -1.3rem;
     top: 0;
 
     .user__order--detail & {
@@ -37,9 +37,9 @@
     }
 
     .tooltip {
-      #{$left}: unset;
+      #{$left}: unset !important;
       #{$right}: -0.375rem;
-      top: 1.5rem;
+      top: 1.5rem !important;
 
       .user__order--detail & {
         #{$right}: -0.375rem;
