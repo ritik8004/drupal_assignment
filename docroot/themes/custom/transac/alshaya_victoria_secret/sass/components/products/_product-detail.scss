@@ -15,6 +15,14 @@
     font-size: 0.75rem;
     font-weight: normal;
   }
+
+  .read-more-description-link {
+    margin: 0.75rem 0 0.875rem;
+  }
+
+  .field__label {
+    margin: 0.5rem 0 0.25rem;
+  }
 }
 
 .nodetype--acq_product,
@@ -188,6 +196,8 @@
 
 .basic-details-wrapper {
   .field--name-field-skus {
+    border-bottom: none;
+
     .form-item-quantity {
       &::after {
         @include breakpoint($only-tablet) {
@@ -293,6 +303,27 @@
           color: $pdp_swatch_disabled;
         }
       }
+    }
+  }
+}
+
+.delivery-options-wrapper {
+  .field__label {
+    margin-top: 1.625rem;
+  }
+
+  .c-accordion__title {
+    @include breakpoint($tablet) {
+      padding: 0.75rem 0 0;
+    }
+
+    .subtitle {
+      padding-bottom: 0.125rem;
+      line-height: 1.33;
+    }
+
+    &::after {
+      font-size: 2rem;
     }
   }
 }
