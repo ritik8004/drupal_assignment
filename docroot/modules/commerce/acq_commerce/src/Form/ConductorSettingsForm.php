@@ -37,7 +37,7 @@ class ConductorSettingsForm extends ConfigFormBase {
     // TODO Validate Conductor URL endpoints with watchdog request.
     $this->config('acq_commerce.conductor')
       ->set('url', $form_state->getValue('url'))
-      ->set('api_version', $form_state->getValue('url'))
+      ->set('api_version', $form_state->getValue('api_version'))
       ->set('hmac_id', $form_state->getValue('hmac_id'))
       ->set('hmac_secret', $form_state->getValue('hmac_secret'))
       ->set('timeout', (int) $form_state->getValue('timeout'))
