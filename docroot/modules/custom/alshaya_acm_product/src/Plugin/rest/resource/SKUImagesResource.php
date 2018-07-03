@@ -125,12 +125,18 @@ class SKUImagesResource extends ResourceBase {
         // We may have some child SKUs which don't have a parent SKU / Node
         // in Drupal as they might be disabled.
         if ($node instanceof NodeInterface) {
-          $response[$sku]['product_url'] = $node->toUrl()->setAbsolute()->toString();
+          $response[$sku] = [
+            'product_url' => $node->toUrl()->setAbsolute()->toString(),
+            'images' => [],
+          ];
 
           $gallery = $this->skuImagesManager->getAllMedia($sku_entity, TRUE);
-          $response[$sku]['images'] = array_values(
-            array_merge($gallery['images'], $gallery['videos'])
-          );
+
+          if (!empty($gallery['images']) || !empty($gallery['videos'])) {
+            $response[$sku]['images'] = array_values(
+              array_merge($gallery['images'], $gallery['videos'])
+            );
+          }
         }
       }
     }
