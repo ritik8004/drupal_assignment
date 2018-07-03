@@ -34,18 +34,12 @@ class SwatchListWidget extends LinksWidget {
 
     $items = $build['#items'];
 
-    /** @var \Drupal\acq_sku\SKUFieldsManager $skuFieldsManager */
-    $skuFieldsManager = \Drupal::service('acq_sku.fields_manager');
-    $fields = $skuFieldsManager->getFieldAdditions();
-    $field_code = str_replace('attr_', '', $facet->getFieldIdentifier());
-    $attribute_code = $fields[$field_code]['source'] ?? $field_code;
-
-    /** @var \Drupal\alshaya_product_options\SwatchesHelper $swatchesManager */
+    /** @var \Drupal\alshaya_product_options\SwatchesHelper $swatches */
     $swatches = \Drupal::service('alshaya_product_options.swatches');
 
     foreach ($items as $index => $item) {
       if (isset($item['#title'], $item['#title']['#value'])) {
-        $swatch = $swatches->getSwatch($attribute_code, $item['#title']['#value']);
+        $swatch = $swatches->getSwatchForFacet($facet, $item['#title']['#value']);
 
         if ($swatch) {
           switch ($swatch['type']) {
