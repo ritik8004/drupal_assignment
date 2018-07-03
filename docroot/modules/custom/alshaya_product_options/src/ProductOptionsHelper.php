@@ -111,9 +111,6 @@ class ProductOptionsHelper {
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       $this->apiWrapper->updateStoreContext($langcode);
       foreach ($sync_options as $attribute_code) {
-        if ($attribute_code == 'color') {
-          continue;
-        }
         $this->syncProductOption($attribute_code, $langcode);
       }
     }
