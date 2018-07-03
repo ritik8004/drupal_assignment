@@ -140,7 +140,7 @@ function hammerIt(elm) {
             infinite: false,
             focusOnSelect: true,
             initialSlide: currentmobSlide,
-            touchThreshold: 1000,
+            touchThreshold: 1000
           };
 
           var gallery = $('#product-image-gallery-mob');
