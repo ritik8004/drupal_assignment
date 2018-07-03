@@ -28,31 +28,38 @@
   .simple-tooltip-wrap {
     display: inline;
     position: absolute;
-    #{$right}: -1.5rem;
+    #{$right}: -1.3rem;
     top: 0;
 
     .user__order--detail & {
       #{$right}: -0.875rem;
-      top: -1px;
+      top: -0.3125rem;
+
+      @include breakpoint($upto-desktop) {
+        top: -1px;
+      }
     }
 
     .tooltip {
-      #{$left}: unset;
-      #{$right}: -0.375rem;
-      top: 1.5rem;
+      #{$left}: -8.7rem !important;
+      top: 1.5rem !important;
 
       .user__order--detail & {
-        #{$right}: -0.375rem;
-        top: 1.5rem;
-        #{$left}: unset;
+        #{$left}: -8.5rem !important;
+        top: 1.79rem !important;
+
+        @include breakpoint($upto-desktop) {
+          #{$left}: -9.1rem !important;
+          top: 1.49rem !important;
+        }
       }
 
       &::before {
-        #{$right}: 0.4375rem;
+        #{$right}: 0.4375rem !important;
       }
 
       &::after {
-        #{$right}: 0.5rem;
+        #{$right}: 0.5rem !important;
       }
     }
   }

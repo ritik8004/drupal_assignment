@@ -256,7 +256,6 @@
   .field--name-field-skus {
     .form-item-quantity::after {
       @include breakpoint($tablet) {
-        font-size: 2rem;
         #{$right}: 0;
       }
     }
