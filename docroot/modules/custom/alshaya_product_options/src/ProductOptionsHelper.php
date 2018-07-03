@@ -6,6 +6,7 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Core\Logger\LoggerChannelInterface;
 
 /**
  * Class ProductOptionsHelper.
@@ -19,35 +20,42 @@ class ProductOptionsHelper {
    *
    * @var \Drupal\acq_sku\SKUFieldsManager
    */
-  private $skuFieldsManager;
+  protected $skuFieldsManager;
 
   /**
    * I18nHelper object.
    *
    * @var \Drupal\acq_commerce\I18nHelper
    */
-  private $i18nHelper;
+  protected $i18nHelper;
 
   /**
    * Production Options Manager service object.
    *
    * @var \Drupal\acq_sku\ProductOptionsManager
    */
-  private $productOptionsManager;
+  protected $productOptionsManager;
 
   /**
    * Alshaya API Wrapper service object.
    *
    * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
-  private $apiWrapper;
+  protected $apiWrapper;
 
   /**
    * Swatches Helper service object.
    *
    * @var \Drupal\alshaya_product_options\SwatchesHelper
    */
-  private $swatches;
+  protected $swatches;
+
+  /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
 
   /**
    * ProductOptionsHelper constructor.
@@ -62,23 +70,28 @@ class ProductOptionsHelper {
    *   Alshaya API Wrapper service object.
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches
    *   Swatches Helper service object.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   Logger.
    */
   public function __construct(SKUFieldsManager $sku_fields_manager,
                               I18nHelper $i18n_helper,
                               ProductOptionsManager $product_options_manager,
                               AlshayaApiWrapper $api_wrapper,
-                              SwatchesHelper $swatches) {
+                              SwatchesHelper $swatches,
+                              LoggerChannelInterface $logger) {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->i18nHelper = $i18n_helper;
     $this->productOptionsManager = $product_options_manager;
     $this->apiWrapper = $api_wrapper;
     $this->swatches = $swatches;
+    $this->logger = $logger;
   }
 
   /**
    * Synchronize all product options.
    */
   public function synchronizeProductOptions() {
+    $this->logger->debug('Sync for all product attribute options started.');
     $fields = $this->skuFieldsManager->getFieldAdditions();
 
     // We only want to sync attributes.
@@ -98,55 +111,78 @@ class ProductOptionsHelper {
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       $this->apiWrapper->updateStoreContext($langcode);
       foreach ($sync_options as $attribute_code) {
-        try {
-          // First get attribute info.
-          $attribute = $this->apiWrapper->getProductAttributeWithSwatches($attribute_code);
-          $attribute = json_decode($attribute, TRUE);
-        }
-        catch (\Exception $e) {
-          // For now we have many fields in sku_base_fields which are not
-          // available in all brands.
-          continue;
-        }
-
-        if (empty($attribute) || empty($attribute['options'])) {
-          continue;
-        }
-
-        $swatches = [];
-        foreach ($attribute['swatches'] as $swatch) {
-          $swatches[$swatch['option_id']] = $swatch;
-        };
-
-        $weight = 0;
-        foreach ($attribute['options'] as $option) {
-          if (empty($option['value'])) {
-            continue;
-          }
-
-          $term = $this->productOptionsManager->createProductOption(
-            $langcode,
-            $option['value'],
-            $option['label'],
-            $attribute['attribute_id'],
-            $attribute['attribute_code'],
-            $weight++
-          );
-
-          if (empty($term)) {
-            continue;
-          }
-
-          // Check if we have value for swatch and it is changed, we trigger
-          // save only if value changed.
-          if (isset($swatches[$option['value']])) {
-            $this->swatches->updateAttributeOptionSwatch($term, $swatches[$option['value']]);
-          }
-        }
+        $this->syncProductOption($attribute_code, $langcode);
       }
     }
 
     $this->apiWrapper->resetStoreContext();
+    $this->logger->debug('Sync for all product attribute options finished.');
+  }
+
+  /**
+   * Sync specific attribute's options for particular language.
+   *
+   * @param string $attribute_code
+   *   Attribute code.
+   * @param string $langcode
+   *   Language code.
+   */
+  public function syncProductOption($attribute_code, $langcode) {
+    $this->logger->debug('Sync for product attribute options started of attribute @attribute_code in language @langcode.', [
+      '@attribute_code' => $attribute_code,
+      '@langcode' => $langcode,
+    ]);
+
+    try {
+      // First get attribute info.
+      $attribute = $this->apiWrapper->getProductAttributeWithSwatches($attribute_code);
+      $attribute = json_decode($attribute, TRUE);
+    }
+    catch (\Exception $e) {
+      // For now we have many fields in sku_base_fields which are not
+      // available in all brands.
+      return;
+    }
+
+    if (empty($attribute) || empty($attribute['options'])) {
+      return;
+    }
+
+    $swatches = [];
+    foreach ($attribute['swatches'] as $swatch) {
+      $swatches[$swatch['option_id']] = $swatch;
+    };
+
+    $weight = 0;
+    foreach ($attribute['options'] as $option) {
+      if (empty($option['value'])) {
+        continue;
+      }
+
+      $term = $this->productOptionsManager->createProductOption(
+        $langcode,
+        $option['value'],
+        $option['label'],
+        $attribute['attribute_id'],
+        $attribute['attribute_code'],
+        $weight++
+      );
+
+      if (empty($term)) {
+        continue;
+      }
+
+      // Check if we have value for swatch and it is changed, we trigger
+      // save only if value changed.
+      if (isset($swatches[$option['value']])) {
+        $this->swatches->updateAttributeOptionSwatch($term, $swatches[$option['value']]);
+      }
+    }
+
+    $this->logger->debug('Sync for product attribute options finished of attribute @attribute_code in language @langcode.', [
+      '@attribute_code' => $attribute_code,
+      '@langcode' => $langcode,
+    ]);
   }
 
 }
