@@ -924,6 +924,11 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
             '#title' => $accordion_title ?: NULL,
             '#content' => alshaya_acm_product_category_child_terms($category_id),
             '#view_all' => $link,
+            '#cache' => [
+              'tags' => [
+                "node:taxonomy_term.accordion",
+              ],
+            ],
           ];
         }
         else {
