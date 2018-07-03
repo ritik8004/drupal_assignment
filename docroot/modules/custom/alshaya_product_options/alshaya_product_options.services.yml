@@ -7,6 +7,7 @@ services:
       - '@acq_sku.product_options_manager'
       - '@alshaya_api.api'
       - '@alshaya_product_options.swatches'
+      - '@logger.channel.alshaya_product_options'
 
   alshaya_product_options.swatches:
     class: Drupal\alshaya_product_options\SwatchesHelper
@@ -16,6 +17,7 @@ services:
       - '@acq_sku.product_options_manager'
       - '@cache.product_options'
       - '@language_manager'
+      - '@acq_sku.fields_manager'
 
   logger.channel.alshaya_product_options:
     parent: logger.channel_base
@@ -27,3 +29,15 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [product_options]
+
+  alshaya_product_options.facets_summary_manager:
+    class: Drupal\alshaya_product_options\AlshayaProductOptionsFacetsSummaryManager
+    decorates: facets_summary.manager
+    decoration_priority: 9
+    public: false
+    arguments:
+      - '@alshaya_product_options.facets_summary_manager.inner'
+      - '@alshaya_product_options.swatches'
+      - '@plugin.manager.facets.facet_source'
+      - '@plugin.manager.facets_summary.processor'
+      - '@facets.manager'
