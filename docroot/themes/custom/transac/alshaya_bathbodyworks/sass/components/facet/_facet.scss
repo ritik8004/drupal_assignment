@@ -38,7 +38,7 @@
 
 .js-facets-checkbox-links {
   .facet-item {
-    height: 2.5rem;
+    min-height: 2.5rem;
     padding: 0.625rem 0;
     margin-bottom: 0;
 
@@ -54,8 +54,74 @@
   }
 }
 
+@include breakpoint($desktop) {
+  .block-facet-blockcategory .c-accordion__title,
+  .block-facet-blockplp-category-facet .c-accordion__title {
+    border-bottom: none;
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .filter--mobile .block-facet-blockcategory {
+    .c-facet__title {
+      border-top: none;
+    }
+  }
+
+  .c-breadcrumb.show-overlay {
+    &::before {
+      top: -0.1875rem;
+    }
+  }
+}
+
 ul[data-drupal-facet-id=category],
 ul[data-drupal-facet-id=plp_category_facet] {
+  &.js-facets-checkbox-links {
+    padding: 0;
+  }
+
+  .facet-item {
+    margin-bottom: 0;
+
+    &.facet-item--expanded {
+      & > label {
+        padding-bottom: 0.625rem;
+        padding-#{$left}: 0.625rem;
+
+        &::before {
+          top: 0.5rem !important;
+        }
+      }
+
+      ul li {
+        > label {
+          &::before {
+            margin-#{$right}: 0.625rem;
+            margin-top: -0.3125rem;
+          }
+        }
+
+        &:not(:last-child) {
+          margin-bottom: 0;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0;
+        }
+      }
+    }
+
+    label {
+      min-height: initial;
+      margin: 0;
+
+      .facet-item__value {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+
   .facet-item--expanded {
     > ul {
       padding-top: 0.625rem;
@@ -83,5 +149,15 @@ ul[data-drupal-facet-id=plp_category_facet] {
         margin-top: 0;
       }
     }
+  }
+}
+
+.c-facet__blocks {
+  .facets-soft-limit-link {
+    float: $left;
+  }
+
+  .c-accordion {
+    clear: both;
   }
 }
