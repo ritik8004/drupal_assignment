@@ -442,6 +442,7 @@
       .total--amount,
       .price-type__wrapper {
         width: 48%;
+        float: $right;
 
         @include breakpoint($upto-desktop) {
           width: 50%;
