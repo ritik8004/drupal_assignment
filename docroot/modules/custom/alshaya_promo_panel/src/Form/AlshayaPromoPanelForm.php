@@ -38,6 +38,13 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
   protected $configFactory;
 
   /**
+   * The entity config prefix.
+   *
+   * @var string
+   */
+  protected $configPrefix;
+
+  /**
    * Constructs a AlshayaPromoPanelForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -51,6 +58,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     parent::__construct($config_factory);
     $this->configFactory = $config_factory;
     $this->blockStorage = $entity_type_manager->getStorage('block');
+    $this->configPrefix = $entity_type_manager->getDefinition('block')->getConfigPrefix();
     $this->pathValidator = $path_validator;
   }
 
@@ -166,7 +174,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     $tags = [];
     $promo_panel_blocks = [];
     foreach ($block_values as $machine_name => $link) {
-      $tags[] = "config:block.block.$machine_name";
+      $tags[] = "config:{$this->configPrefix}.$machine_name";
       $block_load = $this->blockStorage->loadByProperties(['id' => $machine_name]);
       if ($block = reset($block_load)) {
         $promo_panel_blocks[$machine_name] = [
