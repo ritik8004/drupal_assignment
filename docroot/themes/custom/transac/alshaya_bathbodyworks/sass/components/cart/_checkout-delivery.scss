@@ -25,7 +25,7 @@
         }
       }
 
-      @include breakpoint($mobile) {
+      @include breakpoint($tablet) {
         &.active--tab--head {
           h2 {
             font-family: $alshaya-bold;
@@ -197,7 +197,7 @@
     .tab-home-delivery {
       &.active--tab--head {
         h2 {
-          color: $checkout_tab_active_title !important;
+          color: $checkout_tab_default_title !important;
         }
       }
     }
@@ -242,13 +242,20 @@
 
 #selected-address-wrapper {
   .address--controls {
+    padding: 0;
+
     #change-address {
       font-size: 0.875rem;
       font-weight: normal;
       padding: 0.875rem;
+      display: inline-block;
       color: $address_book_change_link;
       text-transform: uppercase;
       border-#{$right}: 1px solid $address_book_border;
+
+      html[lang=en] & {
+        padding-top: 1.125rem;
+      }
     }
   }
 }
