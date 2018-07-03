@@ -1,0 +1,36 @@
+.acq-cart-summary {
+  .price-type__wrapper {
+    .simple-tooltip-wrap {
+      #{$right}: 7.7rem;
+      top: -0.1875rem;
+
+      @include breakpoint($only-mobile) {
+        #{$right}: 12.2rem;
+        top: 1px;
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$right}: 7.2rem;
+        top: 1px;
+      }
+
+      .tooltip {
+        #{$left}: -4.7rem !important;
+        top: 1.8125rem !important;
+
+        @include breakpoint($upto-desktop) {
+          #{$left}: -5.4rem !important;
+          top: 1.5rem !important;
+        }
+
+        &::before {
+          #{$right}: 4.1875rem !important;
+        }
+
+        &::after {
+          #{$right}: 4.25rem !important;
+        }
+      }
+    }
+  }
+}
