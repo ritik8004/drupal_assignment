@@ -441,8 +441,6 @@ function alshaya_super_category_block_access(Block $block, $operation, AccountIn
       $category_id = array_column($category, 'target_id')[0];
     }
 
-    if (!empty($category_id) && !empty($terms)) {
-      return AccessResult::forbiddenIf(!empty($category_id) && in_array($category_id, array_keys($terms)));
-    }
+    return AccessResult::forbiddenIf(!empty($category_id) && in_array($category_id, array_keys($terms)));
   }
 }
