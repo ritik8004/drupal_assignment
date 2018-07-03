@@ -18,7 +18,6 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -32,18 +31,6 @@ function alshaya_acm_drush_command_alter(&$command) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
-  // Route match.
-  $route_match = \Drupal::routeMatch();
-
-  // Change the title of the cart page.
-  if ($route_match->getRouteName() == 'acq_cart.cart') {
-    $request = \Drupal::request();
-
-    if ($route = $request->attributes->get(RouteObjectInterface::ROUTE_OBJECT)) {
-      $route->setDefault('_title', 'Basket');
-    }
-  }
-
   // Including the utility file.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
