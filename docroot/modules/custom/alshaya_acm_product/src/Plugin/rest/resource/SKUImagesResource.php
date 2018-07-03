@@ -6,6 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_api\AlshayaI18nHelper;
+use Drupal\node\NodeInterface;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -120,10 +121,17 @@ class SKUImagesResource extends ResourceBase {
         /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
         $plugin = $sku_entity->getPluginInstance();
         $node = $plugin->getDisplayNode($sku_entity);
-        $response[$sku]['product_url'] = $node->toUrl()->setAbsolute()->toString();
 
-        $gallery = $this->skuImagesManager->getAllMedia($sku_entity, TRUE);
-        $response[$sku]['images'] = array_values(array_merge($gallery['images'], $gallery['videos']));
+        // We may have some child SKUs which don't have a parent SKU / Node
+        // in Drupal as they might be disabled.
+        if ($node instanceof NodeInterface) {
+          $response[$sku]['product_url'] = $node->toUrl()->setAbsolute()->toString();
+
+          $gallery = $this->skuImagesManager->getAllMedia($sku_entity, TRUE);
+          $response[$sku]['images'] = array_values(
+            array_merge($gallery['images'], $gallery['videos'])
+          );
+        }
       }
     }
 
