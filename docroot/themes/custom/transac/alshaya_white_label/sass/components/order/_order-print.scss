@@ -224,6 +224,19 @@ body.path--confirmation.alias--confirmation-print {
     }
   }
 
+  .price {
+    display: inline-block;
+    min-width: 6rem;
+
+    @include breakpoint($tablet) {
+      min-width: 4.625rem;
+    }
+
+    @include breakpoint($desktop) {
+      min-width: 5.4375rem;
+    }
+  }
+
   .price-currency {
     margin-#{$right}: 1.5625rem;
 
@@ -232,17 +245,8 @@ body.path--confirmation.alias--confirmation-print {
     }
   }
 
-  .sub-total-row,
-  .delivery-charge-row {
-    .price-currency {
-      @include breakpoint($tablet) {
-        margin-#{$right}: 0.75rem;
-      }
-
-      @include breakpoint($desktop) {
-        margin-#{$right}: 1.125rem;
-      }
-    }
+  .price-amount {
+    float: $right;
   }
 }
 
