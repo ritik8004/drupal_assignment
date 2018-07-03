@@ -755,7 +755,7 @@ header {
 
         &::after {
           content: '';
-          background: url('../imgs/icons/icon-chevron-next.svg');
+          background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-next.svg');
           width: 8px;
           height: 17px;
           position: absolute;

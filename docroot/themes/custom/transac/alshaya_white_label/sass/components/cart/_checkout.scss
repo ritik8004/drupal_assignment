@@ -197,7 +197,7 @@
     }
 
     .ui-accordion-header-icon {
-      background: url('../imgs/icons/icon-chevron-next.svg') no-repeat;
+      background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-next.svg') no-repeat;
       #{$left}: 92%;
       transform: rotate(90deg);
     }
