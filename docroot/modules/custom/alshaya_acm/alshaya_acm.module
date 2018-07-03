@@ -751,8 +751,17 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
  *   Item name build array.
  */
 function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $cart_item, $is_free_item = FALSE, $cart_rules = []) {
-  // Get SKU attributes.
-  $sku_attributes = alshaya_acm_product_get_sku_configurable_values($sku_entity);
+  // If sku entity attributes exists in cache.
+  if ($sku_attributes_cache = \Drupal::cache()->get('sku_attribute_' . $sku_entity->id())) {
+    $sku_attributes = $sku_attributes_cache->data;
+  }
+  else {
+    // Get SKU attributes.
+    $sku_attributes = alshaya_acm_product_get_sku_configurable_values($sku_entity);
+
+    // Set the cache.
+    \Drupal::cache()->set('sku_attribute_' . $sku_entity->id(), $sku_attributes, ['acq_sku:' . $sku_entity->id()]);
+  }
 
   $name = [];
 
@@ -819,7 +828,13 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   }
 
   // Load the first image.
-  $sku_image = alshaya_acm_get_product_display_image($sku_entity, '137x144');
+  if ($sku_image_cache = \Drupal::cache()->get('sku_display_image:' . $sku_entity->getSku())) {
+    $sku_image = $sku_image_cache->data;
+  }
+  else {
+    $sku_image = alshaya_acm_get_product_display_image($sku_entity, '137x144');
+    \Drupal::cache()->set('sku_display_image:' . $sku_entity->getSku(), $sku_image, ['acq_sku:' . $sku_entity->id()]);
+  }
 
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item['price']);
