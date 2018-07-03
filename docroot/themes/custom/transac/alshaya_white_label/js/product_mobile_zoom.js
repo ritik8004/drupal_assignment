@@ -139,7 +139,8 @@ function hammerIt(elm) {
             centerMode: false,
             infinite: false,
             focusOnSelect: true,
-            initialSlide: currentmobSlide
+            initialSlide: currentmobSlide,
+            touchThreshold: 1000,
           };
 
           var gallery = $('#product-image-gallery-mob');
