@@ -153,7 +153,7 @@ function alshaya_acm_customer_get_communication_preference_api_value(array $valu
 
   // We send array of values to API.
   if ($value) {
-    $values = $value;
+    $values = array_values($value);
   }
   // If value is empty and default is required.
   elseif ($default) {

@@ -170,7 +170,15 @@
 
   .region__content {
     .filter--mobile {
+      @include breakpoint($only-mobile) {
+        z-index: auto;
+      }
+
       .c-facet__blocks__wrapper--mobile {
+        @include breakpoint($only-mobile) {
+          z-index: 7;
+        }
+
         .c-facet__blocks {
           li {
             &.clear-all {
@@ -227,6 +235,7 @@
         select {
           height: 2.1875rem;
           padding: 0.625rem 0.5rem;
+          position: static;
         }
 
         &::after {
@@ -236,6 +245,7 @@
           align-items: center;
           line-height: 2.1875rem;
           font-size: 2rem;
+          z-index: auto;
         }
       }
     }

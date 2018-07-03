@@ -1,3 +1,5 @@
 fields:
   product_brand:
     source: 'brand'
+  color:
+    facet: 0

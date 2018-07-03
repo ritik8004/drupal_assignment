@@ -42,6 +42,12 @@
       font-size: 0.75rem;
     }
   }
+
+  .mobile--menu {
+    @include breakpoint($only-mobile) {
+      top: 1.25rem;
+    }
+  }
 }
 
 .mobile--close {

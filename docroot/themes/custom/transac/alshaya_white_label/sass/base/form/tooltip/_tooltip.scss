@@ -21,3 +21,39 @@
   border-width: 6px;
   margin-#{$left}: -6px;
 }
+
+.price-type__wrapper {
+  position: relative;
+
+  .simple-tooltip-wrap {
+    display: inline;
+    position: absolute;
+    #{$right}: -1.5rem;
+    top: 0;
+
+    .user__order--detail & {
+      #{$right}: -0.875rem;
+      top: -1px;
+    }
+
+    .tooltip {
+      #{$left}: unset;
+      #{$right}: -0.375rem;
+      top: 1.5rem;
+
+      .user__order--detail & {
+        #{$right}: -0.375rem;
+        top: 1.5rem;
+        #{$left}: unset;
+      }
+
+      &::before {
+        #{$right}: 0.4375rem;
+      }
+
+      &::after {
+        #{$right}: 0.5rem;
+      }
+    }
+  }
+}

@@ -112,8 +112,9 @@ function alshaya_hm_gtm_pdp_attributes_alter($sku, &$attributes) {
  *   Return the array of images or empty array.
  */
 function alshaya_hm_get_product_images(NodeInterface $product) {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
-    $skuId = $product->get('field_skus')->first()->getString();
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images') &&
+    !empty($product_field_sku = $product->get('field_skus')->first())) {
+    $skuId = $product_field_sku->getString();
     return alshaya_hm_get_sku_images($skuId);
   }
   return [];

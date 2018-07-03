@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_commerce\Conductor;
 
+use Drupal\acq_commerce\Connector\ConnectorException;
 use GuzzleHttp\TransferStats;
 use GuzzleHttp\Exception\RequestException;
 
@@ -48,11 +49,11 @@ trait IngestRequestTrait {
    * @param string $reskey
    *   Result data key (or NULL)
    *
-   * @throws ConductorException
+   * @throws ConnectorException
    */
-  protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL) {
+  protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL, $acm_uuid = '') {
 
-    $client = $this->clientFactory->createClient();
+    $client = $this->clientFactory->createClient($acm_uuid);
     $reqOpts = [];
 
     $logger = ($this->logger) ?: \Drupal::logger('acq_commerce');
@@ -91,7 +92,7 @@ trait IngestRequestTrait {
       );
 
       $logger->error($mesg);
-      throw new ConductorException($mesg, $e->getCode(), $e);
+      throw new ConnectorException($mesg, $e->getCode(), $e);
     }
   }
 

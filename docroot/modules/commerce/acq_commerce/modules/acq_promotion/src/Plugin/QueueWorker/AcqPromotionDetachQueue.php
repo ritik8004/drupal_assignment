@@ -2,7 +2,6 @@
 
 namespace Drupal\acq_promotion\Plugin\QueueWorker;
 
-use Drupal\acq_commerce\Conductor\ConductorException;
 use Drupal\acq_promotion\AcqPromotionQueueBase;
 use Drupal\acq_sku\Entity\SKU;
 

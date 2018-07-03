@@ -6,9 +6,6 @@
  */
 
 use Drupal\Core\Config\FileStorage;
-use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Helper function to update / install configs.
@@ -21,70 +18,9 @@ use Symfony\Component\Yaml\Yaml;
  *   Path where configs reside. Defaults to install.
  */
 function alshaya_config_install_configs(array $configs, $module_name, $path = 'install') {
-  if (empty($configs)) {
-    return;
-  }
-
-  foreach ($configs as $config) {
-    $config_yaml = Yaml::parse(file_get_contents(drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config . '.yml'));
-
-    // Field config.
-    if (strpos($config, 'field.field.') === 0) {
-      if ($field_obj = FieldConfig::loadByName($config_yaml['entity_type'], $config_yaml['bundle'], $config_yaml['field_name'])) {
-        // Update config using config factory.
-        \Drupal::configFactory()
-          ->getEditable($config)
-          ->setData($config_yaml)
-          ->save();
-
-        // Load field config again and save again.
-        $field_obj = FieldConfig::loadByName($config_yaml['entity_type'], $config_yaml['bundle'], $config_yaml['field_name']);
-        $field_obj->save();
-      }
-      // Create field config.
-      else {
-        FieldConfig::create($config_yaml)->save();
-      }
-
-      continue;
-    }
-    // If field storage.
-    elseif (strpos($config, 'field.storage.') === 0) {
-      if ($field_obj = FieldStorageConfig::loadByName($config_yaml['entity_type'], $config_yaml['field_name'])) {
-        \Drupal::configFactory()->getEditable($config)->setData($config_yaml)->save();
-        // Load field config again and save again.
-        $field_obj = FieldStorageConfig::loadByName($config_yaml['entity_type'], $config_yaml['field_name']);
-        $field_obj->save();
-      }
-      else {
-        $resave_config = FALSE;
-
-        // Some issue with array conversion in allowed values, we handle
-        // exception with workaround for now.
-        if (isset($config_yaml['settings'], $config_yaml['settings']['allowed_values'])) {
-          $resave_config = TRUE;
-          $config_yaml['settings']['allowed_values'] = [];
-        }
-
-        // Create field storage config.
-        FieldStorageConfig::create($config_yaml)->save();
-
-        if ($resave_config) {
-          // We save it again and now it will go to update config where we
-          // do not face issue with allowed values.
-          alshaya_config_install_configs([$config], $module_name, $path);
-        }
-      }
-
-      continue;
-    }
-
-    // Update config using config factory.
-    \Drupal::configFactory()
-      ->getEditable($config)
-      ->setData($config_yaml)
-      ->save(TRUE);
-  }
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs($configs, $module_name, $path);
 }
 
 /**

@@ -21,6 +21,8 @@
       $('#payment_details_wrapper').once('bind-events').each(function () {
         $('.payment-plugin-wrapper-div', $(this)).on('click', function () {
           var selected_option = $(this).data('value');
+          // Remove additional payment fields.
+          $('#payment_details').remove();
           $('[data-drupal-selector="edit-acm-payment-methods-payment-options"]').find('input[value="' + selected_option + '"]').trigger('click');
         });
       });

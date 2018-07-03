@@ -119,6 +119,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
       foreach ($media_data as &$data) {
         if (isset($data['media_type']) && $data['media_type'] == 'image') {
+          // We don't want to show disabled images.
+          if (isset($data['disabled']) && $data['disabled']) {
+            continue;
+          }
+
           if (empty($data['fid']) && $download_media) {
             try {
               // Prepare the File object when we access it the first time.
