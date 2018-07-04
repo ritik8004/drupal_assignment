@@ -1,0 +1,9 @@
+.c-department {
+  .c-category-list {
+    &__item {
+      a:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}

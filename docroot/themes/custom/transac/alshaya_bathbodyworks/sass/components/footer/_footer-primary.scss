@@ -66,6 +66,10 @@
 
   a {
     text-transform: capitalize;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 
   .cols-6 & {
