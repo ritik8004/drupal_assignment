@@ -20,13 +20,24 @@ class SkuImagesManager {
   protected $moduleHandler;
 
   /**
+   * SKU Manager service object.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager service object.
    */
-  public function __construct(ModuleHandlerInterface $module_handler) {
+  public function __construct(ModuleHandlerInterface $module_handler,
+                              SkuManager $sku_manager) {
     $this->moduleHandler = $module_handler;
+    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -59,13 +70,23 @@ class SkuImagesManager {
 
     // Avoid notices and warnings in local.
     if ($check_parent && empty($media) && empty($main)) {
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-      $plugin = $sku->getPluginInstance();
-      $parent = $plugin->getParentSku($sku);
+      if ($sku->bundle() == 'simple') {
+        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+        $plugin = $sku->getPluginInstance();
+        $parent = $plugin->getParentSku($sku);
 
-      // Check once if there is parent SKU available, use media files of parent.
-      if ($parent instanceof SKUInterface) {
-        return $this->getAllMedia($parent);
+        // Check if there is parent SKU available, use media files of parent.
+        if ($parent instanceof SKUInterface) {
+          return $this->getAllMedia($parent);
+        }
+      }
+      elseif ($sku->bundle() == 'configurable') {
+        $child = $this->skuManager->getChildSkus($sku, TRUE);
+
+        // Check if there is child SKU available, use media files of child.
+        if ($child instanceof SKUInterface) {
+          return $this->getAllMedia($child);
+        }
       }
     }
 

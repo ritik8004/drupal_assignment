@@ -9,7 +9,6 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\file\FileInterface;
@@ -191,6 +190,15 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
       if (!$main_image) {
         return alshaya_acm_product_get_gallery($build, $parent_sku);
+      }
+    }
+    elseif ($sku_entity->bundle() == 'configurable') {
+      // Try to get images from first child.
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $first_child = $skuManager->getChildSkus($sku_entity, TRUE);
+      if ($first_child instanceof SKU) {
+        $media = alshaya_acm_product_get_sku_media($first_child);
       }
     }
   }
@@ -635,81 +643,6 @@ function alshaya_acm_product_get_brand_logo($sku) {
   }
 
   return $image;
-}
-
-/**
- * Helper function to update config attributes depending on the selection made.
- *
- * @param array $form_parts
- *   Configurable parts of the form.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   Form state Object.
- *   contain the SKUs depending on the tree path traversed.
- * @param array $configurables
- *   List of values selected keyed by the config attribute.
- * @param bool $deselect_leaf_options
- *   Clear the leaf attribute selected while selecting the parent config.
- */
-function alshaya_acm_product_update_config_options(array &$form_parts, FormStateInterface &$form_state, array $configurables, $deselect_leaf_options = TRUE) {
-  $enabled_options = [];
-  $product_tree = $form_state->get('tree');
-  $leaf_attribute = end($product_tree['configurables'])['code'];
-
-  // To de-select all leaf options on parent change & not re-calculate
-  // availability of parent attributes in the opposite direction.
-  if ($deselect_leaf_options && !empty($configurables[$leaf_attribute])) {
-    foreach ($form_parts['configurables'][$leaf_attribute]['#options'] as $key => $value) {
-      // Deselect the leaf option once clicked on a non-leaf term.
-      if (($key == $configurables[$leaf_attribute]) &&
-        ($form_state->getTriggeringElement()['#name'] == 'configurables[' . $leaf_attribute . ']')) {
-        continue;
-      }
-      elseif ($form_state->getTriggeringElement()['#name'] != 'configurables[' . $leaf_attribute . ']') {
-        $form_parts['configurables'][$leaf_attribute]['#value'] = '';
-      }
-    }
-    unset($configurables[$leaf_attribute]);
-
-    $form_state->setValue('configurables', $configurables);
-    $user_input = $form_state->getUserInput();
-    $user_input['configurables'] = $configurables;
-    $form_state->setUserInput($user_input);
-  }
-
-  $tree_pointer_parent = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
-
-  // Items are keyed by their attribute codes.
-  foreach ($tree_pointer_parent as $key => $value) {
-    $attribute = explode(':', $key);
-    $attribute_code = $attribute[0];
-    $enabled_options[$attribute_code][] = $attribute[1];
-  }
-
-  // Loop over all configurable attributes & disable all options that are not
-  // in the list of enabled options.
-  foreach ($form_parts['configurables'] as $key => $configurable) {
-    if ($key === '#tree') {
-      continue;
-    }
-
-    // Disable options which don't exist for the choosen config.
-    foreach ($configurable['#options'] as $option_key => $value) {
-      if (isset($enabled_options[$key]) && $option_key && !in_array($option_key, $enabled_options[$key])) {
-        unset($form_parts['configurables'][$key]['#options'][$option_key]);
-      }
-    }
-  }
-
-  // If leaf attribute only contains 1 option, mark this option as selected.
-  if (count($form_parts['configurables'][$attribute_code]['#options']) == 1) {
-    $configurables[$attribute_code] = key($form_parts['configurables'][$attribute_code]['#options']);
-    $form_state->setValue('configurables', $configurables);
-    $user_input = $form_state->getUserInput();
-    $user_input['configurables'] = $configurables;
-    $form_state->setUserInput($user_input);
-    // Setting value for the element.
-    $form_parts['configurables'][$attribute_code]['#value'] = key($form_parts['configurables'][$attribute_code]['#options']);
-  }
 }
 
 /**

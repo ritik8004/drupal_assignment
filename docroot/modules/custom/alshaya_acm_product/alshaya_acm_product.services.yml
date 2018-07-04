@@ -25,11 +25,12 @@ services:
       - '@acq_sku.linked_sku'
       - '@cache.alshaya'
       - '@cache.product_labels'
-      - '@cache.configurable_price'
+      - '@cache.configurable_product'
   alshaya_acm_product.sku_images_manager:
     class: Drupal\alshaya_acm_product\SkuImagesManager
     arguments:
       - '@module_handler'
+      - '@alshaya_acm_product.skumanager'
   cache.alshaya:
     class: Drupal\Core\Cache\CacheInterface
     tags:
@@ -42,9 +43,9 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [product_labels]
-  cache.configurable_price:
+  cache.configurable_product:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
-    arguments: [configurable_price]
+    arguments: [configurable_product]
