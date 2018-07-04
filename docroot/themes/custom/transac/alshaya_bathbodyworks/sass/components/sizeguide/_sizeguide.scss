@@ -5,10 +5,6 @@
     padding: calc((100vh - 36rem) / 2) calc((100vw - 45rem) / 2);
   }
 
-  @include breakpoint($desktop) {
-    padding: calc((100vh - 34.75rem) / 2) calc((100vw - 45.5rem) / 2);
-  }
-
   #drupal-modal,
   div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
     @include breakpoint($tablet) {
