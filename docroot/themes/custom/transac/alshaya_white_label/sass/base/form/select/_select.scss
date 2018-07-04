@@ -7,6 +7,12 @@ select:focus::-ms-value {
   color: $primary_dropdown_focus;
 }
 
+form select.error {
+  @include breakpoint($upto-desktop) {
+    color: inherit;
+  }
+}
+
 @mixin select-style($select-width) {
   appearance: none;
   border: 1px solid $primary_dropdown_border;
