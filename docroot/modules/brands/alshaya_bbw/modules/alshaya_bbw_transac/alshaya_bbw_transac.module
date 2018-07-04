@@ -61,7 +61,8 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
           $fragrance_desc['value'] = [
             '#markup' => $fragrance_description,
           ];
-          // $build['short_desc'] contains the short description.
+          // $build['short_desc'] contains the description that should be
+          // displayed before 'Read More'.
           $build['short_desc'] = $fragrance_desc;
           $build['description'][] = $fragrance_desc;
         }
