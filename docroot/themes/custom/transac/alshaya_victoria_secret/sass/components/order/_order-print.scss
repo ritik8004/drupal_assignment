@@ -30,6 +30,10 @@
 }
 
 .c-order-print {
+  .site--brand {
+    text-align: center;
+  }
+
   .delivery-details,
   .dark--text {
     font-family: $vs-bold;

@@ -55,6 +55,9 @@ function alshaya_vs_transac_install() {
     'Store Includes' => [
       'ar' => 'المحل يشمل',
     ],
+    'I would like to receive exclusive deals from Victoria\'s Secret' => [
+      'ar' => 'أرغب في استلام عروض حصرية من فيكتوريا سيكريت',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 

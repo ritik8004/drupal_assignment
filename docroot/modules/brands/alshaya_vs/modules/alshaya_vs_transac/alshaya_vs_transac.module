@@ -7,6 +7,8 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
@@ -54,7 +56,7 @@ function alshaya_vs_transac_acq_sku_base_field_additions_alter(array &$fields = 
  */
 function alshaya_vs_transac_node_load($nodes) {
   /** @var \Drupal\node\NodeInterface $node */
-  foreach ($nodes as $nid => $node) {
+  foreach ($nodes as $node) {
     if ($node->bundle() === 'acq_product') {
       $sku = SKU::loadFromSku($node->get('field_skus')->first()->getString());
       // This is done for all Meta title, Page title.
@@ -106,4 +108,43 @@ function _alshaya_vs_transac_get_title(SKUInterface $sku, $context = 'pdp') {
   }
 
   return $title;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product') {
+    $sku = $entity->get('field_skus')->first()->getString();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if ($sku_entity instanceof SKU && $view_mode == 'full') {
+      $description_value = '';
+      $short_desc = [];
+
+      if ($body = $entity->get('body')->getValue()) {
+        $description_value = $body[0]['value'];
+        $short_desc['label'] = [
+          '#markup' => t('Short Description'),
+        ];
+        $start = strpos($description_value, '<p>');
+        $end = strpos($description_value, '</p>', $start);
+        $short_desc_html = substr($description_value, $start, $end - $start + 4);
+        $short_desc['value'] = [
+          '#markup' => $short_desc_html,
+        ];
+      }
+
+      $description['value'] = [
+        '#markup' => $description_value,
+      ];
+
+      // Add all variables to $build in the sequence in
+      // which they should be displayed.
+      // $build['short_desc'] contains the description that should be
+      // displayed before 'Read More'.
+      $build['short_desc'] = $short_desc;
+      $build['description'][] = $description;
+    }
+  }
 }
