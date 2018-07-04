@@ -80,13 +80,26 @@
     .price-currency {
       margin-#{$right}: 1.5625rem;
 
-      @include breakpoint($only-tablet) {
+      @include breakpoint($tablet) {
         margin-#{$right}: 0.5625rem;
       }
     }
 
+    .price {
+      display: inline-block;
+      min-width: 6rem;
+
+      @include breakpoint($tablet) {
+        min-width: 4.625rem;
+      }
+
+      @include breakpoint($desktop) {
+        min-width: 5.4375rem;
+      }
+    }
+
     .price-amount {
-      float: none;
+      float: $right;
     }
 
     .discount-row {
@@ -240,7 +253,7 @@
       margin-top: 0;
       display: table-cell;
       width: 50%;
-      text-align: right;
+      text-align: $right;
     }
   }
 
