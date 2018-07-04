@@ -10,19 +10,6 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Add new field for GTM currency.
- */
-function acq_commerce_update_8002() {
-  $configs = [
-    'acq_commerce.currency',
-  ];
-
-  alshaya_config_install_configs($configs, 'acq_commerce');
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add new role for sync user.
  */
 function acq_commerce_update_8001() {

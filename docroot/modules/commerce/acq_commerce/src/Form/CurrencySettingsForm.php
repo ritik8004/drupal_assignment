@@ -33,7 +33,6 @@ class CurrencySettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('acq_commerce.currency')
       ->set('currency_code', $form_state->getValue('currency_code'))
-      ->set('gtm_currency_code', $form_state->getValue('gtm_currency_code'))
       ->set('currency_code_position', $form_state->getValue('currency_code_position'))
       ->set('decimal_points', $form_state->getValue('decimal_points'))
       ->save();
@@ -52,14 +51,6 @@ class CurrencySettingsForm extends ConfigFormBase {
       '#title' => $this->t('ISO currency code'),
       '#required' => TRUE,
       '#default_value' => $config->get('currency_code'),
-    ];
-
-    $form['gtm_currency_code'] = [
-      '#type' => 'textfield',
-      '#description' => $this->t('Currency code to be sent to GTM. If this is not set, ISO Currency Code will be used for GTM.'),
-      '#title' => $this->t('GTM Currency Code'),
-      '#required' => FALSE,
-      '#default_value' => $config->get('gtm_currency_code'),
     ];
 
     $options = [

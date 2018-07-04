@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new field for GTM currency.
+ */
+function alshaya_seo_transac_update_8001() {
+  $configs = [
+    'acq_commerce.currency',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_seo_transac', 'override');
+}
