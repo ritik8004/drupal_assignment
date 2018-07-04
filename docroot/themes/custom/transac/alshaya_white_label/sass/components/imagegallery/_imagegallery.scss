@@ -114,6 +114,17 @@
         height: 100%;
       }
     }
+
+    &.thumbnail-count-1 {
+      ul.imagegallery__thumbnails {
+        display: none;
+      }
+
+      .imagegallery__full,
+      .cloudzoom__video_modal {
+        width: 100% !important;
+      }
+    }
   }
 
   .button__wrapper {
