@@ -136,7 +136,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
     > input[type=checkbox] {
       &:checked {
         ~ label {
-          font-weight: bold;
+          font-family: $alshaya-bold;
 
           &::before {
             content: unset;
@@ -156,7 +156,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
         > input[type=checkbox] {
           &:checked {
             ~ label {
-              font-weight: bold;
+              font-family: $alshaya-bold;
 
               &::before {
                 content: unset;
@@ -202,8 +202,8 @@ ul[data-drupal-facet-id=plp_category_facet] {
           }
 
           span {
-            font-weight: bold;
             color: $category_facet_active_text;
+            font-family: $alshaya-bold;
           }
         }
       }
@@ -213,14 +213,14 @@ ul[data-drupal-facet-id=plp_category_facet] {
   > .facet-item--expanded {
     > label {
       span {
-        font-weight: bold;
         color: $category_facet_active_text;
+        font-family: $alshaya-bold;
       }
     }
 
     > input[type=checkbox]:checked {
       ~ label {
-        font-weight: normal;
+        font-family: $alshaya-thin;
 
         @include icon(chevron#{$left}, before) {
           top: 0.875rem;
@@ -255,7 +255,7 @@ ul[data-drupal-facet-id=category] {
     &.facet-item--active-trail {
       > label {
         span {
-          font-weight: normal;
+          font-family: $alshaya-thin;
         }
       }
     }
@@ -372,7 +372,7 @@ ul[data-drupal-facet-id="category"] {
     &.active-item {
       > label {
         span {
-          font-weight: bold;
+          font-family: $alshaya-bold;
           color: $category_facet_active_text;
         }
       }
