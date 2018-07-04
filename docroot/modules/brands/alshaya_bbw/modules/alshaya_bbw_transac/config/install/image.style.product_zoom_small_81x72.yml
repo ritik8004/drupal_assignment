@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: product_zoom_small_81x72
+label: product.zoom.small.81x72
+effects:
+  bd6647d7-8057-4e83-a207-45b24bd670e6:
+    uuid: bd6647d7-8057-4e83-a207-45b24bd670e6
+    id: image_scale
+    weight: 2
+    data:
+      width: 100
+      height: null
+      upscale: false
