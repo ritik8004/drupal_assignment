@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_usp_timer
+    - paragraphs.paragraphs_type.delivery_usp_block
+id: paragraph.delivery_usp_block.field_usp_timer
+field_name: field_usp_timer
+entity_type: paragraph
+bundle: delivery_usp_block
+label: 'USP Timer'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 5
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

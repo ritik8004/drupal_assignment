@@ -117,7 +117,7 @@ class AlshayaConfigManager {
           if ($resave_config) {
             // We save it again and now it will go to update config where we
             // do not face issue with allowed values.
-            $this->updateConfigs([$config], $module_name, $path);
+            $this->updateConfigs([$config_id], $module_name, $path);
           }
         }
       }

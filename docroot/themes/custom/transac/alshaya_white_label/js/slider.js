@@ -35,13 +35,13 @@
       }
 
       if (isRTL()) {
-        $('.c-slider-promo__items').attr('dir', 'rtl');
-        $('.c-slider-promo__items').slick(
+        $('.paragraph-banner').attr('dir', 'rtl');
+        $('.paragraph-banner').slick(
            $.extend({}, options, {rtl: true})
         );
       }
       else {
-        $('.c-slider-promo__items').slick(options);
+        $('.paragraph-banner').slick(options);
       }
 
       var promoPanelOptions = {
