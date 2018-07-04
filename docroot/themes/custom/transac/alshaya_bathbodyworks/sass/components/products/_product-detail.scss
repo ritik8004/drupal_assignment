@@ -175,3 +175,28 @@
     }
   }
 }
+
+.field--name-field-skus {
+  .sku-base-form {
+    button[type="submit"] {
+      font-family: $alshaya-thin;
+      line-height: 1.8;
+      padding: 0.5rem 0;
+      margin-#{$left}: 1rem;
+      width: 73%;
+    }
+  }
+}
+
+article[gtm-sku-type="simple"] {
+  .acq-content-product {
+    .sku-base-form {
+      button[type="submit"] {
+        @include breakpoint($only-tablet) {
+          width: 69%;
+          margin-#{$left}: 0.5rem;
+        }
+      }
+    }
+  }
+}
