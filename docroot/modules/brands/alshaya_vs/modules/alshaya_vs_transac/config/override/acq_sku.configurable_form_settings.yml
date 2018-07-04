@@ -1,9 +1,9 @@
 attribute_weights:
-  color_description: 1
+  color: 1
   band_size: 2
   cup_size: 3
 show_quantity: TRUE
 sortable_options:
-  - color_description
+  - color
   - band_size
   - cup_size
