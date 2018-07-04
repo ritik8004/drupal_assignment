@@ -219,6 +219,12 @@
       }
     }
   }
+
+  .price-wrapper .price {
+    @include breakpoint($only-tablet) {
+      max-width: none !important;
+    }
+  }
 }
 
 #cart_notification {

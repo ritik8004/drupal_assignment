@@ -255,7 +255,19 @@
     }
   }
 
-  &:hover,
+  &:hover {
+    @include breakpoint($desktop) {
+      .address--data {
+        background: $address_form_default;
+      }
+
+      .address--primary {
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+    }
+  }
+
   &.default {
     .address--data {
       background: $address_form_default;
@@ -325,7 +337,22 @@
       }
     }
 
-    &:hover,
+    &:hover {
+      @include breakpoint($desktop) {
+        .address--data {
+          background: $white-four;
+        }
+
+        .address--deliver-to-this-address {
+          a {
+            color: $white-five;
+            border: 1px solid $checkout_default_address_border;
+            background-color: $checkout_default_address_bg;
+          }
+        }
+      }
+    }
+
     &.default {
       .address--data {
         background: $white-four;
