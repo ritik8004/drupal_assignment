@@ -3,6 +3,18 @@
 
   max-width: 100%;
 
+  &.thumbnail-count-1 {
+    @include breakpoint($tablet) {
+      .cloudzoom__thumbnails {
+        display: none;
+      }
+
+      .cloudzoom__herocontainer {
+        width: 100%;
+      }
+    }
+  }
+
   .cloudzoom__herocontainer {
     position: relative;
 
