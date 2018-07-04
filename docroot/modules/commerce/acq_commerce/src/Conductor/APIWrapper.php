@@ -731,6 +731,7 @@ class APIWrapper implements APIWrapperInterface {
     $endpoint = $this->apiVersion . "/agent/promotions/$type";
 
     $doReq = function ($client, $opt) use ($endpoint) {
+      $opt['query']['store_id'] = 1;
       return ($client->get($endpoint, $opt));
     };
 
