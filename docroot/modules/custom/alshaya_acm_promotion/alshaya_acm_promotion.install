@@ -12,7 +12,7 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
- * Updated facets config.
+ * Adding fields for coupon code & free gift skus.
  */
 function alshaya_acm_promotion_update_8013() {
   $field_storage_configs = [
