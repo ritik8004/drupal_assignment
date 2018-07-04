@@ -224,12 +224,29 @@ body.path--confirmation.alias--confirmation-print {
     }
   }
 
+  .price {
+    display: inline-block;
+    min-width: 6rem;
+
+    @include breakpoint($tablet) {
+      min-width: 4.625rem;
+    }
+
+    @include breakpoint($desktop) {
+      min-width: 5.4375rem;
+    }
+  }
+
   .price-currency {
     margin-#{$right}: 1.5625rem;
 
-    @include breakpoint($only-ptablet) {
+    @include breakpoint($ptablet) {
       margin-#{$right}: 0.5625rem;
     }
+  }
+
+  .price-amount {
+    float: $right;
   }
 }
 
@@ -341,9 +358,15 @@ html[lang="ar"] {
   }
 }
 
-.user__order--detail .total-row {
+.user__order--detail .vat-row {
   @include breakpoint($only-mobile) {
     position: relative;
+  }
+
+  .above-mobile:first-child {
+    @include breakpoint($only-tablet) {
+      display: none;
+    }
   }
 
   .warm--white {

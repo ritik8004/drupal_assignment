@@ -255,4 +255,14 @@
       #{$left}: 0;
     }
   }
+
+  .user__order--detail {
+    .price {
+      min-width: 6.5rem;
+
+      @include breakpoint($tablet) {
+        min-width: 5.5rem;
+      }
+    }
+  }
 }
