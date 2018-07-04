@@ -9,7 +9,7 @@ select:focus::-ms-value {
 
 form select.error {
   @include breakpoint($upto-desktop) {
-    color: inherit;
+    color: $address_area_select;
   }
 }
 
