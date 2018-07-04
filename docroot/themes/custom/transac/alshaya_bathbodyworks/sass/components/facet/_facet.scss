@@ -17,6 +17,7 @@
   label {
     .facet-item__value {
       margin-#{$left}: 0.625rem;
+      color: $plp_item_label;
     }
 
     .facet-item__count,
@@ -54,23 +55,19 @@
   }
 }
 
-@include breakpoint($desktop) {
-  .block-facet-blockcategory .c-accordion__title,
-  .block-facet-blockplp-category-facet .c-accordion__title {
-    border-bottom: none;
-  }
-}
-
-@include breakpoint($only-tablet) {
-  .filter--mobile .block-facet-blockcategory {
-    .c-facet__title {
-      border-top: none;
+.block-facet-blockcategory,
+.block-facet-blockplp-category-facet {
+  .c-accordion__title {
+    @include breakpoint($desktop) {
+      border-bottom: none;
     }
   }
 
-  .c-breadcrumb.show-overlay {
-    &::before {
-      top: -0.1875rem;
+  .c-facet__title {
+    .path--search .filter--mobile & {
+      @include breakpoint($only-tablet) {
+        border-top: none;
+      }
     }
   }
 }
@@ -137,6 +134,40 @@ ul[data-drupal-facet-id=plp_category_facet] {
     > label {
       @include icon(chevronleft, before) {
         #{$left}: -1.5rem;
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=plp_category_facet] {
+  .facet-item {
+    margin-bottom: 0;
+
+    &.leaf-li {
+      & > label {
+        .facet-item__value {
+          margin-#{$left}: 0.625rem;
+        }
+
+        &::before {
+          margin-top: -0.3125rem;
+        }
+      }
+    }
+
+    &.facet-item--expanded {
+      & > label {
+        padding-#{$left}: 0;
+        padding-bottom: 0;
+
+        &::before {
+          display: none;
+        }
+
+        .facet-item__value,
+        .facet-item__count {
+          font-weight: normal;
+        }
       }
     }
   }
