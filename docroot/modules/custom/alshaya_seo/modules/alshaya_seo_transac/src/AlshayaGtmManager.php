@@ -578,11 +578,7 @@ class AlshayaGtmManager {
    */
   public function processAttributesForPdp(array $attributes) {
     $processed_attributes['ecommerce'] = [];
-    $gtm_currency_code = $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
-    if (($this->configFactory->get('acq_commerce.currency')->get('gtm_currency_code')) !== '') {
-      $gtm_currency_code = $this->configFactory->get('acq_commerce.currency')->getRawData()['gtm_currency_code'];
-    }
-    $processed_attributes['ecommerce']['currencyCode'] = $gtm_currency_code;
+    $processed_attributes['ecommerce']['currencyCode'] = $this->getGtmCurrency();
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     // Set dimension1 & 2 to empty until product added to cart.
@@ -977,15 +973,11 @@ class AlshayaGtmManager {
     if (!empty($current_user->get('field_privilege_card_number')->getString())) {
       $privilege_customer = 'Privilege Customer';
     }
-    $gtm_currency_code = $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
-    if (($this->configFactory->get('acq_commerce.currency')->get('gtm_currency_code')) !== '') {
-      $gtm_currency_code = $this->configFactory->get('acq_commerce.currency')->getRawData()['gtm_currency_code'];
-    }
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
       'country' => function_exists('_alshaya_country_get_site_level_country_name') ? _alshaya_country_get_site_level_country_name() : '',
-      'currency' => $gtm_currency_code,
+      'currency' => $this->getGtmCurrency(),
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
       'customerType' => $customer_type,
@@ -1341,6 +1333,21 @@ class AlshayaGtmManager {
     }
 
     return $cart_items_flock;
+  }
+
+  /**
+   * Helper function to get gtm currency code.
+   *
+   * @return string
+   *   GTM currency code.
+   */
+  public function getGtmCurrency() {
+    $gtm_currency_code = $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
+    if (($this->configFactory->get('acq_commerce.currency')->get('gtm_currency_code')) !== '') {
+      $gtm_currency_code = $this->configFactory->get('acq_commerce.currency')->getRawData()['gtm_currency_code'];
+    }
+
+    return $gtm_currency_code;
   }
 
 }

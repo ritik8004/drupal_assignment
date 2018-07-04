@@ -11,9 +11,7 @@
  * Add new field for GTM currency.
  */
 function alshaya_seo_transac_update_8001() {
-  $configs = [
-    'acq_commerce.currency',
-  ];
-
-  alshaya_config_install_configs($configs, 'alshaya_seo_transac', 'override');
+  \Drupal::configFactory()->getEditable('acq_commerce.currency')
+    ->set('gtm_currency_code', '')
+    ->save();
 }
