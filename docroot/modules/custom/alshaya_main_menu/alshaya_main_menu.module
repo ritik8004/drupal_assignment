@@ -95,16 +95,9 @@ function alshaya_main_menu_form_taxonomy_term_acq_product_category_form_alter(&$
   // Only for the term edit page.
   if (isset($form['tid']) && !empty($form['tid']['#value'])) {
     if ($term = Term::load($form['tid']['#value'])) {
-      if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')
-          && \Drupal::config('alshaya_super_category.settings')->get('status')) {
-        // Hide highlight field If term is L1 level or greater than L2 level.
-        if ($term->get('depth_level')->getString() == 1 || $term->get('depth_level')->getString() > 2) {
-          unset($form['field_main_menu_highlight']);
-        }
-      }
       // Hide highlight field If term is greater than L1 level.
-      elseif ($term->get('depth_level')->getString() > 1) {
-        unset($form['field_main_menu_highlight']);
+      if ($term->get('depth_level')->getString() > 1) {
+        $form['field_main_menu_highlight']['#access'] = FALSE;
       }
     }
   }
