@@ -21,6 +21,11 @@ function alshaya_paragraphs_update_8117() {
     \Drupal::service('module_installer')->install(['ckeditor_font']);
   }
 
+  // If module not already installed, then install it.
+  if (!\Drupal::moduleHandler()->moduleExists('allowed_formats')) {
+    \Drupal::service('module_installer')->install(['allowed_formats']);
+  }
+
   $configs = [
     'paragraphs.paragraphs_type.delivery_usp_block',
     'field.storage.paragraph.field_usp_timer',

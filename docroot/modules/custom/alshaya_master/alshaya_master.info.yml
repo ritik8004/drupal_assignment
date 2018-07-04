@@ -26,4 +26,3 @@ dependencies:
   - drupal:system
   - drupal:views
   - alshaya_contact:alshaya_contact
-  - ckeditor_font:ckeditor_font

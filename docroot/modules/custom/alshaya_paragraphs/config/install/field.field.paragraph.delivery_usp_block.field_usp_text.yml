@@ -5,7 +5,15 @@ dependencies:
     - field.storage.paragraph.field_usp_text
     - paragraphs.paragraphs_type.delivery_usp_block
   module:
+    - allowed_formats
     - text
+third_party_settings:
+  allowed_formats:
+    limited_options: limited_options
+    full_text: '0'
+    mail_text: '0'
+    rich_text: '0'
+    plain_text: '0'
 id: paragraph.delivery_usp_block.field_usp_text
 field_name: field_usp_text
 entity_type: paragraph
