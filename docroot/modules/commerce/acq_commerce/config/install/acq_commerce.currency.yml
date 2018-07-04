@@ -1,4 +1,5 @@
 currency_code: '$'
+gtm_currency_code: ''
 currency_code_position: 'before'
 decimal_points: '2'
 langcode: en

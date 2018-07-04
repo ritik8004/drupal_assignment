@@ -578,7 +578,11 @@ class AlshayaGtmManager {
    */
   public function processAttributesForPdp(array $attributes) {
     $processed_attributes['ecommerce'] = [];
-    $processed_attributes['ecommerce']['currencyCode'] = $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
+    $gtm_currency_code = $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
+    if (($this->configFactory->get('acq_commerce.currency')->get('gtm_currency_code')) !== '') {
+      $gtm_currency_code = $this->configFactory->get('acq_commerce.currency')->getRawData()['gtm_currency_code'];
+    }
+    $processed_attributes['ecommerce']['currencyCode'] = $gtm_currency_code;
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     // Set dimension1 & 2 to empty until product added to cart.
@@ -973,11 +977,15 @@ class AlshayaGtmManager {
     if (!empty($current_user->get('field_privilege_card_number')->getString())) {
       $privilege_customer = 'Privilege Customer';
     }
+    $gtm_currency_code = $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
+    if (($this->configFactory->get('acq_commerce.currency')->get('gtm_currency_code')) !== '') {
+      $gtm_currency_code = $this->configFactory->get('acq_commerce.currency')->getRawData()['gtm_currency_code'];
+    }
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'platformType' => $platform,
       'country' => function_exists('_alshaya_country_get_site_level_country_name') ? _alshaya_country_get_site_level_country_name() : '',
-      'currency' => $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'],
+      'currency' => $gtm_currency_code,
       'userID' => $data_layer['userUid'] ?: '' ,
       'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
       'customerType' => $customer_type,

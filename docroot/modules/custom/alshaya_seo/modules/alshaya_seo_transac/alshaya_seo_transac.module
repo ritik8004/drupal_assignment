@@ -15,7 +15,11 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
   if (_alshaya_seo_process_gtm()) {
     /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-    $variables['attributes']['gtm-currency'] = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
+    $gtm_currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
+    if ((\Drupal::configFactory()->get('acq_commerce.currency')->get('gtm_currency_code')) !== '') {
+      $gtm_currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['gtm_currency_code'];
+    }
+    $variables['attributes']['gtm-currency'] = $gtm_currency_code;
     $variables['attributes']['gtm-container'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
     $variables['attributes']['gtm-list-name'] = $gtm_manager->convertCurrentRouteToGtmListName($gtm_manager->getGtmContainer());
     if ($variables['attributes']['gtm-list-name'] == 'PDP' || $variables['attributes']['gtm-list-name'] == 'CartPage') {
@@ -88,7 +92,10 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
 
         $product_description = _alshaya_seo_get_node_meta_description();
         $final_price = "";
-        $currency = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
+        $currency = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
+        if ((\Drupal::configFactory()->get('acq_commerce.currency')->get('gtm_currency_code')) !== '') {
+          $currency = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['gtm_currency_code'];
+        }
 
         // If sku name is available.
         if ($sku_entity->get('name')) {
@@ -132,7 +139,10 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
   /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
   $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-  $currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
+  $gtm_currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
+  if ((\Drupal::configFactory()->get('acq_commerce.currency')->get('gtm_currency_code')) !== '') {
+    $gtm_currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['gtm_currency_code'];
+  }
 
   try {
     $current_route = $gtm_manager->getGtmContainer();
@@ -199,7 +209,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
           $data_layer_cart = [
             'ecommerce' => [
-              'currencyCode' => $currency_code,
+              'currencyCode' => $gtm_currency_code,
               'checkout' => [
                 'actionField' => [
                   'step' => $step,
@@ -232,7 +242,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
             $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
 
             $data_layer['ecommerce'] = [
-              'currencyCode' => $currency_code,
+              'currencyCode' => $gtm_currency_code,
               'purchase' => [
                 'actionField' => $attributes['actionField'],
                 'products' => $attributes['products'],
