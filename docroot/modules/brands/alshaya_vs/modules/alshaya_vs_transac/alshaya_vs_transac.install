@@ -52,9 +52,21 @@ function alshaya_vs_transac_install() {
     'Connect with us' => [
       'ar' => ' تواصلي معنا ',
     ],
+    'Store Includes' => [
+      'ar' => 'المحل يشمل',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
+  $view_store_finder = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.stores_finder');
+  $view_store_finder->set('display.attachment_1.display_options.fields.field_brand.label', 'المحل يشمل');
+  $view_store_finder->set('display.page_1.display_options.fields.field_brand.label', 'المحل يشمل');
+  $view_store_finder->set('display.page_3.display_options.fields.field_brand.label', 'المحل يشمل');
+  $view_store_finder->save();
+
+  $field_brand = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.node.store.field_brand');
+  $field_brand->set('label', 'المحل يشمل');
+  $field_brand->save();
   // Enable super category feature and menu block with config factory.
   // Placing config in "override" folder won't work here. As we have an event
   // subscriber written for config save, which will always override the value

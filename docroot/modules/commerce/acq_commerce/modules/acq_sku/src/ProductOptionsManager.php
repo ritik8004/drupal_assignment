@@ -126,8 +126,11 @@ class ProductOptionsManager {
    *   Attribute id.
    * @param string $attribute_code
    *   Attribute code.
+   *
+   * @return \Drupal\taxonomy\Entity\Term|null
+   *   Term object or null.
    */
-  protected function createProductOption($langcode, $option_id, $option_value, $attribute_id, $attribute_code, $weight) {
+  public function createProductOption($langcode, $option_id, $option_value, $attribute_id, $attribute_code, $weight) {
     if (empty($option_value)) {
       $this->logger->warning('Got empty value while syncing production options: @data', [
         '@data' => json_encode([
@@ -138,7 +141,7 @@ class ProductOptionsManager {
         ]),
       ]);
 
-      return;
+      return NULL;
     }
 
     // Update the term if already available.
@@ -184,6 +187,8 @@ class ProductOptionsManager {
 
       $term->save();
     }
+
+    return $term;
   }
 
   /**

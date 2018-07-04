@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e6b6fc58cdff72b0eb315061a1a3003",
+    "content-hash": "0c3d9974482d4870069a12d8f0e6299b",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -10121,16 +10121,16 @@
         },
         {
             "name": "geerlingguy/drupal-vm",
-            "version": "4.7.0",
+            "version": "4.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/geerlingguy/drupal-vm.git",
-                "reference": "aedfc16db569a49c9a0c358212d7029483385b0d"
+                "reference": "4fc4a3a89231e8d4cea077e6541c771f1b46d66c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/geerlingguy/drupal-vm/zipball/aedfc16db569a49c9a0c358212d7029483385b0d",
-                "reference": "aedfc16db569a49c9a0c358212d7029483385b0d",
+                "url": "https://api.github.com/repos/geerlingguy/drupal-vm/zipball/4fc4a3a89231e8d4cea077e6541c771f1b46d66c",
+                "reference": "4fc4a3a89231e8d4cea077e6541c771f1b46d66c",
                 "shasum": ""
             },
             "type": "vm",
@@ -10140,12 +10140,12 @@
             ],
             "authors": [
                 {
-                    "name": "Jeff Geerling",
-                    "homepage": "http://www.jeffgeerling.com"
-                },
-                {
                     "name": "Oskar Schöldström",
                     "homepage": "http://oxy.fi"
+                },
+                {
+                    "name": "Jeff Geerling",
+                    "homepage": "https://www.jeffgeerling.com"
                 }
             ],
             "description": "A VM for local Drupal development, built with Vagrant + Ansible",
@@ -10156,7 +10156,7 @@
                 "virtual machine",
                 "vm"
             ],
-            "time": "2017-10-07T04:35:10+00:00"
+            "time": "2018-06-01T15:22:24+00:00"
         },
         {
             "name": "giggsey/libphonenumber-for-php",

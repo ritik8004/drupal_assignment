@@ -13,3 +13,7 @@
   border-bottom-color: $tooltip_border_2;
   border-width: 6px;
 }
+
+.price-type__wrapper .simple-tooltip-wrap {
+  #{$right}: -1.2rem;
+}

@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_promo_panel\Form;
 
 use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -37,6 +38,13 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
   protected $configFactory;
 
   /**
+   * The entity config prefix.
+   *
+   * @var string
+   */
+  protected $configPrefix;
+
+  /**
    * Constructs a AlshayaPromoPanelForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -50,6 +58,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     parent::__construct($config_factory);
     $this->configFactory = $config_factory;
     $this->blockStorage = $entity_type_manager->getStorage('block');
+    $this->configPrefix = $entity_type_manager->getDefinition('block')->getConfigPrefix();
     $this->pathValidator = $path_validator;
   }
 
@@ -162,8 +171,10 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     $blocks = array_filter($form_state->getValue('blocks'));
     $block_values = !empty($blocks) ? $form_state->getValue('page_urls') : [];
 
+    $tags = [];
     $promo_panel_blocks = [];
     foreach ($block_values as $machine_name => $link) {
+      $tags[] = "config:{$this->configPrefix}.$machine_name";
       $block_load = $this->blockStorage->loadByProperties(['id' => $machine_name]);
       if ($block = reset($block_load)) {
         $promo_panel_blocks[$machine_name] = [
@@ -178,6 +189,7 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     $promo_config->save();
 
     parent::submitForm($form, $form_state);
+    Cache::invalidateTags($tags);
   }
 
   /**

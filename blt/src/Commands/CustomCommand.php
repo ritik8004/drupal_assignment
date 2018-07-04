@@ -172,7 +172,7 @@ class CustomCommand extends BltTasks {
       ->assume(TRUE)
       ->alias($drush_alias)
       ->drush('sync-commerce-cats')
-      ->drush('sync-commerce-product-options')
+      ->drush('sync-options')
       ->drush('sync-commerce-products-test')
       ->arg($limit)
       ->uri($uri)

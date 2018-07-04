@@ -62,7 +62,7 @@ function alshaya_main_menu_taxonomy_term_insert(TermInterface $term) {
   // Invalidate cache for main menu and sitemap or any other cache
   // using our custom cache tag.
   if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
-    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
+    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG, 'node:taxonomy_term.accordion']);
   }
 }
 
@@ -73,7 +73,7 @@ function alshaya_main_menu_taxonomy_term_update(TermInterface $term) {
   // Invalidate cache for main menu and sitemap or any other cache
   // using our custom cache tag.
   if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
-    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
+    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG, 'node:taxonomy_term.accordion']);
   }
 }
 
@@ -84,7 +84,7 @@ function alshaya_main_menu_taxonomy_term_delete(TermInterface $term) {
   // Invalidate cache for main menu and sitemap or any other cache
   // using our custom cache tag.
   if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
-    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
+    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG, 'node:taxonomy_term.accordion']);
   }
 }
 

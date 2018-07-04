@@ -197,7 +197,7 @@
     }
 
     .ui-accordion-header-icon {
-      background: url('../imgs/icons/icon-chevron-next.svg') no-repeat;
+      background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-next.svg') no-repeat;
       #{$left}: 92%;
       transform: rotate(90deg);
     }
@@ -442,6 +442,7 @@
       .total--amount,
       .price-type__wrapper {
         width: 48%;
+        float: $right;
 
         @include breakpoint($upto-desktop) {
           width: 50%;
@@ -1259,10 +1260,16 @@ body.alias--cart {
 
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    color: $primary_brand_button_text;
-    background: $primary_brand_button;
-    border: 1px solid $primary_brand_button;
+    color: $mobile_continue_shopping_btn_text;
+    background-color: $mobile_continue_shopping_btn_bg;
+    border: 1px solid $mobile_continue_shopping_btn_border;
     font-weight: normal;
+  }
+
+  #edit-continue-shopping {
+    color: $desktop_continue_shopping_btn_text;
+    background-color: $desktop_continue_shopping_btn_bg;
+    border: 1px solid $desktop_continue_shopping_btn_border;
   }
 }
 

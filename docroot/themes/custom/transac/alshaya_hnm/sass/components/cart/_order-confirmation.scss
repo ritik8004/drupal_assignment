@@ -42,12 +42,6 @@
           min-width: 15rem;
         }
       }
-
-      .desktop-only {
-        @include breakpoint($desktop) {
-          width: 0 !important;
-        }
-      }
     }
   }
 
@@ -258,7 +252,7 @@
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 7.5rem;
+      margin-#{$right}: 7.5rem !important;
     }
   }
 
