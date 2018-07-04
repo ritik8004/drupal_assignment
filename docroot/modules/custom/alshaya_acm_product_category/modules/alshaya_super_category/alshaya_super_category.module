@@ -457,7 +457,7 @@ function alshaya_super_category_form_taxonomy_term_acq_product_category_form_alt
     }
 
     if ($term = Term::load($form['tid']['#value'])) {
-      // Hide highlight field If term is L1 level or greater than L2 level.
+      // Display highlight field only for level 2 term.
       $form['field_main_menu_highlight']['#access'] = ($term->get('depth_level')->getString() == 2) ? TRUE : FALSE;
     }
   }
