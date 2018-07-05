@@ -463,7 +463,7 @@ function alshaya_acm_checkout_set_shipping_into_billing(CartInterface $cart) {
 function alshaya_acm_checkout_block_access(Block $block, $operation, AccountInterface $account) {
   // Add "join the club" block only if user has not entered loyalty card
   // number in basket.
-  if ($operation == 'view' && in_array($block->id(), ['jointheclub_checkout_confirm'])) {
+  if ($operation == 'view' && $block->id() == 'jointheclub_checkout_confirm') {
     $order = _alshaya_acm_checkout_get_last_order_from_session();
     return AccessResult::forbiddenIf(!empty($order['extension']['loyalty_card']));
   }
