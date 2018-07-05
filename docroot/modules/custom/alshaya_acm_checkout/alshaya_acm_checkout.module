@@ -6,8 +6,11 @@
  */
 
 use Drupal\acq_cart\CartInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -452,4 +455,16 @@ function alshaya_acm_checkout_set_shipping_into_billing(CartInterface $cart) {
   }
 
   $cart->setBilling(_alshaya_acm_checkout_clean_address($shipping_address));
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_acm_checkout_block_access(Block $block, $operation, AccountInterface $account) {
+  // Add "join the club" block only if user has not entered loyalty card
+  // number in basket.
+  if ($operation == 'view' && in_array($block->id(), ['jointheclub_checkout_confirm'])) {
+    $order = _alshaya_acm_checkout_get_last_order_from_session();
+    return AccessResult::forbiddenIf(!empty($order['extension']['loyalty_card']));
+  }
 }
