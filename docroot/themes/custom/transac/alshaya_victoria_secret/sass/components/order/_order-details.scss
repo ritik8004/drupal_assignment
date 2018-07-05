@@ -63,18 +63,6 @@
     }
   }
 
-  .price-type__wrapper {
-    .simple-tooltip-wrap {
-      top: -0.125rem;
-      #{$right}: -1rem;
-
-      @include breakpoint($desktop) {
-        top: -0.3125rem;
-        #{$right}: 0;
-      }
-    }
-  }
-
   .order__delivery-details {
     .label {
       font-family: $vs-bold;
@@ -190,6 +178,17 @@
       td:first-child {
         @include breakpoint($only-tablet) {
           display: none;
+        }
+      }
+    }
+
+    .price-type__wrapper {
+      .simple-tooltip-wrap {
+        top: -0.125rem;
+        #{$right}: auto;
+
+        @include breakpoint($desktop) {
+          top: -0.3125rem;
         }
       }
     }
