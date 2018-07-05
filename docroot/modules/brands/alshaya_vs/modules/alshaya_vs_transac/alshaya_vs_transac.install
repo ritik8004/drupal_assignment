@@ -35,6 +35,8 @@ function alshaya_vs_transac_update_8001() {
     ['image.style.checkout_summary_block_thumbnail'],
     'alshaya_acm'
   );
+
+  alshaya_config_install_configs(['block.block.youllbeableto_checkout_confirm'], 'alshaya_vs_transac', 'optional');
 }
 
 /**
