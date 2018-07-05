@@ -428,7 +428,10 @@
   .form-item input:not(:focus):valid ~ label:not(.error),
   .form-item input:active ~ label:not(.error),
   .form-item input:not(:active):valid ~ label:not(.error),
-  .form-item input.error ~ label:not(.error) {
+  .form-item input.error ~ label:not(.error),
+  .form-item input:-webkit-autofill ~ label:not(.error),
+  .form-item input:-webkit-autofill:hover ~ label:not(.error),
+  .form-item input:-webkit-autofill:focus ~ label:not(.error) {
     top: -1.25em;
     bottom: 0;
     #{$left}: 0;
