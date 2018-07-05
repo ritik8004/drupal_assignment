@@ -41,11 +41,8 @@ class ProductCategoryRequestSubscriber implements EventSubscriberInterface {
     $request = $event->getRequest();
 
     // If we've got an exception, nothing to do here.
-    if ($request->get('exception') != NULL) {
-      return;
-    }
-
-    if ($this->routeMatch->getRouteName() !== 'entity.taxonomy_term.canonical') {
+    if ($request->get('exception') != NULL
+        || $this->routeMatch->getRouteName() !== 'entity.taxonomy_term.canonical') {
       return;
     }
 
