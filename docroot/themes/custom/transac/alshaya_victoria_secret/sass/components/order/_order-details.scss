@@ -166,6 +166,32 @@
         }
       }
     }
+
+    .discount-row,
+    .surcharge-row {
+      td {
+        padding: 0.625rem 1rem;
+      }
+    }
+
+    .surcharge-row {
+      td:first-child {
+        @include breakpoint($only-tablet) {
+          display: none;
+        }
+      }
+    }
+
+    .price-type__wrapper {
+      .simple-tooltip-wrap {
+        top: -0.125rem;
+        #{$right}: auto;
+
+        @include breakpoint($desktop) {
+          top: -0.3125rem;
+        }
+      }
+    }
   }
 
   .c-page-title {

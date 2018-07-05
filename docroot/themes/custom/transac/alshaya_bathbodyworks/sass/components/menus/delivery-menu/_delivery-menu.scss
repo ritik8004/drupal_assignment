@@ -4,7 +4,7 @@
 
   .field--name-field-title {
     font-size: 1.125rem;
-    text-transform: uppercase;
+    text-transform: none;
 
     @include breakpoint($only-mobile) {
       font-size: 1.125rem;
@@ -25,6 +25,7 @@
 
   .field--name-field-sub-title {
     font-size: 1.125rem;
+    text-transform: none;
 
     @include breakpoint($only-mobile) {
       font-size: 1.125rem;

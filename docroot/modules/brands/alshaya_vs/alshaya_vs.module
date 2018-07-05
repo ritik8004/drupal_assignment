@@ -36,7 +36,7 @@ function alshaya_vs_gtm_list_name_alter(&$listName) {
     $listName = $listName . '|' . $super_cat_name . '|' . $major_cat_name;
   }
 
-  elseif ($listName == 'PDP') {
+  elseif ($listName == 'PDP-placeholder' || $listName == 'PDP') {
     $listName = $listName . '|' . $super_cat_name;
   }
 
