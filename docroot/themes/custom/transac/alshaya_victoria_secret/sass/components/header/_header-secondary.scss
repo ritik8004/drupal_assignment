@@ -14,9 +14,13 @@
 
   a {
     font-size: 0.75rem;
-    padding: 0.875rem;
+    padding: 0.875rem 0;
     display: block;
     height: auto;
+
+    @include breakpoint($desktop) {
+      padding: 0.875rem;
+    }
 
     &::before,
     &::after {
