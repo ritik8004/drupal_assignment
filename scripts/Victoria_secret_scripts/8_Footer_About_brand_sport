@@ -3,17 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="https://vsae.test-alshaya.acsitefactory.com/en/admin/structure/menu/manage/footer-logos" />
-<title>Footer_logos</title>
+<link rel="selenium.base" href="https://vsae-test.factory.alshaya.com/en" />
+<title>New Test</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Footer_logos</td></tr>
+<tr><td rowspan="1" colspan="3">About_brand</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/en/admin/structure/menu/manage/footer-logos</td>
+	<td>/en/admin/structure/menu/manage/about-brand</td>
 	<td></td>
 </tr>
 <tr>
@@ -24,7 +24,7 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-title-0-value</td>
-	<td>Mastercard</td>
+	<td>About us</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -33,18 +33,8 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=summary</td>
+	<td>//label[text()=&quot;Victoria Sport&quot;]/../input[@type='checkbox']</td>
 	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-attributes-class</td>
-	<td>c-footer__logo--mastercard</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>//input[@id='edit-weight-0-value']</td>
-	<td>-50</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -59,7 +49,7 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-title-0-value</td>
-	<td>Verisign</td>
+	<td>Delivery Information</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -68,18 +58,8 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=summary</td>
+	<td>//label[text()=&quot;Victoria Sport&quot;]/../input[@type='checkbox']</td>
 	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-attributes-class</td>
-	<td>c-footer__logo--verisign</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>//input[@id='edit-weight-0-value']</td>
-	<td>-49</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -94,7 +74,7 @@
 <tr>
 	<td>type</td>
 	<td>id=edit-title-0-value</td>
-	<td>Visa</td>
+	<td>Terms &amp; Conditions (Sale)</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -103,22 +83,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=summary</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=edit-attributes-class</td>
-	<td>c-footer__logo--visa</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>//input[@id='edit-weight-0-value']</td>
-	<td>-48</td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>id=edit-submit</td>
+	<td>//label[text()=&quot;Victoria Sport&quot;]/../input[@type='checkbox']</td>
 	<td></td>
 </tr>
 <tr>
@@ -127,9 +92,54 @@
 	<td></td>
 </tr>
 <tr>
+	<td>clickAndWait</td>
+	<td>link=Add link</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
-	<td>//input[@id='edit-weight-0-value']</td>
-	<td>-50</td>
+	<td>id=edit-title-0-value</td>
+	<td>Terms &amp; Conditions (Web)</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-link-0-uri</td>
+	<td>&lt;front&gt;</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//label[text()=&quot;Victoria Sport&quot;]/../input[@type='checkbox']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=edit-submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Add link</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-title-0-value</td>
+	<td>Privacy Policy</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-link-0-uri</td>
+	<td>&lt;front&gt;</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//label[text()=&quot;Victoria Sport&quot;]/../input[@type='checkbox']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=edit-submit</td>
+	<td></td>
 </tr>
 </tbody></table>
 </body>
