@@ -157,7 +157,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     }
 
     // We don't show this form completely when we use CoD.
-    $selected_payment_method = $cart->getPaymentMethod(FALSE);
+    $selected_payment_method = $this->getCheckoutHelper()->getSelectedPayment();
     if ($selected_payment_method === 'cashondelivery') {
       $pane_form['#access'] = FALSE;
 
@@ -219,6 +219,23 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       $address = _alshaya_acm_checkout_clean_address($address_book_manager->getMagentoAddressFromAddressArray($address_values));
       $cart->setBilling($address);
     }
+  }
+
+  /**
+   * Get checkout helper service object.
+   *
+   * @return \Drupal\alshaya_acm_checkout\CheckoutHelper
+   *   Checkout Helper service object.
+   */
+  protected function getCheckoutHelper() {
+    static $helper;
+
+    if (empty($helper)) {
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+      $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    }
+
+    return $helper;
   }
 
 }

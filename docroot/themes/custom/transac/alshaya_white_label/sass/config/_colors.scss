@@ -217,7 +217,7 @@ $default_msg_bg: $tealish;
 $default_msg_info_bg: $message-info;
 $default_msg_info_text: $black;
 $content_error_msg_bg: $cherry;
-$content_error_msg_txt: $cherry;
+$content_error_msg_txt: $white-five;
 $content_error_input_border: $cherry;
 $content_error_msg_text: $white-five;
 $formitem_error: $black;
@@ -819,6 +819,7 @@ $user_ui_dialog_border: $white;
 $address_book_delete_cancel: #3381d0;
 $address_book_delete_close: $black;
 $address_book_delete_close_bg: $white;
+$address_area_select: $grey-ash;
 
 //My Account pages
 $user_account_wrapper_light: $grey-ash;

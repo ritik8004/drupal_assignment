@@ -12,6 +12,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
@@ -442,5 +443,22 @@ function alshaya_super_category_block_access(Block $block, $operation, AccountIn
     }
 
     return AccessResult::forbiddenIf(!empty($category_id) && in_array($category_id, array_keys($terms)));
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_super_category_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Only for the term edit page.
+  if (isset($form['tid']) && !empty($form['tid']['#value'])) {
+    if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+      return;
+    }
+
+    if ($term = Term::load($form['tid']['#value'])) {
+      // Display highlight field only for level 2 term.
+      $form['field_main_menu_highlight']['#access'] = ($term->get('depth_level')->getString() == 2) ? TRUE : FALSE;
+    }
   }
 }
