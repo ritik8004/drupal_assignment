@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Detection\MobileDetect;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber;
@@ -585,6 +586,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'include_in_bundle' => '',
         'available_delivery_methods' => '',
         'free_gift_label' => '',
+        'free_gift_promos' => '',
       ],
     ],
     'global_error' => [
@@ -852,17 +854,34 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     $total_price['#final_price'] = number_format($item_cart_price['final_price'] * $item['quantity']['#default_value'], 3);
   }
 
-  // Add sku title & entity id to the promotions with free gift skus.
-  foreach ($promotions as $key => $promotion) {
-    if (!empty($promotion['skus']) && (!$cart_has_promo_code)) {
-      $free_sku_entity = SKU::loadFromSku($promotion['skus'][0]['value']);
-      $promotions[$key]['sku_title'] = $free_sku_entity->get('name')->getString();
-      $promotions[$key]['sku_entity_id'] = $free_sku_entity->id();
-    }
-  }
+  // Extract free gift promotions & Add sku title, entity id to the promotions
+  // with free gift skus.
+  $mobiledetect = new MobileDetect();
+  if (!$mobiledetect->isMobile()) {
+    $free_gift_promos = [];
 
-  if (!empty($total_price['#final_price']) && $total_price['#final_price'] == 0) {
-    $free_gift_label['#markup'] = t('Free Gift with Purchase.');
+    foreach ($promotions as $key => $promotion) {
+      if (!empty($promotion['skus']) && (!$cart_has_promo_code)) {
+        $free_gift_promos[$key] = $promotion;
+        $free_sku_entity = SKU::loadFromSku($promotion['skus'][0]['value']);
+        $free_gift_promos[$key]['sku_title'] = $free_sku_entity->get('name')->getString();
+        $free_gift_promos[$key]['sku_entity_id'] = $free_sku_entity->id();
+      }
+    }
+
+    // If we have free gift promotions linked with the current item, generate the
+    // label for them.
+    $free_gift_cart_promotions = [];
+    if (!empty($free_gift_promos)) {
+      $free_gift_cart_promotions = [
+        '#theme' => 'free_gift_cart_label',
+        '#promos' => $free_gift_promos,
+      ];
+    }
+
+    if (!empty($total_price['#final_price']) && $total_price['#final_price'] == 0) {
+      $free_gift_label['#markup'] = t('Free Gift with Purchase.');
+    }
   }
 
   return [
@@ -870,6 +889,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     '#sku_attributes' => $sku_attributes,
     '#name' => $name,
     '#promotions' => $promotions,
+    '#free_gift_promos' => $free_gift_cart_promotions,
     '#image' => $sku_image,
     '#total_price' => $total_price,
     '#item_code' => $sku_entity->getSku(),
