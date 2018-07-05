@@ -47,6 +47,16 @@
       top: 0;
       height: 2.5rem;
 
+      @include icon(search, before) {
+        color: $store_finder_icon;
+        font-size: 2rem;
+        line-height: 0.8;
+
+        @include breakpoint($upto-desktop) {
+          line-height: 1;
+        }
+      }
+
       @include breakpoint($tablet) {
         top: 0;
       }
@@ -54,6 +64,7 @@
       @include breakpoint($only-tablet) {
         padding: 0.175rem;
         #{$right}: 0.537rem;
+        line-height: 4;
       }
 
       @include breakpoint($desktop) {
@@ -90,9 +101,8 @@
 
   input {
     &[id^=edit-submit-stores-finder] {
-      background: url(../imgs/icons/ic-search-store.svg);
-      width: 2.12rem;
-      height: 2.12rem;
+      background: none;
+      width: auto;
 
       @include breakpoint($desktop) {
         margin-top: -0.1875rem;
@@ -122,18 +132,14 @@
         bottom: 0.6875rem;
       }
     }
-
-    @include breakpoint($only-tablet) {
-      html[lang=ar] & {
-        padding-top: 0.8rem;
-      }
-    }
   }
 
-  .current-location::before {
-    width: 1.875rem;
-    height: 1.875rem;
-    background-size: 100%;
+  .current-location {
+    line-height: 2.5;
+
+    @include breakpoint($only-mobile) {
+      line-height: 2;
+    }
   }
 
   .list-view-link {
@@ -155,8 +161,7 @@
       }
 
       @include breakpoint($tablet) {
-        position: relative;
-        top: -0.2rem;
+        display: none;
       }
     }
 
@@ -170,7 +175,7 @@
       html[lang=ar] & {
         margin-#{$left}: 0.625rem;
         padding-#{$right}: 0;
-        width: 41%;
+        width: 31%;
       }
     }
 
@@ -178,10 +183,10 @@
 
     @include breakpoint($desktop) {
       padding-#{$left}: 1.5rem;
-      width: 9.75rem;
+      width: 15%;
 
       &::before {
-        margin-#{$left}: 1rem;
+        display: none;
       }
     }
 
@@ -261,7 +266,7 @@
     .current-location {
       font-size: 0.875rem;
       margin-bottom: 0.5rem;
-      margin-top: -0.5rem;
+      margin-top: 0.5rem;
       text-transform: uppercase;
     }
   }
@@ -276,10 +281,10 @@
 
       .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
       .form-item-geolocation-geocoder-google-places-api {
-        width: 54% !important;
+        width: 67% !important;
 
         html[lang=ar] & {
-          width: 55% !important;
+          width: 65% !important;
         }
       }
     }
@@ -295,22 +300,24 @@
     }
 
     .label--location {
-      padding-top: 0.4375rem;
+      padding-top: 0.625rem;
 
       html[lang=ar] & {
-        padding-top: 0;
+        padding-top: 0.5rem;
+        text-indent: 0;
+        padding-right: 0;
       }
 
       @include breakpoint($only-tablet) {
-        width: 44.35%;
+        width: 30%;
       }
 
       @include breakpoint($desktop) {
-        padding-top: 0.4375rem;
+        padding-top: 0.625rem;
 
         html[lang=ar] & {
           width: 26.6%;
-          padding-top: 0.4375rem;
+          padding-top: 0.875rem;
           border-right: none;
         }
       }
@@ -432,7 +439,7 @@
     .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
     .form-item-geolocation-geocoder-google-places-api {
       @include breakpoint($desktop) {
-        width: 80%;
+        width: 95%;
         padding-#{$right}: 0;
         padding-#{$left}: 0;
 
@@ -485,5 +492,70 @@
   .hours--wrapper .hours--label,
   .hours--wrapper .open--hours {
     border-bottom: 1px solid $warm-grey-two !important;
+  }
+}
+
+.path--store-finder .input--wrapper,
+.nodetype--store .input--wrapper {
+  position: absolute;
+  #{$left}: 19%;
+  width: 57%;
+
+  html[lang=ar] & {
+    right: 12%;
+    width: 64%;
+
+    @include breakpoint($only-tablet) {
+      right: 14%;
+      width: 49%;
+    }
+
+    @include breakpoint($only-mobile) {
+      right: 0;
+      width: 100%;
+      position: relative;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    #{$left}: 0;
+    width: 100%;
+    position: relative;
+  }
+
+  @include breakpoint($only-tablet) {
+    #{$left}: 16%;
+    width: 46%;
+  }
+}
+
+.path--store-finder,
+.nodetype--store {
+  .form--inline {
+    .current-location,
+    .cc-near-me {
+      @include breakpoint($only-tablet) {
+        line-height: 1.5;
+      }
+    }
+
+    .current-location,
+    .cc-near-me {
+      @include breakpoint($only-tablet) {
+        padding-#{$left}: 2.5rem !important;
+      }
+
+      &::before {
+        background-size: 100%;
+        height: 1.875rem;
+        width: 1.875rem;
+      }
+    }
+  }
+
+  .label--location {
+    .block-store-finder-form__form__label__wrapper {
+      float: $right;
+    }
   }
 }

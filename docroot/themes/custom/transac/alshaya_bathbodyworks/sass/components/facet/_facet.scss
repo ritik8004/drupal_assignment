@@ -17,6 +17,7 @@
   label {
     .facet-item__value {
       margin-#{$left}: 0.625rem;
+      color: $plp_item_label;
     }
 
     .facet-item__count,
@@ -38,7 +39,7 @@
 
 .js-facets-checkbox-links {
   .facet-item {
-    height: 2.5rem;
+    min-height: 2.5rem;
     padding: 0.625rem 0;
     margin-bottom: 0;
 
@@ -54,8 +55,70 @@
   }
 }
 
+.block-facet-blockcategory,
+.block-facet-blockplp-category-facet {
+  .c-accordion__title {
+    @include breakpoint($desktop) {
+      border-bottom: none;
+    }
+  }
+
+  .c-facet__title {
+    .path--search .filter--mobile & {
+      @include breakpoint($only-tablet) {
+        border-top: none;
+      }
+    }
+  }
+}
+
 ul[data-drupal-facet-id=category],
 ul[data-drupal-facet-id=plp_category_facet] {
+  &.js-facets-checkbox-links {
+    padding: 0;
+  }
+
+  .facet-item {
+    margin-bottom: 0;
+
+    &.facet-item--expanded {
+      & > label {
+        padding-bottom: 0.625rem;
+        padding-#{$left}: 0.625rem;
+
+        &::before {
+          top: 0.5rem !important;
+        }
+      }
+
+      ul li {
+        > label {
+          &::before {
+            margin-#{$right}: 0.625rem;
+            margin-top: -0.3125rem;
+          }
+        }
+
+        &:not(:last-child) {
+          margin-bottom: 0;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0;
+        }
+      }
+    }
+
+    label {
+      min-height: 0.875rem;
+      margin: 0;
+
+      .facet-item__value {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+
   .facet-item--expanded {
     > ul {
       padding-top: 0.625rem;
@@ -76,6 +139,40 @@ ul[data-drupal-facet-id=plp_category_facet] {
   }
 }
 
+ul[data-drupal-facet-id=plp_category_facet] {
+  .facet-item {
+    margin-bottom: 0;
+
+    &.leaf-li {
+      & > label {
+        .facet-item__value {
+          margin-#{$left}: 0.625rem;
+        }
+
+        &::before {
+          margin-top: -0.3125rem;
+        }
+      }
+    }
+
+    &.facet-item--expanded {
+      & > label {
+        padding-#{$left}: 0;
+        padding-bottom: 0;
+
+        &::before {
+          display: none;
+        }
+
+        .facet-item__value,
+        .facet-item__count {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
+
 .c-sidebar-first {
   .c-facet__blocks {
     .block {
@@ -83,5 +180,15 @@ ul[data-drupal-facet-id=plp_category_facet] {
         margin-top: 0;
       }
     }
+  }
+}
+
+.c-facet__blocks {
+  .facets-soft-limit-link {
+    float: $left;
+  }
+
+  .c-accordion {
+    clear: both;
   }
 }

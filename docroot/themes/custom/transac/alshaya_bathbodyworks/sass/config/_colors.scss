@@ -181,6 +181,7 @@ $my_account_nav_hover: $peacock-blue;
 $primary_radiobtn_filled: $peacock-blue;
 $primary_radiobtn_empty: $peacock-blue;
 $primary_checkbox_filled: $peacock-blue;
+$primary_checkbox_empty: $peacock-blue;
 
 // Mega menu.
 $mm_bg: $white;
@@ -305,6 +306,7 @@ $plp_facet_summary_filter_icon: $white;
 $plp_item_label: $black;
 $plp_promotion_description: $warm-grey-one;
 $plp_promotion_link: $error-red;
+$plp_facet_filter_count_background: $peacock-blue;
 
 // PLP Product tile.
 $plp_tile_product_title: $black;
@@ -321,13 +323,16 @@ $plp_pager_link_bg: $black;
 $store_finder_header_desktop: $black;
 $store_finder_subheader: $peacock-blue;
 $store_finder_text: $peacock-blue;
+$store_finder_icon: $peacock-blue;
+$store_finder_border_hover: $peacock-blue;
+$store_finder_text_hover: $peacock-blue;
 $store_finder_search_input_mobile_border: $warm-grey-two;
 $store_finder_search_input_border: $warm-grey-two;
 
 // Store finder gloassary.
 $store_finder_glossary_alphabet: $black;
 $store_finder_glossary_text: $warm-grey-one;
-$store_finder_glossary_text_border: $white;
+$store_finder_glossary_text_border: $warm-grey-two;
 $store_finder_glossary_border: $warm-grey-two;
 
 // Store finder search results.
@@ -505,3 +510,12 @@ $order_print_order_details_row_bg_td_blend: rgba(242, 242, 242, 0.27);
 $order_print_product_count_row_border: $warm-grey-two;
 $order_print_delivery_subtotal_row_blend: $white;
 $order_print_total_row: $warm-grey-three;
+
+// Product modal
+$pdp_modal_full_prodlink: $peacock-blue;
+
+// 404
+$page_not_found_text: $white;
+$page_not_found_link: $white;
+$page_not_found_link_border: $white;
+$page_not_found_mobile_bg: rgb(241, 155, 136);
