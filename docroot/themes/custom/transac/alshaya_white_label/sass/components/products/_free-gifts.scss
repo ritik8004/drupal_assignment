@@ -41,7 +41,7 @@
       line-height: 1.29;
       color: $free-gifts-label;
       text-transform: capitalize;
-      margin-bottom: 0.5rem;
+      margin: 0.625rem 0 0.5rem;
     }
   }
 
@@ -73,6 +73,20 @@
 }
 
 .free-gifts-modal-overlay {
+  position: fixed;
+  width: 100%;
+
+  .ui-dialog {
+    #drupal-modal {
+      overflow: auto !important;
+
+      .content__main {
+        min-height: auto;
+        height: 31.5rem;
+      }
+    }
+  }
+
   .c-products__free__item__label {
     font-size: 0.875rem;
     line-height: 1.29;
@@ -135,9 +149,20 @@
             text-decoration: underline;
             cursor: pointer;
 
+            @include breakpoint($only-mobile) {
+              display: block;
+              margin-top: 0.25rem;
+            }
+
             &:hover {
               color: $primary_link-hover;
             }
+          }
+        }
+
+        &.free-gifts-wrapper {
+          @include breakpoint($only-mobile) {
+            padding: 0 0 1rem;
           }
         }
       }
