@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_checkout\Plugin\Block;
 
-use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
@@ -135,14 +134,9 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
 
     $loyalty_card = '';
     if ($loyalty_enabled) {
-      // Add the following block only if user has not entered loyalty card
+      // Set value of privilege card number if user has entered loyalty card
       // number in basket.
-      if (empty($order['extension']['loyalty_card'])) {
-        $block = Block::load('jointheclub');
-        $build['joinclub'] = $this->entityTypeManager->getViewBuilder('block')->view($block);
-        $build['joinclub']['#weight'] = 100;
-      }
-      else {
+      if (!empty($order['extension']['loyalty_card'])) {
         $loyalty_card = $order['extension']['loyalty_card'];
         $account->get('field_privilege_card_number')->setValue($loyalty_card);
       }
