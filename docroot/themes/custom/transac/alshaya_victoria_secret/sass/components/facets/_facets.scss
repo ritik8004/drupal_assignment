@@ -64,3 +64,11 @@
     }
   }
 }
+
+.facet-item {
+  .facet-item__value {
+    html[lang=ar] & {
+      display: inline-flex;
+    }
+  }
+}

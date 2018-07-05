@@ -24,6 +24,13 @@
     }
   }
 
+  li::after {
+    @include breakpoint($upto-desktop) {
+      font-size: 1.5rem;
+      #{$right}: -0.1875rem;
+    }
+  }
+
   .block-alshaya-main-menu-super-category {
     float: $left;
 
