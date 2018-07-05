@@ -72,11 +72,11 @@ class SkuManager {
   protected $productLabelsCache;
 
   /**
-   * Cache Backend service for configurable product info.
+   * Cache Backend service for product info.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
-  protected $configurableProductCache;
+  protected $productCache;
 
   /**
    * Config Factory service object.
@@ -136,7 +136,7 @@ class SkuManager {
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Cache\CacheBackendInterface $product_labels_cache
    *   Cache Backend service for product labels.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $configurable_product_cache
+   * @param \Drupal\Core\Cache\CacheBackendInterface $product_cache
    *   Cache Backend service for configurable price info.
    */
   public function __construct(Connection $connection,
@@ -149,7 +149,7 @@ class SkuManager {
                               AcqSkuLinkedSku $linked_skus,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
-                              CacheBackendInterface $configurable_product_cache) {
+                              CacheBackendInterface $product_cache) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -162,7 +162,7 @@ class SkuManager {
     $this->linkedSkus = $linked_skus;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
-    $this->configurableProductCache = $configurable_product_cache;
+    $this->productCache = $product_cache;
   }
 
   /**
@@ -295,7 +295,7 @@ class SkuManager {
       return $prices;
     }
 
-    if ($cache = $this->getConfigurableProductCachedData($sku_entity, 'price')) {
+    if ($cache = $this->getProductCachedData($sku_entity, 'price')) {
       return $cache;
     }
 
@@ -341,7 +341,7 @@ class SkuManager {
     }
 
     // Set the price info to cache.
-    $this->setConfigurableProductCachedData($sku_entity, 'price', $prices);
+    $this->setProductCachedData($sku_entity, 'price', $prices);
 
     return $prices;
   }
@@ -472,7 +472,7 @@ class SkuManager {
    * @param bool $first_only
    *   Boolean flag to indicate if we want to load only the first child.
    *
-   * @return mixed
+   * @return \Drupal\acq_sku\Entity\SKU[]|\Drupal\acq_sku\Entity\SKU
    *   Array of child skus/ Child SKU when loading first child only.
    */
   public function getChildSkus($sku, $first_only = FALSE) {
@@ -1293,7 +1293,7 @@ class SkuManager {
       return [];
     }
 
-    if ($cache = $this->getConfigurableProductCachedData($sku, 'combinations')) {
+    if ($cache = $this->getProductCachedData($sku, 'combinations')) {
       return $cache;
     }
 
@@ -1327,7 +1327,7 @@ class SkuManager {
       }
     }
 
-    $this->setConfigurableProductCachedData($sku, 'combinations', $combinations);
+    $this->setProductCachedData($sku, 'combinations', $combinations);
 
     return $combinations;
   }
@@ -1375,7 +1375,7 @@ class SkuManager {
   }
 
   /**
-   * Get data from Cache for Configurable product.
+   * Get data from Cache for a product.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU Entity.
@@ -1385,9 +1385,9 @@ class SkuManager {
    * @return array|null
    *   Data if found or null.
    */
-  public function getConfigurableProductCachedData(SKU $sku, $key = 'price') {
-    $cid = $this->getConfigurableProductCachedId($sku);
-    $cache = $this->configurableProductCache->get($cid);
+  public function getProductCachedData(SKU $sku, $key = 'price') {
+    $cid = $this->getProductCachedId($sku);
+    $cache = $this->productCache->get($cid);
     if (isset($cache->data, $cache->data[$key])) {
       return $cache->data[$key];
     }
@@ -1395,7 +1395,7 @@ class SkuManager {
   }
 
   /**
-   * Set data into Cache for Configurable product.
+   * Set data into Cache for a product.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU Entity.
@@ -1404,12 +1404,12 @@ class SkuManager {
    * @param mixed $value
    *   Value to set for the provided key.
    */
-  public function setConfigurableProductCachedData(SKU $sku, $key, $value) {
-    $cid = $this->getConfigurableProductCachedId($sku);
-    $cache = $this->configurableProductCache->get($cid);
+  public function setProductCachedData(SKU $sku, $key, $value) {
+    $cid = $this->getProductCachedId($sku);
+    $cache = $this->productCache->get($cid);
     $data = $cache->data ?? [];
     $data[$key] = $value;
-    $this->configurableProductCache->set($cid, $data);
+    $this->productCache->set($cid, $data);
   }
 
   /**
@@ -1421,8 +1421,8 @@ class SkuManager {
    * @return string
    *   Cache key.
    */
-  public function getConfigurableProductCachedId(SKU $sku) {
-    return 'configurable_product:' . $sku->language()->getId() . ':' . $sku->getSku();
+  public function getProductCachedId(SKU $sku) {
+    return 'alshaya_product:' . $sku->language()->getId() . ':' . $sku->getSku();
   }
 
   /**
@@ -1431,9 +1431,9 @@ class SkuManager {
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU entity.
    */
-  public function clearConfigurableProductCachedData(SKU $sku) {
-    $cid = $this->getConfigurableProductCachedId($sku);
-    $this->configurableProductCache->delete($cid);
+  public function clearProductCachedData(SKU $sku) {
+    $cid = $this->getProductCachedId($sku);
+    $this->productCache->delete($cid);
   }
 
 }

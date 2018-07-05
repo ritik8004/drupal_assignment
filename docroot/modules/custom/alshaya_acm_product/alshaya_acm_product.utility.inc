@@ -170,35 +170,35 @@ function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
  *   Build array to add the gallery and zoom elements to.
  * @param \Drupal\acq_commerce\SKUInterface $sku_entity
  *   SKU Entity for which we want to display the media.
+ * @param bool $check_parent_child
+ *   Check parent or child skus.
  */
-function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity) {
+function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity, $check_parent_child = TRUE) {
   \Drupal::moduleHandler()->loadInclude('alshaya_product_zoom', 'inc', 'alshaya_product_zoom.utility');
 
   // Fetch media.
-  $media = alshaya_acm_product_get_sku_media($sku_entity);
-
   $main_image = [];
   $thumbnails = [];
 
+  $media = alshaya_acm_product_get_sku_media($sku_entity);
+  \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
+
   // Avoid notices and warnings in local.
-  if (empty($media)) {
+  if (empty($media) && empty($main_image) && $check_parent_child) {
     // Check once if there is parent SKU available, use media files of parent.
-    if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity)) {
-      // Give preference to child products to alter before checking for image in
-      // parent. Alter hook to allow all modules to update the element.
-      // @TODO: Move this to hook_alshaya_acm_product_build_alter.
-      \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
-      if (!$main_image) {
-        return alshaya_acm_product_get_gallery($build, $parent_sku);
-      }
+    $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity);
+    if ($parent_sku instanceof SKU) {
+      alshaya_acm_product_get_gallery($build, $parent_sku, FALSE);
+      return;
     }
     elseif ($sku_entity->bundle() == 'configurable') {
       // Try to get images from first child.
-      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-      $first_child = $skuManager->getChildSkus($sku_entity, TRUE);
+      /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+      $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+      $first_child = $skuImagesManager->getFirstChildWithMedia($sku_entity);
       if ($first_child instanceof SKU) {
-        $media = alshaya_acm_product_get_sku_media($first_child);
+        alshaya_acm_product_get_gallery($build, $first_child, FALSE);
+        return;
       }
     }
   }
@@ -298,10 +298,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
     }
   }
 
-  if (empty($main_image)) {
-    return [];
-  }
-  else {
+  if (!empty($main_image)) {
     $pdp_gallery_pager_limit = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
     $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 

@@ -265,11 +265,15 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity) {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $entity->getPluginInstance();
 
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    // Clear cached data for products.
+    $skuManager->clearProductCachedData($entity);
+
     if ($parent = $plugin->getParentSku($entity)) {
       // Clear cached data for configurable products.
-      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-      $skuManager->clearConfigurableProductCachedData($parent);
+      $skuManager->clearProductCachedData($parent);
     }
 
     // Check if node is available.
@@ -859,12 +863,18 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       });
 
       // Give preference to color label passed via query params.
-      $color = \Drupal::request()->query->get('color');
-      if ($color) {
-        // @TODO: This is specific to HnM, need to fix and make it generic.
-        // Get swatch_id from color value.
-        $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-        $first_child = $sku_asset_manager->getChildSkuFromColor($sku_entity, $color);
+      // @TODO: This is specific to HnM, need to fix and make it generic.
+      // This needs to be done in AAVS-470.
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_hm')) {
+        $color = \Drupal::request()->query->get('color');
+        if ($color) {
+          // Get swatch_id from color value.
+          /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_asset_manager */
+          $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+          $first_child = $sku_asset_manager->getChildSkuFromColor(
+            $sku_entity, $color
+          );
+        }
       }
 
       if (!($first_child instanceof SKU)) {
@@ -1104,8 +1114,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     }
 
     $build = [];
-    alshaya_acm_product_get_gallery($build, $tree_pointer);
-    $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
+    alshaya_acm_product_get_gallery($build, $tree_pointer, FALSE);
+    if (isset($build['gallery'], $build['gallery']['product_zoom'])) {
+      $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
+    }
 
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
 

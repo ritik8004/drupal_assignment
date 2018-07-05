@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -36,6 +37,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    * @var \Drupal\alshaya_acm_product\SkuManager
    */
   protected $skuManager;
+
+  /**
+   * SKU Images Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImagesManager;
 
   /**
    * The current route matcher service.
@@ -72,6 +80,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   Current route matcher service.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku Manager service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager
+   *   SKU Images Manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Sku Manager service.
    */
@@ -84,9 +94,11 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               array $third_party_settings,
                               CurrentRouteMatch $currentRouteMatch,
                               SkuManager $skuManager,
+                              SkuImagesManager $skuImagesManager,
                               ConfigFactoryInterface $config_factory) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->skuManager = $skuManager;
+    $this->skuImagesManager = $skuImagesManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $config_factory;
   }
@@ -116,6 +128,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    * @throws \InvalidArgumentException
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
+    $context = 'search';
     $skus = [];
     $stock_mode = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
 
@@ -147,36 +160,17 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       }
     }
 
-    $thumbnails_display_status = $this->configFactory->get('alshaya_acm_product.display_settings')->get('image_thumb_gallery');
     foreach ($items as $delta => $item) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku */
       $sku = $this->viewValue($item);
       $skus[$delta] = $sku;
       if ($sku instanceof SKU) {
-        $promotion_cache_tags = [];
-
-        $sku_media = $this->skuManager->getSkuMedia($sku);
-        $search_main_image = $thumbnails = [];
-
-        // Loop through all media items and prepare thumbnails array.
-        foreach ($sku_media as $key => $media_item) {
-          // For now we are displaying only image slider on search results page
-          // and PLP.
-          if ($media_item['media_type'] === 'image') {
-            $media_item['label'] = $product_label;
-            if (empty($search_main_image)) {
-              $search_main_image = $this->skuManager->getSkuImage($media_item, '291x288');
-            }
-
-            if ($thumbnails_display_status) {
-              $thumbnails[] = $this->skuManager->getSkuImage($media_item, '59x60', '291x288');
-            }
-          }
-        }
+        $sku_gallery = $this->skuImagesManager->getGallery($sku, 'search', $product_label);
 
         $promotion_types = ['cart'];
         $promotions = $this->skuManager->getPromotionsFromSkuId($sku, FALSE, $promotion_types);
 
+        $promotion_cache_tags = [];
         foreach ($promotions as $key => $promotion) {
           $promotions[$key]['render_link'] = TRUE;
           // Check if current page is promotion page,
@@ -186,17 +180,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           }
           $promotion_cache_tags[] = 'node:' . $key;
         }
-
-        $sku_gallery = [
-          '#theme' => 'alshaya_search_gallery',
-          '#mainImage' => $search_main_image,
-          '#thumbnails' => $thumbnails,
-          '#attached' => [
-            'library' => [
-              'alshaya_search/alshaya_search',
-            ],
-          ],
-        ];
 
         $stock_placeholder = NULL;
 
@@ -237,8 +220,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
       }
     }
-
-    $context = 'search';
 
     foreach ($elements as $delta => &$element) {
       $sku = $skus[$delta];
@@ -296,6 +277,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $configuration['third_party_settings'],
       $container->get('current_route_match'),
       $container->get('alshaya_acm_product.skumanager'),
+      $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('config.factory')
     );
   }
