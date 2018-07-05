@@ -337,7 +337,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     $cart->setExtension('cc_selected_info', NULL);
 
     // Clear the payment now.
-    $cart->clearPayment();
+    $this->getCheckoutHelper()->clearPayment();
 
     $address = GuestDeliveryCollect::getStoreAddress($values['store_code']);
 
