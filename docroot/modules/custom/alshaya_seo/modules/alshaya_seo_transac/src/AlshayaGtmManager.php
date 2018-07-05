@@ -1342,12 +1342,13 @@ class AlshayaGtmManager {
    *   GTM currency code.
    */
   public function getGtmCurrency() {
-    if (($this->configFactory->get('acq_commerce.currency')->get('gtm_currency_code')) == '' || ($this->configFactory->get('acq_commerce.currency')->get('gtm_currency_code')) == NULL) {
-      return $this->configFactory->get('acq_commerce.currency')->getRawData()['currency_code'];
+    if (!empty($gtm_currency_code = $this->configFactory->get('acq_commerce.currency')
+      ->get('gtm_currency_code'))) {
+      return $gtm_currency_code;
     }
-    else {
-      return $this->configFactory->get('acq_commerce.currency')->getRawData()['gtm_currency_code'];
-    }
+
+    return $this->configFactory->get('acq_commerce.currency')
+      ->get('currency_code');
   }
 
 }
