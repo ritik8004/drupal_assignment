@@ -44,28 +44,27 @@
     <div class="clearfix page-wrapper">
         <div{{ attributes.addClass('l-container') }}>
             <main>
-
                 <div class="c-content">
                     <div class="c-content__region">
-                      <div class="main-content-wrapper">
-                        {{ page.content|without('checkoutregistrationblock', 'jointheclub_checkout_confirm') }}
-                      </div>
-                      <div class="content-footer">
-                        <div class="content-footer-left">
-                          {{ page.content.checkoutregistrationblock }}
+                      {% block checkout_confirm_content %}
+                        <div class="main-content-wrapper">
+                          {{ page.content|without('checkoutregistrationblock', 'jointheclub_checkout_confirm') }}
                         </div>
-                        <div class="content-footer-right">
-                          {{ page.content.jointheclub_checkout_confirm }}
+                        <div class="content-footer">
+                          <div class="content-footer-left">
+                            {{ page.content.checkoutregistrationblock }}
+                          </div>
+                          <div class="content-footer-right">
+                            {{ page.content.jointheclub_checkout_confirm }}
+                          </div>
                         </div>
-                      </div>
+                      {% endblock %}
                     </div>
                 </div>
 
                 {{ feed_icons }}
-
             </main>
             <!-- /content-inner /content -->
-
         </div>
     </div>
     <!-- /main -->
