@@ -19,7 +19,8 @@ fields:
     configurable: 1
 
   actual_color_label_code:
-    label: 'Actual Color Label Code'
+    label: 'Color'
+    type: 'string'
     cardinality: -1
     index: 1
     facet: 1

@@ -264,7 +264,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
         $cart->setShippingMethod($term->get('field_shipping_carrier_code')->getString(), $term->get('field_shipping_method_code')->getString());
 
         // Clear the payment now.
-        $cart->clearPayment();
+        $this->getCheckoutHelper()->clearPayment();
       }
       else {
         \Drupal::logger('alshaya_acm_checkout')->error('Address in address book is not available for the user @user having address info @address_info for cart @cart', [

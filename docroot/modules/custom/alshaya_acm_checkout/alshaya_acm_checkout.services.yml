@@ -20,7 +20,6 @@ services:
       - '@acq_cart.cart_storage'
       - '@alshaya_acm_customer.orders_manager'
       - '@alshaya_acm.cart_helper'
-      - '@alshaya_addressbook.manager'
       - '@request_stack'
       - '@current_user'
       - '@logger.factory'

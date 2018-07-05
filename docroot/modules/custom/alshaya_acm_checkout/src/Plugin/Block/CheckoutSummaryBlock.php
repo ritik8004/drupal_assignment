@@ -188,6 +188,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   public function build() {
     // Load the CheckoutFlow plugin.
     $config = $this->configFactory->get('acq_checkout.settings');
+    $acm_config = $this->configFactory->get('alshaya_acm_checkout.settings');
     $checkout_flow_plugin = $config->get('checkout_flow_plugin') ?: 'multistep_default';
     $checkout_flow = $this->pluginManager->createInstance($checkout_flow_plugin, []);
 
@@ -357,7 +358,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $totals['subtotal'] = alshaya_acm_price_format($cart_totals['sub']);
 
     // Tax.
-    $tax_config = $this->configFactory->get('alshaya_acm_checkout.settings')->get('checkout_show_tax_info');
+    $tax_config = $acm_config->get('checkout_show_tax_info');
     // Show tax info only if set to true.
     if ($tax_config) {
       $totals['tax'] = (float) $cart_totals['tax'] > 0 ? alshaya_acm_price_format($cart_totals['tax']) : NULL;
@@ -368,6 +369,22 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     // Shipping.
     $totals['shipping'] = (float) $cart_totals['shipping'] > 0 ? alshaya_acm_price_format($cart_totals['shipping']) : NULL;
+
+    // COD Surcharge.
+    $surcharge_label = '';
+
+    // We show surcharge only on payment page.
+    if ($current_step_id == 'payment') {
+      $surcharge = $cart->getExtension('surcharge');
+      if ($surcharge && isset($surcharge['is_applied']) && $surcharge['is_applied']) {
+        if ((float) $surcharge['amount'] > 0) {
+          $surcharge_label = $acm_config->get('cod_surcharge_label');
+
+          $surcharge_tooltip = $acm_config->get('cod_surcharge_tooltip');
+          $totals['surcharge']['#markup'] = alshaya_acm_price_format($surcharge['amount'], [], $surcharge_tooltip);
+        }
+      }
+    }
 
     // Grand Total or Order total.
     $totals['grand'] = alshaya_acm_price_format($cart_totals['grand']);
@@ -383,6 +400,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       '#cart_link' => $url,
       '#number_of_items' => $cart_count,
       '#products' => $products,
+      '#surcharge_label' => $surcharge_label,
       '#totals' => $totals,
       '#delivery' => $delivery,
       '#vat_text' => $vat_text,

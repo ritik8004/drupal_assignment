@@ -23,6 +23,22 @@ function alshaya_acm_product_category_update_dependencies() {
 /**
  * Implements hook_update_N().
  *
+ * Adding new field 'Mobile only - Dept Page' to product category vocabulary.
+ */
+function alshaya_acm_product_category_update_8011() {
+  $configs = [
+    'field.storage.taxonomy_term.field_mobile_only_dpt_page_link',
+    'field.field.taxonomy_term.acq_product_category.field_mobile_only_dpt_page_link',
+    'field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change label of the field.
  */
 function alshaya_acm_product_category_update_8010() {

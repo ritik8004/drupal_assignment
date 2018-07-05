@@ -27,6 +27,18 @@
       }
     }
 
+    .price {
+      min-width: 5rem;
+
+      @include breakpoint($tablet) {
+        min-width: 3.75rem;
+      }
+
+      @include breakpoint($desktop) {
+        min-width: 4.5rem;
+      }
+    }
+
     tr.order-details-row:first-child {
       .order__user--info,
       .order__delivery-details {
@@ -40,12 +52,6 @@
 
         @include breakpoint($desktop) {
           min-width: 15rem;
-        }
-      }
-
-      .desktop-only {
-        @include breakpoint($desktop) {
-          width: 0 !important;
         }
       }
     }

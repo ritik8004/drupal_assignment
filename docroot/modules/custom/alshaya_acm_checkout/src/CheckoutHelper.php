@@ -2,12 +2,12 @@
 
 namespace Drupal\alshaya_acm_checkout;
 
+use Drupal\acq_cart\Cart;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
-use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -50,13 +50,6 @@ class CheckoutHelper {
    * @var \Drupal\alshaya_acm\CartHelper
    */
   protected $cartHelper;
-
-  /**
-   * Address Book Manager service object.
-   *
-   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
-   */
-  protected $addressBookManager;
 
   /**
    * Current request object.
@@ -106,8 +99,6 @@ class CheckoutHelper {
    *   Orders manager service object.
    * @param \Drupal\alshaya_acm\CartHelper $cart_helper
    *   Cart Helper service object.
-   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
-   *   Address Book Manager service object.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
@@ -124,7 +115,6 @@ class CheckoutHelper {
                               CartStorageInterface $cart_storage,
                               OrdersManager $orders_manager,
                               CartHelper $cart_helper,
-                              AlshayaAddressBookManager $address_book_manager,
                               RequestStack $request_stack,
                               AccountProxyInterface $current_user,
                               LoggerChannelFactoryInterface $logger_factory,
@@ -135,7 +125,6 @@ class CheckoutHelper {
     $this->cartStorage = $cart_storage;
     $this->ordersManager = $orders_manager;
     $this->cartHelper = $cart_helper;
-    $this->addressBookManager = $address_book_manager;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->currentUser = $current_user;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
@@ -164,7 +153,15 @@ class CheckoutHelper {
       Cache::invalidateTags(['cart:' . $cart->id()]);
 
       // @TODO: Remove the fix when we get the full order details.
-      $order_id = str_replace('"', '', $response['order']['id']);
+      if (isset($response['order_id'])) {
+        $order_id = $response['order_id'];
+      }
+      elseif (isset($response['order']['id'])) {
+        $order_id = str_replace('"', '', $response['order']['id']);
+      }
+      else {
+        throw new \Exception('Place order returned success in response but order id not returned in response.');
+      }
 
       $session = $this->currentRequest->getSession();
       $session->set('last_order_id', $order_id);
@@ -195,7 +192,7 @@ class CheckoutHelper {
 
       $this->ordersManager->clearOrderCache($email, $current_user_id);
       $this->ordersManager->clearLastOrderRelatedProductsCache();
-      $this->clearCartShippingHistory($cart->id());
+      $this->clearCartHistory($cart->id());
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id.', [
@@ -252,15 +249,34 @@ class CheckoutHelper {
 
     $this->setCartShippingHistory($current_method, $address, $extension);
 
-    $empty_address = $this->addressBookManager->getAddressStructureWithEmptyValues('');
-
     // Clear address and info from extension.
     $cart->setShippingMethod('', '');
-    $cart->setShipping($empty_address);
     $cart->setExtension('store_code', NULL);
     $cart->setExtension('click_and_collect_type', NULL);
     $cart->clearPayment();
     $this->cartStorage->updateCart();
+  }
+
+  /**
+   * Get cart history.
+   *
+   * @return array
+   *   History data if available or empty array.
+   */
+  public function getCartHistory() {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if ($cart instanceof Cart) {
+      // Get cache id.
+      $cid = $this->getCartHistoryCacheId($cart->id());
+      $history = $this->cacheCartHistory->get($cid);
+
+      if ($history) {
+        return $history->data;
+      }
+    }
+
+    return [];
   }
 
   /**
@@ -273,25 +289,34 @@ class CheckoutHelper {
    *   History data if available or empty array.
    */
   public function getCartShippingHistory($method = '') {
-    $cart = $this->cartStorage->getCart(FALSE);
+    $history = $this->getCartHistory();
+    $shipping_history = $history['shipping'] ?? [];
 
-    if (!empty($cart)) {
-      // Get cache id.
-      $cid = $this->getCartHistoryCacheId($cart->id());
-      $history = $this->cacheCartHistory->get($cid);
-
-      if ($history) {
-        $data = $history->data;
-        if (empty($method)) {
-          return $data;
-        }
-        elseif (isset($data[$method])) {
-          return $data[$method];
-        }
+    if (!empty($shipping_history)) {
+      if (empty($method)) {
+        return $shipping_history;
+      }
+      elseif (isset($shipping_history[$method])) {
+        return $shipping_history[$method];
       }
     }
 
     return [];
+  }
+
+  /**
+   * Set cart data into cache.
+   *
+   * @param array $history
+   *   History to store in cache.
+   */
+  public function setCartHistory(array $history) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if ($cart instanceof Cart) {
+      $cid = $this->getCartHistoryCacheId($cart->id());
+      $this->cacheCartHistory->set($cid, $history);
+    }
   }
 
   /**
@@ -305,32 +330,23 @@ class CheckoutHelper {
    *   Values used from Cart extension.
    */
   public function setCartShippingHistory($method, array $address, array $extension = []) {
-    $cart = $this->cartStorage->getCart(FALSE);
-
-    if (empty($cart)) {
-      return;
-    }
-
-    // Get cache id.
-    $cid = $this->getCartHistoryCacheId($cart->id());
-
     // Current history.
-    $history = $this->getCartShippingHistory();
+    $history = $this->getCartHistory();
+
+    $history['shipping'] = $history['shipping'] ?? [];
 
     // Prepare data to store in cache as history.
     // We will use it to restore in cart if user changes his mind again.
-    $history[$method] = [
+    $history['shipping'][$method] = [
       'method' => $method,
       'address' => $address,
     ];
 
     foreach ($extension as $code => $value) {
-      $history[$method][$code] = $value;
+      $history['shipping'][$method][$code] = $value;
     }
 
-    // We will remember only for an hour.
-    $expire = $this->dateTime->getRequestTime() + 3600;
-    $this->cacheCartHistory->set($cid, $history, $expire);
+    $this->setCartHistory($history);
   }
 
   /**
@@ -339,7 +355,7 @@ class CheckoutHelper {
    * @param int $cart_id
    *   Cart ID to use to prepare Cache ID.
    */
-  public function clearCartShippingHistory($cart_id) {
+  public function clearCartHistory($cart_id) {
     $cid = $this->getCartHistoryCacheId($cart_id);
     $this->cacheCartHistory->delete($cid);
   }
@@ -355,6 +371,67 @@ class CheckoutHelper {
    */
   private function getCartHistoryCacheId($cart_id) {
     return 'cart_history:' . $cart_id;
+  }
+
+  /**
+   * Get selected payment info from cache.
+   *
+   * @param bool $full_details
+   *   Flag to say if full details are required or just the name.
+   *
+   * @return array|string
+   *   Array if full details are required, string otherwise.
+   */
+  public function getSelectedPayment($full_details = FALSE) {
+    // Save the current selection into history.
+    $history = $this->getCartHistory();
+
+    if (isset($history['payment'])) {
+      return $full_details ? $history['payment'] : $history['payment']['method'];
+    }
+
+    return $full_details ? [] : '';
+  }
+
+  /**
+   * Set selected payment into Cart and in History.
+   *
+   * @param string $method
+   *   Payment method code.
+   * @param array $data
+   *   Payment additional data.
+   * @param bool $push
+   *   Push the updates to Magento if true.
+   */
+  public function setSelectedPayment($method, array $data = [], $push = TRUE) {
+    $cart = $this->cartStorage->getCart(FALSE);
+    $cart->setPaymentMethod($method, $data);
+
+    if ($push) {
+      $this->cartStorage->updateCart(FALSE);
+    }
+
+    // Save the current selection into cache.
+    $history = $this->getCartHistory();
+    $history['payment'] = [];
+    if ($method) {
+      $history['payment'] = [
+        'method'          => $method,
+        'additional_data' => $data,
+      ];
+    }
+    $this->setCartHistory($history);
+  }
+
+  /**
+   * Clear payment info from cart.
+   */
+  public function clearPayment() {
+    $cart = $this->cartStorage->getCart(FALSE);
+    $cart->clearPayment();
+    $history = $this->getCartHistory();
+    unset($history['payment']);
+    $this->setCartHistory($history);
   }
 
 }

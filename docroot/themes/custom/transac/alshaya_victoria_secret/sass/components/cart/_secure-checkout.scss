@@ -164,7 +164,15 @@
 
       .total--amount,
       .price-type__wrapper {
-        width: 51%;
+        width: 41%;
+
+        @include breakpoint($only-tablet) {
+          width: 47%;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 34%;
+        }
       }
     }
 

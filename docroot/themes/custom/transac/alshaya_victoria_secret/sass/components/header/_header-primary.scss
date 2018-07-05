@@ -9,10 +9,16 @@
 }
 
 .c-pre-content__region {
-  border-top: 0;
+  border: 0;
 
   @include breakpoint($desktop) {
-    height: 2.6rem;
+    height: 2.5rem;
+  }
+
+  .region__pre-content {
+    @include breakpoint($desktop) {
+      border-bottom: 1px solid $header_border;
+    }
   }
 }
 
@@ -155,10 +161,11 @@ header {
         text-transform: uppercase;
         padding: 0.625rem 0.9375rem;
         height: 2.5rem;
+        margin-top: 0;
       }
 
-      &.active a.menu--one__link {
-        border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
+      a.menu--one__link.active {
+        border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
       }
     }
 
@@ -166,6 +173,14 @@ header {
       li.menu--one__list-item {
         &:hover {
           a.menu--one__link {
+            border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
+          }
+        }
+      }
+
+      &:hover {
+        li.menu--one__list-item {
+          a.menu--one__link.active {
             border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
           }
         }

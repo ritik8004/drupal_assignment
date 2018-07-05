@@ -567,6 +567,20 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Function to get attribute info.
+   *
+   * @param string $attribute_code
+   *   Attribute code.
+   *
+   * @return mixed
+   *   API Response.
+   */
+  public function getProductAttributeWithSwatches($attribute_code) {
+    $endpoint = 'products/attributes-with-swatches/' . $attribute_code;
+    return $this->invokeApi($endpoint, [], 'GET');
+  }
+
+  /**
    * Helper function to prepare filter url query string.
    *
    * @param array $filters

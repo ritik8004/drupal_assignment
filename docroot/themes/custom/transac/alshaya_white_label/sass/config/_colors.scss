@@ -217,7 +217,7 @@ $default_msg_bg: $tealish;
 $default_msg_info_bg: $message-info;
 $default_msg_info_text: $black;
 $content_error_msg_bg: $cherry;
-$content_error_msg_txt: $cherry;
+$content_error_msg_txt: $white-five;
 $content_error_input_border: $cherry;
 $content_error_msg_text: $white-five;
 $formitem_error: $black;
@@ -386,6 +386,12 @@ $mm_p_a_text: $white-five;
 $primary_minicart_text: $black;
 $primary_minicart_quantity_text: $white-five;
 $primary_minicart_quantity_bg: $pumpkin-orange;
+$mobile_continue_shopping_btn_text: $white-five;
+$mobile_continue_shopping_btn_bg: $pumpkin-orange;
+$mobile_continue_shopping_btn_border: $pumpkin-orange;
+$desktop_continue_shopping_btn_text: $marine-blue-two;
+$desktop_continue_shopping_btn_bg: $white-five;
+$desktop_continue_shopping_btn_border: $marine-blue-two;
 
 // Notification popup.
 $minicart_notification_bg: $white-five;
@@ -455,6 +461,7 @@ $checkout_progress_next_txt: $brownish-grey;
 // Product listing page and search page.
 $plp_category_desc: $cerulean-two;
 $plp_search_count: $black;
+$color_facet_active_border: $cerulean-two;
 $plp_facet_filter: $windows-blue;
 $plp_facet_filter_bg: $cerulean-two;
 $plp_facet_item_label: $grey-ash;
@@ -771,6 +778,8 @@ $checkout_payment_row_hover: $white-four;
 $checkout_payment_method_title: $brownish-grey;
 $checkout_payment_method_icon_bg: $white;
 $checkout_payment_method_desc: $grey-ash;
+$checkout_payment_method_subtitle: $grey-light;
+$checkout_payment_method_cod_desc: $grey-light;
 $checkout_transaction_type_color: $marine-blue-two;
 $checkout_payment_CVV_tooltip_image_bg: $white;
 
@@ -810,6 +819,7 @@ $user_ui_dialog_border: $white;
 $address_book_delete_cancel: #3381d0;
 $address_book_delete_close: $black;
 $address_book_delete_close_bg: $white;
+$address_area_select: $grey-ash;
 
 //My Account pages
 $user_account_wrapper_light: $grey-ash;

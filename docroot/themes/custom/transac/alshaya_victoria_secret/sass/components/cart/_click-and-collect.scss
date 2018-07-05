@@ -31,6 +31,15 @@
         }
       }
 
+      .cc-near-me {
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            width: 12rem;
+            margin-top: 0;
+          }
+        }
+      }
+
       .label-store-location {
         font-size: 0.875rem;
         margin-bottom: 0.5rem;
@@ -45,6 +54,11 @@
         @include breakpoint($desktop) {
           width: 30%;
           margin: 0.625rem 0;
+
+          html[lang=ar] & {
+            width: 35%;
+            max-width: 19.625rem;
+          }
         }
 
         &::before {
@@ -58,6 +72,12 @@
           padding-#{$left}: 0;
         }
 
+        @include breakpoint($desktop) {
+          html[lang=ar] & {
+            margin-top: 0;
+          }
+        }
+
         input {
           &.store-location-input {
             background-size: contain;
@@ -68,6 +88,10 @@
             @include breakpoint($only-mobile) {
               background-size: 1.125rem;
               background-position: 97% center;
+
+              html[lang=ar] & {
+                background-position: 3% center;
+              }
             }
           }
         }
@@ -96,6 +120,8 @@
       }
 
       #click-and-collect-list-view {
+        clear: both;
+
         .all-stores-info {
           h3 {
             margin-#{$left}: 0;
@@ -120,6 +146,11 @@
               border-bottom: none;
             }
           }
+        }
+
+        span.empty {
+          float: $left;
+          width: 100%;
         }
       }
 
@@ -168,6 +199,15 @@
             font-size: 0.875rem;
             line-height: 1.8;
             min-width: 2.5rem;
+          }
+        }
+      }
+
+      #selected-store-elements-wrapper {
+        .cc_mobile_number {
+          .form-item-cc-mobile-number-country-code,
+          .form-item-cc-mobile-number-mobile {
+            margin-top: 1.5rem !important;
           }
         }
       }

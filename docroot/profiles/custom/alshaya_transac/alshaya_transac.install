@@ -7,7 +7,29 @@
 
 use Drupal\node\Entity\Node;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Site\Settings;
 use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Install alshaya_product_options module.
+ */
+function alshaya_transac_update_8115() {
+  \Drupal::service('module_installer')->install(['alshaya_product_options']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change stock mode based on settings.
+ */
+function alshaya_transac_update_8114() {
+  // Set stock mode.
+  \Drupal::configFactory()->getEditable('acq_sku.settings')
+    ->set('stock_mode', Settings::get('stock_mode'))
+    ->save();
+}
 
 /**
  * Implements hook_update_N().
@@ -287,6 +309,7 @@ function alshaya_transac_install() {
     'alshaya_user',
     'alshaya_acm_knet',
     'alshaya_static_html',
+    'alshaya_product_options',
   ];
 
   global $_alshaya_modules_installed;
@@ -317,6 +340,11 @@ function alshaya_transac_install() {
 
   // Invoke the function in profile to inform sub profile is installed.
   alshaya_sub_profile_installed('alshaya_transac', $modules);
+
+  // Set stock mode.
+  \Drupal::configFactory()->getEditable('acq_sku.settings')
+    ->set('stock_mode', Settings::get('stock_mode'))
+    ->save();
 }
 
 /**

@@ -43,8 +43,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
    * Gets the customer selected plugin.
    */
   public function getSelectedPlugin() {
-    $cart = $this->getCart();
-    $plugin_id = $cart->getPaymentMethod(FALSE);
+    $plugin_id = $this->getCheckoutHelper()->getSelectedPayment();
     return $this->getPlugin($plugin_id);
   }
 
@@ -100,35 +99,51 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       }
     }
 
-    $selected_plugin_id = $cart->getPaymentMethod(FALSE);
+    $cart_payment = $this->getCheckoutHelper()->getSelectedPayment();
 
-    if ($form_values = $form_state->getValue($pane_form['#parents'])) {
+    // By default we use payment method from history, if not found we use from
+    // cart as selected plugin.
+    $selected_plugin_id = empty($cart_payment)
+      ? $cart->getPaymentMethod(FALSE)
+      : $cart_payment;
+
+    // Avoid warnings because of empty array from getPaymentMethod.
+    $selected_plugin_id = is_array($selected_plugin_id) ? '' : $selected_plugin_id;
+
+    // Show payment method selected in form values if available as default.
+    $form_values = $form_state->getValue($pane_form['#parents']);
+    if ($form_values['payment_options']) {
       $selected_plugin_id = $form_values['payment_options'];
     }
 
-    // Avoid warnings because of empty array from getPaymentMethod.
-    if (is_array($selected_plugin_id) && empty($selected_plugin_id)) {
-      $selected_plugin_id = NULL;
-    }
-
     // If selected method is no longer available, we start fresh.
-    if ($selected_plugin_id && !in_array($selected_plugin_id, $payment_methods)) {
+    if (!in_array($selected_plugin_id, $payment_methods)) {
       $selected_plugin_id = '';
-      $cart->setPaymentMethod(NULL, []);
     }
 
-    // If there is no plugin selected, we select the default one.
-    if (empty($selected_plugin_id) && $default_plugin_id) {
-      $selected_plugin_id = reset($payment_methods);
+    // Select first payment method as selected if none available.
+    $selected_plugin_id = empty($selected_plugin_id)
+      ? reset($payment_methods)
+      : $selected_plugin_id;
+
+    // Since introduction of Surcharge, we inform Magento about selected
+    // payment method even before user does place order. By default we select
+    // a payment method, we inform Magento about that here.
+    if (empty($cart_payment)) {
+      $this->getCheckoutHelper()->setSelectedPayment($selected_plugin_id);
     }
 
     // More than one payment method available, so build a form to let the user
-    // chose the option they want. Once they select an option, an ajax callback
-    // will rebuild the payment details and show the selected payment method
-    // plugin form instead.
+    // chose the option they want. Once they select an option, on reload the
+    // page and we show the full form for that particular method.
     $payment_options = [];
     $payment_has_descriptions = [];
     $payment_translations = [];
+
+    $languageManager = \Drupal::languageManager();
+
+    $current_language_id = $languageManager->getCurrentLanguage()->getId();
+    $default_language_id = $languageManager->getDefaultLanguage()->getId();
 
     foreach ($payment_methods as $plugin_id) {
       if (!isset($plugins[$plugin_id])) {
@@ -142,20 +157,43 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         $description = $description_value[0]['value'];
       }
 
-      $current_language_id = \Drupal::languageManager()->getCurrentLanguage()->getId();
-      $default_language_id = \Drupal::languageManager()->getDefaultLanguage()->getId();
-
       if ($current_language_id !== $default_language_id) {
         if ($payment_term->hasTranslation($default_language_id)) {
           $default_language_payment_term = $payment_term->getTranslation($default_language_id);
           $payment_translations[$payment_term->getName()] = $default_language_payment_term->getName();
         }
+
+        if ($plugin_id === 'cashondelivery') {
+          $config = $languageManager->getLanguageConfigOverride(
+            $current_language_id, 'alshaya_acm_checkout.settings'
+          );
+        }
       }
+      elseif ($plugin_id === 'cashondelivery') {
+        $config = \Drupal::config('alshaya_acm_checkout.settings');
+      }
+
+      $sub_title = '';
+
+      if ($plugin_id === 'cashondelivery') {
+        $surcharge = $cart->getExtension('surcharge');
+
+        if ($surcharge) {
+          $surcharge_value = alshaya_acm_price_get_formatted_price($surcharge['amount']);
+          $sub_title = $config->get('cod_surcharge_short_description');
+          $description = $config->get('cod_surcharge_description');
+
+          $sub_title = str_replace('[surcharge]', $surcharge_value, $sub_title);
+          $description = str_replace('[surcharge]', $surcharge_value, $description);
+        }
+      }
+
       $payment_has_descriptions[$plugin_id] = (bool) $description;
 
       $method_name = '
         <div class="payment-method-name">
           <div class="method-title">' . $payment_term->getName() . '</div>
+          <div class="method-sub-title">' . $sub_title . '</div>
           <div class="method-side-info method-' . $plugin_id . '"></div>
           <div class="method-description">' . $description . '</div>
         </div>
@@ -226,7 +264,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     }
 
     if ($selected_plugin_id) {
-      $cart->setPaymentMethod($selected_plugin_id);
       $plugin = $this->getPlugin($selected_plugin_id);
       $pane_form['payment_details_wrapper']['payment_method_' . $selected_plugin_id] += $plugin->buildPaneForm($pane_form['payment_details_wrapper']['payment_method_' . $selected_plugin_id], $form_state, $complete_form);
     }
@@ -245,8 +282,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
       // validation runs before the ajax method is called, so we can get the
       // value selected by the user and update the cart in here so that when
       // the form rebuilds it shows the correct payment plugin form.
-      $cart = $this->getCart();
-      $cart->setPaymentMethod($payment_method);
+      $this->getCheckoutHelper()->setSelectedPayment($payment_method, [], FALSE);
 
       $plugin = $this->getSelectedPlugin();
       $plugin->validatePaymentForm($pane_form, $form_state, $complete_form);
@@ -266,6 +302,23 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // Set the payment method id in session as it is not available in cart.
     $session = \Drupal::request()->getSession();
     $session->set('selected_payment_method', $plugin->getId());
+  }
+
+  /**
+   * Get checkout helper service object.
+   *
+   * @return \Drupal\alshaya_acm_checkout\CheckoutHelper
+   *   Checkout Helper service object.
+   */
+  protected function getCheckoutHelper() {
+    static $helper;
+
+    if (empty($helper)) {
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+      $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    }
+
+    return $helper;
   }
 
 }

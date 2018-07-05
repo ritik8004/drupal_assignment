@@ -68,12 +68,26 @@ class Cart implements CartInterface {
    *   The cart.
    */
   public function updateCartObject($cart) {
+    if (isset($cart->customer_id)) {
+      $cart->customer_id = (string) $cart->customer_id;
+    }
+
     // Some ecommerce backends, like hybris, don't save the billing like they
     // do with shipping. So if a billing was set we don't want it to be
     // overwritten when the API response comes back.
     $current_billing = $this->getBilling();
     if (!empty($current_billing) && empty($cart->billing)) {
       $cart->billing = $current_billing;
+    }
+
+    if (isset($cart->carrier)) {
+      // We use it as array internally everywhere, even set as array.
+      $cart->carrier = (array) $cart->carrier;
+
+      // If carrier is with empty structure, we remove it.
+      if (empty($cart->carrier['carrier_code'])) {
+        unset($cart->carrier);
+      }
     }
 
     $this->cart = $cart;
@@ -105,7 +119,7 @@ class Cart implements CartInterface {
    */
   public function customerId() {
     if (isset($this->cart, $this->cart->customer_id)) {
-      return $this->cart->customer_id;
+      return (string) $this->cart->customer_id;
     }
     return NULL;
   }
@@ -435,11 +449,7 @@ class Cart implements CartInterface {
     // If cart is not updated yet and we are reading from session.
     if (isset($this->cart, $this->cart->carrier)) {
       $method = $this->cart->carrier;
-
-      // V2 onwards, we will have empty structure available all the time.
-      if (!empty($method['carrier_code']) && !empty($method['method_code'])) {
-        return implode(',', [$method['carrier_code'], $method['method_code']]);
-      }
+      return implode(',', [$method['carrier_code'], $method['method_code']]);
     }
 
     if (isset($this->cart, $this->cart->extension, $this->cart->extension['shipping_method'])) {
