@@ -1,0 +1,110 @@
+{% set attributes = attributes.addClass('user-page', 'l-two--sf', 'checkout-login', 'order-confirmation') %}
+<div>
+
+    <!-- ______________________ BREADCRUMB _______________________ -->
+
+  {% if page.breadcrumb %}
+      <div class="c-breadcrumb">
+          <div class="l-container">
+              <div class="c-breadcrumb__region">
+                {{ page.breadcrumb }}
+              </div>
+          </div>
+      </div>
+  {% endif %}
+    <!-- /breadcrumb -->
+
+    <!-- ______________________ MAIN _______________________ -->
+    <div class="site-brand-wrapper">
+      <div class="site-brand-home">
+        <a href="{{ path('<front>') }}" title="{{ site_name }}" rel="home" class="logo">
+          <img src="{{ site_logo }}" alt="{{ site_name }}"/>
+        </a>
+
+        <div class="secure__checkout--block">
+          <span class="secure__checkout--label">{{ "Secure Checkout"|t }}</span><span class="icon-ic_login"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ______________________ HERO CONTENT _______________________ -->
+
+    {% if page.hero_content %}
+      <div class="c-hero-content">
+        <div class="l-container">
+          <div class="c-hero-content__region">
+            {{ page.hero_content }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <!-- /hero content -->
+
+
+    <div class="clearfix page-wrapper">
+        <div{{ attributes.addClass('l-container') }}>
+            <main>
+
+                <div class="c-content">
+                    <div class="c-content__region">
+                      <div class="main-content-wrapper">
+                        {{ page.content|without('checkoutregistrationblock', 'jointheclub_checkout_confirm', 'youllbeableto_checkout_confirm') }}
+                      </div>
+                      <div class="content-footer">
+                        <div class="content-footer-left">
+                          {{ page.content.checkoutregistrationblock }}
+                        </div>
+                        <div class="content-footer-right">
+                          {{ page.content.youllbeableto_checkout_confirm }}
+                          {{ page.content.jointheclub_checkout_confirm }}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+                {{ feed_icons }}
+
+            </main>
+            <!-- /content-inner /content -->
+
+        </div>
+    </div>
+    <!-- /main -->
+
+    <!-- ______________________ Vat text _______________________ -->
+    {% if vat_text_footer %}
+      <div class="vat-container">
+        <div class = 'vat-text-footer'>
+          {{ vat_text_footer }}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- ______________________ Post content _______________________ -->
+
+    {% if page.post_content %}
+      <div class="c-post-content">
+        <div class="l-container">
+          <div class="c-post-content__region">
+            {{ page.post_content }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+  <!-- ______________________ FOOTER SECONDARY _______________________ -->
+
+    {% if page.footer_secondary %}
+        <div class="c-footer-secondary">
+            <div class="l-container">
+                <div class="c-footer-secondary__region">
+                    {{ page.footer_secondary }}
+                </div>
+            </div>
+        </div>
+        <!-- /footer-secondary -->
+    {% endif %}
+
+
+</div>
+<!-- /page -->
