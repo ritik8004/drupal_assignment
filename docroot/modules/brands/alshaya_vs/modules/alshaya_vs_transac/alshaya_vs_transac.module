@@ -59,8 +59,11 @@ function alshaya_vs_transac_node_load($nodes) {
   foreach ($nodes as $node) {
     if ($node->bundle() === 'acq_product') {
       $sku = SKU::loadFromSku($node->get('field_skus')->first()->getString());
-      // This is done for all Meta title, Page title.
-      $node->setTitle(_alshaya_vs_transac_get_title($sku, 'meta'));
+
+      if ($sku instanceof SKU) {
+        // This is done for all Meta title, Page title.
+        $node->setTitle(_alshaya_vs_transac_get_title($sku, 'meta'));
+      }
     }
   }
 }

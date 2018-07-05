@@ -845,6 +845,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     if (count($form_state->get('tree')['configurables']) > 1) {
       $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings')->get('attribute_weights');
       $config_attributes = array_keys($configurable_weights);
+      // @TODO: Support multiple attribute sets here.
+      // We won't have color for all attribute sets.
       $root_attribute_code = array_shift($config_attributes);
       $user_input_configurables = $form_state->getUserInput();
       $first_child = '';
