@@ -1,0 +1,52 @@
+.acq-content-product-modal {
+  .content {
+    &__main {
+      @include breakpoint($desktop) {
+        width: 56%;
+      }
+    }
+
+    &__sidebar {
+      @include breakpoint($desktop) {
+        margin-top: 0.5rem;
+      }
+
+      .content--size-volume {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .full-prod-link {
+    font-weight: normal;
+  }
+
+  .cloudzoom__image {
+    .img-wrap {
+      @include breakpoint($tablet) {
+        height: 21.88rem;
+      }
+
+      @include breakpoint($desktop) {
+        height: 24.5rem;
+      }
+    }
+  }
+
+  .c-products__item__label {
+    margin-top: 0.125rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: $pdp_product_title;
+  }
+
+  .field--name-field-skus .sku-base-form button[type="submit"] {
+    font-family: $alshaya-thin;
+    padding: 0.75rem 2rem;
+    margin-#{$left}: 0;
+
+    @include breakpoint($only-tablet) {
+      padding: 0.75rem 1.5rem;
+    }
+  }
+}

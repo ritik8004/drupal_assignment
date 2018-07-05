@@ -18,3 +18,28 @@
     }
   }
 }
+
+.path--cart,
+.nodetype--acq_product {
+  .ui-dialog {
+    #drupal-modal {
+      overflow-y: auto;
+
+      .full-prod-link {
+        margin-bottom: 0;
+        padding-bottom: 0.375rem;
+      }
+
+      #product-image-gallery,
+      #lightSlider {
+        height: 31rem;
+      }
+    }
+  }
+}
+
+.acq-content-product-modal {
+  .content__main {
+    min-height: auto;
+  }
+}

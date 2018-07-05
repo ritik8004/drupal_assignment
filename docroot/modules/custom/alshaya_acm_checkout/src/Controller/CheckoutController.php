@@ -205,13 +205,7 @@ class CheckoutController implements ContainerInjectionInterface {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if ($cart instanceof CartInterface) {
-      $cart->setPaymentMethod($selected_payment_method);
-
-      // Inform Magento about payment method selection.
-      $this->cartStorage->updateCart(FALSE);
-
-      // Do again, we don't get selected payment method back from Magento.
-      $cart->setPaymentMethod($selected_payment_method);
+      $this->checkoutHelper->setSelectedPayment($selected_payment_method);
     }
 
     $response = new AjaxResponse();
