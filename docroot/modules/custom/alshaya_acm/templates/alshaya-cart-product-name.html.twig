@@ -37,7 +37,7 @@
             </div>
         {% endif %}
     </div>
-    {%  if  promotions is not empty %}
+    {% if free_gift_promos is not empty %}
       <div class="sku-promotions">
         {% for id, promotion in promotions %}
           {% if promotion.sku_entity_id is not empty %}
@@ -48,6 +48,7 @@
             </div>
           {% endif %}
         {% endfor %}
+        {{ free_gift_promos }}
       </div>
     {% endif %}
 </div>
