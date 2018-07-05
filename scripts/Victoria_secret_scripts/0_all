@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+  <title>Test Suite</title>
+</head>
+<body>
+<table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
+<tr><td><b>Test Suite</b></td></tr>
+<tr><td><a href="homepage">homepage</a></td></tr>
+<tr><td><a href="5_Footer_logos">5_Footer_logos</a></td></tr>
+<tr><td><a href="6_Footer_Help_links_VS">6_Footer_Help_links_VS</a></td></tr>
+<tr><td><a href="6_Footer_Help_links_pink">6_Footer_Help_links_pink</a></td></tr>
+<tr><td><a href="6_Footer_Help_links_sport">6_Footer_Help_links_sport</a></td></tr>
+<tr><td><a href="todays_offer">todays_offer</a></td></tr>
+<tr><td><a href="departmentpage">departmentpage</a></td></tr>
+<tr><td><a href="7_Footer_About_brand">7_Footer_About_brand</a></td></tr>
+<tr><td><a href="7_Footer_About_brand_pink">7_Footer_About_brand_pink</a></td></tr>
+<tr><td><a href="7_Footer_About_brand_sport">7_Footer_About_brand_sport</a></td></tr>
+</tbody></table>
+</body>
+</html>
