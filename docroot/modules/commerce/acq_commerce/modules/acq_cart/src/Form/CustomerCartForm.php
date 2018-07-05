@@ -2,8 +2,10 @@
 
 namespace Drupal\acq_cart\Form;
 
+use Detection\MobileDetect;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\UpdateCartErrorEvent;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
