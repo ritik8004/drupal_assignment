@@ -101,6 +101,12 @@
         .c-facet__blocks__wrapper--mobile {
           .c-facet__label {
             border-#{$right}: 0;
+
+            &.active-filter-count {
+              .filter-count {
+                padding-top: 0.25rem;
+              }
+            }
           }
         }
       }
