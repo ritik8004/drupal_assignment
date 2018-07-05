@@ -47,7 +47,17 @@
 
                 <div class="c-content">
                     <div class="c-content__region">
-                        {{ page.content }}
+                      <div class="main-content-wrapper">
+                        {{ page.content|without('checkoutregistrationblock', 'jointheclub_checkout_confirm') }}
+                      </div>
+                      <div class="content-footer">
+                        <div class="content-footer-left">
+                          {{ page.content.checkoutregistrationblock }}
+                        </div>
+                        <div class="content-footer-right">
+                          {{ page.content.jointheclub_checkout_confirm }}
+                        </div>
+                      </div>
                     </div>
                 </div>
 
