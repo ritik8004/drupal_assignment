@@ -1,15 +1,3 @@
-.c-footer__logo--verisign {
-  background-image: url("../../alshaya_white_label/imgs/cards/card-verisign.png");
-}
-
-.c-footer__logo--visa {
-  background-image: url("../../alshaya_white_label/imgs/cards/card-visa.png");
-}
-
-.c-footer__logo--mastercard {
-  background-image: url("../../alshaya_white_label/imgs/cards/card-mastercard.png");
-}
-
 .c-footer__copy {
   @include breakpoint($only-tablet) {
     .field--name-body {
