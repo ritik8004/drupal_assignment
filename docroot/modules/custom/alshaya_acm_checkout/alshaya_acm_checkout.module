@@ -464,7 +464,14 @@ function alshaya_acm_checkout_block_access(Block $block, $operation, AccountInte
   // Add "join the club" block only if user has not entered loyalty card
   // number in basket.
   if ($operation == 'view' && $block->id() == 'jointheclub_checkout_confirm') {
-    $order = _alshaya_acm_checkout_get_last_order_from_session();
-    return AccessResult::forbiddenIf(!empty($order['extension']['loyalty_card']));
+    $current_route = \Drupal::routeMatch();
+    if ($current_route->getRouteName() == 'acq_checkout.form'
+        && $current_route->getParameter('step') == 'confirmation') {
+      $order = _alshaya_acm_checkout_get_last_order_from_session();
+      // We check if we have valid order id.
+      if (!empty($order)) {
+        return AccessResult::forbiddenIf(!empty($order['extension']['loyalty_card']));
+      }
+    }
   }
 }
