@@ -103,7 +103,9 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
     // By default we use payment method from history, if not found we use from
     // cart as selected plugin.
-    $selected_plugin_id = $cart_payment ?? $cart->getPaymentMethod(FALSE);
+    $selected_plugin_id = empty($cart_payment)
+      ? $cart->getPaymentMethod(FALSE)
+      : $cart_payment;
 
     // Avoid warnings because of empty array from getPaymentMethod.
     $selected_plugin_id = is_array($selected_plugin_id) ? '' : $selected_plugin_id;
@@ -120,7 +122,9 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     }
 
     // Select first payment method as selected if none available.
-    $selected_plugin_id = $selected_plugin_id ?? reset($payment_methods);
+    $selected_plugin_id = empty($selected_plugin_id)
+      ? reset($payment_methods)
+      : $selected_plugin_id;
 
     // Since introduction of Surcharge, we inform Magento about selected
     // payment method even before user does place order. By default we select
