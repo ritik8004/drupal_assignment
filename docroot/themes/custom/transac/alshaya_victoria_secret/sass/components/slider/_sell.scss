@@ -20,5 +20,12 @@
         margin: 0 0.3125rem;
       }
     }
+
+    .owl-prev,
+    .owl-next {
+      &::before {
+        font-size: 3rem;
+      }
+    }
   }
 }
