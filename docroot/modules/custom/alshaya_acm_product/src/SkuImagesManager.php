@@ -60,7 +60,7 @@ class SkuImagesManager {
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
    * @param bool $check_parent_child
-   *   Flag to specify if we should check parent SKU when nothing in child.
+   *   Check parent or child SKUs.
    *
    * @return array
    *   Array of media files.
