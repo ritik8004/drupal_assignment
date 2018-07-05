@@ -423,4 +423,15 @@ class CheckoutHelper {
     $this->setCartHistory($history);
   }
 
+  /**
+   * Clear payment info from cart.
+   */
+  public function clearPayment() {
+    $cart = $this->cartStorage->getCart(FALSE);
+    $cart->clearPayment();
+    $history = $this->getCartHistory();
+    unset($history['payment']);
+    $this->setCartHistory($history);
+  }
+
 }
