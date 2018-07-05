@@ -1302,11 +1302,11 @@ class SkuManager {
     $tree = $plugin->deriveProductTree($sku);
 
     $configurable_codes = array_keys($tree['configurables']);
-    $skus = $tree['products'];
 
     $combinations = [];
 
-    foreach ($skus as $sku_code => $sku_entity) {
+    // Prepare array to get all combinations available grouped by SKU.
+    foreach ($tree['products'] ?? [] as $sku_code => $sku_entity) {
       if (!($sku_entity instanceof SKU)) {
         continue;
       }
@@ -1319,7 +1319,9 @@ class SkuManager {
       }
     }
 
-    foreach ($combinations['by_sku'] as $combination) {
+    // Prepare combinations array grouped by attributes to check later which
+    // combination is possible using isset().
+    foreach ($combinations['by_sku'] ?? [] as $combination) {
       foreach ($combination as $key1 => $value1) {
         foreach ($combination as $key2 => $value2) {
           $combinations['by_attribute'][$key1][$value1][$key2][$value2] = $value2;
