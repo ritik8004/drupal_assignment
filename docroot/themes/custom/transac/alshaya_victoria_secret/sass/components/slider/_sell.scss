@@ -5,6 +5,20 @@
   text-transform: none;
 }
 
-.view-product-slider .c-products__item__label {
-  font-size: 0.875rem;
+.view-product-slider {
+  .c-products__item__label {
+    font-size: 0.875rem;
+  }
+}
+
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell {
+  .view-product-slider {
+    .views-row {
+      @include breakpoint($desktop) {
+        margin: 0 0.3125rem;
+      }
+    }
+  }
 }
