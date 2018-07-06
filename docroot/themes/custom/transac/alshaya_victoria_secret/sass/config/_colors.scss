@@ -87,6 +87,7 @@ $ash-triplet: #777;
 $vivid-raspberry: #d91560;
 $whisper-dark: #e5e5e5;
 $white-smoke-light: #f2f2f2;
+$white-smoke-light-transparent: rgba(242, 242, 242, 0.65);
 $white-smoke-fog: #f9f9f9;
 $smoke-light: #fafafa;
 $medium-green: #39b54a;
@@ -307,6 +308,7 @@ $gallery_pager_bg: $white-five;
 $gallery_pager_active_bg: $marine-blue-two;
 $gallery_zoombtn_bg: $white;
 $gallery_zoombtn_disabled: $light-ash;
+$gallery_arrows_bg_mobile: $white-smoke-light-transparent;
 
 // Homepage Slider
 $hp_slider_dots: $nero;

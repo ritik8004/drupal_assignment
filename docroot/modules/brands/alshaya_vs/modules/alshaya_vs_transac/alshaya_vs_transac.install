@@ -8,6 +8,40 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Override image styles to match VS designs.
+ */
+function alshaya_vs_transac_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $styles = [
+    'image.style.137x144',
+    'image.style.192x168',
+    'image.style.291x288',
+    'image.style.product_zoom_medium_606x504',
+    'image.style.product_zoom_small_81x72',
+  ];
+
+  $manager->updateConfigs($styles, 'alshaya_image_styles');
+
+  $manager->updateConfigs(
+    ['image.style.cart_notification_thumbnail'],
+    'alshaya_acm_cart_notification'
+  );
+
+  $manager->updateConfigs(
+    ['image.style.checkout_summary_block_thumbnail'],
+    'alshaya_acm'
+  );
+
+  $field_newsletter = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.user.user.field_subscribe_newsletter');
+  $field_newsletter->set('label', 'أرغب في استلام عروض حصرية من فيكتورياز سيكريت');
+  $field_newsletter->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_vs_transac_install() {
