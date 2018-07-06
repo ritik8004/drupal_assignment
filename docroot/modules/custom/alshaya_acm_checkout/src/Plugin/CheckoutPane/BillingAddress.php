@@ -60,6 +60,25 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       '#weight' => -49,
     ];
 
+    // We don't show this form completely when we use CoD.
+    $selected_payment_method = $this->getCheckoutHelper()->getSelectedPayment();
+    if ($selected_payment_method === 'cashondelivery') {
+      $pane_form['#access'] = FALSE;
+
+      // We still need to copy from Shipping for Magento.
+      $pane_form['same_as_shipping'] = [
+        '#type' => 'value',
+        '#value' => self::BILLING_ADDR_CASE_SAME_AS_SHIPPING,
+      ];
+
+      $this->getCheckoutHelper()->setBillingFromShipping();
+
+      return $pane_form;
+    }
+
+    $billing_info = $this->getCheckoutHelper()->getBillingInfoFromHistory();
+    $is_same = $billing_info['is_same'] ?? self::BILLING_ADDR_CASE_SAME_AS_SHIPPING;
+
     /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
@@ -77,6 +96,11 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       ];
     }
     else {
+      // By default we want to use same address as shipping.
+      $same_as_shipping = $is_same
+        ? self::BILLING_ADDR_CASE_SAME_AS_SHIPPING
+        : self::BILLING_ADDR_CASE_NOT_SAME_AS_SHIPPING;
+
       $pane_form['summary'] = [
         '#markup' => $this->t('Is the delivery address the same as your billing address?'),
       ];
@@ -91,11 +115,8 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
         '#ajax' => [
           'callback' => [$this, 'updateAddressAjaxCallback'],
         ],
-        '#default_value' => self::BILLING_ADDR_CASE_SAME_AS_SHIPPING,
+        '#default_value' => $same_as_shipping,
       ];
-
-      // By default we want to use same address as shipping.
-      $same_as_shipping = self::BILLING_ADDR_CASE_SAME_AS_SHIPPING;
     }
 
     if ($form_state->getValues()) {
@@ -118,9 +139,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
     ];
 
     if ($same_as_shipping !== self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
-      /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
-      $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
-      $billing_address = $cart_helper->getBilling($cart);
+      $billing_address = $billing_info['address'] ?? [];
 
       if (!empty($billing_address['country_id'])) {
         /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
@@ -154,15 +173,6 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
         '#title' => '',
         '#default_value' => $address_default_value,
       ];
-    }
-
-    // We don't show this form completely when we use CoD.
-    $selected_payment_method = $this->getCheckoutHelper()->getSelectedPayment();
-    if ($selected_payment_method === 'cashondelivery') {
-      $pane_form['#access'] = FALSE;
-
-      // We still need to copy from Shipping for Magento.
-      $pane_form['same_as_shipping']['#value'] = self::BILLING_ADDR_CASE_SAME_AS_SHIPPING;
     }
 
     return $pane_form;
@@ -206,18 +216,17 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
    */
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $values = $form_state->getValue($pane_form['#parents']);
-    $cart = $this->getCart();
 
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
 
     if ($values['same_as_shipping'] == self::BILLING_ADDR_CASE_SAME_AS_SHIPPING) {
-      alshaya_acm_checkout_set_shipping_into_billing($cart);
+      $this->getCheckoutHelper()->setBillingFromShipping();
     }
     else {
       $address_values = $values['address']['billing'];
-      $address = _alshaya_acm_checkout_clean_address($address_book_manager->getMagentoAddressFromAddressArray($address_values));
-      $cart->setBilling($address);
+      $address = $address_book_manager->getMagentoAddressFromAddressArray($address_values);
+      $this->getCheckoutHelper()->setBillingInfo(FALSE, $address);
     }
   }
 
