@@ -53,8 +53,14 @@
       cursor: pointer;
 
       a {
-        display: inline-block;
         text-decoration: underline;
+        margin-bottom: 0.25rem;
+        display: block;
+
+        @include breakpoint($only-tablet) {
+          display: inherit;
+          margin-bottom: 0;
+        }
       }
     }
   }
@@ -87,6 +93,25 @@
     }
   }
 
+  @include breakpoint ($only-mobile) {
+    .acq-content-product-modal {
+      display: flex;
+      flex-flow: row wrap;
+
+      > div {
+        width: 100%;
+      }
+
+      .content__main {
+        order: -2;
+      }
+
+      .content__title_wrapper {
+        padding: 0;
+      }
+    }
+  }
+
   .c-products__free__item__label {
     font-size: 0.875rem;
     line-height: 1.29;
@@ -113,6 +138,10 @@
   }
 
   .content__sidebar {
+    @include breakpoint($only-tablet) {
+      margin-top: 0;
+    }
+
     .label {
       margin: 0.8125rem 0 0.75rem;
       font-size: 0.875rem;
@@ -160,8 +189,17 @@
           }
         }
 
-        &.free-gifts-wrapper {
+        .sku-promotions {
           @include breakpoint($only-mobile) {
+            display: none;
+          }
+        }
+
+        &.free-gifts-wrapper {
+          display: none;
+
+          @include breakpoint($only-mobile) {
+            display: block;
             padding: 0 0 1rem;
           }
         }
