@@ -214,15 +214,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Pottery Barn AE.
     'pbae' => [
-      // PBAE is connected to MC UAT for now.
       'default' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mcae_uat',
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_test',
       ],
-      //'default' => [
-      //  'magento' => 'pb_qa',
-      //  'conductor' => 'pbae_test',
-      //],
     ],
     // Victoria Secret KW.
     'vskw' => [
