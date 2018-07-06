@@ -525,7 +525,9 @@ function alshaya_acm_get_cart_items_by_sku() {
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $swatches = \Drupal::config('alshaya_acm_product.display_settings')->get('swatches')['pdp'];
+  $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  $swatches = $display_settings->get('swatches')['pdp'];
+  $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
 
   $form['quantity']['#type'] = 'select';
   $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();

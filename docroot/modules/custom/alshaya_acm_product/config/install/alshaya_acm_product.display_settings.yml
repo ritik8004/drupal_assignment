@@ -1,5 +1,6 @@
 image_thumb_gallery: false
 color_swatches: false
+show_configurable_boxes_after: 767
 swatches:
   pdp: {  }
   plp: {  }
