@@ -2,7 +2,6 @@ effects:
   66d66417-6939-4bc5-869c-df1605cc9833:
     uuid: 66d66417-6939-4bc5-869c-df1605cc9833
     id: image_scale
-    weight: 1
     data:
       width: null
       height: 104

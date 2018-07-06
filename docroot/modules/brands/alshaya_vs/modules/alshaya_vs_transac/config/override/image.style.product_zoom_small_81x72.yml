@@ -2,7 +2,6 @@ effects:
   bd6647d7-8057-4e83-a207-45b24bd670e6:
     uuid: bd6647d7-8057-4e83-a207-45b24bd670e6
     id: image_scale
-    weight: 2
     data:
       width: null
       height: 130
