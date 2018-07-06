@@ -165,23 +165,23 @@ function alshaya_get_magento_host_data() {
     ],
     // Pottery Barn.
     'pb_qa' => [
-      'url' => 'https://qa-h47ppbq-rfuu4sicyisyw.eu.magentosite.cloud',
-      /*'kw' => [
+      'url' => 'https://integration-5ojmyuq-rfuu4sicyisyw.eu.magentosite.cloud',
+      'kw' => [
         'store_id' => [
           'en' => 1,
-          'ar' => 2,
+          'ar' => 6,
         ],
       ],
       'sa' => [
         'store_id' => [
-          'en' => 1,
-          'ar' => 2,
+          'en' => 2,
+          'ar' => 3,
         ],
-      ],*/
+      ],
       'ae' => [
         'store_id' => [
-          'en' => 1,
-          'ar' => 2,
+          'en' => 4,
+          'ar' => 5,
         ],
       ],
     ],
