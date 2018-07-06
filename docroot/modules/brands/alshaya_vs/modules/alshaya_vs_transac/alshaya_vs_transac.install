@@ -41,6 +41,10 @@ function alshaya_vs_transac_update_8001() {
     'alshaya_vs_transac',
     'override'
   );
+
+  $field_newsletter = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.user.user.field_subscribe_newsletter');
+  $field_newsletter->set('label', 'أرغب في استلام عروض حصرية من فيكتورياز سيكريت');
+  $field_newsletter->save();
 }
 
 /**
