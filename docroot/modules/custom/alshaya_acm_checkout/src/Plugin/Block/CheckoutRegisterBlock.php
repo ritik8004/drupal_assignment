@@ -164,6 +164,7 @@ class CheckoutRegisterBlock extends BlockBase implements ContainerFactoryPluginI
       $form['privilege_card_wrapper']['#prefix'] = '<div id="details-privilege-card-wrapper" class="hidden-important">';
       $form['privilege_card_wrapper']['privilege_card_number']['#value'] = $loyalty_card;
       $form['privilege_card_wrapper']['privilege_card_number2']['#value'] = $loyalty_card;
+      $form['privilege_card_wrapper']['#suffix'] = '</div>';
     }
 
     $form['actions']['submit']['#value'] = $this->t('save', [], ['context' => 'button']);
