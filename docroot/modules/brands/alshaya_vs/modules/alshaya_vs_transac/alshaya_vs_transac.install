@@ -10,24 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Update sorting positions.
- */
-function alshaya_vs_transac_update_8002() {
-  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
-    ->setData([
-      'sort_options' => [
-        'created' => 'created',
-        'nid' => 'nid',
-        'name_1' => 'name_1',
-        'final_price' => 'final_price',
-      ],
-    ])
-    ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Override image styles to match VS designs.
  */
 function alshaya_vs_transac_update_8001() {
@@ -53,6 +35,9 @@ function alshaya_vs_transac_update_8001() {
     ['image.style.checkout_summary_block_thumbnail'],
     'alshaya_acm'
   );
+
+  // Update sorting positions.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')->save();
 }
 
 /**
@@ -118,18 +103,6 @@ function alshaya_vs_transac_install() {
   $field_brand = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.node.store.field_brand');
   $field_brand->set('label', 'المحل يشمل');
   $field_brand->save();
-
-  // Save position settings.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
-    ->setData([
-      'sort_options' => [
-        'created' => 'created',
-        'nid' => 'nid',
-        'name_1' => 'name_1',
-        'final_price' => 'final_price',
-      ],
-    ])
-    ->save();
 
   // Enable super category feature and menu block with config factory.
   // Placing config in "override" folder won't work here. As we have an event
