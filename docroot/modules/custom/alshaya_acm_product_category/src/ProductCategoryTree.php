@@ -196,14 +196,20 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
 
     foreach ($terms as $term) {
+      $tag = 'div';
+      $path = $this->getPathForCategory($term->tid);
+      if (!empty($path)) {
+        $tag = 'a';
+      }
       $data[$term->tid] = [
         'label' => $term->name,
         'description' => [
           '#markup' => $term->description__value,
         ],
         'id' => $term->tid,
-        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
+        'path' => $path,
         'active_class' => '',
+        'tag' => $tag,
       ];
 
       if ($highlight_paragraph) {
@@ -519,6 +525,25 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
 
     return [];
+  }
+
+  /**
+   * Get the path for links if links should be clickable.
+   *
+   * @param string $tid
+   *   Taxonomy term ID.
+   *
+   * @return string
+   *   String containing path.
+   */
+  protected function getPathForCategory($tid) {
+    $path = '';
+    $term_load = $this->termStorage->load($tid);
+    if ($term_load->get('field_display_as_clickable_link')->value) {
+      $path = 'href=' . Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $tid])->toString();
+    }
+
+    return $path;
   }
 
 }

@@ -32,6 +32,21 @@ function alshaya_acm_product_category_update_dependencies() {
 /**
  * Implements hook_update_N().
  *
+ * Adding new field 'Display as clickable link' to product category vocabulary.
+ */
+function alshaya_acm_product_category_update_8012() {
+  $configs = [
+    'field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link',
+    'field.storage.taxonomy_term.field_display_as_clickable_link',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_acm_product_category');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update views for product category taxonomy terms.
  */
 function alshaya_acm_product_category_update_8012() {
