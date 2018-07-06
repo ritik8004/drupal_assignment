@@ -117,10 +117,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Database connection.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
-    LanguageManagerInterface $language_manager,
-    CacheBackendInterface $cache,
-    RouteMatchInterface $route_match,
-    Connection $connection) {
+                              LanguageManagerInterface $language_manager,
+                              CacheBackendInterface $cache,
+                              RouteMatchInterface $route_match,
+                              Connection $connection) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
@@ -196,20 +196,15 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
 
     foreach ($terms as $term) {
-      $tag = 'div';
-      $path = $this->getPathForCategory($term->tid);
-      if (!empty($path)) {
-        $tag = 'a';
-      }
       $data[$term->tid] = [
         'label' => $term->name,
         'description' => [
           '#markup' => $term->description__value,
         ],
         'id' => $term->tid,
-        'path' => $path,
+        'path' => $term->field_display_as_clickable_link_value ? 'href=' . Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString() : '',
         'active_class' => '',
-        'tag' => $tag,
+        'tag' => $term->field_display_as_clickable_link_value ? 'a' : 'div',
       ];
 
       if ($highlight_paragraph) {
@@ -385,8 +380,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $mobile_only = FALSE, $vid = NULL) {
     $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['tid', 'name', 'description__value']);
+    $query->fields('tfd', ['tid', 'name', 'description__value'])
+      ->fields('ttdcl', ['field_display_as_clickable_link_value']);
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
+    $query->innerJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid AND ttdcl.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
     if ($exclude_not_in_menu) {
@@ -525,25 +522,6 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
 
     return [];
-  }
-
-  /**
-   * Get the path for links if links should be clickable.
-   *
-   * @param string $tid
-   *   Taxonomy term ID.
-   *
-   * @return string
-   *   String containing path.
-   */
-  protected function getPathForCategory($tid) {
-    $path = '';
-    $term_load = $this->termStorage->load($tid);
-    if ($term_load->get('field_display_as_clickable_link')->value) {
-      $path = 'href=' . Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $tid])->toString();
-    }
-
-    return $path;
   }
 
 }
