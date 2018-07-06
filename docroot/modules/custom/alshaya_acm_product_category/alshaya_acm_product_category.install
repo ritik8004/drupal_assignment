@@ -6,6 +6,7 @@
  */
 
 use Drupal\field\Entity\FieldConfig;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_update_N().
@@ -34,14 +35,26 @@ function alshaya_acm_product_category_update_dependencies() {
  *
  * Adding new field 'Display as clickable link' to product category vocabulary.
  */
-function alshaya_acm_product_category_update_8012() {
+function alshaya_acm_product_category_update_8013() {
   $configs = [
-    'field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link',
     'field.storage.taxonomy_term.field_display_as_clickable_link',
+    'field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link',
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
     'core.entity_view_display.taxonomy_term.acq_product_category.default',
   ];
   \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_acm_product_category');
+
+  // Update value of existing taxonomy terms.
+  $query = \Drupal::entityQuery('taxonomy_term');
+  $query->condition('vid', 'acq_product_category');
+  $tids = $query->execute();
+  foreach ($tids as $tid) {
+    $term = Term::load($tid);
+    if (!empty($term)) {
+      $term->field_display_as_clickable_link->setValue('1');
+      $term->save();
+    }
+  }
 }
 
 /**

@@ -104,9 +104,9 @@ content:
     third_party_settings: {  }
     type: options_select
   field_display_as_clickable_link:
-    weight: 3
+    weight: 20
     settings:
-    display_label: true
+      display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
