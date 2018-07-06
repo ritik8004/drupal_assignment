@@ -35,6 +35,10 @@ function alshaya_vs_transac_update_8001() {
     ['image.style.checkout_summary_block_thumbnail'],
     'alshaya_acm'
   );
+
+  $field_newsletter = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.user.user.field_subscribe_newsletter');
+  $field_newsletter->set('label', 'أرغب في استلام عروض حصرية من فيكتورياز سيكريت');
+  $field_newsletter->save();
 }
 
 /**
