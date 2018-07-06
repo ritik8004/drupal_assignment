@@ -177,11 +177,19 @@ function alshaya_get_magento_host_data() {
           'en' => 2,
           'ar' => 3,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'sau_en',
+          'ar' => 'sau_ar',
+        ],
       ],
       'ae' => [
         'store_id' => [
           'en' => 4,
           'ar' => 5,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'are_en',
+          'ar' => 'are_ar',
         ],
       ],
     ],
