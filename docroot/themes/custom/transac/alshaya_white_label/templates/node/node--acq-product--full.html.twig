@@ -80,25 +80,21 @@ set classes = [
             <h2 class="field__label">{{ 'Product Description'|t }}</h2>
             <div class="field__content-wrapper">
               <div class="field__content">
-                {% set descCount = 0 %}
-                {% for desc in content.description  %}
-                  {% if desc.value|render %}
-                    <div class="desc-wrapper">
-                      {% set descCount = descCount + 1 %}
-                      {% if desc.label|render %}
-                        <div class="desc-label">
-                          {{ desc.label }}
-                        </div>
-                      {% endif %}
-
-                      <div class="desc-value">
-                        {{ desc.value }}
+                {% if content.short_desc.value|render %}
+                  <div class="desc-wrapper">
+                    {% if content.short_desc.label|render %}
+                      <div class="desc-label">
+                        {{ content.short_desc.label }}
                       </div>
+                    {% endif %}
+
+                    <div class="desc-value">
+                      {{ content.short_desc.value }}
                     </div>
-                  {% endif %}
-                {% endfor %}
+                  </div>
+                {% endif %}
               </div>
-              {% if descCount > 1 %}
+              {% if content.short_desc.value|render %}
                 <span class="read-more-description-link">{{ 'Read more'|t }}</span>
                 <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
               {% endif %}

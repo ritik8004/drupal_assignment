@@ -435,135 +435,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $build['item_code']['#markup'] = $sku;
 
-        $at_glance['label'] = [
-          '#markup' => t('At a glance'),
-        ];
-        $at_glance['value'] = [
-          '#markup' => $sku_entity->get('attr_at_glance')->getString(),
-        ];
-
-        $description['label'] = [
-          '#markup' => t('Features and benefits'),
-        ];
-
-        $description_value = '';
-
-        if ($body = $entity->get('body')->getValue()) {
-          $description_value = $body[0]['value'];
-        }
-
-        if ($bullet_points = $sku_entity->get('attr_bullet_points')->getString()) {
-          $description_value .= '<div class="bullet-points-wrapper">';
-          $description_value .= $bullet_points;
-          $description_value .= '</div>';
-        }
-
-        if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
-          $concepts_markup = [
-            '#theme' => 'product_concept_markup',
-            '#concepts' => $concepts,
-          ];
-
-          $description_value .= render($concepts_markup);
-        }
-
-        // Render the wrapper div for composition always so that the same can be
-        // filled with data on variant selection.
-        $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
-        $composition = $skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
-        $composition_markup = [
-          '#theme' => 'product_composition_markup',
-        ];
-
-        if (!empty($composition)) {
-          $composition_markup['#composition']['#markup'] = $composition;
-        }
-
-        $description_value .= render($composition_markup);
-
-        $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
-        $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
-        if (!empty($washing_instructions) || !empty($dry_cleaning_instructions)) {
-          $description_value .= '<div class="care-instructions-wrapper">';
-          $description_value .= '<div class="care-instructions-label">' . t('care instructions') . '</div>';
-          if (!empty($washing_instructions)) {
-            $description_value .= '<div class="care-instructions-value washing-instructions">' . $washing_instructions . '</div>';
-          }
-          if (!empty($dry_cleaning_instructions)) {
-            $description_value .= '<div class="care-instructions-value dry-cleaning-instructions">' . $dry_cleaning_instructions . '</div>';
-          }
-          $description_value .= '</div>';
-        }
-
-        // Render the wrapper div for article warning always so that the same
-        // can be filled with data on variant selection.
-        $warning = $skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
-        $warning_markup = [
-          '#theme' => 'product_article_warning_markup',
-        ];
-
-        if (!empty($warning)) {
-          $warning_markup['#warning']['#markup'] = $warning;
-        }
-
-        $description_value .= render($warning_markup);
-
-        $description['value'] = [
-          '#markup' => $description_value,
-        ];
-
-        if (\Drupal::config('alshaya_acm.settings')->get('pdp_show_specifications')) {
-          $specifications['label'] = [
-            '#markup' => t('Specifications'),
-          ];
-
-          $specifications['value'] = [
-            "#theme" => 'item_list',
-            '#items' => [],
-          ];
-
-          if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
-            $specifications['value']['#items'][] = t('Style Code: @value', [
-              '@value' => $attr_style_code,
-            ]);
-          }
-
-          if ($attr_color = $sku_entity->get('attr_color')->getString()) {
-            $specifications['value']['#items'][] = t('Color: @value', [
-              '@value' => $attr_color,
-            ]);
-          }
-
-          if ($attr_season = $sku_entity->get('attr_season')->getString()) {
-            $specifications['value']['#items'][] = t('Season: @value', [
-              '@value' => $attr_season,
-            ]);
-          }
-
-          if ($attr_brand = $sku_entity->get('attr_product_brand')->getString()) {
-            $specifications['value']['#items'][] = t('Product brand: @value', [
-              '@value' => $attr_brand,
-            ]);
-          }
-        }
-
-        $whats_in_box['label'] = [
-          '#markup' => t("What's In The Box"),
-        ];
-
-        $whats_in_box['value'] = [
-          '#markup' => $sku_entity->get('attr_whats_in_the_box')->getString(),
-        ];
-
-        // Prepare full description in required sequence.
-        // Check comments in MMCPA-218 for sequence requirements.
-        $build['description'][] = $at_glance;
-        $build['description'][] = $description;
-        if (!empty($specifications)) {
-          $build['description'][] = $specifications;
-        }
-        $build['description'][] = $whats_in_box;
-
         // Initialise home delivery variable.
         $build['home_delivery'] = [];
 
@@ -1083,6 +954,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     if (count($form_state->get('tree')['configurables']) > 1) {
       $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings')->get('attribute_weights');
       $config_attributes = array_keys($configurable_weights);
+      // @TODO: Support multiple attribute sets here.
+      // We won't have color for all attribute sets.
       $root_attribute_code = array_shift($config_attributes);
       $user_input_configurables = $form_state->getUserInput();
       $first_child = '';

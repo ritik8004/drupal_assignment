@@ -115,6 +115,13 @@
               color: $checkout_order_print_btn_txt;
             }
           }
+
+          .final-print-confirmation {
+            html[lang=ar] & {
+              min-width: 14.1875rem;
+              text-align: center;
+            }
+          }
         }
       }
 
@@ -253,6 +260,16 @@
     .form-type-checkbox .option::before {
       margin-#{$right}: inherit;
       #{$left}: 0;
+    }
+  }
+
+  .user__order--detail {
+    .price {
+      min-width: 6.5rem;
+
+      @include breakpoint($tablet) {
+        min-width: 5.5rem;
+      }
     }
   }
 }
