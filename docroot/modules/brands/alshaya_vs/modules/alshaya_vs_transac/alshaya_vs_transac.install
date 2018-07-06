@@ -36,7 +36,7 @@ function alshaya_vs_transac_update_8001() {
     'alshaya_acm'
   );
 
-  // Update sorting positions.
+  // Update sorting.
   \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')->save();
 }
 
