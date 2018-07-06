@@ -157,5 +157,18 @@
     @include breakpoint($tablet) {
       display: none;
     }
+
+    &.empty-accordion-delivery-options {
+      .c-accordion__title {
+        @include icon(chevron#{$right}, after);
+
+        a {
+          width: 100%;
+          display: inline-block;
+          position: relative;
+          z-index: 1;
+        }
+      }
+    }
   }
 }
