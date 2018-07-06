@@ -768,11 +768,17 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
  *   Form item array.
  * @param array $cart_item
  *   Cart item array.
+ * @param bool $is_free_item
+ *   If the line item is  a free item.
+ * @param array $cart_rules
+ *   Promotion rules applicable to  this cart.
+ * @param bool $cart_has_promo_code
+ *   Boolean to denote if the cart has a promo code applied to it.
  *
  * @return array
  *   Item name build array.
  */
-function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $cart_item, $is_free_item = FALSE, $cart_rules = [], $cart_has_promo_code = FALSE) {
+function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $cart_item, $is_free_item = FALSE, array $cart_rules = [], $cart_has_promo_code = FALSE) {
   // Get SKU attributes.
   $sku_attributes = alshaya_acm_product_get_sku_configurable_values($sku_entity);
 
@@ -861,6 +867,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     $free_gift_promos = [];
 
     foreach ($promotions as $key => $promotion) {
+      // Render promo label only if no promo code is applied to the cart.
       if (!empty($promotion['skus']) && (!$cart_has_promo_code)) {
         $free_gift_promos[$key] = $promotion;
         $free_sku_entity = SKU::loadFromSku($promotion['skus'][0]['value']);
@@ -869,8 +876,8 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
       }
     }
 
-    // If we have free gift promotions linked with the current item, generate the
-    // label for them.
+    // If we have free gift promotions linked with the current item, generate
+    // the label for them.
     $free_gift_cart_promotions = [];
     if (!empty($free_gift_promos)) {
       $free_gift_cart_promotions = [
@@ -879,6 +886,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
       ];
     }
 
+    // If line item's price is 0, its a free item & set the label for it.
     if (!empty($total_price['#final_price']) && $total_price['#final_price'] == 0) {
       $free_gift_label['#markup'] = t('Free Gift with Purchase.');
     }

@@ -17,9 +17,6 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
         </div>
       {% endif %}
 
-      {% block productBrand %}
-      {% endblock %}
-
       {% if not page %}
         <h2{{ title_attributes.addClass("c-products__free__item__label") }}>
           {{ 'FREE GIFT'|t }}
@@ -42,8 +39,6 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     </div>
 
     <div class="content__sidebar">
-      {% block sizeVolume %}
-      {% endblock %}
       <div class="content__description__wrapper">
         <div class="label">
           {{ 'Product Description'|t }}
