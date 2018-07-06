@@ -6,12 +6,6 @@
 
     .user-register-form {
       margin-top: 1.6rem;
-
-      @include breakpoint($only-tablet) {
-        max-width: 24.8rem;
-        width: 55%;
-        margin-#{$left}: 0;
-      }
     }
 
     #edit-account {
@@ -293,11 +287,6 @@
   }
 
   .user-register-form {
-    @include breakpoint($only-tablet) {
-      float: $left;
-      width: 55%;
-    }
-
     .form-wrapper,
     .form-item {
       @include breakpoint($only-tablet) {
@@ -312,23 +301,41 @@
     }
   }
 
-  .block-checkout-register-block {
-    clear: both;
-    overflow: hidden;
+  .content-footer {
     position: relative;
 
     @include breakpoint($tablet) {
-      padding-top: 2.8rem;
       margin-top: 1rem;
-      float: #{$left};
     }
+  }
 
-    @include breakpoint($only-tablet) {
-      width: 100%;
+  .content-footer-left {
+    clear: both;
+    overflow: hidden;
+
+    @include breakpoint($tablet) {
+      padding-top: 2.8rem;
+      float: $left;
+      max-width: 45%;
+      clear: none;
     }
 
     @include breakpoint($desktop) {
       padding-top: 4.1rem;
+    }
+  }
+
+  .content-footer-right {
+    @include breakpoint($tablet) {
+      float: $left;
+      width: 55%;
+      padding-top: 2.8rem;
+      padding-#{$left}: 4.5625rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-top: 4.1rem;
+      padding-#{$left}: 6.5625rem;
     }
   }
 
@@ -339,20 +346,9 @@
     font-size: 0.75rem;
     text-align: center;
 
-    @include breakpoint($desktop) {
-      padding-#{$left}: 15.5em !important;
-      width: 36.25rem !important;
-    }
-
     @include breakpoint($tablet) {
-      width: 45.5%;
       text-align: $left;
       margin-top: 1.25rem;
-    }
-
-    @include breakpoint($only-tablet) {
-      position: absolute;
-      #{$right}: -1rem;
     }
 
     h3 {
@@ -373,7 +369,6 @@
     @include breakpoint($only-tablet) {
       text-align: center;
       text-indent: 2rem;
-      width: 42%;
       padding-top: 0.5rem;
 
       img {
@@ -742,6 +737,79 @@
       @include breakpoint($desktop) {
         min-width: 57.5rem;
       }
+    }
+  }
+}
+
+#block-youllbeableto-checkout-confirm {
+  text-align: center;
+
+  @include breakpoint($tablet) {
+    text-align: $left;
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: $primary_text;
+    margin: 10px 0;
+  }
+
+  h3 {
+    color: $user_sidebar_block_title;
+    font-size: 0.875rem;
+    font-family: $alshaya-bold;
+    text-transform: lowercase;
+    font-weight: normal;
+  }
+}
+
+.order-confirmation {
+  .block-join-the-club {
+    text-indent: 0;
+
+    @include breakpoint($tablet) {
+      text-align: $left;
+    }
+
+    h3,
+    p {
+      padding-#{$left}: 0;
+    }
+
+    img {
+      @include breakpoint($desktop) {
+        width: 55%;
+        float: $right;
+        max-width: 12.5rem;
+      }
+    }
+  }
+}
+
+#block-jointheclub-checkout-confirm {
+  span {
+    margin-#{$right}: 0.625em;
+    display: inline-block;
+  }
+
+  h3 {
+    color: $privilege_card_title;
+    margin-bottom: 0.1rem;
+    font-size: 0.875rem;
+  }
+
+  a {
+    margin-top: 1em;
+    display: inline-block;
+    color: $user_block_link;
+  }
+
+  p {
+    margin: 0.4rem 0;
+    font-size: 0.875rem;
+
+    @include breakpoint($tablet) {
+      margin: 0.5rem 0;
     }
   }
 }
