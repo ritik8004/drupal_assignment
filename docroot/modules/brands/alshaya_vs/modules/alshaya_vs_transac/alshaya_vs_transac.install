@@ -8,6 +8,23 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Update sorting positions.
+ */
+function alshaya_vs_transac_update_8002() {
+  // Enable sort options.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
+    ->setData([
+      'sort_options' => [
+        'created' => 'created',
+        'nid' => 'nid',
+        'name_1' => 'name_1',
+        'final_price' => 'final_price',
+      ],
+    ])
+    ->save();
+}
+
+/**
  * Implements hook_update_N().
  *
  * Override image styles to match VS designs.
@@ -100,6 +117,19 @@ function alshaya_vs_transac_install() {
   $field_brand = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.node.store.field_brand');
   $field_brand->set('label', 'المحل يشمل');
   $field_brand->save();
+
+  // Save position settings.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
+    ->setData([
+      'sort_options' => [
+        'created' => 'created',
+        'nid' => 'nid',
+        'name_1' => 'name_1',
+        'final_price' => 'final_price',
+      ],
+    ])
+    ->save();
+
   // Enable super category feature and menu block with config factory.
   // Placing config in "override" folder won't work here. As we have an event
   // subscriber written for config save, which will always override the value
