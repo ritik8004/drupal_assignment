@@ -24,6 +24,30 @@
   }
 }
 
+.mobilegallery .mobilegallery__thumbnails,
+#product-image-gallery,
+#lightSlider {
+  .slick-prev,
+  .slick-next {
+    &::before {
+      font-size: 3rem;
+    }
+  }
+}
+
+.mobilegallery .mobilegallery__thumbnails {
+  .slick-prev,
+  .slick-next {
+    &::before {
+      @include breakpoint($only-mobile) {
+        background-color: $gallery_arrows_bg_mobile;
+        height: 3rem;
+        width: 3rem;
+      }
+    }
+  }
+}
+
 @include breakpoint($only-tablet) {
   #product-image-gallery-container {
     .imagegallery__wrapper {
