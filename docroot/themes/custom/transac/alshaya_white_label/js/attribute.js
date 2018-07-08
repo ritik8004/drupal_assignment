@@ -20,6 +20,9 @@
         });
       }
 
+      $('.form-item-configurable-swatch').parent().addClass('configurable-swatch');
+      $('#configurable_ajax .form-item-configurable-select').parent().addClass('configurable-select');
+
       /**
        * JS for converting select list for size to unformatted list on PDP pages.
        *
