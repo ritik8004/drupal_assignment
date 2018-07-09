@@ -273,3 +273,19 @@
     }
   }
 }
+
+.c-order-print {
+  .user__order--detail {
+    .surcharge-row td {
+      padding: 0.625rem 1rem;
+    }
+  }
+}
+
+@media print {
+  html,
+  body {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
