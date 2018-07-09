@@ -143,11 +143,17 @@
 
         // Accordion for department page category for mobile.
         $('.paragraph--type--product-carousel-category').find('.c-accordion-delivery-options').each(function () {
-          $(this).once('accordion-init').accordion({
-            heightStyle: 'content',
-            collapsible: true,
-            active: false
-          });
+          if ($(this).find('ul').length > 0) {
+            $(this).once('accordion-init').accordion({
+              heightStyle: 'content',
+              collapsible: true,
+              active: false
+            });
+          }
+
+          else {
+            $(this).addClass('empty-accordion-delivery-options');
+          }
         });
       }
 
