@@ -240,21 +240,22 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         if (isRTL()) {
           $(this, context).lightSlider({
             vertical: false,
-            item: 4,
+            item: settings.plp_slider.item,
             rtl: true,
-            slideMargin: 5,
+            slideMargin: settings.plp_slider.margin,
             onSliderLoad: function () {
-              gallery.css('height', '73px');
+              gallery.css('height', settings.plp_slider.height + 'px');
             }
           });
         }
         else {
           $(this, context).lightSlider({
             vertical: false,
-            item: 4,
-            slideMargin: 5,
+            item: settings.plp_slider.item,
+            rtl: true,
+            slideMargin: settings.plp_slider.margin,
             onSliderLoad: function () {
-              gallery.css('height', '73px');
+              gallery.css('height', settings.plp_slider.height + 'px');
             }
           });
         }
