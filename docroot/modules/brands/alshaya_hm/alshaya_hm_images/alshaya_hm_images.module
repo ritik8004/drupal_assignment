@@ -9,7 +9,6 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 
 /**
@@ -345,4 +344,24 @@ function alshaya_hm_images_alshaya_master_post_drupal_install() {
     'configurable' => 1,
     'label' => 'Color',
   ]);
+}
+
+/**
+ * Implements hook_alshaya_acm_product_first_child_for_selection().
+ */
+function alshaya_hm_images_alshaya_acm_product_first_child_for_selection(SKUInterface $sku) {
+  $color = \Drupal::request()->query->get('color');
+
+  // Give preference to color label passed via query params.
+  if ($color) {
+    // Get swatch_id from color value.
+    /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_asset_manager */
+    $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+
+    $first_child = $sku_asset_manager->getChildSkuFromColor(
+      $sku, $color
+    );
+  }
+
+  return $first_child ?? NULL;
 }

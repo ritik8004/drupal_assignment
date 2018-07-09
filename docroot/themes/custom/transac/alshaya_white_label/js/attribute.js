@@ -34,9 +34,12 @@
           var that = $(this).parent();
           $('select', that).select2Option();
 
-          var clickedOption = $('.select2Option li a.picked', that);
           $('.select2Option', that).find('.list-title .selected-text').remove();
-          $('.select2Option', that).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+
+          var clickedOption = $('select option:selected', that);
+          if (!clickedOption.is(':disabled')) {
+            $('.select2Option', that).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+          }
         });
       }
 

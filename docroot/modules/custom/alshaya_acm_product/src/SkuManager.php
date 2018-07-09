@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Render\FormattableMarkup;
@@ -11,6 +12,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -56,6 +58,13 @@ class SkuManager {
    * @var \Drupal\acq_sku\AcqSkuLinkedSku
    */
   protected $linkedSkus;
+
+  /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * Cache Backend service for alshaya.
@@ -132,6 +141,8 @@ class SkuManager {
    *   The logger service.
    * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
    *   Linked SKUs service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Cache\CacheBackendInterface $product_labels_cache
@@ -147,6 +158,7 @@ class SkuManager {
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
                               AcqSkuLinkedSku $linked_skus,
+                              ModuleHandlerInterface $module_handler,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
                               CacheBackendInterface $product_cache) {
@@ -160,6 +172,7 @@ class SkuManager {
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
     $this->linkedSkus = $linked_skus;
+    $this->moduleHandler = $module_handler;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
     $this->productCache = $product_cache;
@@ -204,6 +217,8 @@ class SkuManager {
    *   Image build array.
    */
   public function getSkuImage(array $media, $image_style = '', $rel_image_style = '') {
+    $media['label'] = $media['label'] ?? '';
+
     $image = [
       '#theme' => 'image_style',
       '#style_name' => $image_style,
@@ -1436,6 +1451,40 @@ class SkuManager {
   public function clearProductCachedData(SKU $sku) {
     $cid = $this->getProductCachedId($sku);
     $this->productCache->delete($cid);
+  }
+
+  /**
+   * Get first child based on brand conditions if defined or from default.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   First child SKU entity.
+   */
+  public function getFirstChildForSku(SKUInterface $sku) {
+    $first_child = NULL;
+
+    $implementations = $this->moduleHandler->getImplementations('alshaya_acm_product_first_child_for_selection');
+    foreach ($implementations as $module) {
+      $first_child = $this->moduleHandler->invoke(
+        $module,
+        'alshaya_acm_product_first_child_for_selection',
+        [$sku]
+      );
+
+      if ($first_child instanceof SKU) {
+        break;
+      }
+    }
+
+    if (!($first_child instanceof SKU)) {
+      // Default use-case: User landing on PDP from PLP/Search/directly.
+      // Set the color applicable to first child sku as default here.
+      $first_child = $this->getChildSkus($sku, TRUE);
+    }
+
+    return $first_child;
   }
 
 }

@@ -23,6 +23,7 @@ services:
       - '@entity.repository'
       - '@logger.factory'
       - '@acq_sku.linked_sku'
+      - '@module_handler'
       - '@cache.alshaya'
       - '@cache.product_labels'
       - '@cache.alshaya_product'

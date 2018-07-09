@@ -70,7 +70,8 @@ class CartFormHelper {
    */
   public function getFirstAttribute($attribute_set = 'default') {
     $weights = $this->getConfigurableAttributeWeights($attribute_set);
-    return !empty($weights) ? reset($weights) : '';
+    $attributes = $weights ? array_keys($weights) : [];
+    return !empty($attributes) ? reset($attributes) : '';
   }
 
   /**
