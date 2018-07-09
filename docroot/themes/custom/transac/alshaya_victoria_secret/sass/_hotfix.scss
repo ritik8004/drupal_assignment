@@ -6,3 +6,17 @@ html[lang=ar] {
     }
   }
 }
+
+body {
+  &.chrome {
+    &.alias--cart {
+      #table-cart-items {
+        td {
+          select {
+            text-indent: inherit;
+          }
+        }
+      }
+    }
+  }
+}
