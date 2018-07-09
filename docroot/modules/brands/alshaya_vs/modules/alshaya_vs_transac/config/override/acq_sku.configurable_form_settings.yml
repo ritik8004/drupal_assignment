@@ -1,9 +1,17 @@
 attribute_weights:
-  color: 1
-  band_size: 2
-  cup_size: 3
+  default:
+    color: 1
+    band_size: 2
+    cup_size: 3
+  others:
+    color: 1
+    size: 2
+  beauty:
+    fragrance: 1
 show_quantity: TRUE
 sortable_options:
   - color
   - band_size
   - cup_size
+  - size
+  - fragrance

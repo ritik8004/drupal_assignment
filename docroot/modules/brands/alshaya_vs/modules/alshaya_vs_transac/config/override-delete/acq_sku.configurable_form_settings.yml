@@ -1,4 +1,3 @@
 attribute_weights:
-  size: 1
-sortable_options:
-  - size
+  default:
+    size: 1

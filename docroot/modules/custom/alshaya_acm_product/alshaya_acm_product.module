@@ -791,6 +791,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['quantity']['#suffix'] = '</span>';
 
   if (isset($form['ajax']) && isset($form['ajax']['configurables'])) {
+    /** @var \Drupal\acq_sku\CartFormHelper $cart_form_helper */
+    $cart_form_helper = \Drupal::service('acq_sku.cart_form_helper');
+
     // Prepare array of just the configurable options.
     $configurables = [];
     foreach ($form['ajax']['configurables'] as $configurable_key => $configurable) {
@@ -851,7 +854,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     // selected by default on page load.
     $product_tree = $form_state->get('tree');
     if (count($product_tree['configurables']) > 1) {
-      $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings')->get('attribute_weights');
+      $configurable_weights = $cart_form_helper->getConfigurableAttributeWeights(
+        $sku_entity->get('attribute_set')->getString()
+      );
+
       $config_attributes = array_keys($configurable_weights);
       // @TODO: Support multiple attribute sets here.
       // We won't have color for all attribute sets.
@@ -895,7 +901,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       // Set the color attribute as default only if user has not made a
       // selection.
       if ((isset($root_attribute_options[$first_child_root_attr_value])) &&
-        (!isset($user_input_configurables['configurables'][$root_attribute_code]))) {
+        (!isset($user_input_configurables['configurables'], $user_input_configurables['configurables'][$root_attribute_code]))) {
         $form['ajax']['configurables'][$root_attribute_code]['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
         $form_state->setValue('configurables', [$root_attribute_code => $first_child_root_attr_value]);
       }
@@ -919,6 +925,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $selected = isset($user_input_configurables['configurables'])
         ? $user_input_configurables['configurables']
         : $form_state->getValue('configurables');
+
+      // Avoid NULL values.
+      $selected = $selected ?? [];
 
       $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $selected);
 
@@ -950,9 +959,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $process_stock = FALSE;
     }
 
+    $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
+
     foreach ($form['ajax']['configurables'] as $configurable_key => &$configurable) {
       if (is_array($configurable)) {
-        $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
 
         // Add custom ajax callback for configurables to refresh the gallery.
         $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
@@ -968,9 +978,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           continue;
         }
 
-        $configurable['#options_attributes'] = isset($configurable['#options_attributes'])
-          ? $configurable['#options_attributes']
-          : [];
+        $configurable['#options_attributes'] = $configurable['#options_attributes'] ?? [];
 
         // Check if it is a dropdown, we disable the options for which we don't
         // have stock. Apply this check only if we have just 1 configurable
@@ -1088,6 +1096,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
   // List of attributes selected by end-users on the form.
   $selected = $form_state->getValue('configurables');
+
+  $selected = $selected ?? [];
 
   // Calculate available config options based on the attribute value selected,
   // in case of multiple config attributes with a product.
