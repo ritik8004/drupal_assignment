@@ -36,6 +36,12 @@ function alshaya_vs_transac_update_8001() {
     'alshaya_acm'
   );
 
+  $manager->updateConfigs(
+    ['alshaya_acm_product_position.settings'],
+    'alshaya_vs_transac',
+    'override'
+  );
+
   $field_newsletter = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.user.user.field_subscribe_newsletter');
   $field_newsletter->set('label', 'أرغب في استلام عروض حصرية من فيكتورياز سيكريت');
   $field_newsletter->save();
@@ -104,6 +110,7 @@ function alshaya_vs_transac_install() {
   $field_brand = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.node.store.field_brand');
   $field_brand->set('label', 'المحل يشمل');
   $field_brand->save();
+
   // Enable super category feature and menu block with config factory.
   // Placing config in "override" folder won't work here. As we have an event
   // subscriber written for config save, which will always override the value

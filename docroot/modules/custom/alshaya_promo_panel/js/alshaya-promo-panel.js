@@ -16,7 +16,6 @@
       $($offer_toggler).once().on('click', function () {
         $(window).trigger('resize');
         $(this).parent().toggleClass('active-promo-panel');
-        $($offer_content).slideToggle('1000');
         $($body).toggleClass('active-promo-panel-content');
       });
 
