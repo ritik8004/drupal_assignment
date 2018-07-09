@@ -1,4 +1,13 @@
 .c-plp {
+  .product-default-image {
+    img {
+      @include breakpoint($desktop) {
+        max-width: 18.1875rem;
+        max-height: none;
+      }
+    }
+  }
+
   @include breakpoint($tablet) {
     padding-top: 1.5rem;
   }
@@ -19,6 +28,19 @@
   .c-products__item {
     font-size: 0.875rem;
 
+    @include breakpoint ($desktop) {
+      width: 31.6%;
+      max-width: 18.1875rem;
+      margin-#{$right}: 2.4%;
+      margin-bottom: 2rem;
+    }
+
+    &:nth-child(3n) {
+      @include breakpoint ($desktop) {
+        margin-#{$right}: 0;
+      }
+    }
+
     article:hover {
       .field--name-name a {
         text-decoration: none;
@@ -26,15 +48,28 @@
 
       &::after {
         @include breakpoint($tablet) {
-          box-shadow: none;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: -0.75rem;
+          box-shadow: 0.25rem 0.25rem 0.5rem 0 $plp_tile_product_hover_shadow;
         }
       }
     }
 
     .alshaya_search_gallery {
+      @include breakpoint($desktop) {
+        max-height: 24.5rem;
+      }
+
       .alshaya_search_mainimage {
         @include breakpoint($only-tablet) {
           height: auto;
+        }
+
+        @include breakpoint($desktop) {
+          height: 24.5rem;
+          align-items: flex-start;
         }
       }
     }

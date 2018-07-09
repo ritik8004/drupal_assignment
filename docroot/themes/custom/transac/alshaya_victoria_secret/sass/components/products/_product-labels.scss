@@ -1,0 +1,57 @@
+.labels-container {
+  .label {
+    &.top {
+      &-left {
+        .product-zoom-container & {
+          @include breakpoint($desktop) {
+            left: 8rem;
+          }
+
+          @include breakpoint($only-tablet) {
+            left: 5rem;
+          }
+        }
+      }
+
+      &-right {
+        .product-zoom-container & {
+          @include breakpoint($desktop) {
+            right: 8rem;
+          }
+
+          @include breakpoint($only-tablet) {
+            right: 5rem;
+          }
+        }
+      }
+    }
+
+    &.bottom {
+      &-left {
+        .product-zoom-container & {
+          @include breakpoint($desktop) {
+            bottom: 11.5rem;
+            left: 8rem;
+          }
+
+          @include breakpoint($only-tablet) {
+            left: 5rem;
+          }
+        }
+      }
+
+      &-right {
+        .product-zoom-container & {
+          @include breakpoint($desktop) {
+            bottom: 11.5rem;
+            right: 8rem;
+          }
+
+          @include breakpoint($only-tablet) {
+            right: 5rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -125,6 +125,18 @@
 }
 
 .acq-cart-summary {
+  .left {
+    width: 27%;
+  }
+
+  .right {
+    float: $left;
+
+    .product-qty {
+      margin-bottom: 0.3125rem;
+    }
+  }
+
   .caption {
     padding: 0.875rem 0;
     font-size: 0.875rem;
@@ -148,6 +160,7 @@
     img {
       border: 1px solid $checkout_section_border;
       padding: 0.125rem;
+      width: 4.0625rem;
     }
   }
 

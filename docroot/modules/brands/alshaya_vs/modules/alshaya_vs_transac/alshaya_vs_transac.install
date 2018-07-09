@@ -10,6 +10,23 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Correcting dimensions in CS/US and PLP image style.
+ */
+function alshaya_vs_transac_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $styles = [
+    'image.style.192x168',
+    'image.style.291x288',
+  ];
+
+  $manager->updateConfigs($styles, 'alshaya_image_styles');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Override image styles to match VS designs.
  */
 function alshaya_vs_transac_update_8001() {
