@@ -7,6 +7,7 @@
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -15,7 +16,7 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
   if (_alshaya_seo_process_gtm()) {
     /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-    $variables['attributes']['gtm-currency'] = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
+    $variables['attributes']['gtm-currency'] = $gtm_manager->getGtmCurrency();
     $variables['attributes']['gtm-container'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
     $variables['attributes']['gtm-list-name'] = $gtm_manager->convertCurrentRouteToGtmListName($gtm_manager->getGtmContainer());
     if ($variables['attributes']['gtm-list-name'] == 'PDP' || $variables['attributes']['gtm-list-name'] == 'CartPage') {
@@ -67,6 +68,7 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
  */
 function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
   $route_match = \Drupal::routeMatch();
+  $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
   if ($route_match->getRouteName() == 'entity.node.canonical') {
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
@@ -88,7 +90,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
 
         $product_description = _alshaya_seo_get_node_meta_description();
         $final_price = "";
-        $currency = \Drupal::configFactory()->get('acq_commerce.currency')->get('currency_code');
+        $currency = $gtm_manager->getGtmCurrency();
 
         // If sku name is available.
         if ($sku_entity->get('name')) {
@@ -132,7 +134,6 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
   /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
   $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-  $currency_code = \Drupal::configFactory()->get('acq_commerce.currency')->getRawData()['currency_code'];
 
   try {
     $current_route = $gtm_manager->getGtmContainer();
@@ -199,7 +200,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
           $data_layer_cart = [
             'ecommerce' => [
-              'currencyCode' => $currency_code,
+              'currencyCode' => $gtm_manager->getGtmCurrency(),
               'checkout' => [
                 'actionField' => [
                   'step' => $step,
@@ -232,7 +233,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
             $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
 
             $data_layer['ecommerce'] = [
-              'currencyCode' => $currency_code,
+              'currencyCode' => $gtm_manager->getGtmCurrency(),
               'purchase' => [
                 'actionField' => $attributes['actionField'],
                 'products' => $attributes['products'],
@@ -367,4 +368,27 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_seo_transac_form_acq_commerce_currency_settings_alter(&$form, FormStateInterface $form_state) {
+  $form['gtm_currency_code'] = [
+    '#type' => 'textfield',
+    '#description' => t('Currency code to be sent to GTM. If this is not set, ISO Currency Code will be used for GTM.'),
+    '#title' => t('GTM Currency Code'),
+    '#required' => FALSE,
+    '#default_value' => \Drupal::configFactory()->get('acq_commerce.currency')->get('gtm_currency_code'),
+  ];
+  $form['#submit'][] = '_alshaya_seo_transac_acq_commerce_currency_settings_submit_handler';
+}
+
+/**
+ * Submit handler for acq_commerce_settings form.
+ */
+function _alshaya_seo_transac_acq_commerce_currency_settings_submit_handler(array &$form, FormStateInterface $form_state) {
+  \Drupal::configFactory()->getEditable('acq_commerce.currency')
+    ->set('gtm_currency_code', $form_state->getValue('gtm_currency_code'))
+    ->save();
 }

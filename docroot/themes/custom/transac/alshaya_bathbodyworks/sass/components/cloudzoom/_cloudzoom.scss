@@ -3,6 +3,17 @@
   #lightSlider {
     .slick-slide {
       height: 8.1875rem !important;
+
+      .cloudzoom__thumbnails__image {
+        display: flex;
+        height: 100%;
+        align-items: center;
+
+        img {
+          height: auto;
+          width: 100%;
+        }
+      }
     }
   }
 }

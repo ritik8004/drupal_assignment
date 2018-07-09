@@ -3,11 +3,13 @@
 namespace Drupal\alshaya_product_options;
 
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\facets\FacetInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -80,6 +82,13 @@ class SwatchesHelper {
   protected $languageManager;
 
   /**
+   * SKU Fields Manager.
+   *
+   * @var \Drupal\acq_sku\SKUFieldsManager
+   */
+  protected $skuFieldsManager;
+
+  /**
    * SwatchesHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -92,18 +101,22 @@ class SwatchesHelper {
    *   Cache Backend service for product_options.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
+   * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
+   *   SKU Fields Manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LoggerChannelInterface $logger,
                               ProductOptionsManager $product_options_manager,
                               CacheBackendInterface $cache,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              SKUFieldsManager $sku_fields_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->fileStorage = $this->entityTypeManager->getStorage('file');
     $this->logger = $logger;
     $this->productOptionsManager = $product_options_manager;
     $this->cache = $cache;
     $this->languageManager = $language_manager;
+    $this->skuFieldsManager = $sku_fields_manager;
   }
 
   /**
@@ -342,6 +355,24 @@ class SwatchesHelper {
     }
 
     return $data;
+  }
+
+  /**
+   * Get swatch data for value of particular facet.
+   *
+   * @param \Drupal\facets\FacetInterface $facet
+   *   Facet Entity.
+   * @param string $value
+   *   Value to look swatch data for.
+   *
+   * @return array
+   *   Swatch data or empty array.
+   */
+  public function getSwatchForFacet(FacetInterface $facet, $value) {
+    $fields = $this->skuFieldsManager->getFieldAdditions();
+    $field_code = str_replace('attr_', '', $facet->getFieldIdentifier());
+    $attribute_code = $fields[$field_code]['source'] ?? $field_code;
+    return $this->getSwatch($attribute_code, $value);
   }
 
 }

@@ -5,10 +5,14 @@
  * Module file for alshaya_super_category.
  */
 
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
@@ -405,4 +409,56 @@ function alshaya_super_category_get_default_term() {
     $tid = key($terms);
   }
   return $tid;
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_super_category_block_access(Block $block, $operation, AccountInterface $account) {
+  if ($operation !== 'view' || !in_array($block->id(), ['breadcrumbs'])) {
+    return;
+  }
+
+  $config = \Drupal::config('alshaya_super_category.settings');
+  // Check super category feature status.
+  if (!$config->get('status')) {
+    return;
+  }
+
+  $route = \Drupal::routeMatch();
+  if ($route->getRouteName() !== 'entity.node.canonical') {
+    return;
+  }
+
+  /* @var \Drupal\node\Entity\Node $node */
+  $node = $route->getParameter('node');
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+    /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+    $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+    $terms = $product_category_tree->getCategoryRootTerms();
+
+    $category_id = NULL;
+    if ($category = $node->get('field_product_category')->getValue()) {
+      $category_id = array_column($category, 'target_id')[0];
+    }
+
+    return AccessResult::forbiddenIf(!empty($category_id) && in_array($category_id, array_keys($terms)));
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_super_category_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Only for the term edit page.
+  if (isset($form['tid']) && !empty($form['tid']['#value'])) {
+    if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+      return;
+    }
+
+    if ($term = Term::load($form['tid']['#value'])) {
+      // Display highlight field only for level 2 term.
+      $form['field_main_menu_highlight']['#access'] = ($term->get('depth_level')->getString() == 2) ? TRUE : FALSE;
+    }
+  }
 }

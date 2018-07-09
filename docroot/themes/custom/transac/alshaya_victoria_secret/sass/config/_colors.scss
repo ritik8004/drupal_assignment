@@ -87,6 +87,7 @@ $ash-triplet: #777;
 $vivid-raspberry: #d91560;
 $whisper-dark: #e5e5e5;
 $white-smoke-light: #f2f2f2;
+$white-smoke-light-transparent: rgba(242, 242, 242, 0.65);
 $white-smoke-fog: #f9f9f9;
 $smoke-light: #fafafa;
 $medium-green: #39b54a;
@@ -307,6 +308,7 @@ $gallery_pager_bg: $white-five;
 $gallery_pager_active_bg: $marine-blue-two;
 $gallery_zoombtn_bg: $white;
 $gallery_zoombtn_disabled: $light-ash;
+$gallery_arrows_bg_mobile: $white-smoke-light-transparent;
 
 // Homepage Slider
 $hp_slider_dots: $nero;
@@ -487,6 +489,7 @@ $checkout_progress_next_txt: $nero;
 // Product listing page and search page.
 $plp_category_desc: $nero;
 $plp_search_count: $black;
+$color_facet_active_border: $brilliant-rose;
 $plp_sort_by_label: $nero;
 $plp_facet_filter: $brilliant-rose;
 $plp_facet_item_label: $black;
@@ -855,6 +858,7 @@ $address_book_delete_cancel: $black;
 $user_ui_dialog_border: $gainsboro;
 $address_book_delete_close: $vanilla;
 $address_book_delete_close_bg: $nero;
+$address_area_select: $nero;
 
 //My Account pages
 $user_account_wrapper_light: $black;
@@ -925,7 +929,7 @@ $address_pp_delete_closebtn_icon: $black;
 $basket_page_title: $black;
 $basket_sku_promo_link: $red-error;
 $basket_oos_tr_bg: $white-four;
-$basket_oos_inline_txt: $red-error;
+$basket_oos_inline_txt: $brilliant-rose;
 $basket_oos_inline_qty_border: $red-error;
 $basket_img_border: $white;
 $basket_img_bg: $white-five;
@@ -947,8 +951,9 @@ $basket_horizontal_recommendation_slider_dots: $black;
 $basket_header_promo_bg: $rosy-pink;
 $basket_header_promo_txt: $white-four;
 // Basket top OOS.
-$basket_header_oos_bg: $cherry;
-$basket_header_oos_txt: $white-four;
+$basket_header_oos_bg: $vanilla;
+$basket_header_oos_txt: $red-error;
+$basket_header_oos_border: $red-error;
 // Privilege card earn text only for the basket page.
 $privilege_earn_txt: $grey-ash;
 

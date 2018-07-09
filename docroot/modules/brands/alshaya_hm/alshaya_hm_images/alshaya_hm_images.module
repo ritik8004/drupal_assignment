@@ -78,15 +78,14 @@ function alshaya_hm_images_theme_registry_alter(&$theme_registry) {
 }
 
 /**
- * Implements hook_alshaya_acm_product_build_alter().
+ * Implements hook_alshaya_acm_product_gallery_alter().
  */
-function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, $context = 'pdp') {
-  $swatch_plp_limit = \Drupal::config('alshaya_hm_images.settings')->get('swatch_plp_limit');
-  $swatches_display_status = \Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches');
+function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $sku, $context = 'pdp') {
+  /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
   $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
 
   // Check if the gallery has a main image. If not, look for assets.
-  if ($context == 'search' && empty($build['#gallery']['#mainImage'])) {
+  if ($context == 'search') {
     // Get the assets.
     $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
     $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp']);
@@ -102,7 +101,7 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
     $plp_hover_image = !empty($hover_image_assets) ? $hover_image_assets[0] : NULL;
 
     if ($plp_main_image) {
-      $sku_gallery = [
+      $gallery = [
         '#theme' => 'alshaya_assets_gallery',
         '#mainImage' => $plp_main_image,
         '#attached' => [
@@ -113,51 +112,33 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
       ];
 
       // We don't get alt/title, we use product's title for that.
-      $sku_gallery['#label'] = $sku->label();
+      $gallery['#label'] = $sku->label();
 
       if ($plp_hover_image) {
-        $sku_gallery['#hoverImage'] = $plp_hover_image;
+        $gallery['#hoverImage'] = $plp_hover_image;
       }
+    }
+  }
+}
 
-      $build['#gallery'] = $sku_gallery;
-      if ($swatches_display_status) {
-        $swatches = array_filter($sku_assets_manager->getColorsForSku($sku));
-        if ($swatches) {
-          $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit);
-          $build['#swatch_more_text'] = count($swatches) > $swatch_plp_limit
-            ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit])
-            : FALSE;
-        }
-        else {
-          if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
-            $sku_gallery = [
-              '#theme' => 'alshaya_assets_gallery',
-              '#mainImage' => [
-                'url' => Url::fromUri(file_create_url($default_image->getFileUri())),
-                'class' => 'product-default-image',
-              ],
-              '#label' => $sku->label(),
-              '#attached' => [
-                'library' => [
-                  'alshaya_hm_images/hm_images',
-                ],
-              ],
-            ];
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, $context = 'pdp') {
+  /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
+  $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
 
-            if (empty($plp_hover_image)) {
-              $sku_gallery['#hoverImage'] = ['url' => Url::fromUri(file_create_url($default_image->getFileUri()))];
-            }
+  if ($context == 'search') {
+    $swatches_display_status = \Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches');
 
-            $build['#gallery'] = $sku_gallery;
-
-            if ($swatches) {
-              $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit);
-              $build['#swatch_more_text'] = count($swatches) > $swatch_plp_limit
-                ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit])
-                : FALSE;
-            }
-          }
-        }
+    if ($swatches_display_status) {
+      $swatches = array_filter($sku_assets_manager->getColorsForSku($sku));
+      if ($swatches) {
+        $swatch_plp_limit = \Drupal::config('alshaya_hm_images.settings')->get('swatch_plp_limit');
+        $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit);
+        $build['#swatch_more_text'] = count($swatches) > $swatch_plp_limit
+          ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit])
+          : FALSE;
       }
     }
   }
@@ -217,7 +198,7 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
         FALSE
       );
 
-      foreach ($pdp_images['pdp_thumbnail'] as $key => $thumbnail) {
+      foreach ($pdp_images['pdp_thumbnail'] ?? [] as $key => $thumbnail) {
         $thumb_images[$key]['zoomurl'] = $pdp_images['pdp_fullscreen'][$key]['url'];
         $thumb_images[$key]['thumburl'] = $thumbnail['url'];
         $thumb_images[$key]['mediumurl'] = $pdp_images['pdp_main'][$key]['url'];

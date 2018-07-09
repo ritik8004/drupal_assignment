@@ -1,0 +1,146 @@
+.acq-cart-summary {
+  .price-type__wrapper {
+    .simple-tooltip-wrap {
+      #{$right}: 7.7rem;
+      top: -0.1875rem;
+
+      @include breakpoint($only-mobile) {
+        #{$right}: 12.2rem;
+        top: 1px;
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$right}: 7.2rem;
+        top: 1px;
+      }
+
+      .tooltip {
+        #{$left}: -4.7rem !important;
+        top: 1.8125rem !important;
+
+        @include breakpoint($upto-desktop) {
+          #{$left}: -5.4rem !important;
+          top: 1.5rem !important;
+        }
+
+        &::before {
+          #{$right}: 4.1875rem !important;
+        }
+
+        &::after {
+          #{$right}: 4.25rem !important;
+        }
+      }
+    }
+  }
+}
+
+%tooltip-before-after {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+%tooltip-after {
+  border-color: rgba(240, 246, 252, 0);
+  border-bottom-color: $tooltip_bg;
+  border-width: 0.3125rem;
+  margin-#{$left}: -0.3125rem;
+}
+
+%tooltip-before {
+  border-color: rgba(0, 132, 204, 0);
+  border-bottom-color: $tooltip_border;
+  border-width: 0.375rem;
+  margin-#{$left}: -0.375rem;
+}
+
+.contains--tooltip {
+  position: relative;
+
+  .tooltip {
+    display: none;
+    font-size: 0.625rem;
+    font-family: $vs-regular;
+    position: absolute;
+    z-index: 1;
+    padding: 0.625rem 0.6875rem;
+    top: 1rem;
+    #{$left}: -4.3rem;
+    color: $tooltip_text;
+    background-color: $tooltip_bg;
+    border: 1px solid $tooltip_border;
+    border-radius: 0.125rem;
+    width: 10.81rem;
+
+    @include breakpoint($desktop) {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.tooltip--head {
+  color: $tooltip_link;
+  margin: 0;
+
+  @include icon(infomation, after) {
+    margin-#{$left}: 0.3rem;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 1rem;
+    color: $tooltip_icon;
+
+    @include breakpoint($desktop) {
+      margin-#{$left}: 0.75rem;
+      font-size: 1.5rem;
+    }
+  }
+
+  &:hover + .tooltip {
+    display: block;
+  }
+}
+
+.tooltip::before,
+.tooltip::after {
+  #{$right}: 0.25rem;
+
+  @extend %tooltip-before-after;
+
+  @include breakpoint($desktop) {
+    #{$right}: 5rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    #{$right}: 1rem;
+  }
+}
+
+.tooltip::after {
+  @extend %tooltip-after;
+
+  border-bottom-width: 0.375rem;
+
+  @include breakpoint($desktop) {
+    #{$right}: 5.05rem;
+  }
+}
+
+.tooltip::before {
+  #{$right}: 0.1875rem;
+  border-bottom-width: 0.5rem;
+
+  @include breakpoint($only-mobile) {
+    #{$right}: 0.9375rem;
+  }
+
+  @extend %tooltip-before;
+
+  @include breakpoint($desktop) {
+    #{$right}: 5rem;
+  }
+}

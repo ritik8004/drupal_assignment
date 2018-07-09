@@ -53,12 +53,6 @@
       }
     }
 
-    td .form-type-select {
-      &::after {
-        font-size: 2rem;
-      }
-    }
-
     tr td {
       @include breakpoint($desktop) {
         padding-#{$left}: 1.5rem;
@@ -225,6 +219,12 @@
       }
     }
   }
+
+  .price-wrapper .price {
+    @include breakpoint($only-tablet) {
+      max-width: none !important;
+    }
+  }
 }
 
 #cart_notification {
@@ -293,6 +293,16 @@ body.alias--cart {
         .price-currency.suffix {
           font-family: $vs-bold;
         }
+      }
+    }
+  }
+}
+
+.alias--cart {
+  #table-cart-items {
+    td {
+      select {
+        padding-#{$left}: 0.75rem;
       }
     }
   }

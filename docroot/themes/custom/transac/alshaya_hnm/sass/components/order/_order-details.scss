@@ -186,6 +186,24 @@
       }
     }
   }
+
+  .price {
+    min-width: 5rem;
+
+    @include breakpoint($tablet) {
+      min-width: 3.75rem;
+    }
+
+    @include breakpoint($desktop) {
+      min-width: 4.5rem;
+    }
+  }
+
+  .vat-row .above-mobile:first-child {
+    @include breakpoint($only-tablet) {
+      display: table-cell;
+    }
+  }
 }
 
 .path--user #block-userrecentorders {

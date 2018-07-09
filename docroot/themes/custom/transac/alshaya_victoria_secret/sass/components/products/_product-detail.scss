@@ -44,9 +44,9 @@
     button[type="submit"] {
       text-transform: uppercase;
       height: 2.5rem;
+      margin-top: 2.125rem;
 
       @include breakpoint($only-tablet) {
-        margin-top: 1.45rem;
         float: $left;
         margin-#{$left}: 1.5rem;
       }
@@ -118,6 +118,7 @@
 
         &::after {
           width: 2.375rem;
+          font-size: 2.375rem;
         }
 
         select {
@@ -136,58 +137,36 @@
   display: block;
 }
 
-.form-item-configurables-color,
-.form-item-configurables-band-size,
-.form-item-configurables-cup-size {
-  .list-title {
-    span {
-      font-size: 0.75rem;
-      line-height: 1.33;
-      color: $pdp_filter_selector_label;
-    }
-  }
+#configurable_ajax {
+  .configurable-select,
+  .form-item-configurables-color,
+  .form-item-configurables-band-size,
+  .form-item-configurables-cup-size {
+    .list-title {
+      span {
+        font-size: 0.75rem;
+        line-height: 1.33;
+        color: $pdp_filter_selector_label;
 
-  > label {
-    display: none;
-  }
-
-  .select2Option {
-    li {
-      a {
-        font-size: 0.875rem;
-        line-height: 1.29;
-        padding: 0.5625rem 0.6119rem;
-        margin: 0.4375rem 0 0;
-        margin-#{$right}: 0.625rem;
-        min-width: 2.375rem;
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+        }
       }
     }
-  }
-}
 
-.field--name-field-skus {
-  .sku-base-form {
-    .form-item {
-      padding: 0.875rem 0;
+    > label {
+      display: none;
+    }
 
-      &.form-item-configurables-cup-size {
-        padding-bottom: 1.75rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        &.form-item-configurables-band-size,
-        &.form-item-configurables-cup-size {
-          padding-bottom: 1.25rem;
-          margin-bottom: 0.25rem;
-        }
-
-        &.form-item-configurables-band-size {
-          margin-bottom: 1.375rem;
-        }
-
-        &.form-item-configurables-color {
-          margin-bottom: 0;
-          padding-bottom: 2rem;
+    .select2Option {
+      li {
+        a {
+          font-size: 0.875rem;
+          line-height: 1.29;
+          padding: 0.5625rem 0.6119rem;
+          margin: 0.4375rem 0 0;
+          margin-#{$right}: 0.625rem;
+          min-width: 2.375rem;
         }
       }
     }
@@ -213,6 +192,8 @@
 
       &.form-item {
         &.form-type-select {
+          margin-top: 2.125rem;
+
           @include breakpoint($only-tablet) {
             float: $left;
           }
@@ -243,49 +224,85 @@
 
 .basic-details-wrapper {
   .field--name-field-skus {
-    .form-item-configurables-size,
-    .form-item-configurables-cup-size,
-    .form-item-configurables-band-size {
-      label {
-        @include u-visibility(none);
-      }
+    #configurable_ajax {
+      .configurable-select,
+      .form-item-configurables-size,
+      .form-item-configurables-cup-size,
+      .form-item-configurables-band-size {
+        label {
+          @include u-visibility(none);
+        }
 
-      .ajax-progress-throbber {
-        @include u-visibility(none);
+        .ajax-progress-throbber {
+          @include u-visibility(none);
+        }
+
+        @include breakpoint($only-mobile) {
+          @include select-wrapper(12.3125rem);
+
+          padding: 0;
+          margin-top: 0.5em;
+          position: relative;
+          z-index: 3;
+          width: 100%;
+          min-height: 2.188rem;
+
+          &::after {
+            top: 0;
+            z-index: 1;
+            font-size: 2.375rem;
+          }
+
+          label {
+            @include u-visibility(block);
+
+            position: absolute;
+            top: -1.6875rem;
+            font-size: 0.875rem;
+            padding: 0.3125rem 0;
+            padding-#{$right}: 1.25rem;
+            #{$left}: 0;
+          }
+
+          select.form-select {
+            @include select-style(12.3125rem);
+
+            width: 100%;
+            padding-#{$left}: 0.625rem;
+          }
+        }
       }
+    }
+  }
+}
+
+.field--name-field-skus {
+  .sku-base-form {
+    #configurable_ajax {
+      padding: 0.875rem 0 0;
 
       @include breakpoint($only-mobile) {
-        @include select-wrapper(12.3125rem);
+        .form-item {
+          margin: 1.25rem 0 0;
+          padding-bottom: 1.25rem;
 
-        padding: 0;
-        margin-top: 0.5em;
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        min-height: 2.188rem;
+          &.configurable-swatch {
+            margin-top: 0;
+          }
 
-        &::after {
-          top: 0;
-          z-index: 1;
-          font-size: 2.375rem;
-        }
+          &.form-item-configurables-cup-size {
+            margin: 1.25rem 0 0;
+            padding-bottom: 0.875rem;
+          }
 
-        label {
-          @include u-visibility(block);
+          &.form-item-configurables-band-size {
+            margin: 1.25rem 0 0;
+            padding-bottom: 1.25rem;
+          }
 
-          position: absolute;
-          top: -1.6875rem;
-          font-size: 0.875rem;
-          padding: 0.3125rem 0;
-          padding-#{$right}: 1.25rem;
-          #{$left}: 0;
-        }
-
-        select.form-select {
-          @include select-style(12.3125rem);
-
-          width: 100%;
-          padding-#{$left}: 0.625rem;
+          &.form-item-configurables-color {
+            padding-bottom: 2.125rem;
+          }
         }
       }
     }
