@@ -160,7 +160,8 @@
 
     .select2Option {
       li {
-        a {
+        a,
+        span {
           font-size: 0.875rem;
           line-height: 1.29;
           padding: 0.5625rem 0.6119rem;
@@ -315,7 +316,8 @@
       &.disabled {
         a,
         span {
-          background: url("../imgs/icons/disabled.svg") no-repeat;
+          background: url("../imgs/icons/disabled.png") no-repeat;
+          background-size: 100% 100%;
           border: 1px solid $pdp_swatch_disabled;
           color: $pdp_swatch_disabled;
         }
