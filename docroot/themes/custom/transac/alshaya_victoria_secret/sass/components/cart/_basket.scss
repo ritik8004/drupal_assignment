@@ -297,3 +297,13 @@ body.alias--cart {
     }
   }
 }
+
+.alias--cart {
+  #table-cart-items {
+    td {
+      select {
+        padding-#{$left}: 0.75rem;
+      }
+    }
+  }
+}
