@@ -215,6 +215,35 @@ function alshaya_get_magento_host_data() {
         ],
       ],
     ],
+    'vs_uat' => [
+      'url' => 'https://vs-uat.store.alshaya.com',
+      'kw' => [
+        'store_id' => [
+          'en' => 1,
+          'ar' => 18,
+        ],
+      ],
+      'sa' => [
+        'store_id' => [
+          'en' => 6,
+          'ar' => 9,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'sau_en',
+          'ar' => 'sau_ar',
+        ],
+      ],
+      'ae' => [
+        'store_id' => [
+          'en' => 12,
+          'ar' => 15,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'are_en',
+          'ar' => 'are_ar',
+        ],
+      ],
+    ],
     // BathBodyWorks.
     'bbw_qa' => [
       'url' => 'https://integration-5ojmyuq-bbk3lvknero4c.eu-3.magentosite.cloud',
