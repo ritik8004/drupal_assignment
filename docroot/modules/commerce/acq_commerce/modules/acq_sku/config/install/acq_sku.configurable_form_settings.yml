@@ -1,5 +1,6 @@
 attribute_weights:
-  size: 1
+  default:
+    size: 1
 show_quantity: TRUE
 sortable_options:
   - size

@@ -1346,7 +1346,7 @@ class SkuManager {
    * @param array $selected
    *   Selected values.
    */
-  public function disableUnavailableOptions(SKU $sku, array &$configurables, array $tree, array $selected) {
+  public function disableUnavailableOptions(SKU $sku, array &$configurables, array $tree, array $selected = []) {
     $configurable_codes = array_keys($tree['configurables']);
 
     $combinations = $this->getConfigurableCombinations($sku);
