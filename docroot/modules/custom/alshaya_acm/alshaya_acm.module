@@ -525,6 +525,10 @@ function alshaya_acm_get_cart_items_by_sku() {
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+  $swatches = $display_settings->get('swatches')['pdp'];
+  $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
+
   $form['quantity']['#type'] = 'select';
   $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
   $form['quantity']['#validated'] = TRUE;
@@ -537,7 +541,9 @@ function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_s
         $form['ajax']['configurables'][$key]['#options_attributes']['']['disabled'] = 'disabled';
         $form['ajax']['configurables'][$key]['#empty_option'] = t('Select @title', ['@title' => $form_item['#title']]);
         $form['ajax']['configurables'][$key]['#attributes']['data-default-title'] = $form_item['#title'];
-        $form['ajax']['configurables'][$key]['#attributes']['class'][] = 'form-item-configurable-select';
+        $form['ajax']['configurables'][$key]['#attributes']['class'][] = in_array($key, $swatches)
+          ? 'form-item-configurable-swatch'
+          : 'form-item-configurable-select';
       }
     }
   }
