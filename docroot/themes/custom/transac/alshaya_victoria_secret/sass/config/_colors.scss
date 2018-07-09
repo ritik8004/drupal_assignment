@@ -98,6 +98,7 @@ $alabaster: #fcfcfc;
 $_grey-51-6: rgba(51, 51, 51, 0.06);
 $_grey_one: #f8f8f8;
 $_grey_two: #f3f3f3;
+$_pink_one: #636363;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -535,7 +536,7 @@ $plp_tile_product_hover_bg: $white-five;
 $plp_tile_hover_slider_hover: $grey-ash;
 $plp_tile_hover_slider_nav: $grey-ash;
 $plp_tile_hover_slider_nav_hover: $grey-ash;
-$plp_tile_hover_slider_arrows: $black;
+$plp_tile_hover_slider_arrows: $_pink_one;
 $plp_pager_link: $marine-blue;
 $plp_pager_link_border: $marine-blue;
 

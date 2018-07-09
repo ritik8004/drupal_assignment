@@ -252,7 +252,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
           $(this, context).lightSlider({
             vertical: false,
             item: settings.plp_slider.item,
-            rtl: true,
+            rtl: false,
             slideMargin: settings.plp_slider.margin,
             onSliderLoad: function () {
               gallery.css('height', settings.plp_slider.height + 'px');
