@@ -30,7 +30,7 @@
 
     @include breakpoint ($desktop) {
       width: 31.6%;
-      max-width: 291px;
+      max-width: 18.1875rem;
       margin-#{$right}: 2.4%;
       margin-bottom: 2rem;
     }
