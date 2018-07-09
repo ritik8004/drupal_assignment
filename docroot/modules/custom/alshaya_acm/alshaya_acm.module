@@ -759,7 +759,7 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
  *   Item name build array.
  */
 function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $cart_item, $is_free_item = FALSE, $cart_rules = [], $cart_has_promo_code = FALSE) {
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $langcode = $sku_entity->language()->getId();
   $sku_cart_data_cid = 'sku_cart_data:' . $langcode . ':' . $sku_entity->id();
   // If sku entity data exists in cache.
   if ($sku_cart_data_cache = \Drupal::cache()->get($sku_cart_data_cid)) {
