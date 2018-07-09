@@ -69,14 +69,16 @@
         promoPanelOptions['initialSlide'] = 1;
       }
 
-      if (isRTL()) {
-        $('.block-promo-panel-wrapper > .field--name-field-paragraph-content').attr('dir', 'rtl');
-        $('.block-promo-panel-wrapper > .field--name-field-paragraph-content').slick(
-          $.extend({}, promoPanelOptions, {rtl: true})
-        );
-      }
-      else {
-        $('.block-promo-panel-wrapper > .field--name-field-paragraph-content').slick(promoPanelOptions);
+      if ($('.block-promo-panel-wrapper > .field--name-field-paragraph-content > .field__item').length) {
+        if (isRTL()) {
+          $('.block-promo-panel-wrapper > .field--name-field-paragraph-content').attr('dir', 'rtl');
+          $('.block-promo-panel-wrapper > .field--name-field-paragraph-content').slick(
+            $.extend({}, promoPanelOptions, {rtl: true})
+          );
+        }
+        else {
+          $('.block-promo-panel-wrapper > .field--name-field-paragraph-content').slick(promoPanelOptions);
+        }
       }
 
       // eslint-disable-next-line.

@@ -8,12 +8,13 @@
   }
 
   > .field--name-field-paragraph-content {
-    display: none;
+    max-height: 0;
     position: relative;
     background-color: $promo_panel_content_bg;
     overflow: hidden;
     max-width: 80.25rem;
     margin: auto;
+    transition: max-height 0.5s linear;
 
     @include breakpoint($upto-tablet) {
       display: none !important;
@@ -156,6 +157,12 @@
     bottom: 0;
     z-index: 1001;
     width: 100%;
+  }
+
+  > .field--name-field-paragraph-content {
+    @include breakpoint($tablet) {
+      max-height: 37.5rem;
+    }
   }
 
   .promo-panel-label {
