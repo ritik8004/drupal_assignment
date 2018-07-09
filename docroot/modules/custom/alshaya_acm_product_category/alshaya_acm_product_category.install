@@ -26,11 +26,14 @@ function alshaya_acm_product_category_update_dependencies() {
  * Update views for product category taxonomy terms.
  */
 function alshaya_acm_product_category_update_8012() {
-  $configs = [
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
     'views.view.product_category_level_3',
     'views.view.product_category_level_2_3',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
+  ],
+    'alshaya_acm_product_category'
+  );
 }
 
 /**
