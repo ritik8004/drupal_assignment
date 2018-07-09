@@ -1,4 +1,12 @@
 .c-plp {
+  .product-default-image {
+    img {
+      max-width: 18.1875rem;
+      max-height: 25rem;
+      overflow: hidden;
+    }
+  }
+
   @include breakpoint($tablet) {
     padding-top: 1.5rem;
   }
@@ -26,7 +34,7 @@
 
       &::after {
         @include breakpoint($tablet) {
-          box-shadow: none;
+          box-shadow: 0.25rem 0.25rem 0.625rem 0 $plp_tile_product_hover_shadow;
         }
       }
     }

@@ -84,12 +84,11 @@
           }
 
           img {
-            max-width: 6.5rem;
-            padding: 3px;
+            height: 8.125rem;
+            padding: 2px;
 
             @include breakpoint($only-tablet) {
-              max-width: 5.0625rem;
-              padding: 3px;
+              height: 6.3125rem;
             }
           }
         }
@@ -245,6 +244,13 @@
   @include breakpoint($only-mobile) {
     #{$right}: 2.0625rem;
     top: 3.1rem;
+  }
+
+  .notification,
+  .error {
+    .col-1 {
+      width: 4.875rem;
+    }
   }
 }
 
