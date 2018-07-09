@@ -265,11 +265,15 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity) {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $entity->getPluginInstance();
 
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    // Clear cached data for products.
+    $skuManager->clearProductCachedData($entity);
+
     if ($parent = $plugin->getParentSku($entity)) {
-      // Clear cache for processed price of configurable.
-      // Check for SkuManager::getMinPrices() for implementation.
-      $cid = 'configurable_price:' . $parent->getSku();
-      \Drupal::cache('configurable_price')->delete($cid);
+      // Clear cached data for configurable products.
+      $skuManager->clearProductCachedData($parent);
     }
 
     // Check if node is available.
@@ -769,6 +773,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
   // Get SKU id.
   $sku_entity = SKU::load($form['sku_id']['#value']);
 
@@ -842,7 +849,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     // In case of multiple config attributes, make sure the first one is
     // selected by default on page load.
-    if (count($form_state->get('tree')['configurables']) > 1) {
+    $product_tree = $form_state->get('tree');
+    if (count($product_tree['configurables']) > 1) {
       $configurable_weights = \Drupal::service('config.factory')->get('acq_sku.configurable_form_settings')->get('attribute_weights');
       $config_attributes = array_keys($configurable_weights);
       // @TODO: Support multiple attribute sets here.
@@ -857,21 +865,24 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       });
 
       // Give preference to color label passed via query params.
-      $color = \Drupal::request()->query->get('color');
-      if ($color) {
-        // Get swatch_id from color value.
-        $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-        $first_child = $sku_asset_manager->getChildSkuFromColor($sku_entity, $color);
+      // @TODO: This is specific to HnM, need to fix and make it generic.
+      // This needs to be done in AAVS-470.
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_hm')) {
+        $color = \Drupal::request()->query->get('color');
+        if ($color) {
+          // Get swatch_id from color value.
+          /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_asset_manager */
+          $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+          $first_child = $sku_asset_manager->getChildSkuFromColor(
+            $sku_entity, $color
+          );
+        }
       }
 
       if (!($first_child instanceof SKU)) {
-        $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-
         // Default use-case: User landing on PDP from PLP/Search/directly.
         // Set the color applicable to first child sku as default here.
-        $child_skus = $sku_manager->getChildSkus($sku_entity);
-        $filtered_child_skus = array_filter($child_skus);
-        $first_child = array_shift($filtered_child_skus);
+        $first_child = $sku_manager->getChildSkus($sku_entity, TRUE);
       }
 
       if ($first_child instanceof SKU) {
@@ -887,9 +898,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         (!isset($user_input_configurables['configurables'][$root_attribute_code]))) {
         $form['ajax']['configurables'][$root_attribute_code]['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
         $form_state->setValue('configurables', [$root_attribute_code => $first_child_root_attr_value]);
-
-        // Disable config options not available for the selected config.
-        alshaya_acm_product_update_config_options($form['ajax'], $form_state, $form_state->getValue('configurables'), FALSE);
       }
 
       // Check stock in case of Configurable products with multiple attributes.
@@ -907,6 +915,14 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $form_state->setValue('configurables', [$root_attribute_code => $selected_configs[$root_attribute_code]]);
       }
 
+      // Current selection.
+      $selected = isset($user_input_configurables['configurables'])
+        ? $user_input_configurables['configurables']
+        : $form_state->getValue('configurables');
+
+      $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $selected);
+
+      // @TODO: Improve this in CORE-2169.
       if (!empty($selected_configs)) {
         // Get all child SKUs possible for the selected root attribute to do a
         // stock check on visible child attributes that belong to the child
@@ -949,28 +965,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // We are not going to show the form right now, we don't do any
         // stock check for variant SKUs.
         if (!$process_stock) {
-          // Disable options which don't have skus in the product tree.
-          if (count($form_state->get('tree')['configurables']) > 1) {
-            foreach ($configurable['#options'] as $key => $value) {
-              $product_tree = $form_state->get('tree');
-              if (isset($product_tree['options'][$configurable_key . ':' . $key])) {
-                $variations = array_filter($product_tree['options'][$configurable_key . ':' . $key]);
-                // Check if product tree doesn't have any variations available
-                // for this option. Hide options like this one.
-                if (isset($variations['#available_config']) &&
-                  (count($variations) === 1)) {
-                  unset($configurable['#options'][$key]);
-                  \Drupal::logger('alshaya_acm_product')->alert('No SKU found for Config sku: %sku and %option : %option_value',
-                    [
-                      '%sku' => $sku_entity->getSku(),
-                      '%option' => $configurable_key,
-                      '%option_value' => $key,
-                    ]);
-                }
-              }
-            }
-          }
-
           continue;
         }
 
@@ -1083,22 +1077,28 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   // & hence need to be re-rendered in the AJAX callback.
   $dynamic_parts = call_user_func_array($form_state->prepareCallback('::configurableAjaxCallback'), [&$form, &$form_state]);
 
+  $sku = SKU::load($form['sku_id']['#value']);
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   // Configurable product tree keyed with possible config tree, whose leaf items
   // contain the SKUs depending on the tree path traversed.
   $product_tree = $form_state->get('tree');
 
+  // List of attributes selected by end-users on the form.
+  $selected = $form_state->getValue('configurables');
+
   // Calculate available config options based on the attribute value selected,
   // in case of multiple config attributes with a product.
   if (count($product_tree['configurables']) > 1) {
-    // List of attributes selected by end-users on the form.
-    $configurables = $form_state->getValue('configurables');
-
-    // Disable config options not available for the selected config.
-    alshaya_acm_product_update_config_options($dynamic_parts, $form_state, $configurables);
+    /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+    $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku_manager->disableUnavailableOptions($sku, $dynamic_parts['configurables'], $product_tree, $selected);
 
     // Traverse the product tree till the point where config attributes have a
     // value.
-    $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
+    $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($product_tree, $selected);
 
     // If there is only one item returned back,
     // it implies we have reached to the leaf most SKU in the tree.
@@ -1116,10 +1116,11 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     }
 
     $build = [];
-    alshaya_acm_product_get_gallery($build, $tree_pointer);
-    $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
+    alshaya_acm_product_get_gallery($build, $tree_pointer, FALSE);
+    if (isset($build['gallery'], $build['gallery']['product_zoom'])) {
+      $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
+    }
 
-    $sku = SKU::load($form['sku_id']['#value']);
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
 
     $dynamic_parts['selected_variant_sku'] = [
@@ -1134,9 +1135,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     ];
 
     $response = new AjaxResponse();
-
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
     $price_block = $skuManager->getPriceBlock($tree_pointer);
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
@@ -1249,16 +1247,14 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $build = [];
     $sku = $product_tree['parent'];
 
-    // Pull out & update gallery image based on the selected color & first item
-    // having images.
-    foreach ($tree_pointer as $sku_item) {
-      if ($sku_item instanceof SKU) {
-        alshaya_acm_product_get_gallery($build, $sku_item);
-        if (!empty($build['gallery']['product_zoom'])) {
-          break;
-        }
-      }
-    }
+    $configurable_codes = array_keys($product_tree['configurables']);
+    $attribute = reset($configurable_codes);
+    $option_id = $selected[$attribute];
+
+    // Pull out & update gallery image based on the selected color & first item.
+    // @TODO: Verify this in HnM and MC.
+    $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
+    alshaya_acm_product_get_gallery($build, $first_child);
 
     // If no image found on simple SKUs, use parent SKUs image.
     if (empty($build['gallery']['product_zoom'])) {
