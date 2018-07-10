@@ -130,7 +130,17 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // payment method even before user does place order. By default we select
     // a payment method, we inform Magento about that here.
     if (empty($cart_payment)) {
-      $this->getCheckoutHelper()->setSelectedPayment($selected_plugin_id);
+      $isSurchargeEnabled = $this->getCheckoutHelper()->isSurchargeEnabled();
+
+      if ($isSurchargeEnabled) {
+        $this->getCheckoutHelper()->setBillingFromShipping(FALSE);
+      }
+
+      $this->getCheckoutHelper()->setSelectedPayment(
+        $selected_plugin_id,
+        [],
+        $isSurchargeEnabled
+      );
     }
 
     // More than one payment method available, so build a form to let the user
@@ -175,7 +185,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       $sub_title = '';
 
-      if ($plugin_id === 'cashondelivery') {
+      if ($this->getCheckoutHelper()->isSurchargeEnabled() && $plugin_id === 'cashondelivery') {
         $surcharge = $cart->getExtension('surcharge');
 
         if ($surcharge) {

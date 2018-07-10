@@ -205,7 +205,11 @@ class CheckoutController implements ContainerInjectionInterface {
     $cart = $this->cartStorage->getCart(FALSE);
 
     if ($cart instanceof CartInterface) {
-      $this->checkoutHelper->setSelectedPayment($selected_payment_method);
+      $this->checkoutHelper->setSelectedPayment(
+        $selected_payment_method,
+        [],
+        $this->checkoutHelper->isSurchargeEnabled()
+      );
     }
 
     $response = new AjaxResponse();

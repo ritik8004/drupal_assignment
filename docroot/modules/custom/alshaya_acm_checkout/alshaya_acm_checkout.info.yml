@@ -9,5 +9,6 @@ dependencies:
   - acq_commerce:acq_payment
   - alshaya_acm:alshaya_acm
   - alshaya_acm_customer:alshaya_acm_customer
+  - alshaya_addressbook:alshaya_addressbook
   - alshaya_custom:alshaya_custom
   - pcb:pcb
