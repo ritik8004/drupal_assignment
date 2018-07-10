@@ -91,3 +91,37 @@
     }
   }
 }
+
+#product-image-gallery-container {
+  .imagegallery__wrapper {
+    #product-image-gallery {
+      @include breakpoint($desktop) {
+        width: 6.625rem;
+        margin-#{$left}: 1.5rem;
+      }
+    }
+
+    > .imagegallery__full {
+      @include breakpoint($desktop) {
+        width: calc(100% - (10.75rem)) !important;
+      }
+    }
+  }
+
+  .button__wrapper {
+    @include breakpoint($desktop) {
+      #{$left}: 54%;
+    }
+  }
+}
+
+// Size Guide modal popup theming
+.path--cart .ui-dialog,
+.nodetype--acq_product .ui-dialog {
+  #drupal-modal,
+  div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
+    @include breakpoint($desktop) {
+      height: 38.31rem !important;
+    }
+  }
+}
