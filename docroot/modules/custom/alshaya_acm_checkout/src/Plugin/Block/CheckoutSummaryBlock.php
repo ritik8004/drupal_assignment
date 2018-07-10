@@ -12,6 +12,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -98,6 +99,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $addressCountryRepository;
 
   /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -120,6 +128,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Address Country Repository service object.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
    *   ACQ Checkout Flow plugin manager object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
@@ -137,6 +147,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
                               CheckoutOptionsManager $checkout_options_manager,
                               CountryRepository $address_country_repository,
                               PluginManagerInterface $plugin_manager,
+                              LanguageManagerInterface $language_manager,
                               ModuleHandlerInterface $module_handler,
                               RequestStack $request_stack,
                               $store_finder_utility) {
@@ -151,6 +162,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->moduleHandler = $module_handler;
     $this->requestStack = $request_stack;
     $this->storesFinderUtility = $store_finder_utility;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -176,6 +188,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('address.country_repository'),
       $container->get('plugin.manager.acq_checkout_flow'),
+      $container->get('language_manager'),
       $moduleHandler,
       $container->get('request_stack'),
       $store_finder_utility
@@ -188,7 +201,20 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   public function build() {
     // Load the CheckoutFlow plugin.
     $config = $this->configFactory->get('acq_checkout.settings');
-    $acm_config = $this->configFactory->get('alshaya_acm_checkout.settings');
+
+    $current_language = $this->languageManager->getCurrentLanguage()->getId();
+    $default_language = $this->languageManager->getDefaultLanguage()->getId();
+
+    // If current language is not what site's default language, then we pick
+    // language overridden config.
+    if ($current_language != $default_language) {
+      $acm_config = $this->languageManager->getLanguageConfigOverride($current_language, 'alshaya_acm_checkout.settings');
+    }
+    else {
+      // Use default config.
+      $acm_config = $this->configFactory->get('alshaya_acm_checkout.settings');
+    }
+
     $checkout_flow_plugin = $config->get('checkout_flow_plugin') ?: 'multistep_default';
     $checkout_flow = $this->pluginManager->createInstance($checkout_flow_plugin, []);
 
