@@ -8,3 +8,4 @@ plp_slider:
 swatches:
   pdp: {  }
   plp: {  }
+short_desc_characters: 150
