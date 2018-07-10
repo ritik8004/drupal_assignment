@@ -54,7 +54,6 @@
 .highlights {
   img {
     @include breakpoint($desktop) {
-      max-width: 9.75rem;
       display: block;
     }
   }
