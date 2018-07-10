@@ -45,6 +45,12 @@
           height: auto;
           // Adding some buffer and restricting height in case of very tall aspect ratio.
           max-height: 37.5rem;
+
+          .acq-content-product-modal & {
+            img {
+              width: 25.25rem !important;
+            }
+          }
         }
 
         @include breakpoint($only-tablet) {
@@ -55,6 +61,14 @@
 
           img {
             height: auto !important;
+          }
+
+          .acq-content-product-modal & {
+            width: auto;
+
+            img {
+              width: 18.1875rem !important;
+            }
           }
         }
       }
