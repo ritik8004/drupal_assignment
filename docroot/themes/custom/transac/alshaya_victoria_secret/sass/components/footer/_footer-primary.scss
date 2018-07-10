@@ -274,3 +274,13 @@
     padding-bottom: 3.75rem;
   }
 }
+
+.language--switcher {
+  &.only-first-time {
+    .language-switcher-close {
+      &::after {
+        top: 0.25rem;
+      }
+    }
+  }
+}
