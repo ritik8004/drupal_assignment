@@ -337,21 +337,3 @@ function alshaya_hm_images_alshaya_master_post_drupal_install() {
     'label' => 'Color',
   ]);
 }
-
-/**
- * Implements hook_alshaya_acm_product_first_child_for_selection().
- */
-function alshaya_hm_images_alshaya_acm_product_first_child_for_selection(SKUInterface $sku) {
-  $color = \Drupal::request()->query->get('color');
-
-  // Give preference to sku id passed via query params.
-  if ($color) {
-    $first_child = SKU::load($color);
-
-    if ($first_child instanceof SKUInterface) {
-      return $first_child;
-    }
-  }
-
-  return NULL;
-}

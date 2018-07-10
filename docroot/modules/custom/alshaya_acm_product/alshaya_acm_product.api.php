@@ -41,15 +41,5 @@ function hook_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $s
 }
 
 /**
- * Allow other modules to return first child sku per brand specific conditions.
- *
- * @param \Drupal\acq_commerce\SKUInterface $sku
- *   Configurable SKU entity.
- */
-function hook_hook_alshaya_acm_product_first_child_for_selection(SKUInterface $sku) {
-
-}
-
-/**
  * @} End of "addtogroup hooks".
  */

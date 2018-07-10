@@ -22,6 +22,7 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class SkuManager.
@@ -124,6 +125,13 @@ class SkuManager {
   protected $skuStorage;
 
   /**
+   * Request stock service object.
+   *
+   * @var null|\Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -132,6 +140,8 @@ class SkuManager {
    *   Config Factory service object.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route
    *   Current Route object.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager service.
    * @param \Drupal\Core\Language\LanguageManager $languageManager
@@ -154,6 +164,7 @@ class SkuManager {
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
                               CurrentRouteMatch $current_route,
+                              RequestStack $request_stack,
                               EntityTypeManagerInterface $entity_type_manager,
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
@@ -166,6 +177,7 @@ class SkuManager {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
+    $this->currentRequest = $request_stack->getCurrentRequest();
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->fileStorage = $entity_type_manager->getStorage('file');
@@ -1468,13 +1480,27 @@ class SkuManager {
    *   First child SKU entity.
    */
   public function getFirstChildForSku(SKUInterface $sku, $root_attribute_code, array $selected = []) {
-    $first_child = NULL;
-
     // Get the first child from user selected value if available.
     if (isset($selected[$root_attribute_code])) {
       $first_child = $this->getChildSkuFromAttribute($sku, $root_attribute_code, $selected[$root_attribute_code]);
 
       if ($first_child instanceof SKU) {
+        return $first_child;
+      }
+    }
+
+    // Select first child based on value provided in query params.
+    $sku_id = (int) $this->currentRequest->query->get('selected');
+
+    // Give preference to sku id passed via query params.
+    if ($sku_id) {
+      $first_child = SKU::load($sku_id);
+
+      if ($first_child instanceof SKUInterface) {
+        // We do it again to get current translation.
+        // We expect no performance impact as all the skus are already loaded
+        // multiple times in the request.
+        $first_child = SKU::loadFromSku($first_child->getSku());
         return $first_child;
       }
     }
@@ -1490,16 +1516,11 @@ class SkuManager {
       );
 
       if ($first_child instanceof SKU) {
-        break;
+        return $first_child;
       }
     }
 
-    if (!($first_child instanceof SKU)) {
-      // Default use-case: User landing on PDP from PLP/Search/directly.
-      $first_child = $this->getChildSkus($sku, TRUE);
-    }
-
-    return $first_child;
+    return NULL;
   }
 
   /**
@@ -1522,7 +1543,7 @@ class SkuManager {
         continue;
       }
 
-      $swatches[$child->getSku()] = $swatch_item['file']->url();
+      $swatches[$child->id()] = $swatch_item['file']->url();
     }
 
     return $swatches;

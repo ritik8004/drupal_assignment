@@ -32,7 +32,7 @@
       <div class="swatches">
         {% for key,swatch in swatches %}
           {% if swatch is not empty %}
-            <a href="{{ product_url }}?color={{ key }}">
+            <a href="{{ product_url }}?selected={{ key }}">
               <span class='swatch-block swatch-image'>
                 <img src="{{ swatch }}" />
               </span>
