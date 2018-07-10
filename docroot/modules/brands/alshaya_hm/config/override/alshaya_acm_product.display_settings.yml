@@ -1,1 +1,5 @@
 color_swatches: true
+swatches:
+  pdp:
+    - article_castor_id
+

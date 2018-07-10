@@ -87,6 +87,7 @@ $ash-triplet: #777;
 $vivid-raspberry: #d91560;
 $whisper-dark: #e5e5e5;
 $white-smoke-light: #f2f2f2;
+$white-smoke-light-transparent: rgba(242, 242, 242, 0.65);
 $white-smoke-fog: #f9f9f9;
 $smoke-light: #fafafa;
 $medium-green: #39b54a;
@@ -97,6 +98,7 @@ $alabaster: #fcfcfc;
 $_grey-51-6: rgba(51, 51, 51, 0.06);
 $_grey_one: #f8f8f8;
 $_grey_two: #f3f3f3;
+$_pink_one: #636363;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -307,6 +309,7 @@ $gallery_pager_bg: $white-five;
 $gallery_pager_active_bg: $marine-blue-two;
 $gallery_zoombtn_bg: $white;
 $gallery_zoombtn_disabled: $light-ash;
+$gallery_arrows_bg_mobile: $white-smoke-light-transparent;
 
 // Homepage Slider
 $hp_slider_dots: $nero;
@@ -487,6 +490,7 @@ $checkout_progress_next_txt: $nero;
 // Product listing page and search page.
 $plp_category_desc: $nero;
 $plp_search_count: $black;
+$color_facet_active_border: $brilliant-rose;
 $plp_sort_by_label: $nero;
 $plp_facet_filter: $brilliant-rose;
 $plp_facet_item_label: $black;
@@ -524,7 +528,7 @@ $plp_tile_product_title_hover: $nero;
 $plp_tile_product_price: $black;
 $plp_tile_product_special_price: $red-error;
 $plp_tile_product_discount_label: $red-error;
-$plp_tile_product_hover_border: $greyish;
+$plp_tile_product_hover_border: $gainsboro;
 $plp_tile_product_hover_shadow: $whisper-light;
 $plp_tile_product_hover_bg: $white-five;
 
@@ -532,7 +536,7 @@ $plp_tile_product_hover_bg: $white-five;
 $plp_tile_hover_slider_hover: $grey-ash;
 $plp_tile_hover_slider_nav: $grey-ash;
 $plp_tile_hover_slider_nav_hover: $grey-ash;
-$plp_tile_hover_slider_arrows: $black;
+$plp_tile_hover_slider_arrows: $_pink_one;
 $plp_pager_link: $marine-blue;
 $plp_pager_link_border: $marine-blue;
 
@@ -551,7 +555,7 @@ $pdp_sell_title: $nero;
 $pdp_title_collection_name: $ash-triplet;
 
 // Product modal
-$pdp_modal_full_prodlink: $brilliant-rose;
+$pdp_modal_full_prodlink: $nero;
 $pdp_modal_full_prodlink_border: $gainsboro;
 
 // Product Add to cart form.

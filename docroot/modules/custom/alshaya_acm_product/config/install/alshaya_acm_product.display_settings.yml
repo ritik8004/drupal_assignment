@@ -1,2 +1,10 @@
 image_thumb_gallery: false
 color_swatches: false
+show_configurable_boxes_after: 767
+plp_slider:
+  item: 4
+  margin: 5
+  height: 73
+swatches:
+  pdp: {  }
+  plp: {  }

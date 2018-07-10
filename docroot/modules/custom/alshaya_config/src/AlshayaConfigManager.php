@@ -4,6 +4,7 @@ namespace Drupal\alshaya_config;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Symfony\Component\Yaml\Yaml;
@@ -38,13 +39,24 @@ class AlshayaConfigManager {
   protected $configFactory;
 
   /**
+   * Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Constructs a new AlshayaConfigManager object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config storage object.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
+  public function __construct(ConfigFactoryInterface $config_factory,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->configFactory = $config_factory;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -126,6 +138,15 @@ class AlshayaConfigManager {
         $existing = is_array($existing) ? $existing : [];
         $updated = $this->getUpdatedData($existing, $data, $mode);
         $config->setData($updated)->save(TRUE);
+      }
+
+      // Flush image cache for style we updated.
+      if (strpos($config_id, 'image.style.') === 0) {
+        $style_id = str_replace('image.style.', '', $config_id);
+
+        /** @var \Drupal\image\Entity\ImageStyle $style */
+        $style = $this->entityTypeManager->getStorage('image_style')->load($style_id);
+        $style->flush();
       }
     }
   }

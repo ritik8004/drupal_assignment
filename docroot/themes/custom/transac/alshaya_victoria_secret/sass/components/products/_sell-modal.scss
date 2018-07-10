@@ -1,0 +1,17 @@
+@include breakpoint($tablet) {
+  .acq-content-product-modal {
+    .field--name-field-skus {
+      .sku-base-form {
+        #configurable_ajax {
+          ~ button[type="submit"] {
+            margin-top: 2.125rem;
+          }
+        }
+
+        button[type="submit"] {
+          margin-top: 2.125rem;
+        }
+      }
+    }
+  }
+}

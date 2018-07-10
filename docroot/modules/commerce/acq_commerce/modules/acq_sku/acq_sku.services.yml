@@ -60,6 +60,11 @@ services:
       - '@entity.definition_update_manager'
       - '@logger.channel.acq_sku'
 
+  acq_sku.cart_form_helper:
+    class: Drupal\acq_sku\CartFormHelper
+    arguments:
+      - '@config.factory'
+
   logger.channel.acq_sku:
     parent: logger.channel_base
     arguments: ['acq_sku']

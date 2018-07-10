@@ -72,11 +72,11 @@ class SkuManager {
   protected $productLabelsCache;
 
   /**
-   * Cache Backend service for configurable price info.
+   * Cache Backend service for product info.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
-  protected $configurablePriceCache;
+  protected $productCache;
 
   /**
    * Config Factory service object.
@@ -136,7 +136,7 @@ class SkuManager {
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Cache\CacheBackendInterface $product_labels_cache
    *   Cache Backend service for product labels.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $configurable_price_cache
+   * @param \Drupal\Core\Cache\CacheBackendInterface $product_cache
    *   Cache Backend service for configurable price info.
    */
   public function __construct(Connection $connection,
@@ -149,7 +149,7 @@ class SkuManager {
                               AcqSkuLinkedSku $linked_skus,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
-                              CacheBackendInterface $configurable_price_cache) {
+                              CacheBackendInterface $product_cache) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -162,7 +162,7 @@ class SkuManager {
     $this->linkedSkus = $linked_skus;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
-    $this->configurablePriceCache = $configurable_price_cache;
+    $this->productCache = $product_cache;
   }
 
   /**
@@ -295,11 +295,8 @@ class SkuManager {
       return $prices;
     }
 
-    $cid = 'configurable_price:' . $sku_entity->getSku();
-
-    // Return from cache if available.
-    if ($cache = $this->configurablePriceCache->get($cid)) {
-      return $cache->data;
+    if ($cache = $this->getProductCachedData($sku_entity, 'price')) {
+      return $cache;
     }
 
     $sku_price = 0;
@@ -344,7 +341,7 @@ class SkuManager {
     }
 
     // Set the price info to cache.
-    $this->configurablePriceCache->set($cid, $prices);
+    $this->setProductCachedData($sku_entity, 'price', $prices);
 
     return $prices;
   }
@@ -475,7 +472,7 @@ class SkuManager {
    * @param bool $first_only
    *   Boolean flag to indicate if we want to load only the first child.
    *
-   * @return mixed
+   * @return \Drupal\acq_sku\Entity\SKU[]|\Drupal\acq_sku\Entity\SKU
    *   Array of child skus/ Child SKU when loading first child only.
    */
   public function getChildSkus($sku, $first_only = FALSE) {
@@ -483,22 +480,47 @@ class SkuManager {
     $child_skus = [];
 
     if ($sku_entity->getType() == 'configurable') {
-      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs')
-        ->fields('asfcs', ['field_configured_skus_value'])
-        ->condition('asfcs.entity_id', $sku_entity->id());
+      foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
+        try {
+          $child_sku_entity = SKU::loadFromSku(
+            $child_sku->getString(), $sku_entity->language()->getId()
+          );
 
-      $result = $query->execute();
+          if ($child_sku_entity instanceof SKU) {
+            // Return the first valid SKU if only one is required.
+            if ($first_only) {
+              return $child_sku_entity;
+            }
 
-      while ($row = $result->fetchAssoc()) {
-        if (($first_only) &&
-          ($child_sku = SKU::loadFromSku($row['field_configured_skus_value']))) {
-          return $child_sku;
+            $child_skus[] = $child_sku_entity;
+          }
         }
-        $child_skus[] = SKU::loadFromSku($row['field_configured_skus_value']);
+        catch (\Exception $e) {
+          continue;
+        }
       }
     }
 
-    return array_filter($child_skus);
+    return $child_skus;
+  }
+
+  /**
+   * Get SKU based on attribute option id.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $parent_sku
+   *   Parent Sku.
+   * @param string $attribute
+   *   Attribute to search for.
+   * @param int $option_id
+   *   Option id for selected attribute.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU|null
+   *   SKU object matching the attribute option id.
+   */
+  public function getChildSkuFromAttribute(SKU $parent_sku, $attribute, $option_id) {
+    $combinations = $this->getConfigurableCombinations($parent_sku);
+    $sku = reset($combinations['attribute_sku'][$attribute][$option_id]);
+    return SKU::loadFromSku($sku);
   }
 
   /**
@@ -1081,7 +1103,7 @@ class SkuManager {
    */
   public function getLinkedSkusWithFirstChild(SKU $sku, $type) {
     // First always get the parent if available.
-    /** @var \Drupal\acm_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku->getPluginInstance();
     $parent = $plugin->getParentSku($sku);
     $sku_entity = $parent instanceof SKU ? $parent : $sku;
@@ -1201,8 +1223,8 @@ class SkuManager {
    * @param bool $first_only
    *   Flag to indicate we need to fetch only the first item.
    *
-   * @return array
-   *   Array of SKU texts.
+   * @return mixed
+   *   Array of SKU texts of single SKU text if first only is asked.
    */
   public function getChildrenSkuIds(SKU $sku_entity, $first_only = FALSE) {
     $child_skus = [];
@@ -1255,6 +1277,165 @@ class SkuManager {
     }
 
     return NULL;
+  }
+
+  /**
+   * Get possible combinations for a configurable SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   *
+   * @return array
+   *   Calculated combinations array.
+   */
+  public function getConfigurableCombinations(SKU $sku) {
+    if ($sku->bundle() != 'configurable') {
+      return [];
+    }
+
+    if ($cache = $this->getProductCachedData($sku, 'combinations')) {
+      return $cache;
+    }
+
+    /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
+    $plugin = $sku->getPluginInstance();
+    $tree = $plugin->deriveProductTree($sku);
+
+    $configurable_codes = array_keys($tree['configurables']);
+
+    $combinations = [];
+
+    // Prepare array to get all combinations available grouped by SKU.
+    foreach ($tree['products'] ?? [] as $sku_code => $sku_entity) {
+      if (!($sku_entity instanceof SKU)) {
+        continue;
+      }
+
+      foreach ($sku_entity->get('attributes')->getValue() as $attribute) {
+        if (in_array($attribute['key'], $configurable_codes)) {
+          $combinations['by_sku'][$sku_code][$attribute['key']] = $attribute['value'];
+          $combinations['attribute_sku'][$attribute['key']][$attribute['value']][] = $sku_code;
+        }
+      }
+    }
+
+    // Prepare combinations array grouped by attributes to check later which
+    // combination is possible using isset().
+    foreach ($combinations['by_sku'] ?? [] as $combination) {
+      foreach ($combination as $key1 => $value1) {
+        foreach ($combination as $key2 => $value2) {
+          $combinations['by_attribute'][$key1][$value1][$key2][$value2] = $value2;
+        }
+      }
+    }
+
+    $this->setProductCachedData($sku, 'combinations', $combinations);
+
+    return $combinations;
+  }
+
+  /**
+   * Disable configurable options not available in the system.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   * @param array $configurables
+   *   Configurables in the form.
+   * @param array $tree
+   *   Configurable tree from form state.
+   * @param array $selected
+   *   Selected values.
+   */
+  public function disableUnavailableOptions(SKU $sku, array &$configurables, array $tree, array $selected = []) {
+    $configurable_codes = array_keys($tree['configurables']);
+
+    $combinations = $this->getConfigurableCombinations($sku);
+
+    // Cleanup current selection.
+    $selected = array_filter($selected);
+    foreach ($selected as $code => $value) {
+      if (!isset($configurables[$code]['#options'][$value])) {
+        unset($selected[$code]);
+      }
+    }
+
+    foreach ($configurable_codes as $index => $code) {
+      if (isset($selected[$code])) {
+        $selected_value = $selected[$code];
+        for ($i = ++$index; $i < count($configurable_codes); $i++) {
+          $code_to_check = $configurable_codes[$i];
+          foreach ($configurables[$code_to_check]['#options'] as $key => $value) {
+            if (empty($key) || isset($combinations['by_attribute'][$code][$selected_value][$code_to_check][$key])) {
+              continue;
+            }
+
+            $configurables[$code_to_check]['#options_attributes'][$key]['disabled'] = 'disabled';
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Get data from Cache for a product.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   * @param string $key
+   *   Key of the data to get from cache.
+   *
+   * @return array|null
+   *   Data if found or null.
+   */
+  public function getProductCachedData(SKU $sku, $key = 'price') {
+    $cid = $this->getProductCachedId($sku);
+    $cache = $this->productCache->get($cid);
+    if (isset($cache->data, $cache->data[$key])) {
+      return $cache->data[$key];
+    }
+    return NULL;
+  }
+
+  /**
+   * Set data into Cache for a product.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   * @param string $key
+   *   Key of the data to get from cache.
+   * @param mixed $value
+   *   Value to set for the provided key.
+   */
+  public function setProductCachedData(SKU $sku, $key, $value) {
+    $cid = $this->getProductCachedId($sku);
+    $cache = $this->productCache->get($cid);
+    $data = $cache->data ?? [];
+    $data[$key] = $value;
+    $this->productCache->set($cid, $data);
+  }
+
+  /**
+   * Get cache id for particular sku and language.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   *
+   * @return string
+   *   Cache key.
+   */
+  public function getProductCachedId(SKU $sku) {
+    return 'alshaya_product:' . $sku->language()->getId() . ':' . $sku->getSku();
+  }
+
+  /**
+   * Clear configurable product cache for particular SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   */
+  public function clearProductCachedData(SKU $sku) {
+    $cid = $this->getProductCachedId($sku);
+    $this->productCache->delete($cid);
   }
 
 }

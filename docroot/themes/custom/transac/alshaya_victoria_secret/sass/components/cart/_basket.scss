@@ -84,12 +84,11 @@
           }
 
           img {
-            max-width: 6.5rem;
-            padding: 3px;
+            height: 8.125rem;
+            padding: 2px;
 
             @include breakpoint($only-tablet) {
-              max-width: 5.0625rem;
-              padding: 3px;
+              height: 6.3125rem;
             }
           }
         }
@@ -246,6 +245,13 @@
     #{$right}: 2.0625rem;
     top: 3.1rem;
   }
+
+  .notification,
+  .error {
+    .col-1 {
+      width: 4.875rem;
+    }
+  }
 }
 
 body.alias--cart {
@@ -293,6 +299,16 @@ body.alias--cart {
         .price-currency.suffix {
           font-family: $vs-bold;
         }
+      }
+    }
+  }
+}
+
+.alias--cart {
+  #table-cart-items {
+    td {
+      select {
+        padding-#{$left}: 0.75rem;
       }
     }
   }
