@@ -48,7 +48,7 @@
           max-height: 37.5rem;
         }
 
-        @include breakpoint($tablet) {
+        @include breakpoint($only-tablet) {
           width: 18.1875rem;
           height: auto;
           // Adding some buffer and restricting height in case of very tall aspect ratio.
