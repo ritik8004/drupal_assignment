@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\Block;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_acm\CartHelper;
+use Drupal\alshaya_acm_checkout\CheckoutHelper;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Plugin\PluginManagerInterface;
@@ -62,6 +63,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    * @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager
    */
   protected $checkoutOptionsManager;
+
+  /**
+   * Checkout Helper.
+   *
+   * @var \Drupal\alshaya_acm_checkout\CheckoutHelper
+   */
+  protected $checkoutHelper;
 
   /**
    * Module Handler service object.
@@ -124,6 +132,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Cart Helper service object.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager
    *   Checkout Options Manager service object.
+   * @param \Drupal\alshaya_acm_checkout\CheckoutHelper $checkout_helper
+   *   Checkout Helper.
    * @param \Drupal\address\Repository\CountryRepository $address_country_repository
    *   Address Country Repository service object.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
@@ -145,6 +155,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
                               AlshayaAddressBookManager $address_book_manager,
                               CartHelper $cart_helper,
                               CheckoutOptionsManager $checkout_options_manager,
+                              CheckoutHelper $checkout_helper,
                               CountryRepository $address_country_repository,
                               PluginManagerInterface $plugin_manager,
                               LanguageManagerInterface $language_manager,
@@ -157,6 +168,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->addressBookManager = $address_book_manager;
     $this->cartHelper = $cart_helper;
     $this->checkoutOptionsManager = $checkout_options_manager;
+    $this->checkoutHelper = $checkout_helper;
     $this->addressCountryRepository = $address_country_repository;
     $this->pluginManager = $plugin_manager;
     $this->moduleHandler = $module_handler;
@@ -186,6 +198,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $container->get('alshaya_addressbook.manager'),
       $container->get('alshaya_acm.cart_helper'),
       $container->get('alshaya_acm_checkout.options_manager'),
+      $container->get('alshaya_acm_checkout.checkout_helper'),
       $container->get('address.country_repository'),
       $container->get('plugin.manager.acq_checkout_flow'),
       $container->get('language_manager'),
@@ -400,7 +413,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $surcharge_label = '';
 
     // We show surcharge only on payment page.
-    if ($current_step_id == 'payment') {
+    if ($this->checkoutHelper->isSurchargeEnabled()) {
       $surcharge = $cart->getExtension('surcharge');
       if ($surcharge && isset($surcharge['is_applied']) && $surcharge['is_applied']) {
         if ((float) $surcharge['amount'] > 0) {
