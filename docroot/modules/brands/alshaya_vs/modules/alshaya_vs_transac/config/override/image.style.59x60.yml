@@ -1,0 +1,8 @@
+effects:
+  11785684-90f9-4597-b4f6-919be7b20970:
+    uuid: 11785684-90f9-4597-b4f6-919be7b20970
+    id: image_scale
+    data:
+      width: 76
+      height: null
+      upscale: false

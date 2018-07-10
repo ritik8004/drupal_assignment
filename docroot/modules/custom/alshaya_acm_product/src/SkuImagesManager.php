@@ -217,6 +217,9 @@ class SkuImagesManager {
             '#mainImage' => $search_main_image,
             '#thumbnails' => $thumbnails,
             '#attached' => [
+              'drupalSettings' => [
+                'plp_slider' => $this->configFactory->get('alshaya_acm_product.display_settings')->get('plp_slider'),
+              ],
               'library' => [
                 'alshaya_search/alshaya_search',
               ],
