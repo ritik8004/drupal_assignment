@@ -5,6 +5,7 @@
     min-height: 8.125rem;
     padding: 0;
     border: 0;
+    position: relative;
 
     @include breakpoint($desktop) {
       margin: 0.625rem 0;
@@ -20,8 +21,6 @@
   }
 
   .slick-current {
-    position: relative;
-
     &::before {
       content: '';
       position: absolute;
