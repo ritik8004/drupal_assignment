@@ -91,6 +91,10 @@
     html[lang=ar] {
       width: auto;
       margin-#{$left}: 0;
+
+      @include breakpoint($desktop) {
+        margin-#{$right}: 0.625rem;
+      }
     }
   }
 
@@ -272,5 +276,14 @@
 
   @include breakpoint($desktop) {
     padding-bottom: 3.75rem;
+  }
+}
+
+html[lang=ar] {
+  .c-footer-menu--about {
+    @include breakpoint($tablet) {
+      width: auto;
+      margin-right: 5%;
+    }
   }
 }
