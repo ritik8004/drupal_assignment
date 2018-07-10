@@ -23,6 +23,22 @@ function alshaya_acm_product_category_update_dependencies() {
 /**
  * Implements hook_update_N().
  *
+ * Update views for product category taxonomy terms.
+ */
+function alshaya_acm_product_category_update_8012() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'views.view.product_category_level_3',
+    'views.view.product_category_level_2_3',
+  ],
+    'alshaya_acm_product_category'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new field 'Mobile only - Dept Page' to product category vocabulary.
  */
 function alshaya_acm_product_category_update_8011() {
