@@ -10,16 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Add 'short_desc_characters' config.
- */
-function alshaya_vs_transac_update_8002() {
-  $configs = ['alshaya_acm_product.display_settings'];
-  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_acm_product', 'install', 'self::MODE_ADD_MISSING');
-}
-
-/**
- * Implements hook_update_N().
- *
  * Override image styles to match VS designs.
  */
 function alshaya_vs_transac_update_8001() {

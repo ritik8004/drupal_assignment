@@ -58,7 +58,7 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
     ];
 
     $form['short_desc_characters'] = [
-      '#type' => 'textfield',
+      '#type' => 'number',
       '#title' => $this->t('No. of characters that should be displayed as short decription on PDP page.'),
       '#default_value' => $config->get('short_desc_characters'),
     ];
