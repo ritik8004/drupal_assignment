@@ -10,7 +10,7 @@
       width: 100%;
 
       span {
-        text-transform: lowercase;
+        text-transform: capitalize;
         font-size: 0.75rem;
         line-height: 1;
         margin-bottom: 0.25rem;
@@ -64,7 +64,7 @@
   margin-bottom: 0.5rem;
   color: $pdp_product_form_text;
   width: 100%;
-  text-transform: initial;
+  text-transform: capitalize;
 }
 
 .description-wrapper {
