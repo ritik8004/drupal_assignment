@@ -172,3 +172,17 @@
     }
   }
 }
+
+.nodetype--advanced_page {
+  .page-standard {
+    @include breakpoint($only-mobile) {
+      margin-top: 1.75rem;
+
+      .c-page-title {
+        border-bottom: 1px solid $content_pagetitle_border;
+        padding-bottom: 0.75rem;
+        font-family: $alshaya-bold;
+      }
+    }
+  }
+}
