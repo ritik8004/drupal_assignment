@@ -189,12 +189,15 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         $surcharge = $cart->getExtension('surcharge');
 
         if ($surcharge) {
-          $surcharge_value = alshaya_acm_price_get_formatted_price($surcharge['amount']);
-          $sub_title = $config->get('cod_surcharge_short_description');
-          $description = $config->get('cod_surcharge_description');
+          $surcharge['amount'] = (float) $surcharge['amount'];
+          if ($surcharge['amount'] > 0) {
+            $surcharge_value = alshaya_acm_price_get_formatted_price($surcharge['amount']);
+            $sub_title = $config->get('cod_surcharge_short_description');
+            $description = $config->get('cod_surcharge_description');
 
-          $sub_title = str_replace('[surcharge]', $surcharge_value, $sub_title);
-          $description = str_replace('[surcharge]', $surcharge_value, $description);
+            $sub_title = str_replace('[surcharge]', $surcharge_value, $sub_title);
+            $description = str_replace('[surcharge]', $surcharge_value, $description);
+          }
         }
       }
 
