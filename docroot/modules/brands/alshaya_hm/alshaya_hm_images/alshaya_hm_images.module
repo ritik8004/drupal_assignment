@@ -126,7 +126,7 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
       $swatches = array_filter($sku_assets_manager->getColorsForSku($sku));
       if ($swatches) {
         $swatch_plp_limit = \Drupal::config('alshaya_hm_images.settings')->get('swatch_plp_limit');
-        $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit);
+        $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit, TRUE);
         $build['#swatch_more_text'] = count($swatches) > $swatch_plp_limit
           ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit])
           : FALSE;
@@ -344,16 +344,14 @@ function alshaya_hm_images_alshaya_master_post_drupal_install() {
 function alshaya_hm_images_alshaya_acm_product_first_child_for_selection(SKUInterface $sku) {
   $color = \Drupal::request()->query->get('color');
 
-  // Give preference to color label passed via query params.
+  // Give preference to sku id passed via query params.
   if ($color) {
-    // Get swatch_id from color value.
-    /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_asset_manager */
-    $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+    $first_child = SKU::load($color);
 
-    $first_child = $sku_asset_manager->getChildSkuFromColor(
-      $sku, $color
-    );
+    if ($first_child instanceof SKUInterface) {
+      return $first_child;
+    }
   }
 
-  return $first_child ?? NULL;
+  return NULL;
 }
