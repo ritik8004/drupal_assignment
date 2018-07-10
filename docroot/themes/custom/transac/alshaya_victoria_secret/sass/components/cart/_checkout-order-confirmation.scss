@@ -283,9 +283,13 @@
 }
 
 @media print {
-  html,
-  body {
-    height: 100vh;
-    overflow: hidden;
+  .page-standard {
+    &.c-order-print {
+      padding-bottom: 0;
+    }
+  }
+
+  .user__order--detail {
+    margin-bottom: 0;
   }
 }
