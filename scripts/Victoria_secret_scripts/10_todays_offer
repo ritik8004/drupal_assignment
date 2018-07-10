@@ -402,8 +402,98 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//input[@data-drupal-selector='edit-actions-submit']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>//input[@data-drupal-selector='edit-actions-submit']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/node/add/advanced_page</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//input[@data-drupal-selector='edit-field-slider-0-top-links-remove-button']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//input[@data-drupal-selector='edit-field-slider-0-top-links-confirm-remove-button']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//input[@data-drupal-selector='edit-field-slider-0-top-links-confirm-remove-button']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=edit-title-0-value</td>
+	<td>Today's offer</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//input[@data-drupal-selector='edit-field-delivery-banner-0-top-links-remove-button']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//input[@data-drupal-selector='edit-field-delivery-banner-0-top-links-confirm-remove-button']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//input[@data-drupal-selector='edit-field-delivery-banner-0-top-links-confirm-remove-button']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//form[@id='node-advanced-page-form']/div/div/details[4]/summary</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=li.dropbutton-toggle &gt; button[type=&quot;button&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//input[@data-drupal-selector='edit-field-promo-blocks-add-more-add-more-button-block-reference']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//select[@data-drupal-selector='edit-field-promo-blocks-0-subform-field-block-reference-0-plugin-id']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//select[@data-drupal-selector='edit-field-promo-blocks-0-subform-field-block-reference-0-plugin-id']</td>
+	<td>TODAY'S OFFERS</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//input[@data-drupal-selector='edit-field-promo-blocks-0-subform-field-block-reference-0-settings-label-display']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@data-drupal-selector='edit-field-promo-blocks-0-subform-field-block-reference-0-settings-label-display']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=edit-moderation-state-0-state</td>
+	<td>label=Published</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=edit-submit</td>
 	<td></td>
 </tr>
 <tr>
@@ -424,7 +514,7 @@
 <tr>
 	<td>type</td>
 	<td>//input[@data-drupal-selector='edit-page-urls-todaysoffers']</td>
-	<td>/Home</td>
+	<td>/todays-offer</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
