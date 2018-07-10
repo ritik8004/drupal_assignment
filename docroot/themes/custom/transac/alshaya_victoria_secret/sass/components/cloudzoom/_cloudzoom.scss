@@ -114,3 +114,14 @@
     }
   }
 }
+
+// Size Guide modal popup theming
+.path--cart .ui-dialog,
+.nodetype--acq_product .ui-dialog {
+  #drupal-modal,
+  div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
+    @include breakpoint($desktop) {
+      height: 38.31rem !important;
+    }
+  }
+}
