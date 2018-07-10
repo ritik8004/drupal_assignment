@@ -78,6 +78,23 @@ function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
     $build['#product_label'] = [
       '#markup' => $title,
     ];
+
+    $settings = \Drupal::config('alshaya_acm_product.display_settings');
+
+    $swatches_display_status = $settings->get('color_swatches');
+    if ($swatches_display_status) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+      $swatches = $sku_manager->getSwatches($sku);
+      if ($swatches) {
+        $swatch_plp_limit = $settings->get('swatch_plp_limit');
+        $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit);
+        $build['#swatch_more_text'] = count($swatches) > $swatch_plp_limit
+          ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit])
+          : FALSE;
+      }
+    }
   }
   else {
     $build['title'] = [
@@ -150,4 +167,27 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
       $build['description'][] = $description;
     }
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_first_child_for_selection().
+ */
+function alshaya_vs_transac_alshaya_acm_product_first_child_for_selection(SKUInterface $sku) {
+  $color = \Drupal::request()->query->get('color');
+
+  // Give preference to color label passed via query params.
+  if ($color) {
+    $swatch_sku = SKU::loadFromSku($color);
+
+    if ($swatch_sku instanceof SKUInterface) {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $swatch_sku->getPluginInstance();
+
+      // Additional check to avoid fatal errors.
+      $parent = $plugin->getParentSku($swatch_sku);
+      return ($parent && $parent->id() === $sku->id()) ? $swatch_sku : NULL;
+    }
+  }
+
+  return NULL;
 }

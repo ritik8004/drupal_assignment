@@ -69,14 +69,6 @@ function alshaya_hm_images_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implements hook_theme_registry_alter().
- */
-function alshaya_hm_images_theme_registry_alter(&$theme_registry) {
-  $theme_registry['sku_teaser']['variables']['swatches'] = NULL;
-  $theme_registry['sku_teaser']['variables']['swatch_more_text'] = NULL;
-}
-
-/**
  * Implements hook_alshaya_acm_product_gallery_alter().
  */
 function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $sku, $context = 'pdp') {

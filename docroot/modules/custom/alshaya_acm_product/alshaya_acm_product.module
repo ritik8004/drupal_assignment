@@ -197,6 +197,8 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
       'price_block_identifier' => NULL,
       'promotions' => NULL,
       'stock_placeholder' => NULL,
+      'swatches' => NULL,
+      'swatch_more_text' => NULL,
     ],
   ];
 
@@ -847,7 +849,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       );
 
       $user_input_configurables = $form_state->getUserInput();
-      $first_child = $sku_manager->getFirstChildForSku($sku_entity);
+      $selected = $user_input_configurables['configurables'] ?? [];
+      $first_child = $sku_manager->getFirstChildForSku($sku_entity, $root_attribute_code, $selected);
 
       if ($first_child instanceof SKU) {
         $plugin = $sku_entity->getPluginInstance();

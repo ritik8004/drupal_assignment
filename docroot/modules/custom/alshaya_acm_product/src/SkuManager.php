@@ -17,6 +17,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -1458,13 +1459,28 @@ class SkuManager {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU entity.
+   * @param string $root_attribute_code
+   *   Root attribute code.
+   * @param array $selected
+   *   Current selection.
    *
    * @return \Drupal\acq_sku\Entity\SKU
    *   First child SKU entity.
    */
-  public function getFirstChildForSku(SKUInterface $sku) {
+  public function getFirstChildForSku(SKUInterface $sku, $root_attribute_code, array $selected = []) {
     $first_child = NULL;
 
+    // Get the first child from user selected value if available.
+    if (isset($selected[$root_attribute_code])) {
+      $first_child = $this->getChildSkuFromAttribute($sku, $root_attribute_code, $selected[$root_attribute_code]);
+
+      if ($first_child instanceof SKU) {
+        return $first_child;
+      }
+    }
+
+    // Allow brand modules to apply brand specific logic and provide the first
+    // child.
     $implementations = $this->moduleHandler->getImplementations('alshaya_acm_product_first_child_for_selection');
     foreach ($implementations as $module) {
       $first_child = $this->moduleHandler->invoke(
@@ -1480,11 +1496,36 @@ class SkuManager {
 
     if (!($first_child instanceof SKU)) {
       // Default use-case: User landing on PDP from PLP/Search/directly.
-      // Set the color applicable to first child sku as default here.
       $first_child = $this->getChildSkus($sku, TRUE);
     }
 
     return $first_child;
+  }
+
+  /**
+   * Get all the swatch images with sku text as key.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   Parent SKU.
+   *
+   * @return array
+   *   Swatches array.
+   */
+  public function getSwatches(SKUInterface $sku) {
+    $swatches = [];
+    $children = $this->getChildSkus($sku);
+
+    foreach ($children as $child) {
+      $swatch_item = $child->getSwatchImage();
+
+      if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
+        continue;
+      }
+
+      $swatches[$child->getSku()] = $swatch_item['file']->url();
+    }
+
+    return $swatches;
   }
 
 }

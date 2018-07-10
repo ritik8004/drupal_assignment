@@ -26,6 +26,27 @@
       {% endfor %}
     </div>
   {% endif %}
+
+  {% block swatches %}
+    {% if swatches is not empty %}
+      <div class="swatches">
+        {% for key,swatch in swatches %}
+          {% if swatch is not empty %}
+            <a href="{{ product_url }}?color={{ key }}">
+              <span class='swatch-block swatch-image'>
+                <img src="{{ swatch }}" />
+              </span>
+            </a>
+          {% endif %}
+        {% endfor %}
+
+        {% if swatch_more_text %}
+          <a class="swatch-more-link" href="{{ product_url }}">{{ swatch_more_text }}</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endblock %}
+
 </div>
 
 {{ stock_placeholder }}
