@@ -213,7 +213,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
   protected function processMediaItem(&$update_sku, array $data, $download = FALSE) {
     $media_item = $data;
 
-    // Processing si required only for media type image as of now.
+    // Processing is required only for media type image as of now.
     if (isset($data['media_type']) && $data['media_type'] == 'image') {
       if (!empty($data['fid'])) {
         $file = File::load($data['fid']);
