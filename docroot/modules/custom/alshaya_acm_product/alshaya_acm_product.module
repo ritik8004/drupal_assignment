@@ -1472,11 +1472,14 @@ function alshaya_acm_product_alshaya_master_post_drupal_install() {
  *   Short description.
  */
 function alshaya_acm_product_get_short_description($description_value, $tag, $fallback = 'TRUE') {
+  $short_desc_html = '';
   // Extract the first non-empty paragraph.
   $dom = Html::load($description_value);
   $xpath = new \DOMXPath($dom);
   $expression = '//' . $tag . '[normalize-space()][1]';
-  $short_desc_html = $xpath->query($expression)[0]->nodeValue;
+  if ($xpath->query($expression)[0]) {
+    $short_desc_html = $xpath->query($expression)[0]->nodeValue;
+  }
 
   if ($fallback) {
     // If there is no non-empty paragraph,
