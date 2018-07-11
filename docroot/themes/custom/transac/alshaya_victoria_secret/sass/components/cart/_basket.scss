@@ -300,6 +300,12 @@ body.alias--cart {
           font-family: $vs-bold;
         }
       }
+
+      tr[data-drupal-selector=edit-totals-discount] {
+        .cart-promotions {
+          top: 0.875rem;
+        }
+      }
     }
   }
 }
