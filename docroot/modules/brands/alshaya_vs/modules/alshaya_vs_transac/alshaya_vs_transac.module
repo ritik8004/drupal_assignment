@@ -116,7 +116,7 @@ function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
  */
 function _alshaya_vs_transac_get_title(SKUInterface $sku, $context = 'pdp') {
   $new = $sku->get('attr_sku_definition')->getString();
-  $collection = $sku->get('attr_collection')->getString();
+  $collection = $sku->get('attr_product_collection')->getString();
   $short_description = $sku->label();
 
   if ($context === 'pdp') {
@@ -148,7 +148,7 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
           '#markup' => t('Short Description'),
         ];
         $short_desc['value'] = [
-          '#markup' => alshaya_acm_product_get_short_description($description_value, 'p', $fallback = 'TRUE'),
+          '#markup' => alshaya_acm_product_get_short_description($description_value, 'p', 'TRUE'),
         ];
       }
 

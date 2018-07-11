@@ -476,7 +476,7 @@
 
     .field {
       &__content {
-        overflow: scroll;
+        overflow: auto;
         height: 30.125rem;
       }
     }
@@ -1276,7 +1276,7 @@
       padding-#{$left}: 0;
       margin: 0;
       height: 25.5rem;
-      overflow-y: scroll;
+      overflow-y: auto;
       clear: both;
 
       li {
