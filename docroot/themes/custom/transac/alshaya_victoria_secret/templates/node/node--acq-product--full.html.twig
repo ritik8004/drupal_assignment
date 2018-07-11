@@ -54,10 +54,19 @@ set classes = [
 
       <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
 
+      <div class="free-gift-promotions">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
+
       <div class="content--item-code">
         <span class="field__label">{{ 'Item Code'|t }}:</span>
         {{ content.item_code }}
       </div>
+
+      {% if content.free_gift_promotions %}
+        <div class="free-gift-promotions">
+          {{ content.free_gift_promotions }}
+        </div>
+      {% endif %}
+
     </div>
 
     <div class="content__sidebar">

@@ -315,6 +315,12 @@ class AcqPromotionsManager {
     // Set the Promotion type.
     $promotion_node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
 
+    // Set promotion coupon code.
+    $promotion_node->get('field_coupon_code')->setValue($promotion['coupon_code']);
+
+    // Set free skus for promotions.
+    $promotion_node->get('field_free_skus')->setValue($promotion['free_skus']);
+
     // Set the Promotion label.
     if (isset($promotion_label_languages[$site_default_langcode])) {
       $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);

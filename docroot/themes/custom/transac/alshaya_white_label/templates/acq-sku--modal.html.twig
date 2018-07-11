@@ -1,0 +1,52 @@
+{{ attach_library('alshaya_white_label/cloud_zoom') }}
+
+{%
+set classes = [
+'node',
+'node--type-' ~ node.bundle|clean_class,
+view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+]
+%}
+<article{{ attributes }}>
+  <div class="acq-content-product-modal">
+    <div class="content__title_wrapper">
+
+      {% if sku.brand_logo %}
+        <div class="brand-logo-wrapper">
+          {{ sku.brand_logo }}
+        </div>
+      {% endif %}
+
+      {% if not page %}
+        <h2{{ title_attributes.addClass("c-products__free__item__label") }}>
+          {{ 'FREE GIFT'|t }}
+        </h2>
+        <h2{{ title_attributes.addClass("c-products__item__label") }}>
+          {{ sku.name }}
+        </h2>
+      {% endif %}
+
+      <div class="content--item-code">
+        <span class="field__label">{{ 'Item Code'|t }}:</span>
+        {{ sku.item_code }}
+      </div>
+    </div>
+
+    <div class="content__main">
+      {% if sku.gallery is not null %}
+        {{ sku.gallery }}
+      {% endif %}
+    </div>
+
+    <div class="content__sidebar">
+      <div class="content__description__wrapper">
+        <div class="label">
+          {{ 'Product Description'|t }}
+        </div>
+        <div class="content">
+          {{ sku.description }}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
