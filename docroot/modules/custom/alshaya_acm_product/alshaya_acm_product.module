@@ -842,6 +842,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     $product_tree = $form_state->get('tree');
 
+    // Do first to disable for level one or only configurable options.
+    $empty_selected = [];
+    $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $empty_selected);
+
     if (count($form['ajax']['configurables']) > 1) {
       /** @var \Drupal\acq_sku\CartFormHelper $cart_form_helper */
       $cart_form_helper = \Drupal::service('acq_sku.cart_form_helper');
@@ -853,7 +857,12 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
       $user_input_configurables = $form_state->getUserInput();
       $selected = $user_input_configurables['configurables'] ?? [];
-      $first_child = $sku_manager->getFirstChildForSku($sku_entity, $root_attribute_code, $selected);
+      $first_child = $sku_manager->getFirstChildForSku(
+        $sku_entity,
+        $root_attribute_code,
+        $selected,
+        $form['ajax']['configurables'][$root_attribute_code]
+      );
 
       if ($first_child instanceof SKU) {
         $plugin = $sku_entity->getPluginInstance();

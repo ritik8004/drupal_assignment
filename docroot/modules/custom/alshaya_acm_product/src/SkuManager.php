@@ -1349,16 +1349,30 @@ class SkuManager {
    * @param array $selected
    *   Selected values.
    */
-  public function disableUnavailableOptions(SKU $sku, array &$configurables, array $tree, array $selected = []) {
+  public function disableUnavailableOptions(SKU $sku, array &$configurables, array $tree, array &$selected = []) {
     $configurable_codes = array_keys($tree['configurables']);
 
     $combinations = $this->getConfigurableCombinations($sku);
 
     // Cleanup current selection.
     $selected = array_filter($selected);
+
     foreach ($selected as $code => $value) {
+      // Check for selected values in current options.
       if (!isset($configurables[$code]['#options'][$value])) {
         unset($selected[$code]);
+        continue;
+      }
+    }
+
+    // Remove all options which are not available at all.
+    foreach ($configurable_codes as $index => $code) {
+      foreach ($configurables[$code]['#options'] as $key => $value) {
+        if (empty($key) || isset($combinations['attribute_sku'][$code][$key])) {
+          continue;
+        }
+
+        unset($configurables[$code]['#options'][$key]);
       }
     }
 
@@ -1450,11 +1464,13 @@ class SkuManager {
    *   Root attribute code.
    * @param array $selected
    *   Current selection.
+   * @param array|null $root_attribute_form_item
+   *   Form item containing options and disabled attributes.
    *
    * @return \Drupal\acq_sku\Entity\SKU
    *   First child SKU entity.
    */
-  public function getFirstChildForSku(SKUInterface $sku, $root_attribute_code, array $selected = []) {
+  public function getFirstChildForSku(SKUInterface $sku, $root_attribute_code, array $selected = [], $root_attribute_form_item = []) {
     // Get the first child from user selected value if available.
     if (isset($selected[$root_attribute_code])) {
       $first_child = $this->getChildSkuFromAttribute($sku, $root_attribute_code, $selected[$root_attribute_code]);
@@ -1481,6 +1497,27 @@ class SkuManager {
     }
 
     // Default use-case: User landing on PDP from PLP/Search/directly.
+    // Get the first child from sorted options of root attribute.
+    if ($root_attribute_form_item) {
+      foreach ($root_attribute_form_item['#options'] as $key => $value) {
+        if (isset($root_attribute_form_item['#options_attributes'][$key]['disabled'])) {
+          continue;
+        }
+
+        $root_attribute_first_value = $key;
+        break;
+      }
+
+      if (isset($root_attribute_first_value)) {
+        return $this->getChildSkuFromAttribute(
+          $sku,
+          $root_attribute_code,
+          $root_attribute_first_value
+        );
+      }
+    }
+
+    // Fallback.
     return $this->getChildSkus($sku, TRUE);
   }
 
@@ -1489,21 +1526,31 @@ class SkuManager {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   Parent SKU.
+   * @param string $attribute_code
+   *   Attribute code used for swatches.
    *
    * @return array
    *   Swatches array.
    */
-  public function getSwatches(SKUInterface $sku) {
+  public function getSwatches(SKUInterface $sku, $attribute_code = 'color') {
     $swatches = [];
+    $duplicates = [];
     $children = $this->getChildSkus($sku);
 
     foreach ($children as $child) {
+      $value = $child->get('attr_' . $attribute_code)->getString();
+
+      if (empty($value) || isset($duplicates[$value])) {
+        continue;
+      }
+
       $swatch_item = $child->getSwatchImage();
 
       if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
         continue;
       }
 
+      $duplicates[$value] = 1;
       $swatches[$child->id()] = $swatch_item['file']->url();
     }
 
