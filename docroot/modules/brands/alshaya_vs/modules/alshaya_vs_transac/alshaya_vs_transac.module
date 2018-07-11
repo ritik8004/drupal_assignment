@@ -148,7 +148,7 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
           '#markup' => t('Short Description'),
         ];
         $short_desc['value'] = [
-          '#markup' => alshaya_acm_product_get_short_description($description_value, 'p', $fallback = 'TRUE'),
+          '#markup' => alshaya_acm_product_get_short_description($description_value, 'p', 'TRUE'),
         ];
       }
 
